@@ -64,7 +64,7 @@
           </div>
         </div>
         <div class="card-footer text-center">
-          <small>moneyjinn 0.23.0 - &copy; by Oliver Lehmann</small>
+          <small>moneyjinn 0.99.0 - &copy; by Oliver Lehmann</small>
         </div>
       </div>
     </div>
@@ -75,7 +75,6 @@
 import type { ErrorData } from "@/tools/views/ErrorData";
 import { generateErrorData } from "@/tools/views/ErrorData";
 import UserControllerHandler from "@/handler/UserControllerHandler";
-import { nextTick, ref } from "vue";
 
 type LoginViewData = {
   username: string;
