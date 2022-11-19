@@ -7,7 +7,7 @@
             <select
               class="form-control"
               v-model="selectedYear"
-              @change="loadNewYear"
+              @change="selectMonth(selectedYear + '')"
             >
               <option v-for="year in years" :key="year">
                 {{ year }}
@@ -18,15 +18,12 @@
             <nav aria-label="Page navigation example" v-if="dataLoaded">
               <ul class="pagination">
                 <li class="page-item" v-for="month in months" :key="month">
-                  <router-link
+                  <a
                     class="page-link"
-                    :to="{
-                      name: Routes.ListReports,
-                      params: { year: selectedYear, month: month },
-                    }"
+                    href="#"
+                    @click="selectMonth($props.year, month + '')"
+                    >{{ getMonthName(month) }}</a
                   >
-                    {{ getMonthName(month) }}
-                  </router-link>
                 </li>
               </ul>
             </nav>
@@ -34,6 +31,27 @@
         </tr>
       </table>
     </form>
+  </div>
+
+  <div class="row">
+    <div class="col-xs-6 text-start">
+      <a
+        class="page-link link-primary"
+        href="#"
+        @click="selectMonth(previousYear + '', previousMonth + '')"
+        v-if="previousMonthLink"
+        >&lt;&lt; voriger Monat</a
+      >
+    </div>
+    <div class="col-xs-6 text-end">
+      <a
+        class="page-link link-primary"
+        href="#"
+        @click="selectMonth(nextYear + '', nextMonth + '')"
+        v-if="nextMonthLink"
+        >n&auml;chster Monat &gt;&gt;</a
+      >
+    </div>
   </div>
 </template>
 <script lang="ts">
@@ -49,7 +67,13 @@ export default defineComponent({
       dataLoaded: false,
       months: [] as number[],
       years: [] as number[],
-      selectedYear: this.$props.year,
+      previousMonth: 0,
+      previousYear: 0,
+      nextMonth: 0,
+      nextYear: 0,
+      previousMonthLink: false,
+      nextMonthLink: false,
+      selectedYear: 0,
     };
   },
   props: {
@@ -69,20 +93,27 @@ export default defineComponent({
     getMonthName(month: number): string {
       return getMonthName(month);
     },
-    async loadData(year: string, month: string) {
+    async loadData(year?: string, month?: string) {
       let getAvailableMonthResponse =
-        await ReportControllerHandler.getAvailableMonth(+year, +month);
-      this.months =
-        getAvailableMonthResponse.getAvailableMonthResponse.allMonth;
-      this.years = getAvailableMonthResponse.getAvailableMonthResponse.allYears;
+        await ReportControllerHandler.getAvailableMonth(year, month);
+      const response = getAvailableMonthResponse.getAvailableMonthResponse;
+      this.months = response.allMonth;
+      this.years = response.allYears;
+      this.previousMonth = response.previousMonth;
+      this.previousYear = response.previousYear;
+      this.previousMonthLink = response.previousMonthHasMoneyflows === 1;
+      this.nextMonth = response.nextMonth;
+      this.nextYear = response.nextYear;
+      this.nextMonthLink = response.nextMonthHasMoneyflows === 1;
+      this.selectedYear = response.year;
       this.dataLoaded = true;
     },
-    loadNewYear() {
+    selectMonth(year: string, month?: string) {
       router.push({
         name: Routes.ListReports,
-        params: { year: this.selectedYear, month: "1" },
+        params: { year: year, month: month },
       });
-      this.loadData(this.selectedYear, "1");
+      this.loadData(year, month);
     },
   },
 });
