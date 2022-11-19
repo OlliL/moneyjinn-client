@@ -21,6 +21,7 @@
             <div class="form-floating">
               <input
                 v-model="username"
+                ref="usernameRef"
                 id="username"
                 type="text"
                 @input="validateUsername"
@@ -74,6 +75,7 @@
 import type { ErrorData } from "@/tools/views/ErrorData";
 import { generateErrorData } from "@/tools/views/ErrorData";
 import UserControllerHandler from "@/handler/UserControllerHandler";
+import { nextTick, ref } from "vue";
 
 type LoginViewData = {
   username: string;
@@ -87,6 +89,7 @@ type LoginViewData = {
 
 export default {
   name: "LoginView",
+
   data(): LoginViewData {
     return {
       username: "",
@@ -97,6 +100,9 @@ export default {
       passwordErrorMessage: "",
       serverError: "",
     };
+  },
+  mounted() {
+    (this.$refs.usernameRef as any).focus();
   },
   computed: {
     usernameErrorData(): ErrorData {
