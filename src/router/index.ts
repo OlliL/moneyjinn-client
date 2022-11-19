@@ -27,16 +27,14 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  if (!to.matched.some((record) => record.meta.hideForAuth)) {
-    const userSessionStore = useUserSessionStore();
-    const userIsLoggedIn = userSessionStore.getAuthorizationToken?.length > 0;
-    if (!userIsLoggedIn) {
-      next({ name: Routes.Login });
-    } else {
-      next();
-    }
-  } else {
+  const userSessionStore = useUserSessionStore();
+  const userIsLoggedIn = userSessionStore.getAuthorizationToken?.length > 0;
+  const loginNeeded = !to.matched.some((record) => record.meta.hideForAuth);
+
+  if (userIsLoggedIn || !loginNeeded) {
     next();
+  } else {
+    next({ name: Routes.Login });
   }
 });
 
