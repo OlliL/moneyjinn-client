@@ -1,5 +1,5 @@
 <template>
-  <div class="text-center">
+  <div class="container-fluid text-center">
     <h4>Reports</h4>
     <MonthSelectionVue :year="year" :month="month" />
   </div>
