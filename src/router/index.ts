@@ -31,7 +31,7 @@ const router = createRouter({
           component: AppHomeVue,
         },
         {
-          path: "listReports/:year/:month",
+          path: "listReports/:year?/:month?",
           name: Routes.ListReports,
           component: ListReportsVue,
           props: true,

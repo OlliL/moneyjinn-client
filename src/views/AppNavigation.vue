@@ -22,7 +22,11 @@
           </li>
           <li class="nav-item">
             <router-link
-              class="nav-link"
+              :class="
+                $route.matched.some(({ name }) => name === Routes.ListReports)
+                  ? 'router-link-active nav-link'
+                  : 'nav-link'
+              "
               :to="{
                 name: Routes.ListReports,
                 params: { year: year, month: month },
@@ -161,7 +165,7 @@
 </template>
 
 <script lang="ts">
-import { Routes } from "@/router";
+import router, { Routes } from "@/router";
 
 export default {
   name: "AppNavigation",
@@ -169,8 +173,9 @@ export default {
   data() {
     return {
       Routes: Routes,
+      router: router,
       year: new Date().getFullYear(),
-      month: new Date().getMonth(),
+      month: new Date().getMonth() + 1,
     };
   },
 };
