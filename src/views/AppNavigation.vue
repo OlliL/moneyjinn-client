@@ -154,7 +154,6 @@
 
 <style scoped>
 .active {
-  color: white;
   background-color: lightgrey;
 }
 .nav-item {
@@ -163,5 +162,14 @@
 small {
   font-size: 0.7rem;
   vertical-align: middle;
+}
+.navbar .navbar-nav .nav-link {
+  font-size: 1.1em;
+}
+.navbar .navbar-nav .nav-link:hover {
+  background-color: silver;
+}
+a.show {
+  background-color: silver;
 }
 </style>
