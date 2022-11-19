@@ -75,6 +75,7 @@
 import type { ErrorData } from "@/tools/views/ErrorData";
 import { generateErrorData } from "@/tools/views/ErrorData";
 import UserControllerHandler from "@/handler/UserControllerHandler";
+import router, { Routes } from "@/router";
 
 type LoginViewData = {
   username: string;
@@ -150,7 +151,7 @@ export default {
       if (this.formIsValid) {
         await UserControllerHandler.login(this.username, this.password)
           .then(() => {
-            alert("TODO: redirect");
+            router.push({ name: Routes.Main });
           })
           .catch((error) => {
             this.serverError = error.message;

@@ -10,7 +10,15 @@ export type UserSession = {
 };
 
 export const useUserSessionStore = defineStore("userSession", {
-  state: () => ({} as UserSession),
+  state: () =>
+    ({
+      userId: 0,
+      userName: "",
+      userAuthorizationToken: "",
+      userIsAdmin: false,
+      userCanLogin: false,
+      userIsNew: true,
+    } as UserSession),
   getters: {
     getAuthorizationToken(): string {
       return this.userAuthorizationToken;
@@ -18,7 +26,12 @@ export const useUserSessionStore = defineStore("userSession", {
   },
   actions: {
     setUserSession(userSess: UserSession) {
-      this.$state = userSess;
+      this.userId = userSess.userId;
+      this.userName = userSess.userName;
+      this.userAuthorizationToken = userSess.userAuthorizationToken;
+      this.userIsAdmin = userSess.userIsAdmin;
+      this.userCanLogin = userSess.userCanLogin;
+      this.userIsNew = userSess.userIsNew;
     },
   },
 });
