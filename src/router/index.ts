@@ -1,11 +1,14 @@
 import { useUserSessionStore } from "@/stores/UserSessionStore";
 import LoginViewVue from "@/views/LoginView.vue";
-import AppNavigation from "@/views/AppNavigation.vue";
+import AppNavigationVue from "@/views/AppNavigation.vue";
+import AppHomeVue from "@/views/AppHome.vue";
+import ListReportsVue from "@/views/reports/ListReports.vue";
 import { createRouter, createWebHistory } from "vue-router";
 
 export enum Routes {
   Login = "login",
-  App = "app",
+  Home = "home",
+  ListReports = "listReports",
 }
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -20,8 +23,20 @@ const router = createRouter({
     },
     {
       path: "/app",
-      name: Routes.App,
-      component: AppNavigation,
+      component: AppNavigationVue,
+      children: [
+        {
+          path: "",
+          name: Routes.Home,
+          component: AppHomeVue,
+        },
+        {
+          path: "listReports/:year/:month",
+          name: Routes.ListReports,
+          component: ListReportsVue,
+          props: true,
+        },
+      ],
     },
   ],
 });

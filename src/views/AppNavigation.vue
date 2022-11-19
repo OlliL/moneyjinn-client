@@ -16,12 +16,19 @@
       <div class="collapse navbar-collapse">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="#"
+            <a class="nav-link" aria-current="page" href="#"
               ><i class="bi bi-currency-euro"></i
             ></a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#"><i class="bi bi-card-list"></i></a>
+            <router-link
+              class="nav-link"
+              :to="{
+                name: Routes.ListReports,
+                params: { year: year, month: month },
+              }"
+              ><i class="bi bi-card-list"></i
+            ></router-link>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="#"><i class="bi bi-search"></i></a>
@@ -150,10 +157,26 @@
       </div>
     </div>
   </nav>
+  <router-view />
 </template>
 
+<script lang="ts">
+import { Routes } from "@/router";
+
+export default {
+  name: "AppNavigation",
+
+  data() {
+    return {
+      Routes: Routes,
+      year: new Date().getFullYear(),
+      month: new Date().getMonth(),
+    };
+  },
+};
+</script>
 <style scoped>
-.active {
+.router-link-active {
   background-color: lightgrey;
 }
 .nav-item {
