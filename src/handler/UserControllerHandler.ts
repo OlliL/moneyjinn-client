@@ -9,7 +9,7 @@ import {
 class UserControllerHandler extends AbstractControllerHandler {
   private static CONTROLLER = "user";
 
-  async login(username: string, password: string): Promise<boolean> {
+  async login(username: string, password: string) {
     const loginRequest = new LoginRequest(username, password);
     const userSessionStore = useUserSessionStore();
 
@@ -41,8 +41,6 @@ class UserControllerHandler extends AbstractControllerHandler {
     };
 
     userSessionStore.setUserSession(userSession);
-
-    return true;
   }
 }
 

@@ -148,17 +148,14 @@ export default {
       this.validatePassword();
 
       if (this.formIsValid) {
-        const ret = await UserControllerHandler.login(
-          this.username,
-          this.password
-        ).catch((error) => {
-          this.serverError = error.message;
-          this.password = "";
-          return false;
-        });
-        if (await ret) {
-          alert("TODO: redirect");
-        }
+        await UserControllerHandler.login(this.username, this.password)
+          .then(() => {
+            alert("TODO: redirect");
+          })
+          .catch((error) => {
+            this.serverError = error.message;
+            this.password = "";
+          });
       }
     },
   },
