@@ -151,7 +151,7 @@ export default {
       if (this.formIsValid) {
         await UserControllerHandler.login(this.username, this.password)
           .then(() => {
-            router.push({ name: Routes.Main });
+            router.push({ name: Routes.App });
           })
           .catch((error) => {
             this.serverError = error.message;

@@ -1,11 +1,11 @@
 import { useUserSessionStore } from "@/stores/UserSessionStore";
 import LoginViewVue from "@/views/LoginView.vue";
-import MainViewVue from "@/views/MainView.vue";
+import AppNavigation from "@/views/AppNavigation.vue";
 import { createRouter, createWebHistory } from "vue-router";
 
 export enum Routes {
   Login = "login",
-  Main = "main",
+  App = "app",
 }
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -19,9 +19,9 @@ const router = createRouter({
       },
     },
     {
-      path: "/",
-      name: Routes.Main,
-      component: MainViewVue,
+      path: "/app",
+      name: Routes.App,
+      component: AppNavigation,
     },
   ],
 });
