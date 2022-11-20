@@ -11,7 +11,7 @@ import { throwError } from "@/tools/views/ThrowError";
 class UserControllerHandler extends AbstractControllerHandler {
   private static CONTROLLER = "user";
 
-  async login(username: string, password: string) {
+  async login(username: string, password: string): Promise<void> {
     const loginRequest = new LoginRequest(username, password);
     const userSessionStore = useUserSessionStore();
 
