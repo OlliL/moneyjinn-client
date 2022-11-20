@@ -1,7 +1,7 @@
 import AbstractControllerHandler from "@/handler/AbstractControllerHandler";
 import { ErrorCode } from "@/model/ErrorCode";
-import { LoginRequest } from "@/model/rest/LoginRequest";
-import type { LoginResponse } from "@/model/rest/LoginResponse";
+import { LoginRequest } from "@/model/rest/user/LoginRequest";
+import type { LoginResponse } from "@/model/rest/user/LoginResponse";
 import {
   useUserSessionStore,
   type UserSession,

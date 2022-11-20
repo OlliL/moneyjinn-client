@@ -1,4 +1,4 @@
-import type { ErrorResponse } from "./ErrorResponse";
+import type { ErrorResponse } from "../ErrorResponse";
 
 export type GetAvailableMonthResponse = {
   error?: ErrorResponse;

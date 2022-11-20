@@ -1,5 +1,5 @@
 import AbstractControllerHandler from "@/handler/AbstractControllerHandler";
-import type { GetAvailableMonthResponse } from "@/model/rest/GetAvailableMonthResponse";
+import type { GetAvailableMonthResponse } from "@/model/rest/report/GetAvailableMonthResponse";
 import { throwError } from "@/tools/views/ThrowError";
 
 class ReportControllerHandler extends AbstractControllerHandler {
