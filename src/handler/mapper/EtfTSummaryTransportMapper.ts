@@ -12,7 +12,7 @@ export function mapEtfSummaryTransportToEtfSummary(
     spentValue: transport.spentValue,
     buyPrice: transport.buyPrice,
     sellPrice: transport.sellPrice,
-    pricesTimestamp: transport.pricesTimestamp,
+    pricesTimestamp: new Date(transport.pricesTimestamp),
   };
   return etfData;
 }

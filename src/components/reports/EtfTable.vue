@@ -1,11 +1,11 @@
 <template>
-  <div class="row justify-content-md-center" v-if="etfSummaryReceived">
+  <div class="row justify-content-md-center py-4" v-if="etfSummaryReceived">
     <div class="col col-lg-8">
-      <div class="panel panel-default">
-        <div class="panel-heading text-center">
+      <div class="card">
+        <div class="card-header text-center p-3">
           <h4>ETF</h4>
         </div>
-        <div class="panel-body">
+        <div class="card-body">
           <div class="row">
             <div class="col-xs-12 text-center">
               <table
@@ -42,7 +42,7 @@
                 <tbody v-if="dataLoaded">
                   <EtfTableRowVue
                     v-for="etfData in etfSummaryArray"
-                    :key="etfData.name"
+                    :key="etfData.isin"
                     v-bind="etfData"
                   />
                 </tbody>

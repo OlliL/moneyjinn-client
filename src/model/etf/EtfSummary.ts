@@ -6,5 +6,5 @@ export type EtfSummary = {
   spentValue: number;
   buyPrice: number;
   sellPrice: number;
-  pricesTimestamp: string;
+  pricesTimestamp: Date;
 };
