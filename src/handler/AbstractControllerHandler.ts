@@ -3,6 +3,20 @@ import { useUserSessionStore } from "@/stores/UserSessionStore";
 abstract class AbstractControllerHandler {
   private static SERVER_ROOT = "http://localhost:8081/moneyflow/server/";
 
+  private getHeaders(): HeadersInit {
+    const userSessionStore = useUserSessionStore();
+    const headersInit: HeadersInit = {
+      "Content-Type": "application/json",
+    };
+
+    if (userSessionStore.getAuthorizationToken.length > 0) {
+      headersInit["Authentication"] =
+        "Bearer " + userSessionStore.getAuthorizationToken;
+    }
+    console.log("private", userSessionStore.getAuthorizationToken);
+    return headersInit;
+  }
+
   protected async post(
     requestBody: any,
     controller: string,
@@ -46,6 +60,7 @@ abstract class AbstractControllerHandler {
         "Bearer " + userSessionStore.getAuthorizationToken
       );
     }
+
     const response = await fetch(requestInfo);
     return response;
   }

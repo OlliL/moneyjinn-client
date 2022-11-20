@@ -2,12 +2,15 @@
   <div class="container-fluid text-center">
     <h4>Reports</h4>
     <MonthSelectionVue :year="year" :month="month" />
+    <!--@month-changed="onMonthChanged"-->
+    <ReportTableVue :year="year" :month="month" />
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import MonthSelectionVue from "./MonthSelection.vue";
+import MonthSelectionVue from "@/components/reports/MonthSelection.vue";
+import ReportTableVue from "@/components/reports/ReportTable.vue";
 export default defineComponent({
   name: "BookListItem",
   props: {
@@ -20,6 +23,12 @@ export default defineComponent({
       required: true,
     },
   },
-  components: { MonthSelectionVue },
+  /*  methods: {
+    onMonthChanged(year: string, month: string) {
+      console.log(year + "-" + month);
+    },
+  },
+  */
+  components: { MonthSelectionVue, ReportTableVue },
 });
 </script>
