@@ -1,5 +1,5 @@
 <template>
-  <div class="row justify-content-md-center">
+  <div class="row justify-content-md-center" v-if="etfSummaryReceived">
     <div class="col col-lg-8">
       <div class="panel panel-default">
         <div class="panel-heading text-center">
@@ -39,32 +39,12 @@
                   </tr>
                 </thead>
 
-                <tbody>
-                  <tr>
-                    <td class="text-left">
-                      <a :href="chartUrl">{{ name }}</a>
-                    </td>
-                    <td class="text-right">{{ amount }}</td>
-                    <td class="text-right of_number_to_be_evaluated">
-                      {{ avgSpentPriceString }} &euro;
-                    </td>
-                    <td class="text-right of_number_to_be_evaluated">
-                      {{ sellPriceString }} &euro;
-                    </td>
-                    <td class="text-right of_number_to_be_evaluated">
-                      {{ buyPriceString }} &euro;
-                    </td>
-                    <td class="text-right of_number_to_be_evaluated">
-                      {{ spentValueString }} &euro;
-                    </td>
-                    <td class="text-right of_number_to_be_evaluated">
-                      {{ sumSellPriceString }} &euro;
-                    </td>
-                    <td class="text-right of_number_to_be_evaluated">
-                      <u>{{ profitString }} &euro;</u>
-                    </td>
-                    <td class="text-right">{{ pricesTimestampString }}</td>
-                  </tr>
+                <tbody v-if="dataLoaded">
+                  <EtfTableRowVue
+                    v-for="etfData in etfSummaryArray"
+                    :key="etfData.name"
+                    v-bind="etfData"
+                  />
                 </tbody>
               </table>
             </div>
@@ -77,19 +57,14 @@
 
 <script lang="ts">
 import EtfControllerHandler from "@/handler/EtfControllerHandler";
+import type { EtfSummary } from "@/model/etf/EtfSummary";
 import { defineComponent } from "vue";
+import EtfTableRowVue from "./EtfTableRow.vue";
 export default defineComponent({
   name: "EtfTable",
   data() {
     return {
-      isin: "",
-      name: "",
-      chartUrl: "",
-      amount: 0,
-      spentValue: 0,
-      buyPrice: 0,
-      sellPrice: 0,
-      pricesTimestamp: "",
+      etfSummaryArray: new Array<EtfSummary>(),
       dataLoaded: false,
     };
   },
@@ -101,95 +76,6 @@ export default defineComponent({
     month: {
       type: String,
       required: true,
-    },
-  },
-  computed: {
-    sumSellPrice(): number {
-      return this.amount * this.sellPrice;
-    },
-    sumSellPriceString(): string {
-      if (this.dataLoaded) {
-        return new Intl.NumberFormat("de-DE", {
-          style: "decimal",
-          useGrouping: true,
-          minimumFractionDigits: 2,
-          maximumFractionDigits: 2,
-        }).format(this.sumSellPrice);
-      }
-      return "";
-    },
-    avgSpentPriceString(): string {
-      if (this.dataLoaded) {
-        return new Intl.NumberFormat("de-DE", {
-          style: "decimal",
-          useGrouping: true,
-          minimumFractionDigits: 4,
-          maximumFractionDigits: 4,
-        }).format(this.spentValue / this.amount);
-      }
-      return "";
-    },
-    profitString(): string {
-      if (this.dataLoaded) {
-        return new Intl.NumberFormat("de-DE", {
-          style: "decimal",
-          useGrouping: true,
-          minimumFractionDigits: 2,
-          maximumFractionDigits: 2,
-        }).format(this.sumSellPrice - this.spentValue);
-      }
-      return "";
-    },
-    sellPriceString(): string {
-      if (this.dataLoaded) {
-        return new Intl.NumberFormat("de-DE", {
-          style: "decimal",
-          useGrouping: true,
-          minimumFractionDigits: 3,
-          maximumFractionDigits: 3,
-        }).format(this.sellPrice);
-      }
-      return "";
-    },
-    buyPriceString(): string {
-      if (this.dataLoaded) {
-        return new Intl.NumberFormat("de-DE", {
-          style: "decimal",
-          useGrouping: true,
-          minimumFractionDigits: 3,
-          maximumFractionDigits: 3,
-        }).format(this.buyPrice);
-      }
-      return "";
-    },
-    spentValueString(): string {
-      if (this.dataLoaded) {
-        return new Intl.NumberFormat("de-DE", {
-          style: "decimal",
-          useGrouping: true,
-          minimumFractionDigits: 2,
-          maximumFractionDigits: 2,
-        }).format(this.spentValue);
-      }
-      return "";
-    },
-    pricesTimestampString(): string {
-      if (this.dataLoaded) {
-        const dateObj = new Date(this.pricesTimestamp);
-        //avoid comma between date and time
-        const date = new Intl.DateTimeFormat("default", {
-          day: "2-digit",
-          month: "2-digit",
-          year: "numeric",
-        }).format(dateObj);
-        const time = new Intl.DateTimeFormat("default", {
-          hour: "2-digit",
-          minute: "2-digit",
-          second: "2-digit",
-        }).format(dateObj);
-        return date + " " + time;
-      }
-      return "";
     },
   },
   created() {
@@ -204,27 +90,20 @@ export default defineComponent({
       }
     );
   },
+  computed: {
+    etfSummaryReceived(): boolean {
+      return this.etfSummaryArray.length > 0;
+    },
+  },
   methods: {
     async loadData(year: string, month: string) {
-      let listEtfOverviewResponse = await EtfControllerHandler.listEtfOverview(
+      this.etfSummaryArray = await EtfControllerHandler.listEtfOverview(
         year,
         month
       );
-
-      const response =
-        listEtfOverviewResponse.listEtfOverviewResponse.etfSummaryTransport[0];
-      this.isin = response.isin;
-      this.name = response.name;
-      this.chartUrl = response.chartUrl;
-      this.amount = response.amount;
-      this.spentValue = response.spentValue;
-      this.buyPrice = response.buyPrice;
-      this.sellPrice = response.sellPrice;
-      this.pricesTimestamp = response.pricesTimestamp;
       this.dataLoaded = true;
-
-      console.log(response);
     },
   },
+  components: { EtfTableRowVue },
 });
 </script>

@@ -35,7 +35,7 @@ export default defineComponent({
   },
   methods: {
     async loadData(year?: string, month?: string) {
-      console.log(year, month);
+      console.log("ReportTable loading for:", year, month);
     },
   },
 });

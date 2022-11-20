@@ -28,7 +28,7 @@ class UserControllerHandler extends AbstractControllerHandler {
     }
 
     const loginResponse = (await response.json()) as LoginResponse;
-    console.log(loginResponse);
+
     if (loginResponse.error) {
       throwError(loginResponse.error.code);
     }
