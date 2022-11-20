@@ -3,7 +3,7 @@
     <h4>Reports</h4>
     <MonthSelectionVue :year="year" :month="month" />
     <!--@month-changed="onMonthChanged"-->
-    <ReportTableVue :year="year" :month="month" />
+    <ReportTableVue :year="year" :month="month" v-if="year && month" />
   </div>
 </template>
 

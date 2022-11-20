@@ -1,40 +1,42 @@
 <template>
-  <div class="text-center" style="margin-top: 20px">
-    <form action="#">
-      <table style="margin: 0 auto">
-        <tr>
-          <td class="text-right">
-            <select
-              class="form-control"
-              v-model="selectedYear"
-              @change="selectMonth(selectedYear + '')"
-            >
-              <option v-for="year in years" :key="year">
-                {{ year }}
-              </option>
-            </select>
-          </td>
-          <td>
-            <nav aria-label="Page navigation example" v-if="dataLoaded">
-              <ul class="pagination">
-                <li class="page-item" v-for="month in months" :key="month">
-                  <a
-                    :class="
-                      $props.month == month + ''
-                        ? 'page-link active'
-                        : 'page-link'
-                    "
-                    href="#"
-                    @click="selectMonth($props.year, month + '')"
-                    >{{ getMonthName(month) }}</a
-                  >
-                </li>
-              </ul>
-            </nav>
-          </td>
-        </tr>
-      </table>
-    </form>
+  <div class="row" style="margin-top: 20px">
+    <div class="col">
+      <form action="#">
+        <table style="margin: 0 auto">
+          <tr>
+            <td class="text-right pe-2">
+              <select
+                class="form-control"
+                v-model="selectedYear"
+                @change="selectMonth(selectedYear + '')"
+              >
+                <option v-for="year in years" :key="year">
+                  {{ year }}
+                </option>
+              </select>
+            </td>
+            <td>
+              <nav aria-label="Page navigation example" v-if="dataLoaded">
+                <ul class="pagination">
+                  <li class="page-item" v-for="month in months" :key="month">
+                    <a
+                      :class="
+                        $props.month == month + ''
+                          ? 'page-link active'
+                          : 'page-link'
+                      "
+                      href="#"
+                      @click="selectMonth($props.year, month + '')"
+                      >{{ getMonthName(month) }}</a
+                    >
+                  </li>
+                </ul>
+              </nav>
+            </td>
+          </tr>
+        </table>
+      </form>
+    </div>
   </div>
 
   <div class="row">
