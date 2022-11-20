@@ -1,5 +1,6 @@
 import AbstractControllerHandler from "@/handler/AbstractControllerHandler";
 import type { GetAvailableMonthResponse } from "@/model/rest/report/GetAvailableMonthResponse";
+import type { AvailableMonth } from "@/model/report/AvailableMonth";
 import { throwError } from "@/tools/views/ThrowError";
 
 class ReportControllerHandler extends AbstractControllerHandler {
@@ -8,7 +9,7 @@ class ReportControllerHandler extends AbstractControllerHandler {
   async getAvailableMonth(
     year?: string,
     month?: string
-  ): Promise<GetAvailableMonthResponse> {
+  ): Promise<AvailableMonth> {
     let usecase = "getAvailableMonth";
     if (year) {
       usecase += "/" + year;
@@ -30,7 +31,12 @@ class ReportControllerHandler extends AbstractControllerHandler {
     if (getAvailableMonthResponse.error) {
       throwError(getAvailableMonthResponse.error.code);
     }
-    return getAvailableMonthResponse;
+
+    // easy mapping for now - same attributes
+    const availableMonth: AvailableMonth =
+      getAvailableMonthResponse.getAvailableMonthResponse;
+
+    return availableMonth;
   }
 }
 
