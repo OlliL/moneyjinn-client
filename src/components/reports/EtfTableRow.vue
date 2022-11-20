@@ -1,22 +1,24 @@
 <template>
   <tr>
-    <td class="text-left">
+    <td class="text-start">
       <a :href="chartUrl">{{ name }}</a>
     </td>
-    <td class="text-right">{{ amount }}</td>
-    <td class="text-right">{{ avgSpentPriceString }} &euro;</td>
-    <td class="text-right">{{ sellPriceString }} &euro;</td>
-    <td class="text-right">{{ buyPriceString }} &euro;</td>
-    <td class="text-right">{{ spentValueString }} &euro;</td>
-    <td class="text-right">{{ sumSellPriceString }} &euro;</td>
-    <td class="text-right">
+    <td class="text-end">{{ amount }}</td>
+    <td class="text-end">{{ avgSpentPriceString }} &euro;</td>
+    <td class="text-end">{{ sellPriceString }} &euro;</td>
+    <td class="text-end">{{ buyPriceString }} &euro;</td>
+    <td class="text-end">{{ spentValueString }} &euro;</td>
+    <td class="text-end">{{ sumSellPriceString }} &euro;</td>
+    <td :class="profitClass">
       <u>{{ profitString }} &euro;</u>
     </td>
-    <td class="text-right">{{ pricesTimestampString }}</td>
+    <td class="text-end">{{ pricesTimestampString }}</td>
   </tr>
 </template>
 
 <script lang="ts">
+import { redIfNegativeEnd, formatNumber } from "@/tools/views/FormatNumber";
+import { formatDateWithTime } from "@/tools/views/FormatDate";
 import { defineComponent } from "vue";
 
 export default defineComponent({
@@ -50,7 +52,7 @@ export default defineComponent({
       required: true,
     },
     pricesTimestamp: {
-      type: String,
+      type: Date,
       required: true,
     },
   },
@@ -59,67 +61,31 @@ export default defineComponent({
       return this.amount * this.sellPrice;
     },
     sumSellPriceString(): string {
-      return new Intl.NumberFormat("de-DE", {
-        style: "decimal",
-        useGrouping: true,
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      }).format(this.sumSellPrice);
+      return formatNumber(this.sumSellPrice, 2);
     },
     avgSpentPriceString(): string {
-      return new Intl.NumberFormat("de-DE", {
-        style: "decimal",
-        useGrouping: true,
-        minimumFractionDigits: 4,
-        maximumFractionDigits: 4,
-      }).format(this.spentValue / this.amount);
+      return formatNumber(this.spentValue / this.amount, 4);
+    },
+    profit(): number {
+      return this.sumSellPrice - this.spentValue;
     },
     profitString(): string {
-      return new Intl.NumberFormat("de-DE", {
-        style: "decimal",
-        useGrouping: true,
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      }).format(this.sumSellPrice - this.spentValue);
+      return formatNumber(this.profit, 2);
+    },
+    profitClass(): string {
+      return redIfNegativeEnd(this.profit);
     },
     sellPriceString(): string {
-      return new Intl.NumberFormat("de-DE", {
-        style: "decimal",
-        useGrouping: true,
-        minimumFractionDigits: 3,
-        maximumFractionDigits: 3,
-      }).format(this.sellPrice);
+      return formatNumber(this.sellPrice, 3);
     },
     buyPriceString(): string {
-      return new Intl.NumberFormat("de-DE", {
-        style: "decimal",
-        useGrouping: true,
-        minimumFractionDigits: 3,
-        maximumFractionDigits: 3,
-      }).format(this.buyPrice);
+      return formatNumber(this.buyPrice, 3);
     },
     spentValueString(): string {
-      return new Intl.NumberFormat("de-DE", {
-        style: "decimal",
-        useGrouping: true,
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      }).format(this.spentValue);
+      return formatNumber(this.spentValue, 2);
     },
     pricesTimestampString(): string {
-      const dateObj = new Date(this.pricesTimestamp);
-      //avoid comma between date and time
-      const date = new Intl.DateTimeFormat("default", {
-        day: "2-digit",
-        month: "2-digit",
-        year: "numeric",
-      }).format(dateObj);
-      const time = new Intl.DateTimeFormat("default", {
-        hour: "2-digit",
-        minute: "2-digit",
-        second: "2-digit",
-      }).format(dateObj);
-      return date + " " + time;
+      return formatDateWithTime(this.pricesTimestamp);
     },
   },
 });
