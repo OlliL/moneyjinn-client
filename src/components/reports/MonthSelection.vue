@@ -19,7 +19,11 @@
               <ul class="pagination">
                 <li class="page-item" v-for="month in months" :key="month">
                   <a
-                    class="page-link"
+                    :class="
+                      $props.month == month + ''
+                        ? 'page-link active'
+                        : 'page-link'
+                    "
                     href="#"
                     @click="selectMonth($props.year, month + '')"
                     >{{ getMonthName(month) }}</a
@@ -34,7 +38,7 @@
   </div>
 
   <div class="row">
-    <div class="col-xs-6 text-start">
+    <div class="col-sm text-start">
       <a
         class="page-link link-primary"
         href="#"
@@ -43,7 +47,7 @@
         >&lt;&lt; voriger Monat</a
       >
     </div>
-    <div class="col-xs-6 text-end">
+    <div class="col-sm text-end">
       <a
         class="page-link link-primary"
         href="#"
@@ -60,7 +64,8 @@ import { getMonthName } from "@/tools/views/MonthName";
 import router, { Routes } from "@/router";
 import { defineComponent } from "vue";
 export default defineComponent({
-  name: "BookListItem",
+  name: "MonthSelection",
+  //emits: ["monthChanged"],
   data() {
     return {
       Routes: Routes,
@@ -114,6 +119,9 @@ export default defineComponent({
         params: { year: year, month: month },
       });
       this.loadData(year, month);
+      //if (year && month) {
+      //        this.$emit("monthChanged", year, month);
+      //}
     },
   },
 });

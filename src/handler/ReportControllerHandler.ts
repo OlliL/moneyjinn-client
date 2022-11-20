@@ -26,7 +26,7 @@ class ReportControllerHandler extends AbstractControllerHandler {
 
     const getAvailableMonthResponse =
       (await response.json()) as GetAvailableMonthResponse;
-    console.log(getAvailableMonthResponse);
+
     if (getAvailableMonthResponse.error) {
       throwError(getAvailableMonthResponse.error.code);
     }
