@@ -108,10 +108,10 @@ export default defineComponent({
       return getMonthName(month);
     },
     async loadData(year?: string, month?: string) {
-      let getAvailableMonthResponse =
-        await ReportControllerHandler.getAvailableMonth(year, month);
-
-      const response = getAvailableMonthResponse.getAvailableMonthResponse;
+      let response = await ReportControllerHandler.getAvailableMonth(
+        year,
+        month
+      );
 
       this.months = response.allMonth;
       this.years = response.allYears;
