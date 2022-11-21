@@ -25,10 +25,16 @@
 </template>
 
 <script lang="ts">
-import { capitalsourceTypeNames } from "@/model/capitalsource/CapitalsourceType";
-import { capitalsourceStateNames } from "@/model/capitalsource/CapitalsourceState";
+import {
+  CapitalsourceType,
+  capitalsourceTypeNames,
+} from "@/model/capitalsource/CapitalsourceType";
+import {
+  CapitalsourceState,
+  capitalsourceStateNames,
+} from "@/model/capitalsource/CapitalsourceState";
 import { redIfNegativeEnd, formatNumber } from "@/tools/views/FormatNumber";
-import { defineComponent } from "vue";
+import { defineComponent, type PropType } from "vue";
 import { formatDateWithTime } from "@/tools/views/FormatDate";
 
 export default defineComponent({
@@ -38,11 +44,11 @@ export default defineComponent({
   },
   props: {
     capitalsourceType: {
-      type: Number,
+      type: Number as PropType<CapitalsourceType>,
       required: true,
     },
     capitalsourceState: {
-      type: Number,
+      type: Number as PropType<CapitalsourceState>,
       required: true,
     },
     capitalsourceComment: {

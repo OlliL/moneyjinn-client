@@ -1,6 +1,6 @@
 export enum CapitalsourceState {
-  NON_CACHE = 1,
-  CACHE = 2,
+  NON_CACHE,
+  CACHE,
 }
 
-export const capitalsourceStateNames = ["", "bar", "unbar"];
+export const capitalsourceStateNames = ["bar", "unbar"];

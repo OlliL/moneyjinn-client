@@ -1,7 +1,9 @@
-// FIXME: Type + State should be enums, not numbers
+import type { CapitalsourceState } from "../capitalsource/CapitalsourceState";
+import type { CapitalsourceType } from "../capitalsource/CapitalsourceType";
+
 export type ReportTurnoverCapitalsource = {
-  capitalsourceType: number;
-  capitalsourceState: number;
+  capitalsourceType: CapitalsourceType;
+  capitalsourceState: CapitalsourceState;
   capitalsourceComment: string;
   amountBeginOfMonthFixed: number;
   amountEndOfMonthFixed?: number;
