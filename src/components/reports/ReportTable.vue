@@ -2,19 +2,23 @@
   <div class="row" style="margin-top: 20px">
     <div class="col">{{ $props.year }} / {{ $props.month }}</div>
   </div>
+  {{ currentMonthIsSettled }}
   <CapitalsourceTableVue
     :capitalsource-data="assetsTurnoverCapitalsources"
     groupName="Eigenkapital"
+    :current-month-is-settled="currentMonthIsSettled"
     v-if="assetsTurnoverCapitalsources.length > 0"
   />
   <CapitalsourceTableVue
     :capitalsource-data="liabilitiesTurnoverCapitalsources"
     groupName="Fremdkapital"
+    :current-month-is-settled="currentMonthIsSettled"
     v-if="liabilitiesTurnoverCapitalsources.length > 0"
   />
   <CapitalsourceTableVue
     :capitalsource-data="creditTurnoverCapitalsources"
     groupName="Kredite"
+    :current-month-is-settled="currentMonthIsSettled"
     v-if="creditTurnoverCapitalsources.length > 0"
   />
 </template>
@@ -81,6 +85,16 @@ export default defineComponent({
         );
       }
       return new Array<ReportTurnoverCapitalsource>();
+    },
+    currentMonthIsSettled(): boolean {
+      if (this.dataLoaded) {
+        for (let data of this.report.reportTurnoverCapitalsources) {
+          if (data.amountEndOfMonthFixed) {
+            return true;
+          }
+        }
+      }
+      return false;
     },
   },
   methods: {
