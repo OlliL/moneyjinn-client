@@ -4,6 +4,7 @@ import type { ListReportsResponse } from "@/model/rest/report/ListReportsRespons
 import type { AvailableMonth } from "@/model/report/AvailableMonth";
 import { throwError } from "@/tools/views/ThrowError";
 import type { Report } from "@/model/report/Report";
+import { mapReportTurnoverCapitalsourceTransportToReportTurnoverCapitalsource } from "./mapper/ReportTurnoverCapitalsourceTransportMapper";
 
 class ReportControllerHandler extends AbstractControllerHandler {
   private static CONTROLLER = "report";
@@ -70,7 +71,12 @@ class ReportControllerHandler extends AbstractControllerHandler {
       moneyflows: data.moneyflowTransport,
       moneyflowSplitEntrys: data.moneyflowSplitEntryTransport,
       moneyflowsWithReceipt: data.moneyflowsWithReceipt,
-      reportTurnoverCapitalsources: data.reportTurnoverCapitalsourceTransport,
+      reportTurnoverCapitalsources:
+        data.reportTurnoverCapitalsourceTransport.map((rtcp) => {
+          return mapReportTurnoverCapitalsourceTransportToReportTurnoverCapitalsource(
+            rtcp
+          );
+        }),
       turnoverEndOfYearCalculated: data.turnoverEndOfYearCalculated,
     };
 

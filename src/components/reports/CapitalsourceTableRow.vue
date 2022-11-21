@@ -6,14 +6,20 @@
     <td :class="amountBeginOfMonthFixedClass">
       {{ amountBeginOfMonthFixedString }} &euro;
     </td>
-    <td :class="amountEndOfMonthFixedClass">
+    <td :class="amountEndOfMonthFixedClass" v-if="currentMonthIsSettled">
       {{ amountEndOfMonthFixedString }} &euro;
     </td>
     <td :class="amountEndOfMonthCalculatedClass">
       {{ amountEndOfMonthCalculatedString }} &euro;
     </td>
-    <td :class="differenceFixedCalculatedClass">
+    <td :class="differenceFixedCalculatedClass" v-if="currentMonthIsSettled">
       {{ differenceFixedCalculatedString }} &euro;
+    </td>
+    <td :class="amountCurrentClass" v-if="!currentMonthIsSettled">
+      {{ amountCurrentString }} &euro;
+    </td>
+    <td class="text-end" v-if="!currentMonthIsSettled">
+      {{ amountCurrentStateString }}
     </td>
   </tr>
 </template>
@@ -23,6 +29,7 @@ import { capitalsourceTypeNames } from "@/model/capitalsource/CapitalsourceType"
 import { capitalsourceStateNames } from "@/model/capitalsource/CapitalsourceState";
 import { redIfNegativeEnd, formatNumber } from "@/tools/views/FormatNumber";
 import { defineComponent } from "vue";
+import { formatDateWithTime } from "@/tools/views/FormatDate";
 
 export default defineComponent({
   name: "CapitalsourceTableRow",
@@ -48,7 +55,7 @@ export default defineComponent({
     },
     amountEndOfMonthFixed: {
       type: Number,
-      required: true,
+      required: false,
     },
     amountEndOfMonthCalculated: {
       type: Number,
@@ -56,10 +63,14 @@ export default defineComponent({
     },
     amountCurrent: {
       type: Number,
-      required: true,
+      required: false,
     },
     amountCurrentState: {
-      type: String,
+      type: Date,
+      required: false,
+    },
+    currentMonthIsSettled: {
+      type: Boolean,
       required: true,
     },
   },
@@ -77,7 +88,9 @@ export default defineComponent({
       return redIfNegativeEnd(this.amountBeginOfMonthFixed);
     },
     amountEndOfMonthFixedString(): string {
-      return formatNumber(this.amountEndOfMonthFixed, 2);
+      return this.amountEndOfMonthFixed != null
+        ? formatNumber(this.amountEndOfMonthFixed, 2)
+        : "";
     },
     amountEndOfMonthFixedClass(): string {
       return redIfNegativeEnd(this.amountEndOfMonthFixed);
@@ -89,13 +102,28 @@ export default defineComponent({
       return redIfNegativeEnd(this.amountEndOfMonthCalculated);
     },
     differenceFixedCalculated(): number {
-      return this.amountEndOfMonthFixed - this.amountEndOfMonthCalculated;
+      return this.amountEndOfMonthFixed != null
+        ? this.amountEndOfMonthFixed - this.amountEndOfMonthCalculated
+        : 0;
     },
     differenceFixedCalculatedString(): string {
       return formatNumber(this.differenceFixedCalculated, 2);
     },
     differenceFixedCalculatedClass(): string {
       return redIfNegativeEnd(this.differenceFixedCalculated);
+    },
+    amountCurrentString(): string {
+      return this.amountCurrent != null
+        ? formatNumber(this.amountCurrent, 2)
+        : "";
+    },
+    amountCurrentClass(): string {
+      return redIfNegativeEnd(this.amountCurrent);
+    },
+    amountCurrentStateString(): string {
+      return this.amountCurrentState != null
+        ? formatDateWithTime(this.amountCurrentState)
+        : "berechnet";
     },
   },
 });
