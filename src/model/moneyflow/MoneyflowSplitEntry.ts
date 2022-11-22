@@ -1,6 +1,6 @@
 export type MoneyflowSplitEntry = {
   id: number;
-  userid: number;
+  moneyflowid: number;
   amount: number;
   comment: string;
   postingaccountid: number;

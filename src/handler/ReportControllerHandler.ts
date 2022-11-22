@@ -4,7 +4,9 @@ import type { ListReportsResponse } from "@/model/rest/report/ListReportsRespons
 import type { AvailableMonth } from "@/model/report/AvailableMonth";
 import { throwError } from "@/tools/views/ThrowError";
 import type { Report } from "@/model/report/Report";
-import { mapReportTurnoverCapitalsourceTransportToReportTurnoverCapitalsource } from "./mapper/ReportTurnoverCapitalsourceTransportMapper";
+import { mapReportTurnoverCapitalsourceTransportToModel } from "./mapper/ReportTurnoverCapitalsourceTransportMapper";
+import { mapMoneyflowTransportToModel } from "./mapper/MoneyflowTransportMapper";
+import type { MoneyflowSplitEntry } from "@/model/moneyflow/MoneyflowSplitEntry";
 
 class ReportControllerHandler extends AbstractControllerHandler {
   private static CONTROLLER = "report";
@@ -63,23 +65,40 @@ class ReportControllerHandler extends AbstractControllerHandler {
 
     const data = listReportsResponse.listReportsResponse;
 
-    //FIXME: make Transport-Mapper
+    const mseMap = new Map<number, Array<MoneyflowSplitEntry>>();
+
+    for (const mse of data.moneyflowSplitEntryTransport) {
+      let mseMapArray = mseMap.get(mse.moneyflowid);
+      if (mseMapArray == null) {
+        mseMapArray = new Array<MoneyflowSplitEntry>();
+      }
+      mseMapArray.push(mse);
+      mseMap.set(mse.moneyflowid, mseMapArray);
+      console.log(
+        mse.moneyflowid,
+        data.moneyflowsWithReceipt.includes(mse.moneyflowid)
+      );
+    }
+
     const report: Report = {
       year: data.year,
       month: data.month,
       amountBeginOfYear: data.amountBeginOfYear,
-      moneyflows: data.moneyflowTransport,
-      moneyflowSplitEntrys: data.moneyflowSplitEntryTransport,
-      moneyflowsWithReceipt: data.moneyflowsWithReceipt,
+      turnoverEndOfYearCalculated: data.turnoverEndOfYearCalculated,
       reportTurnoverCapitalsources:
         data.reportTurnoverCapitalsourceTransport.map((rtcp) => {
-          return mapReportTurnoverCapitalsourceTransportToReportTurnoverCapitalsource(
-            rtcp
-          );
+          return mapReportTurnoverCapitalsourceTransportToModel(rtcp);
         }),
-      turnoverEndOfYearCalculated: data.turnoverEndOfYearCalculated,
+      moneyflows: data.moneyflowTransport.map((mmf) => {
+        return mapMoneyflowTransportToModel(
+          mmf,
+          data.moneyflowsWithReceipt?.includes(mmf.id),
+          mseMap.get(mmf.id)
+        );
+      }),
     };
 
+    console.log(report);
     return report;
   }
 }
