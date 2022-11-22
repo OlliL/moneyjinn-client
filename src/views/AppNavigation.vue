@@ -1,5 +1,5 @@
 <template>
-  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <nav class="navbar navbar-expand-lg navbar-light fixed-top bg-light">
     <div class="container-fluid">
       <a class="navbar-brand" href="#"><small>moneyjin 0.99.0</small></a>
       <button
@@ -161,7 +161,11 @@
       </div>
     </div>
   </nav>
-  <router-view />
+  <main>
+    <div style="margin-top: 80px">
+      <router-view />
+    </div>
+  </main>
 </template>
 
 <script lang="ts">

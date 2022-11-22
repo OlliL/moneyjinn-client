@@ -1,15 +1,44 @@
 <template>
-  <tr>
-    <td><i class="bi bi-card-image" v-if="mmf.hasReceipt"></i></td>
+  <tr v-if="mmf.moneyflowSplitEntries == null">
+    <td>
+      <i class="bi bi-card-image" v-if="mmf.hasReceipt"></i>
+    </td>
     <td>{{ bookingdateString }}</td>
     <td>{{ invoicedateString }}</td>
     <td colspan="2" :class="amountClass">{{ amountString }} &euro;</td>
     <td class="text-start">{{ mmf.contractpartnername }}</td>
     <td class="text-start">{{ mmf.comment }}</td>
     <td class="text-start">{{ mmf.postingaccountname }}</td>
-    <td class="text-start">{{ mmf.capitalsourcecomment }}</td>
+    <td class="text-start">
+      {{ mmf.capitalsourcecomment }}
+    </td>
     <td class="text-start">bearbeiten</td>
     <td class="text-start">l&ouml;schen</td>
+  </tr>
+  <tr v-for="(mse, index) in mmf.moneyflowSplitEntries" :key="mse.id">
+    <td :rowspan="rowspan" v-if="index == 0">
+      <i class="bi bi-card-image" v-if="mmf.hasReceipt"></i>
+    </td>
+    <td :rowspan="rowspan" v-if="index == 0">{{ bookingdateString }}</td>
+    <td :rowspan="rowspan" v-if="index == 0">{{ invoicedateString }}</td>
+    <td :rowspan="rowspan" v-if="index == 0" :class="amountClass">
+      {{ amountString }} &euro;
+    </td>
+    <td :class="mseAmountClass(mse.amount)">
+      {{ mseAmountString(mse.amount) }} &euro;
+    </td>
+    <td :rowspan="rowspan" v-if="index == 0" class="text-start">
+      {{ mmf.contractpartnername }}
+    </td>
+    <td class="text-start">{{ mse.comment }}</td>
+    <td class="text-start">{{ mse.postingaccountname }}</td>
+    <td :rowspan="rowspan" v-if="index == 0" class="text-start">
+      {{ mmf.capitalsourcecomment }}
+    </td>
+    <td :rowspan="rowspan" v-if="index == 0" class="text-start">bearbeiten</td>
+    <td :rowspan="rowspan" v-if="index == 0" class="text-start">
+      l&ouml;schen
+    </td>
   </tr>
 </template>
 <script lang="ts">
@@ -38,6 +67,26 @@ export default defineComponent({
     },
     amountString(): string {
       return formatNumber(this.mmf.amount, 2);
+    },
+    rowspan(): number {
+      if (this.mmf.moneyflowSplitEntries != null) {
+        return this.mmf.moneyflowSplitEntries.length;
+      }
+      return 1;
+    },
+    amountColspan(): number {
+      if (this.mmf.moneyflowSplitEntries == null) {
+        return 2;
+      }
+      return 1;
+    },
+  },
+  methods: {
+    mseAmountString(amount: number): string {
+      return formatNumber(amount, 2);
+    },
+    mseAmountClass(amount: number): string {
+      return redIfNegativeEnd(amount);
     },
   },
 });

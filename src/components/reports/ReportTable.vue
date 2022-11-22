@@ -28,7 +28,7 @@
             <tr>
               <td class="text-end" colspan="3">&sum;</td>
               <td colspan="2" :class="amountSumClass">
-                {{ amountSumString }} &euro;
+                <u>{{ amountSumString }} &euro;</u>
               </td>
               <td colspan="6"></td>
             </tr>
@@ -37,7 +37,11 @@
       </div>
     </div>
   </div>
-
+  <div class="row" style="margin-top: 40px">
+    <div class="col-xs-12 text-center">
+      <h1>Monatsbilanz</h1>
+    </div>
+  </div>
   <CapitalsourceTableVue
     :capitalsource-data="assetsTurnoverCapitalsources"
     groupName="Eigenkapital"
