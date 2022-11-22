@@ -12,3 +12,12 @@ export function formatDateWithTime(date: Date): string {
   }).format(date);
   return dateStr + " " + timeStr;
 }
+
+export function formatDate(date: Date): string {
+  const dateStr = new Intl.DateTimeFormat("default", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+  }).format(date);
+  return dateStr;
+}
