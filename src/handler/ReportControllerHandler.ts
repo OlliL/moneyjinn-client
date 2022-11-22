@@ -74,10 +74,6 @@ class ReportControllerHandler extends AbstractControllerHandler {
       }
       mseMapArray.push(mse);
       mseMap.set(mse.moneyflowid, mseMapArray);
-      console.log(
-        mse.moneyflowid,
-        data.moneyflowsWithReceipt.includes(mse.moneyflowid)
-      );
     }
 
     const report: Report = {
@@ -98,7 +94,6 @@ class ReportControllerHandler extends AbstractControllerHandler {
       }),
     };
 
-    console.log(report);
     return report;
   }
 }
