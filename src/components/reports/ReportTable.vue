@@ -1,8 +1,43 @@
 <template>
   <div class="row" style="margin-top: 20px">
-    <div class="col">{{ $props.year }} / {{ $props.month }}</div>
+    <div class="card">
+      <div class="card-header text-center p-3">
+        <h5>Geldbewegung {{ monthName }} {{ year }}</h5>
+      </div>
+      <div class="card-body">
+        <table class="table table-striped table-bordered table-hover">
+          <thead>
+            <tr>
+              <th></th>
+              <th>Buchungsdatum</th>
+              <th>Rechnungsdatum</th>
+              <th colspan="2">Betrag</th>
+              <th>Vertragspartner</th>
+              <th>Kommentar</th>
+              <th>Buchungskonto</th>
+              <th>Kapitalquelle</th>
+              <th colspan="2"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <ReportTableRowVue
+              v-for="mmf in report.moneyflows"
+              :key="mmf.id"
+              :mmf="mmf"
+            />
+            <tr>
+              <td class="text-end" colspan="3">&sum;</td>
+              <td colspan="2" :class="amountSumClass">
+                {{ amountSumString }} &euro;
+              </td>
+              <td colspan="6"></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
   </div>
-  {{ currentMonthIsSettled }}
+
   <CapitalsourceTableVue
     :capitalsource-data="assetsTurnoverCapitalsources"
     groupName="Eigenkapital"
@@ -30,6 +65,10 @@ import { CapitalsourceType } from "@/model/capitalsource/CapitalsourceType";
 import type { ReportTurnoverCapitalsource } from "@/model/report/ReportTurnoverCapitalsourceTransport";
 import { defineComponent } from "vue";
 import CapitalsourceTableVue from "./CapitalsourceTable.vue";
+import ReportTableRowVue from "./ReportTableRow.vue";
+import { redIfNegativeEnd, formatNumber } from "@/tools/views/FormatNumber";
+import { getMonthName } from "@/tools/views/MonthName";
+
 export default defineComponent({
   name: "ReportTable",
   data() {
@@ -96,6 +135,24 @@ export default defineComponent({
       }
       return false;
     },
+    amountSum(): number {
+      let sum = 0;
+      if (this.dataLoaded) {
+        for (const mmf of this.report.moneyflows) {
+          sum += mmf.amount;
+        }
+      }
+      return sum;
+    },
+    amountSumClass(): string {
+      return redIfNegativeEnd(this.amountSum);
+    },
+    amountSumString(): string {
+      return formatNumber(this.amountSum, 2);
+    },
+    monthName(): string {
+      return getMonthName(this.report.month);
+    },
   },
   methods: {
     async loadData(year: string, month: string) {
@@ -104,6 +161,6 @@ export default defineComponent({
       console.log(this.report);
     },
   },
-  components: { CapitalsourceTableVue },
+  components: { CapitalsourceTableVue, ReportTableRowVue },
 });
 </script>
