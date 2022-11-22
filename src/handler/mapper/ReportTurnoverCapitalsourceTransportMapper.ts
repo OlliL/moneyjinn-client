@@ -3,10 +3,10 @@ import type { ReportTurnoverCapitalsourceTransport } from "@/model/rest/report/t
 import { mapCapitalsourceStateTransportToEnum } from "./CapitalsourceStateMapper";
 import { mapCapitalsourceTypeTransportToEnum } from "./CapitalsourceTypeMapper";
 
-export function mapReportTurnoverCapitalsourceTransportToReportTurnoverCapitalsource(
+export function mapReportTurnoverCapitalsourceTransportToModel(
   transport: ReportTurnoverCapitalsourceTransport
 ): ReportTurnoverCapitalsource {
-  const etfData: ReportTurnoverCapitalsource = {
+  const model: ReportTurnoverCapitalsource = {
     capitalsourceComment: transport.capitalsourceComment,
     capitalsourceState: mapCapitalsourceStateTransportToEnum(
       transport.capitalsourceState
@@ -22,5 +22,5 @@ export function mapReportTurnoverCapitalsourceTransportToReportTurnoverCapitalso
       ? new Date(transport.amountCurrentState)
       : undefined,
   };
-  return etfData;
+  return model;
 }

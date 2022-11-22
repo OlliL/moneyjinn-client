@@ -1,17 +1,19 @@
-//FIXME: bookingdate, invoicedate --> Date
-//FIXME: private --> boolean
+import type { MoneyflowSplitEntry } from "./MoneyflowSplitEntry";
+
 export type Moneyflow = {
   id: number;
   userid: number;
-  bookingdate: string;
-  invoicedate: string;
+  bookingdate: Date;
+  invoicedate: Date;
   amount: number;
   capitalsourceid: number;
   capitalsourcecomment: string;
   contractpartnerid: number;
   contractpartnername: string;
   comment: string;
-  private: number;
+  private: boolean;
   postingaccountid: number;
   postingaccountname: string;
+  moneyflowSplitEntries?: Array<MoneyflowSplitEntry>;
+  hasReceipt: boolean;
 };

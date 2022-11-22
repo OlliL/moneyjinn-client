@@ -77,11 +77,11 @@
                       <u>{{ differenceFixedCalculatedSumString }} &euro;</u>
                     </td>
                   </tr>
-                  <!--FIXME: sum row-->
                 </tbody>
               </table>
             </div>
           </div>
+          <!-- FIXME: turnover mini-table for the assets -->
         </div>
       </div>
     </div>
