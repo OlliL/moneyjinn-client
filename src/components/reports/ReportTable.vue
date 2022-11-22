@@ -162,7 +162,6 @@ export default defineComponent({
     async loadData(year: string, month: string) {
       this.report = await ReportControllerHandler.listReports(year, month);
       this.dataLoaded = true;
-      console.log(this.report);
     },
   },
   components: { CapitalsourceTableVue, ReportTableRowVue },
