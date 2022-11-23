@@ -5,6 +5,9 @@ export function redIfNegativeEnd(check?: number): string {
 }
 
 export function formatNumber(num: number, decimalPlaces: number): string {
+  if (num !== undefined) {
+    num = +num.toFixed(decimalPlaces).replace(/^-0\.00$/, "0.00");
+  }
   return new Intl.NumberFormat("de-DE", {
     style: "decimal",
     useGrouping: true,

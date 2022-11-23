@@ -1,91 +1,73 @@
 <template>
-  <div class="row justify-content-md-center py-4">
-    <div class="col col-lg-8">
-      <div class="card">
-        <div class="card-header text-center p-3">
-          <h4>{{ groupName }}</h4>
-        </div>
-        <div class="card-body">
-          <div class="row">
-            <div class="col-xs-12 text-center">
-              <table
-                class="table table-striped table-bordered table-hover"
-                style="table-layout: fixed"
-              >
-                <col style="width: 15%" />
-                <col style="width: 10%" />
-                <col style="width: 20%" />
-                <col style="width: 10%" />
-                <col style="width: 10%" />
-                <col style="width: 10%" />
-                <col style="width: 15%" />
-                <thead>
-                  <tr>
-                    <th class="text-center">Typ</th>
-                    <th class="text-center">Status</th>
-                    <th class="text-center">Kommentar</th>
-                    <th class="text-center">Anfangsbetrag</th>
-                    <th class="text-center" v-if="currentMonthIsSettled">
-                      Endbetrag (fix)
-                    </th>
-                    <th class="text-center">Endbetrag (errechnet)</th>
-                    <th class="text-center" v-if="!currentMonthIsSettled">
-                      Aktueller Betrag
-                    </th>
-                    <th class="text-center" v-if="!currentMonthIsSettled">
-                      Stand
-                    </th>
-                    <th class="text-center" v-if="currentMonthIsSettled">
-                      Differenz
-                    </th>
-                  </tr>
-                </thead>
+  <div class="row">
+    <div class="col-xs-12 text-center">
+      <table
+        class="table table-striped table-bordered table-hover"
+        style="table-layout: fixed"
+      >
+        <col style="width: 15%" />
+        <col style="width: 10%" />
+        <col style="width: 20%" />
+        <col style="width: 10%" />
+        <col style="width: 10%" />
+        <col style="width: 10%" />
+        <col style="width: 15%" />
+        <thead>
+          <tr>
+            <th class="text-center">Typ</th>
+            <th class="text-center">Status</th>
+            <th class="text-center">Kommentar</th>
+            <th class="text-center">Anfangsbetrag</th>
+            <th class="text-center" v-if="currentMonthIsSettled">
+              Endbetrag (fix)
+            </th>
+            <th class="text-center">Endbetrag (errechnet)</th>
+            <th class="text-center" v-if="!currentMonthIsSettled">
+              Aktueller Betrag
+            </th>
+            <th class="text-center" v-if="!currentMonthIsSettled">Stand</th>
+            <th class="text-center" v-if="currentMonthIsSettled">Differenz</th>
+          </tr>
+        </thead>
 
-                <tbody>
-                  <CapitalsourceTableRowVue
-                    v-for="data in capitalsourceData"
-                    :key="data.capitalsourceComment"
-                    v-bind="{
-                      ...data,
-                      currentMonthIsSettled: currentMonthIsSettled,
-                    }"
-                  />
-                  <tr>
-                    <td class="text-end" colspan="3">&sum;</td>
-                    <td :class="amountBeginOfMonthFixedSumClass">
-                      <u>{{ amountBeginOfMonthFixedSumString }} &euro;</u>
-                    </td>
-                    <td
-                      :class="amountEndOfMonthFixedSumClass"
-                      v-if="currentMonthIsSettled"
-                    >
-                      <u>{{ amountEndOfMonthFixedSumString }} &euro;</u>
-                    </td>
-                    <td :class="amountEndOfMonthCalculatedSumClass">
-                      <u>{{ amountEndOfMonthCalculatedSumString }} &euro;</u>
-                    </td>
-                    <td
-                      :class="amountCurrentSumClass"
-                      v-if="!currentMonthIsSettled"
-                    >
-                      <u>{{ amountCurrentSumString }} &euro;</u>
-                    </td>
-                    <td
-                      :class="differenceFixedCalculatedSumClass"
-                      v-if="currentMonthIsSettled"
-                    >
-                      <u>{{ differenceFixedCalculatedSumString }} &euro;</u>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-          <!-- FIXME: turnover mini-table for the assets -->
-        </div>
-      </div>
+        <tbody>
+          <CapitalsourceTableRowVue
+            v-for="data in capitalsourceData"
+            :key="data.capitalsourceComment"
+            v-bind="{
+              ...data,
+              currentMonthIsSettled: currentMonthIsSettled,
+            }"
+          />
+          <tr>
+            <td class="text-end" colspan="3">&sum;</td>
+            <td :class="amountBeginOfMonthFixedSumClass">
+              <u>{{ amountBeginOfMonthFixedSumString }} &euro;</u>
+            </td>
+            <td
+              :class="amountEndOfMonthFixedSumClass"
+              v-if="currentMonthIsSettled"
+            >
+              <u>{{ amountEndOfMonthFixedSumString }} &euro;</u>
+            </td>
+            <td :class="amountEndOfMonthCalculatedSumClass">
+              <u>{{ amountEndOfMonthCalculatedSumString }} &euro;</u>
+            </td>
+            <td :class="amountCurrentSumClass" v-if="!currentMonthIsSettled">
+              <u>{{ amountCurrentSumString }} &euro;</u>
+            </td>
+            <td
+              :class="differenceFixedCalculatedSumClass"
+              v-if="currentMonthIsSettled"
+            >
+              <u>{{ differenceFixedCalculatedSumString }} &euro;</u>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
+  <!-- FIXME: turnover mini-table for the assets -->
 </template>
 
 <script lang="ts">
@@ -98,10 +80,6 @@ export default defineComponent({
   props: {
     capitalsourceData: {
       type: Array<ReportTurnoverCapitalsource>,
-      required: true,
-    },
-    groupName: {
-      type: String,
       required: true,
     },
     currentMonthIsSettled: {
