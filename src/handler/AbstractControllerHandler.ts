@@ -1,7 +1,7 @@
 import { useUserSessionStore } from "@/stores/UserSessionStore";
 
 abstract class AbstractControllerHandler {
-  private static SERVER_ROOT = "http://localhost:8081/moneyflow/server/";
+  private static SERVER_ROOT = "http://localhost:8080/moneyflow/server/";
 
   private getHeaders(): HeadersInit {
     const userSessionStore = useUserSessionStore();
@@ -13,7 +13,6 @@ abstract class AbstractControllerHandler {
       headersInit["Authentication"] =
         "Bearer " + userSessionStore.getAuthorizationToken;
     }
-    console.log("private", userSessionStore.getAuthorizationToken);
     return headersInit;
   }
 

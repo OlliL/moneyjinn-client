@@ -48,6 +48,50 @@
     :current-month-is-settled="currentMonthIsSettled"
     v-if="assetsTurnoverCapitalsources.length > 0"
   />
+
+  <div class="row justify-content-md-center py-4">
+    <div class="col col-lg-3">
+      <table class="table table-striped table-bordered table-hover">
+        <thead>
+          <tr>
+            <th></th>
+            <th>Monat</th>
+            <th>Jahr</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-if="currentMonthIsSettled">
+            <th class="text-end">Gewinn (fix)</th>
+            <td class="text-end">{{ assetsMonthlyFixedTurnover }} &euro;</td>
+            <td class="text-end">{{ assetsYearlyFixedTurnover }} &euro;</td>
+          </tr>
+          <tr>
+            <th class="text-end">Gewinn (errechnet)</th>
+            <td class="text-end">
+              {{ assetsMonthlyCalculatedTurnover }} &euro;
+            </td>
+            <td class="text-end">
+              {{ report.turnoverEndOfYearCalculated }} &euro;
+            </td>
+          </tr>
+          <tr v-if="currentMonthIsSettled">
+            <th class="text-end">Differenz</th>
+            <td class="text-end">
+              {{ assetsMonthlyFixedTurnover - assetsMonthlyCalculatedTurnover }}
+              &euro;
+            </td>
+            <td class="text-end">
+              {{
+                assetsYearlyFixedTurnover - report.turnoverEndOfYearCalculated
+              }}
+              &euro;
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
   <CapitalsourceTableVue
     :capitalsource-data="liabilitiesTurnoverCapitalsources"
     groupName="Fremdkapital"
@@ -76,7 +120,13 @@ import { getMonthName } from "@/tools/views/MonthName";
 export default defineComponent({
   name: "ReportTable",
   data() {
-    return { report: {} as Report, dataLoaded: false };
+    return {
+      report: {} as Report,
+      dataLoaded: false,
+      assetsMonthlyFixedTurnover: 0,
+      assetsYearlyFixedTurnover: 0,
+      assetsMonthlyCalculatedTurnover: 0,
+    };
   },
   props: {
     year: {
@@ -161,6 +211,27 @@ export default defineComponent({
   methods: {
     async loadData(year: string, month: string) {
       this.report = await ReportControllerHandler.listReports(year, month);
+
+      this.assetsMonthlyCalculatedTurnover = 0;
+
+      var assetsLastAmount = 0;
+      var assetsFixAmount = 0;
+      for (const data of this.report.reportTurnoverCapitalsources) {
+        if (
+          data.capitalsourceType === CapitalsourceType.CURRENT_ASSET ||
+          data.capitalsourceType === CapitalsourceType.LONG_TERM_ASSET
+        ) {
+          this.assetsMonthlyCalculatedTurnover +=
+            data.amountEndOfMonthCalculated - data.amountBeginOfMonthFixed;
+          assetsLastAmount += data.amountBeginOfMonthFixed;
+          if (data.amountEndOfMonthFixed)
+            assetsFixAmount += data.amountEndOfMonthFixed;
+        }
+      }
+      this.assetsMonthlyFixedTurnover = assetsFixAmount - assetsLastAmount;
+      this.assetsYearlyFixedTurnover =
+        assetsFixAmount - this.report.amountBeginOfYear;
+
       this.dataLoaded = true;
     },
   },
