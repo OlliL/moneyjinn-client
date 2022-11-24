@@ -67,7 +67,6 @@
       </table>
     </div>
   </div>
-  <!-- FIXME: turnover mini-table for the assets -->
 </template>
 
 <script lang="ts">

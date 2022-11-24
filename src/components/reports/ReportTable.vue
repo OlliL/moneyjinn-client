@@ -4,6 +4,9 @@
       <div class="card-header text-center p-3">
         <h5>Geldbewegung {{ monthName }} {{ year }}</h5>
       </div>
+
+      <ReceiptModalVue ref="receiptModal" />
+
       <div class="card-body">
         <table class="table table-striped table-bordered table-hover">
           <thead>
@@ -24,6 +27,7 @@
               v-for="mmf in report.moneyflows"
               :key="mmf.id"
               :mmf="mmf"
+              @show-receipt="showReceipt"
             />
             <tr>
               <td class="text-end" colspan="3">&sum;</td>
@@ -149,6 +153,7 @@ import CapitalsourceTableVue from "./CapitalsourceTable.vue";
 import ReportTableRowVue from "./ReportTableRow.vue";
 import { redIfNegativeEnd, formatNumber } from "@/tools/views/FormatNumber";
 import { getMonthName } from "@/tools/views/MonthName";
+import ReceiptModalVue from "./ReceiptModal.vue";
 
 export default defineComponent({
   name: "ReportTable",
@@ -321,7 +326,10 @@ export default defineComponent({
 
       this.dataLoaded = true;
     },
+    showReceipt(moneyflowId: number) {
+      (this.$refs.receiptModal as typeof ReceiptModalVue)._show(moneyflowId);
+    },
   },
-  components: { CapitalsourceTableVue, ReportTableRowVue },
+  components: { CapitalsourceTableVue, ReportTableRowVue, ReceiptModalVue },
 });
 </script>

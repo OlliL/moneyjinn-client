@@ -1,7 +1,11 @@
 <template>
   <tr v-if="mmf.moneyflowSplitEntries == null">
     <td>
-      <i class="bi bi-card-image" v-if="mmf.hasReceipt"></i>
+      <i
+        class="bi bi-card-image link-primary"
+        v-if="mmf.hasReceipt"
+        @click="showReceipt"
+      ></i>
     </td>
     <td>{{ bookingdateString }}</td>
     <td>{{ invoicedateString }}</td>
@@ -17,7 +21,11 @@
   </tr>
   <tr v-for="(mse, index) in mmf.moneyflowSplitEntries" :key="mse.id">
     <td :rowspan="rowspan" v-if="index == 0">
-      <i class="bi bi-card-image" v-if="mmf.hasReceipt"></i>
+      <i
+        class="bi bi-card-image link-primary"
+        v-if="mmf.hasReceipt"
+        @click="showReceipt"
+      ></i>
     </td>
     <td :rowspan="rowspan" v-if="index == 0">{{ bookingdateString }}</td>
     <td :rowspan="rowspan" v-if="index == 0">{{ invoicedateString }}</td>
@@ -55,6 +63,7 @@ export default defineComponent({
       required: true,
     },
   },
+  emits: ["showReceipt"],
   computed: {
     bookingdateString() {
       return formatDate(this.mmf.bookingdate);
@@ -87,6 +96,9 @@ export default defineComponent({
     },
     mseAmountClass(amount: number): string {
       return redIfNegativeEnd(amount);
+    },
+    showReceipt() {
+      this.$emit("showReceipt", this.mmf.id);
     },
   },
 });
