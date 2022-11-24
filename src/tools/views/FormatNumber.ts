@@ -6,12 +6,15 @@ export function redIfNegativeEnd(check?: number): string {
 
 export function formatNumber(num: number, decimalPlaces: number): string {
   if (num !== undefined) {
-    num = +num.toFixed(decimalPlaces).replace(/^-0\.00$/, "0.00");
+    // save decimal places of the given number, ignore negative sign
+    const decimals: string = Math.abs(num % 1)
+      .toFixed(decimalPlaces)
+      .substring(2);
+    // delete decimal places of the given number
+    num = ~~num;
+    // format number with thousand delimiter and add decimal places again
+    const numStr = num.toLocaleString("de").concat(",", decimals);
+    return numStr;
   }
-  return new Intl.NumberFormat("de-DE", {
-    style: "decimal",
-    useGrouping: true,
-    minimumFractionDigits: decimalPlaces,
-    maximumFractionDigits: decimalPlaces,
-  }).format(num);
+  return "";
 }
