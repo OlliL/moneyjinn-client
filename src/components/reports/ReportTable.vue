@@ -309,7 +309,6 @@ export default defineComponent({
             data.amountEndOfMonthCalculated - data.amountBeginOfMonthFixed
           ).toFixed(2);
           assetsLastAmount += data.amountBeginOfMonthFixed;
-          console.log(assetsFixAmount, data.amountEndOfMonthFixed);
           if (data.amountEndOfMonthFixed)
             assetsFixAmount = +(
               assetsFixAmount + data.amountEndOfMonthFixed
@@ -322,7 +321,6 @@ export default defineComponent({
       this.assetsYearlyFixedTurnover = +(
         assetsFixAmount - this.report.amountBeginOfYear
       ).toFixed(2);
-      console.log(assetsFixAmount);
 
       this.dataLoaded = true;
     },
