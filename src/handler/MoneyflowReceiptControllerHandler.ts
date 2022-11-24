@@ -1,11 +1,14 @@
 import AbstractControllerHandler from "@/handler/AbstractControllerHandler";
+import { ErrorCode } from "@/model/ErrorCode";
+import type { MoneyflowReceipt } from "@/model/moneyflow/MoneyflowReceipt";
+import { MoneyflowReceiptType } from "@/model/moneyflow/MoneyflowReceiptType";
 import type { ShowMoneyflowReceiptResponse } from "@/model/rest/moneyflow/ShowMoneyflowReceiptResponse";
 import { throwError } from "@/tools/views/ThrowError";
 
 class MoneyflowReceiptControllerHandler extends AbstractControllerHandler {
   private static CONTROLLER = "moneyflowreceipt";
 
-  async fetchReceipt(moneyflowId: number): Promise<string> {
+  async fetchReceipt(moneyflowId: number): Promise<MoneyflowReceipt> {
     const usecase = "showMoneyflowReceipt/" + moneyflowId;
     const response = await super.get(
       MoneyflowReceiptControllerHandler.CONTROLLER,
@@ -22,8 +25,32 @@ class MoneyflowReceiptControllerHandler extends AbstractControllerHandler {
       throwError(showMoneyflowReceiptResponse.error.code);
     }
 
-    // FIXME: receiptType!
-    return showMoneyflowReceiptResponse.showMoneyflowReceiptResponse.receipt;
+    let receiptType: MoneyflowReceiptType;
+    switch (
+      showMoneyflowReceiptResponse.showMoneyflowReceiptResponse.receiptType
+    ) {
+      case 1: {
+        receiptType = MoneyflowReceiptType.JPEG;
+        break;
+      }
+      case 2: {
+        receiptType = MoneyflowReceiptType.PDF;
+        break;
+      }
+      default: {
+        receiptType = MoneyflowReceiptType.UNKNOWN;
+        throwError(ErrorCode.MEDIA_TYPE_UNKNOWN);
+      }
+    }
+
+    const moneyflowReceipt: MoneyflowReceipt = {
+      moneyflowId: moneyflowId,
+      receipt:
+        showMoneyflowReceiptResponse.showMoneyflowReceiptResponse.receipt,
+      receiptType: receiptType,
+    };
+
+    return moneyflowReceipt;
   }
 }
 

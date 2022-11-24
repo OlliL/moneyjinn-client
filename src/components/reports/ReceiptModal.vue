@@ -26,7 +26,8 @@ export default defineComponent({
       let response = await MoneyflowReceiptControllerHandler.fetchReceipt(
         moneyflowId
       );
-      this.imageBase64 = response;
+      //FIXME: respect receiptType PDF
+      this.imageBase64 = response.receipt;
 
       (this.$refs.modalComponent as typeof ModalVue)._show();
     },
