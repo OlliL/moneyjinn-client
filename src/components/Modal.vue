@@ -1,7 +1,6 @@
 <template>
   <div
     class="modal fade"
-    id="exampleModal"
     tabindex="-1"
     aria-labelledby=""
     aria-hidden="true"
@@ -9,8 +8,8 @@
   >
     <div class="modal-dialog">
       <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">{{ title }}</h5>
+        <div class="modal-header text-center">
+          <h5 class="modal-title w-100">{{ title }}</h5>
           <button
             type="button"
             class="btn-close"
@@ -20,10 +19,6 @@
         </div>
         <div class="modal-body">
           <slot name="body" />
-          <img
-            :src="`data:image/png;base64,${imageBase64}`"
-            style="max-width: 100%; max-height: 100%"
-          />
         </div>
         <div class="modal-footer">
           <slot name="footer"></slot>
@@ -32,7 +27,7 @@
             class="btn btn-secondary"
             data-bs-dismiss="modal"
           >
-            Close
+            Abbrechen
           </button>
         </div>
       </div>
@@ -43,7 +38,6 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import { Modal } from "bootstrap";
-import MoneyflowReceiptControllerHandler from "@/handler/MoneyflowReceiptControllerHandler";
 
 export default defineComponent({
   name: "ReportTable",
@@ -51,7 +45,6 @@ export default defineComponent({
   data() {
     return {
       thisModalObj: {} as Modal,
-      imageBase64: "",
     };
   },
   props: {
@@ -62,11 +55,6 @@ export default defineComponent({
   },
   methods: {
     async _show() {
-      let response = await MoneyflowReceiptControllerHandler.fetchReceipt(
-        27753
-      );
-      console.log(response);
-      this.imageBase64 = response;
       this.thisModalObj.show();
     },
   },
