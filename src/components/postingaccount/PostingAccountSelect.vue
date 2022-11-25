@@ -1,0 +1,82 @@
+<template>
+  <div class="input-group">
+    <div class="form-floating">
+      <select
+        v-model="postingAccountId"
+        id="postingAccount"
+        @change="emitPostingAccountSelected"
+        :class="'form-select form-control ' + inputClass"
+      >
+        <option value="0">&nbsp;</option>
+        <option
+          v-for="postingAccount of postingAccountArray"
+          :key="postingAccount.id"
+          :value="postingAccount.id"
+        >
+          {{ postingAccount.name }}
+        </option>
+      </select>
+
+      <label for="postingAccount" :style="'color: ' + fieldColor">{{
+        fieldLabel
+      }}</label>
+    </div>
+    <span class="input-group-text"><i class="bi bi-plus"></i></span>
+  </div>
+</template>
+<script lang="ts">
+import type { PostingAccount } from "@/model/postingaccount/PostingAccount";
+import { usePostingAccountStore } from "@/stores/PostingAccountStore";
+import { mapActions } from "pinia";
+import { defineComponent } from "vue";
+
+export default defineComponent({
+  name: "PostingAccountSelect",
+  data() {
+    return { postingAccountId: 0 };
+  },
+  emits: ["postingAccountSelected"],
+  props: {
+    validityDate: {
+      type: Date,
+      required: true,
+    },
+    selectedId: {
+      type: Number,
+      required: false,
+    },
+    inputClass: {
+      type: String,
+      required: true,
+    },
+    fieldColor: {
+      type: String,
+      required: true,
+    },
+    fieldLabel: {
+      type: String,
+      required: true,
+    },
+  },
+  computed: {
+    postingAccountArray(): Array<PostingAccount> {
+      const postingAccountStore = usePostingAccountStore();
+      return postingAccountStore.getPostingAccount;
+    },
+  },
+  watch: {
+    selectedId: function (newVal: number, oldVal: number) {
+      if (newVal != oldVal) this.postingAccountId = newVal;
+    },
+  },
+  created() {
+    this.initPostingAccountStore();
+  },
+  methods: {
+    ...mapActions(usePostingAccountStore, ["initPostingAccountStore"]),
+    emitPostingAccountSelected() {
+      this.$emit("postingAccountSelected", +this.postingAccountId);
+    },
+  },
+});
+</script>
