@@ -73,32 +73,14 @@
                     </div>
                   </div>
                   <div class="col-md-4 col-xs-12">
-                    <div class="input-group">
-                      <div class="form-floating">
-                        <select
-                          v-model="mmf.contractpartnerid"
-                          id="contractpartner"
-                          @change="validateContractpartner"
-                          :class="
-                            'form-select form-control ' +
-                            contractpartnerErrorData.inputClass
-                          "
-                        >
-                          <option value="">&nbsp;</option>
-                        </select>
-
-                        <label
-                          for="contractpartner"
-                          :style="
-                            'color: ' + contractpartnerErrorData.fieldColor
-                          "
-                          >{{ contractpartnerErrorData.fieldLabel }}</label
-                        >
-                      </div>
-                      <span class="input-group-text"
-                        ><i class="bi bi-plus"></i
-                      ></span>
-                    </div>
+                    <ContractpartnerSelectVue
+                      :field-color="contractpartnerErrorData.fieldColor"
+                      :field-label="contractpartnerErrorData.fieldLabel"
+                      :input-class="contractpartnerErrorData.inputClass"
+                      :validity-date="validityDate"
+                      :selected-id="mmf.contractpartnerid"
+                      @contractpartner-selected="onContractpartnerSelected"
+                    />
                   </div>
 
                   <div class="col-md-4 col-xs-12">
@@ -290,6 +272,7 @@
 </template>
 
 <script lang="ts">
+import ContractpartnerSelectVue from "@/components/contractpartner/ContractpartnerSelect.vue";
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 import { generateErrorData, type ErrorData } from "@/tools/views/ErrorData";
 import { defineComponent } from "vue";
@@ -402,10 +385,25 @@ export default defineComponent({
         this.postingaccountErrorMessage
       );
     },
+    validityDate(): Date {
+      if (this.invoicedateIsValid) {
+        return new Date(this.invoicedate);
+      } else if (this.bookingdateIsValid) {
+        return new Date(this.bookingdate);
+      } else {
+        return new Date();
+      }
+    },
   },
   methods: {
     resetForm() {
       [this.bookingdate] = new Date().toISOString().split("T");
+      this.invoicedate = "";
+      this.mmf.contractpartnerid = 0;
+      this.mmf.capitalsourceid = 0;
+      this.mmf.postingaccountid = 0;
+      this.mmf.amount = {} as number;
+      this.mmf.comment = "";
       this.bookingdateIsValid = null;
       this.invoicedateIsValid = null;
       this.contractpartnerIsValid = null;
@@ -428,8 +426,13 @@ export default defineComponent({
       this.invoiceErrorMessage = "";
     },
     validateContractpartner() {
-      this.contractpartnerIsValid = true;
-      this.contractpartnerErrorMessage = "";
+      if (!this.mmf.contractpartnerid) {
+        this.contractpartnerIsValid = false;
+        this.contractpartnerErrorMessage = "Vertragspartner angeben!";
+      } else {
+        this.contractpartnerIsValid = true;
+        this.contractpartnerErrorMessage = "";
+      }
     },
     validateCapitalsource() {
       this.capitalsourceIsValid = true;
@@ -457,6 +460,10 @@ export default defineComponent({
       this.postingaccountIsValid = true;
       this.postingaccountErrorMessage = "";
     },
+    onContractpartnerSelected(contractpartnerId: number) {
+      this.mmf.contractpartnerid = contractpartnerId;
+      this.validateContractpartner();
+    },
     saveMoneyflow() {
       this.validateAmount();
       this.validateBookingdate();
@@ -466,8 +473,11 @@ export default defineComponent({
       this.validateInvoicedate();
       this.validatePostingaccount();
 
+      //this.mmf.bookingdate =
+      //this.mmf.invoicedate =
       if (this.formIsValid) alert("save");
     },
   },
+  components: { ContractpartnerSelectVue },
 });
 </script>
