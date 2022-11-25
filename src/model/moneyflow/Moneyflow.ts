@@ -1,5 +1,6 @@
 import type { MoneyflowSplitEntry } from "./MoneyflowSplitEntry";
 
+//FIXME: camelCase the properties!
 export type Moneyflow = {
   id: number;
   userid: number;
