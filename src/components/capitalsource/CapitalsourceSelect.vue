@@ -77,7 +77,12 @@ export default defineComponent({
   methods: {
     ...mapActions(useCapitalsourceStore, ["initCapitalsourceStore"]),
     emitCapitalsourceSelected() {
-      this.$emit("capitalsourceSelected", +this.capitalsourceId);
+      this.$emit(
+        "capitalsourceSelected",
+        this.capitalsourceArray.filter((mcs) => {
+          return mcs.id === +this.capitalsourceId;
+        })[0]
+      );
     },
   },
 });

@@ -75,7 +75,12 @@ export default defineComponent({
   methods: {
     ...mapActions(useContractpartnerStore, ["initContractpartnerStore"]),
     emitContractpartnerSelected() {
-      this.$emit("contractpartnerSelected", +this.contractpartnerId);
+      this.$emit(
+        "contractpartnerSelected",
+        this.contractpartnerArray.find((mcp) => {
+          return mcp.id === +this.contractpartnerId;
+        })
+      );
     },
   },
 });

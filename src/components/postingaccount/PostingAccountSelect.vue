@@ -75,7 +75,12 @@ export default defineComponent({
   methods: {
     ...mapActions(usePostingAccountStore, ["initPostingAccountStore"]),
     emitPostingAccountSelected() {
-      this.$emit("postingAccountSelected", +this.postingAccountId);
+      this.$emit(
+        "postingAccountSelected",
+        this.postingAccountArray.filter((mpa) => {
+          return mpa.id === +this.postingAccountId;
+        })[0]
+      );
     },
   },
 });
