@@ -28,6 +28,9 @@ export const useUserSessionStore = defineStore("userSession", {
     getRefreshToken(): string {
       return this.userRefreshToken;
     },
+    getUserId(): number {
+      return this.userId;
+    },
   },
   actions: {
     setUserSession(userSess: UserSession) {
