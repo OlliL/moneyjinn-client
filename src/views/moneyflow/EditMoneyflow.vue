@@ -473,9 +473,12 @@ export default defineComponent({
       this.validateInvoicedate();
       this.validatePostingaccount();
 
-      //this.mmf.bookingdate =
-      //this.mmf.invoicedate =
-      if (this.formIsValid) alert("save");
+      if (this.formIsValid) {
+        this.mmf.bookingdate = new Date(this.bookingdate);
+        if (this.invoicedate) this.mmf.invoicedate = new Date(this.invoicedate);
+        console.log(this.mmf);
+        alert("save");
+      }
     },
   },
   components: { ContractpartnerSelectVue },

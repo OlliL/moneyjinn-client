@@ -8,8 +8,13 @@
         :class="'form-select form-control ' + inputClass"
       >
         <option value="0">&nbsp;</option>
-        <option value="1">1</option>
-        <option value="2">2</option>
+        <option
+          v-for="contractpartner of contractpartnerArray"
+          :key="contractpartner.id"
+          :value="contractpartner.id"
+        >
+          {{ contractpartner.name }}
+        </option>
       </select>
 
       <label for="contractpartner" :style="'color: ' + fieldColor">{{
@@ -20,6 +25,9 @@
   </div>
 </template>
 <script lang="ts">
+import type { Contractpartner } from "@/model/contractpartner/Contractpartner";
+import { useContractpartnerStore } from "@/stores/ContractpartnerStore";
+import { mapActions } from "pinia";
 import { defineComponent } from "vue";
 
 export default defineComponent({
@@ -50,12 +58,22 @@ export default defineComponent({
       required: true,
     },
   },
+  computed: {
+    contractpartnerArray(): Array<Contractpartner> {
+      const contractpartnerStore = useContractpartnerStore();
+      return contractpartnerStore.getValidContractpartner(this.validityDate);
+    },
+  },
   watch: {
     selectedId: function (newVal: number, oldVal: number) {
       if (newVal != oldVal) this.contractpartnerId = newVal;
     },
   },
+  created() {
+    this.initContractpartnerStore();
+  },
   methods: {
+    ...mapActions(useContractpartnerStore, ["initContractpartnerStore"]),
     emitContractpartnerSelected() {
       this.$emit("contractpartnerSelected", +this.contractpartnerId);
     },

@@ -25,6 +25,9 @@ export const useUserSessionStore = defineStore("userSession", {
     getAuthorizationToken(): string {
       return this.userAuthorizationToken;
     },
+    getRefreshToken(): string {
+      return this.userRefreshToken;
+    },
   },
   actions: {
     setUserSession(userSess: UserSession) {
@@ -35,6 +38,12 @@ export const useUserSessionStore = defineStore("userSession", {
       this.userIsAdmin = userSess.userIsAdmin;
       this.userCanLogin = userSess.userCanLogin;
       this.userIsNew = userSess.userIsNew;
+    },
+    setAuthorizationToken(token: string) {
+      this.userAuthorizationToken = token;
+    },
+    setRefreshToken(token: string) {
+      this.userRefreshToken = token;
     },
   },
   persist: {
