@@ -237,6 +237,7 @@ import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 import { generateErrorData, type ErrorData } from "@/tools/views/ErrorData";
 import { defineComponent } from "vue";
 import PostingAccountSelectVue from "@/components/postingaccount/PostingAccountSelect.vue";
+import { validateInputField } from "@/tools/views/ValidateInputField";
 
 type EditMoneyflowData = {
   serverError: string;
@@ -361,49 +362,31 @@ export default defineComponent({
       this.postingaccountIsValid = null;
     },
     validateBookingdate() {
-      if (!this.bookingdate) {
-        this.bookingdateIsValid = false;
-        this.bookingdateErrorMessage = "Datum angeben!";
-      } else {
-        this.bookingdateIsValid = true;
-        this.bookingdateErrorMessage = "";
-      }
+      [this.bookingdateIsValid, this.bookingdateErrorMessage] =
+        validateInputField(this.bookingdate, "Datum angeben!");
     },
     validateContractpartner() {
-      if (!this.mmf.contractpartnerid) {
-        this.contractpartnerIsValid = false;
-        this.contractpartnerErrorMessage = "Vertragspartner angeben!";
-      } else {
-        this.contractpartnerIsValid = true;
-        this.contractpartnerErrorMessage = "";
-      }
+      [this.contractpartnerIsValid, this.contractpartnerErrorMessage] =
+        validateInputField(
+          this.mmf.contractpartnerid,
+          "Vertragspartner angeben!"
+        );
     },
     validateCapitalsource() {
-      if (!this.mmf.capitalsourceid) {
-        this.capitalsourceIsValid = false;
-        this.capitalsourceErrorMessage = "Kapitalquelle angeben!";
-      } else {
-        this.capitalsourceIsValid = true;
-        this.capitalsourceErrorMessage = "";
-      }
+      [this.capitalsourceIsValid, this.capitalsourceErrorMessage] =
+        validateInputField(this.mmf.capitalsourceid, "Kapitalquelle angeben!");
     },
     validateAmount() {
-      if (!this.mmf.amount) {
-        this.amountIsValid = false;
-        this.amountErrorMessage = "Betrag angeben!";
-      } else {
-        this.amountIsValid = true;
-        this.amountErrorMessage = "";
-      }
+      [this.amountIsValid, this.amountErrorMessage] = validateInputField(
+        this.mmf.amount,
+        "Betrag angeben!"
+      );
     },
     validateComment() {
-      if (!this.mmf.comment) {
-        this.commentIsValid = false;
-        this.commentErrorMessage = "Kommentar angeben!";
-      } else {
-        this.commentIsValid = true;
-        this.commentErrorMessage = "";
-      }
+      [this.commentIsValid, this.commentErrorMessage] = validateInputField(
+        this.mmf.comment,
+        "Kommentar angeben!"
+      );
     },
     validatePostingaccount() {
       this.postingaccountIsValid = true;
@@ -428,7 +411,6 @@ export default defineComponent({
       this.validateComment();
       this.validateContractpartner();
       this.validatePostingaccount();
-      console.log(this.mmf);
 
       if (this.formIsValid) {
         this.mmf.bookingdate = new Date(this.bookingdate);

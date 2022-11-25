@@ -76,6 +76,7 @@ import type { ErrorData } from "@/tools/views/ErrorData";
 import { generateErrorData } from "@/tools/views/ErrorData";
 import UserControllerHandler from "@/handler/UserControllerHandler";
 import router, { Routes } from "@/router";
+import { validateInputField } from "@/tools/views/ValidateInputField";
 
 type LoginViewData = {
   username: string;
@@ -125,22 +126,17 @@ export default {
   },
   methods: {
     validateUsername() {
-      if (this.username.length === 0) {
-        this.usernameIsValid = false;
-        this.usernameErrorMessage = "Bitte Benutzernamen angeben!";
-      } else {
-        this.usernameIsValid = true;
-        this.usernameErrorMessage = "";
-      }
+      [this.usernameIsValid, this.usernameErrorMessage] = validateInputField(
+        this.username,
+        "Bitte Benutzernamen angeben!"
+      );
     },
+
     validatePassword() {
-      if (this.password.length === 0) {
-        this.passwordIsValid = false;
-        this.passwordErrorMessage = "Bitte Passwort angeben!";
-      } else {
-        this.passwordIsValid = true;
-        this.passwordErrorMessage = "";
-      }
+      [this.passwordIsValid, this.passwordErrorMessage] = validateInputField(
+        this.password,
+        "Bitte Passwort angeben!"
+      );
     },
     async handleLogin() {
       this.serverError = "";
