@@ -128,32 +128,14 @@
                     </div>
                   </div>
                   <div class="col-md-3 col-xs-12">
-                    <div class="input-group">
-                      <div class="form-floating">
-                        <select
-                          v-model="mmf.postingaccountid"
-                          id="postingaccount"
-                          @change="validatePostingaccount"
-                          :class="
-                            'form-select form-control ' +
-                            postingaccountErrorData.inputClass
-                          "
-                        >
-                          <option value="">&nbsp;</option>
-                        </select>
-
-                        <label
-                          for="postingaccount"
-                          :style="
-                            'color: ' + postingaccountErrorData.fieldColor
-                          "
-                          >{{ postingaccountErrorData.fieldLabel }}</label
-                        >
-                      </div>
-                      <span class="input-group-text"
-                        ><i class="bi bi-plus"></i
-                      ></span>
-                    </div>
+                    <PostingAccountSelectVue
+                      :field-color="postingaccountErrorData.fieldColor"
+                      :field-label="postingaccountErrorData.fieldLabel"
+                      :input-class="postingaccountErrorData.inputClass"
+                      :validity-date="validityDate"
+                      :selected-id="mmf.postingaccountid"
+                      @posting-account-selected="onPostingAccountSelected"
+                    />
                   </div>
                   <div
                     class="col-md-3 col-xs-12 d-flex align-items-center justify-content-center"
@@ -254,6 +236,7 @@ import CapitalsourceSelectVue from "@/components/capitalsource/CapitalsourceSele
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 import { generateErrorData, type ErrorData } from "@/tools/views/ErrorData";
 import { defineComponent } from "vue";
+import PostingAccountSelectVue from "@/components/postingaccount/PostingAccountSelect.vue";
 
 type EditMoneyflowData = {
   serverError: string;
@@ -434,6 +417,10 @@ export default defineComponent({
       this.mmf.capitalsourceid = capitalsourceId;
       this.validateCapitalsource();
     },
+    onPostingAccountSelected(postingAccountId: number) {
+      this.mmf.postingaccountid = postingAccountId;
+      this.validatePostingaccount;
+    },
     saveMoneyflow() {
       this.validateAmount();
       this.validateBookingdate();
@@ -450,6 +437,10 @@ export default defineComponent({
       }
     },
   },
-  components: { ContractpartnerSelectVue, CapitalsourceSelectVue },
+  components: {
+    ContractpartnerSelectVue,
+    CapitalsourceSelectVue,
+    PostingAccountSelectVue,
+  },
 });
 </script>
