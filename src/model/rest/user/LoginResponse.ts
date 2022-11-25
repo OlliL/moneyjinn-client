@@ -6,5 +6,6 @@ export type LoginResponse = {
   loginResponse: {
     userTransport: UserTransport;
     token: string;
+    refreshToken: string;
   };
 };
