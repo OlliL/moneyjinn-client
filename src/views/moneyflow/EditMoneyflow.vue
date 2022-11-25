@@ -238,6 +238,9 @@ import { generateErrorData, type ErrorData } from "@/tools/views/ErrorData";
 import { defineComponent } from "vue";
 import PostingAccountSelectVue from "@/components/postingaccount/PostingAccountSelect.vue";
 import { validateInputField } from "@/tools/views/ValidateInputField";
+import type { Contractpartner } from "@/model/contractpartner/Contractpartner";
+import type { Capitalsource } from "@/model/capitalsource/Capitalsource";
+import type { PostingAccount } from "@/model/postingaccount/PostingAccount";
 
 type EditMoneyflowData = {
   serverError: string;
@@ -389,19 +392,19 @@ export default defineComponent({
       );
     },
     validatePostingaccount() {
-      this.postingaccountIsValid = true;
-      this.postingaccountErrorMessage = "";
+      [this.postingaccountIsValid, this.postingaccountErrorMessage] =
+        validateInputField(this.mmf.postingaccountid, "Buchungskonto angeben!");
     },
-    onContractpartnerSelected(contractpartnerId: number) {
-      this.mmf.contractpartnerid = contractpartnerId;
+    onContractpartnerSelected(contractpartner: Contractpartner) {
+      this.mmf.contractpartnerid = contractpartner.id;
       this.validateContractpartner();
     },
-    onCapitalsourceSelected(capitalsourceId: number) {
-      this.mmf.capitalsourceid = capitalsourceId;
+    onCapitalsourceSelected(capitalsource: Capitalsource) {
+      this.mmf.capitalsourceid = capitalsource.id;
       this.validateCapitalsource();
     },
-    onPostingAccountSelected(postingAccountId: number) {
-      this.mmf.postingaccountid = postingAccountId;
+    onPostingAccountSelected(postingAccount: PostingAccount) {
+      this.mmf.postingaccountid = postingAccount.id;
       this.validatePostingaccount;
     },
     saveMoneyflow() {
@@ -415,6 +418,7 @@ export default defineComponent({
       if (this.formIsValid) {
         this.mmf.bookingdate = new Date(this.bookingdate);
         if (this.invoicedate) this.mmf.invoicedate = new Date(this.invoicedate);
+        console.log(this.mmf);
         alert("save");
       }
     },
