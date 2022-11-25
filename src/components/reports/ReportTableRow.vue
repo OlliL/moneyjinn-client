@@ -10,11 +10,11 @@
     <td>{{ bookingdateString }}</td>
     <td>{{ invoicedateString }}</td>
     <td colspan="2" :class="amountClass">{{ amountString }} &euro;</td>
-    <td class="text-start">{{ mmf.contractpartnername }}</td>
+    <td class="text-start">{{ mmf.contractpartnerame }}</td>
     <td class="text-start">{{ mmf.comment }}</td>
-    <td class="text-start">{{ mmf.postingaccountname }}</td>
+    <td class="text-start">{{ mmf.ppostingAccountName}}</td>
     <td class="text-start">
-      {{ mmf.capitalsourcecomment }}
+      {{ mmf.capitalsourceComment }}
     </td>
     <td class="text-start">
       <span role="button" class="link-primary" @click="editMoneyflow"
@@ -44,12 +44,12 @@
       {{ mseAmountString(mse.amount) }} &euro;
     </td>
     <td :rowspan="rowspan" v-if="index == 0" class="text-start">
-      {{ mmf.contractpartnername }}
+      {{ mmf.contractpartnerame }}
     </td>
     <td class="text-start">{{ mse.comment }}</td>
     <td class="text-start">{{ mse.postingaccountname }}</td>
     <td :rowspan="rowspan" v-if="index == 0" class="text-start">
-      {{ mmf.capitalsourcecomment }}
+      {{ mmf.capitalsourceComment }}
     </td>
     <td :rowspan="rowspan" v-if="index == 0" class="text-start">
       <span role="button" class="link-primary" @click="editMoneyflow"
@@ -80,10 +80,10 @@ export default defineComponent({
   emits: ["showReceipt", "deleteMoneyflow", "editMoneyflow"],
   computed: {
     bookingdateString() {
-      return formatDate(this.mmf.bookingdate);
+      return formatDate(this.mmf.bookingDate);
     },
     invoicedateString() {
-      return formatDate(this.mmf.invoicedate);
+      return formatDate(this.mmf.invoiceDate);
     },
     amountClass(): string {
       return redIfNegativeEnd(this.mmf.amount);

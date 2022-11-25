@@ -26,7 +26,7 @@
         >
           Vertragspartner
         </div>
-        <div class="text-start col-sm-9">{{ mmf.contractpartnername }}</div>
+        <div class="text-start col-sm-9">{{ mmf.contractpartnerame }}</div>
       </div>
       <div class="row">
         <div
@@ -35,7 +35,7 @@
         >
           Kapitalquelle
         </div>
-        <div class="text-start col-sm-9">{{ mmf.capitalsourcecomment }}</div>
+        <div class="text-start col-sm-9">{{ mmf.capitalsourceComment }}</div>
       </div>
       <div class="row">
         <div
@@ -64,7 +64,7 @@
         >
           Buchungskonto
         </div>
-        <div class="text-start col-sm-9">{{ mmf.postingaccountname }}</div>
+        <div class="text-start col-sm-9">{{ mmf.ppostingAccountName}}</div>
       </div>
     </template>
     <template #footer>
@@ -96,10 +96,10 @@ export default defineComponent({
   },
   computed: {
     bookingdateString() {
-      return formatDate(this.mmf.bookingdate);
+      return formatDate(this.mmf.bookingDate);
     },
     invoicedateString() {
-      return formatDate(this.mmf.invoicedate);
+      return formatDate(this.mmf.invoiceDate);
     },
     amountClass(): string {
       return redIfNegativeStart(this.mmf.amount);

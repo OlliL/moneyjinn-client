@@ -360,7 +360,7 @@ export default defineComponent({
       this.report.moneyflows = this.report.moneyflows.filter((originalMmf) => {
         return mmf.id !== originalMmf.id;
       });
-      this.modifyCapitalsourceAmounts(mmf.capitalsourcecomment, mmf.amount);
+      this.modifyCapitalsourceAmounts(mmf.capitalsourceComment, mmf.amount);
     },
     editMoneyflow(mmf: Moneyflow) {
       // FIXME: implement
