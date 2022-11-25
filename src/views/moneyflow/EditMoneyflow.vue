@@ -259,6 +259,8 @@ type EditMoneyflowData = {
   postingaccountErrorMessage: string;
   bookingdate: string;
   invoicedate: string;
+  previousCommentSetByContractpartnerDefaults: string;
+  previousPostingAccountSetByContractpartnerDefaults: number;
 };
 export default defineComponent({
   name: "EditMoneyflow",
@@ -280,6 +282,8 @@ export default defineComponent({
       postingaccountErrorMessage: "",
       bookingdate: "",
       invoicedate: "",
+      previousCommentSetByContractpartnerDefaults: "",
+      previousPostingAccountSetByContractpartnerDefaults: 0,
     };
   },
   mounted() {
@@ -363,6 +367,8 @@ export default defineComponent({
       this.amountIsValid = null;
       this.commentIsValid = null;
       this.postingaccountIsValid = null;
+      this.previousCommentSetByContractpartnerDefaults = "";
+      this.previousPostingAccountSetByContractpartnerDefaults = 0;
     },
     validateBookingdate() {
       [this.bookingdateIsValid, this.bookingdateErrorMessage] =
@@ -397,6 +403,26 @@ export default defineComponent({
     },
     onContractpartnerSelected(contractpartner: Contractpartner) {
       this.mmf.contractpartnerid = contractpartner.id;
+      if (
+        this.mmf.comment === this.previousCommentSetByContractpartnerDefaults
+      ) {
+        this.mmf.comment = contractpartner.moneyflowComment;
+        this.previousCommentSetByContractpartnerDefaults =
+          contractpartner.moneyflowComment;
+        this.validateComment();
+      }
+      if (
+        this.mmf.postingaccountid ===
+        this.previousPostingAccountSetByContractpartnerDefaults
+      ) {
+        const paId = contractpartner.postingAccountId
+          ? contractpartner.postingAccountId
+          : 0;
+
+        this.mmf.postingaccountid = paId;
+        this.previousPostingAccountSetByContractpartnerDefaults = paId;
+        this.validatePostingaccount();
+      }
       this.validateContractpartner();
     },
     onCapitalsourceSelected(capitalsource: Capitalsource) {
@@ -405,7 +431,7 @@ export default defineComponent({
     },
     onPostingAccountSelected(postingAccount: PostingAccount) {
       this.mmf.postingaccountid = postingAccount.id;
-      this.validatePostingaccount;
+      this.validatePostingaccount();
     },
     saveMoneyflow() {
       this.validateAmount();
