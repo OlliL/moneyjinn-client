@@ -132,7 +132,6 @@
                       :field-color="postingaccountErrorData.fieldColor"
                       :field-label="postingaccountErrorData.fieldLabel"
                       :input-class="postingaccountErrorData.inputClass"
-                      :validity-date="validityDate"
                       :selected-id="mmf.postingAccountId"
                       @posting-account-selected="onPostingAccountSelected"
                     />

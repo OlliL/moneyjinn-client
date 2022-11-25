@@ -37,10 +37,6 @@ export default defineComponent({
   },
   emits: ["postingAccountSelected"],
   props: {
-    validityDate: {
-      type: Date,
-      required: true,
-    },
     selectedId: {
       type: Number,
       required: false,
