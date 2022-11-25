@@ -10,18 +10,18 @@ export function mapMoneyflowTransportToModel(
 ): Moneyflow {
   const model: Moneyflow = {
     id: transport.id,
-    userid: transport.userid,
-    bookingdate: new Date(transport.bookingdate),
-    invoicedate: new Date(transport.invoicedate),
+    userId: transport.userid,
+    bookingDate: new Date(transport.bookingdate),
+    invoiceDate: new Date(transport.invoicedate),
     amount: transport.amount,
-    capitalsourceid: transport.capitalsourceid,
-    capitalsourcecomment: transport.capitalsourcecomment,
-    contractpartnerid: transport.contractpartnerid,
-    contractpartnername: transport.contractpartnername,
+    capitalsourceId: transport.capitalsourceid,
+    capitalsourceComment: transport.capitalsourcecomment,
+    contractpartnerId: transport.contractpartnerid,
+    contractpartnerName: transport.contractpartnername,
     comment: transport.comment,
     private: transport.private == 1 ? true : false,
-    postingaccountid: transport.postingaccountid,
-    postingaccountname: transport.postingaccountname,
+    postingAccountId: transport.postingaccountid,
+    postingAccountName: transport.postingaccountname,
     hasReceipt: hasReceipt,
     moneyflowSplitEntries: splitEntries?.map((mse) => {
       return mapMoneyflowSplitEntryTransportToModel(mse);

@@ -71,7 +71,7 @@
                       :field-label="contractpartnerErrorData.fieldLabel"
                       :input-class="contractpartnerErrorData.inputClass"
                       :validity-date="validityDate"
-                      :selected-id="mmf.contractpartnerid"
+                      :selected-id="mmf.contractpartnerId"
                       @contractpartner-selected="onContractpartnerSelected"
                     />
                   </div>
@@ -82,7 +82,7 @@
                       :field-label="capitalsourceErrorData.fieldLabel"
                       :input-class="capitalsourceErrorData.inputClass"
                       :validity-date="validityDate"
-                      :selected-id="mmf.capitalsourceid"
+                      :selected-id="mmf.capitalsourceId"
                       @capitalsource-selected="onCapitalsourceSelected"
                     />
                   </div>
@@ -133,7 +133,7 @@
                       :field-label="postingaccountErrorData.fieldLabel"
                       :input-class="postingaccountErrorData.inputClass"
                       :validity-date="validityDate"
-                      :selected-id="mmf.postingaccountid"
+                      :selected-id="mmf.postingAccountId"
                       @posting-account-selected="onPostingAccountSelected"
                     />
                   </div>
@@ -356,9 +356,9 @@ export default defineComponent({
     resetForm() {
       [this.bookingdate] = new Date().toISOString().split("T");
       this.invoicedate = "";
-      this.mmf.contractpartnerid = 0;
-      this.mmf.capitalsourceid = 0;
-      this.mmf.postingaccountid = 0;
+      this.mmf.contractpartnerId = 0;
+      this.mmf.capitalsourceId = 0;
+      this.mmf.postingAccountId = 0;
       this.mmf.amount = 0;
       this.mmf.comment = "";
       this.bookingdateIsValid = null;
@@ -377,13 +377,13 @@ export default defineComponent({
     validateContractpartner() {
       [this.contractpartnerIsValid, this.contractpartnerErrorMessage] =
         validateInputField(
-          this.mmf.contractpartnerid,
+          this.mmf.contractpartnerId,
           "Vertragspartner angeben!"
         );
     },
     validateCapitalsource() {
       [this.capitalsourceIsValid, this.capitalsourceErrorMessage] =
-        validateInputField(this.mmf.capitalsourceid, "Kapitalquelle angeben!");
+        validateInputField(this.mmf.capitalsourceId, "Kapitalquelle angeben!");
     },
     validateAmount() {
       [this.amountIsValid, this.amountErrorMessage] = validateInputField(
@@ -399,10 +399,10 @@ export default defineComponent({
     },
     validatePostingaccount() {
       [this.postingaccountIsValid, this.postingaccountErrorMessage] =
-        validateInputField(this.mmf.postingaccountid, "Buchungskonto angeben!");
+        validateInputField(this.mmf.postingAccountId, "Buchungskonto angeben!");
     },
     onContractpartnerSelected(contractpartner: Contractpartner) {
-      this.mmf.contractpartnerid = contractpartner.id;
+      this.mmf.contractpartnerId = contractpartner.id;
       if (
         this.mmf.comment === this.previousCommentSetByContractpartnerDefaults
       ) {
@@ -412,25 +412,25 @@ export default defineComponent({
         this.validateComment();
       }
       if (
-        this.mmf.postingaccountid ===
+        this.mmf.postingAccountId ===
         this.previousPostingAccountSetByContractpartnerDefaults
       ) {
         const paId = contractpartner.postingAccountId
           ? contractpartner.postingAccountId
           : 0;
 
-        this.mmf.postingaccountid = paId;
+        this.mmf.postingAccountId = paId;
         this.previousPostingAccountSetByContractpartnerDefaults = paId;
         this.validatePostingaccount();
       }
       this.validateContractpartner();
     },
     onCapitalsourceSelected(capitalsource: Capitalsource) {
-      this.mmf.capitalsourceid = capitalsource.id;
+      this.mmf.capitalsourceId = capitalsource.id;
       this.validateCapitalsource();
     },
     onPostingAccountSelected(postingAccount: PostingAccount) {
-      this.mmf.postingaccountid = postingAccount.id;
+      this.mmf.postingAccountId = postingAccount.id;
       this.validatePostingaccount();
     },
     saveMoneyflow() {
@@ -442,8 +442,8 @@ export default defineComponent({
       this.validatePostingaccount();
 
       if (this.formIsValid) {
-        this.mmf.bookingdate = new Date(this.bookingdate);
-        if (this.invoicedate) this.mmf.invoicedate = new Date(this.invoicedate);
+        this.mmf.bookingDate = new Date(this.bookingdate);
+        if (this.invoicedate) this.mmf.invoiceDate = new Date(this.invoicedate);
         console.log(this.mmf);
         alert("save");
       }

@@ -1,20 +1,19 @@
 import type { MoneyflowSplitEntry } from "./MoneyflowSplitEntry";
 
-//FIXME: camelCase the properties!
 export type Moneyflow = {
   id: number;
-  userid: number;
-  bookingdate: Date;
-  invoicedate: Date;
+  userId: number;
+  bookingDate: Date;
+  invoiceDate: Date;
   amount: number;
-  capitalsourceid: number;
-  capitalsourcecomment: string;
-  contractpartnerid: number;
-  contractpartnername: string;
+  capitalsourceId: number;
+  capitalsourceComment: string;
+  contractpartnerId: number;
+  contractpartnerName: string;
   comment: string;
   private: boolean;
-  postingaccountid: number;
-  postingaccountname: string;
+  postingAccountId: number;
+  postingAccountName: string;
   moneyflowSplitEntries?: Array<MoneyflowSplitEntry>;
   hasReceipt: boolean;
 };
