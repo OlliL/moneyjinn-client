@@ -56,16 +56,9 @@
                           v-model="invoicedate"
                           id="invoicedate"
                           type="date"
-                          @change="validateInvoicedate"
-                          :class="
-                            'form-control ' + invoicedateErrorData.inputClass
-                          "
+                          class="form-control"
                         />
-                        <label
-                          for="invoicedate"
-                          :style="'color: ' + invoicedateErrorData.fieldColor"
-                          >{{ invoicedateErrorData.fieldLabel }}</label
-                        >
+                        <label for="invoicedate">Rechnungsdatum</label>
                       </div>
                       <span class="input-group-text"
                         ><i class="bi bi-calendar-date"></i
@@ -84,30 +77,14 @@
                   </div>
 
                   <div class="col-md-4 col-xs-12">
-                    <div class="input-group">
-                      <div class="form-floating">
-                        <select
-                          v-model="mmf.capitalsourceid"
-                          id="capitalsource"
-                          @change="validateCapitalsource"
-                          :class="
-                            'form-select form-control ' +
-                            capitalsourceErrorData.inputClass
-                          "
-                        >
-                          <option value="">&nbsp;</option>
-                        </select>
-
-                        <label
-                          for="contractpartner"
-                          :style="'color: ' + capitalsourceErrorData.fieldColor"
-                          >{{ capitalsourceErrorData.fieldLabel }}</label
-                        >
-                      </div>
-                      <span class="input-group-text"
-                        ><i class="bi bi-plus"></i
-                      ></span>
-                    </div>
+                    <CapitalsourceSelectVue
+                      :field-color="capitalsourceErrorData.fieldColor"
+                      :field-label="capitalsourceErrorData.fieldLabel"
+                      :input-class="capitalsourceErrorData.inputClass"
+                      :validity-date="validityDate"
+                      :selected-id="mmf.capitalsourceid"
+                      @capitalsource-selected="onCapitalsourceSelected"
+                    />
                   </div>
                 </div>
 
@@ -273,6 +250,7 @@
 
 <script lang="ts">
 import ContractpartnerSelectVue from "@/components/contractpartner/ContractpartnerSelect.vue";
+import CapitalsourceSelectVue from "@/components/capitalsource/CapitalsourceSelect.vue";
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 import { generateErrorData, type ErrorData } from "@/tools/views/ErrorData";
 import { defineComponent } from "vue";
@@ -282,8 +260,6 @@ type EditMoneyflowData = {
   mmf: Moneyflow;
   bookingdateIsValid: boolean | null;
   bookingdateErrorMessage: string;
-  invoicedateIsValid: boolean | null;
-  invoiceErrorMessage: string;
   contractpartnerIsValid: boolean | null;
   contractpartnerErrorMessage: string;
   capitalsourceIsValid: boolean | null;
@@ -305,8 +281,6 @@ export default defineComponent({
       mmf: {} as Moneyflow,
       bookingdateIsValid: null,
       bookingdateErrorMessage: "",
-      invoicedateIsValid: null,
-      invoiceErrorMessage: "",
       contractpartnerIsValid: null,
       contractpartnerErrorMessage: "",
       capitalsourceIsValid: null,
@@ -328,7 +302,6 @@ export default defineComponent({
     formIsValid() {
       return (
         this.bookingdateIsValid &&
-        this.invoicedateIsValid &&
         this.contractpartnerIsValid &&
         this.capitalsourceIsValid &&
         this.amountIsValid &&
@@ -341,13 +314,6 @@ export default defineComponent({
         this.bookingdateIsValid,
         "Buchungsdatum",
         this.bookingdateErrorMessage
-      );
-    },
-    invoicedateErrorData(): ErrorData {
-      return generateErrorData(
-        this.invoicedateIsValid,
-        "Rechnungsdatum",
-        this.invoiceErrorMessage
       );
     },
     contractpartnerErrorData(): ErrorData {
@@ -386,7 +352,7 @@ export default defineComponent({
       );
     },
     validityDate(): Date {
-      if (this.invoicedateIsValid) {
+      if (this.invoicedate) {
         return new Date(this.invoicedate);
       } else if (this.bookingdateIsValid) {
         return new Date(this.bookingdate);
@@ -402,10 +368,9 @@ export default defineComponent({
       this.mmf.contractpartnerid = 0;
       this.mmf.capitalsourceid = 0;
       this.mmf.postingaccountid = 0;
-      this.mmf.amount = {} as number;
+      this.mmf.amount = 0;
       this.mmf.comment = "";
       this.bookingdateIsValid = null;
-      this.invoicedateIsValid = null;
       this.contractpartnerIsValid = null;
       this.capitalsourceIsValid = null;
       this.amountIsValid = null;
@@ -421,10 +386,6 @@ export default defineComponent({
         this.bookingdateErrorMessage = "";
       }
     },
-    validateInvoicedate() {
-      this.invoicedateIsValid = true;
-      this.invoiceErrorMessage = "";
-    },
     validateContractpartner() {
       if (!this.mmf.contractpartnerid) {
         this.contractpartnerIsValid = false;
@@ -435,8 +396,13 @@ export default defineComponent({
       }
     },
     validateCapitalsource() {
-      this.capitalsourceIsValid = true;
-      this.capitalsourceErrorMessage = "";
+      if (!this.mmf.capitalsourceid) {
+        this.capitalsourceIsValid = false;
+        this.capitalsourceErrorMessage = "Kapitalquelle angeben!";
+      } else {
+        this.capitalsourceIsValid = true;
+        this.capitalsourceErrorMessage = "";
+      }
     },
     validateAmount() {
       if (!this.mmf.amount) {
@@ -464,23 +430,26 @@ export default defineComponent({
       this.mmf.contractpartnerid = contractpartnerId;
       this.validateContractpartner();
     },
+    onCapitalsourceSelected(capitalsourceId: number) {
+      this.mmf.capitalsourceid = capitalsourceId;
+      this.validateCapitalsource();
+    },
     saveMoneyflow() {
       this.validateAmount();
       this.validateBookingdate();
       this.validateCapitalsource();
       this.validateComment();
       this.validateContractpartner();
-      this.validateInvoicedate();
       this.validatePostingaccount();
+      console.log(this.mmf);
 
       if (this.formIsValid) {
         this.mmf.bookingdate = new Date(this.bookingdate);
         if (this.invoicedate) this.mmf.invoicedate = new Date(this.invoicedate);
-        console.log(this.mmf);
         alert("save");
       }
     },
   },
-  components: { ContractpartnerSelectVue },
+  components: { ContractpartnerSelectVue, CapitalsourceSelectVue },
 });
 </script>
