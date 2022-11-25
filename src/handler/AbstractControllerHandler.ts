@@ -100,8 +100,6 @@ abstract class AbstractControllerHandler {
     const innerLoginResponse = loginResponse.loginResponse;
     userSessionStore.setAuthorizationToken(innerLoginResponse.token);
     userSessionStore.setRefreshToken(innerLoginResponse.refreshToken);
-
-    console.log(await response.json());
   }
 }
 
