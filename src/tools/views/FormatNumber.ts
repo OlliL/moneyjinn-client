@@ -4,6 +4,12 @@ export function redIfNegativeEnd(check?: number): string {
   return cssClass;
 }
 
+export function redIfNegativeStart(check?: number): string {
+  const cssClass =
+    "text-start" + (check != null && check < 0 ? " text-danger" : "");
+  return cssClass;
+}
+
 export function formatNumber(num: number, decimalPlaces: number): string {
   if (num !== undefined) {
     // save decimal places of the given number, ignore negative sign

@@ -16,8 +16,16 @@
     <td class="text-start">
       {{ mmf.capitalsourcecomment }}
     </td>
-    <td class="text-start">bearbeiten</td>
-    <td class="text-start">l&ouml;schen</td>
+    <td class="text-start">
+      <span role="button" class="link-primary" @click="editMoneyflow"
+        >bearbeiten</span
+      >
+    </td>
+    <td class="text-start">
+      <span role="button" class="link-primary" @click="deleteMoneyflow"
+        >l&ouml;schen</span
+      >
+    </td>
   </tr>
   <tr v-for="(mse, index) in mmf.moneyflowSplitEntries" :key="mse.id">
     <td :rowspan="rowspan" v-if="index == 0">
@@ -43,9 +51,15 @@
     <td :rowspan="rowspan" v-if="index == 0" class="text-start">
       {{ mmf.capitalsourcecomment }}
     </td>
-    <td :rowspan="rowspan" v-if="index == 0" class="text-start">bearbeiten</td>
     <td :rowspan="rowspan" v-if="index == 0" class="text-start">
-      l&ouml;schen
+      <span role="button" class="link-primary" @click="editMoneyflow"
+        >bearbeiten</span
+      >
+    </td>
+    <td :rowspan="rowspan" v-if="index == 0" class="text-start">
+      <span role="button" class="link-primary" @click="deleteMoneyflow"
+        >l&ouml;schen</span
+      >
     </td>
   </tr>
 </template>
@@ -63,7 +77,7 @@ export default defineComponent({
       required: true,
     },
   },
-  emits: ["showReceipt"],
+  emits: ["showReceipt", "deleteMoneyflow", "editMoneyflow"],
   computed: {
     bookingdateString() {
       return formatDate(this.mmf.bookingdate);
@@ -99,6 +113,12 @@ export default defineComponent({
     },
     showReceipt() {
       this.$emit("showReceipt", this.mmf.id);
+    },
+    deleteMoneyflow() {
+      this.$emit("deleteMoneyflow", this.mmf);
+    },
+    editMoneyflow() {
+      this.$emit("editMoneyflow", this.mmf);
     },
   },
 });

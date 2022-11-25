@@ -6,6 +6,10 @@
       </div>
 
       <ReceiptModalVue ref="receiptModal" />
+      <DeleteMoneyflowModalVue
+        ref="deleteModal"
+        @moneyflow-deleted="moneyflowDeleted"
+      />
 
       <div class="card-body">
         <table class="table table-striped table-bordered table-hover">
@@ -28,6 +32,8 @@
               :key="mmf.id"
               :mmf="mmf"
               @show-receipt="showReceipt"
+              @delete-moneyflow="deleteMoneyflow"
+              @edit-moneyflow="editMoneyflow"
             />
             <tr>
               <td class="text-end" colspan="3">&sum;</td>
@@ -154,6 +160,8 @@ import ReportTableRowVue from "./ReportTableRow.vue";
 import { redIfNegativeEnd, formatNumber } from "@/tools/views/FormatNumber";
 import { getMonthName } from "@/tools/views/MonthName";
 import ReceiptModalVue from "./ReceiptModal.vue";
+import DeleteMoneyflowModalVue from "../moneyflow/DeleteMoneyflowModal.vue";
+import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 
 export default defineComponent({
   name: "ReportTable",
@@ -272,7 +280,7 @@ export default defineComponent({
     assetsMonthlyDifference(): number {
       return +(
         this.assetsMonthlyFixedTurnover - this.assetsMonthlyCalculatedTurnover
-      ).toFixed(2);
+      );
     },
     assetsMonthlyDifferenceClass(): string {
       return redIfNegativeEnd(this.assetsMonthlyDifference);
@@ -283,7 +291,7 @@ export default defineComponent({
     assetsYearlyDifference(): number {
       return +(
         this.assetsYearlyFixedTurnover - this.report.turnoverEndOfYearCalculated
-      ).toFixed(2);
+      );
     },
     assetsYearlyDifferenceClass(): string {
       return redIfNegativeEnd(this.assetsYearlyDifference);
@@ -307,27 +315,66 @@ export default defineComponent({
         ) {
           this.assetsMonthlyCalculatedTurnover += +(
             data.amountEndOfMonthCalculated - data.amountBeginOfMonthFixed
-          ).toFixed(2);
+          );
           assetsLastAmount += data.amountBeginOfMonthFixed;
           if (data.amountEndOfMonthFixed)
-            assetsFixAmount = +(
-              assetsFixAmount + data.amountEndOfMonthFixed
-            ).toFixed(2);
+            assetsFixAmount = +(assetsFixAmount + data.amountEndOfMonthFixed);
         }
       }
-      this.assetsMonthlyFixedTurnover = +(
-        assetsFixAmount - assetsLastAmount
-      ).toFixed(2);
+      this.assetsMonthlyFixedTurnover = +(assetsFixAmount - assetsLastAmount);
       this.assetsYearlyFixedTurnover = +(
         assetsFixAmount - this.report.amountBeginOfYear
-      ).toFixed(2);
+      );
 
       this.dataLoaded = true;
     },
     showReceipt(moneyflowId: number) {
       (this.$refs.receiptModal as typeof ReceiptModalVue)._show(moneyflowId);
     },
+    deleteMoneyflow(mmf: Moneyflow) {
+      (this.$refs.deleteModal as typeof ReceiptModalVue)._show(mmf);
+    },
+    /**
+     * recalculate End of Month amount (for matching Capitalsource),
+     * recalculate End of Month amount (overall),
+     * recalculate End of Year amount,
+     * @param capitalsourceComment
+     * @param amount
+     */
+    modifyCapitalsourceAmounts(capitalsourceComment: string, amount: number) {
+      for (const mcs of this.report.reportTurnoverCapitalsources) {
+        if (mcs.capitalsourceComment === capitalsourceComment) {
+          mcs.amountEndOfMonthCalculated -= amount;
+          if (
+            mcs.capitalsourceType === CapitalsourceType.CURRENT_ASSET ||
+            mcs.capitalsourceType === CapitalsourceType.LONG_TERM_ASSET
+          ) {
+            this.assetsMonthlyCalculatedTurnover -= amount;
+          }
+        }
+      }
+      this.report.turnoverEndOfYearCalculated -= amount;
+    },
+    moneyflowDeleted(mmf: Moneyflow) {
+      // DELETE moneyflow from Array of moneyflows
+      this.report.moneyflows = this.report.moneyflows.filter((originalMmf) => {
+        return mmf.id !== originalMmf.id;
+      });
+      this.modifyCapitalsourceAmounts(mmf.capitalsourcecomment, mmf.amount);
+    },
+    editMoneyflow(mmf: Moneyflow) {
+      // FIXME: implement
+      // search old mmf
+      // modify mmf array
+      // update Capitalsource amounts if they changed
+      alert("FIXME: not implemented yet!");
+    },
   },
-  components: { CapitalsourceTableVue, ReportTableRowVue, ReceiptModalVue },
+  components: {
+    CapitalsourceTableVue,
+    ReportTableRowVue,
+    ReceiptModalVue,
+    DeleteMoneyflowModalVue,
+  },
 });
 </script>
