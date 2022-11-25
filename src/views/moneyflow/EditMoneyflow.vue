@@ -242,6 +242,10 @@ import type { Contractpartner } from "@/model/contractpartner/Contractpartner";
 import type { Capitalsource } from "@/model/capitalsource/Capitalsource";
 import type { PostingAccount } from "@/model/postingaccount/PostingAccount";
 
+//FIXME: PreDefMoneyflows
+//FIXME: MoneyflowSplitEntries
+//FIXME: save on server
+
 type EditMoneyflowData = {
   serverError: string;
   mmf: Moneyflow;
