@@ -74,7 +74,7 @@ import { getMonthName } from "@/tools/views/MonthName";
 import router, { Routes } from "@/router";
 import { defineComponent } from "vue";
 export default defineComponent({
-  name: "MonthSelection",
+  name: "ListReports",
   data() {
     return {
       Routes: Routes,
