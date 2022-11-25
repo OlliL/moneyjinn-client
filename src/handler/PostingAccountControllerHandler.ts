@@ -26,7 +26,7 @@ class PostingAccountControllerHandler extends AbstractControllerHandler {
     const postingAccountArray = (await showPostingAccountListResponse
       .showPostingAccountListResponse
       .postingAccountTransport) as Array<PostingAccount>;
-    console.log(await postingAccountArray);
+
     return postingAccountArray;
   }
 }
