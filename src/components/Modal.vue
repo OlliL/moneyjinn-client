@@ -21,7 +21,6 @@
           <slot name="body" />
         </div>
         <div class="modal-footer">
-          <slot name="footer"></slot>
           <button
             type="button"
             class="btn btn-secondary"
@@ -29,6 +28,7 @@
           >
             Abbrechen
           </button>
+          <slot name="footer"></slot>
         </div>
       </div>
     </div>
