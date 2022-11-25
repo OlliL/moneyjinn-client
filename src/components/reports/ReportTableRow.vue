@@ -10,9 +10,9 @@
     <td>{{ bookingdateString }}</td>
     <td>{{ invoicedateString }}</td>
     <td colspan="2" :class="amountClass">{{ amountString }} &euro;</td>
-    <td class="text-start">{{ mmf.contractpartnerame }}</td>
+    <td class="text-start">{{ mmf.contractpartnerName }}</td>
     <td class="text-start">{{ mmf.comment }}</td>
-    <td class="text-start">{{ mmf.ppostingAccountName}}</td>
+    <td class="text-start">{{ mmf.postingAccountName }}</td>
     <td class="text-start">
       {{ mmf.capitalsourceComment }}
     </td>
@@ -44,7 +44,7 @@
       {{ mseAmountString(mse.amount) }} &euro;
     </td>
     <td :rowspan="rowspan" v-if="index == 0" class="text-start">
-      {{ mmf.contractpartnerame }}
+      {{ mmf.contractpartnerName }}
     </td>
     <td class="text-start">{{ mse.comment }}</td>
     <td class="text-start">{{ mse.postingaccountname }}</td>
