@@ -30,10 +30,10 @@
                     <div class="input-group">
                       <div class="form-floating">
                         <input
-                          v-model="mmf.bookingdate"
+                          v-model="bookingdate"
                           id="bookingdate"
-                          type="text"
-                          @input="validateBookingdate"
+                          type="date"
+                          @change="validateBookingdate"
                           :class="
                             ' form-control ' + bookingdateErrorData.inputClass
                           "
@@ -53,10 +53,10 @@
                     <div class="input-group">
                       <div class="form-floating">
                         <input
-                          v-model="mmf.invoicedate"
+                          v-model="invoicedate"
                           id="invoicedate"
-                          type="text"
-                          @input="validateInvoicedate"
+                          type="date"
+                          @change="validateInvoicedate"
                           :class="
                             'form-control ' + invoicedateErrorData.inputClass
                           "
@@ -78,8 +78,7 @@
                         <select
                           v-model="mmf.contractpartnerid"
                           id="contractpartner"
-                          type="text"
-                          @input="validateContractpartner"
+                          @change="validateContractpartner"
                           :class="
                             'form-select form-control ' +
                             contractpartnerErrorData.inputClass
@@ -108,8 +107,7 @@
                         <select
                           v-model="mmf.capitalsourceid"
                           id="capitalsource"
-                          type="text"
-                          @input="validateCapitalsource"
+                          @change="validateCapitalsource"
                           :class="
                             'form-select form-control ' +
                             capitalsourceErrorData.inputClass
@@ -138,8 +136,9 @@
                         <input
                           v-model="mmf.amount"
                           id="amount"
-                          type="text"
-                          @input="validateAmount"
+                          type="number"
+                          step="0.01"
+                          @change="validateAmount"
                           :class="' form-control ' + amountErrorData.inputClass"
                         />
                         <label
@@ -175,8 +174,7 @@
                         <select
                           v-model="mmf.postingaccountid"
                           id="postingaccount"
-                          type="text"
-                          @input="validatePostingaccount"
+                          @change="validatePostingaccount"
                           :class="
                             'form-select form-control ' +
                             postingaccountErrorData.inputClass
@@ -269,7 +267,11 @@
                 </div>
                 <div class="row no-gutters flex-lg-nowrap">
                   <div class="col-12">
-                    <button type="button" class="btn btn-secondary">
+                    <button
+                      type="button"
+                      class="btn btn-secondary"
+                      @click="resetForm"
+                    >
                       r&uuml;cksetzen
                     </button>
                     &nbsp;&nbsp;
@@ -309,6 +311,8 @@ type EditMoneyflowData = {
   commentErrorMessage: string;
   postingaccountIsValid: boolean | null;
   postingaccountErrorMessage: string;
+  bookingdate: string;
+  invoicedate: string;
 };
 export default defineComponent({
   name: "EditMoneyflow",
@@ -330,9 +334,25 @@ export default defineComponent({
       commentErrorMessage: "",
       postingaccountIsValid: null,
       postingaccountErrorMessage: "",
+      bookingdate: "",
+      invoicedate: "",
     };
   },
+  mounted() {
+    this.resetForm();
+  },
   computed: {
+    formIsValid() {
+      return (
+        this.bookingdateIsValid &&
+        this.invoicedateIsValid &&
+        this.contractpartnerIsValid &&
+        this.capitalsourceIsValid &&
+        this.amountIsValid &&
+        this.commentIsValid &&
+        this.postingaccountIsValid
+      );
+    },
     bookingdateErrorData(): ErrorData {
       return generateErrorData(
         this.bookingdateIsValid,
@@ -384,18 +404,28 @@ export default defineComponent({
     },
   },
   methods: {
+    resetForm() {
+      [this.bookingdate] = new Date().toISOString().split("T");
+      this.bookingdateIsValid = null;
+      this.invoicedateIsValid = null;
+      this.contractpartnerIsValid = null;
+      this.capitalsourceIsValid = null;
+      this.amountIsValid = null;
+      this.commentIsValid = null;
+      this.postingaccountIsValid = null;
+    },
     validateBookingdate() {
-      if (!this.mmf.bookingdate) {
+      if (!this.bookingdate) {
         this.bookingdateIsValid = false;
-        this.bookingdateErrorMessage = "Bitte Buchungsdatum angeben!";
+        this.bookingdateErrorMessage = "Datum angeben!";
       } else {
         this.bookingdateIsValid = true;
         this.bookingdateErrorMessage = "";
       }
     },
     validateInvoicedate() {
-      this.bookingdateIsValid = true;
-      this.bookingdateErrorMessage = "";
+      this.invoicedateIsValid = true;
+      this.invoiceErrorMessage = "";
     },
     validateContractpartner() {
       this.contractpartnerIsValid = true;
@@ -406,20 +436,37 @@ export default defineComponent({
       this.capitalsourceErrorMessage = "";
     },
     validateAmount() {
-      this.amountIsValid = true;
-      this.amountErrorMessage = "";
+      if (!this.mmf.amount) {
+        this.amountIsValid = false;
+        this.amountErrorMessage = "Betrag angeben!";
+      } else {
+        this.amountIsValid = true;
+        this.amountErrorMessage = "";
+      }
     },
     validateComment() {
-      this.commentIsValid = true;
-      this.commentErrorMessage = "";
+      if (!this.mmf.comment) {
+        this.commentIsValid = false;
+        this.commentErrorMessage = "Kommentar angeben!";
+      } else {
+        this.commentIsValid = true;
+        this.commentErrorMessage = "";
+      }
     },
     validatePostingaccount() {
       this.postingaccountIsValid = true;
       this.postingaccountErrorMessage = "";
     },
     saveMoneyflow() {
+      this.validateAmount();
       this.validateBookingdate();
-      alert("save");
+      this.validateCapitalsource();
+      this.validateComment();
+      this.validateContractpartner();
+      this.validateInvoicedate();
+      this.validatePostingaccount();
+
+      if (this.formIsValid) alert("save");
     },
   },
 });
