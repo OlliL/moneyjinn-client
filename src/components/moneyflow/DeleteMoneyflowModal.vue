@@ -26,7 +26,7 @@
         >
           Vertragspartner
         </div>
-        <div class="text-start col-sm-9">{{ mmf.contractpartnerame }}</div>
+        <div class="text-start col-sm-9">{{ mmf.contractpartnerName }}</div>
       </div>
       <div class="row">
         <div
@@ -64,7 +64,7 @@
         >
           Buchungskonto
         </div>
-        <div class="text-start col-sm-9">{{ mmf.ppostingAccountName}}</div>
+        <div class="text-start col-sm-9">{{ mmf.postingAccountName }}</div>
       </div>
     </template>
     <template #footer>
