@@ -245,21 +245,27 @@
 </template>
 
 <script lang="ts">
+import { defineComponent } from "vue";
+
 import ContractpartnerSelectVue from "@/components/contractpartner/ContractpartnerSelect.vue";
 import CapitalsourceSelectVue from "@/components/capitalsource/CapitalsourceSelect.vue";
-import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
-import { generateErrorData, type ErrorData } from "@/tools/views/ErrorData";
-import { defineComponent } from "vue";
 import PostingAccountSelectVue from "@/components/postingaccount/PostingAccountSelect.vue";
-import { validateInputField } from "@/tools/views/ValidateInputField";
-import type { Contractpartner } from "@/model/contractpartner/Contractpartner";
+
 import type { Capitalsource } from "@/model/capitalsource/Capitalsource";
+import type { Contractpartner } from "@/model/contractpartner/Contractpartner";
+import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 import type { PostingAccount } from "@/model/postingaccount/PostingAccount";
-import PreDefMoneyflowControllerHandler from "@/handler/PreDefMoneyflowControllerHandler";
 import type { PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
+
+import PreDefMoneyflowControllerHandler from "@/handler/PreDefMoneyflowControllerHandler";
+
+import { generateErrorData, type ErrorData } from "@/tools/views/ErrorData";
+import { validateInputField } from "@/tools/views/ValidateInputField";
 import { preDefMoneyflowAlreadyUsedThisMonth } from "@/model/moneyflow/PreDefMoneyflow";
 
 //FIXME: MoneyflowSplitEntries
+//FIXME: Creation of Capitalsources, Contractpartner, PostingAccounts
+//FIXME: only show PostingAccount "+" when user is admin
 //FIXME: save on server
 
 type EditMoneyflowData = {
@@ -408,16 +414,19 @@ export default defineComponent({
       this.mmf.amount = 0;
       this.mmf.comment = "";
       this.mmf.private = false;
+      this.saveAsPreDefMoneyflow = false;
+      this.preDefMoneyflowId = 0;
+
       this.bookingdateIsValid = null;
       this.contractpartnerIsValid = null;
       this.capitalsourceIsValid = null;
       this.amountIsValid = null;
       this.commentIsValid = null;
       this.postingaccountIsValid = null;
+
       this.previousCommentSetByContractpartnerDefaults = "";
       this.previousPostingAccountSetByContractpartnerDefaults = 0;
-      this.preDefMoneyflowId = 0;
-      this.saveAsPreDefMoneyflow = false;
+
       this.toggleTextOff = this.toggleTextOffNoPreDefMoneyflow;
       this.toggleTextOn = this.toggleTextOnNoPreDefMoneyflow;
     },
@@ -489,7 +498,7 @@ export default defineComponent({
         this.resetForm();
       } else {
         const preDefMoneyflow = this.preDefMoneyflows.find((mpm) => {
-          return mpm.id == this.preDefMoneyflowId;
+          return mpm.id === +this.preDefMoneyflowId;
         });
         if (preDefMoneyflow) {
           this.mmf.amount = preDefMoneyflow.amount;
