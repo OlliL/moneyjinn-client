@@ -11,7 +11,7 @@
         @moneyflow-deleted="moneyflowDeleted"
       />
 
-      <div class="card-body">
+      <div class="card-body" v-if="report.moneyflows">
         <table class="table table-striped table-bordered table-hover">
           <thead>
             <tr>
@@ -96,102 +96,110 @@
       </div>
     </div>
   </div>
-  <div class="row" style="margin-top: 40px">
-    <div class="col-xs-12 text-center">
-      <h1>Monatsbilanz</h1>
+  <div v-if="report.reportTurnoverCapitalsources">
+    <div class="row" style="margin-top: 40px">
+      <div class="col-xs-12 text-center">
+        <h1>Monatsbilanz</h1>
+      </div>
     </div>
-  </div>
 
-  <div class="row justify-content-md-center py-4">
-    <div class="col col-lg-8">
-      <div class="card">
-        <div class="card-header text-center p-3">
-          <h4>Eigenkapital</h4>
-        </div>
-        <div class="card-body">
-          <CapitalsourceTableVue
-            :capitalsource-data="assetsTurnoverCapitalsources"
-            :current-month-is-settled="currentMonthIsSettled"
-            v-if="assetsTurnoverCapitalsources.length > 0"
-          />
-          <div class="row justify-content-md-center">
-            <div class="col col-lg-4">
-              <table class="table table-striped table-bordered table-hover">
-                <thead>
-                  <tr>
-                    <th></th>
-                    <th>Monat</th>
-                    <th>Jahr</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr v-if="currentMonthIsSettled">
-                    <th class="text-end">Gewinn (fix)</th>
-                    <td :class="assetsMonthlyFixedTurnoverClass">
-                      {{ assetsMonthlyFixedTurnoverString }} &euro;
-                    </td>
-                    <td :class="assetsYearlyFixedTurnoverClass">
-                      {{ assetsYearlyFixedTurnoverString }} &euro;
-                    </td>
-                  </tr>
-                  <tr>
-                    <th class="text-end">Gewinn (errechnet)</th>
-                    <td :class="assetsMonthlyCalculatedTurnoverClass">
-                      {{ assetsMonthlyCalculatedTurnoverString }} &euro;
-                    </td>
-                    <td :class="turnoverEndOfYearCalculatedClass">
-                      {{ turnoverEndOfYearCalculatedString }} &euro;
-                    </td>
-                  </tr>
-                  <tr v-if="currentMonthIsSettled">
-                    <th class="text-end">Differenz</th>
-                    <td :class="assetsMonthlyDifferenceClass">
-                      {{ assetsMonthlyDifferenceString }}
-                      &euro;
-                    </td>
-                    <td :class="assetsYearlyDifferenceClass">
-                      {{ assetsYearlyDifferenceString }}
-                      &euro;
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+    <div
+      class="row justify-content-md-center py-4"
+      v-if="assetsTurnoverCapitalsources.length > 0"
+    >
+      <div class="col col-lg-8">
+        <div class="card">
+          <div class="card-header text-center p-3">
+            <h4>Eigenkapital</h4>
+          </div>
+          <div class="card-body">
+            <CapitalsourceTableVue
+              :capitalsource-data="assetsTurnoverCapitalsources"
+              :current-month-is-settled="currentMonthIsSettled"
+            />
+            <div class="row justify-content-md-center">
+              <div class="col col-lg-4">
+                <table class="table table-striped table-bordered table-hover">
+                  <thead>
+                    <tr>
+                      <th></th>
+                      <th>Monat</th>
+                      <th>Jahr</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-if="currentMonthIsSettled">
+                      <th class="text-end">Gewinn (fix)</th>
+                      <td :class="assetsMonthlyFixedTurnoverClass">
+                        {{ assetsMonthlyFixedTurnoverString }} &euro;
+                      </td>
+                      <td :class="assetsYearlyFixedTurnoverClass">
+                        {{ assetsYearlyFixedTurnoverString }} &euro;
+                      </td>
+                    </tr>
+                    <tr>
+                      <th class="text-end">Gewinn (errechnet)</th>
+                      <td :class="assetsMonthlyCalculatedTurnoverClass">
+                        {{ assetsMonthlyCalculatedTurnoverString }} &euro;
+                      </td>
+                      <td :class="turnoverEndOfYearCalculatedClass">
+                        {{ turnoverEndOfYearCalculatedString }} &euro;
+                      </td>
+                    </tr>
+                    <tr v-if="currentMonthIsSettled">
+                      <th class="text-end">Differenz</th>
+                      <td :class="assetsMonthlyDifferenceClass">
+                        {{ assetsMonthlyDifferenceString }}
+                        &euro;
+                      </td>
+                      <td :class="assetsYearlyDifferenceClass">
+                        {{ assetsYearlyDifferenceString }}
+                        &euro;
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <div class="row justify-content-md-center py-4">
-    <div class="col col-lg-8">
-      <div class="card">
-        <div class="card-header text-center p-3">
-          <h4>Fremdkapital</h4>
-        </div>
-        <div class="card-body">
-          <CapitalsourceTableVue
-            :capitalsource-data="liabilitiesTurnoverCapitalsources"
-            :current-month-is-settled="currentMonthIsSettled"
-            v-if="liabilitiesTurnoverCapitalsources.length > 0"
-          />
+    <div
+      class="row justify-content-md-center py-4"
+      v-if="liabilitiesTurnoverCapitalsources.length > 0"
+    >
+      <div class="col col-lg-8">
+        <div class="card">
+          <div class="card-header text-center p-3">
+            <h4>Fremdkapital</h4>
+          </div>
+          <div class="card-body">
+            <CapitalsourceTableVue
+              :capitalsource-data="liabilitiesTurnoverCapitalsources"
+              :current-month-is-settled="currentMonthIsSettled"
+            />
+          </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <div class="row justify-content-md-center py-4">
-    <div class="col col-lg-8">
-      <div class="card">
-        <div class="card-header text-center p-3">
-          <h4>Kredite</h4>
-        </div>
-        <div class="card-body">
-          <CapitalsourceTableVue
-            :capitalsource-data="creditTurnoverCapitalsources"
-            :current-month-is-settled="currentMonthIsSettled"
-            v-if="creditTurnoverCapitalsources.length > 0"
-          />
+    <div
+      class="row justify-content-md-center py-4"
+      v-if="creditTurnoverCapitalsources.length > 0"
+    >
+      <div class="col col-lg-8">
+        <div class="card">
+          <div class="card-header text-center p-3">
+            <h4>Kredite</h4>
+          </div>
+          <div class="card-body">
+            <CapitalsourceTableVue
+              :capitalsource-data="creditTurnoverCapitalsources"
+              :current-month-is-settled="currentMonthIsSettled"
+            />
+          </div>
         </div>
       </div>
     </div>
@@ -372,17 +380,19 @@ export default defineComponent({
 
       var assetsLastAmount = 0;
       var assetsFixAmount = 0;
-      for (const data of this.report.reportTurnoverCapitalsources) {
-        if (
-          data.capitalsourceType === CapitalsourceType.CURRENT_ASSET ||
-          data.capitalsourceType === CapitalsourceType.LONG_TERM_ASSET
-        ) {
-          this.assetsMonthlyCalculatedTurnover += +(
-            data.amountEndOfMonthCalculated - data.amountBeginOfMonthFixed
-          );
-          assetsLastAmount += data.amountBeginOfMonthFixed;
-          if (data.amountEndOfMonthFixed)
-            assetsFixAmount = +(assetsFixAmount + data.amountEndOfMonthFixed);
+      if (this.report.reportTurnoverCapitalsources) {
+        for (const data of this.report.reportTurnoverCapitalsources) {
+          if (
+            data.capitalsourceType === CapitalsourceType.CURRENT_ASSET ||
+            data.capitalsourceType === CapitalsourceType.LONG_TERM_ASSET
+          ) {
+            this.assetsMonthlyCalculatedTurnover += +(
+              data.amountEndOfMonthCalculated - data.amountBeginOfMonthFixed
+            );
+            assetsLastAmount += data.amountBeginOfMonthFixed;
+            if (data.amountEndOfMonthFixed)
+              assetsFixAmount = +(assetsFixAmount + data.amountEndOfMonthFixed);
+          }
         }
       }
       this.assetsMonthlyFixedTurnover = +(assetsFixAmount - assetsLastAmount);

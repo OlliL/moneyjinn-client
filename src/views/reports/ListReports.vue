@@ -40,25 +40,32 @@
         </form>
       </div>
     </div>
-
     <div class="row">
-      <div class="col-sm text-start">
-        <a
-          class="page-link link-primary"
-          href="#"
-          @click="selectMonth(previousYear + '', previousMonth + '')"
-          v-if="previousMonthLink"
-          >&lt;&lt; voriger Monat</a
-        >
+      <div
+        class="col-md-3 text-start g-0"
+        style="position: fixed; z-index: 1030; margin-top: 35vh"
+      >
+        <h1>
+          <i
+            role="button"
+            @click="navigateToPreviousMonth"
+            v-if="previousMonthLink"
+            class="bi bi-caret-left-fill link-primary"
+          ></i>
+        </h1>
       </div>
-      <div class="col-sm text-end">
-        <a
-          class="page-link link-primary"
-          href="#"
-          @click="selectMonth(nextYear + '', nextMonth + '')"
-          v-if="nextMonthLink"
-          >n&auml;chster Monat &gt;&gt;</a
-        >
+      <div
+        class="col-md-3 text-end g-0 offset-md-9"
+        style="position: fixed; z-index: 1030; margin-top: 35vh"
+      >
+        <h1>
+          <i
+            role="button"
+            @click="navigateToNextMonth"
+            v-if="nextMonthLink"
+            class="bi bi-caret-right-fill link-primary"
+          ></i>
+        </h1>
       </div>
     </div>
     <ReportTableVue :year="year" :month="month" v-if="year && month" />
@@ -112,7 +119,6 @@ export default defineComponent({
         year,
         month
       );
-
       this.months = response.allMonth;
       this.years = response.allYears;
 
@@ -127,6 +133,12 @@ export default defineComponent({
       this.selectedYear = response.year;
 
       this.dataLoaded = true;
+    },
+    navigateToPreviousMonth() {
+      this.selectMonth(this.previousYear + "", this.previousMonth + "");
+    },
+    navigateToNextMonth() {
+      this.selectMonth(this.nextYear + "", this.nextMonth + "");
     },
     selectMonth(year: string, month?: string) {
       router.push({
