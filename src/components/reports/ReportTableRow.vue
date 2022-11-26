@@ -4,6 +4,7 @@
       <i
         class="bi bi-card-image link-primary"
         v-if="mmf.hasReceipt"
+        role="button"
         @click="showReceipt"
       ></i>
     </td>
@@ -16,22 +17,24 @@
     <td class="text-start">
       {{ mmf.capitalsourceComment }}
     </td>
-    <td class="text-start">
+    <td class="text-start" v-if="isOwnMoneyflow">
       <span role="button" class="link-primary" @click="editMoneyflow"
         >bearbeiten</span
       >
     </td>
-    <td class="text-start">
+    <td class="text-start" v-if="isOwnMoneyflow">
       <span role="button" class="link-primary" @click="deleteMoneyflow"
         >l&ouml;schen</span
       >
     </td>
+    <td colspan="2" v-if="!isOwnMoneyflow"></td>
   </tr>
   <tr v-for="(mse, index) in mmf.moneyflowSplitEntries" :key="mse.id">
     <td :rowspan="rowspan" v-if="index == 0">
       <i
         class="bi bi-card-image link-primary"
         v-if="mmf.hasReceipt"
+        role="button"
         @click="showReceipt"
       ></i>
     </td>
@@ -51,16 +54,25 @@
     <td :rowspan="rowspan" v-if="index == 0" class="text-start">
       {{ mmf.capitalsourceComment }}
     </td>
-    <td :rowspan="rowspan" v-if="index == 0" class="text-start">
+    <td
+      :rowspan="rowspan"
+      v-if="index == 0 && isOwnMoneyflow"
+      class="text-start"
+    >
       <span role="button" class="link-primary" @click="editMoneyflow"
         >bearbeiten</span
       >
     </td>
-    <td :rowspan="rowspan" v-if="index == 0" class="text-start">
+    <td
+      :rowspan="rowspan"
+      v-if="index == 0 && isOwnMoneyflow"
+      class="text-start"
+    >
       <span role="button" class="link-primary" @click="deleteMoneyflow"
         >l&ouml;schen</span
       >
     </td>
+    <td colspan="2" v-if="index == 0 && !isOwnMoneyflow"></td>
   </tr>
 </template>
 <script lang="ts">
@@ -68,6 +80,7 @@ import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 import { defineComponent, type PropType } from "vue";
 import { formatDate } from "@/tools/views/FormatDate";
 import { redIfNegativeEnd, formatNumber } from "@/tools/views/FormatNumber";
+import { useUserSessionStore } from "@/stores/UserSessionStore";
 
 export default defineComponent({
   name: "ReportTableRow",
@@ -102,6 +115,10 @@ export default defineComponent({
         return 2;
       }
       return 1;
+    },
+    isOwnMoneyflow(): boolean {
+      const userSessionStore = useUserSessionStore();
+      return this.mmf.userId === userSessionStore.getUserId;
     },
   },
   methods: {
