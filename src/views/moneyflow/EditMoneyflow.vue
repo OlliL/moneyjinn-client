@@ -7,8 +7,17 @@
     </div>
     <div class="row justify-content-md-center mb-4">
       <div class="col-md-4 col-xs-12">
-        <select class="form-select form-control" id="selectmoneyflow">
-          <option value="-1">Neue Buchung</option>
+        <select
+          class="form-select form-control"
+          id="selectmoneyflow"
+          v-model="preDefMoneyflowId"
+          @change="selectPreDefMoneyflow"
+        >
+          <option value="0">Neue Buchung</option>
+          <option v-for="mcp of preDefMoneyflows" :key="mcp.id" :value="mcp.id">
+            {{ mcp.contractpartnerName }} | {{ mcp.amount.toFixed(2) }} &euro; |
+            {{ mcp.comment }}
+          </option>
         </select>
       </div>
     </div>
@@ -146,7 +155,8 @@
                         name="public-private"
                         id="public"
                         autocomplete="off"
-                        checked
+                        v-model="mmf.private"
+                        :value="false"
                       />
                       <label class="btn btn-outline-success" for="public"
                         ><small>&ouml;ffentlich</small></label
@@ -158,6 +168,8 @@
                         name="public-private"
                         id="private"
                         autocomplete="off"
+                        v-model="mmf.private"
+                        :value="true"
                       />
                       <label class="btn btn-outline-danger" for="private"
                         ><small>privat</small></label
@@ -171,10 +183,11 @@
                         name="once-favorite"
                         id="once"
                         autocomplete="off"
-                        checked
+                        v-model="saveAsPreDefMoneyflow"
+                        :value="false"
                       />
                       <label class="btn btn-outline-secondary" for="once"
-                        ><small>einmalig</small></label
+                        ><small>{{ toggleTextOff }}</small></label
                       >
 
                       <input
@@ -183,9 +196,11 @@
                         name="once-favorite"
                         id="favorite"
                         autocomplete="off"
+                        v-model="saveAsPreDefMoneyflow"
+                        :value="true"
                       />
                       <label class="btn btn-outline-primary" for="favorite"
-                        ><small>Favorit</small></label
+                        ><small>{{ toggleTextOn }}</small></label
                       >
                     </div>
                   </div>
@@ -240,8 +255,10 @@ import { validateInputField } from "@/tools/views/ValidateInputField";
 import type { Contractpartner } from "@/model/contractpartner/Contractpartner";
 import type { Capitalsource } from "@/model/capitalsource/Capitalsource";
 import type { PostingAccount } from "@/model/postingaccount/PostingAccount";
+import PreDefMoneyflowControllerHandler from "@/handler/PreDefMoneyflowControllerHandler";
+import type { PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
+import { preDefMoneyflowAlreadyUsedThisMonth } from "@/model/moneyflow/PreDefMoneyflow";
 
-//FIXME: PreDefMoneyflows
 //FIXME: MoneyflowSplitEntries
 //FIXME: save on server
 
@@ -264,6 +281,15 @@ type EditMoneyflowData = {
   invoicedate: string;
   previousCommentSetByContractpartnerDefaults: string;
   previousPostingAccountSetByContractpartnerDefaults: number;
+  preDefMoneyflows: Array<PreDefMoneyflow>;
+  preDefMoneyflowId: number;
+  saveAsPreDefMoneyflow: boolean;
+  toggleTextOffNoPreDefMoneyflow: string;
+  toggleTextOnNoPreDefMoneyflow: string;
+  toggleTextOffPreDefMoneyflow: string;
+  toggleTextOnPreDefMoneyflow: string;
+  toggleTextOff: string;
+  toggleTextOn: string;
 };
 export default defineComponent({
   name: "EditMoneyflow",
@@ -287,10 +313,27 @@ export default defineComponent({
       invoicedate: "",
       previousCommentSetByContractpartnerDefaults: "",
       previousPostingAccountSetByContractpartnerDefaults: 0,
+      preDefMoneyflows: new Array<PreDefMoneyflow>(),
+      preDefMoneyflowId: 0,
+      saveAsPreDefMoneyflow: false,
+      toggleTextOffNoPreDefMoneyflow: "einmalig",
+      toggleTextOnNoPreDefMoneyflow: "Favorit",
+      toggleTextOffPreDefMoneyflow: "belassen",
+      toggleTextOnPreDefMoneyflow: "erneuern",
+      toggleTextOff: "",
+      toggleTextOn: "",
     };
   },
-  mounted() {
+  async mounted() {
     this.resetForm();
+    const allPreDefMoneyflows =
+      await PreDefMoneyflowControllerHandler.fetchAllPreDefMoneyflow();
+    const today = new Date();
+    this.preDefMoneyflows = allPreDefMoneyflows.filter((mpm) => {
+      return (
+        !mpm.onceAMonth || !preDefMoneyflowAlreadyUsedThisMonth(today, mpm)
+      );
+    });
   },
   computed: {
     formIsValid() {
@@ -364,6 +407,7 @@ export default defineComponent({
       this.mmf.postingAccountId = 0;
       this.mmf.amount = 0;
       this.mmf.comment = "";
+      this.mmf.private = false;
       this.bookingdateIsValid = null;
       this.contractpartnerIsValid = null;
       this.capitalsourceIsValid = null;
@@ -372,6 +416,10 @@ export default defineComponent({
       this.postingaccountIsValid = null;
       this.previousCommentSetByContractpartnerDefaults = "";
       this.previousPostingAccountSetByContractpartnerDefaults = 0;
+      this.preDefMoneyflowId = 0;
+      this.saveAsPreDefMoneyflow = false;
+      this.toggleTextOff = this.toggleTextOffNoPreDefMoneyflow;
+      this.toggleTextOn = this.toggleTextOnNoPreDefMoneyflow;
     },
     validateBookingdate() {
       [this.bookingdateIsValid, this.bookingdateErrorMessage] =
@@ -418,12 +466,12 @@ export default defineComponent({
         this.mmf.postingAccountId ===
         this.previousPostingAccountSetByContractpartnerDefaults
       ) {
-        const paId = contractpartner.postingAccountId
+        const mpaId = contractpartner.postingAccountId
           ? contractpartner.postingAccountId
           : 0;
 
-        this.mmf.postingAccountId = paId;
-        this.previousPostingAccountSetByContractpartnerDefaults = paId;
+        this.mmf.postingAccountId = mpaId;
+        this.previousPostingAccountSetByContractpartnerDefaults = mpaId;
         this.validatePostingaccount();
       }
       this.validateContractpartner();
@@ -436,6 +484,25 @@ export default defineComponent({
       this.mmf.postingAccountId = postingAccount.id;
       this.validatePostingaccount();
     },
+    selectPreDefMoneyflow() {
+      if (this.preDefMoneyflowId <= 0) {
+        this.resetForm();
+      } else {
+        const preDefMoneyflow = this.preDefMoneyflows.find((mpm) => {
+          return mpm.id == this.preDefMoneyflowId;
+        });
+        if (preDefMoneyflow) {
+          this.mmf.amount = preDefMoneyflow.amount;
+          this.mmf.contractpartnerId = preDefMoneyflow.contractpartnerId;
+          this.mmf.comment = preDefMoneyflow.comment;
+          this.mmf.postingAccountId = preDefMoneyflow.postingAccountId;
+          this.mmf.capitalsourceId = preDefMoneyflow.capitalsourceId;
+
+          this.toggleTextOff = this.toggleTextOffPreDefMoneyflow;
+          this.toggleTextOn = this.toggleTextOnPreDefMoneyflow;
+        }
+      }
+    },
     saveMoneyflow() {
       this.validateAmount();
       this.validateBookingdate();
@@ -447,6 +514,8 @@ export default defineComponent({
       if (this.formIsValid) {
         this.mmf.bookingDate = new Date(this.bookingdate);
         if (this.invoicedate) this.mmf.invoiceDate = new Date(this.invoicedate);
+        console.log(this.preDefMoneyflowId);
+        console.log(this.saveAsPreDefMoneyflow);
         console.log(this.mmf);
         alert("save");
       }
