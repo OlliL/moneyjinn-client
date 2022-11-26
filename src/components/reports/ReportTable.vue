@@ -21,7 +21,7 @@
                 <i
                   :class="`bi ${sortIcon('bookingDate')} link-primary`"
                   role="button"
-                  @click="sortBookingdate('bookingDate')"
+                  @click="sortByColumn('bookingDate')"
                 ></i>
               </th>
               <th>
@@ -29,6 +29,7 @@
                 <i
                   :class="`bi ${sortIcon('invoiceDate')} link-primary`"
                   role="button"
+                  @click="sortByColumn('invoiceDate')"
                 ></i>
               </th>
               <th colspan="2">
@@ -36,13 +37,15 @@
                 <i
                   :class="`bi ${sortIcon('amount')} link-primary`"
                   role="button"
+                  @click="sortByColumn('amount')"
                 ></i>
               </th>
               <th>
                 Vertragspartner
                 <i
-                  :class="`bi ${sortIcon('contractpartner')} link-primary`"
+                  :class="`bi ${sortIcon('contractpartnerName')} link-primary`"
                   role="button"
+                  @click="sortByColumn('contractpartnerName')"
                 ></i>
               </th>
               <th>
@@ -50,20 +53,23 @@
                 <i
                   :class="`bi ${sortIcon('comment')} link-primary`"
                   role="button"
+                  @click="sortByColumn('comment')"
                 ></i>
               </th>
               <th>
                 Buchungskonto
                 <i
-                  :class="`bi ${sortIcon('postingAccount')} link-primary`"
+                  :class="`bi ${sortIcon('postingAccountName')} link-primary`"
                   role="button"
+                  @click="sortByColumn('postingAccountName')"
                 ></i>
               </th>
               <th>
                 Kapitalquelle
                 <i
-                  :class="`bi ${sortIcon('capitalsource')} link-primary`"
+                  :class="`bi ${sortIcon('capitalsourceComment')} link-primary`"
                   role="button"
+                  @click="sortByColumn('capitalsourceComment')"
                 ></i>
               </th>
               <th colspan="2"></th>
@@ -361,14 +367,6 @@ export default defineComponent({
     },
   },
   methods: {
-    sortIcon(sortedField: string) {
-      if (this.sortBy.get(sortedField) === undefined) {
-        return "bi-caret-down-square";
-      } else if (this.sortBy.get(sortedField)) {
-        return "bi-caret-down-square-fill";
-      }
-      return "bi-caret-up-square-fill";
-    },
     async loadData(year: string, month: string) {
       this.report = await ReportControllerHandler.listReports(year, month);
 
@@ -394,6 +392,7 @@ export default defineComponent({
         assetsFixAmount - this.report.amountBeginOfYear
       );
 
+      this.sortBy.clear();
       this.sortBy.set("bookingDate", true);
       this.dataLoaded = true;
     },
@@ -431,22 +430,43 @@ export default defineComponent({
       });
       this.modifyCapitalsourceAmounts(mmf.capitalsourceComment, mmf.amount);
     },
-    sortBookingdate(field: keyof Moneyflow) {
-      const fieldName = "bookingDate";
-      let sortByField = this.sortBy.get(fieldName);
-      if (sortByField == undefined || sortByField) {
-        this.report.moneyflows.sort((a, b) =>
-          a[fieldName] > b[fieldName] ? -1 : b[fieldName] > a[fieldName] ? 1 : 0
-        );
-        sortByField = false;
-      } else {
-        this.report.moneyflows.sort((a, b) =>
-          a[fieldName] > b[fieldName] ? 1 : b[fieldName] > a[fieldName] ? -1 : 0
-        );
+    sortIcon(sortedField: string) {
+      if (this.sortBy.get(sortedField) === undefined) {
+        return "bi-caret-down-square";
+      } else if (this.sortBy.get(sortedField)) {
+        return "bi-caret-down-square-fill";
+      }
+      return "bi-caret-up-square-fill";
+    },
+    sortByColumn(field: keyof Moneyflow) {
+      let sortByField = this.sortBy.get(field);
+      if (sortByField == undefined || !sortByField) {
+        this.report.moneyflows.sort((a, b) => {
+          let aField = a[field];
+          let bField = b[field];
+          if (aField === undefined || bField === undefined) return 0;
+          if (typeof aField === "string" && typeof bField === "string") {
+            aField = aField.toLowerCase();
+            bField = bField.toLowerCase();
+          }
+          return aField > bField ? 1 : bField > aField ? -1 : 0;
+        });
         sortByField = true;
+      } else {
+        this.report.moneyflows.sort((a, b) => {
+          let aField = a[field];
+          let bField = b[field];
+          if (aField === undefined || bField === undefined) return 0;
+          if (typeof aField === "string" && typeof bField === "string") {
+            aField = aField.toLowerCase();
+            bField = bField.toLowerCase();
+          }
+          return aField > bField ? -1 : bField > aField ? 1 : 0;
+        });
+        sortByField = false;
       }
       this.sortBy.clear();
-      this.sortBy.set(fieldName, sortByField);
+      this.sortBy.set(field, sortByField);
     },
     editMoneyflow(mmf: Moneyflow) {
       // FIXME: implement
