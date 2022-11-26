@@ -67,13 +67,15 @@ class ReportControllerHandler extends AbstractControllerHandler {
 
     const mseMap = new Map<number, Array<MoneyflowSplitEntry>>();
 
-    for (const mse of data.moneyflowSplitEntryTransport) {
-      let mseMapArray = mseMap.get(mse.moneyflowid);
-      if (mseMapArray == null) {
-        mseMapArray = new Array<MoneyflowSplitEntry>();
+    if (data.moneyflowSplitEntryTransport !== undefined) {
+      for (const mse of data.moneyflowSplitEntryTransport) {
+        let mseMapArray = mseMap.get(mse.moneyflowid);
+        if (mseMapArray == null) {
+          mseMapArray = new Array<MoneyflowSplitEntry>();
+        }
+        mseMapArray.push(mse);
+        mseMap.set(mse.moneyflowid, mseMapArray);
       }
-      mseMapArray.push(mse);
-      mseMap.set(mse.moneyflowid, mseMapArray);
     }
 
     const report: Report = {
@@ -82,10 +84,10 @@ class ReportControllerHandler extends AbstractControllerHandler {
       amountBeginOfYear: data.amountBeginOfYear,
       turnoverEndOfYearCalculated: data.turnoverEndOfYearCalculated,
       reportTurnoverCapitalsources:
-        data.reportTurnoverCapitalsourceTransport.map((rtcp) => {
+        data.reportTurnoverCapitalsourceTransport?.map((rtcp) => {
           return mapReportTurnoverCapitalsourceTransportToModel(rtcp);
         }),
-      moneyflows: data.moneyflowTransport.map((mmf) => {
+      moneyflows: data.moneyflowTransport?.map((mmf) => {
         return mapMoneyflowTransportToModel(
           mmf,
           data.moneyflowsWithReceipt?.includes(mmf.id),
