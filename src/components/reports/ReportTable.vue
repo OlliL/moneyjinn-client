@@ -16,13 +16,56 @@
           <thead>
             <tr>
               <th></th>
-              <th>Buchungsdatum</th>
-              <th>Rechnungsdatum</th>
-              <th colspan="2">Betrag</th>
-              <th>Vertragspartner</th>
-              <th>Kommentar</th>
-              <th>Buchungskonto</th>
-              <th>Kapitalquelle</th>
+              <th>
+                Buchungsdatum
+                <i
+                  :class="`bi ${sortIcon('bookingDate')} link-primary`"
+                  role="button"
+                  @click="sortBookingdate('bookingDate')"
+                ></i>
+              </th>
+              <th>
+                Rechnungsdatum
+                <i
+                  :class="`bi ${sortIcon('invoiceDate')} link-primary`"
+                  role="button"
+                ></i>
+              </th>
+              <th colspan="2">
+                Betrag
+                <i
+                  :class="`bi ${sortIcon('amount')} link-primary`"
+                  role="button"
+                ></i>
+              </th>
+              <th>
+                Vertragspartner
+                <i
+                  :class="`bi ${sortIcon('contractpartner')} link-primary`"
+                  role="button"
+                ></i>
+              </th>
+              <th>
+                Kommentar
+                <i
+                  :class="`bi ${sortIcon('comment')} link-primary`"
+                  role="button"
+                ></i>
+              </th>
+              <th>
+                Buchungskonto
+                <i
+                  :class="`bi ${sortIcon('postingAccount')} link-primary`"
+                  role="button"
+                ></i>
+              </th>
+              <th>
+                Kapitalquelle
+                <i
+                  :class="`bi ${sortIcon('capitalsource')} link-primary`"
+                  role="button"
+                ></i>
+              </th>
               <th colspan="2"></th>
             </tr>
           </thead>
@@ -150,18 +193,24 @@
 </template>
 
 <script lang="ts">
-import ReportControllerHandler from "@/handler/ReportControllerHandler";
+import { defineComponent } from "vue";
+
+import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 import type { Report } from "@/model/report/Report";
 import { CapitalsourceType } from "@/model/capitalsource/CapitalsourceType";
 import type { ReportTurnoverCapitalsource } from "@/model/report/ReportTurnoverCapitalsourceTransport";
-import { defineComponent } from "vue";
-import CapitalsourceTableVue from "./CapitalsourceTable.vue";
+
+import ReportControllerHandler from "@/handler/ReportControllerHandler";
+
 import ReportTableRowVue from "./ReportTableRow.vue";
+import ReceiptModalVue from "./ReceiptModal.vue";
+import CapitalsourceTableVue from "./CapitalsourceTable.vue";
+import DeleteMoneyflowModalVue from "../moneyflow/DeleteMoneyflowModal.vue";
+
 import { redIfNegativeEnd, formatNumber } from "@/tools/views/FormatNumber";
 import { getMonthName } from "@/tools/views/MonthName";
-import ReceiptModalVue from "./ReceiptModal.vue";
-import DeleteMoneyflowModalVue from "../moneyflow/DeleteMoneyflowModal.vue";
-import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
+
+//FIXME: sort columns when clicking on headlines
 
 export default defineComponent({
   name: "ReportTable",
@@ -172,6 +221,14 @@ export default defineComponent({
       assetsMonthlyFixedTurnover: 0,
       assetsYearlyFixedTurnover: 0,
       assetsMonthlyCalculatedTurnover: 0,
+      sortBookingdateAsc: true,
+      sortInvoicedateAsc: null,
+      sortAmountAsc: null,
+      sortContractpartnerAsc: null,
+      sortCommentAsc: null,
+      sortPostingAccountAsc: null,
+      sortCapitalsourceAsc: null,
+      sortBy: new Map<String, Boolean>(),
     };
   },
   props: {
@@ -299,8 +356,19 @@ export default defineComponent({
     assetsYearlyDifferenceString(): string {
       return formatNumber(this.assetsYearlyDifference, 2);
     },
+    bookingdateSortIcon(): string {
+      return this.sortIcon("bookingdate");
+    },
   },
   methods: {
+    sortIcon(sortedField: string) {
+      if (this.sortBy.get(sortedField) === undefined) {
+        return "bi-caret-down-square";
+      } else if (this.sortBy.get(sortedField)) {
+        return "bi-caret-down-square-fill";
+      }
+      return "bi-caret-up-square-fill";
+    },
     async loadData(year: string, month: string) {
       this.report = await ReportControllerHandler.listReports(year, month);
 
@@ -326,6 +394,7 @@ export default defineComponent({
         assetsFixAmount - this.report.amountBeginOfYear
       );
 
+      this.sortBy.set("bookingDate", true);
       this.dataLoaded = true;
     },
     showReceipt(moneyflowId: number) {
@@ -361,6 +430,23 @@ export default defineComponent({
         return mmf.id !== originalMmf.id;
       });
       this.modifyCapitalsourceAmounts(mmf.capitalsourceComment, mmf.amount);
+    },
+    sortBookingdate(field: keyof Moneyflow) {
+      const fieldName = "bookingDate";
+      let sortByField = this.sortBy.get(fieldName);
+      if (sortByField == undefined || sortByField) {
+        this.report.moneyflows.sort((a, b) =>
+          a[fieldName] > b[fieldName] ? -1 : b[fieldName] > a[fieldName] ? 1 : 0
+        );
+        sortByField = false;
+      } else {
+        this.report.moneyflows.sort((a, b) =>
+          a[fieldName] > b[fieldName] ? 1 : b[fieldName] > a[fieldName] ? -1 : 0
+        );
+        sortByField = true;
+      }
+      this.sortBy.clear();
+      this.sortBy.set(fieldName, sortByField);
     },
     editMoneyflow(mmf: Moneyflow) {
       // FIXME: implement
