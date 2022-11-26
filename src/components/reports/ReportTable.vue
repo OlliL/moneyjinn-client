@@ -216,8 +216,6 @@ import DeleteMoneyflowModalVue from "../moneyflow/DeleteMoneyflowModal.vue";
 import { redIfNegativeEnd, formatNumber } from "@/tools/views/FormatNumber";
 import { getMonthName } from "@/tools/views/MonthName";
 
-//FIXME: sort columns when clicking on headlines
-
 export default defineComponent({
   name: "ReportTable",
   data() {
@@ -438,31 +436,25 @@ export default defineComponent({
       }
       return "bi-caret-up-square-fill";
     },
+    compareColumns(a: Moneyflow, b: Moneyflow, field: keyof Moneyflow): number {
+      let aField = a[field];
+      let bField = b[field];
+      if (aField === undefined || bField === undefined) return 0;
+      if (typeof aField === "string" && typeof bField === "string") {
+        aField = aField.toLowerCase();
+        bField = bField.toLowerCase();
+      }
+      return aField > bField ? 1 : bField > aField ? -1 : 0;
+    },
     sortByColumn(field: keyof Moneyflow) {
       let sortByField = this.sortBy.get(field);
       if (sortByField == undefined || !sortByField) {
-        this.report.moneyflows.sort((a, b) => {
-          let aField = a[field];
-          let bField = b[field];
-          if (aField === undefined || bField === undefined) return 0;
-          if (typeof aField === "string" && typeof bField === "string") {
-            aField = aField.toLowerCase();
-            bField = bField.toLowerCase();
-          }
-          return aField > bField ? 1 : bField > aField ? -1 : 0;
-        });
+        this.report.moneyflows.sort((a, b) => this.compareColumns(a, b, field));
         sortByField = true;
       } else {
-        this.report.moneyflows.sort((a, b) => {
-          let aField = a[field];
-          let bField = b[field];
-          if (aField === undefined || bField === undefined) return 0;
-          if (typeof aField === "string" && typeof bField === "string") {
-            aField = aField.toLowerCase();
-            bField = bField.toLowerCase();
-          }
-          return aField > bField ? -1 : bField > aField ? 1 : 0;
-        });
+        this.report.moneyflows.sort(
+          (a, b) => -1 * this.compareColumns(a, b, field)
+        );
         sortByField = false;
       }
       this.sortBy.clear();
