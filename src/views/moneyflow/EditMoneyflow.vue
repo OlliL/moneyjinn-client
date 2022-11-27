@@ -373,6 +373,7 @@ import { preDefMoneyflowAlreadyUsedThisMonth } from "@/model/moneyflow/PreDefMon
 // --> a) validateRow - to validate the row. return false if not valid
 // --> b) getSplitEntry - to return the entered split entry object
 // --> amount change fires an event to calculate the remainder in the parent component
+// --> maybe all changes have to fire an event because the main Comment and PostingAccount have to be made invisible on data entering......
 // --> remainder and + button is shown in the last component only (use provided index + length)
 // --> "+" and "-" buttons fire events to maintain the array-size in the parent component
 // ------> array index needs to be sent with the minus - event for deleting the right array element
