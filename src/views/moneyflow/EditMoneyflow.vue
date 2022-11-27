@@ -224,6 +224,8 @@
                             :key="mse.id"
                             :amount="mse.amount"
                             :comment="mse.comment"
+                            :moneyflowComment="mmf.comment"
+                            :moneyflowPostingAccountId="mmf.postingAccountId"
                             :posting-account-id="mse.postingAccountId"
                             :is-last-row="
                               index + 1 === mmf.moneyflowSplitEntries?.length
@@ -297,9 +299,7 @@ import { generateErrorData, type ErrorData } from "@/tools/views/ErrorData";
 import { validateInputField } from "@/tools/views/ValidateInputField";
 import { preDefMoneyflowAlreadyUsedThisMonth } from "@/model/moneyflow/PreDefMoneyflow";
 
-//FIXME: MoneyflowSplitEntries: Copy Comment & PostingAccount from Moneyflow when using the remainder-Button
-// ------> mainComment
-// ------> mainPostingAccountId
+//FIXME: MoneyflowSplitEntries: Add empty line when last line is filled
 //FIXME: Creation of Capitalsources, Contractpartner, PostingAccounts
 //FIXME: only show PostingAccount "+" when user is admin
 //FIXME: save on server
@@ -446,7 +446,7 @@ export default defineComponent({
       }
     },
     mseRemainder(): number {
-      let remainder = this.mmf.amount;
+      let remainder = +this.mmf.amount;
       if (this.mmf.moneyflowSplitEntries != undefined) {
         for (const mse of this.mmf.moneyflowSplitEntries) {
           if (mse.amount) remainder -= mse.amount;
