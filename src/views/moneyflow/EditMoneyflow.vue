@@ -108,6 +108,7 @@
                           step="0.01"
                           @change="validateAmount"
                           :class="' form-control ' + amountErrorData.inputClass"
+                          ref="amountRef"
                         />
                         <label
                           for="amount"
@@ -505,6 +506,7 @@ export default defineComponent({
           this.onDeleteMoneyflowSplitEntryRow(0);
         }
       }
+      (this.$refs.amountRef as any).focus();
     },
     /*
      * Moneyflow Split Entry handling
