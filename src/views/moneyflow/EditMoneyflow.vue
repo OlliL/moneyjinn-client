@@ -5,7 +5,10 @@
         <h4>Geldbewegung hinzuf&uuml;gen</h4>
       </div>
     </div>
-    <div class="row justify-content-md-center mb-4">
+    <div
+      class="row justify-content-md-center mb-4"
+      v-show="preDefMoneyflows.length > 0"
+    >
       <div class="col-md-4 col-xs-12">
         <select
           class="form-select form-control"
@@ -287,7 +290,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, type PropType } from "vue";
 
 import ContractpartnerSelectVue from "@/components/contractpartner/ContractpartnerSelect.vue";
 import CapitalsourceSelectVue from "@/components/capitalsource/CapitalsourceSelect.vue";
@@ -382,18 +385,26 @@ export default defineComponent({
       showMoneyflowFields: true,
     };
   },
+  props: {
+    mmfToEdit: {
+      type: Object as PropType<Moneyflow>,
+      required: false,
+    },
+  },
   async mounted() {
-    this.resetForm();
-    const allPreDefMoneyflows =
-      await PreDefMoneyflowControllerHandler.fetchAllPreDefMoneyflow();
+    if (!this.mmfToEdit) {
+      this.resetForm();
+      const allPreDefMoneyflows =
+        await PreDefMoneyflowControllerHandler.fetchAllPreDefMoneyflow();
 
-    // remove those PreDefMoneyflows which where used this month already and have onceMonth set
-    const today = new Date();
-    this.preDefMoneyflows = allPreDefMoneyflows.filter((mpm) => {
-      return (
-        !mpm.onceAMonth || !preDefMoneyflowAlreadyUsedThisMonth(today, mpm)
-      );
-    });
+      // remove those PreDefMoneyflows which where used this month already and have onceMonth set
+      const today = new Date();
+      this.preDefMoneyflows = allPreDefMoneyflows.filter((mpm) => {
+        return (
+          !mpm.onceAMonth || !preDefMoneyflowAlreadyUsedThisMonth(today, mpm)
+        );
+      });
+    }
   },
   computed: {
     formIsValid() {
