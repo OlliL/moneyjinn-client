@@ -220,6 +220,7 @@
                         <div class="card-body">
                           <EditMoneyflowSplitEntryRowVue
                             v-for="(mse, index) in mmf.moneyflowSplitEntries"
+                            ref="mseRow"
                             :key="mse.id"
                             :amount="mse.amount"
                             :comment="mse.comment"
@@ -229,6 +230,7 @@
                             "
                             :index="index"
                             :remainder="mseRemainder"
+                            :remainder-is-valid="mseRemainderIsValid"
                             @delete-moneyflow-split-entry-row="
                               onDeleteMoneyflowSplitEntryRow
                             "
@@ -237,6 +239,12 @@
                             "
                             @amount-changed="
                               onMoneyflowSplitEntryRowAmountChanged
+                            "
+                            @comment-changed="
+                              onMoneyflowSplitEntryRowCommentChanged
+                            "
+                            @posting-account-id-changed="
+                              onMoneyflowSplitEntryRowPostingAccountIdChanged
                             "
                           />
                         </div>
@@ -289,26 +297,9 @@ import { generateErrorData, type ErrorData } from "@/tools/views/ErrorData";
 import { validateInputField } from "@/tools/views/ValidateInputField";
 import { preDefMoneyflowAlreadyUsedThisMonth } from "@/model/moneyflow/PreDefMoneyflow";
 
-//FIXME: MoneyflowSplitEntries
-// --> place each row into a sub-component
-// --> component props are:
-// ------> MoneyflowSplitEntry
-// ------> remainingAmount
+//FIXME: MoneyflowSplitEntries: Copy Comment & PostingAccount from Moneyflow when using the remainder-Button
 // ------> mainComment
 // ------> mainPostingAccountId
-// ------> index
-// ------> length of array -1
-// --> v-for on the row-div - ref is then set up as an array (order not guaranteed)
-// --> provide 2 functions in the component
-// --> a) validateRow - to validate the row. return false if not valid
-// --> b) getSplitEntry - to return the entered split entry object
-// --> amount change fires an event to calculate the remainder in the parent component
-// --> maybe all changes have to fire an event because the main Comment and PostingAccount have to be made invisible on data entering......
-// --> remainder and + button is shown in the last component only (use provided index + length)
-// --> "+" and "-" buttons fire events to maintain the array-size in the parent component
-// ------> array index needs to be sent with the minus - event for deleting the right array element
-// ------> array plus - event gets the id of the last array entry adds 1 and uses that as id for the new element
-// --> submit on the parent component loops through refs and calls validate. If all are valid, all split entries are collected, sorted by id and then used for saving.
 //FIXME: Creation of Capitalsources, Contractpartner, PostingAccounts
 //FIXME: only show PostingAccount "+" when user is admin
 //FIXME: save on server
@@ -341,6 +332,8 @@ type EditMoneyflowData = {
   toggleTextOnPreDefMoneyflow: string;
   toggleTextOff: string;
   toggleTextOn: string;
+  mseRowsAreValid: boolean | null;
+  mseRemainderIsValid: boolean | undefined;
 };
 export default defineComponent({
   name: "EditMoneyflow",
@@ -373,6 +366,8 @@ export default defineComponent({
       toggleTextOnPreDefMoneyflow: "erneuern",
       toggleTextOff: "",
       toggleTextOn: "",
+      mseRowsAreValid: null,
+      mseRemainderIsValid: undefined,
     };
   },
   async mounted() {
@@ -394,7 +389,9 @@ export default defineComponent({
         this.capitalsourceIsValid &&
         this.amountIsValid &&
         this.commentIsValid &&
-        this.postingaccountIsValid
+        this.postingaccountIsValid &&
+        this.mseRowsAreValid &&
+        this.mseRemainderIsValid
       );
     },
     bookingdateErrorData(): ErrorData {
@@ -485,9 +482,15 @@ export default defineComponent({
       this.toggleTextOff = this.toggleTextOffNoPreDefMoneyflow;
       this.toggleTextOn = this.toggleTextOnNoPreDefMoneyflow;
 
+      this.mseRowsAreValid = null;
+      this.mseRemainderIsValid = undefined;
+
       this.addNewMoneyflowSplitEntryRow();
       this.addNewMoneyflowSplitEntryRow();
     },
+    /*
+     * Moneyflow Split Entry handling
+     */
     addNewMoneyflowSplitEntryRow() {
       if (this.mmf.moneyflowSplitEntries === undefined) {
         this.mmf.moneyflowSplitEntries = new Array<MoneyflowSplitEntry>();
@@ -509,6 +512,7 @@ export default defineComponent({
           this.addNewMoneyflowSplitEntryRow();
         }
         mse.splice(index, 1);
+        this.validateMseRemainder();
       }
     },
     onAddMoneyflowSplitEntryRow() {
@@ -519,7 +523,52 @@ export default defineComponent({
       if (mse !== undefined) {
         mse[index]["amount"] = amount;
       }
+      this.validateMseRemainder();
     },
+    onMoneyflowSplitEntryRowCommentChanged(index: number, comment: string) {
+      const mse = this.mmf.moneyflowSplitEntries;
+      if (mse !== undefined) {
+        mse[index]["comment"] = comment;
+      }
+    },
+    onMoneyflowSplitEntryRowPostingAccountIdChanged(
+      index: number,
+      postingAccountId: number
+    ) {
+      const mse = this.mmf.moneyflowSplitEntries;
+      if (mse !== undefined) {
+        mse[index]["postingAccountId"] = postingAccountId;
+      }
+    },
+    validateMseRemainder() {
+      let allMseRowsAreEmpty = true;
+      const mseRowRefs = this.$refs.mseRow as Array<
+        typeof EditMoneyflowSplitEntryRowVue
+      >;
+      for (let ref of mseRowRefs) {
+        allMseRowsAreEmpty &&= ref.rowEmpty as boolean;
+      }
+      if (allMseRowsAreEmpty || this.mseRemainder === 0) {
+        this.mseRemainderIsValid = true;
+      } else {
+        this.mseRemainderIsValid = false;
+      }
+    },
+    validateMseRows() {
+      let mseRowsValid = true;
+
+      const mseRowRefs = this.$refs.mseRow as Array<
+        typeof EditMoneyflowSplitEntryRowVue
+      >;
+      for (let ref of mseRowRefs) {
+        mseRowsValid &&= ref.validateRow() as boolean;
+      }
+
+      this.mseRowsAreValid = mseRowsValid;
+    },
+    /*
+     * Moneyflow handling
+     */
     validateBookingdate() {
       [this.bookingdateIsValid, this.bookingdateErrorMessage] =
         validateInputField(this.bookingdate, "Datum angeben!");
@@ -609,6 +658,8 @@ export default defineComponent({
       this.validateComment();
       this.validateContractpartner();
       this.validatePostingaccount();
+      this.validateMseRows();
+      this.validateMseRemainder();
 
       if (this.formIsValid) {
         this.mmf.bookingDate = new Date(this.bookingdate);
