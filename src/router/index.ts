@@ -4,13 +4,13 @@ import AppNavigationVue from "@/views/AppNavigation.vue";
 import AppHomeVue from "@/views/AppHome.vue";
 import ListReportsVue from "@/views/reports/ListReports.vue";
 import { createRouter, createWebHistory } from "vue-router";
-import EditMoneyflowVue from "@/views/moneyflow/EditMoneyflow.vue";
+import CreateMoneyflowVue from "@/views/moneyflow/CreateMoneyflow.vue";
 
 export enum Routes {
   Login = "login",
   Home = "home",
   ListReports = "listReports",
-  AddMoneyflow = "addMoneyflow",
+  CreateMoneyflow = "createMoneyflow",
 }
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -39,9 +39,9 @@ const router = createRouter({
           props: true,
         },
         {
-          path: "addMoneyflow",
-          name: Routes.AddMoneyflow,
-          component: EditMoneyflowVue,
+          path: "createMoneyflow",
+          name: Routes.CreateMoneyflow,
+          component: CreateMoneyflowVue,
         },
       ],
     },

@@ -16,7 +16,7 @@
       <div class="collapse navbar-collapse">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
-            <router-link class="nav-link" :to="{ name: Routes.AddMoneyflow }"
+            <router-link class="nav-link" :to="{ name: Routes.CreateMoneyflow }"
               ><i class="bi bi-currency-euro"></i
             ></router-link>
           </li>
