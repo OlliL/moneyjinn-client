@@ -102,7 +102,7 @@
                     <div class="input-group">
                       <div class="form-floating">
                         <input
-                          v-model="mmf.amount"
+                          v-model="amount"
                           id="amount"
                           type="number"
                           step="0.01"
@@ -299,14 +299,14 @@ import { generateErrorData, type ErrorData } from "@/tools/views/ErrorData";
 import { validateInputField } from "@/tools/views/ValidateInputField";
 import { preDefMoneyflowAlreadyUsedThisMonth } from "@/model/moneyflow/PreDefMoneyflow";
 
-//FIXME: MoneyflowSplitEntries: Add empty line when last line is filled
+//FIXME: save on server
 //FIXME: Creation of Capitalsources, Contractpartner, PostingAccounts
 //FIXME: only show PostingAccount "+" when user is admin
-//FIXME: save on server
 
 type EditMoneyflowData = {
   serverError: string;
   mmf: Moneyflow;
+  amount: number | undefined;
   bookingdateIsValid: boolean | null;
   bookingdateErrorMessage: string;
   contractpartnerIsValid: boolean | null;
@@ -341,6 +341,7 @@ export default defineComponent({
     return {
       serverError: "",
       mmf: {} as Moneyflow,
+      amount: undefined,
       bookingdateIsValid: null,
       bookingdateErrorMessage: "",
       contractpartnerIsValid: null,
@@ -374,6 +375,8 @@ export default defineComponent({
     this.resetForm();
     const allPreDefMoneyflows =
       await PreDefMoneyflowControllerHandler.fetchAllPreDefMoneyflow();
+
+    // remove those PreDefMoneyflows which where used this month already and have onceMonth set
     const today = new Date();
     this.preDefMoneyflows = allPreDefMoneyflows.filter((mpm) => {
       return (
@@ -446,10 +449,13 @@ export default defineComponent({
       }
     },
     mseRemainder(): number {
-      let remainder = +this.mmf.amount;
-      if (this.mmf.moneyflowSplitEntries != undefined) {
-        for (const mse of this.mmf.moneyflowSplitEntries) {
-          if (mse.amount) remainder -= mse.amount;
+      let remainder = 0;
+      if (this.amount) {
+        remainder = this.amount;
+        if (this.mmf.moneyflowSplitEntries != undefined) {
+          for (const mse of this.mmf.moneyflowSplitEntries) {
+            if (mse.amount) remainder -= mse.amount;
+          }
         }
       }
       return remainder;
@@ -457,12 +463,12 @@ export default defineComponent({
   },
   methods: {
     resetForm() {
+      this.amount = undefined;
       [this.bookingdate] = new Date().toISOString().split("T");
       this.invoicedate = "";
       this.mmf.contractpartnerId = 0;
       this.mmf.capitalsourceId = 0;
       this.mmf.postingAccountId = 0;
-      this.mmf.amount = 0;
       this.mmf.comment = "";
       this.mmf.private = false;
 
@@ -485,25 +491,40 @@ export default defineComponent({
       this.mseRowsAreValid = null;
       this.mseRemainderIsValid = undefined;
 
-      this.addNewMoneyflowSplitEntryRow();
-      this.addNewMoneyflowSplitEntryRow();
+      // once the form is filled, delete the existing rows and auto-add 2 new ones.
+      // Otherwise Vue does not notice the changes
+      if (this.mmf.moneyflowSplitEntries == undefined) {
+        // initial state
+        this.mmf.moneyflowSplitEntries = new Array<MoneyflowSplitEntry>();
+        this.addNewMoneyflowSplitEntryRow();
+        this.addNewMoneyflowSplitEntryRow();
+      } else {
+        // reset clicked
+        const length = this.mmf.moneyflowSplitEntries.length;
+        for (let i = 0; i < length; i++) {
+          this.onDeleteMoneyflowSplitEntryRow(0);
+        }
+      }
     },
     /*
      * Moneyflow Split Entry handling
      */
     addNewMoneyflowSplitEntryRow() {
-      if (this.mmf.moneyflowSplitEntries === undefined) {
-        this.mmf.moneyflowSplitEntries = new Array<MoneyflowSplitEntry>();
+      if (this.mmf.moneyflowSplitEntries !== undefined) {
+        const mse = this.mmf.moneyflowSplitEntries;
+        const mseLength = mse.length;
+        let newMseId = 1;
+        if (mseLength > 0) {
+          newMseId = this.mmf.moneyflowSplitEntries[mseLength - 1].id + 1;
+        }
+        const newMse = {
+          amount: 0,
+          comment: "",
+          postingAccountId: 0,
+        } as MoneyflowSplitEntry;
+        newMse.id = newMseId;
+        mse.push(newMse);
       }
-      const mse = this.mmf.moneyflowSplitEntries;
-      const mseLength = mse.length;
-      let newMseId = 1;
-      if (mseLength > 0) {
-        newMseId = this.mmf.moneyflowSplitEntries[mseLength - 1].id + 1;
-      }
-      const newMse = {} as MoneyflowSplitEntry;
-      newMse.id = newMseId;
-      mse.push(newMse);
     },
     onDeleteMoneyflowSplitEntryRow(index: number) {
       const mse = this.mmf.moneyflowSplitEntries;
@@ -561,7 +582,8 @@ export default defineComponent({
         typeof EditMoneyflowSplitEntryRowVue
       >;
       for (let ref of mseRowRefs) {
-        mseRowsValid &&= ref.validateRow() as boolean;
+        const valid = ref.validateRow() as boolean;
+        mseRowsValid &&= valid;
       }
 
       this.mseRowsAreValid = mseRowsValid;
@@ -586,7 +608,7 @@ export default defineComponent({
     },
     validateAmount() {
       [this.amountIsValid, this.amountErrorMessage] = validateInputField(
-        this.mmf.amount,
+        this.amount,
         "Betrag angeben!"
       );
     },
@@ -601,35 +623,62 @@ export default defineComponent({
         validateInputField(this.mmf.postingAccountId, "Buchungskonto angeben!");
     },
     onContractpartnerSelected(contractpartner: Contractpartner) {
-      this.mmf.contractpartnerId = contractpartner.id;
-      if (
-        this.mmf.comment === this.previousCommentSetByContractpartnerDefaults
-      ) {
-        this.mmf.comment = contractpartner.moneyflowComment;
-        this.previousCommentSetByContractpartnerDefaults =
-          contractpartner.moneyflowComment;
-        this.validateComment();
-      }
-      if (
-        this.mmf.postingAccountId ===
-        this.previousPostingAccountSetByContractpartnerDefaults
-      ) {
-        const mpaId = contractpartner.postingAccountId
-          ? contractpartner.postingAccountId
-          : 0;
+      if (contractpartner) {
+        this.mmf.contractpartnerId = contractpartner.id;
+        if (
+          this.mmf.comment === this.previousCommentSetByContractpartnerDefaults
+        ) {
+          this.mmf.comment = contractpartner.moneyflowComment;
+          this.previousCommentSetByContractpartnerDefaults =
+            contractpartner.moneyflowComment;
+          this.validateComment();
+        }
+        if (
+          this.mmf.postingAccountId ===
+          this.previousPostingAccountSetByContractpartnerDefaults
+        ) {
+          const mpaId = contractpartner.postingAccountId
+            ? contractpartner.postingAccountId
+            : 0;
 
-        this.mmf.postingAccountId = mpaId;
-        this.previousPostingAccountSetByContractpartnerDefaults = mpaId;
-        this.validatePostingaccount();
+          this.mmf.postingAccountId = mpaId;
+          this.previousPostingAccountSetByContractpartnerDefaults = mpaId;
+          this.validatePostingaccount();
+        }
+      } else {
+        this.mmf.contractpartnerId = 0;
+        if (
+          this.mmf.comment === this.previousCommentSetByContractpartnerDefaults
+        ) {
+          this.mmf.comment = "";
+          this.previousCommentSetByContractpartnerDefaults = "";
+          this.commentIsValid = null;
+        }
+        if (
+          this.mmf.postingAccountId ===
+          this.previousPostingAccountSetByContractpartnerDefaults
+        ) {
+          this.mmf.postingAccountId = 0;
+          this.previousPostingAccountSetByContractpartnerDefaults = 0;
+          this.postingaccountIsValid = null;
+        }
       }
       this.validateContractpartner();
     },
     onCapitalsourceSelected(capitalsource: Capitalsource) {
-      this.mmf.capitalsourceId = capitalsource.id;
+      if (capitalsource) {
+        this.mmf.capitalsourceId = capitalsource.id;
+      } else {
+        this.mmf.capitalsourceId = 0;
+      }
       this.validateCapitalsource();
     },
     onPostingAccountSelected(postingAccount: PostingAccount) {
-      this.mmf.postingAccountId = postingAccount.id;
+      if (postingAccount) {
+        this.mmf.postingAccountId = postingAccount.id;
+      } else {
+        this.mmf.postingAccountId = 0;
+      }
       this.validatePostingaccount();
     },
     selectPreDefMoneyflow() {
@@ -640,7 +689,7 @@ export default defineComponent({
           return mpm.id === +this.preDefMoneyflowId;
         });
         if (preDefMoneyflow) {
-          this.mmf.amount = preDefMoneyflow.amount;
+          this.amount = preDefMoneyflow.amount;
           this.mmf.contractpartnerId = preDefMoneyflow.contractpartnerId;
           this.mmf.comment = preDefMoneyflow.comment;
           this.mmf.postingAccountId = preDefMoneyflow.postingAccountId;
@@ -664,6 +713,8 @@ export default defineComponent({
       if (this.formIsValid) {
         this.mmf.bookingDate = new Date(this.bookingdate);
         if (this.invoicedate) this.mmf.invoiceDate = new Date(this.invoicedate);
+        if (this.amount) this.mmf.amount = this.amount;
+
         console.log(this.preDefMoneyflowId);
         console.log(this.saveAsPreDefMoneyflow);
         console.log(this.mmf);
