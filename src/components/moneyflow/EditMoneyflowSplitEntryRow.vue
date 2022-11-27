@@ -71,10 +71,14 @@
             id="remainder"
             disabled
             type="number"
-            class="form-control"
+            :class="'form-control ' + remainderErrorData.inputClass"
             :value="remainder"
           />
-          <label for="remainder">Rest</label>
+          <label
+            for="comment"
+            :style="'color: ' + remainderErrorData.fieldColor"
+            >{{ remainderErrorData.fieldLabel }}</label
+          >
         </div>
       </div>
     </div>
@@ -115,7 +119,10 @@ export default defineComponent({
     "deleteMoneyflowSplitEntryRow",
     "addMoneyflowSplitEntryRow",
     "amountChanged",
+    "commentChanged",
+    "postingAccountIdChanged",
   ],
+  expose: ["validateRow", "rowEmpty"],
   props: {
     amount: {
       type: Number,
@@ -141,6 +148,10 @@ export default defineComponent({
       type: Number,
       required: true,
     },
+    remainderIsValid: {
+      type: Boolean,
+      required: false,
+    },
   },
   watch: {
     amount: function (newVal: number, oldVal: number) {
@@ -154,9 +165,17 @@ export default defineComponent({
     },
   },
   computed: {
+    rowEmpty() {
+      return (
+        !this.mse.amount && !this.mse.comment && !this.mse.postingAccountId
+      );
+    },
     formIsValid() {
       return (
-        this.amountIsValid && this.commentIsValid && this.postingaccountIsValid
+        this.rowEmpty ||
+        (this.amountIsValid &&
+          this.commentIsValid &&
+          this.postingaccountIsValid)
       );
     },
     amountErrorData(): ErrorData {
@@ -180,6 +199,13 @@ export default defineComponent({
         this.postingaccountErrorMessage
       );
     },
+    remainderErrorData(): ErrorData {
+      return generateErrorData(
+        this.remainderIsValid,
+        "Rest",
+        "Rest muss 0 sein!"
+      );
+    },
   },
   methods: {
     deleteMoneyflowSplitEntryRow() {
@@ -189,23 +215,45 @@ export default defineComponent({
       this.$emit("addMoneyflowSplitEntryRow");
     },
     validateAmount() {
-      [this.amountIsValid, this.amountErrorMessage] = validateInputField(
-        this.mse.amount,
-        "Betrag angeben!"
-      );
-      if (this.amountIsValid) {
-        this.$emit("amountChanged", this.index, this.mse.amount);
+      if (!this.rowEmpty) {
+        [this.amountIsValid, this.amountErrorMessage] = validateInputField(
+          this.mse.amount,
+          "Betrag angeben!"
+        );
+        if (this.amountIsValid)
+          this.$emit("amountChanged", this.index, this.mse.amount);
       }
     },
     validateComment() {
-      [this.commentIsValid, this.commentErrorMessage] = validateInputField(
-        this.mse.comment,
-        "Kommentar angeben!"
-      );
+      if (!this.rowEmpty) {
+        [this.commentIsValid, this.commentErrorMessage] = validateInputField(
+          this.mse.comment,
+          "Kommentar angeben!"
+        );
+        if (this.commentIsValid)
+          this.$emit("commentChanged", this.index, this.mse.comment);
+      }
     },
     validatePostingaccount() {
-      [this.postingaccountIsValid, this.postingaccountErrorMessage] =
-        validateInputField(this.mse.postingAccountId, "Buchungskonto angeben!");
+      if (!this.rowEmpty) {
+        [this.postingaccountIsValid, this.postingaccountErrorMessage] =
+          validateInputField(
+            this.mse.postingAccountId,
+            "Buchungskonto angeben!"
+          );
+        if (this.postingaccountIsValid)
+          this.$emit(
+            "postingAccountIdChanged",
+            this.index,
+            this.mse.postingAccountId
+          );
+      }
+    },
+    validateRow(): boolean {
+      this.validateAmount();
+      this.validateComment();
+      this.validatePostingaccount();
+      return !!this.formIsValid;
     },
     onPostingAccountSelected(postingAccount: PostingAccount) {
       this.mse.postingAccountId = postingAccount.id;
