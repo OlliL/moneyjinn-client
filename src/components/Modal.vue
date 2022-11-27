@@ -6,7 +6,7 @@
     aria-hidden="true"
     ref="modalEle"
   >
-    <div class="modal-dialog">
+    <div class="modal-dialog" :style="modalStyle">
       <div class="modal-content">
         <div class="modal-header text-center">
           <h5 class="modal-title w-100">{{ title }}</h5>
@@ -20,7 +20,7 @@
         <div class="modal-body">
           <slot name="body" />
         </div>
-        <div class="modal-footer">
+        <div class="modal-footer" v-if="hideFooter">
           <button
             type="button"
             class="btn btn-secondary"
@@ -51,6 +51,22 @@ export default defineComponent({
     title: {
       type: String,
       default: "",
+    },
+    maxWidth: {
+      type: String,
+      default: "",
+    },
+    hideFooter: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  computed: {
+    modalStyle(): string {
+      if (this.maxWidth) {
+        return "max-width: " + this.maxWidth;
+      }
+      return "";
     },
   },
   methods: {

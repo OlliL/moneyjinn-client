@@ -26,22 +26,21 @@
     </div>
     <div class="row justify-content-md-center">
       <div class="col-md-9 col-xs-12">
-        <form
-          @submit.prevent="saveMoneyflow"
-          class="d-flex flex-row align-items-center flex-wrap"
-        >
-          <div class="card w-100 bg-light">
-            <div class="card-body">
-              <div v-if="serverError">
-                <div
-                  class="alert alert-danger"
-                  v-for="(error, index) in serverError"
-                  :key="index"
-                >
-                  {{ error }}
-                </div>
+        <div class="card w-100 bg-light">
+          <div class="card-body">
+            <div v-if="serverError">
+              <div
+                class="alert alert-danger"
+                v-for="(error, index) in serverError"
+                :key="index"
+              >
+                {{ error }}
               </div>
-
+            </div>
+            <form
+              @submit.prevent="saveMoneyflow"
+              class="d-flex flex-row align-items-center flex-wrap"
+            >
               <div class="container-fluid">
                 <div class="row no-gutters flex-lg-nowrap mb-4">
                   <div class="col-md-2 col-xs-12">
@@ -281,9 +280,9 @@
                   </div>
                 </div>
               </div>
-            </div>
+            </form>
           </div>
-        </form>
+        </div>
       </div>
     </div>
   </div>
@@ -407,8 +406,14 @@ export default defineComponent({
     }
   },
   computed: {
-    formIsValid() {
-      return (
+    editMode(): boolean {
+      if (this.mmfToEdit) {
+        return true;
+      }
+      return false;
+    },
+    formIsValid(): boolean {
+      const isValid =
         this.bookingdateIsValid &&
         this.contractpartnerIsValid &&
         this.capitalsourceIsValid &&
@@ -416,8 +421,11 @@ export default defineComponent({
         this.commentIsValid &&
         this.postingaccountIsValid &&
         this.mseRowsAreValid &&
-        this.mseRemainderIsValid
-      );
+        this.mseRemainderIsValid;
+      if (isValid === null || isValid === undefined || isValid === true) {
+        return true;
+      }
+      return false;
     },
     bookingdateErrorData(): ErrorData {
       return generateErrorData(
@@ -490,8 +498,11 @@ export default defineComponent({
       [this.bookingdate] = new Date().toISOString().split("T");
       this.invoicedate = "";
       this.mmf.contractpartnerId = 0;
+      this.mmf.contractpartnerName = "";
       this.mmf.capitalsourceId = 0;
+      this.mmf.capitalsourceComment = "";
       this.mmf.postingAccountId = 0;
+      this.mmf.postingAccountName = "";
       this.mmf.comment = "";
       this.mmf.private = false;
 
@@ -672,6 +683,7 @@ export default defineComponent({
     onContractpartnerSelected(contractpartner: Contractpartner) {
       if (contractpartner) {
         this.mmf.contractpartnerId = contractpartner.id;
+        this.mmf.contractpartnerName = contractpartner.name;
         if (
           this.mmf.comment === this.previousCommentSetByContractpartnerDefaults
         ) {
@@ -694,6 +706,7 @@ export default defineComponent({
         }
       } else {
         this.mmf.contractpartnerId = 0;
+        this.mmf.contractpartnerName = "";
         if (
           this.mmf.comment === this.previousCommentSetByContractpartnerDefaults
         ) {
@@ -715,16 +728,20 @@ export default defineComponent({
     onCapitalsourceSelected(capitalsource: Capitalsource) {
       if (capitalsource) {
         this.mmf.capitalsourceId = capitalsource.id;
+        this.mmf.capitalsourceComment = capitalsource.comment;
       } else {
         this.mmf.capitalsourceId = 0;
+        this.mmf.capitalsourceComment = "";
       }
       this.validateCapitalsource();
     },
     onPostingAccountSelected(postingAccount: PostingAccount) {
       if (postingAccount) {
         this.mmf.postingAccountId = postingAccount.id;
+        this.mmf.postingAccountName = postingAccount.name;
       } else {
         this.mmf.postingAccountId = 0;
+        this.mmf.postingAccountName = "";
       }
       this.validatePostingaccount();
     },

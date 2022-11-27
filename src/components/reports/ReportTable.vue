@@ -10,6 +10,7 @@
         ref="deleteModal"
         @moneyflow-deleted="moneyflowDeleted"
       />
+      <EditMoneyflowModalVue ref="editModal" />
 
       <div class="card-body" v-if="report.moneyflows">
         <table class="table table-striped table-bordered table-hover">
@@ -220,6 +221,7 @@ import ReportTableRowVue from "./ReportTableRow.vue";
 import ReceiptModalVue from "./ReceiptModal.vue";
 import CapitalsourceTableVue from "./CapitalsourceTable.vue";
 import DeleteMoneyflowModalVue from "../moneyflow/DeleteMoneyflowModal.vue";
+import EditMoneyflowModalVue from "../moneyflow/EditMoneyflowModal.vue";
 
 import { redIfNegativeEnd, formatNumber } from "@/tools/views/FormatNumber";
 import { getMonthName } from "@/tools/views/MonthName";
@@ -408,7 +410,14 @@ export default defineComponent({
       (this.$refs.receiptModal as typeof ReceiptModalVue)._show(moneyflowId);
     },
     deleteMoneyflow(mmf: Moneyflow) {
-      (this.$refs.deleteModal as typeof ReceiptModalVue)._show(mmf);
+      (this.$refs.deleteModal as typeof DeleteMoneyflowModalVue)._show(mmf);
+    },
+    editMoneyflow(mmf: Moneyflow) {
+      (this.$refs.editModal as typeof EditMoneyflowModalVue)._show(mmf);
+      // FIXME: implement
+      // search old mmf
+      // modify mmf array
+      // update Capitalsource amounts if they changed
     },
     /**
      * recalculate End of Month amount (for matching Capitalsource),
@@ -417,7 +426,10 @@ export default defineComponent({
      * @param capitalsourceComment
      * @param amount
      */
-    modifyCapitalsourceAmounts(capitalsourceComment: string, amount: number) {
+    modifyCapitalsourceAmounts(
+      capitalsourceComment: string | undefined,
+      amount: number
+    ) {
       for (const mcs of this.report.reportTurnoverCapitalsources) {
         if (mcs.capitalsourceComment === capitalsourceComment) {
           mcs.amountEndOfMonthCalculated -= amount;
@@ -470,19 +482,13 @@ export default defineComponent({
       this.sortBy.clear();
       this.sortBy.set(field, sortByField);
     },
-    editMoneyflow(mmf: Moneyflow) {
-      // FIXME: implement
-      // search old mmf
-      // modify mmf array
-      // update Capitalsource amounts if they changed
-      alert("FIXME: not implemented yet!");
-    },
   },
   components: {
     CapitalsourceTableVue,
     ReportTableRowVue,
     ReceiptModalVue,
     DeleteMoneyflowModalVue,
+    EditMoneyflowModalVue,
   },
 });
 </script>
