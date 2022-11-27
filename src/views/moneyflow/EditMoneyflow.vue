@@ -210,12 +210,108 @@
                   <div class="col-12">
                     <div class="card w-100 bg-light d-none d-lg-block">
                       <div class="card-header text-start">
-                        <a data-bs-toggle="collapse" href="#collapseExample"
+                        <a
+                          data-bs-toggle="collapse"
+                          href="#collapseSplitEntries"
                           >Unterbuchungen</a
                         >
                       </div>
-                      <div class="collapse" id="collapseExample">
-                        <div class="card-body">blah;</div>
+                      <div class="collapse" id="collapseSplitEntries">
+                        <div class="card-body">
+                          <div class="row">
+                            <div
+                              class="col-md-1 d-flex align-items-center justify-content-center"
+                            >
+                              <div class="btn-group" role="group">
+                                <button type="button" class="btn btn-primary">
+                                  <i class="bi bi-dash"></i></button
+                                ><button type="button" class="btn btn-primary">
+                                  <i class="bi bi-plus"></i>
+                                </button>
+                              </div>
+                            </div>
+                            <div class="col-md-2 col-xs-12">
+                              <div class="input-group">
+                                <div class="form-floating">
+                                  <input
+                                    v-model="mmf.amount"
+                                    id="amount"
+                                    type="number"
+                                    step="0.01"
+                                    @change="validateAmount"
+                                    :class="
+                                      ' form-control ' +
+                                      amountErrorData.inputClass
+                                    "
+                                  />
+                                  <label
+                                    for="amount"
+                                    :style="
+                                      'color: ' + amountErrorData.fieldColor
+                                    "
+                                    >{{ amountErrorData.fieldLabel }}</label
+                                  >
+                                </div>
+                                <span class="input-group-text"
+                                  ><i class="bi bi-currency-euro"></i
+                                ></span>
+                              </div>
+                            </div>
+                            <div class="col-md-4 col-xs-12">
+                              <div class="form-floating">
+                                <input
+                                  v-model="mmf.comment"
+                                  id="comment"
+                                  type="text"
+                                  @input="validateComment"
+                                  :class="
+                                    'form-control ' +
+                                    commentErrorData.inputClass
+                                  "
+                                />
+                                <label
+                                  for="comment"
+                                  :style="
+                                    'color: ' + commentErrorData.fieldColor
+                                  "
+                                  >{{ commentErrorData.fieldLabel }}</label
+                                >
+                              </div>
+                            </div>
+                            <div class="col-md-3 col-xs-12">
+                              <PostingAccountSelectVue
+                                :field-color="
+                                  postingaccountErrorData.fieldColor
+                                "
+                                :field-label="
+                                  postingaccountErrorData.fieldLabel
+                                "
+                                :input-class="
+                                  postingaccountErrorData.inputClass
+                                "
+                                :selected-id="mmf.postingAccountId"
+                                @posting-account-selected="
+                                  onPostingAccountSelected
+                                "
+                              />
+                            </div>
+                            <div class="col-md-2 col-xs-12">
+                              <div class="input-group">
+                                <span class="input-group-text" role="button"
+                                  ><i class="bi bi-arrow-left"></i
+                                ></span>
+                                <div class="form-floating">
+                                  <input
+                                    id="password"
+                                    type="password"
+                                    class="form-control"
+                                  />
+                                  <label for="password">Rest</label>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -264,6 +360,24 @@ import { validateInputField } from "@/tools/views/ValidateInputField";
 import { preDefMoneyflowAlreadyUsedThisMonth } from "@/model/moneyflow/PreDefMoneyflow";
 
 //FIXME: MoneyflowSplitEntries
+// --> place each row into a sub-component
+// --> component props are:
+// ------> MoneyflowSplitEntry
+// ------> remainingAmount
+// ------> mainComment
+// ------> mainPostingAccountId
+// ------> index
+// ------> length of array -1
+// --> v-for on the row-div - ref is then set up as an array (order not guaranteed)
+// --> provide 2 functions in the component
+// --> a) validateRow - to validate the row. return false if not valid
+// --> b) getSplitEntry - to return the entered split entry object
+// --> amount change fires an event to calculate the remainder in the parent component
+// --> remainder and + button is shown in the last component only (use provided index + length)
+// --> "+" and "-" buttons fire events to maintain the array-size in the parent component
+// ------> array index needs to be sent with the minus - event for deleting the right array element
+// ------> array plus - event gets the id of the last array entry adds 1 and uses that as id for the new element
+// --> submit on the parent component loops through refs and calls validate. If all are valid, all split entries are collected, sorted by id and then used for saving.
 //FIXME: Creation of Capitalsources, Contractpartner, PostingAccounts
 //FIXME: only show PostingAccount "+" when user is admin
 //FIXME: save on server
