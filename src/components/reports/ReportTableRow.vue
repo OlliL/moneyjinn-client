@@ -50,7 +50,7 @@
       {{ mmf.contractpartnerName }}
     </td>
     <td class="text-start">{{ mse.comment }}</td>
-    <td class="text-start">{{ mse.postingaccountname }}</td>
+    <td class="text-start">{{ mse.postingAccountName }}</td>
     <td :rowspan="rowspan" v-if="index == 0" class="text-start">
       {{ mmf.capitalsourceComment }}
     </td>
