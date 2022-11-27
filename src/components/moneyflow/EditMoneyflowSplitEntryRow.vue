@@ -22,11 +22,11 @@
       <div class="input-group">
         <div class="form-floating">
           <input
-            v-model="mse.amount"
+            v-model="mseAmount"
             id="amount"
             type="number"
             step="0.01"
-            @change="validateAmount"
+            @change="amountChanged"
             :class="' form-control ' + amountErrorData.inputClass"
           />
           <label for="amount" :style="'color: ' + amountErrorData.fieldColor">{{
@@ -41,10 +41,10 @@
     <div class="col-md-4 col-xs-12">
       <div class="form-floating">
         <input
-          v-model="mse.comment"
+          v-model="mseComment"
           id="comment"
           type="text"
-          @input="validateComment"
+          @change="commentChanged"
           :class="'form-control ' + commentErrorData.inputClass"
         />
         <label for="comment" :style="'color: ' + commentErrorData.fieldColor">{{
@@ -57,11 +57,11 @@
         :field-color="postingaccountErrorData.fieldColor"
         :field-label="postingaccountErrorData.fieldLabel"
         :input-class="postingaccountErrorData.inputClass"
-        :selected-id="mse.postingAccountId"
+        :selected-id="msePostingAccountId"
         @posting-account-selected="onPostingAccountSelected"
       />
     </div>
-    <div class="col-md-2 col-xs-12" v-if="isLastRow">
+    <div class="col-md-2 col-xs-12" v-if="showRemainder">
       <div class="input-group">
         <span class="input-group-text" role="button" @click="useRemainder"
           ><i class="bi bi-arrow-left"></i
@@ -87,14 +87,15 @@
 <script lang="ts">
 import PostingAccountSelectVue from "@/components/postingaccount/PostingAccountSelect.vue";
 
-import type { MoneyflowSplitEntry } from "@/model/moneyflow/MoneyflowSplitEntry";
 import type { PostingAccount } from "@/model/postingaccount/PostingAccount";
 import { generateErrorData, type ErrorData } from "@/tools/views/ErrorData";
 import { validateInputField } from "@/tools/views/ValidateInputField";
 import { defineComponent } from "vue";
 
 type EditMoneyflowSplitEntryData = {
-  mse: MoneyflowSplitEntry;
+  mseAmount: number | undefined;
+  mseComment: string | undefined;
+  msePostingAccountId: number;
   amountIsValid: boolean | null;
   amountErrorMessage: string;
   commentIsValid: boolean | null;
@@ -106,13 +107,15 @@ export default defineComponent({
   name: "EditMoneyflowSplitEntryRow",
   data(): EditMoneyflowSplitEntryData {
     return {
-      mse: {} as MoneyflowSplitEntry,
       amountIsValid: null,
       amountErrorMessage: "",
       commentIsValid: null,
       commentErrorMessage: "",
       postingaccountIsValid: null,
       postingaccountErrorMessage: "",
+      mseAmount: undefined,
+      mseComment: undefined,
+      msePostingAccountId: 0,
     };
   },
   emits: [
@@ -152,23 +155,34 @@ export default defineComponent({
       type: Boolean,
       required: false,
     },
+    moneyflowComment: {
+      type: String,
+      required: false,
+    },
+    moneyflowPostingAccountId: {
+      type: Number,
+      required: false,
+    },
   },
   watch: {
-    amount: function (newVal: number, oldVal: number) {
-      if (newVal != oldVal) this.mse.amount = newVal;
+    amount: function (newVal: number | undefined, oldVal: number) {
+      // we want to display an empty amount field when 0 is the amount!
+      if (newVal === 0) newVal = undefined;
+      if (newVal !== oldVal) this.mseAmount = newVal;
     },
     comment: function (newVal: string, oldVal: string) {
-      if (newVal != oldVal) this.mse.comment = newVal;
+      if (newVal != oldVal) this.mseComment = newVal;
     },
     postingAccountId: function (newVal: number, oldVal: number) {
-      if (newVal != oldVal) this.mse.postingAccountId = newVal;
+      if (newVal != oldVal) this.msePostingAccountId = newVal;
     },
   },
   computed: {
+    showRemainder() {
+      return this.isLastRow && this.remainder != 0;
+    },
     rowEmpty() {
-      return (
-        !this.mse.amount && !this.mse.comment && !this.mse.postingAccountId
-      );
+      return !this.mseAmount && !this.mseComment && !this.msePostingAccountId;
     },
     formIsValid() {
       return (
@@ -214,39 +228,54 @@ export default defineComponent({
     addMoneyflowSplitEntryRow() {
       this.$emit("addMoneyflowSplitEntryRow");
     },
+    amountChanged() {
+      this.validateAmount();
+      let amount = this.mseAmount;
+      // when amount is empty, we must send 0 because its a number
+      if (!amount) amount = 0;
+      this.$emit("amountChanged", this.index, amount);
+    },
     validateAmount() {
       if (!this.rowEmpty) {
         [this.amountIsValid, this.amountErrorMessage] = validateInputField(
-          this.mse.amount,
+          this.mseAmount,
           "Betrag angeben!"
         );
-        if (this.amountIsValid)
-          this.$emit("amountChanged", this.index, this.mse.amount);
+      } else {
+        this.amountIsValid = null;
       }
+    },
+    commentChanged() {
+      this.validateComment();
+      this.$emit("commentChanged", this.index, this.mseComment);
     },
     validateComment() {
       if (!this.rowEmpty) {
         [this.commentIsValid, this.commentErrorMessage] = validateInputField(
-          this.mse.comment,
+          this.mseComment,
           "Kommentar angeben!"
         );
-        if (this.commentIsValid)
-          this.$emit("commentChanged", this.index, this.mse.comment);
+      } else {
+        this.commentIsValid = null;
       }
+    },
+    postingaccountChanged() {
+      this.validatePostingaccount();
+      this.$emit(
+        "postingAccountIdChanged",
+        this.index,
+        this.msePostingAccountId
+      );
     },
     validatePostingaccount() {
       if (!this.rowEmpty) {
         [this.postingaccountIsValid, this.postingaccountErrorMessage] =
           validateInputField(
-            this.mse.postingAccountId,
+            this.msePostingAccountId,
             "Buchungskonto angeben!"
           );
-        if (this.postingaccountIsValid)
-          this.$emit(
-            "postingAccountIdChanged",
-            this.index,
-            this.mse.postingAccountId
-          );
+      } else {
+        this.postingaccountIsValid = null;
       }
     },
     validateRow(): boolean {
@@ -256,12 +285,24 @@ export default defineComponent({
       return !!this.formIsValid;
     },
     onPostingAccountSelected(postingAccount: PostingAccount) {
-      this.mse.postingAccountId = postingAccount.id;
-      this.validatePostingaccount();
+      if (postingAccount) {
+        this.msePostingAccountId = postingAccount.id;
+      } else {
+        this.msePostingAccountId = 0;
+      }
+      this.postingaccountChanged();
     },
     useRemainder() {
-      this.mse.amount = this.remainder;
-      this.validateAmount();
+      this.mseAmount = this.remainder;
+      if (this.moneyflowComment) {
+        this.mseComment = this.moneyflowComment;
+        this.commentChanged();
+      }
+      if (this.moneyflowPostingAccountId) {
+        this.msePostingAccountId = this.moneyflowPostingAccountId;
+        this.postingaccountChanged();
+      }
+      this.amountChanged();
     },
   },
   components: { PostingAccountSelectVue },
