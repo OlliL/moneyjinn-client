@@ -29,3 +29,23 @@ export function mapMoneyflowTransportToModel(
   };
   return model;
 }
+
+export function mapMoneyflowToTransport(model: Moneyflow): MoneyflowTransport {
+  const [bookingDate] = model.bookingDate.toISOString().split("T");
+  const invoiceDate = model.invoiceDate
+    ? model.invoiceDate.toISOString().split("T")[0]
+    : bookingDate;
+  const transport: MoneyflowTransport = {
+    id: model.id,
+    userid: model.userId,
+    bookingdate: bookingDate,
+    invoicedate: invoiceDate,
+    amount: model.amount,
+    capitalsourceid: model.capitalsourceId,
+    contractpartnerid: model.contractpartnerId,
+    comment: model.comment,
+    private: model.private ? 1 : 0,
+    postingaccountid: model.postingAccountId,
+  };
+  return transport;
+}

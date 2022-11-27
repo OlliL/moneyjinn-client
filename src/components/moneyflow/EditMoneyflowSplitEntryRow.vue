@@ -125,7 +125,7 @@ export default defineComponent({
     "commentChanged",
     "postingAccountIdChanged",
   ],
-  expose: ["validateRow", "rowEmpty"],
+  expose: ["validateRow"],
   props: {
     amount: {
       type: Number,

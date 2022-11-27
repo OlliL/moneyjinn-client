@@ -7,13 +7,13 @@ export type Moneyflow = {
   invoiceDate: Date;
   amount: number;
   capitalsourceId: number;
-  capitalsourceComment: string;
+  capitalsourceComment?: string;
   contractpartnerId: number;
-  contractpartnerName: string;
+  contractpartnerName?: string;
   comment: string;
   private: boolean;
   postingAccountId: number;
-  postingAccountName: string;
+  postingAccountName?: string;
   moneyflowSplitEntries?: Array<MoneyflowSplitEntry>;
   hasReceipt: boolean;
 };

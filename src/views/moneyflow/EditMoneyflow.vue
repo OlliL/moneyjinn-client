@@ -29,8 +29,14 @@
         >
           <div class="card w-100 bg-light">
             <div class="card-body">
-              <div class="alert alert-danger" v-if="serverError">
-                {{ serverError }}
+              <div v-if="serverError">
+                <div
+                  class="alert alert-danger"
+                  v-for="(error, index) in serverError"
+                  :key="index"
+                >
+                  {{ error }}
+                </div>
               </div>
 
               <div class="container-fluid">
@@ -121,7 +127,8 @@
                       ></span>
                     </div>
                   </div>
-                  <div class="col-md-4 col-xs-12">
+                  <div class="col-md-7" v-show="!showMoneyflowFields"></div>
+                  <div class="col-md-4 col-xs-12" v-show="showMoneyflowFields">
                     <div class="form-floating">
                       <input
                         v-model="mmf.comment"
@@ -137,7 +144,7 @@
                       >
                     </div>
                   </div>
-                  <div class="col-md-3 col-xs-12">
+                  <div class="col-md-3 col-xs-12" v-show="showMoneyflowFields">
                     <PostingAccountSelectVue
                       :field-color="postingaccountErrorData.fieldColor"
                       :field-label="postingaccountErrorData.fieldLabel"
@@ -295,17 +302,18 @@ import type { PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
 import type { PostingAccount } from "@/model/postingaccount/PostingAccount";
 
 import PreDefMoneyflowControllerHandler from "@/handler/PreDefMoneyflowControllerHandler";
+import MoneyflowControllerHandler from "@/handler/MoneyflowControllerHandler";
 
 import { generateErrorData, type ErrorData } from "@/tools/views/ErrorData";
 import { validateInputField } from "@/tools/views/ValidateInputField";
 import { preDefMoneyflowAlreadyUsedThisMonth } from "@/model/moneyflow/PreDefMoneyflow";
+import { getError } from "@/tools/views/ThrowError";
 
-//FIXME: save on server
 //FIXME: Creation of Capitalsources, Contractpartner, PostingAccounts
 //FIXME: only show PostingAccount "+" when user is admin
 
 type EditMoneyflowData = {
-  serverError: string;
+  serverError: Array<String> | undefined;
   mmf: Moneyflow;
   amount: number | undefined;
   bookingdateIsValid: boolean | null;
@@ -335,12 +343,13 @@ type EditMoneyflowData = {
   toggleTextOn: string;
   mseRowsAreValid: boolean | null;
   mseRemainderIsValid: boolean | undefined;
+  showMoneyflowFields: boolean;
 };
 export default defineComponent({
   name: "EditMoneyflow",
   data(): EditMoneyflowData {
     return {
-      serverError: "",
+      serverError: undefined,
       mmf: {} as Moneyflow,
       amount: undefined,
       bookingdateIsValid: null,
@@ -370,6 +379,7 @@ export default defineComponent({
       toggleTextOn: "",
       mseRowsAreValid: null,
       mseRemainderIsValid: undefined,
+      showMoneyflowFields: true,
     };
   },
   async mounted() {
@@ -464,6 +474,7 @@ export default defineComponent({
   },
   methods: {
     resetForm() {
+      this.serverError = undefined;
       this.amount = undefined;
       [this.bookingdate] = new Date().toISOString().split("T");
       this.invoicedate = "";
@@ -491,6 +502,7 @@ export default defineComponent({
 
       this.mseRowsAreValid = null;
       this.mseRemainderIsValid = undefined;
+      this.showMoneyflowFields = true;
 
       // once the form is filled, delete the existing rows and auto-add 2 new ones.
       // Otherwise Vue does not notice the changes
@@ -515,16 +527,19 @@ export default defineComponent({
       if (this.mmf.moneyflowSplitEntries !== undefined) {
         const mse = this.mmf.moneyflowSplitEntries;
         const mseLength = mse.length;
-        let newMseId = 1;
+        let newMseId = -1;
         if (mseLength > 0) {
-          newMseId = this.mmf.moneyflowSplitEntries[mseLength - 1].id + 1;
+          // existing MoneyflowSplitEntries have positive IDs, new created rows must always have negative IDs
+          newMseId =
+            Math.abs(this.mmf.moneyflowSplitEntries[mseLength - 1].id) * -1 - 1;
         }
         const newMse = {
+          id: newMseId,
+          moneyflowId: this.mmf.id,
           amount: 0,
           comment: "",
           postingAccountId: 0,
         } as MoneyflowSplitEntry;
-        newMse.id = newMseId;
         mse.push(newMse);
       }
     },
@@ -536,6 +551,7 @@ export default defineComponent({
         }
         mse.splice(index, 1);
         this.validateMseRemainder();
+        this.toggleMoneyflowFieldsForMse();
       }
     },
     onAddMoneyflowSplitEntryRow() {
@@ -547,12 +563,15 @@ export default defineComponent({
         mse[index]["amount"] = amount;
       }
       this.validateMseRemainder();
+      this.toggleMoneyflowFieldsForMse();
     },
     onMoneyflowSplitEntryRowCommentChanged(index: number, comment: string) {
       const mse = this.mmf.moneyflowSplitEntries;
       if (mse !== undefined) {
         mse[index]["comment"] = comment;
       }
+      this.validateMseRemainder();
+      this.toggleMoneyflowFieldsForMse();
     },
     onMoneyflowSplitEntryRowPostingAccountIdChanged(
       index: number,
@@ -562,17 +581,32 @@ export default defineComponent({
       if (mse !== undefined) {
         mse[index]["postingAccountId"] = postingAccountId;
       }
+      this.validateMseRemainder();
+      this.toggleMoneyflowFieldsForMse();
+    },
+    toggleMoneyflowFieldsForMse() {
+      this.showMoneyflowFields = this.allMseRowsAreEmpty();
+    },
+    allMseRowsAreEmpty(): boolean {
+      let allMseRowsAreEmpty = true;
+      const mse = this.mmf.moneyflowSplitEntries;
+      if (mse !== undefined) {
+        for (let entry of mse) {
+          if (
+            entry.amount !== 0 ||
+            entry.comment != "" ||
+            entry.postingAccountId !== 0
+          ) {
+            allMseRowsAreEmpty = false;
+            break;
+          }
+        }
+      }
+      return allMseRowsAreEmpty;
     },
     validateMseRemainder() {
-      let allMseRowsAreEmpty = true;
-      const mseRowRefs = this.$refs.mseRow as Array<
-        typeof EditMoneyflowSplitEntryRowVue
-      >;
-      for (let ref of mseRowRefs) {
-        allMseRowsAreEmpty &&= ref.rowEmpty as boolean;
-      }
-      if (allMseRowsAreEmpty || this.mseRemainder === 0) {
-        this.mseRemainderIsValid = true;
+      if (this.allMseRowsAreEmpty() || this.mseRemainder === 0) {
+        this.mseRemainderIsValid = undefined;
       } else {
         this.mseRemainderIsValid = false;
       }
@@ -702,7 +736,7 @@ export default defineComponent({
         }
       }
     },
-    saveMoneyflow() {
+    async saveMoneyflow() {
       this.validateAmount();
       this.validateBookingdate();
       this.validateCapitalsource();
@@ -717,10 +751,20 @@ export default defineComponent({
         if (this.invoicedate) this.mmf.invoiceDate = new Date(this.invoicedate);
         if (this.amount) this.mmf.amount = this.amount;
 
-        console.log(this.preDefMoneyflowId);
-        console.log(this.saveAsPreDefMoneyflow);
-        console.log(this.mmf);
-        alert("save");
+        const validationResult =
+          await MoneyflowControllerHandler.createMoneyflow(
+            this.mmf,
+            this.preDefMoneyflowId,
+            this.saveAsPreDefMoneyflow
+          );
+        if (!validationResult.result) {
+          this.serverError = new Array<string>();
+          for (let resultItem of validationResult.validationResultItems) {
+            this.serverError.push(getError(resultItem.error));
+          }
+        } else {
+          this.resetForm();
+        }
       }
     },
   },

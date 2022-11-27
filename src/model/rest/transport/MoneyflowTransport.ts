@@ -5,11 +5,11 @@ export type MoneyflowTransport = {
   invoicedate: string;
   amount: number;
   capitalsourceid: number;
-  capitalsourcecomment: string;
+  capitalsourcecomment?: string;
   contractpartnerid: number;
-  contractpartnername: string;
+  contractpartnername?: string;
   comment: string;
   private: number;
   postingaccountid: number;
-  postingaccountname: string;
+  postingaccountname?: string;
 };
