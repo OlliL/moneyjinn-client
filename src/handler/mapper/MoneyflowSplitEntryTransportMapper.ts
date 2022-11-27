@@ -14,3 +14,16 @@ export function mapMoneyflowSplitEntryTransportToModel(
   };
   return model;
 }
+
+export function mapMoneyflowSplitEntryToTransport(
+  model: MoneyflowSplitEntry
+): MoneyflowSplitEntryTransport {
+  const transport: MoneyflowSplitEntryTransport = {
+    id: model.id,
+    moneyflowid: model.moneyflowId,
+    amount: model.amount,
+    comment: model.comment,
+    postingaccountid: model.postingAccountId,
+  };
+  return transport;
+}
