@@ -6,11 +6,11 @@ export function mapMoneyflowSplitEntryTransportToModel(
 ): MoneyflowSplitEntry {
   const model: MoneyflowSplitEntry = {
     id: transport.id,
-    moneyflowid: transport.moneyflowid,
+    moneyflowId: transport.moneyflowid,
     amount: transport.amount,
     comment: transport.comment,
-    postingaccountid: transport.postingaccountid,
-    postingaccountname: transport.postingaccountname,
+    postingAccountId: transport.postingaccountid,
+    postingAccountName: transport.postingaccountname,
   };
   return model;
 }

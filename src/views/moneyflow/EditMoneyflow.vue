@@ -218,99 +218,27 @@
                       </div>
                       <div class="collapse" id="collapseSplitEntries">
                         <div class="card-body">
-                          <div class="row">
-                            <div
-                              class="col-md-1 d-flex align-items-center justify-content-center"
-                            >
-                              <div class="btn-group" role="group">
-                                <button type="button" class="btn btn-primary">
-                                  <i class="bi bi-dash"></i></button
-                                ><button type="button" class="btn btn-primary">
-                                  <i class="bi bi-plus"></i>
-                                </button>
-                              </div>
-                            </div>
-                            <div class="col-md-2 col-xs-12">
-                              <div class="input-group">
-                                <div class="form-floating">
-                                  <input
-                                    v-model="mmf.amount"
-                                    id="amount"
-                                    type="number"
-                                    step="0.01"
-                                    @change="validateAmount"
-                                    :class="
-                                      ' form-control ' +
-                                      amountErrorData.inputClass
-                                    "
-                                  />
-                                  <label
-                                    for="amount"
-                                    :style="
-                                      'color: ' + amountErrorData.fieldColor
-                                    "
-                                    >{{ amountErrorData.fieldLabel }}</label
-                                  >
-                                </div>
-                                <span class="input-group-text"
-                                  ><i class="bi bi-currency-euro"></i
-                                ></span>
-                              </div>
-                            </div>
-                            <div class="col-md-4 col-xs-12">
-                              <div class="form-floating">
-                                <input
-                                  v-model="mmf.comment"
-                                  id="comment"
-                                  type="text"
-                                  @input="validateComment"
-                                  :class="
-                                    'form-control ' +
-                                    commentErrorData.inputClass
-                                  "
-                                />
-                                <label
-                                  for="comment"
-                                  :style="
-                                    'color: ' + commentErrorData.fieldColor
-                                  "
-                                  >{{ commentErrorData.fieldLabel }}</label
-                                >
-                              </div>
-                            </div>
-                            <div class="col-md-3 col-xs-12">
-                              <PostingAccountSelectVue
-                                :field-color="
-                                  postingaccountErrorData.fieldColor
-                                "
-                                :field-label="
-                                  postingaccountErrorData.fieldLabel
-                                "
-                                :input-class="
-                                  postingaccountErrorData.inputClass
-                                "
-                                :selected-id="mmf.postingAccountId"
-                                @posting-account-selected="
-                                  onPostingAccountSelected
-                                "
-                              />
-                            </div>
-                            <div class="col-md-2 col-xs-12">
-                              <div class="input-group">
-                                <span class="input-group-text" role="button"
-                                  ><i class="bi bi-arrow-left"></i
-                                ></span>
-                                <div class="form-floating">
-                                  <input
-                                    id="password"
-                                    type="password"
-                                    class="form-control"
-                                  />
-                                  <label for="password">Rest</label>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
+                          <EditMoneyflowSplitEntryRowVue
+                            v-for="(mse, index) in mmf.moneyflowSplitEntries"
+                            :key="mse.id"
+                            :amount="mse.amount"
+                            :comment="mse.comment"
+                            :posting-account-id="mse.postingAccountId"
+                            :is-last-row="
+                              index + 1 === mmf.moneyflowSplitEntries?.length
+                            "
+                            :index="index"
+                            :remainder="mseRemainder"
+                            @delete-moneyflow-split-entry-row="
+                              onDeleteMoneyflowSplitEntryRow
+                            "
+                            @add-moneyflow-split-entry-row="
+                              onAddMoneyflowSplitEntryRow
+                            "
+                            @amount-changed="
+                              onMoneyflowSplitEntryRowAmountChanged
+                            "
+                          />
                         </div>
                       </div>
                     </div>
@@ -346,12 +274,14 @@ import { defineComponent } from "vue";
 import ContractpartnerSelectVue from "@/components/contractpartner/ContractpartnerSelect.vue";
 import CapitalsourceSelectVue from "@/components/capitalsource/CapitalsourceSelect.vue";
 import PostingAccountSelectVue from "@/components/postingaccount/PostingAccountSelect.vue";
+import EditMoneyflowSplitEntryRowVue from "@/components/moneyflow/EditMoneyflowSplitEntryRow.vue";
 
 import type { Capitalsource } from "@/model/capitalsource/Capitalsource";
 import type { Contractpartner } from "@/model/contractpartner/Contractpartner";
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
-import type { PostingAccount } from "@/model/postingaccount/PostingAccount";
+import type { MoneyflowSplitEntry } from "@/model/moneyflow/MoneyflowSplitEntry";
 import type { PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
+import type { PostingAccount } from "@/model/postingaccount/PostingAccount";
 
 import PreDefMoneyflowControllerHandler from "@/handler/PreDefMoneyflowControllerHandler";
 
@@ -518,6 +448,15 @@ export default defineComponent({
         return new Date();
       }
     },
+    mseRemainder(): number {
+      let remainder = this.mmf.amount;
+      if (this.mmf.moneyflowSplitEntries != undefined) {
+        for (const mse of this.mmf.moneyflowSplitEntries) {
+          if (mse.amount) remainder -= mse.amount;
+        }
+      }
+      return remainder;
+    },
   },
   methods: {
     resetForm() {
@@ -529,6 +468,7 @@ export default defineComponent({
       this.mmf.amount = 0;
       this.mmf.comment = "";
       this.mmf.private = false;
+
       this.saveAsPreDefMoneyflow = false;
       this.preDefMoneyflowId = 0;
 
@@ -544,6 +484,41 @@ export default defineComponent({
 
       this.toggleTextOff = this.toggleTextOffNoPreDefMoneyflow;
       this.toggleTextOn = this.toggleTextOnNoPreDefMoneyflow;
+
+      this.addNewMoneyflowSplitEntryRow();
+      this.addNewMoneyflowSplitEntryRow();
+    },
+    addNewMoneyflowSplitEntryRow() {
+      if (this.mmf.moneyflowSplitEntries === undefined) {
+        this.mmf.moneyflowSplitEntries = new Array<MoneyflowSplitEntry>();
+      }
+      const mse = this.mmf.moneyflowSplitEntries;
+      const mseLength = mse.length;
+      let newMseId = 1;
+      if (mseLength > 0) {
+        newMseId = this.mmf.moneyflowSplitEntries[mseLength - 1].id + 1;
+      }
+      const newMse = {} as MoneyflowSplitEntry;
+      newMse.id = newMseId;
+      mse.push(newMse);
+    },
+    onDeleteMoneyflowSplitEntryRow(index: number) {
+      const mse = this.mmf.moneyflowSplitEntries;
+      if (mse !== undefined) {
+        if (mse.length === 2) {
+          this.addNewMoneyflowSplitEntryRow();
+        }
+        mse.splice(index, 1);
+      }
+    },
+    onAddMoneyflowSplitEntryRow() {
+      this.addNewMoneyflowSplitEntryRow();
+    },
+    onMoneyflowSplitEntryRowAmountChanged(index: number, amount: number) {
+      const mse = this.mmf.moneyflowSplitEntries;
+      if (mse !== undefined) {
+        mse[index]["amount"] = amount;
+      }
     },
     validateBookingdate() {
       [this.bookingdateIsValid, this.bookingdateErrorMessage] =
@@ -649,6 +624,7 @@ export default defineComponent({
     ContractpartnerSelectVue,
     CapitalsourceSelectVue,
     PostingAccountSelectVue,
+    EditMoneyflowSplitEntryRowVue,
   },
 });
 </script>
