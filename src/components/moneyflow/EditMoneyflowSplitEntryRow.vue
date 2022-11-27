@@ -26,7 +26,7 @@
             id="amount"
             type="number"
             step="0.01"
-            @change="amountChanged"
+            @change="amountChangedWithNewRow"
             :class="' form-control ' + amountErrorData.inputClass"
           />
           <label for="amount" :style="'color: ' + amountErrorData.fieldColor">{{
@@ -44,7 +44,7 @@
           v-model="mseComment"
           id="comment"
           type="text"
-          @change="commentChanged"
+          @change="commentChangedWithNewRow"
           :class="'form-control ' + commentErrorData.inputClass"
         />
         <label for="comment" :style="'color: ' + commentErrorData.fieldColor">{{
@@ -176,6 +176,10 @@ export default defineComponent({
     postingAccountId: function (newVal: number, oldVal: number) {
       if (newVal != oldVal) this.msePostingAccountId = newVal;
     },
+    rowEmpty: function (newVal: boolean, oldVal: boolean) {
+      // remove all form errors when the row becomes empty again
+      if (newVal != oldVal && newVal == true) this.validateRow();
+    },
   },
   computed: {
     showRemainder() {
@@ -228,6 +232,13 @@ export default defineComponent({
     addMoneyflowSplitEntryRow() {
       this.$emit("addMoneyflowSplitEntryRow");
     },
+    /*
+     * Amount
+     */
+    amountChangedWithNewRow() {
+      this.amountChanged();
+      if (this.isLastRow) this.addMoneyflowSplitEntryRow();
+    },
     amountChanged() {
       this.validateAmount();
       let amount = this.mseAmount;
@@ -245,6 +256,13 @@ export default defineComponent({
         this.amountIsValid = null;
       }
     },
+    /*
+     * Comment
+     */
+    commentChangedWithNewRow() {
+      this.commentChanged();
+      if (this.isLastRow) this.addMoneyflowSplitEntryRow();
+    },
     commentChanged() {
       this.validateComment();
       this.$emit("commentChanged", this.index, this.mseComment);
@@ -258,6 +276,13 @@ export default defineComponent({
       } else {
         this.commentIsValid = null;
       }
+    },
+    /*
+     * PostingAccount
+     */
+    postingaccountChangedWithNewRow() {
+      this.postingaccountChanged();
+      if (this.isLastRow) this.addMoneyflowSplitEntryRow();
     },
     postingaccountChanged() {
       this.validatePostingaccount();
@@ -285,24 +310,29 @@ export default defineComponent({
       return !!this.formIsValid;
     },
     onPostingAccountSelected(postingAccount: PostingAccount) {
+      // can be undefined when first empty option is selected
       if (postingAccount) {
         this.msePostingAccountId = postingAccount.id;
       } else {
         this.msePostingAccountId = 0;
       }
-      this.postingaccountChanged();
+      this.postingaccountChangedWithNewRow();
     },
     useRemainder() {
       this.mseAmount = this.remainder;
+      this.amountChanged();
+
       if (this.moneyflowComment) {
         this.mseComment = this.moneyflowComment;
         this.commentChanged();
       }
+
       if (this.moneyflowPostingAccountId) {
         this.msePostingAccountId = this.moneyflowPostingAccountId;
         this.postingaccountChanged();
       }
-      this.amountChanged();
+
+      if (this.isLastRow) this.addMoneyflowSplitEntryRow();
     },
   },
   components: { PostingAccountSelectVue },
