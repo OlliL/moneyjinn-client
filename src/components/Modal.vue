@@ -20,7 +20,7 @@
         <div class="modal-body">
           <slot name="body" />
         </div>
-        <div class="modal-footer" v-if="!hideFooter">
+        <div class="modal-footer justify-content-md-center" v-if="!hideFooter">
           <button
             type="button"
             class="btn btn-secondary"
@@ -73,8 +73,11 @@ export default defineComponent({
     async _show() {
       this.thisModalObj.show();
     },
+    async _hide() {
+      this.thisModalObj.hide();
+    },
   },
-  expose: ["_show"],
+  expose: ["_show", "_hide"],
 
   mounted() {
     this.thisModalObj = new Modal(this.$refs.modalEle as HTMLDivElement);

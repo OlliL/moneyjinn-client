@@ -96,6 +96,7 @@ type EditMoneyflowSplitEntryData = {
   mseAmount: number | undefined;
   mseComment: string | undefined;
   msePostingAccountId: number;
+  msePostingAccountName: string | undefined;
   amountIsValid: boolean | null;
   amountErrorMessage: string;
   commentIsValid: boolean | null;
@@ -116,6 +117,7 @@ export default defineComponent({
       mseAmount: undefined,
       mseComment: undefined,
       msePostingAccountId: 0,
+      msePostingAccountName: undefined,
     };
   },
   emits: [
@@ -298,7 +300,8 @@ export default defineComponent({
       this.$emit(
         "postingAccountIdChanged",
         this.index,
-        this.msePostingAccountId
+        this.msePostingAccountId,
+        this.msePostingAccountName
       );
     },
     validatePostingaccount() {
@@ -322,8 +325,10 @@ export default defineComponent({
       // can be undefined when first empty option is selected
       if (postingAccount) {
         this.msePostingAccountId = postingAccount.id;
+        this.msePostingAccountName = postingAccount.name;
       } else {
         this.msePostingAccountId = 0;
+        this.msePostingAccountName = "";
       }
       this.postingaccountChangedWithNewRow();
     },

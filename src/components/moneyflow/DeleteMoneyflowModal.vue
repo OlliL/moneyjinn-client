@@ -81,6 +81,7 @@
 </template>
 
 <script lang="ts">
+import MoneyflowControllerHandler from "@/handler/MoneyflowControllerHandler";
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 import { formatDate } from "@/tools/views/FormatDate";
 import { formatNumber, redIfNegativeStart } from "@/tools/views/FormatNumber";
@@ -114,7 +115,7 @@ export default defineComponent({
       (this.$refs.modalComponent as typeof ModalVue)._show();
     },
     deleteMoneyflow() {
-      alert("FIXME: not implemented yet!");
+      MoneyflowControllerHandler.deleteMoneyflow(this.mmf.id);
       this.$emit("moneyflowDeleted", this.mmf);
     },
   },

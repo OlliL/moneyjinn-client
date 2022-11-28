@@ -23,32 +23,82 @@ abstract class AbstractControllerHandler {
     controller: string,
     usecase: string
   ): Promise<Response> {
-    let response = await this.internalPost(requestBody, controller, usecase);
+    let response = await this.internalWithBody(
+      requestBody,
+      controller,
+      usecase,
+      "post"
+    );
     if ((await response.status) === 403) {
       this.refreshAuthToken();
-      response = await this.internalPost(requestBody, controller, usecase);
+      response = await this.internalWithBody(
+        requestBody,
+        controller,
+        usecase,
+        "post"
+      );
+    }
+    return response;
+  }
+
+  protected async put(
+    requestBody: any,
+    controller: string,
+    usecase: string
+  ): Promise<Response> {
+    let response = await this.internalWithBody(
+      requestBody,
+      controller,
+      usecase,
+      "put"
+    );
+    if ((await response.status) === 403) {
+      this.refreshAuthToken();
+      response = await this.internalWithBody(
+        requestBody,
+        controller,
+        usecase,
+        "put"
+      );
     }
     return response;
   }
 
   protected async get(controller: string, usecase: string): Promise<Response> {
-    let response = await this.internalGet(controller, usecase);
+    let response = await this.internalWithoutBody(controller, usecase, "get");
     if ((await response.status) === 403) {
       this.refreshAuthToken();
-      response = await this.internalGet(controller, usecase);
+      response = await this.internalWithoutBody(controller, usecase, "get");
     }
     return response;
   }
 
-  private async internalPost(
-    requestBody: any,
+  protected async delete(
     controller: string,
     usecase: string
+  ): Promise<Response> {
+    let response = await this.internalWithoutBody(
+      controller,
+      usecase,
+      "delete"
+    );
+    if ((await response.status) === 403) {
+      this.refreshAuthToken();
+      response = await this.internalWithoutBody(controller, usecase, "delete");
+    }
+    return response;
+  }
+
+  private async internalWithBody(
+    requestBody: any,
+    controller: string,
+    usecase: string,
+    httpMethod: string
   ) {
     const requestInfo = new Request(
       AbstractControllerHandler.SERVER_ROOT + controller + "/" + usecase,
       {
-        method: "post",
+        method: httpMethod,
         body: JSON.stringify(requestBody),
         headers: this.getHeaders(),
       }
@@ -58,14 +108,15 @@ abstract class AbstractControllerHandler {
     return response;
   }
 
-  private async internalGet(
+  private async internalWithoutBody(
     controller: string,
-    usecase: string
+    usecase: string,
+    httpMethod: string
   ): Promise<Response> {
     const requestInfo = new Request(
       AbstractControllerHandler.SERVER_ROOT + controller + "/" + usecase,
       {
-        method: "get",
+        method: httpMethod,
         headers: this.getHeaders(),
       }
     );
