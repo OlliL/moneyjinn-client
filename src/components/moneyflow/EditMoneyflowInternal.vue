@@ -221,25 +221,25 @@
 <script lang="ts">
 import { defineComponent, type PropType } from "vue";
 
-import ContractpartnerSelectVue from "@/components/contractpartner/ContractpartnerSelect.vue";
 import CapitalsourceSelectVue from "@/components/capitalsource/CapitalsourceSelect.vue";
-import PostingAccountSelectVue from "@/components/postingaccount/PostingAccountSelect.vue";
+import ContractpartnerSelectVue from "@/components/contractpartner/ContractpartnerSelect.vue";
 import EditMoneyflowSplitEntryRowVue from "@/components/moneyflow/EditMoneyflowSplitEntryRow.vue";
+import PostingAccountSelectVue from "@/components/postingaccount/PostingAccountSelect.vue";
 
 import type { Capitalsource } from "@/model/capitalsource/Capitalsource";
 import type { Contractpartner } from "@/model/contractpartner/Contractpartner";
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
-import type { MoneyflowValidation } from "@/model/moneyflow/MoneyflowValidation";
 import type { MoneyflowSplitEntry } from "@/model/moneyflow/MoneyflowSplitEntry";
+import type { MoneyflowValidation } from "@/model/moneyflow/MoneyflowValidation";
 import type { PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
 import type { PostingAccount } from "@/model/postingaccount/PostingAccount";
+import type { ValidationResult } from "@/model/validation/ValidationResult";
 
 import MoneyflowControllerHandler from "@/handler/MoneyflowControllerHandler";
 
 import { generateErrorData, type ErrorData } from "@/tools/views/ErrorData";
-import { validateInputField } from "@/tools/views/ValidateInputField";
 import { getError } from "@/tools/views/ThrowError";
-import type { ValidationResult } from "@/model/validation/ValidationResult";
+import { validateInputField } from "@/tools/views/ValidateInputField";
 
 //FIXME: Creation of Capitalsources, Contractpartner, PostingAccounts
 //FIXME: only show PostingAccount "+" when user is admin
@@ -335,7 +335,6 @@ export default defineComponent({
       handler(newVal: Moneyflow | undefined, oldVal: Moneyflow) {
         if (newVal !== oldVal) this.resetForm();
       },
-      //      immediate: true,
     },
   },
   mounted() {
@@ -436,7 +435,7 @@ export default defineComponent({
         this.amount = this.mmf.amount;
         this.originalMoneyflowSplitEntryIds = new Array<number>();
 
-        // during JSON stringify/parse the Date object gets lost unfortunally and
+        // during JSON stringify/parse the Date object gets unfortunally lost and
         // it is a string here, so reparse it before extracting the date
         [this.bookingdate] = new Date(this.mmfToEdit.bookingDate)
           .toISOString()
@@ -446,7 +445,6 @@ export default defineComponent({
           .split("T");
 
         if (this.mmf.moneyflowSplitEntries == undefined) {
-          // initial state
           this.mmf.moneyflowSplitEntries = new Array<MoneyflowSplitEntry>();
           this.addNewMoneyflowSplitEntryRow();
           this.addNewMoneyflowSplitEntryRow();
@@ -476,22 +474,11 @@ export default defineComponent({
         this.mmf.comment = "";
         this.mmf.private = false;
 
+        this.mmf.moneyflowSplitEntries = new Array<MoneyflowSplitEntry>();
+        this.addNewMoneyflowSplitEntryRow();
+        this.addNewMoneyflowSplitEntryRow();
         this.showMoneyflowFields = true;
 
-        // once the form is filled, delete the existing rows and auto-add 2 new ones.
-        // Otherwise Vue does not notice the changes
-        if (this.mmf.moneyflowSplitEntries == undefined) {
-          // initial state
-          this.mmf.moneyflowSplitEntries = new Array<MoneyflowSplitEntry>();
-          this.addNewMoneyflowSplitEntryRow();
-          this.addNewMoneyflowSplitEntryRow();
-        } else {
-          // reset clicked
-          const length = this.mmf.moneyflowSplitEntries.length;
-          for (let i = 0; i < length; i++) {
-            this.onDeleteMoneyflowSplitEntryRow(0);
-          }
-        }
         (this.$refs.amountRef as any).focus();
       }
       this.serverError = undefined;
@@ -769,7 +756,7 @@ export default defineComponent({
         if (this.mmf.moneyflowSplitEntries) {
           this.mmf.moneyflowSplitEntries =
             this.mmf.moneyflowSplitEntries.filter(
-              (mse) => mse.comment && mse.comment && mse.postingAccountId
+              (mse) => mse.amount && mse.comment && mse.postingAccountId
             );
         }
         return true;
