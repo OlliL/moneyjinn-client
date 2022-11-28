@@ -35,8 +35,6 @@ import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 import ModalVue from "../Modal.vue";
 import MoneyflowReceiptControllerHandler from "@/handler/MoneyflowReceiptControllerHandler";
 
-// FIXME: delete Receipt button!
-
 export default defineComponent({
   name: "EditMoneyflowModal",
   data() {
