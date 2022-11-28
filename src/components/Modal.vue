@@ -20,7 +20,7 @@
         <div class="modal-body">
           <slot name="body" />
         </div>
-        <div class="modal-footer justify-content-md-center" v-if="!hideFooter">
+        <div class="modal-footer justify-content-md-center">
           <button
             type="button"
             class="btn btn-secondary"
@@ -55,10 +55,6 @@ export default defineComponent({
     maxWidth: {
       type: String,
       default: "",
-    },
-    hideFooter: {
-      type: Boolean,
-      default: false,
     },
   },
   computed: {

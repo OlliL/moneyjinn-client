@@ -417,10 +417,6 @@ export default defineComponent({
     },
     editMoneyflow(mmf: Moneyflow) {
       (this.$refs.editModal as typeof EditMoneyflowModalVue)._show(mmf);
-      // FIXME: implement
-      // search old mmf
-      // modify mmf array
-      // update Capitalsource amounts if they changed
     },
     /**
      * recalculate End of Month amount (for matching Capitalsource),
@@ -429,37 +425,56 @@ export default defineComponent({
      * @param capitalsourceComment
      * @param amount
      */
-    modifyCapitalsourceAmounts(
-      capitalsourceComment: string | undefined,
-      amount: number
-    ) {
+    bookCapitalsourceAmounts(mmf: Moneyflow, bookOut: boolean) {
+      const bookingDate = mmf.bookingDate;
+      bookingDate.setHours(0, 0, 0, 0);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const capitalsourceComment = mmf.capitalsourceComment;
+      let direction = bookOut ? -1 : 1;
+      const amount = mmf.amount * direction;
+
       for (const mcs of this.report.reportTurnoverCapitalsources) {
         if (mcs.capitalsourceComment === capitalsourceComment) {
-          mcs.amountEndOfMonthCalculated -= amount;
+          mcs.amountEndOfMonthCalculated += amount;
+          if (
+            !mcs.amountCurrentState &&
+            mcs.amountCurrent &&
+            bookingDate <= today
+          ) {
+            mcs.amountCurrent += amount;
+          }
           if (
             mcs.capitalsourceType === CapitalsourceType.CURRENT_ASSET ||
             mcs.capitalsourceType === CapitalsourceType.LONG_TERM_ASSET
           ) {
-            this.assetsMonthlyCalculatedTurnover -= amount;
+            this.assetsMonthlyCalculatedTurnover += amount;
           }
         }
       }
-      this.report.turnoverEndOfYearCalculated -= amount;
+      this.report.turnoverEndOfYearCalculated += amount;
     },
     moneyflowDeleted(mmf: Moneyflow) {
-      // DELETE moneyflow from Array of moneyflows
+      this.bookCapitalsourceAmounts(mmf, true);
       this.report.moneyflows = this.report.moneyflows.filter((originalMmf) => {
         return mmf.id !== originalMmf.id;
       });
-      this.modifyCapitalsourceAmounts(mmf.capitalsourceComment, mmf.amount);
     },
     moneyflowUpdated(mmf: Moneyflow) {
+      const oldMmf = this.report.moneyflows.find(
+        (originalMmf) => mmf.id === originalMmf.id
+      );
+      if (oldMmf) {
+        this.bookCapitalsourceAmounts(oldMmf, true);
+      }
+
       for (var i = 0; i < this.report.moneyflows.length; i++) {
         if (mmf.id === this.report.moneyflows[i].id) {
           this.report.moneyflows[i] = mmf;
           break;
         }
       }
+      this.bookCapitalsourceAmounts(mmf, false);
     },
     sortIcon(sortedField: string) {
       if (this.sortBy.get(sortedField) === undefined) {
