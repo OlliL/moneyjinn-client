@@ -28,9 +28,29 @@
       <div class="col-md-9 col-xs-12">
         <div class="card w-100 bg-light">
           <div class="card-body">
-            <EditMoneyflowVue
-              :selected-pre-def-moneyflow="selectedPreDefMoneyflow"
-            />
+            <form @submit.prevent="createMoneyflow">
+              <div class="container-fluid">
+                <EditMoneyflowVue
+                  :selected-pre-def-moneyflow="selectedPreDefMoneyflow"
+                  ref="editMoneyflowVue"
+                />
+                <div class="row no-gutters flex-lg-nowrap">
+                  <div class="col-12">
+                    <button
+                      type="button"
+                      class="btn btn-secondary"
+                      @click="resetForm"
+                    >
+                      r&uuml;cksetzen
+                    </button>
+                    &nbsp;&nbsp;
+                    <button type="submit" class="btn btn-primary">
+                      Speichern
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </form>
           </div>
         </div>
       </div>
@@ -82,6 +102,20 @@ export default defineComponent({
           this.selectedPreDefMoneyflow = preDefMoneyflow;
         }
       }
+    },
+    async createMoneyflow() {
+      if (
+        await (
+          this.$refs.editMoneyflowVue as typeof EditMoneyflowVue
+        ).createMoneyflow()
+      ) {
+        this.resetForm();
+      }
+    },
+    resetForm() {
+      this.preDefMoneyflowId = 0;
+      this.selectPreDefMoneyflow();
+      (this.$refs.editMoneyflowVue as typeof EditMoneyflowVue).resetForm();
     },
   },
   components: { EditMoneyflowVue },

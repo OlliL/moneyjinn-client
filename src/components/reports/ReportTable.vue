@@ -10,7 +10,10 @@
         ref="deleteModal"
         @moneyflow-deleted="moneyflowDeleted"
       />
-      <EditMoneyflowModalVue ref="editModal" />
+      <EditMoneyflowModalVue
+        ref="editModal"
+        @moneyflow-updated="moneyflowUpdated"
+      />
 
       <div class="card-body" v-if="report.moneyflows">
         <table class="table table-striped table-bordered table-hover">
@@ -449,6 +452,14 @@ export default defineComponent({
         return mmf.id !== originalMmf.id;
       });
       this.modifyCapitalsourceAmounts(mmf.capitalsourceComment, mmf.amount);
+    },
+    moneyflowUpdated(mmf: Moneyflow) {
+      for (var i = 0; i < this.report.moneyflows.length; i++) {
+        if (mmf.id === this.report.moneyflows[i].id) {
+          this.report.moneyflows[i] = mmf;
+          break;
+        }
+      }
     },
     sortIcon(sortedField: string) {
       if (this.sortBy.get(sortedField) === undefined) {

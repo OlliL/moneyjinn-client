@@ -6,7 +6,7 @@ import { throwError } from "@/tools/views/ThrowError";
 import type { Report } from "@/model/report/Report";
 import { mapReportTurnoverCapitalsourceTransportToModel } from "./mapper/ReportTurnoverCapitalsourceTransportMapper";
 import { mapMoneyflowTransportToModel } from "./mapper/MoneyflowTransportMapper";
-import type { MoneyflowSplitEntry } from "@/model/moneyflow/MoneyflowSplitEntry";
+import type { MoneyflowSplitEntryTransport } from "@/model/rest/transport/MoneyflowSplitEntryTransport";
 
 class ReportControllerHandler extends AbstractControllerHandler {
   private static CONTROLLER = "report";
@@ -65,13 +65,13 @@ class ReportControllerHandler extends AbstractControllerHandler {
 
     const data = listReportsResponse.listReportsResponse;
 
-    const mseMap = new Map<number, Array<MoneyflowSplitEntry>>();
+    const mseMap = new Map<number, Array<MoneyflowSplitEntryTransport>>();
 
     if (data.moneyflowSplitEntryTransport !== undefined) {
       for (const mse of data.moneyflowSplitEntryTransport) {
         let mseMapArray = mseMap.get(mse.moneyflowid);
         if (mseMapArray == null) {
-          mseMapArray = new Array<MoneyflowSplitEntry>();
+          mseMapArray = new Array<MoneyflowSplitEntryTransport>();
         }
         mseMapArray.push(mse);
         mseMap.set(mse.moneyflowid, mseMapArray);
