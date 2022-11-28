@@ -13,6 +13,7 @@
       <EditMoneyflowModalVue
         ref="editModal"
         @moneyflow-updated="moneyflowUpdated"
+        @moneyflow-receipt-deleted="moneyflowReceiptDeleted"
       />
 
       <div class="card-body" v-if="report.moneyflows">
@@ -459,6 +460,12 @@ export default defineComponent({
       this.report.moneyflows = this.report.moneyflows.filter((originalMmf) => {
         return mmf.id !== originalMmf.id;
       });
+    },
+    moneyflowReceiptDeleted(mmfId: number) {
+      const oldMmf = this.report.moneyflows.find(
+        (originalMmf) => mmfId === originalMmf.id
+      );
+      if (oldMmf) oldMmf.hasReceipt = false;
     },
     moneyflowUpdated(mmf: Moneyflow) {
       const oldMmf = this.report.moneyflows.find(

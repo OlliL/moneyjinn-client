@@ -68,12 +68,7 @@
       </div>
     </template>
     <template #footer>
-      <button
-        type="button"
-        class="btn btn-danger"
-        data-bs-dismiss="modal"
-        @click="deleteMoneyflow"
-      >
+      <button type="button" class="btn btn-danger" @click="deleteMoneyflow">
         L&ouml;schen
       </button>
     </template>
@@ -116,6 +111,7 @@ export default defineComponent({
     },
     deleteMoneyflow() {
       MoneyflowControllerHandler.deleteMoneyflow(this.mmf.id);
+      (this.$refs.modalComponent as typeof ModalVue)._hide();
       this.$emit("moneyflowDeleted", this.mmf);
     },
   },

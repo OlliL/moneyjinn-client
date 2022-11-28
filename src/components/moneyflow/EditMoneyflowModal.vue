@@ -13,6 +13,15 @@
       </form>
     </template>
     <template #footer>
+      <button
+        type="button"
+        class="btn btn-danger"
+        @click="deleteMoneyflowReceipt"
+        v-if="mmf.hasReceipt"
+      >
+        Bon l&ouml;schen
+      </button>
+
       <button type="submit" class="btn btn-primary" form="updateMoneyflowForm">
         Speichern
       </button>
@@ -24,6 +33,7 @@ import { defineComponent } from "vue";
 import EditMoneyflowVue from "@/components/moneyflow/EditMoneyflowInternal.vue";
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 import ModalVue from "../Modal.vue";
+import MoneyflowReceiptControllerHandler from "@/handler/MoneyflowReceiptControllerHandler";
 
 // FIXME: delete Receipt button!
 
@@ -49,8 +59,13 @@ export default defineComponent({
         (this.$refs.modalComponent as typeof ModalVue)._hide();
       }
     },
+    async deleteMoneyflowReceipt() {
+      MoneyflowReceiptControllerHandler.deleteMoneyflowReceipt(this.mmf.id);
+      this.$emit("moneyflowReceiptDeleted", this.mmf.id);
+      (this.$refs.modalComponent as typeof ModalVue)._hide();
+    },
   },
-  emits: ["moneyflowUpdated"],
+  emits: ["moneyflowUpdated", "moneyflowReceiptDeleted"],
   expose: ["_show"],
   components: { EditMoneyflowVue, ModalVue },
 });
