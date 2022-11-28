@@ -61,8 +61,11 @@ export default defineComponent({
     },
   },
   watch: {
-    selectedId: function (newVal: number, oldVal: number) {
-      if (newVal != oldVal) this.postingAccountId = newVal;
+    selectedId: {
+      handler(newVal: number, oldVal: number) {
+        if (newVal != oldVal) this.postingAccountId = newVal;
+      },
+      immediate: true,
     },
   },
   created() {

@@ -27,7 +27,7 @@
             type="number"
             step="0.01"
             @change="amountChangedWithNewRow"
-            :class="' form-control ' + amountErrorData.inputClass"
+            :class="' form-control text-end ' + amountErrorData.inputClass"
           />
           <label for="amount" :style="'color: ' + amountErrorData.fieldColor">{{
             amountErrorData.fieldLabel
@@ -70,9 +70,9 @@
           <input
             id="remainder"
             disabled
-            type="number"
+            type="text"
             :class="'form-control ' + remainderErrorData.inputClass"
-            :value="remainder"
+            :value="remainder.toFixed(2)"
           />
           <label
             for="comment"
@@ -165,16 +165,25 @@ export default defineComponent({
     },
   },
   watch: {
-    amount: function (newVal: number | undefined, oldVal: number) {
-      // we want to display an empty amount field when 0 is the amount!
-      if (newVal === 0) newVal = undefined;
-      if (newVal !== oldVal) this.mseAmount = newVal;
+    amount: {
+      handler(newVal: number, oldVal: number) {
+        // we want to display an empty amount field when 0 is the amount!
+        if (newVal === 0) this.mseAmount = undefined;
+        else if (newVal !== oldVal) this.mseAmount = newVal;
+      },
+      immediate: true,
     },
-    comment: function (newVal: string, oldVal: string) {
-      if (newVal != oldVal) this.mseComment = newVal;
+    comment: {
+      handler(newVal: string, oldVal: string) {
+        if (newVal != oldVal) this.mseComment = newVal;
+      },
+      immediate: true,
     },
-    postingAccountId: function (newVal: number, oldVal: number) {
-      if (newVal != oldVal) this.msePostingAccountId = newVal;
+    postingAccountId: {
+      handler(newVal: number, oldVal: number) {
+        if (newVal != oldVal) this.msePostingAccountId = newVal;
+      },
+      immediate: true,
     },
     rowEmpty: function (newVal: boolean, oldVal: boolean) {
       // remove all form errors when the row becomes empty again

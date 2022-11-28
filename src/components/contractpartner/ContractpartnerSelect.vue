@@ -65,8 +65,11 @@ export default defineComponent({
     },
   },
   watch: {
-    selectedId: function (newVal: number, oldVal: number) {
-      if (newVal != oldVal) this.contractpartnerId = newVal;
+    selectedId: {
+      handler(newVal: number, oldVal: number) {
+        if (newVal != oldVal) this.contractpartnerId = newVal;
+      },
+      immediate: true,
     },
   },
   created() {

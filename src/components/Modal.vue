@@ -20,7 +20,7 @@
         <div class="modal-body">
           <slot name="body" />
         </div>
-        <div class="modal-footer" v-if="hideFooter">
+        <div class="modal-footer" v-if="!hideFooter">
           <button
             type="button"
             class="btn btn-secondary"

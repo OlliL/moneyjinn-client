@@ -4,6 +4,7 @@
     ref="modalComponent"
     max-width="75%"
     :hide-footer="true"
+    v-if="mmf"
   >
     <template #body>
       <EditMoneyflowVue :mmf-to-edit="mmf" />
@@ -13,7 +14,7 @@
 </template>
 <script lang="ts">
 import { defineComponent } from "vue";
-import EditMoneyflowVue from "@/views/moneyflow/EditMoneyflow.vue";
+import EditMoneyflowVue from "@/components/moneyflow/EditMoneyflowInternal.vue";
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 import ModalVue from "../Modal.vue";
 
@@ -25,8 +26,8 @@ export default defineComponent({
     };
   },
   methods: {
-    async _show(mmf: Moneyflow) {
-      this.mmf = mmf;
+    _show(mmf: Moneyflow) {
+      this.mmf = JSON.parse(JSON.stringify(mmf));
       (this.$refs.modalComponent as typeof ModalVue)._show();
     },
   },
