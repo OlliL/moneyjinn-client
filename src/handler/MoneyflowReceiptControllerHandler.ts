@@ -52,6 +52,18 @@ class MoneyflowReceiptControllerHandler extends AbstractControllerHandler {
 
     return moneyflowReceipt;
   }
+  async deleteMoneyflowReceipt(moneyflowId: number) {
+    const usecase = "deleteMoneyflowReceipt/" + moneyflowId;
+
+    const response = await super.delete(
+      MoneyflowReceiptControllerHandler.CONTROLLER,
+      usecase
+    );
+
+    if (!response.ok) {
+      throw new Error(response.statusText);
+    }
+  }
 }
 
 export default new MoneyflowReceiptControllerHandler();
