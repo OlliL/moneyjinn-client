@@ -67,8 +67,11 @@ export default defineComponent({
     },
   },
   watch: {
-    selectedId: function (newVal: number, oldVal: number) {
-      if (newVal != oldVal) this.capitalsourceId = newVal;
+    selectedId: {
+      handler(newVal: number, oldVal: number) {
+        if (newVal != oldVal) this.capitalsourceId = newVal;
+      },
+      immediate: true,
     },
   },
   created() {
