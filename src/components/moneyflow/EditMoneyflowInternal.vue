@@ -448,10 +448,19 @@ export default defineComponent({
   },
   methods: {
     resetForm() {
-      if (this.mmfToEdit) {
+      if (this.mmfToEdit && this.mmfToEdit.bookingDate) {
         // we need a deep copy!
         this.mmf = JSON.parse(JSON.stringify(this.mmfToEdit));
         this.amount = this.mmf.amount;
+        // FIXME: Does not work because Date was made a string in the Modal vue
+        /*
+        [this.bookingdate] = this.mmfToEdit.bookingDate
+          .toISOString()
+          .split("T");
+        [this.invoicedate] = this.mmfToEdit.invoiceDate
+          .toISOString()
+          .split("T");
+        */
         if (this.mmf.moneyflowSplitEntries == undefined) {
           // initial state
           this.mmf.moneyflowSplitEntries = new Array<MoneyflowSplitEntry>();
@@ -468,7 +477,6 @@ export default defineComponent({
         }
         this.toggleMoneyflowFieldsForMse();
       } else {
-        this.serverError = undefined;
         this.amount = undefined;
         [this.bookingdate] = new Date().toISOString().split("T");
         this.invoicedate = "";
@@ -481,8 +489,6 @@ export default defineComponent({
         this.mmf.comment = "";
         this.mmf.private = false;
 
-        this.mseRowsAreValid = null;
-        this.mseRemainderIsValid = undefined;
         this.showMoneyflowFields = true;
 
         // once the form is filled, delete the existing rows and auto-add 2 new ones.
@@ -501,6 +507,10 @@ export default defineComponent({
         }
         (this.$refs.amountRef as any).focus();
       }
+      this.serverError = undefined;
+      this.mseRowsAreValid = null;
+      this.mseRemainderIsValid = undefined;
+
       this.saveAsPreDefMoneyflow = false;
       this.preDefMoneyflowId = 0;
 
