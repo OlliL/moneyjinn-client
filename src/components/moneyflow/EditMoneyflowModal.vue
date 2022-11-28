@@ -8,11 +8,7 @@
     <template #body>
       <form @submit.prevent="updateMoneyflow" id="updateMoneyflowForm">
         <div class="container-fluid">
-          <EditMoneyflowVue
-            :mmf-to-edit="mmf"
-            ref="editMoneyflowVue"
-            @moneyflow-updated="moneyflowUpdated"
-          />
+          <EditMoneyflowVue :mmf-to-edit="mmf" ref="editMoneyflowVue" />
         </div>
       </form>
     </template>
@@ -44,16 +40,14 @@ export default defineComponent({
       (this.$refs.modalComponent as typeof ModalVue)._show();
     },
     async updateMoneyflow() {
-      if (
-        await (
-          this.$refs.editMoneyflowVue as typeof EditMoneyflowVue
-        ).updateMoneyflow()
-      ) {
+      const mmf: Moneyflow = await (
+        this.$refs.editMoneyflowVue as typeof EditMoneyflowVue
+      ).updateMoneyflow();
+
+      if (mmf !== undefined) {
+        this.$emit("moneyflowUpdated", mmf);
         (this.$refs.modalComponent as typeof ModalVue)._hide();
       }
-    },
-    moneyflowUpdated(mmf: Moneyflow) {
-      this.$emit("moneyflowUpdated", mmf);
     },
   },
   emits: ["moneyflowUpdated"],

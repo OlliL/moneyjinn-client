@@ -776,6 +776,21 @@ export default defineComponent({
       }
       return false;
     },
+    followUpServerCall(validationResult: ValidationResult): boolean {
+      if (!validationResult.result) {
+        this.serverError = new Array<string>();
+        for (let resultItem of validationResult.validationResultItems) {
+          this.serverError.push(getError(resultItem.error));
+        }
+        if (this.mmf.moneyflowSplitEntries) {
+          while (this.mmf.moneyflowSplitEntries.length < 2) {
+            this.addNewMoneyflowSplitEntryRow();
+          }
+        }
+        return false;
+      }
+      return true;
+    },
     async createMoneyflow(): Promise<boolean> {
       if (this.prepareServerCall()) {
         const validationResult =
@@ -784,25 +799,13 @@ export default defineComponent({
             this.preDefMoneyflowId,
             this.saveAsPreDefMoneyflow
           );
-        if (!validationResult.result) {
-          this.serverError = new Array<string>();
-          for (let resultItem of validationResult.validationResultItems) {
-            this.serverError.push(getError(resultItem.error));
-          }
-          // readd empty mse rows
-          if (this.mmf.moneyflowSplitEntries) {
-            while (this.mmf.moneyflowSplitEntries.length < 2) {
-              this.addNewMoneyflowSplitEntryRow();
-            }
-          }
-          return false;
-        } else {
+        if (this.followUpServerCall(validationResult)) {
           return true;
         }
       }
       return false;
     },
-    async updateMoneyflow(): Promise<boolean> {
+    async updateMoneyflow(): Promise<Moneyflow | undefined> {
       if (this.prepareServerCall()) {
         const createMses = new Array<MoneyflowSplitEntry>();
         const updateMses = new Array<MoneyflowSplitEntry>();
@@ -830,27 +833,14 @@ export default defineComponent({
           );
         const validationResult: ValidationResult =
           moneyflowValidation.validationResult;
-        if (!validationResult.result) {
-          this.serverError = new Array<string>();
-          for (let resultItem of validationResult.validationResultItems) {
-            this.serverError.push(getError(resultItem.error));
-          }
-          if (this.mmf.moneyflowSplitEntries) {
-            while (this.mmf.moneyflowSplitEntries.length < 2) {
-              this.addNewMoneyflowSplitEntryRow();
-            }
-          }
-          return false;
-        } else {
-          this.$emit("moneyflowUpdated", moneyflowValidation.mmf);
-          return true;
+        if (this.followUpServerCall(validationResult)) {
+          return moneyflowValidation.mmf;
         }
       }
-      return false;
+      return undefined;
     },
   },
-  emits: ["moneyflowUpdated"],
-  expose: ["createMoneyflow", "resetForm", "updateMoneyflow"],
+  expose: ["createMoneyflow", "updateMoneyflow", "resetForm"],
   components: {
     ContractpartnerSelectVue,
     CapitalsourceSelectVue,
