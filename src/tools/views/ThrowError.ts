@@ -48,6 +48,9 @@ export function getError(code: number) {
     case ErrorCode.BOOKINGDATE_OUTSIDE_GROUP_ASSIGNMENT: {
       return "Sie können keine Geldbewegung zu einem Datum anlegen, an dem Sie in einer anderen Gruppe als Ihrer aktuellen sind!";
     }
+    case ErrorCode.POSTINGACCOUNT_WITH_SAME_NAME_ALREADY_EXISTS: {
+      return "Es existiert bereits ein Buchungskonto mit diesem Namen!";
+    }
     case ErrorCode.CAPITALSOURCE_INVALID: {
       return "Kapitalquelle darf nicht verwendet werden!";
     }

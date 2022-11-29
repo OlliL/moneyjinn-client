@@ -241,8 +241,7 @@ import { generateErrorData, type ErrorData } from "@/tools/views/ErrorData";
 import { getError } from "@/tools/views/ThrowError";
 import { validateInputField } from "@/tools/views/ValidateInputField";
 
-//FIXME: Creation of Capitalsources, Contractpartner, PostingAccounts
-//FIXME: only show PostingAccount "+" when user is admin
+//FIXME: Creation of Capitalsources, Contractpartner
 
 type EditMoneyflowData = {
   serverError: Array<String> | undefined;

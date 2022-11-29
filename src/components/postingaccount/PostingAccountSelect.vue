@@ -1,4 +1,9 @@
 <template>
+  <CreatePostingAccountModalVue
+    ref="createPostingAccountModal"
+    @posting-account-created="postingAccountCreated"
+  />
+
   <div class="input-group">
     <div class="form-floating">
       <select
@@ -21,14 +26,20 @@
         fieldLabel
       }}</label>
     </div>
-    <span class="input-group-text"><i class="bi bi-plus"></i></span>
+    <span class="input-group-text"
+      ><i class="bi bi-plus" @click="showCreatePostingAccountModal()"></i
+    ></span>
   </div>
 </template>
 <script lang="ts">
 import type { PostingAccount } from "@/model/postingaccount/PostingAccount";
 import { usePostingAccountStore } from "@/stores/PostingAccountStore";
+import CreatePostingAccountModalVue from "../postingaccount/CreatePostingAccountModal.vue";
+
 import { mapActions } from "pinia";
 import { defineComponent } from "vue";
+
+//FIXME: only show PostingAccount "+" when user is admin
 
 export default defineComponent({
   name: "PostingAccountSelect",
@@ -73,6 +84,7 @@ export default defineComponent({
   },
   methods: {
     ...mapActions(usePostingAccountStore, ["initPostingAccountStore"]),
+    ...mapActions(usePostingAccountStore, ["addPostingAccountToStore"]),
     emitPostingAccountSelected() {
       this.$emit(
         "postingAccountSelected",
@@ -81,6 +93,19 @@ export default defineComponent({
         })[0]
       );
     },
+    showCreatePostingAccountModal() {
+      (
+        this.$refs
+          .createPostingAccountModal as typeof CreatePostingAccountModalVue
+      )._show();
+    },
+    postingAccountCreated(mpa: PostingAccount) {
+      this.addPostingAccountToStore(mpa);
+      this.postingAccountId = mpa.id;
+    },
+  },
+  components: {
+    CreatePostingAccountModalVue,
   },
 });
 </script>

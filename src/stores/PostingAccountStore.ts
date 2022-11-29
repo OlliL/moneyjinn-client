@@ -19,5 +19,9 @@ export const usePostingAccountStore = defineStore("postingAccount", {
         this.postingAccount = postingAccountArray;
       }
     },
+    async addPostingAccountToStore(mpa: PostingAccount) {
+      this.postingAccount.push(mpa);
+      this.postingAccount.sort((a, b) => a.name.localeCompare(b.name));
+    },
   },
 });
