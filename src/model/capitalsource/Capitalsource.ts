@@ -1,3 +1,4 @@
+import type { CapitalsourceImport } from "./CapitalsourceImport";
 import type { CapitalsourceState } from "./CapitalsourceState";
 import type { CapitalsourceType } from "./CapitalsourceType";
 
@@ -12,5 +13,5 @@ export type Capitalsource = {
   validTil: Date;
   validFrom: Date;
   groupUse: boolean;
-  importAllowed: boolean;
+  importAllowed: CapitalsourceImport;
 };
