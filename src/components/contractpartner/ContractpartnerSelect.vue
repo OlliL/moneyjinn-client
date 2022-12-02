@@ -90,6 +90,7 @@ export default defineComponent({
     ...mapActions(useContractpartnerStore, ["initContractpartnerStore"]),
     ...mapActions(useContractpartnerStore, ["addContractpartnerToStore"]),
     emitContractpartnerSelected() {
+      console.log("emit");
       this.$emit(
         "contractpartnerSelected",
         this.contractpartnerArray.find((mcp) => {
@@ -106,6 +107,7 @@ export default defineComponent({
     async contractpartnerCreated(mcp: Contractpartner) {
       this.addContractpartnerToStore(mcp);
       this.contractpartnerId = mcp.id;
+      this.emitContractpartnerSelected();
     },
   },
   components: { CreateContractpartnerModalVue },
