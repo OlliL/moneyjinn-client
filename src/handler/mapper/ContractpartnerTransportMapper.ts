@@ -20,3 +20,23 @@ export function mapContractpartnerTransportToModel(
   };
   return model;
 }
+
+export function mapContractpartnerToTransport(
+  model: Contractpartner
+): ContractpartnerTransport {
+  const transport: ContractpartnerTransport = {
+    id: model.id,
+    userid: model.userId,
+    country: model.country,
+    moneyflowComment: model.moneyflowComment,
+    name: model.name,
+    postcode: model.postcode,
+    postingAccountId: model.postingAccountId,
+    postingAccountName: model.postingAccountName,
+    street: model.street,
+    town: model.town,
+    validFrom: model.validFrom?.toISOString(),
+    validTil: model.validTil?.toISOString(),
+  };
+  return transport;
+}

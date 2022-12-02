@@ -246,7 +246,6 @@
       <button type="button" class="btn btn-secondary" @click="resetForm">
         r&uuml;cksetzen
       </button>
-      &nbsp;&nbsp;
       <button
         type="submit"
         class="btn btn-primary"
@@ -407,7 +406,6 @@ export default defineComponent({
   methods: {
     async _show() {
       this.resetForm();
-      console.log(this.commentIsValid);
       (this.$refs.modalComponent as typeof ModalVue)._show();
     },
     resetForm() {
@@ -491,7 +489,7 @@ export default defineComponent({
         const validationResult = await (
           await capitalsourceValidation
         ).validationResult;
-        console.log(validationResult);
+
         if (!validationResult.result) {
           this.serverError = new Array<string>();
           for (let resultItem of validationResult.validationResultItems) {

@@ -40,7 +40,6 @@
       <button type="button" class="btn btn-secondary" @click="resetForm">
         r&uuml;cksetzen
       </button>
-      &nbsp;&nbsp;
       <button
         type="submit"
         class="btn btn-primary"
@@ -96,7 +95,6 @@ export default defineComponent({
   methods: {
     async _show() {
       this.resetForm();
-      console.log(this.nameIsValid);
       (this.$refs.modalComponent as typeof ModalVue)._show();
     },
     resetForm() {

@@ -5,8 +5,8 @@ export type ContractpartnerTransport = {
   street: string;
   postcode: number;
   town: string;
-  validTil: Date;
-  validFrom: Date;
+  validTil: string;
+  validFrom: string;
   country: string;
   moneyflowComment: string;
   postingAccountName: string;

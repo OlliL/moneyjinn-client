@@ -430,7 +430,6 @@ export default defineComponent({
       if (this.mmfToEdit && this.mmfToEdit.bookingDate) {
         // we need a deep copy!
         this.mmf = JSON.parse(JSON.stringify(this.mmfToEdit)) as Moneyflow;
-        console.log(this.mmf);
         this.amount = this.mmf.amount;
         this.originalMoneyflowSplitEntryIds = new Array<number>();
 
