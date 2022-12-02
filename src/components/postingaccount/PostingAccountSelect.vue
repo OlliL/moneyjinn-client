@@ -87,7 +87,6 @@ export default defineComponent({
   },
   methods: {
     ...mapActions(usePostingAccountStore, ["initPostingAccountStore"]),
-    ...mapActions(usePostingAccountStore, ["addPostingAccountToStore"]),
     emitPostingAccountSelected() {
       this.$emit(
         "postingAccountSelected",
@@ -103,7 +102,6 @@ export default defineComponent({
       )._show();
     },
     postingAccountCreated(mpa: PostingAccount) {
-      this.addPostingAccountToStore(mpa);
       this.postingAccountId = mpa.id;
       this.emitPostingAccountSelected();
     },

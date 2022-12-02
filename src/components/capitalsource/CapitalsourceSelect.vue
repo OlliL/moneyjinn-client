@@ -90,7 +90,6 @@ export default defineComponent({
   },
   methods: {
     ...mapActions(useCapitalsourceStore, ["initCapitalsourceStore"]),
-    ...mapActions(useCapitalsourceStore, ["addCapitalsourceToStore"]),
     emitCapitalsourceSelected() {
       this.$emit(
         "capitalsourceSelected",
@@ -106,8 +105,8 @@ export default defineComponent({
       )._show();
     },
     capitalsourceCreated(mcs: Capitalsource) {
-      this.addCapitalsourceToStore(mcs);
       this.capitalsourceId = mcs.id;
+      this.emitCapitalsourceSelected();
     },
   },
   components: { CreateCapitalsourceModalVue },

@@ -22,8 +22,10 @@ export const useContractpartnerStore = defineStore("contractpartner", {
       });
     },
     async addContractpartnerToStore(mcp: Contractpartner) {
-      this.contractpartner.push(mcp);
-      this.contractpartner.sort(this.compareContractpartnerByName);
+      if (this.contractpartner.length > 0) {
+        this.contractpartner.push(mcp);
+        this.contractpartner.sort(this.compareContractpartnerByName);
+      }
     },
     compareContractpartnerByName(
       a: Contractpartner,

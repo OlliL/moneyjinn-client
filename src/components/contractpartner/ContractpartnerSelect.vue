@@ -88,7 +88,6 @@ export default defineComponent({
   },
   methods: {
     ...mapActions(useContractpartnerStore, ["initContractpartnerStore"]),
-    ...mapActions(useContractpartnerStore, ["addContractpartnerToStore"]),
     emitContractpartnerSelected() {
       console.log("emit");
       this.$emit(
@@ -105,7 +104,6 @@ export default defineComponent({
       )._show();
     },
     async contractpartnerCreated(mcp: Contractpartner) {
-      this.addContractpartnerToStore(mcp);
       this.contractpartnerId = mcp.id;
       this.emitContractpartnerSelected();
     },
