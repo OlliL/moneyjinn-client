@@ -105,6 +105,7 @@ export default defineComponent({
     postingAccountCreated(mpa: PostingAccount) {
       this.addPostingAccountToStore(mpa);
       this.postingAccountId = mpa.id;
+      this.emitPostingAccountSelected();
     },
   },
   components: {

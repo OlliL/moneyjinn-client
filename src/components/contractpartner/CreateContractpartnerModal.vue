@@ -48,6 +48,19 @@
               </div>
             </div>
           </div>
+
+          <div class="row pt-2">
+            <div class="col-xs-12">
+              <PostingAccountSelectVue
+                field-color="black"
+                field-label="Buchungskonto"
+                input-class=""
+                :selected-id="mcp.postingAccountId"
+                @posting-account-selected="onPostingAccountSelected"
+              />
+            </div>
+          </div>
+
           <div class="row pt-2">
             <div class="col-xs-12">
               <div class="form-floating">
@@ -165,13 +178,16 @@
 </template>
 
 <script lang="ts">
+import PostingAccountSelectVue from "@/components/postingaccount/PostingAccountSelect.vue";
+
 import type { Contractpartner } from "@/model/contractpartner/Contractpartner";
+import type { PostingAccount } from "@/model/postingaccount/PostingAccount";
 import ContractpartnerControllerHandler from "@/handler/ContractpartnerControllerHandler";
 import { generateErrorData, type ErrorData } from "@/tools/views/ErrorData";
+import { getError } from "@/tools/views/ThrowError";
 import { validateInputField } from "@/tools/views/ValidateInputField";
 import { defineComponent } from "vue";
 import ModalVue from "../Modal.vue";
-import { getError } from "@/tools/views/ThrowError";
 
 type CreateContractpartnerModalData = {
   mcp: Contractpartner;
@@ -263,6 +279,15 @@ export default defineComponent({
         "Gültig bis muss angegeben werden!"
       );
     },
+    onPostingAccountSelected(postingAccount: PostingAccount) {
+      if (postingAccount) {
+        this.mcp.postingAccountId = postingAccount.id;
+        this.mcp.postingAccountName = postingAccount.name;
+      } else {
+        this.mcp.postingAccountId = 0;
+        this.mcp.postingAccountName = "";
+      }
+    },
     async createContractpartner() {
       this.validateComment();
       this.validateValidFrom();
@@ -293,6 +318,6 @@ export default defineComponent({
   },
   expose: ["_show"],
   emits: ["contractpartnerCreated"],
-  components: { ModalVue },
+  components: { ModalVue, PostingAccountSelectVue },
 });
 </script>
