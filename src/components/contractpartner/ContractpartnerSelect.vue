@@ -1,4 +1,9 @@
 <template>
+  <CreateContractpartnerModalVue
+    ref="createContractpartnerModal"
+    @contractpartner-created="contractpartnerCreated"
+  />
+
   <div class="input-group">
     <div class="form-floating">
       <select
@@ -21,7 +26,12 @@
         fieldLabel
       }}</label>
     </div>
-    <span class="input-group-text"><i class="bi bi-plus"></i></span>
+    <span
+      class="input-group-text"
+      role="button"
+      @click="async () => showCreateContractpartnerModal()"
+      ><i class="bi bi-plus"></i
+    ></span>
   </div>
 </template>
 <script lang="ts">
@@ -29,6 +39,7 @@ import type { Contractpartner } from "@/model/contractpartner/Contractpartner";
 import { useContractpartnerStore } from "@/stores/ContractpartnerStore";
 import { mapActions } from "pinia";
 import { defineComponent } from "vue";
+import CreateContractpartnerModalVue from "./CreateContractpartnerModal.vue";
 
 export default defineComponent({
   name: "ContractpartnerSelect",
@@ -77,6 +88,7 @@ export default defineComponent({
   },
   methods: {
     ...mapActions(useContractpartnerStore, ["initContractpartnerStore"]),
+    ...mapActions(useContractpartnerStore, ["addContractpartnerToStore"]),
     emitContractpartnerSelected() {
       this.$emit(
         "contractpartnerSelected",
@@ -85,6 +97,17 @@ export default defineComponent({
         })
       );
     },
+    showCreateContractpartnerModal() {
+      (
+        this.$refs
+          .createContractpartnerModal as typeof CreateContractpartnerModalVue
+      )._show();
+    },
+    async contractpartnerCreated(mcp: Contractpartner) {
+      this.addContractpartnerToStore(mcp);
+      this.contractpartnerId = mcp.id;
+    },
   },
+  components: { CreateContractpartnerModalVue },
 });
 </script>

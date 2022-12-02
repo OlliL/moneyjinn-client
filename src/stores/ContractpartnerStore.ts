@@ -21,38 +21,7 @@ export const useContractpartnerStore = defineStore("contractpartner", {
         return validityDate >= mcp.validFrom && validityDate <= mcp.validTil;
       });
     },
-    locationOf(
-      element: Contractpartner,
-      array: Array<Contractpartner>,
-      start?: number,
-      end?: number
-    ): number {
-      if (array.length === 0) return -1;
-
-      start = start || 0;
-      end = end || array.length;
-      const pivot = (start + end) >> 1; // should be faster than dividing by 2
-
-      const c = this.compareContractpartnerByName(element, array[pivot]);
-      if (end - start <= 1) return c == -1 ? pivot - 1 : pivot;
-
-      switch (c) {
-        case -1:
-          return this.locationOf(element, array, start, pivot);
-        case 0:
-          return pivot;
-        default:
-          return this.locationOf(element, array, pivot, end);
-      }
-    },
     async addContractpartnerToStore(mcp: Contractpartner) {
-      /*
-      this.contractpartner.splice(
-        this.locationOf(mcp, this.contractpartner) + 1,
-        0,
-        mcp
-      );
-      */
       this.contractpartner.push(mcp);
       this.contractpartner.sort(this.compareContractpartnerByName);
     },
