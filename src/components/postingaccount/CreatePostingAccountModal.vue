@@ -59,6 +59,8 @@ import { validateInputField } from "@/tools/views/ValidateInputField";
 import { defineComponent } from "vue";
 import ModalVue from "../Modal.vue";
 import { getError } from "@/tools/views/ThrowError";
+import { mapActions } from "pinia";
+import { usePostingAccountStore } from "@/stores/PostingAccountStore";
 
 type CreatePostingAccountModalData = {
   mpa: PostingAccount;
@@ -97,6 +99,7 @@ export default defineComponent({
       this.resetForm();
       (this.$refs.modalComponent as typeof ModalVue)._show();
     },
+    ...mapActions(usePostingAccountStore, ["addPostingAccountToStore"]),
     resetForm() {
       this.mpa = {} as PostingAccount;
       this.nameIsValid = null;
@@ -126,6 +129,7 @@ export default defineComponent({
         } else {
           this.mpa = (await postingAccountValidation).mpa;
           (this.$refs.modalComponent as typeof ModalVue)._hide();
+          this.addPostingAccountToStore(this.mpa);
           this.$emit("postingAccountCreated", this.mpa);
         }
       }

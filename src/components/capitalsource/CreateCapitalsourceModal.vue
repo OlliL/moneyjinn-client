@@ -277,6 +277,8 @@ import {
   CapitalsourceState,
   capitalsourceStateNames,
 } from "@/model/capitalsource/CapitalsourceState";
+import { mapActions } from "pinia";
+import { useCapitalsourceStore } from "@/stores/CapitalsourceStore";
 
 type CreateCapitalsourceModalData = {
   mcs: Capitalsource;
@@ -408,6 +410,7 @@ export default defineComponent({
       this.resetForm();
       (this.$refs.modalComponent as typeof ModalVue)._show();
     },
+    ...mapActions(useCapitalsourceStore, ["addCapitalsourceToStore"]),
     resetForm() {
       this.mcs = {} as Capitalsource;
       [this.validFrom] = new Date().toISOString().split("T");
@@ -498,6 +501,7 @@ export default defineComponent({
         } else {
           this.mcs = (await capitalsourceValidation).mcs;
           (this.$refs.modalComponent as typeof ModalVue)._hide();
+          this.addCapitalsourceToStore(this.mcs);
           this.$emit("capitalsourceCreated", this.mcs);
         }
       }

@@ -188,6 +188,8 @@ import { getError } from "@/tools/views/ThrowError";
 import { validateInputField } from "@/tools/views/ValidateInputField";
 import { defineComponent } from "vue";
 import ModalVue from "../Modal.vue";
+import { mapActions } from "pinia";
+import { useContractpartnerStore } from "@/stores/ContractpartnerStore";
 
 type CreateContractpartnerModalData = {
   mcp: Contractpartner;
@@ -249,6 +251,7 @@ export default defineComponent({
       this.resetForm();
       (this.$refs.modalComponent as typeof ModalVue)._show();
     },
+    ...mapActions(useContractpartnerStore, ["addContractpartnerToStore"]),
     resetForm() {
       this.mcp = {} as Contractpartner;
       [this.validFrom] = new Date().toISOString().split("T");
@@ -311,6 +314,8 @@ export default defineComponent({
         } else {
           this.mcp = (await contractpartnerValidation).mcp;
           (this.$refs.modalComponent as typeof ModalVue)._hide();
+          this.addContractpartnerToStore(this.mcp);
+
           this.$emit("contractpartnerCreated", this.mcp);
         }
       }
