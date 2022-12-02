@@ -69,13 +69,13 @@ type CreatePostingAccountModalData = {
 };
 export default defineComponent({
   name: "CreatePostingAccountModal",
-  data() {
+  data(): CreatePostingAccountModalData {
     return {
       mpa: {} as PostingAccount,
       serverError: {} as Array<String>,
       nameIsValid: null,
       nameErrorMessage: "",
-    } as CreatePostingAccountModalData;
+    };
   },
   computed: {
     formIsValid(): boolean {

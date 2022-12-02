@@ -1,4 +1,9 @@
 <template>
+  <CreateCapitalsourceModalVue
+    ref="createCapitalsourceModal"
+    @capitalsource-created="capitalsourceCreated"
+  />
+
   <div class="input-group">
     <div class="form-floating">
       <select
@@ -21,7 +26,12 @@
         fieldLabel
       }}</label>
     </div>
-    <span class="input-group-text"><i class="bi bi-plus"></i></span>
+    <span
+      class="input-group-text"
+      role="button"
+      @click="showCreateCapitalsourceModal"
+      ><i class="bi bi-plus"></i
+    ></span>
   </div>
 </template>
 <script lang="ts">
@@ -29,6 +39,7 @@ import type { Capitalsource } from "@/model/capitalsource/Capitalsource";
 import { useCapitalsourceStore } from "@/stores/CapitalsourceStore";
 import { mapActions } from "pinia";
 import { defineComponent } from "vue";
+import CreateCapitalsourceModalVue from "./CreateCapitalsourceModal.vue";
 
 export default defineComponent({
   name: "CapitalsourceSelect",
@@ -79,6 +90,7 @@ export default defineComponent({
   },
   methods: {
     ...mapActions(useCapitalsourceStore, ["initCapitalsourceStore"]),
+    ...mapActions(useCapitalsourceStore, ["addCapitalsourceToStore"]),
     emitCapitalsourceSelected() {
       this.$emit(
         "capitalsourceSelected",
@@ -87,6 +99,17 @@ export default defineComponent({
         })[0]
       );
     },
+    showCreateCapitalsourceModal() {
+      (
+        this.$refs
+          .createCapitalsourceModal as typeof CreateCapitalsourceModalVue
+      )._show();
+    },
+    capitalsourceCreated(mcs: Capitalsource) {
+      this.addCapitalsourceToStore(mcs);
+      this.capitalsourceId = mcs.id;
+    },
   },
+  components: { CreateCapitalsourceModalVue },
 });
 </script>

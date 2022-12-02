@@ -26,8 +26,11 @@
         fieldLabel
       }}</label>
     </div>
-    <span class="input-group-text"
-      ><i class="bi bi-plus" @click="showCreatePostingAccountModal()"></i
+    <span
+      class="input-group-text"
+      role="button"
+      @click="showCreatePostingAccountModal"
+      ><i class="bi bi-plus"></i
     ></span>
   </div>
 </template>

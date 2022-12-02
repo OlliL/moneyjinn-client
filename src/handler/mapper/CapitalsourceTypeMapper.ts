@@ -22,3 +22,26 @@ export function mapCapitalsourceTypeTransportToEnum(
     }
   }
 }
+
+export function mapCapitalsourceTypeEnumToTransport(
+  source: CapitalsourceType
+): number {
+  switch (source) {
+    case CapitalsourceType.CURRENT_ASSET: {
+      return 1;
+    }
+    case CapitalsourceType.LONG_TERM_ASSET: {
+      return 2;
+    }
+    case CapitalsourceType.RESERVE_ASSET: {
+      return 3;
+    }
+    case CapitalsourceType.PROVISION_ASSET: {
+      return 4;
+    }
+    default: {
+      // CapitalsourceType.CREDIT
+      return 5;
+    }
+  }
+}

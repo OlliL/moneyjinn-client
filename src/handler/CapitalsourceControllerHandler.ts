@@ -1,8 +1,16 @@
 import AbstractControllerHandler from "@/handler/AbstractControllerHandler";
 import type { Capitalsource } from "@/model/capitalsource/Capitalsource";
+import type { CapitalsourceValidation } from "@/model/capitalsource/CapitalsourceValidation";
 import type { ShowCapitalsourceListResponse } from "@/model/rest/capitalsource/ShowCapitalsourceListResponse";
+import type { CreateCapitalsourceRequest } from "@/model/rest/capitalsource/CreateCapitalsourceRequest";
+import type { CreateCapitalsourceResponse } from "@/model/rest/capitalsource/CreateCapitalsourceResponse";
 import { throwError } from "@/tools/views/ThrowError";
-import { mapCapitalsourceTransportToModel } from "./mapper/CapitalsourceTransportMapper";
+import {
+  mapCapitalsourceToTransport,
+  mapCapitalsourceTransportToModel,
+} from "./mapper/CapitalsourceTransportMapper";
+import { mapValidationItemTransportToModel } from "./mapper/ValidationItemTransportMapper";
+import type { ValidationResult } from "@/model/validation/ValidationResult";
 
 class CapitalsourceControllerHandler extends AbstractControllerHandler {
   private static CONTROLLER = "capitalsource";
@@ -32,6 +40,50 @@ class CapitalsourceControllerHandler extends AbstractControllerHandler {
     });
 
     return capitalsourceArray;
+  }
+
+  async createCapitalsource(
+    mcs: Capitalsource
+  ): Promise<CapitalsourceValidation> {
+    const usecase = "createCapitalsource";
+    const request = {
+      createCapitalsourceRequest: {},
+    } as CreateCapitalsourceRequest;
+    const innerRequest = request.createCapitalsourceRequest;
+    innerRequest.capitalsourceTransport = mapCapitalsourceToTransport(mcs);
+
+    const response = await super.post(
+      request,
+      CapitalsourceControllerHandler.CONTROLLER,
+      usecase
+    );
+
+    if (!response.ok) {
+      throw new Error(response.statusText);
+    }
+
+    const createCapitalsourceResponse =
+      (await response.json()) as CreateCapitalsourceResponse;
+    const innerResponse =
+      createCapitalsourceResponse.createCapitalsourceResponse;
+    const capitalsourceValidation = {} as CapitalsourceValidation;
+    const validationResult: ValidationResult = {
+      result: innerResponse.result,
+      validationResultItems: innerResponse.validationItemTransport?.map(
+        (vit) => {
+          return mapValidationItemTransportToModel(vit);
+        }
+      ),
+    };
+
+    capitalsourceValidation.validationResult = validationResult;
+
+    if (validationResult.result) {
+      const createdMcs: Capitalsource = mcs;
+      createdMcs.id = innerResponse.capitalsourceId;
+      capitalsourceValidation.mcs = createdMcs;
+    }
+    return capitalsourceValidation;
   }
 }
 

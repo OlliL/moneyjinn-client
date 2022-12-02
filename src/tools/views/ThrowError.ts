@@ -12,8 +12,11 @@ export function getError(code: number) {
     case ErrorCode.CAPITALSOURCE_DOES_NOT_EXIST: {
       return "Die gewählte Kapitalquelle existiert nicht!";
     }
+    case ErrorCode.CAPITALSOURCE_IN_USE_PERIOD: {
+      return "Es existieren Geldbewegungen für diese Kapitalquelle ausserhalb des gwählten Gültigkeitszeitraums";
+    }
     case ErrorCode.CAPITALSOURCE_USE_OUT_OF_VALIDITY: {
-      return "Es existieren Geldbewegungen für diese Kapitalquelle ausserhalb des gwählten Gültigkeitszeitraums!";
+      return "Das Buchungsdatum liegt nicht im Gültigkeitszeitraum der gewählten Kapitalquelle!";
     }
     case ErrorCode.CAPITALSOURCE_IS_NOT_SET: {
       return "Eine Kapitalquelle muss angegeben werden!";
@@ -35,6 +38,18 @@ export function getError(code: number) {
     }
     case ErrorCode.AMOUNT_ZERO: {
       return "Der Betrag muss ungleich 0 sein!";
+    }
+    case ErrorCode.NAME_ALREADY_EXISTS: {
+      return "Der Name existiert bereits!";
+    }
+    case ErrorCode.ACCOUNT_NUMBER_TO_LONG: {
+      return "Die IBAN darf nicht mehr als 34 Stellen haben!";
+    }
+    case ErrorCode.BANK_CODE_TO_LONG: {
+      return "Die BIC darf nicht mehr als 11 Stellen haben!";
+    }
+    case ErrorCode.VALIDFROM_AFTER_VALIDTIL: {
+      return 'Das Datum im Feld "gültig von" muss vor dem Datum des Feldes "gültig bis" liegen!';
     }
     case ErrorCode.LOGGED_OUT: {
       return "Zugriff verweigert! Sie sind nicht angemeldet!";

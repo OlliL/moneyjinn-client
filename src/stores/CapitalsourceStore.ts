@@ -33,5 +33,9 @@ export const useCapitalsourceStore = defineStore("capitalsource", {
         );
       });
     },
+    async addCapitalsourceToStore(mcs: Capitalsource) {
+      this.capitalsource.push(mcs);
+      this.capitalsource.sort((a, b) => a.comment.localeCompare(b.comment));
+    },
   },
 });

@@ -1,7 +1,17 @@
 import type { Capitalsource } from "@/model/capitalsource/Capitalsource";
 import type { CapitalsourceTransport } from "@/model/rest/transport/CapitalsourceTransport";
-import { mapCapitalsourceStateTransportToEnum } from "./CapitalsourceStateMapper";
-import { mapCapitalsourceTypeTransportToEnum } from "./CapitalsourceTypeMapper";
+import {
+  mapCapitalsourceImportEnumToTransport,
+  mapCapitalsourceImportTransportToEnum,
+} from "./CapitalsourceImportMapper";
+import {
+  mapCapitalsourceStateEnumToTransport,
+  mapCapitalsourceStateTransportToEnum,
+} from "./CapitalsourceStateMapper";
+import {
+  mapCapitalsourceTypeEnumToTransport,
+  mapCapitalsourceTypeTransportToEnum,
+} from "./CapitalsourceTypeMapper";
 
 export function mapCapitalsourceTransportToModel(
   transport: CapitalsourceTransport
@@ -17,7 +27,28 @@ export function mapCapitalsourceTransportToModel(
     validFrom: new Date(transport.validFrom),
     validTil: new Date(transport.validTil),
     groupUse: transport.groupUse === 1 ? true : false,
-    importAllowed: transport.importAllowed === 1 ? true : false,
+    importAllowed: mapCapitalsourceImportTransportToEnum(
+      transport.importAllowed
+    ),
   };
   return model;
+}
+
+export function mapCapitalsourceToTransport(
+  model: Capitalsource
+): CapitalsourceTransport {
+  const transport: CapitalsourceTransport = {
+    id: model.id,
+    userid: model.userId,
+    state: mapCapitalsourceStateEnumToTransport(model.state),
+    type: mapCapitalsourceTypeEnumToTransport(model.type),
+    accountNumber: model.accountNumber,
+    bankCode: model.bankCode,
+    comment: model.comment,
+    validFrom: model.validFrom?.toISOString(),
+    validTil: model.validTil?.toISOString(),
+    groupUse: model.groupUse ? 1 : 0,
+    importAllowed: mapCapitalsourceImportEnumToTransport(model.importAllowed),
+  };
+  return transport;
 }
