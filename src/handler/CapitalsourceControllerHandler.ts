@@ -88,6 +88,19 @@ class CapitalsourceControllerHandler extends AbstractControllerHandler {
     }
     return capitalsourceValidation;
   }
+
+  async deleteCapitalsource(capitalsourceId: number) {
+    const usecase = "deleteCapitalsourceById/" + capitalsourceId;
+
+    const response = await super.delete(
+      CapitalsourceControllerHandler.CONTROLLER,
+      usecase
+    );
+
+    if (!response.ok) {
+      throw new Error(response.statusText);
+    }
+  }
 }
 
 export default new CapitalsourceControllerHandler();
