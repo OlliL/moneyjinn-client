@@ -1,5 +1,5 @@
 <template>
-  <ModalVue title="Kapitalquelle hinzuf&uuml;gen" ref="modalComponent">
+  <ModalVue title="Vertragspartner hinzuf&uuml;gen" ref="modalComponent">
     <template #body
       ><form
         @submit.prevent="createContractpartner"
@@ -267,7 +267,7 @@ export default defineComponent({
     validateComment() {
       [this.nameIsValid, this.nameErrorMessage] = validateInputField(
         this.mcp.name,
-        "Kapitalquelle angeben!"
+        "Bitte Namen angeben!"
       );
     },
     validateValidFrom() {

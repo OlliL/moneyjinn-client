@@ -1,4 +1,8 @@
 <template>
+  <CreateContractpartnerModalVue ref="createContractpartnerModalNav" />
+  <CreateCapitalsourceModalVue ref="createCapitalsourceModalNav" />
+  <CreatePostingAccountModalVue ref="createPostingAccountModalNav" />
+
   <nav class="navbar navbar-expand-lg navbar-light fixed-top bg-light">
     <div class="container-fluid">
       <a class="navbar-brand" href="#"><small>moneyjin 0.99.0</small></a>
@@ -78,8 +82,22 @@
               <li><a class="dropdown-item" href="#">Bonupload</a></li>
               <li><a class="dropdown-item" href="#">Bons zuweisen</a></li>
               <li><hr class="dropdown-divider" /></li>
-              <li><a class="dropdown-item" href="#">Kapitalquellen</a></li>
-              <li><a class="dropdown-item" href="#">Vertragspartner</a></li>
+              <li>
+                <span
+                  class="dropdown-item"
+                  role="button"
+                  @click="showCreateCapitalsourceModal"
+                  >Kapitalquellen</span
+                >
+              </li>
+              <li>
+                <span
+                  class="dropdown-item"
+                  role="button"
+                  @click="showCreateContractpartnerModal"
+                  >Vertragspartner</span
+                >
+              </li>
               <li>
                 <a class="dropdown-item" href="#"
                   >vordefinierte Geldbewegungen</a
@@ -148,7 +166,14 @@
                 <li><a class="dropdown-item" href="#">Benutzerkonten</a></li>
                 <li><a class="dropdown-item" href="#">Benutzergruppen</a></li>
                 <li><a class="dropdown-item" href="#">Sprachen</a></li>
-                <li><a class="dropdown-item" href="#">Buchungskonten</a></li>
+                <li>
+                  <span
+                    class="dropdown-item"
+                    role="button"
+                    @click="showCreatePostingAccountModal"
+                    >Buchungskonten</span
+                  >
+                </li>
               </ul>
             </li>
             <li class="nav-item">
@@ -170,6 +195,9 @@
 
 <script lang="ts">
 import router, { Routes } from "@/router";
+import CreateContractpartnerModalVue from "@/components/contractpartner/CreateContractpartnerModal.vue";
+import CreateCapitalsourceModalVue from "@/components/capitalsource/CreateCapitalsourceModal.vue";
+import CreatePostingAccountModalVue from "@/components/postingaccount/CreatePostingAccountModal.vue";
 
 export default {
   name: "AppNavigation",
@@ -181,6 +209,31 @@ export default {
       year: new Date().getFullYear(),
       month: new Date().getMonth() + 1,
     };
+  },
+  components: {
+    CreateContractpartnerModalVue,
+    CreateCapitalsourceModalVue,
+    CreatePostingAccountModalVue,
+  },
+  methods: {
+    showCreateContractpartnerModal() {
+      (
+        this.$refs
+          .createContractpartnerModalNav as typeof CreateContractpartnerModalVue
+      )._show();
+    },
+    showCreateCapitalsourceModal() {
+      (
+        this.$refs
+          .createCapitalsourceModalNav as typeof CreateCapitalsourceModalVue
+      )._show();
+    },
+    showCreatePostingAccountModal() {
+      (
+        this.$refs
+          .createPostingAccountModalNav as typeof CreatePostingAccountModalVue
+      )._show();
+    },
   },
 };
 </script>
