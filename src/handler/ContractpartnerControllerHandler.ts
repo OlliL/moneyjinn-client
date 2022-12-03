@@ -12,6 +12,8 @@ import {
 } from "./mapper/ContractpartnerTransportMapper";
 import { mapValidationItemTransportToModel } from "./mapper/ValidationItemTransportMapper";
 import { useUserSessionStore } from "@/stores/UserSessionStore";
+import type { ValidationResponse } from "@/model/rest/ValidationResponse";
+import type { UpdateContractpartnerRequest } from "@/model/rest/contractpartner/UpdateContractpartnerRequest";
 
 class ContractpartnerControllerHandler extends AbstractControllerHandler {
   private static CONTROLLER = "contractpartner";
@@ -86,6 +88,51 @@ class ContractpartnerControllerHandler extends AbstractControllerHandler {
       contractpartnerValidation.mcp = createdMcp;
     }
     return contractpartnerValidation;
+  }
+
+  async updateContractpartner(mcp: Contractpartner): Promise<ValidationResult> {
+    const usecase = "updateContractpartner";
+    const request = {
+      updateContractpartnerRequest: {},
+    } as UpdateContractpartnerRequest;
+    const innerRequest = request.updateContractpartnerRequest;
+    innerRequest.contractpartnerTransport = mapContractpartnerToTransport(mcp);
+
+    const response = await super.put(
+      request,
+      ContractpartnerControllerHandler.CONTROLLER,
+      usecase
+    );
+
+    if (!response.ok) {
+      throw new Error(response.statusText);
+    }
+
+    const validationResponse = (await response.json()) as ValidationResponse;
+    const innerResponse = validationResponse.validationResponse;
+    const validationResult: ValidationResult = {
+      result: innerResponse.result,
+      validationResultItems: innerResponse.validationItemTransport?.map(
+        (vit) => {
+          return mapValidationItemTransportToModel(vit);
+        }
+      ),
+    };
+
+    return validationResult;
+  }
+
+  async deleteContractpartner(contractpartnerId: number) {
+    const usecase = "deleteContractpartnerById/" + contractpartnerId;
+
+    const response = await super.delete(
+      ContractpartnerControllerHandler.CONTROLLER,
+      usecase
+    );
+
+    if (!response.ok) {
+      throw new Error(response.statusText);
+    }
   }
 }
 

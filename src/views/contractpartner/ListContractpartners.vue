@@ -1,18 +1,18 @@
 <template>
-  <CreateCapitalsourceModalVue
-    ref="createCapitalsourceModalList"
+  <CreateContractpartnerModalVue
+    ref="createContractpartnerModalList"
     id-suffix="List"
-    @capitalsource-created="capitalsourceCreated"
+    @contractpartner-created="contractpartnerCreated"
   />
-  <DeleteCapitalsourceModalVue
+  <DeleteContractpartnerModalVue
     ref="deleteModal"
-    @capitalsource-deleted="capitalsourceDeleted"
+    @contractpartner-deleted="contractpartnerDeleted"
   />
 
   <div class="">
     <div class="row">
       <div class="col text-center">
-        <h4>Kapitalquellen</h4>
+        <h4>Vertragspartner</h4>
       </div>
     </div>
     <div class="row justify-content-md-center mb-4" style="margin-top: 20px">
@@ -23,7 +23,7 @@
               <button
                 type="button"
                 class="btn btn-primary"
-                @click="showCreateCapitalsourceModal"
+                @click="showCreateContractpartnerModal"
               >
                 Neu
               </button>
@@ -67,11 +67,11 @@
             <input
               class="form-check-input"
               type="checkbox"
-              id="capitalsourcesValid"
+              id="contractpartnersValid"
               v-model="validNow"
               @change="reloadView"
             />
-            <label class="form-check-label" for="capitalsourcesValid"
+            <label class="form-check-label" for="contractpartnersValid"
               >Jetzt g&uuml;ltig</label
             >
           </div>
@@ -83,26 +83,21 @@
         <table class="table table-striped table-bordered table-hover">
           <thead>
             <tr>
-              <th class="text-center">Kommentar</th>
-              <th class="text-center">Typ</th>
-              <th class="text-center">Status</th>
-              <th class="text-center">IBAN</th>
-              <th class="text-center">BIC</th>
+              <th class="text-center">Name</th>
               <th class="text-center">g&uuml;ltig ab</th>
               <th class="text-center">g&uuml;ltig bis</th>
-              <th class="text-center">Gruppe</th>
-              <th class="text-center">Datenimport</th>
-              <th class="text-center" colspan="2"></th>
+              <th class="text-center">Standard Kommentar</th>
+              <th class="text-center">Standard Buchungskonto</th>
+              <th class="text-center" colspan="3"></th>
             </tr>
           </thead>
           <tbody>
-            <ListCapitalsourceRowVue
-              v-for="mcs in capitalsources"
-              :key="mcs.id"
-              :mcs="mcs"
-              :owner="mcs.userId === getUserId"
-              @delete-capitalsource="deleteCapitalsource"
-              @edit-capitalsource="editCapitalsource"
+            <ListContractpartnerRowVue
+              v-for="mcp in contractpartners"
+              :key="mcp.id"
+              :mcp="mcp"
+              @delete-contractpartner="deleteContractpartner"
+              @edit-contractpartner="editContractpartner"
             />
           </tbody>
         </table>
@@ -112,23 +107,23 @@
 </template>
 
 <script lang="ts">
-import { useCapitalsourceStore } from "@/stores/CapitalsourceStore";
+import { useContractpartnerStore } from "@/stores/ContractpartnerStore";
 import router, { Routes } from "@/router";
 import { defineComponent } from "vue";
 import { mapActions, mapState } from "pinia";
-import type { Capitalsource } from "@/model/capitalsource/Capitalsource";
-import CreateCapitalsourceModalVue from "@/components/capitalsource/CreateCapitalsourceModal.vue";
-import ListCapitalsourceRowVue from "@/components/capitalsource/ListCapitalsourceRow.vue";
+import type { Contractpartner } from "@/model/contractpartner/Contractpartner";
+import CreateContractpartnerModalVue from "@/components/contractpartner/CreateContractpartnerModal.vue";
+import ListContractpartnerRowVue from "@/components/contractpartner/ListContractpartnerRow.vue";
 import { useUserSessionStore } from "@/stores/UserSessionStore";
-import DeleteCapitalsourceModalVue from "@/components/capitalsource/DeleteCapitalsourceModal.vue";
+import DeleteContractpartnerModalVue from "@/components/contractpartner/DeleteContractpartnerModal.vue";
 export default defineComponent({
-  name: "ListCapitalsources",
+  name: "ListContractpartners",
   data() {
     return {
       dataLoaded: false,
       validNow: false,
       letters: {} as Array<string>,
-      capitalsources: {} as Array<Capitalsource>,
+      contractpartners: {} as Array<Contractpartner>,
     };
   },
   props: {
@@ -145,52 +140,54 @@ export default defineComponent({
     ...mapState(useUserSessionStore, ["getUserId"]),
   },
   methods: {
-    ...mapActions(useCapitalsourceStore, ["getCapitalsourceLetters"]),
-    ...mapActions(useCapitalsourceStore, ["getCapitalsourceForLetter"]),
+    ...mapActions(useContractpartnerStore, ["getContractpartnerLetters"]),
+    ...mapActions(useContractpartnerStore, ["getContractpartnerForLetter"]),
     reloadView() {
       this.loadData(this.$props.letter);
     },
     async loadData(letter: string) {
-      this.letters = await this.getCapitalsourceLetters(this.validNow);
-      this.capitalsources = this.getCapitalsourceForLetter(
+      this.letters = await this.getContractpartnerLetters(this.validNow);
+      this.contractpartners = this.getContractpartnerForLetter(
         letter,
         this.validNow
       );
-      if (this.capitalsources.length === 0) this.selectLetter("");
+      if (this.contractpartners.length === 0) this.selectLetter("");
     },
     selectLetter(letter: string) {
       router.push({
-        name: Routes.ListCapitalsources,
+        name: Routes.ListContractpartners,
         params: { letter: letter },
       });
       this.loadData(letter);
     },
-    showCreateCapitalsourceModal() {
+    showCreateContractpartnerModal() {
       (
         this.$refs
-          .createCapitalsourceModalList as typeof CreateCapitalsourceModalVue
+          .createContractpartnerModalList as typeof CreateContractpartnerModalVue
       )._show();
     },
-    capitalsourceCreated() {
+    contractpartnerCreated() {
       this.reloadView();
     },
-    deleteCapitalsource(mcs: Capitalsource) {
-      (this.$refs.deleteModal as typeof DeleteCapitalsourceModalVue)._show(mcs);
+    deleteContractpartner(mcp: Contractpartner) {
+      (this.$refs.deleteModal as typeof DeleteContractpartnerModalVue)._show(
+        mcp
+      );
     },
-    editCapitalsource(mcs: Capitalsource) {
+    editContractpartner(mcp: Contractpartner) {
       (
         this.$refs
-          .createCapitalsourceModalList as typeof CreateCapitalsourceModalVue
-      )._show(mcs);
+          .createContractpartnerModalList as typeof CreateContractpartnerModalVue
+      )._show(mcp);
     },
-    capitalsourceDeleted() {
+    contractpartnerDeleted() {
       this.reloadView();
     },
   },
   components: {
-    CreateCapitalsourceModalVue,
-    ListCapitalsourceRowVue,
-    DeleteCapitalsourceModalVue,
+    CreateContractpartnerModalVue,
+    ListContractpartnerRowVue,
+    DeleteContractpartnerModalVue,
   },
 });
 </script>

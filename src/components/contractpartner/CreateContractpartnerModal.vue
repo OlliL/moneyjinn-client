@@ -1,5 +1,5 @@
 <template>
-  <ModalVue title="Vertragspartner hinzuf&uuml;gen" ref="modalComponent">
+  <ModalVue :title="title" ref="modalComponent">
     <template #body
       ><form
         @submit.prevent="createContractpartner"
@@ -191,9 +191,11 @@ import { defineComponent } from "vue";
 import ModalVue from "../Modal.vue";
 import { mapActions } from "pinia";
 import { useContractpartnerStore } from "@/stores/ContractpartnerStore";
+import type { ValidationResult } from "@/model/validation/ValidationResult";
 
 type CreateContractpartnerModalData = {
   mcp: Contractpartner;
+  origMcp: Contractpartner | undefined;
   validFrom: string;
   validTil: string;
   serverError: Array<String>;
@@ -209,6 +211,7 @@ export default defineComponent({
   data(): CreateContractpartnerModalData {
     return {
       mcp: {} as Contractpartner,
+      origMcp: undefined,
       validFrom: "",
       validTil: "",
       serverError: {} as Array<String>,
@@ -235,6 +238,11 @@ export default defineComponent({
       }
       return false;
     },
+    title(): string {
+      return this.origMcp === undefined
+        ? "Kapitalquelle hinzufügen"
+        : "Kapitalquelle bearbeiten";
+    },
     nameErrorData(): ErrorData {
       return generateErrorData(this.nameIsValid, "Name", this.nameErrorMessage);
     },
@@ -254,15 +262,25 @@ export default defineComponent({
     },
   },
   methods: {
-    async _show() {
+    async _show(mcp?: Contractpartner) {
+      if (mcp) this.origMcp = mcp;
       this.resetForm();
       (this.$refs.modalComponent as typeof ModalVue)._show();
     },
     ...mapActions(useContractpartnerStore, ["addContractpartnerToStore"]),
+    ...mapActions(useContractpartnerStore, ["updateContractpartnerInStore"]),
     resetForm() {
-      this.mcp = {} as Contractpartner;
-      [this.validFrom] = new Date().toISOString().split("T");
-      this.validTil = "2999-12-31";
+      if (this.origMcp) {
+        this.mcp = JSON.parse(JSON.stringify(this.origMcp));
+        [this.validFrom] = new Date(this.mcp.validFrom)
+          .toISOString()
+          .split("T");
+        [this.validTil] = new Date(this.mcp.validTil).toISOString().split("T");
+      } else {
+        this.mcp = {} as Contractpartner;
+        [this.validFrom] = new Date().toISOString().split("T");
+        this.validTil = "2999-12-31";
+      }
       this.nameIsValid = null;
       this.nameErrorMessage = "";
       this.validFromIsValid = null;
@@ -298,6 +316,15 @@ export default defineComponent({
         this.mcp.postingAccountName = "";
       }
     },
+    handleServerError(validationResult: ValidationResult): boolean {
+      if (!validationResult.result) {
+        this.serverError = new Array<string>();
+        for (let resultItem of validationResult.validationResultItems) {
+          this.serverError.push(getError(resultItem.error));
+        }
+      }
+      return !validationResult.result;
+    },
     async createContractpartner() {
       this.validateComment();
       this.validateValidFrom();
@@ -307,29 +334,37 @@ export default defineComponent({
         this.mcp.validFrom = new Date(this.validFrom);
         this.mcp.validTil = new Date(this.validTil);
 
-        const contractpartnerValidation =
-          ContractpartnerControllerHandler.createContractpartner(this.mcp);
-        const validationResult = await (
-          await contractpartnerValidation
-        ).validationResult;
-
-        if (!validationResult.result) {
-          this.serverError = new Array<string>();
-          for (let resultItem of validationResult.validationResultItems) {
-            this.serverError.push(getError(resultItem.error));
+        if (this.mcp.id > 0) {
+          //update
+          const validationResult =
+            await ContractpartnerControllerHandler.updateContractpartner(
+              this.mcp
+            );
+          if (!this.handleServerError(validationResult)) {
+            (this.$refs.modalComponent as typeof ModalVue)._hide();
+            this.updateContractpartnerInStore(this.mcp);
+            this.$emit("contractpartnerUpdated", this.mcp);
           }
         } else {
-          this.mcp = (await contractpartnerValidation).mcp;
-          (this.$refs.modalComponent as typeof ModalVue)._hide();
-          this.addContractpartnerToStore(this.mcp);
+          //create
+          const contractpartnerValidation =
+            ContractpartnerControllerHandler.createContractpartner(this.mcp);
+          const validationResult = await (
+            await contractpartnerValidation
+          ).validationResult;
 
-          this.$emit("contractpartnerCreated", this.mcp);
+          if (!this.handleServerError(validationResult)) {
+            this.mcp = (await contractpartnerValidation).mcp;
+            (this.$refs.modalComponent as typeof ModalVue)._hide();
+            this.addContractpartnerToStore(this.mcp);
+            this.$emit("contractpartnerCreated", this.mcp);
+          }
         }
       }
     },
   },
   expose: ["_show"],
-  emits: ["contractpartnerCreated"],
+  emits: ["contractpartnerCreated", "contractpartnerUpdated"],
   components: { ModalVue, PostingAccountSelectVue },
 });
 </script>
