@@ -1,7 +1,16 @@
 <template>
-  <CreateContractpartnerModalVue ref="createContractpartnerModalNav" />
-  <CreateCapitalsourceModalVue ref="createCapitalsourceModalNav" />
-  <CreatePostingAccountModalVue ref="createPostingAccountModalNav" />
+  <CreateContractpartnerModalVue
+    ref="createContractpartnerModalNav"
+    id-suffix="Nav"
+  />
+  <CreateCapitalsourceModalVue
+    ref="createCapitalsourceModalNav"
+    id-suffix="Nav"
+  />
+  <CreatePostingAccountModalVue
+    ref="createPostingAccountModalNav"
+    id-suffix="Nav"
+  />
 
   <nav class="navbar navbar-expand-lg navbar-light fixed-top bg-light">
     <div class="container-fluid">
@@ -78,10 +87,14 @@
                   >Geldbewegung hinzuf&uuml;gen</a
                 >
               </li>
-              <li><hr class="dropdown-divider" /></li>
+              <li>
+                <hr class="dropdown-divider" />
+              </li>
               <li><a class="dropdown-item" href="#">Bonupload</a></li>
               <li><a class="dropdown-item" href="#">Bons zuweisen</a></li>
-              <li><hr class="dropdown-divider" /></li>
+              <li>
+                <hr class="dropdown-divider" />
+              </li>
               <li>
                 <span
                   class="dropdown-item"
@@ -115,7 +128,21 @@
               <i class="bi bi-wrench"></i>
             </a>
             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <li><a class="dropdown-item" href="#">Kapitalquellen</a></li>
+              <li>
+                <router-link
+                  :class="
+                    $route.matched.some(
+                      ({ name }) => name === Routes.listCapitalsources
+                    )
+                      ? 'router-link-active dropdown-item'
+                      : 'dropdown-item'
+                  "
+                  :to="{
+                    name: Routes.listCapitalsources,
+                  }"
+                  >Kapitalquellen</router-link
+                >
+              </li>
               <li><a class="dropdown-item" href="#">Vertragspartner</a></li>
               <li>
                 <a class="dropdown-item" href="#"
@@ -159,7 +186,9 @@
                     >pers&ouml;nliche Einstellungen</a
                   >
                 </li>
-                <li><hr class="dropdown-divider" /></li>
+                <li>
+                  <hr class="dropdown-divider" />
+                </li>
                 <li>
                   <a class="dropdown-item" href="#">Systemeinstellungen</a>
                 </li>
@@ -241,19 +270,24 @@ export default {
 .router-link-active {
   background-color: lightgrey;
 }
+
 .nav-item {
   padding-left: 15px;
 }
+
 small {
   font-size: 0.7rem;
   vertical-align: middle;
 }
+
 .navbar .navbar-nav .nav-link {
   font-size: 1.1em;
 }
+
 .navbar .navbar-nav .nav-link:hover {
   background-color: silver;
 }
+
 a.show {
   background-color: silver;
 }

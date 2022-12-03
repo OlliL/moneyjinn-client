@@ -1,16 +1,18 @@
-import { useUserSessionStore } from "@/stores/UserSessionStore";
-import LoginViewVue from "@/views/LoginView.vue";
-import AppNavigationVue from "@/views/AppNavigation.vue";
-import AppHomeVue from "@/views/AppHome.vue";
-import ListReportsVue from "@/views/reports/ListReports.vue";
 import { createRouter, createWebHistory } from "vue-router";
+import { useUserSessionStore } from "@/stores/UserSessionStore";
+import AppHomeVue from "@/views/AppHome.vue";
+import AppNavigationVue from "@/views/AppNavigation.vue";
+import LoginViewVue from "@/views/LoginView.vue";
+import ListReportsVue from "@/views/reports/ListReports.vue";
 import CreateMoneyflowVue from "@/views/moneyflow/CreateMoneyflow.vue";
+import ListCapitalsourcesVue from "@/views/capitalsource/ListCapitalsources.vue";
 
 export enum Routes {
   Login = "login",
   Home = "home",
   ListReports = "listReports",
   CreateMoneyflow = "createMoneyflow",
+  listCapitalsources = "listCapitalsources",
 }
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -42,6 +44,12 @@ const router = createRouter({
           path: "createMoneyflow",
           name: Routes.CreateMoneyflow,
           component: CreateMoneyflowVue,
+        },
+        {
+          path: "listCapitalsources/:letter?",
+          name: Routes.listCapitalsources,
+          component: ListCapitalsourcesVue,
+          props: true,
         },
       ],
     },

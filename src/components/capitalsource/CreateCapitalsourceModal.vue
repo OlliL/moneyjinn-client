@@ -1,7 +1,10 @@
 <template>
   <ModalVue title="Kapitalquelle hinzuf&uuml;gen" ref="modalComponent">
     <template #body
-      ><form @submit.prevent="createCapitalsource" id="createCapitalsourceForm">
+      ><form
+        @submit.prevent="createCapitalsource"
+        :id="'createCapitalsourceForm' + idSuffix"
+      >
         <div class="container-fluid">
           <div v-if="serverError">
             <div
@@ -17,13 +20,13 @@
               <div class="form-floating">
                 <input
                   v-model="mcs.comment"
-                  id="comment"
+                  :id="'comment' + idSuffix"
                   type="text"
                   @input="validateComment"
                   :class="'form-control ' + commentErrorData.inputClass"
                 />
                 <label
-                  for="comment"
+                  :for="'comment' + idSuffix"
                   :style="'color: ' + commentErrorData.fieldColor"
                   >{{ commentErrorData.fieldLabel }}</label
                 >
@@ -35,7 +38,7 @@
               <div class="form-floating">
                 <select
                   v-model="mcs.type"
-                  id="type"
+                  :id="'type' + idSuffix"
                   @change="validateType"
                   :class="
                     'form-select form-control ' + typeErrorData.inputClass
@@ -68,7 +71,7 @@
                 </select>
 
                 <label
-                  for="type"
+                  :for="'type' + idSuffix"
                   :style="'color: ' + typeErrorData.fieldColor"
                   >{{ typeErrorData.fieldLabel }}</label
                 >
@@ -80,7 +83,7 @@
               <div class="form-floating">
                 <select
                   v-model="mcs.state"
-                  id="state"
+                  :id="'state' + idSuffix"
                   @change="validateState"
                   :class="
                     'form-select form-control ' + stateErrorData.inputClass
@@ -96,7 +99,7 @@
                 </select>
 
                 <label
-                  for="state"
+                  :for="'state' + idSuffix"
                   :style="'color: ' + stateErrorData.fieldColor"
                   >{{ stateErrorData.fieldLabel }}</label
                 >
@@ -108,11 +111,11 @@
               <div class="form-floating">
                 <input
                   v-model="mcs.accountNumber"
-                  id="accountNumber"
+                  :id="'accountNumber' + idSuffix"
                   type="text"
                   class="form-control"
                 />
-                <label for="accountNumber">IBAN</label>
+                <label :for="'accountNumber' + idSuffix">IBAN</label>
               </div>
             </div>
           </div>
@@ -121,11 +124,11 @@
               <div class="form-floating">
                 <input
                   v-model="mcs.bankCode"
-                  id="bankCode"
+                  :id="'bankCode' + idSuffix"
                   type="text"
                   class="form-control"
                 />
-                <label for="bankCode">BIC</label>
+                <label :for="'bankCode' + idSuffix">BIC</label>
               </div>
             </div>
           </div>
@@ -135,13 +138,13 @@
                 <div class="form-floating">
                   <input
                     v-model="validFrom"
-                    id="validFrom"
+                    :id="'validFrom' + idSuffix"
                     type="date"
                     @change="validateValidFrom"
                     :class="' form-control ' + validFromErrorData.inputClass"
                   />
                   <label
-                    for="validFrom"
+                    :for="'validFrom' + idSuffix"
                     :style="'color: ' + validFromErrorData.fieldColor"
                     >{{ validFromErrorData.fieldLabel }}</label
                   >
@@ -158,13 +161,13 @@
                 <div class="form-floating">
                   <input
                     v-model="validTil"
-                    id="validTil"
+                    :id="'validTil' + idSuffix"
                     type="date"
                     @change="validateValidTil"
                     :class="' form-control ' + validTilErrorData.inputClass"
                   />
                   <label
-                    for="validTil"
+                    :for="'validTil' + idSuffix"
                     :style="'color: ' + validTilErrorData.fieldColor"
                     >{{ validTilErrorData.fieldLabel }}</label
                   >
@@ -180,7 +183,7 @@
               <div class="form-floating">
                 <select
                   v-model="groupUse"
-                  id="groupUse"
+                  :id="'groupUse' + idSuffix"
                   @change="validateGroupUse"
                   :class="
                     'form-select form-control ' + groupUseErrorData.inputClass
@@ -192,7 +195,7 @@
                 </select>
 
                 <label
-                  for="groupUse"
+                  :for="'groupUse' + idSuffix"
                   :style="'color: ' + groupUseErrorData.fieldColor"
                   >{{ groupUseErrorData.fieldLabel }}</label
                 >
@@ -204,7 +207,7 @@
               <div class="form-floating">
                 <select
                   v-model="mcs.importAllowed"
-                  id="importAllowed"
+                  :id="'importAllowed' + idSuffix"
                   @change="validateImportAllowed"
                   :class="
                     'form-select form-control ' +
@@ -232,7 +235,7 @@
                 </select>
 
                 <label
-                  for="importAllowed"
+                  :for="'importAllowed' + idSuffix"
                   :style="'color: ' + importAllowedErrorData.fieldColor"
                   >{{ importAllowedErrorData.fieldLabel }}</label
                 >
@@ -249,7 +252,7 @@
       <button
         type="submit"
         class="btn btn-primary"
-        form="createCapitalsourceForm"
+        :form="'createCapitalsourceForm' + idSuffix"
       >
         Speichern
       </button>
@@ -325,6 +328,12 @@ export default defineComponent({
       importAllowedIsValid: null,
       importAllowedErrorMessage: "",
     };
+  },
+  props: {
+    idSuffix: {
+      type: String,
+      default: "",
+    },
   },
   computed: {
     formIsValid(): boolean {
@@ -470,7 +479,11 @@ export default defineComponent({
     },
     validateImportAllowed() {
       let valid = true;
-      if (this.mcs.importAllowed + "" === "") valid = false;
+      if (
+        this.mcs.importAllowed === undefined ||
+        this.mcs.importAllowed + "" === ""
+      )
+        valid = false;
       [this.importAllowedIsValid, this.importAllowedErrorMessage] =
         validateInputField(valid, "Bitte Importart auswählen!");
     },

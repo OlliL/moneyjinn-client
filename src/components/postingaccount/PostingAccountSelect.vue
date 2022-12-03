@@ -1,6 +1,7 @@
 <template>
   <CreatePostingAccountModalVue
     ref="createPostingAccountModal"
+    :id-suffix="idSuffix"
     @posting-account-created="postingAccountCreated"
   />
 
@@ -8,7 +9,7 @@
     <div class="form-floating">
       <select
         v-model="postingAccountId"
-        id="postingAccount"
+        :id="'postingAccount' + idSuffix"
         @change="emitPostingAccountSelected"
         :class="'form-select form-control ' + inputClass"
       >
@@ -22,9 +23,11 @@
         </option>
       </select>
 
-      <label for="postingAccount" :style="'color: ' + fieldColor">{{
-        fieldLabel
-      }}</label>
+      <label
+        :for="'postingAccount' + idSuffix"
+        :style="'color: ' + fieldColor"
+        >{{ fieldLabel }}</label
+      >
     </div>
     <span
       class="input-group-text"
@@ -66,6 +69,10 @@ export default defineComponent({
     fieldLabel: {
       type: String,
       required: true,
+    },
+    idSuffix: {
+      type: String,
+      default: "",
     },
   },
   computed: {

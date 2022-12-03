@@ -53,6 +53,7 @@
         :input-class="contractpartnerErrorData.inputClass"
         :validity-date="validityDate"
         :selected-id="mmf.contractpartnerId"
+        id-suffix="CreateMoneyflow"
         @contractpartner-selected="onContractpartnerSelected"
       />
     </div>
@@ -64,6 +65,7 @@
         :input-class="capitalsourceErrorData.inputClass"
         :validity-date="validityDate"
         :selected-id="mmf.capitalsourceId"
+        id-suffix="CreateMoneyflow"
         @capitalsource-selected="onCapitalsourceSelected"
       />
     </div>
@@ -112,6 +114,7 @@
         :field-label="postingaccountErrorData.fieldLabel"
         :input-class="postingaccountErrorData.inputClass"
         :selected-id="mmf.postingAccountId"
+        id-suffix="CreateMoneyflow"
         @posting-account-selected="onPostingAccountSelected"
       />
     </div>

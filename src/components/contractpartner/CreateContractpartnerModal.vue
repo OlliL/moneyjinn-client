@@ -3,7 +3,7 @@
     <template #body
       ><form
         @submit.prevent="createContractpartner"
-        id="createContractpartnerForm"
+        :id="'createContractpartnerForm' + idSuffix"
       >
         <div class="container-fluid">
           <div v-if="serverError">
@@ -20,13 +20,13 @@
               <div class="form-floating">
                 <input
                   v-model="mcp.name"
-                  id="comment"
+                  :id="'comment' + idSuffix"
                   type="text"
                   @input="validateComment"
                   :class="'form-control ' + nameErrorData.inputClass"
                 />
                 <label
-                  for="comment"
+                  :for="'comment' + idSuffix"
                   :style="'color: ' + nameErrorData.fieldColor"
                   >{{ nameErrorData.fieldLabel }}</label
                 >
@@ -38,11 +38,11 @@
               <div class="form-floating">
                 <input
                   v-model="mcp.moneyflowComment"
-                  id="moneyflowComment"
+                  :id="'moneyflowComment' + idSuffix"
                   type="text"
                   class="form-control"
                 />
-                <label for="moneyflowComment"
+                <label :for="'moneyflowComment' + idSuffix"
                   >Standard-Kommentar der Geldbewegung</label
                 >
               </div>
@@ -56,6 +56,7 @@
                 field-label="Buchungskonto"
                 input-class=""
                 :selected-id="mcp.postingAccountId"
+                :id-suffix="idSuffix + 'CreateContractpartner'"
                 @posting-account-selected="onPostingAccountSelected"
               />
             </div>
@@ -66,11 +67,11 @@
               <div class="form-floating">
                 <input
                   v-model="mcp.street"
-                  id="street"
+                  :id="'street' + idSuffix"
                   type="text"
                   class="form-control"
                 />
-                <label for="street">Stra&szlig;e</label>
+                <label :for="'street' + idSuffix">Stra&szlig;e</label>
               </div>
             </div>
           </div>
@@ -79,11 +80,11 @@
               <div class="form-floating">
                 <input
                   v-model="mcp.postcode"
-                  id="postcode"
+                  :id="'postcode' + idSuffix"
                   type="text"
                   class="form-control"
                 />
-                <label for="postcode">Postleitzahl</label>
+                <label :for="'postcode' + idSuffix">Postleitzahl</label>
               </div>
             </div>
           </div>
@@ -92,11 +93,11 @@
               <div class="form-floating">
                 <input
                   v-model="mcp.town"
-                  id="town"
+                  :id="'town' + idSuffix"
                   type="text"
                   class="form-control"
                 />
-                <label for="town">Stadt</label>
+                <label :for="'town' + idSuffix">Stadt</label>
               </div>
             </div>
           </div>
@@ -105,11 +106,11 @@
               <div class="form-floating">
                 <input
                   v-model="mcp.country"
-                  id="country"
+                  :id="'country' + idSuffix"
                   type="text"
                   class="form-control"
                 />
-                <label for="country">Land</label>
+                <label :for="'country' + idSuffix">Land</label>
               </div>
             </div>
           </div>
@@ -119,13 +120,13 @@
                 <div class="form-floating">
                   <input
                     v-model="validFrom"
-                    id="validFrom"
+                    :id="'validFrom' + idSuffix"
                     type="date"
                     @change="validateValidFrom"
                     :class="' form-control ' + validFromErrorData.inputClass"
                   />
                   <label
-                    for="validFrom"
+                    :for="'validFrom' + idSuffix"
                     :style="'color: ' + validFromErrorData.fieldColor"
                     >{{ validFromErrorData.fieldLabel }}</label
                   >
@@ -142,13 +143,13 @@
                 <div class="form-floating">
                   <input
                     v-model="validTil"
-                    id="validTil"
+                    :id="'validTil' + idSuffix"
                     type="date"
                     @change="validateValidTil"
                     :class="' form-control ' + validTilErrorData.inputClass"
                   />
                   <label
-                    for="validTil"
+                    :for="'validFrom' + idSuffix"
                     :style="'color: ' + validTilErrorData.fieldColor"
                     >{{ validTilErrorData.fieldLabel }}</label
                   >
@@ -169,7 +170,7 @@
       <button
         type="submit"
         class="btn btn-primary"
-        form="createContractpartnerForm"
+        :form="'createContractpartnerForm' + idSuffix"
       >
         Speichern
       </button>
@@ -218,6 +219,12 @@ export default defineComponent({
       validTilIsValid: null,
       validTilErrorMessage: "",
     };
+  },
+  props: {
+    idSuffix: {
+      type: String,
+      default: "",
+    },
   },
   computed: {
     formIsValid(): boolean {

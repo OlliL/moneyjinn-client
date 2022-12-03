@@ -1,6 +1,7 @@
 <template>
   <CreateContractpartnerModalVue
     ref="createContractpartnerModal"
+    :id-suffix="idSuffix"
     @contractpartner-created="contractpartnerCreated"
   />
 
@@ -8,7 +9,7 @@
     <div class="form-floating">
       <select
         v-model="contractpartnerId"
-        id="contractpartner"
+        :id="'contractpartner' + idSuffix"
         @change="emitContractpartnerSelected"
         :class="'form-select form-control ' + inputClass"
       >
@@ -22,9 +23,11 @@
         </option>
       </select>
 
-      <label for="contractpartner" :style="'color: ' + fieldColor">{{
-        fieldLabel
-      }}</label>
+      <label
+        :for="'contractpartner' + idSuffix"
+        :style="'color: ' + fieldColor"
+        >{{ fieldLabel }}</label
+      >
     </div>
     <span
       class="input-group-text"
@@ -68,6 +71,10 @@ export default defineComponent({
       type: String,
       required: true,
     },
+    idSuffix: {
+      type: String,
+      default: "",
+    },
   },
   computed: {
     contractpartnerArray(): Array<Contractpartner> {
@@ -89,7 +96,6 @@ export default defineComponent({
   methods: {
     ...mapActions(useContractpartnerStore, ["initContractpartnerStore"]),
     emitContractpartnerSelected() {
-      console.log("emit");
       this.$emit(
         "contractpartnerSelected",
         this.contractpartnerArray.find((mcp) => {

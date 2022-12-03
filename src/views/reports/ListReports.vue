@@ -18,7 +18,7 @@
                 </select>
               </td>
               <td>
-                <nav aria-label="Page navigation example" v-if="dataLoaded">
+                <nav aria-label="Month navigation" v-if="dataLoaded">
                   <ul class="pagination month-selection">
                     <li class="page-item" v-for="month in months" :key="month">
                       <a

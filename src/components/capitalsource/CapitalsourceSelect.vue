@@ -1,6 +1,7 @@
 <template>
   <CreateCapitalsourceModalVue
     ref="createCapitalsourceModal"
+    :id-suffix="idSuffix"
     @capitalsource-created="capitalsourceCreated"
   />
 
@@ -8,7 +9,7 @@
     <div class="form-floating">
       <select
         v-model="capitalsourceId"
-        id="capitalsource"
+        :id="'capitalsource' + idSuffix"
         @change="emitCapitalsourceSelected"
         :class="'form-select form-control ' + inputClass"
       >
@@ -22,9 +23,11 @@
         </option>
       </select>
 
-      <label for="capitalsource" :style="'color: ' + fieldColor">{{
-        fieldLabel
-      }}</label>
+      <label
+        :for="'capitalsource' + idSuffix"
+        :style="'color: ' + fieldColor"
+        >{{ fieldLabel }}</label
+      >
     </div>
     <span
       class="input-group-text"
@@ -67,6 +70,10 @@ export default defineComponent({
     fieldLabel: {
       type: String,
       required: true,
+    },
+    idSuffix: {
+      type: String,
+      default: "",
     },
   },
   computed: {
