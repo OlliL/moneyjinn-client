@@ -5,7 +5,7 @@
   />
 
   <div class="container-fluid text-center">
-    <h4>Reports</h4>
+    <h4>Kapitalquellen</h4>
     <div class="row justify-content-md-center mb-4" style="margin-top: 20px">
       <div class="col-md-9 col-xs-12">
         <form action="#">
