@@ -156,6 +156,7 @@ export default defineComponent({
         letter,
         this.validNow
       );
+      if (this.capitalsources.length === 0) this.selectLetter("");
     },
     selectLetter(letter: string) {
       router.push({
@@ -180,9 +181,8 @@ export default defineComponent({
       console.log("edit", mcs);
       //FIXME: implement
     },
-    capitalsourceDeleted(mcs: Capitalsource) {
-      console.log("delete", mcs);
-      //FIXME: implement
+    capitalsourceDeleted() {
+      this.reloadView();
     },
   },
   components: {

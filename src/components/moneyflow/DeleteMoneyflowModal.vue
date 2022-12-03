@@ -3,7 +3,7 @@
     <template #body>
       <div class="row">
         <div
-          class="text-start col-sm-3 col-xs-5"
+          class="text-start d-flex align-items-center col-sm-3 col-xs-5"
           style="font-weight: 700; font-size: 10.5px"
         >
           Buchungsdatum
@@ -12,7 +12,7 @@
       </div>
       <div class="row">
         <div
-          class="text-start col-sm-3 col-xs-5"
+          class="text-start d-flex align-items-center col-sm-3 col-xs-5"
           style="font-weight: 700; font-size: 10.5px"
         >
           Rechnungsdatum
@@ -21,7 +21,7 @@
       </div>
       <div class="row">
         <div
-          class="text-start col-sm-3 col-xs-5"
+          class="text-start d-flex align-items-center col-sm-3 col-xs-5"
           style="font-weight: 700; font-size: 10.5px"
         >
           Vertragspartner
@@ -30,7 +30,7 @@
       </div>
       <div class="row">
         <div
-          class="text-start col-sm-3 col-xs-5"
+          class="text-start d-flex align-items-center col-sm-3 col-xs-5"
           style="font-weight: 700; font-size: 10.5px"
         >
           Kapitalquelle
@@ -39,7 +39,7 @@
       </div>
       <div class="row">
         <div
-          class="text-start col-sm-3 col-xs-5"
+          class="text-start d-flex align-items-center col-sm-3 col-xs-5"
           style="font-weight: 700; font-size: 10.5px"
         >
           Betrag
@@ -50,7 +50,7 @@
       </div>
       <div class="row">
         <div
-          class="text-start col-sm-3 col-xs-5"
+          class="text-start d-flex align-items-center col-sm-3 col-xs-5"
           style="font-weight: 700; font-size: 10.5px"
         >
           Kommentar
@@ -59,7 +59,7 @@
       </div>
       <div class="row">
         <div
-          class="text-start col-sm-3 col-xs-5"
+          class="text-start d-flex align-items-center col-sm-3 col-xs-5"
           style="font-weight: 700; font-size: 10.5px"
         >
           Buchungskonto
