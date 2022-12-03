@@ -5,6 +5,7 @@
     aria-labelledby=""
     aria-hidden="true"
     ref="modalEle"
+    :style="'z-index: ' + zIndex"
   >
     <div class="modal-dialog" :style="modalStyle">
       <div class="modal-content">
@@ -55,6 +56,10 @@ export default defineComponent({
     maxWidth: {
       type: String,
       default: "",
+    },
+    zIndex: {
+      type: String,
+      default: "2000",
     },
   },
   computed: {

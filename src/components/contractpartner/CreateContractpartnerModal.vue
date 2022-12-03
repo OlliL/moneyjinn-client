@@ -263,7 +263,7 @@ export default defineComponent({
   },
   methods: {
     async _show(mcp?: Contractpartner) {
-      if (mcp) this.origMcp = mcp;
+      this.origMcp = mcp ? mcp : undefined;
       this.resetForm();
       (this.$refs.modalComponent as typeof ModalVue)._show();
     },
