@@ -431,7 +431,6 @@ export default defineComponent({
     ...mapActions(useCapitalsourceStore, ["addCapitalsourceToStore"]),
     ...mapActions(useCapitalsourceStore, ["updateCapitalsourceInStore"]),
     resetForm() {
-      console.log(this.origMcs);
       if (this.origMcs) {
         this.mcs = JSON.parse(JSON.stringify(this.origMcs));
         [this.validFrom] = new Date(this.mcs.validFrom)
