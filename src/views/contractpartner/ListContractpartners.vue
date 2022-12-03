@@ -22,7 +22,15 @@
       <div class="col-md-9 col-xs-12">
         <table style="margin: 0 auto">
           <tr>
-            <td class="text-right pe-2"></td>
+            <td class="text-right pe-2">
+              <button
+                type="button"
+                class="btn btn-primary"
+                @click="showCreateContractpartnerModal"
+              >
+                Neu
+              </button>
+            </td>
             <td>
               <nav aria-label="Start letter navigation" v-if="dataLoaded">
                 <ul class="pagination month-selection">
