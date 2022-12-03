@@ -66,6 +66,19 @@ export function getError(code: number) {
     case ErrorCode.POSTINGACCOUNT_WITH_SAME_NAME_ALREADY_EXISTS: {
       return "Es existiert bereits ein Buchungskonto mit diesem Namen!";
     }
+    case ErrorCode.ACCOUNT_NUMBER_CONTAINS_ILLEGAL_CHARS_OR_IS_EMPTY: {
+      return "Die IBAN darf nicht leer sein und darf nur aus Buchstaben und Ziffern bestehen!";
+    }
+    case ErrorCode.BANK_CODE_CONTAINS_ILLEGAL_CHARS_OR_IS_EMPTY: {
+      return "Die BIC darf nicht leer sein und darf nur aus Buchstaben und Ziffern bestehen!";
+    }
+    case ErrorCode.ACCOUNT_NUMBER_CONTAINS_ILLEGAL_CHARS: {
+      return "Die IBAN darf nur aus Buchstaben und Ziffern bestehen!";
+    }
+    case ErrorCode.BANK_CODE_CONTAINS_ILLEGAL_CHARS: {
+      return "Die BIC darf nur aus Buchstaben und Ziffern bestehen!";
+    }
+
     case ErrorCode.CAPITALSOURCE_INVALID: {
       return "Kapitalquelle darf nicht verwendet werden!";
     }

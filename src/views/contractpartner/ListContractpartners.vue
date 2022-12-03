@@ -3,11 +3,14 @@
     ref="createContractpartnerModalList"
     id-suffix="List"
     @contractpartner-created="contractpartnerCreated"
+    @contractpartner-updated="contractpartnerUpdated"
   />
   <DeleteContractpartnerModalVue
     ref="deleteModal"
     @contractpartner-deleted="contractpartnerDeleted"
   />
+
+  <ListContractpartnerAccountsModalVue ref="accountsModal" />
 
   <div class="">
     <div class="row">
@@ -19,15 +22,7 @@
       <div class="col-md-9 col-xs-12">
         <table style="margin: 0 auto">
           <tr>
-            <td class="text-right pe-2">
-              <button
-                type="button"
-                class="btn btn-primary"
-                @click="showCreateContractpartnerModal"
-              >
-                Neu
-              </button>
-            </td>
+            <td class="text-right pe-2"></td>
             <td>
               <nav aria-label="Start letter navigation" v-if="dataLoaded">
                 <ul class="pagination month-selection">
@@ -98,6 +93,7 @@
               :mcp="mcp"
               @delete-contractpartner="deleteContractpartner"
               @edit-contractpartner="editContractpartner"
+              @list-contractpartner-accounts="listContractpartnerAccounts"
             />
           </tbody>
         </table>
@@ -116,6 +112,7 @@ import CreateContractpartnerModalVue from "@/components/contractpartner/CreateCo
 import ListContractpartnerRowVue from "@/components/contractpartner/ListContractpartnerRow.vue";
 import { useUserSessionStore } from "@/stores/UserSessionStore";
 import DeleteContractpartnerModalVue from "@/components/contractpartner/DeleteContractpartnerModal.vue";
+import ListContractpartnerAccountsModalVue from "@/components/contractpartneraccount/ListContractpartnerAccountsModal.vue";
 export default defineComponent({
   name: "ListContractpartners",
   data() {
@@ -169,25 +166,34 @@ export default defineComponent({
     contractpartnerCreated() {
       this.reloadView();
     },
-    deleteContractpartner(mcp: Contractpartner) {
-      (this.$refs.deleteModal as typeof DeleteContractpartnerModalVue)._show(
-        mcp
-      );
-    },
     editContractpartner(mcp: Contractpartner) {
       (
         this.$refs
           .createContractpartnerModalList as typeof CreateContractpartnerModalVue
       )._show(mcp);
     },
+    contractpartnerUpdated() {
+      this.reloadView();
+    },
+    deleteContractpartner(mcp: Contractpartner) {
+      (this.$refs.deleteModal as typeof DeleteContractpartnerModalVue)._show(
+        mcp
+      );
+    },
     contractpartnerDeleted() {
       this.reloadView();
+    },
+    listContractpartnerAccounts(mcp: Contractpartner) {
+      (
+        this.$refs.accountsModal as typeof ListContractpartnerAccountsModalVue
+      )._show(mcp);
     },
   },
   components: {
     CreateContractpartnerModalVue,
     ListContractpartnerRowVue,
     DeleteContractpartnerModalVue,
+    ListContractpartnerAccountsModalVue,
   },
 });
 </script>

@@ -424,7 +424,7 @@ export default defineComponent({
   },
   methods: {
     async _show(mcs?: Capitalsource) {
-      if (mcs) this.origMcs = mcs;
+      this.origMcs = mcs ? mcs : undefined;
       this.resetForm();
       (this.$refs.modalComponent as typeof ModalVue)._show();
     },

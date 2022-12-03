@@ -15,15 +15,17 @@
         >l&ouml;schen</span
       >
     </td>
-    <td class="text-center">Konten</td>
+    <td class="text-center">
+      <span role="button" class="link-primary" @click="listAccounts"
+        >Konten</span
+      >
+    </td>
   </tr>
 </template>
 <script lang="ts">
 import type { Contractpartner } from "@/model/contractpartner/Contractpartner";
 import { formatDate } from "@/tools/views/FormatDate";
 import { defineComponent, type PropType } from "vue";
-
-// FIXME: Account handling
 
 export default defineComponent({
   name: "ReportTableRow",
@@ -33,7 +35,11 @@ export default defineComponent({
       required: true,
     },
   },
-  emits: ["deleteContractpartner", "editContractpartner"],
+  emits: [
+    "deleteContractpartner",
+    "editContractpartner",
+    "listContractpartnerAccounts",
+  ],
   computed: {
     validFromString(): string {
       return formatDate(this.mcp.validFrom);
@@ -48,6 +54,9 @@ export default defineComponent({
     },
     editContractpartner() {
       this.$emit("editContractpartner", this.mcp);
+    },
+    listAccounts() {
+      this.$emit("listContractpartnerAccounts", this.mcp);
     },
   },
 });
