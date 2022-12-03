@@ -4,7 +4,7 @@ export function throwError(code: number) {
   throw new Error(getError(code));
 }
 
-export function getError(code: number) {
+export function getError(code: number, variableArray?: Array<string>) {
   switch (code) {
     case ErrorCode.CONTRACTPARTNER_DOES_NOT_EXIST: {
       return "Der gewählte Vertragspartner existiert nicht!";
@@ -78,7 +78,15 @@ export function getError(code: number) {
     case ErrorCode.BANK_CODE_CONTAINS_ILLEGAL_CHARS: {
       return "Die BIC darf nur aus Buchstaben und Ziffern bestehen!";
     }
-
+    case ErrorCode.ACCOUNT_ALREADY_ASSIGNED_TO_OTHER_PARTNER: {
+      console.log(variableArray);
+      const contractpartnerName = variableArray ? variableArray[0] : "";
+      return (
+        "Das von Ihnen angegebene Vertragspartnerkonto ist bereits dem Vertragspartner " +
+        contractpartnerName +
+        " zugeordnet!"
+      );
+    }
     case ErrorCode.CAPITALSOURCE_INVALID: {
       return "Kapitalquelle darf nicht verwendet werden!";
     }

@@ -172,7 +172,9 @@ export default defineComponent({
       if (!validationResult.result) {
         this.serverError = new Array<string>();
         for (let resultItem of validationResult.validationResultItems) {
-          this.serverError.push(getError(resultItem.error));
+          this.serverError.push(
+            getError(resultItem.error, resultItem.variableArray)
+          );
         }
       }
       return !validationResult.result;
