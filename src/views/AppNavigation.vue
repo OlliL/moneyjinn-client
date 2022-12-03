@@ -132,18 +132,32 @@
                 <router-link
                   :class="
                     $route.matched.some(
-                      ({ name }) => name === Routes.listCapitalsources
+                      ({ name }) => name === Routes.ListCapitalsources
                     )
                       ? 'router-link-active dropdown-item'
                       : 'dropdown-item'
                   "
                   :to="{
-                    name: Routes.listCapitalsources,
+                    name: Routes.ListCapitalsources,
                   }"
                   >Kapitalquellen</router-link
                 >
               </li>
-              <li><a class="dropdown-item" href="#">Vertragspartner</a></li>
+              <li>
+                <router-link
+                  :class="
+                    $route.matched.some(
+                      ({ name }) => name === Routes.ListContractpartners
+                    )
+                      ? 'router-link-active dropdown-item'
+                      : 'dropdown-item'
+                  "
+                  :to="{
+                    name: Routes.ListContractpartners,
+                  }"
+                  >Vertragspartner</router-link
+                >
+              </li>
               <li>
                 <a class="dropdown-item" href="#"
                   >vordefinierte Geldbewegungen</a
