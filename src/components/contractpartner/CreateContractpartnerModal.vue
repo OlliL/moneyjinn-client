@@ -240,8 +240,8 @@ export default defineComponent({
     },
     title(): string {
       return this.origMcp === undefined
-        ? "Kapitalquelle hinzufügen"
-        : "Kapitalquelle bearbeiten";
+        ? "Vertragspartner hinzufügen"
+        : "Vertragspartner bearbeiten";
     },
     nameErrorData(): ErrorData {
       return generateErrorData(this.nameIsValid, "Name", this.nameErrorMessage);
