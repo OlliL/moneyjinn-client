@@ -4,6 +4,10 @@
     id-suffix="List"
     @capitalsource-created="capitalsourceCreated"
   />
+  <DeleteCapitalsourceModalVue
+    ref="deleteModal"
+    @capitalsource-deleted="capitalsourceDeleted"
+  />
 
   <div class="">
     <div class="row">
@@ -116,6 +120,7 @@ import type { Capitalsource } from "@/model/capitalsource/Capitalsource";
 import CreateCapitalsourceModalVue from "@/components/capitalsource/CreateCapitalsourceModal.vue";
 import ListCapitalsourceRowVue from "@/components/capitalsource/ListCapitalsourceRow.vue";
 import { useUserSessionStore } from "@/stores/UserSessionStore";
+import DeleteCapitalsourceModalVue from "@/components/capitalsource/DeleteCapitalsourceModal.vue";
 export default defineComponent({
   name: "ListCapitalsources",
   data() {
@@ -169,14 +174,21 @@ export default defineComponent({
       this.reloadView();
     },
     deleteCapitalsource(mcs: Capitalsource) {
-      console.log("delete", mcs);
-      //FIXME: implement
+      (this.$refs.deleteModal as typeof DeleteCapitalsourceModalVue)._show(mcs);
     },
     editCapitalsource(mcs: Capitalsource) {
       console.log("edit", mcs);
       //FIXME: implement
     },
+    capitalsourceDeleted(mcs: Capitalsource) {
+      console.log("delete", mcs);
+      //FIXME: implement
+    },
   },
-  components: { CreateCapitalsourceModalVue, ListCapitalsourceRowVue },
+  components: {
+    CreateCapitalsourceModalVue,
+    ListCapitalsourceRowVue,
+    DeleteCapitalsourceModalVue,
+  },
 });
 </script>
