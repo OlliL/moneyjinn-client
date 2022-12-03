@@ -1,9 +1,9 @@
 <template>
-  <ModalVue title="Geldbewegung l&ouml;schen" ref="modalComponent">
+  <ModalVue title="Kapitalquelle l&ouml;schen" ref="modalComponent">
     <template #body>
       <div class="row">
         <div
-          class="text-start col-sm-3 col-xs-5"
+          class="text-start d-flex align-items-center col-sm-3 col-xs-5"
           style="font-weight: 700; font-size: 10.5px"
         >
           Kommentar
@@ -12,7 +12,7 @@
       </div>
       <div class="row">
         <div
-          class="text-start col-sm-3 col-xs-5"
+          class="text-start d-flex align-items-center col-sm-3 col-xs-5"
           style="font-weight: 700; font-size: 10.5px"
         >
           Typ
@@ -21,7 +21,7 @@
       </div>
       <div class="row">
         <div
-          class="text-start col-sm-3 col-xs-5"
+          class="text-start d-flex align-items-center col-sm-3 col-xs-5"
           style="font-weight: 700; font-size: 10.5px"
         >
           Status
@@ -30,7 +30,7 @@
       </div>
       <div class="row">
         <div
-          class="text-start col-sm-3 col-xs-5"
+          class="text-start d-flex align-items-center col-sm-3 col-xs-5"
           style="font-weight: 700; font-size: 10.5px"
         >
           IBAN
@@ -39,7 +39,7 @@
       </div>
       <div class="row">
         <div
-          class="text-start col-sm-3 col-xs-5"
+          class="text-start d-flex align-items-center col-sm-3 col-xs-5"
           style="font-weight: 700; font-size: 10.5px"
         >
           BIC
@@ -48,7 +48,7 @@
       </div>
       <div class="row">
         <div
-          class="text-start col-sm-3 col-xs-5"
+          class="text-start d-flex align-items-center col-sm-3 col-xs-5"
           style="font-weight: 700; font-size: 10.5px"
         >
           g&uuml;ltig ab
@@ -57,7 +57,7 @@
       </div>
       <div class="row">
         <div
-          class="text-start col-sm-3 col-xs-5"
+          class="text-start d-flex align-items-center col-sm-3 col-xs-5"
           style="font-weight: 700; font-size: 10.5px"
         >
           g&uuml;ltig bis
@@ -66,7 +66,7 @@
       </div>
       <div class="row">
         <div
-          class="text-start col-sm-3 col-xs-5"
+          class="text-start d-flex align-items-center col-sm-3 col-xs-5"
           style="font-weight: 700; font-size: 10.5px"
         >
           Gruppe
@@ -77,7 +77,7 @@
       </div>
       <div class="row">
         <div
-          class="text-start col-sm-3 col-xs-5"
+          class="text-start d-flex align-items-center col-sm-3 col-xs-5"
           style="font-weight: 700; font-size: 10.5px"
         >
           Datenimport
@@ -103,6 +103,7 @@ import type { Capitalsource } from "@/model/capitalsource/Capitalsource";
 import { capitalsourceImportNames } from "@/model/capitalsource/CapitalsourceImport";
 import { capitalsourceStateNames } from "@/model/capitalsource/CapitalsourceState";
 import { capitalsourceTypeNames } from "@/model/capitalsource/CapitalsourceType";
+import { useCapitalsourceStore } from "@/stores/CapitalsourceStore";
 import { formatDate } from "@/tools/views/FormatDate";
 import { defineComponent } from "vue";
 import ModalVue from "../Modal.vue";
@@ -147,6 +148,8 @@ export default defineComponent({
     },
     deleteCapitalsource() {
       CapitalsourceControllerHandler.deleteCapitalsource(this.mcs.id);
+      const capitalsourceStore = useCapitalsourceStore();
+      capitalsourceStore.deleteCapitalsource(this.mcs);
       (this.$refs.modalComponent as typeof ModalVue)._hide();
       this.$emit("capitalsourceDeleted", this.mcs);
     },

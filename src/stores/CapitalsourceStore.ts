@@ -1,20 +1,23 @@
 import CapitalsourceControllerHandler from "@/handler/CapitalsourceControllerHandler";
 import type { Capitalsource } from "@/model/capitalsource/Capitalsource";
 import { CapitalsourceType } from "@/model/capitalsource/CapitalsourceType";
-import { defineStore } from "pinia";
+import { defineStore, mapState } from "pinia";
 import { useUserSessionStore } from "./UserSessionStore";
 
 export const useCapitalsourceStore = defineStore("capitalsource", {
   state: () => ({
     capitalsource: [] as Array<Capitalsource>,
   }),
-  getters: {},
+  getters: {
+    ...mapState(useUserSessionStore, ["getUserId"]),
+  },
   actions: {
     async initCapitalsourceStore() {
       if (this.capitalsource.length === 0) {
         const capitalsourceArray =
           await CapitalsourceControllerHandler.fetchAllCapitalsource();
         this.capitalsource = capitalsourceArray;
+        this.capitalsource.sort(this.compareCapitalsource);
       }
     },
     getValidCapitalsource(validityDate: Date) {
@@ -23,13 +26,12 @@ export const useCapitalsourceStore = defineStore("capitalsource", {
       });
     },
     getBookableValidCapitalsources(validityDate: Date) {
-      const userId = useUserSessionStore().getUserId;
       return this.capitalsource.filter((mcp) => {
         return (
           validityDate >= mcp.validFrom &&
           validityDate <= mcp.validTil &&
           mcp.type != CapitalsourceType.CREDIT &&
-          (mcp.userId === userId || mcp.groupUse)
+          (mcp.userId === this.getUserId || mcp.groupUse)
         );
       });
     },
@@ -66,8 +68,31 @@ export const useCapitalsourceStore = defineStore("capitalsource", {
     async addCapitalsourceToStore(mcs: Capitalsource) {
       if (this.capitalsource.length > 0) {
         this.capitalsource.push(mcs);
-        this.capitalsource.sort((a, b) => a.comment.localeCompare(b.comment));
+        this.capitalsource.sort(this.compareCapitalsource);
       }
+    },
+    deleteCapitalsource(mcs: Capitalsource) {
+      this.capitalsource = this.capitalsource.filter(
+        (originalMcs) => mcs.id !== originalMcs.id
+      );
+    },
+    compareCapitalsource(a: Capitalsource, b: Capitalsource): number {
+      const aComment = a.comment.toLowerCase();
+      const bComment = b.comment.toLowerCase();
+      const aOwner = a.userId == this.getUserId;
+      const bOwner = b.userId == this.getUserId;
+      const aValidFrom = a.validFrom;
+      const bValidFrom = b.validFrom;
+
+      const ownerCompare = aOwner === bOwner ? 0 : aOwner < bOwner ? 1 : -1;
+      const commentCompare =
+        aComment === bComment ? 0 : aComment > bComment ? 1 : -1;
+      const validFromCompare =
+        aValidFrom === bValidFrom ? 0 : aValidFrom > bValidFrom ? 1 : -1;
+
+      if (ownerCompare != 0) return ownerCompare;
+      if (commentCompare != 0) return commentCompare;
+      return validFromCompare;
     },
   },
 });
