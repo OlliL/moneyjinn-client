@@ -178,8 +178,10 @@ export default defineComponent({
       (this.$refs.deleteModal as typeof DeleteCapitalsourceModalVue)._show(mcs);
     },
     editCapitalsource(mcs: Capitalsource) {
-      console.log("edit", mcs);
-      //FIXME: implement
+      (
+        this.$refs
+          .createCapitalsourceModalList as typeof CreateCapitalsourceModalVue
+      )._show(mcs);
     },
     capitalsourceDeleted() {
       this.reloadView();

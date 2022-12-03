@@ -12,6 +12,8 @@ import {
 import { mapValidationItemTransportToModel } from "./mapper/ValidationItemTransportMapper";
 import type { ValidationResult } from "@/model/validation/ValidationResult";
 import { useUserSessionStore } from "@/stores/UserSessionStore";
+import type { UpdateCapitalsourceRequest } from "@/model/rest/capitalsource/UpdateCapitalsourceRequest";
+import type { ValidationResponse } from "@/model/rest/ValidationResponse";
 
 class CapitalsourceControllerHandler extends AbstractControllerHandler {
   private static CONTROLLER = "capitalsource";
@@ -87,6 +89,38 @@ class CapitalsourceControllerHandler extends AbstractControllerHandler {
       capitalsourceValidation.mcs = createdMcs;
     }
     return capitalsourceValidation;
+  }
+
+  async updateCapitalsource(mcs: Capitalsource): Promise<ValidationResult> {
+    const usecase = "updateCapitalsource";
+    const request = {
+      updateCapitalsourceRequest: {},
+    } as UpdateCapitalsourceRequest;
+    const innerRequest = request.updateCapitalsourceRequest;
+    innerRequest.capitalsourceTransport = mapCapitalsourceToTransport(mcs);
+
+    const response = await super.put(
+      request,
+      CapitalsourceControllerHandler.CONTROLLER,
+      usecase
+    );
+
+    if (!response.ok) {
+      throw new Error(response.statusText);
+    }
+
+    const validationResponse = (await response.json()) as ValidationResponse;
+    const innerResponse = validationResponse.validationResponse;
+    const validationResult: ValidationResult = {
+      result: innerResponse.result,
+      validationResultItems: innerResponse.validationItemTransport?.map(
+        (vit) => {
+          return mapValidationItemTransportToModel(vit);
+        }
+      ),
+    };
+
+    return validationResult;
   }
 
   async deleteCapitalsource(capitalsourceId: number) {
