@@ -11,6 +11,7 @@ import {
   mapContractpartnerToTransport,
 } from "./mapper/ContractpartnerTransportMapper";
 import { mapValidationItemTransportToModel } from "./mapper/ValidationItemTransportMapper";
+import { useUserSessionStore } from "@/stores/UserSessionStore";
 
 class ContractpartnerControllerHandler extends AbstractControllerHandler {
   private static CONTROLLER = "contractpartner";
@@ -78,8 +79,10 @@ class ContractpartnerControllerHandler extends AbstractControllerHandler {
 
     contractpartnerValidation.validationResult = validationResult;
     if (validationResult.result) {
+      const userSessionStore = useUserSessionStore();
       const createdMcp: Contractpartner = mcp;
       createdMcp.id = innerResponse.contractpartnerId;
+      createdMcp.userId = userSessionStore.getUserId;
       contractpartnerValidation.mcp = createdMcp;
     }
     return contractpartnerValidation;

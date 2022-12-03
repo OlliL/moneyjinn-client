@@ -17,12 +17,12 @@
     <td class="text-start">
       {{ mmf.capitalsourceComment }}
     </td>
-    <td class="text-start" v-if="isOwnMoneyflow">
+    <td class="text-center" v-if="isOwnMoneyflow">
       <span role="button" class="link-primary" @click="editMoneyflow"
         >bearbeiten</span
       >
     </td>
-    <td class="text-start" v-if="isOwnMoneyflow">
+    <td class="text-center" v-if="isOwnMoneyflow">
       <span role="button" class="link-primary" @click="deleteMoneyflow"
         >l&ouml;schen</span
       >
@@ -57,7 +57,7 @@
     <td
       :rowspan="rowspan"
       v-if="index == 0 && isOwnMoneyflow"
-      class="text-start"
+      class="text-center"
     >
       <span role="button" class="link-primary" @click="editMoneyflow"
         >bearbeiten</span
@@ -66,7 +66,7 @@
     <td
       :rowspan="rowspan"
       v-if="index == 0 && isOwnMoneyflow"
-      class="text-start"
+      class="text-center"
     >
       <span role="button" class="link-primary" @click="deleteMoneyflow"
         >l&ouml;schen</span

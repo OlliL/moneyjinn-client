@@ -33,18 +33,30 @@ export const useCapitalsourceStore = defineStore("capitalsource", {
         );
       });
     },
-    getCapitalsourceForLetter(letter: string): Array<Capitalsource> {
-      if (letter === "") {
-        return this.capitalsource;
+    getCapitalsourceForLetter(
+      letter: string,
+      validNow?: boolean
+    ): Array<Capitalsource> {
+      let mcs = this.capitalsource;
+      if (validNow) {
+        mcs = this.getBookableValidCapitalsources(new Date());
       }
-      return this.capitalsource.filter(
-        (mcs) => mcs.comment.substring(0, 1).toUpperCase() === letter
+
+      if (letter === "") {
+        return mcs;
+      }
+      return mcs.filter(
+        (entry) => entry.comment.substring(0, 1).toUpperCase() === letter
       );
     },
-    async getCapitalsourceLetters(): Promise<Array<string>> {
+    async getCapitalsourceLetters(validNow?: boolean): Promise<Array<string>> {
       await this.initCapitalsourceStore();
-      const letters = this.capitalsource.map((mcs) =>
-        mcs.comment.substring(0, 1).toUpperCase()
+      let mcs = this.capitalsource;
+      if (validNow) {
+        mcs = this.getBookableValidCapitalsources(new Date());
+      }
+      const letters = mcs.map((entry) =>
+        entry.comment.substring(0, 1).toUpperCase()
       );
       const uniqueLetters = letters
         .filter((v, i, a) => a.indexOf(v) === i)
