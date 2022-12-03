@@ -1,5 +1,5 @@
 <template>
-  <ModalVue title="Kapitalquelle hinzuf&uuml;gen" ref="modalComponent">
+  <ModalVue :title="title" ref="modalComponent">
     <template #body
       ><form
         @submit.prevent="createCapitalsource"
@@ -282,9 +282,11 @@ import {
 } from "@/model/capitalsource/CapitalsourceState";
 import { mapActions } from "pinia";
 import { useCapitalsourceStore } from "@/stores/CapitalsourceStore";
+import type { ValidationResult } from "@/model/validation/ValidationResult";
 
 type CreateCapitalsourceModalData = {
   mcs: Capitalsource;
+  origMcs: Capitalsource | undefined;
   validFrom: string;
   validTil: string;
   groupUse: string;
@@ -309,6 +311,7 @@ export default defineComponent({
   data(): CreateCapitalsourceModalData {
     return {
       mcs: {} as Capitalsource,
+      origMcs: undefined,
       validFrom: "",
       validTil: "",
       groupUse: "",
@@ -349,6 +352,11 @@ export default defineComponent({
         return true;
       }
       return false;
+    },
+    title(): string {
+      return this.origMcs === undefined
+        ? "Kapitalquelle hinzufügen"
+        : "Kapitalquelle bearbeiten";
     },
     commentErrorData(): ErrorData {
       return generateErrorData(
@@ -415,16 +423,28 @@ export default defineComponent({
     },
   },
   methods: {
-    async _show() {
+    async _show(mcs?: Capitalsource) {
+      if (mcs) this.origMcs = mcs;
       this.resetForm();
       (this.$refs.modalComponent as typeof ModalVue)._show();
     },
     ...mapActions(useCapitalsourceStore, ["addCapitalsourceToStore"]),
+    ...mapActions(useCapitalsourceStore, ["updateCapitalsourceInStore"]),
     resetForm() {
-      this.mcs = {} as Capitalsource;
-      [this.validFrom] = new Date().toISOString().split("T");
-      this.validTil = "2999-12-31";
-      this.groupUse = "";
+      console.log(this.origMcs);
+      if (this.origMcs) {
+        this.mcs = JSON.parse(JSON.stringify(this.origMcs));
+        [this.validFrom] = new Date(this.mcs.validFrom)
+          .toISOString()
+          .split("T");
+        [this.validTil] = new Date(this.mcs.validTil).toISOString().split("T");
+        this.groupUse = this.mcs.groupUse ? "1" : "0";
+      } else {
+        this.mcs = {} as Capitalsource;
+        [this.validFrom] = new Date().toISOString().split("T");
+        this.validTil = "2999-12-31";
+        this.groupUse = "";
+      }
       this.commentIsValid = null;
       this.commentErrorMessage = "";
       this.typeIsValid = null;
@@ -487,6 +507,15 @@ export default defineComponent({
       [this.importAllowedIsValid, this.importAllowedErrorMessage] =
         validateInputField(valid, "Bitte Importart auswählen!");
     },
+    handleServerError(validationResult: ValidationResult): boolean {
+      if (!validationResult.result) {
+        this.serverError = new Array<string>();
+        for (let resultItem of validationResult.validationResultItems) {
+          this.serverError.push(getError(resultItem.error));
+        }
+      }
+      return !validationResult.result;
+    },
     async createCapitalsource() {
       this.validateComment();
       this.validateType();
@@ -500,28 +529,36 @@ export default defineComponent({
         this.mcs.validFrom = new Date(this.validFrom);
         this.mcs.validTil = new Date(this.validTil);
         this.mcs.groupUse = this.groupUse === "1" ? true : false;
-        const capitalsourceValidation =
-          CapitalsourceControllerHandler.createCapitalsource(this.mcs);
-        const validationResult = await (
-          await capitalsourceValidation
-        ).validationResult;
 
-        if (!validationResult.result) {
-          this.serverError = new Array<string>();
-          for (let resultItem of validationResult.validationResultItems) {
-            this.serverError.push(getError(resultItem.error));
+        if (this.mcs.id > 0) {
+          //update
+          const validationResult =
+            await CapitalsourceControllerHandler.updateCapitalsource(this.mcs);
+          if (!this.handleServerError(validationResult)) {
+            (this.$refs.modalComponent as typeof ModalVue)._hide();
+            this.updateCapitalsourceInStore(this.mcs);
+            this.$emit("capitalsourceUpdated", this.mcs);
           }
         } else {
-          this.mcs = (await capitalsourceValidation).mcs;
-          (this.$refs.modalComponent as typeof ModalVue)._hide();
-          this.addCapitalsourceToStore(this.mcs);
-          this.$emit("capitalsourceCreated", this.mcs);
+          //create
+          const capitalsourceValidation =
+            CapitalsourceControllerHandler.createCapitalsource(this.mcs);
+          const validationResult = await (
+            await capitalsourceValidation
+          ).validationResult;
+
+          if (!this.handleServerError(validationResult)) {
+            this.mcs = (await capitalsourceValidation).mcs;
+            (this.$refs.modalComponent as typeof ModalVue)._hide();
+            this.addCapitalsourceToStore(this.mcs);
+            this.$emit("capitalsourceCreated", this.mcs);
+          }
         }
       }
     },
   },
   expose: ["_show"],
-  emits: ["capitalsourceCreated"],
+  emits: ["capitalsourceCreated", "capitalsourceUpdated"],
   components: { ModalVue },
 });
 </script>
