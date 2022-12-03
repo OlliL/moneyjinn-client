@@ -3,7 +3,7 @@
     <template #body
       ><form
         @submit.prevent="createPostingAccount"
-        id="createPostingAccountForm"
+        :id="'createPostingAccountForm' + idSuffix"
       >
         <div class="container-fluid">
           <div v-if="serverError">
@@ -20,13 +20,13 @@
               <div class="form-floating">
                 <input
                   v-model="mpa.name"
-                  id="comment"
+                  :id="'comment' + idSuffix"
                   type="text"
                   @input="validateName"
                   :class="'form-control ' + nameErrorData.inputClass"
                 />
                 <label
-                  for="comment"
+                  :for="'comment' + idSuffix"
                   :style="'color: ' + nameErrorData.fieldColor"
                   >{{ nameErrorData.fieldLabel }}</label
                 >
@@ -43,7 +43,7 @@
       <button
         type="submit"
         class="btn btn-primary"
-        form="createPostingAccountForm"
+        :form="'createPostingAccountForm' + idSuffix"
       >
         Speichern
       </button>
@@ -77,6 +77,12 @@ export default defineComponent({
       nameIsValid: null,
       nameErrorMessage: "",
     };
+  },
+  props: {
+    idSuffix: {
+      type: String,
+      default: "",
+    },
   },
   computed: {
     formIsValid(): boolean {
