@@ -11,6 +11,7 @@ import {
 } from "./mapper/CapitalsourceTransportMapper";
 import { mapValidationItemTransportToModel } from "./mapper/ValidationItemTransportMapper";
 import type { ValidationResult } from "@/model/validation/ValidationResult";
+import { useUserSessionStore } from "@/stores/UserSessionStore";
 
 class CapitalsourceControllerHandler extends AbstractControllerHandler {
   private static CONTROLLER = "capitalsource";
@@ -79,8 +80,10 @@ class CapitalsourceControllerHandler extends AbstractControllerHandler {
     capitalsourceValidation.validationResult = validationResult;
 
     if (validationResult.result) {
+      const userSessionStore = useUserSessionStore();
       const createdMcs: Capitalsource = mcs;
       createdMcs.id = innerResponse.capitalsourceId;
+      createdMcs.userId = userSessionStore.getUserId;
       capitalsourceValidation.mcs = createdMcs;
     }
     return capitalsourceValidation;
