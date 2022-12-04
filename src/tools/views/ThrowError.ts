@@ -79,7 +79,6 @@ export function getError(code: number, variableArray?: Array<string>) {
       return "Die BIC darf nur aus Buchstaben und Ziffern bestehen!";
     }
     case ErrorCode.ACCOUNT_ALREADY_ASSIGNED_TO_OTHER_PARTNER: {
-      console.log(variableArray);
       const contractpartnerName = variableArray ? variableArray[0] : "";
       return (
         "Das von Ihnen angegebene Vertragspartnerkonto ist bereits dem Vertragspartner " +

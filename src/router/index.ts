@@ -7,6 +7,7 @@ import ListReportsVue from "@/views/reports/ListReports.vue";
 import CreateMoneyflowVue from "@/views/moneyflow/CreateMoneyflow.vue";
 import ListCapitalsourcesVue from "@/views/capitalsource/ListCapitalsources.vue";
 import ListContractpartnersVue from "@/views/contractpartner/ListContractpartners.vue";
+import ImportMoneyflowsVue from "@/views/moneyflow/ImportMoneyflows.vue";
 
 export enum Routes {
   Login = "login",
@@ -15,6 +16,7 @@ export enum Routes {
   CreateMoneyflow = "createMoneyflow",
   ListCapitalsources = "listCapitalsources",
   ListContractpartners = "listContractpartners",
+  ImportMoneyflows = "importMoneyflows",
 }
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -46,6 +48,11 @@ const router = createRouter({
           path: "createMoneyflow",
           name: Routes.CreateMoneyflow,
           component: CreateMoneyflowVue,
+        },
+        {
+          path: "importMoneyflows",
+          name: Routes.ImportMoneyflows,
+          component: ImportMoneyflowsVue,
         },
         {
           path: "listCapitalsources/:letter?",
