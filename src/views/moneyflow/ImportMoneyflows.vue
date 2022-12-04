@@ -50,6 +50,8 @@ import type { ImportedMoneyflow } from "@/model/moneyflow/ImportedMoneyflow";
 import ImportedMoneyflowControllerHandler from "@/handler/ImportedMoneyflowControllerHandler";
 import EditMoneyflowVue from "@/components/moneyflow/EditMoneyflowInternal.vue";
 
+//FIXME: display hbci data above moneyflow form
+
 export default defineComponent({
   name: "ImportMoneyflows",
   data() {
