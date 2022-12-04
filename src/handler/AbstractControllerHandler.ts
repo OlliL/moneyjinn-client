@@ -30,7 +30,7 @@ abstract class AbstractControllerHandler {
       "post"
     );
     if ((await response.status) === 403) {
-      this.refreshAuthToken();
+      await this.refreshAuthToken();
       response = await this.internalWithBody(
         requestBody,
         controller,
@@ -53,7 +53,7 @@ abstract class AbstractControllerHandler {
       "put"
     );
     if ((await response.status) === 403) {
-      this.refreshAuthToken();
+      await this.refreshAuthToken();
       response = await this.internalWithBody(
         requestBody,
         controller,
@@ -67,7 +67,7 @@ abstract class AbstractControllerHandler {
   protected async get(controller: string, usecase: string): Promise<Response> {
     let response = await this.internalWithoutBody(controller, usecase, "get");
     if ((await response.status) === 403) {
-      this.refreshAuthToken();
+      await this.refreshAuthToken();
       response = await this.internalWithoutBody(controller, usecase, "get");
     }
     return response;
@@ -83,7 +83,7 @@ abstract class AbstractControllerHandler {
       "delete"
     );
     if ((await response.status) === 403) {
-      this.refreshAuthToken();
+      await this.refreshAuthToken();
       response = await this.internalWithoutBody(controller, usecase, "delete");
     }
     return response;
