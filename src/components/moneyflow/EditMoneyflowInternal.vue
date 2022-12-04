@@ -14,13 +14,13 @@
         <div class="form-floating">
           <input
             v-model="bookingdate"
-            id="bookingdate"
+            :id="'bookingdate' + idSuffix"
             type="date"
             @change="validateBookingdate"
             :class="' form-control ' + bookingdateErrorData.inputClass"
           />
           <label
-            for="bookingdate"
+            :for="'bookingdate' + idSuffix"
             :style="'color: ' + bookingdateErrorData.fieldColor"
             >{{ bookingdateErrorData.fieldLabel }}</label
           >
@@ -35,11 +35,11 @@
         <div class="form-floating">
           <input
             v-model="invoicedate"
-            id="invoicedate"
+            :id="'invoicedate' + idSuffix"
             type="date"
             class="form-control"
           />
-          <label for="invoicedate">Rechnungsdatum</label>
+          <label :for="'invoicedate' + idSuffix">Rechnungsdatum</label>
         </div>
         <span class="input-group-text"
           ><i class="bi bi-calendar-date"></i
@@ -53,7 +53,7 @@
         :input-class="contractpartnerErrorData.inputClass"
         :validity-date="validityDate"
         :selected-id="mmf.contractpartnerId"
-        id-suffix="CreateMoneyflow"
+        :id-suffix="'CreateMoneyflow' + idSuffix"
         @contractpartner-selected="onContractpartnerSelected"
       />
     </div>
@@ -65,7 +65,7 @@
         :input-class="capitalsourceErrorData.inputClass"
         :validity-date="validityDate"
         :selected-id="mmf.capitalsourceId"
-        id-suffix="CreateMoneyflow"
+        :id-suffix="'CreateMoneyflow' + idSuffix"
         @capitalsource-selected="onCapitalsourceSelected"
       />
     </div>
@@ -77,16 +77,18 @@
         <div class="form-floating">
           <input
             v-model="amount"
-            id="amount"
+            :id="'amount' + idSuffix"
             type="number"
             step="0.01"
             @change="validateAmount"
             :class="' form-control text-end ' + amountErrorData.inputClass"
             ref="amountRef"
           />
-          <label for="amount" :style="'color: ' + amountErrorData.fieldColor">{{
-            amountErrorData.fieldLabel
-          }}</label>
+          <label
+            :for="'amount' + idSuffix"
+            :style="'color: ' + amountErrorData.fieldColor"
+            >{{ amountErrorData.fieldLabel }}</label
+          >
         </div>
         <span class="input-group-text"
           ><i class="bi bi-currency-euro"></i
@@ -98,14 +100,16 @@
       <div class="form-floating">
         <input
           v-model="mmf.comment"
-          id="comment"
+          :id="'comment' + idSuffix"
           type="text"
           @input="validateComment"
           :class="'form-control ' + commentErrorData.inputClass"
         />
-        <label for="comment" :style="'color: ' + commentErrorData.fieldColor">{{
-          commentErrorData.fieldLabel
-        }}</label>
+        <label
+          :for="'comment' + idSuffix"
+          :style="'color: ' + commentErrorData.fieldColor"
+          >{{ commentErrorData.fieldLabel }}</label
+        >
       </div>
     </div>
     <div class="col-md-3 col-xs-12" v-show="showMoneyflowFields">
@@ -114,7 +118,7 @@
         :field-label="postingaccountErrorData.fieldLabel"
         :input-class="postingaccountErrorData.inputClass"
         :selected-id="mmf.postingAccountId"
-        id-suffix="CreateMoneyflow"
+        :id-suffix="'CreateMoneyflow' + idSuffix"
         @posting-account-selected="onPostingAccountSelected"
       />
     </div>
@@ -126,12 +130,12 @@
           type="radio"
           class="btn-check"
           name="public-private"
-          id="public"
+          :id="'public' + idSuffix"
           autocomplete="off"
           v-model="mmf.private"
           :value="false"
         />
-        <label class="btn btn-outline-success" for="public"
+        <label class="btn btn-outline-success" :for="'public' + idSuffix"
           ><small>&ouml;ffentlich</small></label
         >
 
@@ -139,12 +143,12 @@
           type="radio"
           class="btn-check"
           name="public-private"
-          id="private"
+          :id="'private' + idSuffix"
           autocomplete="off"
           v-model="mmf.private"
           :value="true"
         />
-        <label class="btn btn-outline-danger" for="private"
+        <label class="btn btn-outline-danger" :for="'private' + idSuffix"
           ><small>privat</small></label
         >
       </div>
@@ -154,12 +158,12 @@
           type="radio"
           class="btn-check"
           name="once-favorite"
-          id="once"
+          :id="'once' + idSuffix"
           autocomplete="off"
           v-model="saveAsPreDefMoneyflow"
           :value="false"
         />
-        <label class="btn btn-outline-secondary" for="once"
+        <label class="btn btn-outline-secondary" :for="'once' + idSuffix"
           ><small>{{ toggleTextOff }}</small></label
         >
 
@@ -167,12 +171,12 @@
           type="radio"
           class="btn-check"
           name="once-favorite"
-          id="favorite"
+          :id="'favorite' + idSuffix"
           autocomplete="off"
           v-model="saveAsPreDefMoneyflow"
           :value="true"
         />
-        <label class="btn btn-outline-primary" for="favorite"
+        <label class="btn btn-outline-primary" :for="'favorite' + idSuffix"
           ><small>{{ toggleTextOn }}</small></label
         >
       </div>
@@ -185,13 +189,13 @@
         <div class="card-header text-start">
           <a
             data-bs-toggle="collapse"
-            href="#collapseSplitEntries"
-            id="mseContainer"
+            :href="'#collapseSplitEntries' + idSuffix"
+            :id="'mseContainer' + idSuffix"
             ref="mseContainer"
             >Unterbuchungen</a
           >
         </div>
-        <div class="collapse" id="collapseSplitEntries">
+        <div class="collapse" :id="'collapseSplitEntries' + idSuffix">
           <div class="card-body">
             <EditMoneyflowSplitEntryRowVue
               v-for="(mse, index) in mmf.moneyflowSplitEntries"
@@ -243,6 +247,8 @@ import MoneyflowControllerHandler from "@/handler/MoneyflowControllerHandler";
 import { generateErrorData, type ErrorData } from "@/tools/views/ErrorData";
 import { getError } from "@/tools/views/ThrowError";
 import { validateInputField } from "@/tools/views/ValidateInputField";
+import ImportedMoneyflowControllerHandler from "@/handler/ImportedMoneyflowControllerHandler";
+import type { ImportedMoneyflow } from "@/model/moneyflow/ImportedMoneyflow";
 
 type EditMoneyflowData = {
   serverError: Array<String> | undefined;
@@ -322,6 +328,10 @@ export default defineComponent({
     selectedPreDefMoneyflow: {
       type: Object as PropType<PreDefMoneyflow>,
       required: false,
+    },
+    idSuffix: {
+      type: String,
+      default: "",
     },
   },
   watch: {
@@ -777,6 +787,31 @@ export default defineComponent({
       }
       return true;
     },
+    async importImportedMoneyflow(mim: ImportedMoneyflow) {
+      if (this.prepareServerCall()) {
+        const importedMoneyflow: ImportedMoneyflow = {
+          ...this.mmf,
+          accountNumber: mim.accountNumber,
+          bankCode: mim.bankCode,
+          externalid: mim.externalid,
+          name: mim.name,
+          usage: mim.usage,
+          accountNumberCapitalsource: mim.accountNumberCapitalsource,
+          bankCodeCapitalsource: mim.bankCodeCapitalsource,
+        };
+        const validationResult =
+          await ImportedMoneyflowControllerHandler.importImportedMoneyflow(
+            importedMoneyflow
+          );
+        if (this.followUpServerCall(validationResult)) {
+          return true;
+        }
+      }
+      return false;
+    },
+    async deleteImportedMoneyflow(id: number) {
+      await ImportedMoneyflowControllerHandler.deleteImportedMoneyflow(id);
+    },
     async createMoneyflow(): Promise<boolean> {
       if (this.prepareServerCall()) {
         const validationResult =
@@ -826,7 +861,13 @@ export default defineComponent({
       return undefined;
     },
   },
-  expose: ["createMoneyflow", "updateMoneyflow", "resetForm"],
+  expose: [
+    "createMoneyflow",
+    "updateMoneyflow",
+    "resetForm",
+    "importImportedMoneyflow",
+    "deleteImportedMoneyflow",
+  ],
   components: {
     ContractpartnerSelectVue,
     CapitalsourceSelectVue,

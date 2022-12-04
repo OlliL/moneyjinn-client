@@ -50,11 +50,9 @@
           <li class="nav-item">
             <a class="nav-link" href="#"><i class="bi bi-search"></i></a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#"
-              ><i class="bi bi-box-arrow-in-down-right"></i
-            ></a>
-          </li>
+          <router-link class="nav-link" :to="{ name: Routes.ImportMoneyflows }"
+            ><i class="bi bi-box-arrow-in-down-right"></i
+          ></router-link>
           <li class="nav-item">
             <a class="nav-link" href="#"><i class="bi bi-ui-checks"></i></a>
           </li>
