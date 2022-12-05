@@ -16,6 +16,46 @@
           <div class="card-body">
             <form @submit.prevent="importImportedMoneyflow(importedMoneyflow)">
               <div class="container-fluid">
+                <div class="row mb-2">
+                  <div
+                    class="col-md-1 col-xs-6 d-flex justify-content-end align-items-center"
+                    style="font-weight: 700; font-size: 10.5px"
+                  >
+                    IBAN:
+                  </div>
+                  <div class="col-md-2 col-xs-6 text-start">
+                    {{ importedMoneyflow.accountNumber }}
+                  </div>
+                  <div
+                    class="col-md-1 col-xs-6 d-flex justify-content-end align-items-center"
+                    style="font-weight: 700; font-size: 10.5px"
+                  >
+                    BIC:
+                  </div>
+                  <div class="col-md-2 col-xs-6 text-start">
+                    {{ importedMoneyflow.bankCode }}
+                  </div>
+                  <div
+                    class="col-md-2 col-xs-6 d-flex justify-content-end align-items-center"
+                    style="font-weight: 700; font-size: 10.5px"
+                  >
+                    Transaktionspartner:
+                  </div>
+                  <div class="col-md-4 col-xs-6 text-start">
+                    {{ importedMoneyflow.name }}
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <div
+                    class="col-md-1 col-xs-6 d-flex justify-content-end align-items-center"
+                    style="font-weight: 700; font-size: 10.5px"
+                  >
+                    Verwendungszweck:
+                  </div>
+                  <div class="col-md-11 col-xs-6 text-start">
+                    {{ importedMoneyflow.usage }}
+                  </div>
+                </div>
                 <EditMoneyflowVue
                   :ref="'editMoneyflowVue' + importedMoneyflow.id"
                   :mmf-to-edit="importedMoneyflow"
