@@ -424,16 +424,17 @@ export default defineComponent({
       }
     },
     mseRemainder(): number {
+      // avoid floating arithmetic problems by using fixed point arithmetics
       let remainder = 0;
       if (this.amount) {
-        remainder = this.amount;
+        remainder = this.amount * 100;
         if (this.mmf.moneyflowSplitEntries != undefined) {
           for (const mse of this.mmf.moneyflowSplitEntries) {
-            if (mse.amount) remainder -= mse.amount;
+            if (mse.amount) remainder -= mse.amount * 100;
           }
         }
       }
-      return remainder;
+      return remainder / 100;
     },
   },
   methods: {
