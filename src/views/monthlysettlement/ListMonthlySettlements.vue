@@ -55,24 +55,87 @@
       </div>
     </div>
     <!---->
-    <div class="row justify-content-md-center" v-if="selectedMonth">
+    <div class="row justify-content-md-center mb-4" v-if="selectedMonth">
       <div class="col-md-4 col-xs-12">
         <div class="card">
           <div class="card-header text-center p-3">
             <h5>Geldbewegung {{ monthName }} {{ year }}</h5>
           </div>
           <div class="card-body">
-            <table class="table table-striped table-bordered table-hover">
+            <table
+              class="table table-striped table-bordered table-hover"
+              v-if="monthlySettlementsNoCredit"
+            >
+              <col style="width: 70%" />
+              <col style="width: 30%" />
               <thead>
                 <tr>
                   <th>Kapitalquelle</th>
                   <th>Betrag</th>
                 </tr>
               </thead>
-              <tbody></tbody>
+              <tbody>
+                <tr v-for="mms in monthlySettlementsNoCredit" :key="mms.id">
+                  <td class="text-start">{{ mms.capitalsourceComment }}</td>
+                  <td :class="mms.amountClass">
+                    {{ mms.amountString }} &euro;
+                  </td>
+                </tr>
+                <tr>
+                  <td class="text-end">&sum;</td>
+                  <td :class="monthlySettlementNoCreditSumClass">
+                    <u>{{ monthlySettlementNoCreditSumString }} &euro;</u>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <table
+              class="table table-striped table-bordered table-hover"
+              v-if="monthlySettlementsCredit"
+            >
+              <col style="width: 70%" />
+              <col style="width: 30%" />
+              <thead v-if="!monthlySettlementsNoCredit">
+                <tr>
+                  <th>Kapitalquelle</th>
+                  <th>Betrag</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="mms in monthlySettlementsCredit" :key="mms.id">
+                  <td class="text-start">{{ mms.capitalsourceComment }}</td>
+                  <td :class="mms.amountClass">
+                    {{ mms.amountString }} &euro;
+                  </td>
+                </tr>
+                <tr>
+                  <td class="text-end">&sum;</td>
+                  <td :class="monthlySettlementCreditSumClass">
+                    <u>{{ monthlySettlementCreditSumString }} &euro;</u>
+                  </td>
+                </tr>
+              </tbody>
             </table>
           </div>
         </div>
+      </div>
+    </div>
+    <div class="row justify-content-md-center mb-4" v-if="selectedMonth">
+      <div class="col-md-4 col-xs-12">
+        <button
+          type="button"
+          class="btn btn-primary mx-2"
+          @click="showEditMonthlySettlementModal"
+        >
+          Bearbeiten
+        </button>
+        <button
+          type="button"
+          class="btn btn-danger mx-2"
+          @click="showDeleteMonthlySettlementModal"
+        >
+          L&ouml;schen
+        </button>
       </div>
     </div>
     <!---->
@@ -81,9 +144,18 @@
 
 <script lang="ts">
 import MonthlySettlementControllerHandler from "@/handler/MonthlySettlementControllerHandler";
+import type { MonthlySettlement } from "@/model/monthlysettlement/MonthlySettlement";
 import { getMonthName } from "@/tools/views/MonthName";
 import router, { Routes } from "@/router";
 import { defineComponent } from "vue";
+import { formatNumber, redIfNegativeEnd } from "@/tools/views/FormatNumber";
+import { CapitalsourceType } from "@/model/capitalsource/CapitalsourceType";
+
+type MonthlySettlementData = MonthlySettlement & {
+  amountClass: string;
+  amountString: string;
+};
+
 export default defineComponent({
   name: "ListMonthlySettlements",
   data() {
@@ -94,6 +166,12 @@ export default defineComponent({
       years: [] as number[],
       selectedYear: 0,
       selectedMonth: 0,
+      monthlySettlementsNoCredit: {} as Array<MonthlySettlementData>,
+      monthlySettlementsCredit: {} as Array<MonthlySettlementData>,
+      monthlySettlementNoCreditSumClass: "",
+      monthlySettlementNoCreditSumString: "",
+      monthlySettlementCreditSumClass: "",
+      monthlySettlementCreditSumString: "",
     };
   },
   props: {
@@ -115,8 +193,9 @@ export default defineComponent({
       : undefined;
 
     this.loadMonth(year, month);
+
     if (year !== undefined && month !== undefined)
-      this.loadMontlySettlements(year, month);
+      this.loadMonthlySettlements(year, month);
   },
   computed: {
     monthName(): string {
@@ -137,11 +216,52 @@ export default defineComponent({
 
       this.selectedYear = response.year;
       this.selectedMonth = response.month;
-      console.log(response);
-      console.log(month);
+
       this.dataLoaded = true;
     },
-    loadMontlySettlements(year: number, month: number) {},
+    async loadMonthlySettlements(year: number, month: number) {
+      this.monthlySettlementsCredit = new Array<MonthlySettlementData>();
+      this.monthlySettlementsNoCredit = new Array<MonthlySettlementData>();
+
+      const monthlySettlements: Array<MonthlySettlement> =
+        await MonthlySettlementControllerHandler.getMonthlySettlementList(
+          year,
+          month
+        );
+
+      let monthlySettlementNoCreditSum = 0;
+      let monthlySettlementCreditSum = 0;
+
+      for (let mms of monthlySettlements) {
+        const data: MonthlySettlementData = {
+          ...mms,
+          amountClass: redIfNegativeEnd(mms.amount),
+          amountString: formatNumber(mms.amount, 2),
+        };
+        if (mms.capitalsourceType === CapitalsourceType.CREDIT) {
+          this.monthlySettlementsCredit.push(data);
+          monthlySettlementCreditSum += mms.amount;
+        } else {
+          this.monthlySettlementsNoCredit.push(data);
+          monthlySettlementNoCreditSum += mms.amount;
+        }
+
+        this.monthlySettlementNoCreditSumClass = redIfNegativeEnd(
+          monthlySettlementNoCreditSum
+        );
+        this.monthlySettlementNoCreditSumString = formatNumber(
+          monthlySettlementNoCreditSum,
+          2
+        );
+        this.monthlySettlementCreditSumClass = redIfNegativeEnd(
+          monthlySettlementCreditSum
+        );
+        this.monthlySettlementCreditSumString = formatNumber(
+          monthlySettlementCreditSum,
+          2
+        );
+      }
+    },
     selectMonth(year: string, month?: string) {
       router.push({
         name: Routes.ListMonthlySettlements,
@@ -149,9 +269,10 @@ export default defineComponent({
       });
       if (this.$props.year + "" != year) this.loadMonth(+year);
       if (month) this.selectedMonth = +month;
-      console.log(this.selectedMonth);
     },
     showCreateMonthlySettlementModal() {},
+    showEditMonthlySettlementModal() {},
+    showDeleteMonthlySettlementModal() {},
   },
   components: {},
 });
