@@ -220,15 +220,14 @@ export default defineComponent({
       this.dataLoaded = true;
     },
     async loadMonthlySettlements(year: number, month: number) {
-      this.monthlySettlementsCredit = new Array<MonthlySettlementData>();
-      this.monthlySettlementsNoCredit = new Array<MonthlySettlementData>();
-
       const monthlySettlements: Array<MonthlySettlement> =
         await MonthlySettlementControllerHandler.getMonthlySettlementList(
           year,
           month
         );
 
+      const monthlySettlementsCredit = new Array<MonthlySettlementData>();
+      const monthlySettlementsNoCredit = new Array<MonthlySettlementData>();
       let monthlySettlementNoCreditSum = 0;
       let monthlySettlementCreditSum = 0;
 
@@ -239,12 +238,15 @@ export default defineComponent({
           amountString: formatNumber(mms.amount, 2),
         };
         if (mms.capitalsourceType === CapitalsourceType.CREDIT) {
-          this.monthlySettlementsCredit.push(data);
+          monthlySettlementsCredit.push(data);
           monthlySettlementCreditSum += mms.amount;
         } else {
-          this.monthlySettlementsNoCredit.push(data);
+          monthlySettlementsNoCredit.push(data);
           monthlySettlementNoCreditSum += mms.amount;
         }
+
+        this.monthlySettlementsCredit = monthlySettlementsCredit;
+        this.monthlySettlementsNoCredit = monthlySettlementsNoCredit;
 
         this.monthlySettlementNoCreditSumClass = redIfNegativeEnd(
           monthlySettlementNoCreditSum
@@ -268,7 +270,10 @@ export default defineComponent({
         params: { year: year, month: month },
       });
       if (this.$props.year + "" != year) this.loadMonth(+year);
-      if (month) this.selectedMonth = +month;
+      if (month) {
+        this.loadMonthlySettlements(+year, +month);
+        this.selectedMonth = +month;
+      }
     },
     showCreateMonthlySettlementModal() {},
     showEditMonthlySettlementModal() {},
