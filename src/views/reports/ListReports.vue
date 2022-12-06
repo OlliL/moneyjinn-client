@@ -104,11 +104,11 @@ export default defineComponent({
   props: {
     year: {
       type: String,
-      required: true,
+      default: "",
     },
     month: {
       type: String,
-      required: true,
+      default: "",
     },
   },
   created() {

@@ -7,8 +7,8 @@ class MonthlySettlementControllerHandler extends AbstractControllerHandler {
   private static CONTROLLER = "monthlysettlement";
 
   async getAvailableMonth(
-    year?: string,
-    month?: string
+    year?: number,
+    month?: number
   ): Promise<AvailableMonth> {
     let usecase = "getAvailableMonth";
     if (year) {
@@ -35,7 +35,7 @@ class MonthlySettlementControllerHandler extends AbstractControllerHandler {
     // easy mapping for now - same attributes
     const availableMonth: AvailableMonth =
       getAvailableMonthResponse.getAvailableMonthResponse;
-
+    console.log(getAvailableMonthResponse.getAvailableMonthResponse);
     return availableMonth;
   }
 }
