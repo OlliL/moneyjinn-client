@@ -11,7 +11,7 @@
     >
       <div class="col-md-4 col-xs-12">
         <select
-          class="form-select form-control"
+          class="form-select"
           id="selectmoneyflow"
           v-model="preDefMoneyflowId"
           @change="selectPreDefMoneyflow"

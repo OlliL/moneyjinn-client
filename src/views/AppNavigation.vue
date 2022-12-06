@@ -166,7 +166,19 @@
                 >
               </li>
               <li>
-                <a class="dropdown-item" href="#">Monatsabschl&uuml;sse</a>
+                <router-link
+                  :class="
+                    $route.matched.some(
+                      ({ name }) => name === Routes.ListMonthlySettlements
+                    )
+                      ? 'router-link-active dropdown-item'
+                      : 'dropdown-item'
+                  "
+                  :to="{
+                    name: Routes.ListMonthlySettlements,
+                  }"
+                  >Monatsabschl&uuml;sse</router-link
+                >
               </li>
             </ul>
           </li>
