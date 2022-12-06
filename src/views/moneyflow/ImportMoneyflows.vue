@@ -63,13 +63,12 @@
                 />
                 <div class="row no-gutters flex-lg-nowrap">
                   <div class="col-12">
-                    <button type="submit" class="btn btn-primary">
+                    <button type="submit" class="btn btn-primary mx-2">
                       &Uuml;bernehmen
                     </button>
-                    &nbsp;&nbsp;
                     <button
                       type="button"
-                      class="btn btn-danger"
+                      class="btn btn-danger mx-2"
                       @click="deleteImportedMoneyflow(importedMoneyflow)"
                     >
                       l&ouml;schen
