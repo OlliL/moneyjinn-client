@@ -1,11 +1,21 @@
 <template>
   <div class="container-fluid text-center">
-    <h4>Reports</h4>
-    <div class="row" style="margin-top: 20px">
-      <div class="col">
+    <h4>Monatsabschl&uuml;sse</h4>
+    <div class="row justify-content-md-center mb-4" style="margin-top: 20px">
+      <div class="col-md-9 col-xs-12">
         <form action="#">
           <table style="margin: 0 auto">
             <tr>
+              <td class="text-right pe-2">
+                <button
+                  type="button"
+                  class="btn btn-primary"
+                  @click="showCreateMonthlySettlementModal"
+                >
+                  Neu
+                </button>
+              </td>
+
               <td class="text-right pe-2">
                 <select
                   class="form-select"
@@ -40,60 +50,23 @@
         </form>
       </div>
     </div>
-    <div class="row">
-      <div
-        class="col-md-3 text-start g-0"
-        style="position: fixed; z-index: 1030; margin-top: 35vh"
-      >
-        <h1>
-          <i
-            role="button"
-            @click="navigateToPreviousMonth"
-            v-if="previousMonthLink"
-            class="bi bi-caret-left-fill link-primary"
-          ></i>
-        </h1>
-      </div>
-      <div
-        class="col-md-3 text-end g-0 offset-md-9"
-        style="position: fixed; z-index: 1030; margin-top: 35vh"
-      >
-        <h1>
-          <i
-            role="button"
-            @click="navigateToNextMonth"
-            v-if="nextMonthLink"
-            class="bi bi-caret-right-fill link-primary"
-          ></i>
-        </h1>
-      </div>
-    </div>
-    <ReportTableVue :year="year" :month="month" v-if="year && month" />
-    <EtfTableVue :year="year" :month="month" v-if="year && month" />
+    <!-- conten vue here -->
   </div>
 </template>
 
 <script lang="ts">
-import ReportTableVue from "@/components/reports/ReportTable.vue";
-import EtfTableVue from "@/components/reports/EtfTable.vue";
-import ReportControllerHandler from "@/handler/ReportControllerHandler";
+import MonthlySettlementControllerHandler from "@/handler/MonthlySettlementControllerHandler";
 import { getMonthName } from "@/tools/views/MonthName";
 import router, { Routes } from "@/router";
 import { defineComponent } from "vue";
 export default defineComponent({
-  name: "ListReports",
+  name: "ListMonthlySettlements",
   data() {
     return {
       Routes: Routes,
       dataLoaded: false,
       months: [] as number[],
       years: [] as number[],
-      previousMonth: 0,
-      previousYear: 0,
-      nextMonth: 0,
-      nextYear: 0,
-      previousMonthLink: false,
-      nextMonthLink: false,
       selectedYear: 0,
     };
   },
@@ -115,40 +88,27 @@ export default defineComponent({
       return getMonthName(month);
     },
     async loadData(year?: string, month?: string) {
-      let response = await ReportControllerHandler.getAvailableMonth(
+      let response = await MonthlySettlementControllerHandler.getAvailableMonth(
         year,
         month
       );
       this.months = response.allMonth;
       this.years = response.allYears;
 
-      this.previousMonth = response.previousMonth;
-      this.previousMonthLink = response.previousMonthHasMoneyflows === 1;
-      this.previousYear = response.previousYear;
-
-      this.nextMonth = response.nextMonth;
-      this.nextMonthLink = response.nextMonthHasMoneyflows === 1;
-      this.nextYear = response.nextYear;
-
       this.selectedYear = response.year;
 
       this.dataLoaded = true;
     },
-    navigateToPreviousMonth() {
-      this.selectMonth(this.previousYear + "", this.previousMonth + "");
-    },
-    navigateToNextMonth() {
-      this.selectMonth(this.nextYear + "", this.nextMonth + "");
-    },
     selectMonth(year: string, month?: string) {
       router.push({
-        name: Routes.ListReports,
+        name: Routes.ListMonthlySettlements,
         params: { year: year, month: month },
       });
       this.loadData(year, month);
     },
+    showCreateMonthlySettlementModal() {},
   },
-  components: { ReportTableVue, EtfTableVue },
+  components: {},
 });
 </script>
 
