@@ -104,7 +104,7 @@ export default defineComponent({
         name: Routes.ListMonthlySettlements,
         params: { year: year, month: month },
       });
-      this.loadData(year, month);
+      if (this.$props.year != year) this.loadData(year, month);
     },
     showCreateMonthlySettlementModal() {},
   },
