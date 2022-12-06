@@ -38,13 +38,12 @@
                   <div class="col-12">
                     <button
                       type="button"
-                      class="btn btn-secondary"
+                      class="btn btn-secondary mx-2"
                       @click="resetForm"
                     >
                       r&uuml;cksetzen
                     </button>
-                    &nbsp;&nbsp;
-                    <button type="submit" class="btn btn-primary">
+                    <button type="submit" class="btn btn-primary mx-2">
                       Speichern
                     </button>
                   </div>

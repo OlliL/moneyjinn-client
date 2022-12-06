@@ -125,7 +125,7 @@
     <div
       class="col-md-3 col-xs-12 d-flex align-items-center justify-content-center"
     >
-      <div class="btn-group" role="group">
+      <div class="btn-group mx-2" role="group">
         <input
           type="radio"
           class="btn-check"
@@ -152,8 +152,7 @@
           ><small>privat</small></label
         >
       </div>
-      &nbsp; &nbsp;
-      <div class="btn-group" role="group">
+      <div class="btn-group mx-2" role="group">
         <input
           type="radio"
           class="btn-check"
