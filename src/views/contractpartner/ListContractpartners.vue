@@ -12,13 +12,13 @@
 
   <ListContractpartnerAccountsModalVue ref="accountsModal" />
 
-  <div class="">
-    <div class="row">
-      <div class="col text-center">
+  <div class="container-fluid text-center">
+    <div class="row justify-content-md-center">
+      <div class="col-xs-12 mb-4">
         <h4>Vertragspartner</h4>
       </div>
     </div>
-    <div class="row justify-content-md-center mb-4" style="margin-top: 20px">
+    <div class="row justify-content-md-center mb-4">
       <div class="col-md-9 col-xs-12">
         <table style="margin: 0 auto">
           <tr>

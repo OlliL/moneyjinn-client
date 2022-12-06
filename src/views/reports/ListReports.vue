@@ -1,7 +1,11 @@
 <template>
   <div class="container-fluid text-center">
-    <h4>Reports</h4>
-    <div class="row" style="margin-top: 20px">
+    <div class="row justify-content-md-center">
+      <div class="col-xs-12 mb-4">
+        <h4>Reports</h4>
+      </div>
+    </div>
+    <div class="row justify-content-md-center mb-4">
       <div class="col">
         <form action="#">
           <table style="margin: 0 auto">
