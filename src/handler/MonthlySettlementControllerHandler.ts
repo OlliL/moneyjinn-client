@@ -75,6 +75,21 @@ class MonthlySettlementControllerHandler extends AbstractControllerHandler {
 
     return monthlySettlements;
   }
+
+  async deleteMonthlySettlement(year: number, month: number) {
+    let usecase = "deleteMonthlySettlement";
+    usecase += "/" + year;
+    usecase += "/" + month;
+
+    const response = await super.delete(
+      MonthlySettlementControllerHandler.CONTROLLER,
+      usecase
+    );
+
+    if (!response.ok) {
+      throw new Error(response.statusText);
+    }
+  }
 }
 
 export default new MonthlySettlementControllerHandler();
