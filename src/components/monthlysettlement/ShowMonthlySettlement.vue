@@ -151,8 +151,8 @@ export default defineComponent({
           monthlySettlementCreditSum,
           2
         );
-        this.dataLoaded = true;
       }
+      this.dataLoaded = true;
     },
   },
   components: {},

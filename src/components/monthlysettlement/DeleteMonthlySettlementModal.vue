@@ -30,7 +30,7 @@ import ModalVue from "../Modal.vue";
 import ShowMonthlySettlementVue from "./ShowMonthlySettlement.vue";
 
 export default defineComponent({
-  name: "DeleteMoneyflowModal",
+  name: "DeleteMonthlySettlementModal",
   data() {
     return {
       year: 0,

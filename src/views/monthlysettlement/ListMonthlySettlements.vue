@@ -3,6 +3,10 @@
     ref="deleteModal"
     @monthly-settlement-deleted="monthlySettlementDeleted"
   />
+  <EditMonthlySettlementModalVue
+    ref="editModal"
+    @monthly-settlement-upserted="monthlySettlementUpserted"
+  />
   <div class="container-fluid text-center">
     <div class="row justify-content-md-center">
       <div class="col-xs-12 mb-4">
@@ -18,7 +22,7 @@
                 <button
                   type="button"
                   class="btn btn-primary"
-                  @click="showCreateMonthlySettlementModal"
+                  @click="showEditMonthlySettlementModal()"
                 >
                   Neu
                 </button>
@@ -78,7 +82,7 @@
         <button
           type="button"
           class="btn btn-primary mx-2"
-          @click="showEditMonthlySettlementModal"
+          @click="showEditMonthlySettlementModal(selectedYear, selectedMonth)"
         >
           Bearbeiten
         </button>
@@ -102,6 +106,7 @@ import ShowMontlySettlementVue from "@/components/monthlysettlement/ShowMonthlyS
 import router, { Routes } from "@/router";
 import { defineComponent } from "vue";
 import DeleteMonthlySettlementModalVue from "@/components/monthlysettlement/DeleteMonthlySettlementModal.vue";
+import EditMonthlySettlementModalVue from "@/components/monthlysettlement/EditMonthlySettlementModal.vue";
 
 export default defineComponent({
   name: "ListMonthlySettlements",
@@ -177,8 +182,13 @@ export default defineComponent({
         this.selectedMonth = 0;
       }
     },
-    showCreateMonthlySettlementModal() {},
-    showEditMonthlySettlementModal() {},
+    showEditMonthlySettlementModal(year?: number, month?: number) {
+      (this.$refs.editModal as typeof EditMonthlySettlementModalVue)._show(
+        year,
+        month
+      );
+    },
+    monthlySettlementUpserted() {},
     showDeleteMonthlySettlementModal() {
       (this.$refs.deleteModal as typeof DeleteMonthlySettlementModalVue)._show(
         this.selectedYear,
@@ -201,7 +211,11 @@ export default defineComponent({
       }
     },
   },
-  components: { ShowMontlySettlementVue, DeleteMonthlySettlementModalVue },
+  components: {
+    ShowMontlySettlementVue,
+    DeleteMonthlySettlementModalVue,
+    EditMonthlySettlementModalVue,
+  },
 });
 </script>
 
