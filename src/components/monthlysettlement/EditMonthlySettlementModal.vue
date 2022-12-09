@@ -68,9 +68,9 @@
                       id="amount"
                       type="number"
                       step="0.01"
-                      @change="validateAmount(mms.amount)"
+                      @change="validateAmount(mms)"
                       :class="
-                        ' form-control text-end ' + amountErrorData.inputClass
+                        ' form-control text-end ' + mms.errorData.inputClass
                       "
                       ref="amountRef"
                       :disabled="mms.imported"
@@ -105,9 +105,9 @@
                       id="amountCredit"
                       type="number"
                       step="0.01"
-                      @change="validateAmount(mms.amount)"
+                      @change="validateAmount(mms)"
                       :class="
-                        ' form-control text-end ' + amountErrorData.inputClass
+                        ' form-control text-end ' + mms.errorData.inputClass
                       "
                       ref="amountCreditRef"
                       :disabled="mms.imported"
@@ -141,7 +141,6 @@ import { CapitalsourceType } from "@/model/capitalsource/CapitalsourceType";
 import type { MonthlySettlement } from "@/model/monthlysettlement/MonthlySettlement";
 import { generateErrorData, type ErrorData } from "@/tools/views/ErrorData";
 import { getMonthName } from "@/tools/views/MonthName";
-import { validateInputField } from "@/tools/views/ValidateInputField";
 import { defineComponent } from "vue";
 import ModalVue from "../Modal.vue";
 import type { MonthlySettlementEditTransporter } from "@/model/monthlysettlement/MonthlySettlementEditTransporter";
@@ -152,6 +151,8 @@ import { getError } from "@/tools/views/ThrowError";
 
 type MonthlySettlementFormData = MonthlySettlement & {
   imported: boolean;
+  isValid: boolean | null;
+  errorData: ErrorData;
 };
 type EditMonthlySettlementModal = {
   serverError: Array<String> | undefined;
@@ -188,20 +189,21 @@ export default defineComponent({
     monthName(): string {
       return getMonthName(this.month);
     },
-    amountErrorData(): ErrorData {
-      return generateErrorData(
-        this.amountIsValid,
-        "Betrag",
-        this.amountErrorMessage
-      );
-    },
   },
   methods: {
+    amountErrorData(isValid: boolean | null): ErrorData {
+      return generateErrorData(isValid, "Betrag", "Betrag angeben!");
+    },
+    validateAmount(mms: MonthlySettlementFormData) {
+      mms.isValid = mms.amount + "" === "" ? false : true;
+      mms.errorData = this.amountErrorData(mms.isValid);
+    },
     getMonthName(month: number): string {
       return getMonthName(month);
     },
     async _show(year?: number, month?: number) {
       this.loadMonthlySettlements(year, month);
+      this.serverError = new Array<String>();
       (this.$refs.modalComponent as typeof ModalVue)._show();
     },
     selectYearMonth() {
@@ -219,11 +221,21 @@ export default defineComponent({
       const monthlySettlements = new Array<MonthlySettlementFormData>();
 
       for (let mms of transporter.monthlySettlements) {
-        monthlySettlements.push({ ...mms, imported: false });
+        monthlySettlements.push({
+          ...mms,
+          imported: false,
+          isValid: null,
+          errorData: this.amountErrorData(null),
+        });
       }
       if (transporter.importedMonthlySettlements) {
         for (let mms of transporter.importedMonthlySettlements) {
-          monthlySettlements.push({ ...mms, imported: true });
+          monthlySettlements.push({
+            ...mms,
+            imported: false,
+            isValid: null,
+            errorData: this.amountErrorData(null),
+          });
         }
       }
 
@@ -247,12 +259,7 @@ export default defineComponent({
       this.monthlySettlementsNoCredit = monthlySettlementsNoCredit;
       this.dataLoaded = true;
     },
-    validateAmount(amount: number) {
-      [this.amountIsValid, this.amountErrorMessage] = validateInputField(
-        amount,
-        "Betrag angeben!"
-      );
-    },
+
     followUpServerCall(validationResult: ValidationResult): boolean {
       if (!validationResult.result) {
         this.serverError = new Array<string>();
@@ -264,18 +271,30 @@ export default defineComponent({
       return true;
     },
     async upsertMonthlySettlement() {
-      let monthlySettlements = new Array<MonthlySettlement>();
+      let monthlySettlements = new Array<MonthlySettlementFormData>();
       monthlySettlements = this.monthlySettlementsCredit.concat(
         this.monthlySettlementsNoCredit
       );
-      const valRes =
-        await MonthlySettlementControllerHandler.upsertMonthlySettlement(
-          monthlySettlements
-        );
 
-      if (this.followUpServerCall(valRes)) {
-        (this.$refs.modalComponent as typeof ModalVue)._hide();
-        this.$emit("monthlySettlementUpserted", this.year, this.month);
+      let isValid = true;
+      for (let mms of monthlySettlements) {
+        this.validateAmount(mms);
+
+        if (mms.isValid === false) {
+          isValid = false;
+        }
+      }
+
+      if (isValid) {
+        const valRes =
+          await MonthlySettlementControllerHandler.upsertMonthlySettlement(
+            monthlySettlements
+          );
+
+        if (this.followUpServerCall(valRes)) {
+          (this.$refs.modalComponent as typeof ModalVue)._hide();
+          this.$emit("monthlySettlementUpserted", this.year, this.month);
+        }
       }
     },
   },
