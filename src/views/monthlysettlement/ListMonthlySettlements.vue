@@ -188,7 +188,13 @@ export default defineComponent({
         month
       );
     },
-    monthlySettlementUpserted() {},
+    monthlySettlementUpserted(year: number, month: number) {
+      this.loadMonth(year, month);
+      router.push({
+        name: Routes.ListMonthlySettlements,
+        params: { year: year, month: month },
+      });
+    },
     showDeleteMonthlySettlementModal() {
       (this.$refs.deleteModal as typeof DeleteMonthlySettlementModalVue)._show(
         this.selectedYear,
