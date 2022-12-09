@@ -1,12 +1,19 @@
 import AbstractControllerHandler from "@/handler/AbstractControllerHandler";
 import type { GetAvailableMonthResponse } from "@/model/rest/monthlysettlement/GetAvailableMonthResponse";
-import type { AvailableMonth } from "@/model/monthlysettlement/AvailableMonth";
-import { throwError } from "@/tools/views/ThrowError";
-import type { ShowMonthlySettlementListResponse } from "@/model/rest/monthlysettlement/ShowMonthlySettlementListResponse";
 import type { MonthlySettlement } from "@/model/monthlysettlement/MonthlySettlement";
-import { mapMonthlySettlementTransportToModel } from "./mapper/MonthlySettlementTransportMapper";
-import type { ShowMonthlySettlementCreateResponse } from "@/model/rest/monthlysettlement/ShowMonthlySettlementCreateResponse";
+import type { AvailableMonth } from "@/model/monthlysettlement/AvailableMonth";
 import type { MonthlySettlementEditTransporter } from "@/model/monthlysettlement/MonthlySettlementEditTransporter";
+import {
+  mapMonthlySettlementToTransport,
+  mapMonthlySettlementTransportToModel,
+} from "./mapper/MonthlySettlementTransportMapper";
+import type { ShowMonthlySettlementListResponse } from "@/model/rest/monthlysettlement/ShowMonthlySettlementListResponse";
+import type { ShowMonthlySettlementCreateResponse } from "@/model/rest/monthlysettlement/ShowMonthlySettlementCreateResponse";
+import type { UpsertMonthlySettlementRequest } from "@/model/rest/monthlysettlement/UpsertMonthlySettlementRequest";
+import type { ValidationResult } from "@/model/validation/ValidationResult";
+import { throwError } from "@/tools/views/ThrowError";
+import type { ValidationResponse } from "@/model/rest/ValidationResponse";
+import { mapValidationItemTransportToModel } from "./mapper/ValidationItemTransportMapper";
 
 class MonthlySettlementControllerHandler extends AbstractControllerHandler {
   private static CONTROLLER = "monthlysettlement";
@@ -127,6 +134,42 @@ class MonthlySettlementControllerHandler extends AbstractControllerHandler {
     result.editMode = innerResult.editMode == 1 ? true : false;
 
     return result;
+  }
+
+  async upsertMonthlySettlement(
+    monthlySettlements: Array<MonthlySettlement>
+  ): Promise<ValidationResult> {
+    const usecase = "upsertMonthlySettlement";
+    const request = {
+      upsertMonthlySettlementRequest: {},
+    } as UpsertMonthlySettlementRequest;
+    const innerRequest = request.upsertMonthlySettlementRequest;
+    innerRequest.monthlySettlementTransport = monthlySettlements?.map((mms) =>
+      mapMonthlySettlementToTransport(mms)
+    );
+
+    const response = await super.post(
+      request,
+      MonthlySettlementControllerHandler.CONTROLLER,
+      usecase
+    );
+
+    if (!response.ok) {
+      throw new Error(response.statusText);
+    }
+
+    const validationResponse = (await response.json()) as ValidationResponse;
+    const innerResponse = validationResponse.validationResponse;
+    const validationResult: ValidationResult = {
+      result: innerResponse.result,
+      validationResultItems: innerResponse.validationItemTransport?.map(
+        (vit) => {
+          return mapValidationItemTransportToModel(vit);
+        }
+      ),
+    };
+
+    return validationResult;
   }
 
   async deleteMonthlySettlement(year: number, month: number) {
