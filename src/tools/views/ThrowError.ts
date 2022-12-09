@@ -95,6 +95,12 @@ export function getError(code: number, variableArray?: Array<string>) {
     case ErrorCode.AMOUNT_TO_BIG: {
       return "Betrag zu groß!";
     }
+    case ErrorCode.MEDIA_TYPE_UNKNOWN: {
+      return "Unbekannter Medientyp!";
+    }
+    case ErrorCode.AMOUNT_HAS_TO_BE_SPECIFIED: {
+      return "Es muss ein Betrag angegeben werden!";
+    }
     default: {
       return "Fehlertext zu Fehler-ID '" + code + "' ist unbekannt!";
     }
