@@ -283,6 +283,7 @@ import {
 import { mapActions } from "pinia";
 import { useCapitalsourceStore } from "@/stores/CapitalsourceStore";
 import type { ValidationResult } from "@/model/validation/ValidationResult";
+import { getISOStringDate } from "@/tools/views/FormatDate";
 
 type CreateCapitalsourceModalData = {
   mcs: Capitalsource;
@@ -433,14 +434,12 @@ export default defineComponent({
     resetForm() {
       if (this.origMcs) {
         this.mcs = JSON.parse(JSON.stringify(this.origMcs));
-        [this.validFrom] = new Date(this.mcs.validFrom)
-          .toISOString()
-          .split("T");
-        [this.validTil] = new Date(this.mcs.validTil).toISOString().split("T");
+        this.validFrom = getISOStringDate(new Date(this.mcs.validFrom));
+        this.validTil = getISOStringDate(new Date(this.mcs.validTil));
         this.groupUse = this.mcs.groupUse ? "1" : "0";
       } else {
         this.mcs = {} as Capitalsource;
-        [this.validFrom] = new Date().toISOString().split("T");
+        this.validFrom = getISOStringDate(new Date());
         this.validTil = "2999-12-31";
         this.groupUse = "";
       }

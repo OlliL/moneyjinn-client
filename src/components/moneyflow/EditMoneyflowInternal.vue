@@ -248,6 +248,7 @@ import { getError } from "@/tools/views/ThrowError";
 import { validateInputField } from "@/tools/views/ValidateInputField";
 import ImportedMoneyflowControllerHandler from "@/handler/ImportedMoneyflowControllerHandler";
 import type { ImportedMoneyflow } from "@/model/moneyflow/ImportedMoneyflow";
+import { getISOStringDate } from "@/tools/views/FormatDate";
 
 type EditMoneyflowData = {
   serverError: Array<String> | undefined;
@@ -446,12 +447,12 @@ export default defineComponent({
 
         // during JSON stringify/parse the Date object gets unfortunally lost and
         // it is a string here, so reparse it before extracting the date
-        [this.bookingdate] = new Date(this.mmfToEdit.bookingDate)
-          .toISOString()
-          .split("T");
-        [this.invoicedate] = new Date(this.mmfToEdit.invoiceDate)
-          .toISOString()
-          .split("T");
+        this.bookingdate = getISOStringDate(
+          new Date(this.mmfToEdit.bookingDate)
+        );
+        this.invoicedate = getISOStringDate(
+          new Date(this.mmfToEdit.invoiceDate)
+        );
 
         if (this.mmf.moneyflowSplitEntries == undefined) {
           this.mmf.moneyflowSplitEntries = new Array<MoneyflowSplitEntry>();
@@ -472,7 +473,7 @@ export default defineComponent({
         this.toggleMoneyflowFieldsForMse();
       } else {
         this.amount = undefined;
-        [this.bookingdate] = new Date().toISOString().split("T");
+        this.bookingdate = getISOStringDate(new Date());
         this.invoicedate = "";
         this.mmf.contractpartnerId = 0;
         this.mmf.contractpartnerName = "";
