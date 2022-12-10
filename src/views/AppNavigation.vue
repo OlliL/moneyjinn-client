@@ -250,7 +250,11 @@
   </nav>
   <main>
     <div style="margin-top: 80px">
-      <router-view />
+      <router-view v-slot="{ Component }">
+        <keep-alive>
+          <component :is="Component" />
+        </keep-alive>
+      </router-view>
     </div>
   </main>
 </template>

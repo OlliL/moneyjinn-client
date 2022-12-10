@@ -53,7 +53,7 @@ export default defineComponent({
   props: {
     validityDate: {
       type: Date,
-      required: true,
+      required: false,
     },
     selectedId: {
       type: Number,
@@ -79,7 +79,10 @@ export default defineComponent({
   computed: {
     contractpartnerArray(): Array<Contractpartner> {
       const contractpartnerStore = useContractpartnerStore();
-      return contractpartnerStore.getValidContractpartner(this.validityDate);
+      if (this.validityDate) {
+        return contractpartnerStore.getValidContractpartner(this.validityDate);
+      }
+      return contractpartnerStore.contractpartner;
     },
   },
   watch: {

@@ -5,7 +5,7 @@
         <h4>Suche nach Geldbewegungen</h4>
       </div>
     </div>
-    <div class="row justify-content-md-center">
+    <div class="row justify-content-md-center mb-4">
       <div class="col-md-9 col-xs-12">
         <div class="card w-100 bg-light">
           <div class="card-body">
@@ -72,7 +72,6 @@
                       field-color="black"
                       field-label="Vertragspartner"
                       input-class=""
-                      :validity-date="new Date()"
                       :selected-id="contractpartnerId"
                       id-suffix="SearchMoneyflow"
                       @contractpartner-selected="onContractpartnerSelected"
@@ -173,10 +172,19 @@
                     </div>
                   </div>
                 </div>
-                <div class="row no-gutters flex-lg-nowrap mb-4">
-                  <div class="col-md-3 col-xs-12 d-grid gap-2 col-6 mx-auto">
-                    <button type="submit" class="btn btn-primary">
+                <div class="row no-gutters mb-4">
+                  <div
+                    class="col-md-3 col-xs-12 mx-auto d-flex align-items-center justify-content-center"
+                  >
+                    <button type="submit" class="btn btn-primary mx-2">
                       Suchen
+                    </button>
+                    <button
+                      type="button"
+                      class="btn btn-secondary mx-2"
+                      @click="resetForm"
+                    >
+                      r&uuml;cksetzen
                     </button>
                   </div>
                   <div class="col-md-3 col-xs-12">
@@ -240,6 +248,33 @@
         </div>
       </div>
     </div>
+    <div class="row justify-content-md-center" v-if="dataLoaded">
+      <div class="col-md-9 col-xs-12">
+        <table class="table table-striped table-bordered table-hover">
+          <thead>
+            <tr>
+              <th></th>
+              <th v-if="colBookingMonth">Buchungsmonat</th>
+              <th v-if="colBookingYear">Buchungsjahr</th>
+              <th v-if="colContractpartner">Vertragspartner</th>
+              <th>Betrag</th>
+              <th>Kommentar</th>
+            </tr>
+          </thead>
+          <tbody>
+            <SearchMoneyflowResultGroupVue
+              v-for="[index, moneyflowGroup] in moneyflowGroups"
+              :key="index.toString()"
+              :moneyflow-group="moneyflowGroup"
+              :moneyflow-group-key="index.toString()"
+              :col-booking-month="colBookingMonth"
+              :col-booking-year="colBookingYear"
+              :col-contractpartner="colContractpartner"
+            />
+          </tbody>
+        </table>
+      </div>
+    </div>
   </div>
 </template>
 <script lang="ts">
@@ -256,11 +291,8 @@ import MoneyflowControllerHandler from "@/handler/MoneyflowControllerHandler";
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 import { getMonthName } from "@/tools/views/MonthName";
 import { toFixed } from "@/tools/math";
+import SearchMoneyflowResultGroupVue from "@/components/moneyflow/SearchMoneyflowResultGroup.vue";
 
-//FIXME - ValidityDate for Contractpartner needs to be range!
-//FIXME - sorting
-//FIXME - grouping
-//FIXME - display result
 //FIXME - show edit Modal with loading full moneyflowdata (including split entries)
 
 const GROUP_NONE: number = 0;
@@ -299,17 +331,14 @@ type SearchMoneyflowsData = {
   ORDER_AMOUNT: number;
   ORDER_COMMENT: number;
   moneyflowGroups: Map<String, MoneyflowGroup>;
+  colBookingMonth: boolean;
+  colBookingYear: boolean;
+  colContractpartner: boolean;
+  dataLoaded: boolean;
 };
-/*
-year
-month
-contractpartner
-group
-amount
-comment
-*/
 
 type MoneyflowGroup = {
+  sortString: string;
   month: number;
   monthString: string;
   year: number;
@@ -349,16 +378,17 @@ export default defineComponent({
       ORDER_GROUP: ORDER_GROUP,
       ORDER_AMOUNT: ORDER_AMOUNT,
       ORDER_COMMENT: ORDER_COMMENT,
-      moneyflowGroups: new Map<String, MoneyflowGroup>(),
+      moneyflowGroups: new Map<string, MoneyflowGroup>(),
+      colBookingMonth: false,
+      colBookingYear: false,
+      colContractpartner: false,
+      dataLoaded: false,
     };
   },
   mounted() {
-    const today = new Date();
-    this.enddate = getISOStringDate(today);
-    today.setMonth(0);
-    today.setDate(1);
-    this.startdate = getISOStringDate(today);
+    this.resetForm();
   },
+
   computed: {
     formIsValid(): boolean {
       const isValid = this.startdateIsValid && this.enddateIsValid;
@@ -383,6 +413,27 @@ export default defineComponent({
     },
   },
   methods: {
+    resetForm() {
+      const today = new Date();
+      this.enddate = getISOStringDate(today);
+      today.setMonth(0);
+      today.setDate(1);
+      this.startdate = getISOStringDate(today);
+      this.contractpartnerId = 0;
+      this.postingAccountId = 0;
+      this.comment = "";
+      this.featureCaseSensitive = false;
+      this.featureEqual = false;
+      this.featureOnlyMinusAmounts = false;
+      this.featureRegexp = false;
+      this.groupByFirst = GROUP_YEAR;
+      this.groupBySecond = GROUP_MONTH;
+      this.orderBy = ORDER_GROUP;
+      this.colBookingMonth = false;
+      this.colBookingYear = false;
+      this.colContractpartner = true;
+      this.dataLoaded = false;
+    },
     validateStartdate() {
       [this.startdateIsValid, this.startdateErrorMessage] = validateInputField(
         this.startdate,
@@ -406,6 +457,7 @@ export default defineComponent({
       }
     },
     async searchMoneyflows() {
+      this.dataLoaded = false;
       const searchParams: MoneyflowSearchParams = {
         startDate: new Date(this.startdate),
         endDate: new Date(this.enddate),
@@ -420,6 +472,14 @@ export default defineComponent({
           this.postingAccountId > 0 ? this.postingAccountId : undefined,
       };
 
+      this.colBookingMonth =
+        this.groupByFirst == GROUP_MONTH || this.groupBySecond == GROUP_MONTH;
+      this.colBookingYear =
+        !this.colBookingMonth &&
+        (this.groupByFirst == GROUP_YEAR || this.groupBySecond == GROUP_YEAR);
+      this.colContractpartner =
+        this.groupByFirst == GROUP_CONTRACTPARTNER ||
+        this.groupBySecond == GROUP_CONTRACTPARTNER;
       const moneyflows: Array<Moneyflow> =
         await MoneyflowControllerHandler.searchMoneyflows(searchParams);
 
@@ -428,7 +488,9 @@ export default defineComponent({
       switch (this.orderBy) {
         case ORDER_GROUP: {
           this.moneyflowGroups = new Map(
-            [...this.moneyflowGroups.entries()].sort()
+            [...this.moneyflowGroups.entries()].sort((a, b) =>
+              a[1].sortString.localeCompare(b[1].sortString)
+            )
           );
           break;
         }
@@ -449,7 +511,7 @@ export default defineComponent({
           break;
         }
       }
-      console.log(this.moneyflowGroups);
+      this.dataLoaded = true;
     },
     makeCommentString() {
       this.moneyflowGroups.forEach(
@@ -457,6 +519,7 @@ export default defineComponent({
       );
     },
     groupBy(moneyflows: Array<Moneyflow>) {
+      this.moneyflowGroups.clear();
       for (const moneyflow of moneyflows) {
         const groupByKey = this.getGroupByKey(moneyflow);
         let moneyflowGroup = this.moneyflowGroups.get(groupByKey);
@@ -476,6 +539,7 @@ export default defineComponent({
       moneyflow: Moneyflow
     ): MoneyflowGroup {
       const moneyflowGroup = {
+        sortString: this.getSortString(moneyflow),
         amount: 0,
         comment: new Set<string>(),
         moneyflows: new Array<Moneyflow>(),
@@ -505,8 +569,7 @@ export default defineComponent({
       this.moneyflowGroups.set(groupByKey, moneyflowGroup);
       return moneyflowGroup;
     },
-
-    getGroupByKey(moneyflow: Moneyflow): string {
+    getSortString(moneyflow: Moneyflow): string {
       let groupByKey = "";
       for (let groupBy of [this.groupByFirst, this.groupBySecond]) {
         switch (groupBy) {
@@ -535,7 +598,39 @@ export default defineComponent({
       }
       return groupByKey;
     },
+
+    getGroupByKey(moneyflow: Moneyflow): string {
+      let groupByKey = "";
+      for (let groupBy of [this.groupByFirst, this.groupBySecond]) {
+        switch (groupBy) {
+          case GROUP_CONTRACTPARTNER: {
+            groupByKey += String(moneyflow["contractpartnerId"]);
+            break;
+          }
+          case GROUP_MONTH: {
+            let month = String(moneyflow["bookingDate"].getMonth() + 1);
+            if (month.length === 1) groupByKey += "0";
+            groupByKey += month;
+            break;
+          }
+          case GROUP_YEAR: {
+            groupByKey += String(moneyflow["bookingDate"].getFullYear());
+            break;
+          }
+          default: {
+            groupByKey += "";
+            break;
+          }
+        }
+        groupByKey += "-";
+      }
+      return groupByKey;
+    },
   },
-  components: { ContractpartnerSelectVue, PostingAccountSelectVue },
+  components: {
+    ContractpartnerSelectVue,
+    PostingAccountSelectVue,
+    SearchMoneyflowResultGroupVue,
+  },
 });
 </script>
