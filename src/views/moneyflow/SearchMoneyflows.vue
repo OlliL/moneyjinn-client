@@ -426,7 +426,6 @@ export default defineComponent({
       this.groupBy(moneyflows);
       this.makeCommentString();
       switch (this.orderBy) {
-        // FIXME amount
         case ORDER_GROUP: {
           this.moneyflowGroups = new Map(
             [...this.moneyflowGroups.entries()].sort()
@@ -437,6 +436,14 @@ export default defineComponent({
           this.moneyflowGroups = new Map(
             [...this.moneyflowGroups.entries()].sort((a, b) =>
               a[1].commentString.localeCompare(b[1].commentString)
+            )
+          );
+          break;
+        }
+        case ORDER_AMOUNT: {
+          this.moneyflowGroups = new Map(
+            [...this.moneyflowGroups.entries()].sort(
+              (a, b) => a[1].amount - b[1].amount
             )
           );
           break;
