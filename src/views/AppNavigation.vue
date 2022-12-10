@@ -48,8 +48,13 @@
             ></router-link>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#"><i class="bi bi-search"></i></a>
+            <router-link
+              class="nav-link"
+              :to="{ name: Routes.SearchMoneyflows }"
+              ><i class="bi bi-search"></i
+            ></router-link>
           </li>
+
           <li class="nav-item">
             <router-link
               class="nav-link"

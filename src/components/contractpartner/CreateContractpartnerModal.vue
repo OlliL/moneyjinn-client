@@ -192,6 +192,7 @@ import ModalVue from "../Modal.vue";
 import { mapActions } from "pinia";
 import { useContractpartnerStore } from "@/stores/ContractpartnerStore";
 import type { ValidationResult } from "@/model/validation/ValidationResult";
+import { getISOStringDate } from "@/tools/views/FormatDate";
 
 type CreateContractpartnerModalData = {
   mcp: Contractpartner;
@@ -272,13 +273,11 @@ export default defineComponent({
     resetForm() {
       if (this.origMcp) {
         this.mcp = JSON.parse(JSON.stringify(this.origMcp));
-        [this.validFrom] = new Date(this.mcp.validFrom)
-          .toISOString()
-          .split("T");
-        [this.validTil] = new Date(this.mcp.validTil).toISOString().split("T");
+        this.validFrom = getISOStringDate(new Date(this.mcp.validFrom));
+        this.validTil = getISOStringDate(new Date(this.mcp.validTil));
       } else {
         this.mcp = {} as Contractpartner;
-        [this.validFrom] = new Date().toISOString().split("T");
+        this.validFrom = getISOStringDate(new Date());
         this.validTil = "2999-12-31";
       }
       this.nameIsValid = null;

@@ -1,12 +1,17 @@
 import AbstractControllerHandler from "@/handler/AbstractControllerHandler";
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
+import type { MoneyflowSearchParams } from "@/model/moneyflow/MoneyflowSearchParams";
 import type { MoneyflowSplitEntry } from "@/model/moneyflow/MoneyflowSplitEntry";
 import type { MoneyflowValidation } from "@/model/moneyflow/MoneyflowValidation";
 import type { CreateMoneyflowRequest } from "@/model/rest/moneyflow/CreateMoneyflowRequest";
+import type { SearchMoneyflowsRequest } from "@/model/rest/moneyflow/SearchMoneyflowsRequest";
+import type { SearchMoneyflowsResponse } from "@/model/rest/moneyflow/SearchMoneyflowsResponse";
 import type { UpdateMoneyflowRequest } from "@/model/rest/moneyflow/UpdateMoneyflowRequest";
 import type { UpdateMoneyflowResponse } from "@/model/rest/moneyflow/UpdateMoneyflowResponse";
 import type { ValidationResponse } from "@/model/rest/ValidationResponse";
 import type { ValidationResult } from "@/model/validation/ValidationResult";
+import { throwError } from "@/tools/views/ThrowError";
+import { mapMoneyflowSearchParamsToTransport } from "./mapper/MoneyflowSearchParamsTransportMapper";
 import { mapMoneyflowSplitEntryToTransport } from "./mapper/MoneyflowSplitEntryTransportMapper";
 import {
   mapMoneyflowToTransport,
@@ -132,6 +137,43 @@ class MoneyflowControllerHandler extends AbstractControllerHandler {
     if (!response.ok) {
       throw new Error(response.statusText);
     }
+  }
+
+  async searchMoneyflows(
+    searchParams: MoneyflowSearchParams
+  ): Promise<Array<Moneyflow>> {
+    const usecase = "searchMoneyflows";
+
+    const request = { searchMoneyflowsRequest: {} } as SearchMoneyflowsRequest;
+    const innerRequest = request.searchMoneyflowsRequest;
+    innerRequest.moneyflowSearchParamsTransport =
+      mapMoneyflowSearchParamsToTransport(searchParams);
+
+    const response = await super.put(
+      request,
+      MoneyflowControllerHandler.CONTROLLER,
+      usecase
+    );
+    if (!response.ok) {
+      throw new Error(response.statusText);
+    }
+
+    const searchMoneyflowsResponse =
+      (await response.json()) as SearchMoneyflowsResponse;
+
+    if (searchMoneyflowsResponse.error) {
+      throwError(searchMoneyflowsResponse.error.code);
+    }
+
+    const innerResponse = searchMoneyflowsResponse.searchMoneyflowsResponse;
+
+    const moneyflows: Array<Moneyflow> = innerResponse.moneyflowTransport?.map(
+      (mmf) => {
+        return mapMoneyflowTransportToModel(mmf, false);
+      }
+    );
+
+    return moneyflows;
   }
 }
 

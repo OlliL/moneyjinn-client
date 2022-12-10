@@ -26,3 +26,16 @@ export function formatDate(date: Date): string {
   }
   return dateStr;
 }
+
+export function getISOStringDate(date: Date): string {
+  let dateStr = date.getFullYear() + "-";
+  dateStr += leftpad(date.getMonth() + 1) + "-";
+  dateStr += leftpad(date.getDate());
+  return dateStr;
+}
+
+function leftpad(num: number, resultLength = 2, leftpadChar = "0"): string {
+  return (String(leftpadChar).repeat(resultLength) + String(num)).slice(
+    String(num).length
+  );
+}

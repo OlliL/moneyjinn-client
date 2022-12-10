@@ -1,6 +1,7 @@
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 import type { MoneyflowSplitEntryTransport } from "@/model/rest/transport/MoneyflowSplitEntryTransport";
 import type { MoneyflowTransport } from "@/model/rest/transport/MoneyflowTransport";
+import { getISOStringDate } from "@/tools/views/FormatDate";
 import { mapMoneyflowSplitEntryTransportToModel } from "./MoneyflowSplitEntryTransportMapper";
 
 export function mapMoneyflowTransportToModel(
@@ -31,9 +32,9 @@ export function mapMoneyflowTransportToModel(
 }
 
 export function mapMoneyflowToTransport(model: Moneyflow): MoneyflowTransport {
-  const [bookingDate] = model.bookingDate.toISOString().split("T");
+  const bookingDate = getISOStringDate(model.bookingDate);
   const invoiceDate = model.invoiceDate
-    ? model.invoiceDate.toISOString().split("T")[0]
+    ? getISOStringDate(model.invoiceDate)
     : bookingDate;
   const transport: MoneyflowTransport = {
     id: model.id,
