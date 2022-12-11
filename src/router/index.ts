@@ -62,6 +62,7 @@ const router = createRouter({
           path: "searchMoneyflows",
           name: Routes.SearchMoneyflows,
           component: SearchMoneyflowsVue,
+          meta: { keepAlive: true },
         },
         {
           path: "listCapitalsources/:letter?",

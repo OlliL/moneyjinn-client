@@ -3,6 +3,7 @@ import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 import type { MoneyflowSearchParams } from "@/model/moneyflow/MoneyflowSearchParams";
 import type { MoneyflowSplitEntry } from "@/model/moneyflow/MoneyflowSplitEntry";
 import type { MoneyflowValidation } from "@/model/moneyflow/MoneyflowValidation";
+import type { MoneyflowsValidation } from "@/model/moneyflow/MoneyflowsValidation";
 import type { CreateMoneyflowRequest } from "@/model/rest/moneyflow/CreateMoneyflowRequest";
 import type { SearchMoneyflowsRequest } from "@/model/rest/moneyflow/SearchMoneyflowsRequest";
 import type { SearchMoneyflowsResponse } from "@/model/rest/moneyflow/SearchMoneyflowsResponse";
@@ -18,6 +19,7 @@ import {
   mapMoneyflowTransportToModel,
 } from "./mapper/MoneyflowTransportMapper";
 import { mapValidationItemTransportToModel } from "./mapper/ValidationItemTransportMapper";
+import type { ShowEditMoneyflowResponse } from "@/model/rest/moneyflow/ShowEditMoneyflowResponse";
 
 class MoneyflowControllerHandler extends AbstractControllerHandler {
   private static CONTROLLER = "moneyflow";
@@ -141,13 +143,15 @@ class MoneyflowControllerHandler extends AbstractControllerHandler {
 
   async searchMoneyflows(
     searchParams: MoneyflowSearchParams
-  ): Promise<Array<Moneyflow>> {
+  ): Promise<MoneyflowValidation> {
     const usecase = "searchMoneyflows";
 
     const request = { searchMoneyflowsRequest: {} } as SearchMoneyflowsRequest;
     const innerRequest = request.searchMoneyflowsRequest;
     innerRequest.moneyflowSearchParamsTransport =
       mapMoneyflowSearchParamsToTransport(searchParams);
+
+    const moneyflowsValidation = {} as MoneyflowsValidation;
 
     const response = await super.put(
       request,
@@ -166,14 +170,53 @@ class MoneyflowControllerHandler extends AbstractControllerHandler {
     }
 
     const innerResponse = searchMoneyflowsResponse.searchMoneyflowsResponse;
+    const validationResult: ValidationResult = {
+      result: innerResponse.result,
+      validationResultItems: innerResponse.validationItemTransport?.map(
+        (vit) => {
+          return mapValidationItemTransportToModel(vit);
+        }
+      ),
+    };
+    moneyflowsValidation.validationResult = validationResult;
 
-    const moneyflows: Array<Moneyflow> = innerResponse.moneyflowTransport?.map(
-      (mmf) => {
-        return mapMoneyflowTransportToModel(mmf, false);
-      }
+    if (validationResult.result) {
+      const moneyflows: Array<Moneyflow> =
+        innerResponse.moneyflowTransport?.map((mmf) => {
+          return mapMoneyflowTransportToModel(mmf, false);
+        });
+      moneyflowsValidation.moneyflows = moneyflows;
+    }
+
+    return moneyflowsValidation;
+  }
+  async fetchMoneyflow(id: number): Promise<Moneyflow> {
+    const usecase = "showEditMoneyflow/" + id;
+
+    const response = await super.get(
+      MoneyflowControllerHandler.CONTROLLER,
+      usecase
+    );
+    if (!response.ok) {
+      throw new Error(response.statusText);
+    }
+
+    const showEditMoneyflowResponse =
+      (await response.json()) as ShowEditMoneyflowResponse;
+
+    if (showEditMoneyflowResponse.error) {
+      throwError(showEditMoneyflowResponse.error.code);
+    }
+
+    const innerResponse = showEditMoneyflowResponse.showEditMoneyflowResponse;
+
+    const moneyflow = mapMoneyflowTransportToModel(
+      innerResponse.moneyflowTransport,
+      innerResponse.hasReceipt,
+      innerResponse.moneyflowSplitEntryTransport
     );
 
-    return moneyflows;
+    return moneyflow;
   }
 }
 

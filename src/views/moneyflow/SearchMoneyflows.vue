@@ -1,4 +1,13 @@
 <template>
+  <DeleteMoneyflowModalVue
+    ref="deleteModal"
+    @moneyflow-deleted="searchMoneyflows"
+  />
+  <EditMoneyflowModalVue
+    ref="editModal"
+    @moneyflow-updated="searchMoneyflows"
+  />
+
   <div class="container-fluid text-center">
     <div class="row justify-content-md-center">
       <div class="col-xs-12 mb-4">
@@ -270,6 +279,8 @@
               :col-booking-month="colBookingMonth"
               :col-booking-year="colBookingYear"
               :col-contractpartner="colContractpartner"
+              @delete-moneyflow="deleteMoneyflow"
+              @edit-moneyflow="editMoneyflow"
             />
           </tbody>
         </table>
@@ -280,6 +291,8 @@
 <script lang="ts">
 import PostingAccountSelectVue from "@/components/postingaccount/PostingAccountSelect.vue";
 import ContractpartnerSelectVue from "@/components/contractpartner/ContractpartnerSelect.vue";
+import DeleteMoneyflowModalVue from "@/components/moneyflow/DeleteMoneyflowModal.vue";
+import EditMoneyflowModalVue from "@/components/moneyflow/EditMoneyflowModal.vue";
 import { generateErrorData, type ErrorData } from "@/tools/views/ErrorData";
 import { validateInputField } from "@/tools/views/ValidateInputField";
 import { defineComponent } from "vue";
@@ -292,6 +305,9 @@ import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 import { getMonthName } from "@/tools/views/MonthName";
 import { toFixed } from "@/tools/math";
 import SearchMoneyflowResultGroupVue from "@/components/moneyflow/SearchMoneyflowResultGroup.vue";
+import { getError } from "@/tools/views/ThrowError";
+import type { ValidationResult } from "@/model/validation/ValidationResult";
+import type { MoneyflowsValidation } from "@/model/moneyflow/MoneyflowsValidation";
 
 //FIXME - show edit Modal with loading full moneyflowdata (including split entries)
 
@@ -456,6 +472,15 @@ export default defineComponent({
         this.postingAccountId = postingAccount.id;
       }
     },
+    followUpServerCall(validationResult: ValidationResult): boolean {
+      if (!validationResult.result) {
+        this.serverError = new Array<string>();
+        for (let resultItem of validationResult.validationResultItems) {
+          this.serverError.push(getError(resultItem.error));
+        }
+      }
+      return validationResult.result;
+    },
     async searchMoneyflows() {
       this.dataLoaded = false;
       const searchParams: MoneyflowSearchParams = {
@@ -480,38 +505,44 @@ export default defineComponent({
       this.colContractpartner =
         this.groupByFirst == GROUP_CONTRACTPARTNER ||
         this.groupBySecond == GROUP_CONTRACTPARTNER;
-      const moneyflows: Array<Moneyflow> =
+      const moneyflowsValidation: MoneyflowsValidation =
         await MoneyflowControllerHandler.searchMoneyflows(searchParams);
 
-      this.groupBy(moneyflows);
-      this.makeCommentString();
-      switch (this.orderBy) {
-        case ORDER_GROUP: {
-          this.moneyflowGroups = new Map(
-            [...this.moneyflowGroups.entries()].sort((a, b) =>
-              a[1].sortString.localeCompare(b[1].sortString)
-            )
-          );
-          break;
+      const moneyflows = moneyflowsValidation.moneyflows;
+      if (
+        this.followUpServerCall(moneyflowsValidation.validationResult) &&
+        moneyflows
+      ) {
+        this.groupBy(moneyflows);
+        this.makeCommentString();
+        switch (this.orderBy) {
+          case ORDER_GROUP: {
+            this.moneyflowGroups = new Map(
+              [...this.moneyflowGroups.entries()].sort((a, b) =>
+                a[1].sortString.localeCompare(b[1].sortString)
+              )
+            );
+            break;
+          }
+          case ORDER_COMMENT: {
+            this.moneyflowGroups = new Map(
+              [...this.moneyflowGroups.entries()].sort((a, b) =>
+                a[1].commentString.localeCompare(b[1].commentString)
+              )
+            );
+            break;
+          }
+          case ORDER_AMOUNT: {
+            this.moneyflowGroups = new Map(
+              [...this.moneyflowGroups.entries()].sort(
+                (a, b) => a[1].amount - b[1].amount
+              )
+            );
+            break;
+          }
         }
-        case ORDER_COMMENT: {
-          this.moneyflowGroups = new Map(
-            [...this.moneyflowGroups.entries()].sort((a, b) =>
-              a[1].commentString.localeCompare(b[1].commentString)
-            )
-          );
-          break;
-        }
-        case ORDER_AMOUNT: {
-          this.moneyflowGroups = new Map(
-            [...this.moneyflowGroups.entries()].sort(
-              (a, b) => a[1].amount - b[1].amount
-            )
-          );
-          break;
-        }
+        this.dataLoaded = true;
       }
-      this.dataLoaded = true;
     },
     makeCommentString() {
       this.moneyflowGroups.forEach(
@@ -626,11 +657,22 @@ export default defineComponent({
       }
       return groupByKey;
     },
+    async deleteMoneyflow(id: number) {
+      console.log(id);
+      const mmf = await MoneyflowControllerHandler.fetchMoneyflow(id);
+      (this.$refs.deleteModal as typeof DeleteMoneyflowModalVue)._show(mmf);
+    },
+    async editMoneyflow(id: number) {
+      const mmf = await MoneyflowControllerHandler.fetchMoneyflow(id);
+      (this.$refs.editModal as typeof EditMoneyflowModalVue)._show(mmf);
+    },
   },
   components: {
     ContractpartnerSelectVue,
     PostingAccountSelectVue,
     SearchMoneyflowResultGroupVue,
+    DeleteMoneyflowModalVue,
+    EditMoneyflowModalVue,
   },
 });
 </script>

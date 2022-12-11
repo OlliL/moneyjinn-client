@@ -90,8 +90,10 @@
             </a>
             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
               <li>
-                <a class="dropdown-item" href="#"
-                  >Geldbewegung hinzuf&uuml;gen</a
+                <router-link
+                  class="dropdown-item"
+                  :to="{ name: Routes.CreateMoneyflow }"
+                  >Geldbewegung hinzuf&uuml;gen</router-link
                 >
               </li>
               <li>
@@ -251,7 +253,7 @@
   <main>
     <div style="margin-top: 80px">
       <router-view v-slot="{ Component }">
-        <keep-alive>
+        <keep-alive include="SearchMoneyflows">
           <component :is="Component" />
         </keep-alive>
       </router-view>
@@ -274,6 +276,7 @@ export default {
       router: router,
       year: new Date().getFullYear(),
       month: new Date().getMonth() + 1,
+      console: console,
     };
   },
   components: {
