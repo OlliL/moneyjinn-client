@@ -126,6 +126,12 @@ export default defineComponent({
       this.allPreDefMoneyflows =
         await PreDefMoneyflowControllerHandler.fetchAllPreDefMoneyflow();
 
+      this.allPreDefMoneyflows.sort((a, b) => {
+        return a.contractpartnerName
+          .toUpperCase()
+          .localeCompare(b.contractpartnerName.toUpperCase());
+      });
+
       const letters = this.allPreDefMoneyflows.map((entry) =>
         entry.contractpartnerName.substring(0, 1).toUpperCase()
       );
