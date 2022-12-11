@@ -286,7 +286,6 @@ export default {
       router: router,
       year: new Date().getFullYear(),
       month: new Date().getMonth() + 1,
-      console: console,
     };
   },
   components: {
