@@ -75,6 +75,8 @@
               v-for="moneyflow of moneyflowGroup.moneyflows"
               :key="moneyflow.id"
               :mmf="moneyflow"
+              @delete-moneyflow="emitDeleteMoneyflow"
+              @edit-moneyflow="emitEditMoneyflow"
             />
           </tbody>
         </table>
@@ -139,6 +141,7 @@ export default defineComponent({
       .getElementById("collapseResults" + this.moneyflowGroupKey)
       ?.addEventListener("hide.bs.collapse", () => this.toggleButtonHide());
   },
+  emits: ["deleteMoneyflow", "editMoneyflow"],
   computed: {
     amountClass(): string {
       return redIfNegativeEnd(this.moneyflowGroup.amount);
@@ -154,6 +157,12 @@ export default defineComponent({
     },
     toggleButtonHide() {
       this.collapseIconClass = "bi bi-caret-right-fill";
+    },
+    emitDeleteMoneyflow(id: number) {
+      this.$emit("deleteMoneyflow", id);
+    },
+    emitEditMoneyflow(id: number) {
+      this.$emit("editMoneyflow", id);
     },
   },
   components: { SearchMoneyflowResultRowVue },

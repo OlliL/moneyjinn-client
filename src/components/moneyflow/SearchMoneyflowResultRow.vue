@@ -54,10 +54,10 @@ export default defineComponent({
   },
   methods: {
     deleteMoneyflow() {
-      this.$emit("deleteMoneyflow", this.mmf);
+      this.$emit("deleteMoneyflow", this.mmf.id);
     },
     editMoneyflow() {
-      this.$emit("editMoneyflow", this.mmf);
+      this.$emit("editMoneyflow", this.mmf.id);
     },
   },
 });

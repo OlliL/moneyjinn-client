@@ -36,6 +36,9 @@ export function getError(code: number, variableArray?: Array<string>) {
     case ErrorCode.ACCOUNT_IS_LOCKED: {
       return "Ihr Benutzerkonto wurde gesperrt!";
     }
+    case ErrorCode.NO_SEARCH_CRITERIA_ENTERED: {
+      return "Keine Suchkriterien angegeben!";
+    }
     case ErrorCode.AMOUNT_ZERO: {
       return "Der Betrag muss ungleich 0 sein!";
     }
