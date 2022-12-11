@@ -48,8 +48,8 @@ export default defineComponent({
       this.month = month;
       (this.$refs.modalComponent as typeof ModalVue)._show();
     },
-    deleteMonthlySettlement() {
-      MonthlySettlementControllerHandler.deleteMonthlySettlement(
+    async deleteMonthlySettlement() {
+      await MonthlySettlementControllerHandler.deleteMonthlySettlement(
         this.year,
         this.month
       );

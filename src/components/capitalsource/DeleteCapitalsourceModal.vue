@@ -146,8 +146,8 @@ export default defineComponent({
       this.mcs = mcs;
       (this.$refs.modalComponent as typeof ModalVue)._show();
     },
-    deleteCapitalsource() {
-      CapitalsourceControllerHandler.deleteCapitalsource(this.mcs.id);
+    async deleteCapitalsource() {
+      await CapitalsourceControllerHandler.deleteCapitalsource(this.mcs.id);
       const capitalsourceStore = useCapitalsourceStore();
       capitalsourceStore.deleteCapitalsource(this.mcs);
       (this.$refs.modalComponent as typeof ModalVue)._hide();
