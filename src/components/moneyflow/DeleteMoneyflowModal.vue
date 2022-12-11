@@ -109,8 +109,8 @@ export default defineComponent({
       this.mmf = mmf;
       (this.$refs.modalComponent as typeof ModalVue)._show();
     },
-    deleteMoneyflow() {
-      MoneyflowControllerHandler.deleteMoneyflow(this.mmf.id);
+    async deleteMoneyflow() {
+      await MoneyflowControllerHandler.deleteMoneyflow(this.mmf.id);
       (this.$refs.modalComponent as typeof ModalVue)._hide();
       this.$emit("moneyflowDeleted", this.mmf);
     },
