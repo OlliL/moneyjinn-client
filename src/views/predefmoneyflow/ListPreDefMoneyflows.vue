@@ -1,0 +1,162 @@
+<template>
+  <div class="container-fluid text-center">
+    <div class="row justify-content-md-center">
+      <div class="col-xs-12 mb-4">
+        <h4>Vordefinierte Geldbewegungen</h4>
+      </div>
+    </div>
+    <div class="row justify-content-md-center mb-4">
+      <div class="col-md-9 col-xs-12">
+        <table style="margin: 0 auto">
+          <tr>
+            <td class="text-right pe-2">
+              <button
+                type="button"
+                class="btn btn-primary"
+                @click="showCreatePreDefMoneyflowModal"
+              >
+                Neu
+              </button>
+            </td>
+            <td>
+              <nav aria-label="Start letter navigation" v-if="dataLoaded">
+                <ul class="pagination month-selection">
+                  <li class="page-item">
+                    <a
+                      :class="
+                        $props.letter === '' ? 'page-link active' : 'page-link'
+                      "
+                      href="#"
+                      @click="selectLetter('')"
+                      >Alle</a
+                    >
+                  </li>
+                  <li class="page-item" v-for="letter in letters" :key="letter">
+                    <a
+                      :class="
+                        $props.letter === letter
+                          ? 'page-link active'
+                          : 'page-link'
+                      "
+                      href="#"
+                      @click="selectLetter(letter)"
+                      >{{ letter }}</a
+                    >
+                  </li>
+                </ul>
+              </nav>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+    <div class="row justify-content-md-center">
+      <div class="col-md-9 col-xs-12">
+        <table class="table table-striped table-bordered table-hover">
+          <thead>
+            <tr>
+              <th class="text-center">Betrag</th>
+              <th class="text-center">Vertragspartner</th>
+              <th class="text-center">Kommentar</th>
+              <th class="text-center">Buchungskonto</th>
+              <th class="text-center">Kapitalquelle</th>
+              <th class="text-center">1x</th>
+              <th class="text-center">angelegt am</th>
+              <th class="text-center">verwendet am</th>
+              <th class="text-center" colspan="2"></th>
+            </tr>
+            <tr v-for="mpm in preDefMoneyflows" :key="mpm.id">
+              <td>{{ mpm.amount }}</td>
+              <td>{{ mpm.contractpartnerName }}</td>
+              <td>{{ mpm.comment }}</td>
+              <td>{{ mpm.postingAccountName }}</td>
+              <td>{{ mpm.capitalsourceComment }}</td>
+              <td>{{ mpm.onceAMonth }}</td>
+              <td>{{ mpm.createDate }}</td>
+              <td>{{ mpm.lastUsed }}</td>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script lang="ts">
+import router, { Routes } from "@/router";
+import { defineComponent } from "vue";
+import type { PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
+import PreDefMoneyflowControllerHandler from "@/handler/PreDefMoneyflowControllerHandler";
+export default defineComponent({
+  name: "ListPreDefMoneyflows",
+  data() {
+    return {
+      dataLoaded: false,
+      letters: {} as Array<string>,
+      preDefMoneyflows: {} as Array<PreDefMoneyflow>,
+      allPreDefMoneyflows: {} as Array<PreDefMoneyflow>,
+    };
+  },
+  props: {
+    letter: {
+      type: String,
+      default: "",
+    },
+  },
+  async mounted() {
+    this.allPreDefMoneyflows =
+      await PreDefMoneyflowControllerHandler.fetchAllPreDefMoneyflow();
+
+    const letters = this.allPreDefMoneyflows.map((entry) =>
+      entry.contractpartnerName.substring(0, 1).toUpperCase()
+    );
+    const uniqueLetters = letters
+      .filter((v, i, a) => a.indexOf(v) === i)
+      .sort();
+    this.letters = uniqueLetters;
+
+    this.loadData(this.$props.letter);
+  },
+  computed: {},
+  methods: {
+    reloadView() {
+      this.loadData(this.$props.letter);
+    },
+    async loadData(letter: string) {
+      this.dataLoaded = false;
+      console.log(letter);
+      if (letter === "") {
+        this.preDefMoneyflows = this.allPreDefMoneyflows;
+      } else {
+        this.preDefMoneyflows = this.allPreDefMoneyflows.filter(
+          (entry) =>
+            entry.contractpartnerName.substring(0, 1).toUpperCase() === letter
+        );
+      }
+
+      this.dataLoaded = true;
+    },
+    selectLetter(letter: string) {
+      router.push({
+        name: Routes.ListPreDefMoneyflows,
+        params: { letter: letter },
+      });
+      this.loadData(letter);
+    },
+    showCreatePreDefMoneyflowModal() {},
+    preDefMoneyflowCreated() {
+      this.reloadView();
+    },
+    editPreDefMoneyflow(mpm: PreDefMoneyflow) {},
+    preDefMoneyflowUpdated() {
+      this.reloadView();
+    },
+    deletePreDefMoneyflow(mpm: PreDefMoneyflow) {},
+    preDefMoneyflowDeleted() {
+      this.reloadView();
+    },
+  },
+  components: {},
+});
+</script>
