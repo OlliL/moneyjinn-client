@@ -168,8 +168,18 @@
                 >
               </li>
               <li>
-                <a class="dropdown-item" href="#"
-                  >vordefinierte Geldbewegungen</a
+                <router-link
+                  :class="
+                    $route.matched.some(
+                      ({ name }) => name === Routes.ListPreDefMoneyflows
+                    )
+                      ? 'router-link-active dropdown-item'
+                      : 'dropdown-item'
+                  "
+                  :to="{
+                    name: Routes.ListPreDefMoneyflows,
+                  }"
+                  >vordefinierte Geldbewegungen</router-link
                 >
               </li>
               <li>
