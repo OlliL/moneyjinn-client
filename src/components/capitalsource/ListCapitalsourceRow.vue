@@ -34,7 +34,7 @@ import { formatDate } from "@/tools/views/FormatDate";
 import { defineComponent, type PropType } from "vue";
 
 export default defineComponent({
-  name: "ReportTableRow",
+  name: "ListCapitalsourceRow",
   props: {
     mcs: {
       type: Object as PropType<Capitalsource>,

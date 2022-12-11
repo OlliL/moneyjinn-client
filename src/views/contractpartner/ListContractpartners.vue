@@ -86,12 +86,12 @@
         <table class="table table-striped table-bordered table-hover">
           <thead>
             <tr>
-              <th class="text-center">Name</th>
-              <th class="text-center">g&uuml;ltig ab</th>
-              <th class="text-center">g&uuml;ltig bis</th>
-              <th class="text-center">Standard Kommentar</th>
-              <th class="text-center">Standard Buchungskonto</th>
-              <th class="text-center" colspan="3"></th>
+              <th>Name</th>
+              <th>g&uuml;ltig ab</th>
+              <th>g&uuml;ltig bis</th>
+              <th>Standard Kommentar</th>
+              <th>Standard Buchungskonto</th>
+              <th colspan="3"></th>
             </tr>
           </thead>
           <tbody>
