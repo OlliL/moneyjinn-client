@@ -259,7 +259,7 @@
     </div>
     <div class="row justify-content-md-center" v-if="dataLoaded">
       <div class="col-md-9 col-xs-12">
-        <table class="table table-striped table-bordered table-hover">
+        <table class="table table-striped table-bordered">
           <thead>
             <tr>
               <th></th>
@@ -289,27 +289,25 @@
   </div>
 </template>
 <script lang="ts">
+import { defineComponent } from "vue";
+import MoneyflowControllerHandler from "@/handler/MoneyflowControllerHandler";
 import PostingAccountSelectVue from "@/components/postingaccount/PostingAccountSelect.vue";
 import ContractpartnerSelectVue from "@/components/contractpartner/ContractpartnerSelect.vue";
 import DeleteMoneyflowModalVue from "@/components/moneyflow/DeleteMoneyflowModal.vue";
 import EditMoneyflowModalVue from "@/components/moneyflow/EditMoneyflowModal.vue";
-import { generateErrorData, type ErrorData } from "@/tools/views/ErrorData";
-import { validateInputField } from "@/tools/views/ValidateInputField";
-import { defineComponent } from "vue";
-import type { Contractpartner } from "@/model/contractpartner/Contractpartner";
-import type { PostingAccount } from "@/model/postingaccount/PostingAccount";
-import { getISOStringDate } from "@/tools/views/FormatDate";
-import type { MoneyflowSearchParams } from "@/model/moneyflow/MoneyflowSearchParams";
-import MoneyflowControllerHandler from "@/handler/MoneyflowControllerHandler";
-import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
-import { getMonthName } from "@/tools/views/MonthName";
-import { toFixed } from "@/tools/math";
 import SearchMoneyflowResultGroupVue from "@/components/moneyflow/SearchMoneyflowResultGroup.vue";
+import { toFixed } from "@/tools/math";
+import { generateErrorData, type ErrorData } from "@/tools/views/ErrorData";
+import { getISOStringDate } from "@/tools/views/FormatDate";
 import { getError } from "@/tools/views/ThrowError";
-import type { ValidationResult } from "@/model/validation/ValidationResult";
+import { getMonthName } from "@/tools/views/MonthName";
+import { validateInputField } from "@/tools/views/ValidateInputField";
+import type { Contractpartner } from "@/model/contractpartner/Contractpartner";
+import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
+import type { MoneyflowSearchParams } from "@/model/moneyflow/MoneyflowSearchParams";
 import type { MoneyflowsValidation } from "@/model/moneyflow/MoneyflowsValidation";
-
-//FIXME - show edit Modal with loading full moneyflowdata (including split entries)
+import type { PostingAccount } from "@/model/postingaccount/PostingAccount";
+import type { ValidationResult } from "@/model/validation/ValidationResult";
 
 const GROUP_NONE: number = 0;
 const GROUP_YEAR: number = 1;
@@ -449,6 +447,7 @@ export default defineComponent({
       this.colBookingYear = false;
       this.colContractpartner = true;
       this.dataLoaded = false;
+      this.serverError = {} as Array<String>;
     },
     validateStartdate() {
       [this.startdateIsValid, this.startdateErrorMessage] = validateInputField(
@@ -483,6 +482,7 @@ export default defineComponent({
     },
     async searchMoneyflows() {
       this.dataLoaded = false;
+      this.serverError = {} as Array<String>;
       const searchParams: MoneyflowSearchParams = {
         startDate: new Date(this.startdate),
         endDate: new Date(this.enddate),
