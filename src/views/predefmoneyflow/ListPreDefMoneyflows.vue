@@ -1,4 +1,16 @@
 <template>
+  <CreatePreDefMoneyflowModalVue
+    ref="createPreDedMoneyflowModal"
+    id-suffix="List"
+    @pre-def-moneyflow-created="preDefMoneyflowCreated"
+    @pre-def-moneyflow-updated="preDefMoneyflowUpdated"
+  />
+  <DeletePreDefMoneyflowModalVue
+    ref="deletePreDedMoneyflowModal"
+    id-suffix="List"
+    @pre-def-moneyflow-deleted="preDefMoneyflowDeleted"
+  />
+
   <div class="container-fluid text-center">
     <div class="row justify-content-md-center">
       <div class="col-xs-12 mb-4">
@@ -69,6 +81,8 @@
               v-for="mpm in preDefMoneyflows"
               :key="mpm.id"
               :mpm="mpm"
+              @edit-pre-def-moneyflow="editPreDefMoneyflow"
+              @delete-pre-def-moneyflow="deletePreDefMoneyflow"
             />
           </thead>
           <tbody></tbody>
@@ -84,6 +98,8 @@ import { defineComponent } from "vue";
 import type { PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
 import PreDefMoneyflowControllerHandler from "@/handler/PreDefMoneyflowControllerHandler";
 import ListPreDefMoneyflowRowVue from "@/components/predefmoneyflow/ListPreDefMoneyflowRow.vue";
+import CreatePreDefMoneyflowModalVue from "@/components/predefmoneyflow/CreatePreDefMoneyflowModal.vue";
+import DeletePreDefMoneyflowModalVue from "@/components/predefmoneyflow/DeletePreDefMoneyflowModal.vue";
 export default defineComponent({
   name: "ListPreDefMoneyflows",
   data() {
@@ -121,7 +137,6 @@ export default defineComponent({
     },
     async loadData(letter: string) {
       this.dataLoaded = false;
-      console.log(letter);
       if (letter === "") {
         this.preDefMoneyflows = this.allPreDefMoneyflows;
       } else {
@@ -140,19 +155,38 @@ export default defineComponent({
       });
       this.loadData(letter);
     },
-    showCreatePreDefMoneyflowModal() {},
+    showCreatePreDefMoneyflowModal() {
+      (
+        this.$refs
+          .createPreDedMoneyflowModal as typeof CreatePreDefMoneyflowModalVue
+      )._show();
+    },
     preDefMoneyflowCreated() {
       this.reloadView();
     },
-    editPreDefMoneyflow(mpm: PreDefMoneyflow) {},
+    editPreDefMoneyflow(mpm: PreDefMoneyflow) {
+      (
+        this.$refs
+          .createPreDedMoneyflowModal as typeof CreatePreDefMoneyflowModalVue
+      )._show(mpm);
+    },
     preDefMoneyflowUpdated() {
       this.reloadView();
     },
-    deletePreDefMoneyflow(mpm: PreDefMoneyflow) {},
+    deletePreDefMoneyflow(mpm: PreDefMoneyflow) {
+      (
+        this.$refs
+          .deletePreDedMoneyflowModal as typeof DeletePreDefMoneyflowModalVue
+      )._show(mpm);
+    },
     preDefMoneyflowDeleted() {
       this.reloadView();
     },
   },
-  components: { ListPreDefMoneyflowRowVue },
+  components: {
+    ListPreDefMoneyflowRowVue,
+    CreatePreDefMoneyflowModalVue,
+    DeletePreDefMoneyflowModalVue,
+  },
 });
 </script>

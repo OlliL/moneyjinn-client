@@ -37,11 +37,7 @@ export default defineComponent({
       required: true,
     },
   },
-  emits: [
-    "deletePreDefMoneyflow",
-    "editPreDefMoneyflow",
-    "listPreDefMoneyflowAccounts",
-  ],
+  emits: ["deletePreDefMoneyflow", "editPreDefMoneyflow"],
   computed: {
     createDateString(): string {
       return formatDate(this.mpm.createDate);

@@ -658,7 +658,6 @@ export default defineComponent({
       return groupByKey;
     },
     async deleteMoneyflow(id: number) {
-      console.log(id);
       const mmf = await MoneyflowControllerHandler.fetchMoneyflow(id);
       (this.$refs.deleteModal as typeof DeleteMoneyflowModalVue)._show(mmf);
     },
