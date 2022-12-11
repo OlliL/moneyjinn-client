@@ -55,26 +55,21 @@
         <table class="table table-striped table-bordered table-hover">
           <thead>
             <tr>
-              <th class="text-center">Betrag</th>
-              <th class="text-center">Vertragspartner</th>
-              <th class="text-center">Kommentar</th>
-              <th class="text-center">Buchungskonto</th>
-              <th class="text-center">Kapitalquelle</th>
-              <th class="text-center">1x</th>
-              <th class="text-center">angelegt am</th>
-              <th class="text-center">verwendet am</th>
-              <th class="text-center" colspan="2"></th>
+              <th>Betrag</th>
+              <th>Vertragspartner</th>
+              <th>Kommentar</th>
+              <th>Buchungskonto</th>
+              <th>Kapitalquelle</th>
+              <th>1x</th>
+              <th>angelegt am</th>
+              <th>verwendet am</th>
+              <th colspan="2"></th>
             </tr>
-            <tr v-for="mpm in preDefMoneyflows" :key="mpm.id">
-              <td>{{ mpm.amount }}</td>
-              <td>{{ mpm.contractpartnerName }}</td>
-              <td>{{ mpm.comment }}</td>
-              <td>{{ mpm.postingAccountName }}</td>
-              <td>{{ mpm.capitalsourceComment }}</td>
-              <td>{{ mpm.onceAMonth }}</td>
-              <td>{{ mpm.createDate }}</td>
-              <td>{{ mpm.lastUsed }}</td>
-            </tr>
+            <ListPreDefMoneyflowRowVue
+              v-for="mpm in preDefMoneyflows"
+              :key="mpm.id"
+              :mpm="mpm"
+            />
           </thead>
           <tbody></tbody>
         </table>
@@ -88,6 +83,7 @@ import router, { Routes } from "@/router";
 import { defineComponent } from "vue";
 import type { PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
 import PreDefMoneyflowControllerHandler from "@/handler/PreDefMoneyflowControllerHandler";
+import ListPreDefMoneyflowRowVue from "@/components/predefmoneyflow/ListPreDefMoneyflowRow.vue";
 export default defineComponent({
   name: "ListPreDefMoneyflows",
   data() {
@@ -157,6 +153,6 @@ export default defineComponent({
       this.reloadView();
     },
   },
-  components: {},
+  components: { ListPreDefMoneyflowRowVue },
 });
 </script>

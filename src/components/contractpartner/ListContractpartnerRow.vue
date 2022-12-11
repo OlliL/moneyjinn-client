@@ -28,7 +28,7 @@ import { formatDate } from "@/tools/views/FormatDate";
 import { defineComponent, type PropType } from "vue";
 
 export default defineComponent({
-  name: "ReportTableRow",
+  name: "ListContractpartnerRow",
   props: {
     mcp: {
       type: Object as PropType<Contractpartner>,

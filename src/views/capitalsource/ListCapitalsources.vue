@@ -83,16 +83,16 @@
         <table class="table table-striped table-bordered table-hover">
           <thead>
             <tr>
-              <th class="text-center">Kommentar</th>
-              <th class="text-center">Typ</th>
-              <th class="text-center">Status</th>
-              <th class="text-center">IBAN</th>
-              <th class="text-center">BIC</th>
-              <th class="text-center">g&uuml;ltig ab</th>
-              <th class="text-center">g&uuml;ltig bis</th>
-              <th class="text-center">Gruppe</th>
-              <th class="text-center">Datenimport</th>
-              <th class="text-center" colspan="2"></th>
+              <th>Kommentar</th>
+              <th>Typ</th>
+              <th>Status</th>
+              <th>IBAN</th>
+              <th>BIC</th>
+              <th>g&uuml;ltig ab</th>
+              <th>g&uuml;ltig bis</th>
+              <th>Gruppe</th>
+              <th>Datenimport</th>
+              <th colspan="2"></th>
             </tr>
           </thead>
           <tbody>
