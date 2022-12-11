@@ -58,7 +58,9 @@ export default defineComponent({
       }
     },
     async deleteMoneyflowReceipt() {
-      MoneyflowReceiptControllerHandler.deleteMoneyflowReceipt(this.mmf.id);
+      await MoneyflowReceiptControllerHandler.deleteMoneyflowReceipt(
+        this.mmf.id
+      );
       this.$emit("moneyflowReceiptDeleted", this.mmf.id);
       (this.$refs.modalComponent as typeof ModalVue)._hide();
     },

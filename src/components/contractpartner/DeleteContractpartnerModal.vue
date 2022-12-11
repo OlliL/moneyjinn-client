@@ -125,8 +125,8 @@ export default defineComponent({
       this.mcp = mcp;
       (this.$refs.modalComponent as typeof ModalVue)._show();
     },
-    deleteContractpartner() {
-      ContractpartnerControllerHandler.deleteContractpartner(this.mcp.id);
+    async deleteContractpartner() {
+      await ContractpartnerControllerHandler.deleteContractpartner(this.mcp.id);
       const contractpartnerStore = useContractpartnerStore();
       contractpartnerStore.deleteContractpartner(this.mcp);
       (this.$refs.modalComponent as typeof ModalVue)._hide();
