@@ -104,8 +104,13 @@
               <li>
                 <hr class="dropdown-divider" />
               </li>
-              <li><a class="dropdown-item" href="#">Bonupload</a></li>
-              <li><a class="dropdown-item" href="#">Bons zuweisen</a></li>
+              <li>
+                <router-link
+                  class="dropdown-item"
+                  :to="{ name: Routes.ImportReceipts }"
+                  >Bons zuweisen</router-link
+                >
+              </li>
               <li>
                 <hr class="dropdown-divider" />
               </li>
@@ -285,6 +290,8 @@ import CreateContractpartnerModalVue from "@/components/contractpartner/CreateCo
 import CreateCapitalsourceModalVue from "@/components/capitalsource/CreateCapitalsourceModal.vue";
 import CreatePostingAccountModalVue from "@/components/postingaccount/CreatePostingAccountModal.vue";
 import CreatePreDefMoneyflowModalVue from "@/components/predefmoneyflow/CreatePreDefMoneyflowModal.vue";
+
+//FIXME: highlight dropdown-element too when a sub-page is open
 
 export default {
   name: "AppNavigation",
