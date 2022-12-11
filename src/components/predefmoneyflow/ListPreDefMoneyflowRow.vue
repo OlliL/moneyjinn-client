@@ -40,10 +40,10 @@ export default defineComponent({
   emits: ["deletePreDefMoneyflow", "editPreDefMoneyflow"],
   computed: {
     createDateString(): string {
-      return formatDate(this.mpm.createDate);
+      return this.mpm.createDate ? formatDate(this.mpm.createDate) : "";
     },
     lastUsedString(): string {
-      return formatDate(this.mpm.lastUsed);
+      return this.mpm.lastUsed ? formatDate(this.mpm.lastUsed) : "";
     },
     onceAMonthColor(): string {
       return this.mpm.onceAMonth ? "green" : "red";
