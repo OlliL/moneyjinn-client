@@ -110,10 +110,10 @@ export default defineComponent({
   },
   computed: {
     createDateString(): string {
-      return formatDate(this.mpm.createDate);
+      return this.mpm.createDate ? formatDate(this.mpm.createDate) : "";
     },
     lastUsedString(): string {
-      return formatDate(this.mpm.lastUsed);
+      return this.mpm.lastUsed ? formatDate(this.mpm.lastUsed) : "";
     },
     onceAMonthColor(): string {
       return this.mpm.onceAMonth ? "green" : "red";
@@ -133,8 +133,8 @@ export default defineComponent({
       this.mpm = mpm;
       (this.$refs.modalComponent as typeof ModalVue)._show();
     },
-    deletePreDefMoneyflow() {
-      PreDefMoneyflowControllerHandler.deletePreDefMoneyflow(this.mpm.id);
+    async deletePreDefMoneyflow() {
+      await PreDefMoneyflowControllerHandler.deletePreDefMoneyflow(this.mpm.id);
       (this.$refs.modalComponent as typeof ModalVue)._hide();
       this.$emit("preDefMoneyflowDeleted", this.mpm);
     },

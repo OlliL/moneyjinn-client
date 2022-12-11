@@ -147,8 +147,6 @@ import type { MonthlySettlementEditTransporter } from "@/model/monthlysettlement
 import type { ValidationResult } from "@/model/validation/ValidationResult";
 import { getError } from "@/tools/views/ThrowError";
 
-// FIXME: amount fields must get unique ID, validation too. currently errorData is shared among all amount fields
-
 type MonthlySettlementFormData = MonthlySettlement & {
   imported: boolean;
   isValid: boolean | null;

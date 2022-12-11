@@ -1,12 +1,12 @@
 <template>
   <CreatePreDefMoneyflowModalVue
-    ref="createPreDedMoneyflowModal"
+    ref="createPreDedMoneyflowModalList"
     id-suffix="List"
     @pre-def-moneyflow-created="preDefMoneyflowCreated"
     @pre-def-moneyflow-updated="preDefMoneyflowUpdated"
   />
   <DeletePreDefMoneyflowModalVue
-    ref="deletePreDedMoneyflowModal"
+    ref="deletePreDedMoneyflowModalList"
     id-suffix="List"
     @pre-def-moneyflow-deleted="preDefMoneyflowDeleted"
   />
@@ -100,6 +100,7 @@ import PreDefMoneyflowControllerHandler from "@/handler/PreDefMoneyflowControlle
 import ListPreDefMoneyflowRowVue from "@/components/predefmoneyflow/ListPreDefMoneyflowRow.vue";
 import CreatePreDefMoneyflowModalVue from "@/components/predefmoneyflow/CreatePreDefMoneyflowModal.vue";
 import DeletePreDefMoneyflowModalVue from "@/components/predefmoneyflow/DeletePreDefMoneyflowModal.vue";
+
 export default defineComponent({
   name: "ListPreDefMoneyflows",
   data() {
@@ -117,22 +118,22 @@ export default defineComponent({
     },
   },
   async mounted() {
-    this.allPreDefMoneyflows =
-      await PreDefMoneyflowControllerHandler.fetchAllPreDefMoneyflow();
-
-    const letters = this.allPreDefMoneyflows.map((entry) =>
-      entry.contractpartnerName.substring(0, 1).toUpperCase()
-    );
-    const uniqueLetters = letters
-      .filter((v, i, a) => a.indexOf(v) === i)
-      .sort();
-    this.letters = uniqueLetters;
-
-    this.loadData(this.$props.letter);
+    this.reloadView();
   },
   computed: {},
   methods: {
-    reloadView() {
+    async reloadView() {
+      this.allPreDefMoneyflows =
+        await PreDefMoneyflowControllerHandler.fetchAllPreDefMoneyflow();
+
+      const letters = this.allPreDefMoneyflows.map((entry) =>
+        entry.contractpartnerName.substring(0, 1).toUpperCase()
+      );
+      const uniqueLetters = letters
+        .filter((v, i, a) => a.indexOf(v) === i)
+        .sort();
+      this.letters = uniqueLetters;
+
       this.loadData(this.$props.letter);
     },
     async loadData(letter: string) {
@@ -158,7 +159,7 @@ export default defineComponent({
     showCreatePreDefMoneyflowModal() {
       (
         this.$refs
-          .createPreDedMoneyflowModal as typeof CreatePreDefMoneyflowModalVue
+          .createPreDedMoneyflowModalList as typeof CreatePreDefMoneyflowModalVue
       )._show();
     },
     preDefMoneyflowCreated() {
@@ -167,7 +168,7 @@ export default defineComponent({
     editPreDefMoneyflow(mpm: PreDefMoneyflow) {
       (
         this.$refs
-          .createPreDedMoneyflowModal as typeof CreatePreDefMoneyflowModalVue
+          .createPreDedMoneyflowModalList as typeof CreatePreDefMoneyflowModalVue
       )._show(mpm);
     },
     preDefMoneyflowUpdated() {
@@ -176,7 +177,7 @@ export default defineComponent({
     deletePreDefMoneyflow(mpm: PreDefMoneyflow) {
       (
         this.$refs
-          .deletePreDedMoneyflowModal as typeof DeletePreDefMoneyflowModalVue
+          .deletePreDedMoneyflowModalList as typeof DeletePreDefMoneyflowModalVue
       )._show(mpm);
     },
     preDefMoneyflowDeleted() {

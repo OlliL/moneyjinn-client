@@ -12,6 +12,11 @@
     id-suffix="Nav"
   />
 
+  <CreatePreDefMoneyflowModalVue
+    ref="createPreDedMoneyflowModalNav"
+    id-suffix="Nav"
+  />
+
   <nav class="navbar navbar-expand-lg navbar-light fixed-top bg-light">
     <div class="container-fluid">
       <a class="navbar-brand" href="#"><small>moneyjin 0.99.0</small></a>
@@ -121,8 +126,11 @@
                 >
               </li>
               <li>
-                <a class="dropdown-item" href="#"
-                  >vordefinierte Geldbewegungen</a
+                <span
+                  class="dropdown-item"
+                  role="button"
+                  @click="showPreDefMoneyflowModal"
+                  >vordefinierte Geldbewegungen</span
                 >
               </li>
             </ul>
@@ -276,6 +284,7 @@ import router, { Routes } from "@/router";
 import CreateContractpartnerModalVue from "@/components/contractpartner/CreateContractpartnerModal.vue";
 import CreateCapitalsourceModalVue from "@/components/capitalsource/CreateCapitalsourceModal.vue";
 import CreatePostingAccountModalVue from "@/components/postingaccount/CreatePostingAccountModal.vue";
+import CreatePreDefMoneyflowModalVue from "@/components/predefmoneyflow/CreatePreDefMoneyflowModal.vue";
 
 export default {
   name: "AppNavigation",
@@ -292,6 +301,7 @@ export default {
     CreateContractpartnerModalVue,
     CreateCapitalsourceModalVue,
     CreatePostingAccountModalVue,
+    CreatePreDefMoneyflowModalVue,
   },
   methods: {
     showCreateContractpartnerModal() {
@@ -310,6 +320,12 @@ export default {
       (
         this.$refs
           .createPostingAccountModalNav as typeof CreatePostingAccountModalVue
+      )._show();
+    },
+    showPreDefMoneyflowModal() {
+      (
+        this.$refs
+          .createPreDedMoneyflowModalNav as typeof CreatePreDefMoneyflowModalVue
       )._show();
     },
   },

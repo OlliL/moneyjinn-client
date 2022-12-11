@@ -7,9 +7,9 @@ export type PreDefMoneyflow = {
   contractpartnerId: number;
   contractpartnerName: string;
   comment: string;
-  createDate: Date;
+  createDate?: Date;
   onceAMonth: boolean;
-  lastUsed: Date;
+  lastUsed?: Date;
   postingAccountId: number;
   postingAccountName: string;
 };
