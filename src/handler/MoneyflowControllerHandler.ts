@@ -20,6 +20,9 @@ import {
 } from "./mapper/MoneyflowTransportMapper";
 import { mapValidationItemTransportToModel } from "./mapper/ValidationItemTransportMapper";
 import type { ShowEditMoneyflowResponse } from "@/model/rest/moneyflow/ShowEditMoneyflowResponse";
+import { getISOStringDate } from "@/tools/views/FormatDate";
+import type { SearchMoneyflowsByAmountResponse } from "@/model/rest/moneyflow/SearchMoneyflowsByAmountResponse";
+import type { MoneyflowSplitEntryTransport } from "@/model/rest/transport/MoneyflowSplitEntryTransport";
 
 class MoneyflowControllerHandler extends AbstractControllerHandler {
   private static CONTROLLER = "moneyflow";
@@ -217,6 +220,52 @@ class MoneyflowControllerHandler extends AbstractControllerHandler {
     );
 
     return moneyflow;
+  }
+
+  async searchMoneyflowsByAmount(
+    amount: number,
+    startDate: Date,
+    endDate: Date
+  ): Promise<Array<Moneyflow>> {
+    let usecase = "searchMoneyflowsByAmount";
+    usecase += "/" + amount;
+    usecase += "/" + getISOStringDate(startDate).replace(/[-]/gi, "");
+    usecase += "/" + getISOStringDate(endDate).replace(/[-]/gi, "");
+
+    const response = await super.get(
+      MoneyflowControllerHandler.CONTROLLER,
+      usecase
+    );
+    if (!response.ok) {
+      throw new Error(response.statusText);
+    }
+
+    if (response.status === 204) return new Array<Moneyflow>();
+
+    const searchMoneyflowsByAmountResponse =
+      (await response.json()) as SearchMoneyflowsByAmountResponse;
+
+    const data =
+      searchMoneyflowsByAmountResponse.searchMoneyflowsByAmountResponse;
+
+    const mseMap = new Map<number, Array<MoneyflowSplitEntryTransport>>();
+
+    if (data.moneyflowSplitEntryTransport !== undefined) {
+      for (const mse of data.moneyflowSplitEntryTransport) {
+        let mseMapArray = mseMap.get(mse.moneyflowid);
+        if (mseMapArray == null) {
+          mseMapArray = new Array<MoneyflowSplitEntryTransport>();
+        }
+        mseMapArray.push(mse);
+        mseMap.set(mse.moneyflowid, mseMapArray);
+      }
+    }
+
+    const moneyflows: Array<Moneyflow> = data.moneyflowTransport?.map((mmf) => {
+      return mapMoneyflowTransportToModel(mmf, false, mseMap.get(mmf.id));
+    });
+
+    return moneyflows;
   }
 }
 
