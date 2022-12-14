@@ -38,6 +38,7 @@ class ImportedMoneyflowControllerHandler extends AbstractControllerHandler {
 
     return result;
   }
+
   async importImportedMoneyflow(
     importedMoneyflow: ImportedMoneyflow
   ): Promise<ValidationResult> {
