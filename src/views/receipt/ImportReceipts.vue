@@ -5,27 +5,37 @@
         <h4>Bons zuweisen</h4>
       </div>
     </div>
-    <div class="row justify-content-md-center mb-4">
-      <div class="col-md-9 col-xs-12"></div>
-    </div>
+    <ImportReceiptsRowVue
+      v-for="receipt in importedMoneyflowReceipts"
+      :key="receipt.id"
+      :receipt="receipt"
+    />
   </div>
 </template>
 
 <script lang="ts">
+import ImportReceiptsRowVue from "@/components/moneyflow/ImportReceiptsRow.vue";
+import ImportedMoneyflowReceiptControllerHandler from "@/handler/ImportedMoneyflowReceiptControllerHandler";
+import type { ImportedMoneyflowReceipt } from "@/model/moneyflow/ImportedMoneyflowReceipt";
 import { defineComponent } from "vue";
 
 export default defineComponent({
   name: "ImportReceipts",
   data() {
     return {
-      dataLoaded: false,
+      importedMoneyflowReceipts: new Array<ImportedMoneyflowReceipt>(),
     };
   },
-  mounted() {},
+  mounted() {
+    this.loadData();
+  },
   computed: {},
   methods: {
-    async loadData() {},
+    async loadData() {
+      this.importedMoneyflowReceipts =
+        await ImportedMoneyflowReceiptControllerHandler.showImportImportedMoneyflowReceipts();
+    },
   },
-  components: {},
+  components: { ImportReceiptsRowVue },
 });
 </script>
