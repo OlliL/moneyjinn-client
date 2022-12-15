@@ -180,7 +180,6 @@
 <script lang="ts">
 import ImportedMoneyflowReceiptControllerHandler from "@/handler/ImportedMoneyflowReceiptControllerHandler";
 import MoneyflowControllerHandler from "@/handler/MoneyflowControllerHandler";
-import MoneyflowReceiptControllerHandler from "@/handler/MoneyflowReceiptControllerHandler";
 import type { ImportedMoneyflowReceipt } from "@/model/moneyflow/ImportedMoneyflowReceipt";
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 import type { ValidationResult } from "@/model/validation/ValidationResult";
@@ -192,11 +191,6 @@ import { validateInputField } from "@/tools/views/ValidateInputField";
 import { defineComponent, type PropType } from "vue";
 import ImportReceiptSearchRowVue from "./ImportReceiptSearchRow.vue";
 
-//FIXME: place a radio-box in front of search results
-//FIXME: import button
-//FIXME: delete button
-//FIXME: form validation (all 3 input fields must be set)
-//FIXME: error handling
 type ImportReceiptsRowData = {
   serverError: Array<String> | undefined;
   startDate: string;
@@ -241,6 +235,7 @@ export default defineComponent({
 
     this.startDate = getISOStringDate(todayMinus30);
     this.endDate = getISOStringDate(today);
+
     const posOfDot = this.receipt.filename.indexOf(".");
     const amountFromFilename = this.receipt.filename.substring(0, posOfDot);
     if (!isNaN(Number(amountFromFilename))) {
