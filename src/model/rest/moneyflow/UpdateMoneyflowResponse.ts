@@ -3,8 +3,7 @@ import type { MoneyflowSplitEntryTransport } from "../transport/MoneyflowSplitEn
 import type { MoneyflowTransport } from "../transport/MoneyflowTransport";
 import type { ValidationItemTransport } from "../transport/ValidationItemTransport";
 
-export type UpdateMoneyflowResponse = {
-  error?: ErrorResponse;
+export type UpdateMoneyflowResponse = ErrorResponse & {
   updateMoneyflowResponse: {
     result: boolean;
     validationItemTransport: Array<ValidationItemTransport>;

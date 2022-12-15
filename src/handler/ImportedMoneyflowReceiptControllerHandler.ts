@@ -67,8 +67,8 @@ class ImportedMoneyflowReceiptControllerHandler extends AbstractControllerHandle
     } else {
       const errorResponse = (await response.json()) as ErrorResponse;
       const validationResultItem = {
-        error: errorResponse.code,
-      };
+        error: errorResponse.error.code,
+      } as ValidationResultItem;
       console.log(errorResponse, validationResultItem);
       validationResult.result = false;
       validationResult.validationResultItems = [validationResultItem];

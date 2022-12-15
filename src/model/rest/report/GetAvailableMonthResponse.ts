@@ -1,7 +1,6 @@
 import type { ErrorResponse } from "../ErrorResponse";
 
-export type GetAvailableMonthResponse = {
-  error?: ErrorResponse;
+export type GetAvailableMonthResponse = ErrorResponse & {
   getAvailableMonthResponse: {
     year: number;
     month: number;
