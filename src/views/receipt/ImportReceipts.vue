@@ -14,6 +14,7 @@
       :receipt="receipt"
       @delete-moneyflow="deleteMoneyflow"
       @edit-moneyflow="editMoneyflow"
+      @remove-receipt-from-view="removeReceiptFromView"
     />
   </div>
 </template>
@@ -50,6 +51,13 @@ export default defineComponent({
     async editMoneyflow(id: number) {
       const mmf = await MoneyflowControllerHandler.fetchMoneyflow(id);
       (this.$refs.editModal as typeof EditMoneyflowModalVue)._show(mmf);
+    },
+    removeReceiptFromView(id: number) {
+      this.importedMoneyflowReceipts = this.importedMoneyflowReceipts.filter(
+        (receipt) => {
+          return receipt.id !== id;
+        }
+      );
     },
   },
   components: {
