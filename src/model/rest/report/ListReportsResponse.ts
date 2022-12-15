@@ -3,8 +3,7 @@ import type { MoneyflowTransport } from "../transport/MoneyflowTransport";
 import type { MoneyflowSplitEntryTransport } from "../transport/MoneyflowSplitEntryTransport";
 import type { ReportTurnoverCapitalsourceTransport } from "./transport/ReportTurnoverCapitalsourceTransport";
 
-export type ListReportsResponse = {
-  error?: ErrorResponse;
+export type ListReportsResponse = ErrorResponse & {
   listReportsResponse: {
     year: number;
     month: number;
