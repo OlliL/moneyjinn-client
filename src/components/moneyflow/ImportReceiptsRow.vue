@@ -120,6 +120,24 @@
               </div>
             </div>
           </div>
+          <div class="row no-gutters flex-lg-nowrap">
+            <div class="col-12">
+              <button
+                type="button"
+                class="btn btn-primary mx-2"
+                @click="importReceipt"
+              >
+                &uuml;bernehmen
+              </button>
+              <button
+                type="button"
+                class="btn btn-danger mx-2"
+                @click="deleteReceipt"
+              >
+                l&ouml;schen
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -127,7 +145,9 @@
 </template>
 
 <script lang="ts">
+import ImportedMoneyflowReceiptControllerHandler from "@/handler/ImportedMoneyflowReceiptControllerHandler";
 import MoneyflowControllerHandler from "@/handler/MoneyflowControllerHandler";
+import MoneyflowReceiptControllerHandler from "@/handler/MoneyflowReceiptControllerHandler";
 import type { ImportedMoneyflowReceipt } from "@/model/moneyflow/ImportedMoneyflowReceipt";
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 import { toFixed } from "@/tools/math";
@@ -182,7 +202,7 @@ export default defineComponent({
       return this.receipt.mediaType === "application/pdf";
     },
   },
-  emits: ["deleteMoneyflow", "editMoneyflow"],
+  emits: ["deleteMoneyflow", "editMoneyflow", "removeReceiptFromView"],
   methods: {
     async searchMoneyflows() {
       this.searchExecuted = false;
@@ -204,6 +224,19 @@ export default defineComponent({
     selectMoneyflow(id: number) {
       this.selectedMoneyflowId = id;
       console.log(this.selectedMoneyflowId);
+    },
+    importReceipt() {
+      ImportedMoneyflowReceiptControllerHandler.importImportedMoneyflowReceipt(
+        this.receipt.id,
+        this.selectedMoneyflowId
+      );
+      this.$emit("removeReceiptFromView", this.receipt.id);
+    },
+    deleteReceipt() {
+      ImportedMoneyflowReceiptControllerHandler.deleteImportedMoneyflowReceiptById(
+        this.receipt.id
+      );
+      this.$emit("removeReceiptFromView", this.receipt.id);
     },
   },
   components: { ImportReceiptSearchRowVue },
