@@ -299,26 +299,23 @@ export default {
   },
   methods: {
     markDropdownActive(routeName: RouteRecordName | null | undefined) {
-      (this.$refs.dropdownWrench as HTMLElement).classList.remove(
-        "router-link-active"
-      );
-      (this.$refs.dropdownPlus as HTMLElement).classList.remove(
-        "router-link-active"
-      );
+      const wrenchClassList = (this.$refs.dropdownWrench as HTMLElement)
+        .classList;
+      const plusClassList = (this.$refs.dropdownPlus as HTMLElement).classList;
+      const routerLinkActive = "router-link-active";
+
+      wrenchClassList.remove(routerLinkActive);
+      plusClassList.remove(routerLinkActive);
       switch (routeName) {
         case Routes.ListPreDefMoneyflows:
         case Routes.ListCapitalsources:
         case Routes.ListContractpartners:
         case Routes.ListMonthlySettlements: {
-          (this.$refs.dropdownWrench as HTMLElement).classList.add(
-            "router-link-active"
-          );
+          wrenchClassList.add(routerLinkActive);
           break;
         }
         case Routes.ImportReceipts: {
-          (this.$refs.dropdownPlus as HTMLElement).classList.add(
-            "router-link-active"
-          );
+          plusClassList.add(routerLinkActive);
           break;
         }
       }
