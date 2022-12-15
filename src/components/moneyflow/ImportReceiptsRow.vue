@@ -94,6 +94,7 @@
                   >
                     <thead>
                       <tr>
+                        <th></th>
                         <th>Rechnungsdatum</th>
                         <th>Betrag</th>
                         <th>Vertragspartner</th>
@@ -108,6 +109,7 @@
                         :mmf="moneyflow"
                         @delete-moneyflow="emitDeleteMoneyflow"
                         @edit-moneyflow="emitEditMoneyflow"
+                        @emit-selection="selectMoneyflow"
                       />
                     </tbody>
                   </table>
@@ -149,6 +151,7 @@ export default defineComponent({
       moneyflows: {} as Array<Moneyflow>,
       searchExecuted: false,
       searchSuccessful: false,
+      selectedMoneyflowId: 0,
     };
   },
   mounted() {
@@ -197,6 +200,10 @@ export default defineComponent({
     },
     emitEditMoneyflow(id: number) {
       this.$emit("editMoneyflow", id);
+    },
+    selectMoneyflow(id: number) {
+      this.selectedMoneyflowId = id;
+      console.log(this.selectedMoneyflowId);
     },
   },
   components: { ImportReceiptSearchRowVue },

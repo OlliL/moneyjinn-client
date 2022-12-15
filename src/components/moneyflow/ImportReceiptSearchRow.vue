@@ -1,5 +1,16 @@
 <template>
   <tr>
+    <td class="">
+      <div class="form-check d-flex align-items-center justify-content-center">
+        <input
+          class="form-check-input"
+          type="radio"
+          name="selectMoneyflow"
+          value="{{mmf.id}}"
+          @change="emitSelection"
+        />
+      </div>
+    </td>
     <td>{{ invoicedateString }}</td>
     <td :class="amountClass">{{ amountString }} &euro;</td>
     <td class="text-start">{{ mmf.contractpartnerName }}</td>
@@ -32,7 +43,7 @@ export default defineComponent({
       required: true,
     },
   },
-  emits: ["deleteMoneyflow", "editMoneyflow"],
+  emits: ["deleteMoneyflow", "editMoneyflow", "emitSelection"],
   computed: {
     invoicedateString() {
       return formatDate(this.mmf.invoiceDate);
@@ -54,6 +65,9 @@ export default defineComponent({
     },
     editMoneyflow() {
       this.$emit("editMoneyflow", this.mmf.id);
+    },
+    emitSelection() {
+      this.$emit("emitSelection", this.mmf.id);
     },
   },
 });
