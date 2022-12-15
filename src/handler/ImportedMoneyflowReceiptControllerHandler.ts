@@ -1,5 +1,8 @@
 import type { ImportedMoneyflowReceipt } from "@/model/moneyflow/ImportedMoneyflowReceipt";
+import type { ErrorResponse } from "@/model/rest/ErrorResponse";
 import type { ShowImportImportedMoneyflowReceiptsResponse } from "@/model/rest/importedmoneyflowreceipt/ShowImportImportedMoneyflowReceiptsResponse";
+import type { ValidationResult } from "@/model/validation/ValidationResult";
+import type { ValidationResultItem } from "@/model/validation/ValidationResultItem";
 import AbstractControllerHandler from "./AbstractControllerHandler";
 
 class ImportedMoneyflowReceiptControllerHandler extends AbstractControllerHandler {
@@ -43,7 +46,10 @@ class ImportedMoneyflowReceiptControllerHandler extends AbstractControllerHandle
     }
   }
 
-  async importImportedMoneyflowReceipt(id: number, moneyflowId: number) {
+  async importImportedMoneyflowReceipt(
+    id: number,
+    moneyflowId: number
+  ): Promise<ValidationResult> {
     const usecase = "importImportedMoneyflowReceipt/" + id + "/" + moneyflowId;
 
     const response = await super.post(
@@ -54,6 +60,21 @@ class ImportedMoneyflowReceiptControllerHandler extends AbstractControllerHandle
     if (!response.ok) {
       throw new Error(response.statusText);
     }
+
+    const validationResult = {} as ValidationResult;
+    if (response.status === 204) {
+      validationResult.result = true;
+    } else {
+      const errorResponse = (await response.json()) as ErrorResponse;
+      const validationResultItem = {
+        error: errorResponse.code,
+      };
+      console.log(errorResponse, validationResultItem);
+      validationResult.result = false;
+      validationResult.validationResultItems = [validationResultItem];
+      console.log(validationResult);
+    }
+    return validationResult;
   }
 }
 export default new ImportedMoneyflowReceiptControllerHandler();
