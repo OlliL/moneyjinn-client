@@ -127,6 +127,9 @@ abstract class AbstractControllerHandler {
 
   private async refreshAuthToken() {
     const userSessionStore = useUserSessionStore();
+
+    if (userSessionStore.getRefreshToken.length === 0) return;
+
     const requestInfo = new Request(
       AbstractControllerHandler.SERVER_ROOT + "user" + "/" + "refreshToken",
       {
@@ -136,12 +139,10 @@ abstract class AbstractControllerHandler {
         },
       }
     );
-    if (userSessionStore.getRefreshToken.length > 0) {
-      requestInfo.headers.append(
-        "Authorization",
-        "Bearer " + userSessionStore.getRefreshToken
-      );
-    }
+    requestInfo.headers.append(
+      "Authorization",
+      "Bearer " + userSessionStore.getRefreshToken
+    );
     const response = await fetch(requestInfo);
     const loginResponse = (await response.json()) as LoginResponse;
 
