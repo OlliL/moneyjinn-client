@@ -84,6 +84,38 @@
                   </div>
                 </div>
               </form>
+              <div
+                class="row no-gutters flex-lg-nowrap mb-4 justify-content-center"
+              >
+                <div class="col-xs-12">
+                  <table
+                    class="table table-striped table-bordered table-hover"
+                    v-if="searchExecuted && searchSuccessful"
+                  >
+                    <thead>
+                      <tr>
+                        <th>Rechnungsdatum</th>
+                        <th>Betrag</th>
+                        <th>Vertragspartner</th>
+                        <th>Kommentar</th>
+                        <th colspan="2"></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <ImportReceiptSearchRowVue
+                        v-for="moneyflow in moneyflows"
+                        :key="moneyflow.id"
+                        :mmf="moneyflow"
+                        @delete-moneyflow="emitDeleteMoneyflow"
+                        @edit-moneyflow="emitEditMoneyflow"
+                      />
+                    </tbody>
+                  </table>
+                  <div v-if="searchExecuted && !searchSuccessful">
+                    Keine passenden Geldbewegungen gefunden!
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -95,12 +127,13 @@
 <script lang="ts">
 import MoneyflowControllerHandler from "@/handler/MoneyflowControllerHandler";
 import type { ImportedMoneyflowReceipt } from "@/model/moneyflow/ImportedMoneyflowReceipt";
+import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 import { toFixed } from "@/tools/math";
 import { getISOStringDate } from "@/tools/views/FormatDate";
 import { defineComponent, type PropType } from "vue";
+import ImportReceiptSearchRowVue from "./ImportReceiptSearchRow.vue";
 
-//FIXME: show search-result Data
-//FIXME: auto-display search results if filename is a number
+//FIXME: place a radio-box in front of search results
 //FIXME: import button
 //FIXME: delete button
 //FIXME: form validation (all 3 input fields must be set)
@@ -113,20 +146,24 @@ export default defineComponent({
       startDate: "",
       endDate: "",
       amount: 0,
+      moneyflows: {} as Array<Moneyflow>,
+      searchExecuted: false,
+      searchSuccessful: false,
     };
   },
   mounted() {
-    const posOfDot = this.receipt.filename.indexOf(".");
-    const amountFromFilename = this.receipt.filename.substring(0, posOfDot);
-    if (!isNaN(Number(amountFromFilename))) {
-      this.amount = toFixed(+amountFromFilename / 100, 2);
-    }
     const today = new Date();
     const todayMinus30 = new Date();
     todayMinus30.setDate(todayMinus30.getDate() - 30);
 
     this.startDate = getISOStringDate(todayMinus30);
     this.endDate = getISOStringDate(today);
+    const posOfDot = this.receipt.filename.indexOf(".");
+    const amountFromFilename = this.receipt.filename.substring(0, posOfDot);
+    if (!isNaN(Number(amountFromFilename))) {
+      this.amount = toFixed(+amountFromFilename / 100, 2);
+      this.searchMoneyflows();
+    }
   },
   props: {
     receipt: {
@@ -142,16 +179,26 @@ export default defineComponent({
       return this.receipt.mediaType === "application/pdf";
     },
   },
+  emits: ["deleteMoneyflow", "editMoneyflow"],
   methods: {
     async searchMoneyflows() {
-      const moneyflows = MoneyflowControllerHandler.searchMoneyflowsByAmount(
-        this.amount,
-        new Date(this.startDate),
-        new Date(this.endDate)
-      );
-      console.log(await moneyflows);
+      this.searchExecuted = false;
+      this.moneyflows =
+        await MoneyflowControllerHandler.searchMoneyflowsByAmount(
+          this.amount,
+          new Date(this.startDate),
+          new Date(this.endDate)
+        );
+      this.searchExecuted = true;
+      this.searchSuccessful = this.moneyflows.length > 0;
+    },
+    emitDeleteMoneyflow(id: number) {
+      this.$emit("deleteMoneyflow", id);
+    },
+    emitEditMoneyflow(id: number) {
+      this.$emit("editMoneyflow", id);
     },
   },
-  components: {},
+  components: { ImportReceiptSearchRowVue },
 });
 </script>
