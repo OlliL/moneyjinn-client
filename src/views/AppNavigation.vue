@@ -152,61 +152,29 @@
             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
               <li>
                 <router-link
-                  :class="
-                    $route.matched.some(
-                      ({ name }) => name === Routes.ListCapitalsources
-                    )
-                      ? 'router-link-active dropdown-item'
-                      : 'dropdown-item'
-                  "
-                  :to="{
-                    name: Routes.ListCapitalsources,
-                  }"
+                  class="dropdown-item"
+                  :to="{ name: Routes.ListCapitalsources }"
                   >Kapitalquellen</router-link
                 >
               </li>
               <li>
                 <router-link
-                  :class="
-                    $route.matched.some(
-                      ({ name }) => name === Routes.ListContractpartners
-                    )
-                      ? 'router-link-active dropdown-item'
-                      : 'dropdown-item'
-                  "
-                  :to="{
-                    name: Routes.ListContractpartners,
-                  }"
+                  class="dropdown-item"
+                  :to="{ name: Routes.ListContractpartners }"
                   >Vertragspartner</router-link
                 >
               </li>
               <li>
                 <router-link
-                  :class="
-                    $route.matched.some(
-                      ({ name }) => name === Routes.ListPreDefMoneyflows
-                    )
-                      ? 'router-link-active dropdown-item'
-                      : 'dropdown-item'
-                  "
-                  :to="{
-                    name: Routes.ListPreDefMoneyflows,
-                  }"
+                  class="dropdown-item"
+                  :to="{ name: Routes.ListPreDefMoneyflows }"
                   >vordefinierte Geldbewegungen</router-link
                 >
               </li>
               <li>
                 <router-link
-                  :class="
-                    $route.matched.some(
-                      ({ name }) => name === Routes.ListMonthlySettlements
-                    )
-                      ? 'router-link-active dropdown-item'
-                      : 'dropdown-item'
-                  "
-                  :to="{
-                    name: Routes.ListMonthlySettlements,
-                  }"
+                  class="dropdown-item"
+                  :to="{ name: Routes.ListMonthlySettlements }"
                   >Monatsabschl&uuml;sse</router-link
                 >
               </li>
@@ -270,9 +238,9 @@
               </ul>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#"
+              <span class="nav-link" role="button" @click="logout"
                 ><i class="bi bi-box-arrow-right"></i
-              ></a>
+              ></span>
             </li>
           </ul>
         </div>
@@ -310,6 +278,7 @@ export default {
       year: new Date().getFullYear(),
       month: new Date().getMonth() + 1,
       userIsAdmin: false,
+      blah: "",
     };
   },
   components: {
@@ -346,6 +315,13 @@ export default {
         this.$refs
           .createPreDedMoneyflowModalNav as typeof CreatePreDefMoneyflowModalVue
       )._show();
+    },
+    logout() {
+      const userSessionStore = useUserSessionStore();
+      userSessionStore.logout();
+      router.push({
+        name: Routes.Login,
+      });
     },
   },
 };

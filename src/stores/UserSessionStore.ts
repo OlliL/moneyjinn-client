@@ -51,6 +51,15 @@ export const useUserSessionStore = defineStore("userSession", {
     setRefreshToken(token: string) {
       this.userRefreshToken = token;
     },
+    logout() {
+      this.userId = 0;
+      this.userName = "";
+      this.userAuthorizationToken = "";
+      this.userRefreshToken = "";
+      this.userIsAdmin = false;
+      this.userCanLogin = false;
+      this.userIsNew = true;
+    },
   },
   persist: {
     enabled: true,
