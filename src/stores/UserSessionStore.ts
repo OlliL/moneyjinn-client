@@ -31,6 +31,9 @@ export const useUserSessionStore = defineStore("userSession", {
     getUserId(): number {
       return this.userId;
     },
+    isAdmin(): boolean {
+      return this.userIsAdmin;
+    },
   },
   actions: {
     setUserSession(userSess: UserSession) {

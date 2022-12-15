@@ -33,6 +33,7 @@
       class="input-group-text"
       role="button"
       @click="showCreatePostingAccountModal"
+      v-if="userIsAdmin"
       ><i class="bi bi-plus"></i
     ></span>
   </div>
@@ -44,13 +45,15 @@ import CreatePostingAccountModalVue from "../postingaccount/CreatePostingAccount
 
 import { mapActions } from "pinia";
 import { defineComponent } from "vue";
-
-//FIXME: only show PostingAccount "+" when user is admin
+import { useUserSessionStore } from "@/stores/UserSessionStore";
 
 export default defineComponent({
   name: "PostingAccountSelect",
   data() {
-    return { postingAccountId: 0 };
+    return {
+      postingAccountId: 0,
+      userIsAdmin: false,
+    };
   },
   emits: ["postingAccountSelected"],
   props: {
@@ -90,6 +93,8 @@ export default defineComponent({
     },
   },
   created() {
+    const userSessionStore = useUserSessionStore();
+    this.userIsAdmin = userSessionStore.isAdmin;
     this.initPostingAccountStore();
   },
   methods: {
