@@ -244,16 +244,22 @@
                     >pers&ouml;nliche Einstellungen</a
                   >
                 </li>
-                <li>
+                <li v-if="userIsAdmin">
                   <hr class="dropdown-divider" />
                 </li>
-                <li>
+                <li v-if="userIsAdmin">
                   <a class="dropdown-item" href="#">Systemeinstellungen</a>
                 </li>
-                <li><a class="dropdown-item" href="#">Benutzerkonten</a></li>
-                <li><a class="dropdown-item" href="#">Benutzergruppen</a></li>
-                <li><a class="dropdown-item" href="#">Sprachen</a></li>
-                <li>
+                <li v-if="userIsAdmin">
+                  <a class="dropdown-item" href="#">Benutzerkonten</a>
+                </li>
+                <li v-if="userIsAdmin">
+                  <a class="dropdown-item" href="#">Benutzergruppen</a>
+                </li>
+                <li v-if="userIsAdmin">
+                  <a class="dropdown-item" href="#">Sprachen</a>
+                </li>
+                <li v-if="userIsAdmin">
                   <span
                     class="dropdown-item"
                     role="button"
@@ -290,6 +296,7 @@ import CreateContractpartnerModalVue from "@/components/contractpartner/CreateCo
 import CreateCapitalsourceModalVue from "@/components/capitalsource/CreateCapitalsourceModal.vue";
 import CreatePostingAccountModalVue from "@/components/postingaccount/CreatePostingAccountModal.vue";
 import CreatePreDefMoneyflowModalVue from "@/components/predefmoneyflow/CreatePreDefMoneyflowModal.vue";
+import { useUserSessionStore } from "@/stores/UserSessionStore";
 
 //FIXME: highlight dropdown-element too when a sub-page is open
 
@@ -302,6 +309,7 @@ export default {
       router: router,
       year: new Date().getFullYear(),
       month: new Date().getMonth() + 1,
+      userIsAdmin: false,
     };
   },
   components: {
@@ -309,6 +317,10 @@ export default {
     CreateCapitalsourceModalVue,
     CreatePostingAccountModalVue,
     CreatePreDefMoneyflowModalVue,
+  },
+  created() {
+    const userSessionStore = useUserSessionStore();
+    this.userIsAdmin = userSessionStore.isAdmin;
   },
   methods: {
     showCreateContractpartnerModal() {
