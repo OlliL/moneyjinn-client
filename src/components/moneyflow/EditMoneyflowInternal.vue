@@ -249,6 +249,7 @@ import { validateInputField } from "@/tools/views/ValidateInputField";
 import ImportedMoneyflowControllerHandler from "@/handler/ImportedMoneyflowControllerHandler";
 import type { ImportedMoneyflow } from "@/model/moneyflow/ImportedMoneyflow";
 import { getISOStringDate } from "@/tools/views/FormatDate";
+import { toFixed } from "@/tools/math";
 
 type EditMoneyflowData = {
   serverError: Array<String> | undefined;
@@ -427,14 +428,14 @@ export default defineComponent({
       // avoid floating arithmetic problems by using fixed point arithmetics
       let remainder = 0;
       if (this.amount) {
-        remainder = this.amount * 100;
+        remainder = toFixed(this.amount, 2);
         if (this.mmf.moneyflowSplitEntries != undefined) {
           for (const mse of this.mmf.moneyflowSplitEntries) {
-            if (mse.amount) remainder -= mse.amount * 100;
+            if (mse.amount) remainder = toFixed(remainder - mse.amount, 2);
           }
         }
       }
-      return remainder / 100;
+      return remainder;
     },
   },
   methods: {
