@@ -90,6 +90,7 @@
               href="#"
               role="button"
               data-bs-toggle="dropdown"
+              ref="dropdownPlus"
             >
               <i class="bi bi-plus-lg"></i>
             </a>
@@ -146,6 +147,7 @@
               href="#"
               role="button"
               data-bs-toggle="dropdown"
+              ref="dropdownWrench"
             >
               <i class="bi bi-wrench"></i>
             </a>
@@ -265,8 +267,7 @@ import CreateCapitalsourceModalVue from "@/components/capitalsource/CreateCapita
 import CreatePostingAccountModalVue from "@/components/postingaccount/CreatePostingAccountModal.vue";
 import CreatePreDefMoneyflowModalVue from "@/components/predefmoneyflow/CreatePreDefMoneyflowModal.vue";
 import { useUserSessionStore } from "@/stores/UserSessionStore";
-
-//FIXME: highlight dropdown-element too when a sub-page is open
+import type { RouteRecordName } from "vue-router";
 
 export default {
   name: "AppNavigation",
@@ -278,7 +279,6 @@ export default {
       year: new Date().getFullYear(),
       month: new Date().getMonth() + 1,
       userIsAdmin: false,
-      blah: "",
     };
   },
   components: {
@@ -287,11 +287,42 @@ export default {
     CreatePostingAccountModalVue,
     CreatePreDefMoneyflowModalVue,
   },
-  created() {
+  mounted() {
     const userSessionStore = useUserSessionStore();
     this.userIsAdmin = userSessionStore.isAdmin;
+    this.markDropdownActive(this.$route.name);
+  },
+  watch: {
+    $route(to) {
+      this.markDropdownActive(to.name);
+    },
   },
   methods: {
+    markDropdownActive(routeName: RouteRecordName | null | undefined) {
+      (this.$refs.dropdownWrench as HTMLElement).classList.remove(
+        "router-link-active"
+      );
+      (this.$refs.dropdownPlus as HTMLElement).classList.remove(
+        "router-link-active"
+      );
+      switch (routeName) {
+        case Routes.ListPreDefMoneyflows:
+        case Routes.ListCapitalsources:
+        case Routes.ListContractpartners:
+        case Routes.ListMonthlySettlements: {
+          (this.$refs.dropdownWrench as HTMLElement).classList.add(
+            "router-link-active"
+          );
+          break;
+        }
+        case Routes.ImportReceipts: {
+          (this.$refs.dropdownPlus as HTMLElement).classList.add(
+            "router-link-active"
+          );
+          break;
+        }
+      }
+    },
     showCreateContractpartnerModal() {
       (
         this.$refs
