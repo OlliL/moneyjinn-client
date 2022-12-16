@@ -9,12 +9,30 @@
       </div>
     </div>
     <div class="row justify-content-md-center">
-      <div class="col-xs-12 mb-4">
+      <div class="col-sm-3 mb-5">
+        <div v-if="serverError">
+          <div
+            class="alert alert-danger"
+            v-for="(error, index) in serverError"
+            :key="index"
+          >
+            {{ error }}
+          </div>
+        </div>
         <form @submit.prevent="uploadReceipts">
-          <button type="submit" class="btn btn-primary">
-            <i class="bi bi-upload"></i></button
-          >&nbsp;
-          <input type="file" id="input" multiple ref="fileUpload" />
+          <div class="input-group">
+            <button type="submit" class="btn btn-primary">
+              <i class="bi bi-upload"></i> Hochladen
+            </button>
+
+            <input
+              type="file"
+              class="form-control"
+              id="input"
+              multiple
+              ref="fileUpload"
+            />
+          </div>
         </form>
       </div>
     </div>
@@ -37,6 +55,8 @@ import ImportedMoneyflowReceiptControllerHandler from "@/handler/ImportedMoneyfl
 import MoneyflowControllerHandler from "@/handler/MoneyflowControllerHandler";
 import type { ImportedMoneyflowReceipt } from "@/model/moneyflow/ImportedMoneyflowReceipt";
 import type { MoneyflowReceipt } from "@/model/moneyflow/MoneyflowReceipt";
+import type { ValidationResult } from "@/model/validation/ValidationResult";
+import { getError } from "@/tools/views/ThrowError";
 import { defineComponent } from "vue";
 
 export default defineComponent({
@@ -44,6 +64,7 @@ export default defineComponent({
   data() {
     return {
       importedMoneyflowReceipts: new Array<ImportedMoneyflowReceipt>(),
+      serverError: new Array<string>(),
     };
   },
   mounted() {
@@ -70,9 +91,21 @@ export default defineComponent({
         }
       );
     },
+    followUpServerCall(validationResult: ValidationResult): boolean {
+      if (!validationResult.result) {
+        this.serverError = new Array<string>();
+        for (let resultItem of validationResult.validationResultItems) {
+          this.serverError.push(getError(resultItem.error));
+        }
+        return false;
+      }
+      return true;
+    },
     async uploadReceipts() {
+      this.serverError = new Array<string>();
       const filesElement = this.$refs.fileUpload as HTMLInputElement;
       const files = filesElement.files;
+      const receipts = new Array<ImportedMoneyflowReceipt>();
       if (files != null) {
         for (let file of files) {
           const arrayBuffer = new Uint8Array(await file.arrayBuffer());
@@ -88,8 +121,17 @@ export default defineComponent({
             mediaType: file.type,
             receipt: base64Encoded,
           };
-
-          console.log(receipt);
+          receipts.push(receipt);
+        }
+      }
+      if (receipts.length > 0) {
+        const validationResult: ValidationResult =
+          await ImportedMoneyflowReceiptControllerHandler.createImportedMoneyflowReceipts(
+            receipts
+          );
+        if (this.followUpServerCall(validationResult)) {
+          filesElement.value = "";
+          this.loadData();
         }
       }
     },

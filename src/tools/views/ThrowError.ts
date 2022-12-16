@@ -95,6 +95,9 @@ export function getError(code: number, variableArray?: Array<string>) {
     case ErrorCode.SPLIT_ENTRIES_AMOUNT_IS_NOT_EQUALS_MONEYFLOW_AMOUNT: {
       return "Die Summe der Beträge der Unterbuchungen entspricht nicht dem Betrag der Hauptbuchung!";
     }
+    case ErrorCode.UNSUPPORTED_MEDIA_TYPE: {
+      return "Bitte nur JPEG oder PDF Dokumente hochladen!";
+    }
     case ErrorCode.RECEIPT_ALREADY_EXISTS: {
       return "Die ausgewählte Geldbewegung verfügt bereits über einen Bon!";
     }

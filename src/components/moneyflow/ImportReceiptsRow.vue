@@ -334,7 +334,6 @@ export default defineComponent({
     },
     selectMoneyflow(id: number) {
       this.selectedMoneyflowId = id;
-      console.log(this.selectedMoneyflowId);
     },
     followUpServerCall(validationResult: ValidationResult): boolean {
       if (!validationResult.result) {

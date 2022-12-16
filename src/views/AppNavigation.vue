@@ -109,7 +109,7 @@
                 <router-link
                   class="dropdown-item"
                   :to="{ name: Routes.ImportReceipts }"
-                  >Bons zuweisen</router-link
+                  >Bons importieren</router-link
                 >
               </li>
               <li>
