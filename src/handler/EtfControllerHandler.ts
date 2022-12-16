@@ -4,6 +4,8 @@ import type { EtfSummary } from "@/model/etf/EtfSummary";
 import type { ListEtfFlowsResponse } from "@/model/rest/etf/ListEtfFlowsResponse";
 import type { ListEtfOverviewResponse } from "@/model/rest/etf/ListEtfOverviewResponse";
 import { throwError } from "@/tools/views/ThrowError";
+import { mapEtfEffectiveFlowTransportToModel } from "./mapper/EtfEffectiveFlowTransportMapper";
+import { mapEtfFlowTransportToModel } from "./mapper/EtfFlowTransportMapper";
 import { mapEtfSummaryTransportToEtfSummary } from "./mapper/EtfTSummaryTransportMapper";
 
 class EtfControllerHandler extends AbstractControllerHandler {
@@ -57,8 +59,15 @@ class EtfControllerHandler extends AbstractControllerHandler {
     etfListViewData.calcEtfBidPrice = innerResponse.calcEtfBidPrice;
     etfListViewData.calcEtfSaleIsin = innerResponse.calcEtfSaleIsin;
     etfListViewData.calcEtfSalePieces = innerResponse.calcEtfSalePieces;
-    etfListViewData.etfFlows = innerResponse.etfFlowTransport;
-    etfListViewData.etfEffectiveFlows = innerResponse.etfEffectiveFlowTransport;
+    etfListViewData.calcEtfTransactionCosts =
+      innerResponse.calcEtfTransactionCosts;
+    etfListViewData.etfFlows = innerResponse.etfFlowTransport?.map((flow) => {
+      return mapEtfFlowTransportToModel(flow);
+    });
+    etfListViewData.etfEffectiveFlows =
+      innerResponse.etfEffectiveFlowTransport?.map((flow) => {
+        return mapEtfEffectiveFlowTransportToModel(flow);
+      });
     etfListViewData.etfs = innerResponse.etfTransport;
 
     return etfListViewData;
