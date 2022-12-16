@@ -19,7 +19,9 @@
 
   <nav class="navbar navbar-expand-lg navbar-light fixed-top bg-light">
     <div class="container-fluid">
-      <a class="navbar-brand" href="#"><small>moneyjin 0.99.0</small></a>
+      <router-link class="navbar-brand bg-light" :to="{ name: Routes.Home }"
+        ><small>moneyjin 0.99.0</small></router-link
+      >
       <button
         class="navbar-toggler"
         type="button"
