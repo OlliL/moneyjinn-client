@@ -9,6 +9,8 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import EditMonthlySettlementModalVue from "@/components/monthlysettlement/EditMonthlySettlementModal.vue";
+import type { Events } from "@/model/event/Events";
+import EventControllerHandler from "@/handler/EventControllerHandler";
 
 export default defineComponent({
   name: "HomeView",
@@ -16,8 +18,9 @@ export default defineComponent({
     this.loadData();
   },
   methods: {
-    loadData() {
-      //FIXME: Call System Events Controller Endpoint
+    async loadData() {
+      const events: Events = await EventControllerHandler.showEventList();
+      console.log(events);
       //FIXME: Display link to import Moneyflows if they exist
       //FIXME: Display Modal-Link for Monthly Settlement-Creation if needed
     },
