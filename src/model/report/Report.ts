@@ -1,4 +1,4 @@
-import type { ReportTurnoverCapitalsource } from "./ReportTurnoverCapitalsourceTransport";
+import type { ReportTurnoverCapitalsource } from "./ReportTurnoverCapitalsource";
 import type { Moneyflow } from "../moneyflow/Moneyflow";
 
 export type Report = {
