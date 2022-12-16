@@ -5,7 +5,17 @@
   <div class="container-fluid text-center">
     <div class="row justify-content-md-center">
       <div class="col-xs-12 mb-4">
-        <h4>Bons zuweisen</h4>
+        <h4>Bons importieren</h4>
+      </div>
+    </div>
+    <div class="row justify-content-md-center">
+      <div class="col-xs-12 mb-4">
+        <form @submit.prevent="uploadReceipts">
+          <button type="submit" class="btn btn-primary">
+            <i class="bi bi-upload"></i></button
+          >&nbsp;
+          <input type="file" id="input" multiple ref="fileUpload" />
+        </form>
       </div>
     </div>
     <ImportReceiptsRowVue
@@ -26,6 +36,7 @@ import ImportReceiptsRowVue from "@/components/moneyflow/ImportReceiptsRow.vue";
 import ImportedMoneyflowReceiptControllerHandler from "@/handler/ImportedMoneyflowReceiptControllerHandler";
 import MoneyflowControllerHandler from "@/handler/MoneyflowControllerHandler";
 import type { ImportedMoneyflowReceipt } from "@/model/moneyflow/ImportedMoneyflowReceipt";
+import type { MoneyflowReceipt } from "@/model/moneyflow/MoneyflowReceipt";
 import { defineComponent } from "vue";
 
 export default defineComponent({
@@ -58,6 +69,29 @@ export default defineComponent({
           return receipt.id !== id;
         }
       );
+    },
+    async uploadReceipts() {
+      const filesElement = this.$refs.fileUpload as HTMLInputElement;
+      const files = filesElement.files;
+      if (files != null) {
+        for (let file of files) {
+          const arrayBuffer = new Uint8Array(await file.arrayBuffer());
+          let fileContents: string = "";
+          for (var i = 0; i < arrayBuffer.byteLength; i++) {
+            fileContents += String.fromCharCode(arrayBuffer[i]);
+          }
+          const base64Encoded = btoa(fileContents);
+
+          const receipt: ImportedMoneyflowReceipt = {
+            filename: file.name,
+            id: 0,
+            mediaType: file.type,
+            receipt: base64Encoded,
+          };
+
+          console.log(receipt);
+        }
+      }
     },
   },
   components: {
