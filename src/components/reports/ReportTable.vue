@@ -217,7 +217,7 @@ import { defineComponent } from "vue";
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 import type { Report } from "@/model/report/Report";
 import { CapitalsourceType } from "@/model/capitalsource/CapitalsourceType";
-import type { ReportTurnoverCapitalsource } from "@/model/report/ReportTurnoverCapitalsourceTransport";
+import type { ReportTurnoverCapitalsource } from "@/model/report/ReportTurnoverCapitalsource";
 
 import ReportControllerHandler from "@/handler/ReportControllerHandler";
 

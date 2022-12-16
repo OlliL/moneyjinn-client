@@ -70,7 +70,7 @@
 </template>
 
 <script lang="ts">
-import type { ReportTurnoverCapitalsource } from "@/model/report/ReportTurnoverCapitalsourceTransport";
+import type { ReportTurnoverCapitalsource } from "@/model/report/ReportTurnoverCapitalsource";
 import { formatNumber, redIfNegativeEnd } from "@/tools/views/FormatNumber";
 import { defineComponent } from "vue";
 import CapitalsourceTableRowVue from "./CapitalsourceTableRow.vue";

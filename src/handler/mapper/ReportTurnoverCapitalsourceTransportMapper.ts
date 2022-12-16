@@ -1,4 +1,4 @@
-import type { ReportTurnoverCapitalsource } from "@/model/report/ReportTurnoverCapitalsourceTransport";
+import type { ReportTurnoverCapitalsource } from "@/model/report/ReportTurnoverCapitalsource";
 import type { ReportTurnoverCapitalsourceTransport } from "@/model/rest/report/transport/ReportTurnoverCapitalsourceTransport";
 import { mapCapitalsourceStateTransportToEnum } from "./CapitalsourceStateMapper";
 import { mapCapitalsourceTypeTransportToEnum } from "./CapitalsourceTypeMapper";
