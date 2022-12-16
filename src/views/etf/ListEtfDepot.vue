@@ -13,6 +13,8 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
+import type { EtfDepot } from "@/model/etf/EtfDepot";
+import EtfControllerHandler from "@/handler/EtfControllerHandler";
 
 export default defineComponent({
   name: "ListEtfs",
@@ -25,7 +27,10 @@ export default defineComponent({
     this.loadData();
   },
   methods: {
-    async loadData() {},
+    async loadData() {
+      const etfDepot: EtfDepot = await EtfControllerHandler.listEtfFlows();
+      console.log(etfDepot);
+    },
   },
   components: {},
 });
