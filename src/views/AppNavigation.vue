@@ -194,7 +194,13 @@
               <i class="bi bi-asterisk"></i>
             </a>
             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <li><a class="dropdown-item" href="#">ETF Depot</a></li>
+              <li>
+                <router-link
+                  class="dropdown-item"
+                  :to="{ name: Routes.ListEtfDepot }"
+                  >ETF Depot</router-link
+                >
+              </li>
               <li><a class="dropdown-item" href="#">neue ETF Buchung</a></li>
             </ul>
           </li>
