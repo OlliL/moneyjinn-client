@@ -74,7 +74,6 @@ export default defineComponent({
   methods: {
     async loadData() {
       const events: Events = await EventControllerHandler.showEventList();
-      console.log(events);
 
       if (events.numberOfImportedMoneyflows > 0) {
         this.importedMoneyflows = true;
