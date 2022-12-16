@@ -11,6 +11,7 @@ import ImportMoneyflowsVue from "@/views/moneyflow/ImportMoneyflows.vue";
 import ListMonthlySettlementsVue from "@/views/monthlysettlement/ListMonthlySettlements.vue";
 import SearchMoneyflowsVue from "@/views/moneyflow/SearchMoneyflows.vue";
 import ListPreDefMoneyflowsVue from "@/views/predefmoneyflow/ListPreDefMoneyflows.vue";
+import ListEtfDepotVue from "@/views/etf/ListEtfDepot.vue";
 import ImportReceiptsVue from "@/views/receipt/ImportReceipts.vue";
 
 export enum Routes {
@@ -22,6 +23,7 @@ export enum Routes {
   ListContractpartners = "listContractpartners",
   ListMonthlySettlements = "listMonthlySettlements",
   ListPreDefMoneyflows = "listPreDefMoneyflows",
+  ListEtfDepot = "listEtfDepot",
   ImportMoneyflows = "importMoneyflows",
   ImportReceipts = "importReceipts",
   SearchMoneyflows = "searchMoneyflows",
@@ -96,6 +98,11 @@ const router = createRouter({
           name: Routes.ListMonthlySettlements,
           component: ListMonthlySettlementsVue,
           props: true,
+        },
+        {
+          path: "listEtfDepot",
+          name: Routes.ListEtfDepot,
+          component: ListEtfDepotVue,
         },
       ],
     },
