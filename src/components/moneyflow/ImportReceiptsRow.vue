@@ -138,6 +138,8 @@
                         v-for="moneyflow in moneyflows"
                         :key="moneyflow.id"
                         :mmf="moneyflow"
+                        :preselected="preselected"
+                        :receipt-id="receipt.id"
                         @delete-moneyflow="emitDeleteMoneyflow"
                         @edit-moneyflow="emitEditMoneyflow"
                         @emit-selection="selectMoneyflow"
@@ -206,6 +208,7 @@ type ImportReceiptsRowData = {
   endDateErrorMessage: string;
   amountIsValid: boolean | null;
   amountErrorMessage: string;
+  preselected: boolean;
 };
 
 export default defineComponent({
@@ -226,6 +229,7 @@ export default defineComponent({
       endDateErrorMessage: "",
       amountIsValid: null,
       amountErrorMessage: "",
+      preselected: false,
     };
   },
   mounted() {
@@ -306,6 +310,10 @@ export default defineComponent({
           );
         this.searchExecuted = true;
         this.searchSuccessful = this.moneyflows.length > 0;
+        if (this.moneyflows.length === 1) {
+          this.preselected = true;
+          this.selectMoneyflow(this.moneyflows[0].id);
+        }
       }
     },
     validateStartDate() {

@@ -5,8 +5,9 @@
         <input
           class="form-check-input"
           type="radio"
-          name="selectMoneyflow"
+          :name="'selectMoneyflow' + receiptId"
           value="{{mmf.id}}"
+          :checked="preselected"
           @change="emitSelection"
         />
       </div>
@@ -40,6 +41,14 @@ export default defineComponent({
   props: {
     mmf: {
       type: Object as PropType<Moneyflow>,
+      required: true,
+    },
+    preselected: {
+      type: Boolean,
+      required: true,
+    },
+    receiptId: {
+      type: Number,
       required: true,
     },
   },

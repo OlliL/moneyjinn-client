@@ -54,7 +54,6 @@ import ImportReceiptsRowVue from "@/components/moneyflow/ImportReceiptsRow.vue";
 import ImportedMoneyflowReceiptControllerHandler from "@/handler/ImportedMoneyflowReceiptControllerHandler";
 import MoneyflowControllerHandler from "@/handler/MoneyflowControllerHandler";
 import type { ImportedMoneyflowReceipt } from "@/model/moneyflow/ImportedMoneyflowReceipt";
-import type { MoneyflowReceipt } from "@/model/moneyflow/MoneyflowReceipt";
 import type { ValidationResult } from "@/model/validation/ValidationResult";
 import { getError } from "@/tools/views/ThrowError";
 import { defineComponent } from "vue";
