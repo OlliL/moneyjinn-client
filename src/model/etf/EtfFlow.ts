@@ -1,7 +1,7 @@
 export type EtfFlow = {
   etfflowid: number;
   isin: string;
-  timestamp: number;
+  timestamp: Date;
   nanoseconds: number;
   amount: number;
   price: number;
