@@ -303,7 +303,6 @@ export default defineComponent({
       );
     },
     validatePrice() {
-      console.log(this.etfFlow.amount);
       [this.priceIsValid, this.priceErrorMessage] = validateInputField(
         this.etfFlow.price,
         "Stückpreis angeben!"
@@ -328,35 +327,36 @@ export default defineComponent({
 
       if (this.formIsValid) {
         //FIXME Time!
-        this.etfFlow.timestamp = new Date(this.bookingdate);
+        const times: Array<string> = this.bookingtime.split(":");
+        if (times && times.length == 4) {
+          this.etfFlow.timestamp = new Date(this.bookingdate);
+          this.etfFlow.timestamp.setHours(+times[0], +times[1], +times[2], 0);
+          this.etfFlow.nanoseconds = +times[3] * 1000000;
 
-        if (this.etfFlow.etfflowid > 0) {
-          //update
-          /*
-          const validationResult = await EtfFlowControllerHandler.updateEtfFlow(
-            this.etfFlow
-          );
-          if (!this.handleServerError(validationResult)) {
-            (this.$refs.modalComponent as typeof ModalVue)._hide();
-            this.updateEtfFlowInStore(this.etfFlow);
-            this.$emit("etfFlowUpdated", this.etfFlow);
-          }
+          if (this.etfFlow.etfflowid > 0) {
+            //update
+            /*
+    const validationResult = await EtfFlowControllerHandler.updateEtfFlow(
+      this.etfFlow
+    );
+    if (!this.handleServerError(validationResult)) {
+      (this.$refs.modalComponent as typeof ModalVue)._hide();
+      this.updateEtfFlowInStore(this.etfFlow);
+      this.$emit("etfFlowUpdated", this.etfFlow);
+    }
 */
-        } else {
-          //create
-          /*          const etfFlowValidation =
-            EtfFlowControllerHandler.createEtfFlow(this.etfFlow);
-          const validationResult = await (
-            await etfFlowValidation
-          ).validationResult;
+          } else {
+            //create
+            const etfFlowValidation =
+              await EtfFlowControllerHandler.createEtfFlow(this.etfFlow);
+            const validationResult = etfFlowValidation.validationResult;
 
-          if (!this.handleServerError(validationResult)) {
-            this.etfFlow = (await etfFlowValidation).etfFlow;
-            (this.$refs.modalComponent as typeof ModalVue)._hide();
-            this.addEtfFlowToStore(this.etfFlow);
-            this.$emit("etfFlowCreated", this.etfFlow);
+            if (!this.handleServerError(validationResult)) {
+              this.etfFlow = etfFlowValidation.etfFlow;
+              (this.$refs.modalComponent as typeof ModalVue)._hide();
+              this.$emit("etfFlowCreated", this.etfFlow);
+            }
           }
-*/
         }
       }
     },

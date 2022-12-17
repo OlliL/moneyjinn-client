@@ -14,3 +14,15 @@ export function mapEtfFlowTransportToModel(
   };
   return model;
 }
+
+export function mapEtfFlowModelToTransport(model: EtfFlow): EtfFlowTransport {
+  const transport: EtfFlowTransport = {
+    amount: model.amount,
+    etfflowid: model.etfflowid,
+    isin: model.isin,
+    nanoseconds: model.nanoseconds,
+    timestamp: model.timestamp.toISOString(),
+    price: model.price,
+  };
+  return transport;
+}
