@@ -10,6 +10,8 @@ import type { CreateEtfFlowRequest } from "@/model/rest/etf/CreateEtfFlowRequest
 import type { CreateEtfFlowResponse } from "@/model/rest/etf/CreateEtfFlowResponse";
 import type { ListEtfFlowsResponse } from "@/model/rest/etf/ListEtfFlowsResponse";
 import type { ListEtfOverviewResponse } from "@/model/rest/etf/ListEtfOverviewResponse";
+import type { UpdateEtfFlowRequest } from "@/model/rest/etf/UpdateEtfFlowRequest";
+import type { ValidationResponse } from "@/model/rest/ValidationResponse";
 import type { ValidationResult } from "@/model/validation/ValidationResult";
 import { throwError } from "@/tools/views/ThrowError";
 import { mapEtfEffectiveFlowTransportToModel } from "./mapper/EtfEffectiveFlowTransportMapper";
@@ -179,6 +181,38 @@ class EtfControllerHandler extends AbstractControllerHandler {
       etfFlowValidation.etfFlow = createdEtfFlow;
     }
     return etfFlowValidation;
+  }
+
+  async updateEtfFlow(etfFlow: EtfFlow): Promise<ValidationResult> {
+    const usecase = "updateEtfFlow";
+    const request = {
+      updateEtfFlowRequest: {},
+    } as UpdateEtfFlowRequest;
+    const innerRequest = request.updateEtfFlowRequest;
+    innerRequest.etfFlowTransport = mapEtfFlowModelToTransport(etfFlow);
+
+    const response = await super.put(
+      request,
+      EtfControllerHandler.CONTROLLER,
+      usecase
+    );
+
+    if (!response.ok) {
+      throw new Error(response.statusText);
+    }
+
+    const validationResponse = (await response.json()) as ValidationResponse;
+    const innerResponse = validationResponse.validationResponse;
+    const validationResult: ValidationResult = {
+      result: innerResponse.result,
+      validationResultItems: innerResponse.validationItemTransport?.map(
+        (vit) => {
+          return mapValidationItemTransportToModel(vit);
+        }
+      ),
+    };
+
+    return validationResult;
   }
 
   async deleteEtfFlow(etfFlowId: number) {
