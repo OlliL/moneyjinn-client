@@ -1,9 +1,25 @@
 <template>
   <DeleteEtfFlowModalVue @etf-flow-deleted="etfFlowDeleted" ref="deleteModal" />
+  <CreateEtfFlowModalVue
+    @etf-flow-created="etfFlowCreated"
+    @etf-flow-updated="etfFlowUpdated"
+    ref="createModal"
+  />
   <div class="container-fluid text-center">
     <div class="row justify-content-md-center">
       <div class="col-xs-12 mb-4">
         <h4>ETF Depot</h4>
+      </div>
+    </div>
+    <div class="row justify-content-md-center mb-4">
+      <div class="col-12">
+        <button
+          type="button"
+          class="btn btn-primary mx-2"
+          @click="createEtfFlow"
+        >
+          neue Buchung
+        </button>
       </div>
     </div>
     <div class="row justify-content-md-center mb-4">
@@ -352,6 +368,7 @@
 import { defineComponent } from "vue";
 import ListEtfDepotRowVue from "@/components/etf/ListEtfDepotRow.vue";
 import DeleteEtfFlowModalVue from "@/components/etf/DeleteEtfFlowModal.vue";
+import CreateEtfFlowModalVue from "@/components/etf/CreateEtfFlowModal.vue";
 import type { ListDepotRowData } from "@/components/etf/ListDepotRowData";
 import type { Etf } from "@/model/etf/Etf";
 import type { EtfDepot } from "@/model/etf/EtfDepot";
@@ -659,7 +676,22 @@ export default defineComponent({
         (flow) => flow.etfflowid != etfFlow.etfflowid
       );
     },
+    createEtfFlow() {
+      (this.$refs.createModal as typeof CreateEtfFlowModalVue)._show(this.etfs);
+    },
+    etfFlowCreated() {},
+    editEtfFlow(etfFlow: EtfFlow) {
+      (this.$refs.createModal as typeof CreateEtfFlowModalVue)._show(
+        etfFlow,
+        this.etfs
+      );
+    },
+    etfFlowUpdated() {},
   },
-  components: { ListEtfDepotRowVue, DeleteEtfFlowModalVue },
+  components: {
+    ListEtfDepotRowVue,
+    DeleteEtfFlowModalVue,
+    CreateEtfFlowModalVue,
+  },
 });
 </script>
