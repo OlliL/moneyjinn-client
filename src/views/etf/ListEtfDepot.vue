@@ -124,12 +124,22 @@
         <h4>Verkauf berechnen</h4>
       </div>
     </div>
+
     <form @submit.prevent="calculateEtfSale">
       <div class="row justify-content-md-center">
         <div class="col-md-8 col-xs-12 mb-4">
           <div class="card w-100 bg-light">
             <div class="card-body">
               <div class="container-fluid">
+                <div v-if="serverError">
+                  <div
+                    class="alert alert-danger"
+                    v-for="(error, index) in serverError"
+                    :key="index"
+                  >
+                    {{ error }}
+                  </div>
+                </div>
                 <div class="row no-gutters flex-lg-nowrap mb-4">
                   <div class="col-md-4 col-xs-12">
                     <div class="form-floating">
@@ -270,12 +280,75 @@
         </div>
       </div>
     </form>
+    <div class="row justify-content-md-center" v-if="calcResults.isin">
+      <div class="col-md-3 col-xs-12 mb-4">
+        <table class="table table-striped table-bordered table-hover">
+          <col style="width: 70%" />
+          <col style="width: 30%" />
+          <tbody>
+            <tr>
+              <th class="text-start">zu verkaufende Stück</th>
+              <td class="text-end">{{ calcResults.pieces }}</td>
+            </tr>
+            <tr>
+              <th class="text-start">ursprünglicher Kaufpreis</th>
+              <td class="text-end">{{ originalBuyPrice }} &euro;</td>
+            </tr>
+            <tr>
+              <th class="text-start">Verkaufspreis</th>
+              <td class="text-end">{{ sellPrice }} &euro;</td>
+            </tr>
+          </tbody>
+        </table>
+        <table class="table table-striped table-bordered table-hover">
+          <col style="width: 70%" />
+          <col style="width: 30%" />
+          <tbody>
+            <tr>
+              <th class="text-start">Gewinn</th>
+              <td class="text-end">{{ profit }} &euro;</td>
+            </tr>
+            <tr>
+              <th class="text-start">davon steuerlich relevant</th>
+              <td class="text-end">
+                <b>{{ chargeable }} &euro;</b>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <table class="table table-striped table-bordered table-hover">
+          <col style="width: 70%" />
+          <col style="width: 30%" />
+          <tbody>
+            <tr>
+              <th class="text-start">neuer Kaufpreis</th>
+              <td class="text-end">{{ newBuyPrice }} &euro;</td>
+            </tr>
+            <tr>
+              <th class="text-start">Wiederkaufverlust</th>
+              <td class="text-end">{{ rebuyLosses }} &euro;</td>
+            </tr>
+            <tr>
+              <th class="text-start">Transaktionskosten</th>
+              <td class="text-end">{{ transactionCosts }} &euro;</td>
+            </tr>
+            <tr>
+              <th class="text-start">Gesamtkosten</th>
+              <td class="text-end">
+                <b>{{ overallCosts }} &euro;</b>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
 import type { EtfDepot } from "@/model/etf/EtfDepot";
+import type { EtfSalesCalculation } from "@/model/etf/EtfSalesCalculation";
 import EtfControllerHandler from "@/handler/EtfControllerHandler";
 import type { ListDepotRowData } from "@/components/etf/ListDepotRowData";
 import type { Etf } from "@/model/etf/Etf";
@@ -283,13 +356,14 @@ import ListEtfDepotRowVue from "@/components/etf/ListEtfDepotRow.vue";
 import { formatNumber } from "@/tools/views/FormatNumber";
 import { generateErrorData, type ErrorData } from "@/tools/views/ErrorData";
 import { validateInputField } from "@/tools/views/ValidateInputField";
+import type { ValidationResult } from "@/model/validation/ValidationResult";
+import { getError } from "@/tools/views/ThrowError";
 
 //FIXME: edit
 //FIXME: delete
-//FIXME: execute sales calculation
-//FIXME: display sales calculation
 
 type ListEtfsData = {
+  serverError: Array<String> | undefined;
   dataLoaded: boolean;
   etfFlows: Array<ListDepotRowData>;
   etfEffectiveFlows: Array<ListDepotRowData>;
@@ -307,11 +381,13 @@ type ListEtfsData = {
   calcEtfSalePiecesErrorMessage: string;
   calcEtfTransactionCostsIsValid: boolean | null;
   calcEtfTransactionCostsErrorMessage: string;
+  calcResults: EtfSalesCalculation;
 };
 export default defineComponent({
   name: "ListEtfs",
   data(): ListEtfsData {
     return {
+      serverError: undefined,
       dataLoaded: false,
       etfFlows: new Array<ListDepotRowData>(),
       etfEffectiveFlows: new Array<ListDepotRowData>(),
@@ -329,6 +405,7 @@ export default defineComponent({
       calcEtfSalePiecesErrorMessage: "",
       calcEtfTransactionCostsIsValid: null,
       calcEtfTransactionCostsErrorMessage: "",
+      calcResults: {} as EtfSalesCalculation,
     };
   },
   mounted() {
@@ -404,6 +481,45 @@ export default defineComponent({
         "Transaktionskosten",
         this.calcEtfTransactionCostsErrorMessage
       );
+    },
+    formIsValid(): boolean {
+      const isValid =
+        this.calcEtfAskPriceIsValid &&
+        this.calcEtfBidPriceIsValid &&
+        this.calcEtfSalePiecesIsValid &&
+        this.calcEtfTransactionCostsIsValid;
+      if (isValid === null || isValid === undefined || isValid === true) {
+        return true;
+      }
+      return false;
+    },
+    chargeable() {
+      return formatNumber(this.calcResults.chargeable, 2);
+    },
+
+    newBuyPrice() {
+      return formatNumber(this.calcResults.newBuyPrice, 2);
+    },
+    originalBuyPrice() {
+      return formatNumber(this.calcResults.originalBuyPrice, 2);
+    },
+    overallCosts() {
+      return formatNumber(this.calcResults.overallCosts, 2);
+    },
+    pieces() {
+      return formatNumber(this.calcResults.pieces, 2);
+    },
+    profit() {
+      return formatNumber(this.calcResults.profit, 2);
+    },
+    rebuyLosses() {
+      return formatNumber(this.calcResults.rebuyLosses, 2);
+    },
+    sellPrice() {
+      return formatNumber(this.calcResults.sellPrice, 2);
+    },
+    transactionCosts() {
+      return formatNumber(this.calcResults.transactionCosts, 2);
     },
   },
   methods: {
@@ -497,7 +613,34 @@ export default defineComponent({
         "Transaktionskosten angeben!"
       );
     },
-    calculateEtfSale() {},
+    followUpServerCall(validationResult: ValidationResult): boolean {
+      if (!validationResult.result) {
+        this.serverError = new Array<string>();
+        for (let resultItem of validationResult.validationResultItems) {
+          this.serverError.push(getError(resultItem.error));
+        }
+        return false;
+      }
+      return true;
+    },
+    async calculateEtfSale() {
+      this.validateCalcEtfAskPrice();
+      this.validateCalcEtfBidPrice();
+      this.validateCalcEtfSalePieces();
+      this.validateCalcEtfTransactionCosts();
+
+      if (this.formIsValid) {
+        this.calcResults = await EtfControllerHandler.calcEtfSale(
+          this.calcEtfSaleIsin,
+          this.calcEtfSalePieces,
+          this.calcEtfBidPrice,
+          this.calcEtfAskPrice,
+          this.calcEtfTransactionCosts
+        );
+        console.log(this.calcResults.validationResult);
+        this.followUpServerCall(this.calcResults.validationResult);
+      }
+    },
   },
   components: { ListEtfDepotRowVue },
 });

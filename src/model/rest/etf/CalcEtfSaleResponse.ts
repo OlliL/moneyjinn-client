@@ -1,7 +1,9 @@
-import type { ValidationResponse } from "../ValidationResponse";
+import type { ValidationItemTransport } from "../transport/ValidationItemTransport";
 
-export type CalcEtfSaleResponse = ValidationResponse & {
+export type CalcEtfSaleResponse = {
   calcEtfSaleResponse: {
+    result: boolean;
+    validationItemTransport: Array<ValidationItemTransport>;
     isin: string;
     originalBuyPrice: number;
     sellPrice: number;
