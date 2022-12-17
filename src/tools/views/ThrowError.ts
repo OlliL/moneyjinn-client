@@ -95,8 +95,17 @@ export function getError(code: number, variableArray?: Array<string>) {
     case ErrorCode.SPLIT_ENTRIES_AMOUNT_IS_NOT_EQUALS_MONEYFLOW_AMOUNT: {
       return "Die Summe der Beträge der Unterbuchungen entspricht nicht dem Betrag der Hauptbuchung!";
     }
+    case ErrorCode.PIECES_NOT_SET: {
+      return "Bitte Menge angeben!";
+    }
+    case ErrorCode.NO_ETF_SPECIFIED: {
+      return "Bitte einen ETF auswählen!";
+    }
     case ErrorCode.AMOUNT_TO_HIGH: {
       return "Mehr Stück angegeben als verfügbar!";
+    }
+    case ErrorCode.PRICE_NOT_SET: {
+      return "Bitte Stückpreis angeben!";
     }
     case ErrorCode.UNSUPPORTED_MEDIA_TYPE: {
       return "Bitte nur JPEG oder PDF Dokumente hochladen!";

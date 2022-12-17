@@ -14,7 +14,7 @@ const dateCache = new Map<Date, string>();
 export function formatDateWithTime(date: Date): string {
   //avoid comma between date and time
   const dateStr = formatDate(date);
-  const timeStr = timeFormatter.format(date);
+  const timeStr = formatTime(date);
   return dateStr + " " + timeStr;
 }
 
@@ -25,6 +25,10 @@ export function formatDate(date: Date): string {
     dateCache.set(date, dateStr);
   }
   return dateStr;
+}
+
+export function formatTime(date: Date): string {
+  return timeFormatter.format(date);
 }
 
 export function getISOStringDate(date: Date): string {

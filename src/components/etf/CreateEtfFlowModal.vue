@@ -146,7 +146,7 @@ import { defineComponent } from "vue";
 import ModalVue from "../Modal.vue";
 import { getError } from "@/tools/views/ThrowError";
 import type { ValidationResult } from "@/model/validation/ValidationResult";
-import { getISOStringDate } from "@/tools/views/FormatDate";
+import { formatTime, getISOStringDate } from "@/tools/views/FormatDate";
 import type { Etf } from "@/model/etf/Etf";
 
 type CreateEtfFlowModalData = {
@@ -255,7 +255,12 @@ export default defineComponent({
     resetForm() {
       if (this.origEtfFlow) {
         this.etfFlow = JSON.parse(JSON.stringify(this.origEtfFlow));
-        this.bookingdate = getISOStringDate(new Date(this.etfFlow.timestamp));
+        const timestamp = new Date(this.etfFlow.timestamp);
+        this.bookingdate = getISOStringDate(timestamp);
+        this.bookingtime =
+          formatTime(timestamp) +
+          ":" +
+          String(this.etfFlow.nanoseconds + 1000000000).substring(1, 4); //80000000 -> 1080000000 -> 080
       } else {
         this.etfFlow = {} as EtfFlow;
         this.bookingdate = getISOStringDate(new Date());
@@ -326,7 +331,6 @@ export default defineComponent({
       this.validatePrice();
 
       if (this.formIsValid) {
-        //FIXME Time!
         const times: Array<string> = this.bookingtime.split(":");
         if (times && times.length == 4) {
           this.etfFlow.timestamp = new Date(this.bookingdate);
@@ -335,16 +339,12 @@ export default defineComponent({
 
           if (this.etfFlow.etfflowid > 0) {
             //update
-            /*
-    const validationResult = await EtfFlowControllerHandler.updateEtfFlow(
-      this.etfFlow
-    );
-    if (!this.handleServerError(validationResult)) {
-      (this.$refs.modalComponent as typeof ModalVue)._hide();
-      this.updateEtfFlowInStore(this.etfFlow);
-      this.$emit("etfFlowUpdated", this.etfFlow);
-    }
-*/
+            const validationResult =
+              await EtfFlowControllerHandler.updateEtfFlow(this.etfFlow);
+            if (!this.handleServerError(validationResult)) {
+              (this.$refs.modalComponent as typeof ModalVue)._hide();
+              this.$emit("etfFlowUpdated", this.etfFlow);
+            }
           } else {
             //create
             const etfFlowValidation =

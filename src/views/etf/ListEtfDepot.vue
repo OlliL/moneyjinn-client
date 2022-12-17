@@ -71,6 +71,7 @@
                   :key="etfFlow.etfflowid"
                   :flow="etfFlow"
                   @delete-etf-flow="deleteEtfFlow"
+                  @edit-etf-flow="editEtfFlow"
                 />
                 <tr>
                   <td colspan="2" class="text-end">&sum;</td>
@@ -118,6 +119,7 @@
                   :key="etfFlow.etfflowid"
                   :flow="etfFlow"
                   @delete-etf-flow="deleteEtfFlow"
+                  @edit-etf-flow="editEtfFlow"
                 />
                 <tr>
                   <td colspan="2" class="text-end">&sum;</td>
@@ -380,8 +382,6 @@ import { formatNumber } from "@/tools/views/FormatNumber";
 import { generateErrorData, type ErrorData } from "@/tools/views/ErrorData";
 import { validateInputField } from "@/tools/views/ValidateInputField";
 import { getError } from "@/tools/views/ThrowError";
-
-//FIXME: edit
 
 type ListEtfsData = {
   serverError: Array<String> | undefined;
@@ -672,13 +672,9 @@ export default defineComponent({
         etfName
       );
     },
-    etfFlowDeleted(etfFlow: EtfFlow) {
-      this.etfFlows = this.etfFlows.filter(
-        (flow) => flow.etfflowid != etfFlow.etfflowid
-      );
-      this.etfEffectiveFlows = this.etfEffectiveFlows.filter(
-        (flow) => flow.etfflowid != etfFlow.etfflowid
-      );
+    etfFlowDeleted() {
+      // reload because effective/all logic happens on server
+      this.loadData();
     },
     createEtfFlow() {
       (this.$refs.createModal as typeof CreateEtfFlowModalVue)._show(this.etfs);
@@ -689,11 +685,14 @@ export default defineComponent({
     },
     editEtfFlow(etfFlow: EtfFlow) {
       (this.$refs.createModal as typeof CreateEtfFlowModalVue)._show(
-        etfFlow,
-        this.etfs
+        this.etfs,
+        etfFlow
       );
     },
-    etfFlowUpdated() {},
+    etfFlowUpdated() {
+      // reload because effective/all logic happens on server
+      this.loadData();
+    },
   },
   components: {
     ListEtfDepotRowVue,
