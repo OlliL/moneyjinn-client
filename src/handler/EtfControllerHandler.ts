@@ -133,6 +133,18 @@ class EtfControllerHandler extends AbstractControllerHandler {
     }
     return etfSalesCalculation;
   }
+  async deleteEtfFlow(etfFlowId: number) {
+    const usecase = "deleteEtfFlow/" + etfFlowId;
+
+    const response = await super.delete(
+      EtfControllerHandler.CONTROLLER,
+      usecase
+    );
+
+    if (!response.ok) {
+      throw new Error(response.statusText);
+    }
+  }
 }
 
 export default new EtfControllerHandler();

@@ -1,4 +1,5 @@
 <template>
+  <DeleteEtfFlowModalVue @etf-flow-deleted="etfFlowDeleted" ref="deleteModal" />
   <div class="container-fluid text-center">
     <div class="row justify-content-md-center">
       <div class="col-xs-12 mb-4">
@@ -53,6 +54,7 @@
                   v-for="etfFlow in etfEffectiveFlows"
                   :key="etfFlow.etfflowid"
                   :flow="etfFlow"
+                  @delete-etf-flow="deleteEtfFlow"
                 />
                 <tr>
                   <td colspan="2" class="text-end">&sum;</td>
@@ -99,6 +101,7 @@
                   v-for="etfFlow in etfFlows"
                   :key="etfFlow.etfflowid"
                   :flow="etfFlow"
+                  @delete-etf-flow="deleteEtfFlow"
                 />
                 <tr>
                   <td colspan="2" class="text-end">&sum;</td>
@@ -347,20 +350,21 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import type { EtfDepot } from "@/model/etf/EtfDepot";
-import type { EtfSalesCalculation } from "@/model/etf/EtfSalesCalculation";
-import EtfControllerHandler from "@/handler/EtfControllerHandler";
+import ListEtfDepotRowVue from "@/components/etf/ListEtfDepotRow.vue";
+import DeleteEtfFlowModalVue from "@/components/etf/DeleteEtfFlowModal.vue";
 import type { ListDepotRowData } from "@/components/etf/ListDepotRowData";
 import type { Etf } from "@/model/etf/Etf";
-import ListEtfDepotRowVue from "@/components/etf/ListEtfDepotRow.vue";
+import type { EtfDepot } from "@/model/etf/EtfDepot";
+import type { EtfFlow } from "@/model/etf/EtfFlow";
+import type { EtfSalesCalculation } from "@/model/etf/EtfSalesCalculation";
+import type { ValidationResult } from "@/model/validation/ValidationResult";
+import EtfControllerHandler from "@/handler/EtfControllerHandler";
 import { formatNumber } from "@/tools/views/FormatNumber";
 import { generateErrorData, type ErrorData } from "@/tools/views/ErrorData";
 import { validateInputField } from "@/tools/views/ValidateInputField";
-import type { ValidationResult } from "@/model/validation/ValidationResult";
 import { getError } from "@/tools/views/ThrowError";
 
 //FIXME: edit
-//FIXME: delete
 
 type ListEtfsData = {
   serverError: Array<String> | undefined;
@@ -641,7 +645,21 @@ export default defineComponent({
         this.followUpServerCall(this.calcResults.validationResult);
       }
     },
+    deleteEtfFlow(etfFlow: EtfFlow, etfName: string) {
+      (this.$refs.deleteModal as typeof DeleteEtfFlowModalVue)._show(
+        etfFlow,
+        etfName
+      );
+    },
+    etfFlowDeleted(etfFlow: EtfFlow) {
+      this.etfFlows = this.etfFlows.filter(
+        (flow) => flow.etfflowid != etfFlow.etfflowid
+      );
+      this.etfEffectiveFlows = this.etfEffectiveFlows.filter(
+        (flow) => flow.etfflowid != etfFlow.etfflowid
+      );
+    },
   },
-  components: { ListEtfDepotRowVue },
+  components: { ListEtfDepotRowVue, DeleteEtfFlowModalVue },
 });
 </script>
