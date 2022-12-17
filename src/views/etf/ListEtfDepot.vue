@@ -22,7 +22,7 @@
         </button>
       </div>
     </div>
-    <div class="row justify-content-md-center mb-4">
+    <div class="row justify-content-md-center mb-4" v-if="dataLoaded">
       <div class="col-md-8 col-xs-12">
         <ul class="nav nav-tabs">
           <li class="nav-item">
@@ -138,13 +138,13 @@
         </div>
       </div>
     </div>
-    <div class="row justify-content-md-center">
+    <div class="row justify-content-md-center" v-if="dataLoaded">
       <div class="col-xs-12 mb-4">
         <h4>Verkauf berechnen</h4>
       </div>
     </div>
 
-    <form @submit.prevent="calculateEtfSale">
+    <form @submit.prevent="calculateEtfSale" v-if="dataLoaded">
       <div class="row justify-content-md-center">
         <div class="col-md-8 col-xs-12 mb-4">
           <div class="card w-100 bg-light">
@@ -410,8 +410,8 @@ export default defineComponent({
     return {
       serverError: undefined,
       dataLoaded: false,
-      etfFlows: new Array<ListDepotRowData>(),
-      etfEffectiveFlows: new Array<ListDepotRowData>(),
+      etfFlows: {} as Array<ListDepotRowData>,
+      etfEffectiveFlows: {} as Array<ListDepotRowData>,
       etfs: {} as Array<Etf>,
       calcEtfAskPrice: 0,
       calcEtfBidPrice: 0,
@@ -545,6 +545,10 @@ export default defineComponent({
   },
   methods: {
     async loadData() {
+      this.dataLoaded = false;
+      this.etfFlows = new Array<ListDepotRowData>();
+      this.etfEffectiveFlows = new Array<ListDepotRowData>();
+      this.etfs = {} as Array<Etf>;
       const etfDepot: EtfDepot = await EtfControllerHandler.listEtfFlows();
       if (etfDepot.etfs) {
         this.etfs = etfDepot.etfs;
@@ -575,6 +579,7 @@ export default defineComponent({
               chartUrl: etf.chartUrl,
             });
         }
+        this.dataLoaded = true;
       }
     },
     showEffective() {
@@ -658,7 +663,6 @@ export default defineComponent({
           this.calcEtfAskPrice,
           this.calcEtfTransactionCosts
         );
-        console.log(this.calcResults.validationResult);
         this.followUpServerCall(this.calcResults.validationResult);
       }
     },
@@ -679,7 +683,10 @@ export default defineComponent({
     createEtfFlow() {
       (this.$refs.createModal as typeof CreateEtfFlowModalVue)._show(this.etfs);
     },
-    etfFlowCreated() {},
+    etfFlowCreated() {
+      // reload because effective/all logic happens on server
+      this.loadData();
+    },
     editEtfFlow(etfFlow: EtfFlow) {
       (this.$refs.createModal as typeof CreateEtfFlowModalVue)._show(
         etfFlow,
