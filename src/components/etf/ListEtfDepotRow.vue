@@ -62,10 +62,10 @@ export default defineComponent({
   },
   methods: {
     deleteEtfFlow() {
-      this.$emit("deleteEtfFlow", this.flow);
+      this.$emit("deleteEtfFlow", this.flow, this.flow.name);
     },
     editEtfFlow() {
-      this.$emit("editEtfFlow", this.flow);
+      this.$emit("editEtfFlow", this.flow, this.flow.name);
     },
   },
 });
