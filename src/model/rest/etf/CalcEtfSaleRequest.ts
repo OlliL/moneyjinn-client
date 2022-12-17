@@ -4,6 +4,6 @@ export type CalcEtfSaleRequest = {
     pieces: number;
     bidPrice: number;
     askPrice: number;
-    TransactionCosts: number;
+    transactionCosts: number;
   };
 };
