@@ -1,5 +1,8 @@
 <template>
-  <div class="row justify-content-md-center py-4" v-if="etfSummaryReceived">
+  <div
+    class="row justify-content-md-center py-4"
+    v-if="dataLoaded && etfSummaryReceived"
+  >
     <div class="col col-lg-8">
       <div class="card">
         <div class="card-header text-center p-3">
@@ -97,6 +100,7 @@ export default defineComponent({
   },
   methods: {
     async loadData(year: string, month: string) {
+      this.dataLoaded = false;
       this.etfSummaryArray = await EtfControllerHandler.listEtfOverview(
         year,
         month
