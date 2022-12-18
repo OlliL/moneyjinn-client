@@ -72,8 +72,16 @@
         </h1>
       </div>
     </div>
-    <ReportTableVue :year="year" :month="month" v-if="year && month" />
-    <EtfTableVue :year="year" :month="month" v-if="year && month" />
+    <ReportTableVue
+      :year="year"
+      :month="month"
+      v-if="dataLoaded && year && month"
+    />
+    <EtfTableVue
+      :year="year"
+      :month="month"
+      v-if="dataLoaded && year && month"
+    />
   </div>
 </template>
 
@@ -119,6 +127,7 @@ export default defineComponent({
       return getMonthName(month);
     },
     async loadData(year?: string, month?: string) {
+      this.dataLoaded = false;
       let response = await ReportControllerHandler.getAvailableMonth(
         year,
         month
@@ -145,6 +154,7 @@ export default defineComponent({
       this.selectMonth(this.nextYear + "", this.nextMonth + "");
     },
     selectMonth(year: string, month?: string) {
+      this.dataLoaded = false;
       router.push({
         name: Routes.ListReports,
         params: { year: year, month: month },

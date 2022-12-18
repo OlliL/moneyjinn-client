@@ -1,5 +1,5 @@
 <template>
-  <div class="row" style="margin-top: 20px">
+  <div class="row" style="margin-top: 20px" v-if="dataLoaded">
     <div class="card">
       <div class="card-header text-center p-3">
         <h5>Geldbewegung {{ monthName }} {{ year }}</h5>
@@ -380,6 +380,7 @@ export default defineComponent({
   },
   methods: {
     async loadData(year: string, month: string) {
+      this.dataLoaded = false;
       this.report = await ReportControllerHandler.listReports(year, month);
 
       this.assetsMonthlyCalculatedTurnover = 0;
