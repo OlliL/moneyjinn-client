@@ -184,25 +184,10 @@
               </li>
             </ul>
           </li>
-          <li class="nav-item dropdown">
-            <a
-              class="nav-link dropdown-toggle"
-              href="#"
-              role="button"
-              data-bs-toggle="dropdown"
-            >
-              <i class="bi bi-asterisk"></i>
-            </a>
-            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <li>
-                <router-link
-                  class="dropdown-item"
-                  :to="{ name: Routes.ListEtfDepot }"
-                  >ETF Depot</router-link
-                >
-              </li>
-              <li><a class="dropdown-item" href="#">neue ETF Buchung</a></li>
-            </ul>
+          <li class="nav-item">
+            <router-link class="nav-link" :to="{ name: Routes.ListEtfDepot }"
+              ><i class="bi bi-asterisk"></i
+            ></router-link>
           </li>
         </ul>
         <div class="collapse navbar-collapse dropstart">
