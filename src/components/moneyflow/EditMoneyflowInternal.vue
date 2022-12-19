@@ -242,6 +242,7 @@ import type { PostingAccount } from "@/model/postingaccount/PostingAccount";
 import type { ValidationResult } from "@/model/validation/ValidationResult";
 
 import MoneyflowControllerHandler from "@/handler/MoneyflowControllerHandler";
+import { useContractpartnerStore } from "@/stores/ContractpartnerStore";
 
 import { generateErrorData, type ErrorData } from "@/tools/views/ErrorData";
 import { getError } from "@/tools/views/ThrowError";
@@ -250,6 +251,7 @@ import ImportedMoneyflowControllerHandler from "@/handler/ImportedMoneyflowContr
 import type { ImportedMoneyflow } from "@/model/moneyflow/ImportedMoneyflow";
 import { getISOStringDate } from "@/tools/views/FormatDate";
 import { toFixed } from "@/tools/math";
+import { mapActions } from "pinia";
 
 type EditMoneyflowData = {
   serverError: Array<String> | undefined;
@@ -333,6 +335,10 @@ export default defineComponent({
     idSuffix: {
       type: String,
       default: "",
+    },
+    fillContractpartnerDefaults: {
+      type: Boolean,
+      default: false,
     },
   },
   watch: {
@@ -439,12 +445,31 @@ export default defineComponent({
     },
   },
   methods: {
+    ...mapActions(useContractpartnerStore, ["getContractpartner"]),
     resetForm() {
       if (this.mmfToEdit && this.mmfToEdit.bookingDate) {
         // we need a deep copy!
         this.mmf = JSON.parse(JSON.stringify(this.mmfToEdit)) as Moneyflow;
         this.amount = this.mmf.amount;
         this.originalMoneyflowSplitEntryIds = new Array<number>();
+        if (
+          this.fillContractpartnerDefaults &&
+          this.mmf.contractpartnerId > 0
+        ) {
+          this.previousCommentSetByContractpartnerDefaults = this.mmf.comment;
+          this.previousPostingAccountSetByContractpartnerDefaults =
+            this.mmf.postingAccountId;
+
+          const contractpartner = this.getContractpartner(
+            this.mmf.contractpartnerId
+          );
+          if (contractpartner) {
+            this.onContractpartnerSelected(contractpartner);
+          }
+        } else {
+          this.previousCommentSetByContractpartnerDefaults = "";
+          this.previousPostingAccountSetByContractpartnerDefaults = 0;
+        }
 
         // during JSON stringify/parse the Date object gets unfortunally lost and
         // it is a string here, so reparse it before extracting the date
@@ -491,6 +516,8 @@ export default defineComponent({
         this.showMoneyflowFields = true;
 
         (this.$refs.amountRef as any).focus();
+        this.previousCommentSetByContractpartnerDefaults = "";
+        this.previousPostingAccountSetByContractpartnerDefaults = 0;
       }
       this.serverError = undefined;
       this.mseRowsAreValid = null;
@@ -505,9 +532,6 @@ export default defineComponent({
       this.amountIsValid = null;
       this.commentIsValid = null;
       this.postingaccountIsValid = null;
-
-      this.previousCommentSetByContractpartnerDefaults = "";
-      this.previousPostingAccountSetByContractpartnerDefaults = 0;
 
       this.toggleTextOff = this.toggleTextOffNoPreDefMoneyflow;
       this.toggleTextOn = this.toggleTextOnNoPreDefMoneyflow;
@@ -675,6 +699,7 @@ export default defineComponent({
           this.mmf.postingAccountId = mpaId;
           this.previousPostingAccountSetByContractpartnerDefaults = mpaId;
           this.validatePostingaccount();
+          console.log("set!", mpaId);
         }
       } else {
         this.mmf.contractpartnerId = 0;

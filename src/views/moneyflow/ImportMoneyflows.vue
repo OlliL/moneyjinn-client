@@ -56,10 +56,11 @@
                     {{ importedMoneyflow.usage }}
                   </div>
                 </div>
-                <EditMoneyflowVue
+                <EditMoneyflowInternalVue
                   :ref="'editMoneyflowVue' + importedMoneyflow.id"
                   :mmf-to-edit="importedMoneyflow"
                   :id-suffix="importedMoneyflow.id + ''"
+                  :fill-contractpartner-defaults="true"
                 />
                 <div class="row no-gutters flex-lg-nowrap">
                   <div class="col-12">
@@ -87,7 +88,7 @@
 import { defineComponent } from "vue";
 import type { ImportedMoneyflow } from "@/model/moneyflow/ImportedMoneyflow";
 import ImportedMoneyflowControllerHandler from "@/handler/ImportedMoneyflowControllerHandler";
-import EditMoneyflowVue from "@/components/moneyflow/EditMoneyflowInternal.vue";
+import EditMoneyflowInternalVue from "@/components/moneyflow/EditMoneyflowInternal.vue";
 
 export default defineComponent({
   name: "ImportMoneyflows",
@@ -103,7 +104,9 @@ export default defineComponent({
   methods: {
     async deleteImportedMoneyflow(mim: ImportedMoneyflow) {
       const ref = (
-        this.$refs["editMoneyflowVue" + mim.id] as typeof EditMoneyflowVue
+        this.$refs[
+          "editMoneyflowVue" + mim.id
+        ] as typeof EditMoneyflowInternalVue
       )[0];
       await ref.deleteImportedMoneyflow(mim.id);
       this.importMoneyflows = this.importMoneyflows.filter(
@@ -112,7 +115,9 @@ export default defineComponent({
     },
     async importImportedMoneyflow(mim: ImportedMoneyflow) {
       const ref = (
-        this.$refs["editMoneyflowVue" + mim.id] as typeof EditMoneyflowVue
+        this.$refs[
+          "editMoneyflowVue" + mim.id
+        ] as typeof EditMoneyflowInternalVue
       )[0];
       if (await ref.importImportedMoneyflow(mim)) {
         this.importMoneyflows = this.importMoneyflows.filter(
@@ -121,6 +126,6 @@ export default defineComponent({
       }
     },
   },
-  components: { EditMoneyflowVue },
+  components: { EditMoneyflowInternalVue },
 });
 </script>
