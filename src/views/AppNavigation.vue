@@ -82,8 +82,20 @@
               <i class="bi bi-bar-chart-fill"></i>
             </a>
             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <li><a class="dropdown-item" href="#">Trends</a></li>
-              <li><a class="dropdown-item" href="#">Ausgabenauswertung</a></li>
+              <li>
+                <router-link
+                  class="dropdown-item"
+                  :to="{ name: Routes.ShowTrends }"
+                  >Trends</router-link
+                >
+              </li>
+              <li>
+                <router-link
+                  class="dropdown-item"
+                  :to="{ name: Routes.ShowReporting }"
+                  >Ausgabenauswertung</router-link
+                >
+              </li>
             </ul>
           </li>
           <li class="nav-item dropdown">
