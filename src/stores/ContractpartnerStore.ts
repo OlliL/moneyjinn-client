@@ -70,6 +70,9 @@ export const useContractpartnerStore = defineStore("contractpartner", {
         (originalMcs) => mcs.id !== originalMcs.id
       );
     },
+    getContractpartner(id: number): Contractpartner | undefined {
+      return this.contractpartner.find((entry) => entry.id === id);
+    },
     compareContractpartnerByName(
       a: Contractpartner,
       b: Contractpartner
