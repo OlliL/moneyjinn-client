@@ -13,6 +13,8 @@ import SearchMoneyflowsVue from "@/views/moneyflow/SearchMoneyflows.vue";
 import ListPreDefMoneyflowsVue from "@/views/predefmoneyflow/ListPreDefMoneyflows.vue";
 import ListEtfDepotVue from "@/views/etf/ListEtfDepot.vue";
 import ImportReceiptsVue from "@/views/receipt/ImportReceipts.vue";
+import ShowTrendsVue from "@/views/reports/ShowTrends.vue";
+import ShowReportingVue from "@/views/reports/ShowReporting.vue";
 
 export enum Routes {
   Login = "login",
@@ -27,6 +29,8 @@ export enum Routes {
   ImportMoneyflows = "importMoneyflows",
   ImportReceipts = "importReceipts",
   SearchMoneyflows = "searchMoneyflows",
+  ShowTrends = "showTrends",
+  ShowReporting = "showReporting",
 }
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -103,6 +107,16 @@ const router = createRouter({
           path: "listEtfDepot",
           name: Routes.ListEtfDepot,
           component: ListEtfDepotVue,
+        },
+        {
+          path: "showTrends",
+          name: Routes.ShowTrends,
+          component: ShowTrendsVue,
+        },
+        {
+          path: "showReporting",
+          name: Routes.ShowReporting,
+          component: ShowReportingVue,
         },
       ],
     },
