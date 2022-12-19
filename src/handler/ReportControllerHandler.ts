@@ -7,6 +7,8 @@ import type { Report } from "@/model/report/Report";
 import { mapReportTurnoverCapitalsourceTransportToModel } from "./mapper/ReportTurnoverCapitalsourceTransportMapper";
 import { mapMoneyflowTransportToModel } from "./mapper/MoneyflowTransportMapper";
 import type { MoneyflowSplitEntryTransport } from "@/model/rest/transport/MoneyflowSplitEntryTransport";
+import type { TrendsTransporter } from "@/model/report/TrendsTransporter";
+import type { ShowTrendsFormResponse } from "@/model/rest/report/ShowTrendsFormResponse";
 
 class ReportControllerHandler extends AbstractControllerHandler {
   private static CONTROLLER = "report";
@@ -97,6 +99,35 @@ class ReportControllerHandler extends AbstractControllerHandler {
     };
 
     return report;
+  }
+
+  async showTrendsForm(): Promise<TrendsTransporter> {
+    const usecase = "showTrendsForm";
+
+    const response = await super.get(
+      ReportControllerHandler.CONTROLLER,
+      usecase
+    );
+    if (!response.ok) {
+      throw new Error(response.statusText);
+    }
+
+    const showTrendsFormResponse =
+      (await response.json()) as ShowTrendsFormResponse;
+
+    if (showTrendsFormResponse.error) {
+      throwError(showTrendsFormResponse.error.code);
+    }
+
+    const innerResponse = showTrendsFormResponse.showTrendsFormResponse;
+    console.log(innerResponse);
+    const trendsTransporter: TrendsTransporter = {
+      minDate: new Date(innerResponse.minDate),
+      maxDate: new Date(innerResponse.maxDate),
+      selectedCapitalsourceIds: innerResponse.settingTrendCapitalsourceId,
+    };
+
+    return trendsTransporter;
   }
 }
 
