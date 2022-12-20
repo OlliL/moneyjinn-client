@@ -62,7 +62,10 @@
 
                 <div class="row no-gutters flex-lg-nowrap">
                   <div class="col-12 text-start">
-                    <small>Kapitalquellen:</small>
+                    <small
+                      :style="'color:' + capitalsourceErrorData.fieldColor"
+                      >{{ capitalsourceErrorData.fieldLabel }}</small
+                    >
                   </div>
                 </div>
                 <div class="row no-gutters flex-lg-nowrap">
@@ -104,7 +107,8 @@
 <script lang="ts">
 import ReportControllerHandler from "@/handler/ReportControllerHandler";
 import type { Capitalsource } from "@/model/capitalsource/Capitalsource";
-import type { TrendsTransporter } from "@/model/report/TrendsTransporter";
+import type { TrendsParameter } from "@/model/report/TrendsParameter";
+import type { Trends } from "@/model/report/Trends";
 import { useCapitalsourceStore } from "@/stores/CapitalsourceStore";
 import { generateErrorData, type ErrorData } from "@/tools/views/ErrorData";
 import { validateInputField } from "@/tools/views/ValidateInputField";
@@ -118,6 +122,8 @@ type ShowTrendsData = {
   startDateErrorMessage: string;
   endDateIsValid: boolean | null;
   endDateErrorMessage: string;
+  capitalsourceIsValid: boolean | null;
+  capitalsourceErrorMessage: string;
   capitalsourceIds: Array<number>;
 };
 
@@ -133,6 +139,8 @@ export default defineComponent({
       endDateIsValid: null,
       endDateErrorMessage: "",
       capitalsourceIds: {} as Array<number>,
+      capitalsourceIsValid: null,
+      capitalsourceErrorMessage: "",
     };
   },
   created() {
@@ -140,7 +148,10 @@ export default defineComponent({
   },
   computed: {
     formIsValid(): boolean {
-      const isValid = this.startDateIsValid && this.endDateIsValid;
+      const isValid =
+        this.startDateIsValid &&
+        this.endDateIsValid &&
+        this.capitalsourceIsValid;
       if (isValid === null || isValid === undefined || isValid === true) {
         return true;
       }
@@ -160,6 +171,13 @@ export default defineComponent({
         this.endDateErrorMessage
       );
     },
+    capitalsourceErrorData(): ErrorData {
+      return generateErrorData(
+        this.capitalsourceIsValid,
+        "Kapitalquellen",
+        this.capitalsourceErrorMessage
+      );
+    },
     capitalsourceArray(): Array<Capitalsource> {
       const capitalsourceStore = useCapitalsourceStore();
       return capitalsourceStore.capitalsource;
@@ -168,10 +186,10 @@ export default defineComponent({
   methods: {
     async loadData() {
       this.dataLoaded = false;
-      const trendsTransporter: TrendsTransporter =
+      const trendsTransporter: TrendsParameter =
         await ReportControllerHandler.showTrendsForm();
 
-      const minDate = trendsTransporter.minDate;
+      const minDate = trendsTransporter.startDate;
       const minDateYear = minDate.getFullYear();
       const minDateMonth =
         minDate.getMonth() < 9
@@ -179,7 +197,7 @@ export default defineComponent({
           : minDate.getMonth() + 1;
       this.startDate = minDateYear + "-" + minDateMonth;
 
-      const maxDate = trendsTransporter.maxDate;
+      const maxDate = trendsTransporter.endDate;
       const maxDateYear = maxDate.getFullYear();
       const maxDateMonth =
         maxDate.getMonth() < 9
@@ -204,13 +222,32 @@ export default defineComponent({
         "Enddatum angeben!"
       );
     },
+    validateCapitalsource() {
+      [this.capitalsourceIsValid, this.capitalsourceErrorMessage] =
+        validateInputField(
+          this.capitalsourceIds.length,
+          "Kapitalquellen angeben!"
+        );
+    },
 
-    showTrends() {
+    async showTrends() {
       this.validateEndDate();
       this.validateStartDate();
+      this.validateCapitalsource();
 
       if (this.formIsValid) {
-        console.log("search");
+        const startDate = new Date(this.startDate + "-01");
+        const endDate = new Date(this.endDate + "-01");
+        const trendsParameter: TrendsParameter = {
+          startDate: startDate,
+          endDate: endDate,
+          selectedCapitalsourceIds: this.capitalsourceIds,
+        };
+        const trends: Trends = await ReportControllerHandler.showTrendsGraph(
+          trendsParameter
+        );
+
+        console.log(trends);
       }
     },
   },
