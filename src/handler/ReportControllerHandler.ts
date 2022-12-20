@@ -123,7 +123,7 @@ class ReportControllerHandler extends AbstractControllerHandler {
     }
 
     const innerResponse = showTrendsFormResponse.showTrendsFormResponse;
-    console.log(innerResponse);
+
     const trendsTransporter: TrendsParameter = {
       startDate: new Date(innerResponse.minDate),
       endDate: new Date(innerResponse.maxDate),
