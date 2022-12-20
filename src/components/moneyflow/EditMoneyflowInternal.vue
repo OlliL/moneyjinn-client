@@ -699,7 +699,6 @@ export default defineComponent({
           this.mmf.postingAccountId = mpaId;
           this.previousPostingAccountSetByContractpartnerDefaults = mpaId;
           this.validatePostingaccount();
-          console.log("set!", mpaId);
         }
       } else {
         this.mmf.contractpartnerId = 0;
