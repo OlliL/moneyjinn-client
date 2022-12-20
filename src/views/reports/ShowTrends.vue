@@ -12,7 +12,7 @@
             <form @submit.prevent="showTrends">
               <div class="container-fluid">
                 <div class="row no-gutters flex-lg-nowrap">
-                  <div class="col-md-6 col-xs-12 mb-4">
+                  <div class="col-md-6 col-xs-12 mb-2">
                     <div class="input-group">
                       <div class="form-floating">
                         <input
@@ -59,6 +59,32 @@
                     </div>
                   </div>
                 </div>
+
+                <div class="row no-gutters flex-lg-nowrap">
+                  <div class="col-12 text-start">
+                    <small>Kapitalquellen:</small>
+                  </div>
+                </div>
+                <div class="row no-gutters flex-lg-nowrap">
+                  <div class="col-12 mb-4">
+                    <select
+                      v-model="capitalsourceIds"
+                      id="capitalsourceIds2"
+                      class="form-select form-control"
+                      multiple
+                      size="5"
+                    >
+                      <option
+                        v-for="capitalsource of capitalsourceArray"
+                        :key="capitalsource.id"
+                        :value="capitalsource.id"
+                      >
+                        {{ capitalsource.comment }}
+                      </option>
+                    </select>
+                  </div>
+                </div>
+
                 <div class="row no-gutters flex-lg-nowrap">
                   <div class="col-12">
                     <button type="submit" class="btn btn-primary mx-2">
@@ -77,7 +103,9 @@
 
 <script lang="ts">
 import ReportControllerHandler from "@/handler/ReportControllerHandler";
+import type { Capitalsource } from "@/model/capitalsource/Capitalsource";
 import type { TrendsTransporter } from "@/model/report/TrendsTransporter";
+import { useCapitalsourceStore } from "@/stores/CapitalsourceStore";
 import { generateErrorData, type ErrorData } from "@/tools/views/ErrorData";
 import { validateInputField } from "@/tools/views/ValidateInputField";
 import { defineComponent } from "vue";
@@ -90,6 +118,7 @@ type ShowTrendsData = {
   startDateErrorMessage: string;
   endDateIsValid: boolean | null;
   endDateErrorMessage: string;
+  capitalsourceIds: Array<number>;
 };
 
 export default defineComponent({
@@ -103,6 +132,7 @@ export default defineComponent({
       startDateErrorMessage: "",
       endDateIsValid: null,
       endDateErrorMessage: "",
+      capitalsourceIds: {} as Array<number>,
     };
   },
   created() {
@@ -130,12 +160,34 @@ export default defineComponent({
         this.endDateErrorMessage
       );
     },
+    capitalsourceArray(): Array<Capitalsource> {
+      const capitalsourceStore = useCapitalsourceStore();
+      return capitalsourceStore.capitalsource;
+    },
   },
   methods: {
     async loadData() {
       this.dataLoaded = false;
       const trendsTransporter: TrendsTransporter =
         await ReportControllerHandler.showTrendsForm();
+
+      const minDate = trendsTransporter.minDate;
+      const minDateYear = minDate.getFullYear();
+      const minDateMonth =
+        minDate.getMonth() < 9
+          ? "0" + (minDate.getMonth() + 1)
+          : minDate.getMonth() + 1;
+      this.startDate = minDateYear + "-" + minDateMonth;
+
+      const maxDate = trendsTransporter.maxDate;
+      const maxDateYear = maxDate.getFullYear();
+      const maxDateMonth =
+        maxDate.getMonth() < 9
+          ? "0" + (maxDate.getMonth() + 1)
+          : maxDate.getMonth() + 1;
+      this.endDate = maxDateYear + "-" + maxDateMonth;
+
+      this.capitalsourceIds = trendsTransporter.selectedCapitalsourceIds;
 
       console.log(trendsTransporter);
       this.dataLoaded = true;
