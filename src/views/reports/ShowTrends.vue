@@ -5,8 +5,8 @@
         <h4>Trends</h4>
       </div>
     </div>
-    <div class="row justify-content-md-center">
-      <div class="col-md-4 col-xs-12">
+    <div class="row justify-content-md-center mb-2">
+      <div class="col-xxl-4 col-md-6 col-sm-10 col-xs-12">
         <div class="card w-100 bg-light">
           <div class="card-body">
             <form @submit.prevent="showTrends">
@@ -69,13 +69,13 @@
                   </div>
                 </div>
                 <div class="row no-gutters flex-lg-nowrap">
-                  <div class="col-12 mb-4">
+                  <div class="col-12 mb-3">
                     <select
                       v-model="capitalsourceIds"
                       id="capitalsourceIds2"
                       class="form-select form-control"
                       multiple
-                      size="5"
+                      size="4"
                     >
                       <option
                         v-for="capitalsource of capitalsourceArray"
@@ -90,7 +90,7 @@
 
                 <div class="row no-gutters flex-lg-nowrap">
                   <div class="col-12">
-                    <button type="submit" class="btn btn-primary mx-2">
+                    <button type="submit" class="btn btn-primary">
                       anzeigen
                     </button>
                   </div>
@@ -105,7 +105,7 @@
       class="row justify-content-md-center"
       style="position: relative; height: 55vh"
     >
-      <div class="col-7">
+      <div class="col-xxl-7 col-md-10 col-sm-12 col-xs-12">
         <Line
           :data="chartData"
           :options="chartOptions"
@@ -204,20 +204,29 @@ export default defineComponent({
       capitalsourceErrorMessage: "",
       chartOptions: {
         responsive: true,
+        maintainAspectRatio: false,
         plugins: {
           title: {
             display: true,
             text: "",
           },
         },
-        tooltips: {
+        interaction: {
           mode: "index",
           intersect: false,
         },
         scales: {
           x: {
-            text: "hugo",
-            display: true,
+            title: {
+              text: "Monat/Jahr",
+              display: true,
+            },
+          },
+          y: {
+            title: {
+              text: "Betrag",
+              display: true,
+            },
           },
         },
       },
