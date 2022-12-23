@@ -12,6 +12,8 @@ import type { ShowTrendsFormResponse } from "@/model/rest/report/ShowTrendsFormR
 import type { Trends } from "@/model/report/Trends";
 import type { ShowTrendsGraphRequest } from "@/model/rest/report/ShowTrendsGraphRequest";
 import type { ShowTrendsGraphResponse } from "@/model/rest/report/ShowTrendsGraphResponse";
+import type { ReportingParameter } from "@/model/report/ReportingParameter";
+import type { ShowReportingFormResponse } from "@/model/rest/report/ShowReportingFormResponse";
 
 class ReportControllerHandler extends AbstractControllerHandler {
   private static CONTROLLER = "report";
@@ -163,6 +165,35 @@ class ReportControllerHandler extends AbstractControllerHandler {
     };
 
     return result;
+  }
+
+  async showReportingForm(): Promise<ReportingParameter> {
+    const usecase = "showReportingForm";
+
+    const response = await super.get(
+      ReportControllerHandler.CONTROLLER,
+      usecase
+    );
+    if (!response.ok) {
+      throw new Error(response.statusText);
+    }
+
+    const showReportingFormResponse =
+      (await response.json()) as ShowReportingFormResponse;
+
+    if (showReportingFormResponse.error) {
+      throwError(showReportingFormResponse.error.code);
+    }
+
+    const innerResponse = showReportingFormResponse.showReportingFormResponse;
+
+    const reportingParameter: ReportingParameter = {
+      startDate: new Date(innerResponse.minDate),
+      endDate: new Date(innerResponse.maxDate),
+      notSelectedPostingAccountIds: innerResponse.postingAccountIdsNo,
+    };
+    console.log(innerResponse);
+    return reportingParameter;
   }
 }
 
