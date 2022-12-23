@@ -14,6 +14,11 @@ import type { ShowTrendsGraphRequest } from "@/model/rest/report/ShowTrendsGraph
 import type { ShowTrendsGraphResponse } from "@/model/rest/report/ShowTrendsGraphResponse";
 import type { ReportingParameter } from "@/model/report/ReportingParameter";
 import type { ShowReportingFormResponse } from "@/model/rest/report/ShowReportingFormResponse";
+import { usePostingAccountStore } from "@/stores/PostingAccountStore";
+import type { ReportingMonthAmount } from "@/model/report/ReportingMonthAmount";
+import type { ShowMonthlyReportGraphRequest } from "@/model/rest/report/ShowMonthlyReportGraphRequest";
+import type { ShowMonthlyReportGraphResponse } from "@/model/rest/report/ShowMonthlyReportGraphResponse";
+import { mapPostingAccountAmountTransportToModel } from "./mapper/PostingAccountAmountTransportMapper";
 
 class ReportControllerHandler extends AbstractControllerHandler {
   private static CONTROLLER = "report";
@@ -187,13 +192,63 @@ class ReportControllerHandler extends AbstractControllerHandler {
 
     const innerResponse = showReportingFormResponse.showReportingFormResponse;
 
+    const postingAccountStore = usePostingAccountStore();
+    const postingAccounts = postingAccountStore.getPostingAccount;
+
+    const postingAccountsYes = postingAccounts.filter((pa) => {
+      return !innerResponse.postingAccountIdsNo.includes(pa.id);
+    });
+    const postingAccountsNo = postingAccounts.filter((pa) => {
+      return innerResponse.postingAccountIdsNo.includes(pa.id);
+    });
+
     const reportingParameter: ReportingParameter = {
       startDate: new Date(innerResponse.minDate),
       endDate: new Date(innerResponse.maxDate),
-      notSelectedPostingAccountIds: innerResponse.postingAccountIdsNo,
+      selectedPostingAccounts: postingAccountsYes,
+      unselectedPostingAccounts: postingAccountsNo,
     };
 
     return reportingParameter;
+  }
+
+  async showMonthlyReportGraph(
+    reportingParameter: ReportingParameter
+  ): Promise<Array<ReportingMonthAmount>> {
+    const usecase = "showMonthlyReportGraph";
+    const request = {
+      showMonthlyReportGraphRequest: {},
+    } as ShowMonthlyReportGraphRequest;
+    const innerRequest = request.showMonthlyReportGraphRequest;
+
+    innerRequest.startDate = reportingParameter.startDate.toISOString();
+    innerRequest.endDate = reportingParameter.endDate.toISOString();
+    innerRequest.postingAccountIdsYes =
+      reportingParameter.selectedPostingAccounts.map((mpa) => mpa.id);
+    innerRequest.postingAccountIdsNo =
+      reportingParameter.unselectedPostingAccounts.map((mpa) => mpa.id);
+
+    const response = await super.put(
+      request,
+      ReportControllerHandler.CONTROLLER,
+      usecase
+    );
+
+    if (!response.ok) {
+      throw new Error(response.statusText);
+    }
+
+    const showMonthlyReportGraphResponse =
+      (await response.json()) as ShowMonthlyReportGraphResponse;
+    const innerResponse =
+      showMonthlyReportGraphResponse.showMonthlyReportGraphResponse;
+
+    const result: Array<ReportingMonthAmount> =
+      innerResponse.postingAccountAmountTransport.map((paat) =>
+        mapPostingAccountAmountTransportToModel(paat)
+      );
+
+    return result;
   }
 }
 
