@@ -179,6 +179,7 @@
                       type="button"
                       class="btn btn-light btn-sm"
                       style="padding: 0.1rem 0.3rem !important"
+                      @click="removeAllPostingAccounts"
                     >
                       <i class="bi bi-caret-right-fill"></i>
                     </button>
@@ -187,6 +188,7 @@
                       type="button"
                       class="btn btn-light btn-sm"
                       style="padding: 0.1rem 0.3rem !important"
+                      @click="removeSelectedPostingAccounts"
                     >
                       <i class="bi bi-caret-right"></i>
                     </button>
@@ -196,6 +198,7 @@
                       type="button"
                       class="btn btn-light btn-sm"
                       style="padding: 0.1rem 0.3rem !important"
+                      @click="addSelectedPostingAccounts"
                     >
                       <i class="bi bi-caret-left"></i>
                     </button>
@@ -204,6 +207,7 @@
                       type="button"
                       class="btn btn-light btn-sm"
                       style="padding: 0.1rem 0.3rem !important"
+                      @click="addAllPostingAccounts"
                     >
                       <i class="bi bi-caret-left-fill"></i>
                     </button>
@@ -270,7 +274,7 @@ import { usePostingAccountStore } from "@/stores/PostingAccountStore";
 import { generateErrorData, type ErrorData } from "@/tools/views/ErrorData";
 import { validateInputField } from "@/tools/views/ValidateInputField";
 
-import { defineComponent } from "vue";
+import { defineComponent, toHandlers } from "vue";
 
 type ShowReportingData = {
   dataLoaded: boolean;
@@ -329,11 +333,11 @@ export default defineComponent({
       postingAccountYesErrorMessage: "",
       postingAccountNoIsValid: null,
       postingAccountNoErrorMessage: "",
-      postingAccounts: {} as Array<PostingAccount>,
-      postingAccountsYes: {} as Array<PostingAccount>,
-      postingAccountsNo: {} as Array<PostingAccount>,
-      selectedPostingAccountsYes: {} as Array<number>,
-      selectedPostingAccountsNo: {} as Array<number>,
+      postingAccounts: new Array<PostingAccount>(),
+      postingAccountsYes: new Array<PostingAccount>(),
+      postingAccountsNo: new Array<PostingAccount>(),
+      selectedPostingAccountsYes: new Array<number>(),
+      selectedPostingAccountsNo: new Array<number>(),
       selectedPostingAccount: 0,
     };
   },
@@ -434,7 +438,6 @@ export default defineComponent({
       this.postingAccountsNo = this.postingAccounts.filter((pa) => {
         return reportingParameter.notSelectedPostingAccountIds.includes(pa.id);
       });
-      console.log(reportingParameter);
       this.dataLoaded = true;
     },
     validateStartDateMonth() {
@@ -457,12 +460,15 @@ export default defineComponent({
       [this.postingAccountYesIsValid, this.postingAccountYesErrorMessage] =
         validateInputField(
           this.postingAccountsYes.length,
-          "Kapitalquellen angeben!"
+          "Buchungskonten angeben!"
         );
     },
     validatePostingAccount() {
       [this.postingAccountIsValid, this.postingAccountErrorMessage] =
-        validateInputField(this.postingAccounts, "Kapitalquelle angeben!");
+        validateInputField(
+          this.selectedPostingAccount,
+          "Buchungskonto angeben!"
+        );
     },
     onPostingAccountSelected(postingAccount: PostingAccount) {
       if (postingAccount) {
@@ -471,15 +477,72 @@ export default defineComponent({
         this.selectedPostingAccount = 0;
       }
     },
+    removeAllPostingAccounts() {
+      this.postingAccountsNo = this.postingAccounts;
+      this.postingAccountsYes = new Array<PostingAccount>();
+    },
+    movePostingAccounts(
+      from: Array<PostingAccount>,
+      to: Array<PostingAccount>,
+      toBeMovedIds: Array<number>
+    ): Array<PostingAccount> {
+      const toBeMoved = from.filter((mpa) =>
+        toBeMovedIds.find((id) => id == mpa.id)
+      );
+      const newFrom = from.filter(
+        (mpa) => !toBeMovedIds.find((id) => id == mpa.id)
+      );
+      for (let mpa of toBeMoved) {
+        to.push(mpa);
+      }
+      to.sort((a, b) => a.name.localeCompare(b.name));
+      return newFrom;
+    },
+    removeSelectedPostingAccounts() {
+      this.postingAccountsYes = this.movePostingAccounts(
+        this.postingAccountsYes,
+        this.postingAccountsNo,
+        this.selectedPostingAccountsYes
+      );
+      this.selectedPostingAccountsYes = new Array();
+    },
+    addAllPostingAccounts() {
+      this.postingAccountsNo = new Array<PostingAccount>();
+      this.postingAccountsYes = this.postingAccounts;
+    },
+    addSelectedPostingAccounts() {
+      this.postingAccountsNo = this.movePostingAccounts(
+        this.postingAccountsNo,
+        this.postingAccountsYes,
+        this.selectedPostingAccountsNo
+      );
+      this.selectedPostingAccountsNo = new Array();
+    },
     showReportingGraph() {
-      this.validateEndDateMonth();
-      this.validateStartDateMonth();
-      this.validateEndDateYear();
-      this.validateStartDateYear();
+      let validForm: boolean | null = true;
+      if (this.groupByYear) {
+        this.validateEndDateYear();
+        this.validateStartDateYear();
+        validForm =
+          validForm && this.startDateYearIsValid && this.startDateYearIsValid;
+      } else {
+        this.validateEndDateMonth();
+        this.validateStartDateMonth();
+        validForm =
+          validForm && this.startDateMonthIsValid && this.startDateMonthIsValid;
+      }
+      if (this.singlePostingAccounts) {
+        this.validatePostingAccount();
+        validForm = validForm && this.postingAccountIsValid;
+      } else {
+        this.validatePostingAccountYes();
+        validForm = validForm && this.postingAccountYesIsValid;
+      }
       this.reportingGraphLoaded = false;
-
-      //FIXME check validity of form
-      console.log(this.groupByYear, this.singlePostingAccounts);
+      if (validForm === true) {
+        //FIXME check validity of form
+        console.log(this.groupByYear, this.singlePostingAccounts);
+      }
       this.reportingGraphLoaded = true;
     },
   },

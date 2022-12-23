@@ -192,7 +192,7 @@ class ReportControllerHandler extends AbstractControllerHandler {
       endDate: new Date(innerResponse.maxDate),
       notSelectedPostingAccountIds: innerResponse.postingAccountIdsNo,
     };
-    console.log(innerResponse);
+
     return reportingParameter;
   }
 }
