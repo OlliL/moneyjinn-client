@@ -266,15 +266,14 @@ import PostingAccountSelectVue from "@/components/postingaccount/PostingAccountS
 
 import type { PostingAccount } from "@/model/postingaccount/PostingAccount";
 import type { ReportingParameter } from "@/model/report/ReportingParameter";
+import type { ReportingMonthAmount } from "@/model/report/ReportingMonthAmount";
 
 import ReportControllerHandler from "@/handler/ReportControllerHandler";
-
-import { usePostingAccountStore } from "@/stores/PostingAccountStore";
 
 import { generateErrorData, type ErrorData } from "@/tools/views/ErrorData";
 import { validateInputField } from "@/tools/views/ValidateInputField";
 
-import { defineComponent, toHandlers } from "vue";
+import { defineComponent } from "vue";
 
 type ShowReportingData = {
   dataLoaded: boolean;
@@ -429,15 +428,11 @@ export default defineComponent({
       this.endDateMonth = maxDateYear + "-" + maxDateMonth;
       this.endDateYear = maxDateYear + "";
 
-      const postingAccountStore = usePostingAccountStore();
-      this.postingAccounts = postingAccountStore.getPostingAccount;
-
-      this.postingAccountsYes = this.postingAccounts.filter((pa) => {
-        return !reportingParameter.notSelectedPostingAccountIds.includes(pa.id);
-      });
-      this.postingAccountsNo = this.postingAccounts.filter((pa) => {
-        return reportingParameter.notSelectedPostingAccountIds.includes(pa.id);
-      });
+      this.postingAccountsYes = reportingParameter.selectedPostingAccounts;
+      this.postingAccountsNo = reportingParameter.unselectedPostingAccounts;
+      this.postingAccounts = this.postingAccountsYes.concat(
+        this.postingAccountsNo
+      );
       this.dataLoaded = true;
     },
     validateStartDateMonth() {
@@ -518,30 +513,59 @@ export default defineComponent({
       );
       this.selectedPostingAccountsNo = new Array();
     },
-    showReportingGraph() {
+    async showReportingGraph() {
       let validForm: boolean | null = true;
+      const reportingParameter = {} as ReportingParameter;
       if (this.groupByYear) {
         this.validateEndDateYear();
         this.validateStartDateYear();
         validForm =
           validForm && this.startDateYearIsValid && this.startDateYearIsValid;
+        if (validForm === true) {
+          reportingParameter.startDate = new Date(this.startDateYear);
+          reportingParameter.endDate = new Date(this.endDateYear);
+        }
       } else {
         this.validateEndDateMonth();
         this.validateStartDateMonth();
         validForm =
           validForm && this.startDateMonthIsValid && this.startDateMonthIsValid;
+        if (validForm === true) {
+          reportingParameter.startDate = new Date(this.startDateMonth);
+          reportingParameter.endDate = new Date(this.endDateMonth);
+        }
       }
       if (this.singlePostingAccounts) {
         this.validatePostingAccount();
         validForm = validForm && this.postingAccountIsValid;
+        if (validForm === true) {
+          const selectedPostingAccounts = new Array<PostingAccount>();
+          const selectedPostingAccount = this.postingAccounts.filter(
+            (mpa) => mpa.id == this.selectedPostingAccount
+          )[0];
+          selectedPostingAccounts.push(selectedPostingAccount);
+          reportingParameter.selectedPostingAccounts = selectedPostingAccounts;
+        }
       } else {
         this.validatePostingAccountYes();
         validForm = validForm && this.postingAccountYesIsValid;
+        if (validForm === true) {
+          reportingParameter.selectedPostingAccounts = this.postingAccountsYes;
+          reportingParameter.unselectedPostingAccounts = this.postingAccountsNo;
+        }
       }
       this.reportingGraphLoaded = false;
       if (validForm === true) {
-        //FIXME check validity of form
-        console.log(this.groupByYear, this.singlePostingAccounts);
+        if (this.groupByYear) {
+          //FIXME check validity of form
+          console.log(this.groupByYear, this.singlePostingAccounts);
+        } else {
+          const reportingMonthAmounts: Array<ReportingMonthAmount> =
+            await ReportControllerHandler.showMonthlyReportGraph(
+              reportingParameter
+            );
+          console.log(reportingMonthAmounts);
+        }
       }
       this.reportingGraphLoaded = true;
     },

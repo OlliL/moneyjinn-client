@@ -1,6 +1,6 @@
-import type { MonthAmount } from "./MonthAmount";
+import type { TrendsMonthAmount } from "./TrendsMonthAmount";
 
 export type Trends = {
-  trendsSettled: Array<MonthAmount>;
-  trendsCalculated: Array<MonthAmount>;
+  trendsSettled: Array<TrendsMonthAmount>;
+  trendsCalculated: Array<TrendsMonthAmount>;
 };
