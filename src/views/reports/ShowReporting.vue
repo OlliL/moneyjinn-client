@@ -226,8 +226,22 @@
                     </select>
                   </div>
                 </div>
+                <div
+                  class="row no-gutters flex-lg-nowrap justify-content-md-center mt-3"
+                  v-show="singlePostingAccounts"
+                >
+                  <div class="col-7">
+                    <PostingAccountSelectVue
+                      :field-color="postingAccountErrorData.fieldColor"
+                      :field-label="postingAccountErrorData.fieldLabel"
+                      :input-class="postingAccountErrorData.inputClass"
+                      id-suffix="ShowReporting"
+                      @posting-account-selected="onPostingAccountSelected"
+                    />
+                  </div>
+                </div>
 
-                <div class="row no-gutters flex-lg-nowrap mt-2">
+                <div class="row no-gutters flex-lg-nowrap mt-3">
                   <div class="col-12">
                     <button type="submit" class="btn btn-primary mx-2">
                       anzeigen
@@ -244,12 +258,18 @@
 </template>
 
 <script lang="ts">
-import ReportControllerHandler from "@/handler/ReportControllerHandler";
+import PostingAccountSelectVue from "@/components/postingaccount/PostingAccountSelect.vue";
+
 import type { PostingAccount } from "@/model/postingaccount/PostingAccount";
 import type { ReportingParameter } from "@/model/report/ReportingParameter";
+
+import ReportControllerHandler from "@/handler/ReportControllerHandler";
+
 import { usePostingAccountStore } from "@/stores/PostingAccountStore";
+
 import { generateErrorData, type ErrorData } from "@/tools/views/ErrorData";
 import { validateInputField } from "@/tools/views/ValidateInputField";
+
 import { defineComponent } from "vue";
 
 type ShowReportingData = {
@@ -280,6 +300,7 @@ type ShowReportingData = {
   postingAccountsNo: Array<PostingAccount>;
   selectedPostingAccountsYes: Array<number>;
   selectedPostingAccountsNo: Array<number>;
+  selectedPostingAccount: number;
 };
 
 export default defineComponent({
@@ -313,6 +334,7 @@ export default defineComponent({
       postingAccountsNo: {} as Array<PostingAccount>,
       selectedPostingAccountsYes: {} as Array<number>,
       selectedPostingAccountsNo: {} as Array<number>,
+      selectedPostingAccount: 0,
     };
   },
   created() {
@@ -374,7 +396,7 @@ export default defineComponent({
     postingAccountErrorData(): ErrorData {
       return generateErrorData(
         this.postingAccountIsValid,
-        "Kapitalquelle",
+        "Buchungskonto",
         this.postingAccountErrorMessage
       );
     },
@@ -442,6 +464,13 @@ export default defineComponent({
       [this.postingAccountIsValid, this.postingAccountErrorMessage] =
         validateInputField(this.postingAccounts, "Kapitalquelle angeben!");
     },
+    onPostingAccountSelected(postingAccount: PostingAccount) {
+      if (postingAccount) {
+        this.selectedPostingAccount = postingAccount.id;
+      } else {
+        this.selectedPostingAccount = 0;
+      }
+    },
     showReportingGraph() {
       this.validateEndDateMonth();
       this.validateStartDateMonth();
@@ -454,7 +483,7 @@ export default defineComponent({
       this.reportingGraphLoaded = true;
     },
   },
-  components: {},
+  components: { PostingAccountSelectVue },
 });
 </script>
 
