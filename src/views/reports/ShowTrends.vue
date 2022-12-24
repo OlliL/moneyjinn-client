@@ -343,8 +343,8 @@ export default defineComponent({
 
       if (this.formIsValid && this.startDate && this.endDate) {
         const endDate = this.endDate;
-        endDate.setMonth(11);
-        endDate.setDate(31);
+        endDate.setMonth(endDate.getMonth() + 1);
+        endDate.setDate(0);
         const trendsParameter: TrendsParameter = {
           startDate: this.startDate,
           endDate: this.endDate,
@@ -353,61 +353,63 @@ export default defineComponent({
         const trends: Trends = await ReportControllerHandler.showTrendsGraph(
           trendsParameter
         );
-        const labelsSettled: Array<string> = trends.trendsSettled.map(function (
-          e
-        ) {
-          return getXLabel(e.month, e.year);
-        });
-
-        const dataSettled: Array<number> = trends.trendsSettled.map(function (
-          e
-        ) {
-          return e.amount;
-        });
-
-        this.chartData.labels = labelsSettled;
-        this.chartData.datasets[0].data = dataSettled;
-
-        if (trends.trendsCalculated && trends.trendsCalculated.length > 0) {
-          const labelsCalculated: Array<string> = trends.trendsCalculated.map(
+        if (trends && trends.trendsSettled && trends.trendsSettled.length > 0) {
+          const labelsSettled: Array<string> = trends.trendsSettled.map(
             function (e) {
               return getXLabel(e.month, e.year);
             }
           );
 
-          const dataCalculated = new Array<number | null>();
+          const dataSettled: Array<number> = trends.trendsSettled.map(function (
+            e
+          ) {
+            return e.amount;
+          });
 
-          for (let i = 0; i < dataSettled.length; i++) {
-            if (i + 1 == dataSettled.length) {
-              dataCalculated.push(dataSettled[i]);
-            } else {
-              dataCalculated.push(null);
+          this.chartData.labels = labelsSettled;
+          this.chartData.datasets[0].data = dataSettled;
+
+          if (trends.trendsCalculated && trends.trendsCalculated.length > 0) {
+            const labelsCalculated: Array<string> = trends.trendsCalculated.map(
+              function (e) {
+                return getXLabel(e.month, e.year);
+              }
+            );
+
+            const dataCalculated = new Array<number | null>();
+
+            for (let i = 0; i < dataSettled.length; i++) {
+              if (i + 1 == dataSettled.length) {
+                dataCalculated.push(dataSettled[i]);
+              } else {
+                dataCalculated.push(null);
+              }
             }
+
+            trends.trendsCalculated.forEach((data) => {
+              dataCalculated.push(data.amount);
+            });
+
+            labelsCalculated.forEach((label) => {
+              this.chartData.labels.push(label);
+            });
+
+            this.chartData.datasets[1].data = dataCalculated;
+            this.chartData.datasets[1].hidden = false;
+          } else {
+            this.chartData.datasets[1].hidden = true;
           }
 
-          trends.trendsCalculated.forEach((data) => {
-            dataCalculated.push(data.amount);
-          });
-
-          labelsCalculated.forEach((label) => {
-            this.chartData.labels.push(label);
-          });
-
-          this.chartData.datasets[1].data = dataCalculated;
-          this.chartData.datasets[1].hidden = false;
-        } else {
-          this.chartData.datasets[1].hidden = true;
+          const startLabel = this.chartData.labels[0];
+          const endLabel =
+            this.chartData.labels[this.chartData.labels.length - 1];
+          this.chartOptions.plugins.title.text =
+            "Vermögenstrend der ausgewählten Kapitalquellen " +
+            startLabel +
+            " bis " +
+            endLabel;
+          this.trendsGraphLoaded = true;
         }
-
-        const startLabel = this.chartData.labels[0];
-        const endLabel =
-          this.chartData.labels[this.chartData.labels.length - 1];
-        this.chartOptions.plugins.title.text =
-          "Vermögenstrend der ausgewählten Kapitalquellen " +
-          startLabel +
-          " bis " +
-          endLabel;
-        this.trendsGraphLoaded = true;
       }
     },
   },
