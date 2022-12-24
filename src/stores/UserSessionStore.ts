@@ -61,7 +61,5 @@ export const useUserSessionStore = defineStore("userSession", {
       this.userIsNew = true;
     },
   },
-  persist: {
-    enabled: true,
-  },
+  persist: true,
 });
