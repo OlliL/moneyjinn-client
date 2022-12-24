@@ -116,11 +116,16 @@ export default defineComponent({
   },
   methods: {
     emitDate() {
-      if (
+      if (this.datepicker.dates.length === 0) {
+        if (this.$props.defaultDate !== undefined) {
+          this.$emit("dateSelected", undefined);
+        }
+      } else if (
         (this.datepicker.getDate() as Date).toISOString() !=
         this.$props.defaultDate?.toISOString()
-      )
+      ) {
         this.$emit("dateSelected", this.datepicker.getDate());
+      }
     },
     initializeDatepicker() {
       if (!(this.datepicker instanceof Datepicker)) {
@@ -149,6 +154,7 @@ export default defineComponent({
           {
             buttonClass: "btn",
             pickLevel: pickLevel,
+            clearBtn: true,
             todayBtn: true,
             todayBtnMode: 1,
             autohide: true,
