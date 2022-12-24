@@ -247,7 +247,6 @@ export default defineComponent({
     resetForm() {
       if (this.origEtfFlow) {
         const bookingDate = new Date(this.origEtfFlow.timestamp);
-        bookingDate.setHours(0, 0, 0, 0);
 
         this.etfFlow = {
           amount: this.origEtfFlow.amount,
@@ -266,7 +265,6 @@ export default defineComponent({
           String(this.etfFlow.nanoseconds + 1000000000).substring(1, 4); //80000000 -> 1080000000 -> 080
       } else {
         const bookingDate = new Date();
-        bookingDate.setHours(0, 0, 0, 0);
 
         this.etfFlow = {} as EtfFlow;
         this.bookingdate = bookingDate;
