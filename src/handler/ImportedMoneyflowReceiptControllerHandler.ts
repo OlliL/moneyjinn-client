@@ -82,7 +82,7 @@ class ImportedMoneyflowReceiptControllerHandler extends AbstractControllerHandle
   async createImportedMoneyflowReceipts(
     receipts: Array<ImportedMoneyflowReceipt>
   ): Promise<ValidationResult> {
-    const usecase = "createImportedMoneyflowReceipts/";
+    const usecase = "createImportedMoneyflowReceipts";
 
     const request = {
       createImportedMoneyflowReceiptsRequest: {},

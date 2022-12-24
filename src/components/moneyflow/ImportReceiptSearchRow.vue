@@ -55,7 +55,10 @@ export default defineComponent({
   emits: ["deleteMoneyflow", "editMoneyflow", "emitSelection"],
   computed: {
     invoicedateString() {
-      return formatDate(this.mmf.invoiceDate);
+      if (this.mmf.invoiceDate) {
+        return formatDate(this.mmf.invoiceDate);
+      }
+      return "";
     },
     amountClass(): string {
       return redIfNegativeEnd(this.mmf.amount);

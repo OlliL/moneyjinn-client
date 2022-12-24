@@ -68,50 +68,28 @@
                     </div>
                   </div>
                   <div class="col-md-3 col-xs-12">
-                    <div class="input-group">
-                      <div class="form-floating">
-                        <input
-                          v-model="startDate"
-                          id="receiptStartDate"
-                          type="date"
-                          @change="validateStartDate"
-                          :class="
-                            ' form-control ' + startDateErrorData.inputClass
-                          "
-                        />
-                        <label
-                          for="receiptStartDate"
-                          :style="'color: ' + startDateErrorData.fieldColor"
-                          >{{ startDateErrorData.fieldLabel }}</label
-                        >
-                      </div>
-                      <span class="input-group-text"
-                        ><i class="bi bi-calendar-date"></i
-                      ></span>
-                    </div>
+                    <DatepickerVue
+                      id="receiptStartDate"
+                      :label="startDateErrorData.fieldLabel"
+                      :default-date="startDate"
+                      :input-class="
+                        ' form-control ' + startDateErrorData.inputClass
+                      "
+                      :label-style="'color: ' + startDateErrorData.fieldColor"
+                      @date-selected="startDateSelected"
+                    />
                   </div>
                   <div class="col-md-3 col-xs-12">
-                    <div class="input-group">
-                      <div class="form-floating">
-                        <input
-                          v-model="endDate"
-                          id="receiptEndDate"
-                          type="date"
-                          @change="validateEndDate"
-                          :class="
-                            ' form-control ' + endDateErrorData.inputClass
-                          "
-                        />
-                        <label
-                          for="receiptStartDate"
-                          :style="'color: ' + endDateErrorData.fieldColor"
-                          >{{ endDateErrorData.fieldLabel }}</label
-                        >
-                      </div>
-                      <span class="input-group-text"
-                        ><i class="bi bi-calendar-date"></i
-                      ></span>
-                    </div>
+                    <DatepickerVue
+                      id="receiptEndDate"
+                      :label="endDateErrorData.fieldLabel"
+                      :default-date="endDate"
+                      :input-class="
+                        ' form-control ' + endDateErrorData.inputClass
+                      "
+                      :label-style="'color: ' + endDateErrorData.fieldColor"
+                      @date-selected="endDateSelected"
+                    />
                   </div>
                 </div>
               </form>
@@ -192,11 +170,12 @@ import { getError } from "@/tools/views/ThrowError";
 import { validateInputField } from "@/tools/views/ValidateInputField";
 import { defineComponent, type PropType } from "vue";
 import ImportReceiptSearchRowVue from "./ImportReceiptSearchRow.vue";
+import DatepickerVue from "../Datepicker.vue";
 
 type ImportReceiptsRowData = {
   serverError: Array<String> | undefined;
-  startDate: string;
-  endDate: string;
+  startDate: Date | undefined;
+  endDate: Date | undefined;
   amount: number;
   moneyflows: Array<Moneyflow>;
   searchExecuted: boolean;
@@ -216,8 +195,8 @@ export default defineComponent({
   data(): ImportReceiptsRowData {
     return {
       serverError: undefined,
-      startDate: "",
-      endDate: "",
+      startDate: undefined,
+      endDate: undefined,
       amount: 0,
       moneyflows: {} as Array<Moneyflow>,
       searchExecuted: false,
@@ -234,11 +213,12 @@ export default defineComponent({
   },
   mounted() {
     const today = new Date();
+    today.setHours(0, 0, 0, 0);
     const todayMinus30 = new Date();
     todayMinus30.setDate(todayMinus30.getDate() - 30);
 
-    this.startDate = getISOStringDate(todayMinus30);
-    this.endDate = getISOStringDate(today);
+    this.startDate = todayMinus30;
+    this.endDate = today;
 
     const posOfDot = this.receipt.filename.indexOf(".");
     const amountFromFilename = this.receipt.filename.substring(0, posOfDot);
@@ -300,13 +280,13 @@ export default defineComponent({
       this.validateEndDate();
       this.validateStartDate();
 
-      if (this.formIsValid) {
+      if (this.formIsValid && this.startDate && this.endDate) {
         this.searchExecuted = false;
         this.moneyflows =
           await MoneyflowControllerHandler.searchMoneyflowsByAmount(
             this.amount,
-            new Date(this.startDate),
-            new Date(this.endDate)
+            this.startDate,
+            this.endDate
           );
         this.searchExecuted = true;
         this.searchSuccessful = this.moneyflows.length > 0;
@@ -343,6 +323,14 @@ export default defineComponent({
     selectMoneyflow(id: number) {
       this.selectedMoneyflowId = id;
     },
+    startDateSelected(date: Date) {
+      this.startDate = date;
+      this.validateStartDate();
+    },
+    endDateSelected(date: Date) {
+      this.endDate = date;
+      this.validateEndDate();
+    },
     followUpServerCall(validationResult: ValidationResult): boolean {
       if (!validationResult.result) {
         this.serverError = new Array<string>();
@@ -370,6 +358,6 @@ export default defineComponent({
       this.$emit("removeReceiptFromView", this.receipt.id);
     },
   },
-  components: { ImportReceiptSearchRowVue },
+  components: { ImportReceiptSearchRowVue, DatepickerVue },
 });
 </script>
