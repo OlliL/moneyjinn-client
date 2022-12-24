@@ -99,6 +99,10 @@ export default defineComponent({
       type: String,
       default: "",
     },
+    pickMode: {
+      type: String,
+      default: "day",
+    },
   },
   watch: {
     defaultDate: {
@@ -127,15 +131,35 @@ export default defineComponent({
     initializeDatepicker() {
       if (!(this.datepicker instanceof Datepicker)) {
         Object.assign(Datepicker.locales, de);
+        let pickLevel = 0;
+        let format = "dd.mm.yyyy";
+        switch (this.pickMode) {
+          case "day": {
+            pickLevel = 0;
+            format = "dd.mm.yyyy";
+            break;
+          }
+          case "month": {
+            pickLevel = 1;
+            format = "mm.yyyy";
+            break;
+          }
+          case "year": {
+            pickLevel = 2;
+            format = "yyyy";
+            break;
+          }
+        }
         this.datepicker = new Datepicker(
           this.$refs[this.$props.id] as HTMLInputElement,
           {
             buttonClass: "btn",
-            pickLevel: 0,
+            pickLevel: pickLevel,
             todayBtn: true,
             todayBtnMode: 1,
             autohide: true,
             language: "de",
+            format: format,
           }
         );
       }

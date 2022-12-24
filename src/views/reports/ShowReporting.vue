@@ -13,100 +13,63 @@
               <div class="container-fluid">
                 <div class="row no-gutters flex-lg-nowrap mb-2">
                   <div class="col-md-4 col-xs-12" v-show="!groupByYear">
-                    <div class="input-group">
-                      <div class="form-floating">
-                        <input
-                          v-model="startDateMonth"
-                          id="startDateMonth"
-                          type="month"
-                          @change="validateStartDateMonth"
-                          :class="
-                            ' form-control ' +
-                            startDateMonthErrorData.inputClass
-                          "
-                        />
-                        <label
-                          for="startDateMonth"
-                          :style="
-                            'color: ' + startDateMonthErrorData.fieldColor
-                          "
-                          >{{ startDateMonthErrorData.fieldLabel }}</label
-                        >
-                      </div>
-                      <span class="input-group-text"
-                        ><i class="bi bi-calendar-date"></i
-                      ></span>
-                    </div>
+                    <DatepickerVue
+                      id="startDateMonth"
+                      :label="startDateMonthErrorData.fieldLabel"
+                      :default-date="startDateMonth"
+                      pick-mode="month"
+                      :input-class="
+                        ' form-control ' + startDateMonthErrorData.inputClass
+                      "
+                      :label-style="
+                        'color: ' + startDateMonthErrorData.fieldColor
+                      "
+                      @date-selected="startDateMonthSelected"
+                    />
                   </div>
                   <div class="col-md-4 col-xs-12" v-show="!groupByYear">
-                    <div class="input-group">
-                      <div class="form-floating">
-                        <input
-                          v-model="endDateMonth"
-                          id="endDateMonth"
-                          type="month"
-                          @change="validateEndDateMonth"
-                          :class="
-                            ' form-control ' + endDateMonthErrorData.inputClass
-                          "
-                        />
-                        <label
-                          for="endDateMonth"
-                          :style="'color: ' + endDateMonthErrorData.fieldColor"
-                          >{{ endDateMonthErrorData.fieldLabel }}</label
-                        >
-                      </div>
-                      <span class="input-group-text"
-                        ><i class="bi bi-calendar-date"></i
-                      ></span>
-                    </div>
+                    <DatepickerVue
+                      id="endDateMonth"
+                      :label="endDateMonthErrorData.fieldLabel"
+                      :default-date="endDateMonth"
+                      pick-mode="month"
+                      :input-class="
+                        ' form-control ' + endDateMonthErrorData.inputClass
+                      "
+                      :label-style="
+                        'color: ' + endDateMonthErrorData.fieldColor
+                      "
+                      @date-selected="endDateMonthSelected"
+                    />
                   </div>
 
                   <div class="col-md-4 col-xs-12" v-show="groupByYear">
-                    <div class="input-group">
-                      <div class="form-floating">
-                        <input
-                          v-model="startDateYear"
-                          id="startDateYear"
-                          type="year"
-                          @change="validateStartDateYear"
-                          :class="
-                            ' form-control ' + startDateYearErrorData.inputClass
-                          "
-                        />
-                        <label
-                          for="startDateYear"
-                          :style="'color: ' + startDateYearErrorData.fieldColor"
-                          >{{ startDateYearErrorData.fieldLabel }}</label
-                        >
-                      </div>
-                      <span class="input-group-text"
-                        ><i class="bi bi-calendar-date"></i
-                      ></span>
-                    </div>
+                    <DatepickerVue
+                      id="startDateYear"
+                      :label="startDateYearErrorData.fieldLabel"
+                      :default-date="startDateYear"
+                      pick-mode="year"
+                      :input-class="
+                        ' form-control ' + startDateYearErrorData.inputClass
+                      "
+                      :label-style="
+                        'color: ' + startDateYearErrorData.fieldColor
+                      "
+                      @date-selected="startDateYearSelected"
+                    />
                   </div>
                   <div class="col-md-4 col-xs-12" v-show="groupByYear">
-                    <div class="input-group">
-                      <div class="form-floating">
-                        <input
-                          v-model="endDateYear"
-                          id="endDateYear"
-                          type="month"
-                          @change="validateEndDateYear"
-                          :class="
-                            ' form-control ' + endDateYearErrorData.inputClass
-                          "
-                        />
-                        <label
-                          for="endDateYear"
-                          :style="'color: ' + endDateYearErrorData.fieldColor"
-                          >{{ endDateYearErrorData.fieldLabel }}</label
-                        >
-                      </div>
-                      <span class="input-group-text"
-                        ><i class="bi bi-calendar-date"></i
-                      ></span>
-                    </div>
+                    <DatepickerVue
+                      id="endDateYear"
+                      :label="endDateYearErrorData.fieldLabel"
+                      :default-date="endDateYear"
+                      pick-mode="year"
+                      :input-class="
+                        ' form-control ' + endDateYearErrorData.inputClass
+                      "
+                      :label-style="'color: ' + endDateYearErrorData.fieldColor"
+                      @date-selected="endDateYearSelected"
+                    />
                   </div>
                   <div class="col-md-4 col-xs-12">
                     <div class="form-check form-switch text-start">
@@ -275,6 +238,7 @@
 
 <script lang="ts">
 import PostingAccountSelectVue from "@/components/postingaccount/PostingAccountSelect.vue";
+import DatepickerVue from "@/components/Datepicker.vue";
 
 import type { PostingAccount } from "@/model/postingaccount/PostingAccount";
 import type { ReportingParameter } from "@/model/report/ReportingParameter";
@@ -323,10 +287,10 @@ type ShowReportingData = {
   reportingGraphLoaded: boolean;
   groupByYear: boolean;
   singlePostingAccounts: boolean;
-  startDateMonth: string;
-  endDateMonth: string;
-  startDateYear: string;
-  endDateYear: string;
+  startDateMonth: Date | undefined;
+  endDateMonth: Date | undefined;
+  startDateYear: Date | undefined;
+  endDateYear: Date | undefined;
   startDateMonthIsValid: boolean | null;
   startDateMonthErrorMessage: string;
   endDateMonthIsValid: boolean | null;
@@ -359,10 +323,10 @@ export default defineComponent({
       reportingGraphLoaded: false,
       groupByYear: false,
       singlePostingAccounts: false,
-      startDateMonth: "",
-      endDateMonth: "",
-      startDateYear: "",
-      endDateYear: "",
+      startDateMonth: undefined,
+      endDateMonth: undefined,
+      startDateYear: undefined,
+      endDateYear: undefined,
       startDateMonthIsValid: null,
       startDateMonthErrorMessage: "",
       endDateMonthIsValid: null,
@@ -490,22 +454,16 @@ export default defineComponent({
         await ReportControllerHandler.showReportingForm();
 
       const minDate = reportingParameter.startDate;
-      const minDateYear = minDate.getFullYear();
-      const minDateMonth =
-        minDate.getMonth() < 9
-          ? "0" + (minDate.getMonth() + 1)
-          : minDate.getMonth() + 1;
-      this.startDateMonth = minDateYear + "-" + minDateMonth;
-      this.startDateYear = minDateYear + "";
+      minDate.setHours(0, 0, 0, 0);
+
+      this.startDateMonth = minDate;
+      this.startDateYear = minDate;
 
       const maxDate = reportingParameter.endDate;
-      const maxDateYear = maxDate.getFullYear();
-      const maxDateMonth =
-        maxDate.getMonth() < 9
-          ? "0" + (maxDate.getMonth() + 1)
-          : maxDate.getMonth() + 1;
-      this.endDateMonth = maxDateYear + "-" + maxDateMonth;
-      this.endDateYear = maxDateYear + "";
+      maxDate.setHours(0, 0, 0, 0);
+
+      this.endDateMonth = maxDate;
+      this.endDateYear = maxDate;
 
       this.postingAccountsYes = reportingParameter.selectedPostingAccounts;
       this.postingAccountsNo = reportingParameter.unselectedPostingAccounts;
@@ -550,6 +508,22 @@ export default defineComponent({
       } else {
         this.selectedPostingAccount = 0;
       }
+    },
+    startDateMonthSelected(date: Date) {
+      this.startDateMonth = date;
+      this.validateStartDateMonth();
+    },
+    endDateMonthSelected(date: Date) {
+      this.endDateMonth = date;
+      this.validateEndDateMonth();
+    },
+    startDateYearSelected(date: Date) {
+      this.startDateYear = date;
+      this.validateStartDateYear();
+    },
+    endDateYearSelected(date: Date) {
+      this.endDateYear = date;
+      this.validateEndDateYear();
     },
     removeAllPostingAccounts() {
       this.postingAccountsNo = this.postingAccounts;
@@ -660,20 +634,20 @@ export default defineComponent({
         this.validateStartDateYear();
         validForm =
           validForm && this.startDateYearIsValid && this.startDateYearIsValid;
-        if (validForm === true) {
-          reportingParameter.startDate = new Date(
-            this.startDateYear + "-01-01"
-          );
-          reportingParameter.endDate = new Date(this.endDateYear + "-12-31");
+        if (validForm === true && this.startDateYear && this.endDateYear) {
+          reportingParameter.startDate = this.startDateYear;
+          reportingParameter.endDate = this.endDateYear;
+          reportingParameter.endDate.setMonth(11);
+          reportingParameter.endDate.setDate(31);
         }
       } else {
         this.validateEndDateMonth();
         this.validateStartDateMonth();
         validForm =
           validForm && this.startDateMonthIsValid && this.startDateMonthIsValid;
-        if (validForm === true) {
-          reportingParameter.startDate = new Date(this.startDateMonth + "-01");
-          reportingParameter.endDate = new Date(this.endDateMonth + "-01");
+        if (validForm === true && this.startDateMonth && this.endDateMonth) {
+          reportingParameter.startDate = this.startDateMonth;
+          reportingParameter.endDate = this.endDateMonth;
           reportingParameter.endDate.setMonth(
             reportingParameter.endDate.getMonth() + 1
           );
@@ -701,6 +675,7 @@ export default defineComponent({
       }
       this.reportingGraphLoaded = false;
       if (validForm === true) {
+        console.log(reportingParameter);
         let reportingMonthAmounts: Array<ReportingMonthAmount> =
           await this.retrieveGraphData(reportingParameter);
 
@@ -753,7 +728,7 @@ export default defineComponent({
       this.reportingGraphLoaded = true;
     },
   },
-  components: { PostingAccountSelectVue, Bar },
+  components: { PostingAccountSelectVue, Bar, DatepickerVue },
 });
 </script>
 
