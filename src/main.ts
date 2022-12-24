@@ -1,6 +1,7 @@
 import { createApp } from "vue";
 import { createPinia } from "pinia";
-import piniaPersist from "pinia-plugin-persist";
+import piniaPluginPersistedstate from "pinia-plugin-persistedstate";
+import { PiniaSharedState } from "pinia-shared-state";
 
 import App from "./App.vue";
 import router from "./router";
@@ -11,7 +12,12 @@ import "bootstrap";
 
 const app = createApp(App);
 const pinia = createPinia();
-pinia.use(piniaPersist);
+pinia.use(piniaPluginPersistedstate);
+pinia.use(
+  PiniaSharedState({
+    enable: true,
+  })
+);
 
 app.use(pinia);
 app.use(router);
