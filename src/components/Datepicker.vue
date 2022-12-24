@@ -18,6 +18,55 @@
 import { defineComponent } from "vue";
 import { Datepicker } from "vanillajs-datepicker";
 
+export const de = {
+  de: {
+    days: [
+      "Sonntag",
+      "Montag",
+      "Dienstag",
+      "Mittwoch",
+      "Donnerstag",
+      "Freitag",
+      "Samstag",
+    ],
+    daysShort: ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"],
+    daysMin: ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"],
+    months: [
+      "Januar",
+      "Februar",
+      "März",
+      "April",
+      "Mai",
+      "Juni",
+      "Juli",
+      "August",
+      "September",
+      "Oktober",
+      "November",
+      "Dezember",
+    ],
+    monthsShort: [
+      "Jan",
+      "Feb",
+      "Mär",
+      "Apr",
+      "Mai",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Okt",
+      "Nov",
+      "Dez",
+    ],
+    today: "Heute",
+    monthsTitle: "Monate",
+    clear: "Löschen",
+    weekStart: 1,
+    format: "dd.mm.yyyy",
+  },
+};
+
 export default defineComponent({
   name: "MyModal",
 
@@ -77,12 +126,16 @@ export default defineComponent({
     },
     initializeDatepicker() {
       if (!(this.datepicker instanceof Datepicker)) {
+        Object.assign(Datepicker.locales, de);
         this.datepicker = new Datepicker(
           this.$refs[this.$props.id] as HTMLInputElement,
           {
             buttonClass: "btn",
             pickLevel: 0,
-            format: "dd.mm.yyyy",
+            todayBtn: true,
+            todayBtnMode: 1,
+            autohide: true,
+            language: "de",
           }
         );
       }
