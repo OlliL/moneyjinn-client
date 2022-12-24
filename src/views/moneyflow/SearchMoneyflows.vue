@@ -31,50 +31,28 @@
                 </div>
                 <div class="row no-gutters flex-lg-nowrap mb-4">
                   <div class="col-md-2 col-xs-12">
-                    <div class="input-group">
-                      <div class="form-floating">
-                        <input
-                          v-model="startdate"
-                          id="startdate"
-                          type="date"
-                          @change="validateStartdate"
-                          :class="
-                            ' form-control ' + startdateErrorData.inputClass
-                          "
-                        />
-                        <label
-                          for="startdate"
-                          :style="'color: ' + startdateErrorData.fieldColor"
-                          >{{ startdateErrorData.fieldLabel }}</label
-                        >
-                      </div>
-                      <span class="input-group-text"
-                        ><i class="bi bi-calendar-date"></i
-                      ></span>
-                    </div>
+                    <DatepickerVue
+                      id="receiptStartDate"
+                      :label="startDateErrorData.fieldLabel"
+                      :default-date="startDate"
+                      :input-class="
+                        ' form-control ' + startDateErrorData.inputClass
+                      "
+                      :label-style="'color: ' + startDateErrorData.fieldColor"
+                      @date-selected="startDateSelected"
+                    />
                   </div>
                   <div class="col-md-2 col-xs-12">
-                    <div class="input-group">
-                      <div class="form-floating">
-                        <input
-                          v-model="enddate"
-                          id="enddate"
-                          type="date"
-                          @change="validateEnddate"
-                          :class="
-                            ' form-control ' + enddateErrorData.inputClass
-                          "
-                        />
-                        <label
-                          for="startdate"
-                          :style="'color: ' + enddateErrorData.fieldColor"
-                          >{{ enddateErrorData.fieldLabel }}</label
-                        >
-                      </div>
-                      <span class="input-group-text"
-                        ><i class="bi bi-calendar-date"></i
-                      ></span>
-                    </div>
+                    <DatepickerVue
+                      id="receiptEndDate"
+                      :label="endDateErrorData.fieldLabel"
+                      :default-date="endDate"
+                      :input-class="
+                        ' form-control ' + endDateErrorData.inputClass
+                      "
+                      :label-style="'color: ' + endDateErrorData.fieldColor"
+                      @date-selected="endDateSelected"
+                    />
                   </div>
                   <div class="col-md-4 col-xs-12">
                     <ContractpartnerSelectVue
@@ -298,7 +276,6 @@ import EditMoneyflowModalVue from "@/components/moneyflow/EditMoneyflowModal.vue
 import SearchMoneyflowResultGroupVue from "@/components/moneyflow/SearchMoneyflowResultGroup.vue";
 import { toFixed } from "@/tools/math";
 import { generateErrorData, type ErrorData } from "@/tools/views/ErrorData";
-import { getISOStringDate } from "@/tools/views/FormatDate";
 import { getError } from "@/tools/views/ThrowError";
 import { getMonthName } from "@/tools/views/MonthName";
 import { validateInputField } from "@/tools/views/ValidateInputField";
@@ -308,6 +285,7 @@ import type { MoneyflowSearchParams } from "@/model/moneyflow/MoneyflowSearchPar
 import type { MoneyflowsValidation } from "@/model/moneyflow/MoneyflowsValidation";
 import type { PostingAccount } from "@/model/postingaccount/PostingAccount";
 import type { ValidationResult } from "@/model/validation/ValidationResult";
+import DatepickerVue from "@/components/Datepicker.vue";
 
 const GROUP_NONE: number = 0;
 const GROUP_YEAR: number = 1;
@@ -320,8 +298,8 @@ const ORDER_COMMENT: number = 3;
 
 type SearchMoneyflowsData = {
   serverError: Array<String> | undefined;
-  startdate: string;
-  enddate: string;
+  startDate: Date | undefined;
+  endDate: Date | undefined;
   contractpartnerId: number;
   postingAccountId: number;
   comment: string;
@@ -368,8 +346,8 @@ export default defineComponent({
   data(): SearchMoneyflowsData {
     return {
       serverError: {} as Array<String>,
-      startdate: "",
-      enddate: "",
+      startDate: undefined,
+      endDate: undefined,
       contractpartnerId: 0,
       postingAccountId: 0,
       comment: "",
@@ -411,14 +389,14 @@ export default defineComponent({
       }
       return false;
     },
-    startdateErrorData(): ErrorData {
+    startDateErrorData(): ErrorData {
       return generateErrorData(
         this.startdateIsValid,
         "Startdatum",
         this.startdateErrorMessage
       );
     },
-    enddateErrorData(): ErrorData {
+    endDateErrorData(): ErrorData {
       return generateErrorData(
         this.enddateIsValid,
         "Enddatum",
@@ -429,10 +407,14 @@ export default defineComponent({
   methods: {
     resetForm() {
       const today = new Date();
-      this.enddate = getISOStringDate(today);
-      today.setMonth(0);
-      today.setDate(1);
-      this.startdate = getISOStringDate(today);
+      today.setHours(0, 0, 0, 0);
+      const beginOfYear = new Date();
+      beginOfYear.setHours(0, 0, 0, 0);
+      beginOfYear.setMonth(0);
+      beginOfYear.setDate(1);
+
+      this.startDate = beginOfYear;
+      this.endDate = today;
       this.contractpartnerId = 0;
       this.postingAccountId = 0;
       this.comment = "";
@@ -449,15 +431,15 @@ export default defineComponent({
       this.dataLoaded = false;
       this.serverError = {} as Array<String>;
     },
-    validateStartdate() {
+    validateStartDate() {
       [this.startdateIsValid, this.startdateErrorMessage] = validateInputField(
-        this.startdate,
+        this.startDate,
         "Datum angeben!"
       );
     },
-    validateEnddate() {
+    validateEndDate() {
       [this.enddateIsValid, this.enddateErrorMessage] = validateInputField(
-        this.enddate,
+        this.endDate,
         "Datum angeben!"
       );
     },
@@ -471,6 +453,14 @@ export default defineComponent({
         this.postingAccountId = postingAccount.id;
       }
     },
+    startDateSelected(date: Date) {
+      this.startDate = date;
+      this.validateStartDate();
+    },
+    endDateSelected(date: Date) {
+      this.endDate = date;
+      this.validateEndDate();
+    },
     followUpServerCall(validationResult: ValidationResult): boolean {
       if (!validationResult.result) {
         this.serverError = new Array<string>();
@@ -483,65 +473,68 @@ export default defineComponent({
     async searchMoneyflows() {
       this.dataLoaded = false;
       this.serverError = {} as Array<String>;
-      const searchParams: MoneyflowSearchParams = {
-        startDate: new Date(this.startdate),
-        endDate: new Date(this.enddate),
-        searchString: this.comment.length > 0 ? this.comment : undefined,
-        featureEqual: this.featureEqual,
-        featureRegexp: this.featureRegexp,
-        featureCaseSensitive: this.featureCaseSensitive,
-        featureOnlyMinusAmounts: this.featureOnlyMinusAmounts,
-        contractpartnerId:
-          this.contractpartnerId > 0 ? this.contractpartnerId : undefined,
-        postingAccountId:
-          this.postingAccountId > 0 ? this.postingAccountId : undefined,
-      };
+      if (this.startDate && this.endDate) {
+        const searchParams: MoneyflowSearchParams = {
+          startDate: this.startDate,
+          endDate: this.endDate,
+          searchString: this.comment.length > 0 ? this.comment : undefined,
+          featureEqual: this.featureEqual,
+          featureRegexp: this.featureRegexp,
+          featureCaseSensitive: this.featureCaseSensitive,
+          featureOnlyMinusAmounts: this.featureOnlyMinusAmounts,
+          contractpartnerId:
+            this.contractpartnerId > 0 ? this.contractpartnerId : undefined,
+          postingAccountId:
+            this.postingAccountId > 0 ? this.postingAccountId : undefined,
+        };
 
-      this.colBookingMonth =
-        this.groupByFirst == GROUP_MONTH || this.groupBySecond == GROUP_MONTH;
-      this.colBookingYear =
-        !this.colBookingMonth &&
-        (this.groupByFirst == GROUP_YEAR || this.groupBySecond == GROUP_YEAR);
-      this.colContractpartner =
-        this.groupByFirst == GROUP_CONTRACTPARTNER ||
-        this.groupBySecond == GROUP_CONTRACTPARTNER;
-      const moneyflowsValidation: MoneyflowsValidation =
-        await MoneyflowControllerHandler.searchMoneyflows(searchParams);
+        this.colBookingMonth =
+          this.groupByFirst == GROUP_MONTH || this.groupBySecond == GROUP_MONTH;
+        this.colBookingYear =
+          !this.colBookingMonth &&
+          (this.groupByFirst == GROUP_YEAR || this.groupBySecond == GROUP_YEAR);
+        this.colContractpartner =
+          this.groupByFirst == GROUP_CONTRACTPARTNER ||
+          this.groupBySecond == GROUP_CONTRACTPARTNER;
+        const moneyflowsValidation: MoneyflowsValidation =
+          await MoneyflowControllerHandler.searchMoneyflows(searchParams);
 
-      const moneyflows = moneyflowsValidation.moneyflows;
-      if (
-        this.followUpServerCall(moneyflowsValidation.validationResult) &&
-        moneyflows
-      ) {
-        this.groupBy(moneyflows);
-        this.makeCommentString();
-        switch (this.orderBy) {
-          case ORDER_GROUP: {
-            this.moneyflowGroups = new Map(
-              [...this.moneyflowGroups.entries()].sort((a, b) =>
-                a[1].sortString.localeCompare(b[1].sortString)
-              )
-            );
-            break;
+        const moneyflows = moneyflowsValidation.moneyflows;
+        if (
+          this.followUpServerCall(moneyflowsValidation.validationResult) &&
+          moneyflows
+        ) {
+          this.groupBy(moneyflows);
+          this.makeCommentString();
+          switch (this.orderBy) {
+            case ORDER_GROUP: {
+              this.moneyflowGroups = new Map(
+                [...this.moneyflowGroups.entries()].sort((a, b) =>
+                  a[1].sortString.localeCompare(b[1].sortString)
+                )
+              );
+              break;
+            }
+            case ORDER_COMMENT: {
+              this.moneyflowGroups = new Map(
+                [...this.moneyflowGroups.entries()].sort((a, b) =>
+                  a[1].commentString.localeCompare(b[1].commentString)
+                )
+              );
+              break;
+            }
+            case ORDER_AMOUNT: {
+              this.moneyflowGroups = new Map(
+                [...this.moneyflowGroups.entries()].sort(
+                  (a, b) => a[1].amount - b[1].amount
+                )
+              );
+              break;
+            }
           }
-          case ORDER_COMMENT: {
-            this.moneyflowGroups = new Map(
-              [...this.moneyflowGroups.entries()].sort((a, b) =>
-                a[1].commentString.localeCompare(b[1].commentString)
-              )
-            );
-            break;
-          }
-          case ORDER_AMOUNT: {
-            this.moneyflowGroups = new Map(
-              [...this.moneyflowGroups.entries()].sort(
-                (a, b) => a[1].amount - b[1].amount
-              )
-            );
-            break;
-          }
+
+          this.dataLoaded = true;
         }
-        this.dataLoaded = true;
       }
     },
     makeCommentString() {
@@ -672,6 +665,7 @@ export default defineComponent({
     SearchMoneyflowResultGroupVue,
     DeleteMoneyflowModalVue,
     EditMoneyflowModalVue,
+    DatepickerVue,
   },
 });
 </script>
