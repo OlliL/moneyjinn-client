@@ -677,7 +677,8 @@ export default defineComponent({
           this.mmf.comment = contractpartner.moneyflowComment;
           this.previousCommentSetByContractpartnerDefaults =
             contractpartner.moneyflowComment;
-          this.validateComment();
+          if (contractpartner.moneyflowComment) this.validateComment();
+          else this.commentIsValid = null;
         }
         if (
           this.mmf.postingAccountId ===
@@ -689,7 +690,8 @@ export default defineComponent({
 
           this.mmf.postingAccountId = mpaId;
           this.previousPostingAccountSetByContractpartnerDefaults = mpaId;
-          this.validatePostingaccount();
+          if (contractpartner.postingAccountId) this.validatePostingaccount();
+          else this.postingaccountIsValid = null;
         }
       } else {
         this.mmf.contractpartnerId = 0;
