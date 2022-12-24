@@ -423,11 +423,9 @@ export default defineComponent({
     resetForm() {
       if (this.mmfToEdit && this.mmfToEdit.bookingDate) {
         const bookingDate = new Date(this.mmfToEdit.bookingDate);
-        bookingDate.setHours(0, 0, 0, 0);
         const invoiceDate = this.mmfToEdit.invoiceDate
           ? new Date(this.mmfToEdit.invoiceDate)
           : undefined;
-        if (invoiceDate) invoiceDate.setHours(0, 0, 0, 0);
 
         this.mmf = {
           amount: this.mmfToEdit.amount,
@@ -489,7 +487,6 @@ export default defineComponent({
         this.amount = undefined;
 
         const bookingDate = new Date();
-        bookingDate.setHours(0, 0, 0, 0);
         this.mmf.bookingDate = bookingDate;
         this.mmf.invoiceDate = undefined;
         this.mmf.contractpartnerId = 0;

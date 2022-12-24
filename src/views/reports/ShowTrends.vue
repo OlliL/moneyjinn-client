@@ -295,12 +295,9 @@ export default defineComponent({
         await ReportControllerHandler.showTrendsForm();
 
       const minDate = trendsTransporter.startDate;
-      minDate.setHours(0, 0, 0, 0);
-      this.startDate = minDate;
-
       const maxDate = trendsTransporter.endDate;
-      maxDate.setHours(0, 0, 0, 0);
-      maxDate.setDate(1);
+
+      this.startDate = minDate;
       this.endDate = maxDate;
 
       this.capitalsourceIds = trendsTransporter.selectedCapitalsourceIds;

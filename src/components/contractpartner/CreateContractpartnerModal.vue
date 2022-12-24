@@ -247,9 +247,7 @@ export default defineComponent({
     resetForm() {
       if (this.origMcp) {
         const validFrom = new Date(this.origMcp.validFrom);
-        validFrom.setHours(0, 0, 0, 0);
         const validTil = new Date(this.origMcp.validTil);
-        validTil.setHours(0, 0, 0, 0);
 
         this.mcp = {
           country: this.origMcp.country,
@@ -267,9 +265,7 @@ export default defineComponent({
         };
       } else {
         const validFrom = new Date();
-        validFrom.setHours(0, 0, 0, 0);
         const validTil = new Date("2999-12-31");
-        validTil.setHours(0, 0, 0, 0);
 
         this.mcp = {} as Contractpartner;
         this.mcp.validFrom = validFrom;

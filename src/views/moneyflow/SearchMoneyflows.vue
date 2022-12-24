@@ -407,9 +407,7 @@ export default defineComponent({
   methods: {
     resetForm() {
       const today = new Date();
-      today.setHours(0, 0, 0, 0);
       const beginOfYear = new Date();
-      beginOfYear.setHours(0, 0, 0, 0);
       beginOfYear.setMonth(0);
       beginOfYear.setDate(1);
 

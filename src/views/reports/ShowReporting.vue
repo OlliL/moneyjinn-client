@@ -454,14 +454,10 @@ export default defineComponent({
         await ReportControllerHandler.showReportingForm();
 
       const minDate = reportingParameter.startDate;
-      minDate.setHours(0, 0, 0, 0);
+      const maxDate = reportingParameter.endDate;
 
       this.startDateMonth = minDate;
       this.startDateYear = minDate;
-
-      const maxDate = reportingParameter.endDate;
-      maxDate.setHours(0, 0, 0, 0);
-
       this.endDateMonth = maxDate;
       this.endDateYear = maxDate;
 

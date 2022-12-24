@@ -212,7 +212,6 @@ export default defineComponent({
   },
   mounted() {
     const today = new Date();
-    today.setHours(0, 0, 0, 0);
     const todayMinus30 = new Date();
     todayMinus30.setDate(todayMinus30.getDate() - 30);
 
