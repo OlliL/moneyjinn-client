@@ -70,7 +70,9 @@
             ></router-link>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#"><i class="bi bi-ui-checks"></i></a>
+            <router-link class="nav-link" :to="{ name: Routes.CompareData }"
+              ><i class="bi bi-ui-checks"></i
+            ></router-link>
           </li>
           <li class="nav-item dropdown">
             <a
