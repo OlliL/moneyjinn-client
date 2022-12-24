@@ -134,48 +134,26 @@
           </div>
           <div class="row pt-2">
             <div class="col-xs-12">
-              <div class="input-group">
-                <div class="form-floating">
-                  <input
-                    v-model="validFrom"
-                    :id="'validFrom' + idSuffix"
-                    type="date"
-                    @change="validateValidFrom"
-                    :class="' form-control ' + validFromErrorData.inputClass"
-                  />
-                  <label
-                    :for="'validFrom' + idSuffix"
-                    :style="'color: ' + validFromErrorData.fieldColor"
-                    >{{ validFromErrorData.fieldLabel }}</label
-                  >
-                </div>
-                <span class="input-group-text"
-                  ><i class="bi bi-calendar-date"></i
-                ></span>
-              </div>
+              <DatepickerVue
+                :id="'validFrom' + idSuffix"
+                :label="validFromErrorData.fieldLabel"
+                :default-date="mcs.validFrom"
+                :input-class="' form-control ' + validFromErrorData.inputClass"
+                :label-style="'color: ' + validFromErrorData.fieldColor"
+                @date-selected="validFromSelected"
+              />
             </div>
           </div>
           <div class="row pt-2">
             <div class="col-xs-12">
-              <div class="input-group">
-                <div class="form-floating">
-                  <input
-                    v-model="validTil"
-                    :id="'validTil' + idSuffix"
-                    type="date"
-                    @change="validateValidTil"
-                    :class="' form-control ' + validTilErrorData.inputClass"
-                  />
-                  <label
-                    :for="'validTil' + idSuffix"
-                    :style="'color: ' + validTilErrorData.fieldColor"
-                    >{{ validTilErrorData.fieldLabel }}</label
-                  >
-                </div>
-                <span class="input-group-text"
-                  ><i class="bi bi-calendar-date"></i
-                ></span>
-              </div>
+              <DatepickerVue
+                :id="'validTil' + idSuffix"
+                :label="validTilErrorData.fieldLabel"
+                :default-date="mcs.validTil"
+                :input-class="' form-control ' + validTilErrorData.inputClass"
+                :label-style="'color: ' + validTilErrorData.fieldColor"
+                @date-selected="validTilSelected"
+              />
             </div>
           </div>
           <div class="row pt-2">
@@ -283,13 +261,11 @@ import {
 import { mapActions } from "pinia";
 import { useCapitalsourceStore } from "@/stores/CapitalsourceStore";
 import type { ValidationResult } from "@/model/validation/ValidationResult";
-import { getISOStringDate } from "@/tools/views/FormatDate";
+import DatepickerVue from "../Datepicker.vue";
 
 type CreateCapitalsourceModalData = {
   mcs: Capitalsource;
   origMcs: Capitalsource | undefined;
-  validFrom: string;
-  validTil: string;
   groupUse: string;
   serverError: Array<String>;
   commentIsValid: boolean | null;
@@ -313,8 +289,6 @@ export default defineComponent({
     return {
       mcs: {} as Capitalsource,
       origMcs: undefined,
-      validFrom: "",
-      validTil: "",
       groupUse: "",
       serverError: {} as Array<String>,
       commentIsValid: null,
@@ -433,14 +407,35 @@ export default defineComponent({
     ...mapActions(useCapitalsourceStore, ["updateCapitalsourceInStore"]),
     resetForm() {
       if (this.origMcs) {
-        this.mcs = JSON.parse(JSON.stringify(this.origMcs));
-        this.validFrom = getISOStringDate(new Date(this.mcs.validFrom));
-        this.validTil = getISOStringDate(new Date(this.mcs.validTil));
+        const validFrom = new Date(this.origMcs.validFrom);
+        validFrom.setHours(0, 0, 0, 0);
+        const validTil = new Date(this.origMcs.validTil);
+        validTil.setHours(0, 0, 0, 0);
+
+        this.mcs = {
+          accountNumber: this.origMcs.accountNumber,
+          bankCode: this.origMcs.bankCode,
+          comment: this.origMcs.comment,
+          groupUse: this.origMcs.groupUse,
+          id: this.origMcs.id,
+          importAllowed: this.origMcs.importAllowed,
+          state: this.origMcs.state,
+          type: this.origMcs.type,
+          userId: this.origMcs.userId,
+          validFrom: validFrom,
+          validTil: validTil,
+        };
+
         this.groupUse = this.mcs.groupUse ? "1" : "0";
       } else {
+        const validFrom = new Date();
+        validFrom.setHours(0, 0, 0, 0);
+        const validTil = new Date("2999-12-31");
+        validTil.setHours(0, 0, 0, 0);
+
         this.mcs = {} as Capitalsource;
-        this.validFrom = getISOStringDate(new Date());
-        this.validTil = "2999-12-31";
+        this.mcs.validFrom = validFrom;
+        this.mcs.validTil = validTil;
         this.groupUse = "";
       }
       this.commentIsValid = null;
@@ -479,13 +474,13 @@ export default defineComponent({
     },
     validateValidFrom() {
       [this.validFromIsValid, this.validFromErrorMessage] = validateInputField(
-        this.validFrom,
+        this.mcs.validFrom,
         "Gültig ab muss angegeben werden!"
       );
     },
     validateValidTil() {
       [this.validTilIsValid, this.validTilErrorMessage] = validateInputField(
-        this.validTil,
+        this.mcs.validTil,
         "Gültig bis muss angegeben werden!"
       );
     },
@@ -504,6 +499,14 @@ export default defineComponent({
         valid = false;
       [this.importAllowedIsValid, this.importAllowedErrorMessage] =
         validateInputField(valid, "Bitte Importart auswählen!");
+    },
+    validFromSelected(date: Date) {
+      this.mcs.validFrom = date;
+      this.validateValidFrom();
+    },
+    validTilSelected(date: Date) {
+      this.mcs.validTil = date;
+      this.validateValidTil();
     },
     handleServerError(validationResult: ValidationResult): boolean {
       if (!validationResult.result) {
@@ -524,8 +527,6 @@ export default defineComponent({
       this.validateImportAllowed();
 
       if (this.formIsValid) {
-        this.mcs.validFrom = new Date(this.validFrom);
-        this.mcs.validTil = new Date(this.validTil);
         this.mcs.groupUse = this.groupUse === "1" ? true : false;
 
         if (this.mcs.id > 0) {
@@ -557,6 +558,6 @@ export default defineComponent({
   },
   expose: ["_show"],
   emits: ["capitalsourceCreated", "capitalsourceUpdated"],
-  components: { ModalVue },
+  components: { ModalVue, DatepickerVue },
 });
 </script>
