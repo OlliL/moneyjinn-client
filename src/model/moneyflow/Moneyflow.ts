@@ -4,7 +4,7 @@ export type Moneyflow = {
   id: number;
   userId: number;
   bookingDate: Date;
-  invoiceDate: Date;
+  invoiceDate: Date | undefined;
   amount: number;
   capitalsourceId: number;
   capitalsourceComment?: string;

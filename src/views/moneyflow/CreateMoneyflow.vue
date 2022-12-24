@@ -88,6 +88,7 @@ export default defineComponent({
         !mpm.onceAMonth || !preDefMoneyflowAlreadyUsedThisMonth(today, mpm)
       );
     });
+    this.resetForm();
   },
   methods: {
     selectPreDefMoneyflow() {

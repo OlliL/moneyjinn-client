@@ -1,0 +1,14 @@
+ {"depcheck": {"ignoreMatches": [
+    "chart.js",
+    "vue-chartjs",
+    "vanillajs-datepicker",
+    "@types/vanillajs-datepicker",
+    "@rushstack/eslint-patch",
+    "@vue/eslint-config-prettier",
+    "@vue/eslint-config-typescript",
+    "@vue/tsconfig",
+    "eslint-plugin-vue",
+    "prettier"
+    ]
+    }
+}
