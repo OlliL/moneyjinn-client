@@ -675,7 +675,6 @@ export default defineComponent({
       }
       this.reportingGraphLoaded = false;
       if (validForm === true) {
-        console.log(reportingParameter);
         let reportingMonthAmounts: Array<ReportingMonthAmount> =
           await this.retrieveGraphData(reportingParameter);
 
