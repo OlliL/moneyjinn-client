@@ -108,7 +108,6 @@ export default defineComponent({
     defaultDate: {
       handler(newVal: Date, oldVal: Date) {
         if (newVal != oldVal && this.datepicker instanceof Datepicker) {
-          console.log("~~", this.id, oldVal, newVal);
           this.datepicker.setDate(newVal);
         }
       },
@@ -117,11 +116,6 @@ export default defineComponent({
   },
   methods: {
     emitDate() {
-      console.log(
-        this.id,
-        (this.datepicker.getDate() as Date).toISOString(),
-        this.$props.defaultDate?.toISOString()
-      );
       if (
         (this.datepicker.getDate() as Date).toISOString() !=
         this.$props.defaultDate?.toISOString()
