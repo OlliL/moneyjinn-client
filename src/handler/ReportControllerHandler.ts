@@ -18,6 +18,8 @@ import { usePostingAccountStore } from "@/stores/PostingAccountStore";
 import type { ReportingMonthAmount } from "@/model/report/ReportingMonthAmount";
 import type { ShowMonthlyReportGraphRequest } from "@/model/rest/report/ShowMonthlyReportGraphRequest";
 import type { ShowMonthlyReportGraphResponse } from "@/model/rest/report/ShowMonthlyReportGraphResponse";
+import type { ShowYearlyReportGraphRequest } from "@/model/rest/report/ShowYearlyReportGraphRequest";
+import type { ShowYearlyReportGraphResponse } from "@/model/rest/report/ShowYearlyReportGraphResponse";
 import { mapPostingAccountAmountTransportToModel } from "./mapper/PostingAccountAmountTransportMapper";
 
 class ReportControllerHandler extends AbstractControllerHandler {
@@ -226,7 +228,7 @@ class ReportControllerHandler extends AbstractControllerHandler {
     innerRequest.postingAccountIdsYes =
       reportingParameter.selectedPostingAccounts.map((mpa) => mpa.id);
     innerRequest.postingAccountIdsNo =
-      reportingParameter.unselectedPostingAccounts.map((mpa) => mpa.id);
+      reportingParameter.unselectedPostingAccounts?.map((mpa) => mpa.id);
 
     const response = await super.put(
       request,
@@ -242,6 +244,45 @@ class ReportControllerHandler extends AbstractControllerHandler {
       (await response.json()) as ShowMonthlyReportGraphResponse;
     const innerResponse =
       showMonthlyReportGraphResponse.showMonthlyReportGraphResponse;
+
+    const result: Array<ReportingMonthAmount> =
+      innerResponse.postingAccountAmountTransport.map((paat) =>
+        mapPostingAccountAmountTransportToModel(paat)
+      );
+
+    return result;
+  }
+
+  async showYearlyReportGraph(
+    reportingParameter: ReportingParameter
+  ): Promise<Array<ReportingMonthAmount>> {
+    const usecase = "showYearlyReportGraph";
+    const request = {
+      showYearlyReportGraphRequest: {},
+    } as ShowYearlyReportGraphRequest;
+    const innerRequest = request.showYearlyReportGraphRequest;
+
+    innerRequest.startDate = reportingParameter.startDate.toISOString();
+    innerRequest.endDate = reportingParameter.endDate.toISOString();
+    innerRequest.postingAccountIdsYes =
+      reportingParameter.selectedPostingAccounts.map((mpa) => mpa.id);
+    innerRequest.postingAccountIdsNo =
+      reportingParameter.unselectedPostingAccounts?.map((mpa) => mpa.id);
+
+    const response = await super.put(
+      request,
+      ReportControllerHandler.CONTROLLER,
+      usecase
+    );
+
+    if (!response.ok) {
+      throw new Error(response.statusText);
+    }
+
+    const showYearlyReportGraphResponse =
+      (await response.json()) as ShowYearlyReportGraphResponse;
+    const innerResponse =
+      showYearlyReportGraphResponse.showYearlyReportGraphResponse;
 
     const result: Array<ReportingMonthAmount> =
       innerResponse.postingAccountAmountTransport.map((paat) =>
