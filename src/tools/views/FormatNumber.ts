@@ -19,7 +19,10 @@ export function formatNumber(num: number, decimalPlaces: number): string {
     // delete decimal places of the given number
     num = ~~num;
     // format number with thousand delimiter and add decimal places again
-    const numStr = num.toLocaleString("de").concat(",", decimals);
+    let numStr = num.toLocaleString("de");
+    if (decimalPlaces > 0) {
+      numStr = numStr.concat(",", decimals);
+    }
     return numStr;
   }
   return "";
