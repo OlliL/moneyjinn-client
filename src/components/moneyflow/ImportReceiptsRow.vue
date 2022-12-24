@@ -165,7 +165,6 @@ import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 import type { ValidationResult } from "@/model/validation/ValidationResult";
 import { toFixed } from "@/tools/math";
 import { generateErrorData, type ErrorData } from "@/tools/views/ErrorData";
-import { getISOStringDate } from "@/tools/views/FormatDate";
 import { getError } from "@/tools/views/ThrowError";
 import { validateInputField } from "@/tools/views/ValidateInputField";
 import { defineComponent, type PropType } from "vue";
