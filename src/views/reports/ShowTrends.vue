@@ -13,50 +13,30 @@
               <div class="container-fluid">
                 <div class="row no-gutters flex-lg-nowrap">
                   <div class="col-md-6 col-xs-12 mb-2">
-                    <div class="input-group">
-                      <div class="form-floating">
-                        <input
-                          v-model="startDate"
-                          id="trendsStartDate"
-                          type="month"
-                          @change="validateStartDate"
-                          :class="
-                            ' form-control ' + startDateErrorData.inputClass
-                          "
-                        />
-                        <label
-                          for="trendsStartDate"
-                          :style="'color: ' + startDateErrorData.fieldColor"
-                          >{{ startDateErrorData.fieldLabel }}</label
-                        >
-                      </div>
-                      <span class="input-group-text"
-                        ><i class="bi bi-calendar-date"></i
-                      ></span>
-                    </div>
+                    <DatepickerVue
+                      id="startDate"
+                      :label="startDateErrorData.fieldLabel"
+                      :default-date="startDate"
+                      pick-mode="month"
+                      :input-class="
+                        ' form-control ' + startDateErrorData.inputClass
+                      "
+                      :label-style="'color: ' + startDateErrorData.fieldColor"
+                      @date-selected="startDateSelected"
+                    />
                   </div>
                   <div class="col-md-6 col-xs-12">
-                    <div class="input-group">
-                      <div class="form-floating">
-                        <input
-                          v-model="endDate"
-                          id="trendsEndDate"
-                          type="month"
-                          @change="validateEndDate"
-                          :class="
-                            ' form-control ' + endDateErrorData.inputClass
-                          "
-                        />
-                        <label
-                          for="trendsEndDate"
-                          :style="'color: ' + endDateErrorData.fieldColor"
-                          >{{ endDateErrorData.fieldLabel }}</label
-                        >
-                      </div>
-                      <span class="input-group-text"
-                        ><i class="bi bi-calendar-date"></i
-                      ></span>
-                    </div>
+                    <DatepickerVue
+                      id="endDate"
+                      :label="endDateErrorData.fieldLabel"
+                      :default-date="endDate"
+                      pick-mode="month"
+                      :input-class="
+                        ' form-control ' + endDateErrorData.inputClass
+                      "
+                      :label-style="'color: ' + endDateErrorData.fieldColor"
+                      @date-selected="endDateSelected"
+                    />
                   </div>
                 </div>
 
@@ -124,6 +104,7 @@ import type { Trends } from "@/model/report/Trends";
 import { useCapitalsourceStore } from "@/stores/CapitalsourceStore";
 import { generateErrorData, type ErrorData } from "@/tools/views/ErrorData";
 import { validateInputField } from "@/tools/views/ValidateInputField";
+import DatepickerVue from "@/components/Datepicker.vue";
 import { defineComponent } from "vue";
 import {
   Chart as ChartJS,
@@ -166,8 +147,8 @@ type ChartData = {
 type ShowTrendsData = {
   dataLoaded: boolean;
   trendsGraphLoaded: boolean;
-  startDate: string;
-  endDate: string;
+  startDate: Date | undefined;
+  endDate: Date | undefined;
   startDateIsValid: boolean | null;
   startDateErrorMessage: string;
   endDateIsValid: boolean | null;
@@ -193,8 +174,8 @@ export default defineComponent({
     return {
       dataLoaded: false,
       trendsGraphLoaded: false,
-      startDate: "",
-      endDate: "",
+      startDate: undefined,
+      endDate: undefined,
       startDateIsValid: null,
       startDateErrorMessage: "",
       endDateIsValid: null,
@@ -314,20 +295,13 @@ export default defineComponent({
         await ReportControllerHandler.showTrendsForm();
 
       const minDate = trendsTransporter.startDate;
-      const minDateYear = minDate.getFullYear();
-      const minDateMonth =
-        minDate.getMonth() < 9
-          ? "0" + (minDate.getMonth() + 1)
-          : minDate.getMonth() + 1;
-      this.startDate = minDateYear + "-" + minDateMonth;
+      minDate.setHours(0, 0, 0, 0);
+      this.startDate = minDate;
 
       const maxDate = trendsTransporter.endDate;
-      const maxDateYear = maxDate.getFullYear();
-      const maxDateMonth =
-        maxDate.getMonth() < 9
-          ? "0" + (maxDate.getMonth() + 1)
-          : maxDate.getMonth() + 1;
-      this.endDate = maxDateYear + "-" + maxDateMonth;
+      maxDate.setHours(0, 0, 0, 0);
+      maxDate.setDate(1);
+      this.endDate = maxDate;
 
       this.capitalsourceIds = trendsTransporter.selectedCapitalsourceIds;
 
@@ -352,6 +326,14 @@ export default defineComponent({
           "Kapitalquellen angeben!"
         );
     },
+    startDateSelected(date: Date) {
+      this.startDate = date;
+      this.validateStartDate();
+    },
+    endDateSelected(date: Date) {
+      this.endDate = date;
+      this.validateEndDate();
+    },
 
     async showTrends() {
       this.validateEndDate();
@@ -359,12 +341,13 @@ export default defineComponent({
       this.validateCapitalsource();
       this.trendsGraphLoaded = false;
 
-      if (this.formIsValid) {
-        const startDate = new Date(this.startDate + "-01");
-        const endDate = new Date(this.endDate + "-01");
+      if (this.formIsValid && this.startDate && this.endDate) {
+        const endDate = this.endDate;
+        endDate.setMonth(11);
+        endDate.setDate(31);
         const trendsParameter: TrendsParameter = {
-          startDate: startDate,
-          endDate: endDate,
+          startDate: this.startDate,
+          endDate: this.endDate,
           selectedCapitalsourceIds: this.capitalsourceIds,
         };
         const trends: Trends = await ReportControllerHandler.showTrendsGraph(
@@ -429,7 +412,7 @@ export default defineComponent({
     },
   },
   // eslint-disable-next-line vue/no-reserved-component-names
-  components: { Line },
+  components: { Line, DatepickerVue },
 });
 </script>
 
