@@ -180,7 +180,7 @@ export default defineComponent({
       startDateErrorMessage: "",
       endDateIsValid: null,
       endDateErrorMessage: "",
-      capitalsourceIds: {} as Array<number>,
+      capitalsourceIds: new Array<number>(),
       capitalsourceIsValid: null,
       capitalsourceErrorMessage: "",
       chartOptions: {
