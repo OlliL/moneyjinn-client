@@ -264,6 +264,7 @@ import {
 import { Bar } from "vue-chartjs";
 import { toFixed } from "@/tools/math";
 import { getMonthName } from "@/tools/views/MonthName";
+import { formatNumber } from "@/tools/views/FormatNumber";
 
 ChartJS.register(
   CategoryScale,
@@ -358,6 +359,18 @@ export default defineComponent({
           legend: {
             display: false,
           },
+          tooltip: {
+            callbacks: {
+              label: function (context: any) {
+                let label = context.dataset.label || "";
+
+                if (context.parsed.y !== null) {
+                  label += formatNumber(+context.parsed.y, 2) + "€";
+                }
+                return label;
+              },
+            },
+          },
         },
         interaction: {
           mode: "index",
@@ -365,9 +378,11 @@ export default defineComponent({
         },
 
         scales: {
-          x: {
+          y: {
             ticks: {
-              beginAtZero: true,
+              callback: function (value: number) {
+                return formatNumber(value, 0) + "€";
+              },
             },
           },
         },

@@ -119,6 +119,7 @@ import {
 } from "chart.js";
 
 import { Line } from "vue-chartjs";
+import { formatNumber } from "@/tools/views/FormatNumber";
 
 ChartJS.register(
   CategoryScale,
@@ -191,6 +192,20 @@ export default defineComponent({
             display: true,
             text: "",
           },
+          tooltip: {
+            callbacks: {
+              label: function (context: any) {
+                let label = context.dataset.label || "";
+
+                if (label) label += ": ";
+
+                if (context.parsed.y !== null) {
+                  label += formatNumber(+context.parsed.y, 2) + "€";
+                }
+                return label;
+              },
+            },
+          },
         },
         interaction: {
           mode: "index",
@@ -207,6 +222,11 @@ export default defineComponent({
             title: {
               text: "Betrag",
               display: true,
+            },
+            ticks: {
+              callback: function (value: number) {
+                return formatNumber(value, 0) + "€";
+              },
             },
           },
         },
