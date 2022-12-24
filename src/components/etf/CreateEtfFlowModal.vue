@@ -34,25 +34,16 @@
           </div>
           <div class="row pt-2">
             <div class="col-xs-12">
-              <div class="input-group">
-                <div class="form-floating">
-                  <input
-                    v-model="bookingdate"
-                    id="bookingdate"
-                    type="date"
-                    @change="validateBookingdate"
-                    :class="' form-control ' + bookingdateErrorData.inputClass"
-                  />
-                  <label
-                    for="bookingdate"
-                    :style="'color: ' + bookingdateErrorData.fieldColor"
-                    >{{ bookingdateErrorData.fieldLabel }}</label
-                  >
-                </div>
-                <span class="input-group-text"
-                  ><i class="bi bi-calendar-date"></i
-                ></span>
-              </div>
+              <DatepickerVue
+                id="bookingdate"
+                :label="bookingdateErrorData.fieldLabel"
+                :default-date="bookingdate"
+                :input-class="
+                  ' form-control ' + bookingdateErrorData.inputClass
+                "
+                :label-style="'color: ' + bookingdateErrorData.fieldColor"
+                @date-selected="bookingdateSelected"
+              />
             </div>
           </div>
           <div class="row pt-2">
@@ -146,14 +137,15 @@ import { defineComponent } from "vue";
 import ModalVue from "../Modal.vue";
 import { getError } from "@/tools/views/ThrowError";
 import type { ValidationResult } from "@/model/validation/ValidationResult";
-import { formatTime, getISOStringDate } from "@/tools/views/FormatDate";
+import { formatTime } from "@/tools/views/FormatDate";
 import type { Etf } from "@/model/etf/Etf";
+import DatepickerVue from "../Datepicker.vue";
 
 type CreateEtfFlowModalData = {
   etfs: Array<Etf>;
   etfFlow: EtfFlow;
   origEtfFlow: EtfFlow | undefined;
-  bookingdate: string;
+  bookingdate: Date | undefined;
   bookingtime: string;
   serverError: Array<String>;
   etfIsValid: boolean | null;
@@ -174,7 +166,7 @@ export default defineComponent({
       etfs: {} as Array<Etf>,
       etfFlow: {} as EtfFlow,
       origEtfFlow: undefined,
-      bookingdate: "",
+      bookingdate: undefined,
       bookingtime: "",
       serverError: {} as Array<String>,
       etfIsValid: null,
@@ -254,16 +246,30 @@ export default defineComponent({
     },
     resetForm() {
       if (this.origEtfFlow) {
-        this.etfFlow = JSON.parse(JSON.stringify(this.origEtfFlow));
+        const bookingDate = new Date(this.origEtfFlow.timestamp);
+        bookingDate.setHours(0, 0, 0, 0);
+
+        this.etfFlow = {
+          amount: this.origEtfFlow.amount,
+          etfflowid: this.origEtfFlow.etfflowid,
+          isin: this.origEtfFlow.isin,
+          nanoseconds: this.origEtfFlow.nanoseconds,
+          price: this.origEtfFlow.price,
+          timestamp: this.origEtfFlow.timestamp,
+        };
+
         const timestamp = new Date(this.etfFlow.timestamp);
-        this.bookingdate = getISOStringDate(timestamp);
+        this.bookingdate = bookingDate;
         this.bookingtime =
           formatTime(timestamp) +
           ":" +
           String(this.etfFlow.nanoseconds + 1000000000).substring(1, 4); //80000000 -> 1080000000 -> 080
       } else {
+        const bookingDate = new Date();
+        bookingDate.setHours(0, 0, 0, 0);
+
         this.etfFlow = {} as EtfFlow;
-        this.bookingdate = getISOStringDate(new Date());
+        this.bookingdate = bookingDate;
         this.bookingtime = "";
         this.etfFlow.isin = this.etfs[0].isin;
       }
@@ -288,7 +294,7 @@ export default defineComponent({
     },
     validateBookingdate() {
       [this.bookingdateIsValid, this.bookingdateErrorMessage] =
-        validateInputField(this.bookingdate, "Buchungsdatum angeben!");
+        validateInputField(this.etfFlow.timestamp, "Buchungsdatum angeben!");
     },
     validateBookingtime() {
       const message = "Buchungszeit im Format 00:00:00:000 angeben!";
@@ -313,6 +319,10 @@ export default defineComponent({
         "Stückpreis angeben!"
       );
     },
+    bookingdateSelected(date: Date) {
+      this.etfFlow.timestamp = date;
+      this.validateBookingdate();
+    },
     handleServerError(validationResult: ValidationResult): boolean {
       if (!validationResult.result) {
         this.serverError = new Array<string>();
@@ -332,8 +342,9 @@ export default defineComponent({
 
       if (this.formIsValid) {
         const times: Array<string> = this.bookingtime.split(":");
-        if (times && times.length == 4) {
-          this.etfFlow.timestamp = new Date(this.bookingdate);
+        const bookingDate = this.bookingdate;
+        if (times && times.length == 4 && bookingDate) {
+          this.etfFlow.timestamp = bookingDate;
           this.etfFlow.timestamp.setHours(+times[0], +times[1], +times[2], 0);
           this.etfFlow.nanoseconds = +times[3] * 1000000;
 
@@ -363,6 +374,6 @@ export default defineComponent({
   },
   expose: ["_show"],
   emits: ["etfFlowCreated", "etfFlowUpdated"],
-  components: { ModalVue },
+  components: { ModalVue, DatepickerVue },
 });
 </script>
