@@ -10,41 +10,22 @@
   </div>
   <div class="row no-gutters flex-lg-nowrap mb-4">
     <div class="col-md-2 col-xs-12">
-      <div class="input-group">
-        <div class="form-floating">
-          <input
-            v-model="bookingdate"
-            :id="'bookingdate' + idSuffix"
-            type="date"
-            @change="validateBookingdate"
-            :class="' form-control ' + bookingdateErrorData.inputClass"
-          />
-          <label
-            :for="'bookingdate' + idSuffix"
-            :style="'color: ' + bookingdateErrorData.fieldColor"
-            >{{ bookingdateErrorData.fieldLabel }}</label
-          >
-        </div>
-        <span class="input-group-text"
-          ><i class="bi bi-calendar-date"></i
-        ></span>
-      </div>
+      <DatepickerVue
+        id="bookingdate"
+        :label="bookingdateErrorData.fieldLabel"
+        :default-date="mmf.bookingDate"
+        :input-class="' form-control ' + bookingdateErrorData.inputClass"
+        :label-style="'color: ' + bookingdateErrorData.fieldColor"
+        @date-selected="bookingdateSelected"
+      />
     </div>
     <div class="col-md-2 col-xs-12">
-      <div class="input-group">
-        <div class="form-floating">
-          <input
-            v-model="invoicedate"
-            :id="'invoicedate' + idSuffix"
-            type="date"
-            class="form-control"
-          />
-          <label :for="'invoicedate' + idSuffix">Rechnungsdatum</label>
-        </div>
-        <span class="input-group-text"
-          ><i class="bi bi-calendar-date"></i
-        ></span>
-      </div>
+      <DatepickerVue
+        id="invoicedate"
+        label="Rechnungsdatum"
+        :default-date="mmf.invoiceDate"
+        @date-selected="invoicedateSelected"
+      />
     </div>
     <div class="col-md-4 col-xs-12">
       <ContractpartnerSelectVue
@@ -231,6 +212,7 @@ import CapitalsourceSelectVue from "@/components/capitalsource/CapitalsourceSele
 import ContractpartnerSelectVue from "@/components/contractpartner/ContractpartnerSelect.vue";
 import EditMoneyflowSplitEntryRowVue from "@/components/moneyflow/EditMoneyflowSplitEntryRow.vue";
 import PostingAccountSelectVue from "@/components/postingaccount/PostingAccountSelect.vue";
+import DatepickerVue from "@/components/Datepicker.vue";
 
 import type { Capitalsource } from "@/model/capitalsource/Capitalsource";
 import type { Contractpartner } from "@/model/contractpartner/Contractpartner";
@@ -249,7 +231,6 @@ import { getError } from "@/tools/views/ThrowError";
 import { validateInputField } from "@/tools/views/ValidateInputField";
 import ImportedMoneyflowControllerHandler from "@/handler/ImportedMoneyflowControllerHandler";
 import type { ImportedMoneyflow } from "@/model/moneyflow/ImportedMoneyflow";
-import { getISOStringDate } from "@/tools/views/FormatDate";
 import { toFixed } from "@/tools/math";
 import { mapActions } from "pinia";
 
@@ -269,8 +250,6 @@ type EditMoneyflowData = {
   commentErrorMessage: string;
   postingaccountIsValid: boolean | null;
   postingaccountErrorMessage: string;
-  bookingdate: string;
-  invoicedate: string;
   previousCommentSetByContractpartnerDefaults: string;
   previousPostingAccountSetByContractpartnerDefaults: number;
   preDefMoneyflowId: number;
@@ -305,8 +284,6 @@ export default defineComponent({
       commentErrorMessage: "",
       postingaccountIsValid: null,
       postingaccountErrorMessage: "",
-      bookingdate: "",
-      invoicedate: "",
       previousCommentSetByContractpartnerDefaults: "",
       previousPostingAccountSetByContractpartnerDefaults: 0,
       preDefMoneyflowId: 0,
@@ -353,9 +330,6 @@ export default defineComponent({
         if (newVal !== oldVal) this.resetForm();
       },
     },
-  },
-  mounted() {
-    this.resetForm();
   },
   computed: {
     editMode(): boolean {
@@ -422,10 +396,10 @@ export default defineComponent({
       );
     },
     validityDate(): Date {
-      if (this.invoicedate) {
-        return new Date(this.invoicedate);
+      if (this.mmf.invoiceDate) {
+        return this.mmf.invoiceDate;
       } else if (this.bookingdateIsValid) {
-        return new Date(this.bookingdate);
+        return this.mmf.bookingDate;
       } else {
         return new Date();
       }
@@ -448,8 +422,31 @@ export default defineComponent({
     ...mapActions(useContractpartnerStore, ["getContractpartner"]),
     resetForm() {
       if (this.mmfToEdit && this.mmfToEdit.bookingDate) {
-        // we need a deep copy!
-        this.mmf = JSON.parse(JSON.stringify(this.mmfToEdit)) as Moneyflow;
+        const bookingDate = new Date(this.mmfToEdit.bookingDate);
+        bookingDate.setHours(0, 0, 0, 0);
+        const invoiceDate = this.mmfToEdit.invoiceDate
+          ? new Date(this.mmfToEdit.invoiceDate)
+          : undefined;
+        if (invoiceDate) invoiceDate.setHours(0, 0, 0, 0);
+
+        this.mmf = {
+          amount: this.mmfToEdit.amount,
+          bookingDate: bookingDate,
+          capitalsourceId: this.mmfToEdit.capitalsourceId,
+          comment: this.mmfToEdit.comment,
+          contractpartnerId: this.mmfToEdit.contractpartnerId,
+          hasReceipt: this.mmfToEdit.hasReceipt,
+          id: this.mmfToEdit.id,
+          invoiceDate: invoiceDate,
+          postingAccountId: this.mmfToEdit.postingAccountId,
+          private: this.mmfToEdit.private,
+          userId: this.mmfToEdit.userId,
+          capitalsourceComment: this.mmfToEdit.capitalsourceComment,
+          contractpartnerName: this.mmfToEdit.contractpartnerName,
+          moneyflowSplitEntries: this.mmfToEdit.moneyflowSplitEntries,
+          postingAccountName: this.mmfToEdit.postingAccountName,
+        };
+
         this.amount = this.mmf.amount;
         this.originalMoneyflowSplitEntryIds = new Array<number>();
         if (
@@ -471,15 +468,6 @@ export default defineComponent({
           this.previousPostingAccountSetByContractpartnerDefaults = 0;
         }
 
-        // during JSON stringify/parse the Date object gets unfortunally lost and
-        // it is a string here, so reparse it before extracting the date
-        this.bookingdate = getISOStringDate(
-          new Date(this.mmfToEdit.bookingDate)
-        );
-        this.invoicedate = getISOStringDate(
-          new Date(this.mmfToEdit.invoiceDate)
-        );
-
         if (this.mmf.moneyflowSplitEntries == undefined) {
           this.mmf.moneyflowSplitEntries = new Array<MoneyflowSplitEntry>();
           this.addNewMoneyflowSplitEntryRow();
@@ -499,8 +487,11 @@ export default defineComponent({
         this.toggleMoneyflowFieldsForMse();
       } else {
         this.amount = undefined;
-        this.bookingdate = getISOStringDate(new Date());
-        this.invoicedate = "";
+
+        const bookingDate = new Date();
+        bookingDate.setHours(0, 0, 0, 0);
+        this.mmf.bookingDate = bookingDate;
+        this.mmf.invoiceDate = undefined;
         this.mmf.contractpartnerId = 0;
         this.mmf.contractpartnerName = "";
         this.mmf.capitalsourceId = 0;
@@ -647,7 +638,7 @@ export default defineComponent({
      */
     validateBookingdate() {
       [this.bookingdateIsValid, this.bookingdateErrorMessage] =
-        validateInputField(this.bookingdate, "Datum angeben!");
+        validateInputField(this.mmf.bookingDate, "Datum angeben!");
     },
     validateContractpartner() {
       [this.contractpartnerIsValid, this.contractpartnerErrorMessage] =
@@ -757,6 +748,13 @@ export default defineComponent({
         }
       }
     },
+    bookingdateSelected(date: Date) {
+      this.mmf.bookingDate = date;
+      this.validateBookingdate();
+    },
+    invoicedateSelected(date: Date) {
+      this.mmf.invoiceDate = date;
+    },
     prepareServerCall(): boolean {
       this.validateMseRows();
       this.validateMseRemainder();
@@ -784,8 +782,6 @@ export default defineComponent({
       this.validatePostingaccount();
 
       if (this.formIsValid) {
-        this.mmf.bookingDate = new Date(this.bookingdate);
-        if (this.invoicedate) this.mmf.invoiceDate = new Date(this.invoicedate);
         if (this.amount) this.mmf.amount = this.amount;
         // remove empty rows
         if (this.mmf.moneyflowSplitEntries) {
@@ -899,6 +895,7 @@ export default defineComponent({
     CapitalsourceSelectVue,
     PostingAccountSelectVue,
     EditMoneyflowSplitEntryRowVue,
+    DatepickerVue,
   },
 });
 </script>

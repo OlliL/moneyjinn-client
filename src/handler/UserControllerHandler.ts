@@ -15,6 +15,7 @@ class UserControllerHandler extends AbstractControllerHandler {
     const loginRequest = new LoginRequest(username, password);
     const userSessionStore = useUserSessionStore();
 
+    userSessionStore.logout();
     const response = await super.post(
       loginRequest,
       UserControllerHandler.CONTROLLER,

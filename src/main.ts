@@ -9,6 +9,7 @@ import router from "./router";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import "bootstrap";
+import "../node_modules/vanillajs-datepicker/dist/css/datepicker-bs5.min.css";
 
 const app = createApp(App);
 const pinia = createPinia();
