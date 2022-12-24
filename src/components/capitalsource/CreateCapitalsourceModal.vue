@@ -408,9 +408,7 @@ export default defineComponent({
     resetForm() {
       if (this.origMcs) {
         const validFrom = new Date(this.origMcs.validFrom);
-        validFrom.setHours(0, 0, 0, 0);
         const validTil = new Date(this.origMcs.validTil);
-        validTil.setHours(0, 0, 0, 0);
 
         this.mcs = {
           accountNumber: this.origMcs.accountNumber,
@@ -429,9 +427,7 @@ export default defineComponent({
         this.groupUse = this.mcs.groupUse ? "1" : "0";
       } else {
         const validFrom = new Date();
-        validFrom.setHours(0, 0, 0, 0);
         const validTil = new Date("2999-12-31");
-        validTil.setHours(0, 0, 0, 0);
 
         this.mcs = {} as Capitalsource;
         this.mcs.validFrom = validFrom;

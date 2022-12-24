@@ -108,7 +108,25 @@ export default defineComponent({
     defaultDate: {
       handler(newVal: Date, oldVal: Date) {
         if (newVal != oldVal && this.datepicker instanceof Datepicker) {
-          this.datepicker.setDate(newVal);
+          if (newVal === undefined) {
+            if (this.datepicker.dates.length > 0) {
+              this.datepicker.setDate(undefined);
+            }
+          } else {
+            if (this.pickMode === "month" || this.pickMode === "year")
+              newVal.setDate(1);
+            if (this.pickMode === "year") newVal.setMonth(0);
+            newVal.setHours(0, 0, 0, 0);
+
+            if (this.datepicker.dates.length === 0) {
+              this.datepicker.setDate(newVal);
+            } else if (
+              (this.datepicker.getDate() as Date).toISOString() !=
+              newVal?.toISOString()
+            ) {
+              this.datepicker.setDate(newVal);
+            }
+          }
         }
       },
       immediate: true,
