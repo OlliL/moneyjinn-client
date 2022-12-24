@@ -116,48 +116,26 @@
           </div>
           <div class="row pt-2">
             <div class="col-xs-12">
-              <div class="input-group">
-                <div class="form-floating">
-                  <input
-                    v-model="validFrom"
-                    :id="'validFrom' + idSuffix"
-                    type="date"
-                    @change="validateValidFrom"
-                    :class="' form-control ' + validFromErrorData.inputClass"
-                  />
-                  <label
-                    :for="'validFrom' + idSuffix"
-                    :style="'color: ' + validFromErrorData.fieldColor"
-                    >{{ validFromErrorData.fieldLabel }}</label
-                  >
-                </div>
-                <span class="input-group-text"
-                  ><i class="bi bi-calendar-date"></i
-                ></span>
-              </div>
+              <DatepickerVue
+                :id="'validFrom' + idSuffix"
+                :label="validFromErrorData.fieldLabel"
+                :default-date="mcp.validFrom"
+                :input-class="' form-control ' + validFromErrorData.inputClass"
+                :label-style="'color: ' + validFromErrorData.fieldColor"
+                @date-selected="validFromSelected"
+              />
             </div>
           </div>
           <div class="row pt-2">
             <div class="col-xs-12">
-              <div class="input-group">
-                <div class="form-floating">
-                  <input
-                    v-model="validTil"
-                    :id="'validTil' + idSuffix"
-                    type="date"
-                    @change="validateValidTil"
-                    :class="' form-control ' + validTilErrorData.inputClass"
-                  />
-                  <label
-                    :for="'validFrom' + idSuffix"
-                    :style="'color: ' + validTilErrorData.fieldColor"
-                    >{{ validTilErrorData.fieldLabel }}</label
-                  >
-                </div>
-                <span class="input-group-text"
-                  ><i class="bi bi-calendar-date"></i
-                ></span>
-              </div>
+              <DatepickerVue
+                :id="'validTil' + idSuffix"
+                :label="validTilErrorData.fieldLabel"
+                :default-date="mcp.validTil"
+                :input-class="' form-control ' + validTilErrorData.inputClass"
+                :label-style="'color: ' + validTilErrorData.fieldColor"
+                @date-selected="validTilSelected"
+              />
             </div>
           </div>
         </div>
@@ -192,13 +170,11 @@ import ModalVue from "../Modal.vue";
 import { mapActions } from "pinia";
 import { useContractpartnerStore } from "@/stores/ContractpartnerStore";
 import type { ValidationResult } from "@/model/validation/ValidationResult";
-import { getISOStringDate } from "@/tools/views/FormatDate";
+import DatepickerVue from "../Datepicker.vue";
 
 type CreateContractpartnerModalData = {
   mcp: Contractpartner;
   origMcp: Contractpartner | undefined;
-  validFrom: string;
-  validTil: string;
   serverError: Array<String>;
   nameIsValid: boolean | null;
   nameErrorMessage: string;
@@ -213,8 +189,6 @@ export default defineComponent({
     return {
       mcp: {} as Contractpartner,
       origMcp: undefined,
-      validFrom: "",
-      validTil: "",
       serverError: {} as Array<String>,
       nameIsValid: null,
       nameErrorMessage: "",
@@ -272,13 +246,34 @@ export default defineComponent({
     ...mapActions(useContractpartnerStore, ["updateContractpartnerInStore"]),
     resetForm() {
       if (this.origMcp) {
-        this.mcp = JSON.parse(JSON.stringify(this.origMcp));
-        this.validFrom = getISOStringDate(new Date(this.mcp.validFrom));
-        this.validTil = getISOStringDate(new Date(this.mcp.validTil));
+        const validFrom = new Date(this.origMcp.validFrom);
+        validFrom.setHours(0, 0, 0, 0);
+        const validTil = new Date(this.origMcp.validTil);
+        validTil.setHours(0, 0, 0, 0);
+
+        this.mcp = {
+          country: this.origMcp.country,
+          id: this.origMcp.id,
+          moneyflowComment: this.origMcp.moneyflowComment,
+          name: this.origMcp.name,
+          postcode: this.origMcp.postcode,
+          postingAccountId: this.origMcp.postingAccountId,
+          postingAccountName: this.origMcp.postingAccountName,
+          street: this.origMcp.street,
+          town: this.origMcp.town,
+          userId: this.origMcp.userId,
+          validFrom: validFrom,
+          validTil: validTil,
+        };
       } else {
+        const validFrom = new Date();
+        validFrom.setHours(0, 0, 0, 0);
+        const validTil = new Date("2999-12-31");
+        validTil.setHours(0, 0, 0, 0);
+
         this.mcp = {} as Contractpartner;
-        this.validFrom = getISOStringDate(new Date());
-        this.validTil = "2999-12-31";
+        this.mcp.validFrom = validFrom;
+        this.mcp.validTil = validTil;
       }
       this.nameIsValid = null;
       this.nameErrorMessage = "";
@@ -296,13 +291,13 @@ export default defineComponent({
     },
     validateValidFrom() {
       [this.validFromIsValid, this.validFromErrorMessage] = validateInputField(
-        this.validFrom,
+        this.mcp.validFrom,
         "Gültig ab muss angegeben werden!"
       );
     },
     validateValidTil() {
       [this.validTilIsValid, this.validTilErrorMessage] = validateInputField(
-        this.validTil,
+        this.mcp.validTil,
         "Gültig bis muss angegeben werden!"
       );
     },
@@ -314,6 +309,14 @@ export default defineComponent({
         this.mcp.postingAccountId = 0;
         this.mcp.postingAccountName = "";
       }
+    },
+    validFromSelected(date: Date) {
+      this.mcp.validFrom = date;
+      this.validateValidFrom();
+    },
+    validTilSelected(date: Date) {
+      this.mcp.validTil = date;
+      this.validateValidTil();
     },
     handleServerError(validationResult: ValidationResult): boolean {
       if (!validationResult.result) {
@@ -330,9 +333,6 @@ export default defineComponent({
       this.validateValidTil();
 
       if (this.formIsValid) {
-        this.mcp.validFrom = new Date(this.validFrom);
-        this.mcp.validTil = new Date(this.validTil);
-
         if (this.mcp.id > 0) {
           //update
           const validationResult =
@@ -364,6 +364,6 @@ export default defineComponent({
   },
   expose: ["_show"],
   emits: ["contractpartnerCreated", "contractpartnerUpdated"],
-  components: { ModalVue, PostingAccountSelectVue },
+  components: { ModalVue, PostingAccountSelectVue, DatepickerVue },
 });
 </script>
