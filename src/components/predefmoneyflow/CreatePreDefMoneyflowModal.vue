@@ -339,7 +339,7 @@ export default defineComponent({
       return !validationResult.result;
     },
     async createPreDefMoneyflow() {
-      this.validateComment();
+      this.validateAmount();
       this.validateCapitalsource();
       this.validateComment();
       this.validateContractpartner();
