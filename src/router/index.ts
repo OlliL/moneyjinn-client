@@ -6,6 +6,7 @@ import LoginViewVue from "@/views/LoginView.vue";
 import ListReportsVue from "@/views/reports/ListReports.vue";
 import CreateMoneyflowVue from "@/views/moneyflow/CreateMoneyflow.vue";
 import ListCapitalsourcesVue from "@/views/capitalsource/ListCapitalsources.vue";
+import ListPostingAccountsVue from "@/views/postingaccount/ListPostingAccounts.vue";
 import ListContractpartnersVue from "@/views/contractpartner/ListContractpartners.vue";
 import ImportMoneyflowsVue from "@/views/moneyflow/ImportMoneyflows.vue";
 import ListMonthlySettlementsVue from "@/views/monthlysettlement/ListMonthlySettlements.vue";
@@ -24,6 +25,7 @@ export enum Routes {
   ListReports = "listReports",
   CreateMoneyflow = "createMoneyflow",
   ListCapitalsources = "listCapitalsources",
+  ListPostingAccounts = "listPostingAccounts",
   ListContractpartners = "listContractpartners",
   ListMonthlySettlements = "listMonthlySettlements",
   ListPreDefMoneyflows = "listPreDefMoneyflows",
@@ -87,6 +89,12 @@ const router = createRouter({
           path: "listCapitalsources/:letter?",
           name: Routes.ListCapitalsources,
           component: ListCapitalsourcesVue,
+          props: true,
+        },
+        {
+          path: "listPostingAccounts/:letter?",
+          name: Routes.ListPostingAccounts,
+          component: ListPostingAccountsVue,
           props: true,
         },
         {

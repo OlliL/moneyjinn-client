@@ -79,6 +79,7 @@ export const useCapitalsourceStore = defineStore("capitalsource", {
     updateCapitalsourceInStore(mcs: Capitalsource) {
       const pos = this.capitalsource.findIndex((entry) => entry.id === mcs.id);
       if (pos !== undefined) this.capitalsource.splice(pos, 1, mcs);
+      this.capitalsource.sort(this.compareCapitalsource);
     },
     deleteCapitalsource(mcs: Capitalsource) {
       this.capitalsource = this.capitalsource.filter(

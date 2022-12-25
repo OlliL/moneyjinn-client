@@ -4,6 +4,8 @@ import type { PostingAccountValidation } from "@/model/postingaccount/PostingAcc
 import type { CreatePostingAccountRequest } from "@/model/rest/postingaccount/CreatePostingAccountRequest";
 import type { CreatePostingAccountResponse } from "@/model/rest/postingaccount/CreatePostingAccountResponse";
 import type { ShowPostingAccountListResponse } from "@/model/rest/postingaccount/ShowPostingAccountListResponse";
+import type { UpdatePostingAccountRequest } from "@/model/rest/postingaccount/UpdatePostingAccountRequest";
+import type { ValidationResponse } from "@/model/rest/ValidationResponse";
 import type { ValidationResult } from "@/model/validation/ValidationResult";
 import { throwError } from "@/tools/views/ThrowError";
 import {
@@ -86,6 +88,51 @@ class PostingAccountControllerHandler extends AbstractControllerHandler {
       postingAccountValidation.mpa = createdMpa;
     }
     return postingAccountValidation;
+  }
+
+  async updatePostingAccount(mcp: PostingAccount): Promise<ValidationResult> {
+    const usecase = "updatePostingAccount";
+    const request = {
+      updatePostingAccountRequest: {},
+    } as UpdatePostingAccountRequest;
+    const innerRequest = request.updatePostingAccountRequest;
+    innerRequest.postingAccountTransport = mapPostingAccountToTransport(mcp);
+
+    const response = await super.put(
+      request,
+      PostingAccountControllerHandler.CONTROLLER,
+      usecase
+    );
+
+    if (!response.ok) {
+      throw new Error(response.statusText);
+    }
+
+    const validationResponse = (await response.json()) as ValidationResponse;
+    const innerResponse = validationResponse.validationResponse;
+    const validationResult: ValidationResult = {
+      result: innerResponse.result,
+      validationResultItems: innerResponse.validationItemTransport?.map(
+        (vit) => {
+          return mapValidationItemTransportToModel(vit);
+        }
+      ),
+    };
+
+    return validationResult;
+  }
+
+  async deletePostingAccount(postingAccountId: number) {
+    const usecase = "deletePostingAccountById/" + postingAccountId;
+
+    const response = await super.delete(
+      PostingAccountControllerHandler.CONTROLLER,
+      usecase
+    );
+
+    if (!response.ok) {
+      throw new Error(response.statusText);
+    }
   }
 }
 
