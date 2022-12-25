@@ -98,29 +98,22 @@
                     </div>
                   </div>
                 </div>
+
                 <div
                   class="row no-gutters flex-lg-nowrap"
                   v-show="!singlePostingAccounts"
                 >
                   <div class="col-5 text-start">
-                    <small
-                      :style="'color:' + postingAccountYesErrorData.fieldColor"
-                      >{{ postingAccountYesErrorData.fieldLabel }}</small
+                    <label
+                      for="postingAccountIdsYes"
+                      :style="
+                        'opacity: .65; color: ' +
+                        postingAccountYesErrorData.fieldColor
+                      "
+                      ><small>{{
+                        postingAccountYesErrorData.fieldLabel
+                      }}</small></label
                     >
-                  </div>
-                  <div class="col-2">&nbsp;</div>
-                  <div class="col-5 text-start">
-                    <small
-                      :style="'color:' + postingAccountNoErrorData.fieldColor"
-                      >{{ postingAccountNoErrorData.fieldLabel }}</small
-                    >
-                  </div>
-                </div>
-                <div
-                  class="row no-gutters flex-lg-nowrap"
-                  v-show="!singlePostingAccounts"
-                >
-                  <div class="col-5">
                     <select
                       v-model="selectedPostingAccountsYes"
                       id="postingAccountIdsYes"
@@ -138,6 +131,7 @@
                     </select>
                   </div>
                   <div class="col-2">
+                    <br />
                     <button
                       type="button"
                       class="btn btn-light btn-sm"
@@ -175,7 +169,17 @@
                       <i class="bi bi-caret-left-fill"></i>
                     </button>
                   </div>
-                  <div class="col-5">
+                  <div class="col-5 text-start">
+                    <label
+                      for="postingAccountIdsYes"
+                      :style="
+                        'opacity: .65; color: ' +
+                        postingAccountNoErrorData.fieldColor
+                      "
+                      ><small>{{
+                        postingAccountNoErrorData.fieldLabel
+                      }}</small></label
+                    >
                     <select
                       v-model="selectedPostingAccountsNo"
                       id="postingAccountIdsNo"
