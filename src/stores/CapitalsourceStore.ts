@@ -20,6 +20,11 @@ export const useCapitalsourceStore = defineStore("capitalsource", {
         this.capitalsource.sort(this.compareCapitalsource);
       }
     },
+    getCapitalsource(id: number): Capitalsource | undefined {
+      return this.capitalsource.find((mcp) => {
+        return mcp.id === id;
+      });
+    },
     getValidCapitalsource(validityDate: Date) {
       return this.capitalsource.filter((mcp) => {
         return validityDate >= mcp.validFrom && validityDate <= mcp.validTil;
