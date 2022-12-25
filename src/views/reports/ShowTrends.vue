@@ -41,15 +41,17 @@
                 </div>
 
                 <div class="row no-gutters flex-lg-nowrap">
-                  <div class="col-12 text-start">
-                    <small
-                      :style="'color:' + capitalsourceErrorData.fieldColor"
-                      >{{ capitalsourceErrorData.fieldLabel }}</small
+                  <div class="col-12 mb-3 text-start">
+                    <label
+                      for="capitalsourceIds2"
+                      :style="
+                        'opacity: .65; color: ' +
+                        capitalsourceErrorData.fieldColor
+                      "
+                      ><small>{{
+                        capitalsourceErrorData.fieldLabel
+                      }}</small></label
                     >
-                  </div>
-                </div>
-                <div class="row no-gutters flex-lg-nowrap">
-                  <div class="col-12 mb-3">
                     <select
                       v-model="capitalsourceIds"
                       id="capitalsourceIds2"
