@@ -147,14 +147,14 @@
           <col style="width: 90%" />
           <tbody>
             <CompareDataResultGroupVue
-              comment="Datens&auml;tze die in der Export-Datei, aber nicht in der Datenbank, enthalten sind"
+              comment="Datens&auml;tze die in der Quelle, aber nicht in der Datenbank, enthalten sind"
               :compare-data="compareDatasNotInDatabase"
               compare-data-key="notInDatabase"
               :amount-class="compareDatasNotInDatabaseCountClass"
               :capitalsource-comment="capitalsourceComment"
             />
             <CompareDataResultGroupVue
-              comment="Datensätze die in der Datenbank, aber nicht in der Export-Datei, enthalten sind"
+              comment="Datensätze die in der Datenbank, aber nicht in der Quelle, enthalten sind"
               :compare-data="compareDatasNotInFile"
               compare-data-key="notInFile"
               :amount-class="compareDatasNotInFileCountClass"
