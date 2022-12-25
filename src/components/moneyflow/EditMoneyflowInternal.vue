@@ -318,6 +318,9 @@ export default defineComponent({
       default: false,
     },
   },
+  mounted() {
+    if (this.fillContractpartnerDefaults) this.resetForm();
+  },
   watch: {
     selectedPreDefMoneyflow: function (
       newVal: PreDefMoneyflow | undefined,
