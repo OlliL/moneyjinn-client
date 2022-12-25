@@ -1,6 +1,6 @@
 export type CompareDataDataset = {
-  bookingDate: string;
-  invoiceDate: string;
+  bookingDate: Date;
+  invoiceDate?: Date;
   amount: number;
   partner: string;
   comment: string;

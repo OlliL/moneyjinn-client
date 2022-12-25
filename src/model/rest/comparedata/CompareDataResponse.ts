@@ -1,13 +1,11 @@
-import type { CompareDataMatchingTransport } from "./transport/CompareDataMatchingTransport";
-import type { CompareDataNotInDatabaseTransport } from "./transport/CompareDataNotInDatabaseTransport";
-import type { CompareDataNotInFileTransport } from "./transport/CompareDataNotInFileTransport";
-import type { CompareDataWrongCapitalsourceTransport } from "./transport/CompareDataWrongCapitalsourceTransport";
+import type { ErrorResponse } from "../ErrorResponse";
+import type { CompareDataTransport } from "./transport/CompareDataTransport";
 
-export type CompareDataResponse = {
+export type CompareDataResponse = ErrorResponse & {
   compareDataResponse: {
-    compareDataMatchingTransport: Array<CompareDataMatchingTransport>;
-    compareDataWrongCapitalsourceTransport: Array<CompareDataWrongCapitalsourceTransport>;
-    compareDataNotInFileTransport: Array<CompareDataNotInFileTransport>;
-    compareDataNotInDatabaseTransport: Array<CompareDataNotInDatabaseTransport>;
+    compareDataMatchingTransport: Array<CompareDataTransport>;
+    compareDataWrongCapitalsourceTransport: Array<CompareDataTransport>;
+    compareDataNotInFileTransport: Array<CompareDataTransport>;
+    compareDataNotInDatabaseTransport: Array<CompareDataTransport>;
   };
 };

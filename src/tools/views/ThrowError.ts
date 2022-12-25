@@ -39,6 +39,9 @@ export function getError(code: number, variableArray?: Array<string>) {
     case ErrorCode.NO_SEARCH_CRITERIA_ENTERED: {
       return "Keine Suchkriterien angegeben!";
     }
+    case ErrorCode.WRONG_FILE_FORMAT: {
+      return "Die angegebene Datei konnte nicht geparsed werden! Eventuell haben Sie eine falsche Datei oder das falsche Format angegeben?";
+    }
     case ErrorCode.AMOUNT_ZERO: {
       return "Der Betrag muss ungleich 0 sein!";
     }

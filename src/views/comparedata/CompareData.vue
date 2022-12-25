@@ -11,6 +11,15 @@
           <div class="card-body">
             <form @submit.prevent="compareData">
               <div class="container-fluid">
+                <div v-if="serverError">
+                  <div
+                    class="alert alert-danger"
+                    v-for="(error, index) in serverError"
+                    :key="index"
+                  >
+                    {{ error }}
+                  </div>
+                </div>
                 <div class="row no-gutters flex-lg-nowrap">
                   <div class="col-md-3 col-xs-12 mb-2">
                     <DatepickerVue
@@ -65,13 +74,23 @@
                   class="row no-gutters flex-lg-nowrap d-flex align-items-center"
                   v-if="!sourceIsImport"
                 >
-                  <div class="col-md-6 col-xs-12 mb-2">
+                  <div class="col-md-6 col-xs-12 mb-2 text-start">
+                    <label
+                      for="input"
+                      :style="
+                        'opacity: .65; color: ' + uploadFileErrorData.fieldColor
+                      "
+                      ><small>{{
+                        uploadFileErrorData.fieldLabel
+                      }}</small></label
+                    >
                     <input
                       type="file"
-                      class="form-control"
+                      :class="' form-control ' + uploadFileErrorData.inputClass"
                       id="input"
                       multiple
                       ref="fileUpload"
+                      @change="validateUploadFile"
                     />
                   </div>
                   <div class="col-md-4 col-xs-12 mb-2">
@@ -117,12 +136,55 @@
         </div>
       </div>
     </div>
+    <div class="row justify-content-md-center mt-4" v-if="dataCompared">
+      <div class="col-xxl-7 col-md-8 col-sm-10 col-xs-12">
+        <table class="table table-striped table-bordered">
+          <col style="width: 10%" />
+          <col style="width: 90%" />
+          <tbody>
+            <tr>
+              <th :class="compareDatasNotInDatabaseCountClass">
+                {{ compareDatasNotInDatabaseCount }}
+              </th>
+              <td class="text-start">
+                Datens&auml;tze die in der Export-Datei, aber nicht in der
+                Datenbank, enthalten sind
+              </td>
+            </tr>
+            <tr>
+              <th :class="compareDatasNotInFileCountClass">
+                {{ compareDatasNotInFileCount }}
+              </th>
+              <td class="text-start">
+                Datens&auml;tze die in der Datenbank, aber nicht in der
+                Export-Datei, enthalten sind
+              </td>
+            </tr>
+            <tr>
+              <th :class="compareDatasWrongCapitalsourceCountClass">
+                {{ compareDatasWrongCapitalsourceCount }}
+              </th>
+              <td class="text-start">
+                passende Datens&auml;tze jedoch mit falscher Kapitalquelle
+              </td>
+            </tr>
+            <tr>
+              <th :class="compareDatasMatchingCountClass">
+                {{ compareDatasMatchingCount }}
+              </th>
+              <td class="text-start">passende Datens&auml;tze</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
 import CompareDataControllerHandler from "@/handler/CompareDataControllerHandler";
 import type { CompareDataParameter } from "@/model/comparedata/CompareDataParameter";
+import type { CompareDataResult } from "@/model/comparedata/CompareDataResult";
 import { generateErrorData, type ErrorData } from "@/tools/views/ErrorData";
 import { validateInputField } from "@/tools/views/ValidateInputField";
 import { defineComponent } from "vue";
@@ -130,8 +192,10 @@ import DatepickerVue from "@/components/Datepicker.vue";
 import CapitalsourceSelectVue from "@/components/capitalsource/CapitalsourceSelect.vue";
 import type { Capitalsource } from "@/model/capitalsource/Capitalsource";
 import type { CompareDataFormat } from "@/model/comparedata/CompareDataFormat";
+import type { CompareData } from "@/model/comparedata/CompareData";
 
 type CompareDataData = {
+  serverError: Array<String> | undefined;
   dataLoaded: boolean;
   dataCompared: boolean;
   startDate: Date | undefined;
@@ -148,11 +212,18 @@ type CompareDataData = {
   capitalsourceErrorMessage: string;
   compareDataFormatIsValid: boolean | null;
   compareDataFormatErrorMessage: string;
+  uploadFileIsValid: boolean | null;
+  uploadFileErrorMessage: string;
+  compareDatasMatching: Array<CompareData> | undefined;
+  compareDatasWrongCapitalsource: Array<CompareData> | undefined;
+  compareDatasNotInFile: Array<CompareData> | undefined;
+  compareDatasNotInDatabase: Array<CompareData> | undefined;
 };
 export default defineComponent({
   name: "CompareData",
   data(): CompareDataData {
     return {
+      serverError: undefined,
       dataLoaded: false,
       dataCompared: false,
       startDate: undefined,
@@ -169,6 +240,12 @@ export default defineComponent({
       capitalsourceErrorMessage: "",
       compareDataFormatIsValid: null,
       compareDataFormatErrorMessage: "",
+      uploadFileIsValid: null,
+      uploadFileErrorMessage: "",
+      compareDatasMatching: undefined,
+      compareDatasWrongCapitalsource: undefined,
+      compareDatasNotInFile: undefined,
+      compareDatasNotInDatabase: undefined,
     };
   },
   mounted() {
@@ -216,6 +293,49 @@ export default defineComponent({
         this.compareDataFormatErrorMessage
       );
     },
+    uploadFileErrorData(): ErrorData {
+      return generateErrorData(
+        this.uploadFileIsValid,
+        "Importdatei",
+        this.uploadFileErrorMessage
+      );
+    },
+    compareDatasMatchingCount(): number {
+      return this.compareDatasMatching ? this.compareDatasMatching.length : 0;
+    },
+    compareDatasMatchingCountClass(): string {
+      return this.compareDatasMatchingCount > 0
+        ? "text-success"
+        : "text-danger";
+    },
+    compareDatasWrongCapitalsourceCount(): number {
+      return this.compareDatasWrongCapitalsource
+        ? this.compareDatasWrongCapitalsource.length
+        : 0;
+    },
+    compareDatasWrongCapitalsourceCountClass(): string {
+      return this.compareDatasWrongCapitalsourceCount > 0
+        ? "text-danger"
+        : "text-success";
+    },
+    compareDatasNotInFileCount(): number {
+      return this.compareDatasNotInFile ? this.compareDatasNotInFile.length : 0;
+    },
+    compareDatasNotInFileCountClass(): string {
+      return this.compareDatasNotInFileCount > 0
+        ? "text-danger"
+        : "text-success";
+    },
+    compareDatasNotInDatabaseCount(): number {
+      return this.compareDatasNotInDatabase
+        ? this.compareDatasNotInDatabase.length
+        : 0;
+    },
+    compareDatasNotInDatabaseCountClass(): string {
+      return this.compareDatasNotInDatabaseCount > 0
+        ? "text-danger"
+        : "text-success";
+    },
   },
   methods: {
     async loadData() {
@@ -234,8 +354,8 @@ export default defineComponent({
       this.sourceIsImport = compareDataParameter.selectedSourceIsImport;
       this.compareDataFormat = compareDataParameter.selectedCompareDataFormat;
       this.compareDataFormats = compareDataParameter.compareDataFormats;
+      this.capitalsourceId = compareDataParameter.selectedCapitalSourceId;
 
-      console.log(compareDataParameter);
       this.dataLoaded = true;
     },
     validateStartDate() {
@@ -258,6 +378,15 @@ export default defineComponent({
       [this.capitalsourceIsValid, this.capitalsourceErrorMessage] =
         validateInputField(this.capitalsourceId, "Kapitalquelle angeben!");
     },
+    validateUploadFile() {
+      const filesElement = this.$refs.fileUpload as HTMLInputElement;
+      const files = filesElement.files;
+      [this.uploadFileIsValid, this.uploadFileErrorMessage] =
+        validateInputField(
+          files != null && files.length === 1,
+          "Datei angeben!"
+        );
+    },
     startDateSelected(date: Date) {
       this.startDate = date;
       this.validateStartDate();
@@ -279,9 +408,61 @@ export default defineComponent({
       this.validateStartDate();
       this.validateCapitalsource();
       this.dataCompared = false;
+      this.serverError = undefined;
 
-      if (this.formIsValid && this.startDate && this.endDate) {
-        this.dataCompared = true;
+      let formIsValid: boolean | null = this.formIsValid;
+      if (!this.sourceIsImport) {
+        this.validateCompareDataFormat();
+        this.validateUploadFile();
+        formIsValid =
+          formIsValid &&
+          this.compareDataFormatIsValid &&
+          this.uploadFileIsValid;
+      }
+
+      if (formIsValid && this.startDate && this.endDate) {
+        const compareDataParameter = {
+          startDate: this.startDate,
+          endDate: this.endDate,
+          selectedCapitalSourceId: this.capitalsourceId,
+          selectedSourceIsImport: this.sourceIsImport,
+        } as CompareDataParameter;
+
+        if (!this.sourceIsImport) {
+          const filesElement = this.$refs.fileUpload as HTMLInputElement;
+          const files = filesElement.files;
+
+          if (files != null && files.length === 1) {
+            const file = files[0];
+            const arrayBuffer = new Uint8Array(await file.arrayBuffer());
+            let fileContents: string = "";
+            for (var i = 0; i < arrayBuffer.byteLength; i++) {
+              fileContents += String.fromCharCode(arrayBuffer[i]);
+            }
+            compareDataParameter.fileContents = btoa(fileContents);
+            compareDataParameter.selectedCompareDataFormat =
+              this.compareDataFormat;
+          }
+        }
+
+        try {
+          const compareDataResult: CompareDataResult =
+            await CompareDataControllerHandler.compareData(
+              compareDataParameter
+            );
+
+          this.compareDatasMatching = compareDataResult.compareDatasMatching;
+          this.compareDatasNotInDatabase =
+            compareDataResult.compareDatasNotInDatabase;
+          this.compareDatasNotInFile = compareDataResult.compareDatasNotInFile;
+          this.compareDatasWrongCapitalsource =
+            compareDataResult.compareDatasWrongCapitalsource;
+
+          this.dataCompared = true;
+        } catch (e) {
+          this.serverError = new Array<string>();
+          this.serverError.push((e as Error).message);
+        }
       }
     },
   },
