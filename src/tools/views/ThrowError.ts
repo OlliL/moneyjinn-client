@@ -33,6 +33,9 @@ export function getError(code: number, variableArray?: Array<string>) {
     case ErrorCode.USERNAME_PASSWORD_WRONG: {
       return "Der angegebene Benutzername oder das Passwort sind falsch!";
     }
+    case ErrorCode.PASSWORD_NOT_MATCHING: {
+      return "Passwort falsch!";
+    }
     case ErrorCode.ACCOUNT_IS_LOCKED: {
       return "Ihr Benutzerkonto wurde gesperrt!";
     }
