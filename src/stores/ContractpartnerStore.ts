@@ -64,6 +64,7 @@ export const useContractpartnerStore = defineStore("contractpartner", {
         (entry) => entry.id === mcs.id
       );
       if (pos !== undefined) this.contractpartner.splice(pos, 1, mcs);
+      this.contractpartner.sort(this.compareContractpartnerByName);
     },
     deleteContractpartner(mcs: Contractpartner) {
       this.contractpartner = this.contractpartner.filter(

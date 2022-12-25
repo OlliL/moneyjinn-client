@@ -61,9 +61,11 @@ import ModalVue from "../Modal.vue";
 import { getError } from "@/tools/views/ThrowError";
 import { mapActions } from "pinia";
 import { usePostingAccountStore } from "@/stores/PostingAccountStore";
+import type { ValidationResult } from "@/model/validation/ValidationResult";
 
 type CreatePostingAccountModalData = {
   mpa: PostingAccount;
+  origMpa: PostingAccount | undefined;
   serverError: Array<String>;
   nameIsValid: boolean | null;
   nameErrorMessage: string;
@@ -73,6 +75,7 @@ export default defineComponent({
   data(): CreatePostingAccountModalData {
     return {
       mpa: {} as PostingAccount,
+      origMpa: undefined,
       serverError: {} as Array<String>,
       nameIsValid: null,
       nameErrorMessage: "",
@@ -101,13 +104,19 @@ export default defineComponent({
     },
   },
   methods: {
-    async _show() {
+    async _show(mpa?: PostingAccount) {
+      this.origMpa = mpa ? mpa : undefined;
       this.resetForm();
       (this.$refs.modalComponent as typeof ModalVue)._show();
     },
     ...mapActions(usePostingAccountStore, ["addPostingAccountToStore"]),
+    ...mapActions(usePostingAccountStore, ["updatePostingAccountInStore"]),
     resetForm() {
-      this.mpa = {} as PostingAccount;
+      if (this.origMpa) {
+        this.mpa = { id: this.origMpa.id, name: this.origMpa.name };
+      } else {
+        this.mpa = {} as PostingAccount;
+      }
       this.nameIsValid = null;
       this.nameErrorMessage = "";
       this.serverError = {} as Array<String>;
@@ -118,9 +127,45 @@ export default defineComponent({
         "Buchungskonto angeben!"
       );
     },
+    handleServerError(validationResult: ValidationResult): boolean {
+      if (!validationResult.result) {
+        this.serverError = new Array<string>();
+        for (let resultItem of validationResult.validationResultItems) {
+          this.serverError.push(getError(resultItem.error));
+        }
+      }
+      return !validationResult.result;
+    },
     async createPostingAccount() {
       this.validateName();
       if (this.formIsValid) {
+        if (this.mpa.id > 0) {
+          //update
+          const validationResult =
+            await PostingAccountControllerHandler.updatePostingAccount(
+              this.mpa
+            );
+          if (!this.handleServerError(validationResult)) {
+            (this.$refs.modalComponent as typeof ModalVue)._hide();
+            this.updatePostingAccountInStore(this.mpa);
+            this.$emit("postingAccountUpdated", this.mpa);
+          }
+        } else {
+          //create
+          const postingAccountValidation =
+            PostingAccountControllerHandler.createPostingAccount(this.mpa);
+          const validationResult = await (
+            await postingAccountValidation
+          ).validationResult;
+
+          if (!this.handleServerError(validationResult)) {
+            this.mpa = (await postingAccountValidation).mpa;
+            (this.$refs.modalComponent as typeof ModalVue)._hide();
+            this.addPostingAccountToStore(this.mpa);
+            this.$emit("postingAccountCreated", this.mpa);
+          }
+        }
+
         const postingAccountValidation =
           PostingAccountControllerHandler.createPostingAccount(this.mpa);
         const validationResult = await (
@@ -142,7 +187,7 @@ export default defineComponent({
     },
   },
   expose: ["_show"],
-  emits: ["postingAccountCreated"],
+  emits: ["postingAccountCreated", "postingAccountUpdated"],
   components: { ModalVue },
 });
 </script>

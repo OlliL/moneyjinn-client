@@ -227,23 +227,16 @@
                   <hr class="dropdown-divider" />
                 </li>
                 <li v-if="userIsAdmin">
-                  <a class="dropdown-item" href="#">Systemeinstellungen</a>
-                </li>
-                <li v-if="userIsAdmin">
                   <a class="dropdown-item" href="#">Benutzerkonten</a>
                 </li>
                 <li v-if="userIsAdmin">
                   <a class="dropdown-item" href="#">Benutzergruppen</a>
                 </li>
                 <li v-if="userIsAdmin">
-                  <a class="dropdown-item" href="#">Sprachen</a>
-                </li>
-                <li v-if="userIsAdmin">
-                  <span
+                  <router-link
                     class="dropdown-item"
-                    role="button"
-                    @click="showCreatePostingAccountModal"
-                    >Buchungskonten</span
+                    :to="{ name: Routes.ListPostingAccounts }"
+                    >Buchungskonten</router-link
                   >
                 </li>
               </ul>
