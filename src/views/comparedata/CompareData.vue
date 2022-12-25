@@ -1,4 +1,7 @@
 <template>
+  <DeleteMoneyflowModalVue ref="deleteModal" @moneyflow-deleted="compareData" />
+  <EditMoneyflowModalVue ref="editModal" @moneyflow-updated="compareData" />
+
   <div class="container-fluid text-center">
     <div class="row justify-content-md-center">
       <div class="col-xs-12 mb-4">
@@ -137,43 +140,46 @@
       </div>
     </div>
     <div class="row justify-content-md-center mt-4" v-if="dataCompared">
-      <div class="col-xxl-7 col-md-8 col-sm-10 col-xs-12">
+      <div class="col-xxl-10 col-md-12 col-sm-12 col-xs-12">
         <table class="table table-striped table-bordered">
-          <col style="width: 10%" />
+          <col style="width: 5%" />
+          <col style="width: 5%" />
           <col style="width: 90%" />
           <tbody>
-            <tr>
-              <th :class="compareDatasNotInDatabaseCountClass">
-                {{ compareDatasNotInDatabaseCount }}
-              </th>
-              <td class="text-start">
-                Datens&auml;tze die in der Export-Datei, aber nicht in der
-                Datenbank, enthalten sind
-              </td>
-            </tr>
-            <tr>
-              <th :class="compareDatasNotInFileCountClass">
-                {{ compareDatasNotInFileCount }}
-              </th>
-              <td class="text-start">
-                Datens&auml;tze die in der Datenbank, aber nicht in der
-                Export-Datei, enthalten sind
-              </td>
-            </tr>
-            <tr>
-              <th :class="compareDatasWrongCapitalsourceCountClass">
-                {{ compareDatasWrongCapitalsourceCount }}
-              </th>
-              <td class="text-start">
-                passende Datens&auml;tze jedoch mit falscher Kapitalquelle
-              </td>
-            </tr>
-            <tr>
-              <th :class="compareDatasMatchingCountClass">
-                {{ compareDatasMatchingCount }}
-              </th>
-              <td class="text-start">passende Datens&auml;tze</td>
-            </tr>
+            <CompareDataResultGroupVue
+              comment="Datens&auml;tze die in der Export-Datei, aber nicht in der Datenbank, enthalten sind"
+              :compare-data="compareDatasNotInDatabase"
+              compare-data-key="notInDatabase"
+              :amount-class="compareDatasNotInDatabaseCountClass"
+              :capitalsource-comment="capitalsourceComment"
+            />
+            <CompareDataResultGroupVue
+              comment="Datensätze die in der Datenbank, aber nicht in der Export-Datei, enthalten sind"
+              :compare-data="compareDatasNotInFile"
+              compare-data-key="notInFile"
+              :amount-class="compareDatasNotInFileCountClass"
+              :capitalsource-comment="capitalsourceComment"
+              @delete-moneyflow="deleteMoneyflow"
+              @edit-moneyflow="editMoneyflow"
+            />
+            <CompareDataResultGroupVue
+              comment="passende Datens&auml;tze jedoch mit falscher Kapitalquelle"
+              :compare-data="compareDatasWrongCapitalsource"
+              compare-data-key="wrongCapitalsource"
+              :amount-class="compareDatasWrongCapitalsourceCountClass"
+              :capitalsource-comment="capitalsourceComment"
+              @delete-moneyflow="deleteMoneyflow"
+              @edit-moneyflow="editMoneyflow"
+            />
+            <CompareDataResultGroupVue
+              comment="passende Datens&auml;tze"
+              :compare-data="compareDatasMatching"
+              compare-data-key="matching"
+              :amount-class="compareDatasMatchingCountClass"
+              :capitalsource-comment="capitalsourceComment"
+              @delete-moneyflow="deleteMoneyflow"
+              @edit-moneyflow="editMoneyflow"
+            />
           </tbody>
         </table>
       </div>
@@ -193,6 +199,11 @@ import CapitalsourceSelectVue from "@/components/capitalsource/CapitalsourceSele
 import type { Capitalsource } from "@/model/capitalsource/Capitalsource";
 import type { CompareDataFormat } from "@/model/comparedata/CompareDataFormat";
 import type { CompareData } from "@/model/comparedata/CompareData";
+import CompareDataResultGroupVue from "@/components/comparedata/CompareDataResultGroup.vue";
+import MoneyflowControllerHandler from "@/handler/MoneyflowControllerHandler";
+import DeleteMoneyflowModalVue from "@/components/moneyflow/DeleteMoneyflowModal.vue";
+import EditMoneyflowModalVue from "@/components/moneyflow/EditMoneyflowModal.vue";
+import { useCapitalsourceStore } from "@/stores/CapitalsourceStore";
 
 type CompareDataData = {
   serverError: Array<String> | undefined;
@@ -201,6 +212,7 @@ type CompareDataData = {
   startDate: Date | undefined;
   endDate: Date | undefined;
   capitalsourceId: number;
+  capitalsourceComment: string;
   sourceIsImport: boolean;
   compareDataFormat: number;
   compareDataFormats: Array<CompareDataFormat>;
@@ -229,6 +241,7 @@ export default defineComponent({
       startDate: undefined,
       endDate: undefined,
       capitalsourceId: 0,
+      capitalsourceComment: "",
       sourceIsImport: true,
       compareDataFormat: 0,
       compareDataFormats: {} as Array<CompareDataFormat>,
@@ -355,6 +368,15 @@ export default defineComponent({
       this.compareDataFormat = compareDataParameter.selectedCompareDataFormat;
       this.compareDataFormats = compareDataParameter.compareDataFormats;
       this.capitalsourceId = compareDataParameter.selectedCapitalSourceId;
+      if (this.capitalsourceId) {
+        const capitalsourceStore = useCapitalsourceStore();
+        const capitalsource = capitalsourceStore.getCapitalsource(
+          this.capitalsourceId
+        );
+        if (capitalsource) {
+          this.capitalsourceComment = capitalsource.comment;
+        }
+      }
 
       this.dataLoaded = true;
     },
@@ -398,8 +420,10 @@ export default defineComponent({
     onCapitalsourceSelected(capitalsource: Capitalsource) {
       if (capitalsource) {
         this.capitalsourceId = capitalsource.id;
+        this.capitalsourceComment = capitalsource.comment;
       } else {
         this.capitalsourceId = 0;
+        this.capitalsourceComment = "";
       }
       this.validateCapitalsource();
     },
@@ -465,7 +489,21 @@ export default defineComponent({
         }
       }
     },
+    async deleteMoneyflow(id: number) {
+      const mmf = await MoneyflowControllerHandler.fetchMoneyflow(id);
+      (this.$refs.deleteModal as typeof DeleteMoneyflowModalVue)._show(mmf);
+    },
+    async editMoneyflow(id: number) {
+      const mmf = await MoneyflowControllerHandler.fetchMoneyflow(id);
+      (this.$refs.editModal as typeof EditMoneyflowModalVue)._show(mmf);
+    },
   },
-  components: { DatepickerVue, CapitalsourceSelectVue },
+  components: {
+    DatepickerVue,
+    CapitalsourceSelectVue,
+    CompareDataResultGroupVue,
+    DeleteMoneyflowModalVue,
+    EditMoneyflowModalVue,
+  },
 });
 </script>
