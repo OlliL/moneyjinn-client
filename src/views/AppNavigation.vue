@@ -230,7 +230,11 @@
                   <a class="dropdown-item" href="#">Benutzerkonten</a>
                 </li>
                 <li v-if="userIsAdmin">
-                  <a class="dropdown-item" href="#">Benutzergruppen</a>
+                  <router-link
+                    class="dropdown-item"
+                    :to="{ name: Routes.ListGroups }"
+                    >Benutzergruppen</router-link
+                  >
                 </li>
                 <li v-if="userIsAdmin">
                   <router-link

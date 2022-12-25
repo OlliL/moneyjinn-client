@@ -51,6 +51,9 @@ export function getError(code: number, variableArray?: Array<string>) {
     case ErrorCode.NAME_ALREADY_EXISTS: {
       return "Der Name existiert bereits!";
     }
+    case ErrorCode.GROUP_IN_USE: {
+      return "Eine Gruppe darf nicht gelöscht werden, solange Benutzer dieser Gruppe zugewiesen sind oder waren!";
+    }
     case ErrorCode.ACCOUNT_NUMBER_TO_LONG: {
       return "Die IBAN darf nicht mehr als 34 Stellen haben!";
     }

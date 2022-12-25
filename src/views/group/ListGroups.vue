@@ -1,20 +1,20 @@
 <template>
-  <CreatePreDefMoneyflowModalVue
-    ref="createPreDefMoneyflowModalList"
+  <CreateGroupModalVue
+    ref="createGroupModalList"
     id-suffix="List"
-    @pre-def-moneyflow-created="preDefMoneyflowCreated"
-    @pre-def-moneyflow-updated="preDefMoneyflowUpdated"
+    @group-created="groupCreated"
+    @group-updated="groupUpdated"
   />
-  <DeletePreDefMoneyflowModalVue
-    ref="deletePreDefMoneyflowModalList"
+  <DeleteGroupModalVue
+    ref="deleteGroupModalList"
     id-suffix="List"
-    @pre-def-moneyflow-deleted="preDefMoneyflowDeleted"
+    @group-deleted="groupDeleted"
   />
 
   <div class="container-fluid text-center">
     <div class="row justify-content-md-center">
       <div class="col-xs-12 mb-4">
-        <h4>Vordefinierte Geldbewegungen</h4>
+        <h4>Benutzergruppen</h4>
       </div>
     </div>
     <div class="row justify-content-md-center mb-4">
@@ -25,7 +25,7 @@
               <button
                 type="button"
                 class="btn btn-primary"
-                @click="showCreatePreDefMoneyflowModal"
+                @click="showCreateGroupModal"
               >
                 Neu
               </button>
@@ -63,26 +63,19 @@
       </div>
     </div>
     <div class="row justify-content-md-center">
-      <div class="col-md-9 col-xs-12">
+      <div class="col-md-3 col-xs-12">
         <table class="table table-striped table-bordered table-hover">
           <thead>
             <tr>
-              <th>Betrag</th>
-              <th>Vertragspartner</th>
-              <th>Kommentar</th>
-              <th>Buchungskonto</th>
-              <th>Kapitalquelle</th>
-              <th>1x</th>
-              <th>angelegt am</th>
-              <th>verwendet am</th>
+              <th>Name</th>
               <th colspan="2"></th>
             </tr>
-            <ListPreDefMoneyflowRowVue
-              v-for="mpm in preDefMoneyflows"
-              :key="mpm.id"
-              :mpm="mpm"
-              @edit-pre-def-moneyflow="editPreDefMoneyflow"
-              @delete-pre-def-moneyflow="deletePreDefMoneyflow"
+            <ListGroupRowVue
+              v-for="group in groups"
+              :key="group.id"
+              :group="group"
+              @edit-group="editGroup"
+              @delete-group="deleteGroup"
             />
           </thead>
           <tbody></tbody>
@@ -95,20 +88,20 @@
 <script lang="ts">
 import router, { Routes } from "@/router";
 import { defineComponent } from "vue";
-import type { PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
-import PreDefMoneyflowControllerHandler from "@/handler/PreDefMoneyflowControllerHandler";
-import ListPreDefMoneyflowRowVue from "@/components/predefmoneyflow/ListPreDefMoneyflowRow.vue";
-import CreatePreDefMoneyflowModalVue from "@/components/predefmoneyflow/CreatePreDefMoneyflowModal.vue";
-import DeletePreDefMoneyflowModalVue from "@/components/predefmoneyflow/DeletePreDefMoneyflowModal.vue";
+import type { Group } from "@/model/group/Group";
+import GroupControllerHandler from "@/handler/GroupControllerHandler";
+import ListGroupRowVue from "@/components/group/ListGroupRow.vue";
+import CreateGroupModalVue from "@/components/group/CreateGroupModal.vue";
+import DeleteGroupModalVue from "@/components/group/DeleteGroupModal.vue";
 
 export default defineComponent({
-  name: "ListPreDefMoneyflows",
+  name: "ListGroups",
   data() {
     return {
       dataLoaded: false,
       letters: {} as Array<string>,
-      preDefMoneyflows: {} as Array<PreDefMoneyflow>,
-      allPreDefMoneyflows: {} as Array<PreDefMoneyflow>,
+      groups: {} as Array<Group>,
+      allGroups: {} as Array<Group>,
     };
   },
   props: {
@@ -123,17 +116,14 @@ export default defineComponent({
   computed: {},
   methods: {
     async reloadView() {
-      this.allPreDefMoneyflows =
-        await PreDefMoneyflowControllerHandler.fetchAllPreDefMoneyflow();
+      this.allGroups = await GroupControllerHandler.fetchAllGroup();
 
-      this.allPreDefMoneyflows.sort((a, b) => {
-        return a.contractpartnerName
-          .toUpperCase()
-          .localeCompare(b.contractpartnerName.toUpperCase());
+      this.allGroups.sort((a, b) => {
+        return a.name.toUpperCase().localeCompare(b.name.toUpperCase());
       });
 
-      const letters = this.allPreDefMoneyflows.map((entry) =>
-        entry.contractpartnerName.substring(0, 1).toUpperCase()
+      const letters = this.allGroups.map((entry) =>
+        entry.name.substring(0, 1).toUpperCase()
       );
       const uniqueLetters = letters
         .filter((v, i, a) => a.indexOf(v) === i)
@@ -145,11 +135,10 @@ export default defineComponent({
     async loadData(letter: string) {
       this.dataLoaded = false;
       if (letter === "") {
-        this.preDefMoneyflows = this.allPreDefMoneyflows;
+        this.groups = this.allGroups;
       } else {
-        this.preDefMoneyflows = this.allPreDefMoneyflows.filter(
-          (entry) =>
-            entry.contractpartnerName.substring(0, 1).toUpperCase() === letter
+        this.groups = this.allGroups.filter(
+          (entry) => entry.name.substring(0, 1).toUpperCase() === letter
         );
       }
 
@@ -157,43 +146,38 @@ export default defineComponent({
     },
     selectLetter(letter: string) {
       router.push({
-        name: Routes.ListPreDefMoneyflows,
+        name: Routes.ListGroups,
         params: { letter: letter },
       });
       this.loadData(letter);
     },
-    showCreatePreDefMoneyflowModal() {
-      (
-        this.$refs
-          .createPreDefMoneyflowModalList as typeof CreatePreDefMoneyflowModalVue
-      )._show();
+    showCreateGroupModal() {
+      (this.$refs.createGroupModalList as typeof CreateGroupModalVue)._show();
     },
-    preDefMoneyflowCreated() {
+    groupCreated() {
       this.reloadView();
     },
-    editPreDefMoneyflow(mpm: PreDefMoneyflow) {
-      (
-        this.$refs
-          .createPreDefMoneyflowModalList as typeof CreatePreDefMoneyflowModalVue
-      )._show(mpm);
+    editGroup(group: Group) {
+      (this.$refs.createGroupModalList as typeof CreateGroupModalVue)._show(
+        group
+      );
     },
-    preDefMoneyflowUpdated() {
+    groupUpdated() {
       this.reloadView();
     },
-    deletePreDefMoneyflow(mpm: PreDefMoneyflow) {
-      (
-        this.$refs
-          .deletePreDefMoneyflowModalList as typeof DeletePreDefMoneyflowModalVue
-      )._show(mpm);
+    deleteGroup(group: Group) {
+      (this.$refs.deleteGroupModalList as typeof DeleteGroupModalVue)._show(
+        group
+      );
     },
-    preDefMoneyflowDeleted() {
+    groupDeleted() {
       this.reloadView();
     },
   },
   components: {
-    ListPreDefMoneyflowRowVue,
-    CreatePreDefMoneyflowModalVue,
-    DeletePreDefMoneyflowModalVue,
+    ListGroupRowVue,
+    CreateGroupModalVue,
+    DeleteGroupModalVue,
   },
 });
 </script>

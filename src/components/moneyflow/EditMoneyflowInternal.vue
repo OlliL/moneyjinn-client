@@ -235,7 +235,7 @@ import { toFixed } from "@/tools/math";
 import { mapActions } from "pinia";
 
 type EditMoneyflowData = {
-  serverError: Array<String> | undefined;
+  serverError: Array<string> | undefined;
   mmf: Moneyflow;
   amount: number | undefined;
   bookingdateIsValid: boolean | null;

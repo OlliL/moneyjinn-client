@@ -6,13 +6,14 @@ import LoginViewVue from "@/views/LoginView.vue";
 import ListReportsVue from "@/views/reports/ListReports.vue";
 import CreateMoneyflowVue from "@/views/moneyflow/CreateMoneyflow.vue";
 import ListCapitalsourcesVue from "@/views/capitalsource/ListCapitalsources.vue";
-import ListPostingAccountsVue from "@/views/postingaccount/ListPostingAccounts.vue";
 import ListContractpartnersVue from "@/views/contractpartner/ListContractpartners.vue";
-import ImportMoneyflowsVue from "@/views/moneyflow/ImportMoneyflows.vue";
-import ListMonthlySettlementsVue from "@/views/monthlysettlement/ListMonthlySettlements.vue";
-import SearchMoneyflowsVue from "@/views/moneyflow/SearchMoneyflows.vue";
-import ListPreDefMoneyflowsVue from "@/views/predefmoneyflow/ListPreDefMoneyflows.vue";
 import ListEtfDepotVue from "@/views/etf/ListEtfDepot.vue";
+import ListGroupsVue from "@/views/group/ListGroups.vue";
+import ListMonthlySettlementsVue from "@/views/monthlysettlement/ListMonthlySettlements.vue";
+import ListPostingAccountsVue from "@/views/postingaccount/ListPostingAccounts.vue";
+import ListPreDefMoneyflowsVue from "@/views/predefmoneyflow/ListPreDefMoneyflows.vue";
+import ImportMoneyflowsVue from "@/views/moneyflow/ImportMoneyflows.vue";
+import SearchMoneyflowsVue from "@/views/moneyflow/SearchMoneyflows.vue";
 import ImportReceiptsVue from "@/views/receipt/ImportReceipts.vue";
 import ShowTrendsVue from "@/views/reports/ShowTrends.vue";
 import ShowReportingVue from "@/views/reports/ShowReporting.vue";
@@ -25,11 +26,12 @@ export enum Routes {
   ListReports = "listReports",
   CreateMoneyflow = "createMoneyflow",
   ListCapitalsources = "listCapitalsources",
-  ListPostingAccounts = "listPostingAccounts",
   ListContractpartners = "listContractpartners",
-  ListMonthlySettlements = "listMonthlySettlements",
-  ListPreDefMoneyflows = "listPreDefMoneyflows",
   ListEtfDepot = "listEtfDepot",
+  ListGroups = "listGroups",
+  ListMonthlySettlements = "listMonthlySettlements",
+  ListPostingAccounts = "listPostingAccounts",
+  ListPreDefMoneyflows = "listPreDefMoneyflows",
   ImportMoneyflows = "importMoneyflows",
   ImportReceipts = "importReceipts",
   SearchMoneyflows = "searchMoneyflows",
@@ -101,6 +103,12 @@ const router = createRouter({
           path: "listContractpartners/:letter?",
           name: Routes.ListContractpartners,
           component: ListContractpartnersVue,
+          props: true,
+        },
+        {
+          path: "listGroups/:letter?",
+          name: Routes.ListGroups,
+          component: ListGroupsVue,
           props: true,
         },
         {
