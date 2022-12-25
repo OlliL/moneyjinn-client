@@ -95,7 +95,7 @@ export default defineComponent({
       return formatDate(this.mmf.bookingDate);
     },
     invoicedateString() {
-      return formatDate(this.mmf.invoiceDate);
+      return this.mmf.invoiceDate ? formatDate(this.mmf.invoiceDate) : "";
     },
     amountClass(): string {
       return redIfNegativeStart(this.mmf.amount);

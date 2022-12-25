@@ -1,5 +1,7 @@
 import AbstractControllerHandler from "@/handler/AbstractControllerHandler";
 import { ErrorCode } from "@/model/ErrorCode";
+import type { ErrorResponse } from "@/model/rest/ErrorResponse";
+import type { ChangePasswordRequest } from "@/model/rest/user/ChangePasswordRequest";
 import { LoginRequest } from "@/model/rest/user/LoginRequest";
 import type { LoginResponse } from "@/model/rest/user/LoginResponse";
 import {
@@ -47,6 +49,29 @@ class UserControllerHandler extends AbstractControllerHandler {
     };
 
     userSessionStore.setUserSession(userSession);
+  }
+
+  async changePassword(password: string) {
+    const usecase = "changePassword";
+    const request: ChangePasswordRequest = {
+      changePasswordRequest: { password: password },
+    };
+
+    const response = await super.post(
+      request,
+      UserControllerHandler.CONTROLLER,
+      usecase
+    );
+
+    if (!response.ok) {
+      throw new Error(response.statusText);
+    }
+
+    const errorResponse = (await response.json()) as ErrorResponse;
+
+    if (errorResponse.error) {
+      throwError(errorResponse.error.code);
+    }
   }
 }
 

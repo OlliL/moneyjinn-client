@@ -16,6 +16,7 @@ import ImportReceiptsVue from "@/views/receipt/ImportReceipts.vue";
 import ShowTrendsVue from "@/views/reports/ShowTrends.vue";
 import ShowReportingVue from "@/views/reports/ShowReporting.vue";
 import CompareDataVue from "@/views/comparedata/CompareData.vue";
+import ChangePasswordVue from "@/views/user/ChangePassword.vue";
 
 export enum Routes {
   Login = "login",
@@ -33,6 +34,7 @@ export enum Routes {
   ShowTrends = "showTrends",
   ShowReporting = "showReporting",
   CompareData = "compareData",
+  ChangePassword = "changePassword",
 }
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -124,6 +126,11 @@ const router = createRouter({
           path: "compareData",
           name: Routes.CompareData,
           component: CompareDataVue,
+        },
+        {
+          path: "changePassword",
+          name: Routes.ChangePassword,
+          component: ChangePasswordVue,
         },
       ],
     },

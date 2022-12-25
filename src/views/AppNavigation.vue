@@ -217,8 +217,10 @@
               </a>
               <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                 <li>
-                  <a class="dropdown-item" href="#"
-                    >pers&ouml;nliche Einstellungen</a
+                  <router-link
+                    class="dropdown-item"
+                    :to="{ name: Routes.ChangePassword }"
+                    >Passwortwechsel</router-link
                   >
                 </li>
                 <li v-if="userIsAdmin">
