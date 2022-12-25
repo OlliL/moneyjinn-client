@@ -95,7 +95,9 @@
 <script lang="ts">
 import { generateErrorData, type ErrorData } from "@/tools/views/ErrorData";
 import { validateInputField } from "@/tools/views/ValidateInputField";
+import UserControllerHandler from "@/handler/UserControllerHandler";
 import { defineComponent } from "vue";
+import router, { Routes } from "@/router";
 
 type ChangePasswordData = {
   serverError: Array<String> | undefined;
@@ -183,10 +185,18 @@ export default defineComponent({
 
       if (this.formIsValid) {
         if (this.password1 != this.password2) {
-          alert("neues Passwort ungleich");
+          this.serverError = new Array<string>();
+          this.serverError.push("Die neuen Passwörter stimmen nicht überein!");
+          return;
         }
         try {
-          alert("ff");
+          await UserControllerHandler.changePassword(
+            this.passwordOld,
+            this.password1
+          );
+          router.push({
+            name: Routes.Home,
+          });
         } catch (e) {
           this.serverError = new Array<string>();
           this.serverError.push((e as Error).message);

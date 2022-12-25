@@ -51,13 +51,13 @@ class UserControllerHandler extends AbstractControllerHandler {
     userSessionStore.setUserSession(userSession);
   }
 
-  async changePassword(password: string) {
+  async changePassword(oldPassword: string, password: string) {
     const usecase = "changePassword";
     const request: ChangePasswordRequest = {
-      changePasswordRequest: { password: password },
+      changePasswordRequest: { password: password, oldPassword: oldPassword },
     };
 
-    const response = await super.post(
+    const response = await super.put(
       request,
       UserControllerHandler.CONTROLLER,
       usecase
@@ -65,6 +65,10 @@ class UserControllerHandler extends AbstractControllerHandler {
 
     if (!response.ok) {
       throw new Error(response.statusText);
+    }
+
+    if (response.status === 204) {
+      return;
     }
 
     const errorResponse = (await response.json()) as ErrorResponse;
