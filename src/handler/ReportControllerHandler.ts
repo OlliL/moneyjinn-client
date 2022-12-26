@@ -21,6 +21,7 @@ import type { ShowMonthlyReportGraphResponse } from "@/model/rest/report/ShowMon
 import type { ShowYearlyReportGraphRequest } from "@/model/rest/report/ShowYearlyReportGraphRequest";
 import type { ShowYearlyReportGraphResponse } from "@/model/rest/report/ShowYearlyReportGraphResponse";
 import { mapPostingAccountAmountTransportToModel } from "./mapper/PostingAccountAmountTransportMapper";
+import type { PostingAccount } from "@/model/postingaccount/PostingAccount";
 
 class ReportControllerHandler extends AbstractControllerHandler {
   private static CONTROLLER = "report";
@@ -197,12 +198,18 @@ class ReportControllerHandler extends AbstractControllerHandler {
     const postingAccountStore = usePostingAccountStore();
     const postingAccounts = postingAccountStore.getPostingAccount;
 
-    const postingAccountsYes = postingAccounts.filter((pa) => {
-      return !innerResponse.postingAccountIdsNo.includes(pa.id);
-    });
-    const postingAccountsNo = postingAccounts.filter((pa) => {
-      return innerResponse.postingAccountIdsNo.includes(pa.id);
-    });
+    let postingAccountsYes: Array<PostingAccount> | undefined;
+    let postingAccountsNo: Array<PostingAccount> | undefined;
+    if (innerResponse.postingAccountIdsNo) {
+      postingAccountsYes = postingAccounts.filter((pa) => {
+        return !innerResponse.postingAccountIdsNo.includes(pa.id);
+      });
+      postingAccountsNo = postingAccounts.filter((pa) => {
+        return innerResponse.postingAccountIdsNo.includes(pa.id);
+      });
+    } else {
+      postingAccountsYes = postingAccounts;
+    }
 
     const reportingParameter: ReportingParameter = {
       startDate: new Date(innerResponse.minDate),
@@ -227,8 +234,9 @@ class ReportControllerHandler extends AbstractControllerHandler {
     innerRequest.endDate = reportingParameter.endDate.toISOString();
     innerRequest.postingAccountIdsYes =
       reportingParameter.selectedPostingAccounts.map((mpa) => mpa.id);
-    innerRequest.postingAccountIdsNo =
-      reportingParameter.unselectedPostingAccounts?.map((mpa) => mpa.id);
+    if (reportingParameter.unselectedPostingAccounts)
+      innerRequest.postingAccountIdsNo =
+        reportingParameter.unselectedPostingAccounts.map((mpa) => mpa.id);
 
     const response = await super.put(
       request,
@@ -266,8 +274,9 @@ class ReportControllerHandler extends AbstractControllerHandler {
     innerRequest.endDate = reportingParameter.endDate.toISOString();
     innerRequest.postingAccountIdsYes =
       reportingParameter.selectedPostingAccounts.map((mpa) => mpa.id);
-    innerRequest.postingAccountIdsNo =
-      reportingParameter.unselectedPostingAccounts?.map((mpa) => mpa.id);
+    if (reportingParameter.unselectedPostingAccounts)
+      innerRequest.postingAccountIdsNo =
+        reportingParameter.unselectedPostingAccounts.map((mpa) => mpa.id);
 
     const response = await super.put(
       request,

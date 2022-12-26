@@ -8,8 +8,8 @@
       {{ error }}
     </div>
   </div>
-  <div class="row no-gutters flex-lg-nowrap mb-4">
-    <div class="col-md-2 col-xs-12">
+  <div class="row no-gutters flex-lg-nowrap mb-2">
+    <div class="col-md-2 col-xs-12 mb-2">
       <DatepickerVue
         id="bookingdate"
         :label="bookingdateErrorData.fieldLabel"
@@ -19,7 +19,7 @@
         @date-selected="bookingdateSelected"
       />
     </div>
-    <div class="col-md-2 col-xs-12">
+    <div class="col-md-2 col-xs-12 mb-2">
       <DatepickerVue
         id="invoicedate"
         label="Rechnungsdatum"
@@ -27,7 +27,7 @@
         @date-selected="invoicedateSelected"
       />
     </div>
-    <div class="col-md-4 col-xs-12">
+    <div class="col-md-4 col-xs-12 mb-2">
       <ContractpartnerSelectVue
         :field-color="contractpartnerErrorData.fieldColor"
         :field-label="contractpartnerErrorData.fieldLabel"
@@ -39,7 +39,7 @@
       />
     </div>
 
-    <div class="col-md-4 col-xs-12">
+    <div class="col-md-4 col-xs-12 mb-2">
       <CapitalsourceSelectVue
         :field-color="capitalsourceErrorData.fieldColor"
         :field-label="capitalsourceErrorData.fieldLabel"
@@ -52,8 +52,8 @@
     </div>
   </div>
 
-  <div class="row no-gutters flex-lg-nowrap mb-4">
-    <div class="col-md-2 col-xs-12">
+  <div class="row no-gutters flex-lg-nowrap mb-2">
+    <div class="col-md-2 col-xs-12 mb-2">
       <div class="input-group">
         <div class="form-floating">
           <input
@@ -77,7 +77,7 @@
       </div>
     </div>
     <div class="col-md-7" v-show="!showMoneyflowFields"></div>
-    <div class="col-md-4 col-xs-12" v-show="showMoneyflowFields">
+    <div class="col-md-4 col-xs-12 mb-2" v-show="showMoneyflowFields">
       <div class="form-floating">
         <input
           v-model="mmf.comment"
@@ -93,7 +93,7 @@
         >
       </div>
     </div>
-    <div class="col-md-3 col-xs-12" v-show="showMoneyflowFields">
+    <div class="col-md-3 col-xs-12 mb-2" v-show="showMoneyflowFields">
       <PostingAccountSelectVue
         :field-color="postingaccountErrorData.fieldColor"
         :field-label="postingaccountErrorData.fieldLabel"
@@ -104,7 +104,7 @@
       />
     </div>
     <div
-      class="col-md-3 col-xs-12 d-flex align-items-center justify-content-center"
+      class="col-md-3 col-xs-12 mb-2 d-flex align-items-center justify-content-center"
     >
       <div class="btn-group mx-2" role="group">
         <input
@@ -133,7 +133,7 @@
           ><small>privat</small></label
         >
       </div>
-      <div class="btn-group mx-2" role="group">
+      <div class="btn-group mx-2 mb-2" role="group">
         <input
           type="radio"
           class="btn-check"

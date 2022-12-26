@@ -55,7 +55,10 @@
                     <select
                       v-model="capitalsourceIds"
                       id="capitalsourceIds2"
-                      class="form-select form-control"
+                      :class="
+                        'form-select form-control ' +
+                        capitalsourceErrorData.inputClass
+                      "
                       multiple
                       size="4"
                     >
@@ -341,7 +344,7 @@ export default defineComponent({
     validateCapitalsource() {
       [this.capitalsourceIsValid, this.capitalsourceErrorMessage] =
         validateInputField(
-          this.capitalsourceIds.length,
+          this.capitalsourceIds ? this.capitalsourceIds.length : false,
           "Kapitalquellen angeben!"
         );
     },

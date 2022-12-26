@@ -472,7 +472,6 @@ export default defineComponent({
 
         if (this.formForCreationIsValid && this.validatePasswordsAreEqual()) {
           this.user.userPassword = this.password1;
-          console.log(this.user);
           const userValidation = await UserControllerHandler.createUser(
             this.user
           );

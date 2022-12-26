@@ -201,7 +201,7 @@
                   class="row no-gutters flex-lg-nowrap justify-content-md-center mt-3"
                   v-show="singlePostingAccounts"
                 >
-                  <div class="col-6">
+                  <div class="col-12 col-sm-6">
                     <PostingAccountSelectVue
                       :field-color="postingAccountErrorData.fieldColor"
                       :field-label="postingAccountErrorData.fieldLabel"
@@ -475,13 +475,19 @@ export default defineComponent({
       const minDate = reportingParameter.startDate;
       const maxDate = reportingParameter.endDate;
 
-      this.startDateMonth = minDate;
-      this.startDateYear = minDate;
-      this.endDateMonth = maxDate;
-      this.endDateYear = maxDate;
+      if (minDate) {
+        this.startDateMonth = new Date(minDate.getTime());
+        this.startDateYear = new Date(minDate.getTime());
+      }
+      if (maxDate) {
+        this.endDateMonth = new Date(maxDate.getTime());
+        this.endDateYear = new Date(maxDate.getTime());
+      }
 
       this.postingAccountsYes = reportingParameter.selectedPostingAccounts;
-      this.postingAccountsNo = reportingParameter.unselectedPostingAccounts;
+      this.postingAccountsNo = reportingParameter.unselectedPostingAccounts
+        ? reportingParameter.unselectedPostingAccounts
+        : new Array();
       this.postingAccounts = this.postingAccountsYes.concat(
         this.postingAccountsNo
       );
