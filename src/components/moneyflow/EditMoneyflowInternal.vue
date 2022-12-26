@@ -133,7 +133,7 @@
           ><small>privat</small></label
         >
       </div>
-      <div class="btn-group mx-2 mb-2" role="group">
+      <div class="btn-group mx-2" role="group">
         <input
           type="radio"
           class="btn-check"
