@@ -88,8 +88,8 @@ export default defineComponent({
     },
     title(): string {
       return this.origUser === undefined
-        ? "Benutzer hinzufügen"
-        : "Benutzer bearbeiten";
+        ? "Benutzerkonto hinzufügen"
+        : "Benutzerkonto bearbeiten";
     },
     nameErrorData(): ErrorData {
       return generateErrorData(this.nameIsValid, "Name", this.nameErrorMessage);
