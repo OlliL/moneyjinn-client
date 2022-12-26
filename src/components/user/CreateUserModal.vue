@@ -17,11 +17,130 @@
               <div class="form-floating">
                 <input
                   v-model="user.userName"
-                  :id="'userName' + idSuffix"
+                  id="userName"
                   type="text"
-                  class="form-control"
+                  @input="validateName"
+                  :class="'form-control ' + nameErrorData.inputClass"
                 />
-                <label :for="'userName' + idSuffix">Name</label>
+                <label
+                  for="userName"
+                  :style="'color: ' + nameErrorData.fieldColor"
+                  >{{ nameErrorData.fieldLabel }}</label
+                >
+              </div>
+            </div>
+          </div>
+          <div class="row pt-2">
+            <div class="col-xs-12">
+              <div class="form-floating">
+                <input
+                  v-model="password1"
+                  id="password1"
+                  type="password"
+                  @input="validatePassword1"
+                  :class="'form-control ' + password1ErrorData.inputClass"
+                />
+                <label
+                  :for="password1"
+                  :style="'color: ' + password1ErrorData.fieldColor"
+                  >{{ password1ErrorData.fieldLabel }}</label
+                >
+              </div>
+            </div>
+          </div>
+          <div class="row pt-2">
+            <div class="col-xs-12">
+              <div class="form-floating">
+                <input
+                  v-model="password2"
+                  id="password2"
+                  type="password"
+                  @input="validatePassword2"
+                  :class="'form-control ' + password2ErrorData.inputClass"
+                />
+                <label
+                  :for="password2"
+                  :style="'color: ' + password2ErrorData.fieldColor"
+                  >{{ password2ErrorData.fieldLabel }}</label
+                >
+              </div>
+            </div>
+          </div>
+          <div class="row pt-2">
+            <div class="col-xs-12">
+              <div class="form-floating">
+                <select
+                  v-model="user.userCanLogin"
+                  id="userCanLogin"
+                  class="form-select form-control"
+                >
+                  <option value="false">Nein</option>
+                  <option value="true">Ja</option>
+                </select>
+
+                <label for="groupUse">Anmeldung erlaubt</label>
+              </div>
+            </div>
+          </div>
+          <div class="row pt-2">
+            <div class="col-xs-12">
+              <div class="form-floating">
+                <select
+                  v-model="user.userIsAdmin"
+                  id="userIsAdmin"
+                  class="form-select form-control"
+                >
+                  <option value="false">Nein</option>
+                  <option value="true">Ja</option>
+                </select>
+
+                <label for="userIsAdmin">Administrator</label>
+              </div>
+            </div>
+          </div>
+          <div class="row pt-2">
+            <div class="col-xs-12">
+              <div class="form-floating">
+                <select
+                  v-model="user.userIsNew"
+                  id="userIsNew"
+                  class="form-select form-control"
+                >
+                  <option value="false">Nein</option>
+                  <option value="true">Ja</option>
+                </select>
+
+                <label for="userIsNew">neu</label>
+              </div>
+            </div>
+          </div>
+
+          <div class="row pt-2">
+            <div class="col-xs-12">
+              <div class="form-floating">
+                <select
+                  v-model="user.groupId"
+                  id="groupId"
+                  @change="validateGroupId"
+                  :class="
+                    'form-select form-control ' + groupIdErrorData.inputClass
+                  "
+                >
+                  <option value="0">&nbsp;</option>
+                  <option
+                    v-for="group of groups"
+                    :key="group.id"
+                    :value="group.id"
+                  >
+                    {{ group.name }}
+                  </option>
+                </select>
+
+                <label
+                  for="groupId"
+                  :style="'color: ' + groupIdErrorData.fieldColor"
+                  >{{ groupIdErrorData.fieldLabel }}</label
+                >
               </div>
             </div>
           </div>
@@ -53,23 +172,43 @@ import { defineComponent } from "vue";
 import ModalVue from "../Modal.vue";
 import type { ValidationResult } from "@/model/validation/ValidationResult";
 import type { AccessRelation } from "@/model/user/AccessRelation";
+import type { Group } from "@/model/group/Group";
+import GroupControllerHandler from "@/handler/GroupControllerHandler";
 
 type CreateUserModalData = {
-  user: User;
-  origUser: User | undefined;
   serverError: Array<String>;
+  origUser: User | undefined;
+  user: User;
+  groups: Array<Group>;
+  password1: string;
+  password2: string;
   nameIsValid: boolean | null;
   nameErrorMessage: string;
+  password1IsValid: boolean | null;
+  password1ErrorMessage: string;
+  password2IsValid: boolean | null;
+  password2ErrorMessage: string;
+  groupIdIsValid: boolean | null;
+  groupIdErrorMessage: string;
 };
 export default defineComponent({
   name: "CreateUserModal",
   data(): CreateUserModalData {
     return {
-      user: {} as User,
-      origUser: undefined,
       serverError: {} as Array<String>,
+      origUser: undefined,
+      user: {} as User,
+      groups: {} as Array<Group>,
       nameIsValid: null,
       nameErrorMessage: "",
+      password1: "",
+      password2: "",
+      password1IsValid: null,
+      password1ErrorMessage: "",
+      password2IsValid: null,
+      password2ErrorMessage: "",
+      groupIdIsValid: null,
+      groupIdErrorMessage: "",
     };
   },
   props: {
@@ -79,8 +218,19 @@ export default defineComponent({
     },
   },
   computed: {
-    formIsValid(): boolean {
-      const isValid = this.nameIsValid;
+    formForCreationIsValid(): boolean {
+      const isValid =
+        this.nameIsValid &&
+        this.groupIdIsValid &&
+        this.password1IsValid &&
+        this.password2IsValid;
+      if (isValid === null || isValid === undefined || isValid === true) {
+        return true;
+      }
+      return false;
+    },
+    formForUpdateIsValid(): boolean {
+      const isValid = this.nameIsValid && this.groupIdIsValid;
       if (isValid === null || isValid === undefined || isValid === true) {
         return true;
       }
@@ -94,6 +244,27 @@ export default defineComponent({
     nameErrorData(): ErrorData {
       return generateErrorData(this.nameIsValid, "Name", this.nameErrorMessage);
     },
+    password1ErrorData(): ErrorData {
+      return generateErrorData(
+        this.password1IsValid,
+        "Passwort",
+        this.password1ErrorMessage
+      );
+    },
+    password2ErrorData(): ErrorData {
+      return generateErrorData(
+        this.password2IsValid,
+        "Passwort wiederholen",
+        this.password2ErrorMessage
+      );
+    },
+    groupIdErrorData(): ErrorData {
+      return generateErrorData(
+        this.groupIdIsValid,
+        "Gruppe",
+        this.groupIdErrorMessage
+      );
+    },
   },
   methods: {
     async _show(user?: User) {
@@ -101,12 +272,19 @@ export default defineComponent({
       this.resetForm();
       (this.$refs.modalComponent as typeof ModalVue)._show();
     },
-    resetForm() {
+    async resetForm() {
+      this.groups = await GroupControllerHandler.fetchAllGroup();
+
       if (this.origUser) {
         this.user = JSON.parse(JSON.stringify(this.origUser));
       } else {
         this.user = {} as User;
         this.user.userName = "";
+        this.user.userPassword = "";
+        this.user.userCanLogin = true;
+        this.user.userIsAdmin = false;
+        this.user.userIsNew = true;
+        this.user.groupId = 0;
       }
       this.nameIsValid = null;
       this.serverError = {} as Array<String>;
@@ -115,6 +293,32 @@ export default defineComponent({
       [this.nameIsValid, this.nameErrorMessage] = validateInputField(
         this.user.userName,
         "Name angeben!"
+      );
+    },
+    validatePassword1() {
+      [this.password1IsValid, this.password1ErrorMessage] = validateInputField(
+        this.password1,
+        "Passwort angeben!"
+      );
+    },
+    validatePassword2() {
+      [this.password2IsValid, this.password2ErrorMessage] = validateInputField(
+        this.password2,
+        "Passwortwiederholung angeben!"
+      );
+    },
+    validatePasswordsAreEqual() {
+      if (this.password1 != this.password2) {
+        this.serverError = new Array<string>();
+        this.serverError.push("Die Passwörter stimmen nicht überein!");
+        return false;
+      }
+      return true;
+    },
+    validateGroupId() {
+      [this.groupIdIsValid, this.groupIdErrorMessage] = validateInputField(
+        this.user.groupId,
+        "Gruppe angeben!"
       );
     },
     handleServerError(validationResult: ValidationResult): boolean {
@@ -128,9 +332,10 @@ export default defineComponent({
     },
     async createUser() {
       this.validateName();
+      this.validateGroupId();
 
-      if (this.formIsValid) {
-        if (this.user.id > 0) {
+      if (this.user.id > 0) {
+        if (this.formForUpdateIsValid && this.validatePasswordsAreEqual()) {
           //update
           //FIXME AccessRelation
           const validationResult = await UserControllerHandler.updateUser(
@@ -141,13 +346,14 @@ export default defineComponent({
             (this.$refs.modalComponent as typeof ModalVue)._hide();
             this.$emit("userUpdated", this.user);
           }
-        } else {
+        }
+      } else {
+        this.validatePassword1();
+        this.validatePassword2();
+
+        if (this.formForCreationIsValid && this.validatePasswordsAreEqual()) {
           //create
-          //FIXME AccessRelation
-          const userValidation = UserControllerHandler.createUser(
-            this.user,
-            {} as AccessRelation
-          );
+          const userValidation = UserControllerHandler.createUser(this.user);
           const validationResult = await (
             await userValidation
           ).validationResult;
