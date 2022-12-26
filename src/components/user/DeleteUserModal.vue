@@ -19,6 +19,48 @@
         </div>
         <div class="text-start col-sm-9">{{ user.userName }}</div>
       </div>
+      <div class="row">
+        <div
+          class="text-start d-flex align-items-center col-sm-3 col-xs-5"
+          style="font-weight: 700; font-size: 10.5px"
+        >
+          Gruppe
+        </div>
+        <div class="text-start col-sm-9">{{ user.groupName }}</div>
+      </div>
+      <div class="row">
+        <div
+          class="text-start d-flex align-items-center col-sm-3 col-xs-5"
+          style="font-weight: 700; font-size: 10.5px"
+        >
+          Anmeldung erlaubt
+        </div>
+        <div class="text-start col-sm-9">
+          <b :style="'color:' + userCanLoginColor">{{ userCanLoginString }}</b>
+        </div>
+      </div>
+      <div class="row">
+        <div
+          class="text-start d-flex align-items-center col-sm-3 col-xs-5"
+          style="font-weight: 700; font-size: 10.5px"
+        >
+          Administrator
+        </div>
+        <div class="text-start col-sm-9">
+          <b :style="'color:' + userIsAdminColor">{{ userIsAdminString }}</b>
+        </div>
+      </div>
+      <div class="row">
+        <div
+          class="text-start d-flex align-items-center col-sm-3 col-xs-5"
+          style="font-weight: 700; font-size: 10.5px"
+        >
+          Neu
+        </div>
+        <div class="text-start col-sm-9">
+          <b :style="'color:' + userIsNewColor">{{ userIsNewString }}</b>
+        </div>
+      </div>
     </template>
     <template #footer>
       <button type="button" class="btn btn-danger" @click="deleteUser">
@@ -44,7 +86,26 @@ export default defineComponent({
       serverError: new Array<string>(),
     };
   },
-  computed: {},
+  computed: {
+    userCanLoginColor(): string {
+      return this.user.userCanLogin ? "green" : "red";
+    },
+    userCanLoginString(): string {
+      return this.user.userCanLogin ? "Ja" : "Nein";
+    },
+    userIsAdminColor(): string {
+      return this.user.userIsAdmin ? "green" : "red";
+    },
+    userIsAdminString(): string {
+      return this.user.userIsAdmin ? "Ja" : "Nein";
+    },
+    userIsNewColor(): string {
+      return this.user.userIsNew ? "green" : "red";
+    },
+    userIsNewString(): string {
+      return this.user.userIsNew ? "Ja" : "Nein";
+    },
+  },
   methods: {
     async _show(user: User) {
       this.user = user;
