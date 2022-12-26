@@ -30,6 +30,7 @@ import { mapValidationItemTransportToModel } from "./mapper/ValidationItemTransp
 import type { UpdateUserResponse } from "@/model/rest/user/UpdateUserResponse";
 import type { UserTransporter } from "@/model/user/UserTransporter";
 import { mapGroupTransportToModel } from "./mapper/GroupTransportMapper";
+import type { Group } from "@/model/group/Group";
 
 class UserControllerHandler extends AbstractControllerHandler {
   private static CONTROLLER = "user";
@@ -99,7 +100,7 @@ class UserControllerHandler extends AbstractControllerHandler {
     }
   }
 
-  async fetchAllUser(): Promise<UserTransporter> {
+  async fetchAllUser(): Promise<Array<User>> {
     const usecase = "showUserList/all";
     const response = await super.get(UserControllerHandler.CONTROLLER, usecase);
     if (!response.ok) {
@@ -114,17 +115,40 @@ class UserControllerHandler extends AbstractControllerHandler {
     }
 
     const innerResponse = await showUserListResponse.showUserListResponse;
-    return {
-      users: innerResponse.userTransport.map((value) => {
-        return mapUserTransportToModel(value);
-      }),
-      groups: innerResponse.groupTransport.map((value) => {
-        return mapGroupTransportToModel(value);
-      }),
-      accessRelations: innerResponse.accessRelationTransport.map((value) => {
+
+    const groups: Array<Group> = innerResponse.groupTransport.map((value) => {
+      return mapGroupTransportToModel(value);
+    });
+    const users: Array<User> = innerResponse.userTransport.map((value) => {
+      return mapUserTransportToModel(value);
+    });
+    const accessRelations: Array<AccessRelation> =
+      innerResponse.accessRelationTransport.map((value) => {
         return mapAccessRelationTransportToModel(value);
-      }),
-    };
+      });
+
+    const groupsById = new Map<number, Group>();
+    for (const group of groups) {
+      groupsById.set(group.id, group);
+    }
+
+    const accessRelationsById = new Map<number, AccessRelation>();
+    for (const accessRelation of accessRelations) {
+      accessRelationsById.set(accessRelation.id, accessRelation);
+    }
+
+    for (const user of users) {
+      const accessRelation = accessRelationsById.get(user.id);
+      if (accessRelation) {
+        user.groupId = accessRelation.refId;
+        const group = groupsById.get(user.groupId);
+        if (group) {
+          user.groupName = group.name;
+        }
+      }
+    }
+
+    return users;
   }
 
   async createUser(mpm: User, mar: AccessRelation): Promise<UserValidation> {

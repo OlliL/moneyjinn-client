@@ -70,6 +70,8 @@
               <th>Name</th>
               <th colspan="2"></th>
             </tr>
+          </thead>
+          <tbody>
             <ListGroupRowVue
               v-for="group in groups"
               :key="group.id"
@@ -77,8 +79,7 @@
               @edit-group="editGroup"
               @delete-group="deleteGroup"
             />
-          </thead>
-          <tbody></tbody>
+          </tbody>
         </table>
       </div>
     </div>

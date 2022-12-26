@@ -68,8 +68,14 @@
           <thead>
             <tr>
               <th>Name</th>
+              <th>Gruppe</th>
+              <th>Anmeldung erlaubt</th>
+              <th>Administrator</th>
+              <th>neu</th>
               <th colspan="2"></th>
             </tr>
+          </thead>
+          <tbody>
             <ListUserRowVue
               v-for="user in users"
               :key="user.id"
@@ -77,8 +83,7 @@
               @edit-user="editUser"
               @delete-user="deleteUser"
             />
-          </thead>
-          <tbody></tbody>
+          </tbody>
         </table>
       </div>
     </div>
@@ -116,8 +121,7 @@ export default defineComponent({
   computed: {},
   methods: {
     async reloadView() {
-      const userTransporter = await UserControllerHandler.fetchAllUser();
-      this.allUsers = userTransporter.users;
+      this.allUsers = await UserControllerHandler.fetchAllUser();
 
       this.allUsers.sort((a, b) => {
         return a.userName.toUpperCase().localeCompare(b.userName.toUpperCase());
