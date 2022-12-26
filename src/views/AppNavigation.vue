@@ -20,7 +20,7 @@
   <nav class="navbar navbar-expand-lg navbar-light fixed-top bg-light">
     <div class="container-fluid">
       <router-link class="navbar-brand bg-light" :to="{ name: Routes.Home }"
-        ><small>moneyjin 0.99.0</small></router-link
+        ><small>moneyjin {{ appVersion }}</small></router-link
       >
       <button
         class="navbar-toggler"
@@ -281,6 +281,7 @@ import CreatePostingAccountModalVue from "@/components/postingaccount/CreatePost
 import CreatePreDefMoneyflowModalVue from "@/components/predefmoneyflow/CreatePreDefMoneyflowModal.vue";
 import { useUserSessionStore } from "@/stores/UserSessionStore";
 import type { RouteRecordName } from "vue-router";
+import { version } from "../../package.json";
 
 export default {
   name: "AppNavigation",
@@ -292,6 +293,7 @@ export default {
       year: new Date().getFullYear(),
       month: new Date().getMonth() + 1,
       userIsAdmin: false,
+      appVersion: version,
     };
   },
   components: {

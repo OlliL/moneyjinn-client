@@ -1,25 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
 import { useUserSessionStore } from "@/stores/UserSessionStore";
-import AppHomeVue from "@/views/AppHome.vue";
-import AppNavigationVue from "@/views/AppNavigation.vue";
-import LoginViewVue from "@/views/LoginView.vue";
-import ListReportsVue from "@/views/reports/ListReports.vue";
-import CreateMoneyflowVue from "@/views/moneyflow/CreateMoneyflow.vue";
-import ListCapitalsourcesVue from "@/views/capitalsource/ListCapitalsources.vue";
-import ListContractpartnersVue from "@/views/contractpartner/ListContractpartners.vue";
-import ListEtfDepotVue from "@/views/etf/ListEtfDepot.vue";
-import ListGroupsVue from "@/views/group/ListGroups.vue";
-import ListMonthlySettlementsVue from "@/views/monthlysettlement/ListMonthlySettlements.vue";
-import ListPostingAccountsVue from "@/views/postingaccount/ListPostingAccounts.vue";
-import ListPreDefMoneyflowsVue from "@/views/predefmoneyflow/ListPreDefMoneyflows.vue";
-import ListUsersVue from "@/views/user/ListUsers.vue";
-import ImportMoneyflowsVue from "@/views/moneyflow/ImportMoneyflows.vue";
-import SearchMoneyflowsVue from "@/views/moneyflow/SearchMoneyflows.vue";
-import ImportReceiptsVue from "@/views/receipt/ImportReceipts.vue";
-import ShowTrendsVue from "@/views/reports/ShowTrends.vue";
-import ShowReportingVue from "@/views/reports/ShowReporting.vue";
-import CompareDataVue from "@/views/comparedata/CompareData.vue";
-import ChangePasswordVue from "@/views/user/ChangePassword.vue";
 
 export enum Routes {
   Login = "login",
@@ -48,113 +28,118 @@ const router = createRouter({
     {
       path: "/login",
       name: Routes.Login,
-      component: LoginViewVue,
+      component: () => import("@/views/LoginView.vue"),
       meta: {
         hideForAuth: true,
       },
     },
     {
       path: "/app",
-      component: AppNavigationVue,
+      component: () => import("@/views/AppNavigation.vue"),
       children: [
         {
           path: "",
           name: Routes.Home,
-          component: AppHomeVue,
+          component: () => import("@/views/AppHome.vue"),
         },
         {
           path: "listReports/:year?/:month?",
           name: Routes.ListReports,
-          component: ListReportsVue,
+          component: () => import("@/views/reports/ListReports.vue"),
           props: true,
         },
         {
           path: "createMoneyflow",
           name: Routes.CreateMoneyflow,
-          component: CreateMoneyflowVue,
+          component: () => import("@/views/moneyflow/CreateMoneyflow.vue"),
         },
         {
           path: "importMoneyflows",
           name: Routes.ImportMoneyflows,
-          component: ImportMoneyflowsVue,
+          component: () => import("@/views/moneyflow/ImportMoneyflows.vue"),
         },
         {
           path: "importReceipts",
           name: Routes.ImportReceipts,
-          component: ImportReceiptsVue,
+          component: () => import("@/views/moneyflow/SearchMoneyflows.vue"),
         },
         {
           path: "searchMoneyflows",
           name: Routes.SearchMoneyflows,
-          component: SearchMoneyflowsVue,
+          component: () => import("@/views/moneyflow/SearchMoneyflows.vue"),
           meta: { keepAlive: true },
         },
         {
           path: "listCapitalsources/:letter?",
           name: Routes.ListCapitalsources,
-          component: ListCapitalsourcesVue,
+          component: () =>
+            import("@/views/capitalsource/ListCapitalsources.vue"),
           props: true,
         },
         {
           path: "listPostingAccounts/:letter?",
           name: Routes.ListPostingAccounts,
-          component: ListPostingAccountsVue,
+          component: () =>
+            import("@/views/postingaccount/ListPostingAccounts.vue"),
           props: true,
         },
         {
           path: "listContractpartners/:letter?",
           name: Routes.ListContractpartners,
-          component: ListContractpartnersVue,
+          component: () =>
+            import("@/views/contractpartner/ListContractpartners.vue"),
           props: true,
         },
         {
           path: "listGroups/:letter?",
           name: Routes.ListGroups,
-          component: ListGroupsVue,
+          component: () => import("@/views/group/ListGroups.vue"),
           props: true,
         },
         {
           path: "listUsers/:letter?",
           name: Routes.ListUsers,
-          component: ListUsersVue,
+          component: () => import("@/views/user/ListUsers.vue"),
           props: true,
         },
         {
           path: "listPreDefMoneyflows/:letter?",
           name: Routes.ListPreDefMoneyflows,
-          component: ListPreDefMoneyflowsVue,
+          component: () =>
+            import("@/views/predefmoneyflow/ListPreDefMoneyflows.vue"),
           props: true,
         },
         {
           path: "listMonthlySettlements/:year?/:month?",
           name: Routes.ListMonthlySettlements,
-          component: ListMonthlySettlementsVue,
+          component: () =>
+            import("@/views/monthlysettlement/ListMonthlySettlements.vue"),
           props: true,
         },
         {
           path: "listEtfDepot",
           name: Routes.ListEtfDepot,
-          component: ListEtfDepotVue,
+          component: () => import("@/views/etf/ListEtfDepot.vue"),
         },
         {
           path: "showTrends",
           name: Routes.ShowTrends,
-          component: ShowTrendsVue,
+          component: () => import("@/views/reports/ShowTrends.vue"),
         },
         {
           path: "showReporting",
           name: Routes.ShowReporting,
-          component: ShowReportingVue,
+          component: () => import("@/views/reports/ShowReporting.vue"),
         },
         {
           path: "compareData",
           name: Routes.CompareData,
-          component: CompareDataVue,
+          component: () => import("@/views/comparedata/CompareData.vue"),
         },
         {
           path: "changePassword",
           name: Routes.ChangePassword,
-          component: ChangePasswordVue,
+          component: () => import("@/views/user/ChangePassword.vue"),
         },
       ],
     },
