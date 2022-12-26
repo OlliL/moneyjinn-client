@@ -1,5 +1,5 @@
 <template>
-  <ModalVue title="Benutzer l&ouml;schen" ref="modalComponent">
+  <ModalVue title="Benutzerkonto l&ouml;schen" ref="modalComponent">
     <template #body>
       <div v-if="serverError">
         <div
