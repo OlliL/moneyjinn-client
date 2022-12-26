@@ -227,7 +227,11 @@
                   <hr class="dropdown-divider" />
                 </li>
                 <li v-if="userIsAdmin">
-                  <a class="dropdown-item" href="#">Benutzerkonten</a>
+                  <router-link
+                    class="dropdown-item"
+                    :to="{ name: Routes.ListUsers }"
+                    >Benutzerkonten</router-link
+                  >
                 </li>
                 <li v-if="userIsAdmin">
                   <router-link

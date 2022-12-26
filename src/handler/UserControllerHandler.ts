@@ -8,7 +8,6 @@ import { LoginRequest } from "@/model/rest/user/LoginRequest";
 import type { LoginResponse } from "@/model/rest/user/LoginResponse";
 import type { ShowUserListResponse } from "@/model/rest/user/ShowUserListResponse";
 import type { UpdateUserRequest } from "@/model/rest/user/UpdateUserRequest";
-import type { ValidationResponse } from "@/model/rest/ValidationResponse";
 import type { UserValidation } from "@/model/user/UserValidation";
 import type { AccessRelation } from "@/model/user/AccessRelation";
 import type { User } from "@/model/user/User";
