@@ -12,6 +12,7 @@ import ListGroupsVue from "@/views/group/ListGroups.vue";
 import ListMonthlySettlementsVue from "@/views/monthlysettlement/ListMonthlySettlements.vue";
 import ListPostingAccountsVue from "@/views/postingaccount/ListPostingAccounts.vue";
 import ListPreDefMoneyflowsVue from "@/views/predefmoneyflow/ListPreDefMoneyflows.vue";
+import ListUsersVue from "@/views/user/ListUsers.vue";
 import ImportMoneyflowsVue from "@/views/moneyflow/ImportMoneyflows.vue";
 import SearchMoneyflowsVue from "@/views/moneyflow/SearchMoneyflows.vue";
 import ImportReceiptsVue from "@/views/receipt/ImportReceipts.vue";
@@ -32,6 +33,7 @@ export enum Routes {
   ListMonthlySettlements = "listMonthlySettlements",
   ListPostingAccounts = "listPostingAccounts",
   ListPreDefMoneyflows = "listPreDefMoneyflows",
+  ListUsers = "listUsers",
   ImportMoneyflows = "importMoneyflows",
   ImportReceipts = "importReceipts",
   SearchMoneyflows = "searchMoneyflows",
@@ -109,6 +111,12 @@ const router = createRouter({
           path: "listGroups/:letter?",
           name: Routes.ListGroups,
           component: ListGroupsVue,
+          props: true,
+        },
+        {
+          path: "listUsers/:letter?",
+          name: Routes.ListUsers,
+          component: ListUsersVue,
           props: true,
         },
         {

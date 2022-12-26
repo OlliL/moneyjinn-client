@@ -1,7 +1,7 @@
 <template>
   <ModalVue :title="title" ref="modalComponent">
     <template #body
-      ><form @submit.prevent="createGroup" :id="'createGroupForm' + idSuffix">
+      ><form @submit.prevent="createUser" :id="'createUserForm' + idSuffix">
         <div class="container-fluid">
           <div v-if="serverError">
             <div
@@ -16,12 +16,12 @@
             <div class="col-xs-12">
               <div class="form-floating">
                 <input
-                  v-model="group.name"
-                  :id="'groupName' + idSuffix"
+                  v-model="user.userName"
+                  :id="'userName' + idSuffix"
                   type="text"
                   class="form-control"
                 />
-                <label :for="'groupName' + idSuffix">Name</label>
+                <label :for="'userName' + idSuffix">Name</label>
               </div>
             </div>
           </div>
@@ -35,7 +35,7 @@
       <button
         type="submit"
         class="btn btn-primary"
-        :form="'createGroupForm' + idSuffix"
+        :form="'createUserForm' + idSuffix"
       >
         Speichern
       </button>
@@ -44,28 +44,29 @@
 </template>
 
 <script lang="ts">
-import type { Group } from "@/model/group/Group";
-import GroupControllerHandler from "@/handler/GroupControllerHandler";
+import type { User } from "@/model/user/User";
+import UserControllerHandler from "@/handler/UserControllerHandler";
 import { generateErrorData, type ErrorData } from "@/tools/views/ErrorData";
 import { getError } from "@/tools/views/ThrowError";
 import { validateInputField } from "@/tools/views/ValidateInputField";
 import { defineComponent } from "vue";
 import ModalVue from "../Modal.vue";
 import type { ValidationResult } from "@/model/validation/ValidationResult";
+import type { AccessRelation } from "@/model/user/AccessRelation";
 
-type CreateGroupModalData = {
-  group: Group;
-  origGroup: Group | undefined;
+type CreateUserModalData = {
+  user: User;
+  origUser: User | undefined;
   serverError: Array<String>;
   nameIsValid: boolean | null;
   nameErrorMessage: string;
 };
 export default defineComponent({
-  name: "CreateGroupModal",
-  data(): CreateGroupModalData {
+  name: "CreateUserModal",
+  data(): CreateUserModalData {
     return {
-      group: {} as Group,
-      origGroup: undefined,
+      user: {} as User,
+      origUser: undefined,
       serverError: {} as Array<String>,
       nameIsValid: null,
       nameErrorMessage: "",
@@ -86,33 +87,33 @@ export default defineComponent({
       return false;
     },
     title(): string {
-      return this.origGroup === undefined
-        ? "Benutzergruppe hinzufügen"
-        : "Benutzergruppe bearbeiten";
+      return this.origUser === undefined
+        ? "Benutzer hinzufügen"
+        : "Benutzer bearbeiten";
     },
     nameErrorData(): ErrorData {
       return generateErrorData(this.nameIsValid, "Name", this.nameErrorMessage);
     },
   },
   methods: {
-    async _show(group?: Group) {
-      this.origGroup = group ? group : undefined;
+    async _show(user?: User) {
+      this.origUser = user ? user : undefined;
       this.resetForm();
       (this.$refs.modalComponent as typeof ModalVue)._show();
     },
     resetForm() {
-      if (this.origGroup) {
-        this.group = JSON.parse(JSON.stringify(this.origGroup));
+      if (this.origUser) {
+        this.user = JSON.parse(JSON.stringify(this.origUser));
       } else {
-        this.group = {} as Group;
-        this.group.name = "";
+        this.user = {} as User;
+        this.user.userName = "";
       }
       this.nameIsValid = null;
       this.serverError = {} as Array<String>;
     },
     validateName() {
       [this.nameIsValid, this.nameErrorMessage] = validateInputField(
-        this.group.name,
+        this.user.userName,
         "Name angeben!"
       );
     },
@@ -125,39 +126,43 @@ export default defineComponent({
       }
       return !validationResult.result;
     },
-    async createGroup() {
+    async createUser() {
       this.validateName();
 
       if (this.formIsValid) {
-        if (this.group.id > 0) {
+        if (this.user.id > 0) {
           //update
-          const validationResult = await GroupControllerHandler.updateGroup(
-            this.group
+          //FIXME AccessRelation
+          const validationResult = await UserControllerHandler.updateUser(
+            this.user,
+            {} as AccessRelation
           );
           if (!this.handleServerError(validationResult)) {
             (this.$refs.modalComponent as typeof ModalVue)._hide();
-            this.$emit("groupUpdated", this.group);
+            this.$emit("userUpdated", this.user);
           }
         } else {
           //create
-          const groupValidation = GroupControllerHandler.createGroup(
-            this.group
+          //FIXME AccessRelation
+          const userValidation = UserControllerHandler.createUser(
+            this.user,
+            {} as AccessRelation
           );
           const validationResult = await (
-            await groupValidation
+            await userValidation
           ).validationResult;
 
           if (!this.handleServerError(validationResult)) {
-            this.group = (await groupValidation).group;
+            this.user = (await userValidation).user;
             (this.$refs.modalComponent as typeof ModalVue)._hide();
-            this.$emit("groupCreated", this.group);
+            this.$emit("userCreated", this.user);
           }
         }
       }
     },
   },
   expose: ["_show"],
-  emits: ["groupCreated", "groupUpdated"],
+  emits: ["userCreated", "userUpdated"],
   components: {
     ModalVue,
   },
