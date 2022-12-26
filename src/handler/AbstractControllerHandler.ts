@@ -3,7 +3,7 @@ import { useUserSessionStore } from "@/stores/UserSessionStore";
 import { throwError } from "@/tools/views/ThrowError";
 
 abstract class AbstractControllerHandler {
-  private static SERVER_ROOT = "http://localhost:8081/moneyflow/server/";
+  private static SERVER_ROOT = "http://10.0.1.51:8080/moneyflow/server/";
 
   private getHeaders(): HeadersInit {
     const userSessionStore = useUserSessionStore();

@@ -229,6 +229,16 @@
                 <li v-if="userIsAdmin">
                   <router-link
                     class="dropdown-item"
+                    :to="{ name: Routes.ListPostingAccounts }"
+                    >Buchungskonten</router-link
+                  >
+                </li>
+                <li v-if="userIsAdmin">
+                  <hr class="dropdown-divider" />
+                </li>
+                <li v-if="userIsAdmin">
+                  <router-link
+                    class="dropdown-item"
                     :to="{ name: Routes.ListUsers }"
                     >Benutzerkonten</router-link
                   >
@@ -238,13 +248,6 @@
                     class="dropdown-item"
                     :to="{ name: Routes.ListGroups }"
                     >Benutzergruppen</router-link
-                  >
-                </li>
-                <li v-if="userIsAdmin">
-                  <router-link
-                    class="dropdown-item"
-                    :to="{ name: Routes.ListPostingAccounts }"
-                    >Buchungskonten</router-link
                   >
                 </li>
               </ul>
