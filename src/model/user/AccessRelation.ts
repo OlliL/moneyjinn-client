@@ -1,5 +1,5 @@
 export type AccessRelation = {
-  id: number;
+  id?: number;
   refId: number;
   validFrom: Date;
   validTil?: Date;

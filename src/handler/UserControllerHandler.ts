@@ -134,7 +134,8 @@ class UserControllerHandler extends AbstractControllerHandler {
 
     const accessRelationsById = new Map<number, AccessRelation>();
     for (const accessRelation of accessRelations) {
-      accessRelationsById.set(accessRelation.id, accessRelation);
+      if (accessRelation.id)
+        accessRelationsById.set(accessRelation.id, accessRelation);
     }
 
     for (const user of users) {
@@ -151,14 +152,21 @@ class UserControllerHandler extends AbstractControllerHandler {
     return users;
   }
 
-  async createUser(mpm: User, mar: AccessRelation): Promise<UserValidation> {
+  async createUser(mpm: User): Promise<UserValidation> {
     const usecase = "createUser";
     const request = {
       createUserRequest: {},
     } as CreateUserRequest;
     const innerRequest = request.createUserRequest;
     innerRequest.userTransport = mapUserToTransport(mpm);
-    innerRequest.accessRelationTransport = mapAccessRelationToTransport(mar);
+
+    if (mpm.groupId) {
+      const mar: AccessRelation = {
+        refId: mpm.groupId,
+        validFrom: new Date(),
+      };
+      innerRequest.accessRelationTransport = mapAccessRelationToTransport(mar);
+    }
 
     const response = await super.post(
       request,
