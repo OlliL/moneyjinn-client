@@ -187,7 +187,7 @@ class UserControllerHandler extends AbstractControllerHandler {
       };
       innerRequest.accessRelationTransport = mapAccessRelationToTransport(mar);
     }
-    console.log(request);
+
     const response = await super.post(
       request,
       UserControllerHandler.CONTROLLER,

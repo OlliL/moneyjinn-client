@@ -4,5 +4,5 @@ export type ReportingParameter = {
   startDate: Date;
   endDate: Date;
   selectedPostingAccounts: Array<PostingAccount>;
-  unselectedPostingAccounts: Array<PostingAccount>;
+  unselectedPostingAccounts: Array<PostingAccount> | undefined;
 };
