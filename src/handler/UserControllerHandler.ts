@@ -28,9 +28,9 @@ import {
 } from "./mapper/AccessRelationTransportMapper";
 import { mapValidationItemTransportToModel } from "./mapper/ValidationItemTransportMapper";
 import type { UpdateUserResponse } from "@/model/rest/user/UpdateUserResponse";
-import type { UserTransporter } from "@/model/user/UserTransporter";
 import { mapGroupTransportToModel } from "./mapper/GroupTransportMapper";
 import type { Group } from "@/model/group/Group";
+import type { ShowEditUserResponse } from "@/model/rest/user/ShowEditUserResponse";
 
 class UserControllerHandler extends AbstractControllerHandler {
   private static CONTROLLER = "user";
@@ -152,6 +152,26 @@ class UserControllerHandler extends AbstractControllerHandler {
     return users;
   }
 
+  async getAllAccessRelations(userId: number): Promise<Array<AccessRelation>> {
+    const usecase = "showEditUser/" + userId;
+    const response = await super.get(UserControllerHandler.CONTROLLER, usecase);
+
+    if (!response.ok) {
+      throw new Error(response.statusText);
+    }
+    const showEditUserResponse =
+      (await response.json()) as ShowEditUserResponse;
+
+    const innerResponse = await showEditUserResponse.showEditUserResponse;
+
+    const accessRelations: Array<AccessRelation> =
+      innerResponse.accessRelationTransport.map((value) => {
+        return mapAccessRelationTransportToModel(value);
+      });
+
+    return accessRelations;
+  }
+
   async createUser(mpm: User): Promise<UserValidation> {
     const usecase = "createUser";
     const request = {
@@ -167,7 +187,7 @@ class UserControllerHandler extends AbstractControllerHandler {
       };
       innerRequest.accessRelationTransport = mapAccessRelationToTransport(mar);
     }
-
+    console.log(request);
     const response = await super.post(
       request,
       UserControllerHandler.CONTROLLER,

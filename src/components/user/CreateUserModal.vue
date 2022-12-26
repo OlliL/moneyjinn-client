@@ -1,146 +1,192 @@
 <template>
-  <ModalVue :title="title" ref="modalComponent">
+  <ModalVue :title="title" :max-width="maxWidth" ref="modalComponent">
     <template #body
       ><form @submit.prevent="createUser" :id="'createUserForm' + idSuffix">
         <div class="container-fluid">
-          <div v-if="serverError">
-            <div
-              class="alert alert-danger"
-              v-for="(error, index) in serverError"
-              :key="index"
-            >
-              {{ error }}
-            </div>
-          </div>
-          <div class="row pt-2">
-            <div class="col-xs-12">
-              <div class="form-floating">
-                <input
-                  v-model="user.userName"
-                  id="userName"
-                  type="text"
-                  @input="validateName"
-                  :class="'form-control ' + nameErrorData.inputClass"
-                />
-                <label
-                  for="userName"
-                  :style="'color: ' + nameErrorData.fieldColor"
-                  >{{ nameErrorData.fieldLabel }}</label
+          <div class="row">
+            <div class="col">
+              <div v-if="serverError">
+                <div
+                  class="alert alert-danger"
+                  v-for="(error, index) in serverError"
+                  :key="index"
                 >
+                  {{ error }}
+                </div>
               </div>
-            </div>
-          </div>
-          <div class="row pt-2">
-            <div class="col-xs-12">
-              <div class="form-floating">
-                <input
-                  v-model="password1"
-                  id="password1"
-                  type="password"
-                  @input="validatePassword1"
-                  :class="'form-control ' + password1ErrorData.inputClass"
-                />
-                <label
-                  :for="password1"
-                  :style="'color: ' + password1ErrorData.fieldColor"
-                  >{{ password1ErrorData.fieldLabel }}</label
-                >
+              <div class="row pt-2">
+                <div class="col-xs-12">
+                  <div class="form-floating">
+                    <input
+                      v-model="user.userName"
+                      id="userName"
+                      type="text"
+                      @input="validateName"
+                      :class="'form-control ' + nameErrorData.inputClass"
+                    />
+                    <label
+                      for="userName"
+                      :style="'color: ' + nameErrorData.fieldColor"
+                      >{{ nameErrorData.fieldLabel }}</label
+                    >
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
-          <div class="row pt-2">
-            <div class="col-xs-12">
-              <div class="form-floating">
-                <input
-                  v-model="password2"
-                  id="password2"
-                  type="password"
-                  @input="validatePassword2"
-                  :class="'form-control ' + password2ErrorData.inputClass"
-                />
-                <label
-                  :for="password2"
-                  :style="'color: ' + password2ErrorData.fieldColor"
-                  >{{ password2ErrorData.fieldLabel }}</label
-                >
+              <div class="row pt-2">
+                <div class="col-xs-12">
+                  <div class="form-floating">
+                    <input
+                      v-model="password1"
+                      id="password1"
+                      type="password"
+                      @input="validatePassword1"
+                      :class="'form-control ' + password1ErrorData.inputClass"
+                    />
+                    <label
+                      :for="password1"
+                      :style="'color: ' + password1ErrorData.fieldColor"
+                      >{{ password1ErrorData.fieldLabel }}</label
+                    >
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
-          <div class="row pt-2">
-            <div class="col-xs-12">
-              <div class="form-floating">
-                <select
-                  v-model="user.userCanLogin"
-                  id="userCanLogin"
-                  class="form-select form-control"
-                >
-                  <option value="false">Nein</option>
-                  <option value="true">Ja</option>
-                </select>
+              <div class="row pt-2">
+                <div class="col-xs-12">
+                  <div class="form-floating">
+                    <input
+                      v-model="password2"
+                      id="password2"
+                      type="password"
+                      @input="validatePassword2"
+                      :class="'form-control ' + password2ErrorData.inputClass"
+                    />
+                    <label
+                      :for="password2"
+                      :style="'color: ' + password2ErrorData.fieldColor"
+                      >{{ password2ErrorData.fieldLabel }}</label
+                    >
+                  </div>
+                </div>
+              </div>
+              <div class="row pt-2">
+                <div class="col-xs-12">
+                  <div class="form-floating">
+                    <select
+                      v-model="user.userCanLogin"
+                      id="userCanLogin"
+                      class="form-select form-control"
+                    >
+                      <option :value="false">Nein</option>
+                      <option :value="true">Ja</option>
+                    </select>
 
-                <label for="groupUse">Anmeldung erlaubt</label>
+                    <label for="groupUse">Anmeldung erlaubt</label>
+                  </div>
+                </div>
+              </div>
+              <div class="row pt-2">
+                <div class="col-xs-12">
+                  <div class="form-floating">
+                    <select
+                      v-model="user.userIsAdmin"
+                      id="userIsAdmin"
+                      class="form-select form-control"
+                    >
+                      <option :value="false">Nein</option>
+                      <option :value="true">Ja</option>
+                    </select>
+
+                    <label for="userIsAdmin">Administrator</label>
+                  </div>
+                </div>
+              </div>
+              <div class="row pt-2" v-if="editMode">
+                <div class="col-xs-12">
+                  <div class="form-floating">
+                    <select
+                      v-model="user.userIsNew"
+                      id="userIsNew"
+                      class="form-select form-control"
+                    >
+                      <option :value="false">Nein</option>
+                      <option :value="true">Ja</option>
+                    </select>
+
+                    <label for="userIsNew">neu</label>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row pt-5">
+                <div class="col-xs-12">
+                  <div class="form-floating">
+                    <select
+                      v-model="user.groupId"
+                      id="groupId"
+                      @change="validateGroupId"
+                      :class="
+                        'form-select form-control ' +
+                        groupIdErrorData.inputClass
+                      "
+                    >
+                      <option value="0">&nbsp;</option>
+                      <option
+                        v-for="group of groups"
+                        :key="group.id"
+                        :value="group.id"
+                      >
+                        {{ group.name }}
+                      </option>
+                    </select>
+
+                    <label
+                      for="groupId"
+                      :style="'color: ' + groupIdErrorData.fieldColor"
+                      >{{ groupIdErrorData.fieldLabel }}</label
+                    >
+                  </div>
+                </div>
+              </div>
+              <div class="row pt-2">
+                <div class="col-xs-12">
+                  <DatepickerVue
+                    id="validFrom"
+                    :label="validFromErrorData.fieldLabel"
+                    :default-date="validFrom"
+                    :input-class="
+                      ' form-control ' + validFromErrorData.inputClass
+                    "
+                    :label-style="'color: ' + validFromErrorData.fieldColor"
+                    @date-selected="validFromSelected"
+                  />
+                </div>
               </div>
             </div>
-          </div>
-          <div class="row pt-2">
-            <div class="col-xs-12">
-              <div class="form-floating">
-                <select
-                  v-model="user.userIsAdmin"
-                  id="userIsAdmin"
-                  class="form-select form-control"
-                >
-                  <option value="false">Nein</option>
-                  <option value="true">Ja</option>
-                </select>
-
-                <label for="userIsAdmin">Administrator</label>
+            <div class="col" v-if="editMode">
+              <div class="row justify-content-md-center">
+                <div class="col-xs-12 mb-4 text-center">
+                  <h5>Gruppenhistorie</h5>
+                </div>
               </div>
-            </div>
-          </div>
-          <div class="row pt-2">
-            <div class="col-xs-12">
-              <div class="form-floating">
-                <select
-                  v-model="user.userIsNew"
-                  id="userIsNew"
-                  class="form-select form-control"
-                >
-                  <option value="false">Nein</option>
-                  <option value="true">Ja</option>
-                </select>
-
-                <label for="userIsNew">neu</label>
-              </div>
-            </div>
-          </div>
-
-          <div class="row pt-2">
-            <div class="col-xs-12">
-              <div class="form-floating">
-                <select
-                  v-model="user.groupId"
-                  id="groupId"
-                  @change="validateGroupId"
-                  :class="
-                    'form-select form-control ' + groupIdErrorData.inputClass
-                  "
-                >
-                  <option value="0">&nbsp;</option>
-                  <option
-                    v-for="group of groups"
-                    :key="group.id"
-                    :value="group.id"
-                  >
-                    {{ group.name }}
-                  </option>
-                </select>
-
-                <label
-                  for="groupId"
-                  :style="'color: ' + groupIdErrorData.fieldColor"
-                  >{{ groupIdErrorData.fieldLabel }}</label
-                >
+              <div class="row justify-content-md-center">
+                <div class="col-xs-12 mb-4 text-center">
+                  <table class="table table-striped table-bordered table-hover">
+                    <thead>
+                      <tr>
+                        <th>Gruppe</th>
+                        <th>g&uuml;ltig ab</th>
+                        <th>g&uuml;ltig bis</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr v-for="userGroup in userGroups" :key="userGroup.id">
+                        <td>{{ userGroup.group?.name }}</td>
+                        <td>{{ formatDate(userGroup.validFrom) }}</td>
+                        <td>{{ formatDate(userGroup.validTil) }}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </div>
           </div>
@@ -174,7 +220,12 @@ import type { ValidationResult } from "@/model/validation/ValidationResult";
 import type { AccessRelation } from "@/model/user/AccessRelation";
 import type { Group } from "@/model/group/Group";
 import GroupControllerHandler from "@/handler/GroupControllerHandler";
+import { formatDate } from "@/tools/views/FormatDate";
+import DatepickerVue from "@/components/Datepicker.vue";
 
+type UserGroup = AccessRelation & {
+  group?: Group;
+};
 type CreateUserModalData = {
   serverError: Array<String>;
   origUser: User | undefined;
@@ -182,6 +233,8 @@ type CreateUserModalData = {
   groups: Array<Group>;
   password1: string;
   password2: string;
+  validFrom: Date;
+  userGroups: Array<UserGroup>;
   nameIsValid: boolean | null;
   nameErrorMessage: string;
   password1IsValid: boolean | null;
@@ -190,6 +243,8 @@ type CreateUserModalData = {
   password2ErrorMessage: string;
   groupIdIsValid: boolean | null;
   groupIdErrorMessage: string;
+  validFromIsValid: boolean | null;
+  validFromErrorMessage: string;
 };
 export default defineComponent({
   name: "CreateUserModal",
@@ -199,16 +254,20 @@ export default defineComponent({
       origUser: undefined,
       user: {} as User,
       groups: {} as Array<Group>,
-      nameIsValid: null,
-      nameErrorMessage: "",
       password1: "",
       password2: "",
+      validFrom: new Date(),
+      userGroups: {} as Array<UserGroup>,
+      nameIsValid: null,
+      nameErrorMessage: "",
       password1IsValid: null,
       password1ErrorMessage: "",
       password2IsValid: null,
       password2ErrorMessage: "",
       groupIdIsValid: null,
       groupIdErrorMessage: "",
+      validFromIsValid: null,
+      validFromErrorMessage: "",
     };
   },
   props: {
@@ -230,16 +289,23 @@ export default defineComponent({
       return false;
     },
     formForUpdateIsValid(): boolean {
-      const isValid = this.nameIsValid && this.groupIdIsValid;
+      const isValid =
+        this.nameIsValid && this.groupIdIsValid && this.validFromIsValid;
       if (isValid === null || isValid === undefined || isValid === true) {
         return true;
       }
       return false;
     },
+    editMode(): boolean {
+      return this.origUser !== undefined;
+    },
     title(): string {
-      return this.origUser === undefined
-        ? "Benutzerkonto hinzufügen"
-        : "Benutzerkonto bearbeiten";
+      return this.editMode
+        ? "Benutzerkonto bearbeiten"
+        : "Benutzerkonto hinzufügen";
+    },
+    maxWidth(): string {
+      return this.editMode ? "45%" : "var(--bs-modal-width);";
     },
     nameErrorData(): ErrorData {
       return generateErrorData(this.nameIsValid, "Name", this.nameErrorMessage);
@@ -265,6 +331,13 @@ export default defineComponent({
         this.groupIdErrorMessage
       );
     },
+    validFromErrorData(): ErrorData {
+      return generateErrorData(
+        this.validFromIsValid,
+        "Gültig ab",
+        this.validFromErrorMessage
+      );
+    },
   },
   methods: {
     async _show(user?: User) {
@@ -274,9 +347,29 @@ export default defineComponent({
     },
     async resetForm() {
       this.groups = await GroupControllerHandler.fetchAllGroup();
+      this.userGroups = new Array<UserGroup>();
+      this.password1 = "";
+      this.password2 = "";
 
-      if (this.origUser) {
-        this.user = JSON.parse(JSON.stringify(this.origUser));
+      if (this.editMode) {
+        (this.validFrom = new Date()),
+          (this.user = JSON.parse(JSON.stringify(this.origUser)));
+        if (this.user.id) {
+          const groupsById = new Map<number, Group>();
+          for (const group of this.groups) {
+            groupsById.set(group.id, group);
+          }
+
+          const accessRelations =
+            await UserControllerHandler.getAllAccessRelations(this.user.id);
+
+          accessRelations.forEach((mar) => {
+            this.userGroups.push({
+              ...mar,
+              group: groupsById.get(mar.refId),
+            });
+          });
+        }
       } else {
         this.user = {} as User;
         this.user.userName = "";
@@ -285,9 +378,13 @@ export default defineComponent({
         this.user.userIsAdmin = false;
         this.user.userIsNew = true;
         this.user.groupId = 0;
+        this.validFrom = new Date();
       }
       this.nameIsValid = null;
       this.serverError = {} as Array<String>;
+    },
+    formatDate(date?: Date) {
+      return date ? formatDate(date) : "";
     },
     validateName() {
       [this.nameIsValid, this.nameErrorMessage] = validateInputField(
@@ -321,6 +418,16 @@ export default defineComponent({
         "Gruppe angeben!"
       );
     },
+    validateValidFrom() {
+      [this.validFromIsValid, this.validFromErrorMessage] = validateInputField(
+        this.validFrom,
+        "Gültig ab angeben!"
+      );
+    },
+    validFromSelected(date: Date) {
+      this.validFrom = date;
+      this.validateValidFrom();
+    },
     handleServerError(validationResult: ValidationResult): boolean {
       if (!validationResult.result) {
         this.serverError = new Array<string>();
@@ -335,28 +442,41 @@ export default defineComponent({
       this.validateGroupId();
 
       if (this.user.id > 0) {
+        //update
+        this.validateValidFrom();
         if (this.formForUpdateIsValid && this.validatePasswordsAreEqual()) {
-          //update
-          //FIXME AccessRelation
-          const validationResult = await UserControllerHandler.updateUser(
-            this.user,
-            {} as AccessRelation
-          );
-          if (!this.handleServerError(validationResult)) {
-            (this.$refs.modalComponent as typeof ModalVue)._hide();
-            this.$emit("userUpdated", this.user);
+          if (this.password1) {
+            this.user.userPassword = this.password1;
+          }
+
+          if (this.user.groupId) {
+            const mar: AccessRelation = {
+              id: this.user.id,
+              refId: this.user.groupId,
+              validFrom: this.validFrom,
+            };
+            const validationResult = await UserControllerHandler.updateUser(
+              this.user,
+              mar
+            );
+            if (!this.handleServerError(validationResult)) {
+              (this.$refs.modalComponent as typeof ModalVue)._hide();
+              this.$emit("userUpdated", this.user);
+            }
           }
         }
       } else {
+        //create
         this.validatePassword1();
         this.validatePassword2();
 
         if (this.formForCreationIsValid && this.validatePasswordsAreEqual()) {
-          //create
-          const userValidation = UserControllerHandler.createUser(this.user);
-          const validationResult = await (
-            await userValidation
-          ).validationResult;
+          this.user.userPassword = this.password1;
+          console.log(this.user);
+          const userValidation = await UserControllerHandler.createUser(
+            this.user
+          );
+          const validationResult = userValidation.validationResult;
 
           if (!this.handleServerError(validationResult)) {
             this.user = (await userValidation).user;
@@ -370,6 +490,7 @@ export default defineComponent({
   expose: ["_show"],
   emits: ["userCreated", "userUpdated"],
   components: {
+    DatepickerVue,
     ModalVue,
   },
 });
