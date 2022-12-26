@@ -1,5 +1,5 @@
 export type AccessRelationTransport = {
-  id: number;
+  id?: number;
   refId: number;
   validfrom: string;
   validtil?: string;

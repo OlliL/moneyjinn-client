@@ -1,9 +1,12 @@
 import type { LoginResponse } from "@/model/rest/user/LoginResponse";
 import { useUserSessionStore } from "@/stores/UserSessionStore";
 import { throwError } from "@/tools/views/ThrowError";
+import { devtools } from "vue";
 
 abstract class AbstractControllerHandler {
-  private static SERVER_ROOT = "http://10.0.1.51:8081/moneyflow/server/";
+  private static SERVER_ROOT = devtools
+    ? "http://localhost:8081/moneyflow/server/"
+    : "http://bomba.salatschuessel.net:8080/moneyflow/server/";
 
   private getHeaders(): HeadersInit {
     const userSessionStore = useUserSessionStore();
@@ -65,6 +68,7 @@ abstract class AbstractControllerHandler {
   }
 
   protected async get(controller: string, usecase: string): Promise<Response> {
+    console.log(devtools);
     let response = await this.internalWithoutBody(controller, usecase, "get");
     if ((await response.status) === 403) {
       await this.refreshAuthToken();
