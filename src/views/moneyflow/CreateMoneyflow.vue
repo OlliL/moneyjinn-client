@@ -5,10 +5,7 @@
         <h4>Geldbewegung hinzuf&uuml;gen</h4>
       </div>
     </div>
-    <div
-      class="row justify-content-md-center mb-4"
-      v-show="preDefMoneyflows.length > 0"
-    >
+    <div class="row justify-content-md-center mb-4">
       <div class="col-md-4 col-xs-12">
         <select
           class="form-select"

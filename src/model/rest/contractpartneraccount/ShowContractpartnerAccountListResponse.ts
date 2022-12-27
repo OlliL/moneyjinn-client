@@ -4,6 +4,5 @@ import type { ContractpartnerAccountTransport } from "@/model/rest/transport/Con
 export type ShowContractpartnerAccountListResponse = ErrorResponse & {
   showContractpartnerAccountListResponse: {
     contractpartnerAccountTransport: Array<ContractpartnerAccountTransport>;
-    contractpartnerName: string;
   };
 };

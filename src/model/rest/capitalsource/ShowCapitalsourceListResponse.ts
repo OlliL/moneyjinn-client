@@ -3,8 +3,6 @@ import type { CapitalsourceTransport } from "@/model/rest/transport/Capitalsourc
 
 export type ShowCapitalsourceListResponse = ErrorResponse & {
   showCapitalsourceListResponse: {
-    initials: Array<string>;
     capitalsourceTransport: Array<CapitalsourceTransport>;
-    currentlyValid: number;
   };
 };
