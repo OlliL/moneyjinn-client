@@ -61,7 +61,7 @@ const router = createRouter({
         {
           path: "importReceipts",
           name: Routes.ImportReceipts,
-          component: () => import("@/views/moneyflow/SearchMoneyflows.vue"),
+          component: () => import("@/views/receipt/ImportReceipts.vue"),
         },
         {
           path: "searchMoneyflows",

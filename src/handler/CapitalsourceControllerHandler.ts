@@ -19,7 +19,7 @@ class CapitalsourceControllerHandler extends AbstractControllerHandler {
   private static CONTROLLER = "capitalsource";
 
   async fetchAllCapitalsource(): Promise<Array<Capitalsource>> {
-    const usecase = "showCapitalsourceList/all/currentlyValid/false";
+    const usecase = "showCapitalsourceList";
     const response = await super.get(
       CapitalsourceControllerHandler.CONTROLLER,
       usecase

@@ -68,7 +68,6 @@ abstract class AbstractControllerHandler {
   }
 
   protected async get(controller: string, usecase: string): Promise<Response> {
-    console.log(devtools);
     let response = await this.internalWithoutBody(controller, usecase, "get");
     if ((await response.status) === 403) {
       await this.refreshAuthToken();

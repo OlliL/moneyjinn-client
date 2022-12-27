@@ -72,16 +72,8 @@
         </h1>
       </div>
     </div>
-    <ReportTableVue
-      :year="year"
-      :month="month"
-      v-if="dataLoaded && year && month"
-    />
-    <EtfTableVue
-      :year="year"
-      :month="month"
-      v-if="dataLoaded && year && month"
-    />
+    <ReportTableVue :year="year" :month="month" v-if="year && month" />
+    <EtfTableVue :year="year" :month="month" v-if="year && month" />
   </div>
 </template>
 

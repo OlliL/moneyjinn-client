@@ -19,7 +19,7 @@ class ContractpartnerControllerHandler extends AbstractControllerHandler {
   private static CONTROLLER = "contractpartner";
 
   async fetchAllContractpartner(): Promise<Array<Contractpartner>> {
-    const usecase = "showContractpartnerList/all/currentlyValid/false";
+    const usecase = "showContractpartnerList";
     const response = await super.get(
       ContractpartnerControllerHandler.CONTROLLER,
       usecase

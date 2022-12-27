@@ -20,7 +20,7 @@ class GroupControllerHandler extends AbstractControllerHandler {
   private static CONTROLLER = "group";
 
   async fetchAllGroup(): Promise<Array<Group>> {
-    const usecase = "showGroupList/all";
+    const usecase = "showGroupList";
     const response = await super.get(
       GroupControllerHandler.CONTROLLER,
       usecase

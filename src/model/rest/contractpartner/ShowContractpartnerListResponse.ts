@@ -3,8 +3,6 @@ import type { ContractpartnerTransport } from "@/model/rest/transport/Contractpa
 
 export type ShowContractpartnerListResponse = ErrorResponse & {
   showContractpartnerListResponse: {
-    initials: Array<string>;
     contractpartnerTransport: Array<ContractpartnerTransport>;
-    currentlyValid: number;
   };
 };
