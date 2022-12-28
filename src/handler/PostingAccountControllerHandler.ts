@@ -18,7 +18,7 @@ class PostingAccountControllerHandler extends AbstractControllerHandler {
   private static CONTROLLER = "postingaccount";
 
   async fetchAllPostingAccount(): Promise<Array<PostingAccount>> {
-    const usecase = "showPostingAccountList/all";
+    const usecase = "showPostingAccountList";
     const response = await super.get(
       PostingAccountControllerHandler.CONTROLLER,
       usecase

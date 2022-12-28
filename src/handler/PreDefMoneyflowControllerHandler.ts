@@ -18,7 +18,7 @@ class PreDefMoneyflowControllerHandler extends AbstractControllerHandler {
   private static CONTROLLER = "predefmoneyflow";
 
   async fetchAllPreDefMoneyflow(): Promise<Array<PreDefMoneyflow>> {
-    const usecase = "showPreDefMoneyflowList/all";
+    const usecase = "showPreDefMoneyflowList";
     const response = await super.get(
       PreDefMoneyflowControllerHandler.CONTROLLER,
       usecase

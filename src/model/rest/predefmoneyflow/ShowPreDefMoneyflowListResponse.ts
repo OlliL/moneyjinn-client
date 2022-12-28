@@ -3,7 +3,6 @@ import type { PreDefMoneyflowTransport } from "../transport/PreDefMoneyflowTrans
 
 export type ShowPreDefMoneyflowListResponse = ErrorResponse & {
   showPreDefMoneyflowListResponse: {
-    initials: Array<string>;
     preDefMoneyflowTransport: Array<PreDefMoneyflowTransport>;
   };
 };
