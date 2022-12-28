@@ -3,7 +3,6 @@ import type { PostingAccountTransport } from "../transport/PostingAccountTranspo
 
 export type ShowPostingAccountListResponse = ErrorResponse & {
   showPostingAccountListResponse: {
-    initials: Array<string>;
     postingAccountTransport: Array<PostingAccountTransport>;
   };
 };

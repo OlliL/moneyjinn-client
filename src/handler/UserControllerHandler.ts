@@ -101,7 +101,7 @@ class UserControllerHandler extends AbstractControllerHandler {
   }
 
   async fetchAllUser(): Promise<Array<User>> {
-    const usecase = "showUserList/all";
+    const usecase = "showUserList";
     const response = await super.get(UserControllerHandler.CONTROLLER, usecase);
     if (!response.ok) {
       throw new Error(response.statusText);
