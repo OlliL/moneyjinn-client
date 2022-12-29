@@ -449,6 +449,12 @@ export default defineComponent({
         };
 
         this.amount = this.mmf.amount;
+
+        // set correct defaults for imported moneyflows
+        if (this.mmf.comment === undefined) this.mmf.comment = "";
+        if (this.mmf.postingAccountId === undefined)
+          this.mmf.postingAccountId = 0;
+
         this.originalMoneyflowSplitEntryIds = new Array<number>();
         if (
           this.fillContractpartnerDefaults &&
@@ -671,6 +677,14 @@ export default defineComponent({
       if (contractpartner) {
         this.mmf.contractpartnerId = contractpartner.id;
         this.mmf.contractpartnerName = contractpartner.name;
+        console.log(
+          this.mmf.comment,
+          this.previousCommentSetByContractpartnerDefaults
+        );
+        console.log(
+          this.mmf.postingAccountId,
+          this.previousPostingAccountSetByContractpartnerDefaults
+        );
         if (
           this.mmf.comment === this.previousCommentSetByContractpartnerDefaults
         ) {
