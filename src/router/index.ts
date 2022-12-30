@@ -1,4 +1,9 @@
-import { createRouter, createWebHistory } from "vue-router";
+import {
+  createRouter,
+  createWebHistory,
+  type NavigationGuardNext,
+  type RouteLocationNormalized,
+} from "vue-router";
 import { useUserSessionStore } from "@/stores/UserSessionStore";
 
 export enum Routes {
@@ -150,16 +155,28 @@ const router = createRouter({
   ],
 });
 
-router.beforeEach((to, from, next) => {
-  const userSessionStore = useUserSessionStore();
-  const userIsLoggedIn = userSessionStore.getAuthorizationToken?.length > 0;
-  const loginNeeded = !to.matched.some((record) => record.meta.hideForAuth);
+router.beforeEach(
+  (
+    to: RouteLocationNormalized,
+    from: RouteLocationNormalized,
+    next: NavigationGuardNext
+  ) => {
+    const userSessionStore = useUserSessionStore();
+    const userIsLoggedIn = userSessionStore.getAuthorizationToken?.length > 0;
+    const loginNeeded = !to.matched.some((record) => record.meta.hideForAuth);
 
-  if (userIsLoggedIn || !loginNeeded) {
-    next();
-  } else {
-    next({ name: Routes.Login });
+    if (userIsLoggedIn || !loginNeeded) {
+      if (to.name === Routes.ChangePassword || to.name === Routes.Login) {
+        next();
+      }
+      if (userSessionStore.userIsNew) {
+        next({ name: Routes.ChangePassword });
+      }
+      next();
+    } else {
+      next({ name: Routes.Login });
+    }
   }
-});
+);
 
 export default router;

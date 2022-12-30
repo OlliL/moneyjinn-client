@@ -95,9 +95,12 @@
 <script lang="ts">
 import { generateErrorData, type ErrorData } from "@/tools/views/ErrorData";
 import { validateInputField } from "@/tools/views/ValidateInputField";
+import { getError } from "@/tools/views/ThrowError";
 import UserControllerHandler from "@/handler/UserControllerHandler";
 import { defineComponent } from "vue";
 import router, { Routes } from "@/router";
+import { ErrorCode } from "@/model/ErrorCode";
+import { useUserSessionStore } from "@/stores/UserSessionStore";
 
 type ChangePasswordData = {
   serverError: Array<String> | undefined;
@@ -110,6 +113,7 @@ type ChangePasswordData = {
   password1ErrorMessage: string;
   password2IsValid: boolean | null;
   password2ErrorMessage: string;
+  userIsNew: boolean;
 };
 export default defineComponent({
   name: "ChangePassword",
@@ -125,9 +129,21 @@ export default defineComponent({
       password1ErrorMessage: "",
       password2IsValid: null,
       password2ErrorMessage: "",
+      userIsNew: false,
     };
   },
-
+  created() {
+    const userSessionStore = useUserSessionStore();
+    if (userSessionStore.userIsNew) {
+      this.userIsNew = true;
+    } else {
+      this.userIsNew = false;
+    }
+    this.serverError = new Array<string>();
+    if (this.userIsNew) {
+      this.serverError.push(getError(ErrorCode.PASSWORD_MUST_BE_CHANGED));
+    }
+  },
   computed: {
     formIsValid(): boolean {
       const isValid = this.password1IsValid && this.password2IsValid;
@@ -194,9 +210,17 @@ export default defineComponent({
             this.passwordOld,
             this.password1
           );
-          router.push({
-            name: Routes.Home,
-          });
+          const userSessionStore = useUserSessionStore();
+          if (userSessionStore.userIsNew) {
+            userSessionStore.logout();
+            router.push({
+              name: Routes.Login,
+            });
+          } else {
+            router.push({
+              name: Routes.Home,
+            });
+          }
         } catch (e) {
           this.serverError = new Array<string>();
           this.serverError.push((e as Error).message);
