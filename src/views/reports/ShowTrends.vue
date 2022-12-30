@@ -439,9 +439,3 @@ export default defineComponent({
   components: { Line, DatepickerVue },
 });
 </script>
-
-<style>
-ul.month-selection {
-  margin: 0 !important;
-}
-</style>
