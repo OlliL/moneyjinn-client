@@ -751,9 +751,3 @@ export default defineComponent({
   components: { PostingAccountSelectVue, Bar, DatepickerVue },
 });
 </script>
-
-<style>
-ul.month-selection {
-  margin: 0 !important;
-}
-</style>

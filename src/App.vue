@@ -5,3 +5,9 @@ import { RouterView } from "vue-router";
 <template>
   <router-view />
 </template>
+
+<style>
+ul.month-selection {
+  margin: 0 !important;
+}
+</style>

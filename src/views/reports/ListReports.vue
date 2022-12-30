@@ -157,9 +157,3 @@ export default defineComponent({
   components: { ReportTableVue, EtfTableVue },
 });
 </script>
-
-<style>
-ul.month-selection {
-  margin: 0 !important;
-}
-</style>

@@ -31,32 +31,40 @@
               </button>
             </td>
             <td>
-              <nav aria-label="Start letter navigation" v-if="dataLoaded">
-                <ul class="pagination month-selection">
-                  <li class="page-item">
-                    <a
-                      :class="
-                        $props.letter === '' ? 'page-link active' : 'page-link'
-                      "
-                      href="#"
-                      @click="selectLetter('')"
-                      >Alle</a
+              <div class="d-flex align-self-end">
+                <nav aria-label="Start letter navigation" v-if="dataLoaded">
+                  <ul class="pagination month-selection">
+                    <li class="page-item">
+                      <a
+                        :class="
+                          $props.letter === ''
+                            ? 'page-link active'
+                            : 'page-link'
+                        "
+                        href="#"
+                        @click="selectLetter('')"
+                        >Alle</a
+                      >
+                    </li>
+                    <li
+                      class="page-item"
+                      v-for="letter in letters"
+                      :key="letter"
                     >
-                  </li>
-                  <li class="page-item" v-for="letter in letters" :key="letter">
-                    <a
-                      :class="
-                        $props.letter === letter
-                          ? 'page-link active'
-                          : 'page-link'
-                      "
-                      href="#"
-                      @click="selectLetter(letter)"
-                      >{{ letter }}</a
-                    >
-                  </li>
-                </ul>
-              </nav>
+                      <a
+                        :class="
+                          $props.letter === letter
+                            ? 'page-link active'
+                            : 'page-link'
+                        "
+                        href="#"
+                        @click="selectLetter(letter)"
+                        >{{ letter }}</a
+                      >
+                    </li>
+                  </ul>
+                </nav>
+              </div>
             </td>
           </tr>
         </table>

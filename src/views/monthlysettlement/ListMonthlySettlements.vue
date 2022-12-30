@@ -224,9 +224,3 @@ export default defineComponent({
   },
 });
 </script>
-
-<style>
-ul.month-selection {
-  margin: 0 !important;
-}
-</style>
