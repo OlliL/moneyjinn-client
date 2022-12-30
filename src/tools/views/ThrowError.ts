@@ -39,6 +39,9 @@ export function getError(code: number, variableArray?: Array<string>) {
     case ErrorCode.ACCOUNT_IS_LOCKED: {
       return "Ihr Benutzerkonto wurde gesperrt!";
     }
+    case ErrorCode.PASSWORD_MUST_BE_CHANGED: {
+      return "Sie müssen ihr Passwort ändern!";
+    }
     case ErrorCode.NO_SEARCH_CRITERIA_ENTERED: {
       return "Keine Suchkriterien angegeben!";
     }
