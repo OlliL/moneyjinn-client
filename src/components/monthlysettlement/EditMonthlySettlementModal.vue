@@ -182,8 +182,9 @@ export default defineComponent({
     async _show(year?: number, month?: number) {
       if (year && month) {
         const monthDate = new Date();
-        monthDate.setFullYear(year);
+        monthDate.setDate(1);
         monthDate.setMonth(month - 1);
+        monthDate.setFullYear(year);
         this.selectedMonth = monthDate;
       } else {
         this.selectedMonth = undefined;
