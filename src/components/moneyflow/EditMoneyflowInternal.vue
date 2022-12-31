@@ -677,14 +677,6 @@ export default defineComponent({
       if (contractpartner) {
         this.mmf.contractpartnerId = contractpartner.id;
         this.mmf.contractpartnerName = contractpartner.name;
-        console.log(
-          this.mmf.comment,
-          this.previousCommentSetByContractpartnerDefaults
-        );
-        console.log(
-          this.mmf.postingAccountId,
-          this.previousPostingAccountSetByContractpartnerDefaults
-        );
         if (
           this.mmf.comment === this.previousCommentSetByContractpartnerDefaults
         ) {

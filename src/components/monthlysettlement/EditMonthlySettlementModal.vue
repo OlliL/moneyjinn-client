@@ -14,34 +14,15 @@
         </div>
       </div>
       <div class="row justify-content-md-center mb-4">
-        <div class="col-md-4">
-          <div class="form-floating">
-            <select
-              class="form-select"
-              v-model="selectedMonth"
-              id="month"
-              @change="selectYearMonth"
-            >
-              <label for="year">Jahr</label
-              >>
-              <option v-for="i in 12" :value="i" :key="i">
-                {{ getMonthName(i) }}
-              </option>
-            </select>
-            <label for="month">Monat</label>
-          </div>
-        </div>
-        <div class="col-md-3">
-          <div class="form-floating">
-            <input
-              v-model="selectedYear"
-              type="text"
-              id="year"
-              class="form-control"
-              @change="selectYearMonth"
-            />
-            <label for="year">Jahr</label>
-          </div>
+        <div class="col-6">
+          <DatepickerVue
+            id="selectedMonth"
+            label="Monat"
+            pick-mode="month"
+            :default-date="selectedMonth"
+            input-class="form-control"
+            @date-selected="onDateSelected"
+          />
         </div>
       </div>
       <div class="row justify-content-md-center mb-4">
@@ -146,6 +127,7 @@ import ModalVue from "../Modal.vue";
 import type { MonthlySettlementEditTransporter } from "@/model/monthlysettlement/MonthlySettlementEditTransporter";
 import type { ValidationResult } from "@/model/validation/ValidationResult";
 import { getError } from "@/tools/views/ThrowError";
+import DatepickerVue from "../Datepicker.vue";
 
 type MonthlySettlementFormData = MonthlySettlement & {
   imported: boolean;
@@ -158,8 +140,7 @@ type EditMonthlySettlementModal = {
   editMode: boolean;
   year: number;
   month: number;
-  selectedMonth: number;
-  selectedYear: string;
+  selectedMonth: Date | undefined;
   monthlySettlementsNoCredit: Array<MonthlySettlementFormData>;
   monthlySettlementsCredit: Array<MonthlySettlementFormData>;
   amountIsValid: boolean | null;
@@ -175,8 +156,7 @@ export default defineComponent({
       editMode: false,
       year: 0,
       month: 0,
-      selectedMonth: 0,
-      selectedYear: "",
+      selectedMonth: undefined,
       monthlySettlementsNoCredit: {} as Array<MonthlySettlementFormData>,
       monthlySettlementsCredit: {} as Array<MonthlySettlementFormData>,
       amountIsValid: null,
@@ -200,16 +180,29 @@ export default defineComponent({
       return getMonthName(month);
     },
     async _show(year?: number, month?: number) {
-      this.loadMonthlySettlements(year, month);
+      if (year && month) {
+        const monthDate = new Date();
+        monthDate.setFullYear(year);
+        monthDate.setMonth(month - 1);
+        this.selectedMonth = monthDate;
+      } else {
+        this.selectedMonth = undefined;
+      }
+      this.loadMonthlySettlements();
       this.serverError = new Array<String>();
       (this.$refs.modalComponent as typeof ModalVue)._show();
     },
-    selectYearMonth() {
-      if (!isNaN(+this.selectedYear)) {
-        this.loadMonthlySettlements(+this.selectedYear, this.selectedMonth);
-      }
+    onDateSelected(selectedDate: Date) {
+      this.selectedMonth = selectedDate;
+      this.loadMonthlySettlements();
     },
-    async loadMonthlySettlements(year?: number, month?: number) {
+    async loadMonthlySettlements() {
+      let year = undefined;
+      let month = undefined;
+      if (this.selectedMonth) {
+        year = this.selectedMonth.getFullYear();
+        month = this.selectedMonth.getMonth() + 1;
+      }
       const transporter: MonthlySettlementEditTransporter =
         await MonthlySettlementControllerHandler.getMonthlySettlementForEdit(
           year,
@@ -250,8 +243,12 @@ export default defineComponent({
 
       this.year = transporter.year;
       this.month = transporter.month;
-      this.selectedYear = transporter.year.toString();
-      this.selectedMonth = transporter.month;
+      const monthDate = new Date();
+      monthDate.setFullYear(transporter.year);
+      monthDate.setDate(1);
+      monthDate.setMonth(transporter.month - 1);
+
+      this.selectedMonth = monthDate;
       this.editMode = transporter.editMode;
       this.monthlySettlementsCredit = monthlySettlementsCredit;
       this.monthlySettlementsNoCredit = monthlySettlementsNoCredit;
@@ -298,6 +295,6 @@ export default defineComponent({
   },
   expose: ["_show"],
   emits: ["monthlySettlementUpserted"],
-  components: { ModalVue },
+  components: { ModalVue, DatepickerVue },
 });
 </script>
