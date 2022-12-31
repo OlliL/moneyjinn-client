@@ -4,7 +4,7 @@ export type EtfSummaryTransport = {
   chartUrl: string;
   amount: number;
   spentValue: number;
-  buyPrice: number;
-  sellPrice: number;
-  pricesTimestamp: string;
+  buyPrice?: number;
+  sellPrice?: number;
+  pricesTimestamp?: string;
 };

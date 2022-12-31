@@ -4,13 +4,13 @@
       <a :href="chartUrl">{{ name }}</a>
     </td>
     <td class="text-end">{{ amount }}</td>
-    <td class="text-end">{{ avgSpentPriceString }} &euro;</td>
-    <td class="text-end">{{ sellPriceString }} &euro;</td>
-    <td class="text-end">{{ buyPriceString }} &euro;</td>
-    <td class="text-end">{{ spentValueString }} &euro;</td>
-    <td class="text-end">{{ sumSellPriceString }} &euro;</td>
+    <td class="text-end">{{ avgSpentPriceString }}</td>
+    <td class="text-end">{{ sellPriceString }}</td>
+    <td class="text-end">{{ buyPriceString }}</td>
+    <td class="text-end">{{ spentValueString }}</td>
+    <td class="text-end">{{ sumSellPriceString }}</td>
     <td :class="profitClass">
-      <u>{{ profitString }} &euro;</u>
+      <u>{{ profitString }} </u>
     </td>
     <td class="text-end">{{ pricesTimestampString }}</td>
   </tr>
@@ -45,47 +45,53 @@ export default defineComponent({
     },
     buyPrice: {
       type: Number,
-      required: true,
+      required: false,
     },
     sellPrice: {
       type: Number,
-      required: true,
+      required: false,
     },
     pricesTimestamp: {
       type: Date,
-      required: true,
+      required: false,
     },
   },
   computed: {
-    sumSellPrice(): number {
-      return this.amount * this.sellPrice;
+    sumSellPrice(): number | undefined {
+      return this.sellPrice ? this.amount * this.sellPrice : undefined;
     },
     sumSellPriceString(): string {
-      return formatNumber(this.sumSellPrice, 2);
+      return this.sumSellPrice
+        ? formatNumber(this.sumSellPrice, 2) + " \u20AC"
+        : "";
     },
     avgSpentPriceString(): string {
-      return formatNumber(this.spentValue / this.amount, 4);
+      return formatNumber(this.spentValue / this.amount, 4) + " \u20AC";
     },
-    profit(): number {
-      return this.sumSellPrice - this.spentValue;
+    profit(): number | undefined {
+      return this.sumSellPrice
+        ? this.sumSellPrice - this.spentValue
+        : undefined;
     },
     profitString(): string {
-      return formatNumber(this.profit, 2);
+      return this.profit ? formatNumber(this.profit, 2) + " \u20AC" : "";
     },
     profitClass(): string {
       return redIfNegativeEnd(this.profit);
     },
     sellPriceString(): string {
-      return formatNumber(this.sellPrice, 3);
+      return this.sellPrice ? formatNumber(this.sellPrice, 3) + " \u20AC" : "";
     },
     buyPriceString(): string {
-      return formatNumber(this.buyPrice, 3);
+      return this.buyPrice ? formatNumber(this.buyPrice, 3) + " \u20AC" : "";
     },
     spentValueString(): string {
-      return formatNumber(this.spentValue, 2);
+      return formatNumber(this.spentValue, 2) + " \u20AC";
     },
     pricesTimestampString(): string {
-      return formatDateWithTime(this.pricesTimestamp);
+      return this.pricesTimestamp
+        ? formatDateWithTime(this.pricesTimestamp)
+        : "";
     },
   },
 });
