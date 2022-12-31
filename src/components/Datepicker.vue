@@ -107,32 +107,38 @@ export default defineComponent({
   watch: {
     defaultDate: {
       handler(newVal: Date, oldVal: Date) {
-        if (newVal != oldVal && this.datepicker instanceof Datepicker) {
-          if (newVal === undefined) {
-            if (this.datepicker.dates.length > 0) {
-              this.datepicker.setDate(undefined);
-            }
-          } else {
-            if (this.pickMode === "month" || this.pickMode === "year")
-              newVal.setDate(1);
-            if (this.pickMode === "year") newVal.setMonth(0);
-            newVal.setHours(0, 0, 0, 0);
-
-            if (this.datepicker.dates.length === 0) {
-              this.datepicker.setDate(newVal);
-            } else if (
-              (this.datepicker.getDate() as Date).toISOString() !=
-              newVal?.toISOString()
-            ) {
-              this.datepicker.setDate(newVal);
-            }
-          }
+        if (newVal != oldVal) {
+          this.setDate(newVal);
         }
       },
       immediate: true,
     },
   },
   methods: {
+    setDate(newVal: Date) {
+      if (this.datepicker instanceof Datepicker) {
+        if (newVal === undefined) {
+          if (this.datepicker.dates.length > 0) {
+            this.datepicker.setDate(undefined);
+          }
+        } else {
+          if (this.pickMode === "month" || this.pickMode === "year") {
+            newVal.setDate(1);
+          }
+          if (this.pickMode === "year") newVal.setMonth(0);
+          newVal.setHours(0, 0, 0, 0);
+
+          if (this.datepicker.dates.length === 0) {
+            this.datepicker.setDate(newVal);
+          } else if (
+            (this.datepicker.getDate() as Date).toISOString() !=
+            newVal?.toISOString()
+          ) {
+            this.datepicker.setDate(newVal);
+          }
+        }
+      }
+    },
     emitDate() {
       if (this.datepicker.dates.length === 0) {
         if (this.$props.defaultDate !== undefined) {
@@ -180,6 +186,7 @@ export default defineComponent({
             format: format,
           }
         );
+        if (this.$props.defaultDate) this.setDate(this.$props.defaultDate);
       }
     },
   },
