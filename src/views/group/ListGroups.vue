@@ -2,13 +2,13 @@
   <CreateGroupModalVue
     ref="createGroupModalList"
     id-suffix="List"
-    @group-created="groupCreated"
-    @group-updated="groupUpdated"
+    @group-created="reloadView"
+    @group-updated="reloadView"
   />
   <DeleteGroupModalVue
     ref="deleteGroupModalList"
     id-suffix="List"
-    @group-deleted="groupDeleted"
+    @group-deleted="reloadView"
   />
 
   <div class="container-fluid text-center">
@@ -31,32 +31,22 @@
               </button>
             </td>
             <td>
-              <nav aria-label="Start letter navigation" v-if="dataLoaded">
-                <ul class="pagination month-selection">
-                  <li class="page-item">
-                    <a
-                      :class="
-                        $props.letter === '' ? 'page-link active' : 'page-link'
-                      "
-                      href="#"
-                      @click="selectLetter('')"
-                      >Alle</a
-                    >
-                  </li>
-                  <li class="page-item" v-for="letter in letters" :key="letter">
-                    <a
-                      :class="
-                        $props.letter === letter
-                          ? 'page-link active'
-                          : 'page-link'
-                      "
-                      href="#"
-                      @click="selectLetter(letter)"
-                      >{{ letter }}</a
-                    >
-                  </li>
-                </ul>
-              </nav>
+              <div class="input-group">
+                <button
+                  type="button"
+                  class="btn btn-primary"
+                  @click="searchAllContent"
+                >
+                  Alle
+                </button>
+                <input
+                  class="form-control"
+                  type="text"
+                  placeholder="Suchen nach Name..."
+                  v-model="searchString"
+                  @input="searchContent"
+                />
+              </div>
             </td>
           </tr>
         </table>
@@ -87,7 +77,6 @@
 </template>
 
 <script lang="ts">
-import router, { Routes } from "@/router";
 import { defineComponent } from "vue";
 import type { Group } from "@/model/group/Group";
 import GroupControllerHandler from "@/handler/GroupControllerHandler";
@@ -99,19 +88,13 @@ export default defineComponent({
   name: "ListGroups",
   data() {
     return {
-      dataLoaded: false,
-      letters: {} as Array<string>,
       groups: {} as Array<Group>,
       allGroups: {} as Array<Group>,
+      searchString: "",
     };
   },
-  props: {
-    letter: {
-      type: String,
-      default: "",
-    },
-  },
   async mounted() {
+    this.searchString = "";
     this.reloadView();
   },
   computed: {},
@@ -123,56 +106,35 @@ export default defineComponent({
         return a.name.toUpperCase().localeCompare(b.name.toUpperCase());
       });
 
-      const letters = this.allGroups.map((entry) =>
-        entry.name.substring(0, 1).toUpperCase()
-      );
-      const uniqueLetters = letters
-        .filter((v, i, a) => a.indexOf(v) === i)
-        .sort();
-      this.letters = uniqueLetters;
-
-      this.loadData(this.$props.letter);
-    },
-    async loadData(letter: string) {
-      this.dataLoaded = false;
-      if (letter === "") {
-        this.groups = this.allGroups;
-      } else {
-        this.groups = this.allGroups.filter(
-          (entry) => entry.name.substring(0, 1).toUpperCase() === letter
-        );
-      }
-
-      this.dataLoaded = true;
-    },
-    selectLetter(letter: string) {
-      router.push({
-        name: Routes.ListGroups,
-        params: { letter: letter },
-      });
-      this.loadData(letter);
+      this.searchContent();
     },
     showCreateGroupModal() {
       (this.$refs.createGroupModalList as typeof CreateGroupModalVue)._show();
-    },
-    groupCreated() {
-      this.reloadView();
     },
     editGroup(group: Group) {
       (this.$refs.createGroupModalList as typeof CreateGroupModalVue)._show(
         group
       );
     },
-    groupUpdated() {
-      this.reloadView();
-    },
     deleteGroup(group: Group) {
       (this.$refs.deleteGroupModalList as typeof DeleteGroupModalVue)._show(
         group
       );
     },
-    groupDeleted() {
-      this.reloadView();
+    searchAllContent() {
+      this.searchString = "";
+      this.searchContent();
+    },
+    searchContent() {
+      let groups = this.allGroups;
+      if (this.searchString === "") {
+        this.groups = groups;
+      }
+
+      const commentUpper = this.searchString.toUpperCase();
+      this.groups = groups.filter((entry) =>
+        entry.name.toUpperCase().includes(commentUpper)
+      );
     },
   },
   components: {
