@@ -2,13 +2,13 @@
   <CreatePreDefMoneyflowModalVue
     ref="createPreDefMoneyflowModalList"
     id-suffix="List"
-    @pre-def-moneyflow-created="preDefMoneyflowCreated"
-    @pre-def-moneyflow-updated="preDefMoneyflowUpdated"
+    @pre-def-moneyflow-created="reloadView"
+    @pre-def-moneyflow-updated="reloadView"
   />
   <DeletePreDefMoneyflowModalVue
     ref="deletePreDefMoneyflowModalList"
     id-suffix="List"
-    @pre-def-moneyflow-deleted="preDefMoneyflowDeleted"
+    @pre-def-moneyflow-deleted="reloadView"
   />
 
   <div class="container-fluid text-center">
@@ -31,32 +31,22 @@
               </button>
             </td>
             <td>
-              <nav aria-label="Start letter navigation" v-if="dataLoaded">
-                <ul class="pagination month-selection">
-                  <li class="page-item">
-                    <a
-                      :class="
-                        $props.letter === '' ? 'page-link active' : 'page-link'
-                      "
-                      href="#"
-                      @click="selectLetter('')"
-                      >Alle</a
-                    >
-                  </li>
-                  <li class="page-item" v-for="letter in letters" :key="letter">
-                    <a
-                      :class="
-                        $props.letter === letter
-                          ? 'page-link active'
-                          : 'page-link'
-                      "
-                      href="#"
-                      @click="selectLetter(letter)"
-                      >{{ letter }}</a
-                    >
-                  </li>
-                </ul>
-              </nav>
+              <div class="input-group">
+                <button
+                  type="button"
+                  class="btn btn-primary"
+                  @click="searchAllContent"
+                >
+                  Alle
+                </button>
+                <input
+                  class="form-control"
+                  type="text"
+                  placeholder="Suchen nach Vertragspartner..."
+                  v-model="searchString"
+                  @input="searchContent"
+                />
+              </div>
             </td>
           </tr>
         </table>
@@ -93,7 +83,6 @@
 </template>
 
 <script lang="ts">
-import router, { Routes } from "@/router";
 import { defineComponent } from "vue";
 import type { PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
 import PreDefMoneyflowControllerHandler from "@/handler/PreDefMoneyflowControllerHandler";
@@ -105,19 +94,13 @@ export default defineComponent({
   name: "ListPreDefMoneyflows",
   data() {
     return {
-      dataLoaded: false,
-      letters: {} as Array<string>,
       preDefMoneyflows: {} as Array<PreDefMoneyflow>,
       allPreDefMoneyflows: {} as Array<PreDefMoneyflow>,
+      searchString: "",
     };
   },
-  props: {
-    letter: {
-      type: String,
-      default: "",
-    },
-  },
   async mounted() {
+    this.searchString = "";
     this.reloadView();
   },
   computed: {},
@@ -131,36 +114,7 @@ export default defineComponent({
           .toUpperCase()
           .localeCompare(b.contractpartnerName.toUpperCase());
       });
-
-      const letters = this.allPreDefMoneyflows.map((entry) =>
-        entry.contractpartnerName.substring(0, 1).toUpperCase()
-      );
-      const uniqueLetters = letters
-        .filter((v, i, a) => a.indexOf(v) === i)
-        .sort();
-      this.letters = uniqueLetters;
-
-      this.loadData(this.$props.letter);
-    },
-    async loadData(letter: string) {
-      this.dataLoaded = false;
-      if (letter === "") {
-        this.preDefMoneyflows = this.allPreDefMoneyflows;
-      } else {
-        this.preDefMoneyflows = this.allPreDefMoneyflows.filter(
-          (entry) =>
-            entry.contractpartnerName.substring(0, 1).toUpperCase() === letter
-        );
-      }
-
-      this.dataLoaded = true;
-    },
-    selectLetter(letter: string) {
-      router.push({
-        name: Routes.ListPreDefMoneyflows,
-        params: { letter: letter },
-      });
-      this.loadData(letter);
+      this.searchContent();
     },
     showCreatePreDefMoneyflowModal() {
       (
@@ -168,17 +122,11 @@ export default defineComponent({
           .createPreDefMoneyflowModalList as typeof CreatePreDefMoneyflowModalVue
       )._show();
     },
-    preDefMoneyflowCreated() {
-      this.reloadView();
-    },
     editPreDefMoneyflow(mpm: PreDefMoneyflow) {
       (
         this.$refs
           .createPreDefMoneyflowModalList as typeof CreatePreDefMoneyflowModalVue
       )._show(mpm);
-    },
-    preDefMoneyflowUpdated() {
-      this.reloadView();
     },
     deletePreDefMoneyflow(mpm: PreDefMoneyflow) {
       (
@@ -186,8 +134,20 @@ export default defineComponent({
           .deletePreDefMoneyflowModalList as typeof DeletePreDefMoneyflowModalVue
       )._show(mpm);
     },
-    preDefMoneyflowDeleted() {
-      this.reloadView();
+    searchAllContent() {
+      this.searchString = "";
+      this.searchContent();
+    },
+    searchContent() {
+      let mpm = this.allPreDefMoneyflows;
+      if (this.searchString === "") {
+        this.preDefMoneyflows = mpm;
+      }
+
+      const commentUpper = this.searchString.toUpperCase();
+      this.preDefMoneyflows = mpm.filter((entry) =>
+        entry.contractpartnerName.toUpperCase().includes(commentUpper)
+      );
     },
   },
   components: {

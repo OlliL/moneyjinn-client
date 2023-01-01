@@ -79,7 +79,6 @@ const router = createRouter({
           name: Routes.ListCapitalsources,
           component: () =>
             import("@/views/capitalsource/ListCapitalsources.vue"),
-          props: true,
         },
         {
           path: "listPostingAccounts/:letter?",
@@ -93,7 +92,6 @@ const router = createRouter({
           name: Routes.ListContractpartners,
           component: () =>
             import("@/views/contractpartner/ListContractpartners.vue"),
-          props: true,
         },
         {
           path: "listGroups/:letter?",
@@ -112,7 +110,6 @@ const router = createRouter({
           name: Routes.ListPreDefMoneyflows,
           component: () =>
             import("@/views/predefmoneyflow/ListPreDefMoneyflows.vue"),
-          props: true,
         },
         {
           path: "listMonthlySettlements/:year?/:month?",
