@@ -100,7 +100,6 @@
 <script lang="ts">
 import ContractpartnerControllerHandler from "@/handler/ContractpartnerControllerHandler";
 import type { Contractpartner } from "@/model/contractpartner/Contractpartner";
-import { useContractpartnerStore } from "@/stores/ContractpartnerStore";
 import { formatDate } from "@/tools/views/FormatDate";
 import { defineComponent } from "vue";
 import ModalVue from "../Modal.vue";
@@ -127,8 +126,6 @@ export default defineComponent({
     },
     async deleteContractpartner() {
       await ContractpartnerControllerHandler.deleteContractpartner(this.mcp.id);
-      const contractpartnerStore = useContractpartnerStore();
-      contractpartnerStore.deleteContractpartner(this.mcp);
       (this.$refs.modalComponent as typeof ModalVue)._hide();
       this.$emit("contractpartnerDeleted", this.mcp);
     },

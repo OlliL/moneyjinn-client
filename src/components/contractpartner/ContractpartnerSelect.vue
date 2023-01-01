@@ -40,7 +40,6 @@
 <script lang="ts">
 import type { Contractpartner } from "@/model/contractpartner/Contractpartner";
 import { useContractpartnerStore } from "@/stores/ContractpartnerStore";
-import { mapActions } from "pinia";
 import { defineComponent } from "vue";
 import CreateContractpartnerModalVue from "./CreateContractpartnerModal.vue";
 
@@ -93,11 +92,7 @@ export default defineComponent({
       immediate: true,
     },
   },
-  created() {
-    this.initContractpartnerStore();
-  },
   methods: {
-    ...mapActions(useContractpartnerStore, ["initContractpartnerStore"]),
     emitContractpartnerSelected() {
       this.$emit(
         "contractpartnerSelected",

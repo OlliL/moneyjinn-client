@@ -123,7 +123,7 @@ class ContractpartnerControllerHandler extends AbstractControllerHandler {
   }
 
   async deleteContractpartner(contractpartnerId: number) {
-    const usecase = "deleteContractpartnerById/" + contractpartnerId;
+    const usecase = "deleteContractpartner/" + contractpartnerId;
 
     const response = await super.delete(
       ContractpartnerControllerHandler.CONTROLLER,

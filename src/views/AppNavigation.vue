@@ -282,6 +282,9 @@ import CreatePreDefMoneyflowModalVue from "@/components/predefmoneyflow/CreatePr
 import { useUserSessionStore } from "@/stores/UserSessionStore";
 import type { RouteRecordName } from "vue-router";
 import { version } from "../../package.json";
+import WebSocketHandler from "@/handler/WebSocketHandler";
+import WebServer from "@/handler/WebServer";
+import { useContractpartnerStore } from "@/stores/ContractpartnerStore";
 
 export default {
   name: "AppNavigation",
@@ -306,6 +309,16 @@ export default {
     const userSessionStore = useUserSessionStore();
     this.userIsAdmin = userSessionStore.isAdmin;
     this.markDropdownActive(this.$route.name);
+    console.log("mounted");
+  },
+  created() {
+    WebSocketHandler.connectStompClient(
+      "ws://" + WebServer.getWebServer() + "/websocket"
+    );
+
+    // initialize Stores
+    const contractpartnerStore = useContractpartnerStore();
+    contractpartnerStore.initContractpartnerStore();
   },
   watch: {
     $route(to) {

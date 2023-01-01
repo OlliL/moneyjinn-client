@@ -1,13 +1,9 @@
 import type { LoginResponse } from "@/model/rest/user/LoginResponse";
 import { useUserSessionStore } from "@/stores/UserSessionStore";
 import { throwError } from "@/tools/views/ThrowError";
-import { devtools } from "vue";
+import WebServer from "./WebServer";
 
 abstract class AbstractControllerHandler {
-  private static SERVER_ROOT = devtools
-    ? "http://localhost:8081/moneyflow/server/"
-    : "http://bomba.salatschuessel.net:8080/moneyflow/server/";
-
   private getHeaders(): HeadersInit {
     const userSessionStore = useUserSessionStore();
     const headersInit: HeadersInit = {
@@ -21,6 +17,9 @@ abstract class AbstractControllerHandler {
     return headersInit;
   }
 
+  private getWebRoot(): String {
+    return "http://" + WebServer.getWebServer() + "/moneyflow/server/";
+  }
   protected async post(
     requestBody: any,
     controller: string,
@@ -99,7 +98,7 @@ abstract class AbstractControllerHandler {
     httpMethod: string
   ) {
     const requestInfo = new Request(
-      AbstractControllerHandler.SERVER_ROOT + controller + "/" + usecase,
+      this.getWebRoot() + controller + "/" + usecase,
       {
         method: httpMethod,
         body: JSON.stringify(requestBody),
@@ -117,7 +116,7 @@ abstract class AbstractControllerHandler {
     httpMethod: string
   ): Promise<Response> {
     const requestInfo = new Request(
-      AbstractControllerHandler.SERVER_ROOT + controller + "/" + usecase,
+      this.getWebRoot() + controller + "/" + usecase,
       {
         method: httpMethod,
         headers: this.getHeaders(),
@@ -134,7 +133,7 @@ abstract class AbstractControllerHandler {
     if (userSessionStore.getRefreshToken.length === 0) return;
 
     const requestInfo = new Request(
-      AbstractControllerHandler.SERVER_ROOT + "user" + "/" + "refreshToken",
+      this.getWebRoot() + "user" + "/" + "refreshToken",
       {
         method: "get",
         headers: {
