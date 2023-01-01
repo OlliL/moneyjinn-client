@@ -1,6 +1,10 @@
 import ContractpartnerControllerHandler from "@/handler/ContractpartnerControllerHandler";
+import { mapContractpartnerTransportToModel } from "@/handler/mapper/ContractpartnerTransportMapper";
+import WebSocketHandler from "@/handler/WebSocketHandler";
 import type { Contractpartner } from "@/model/contractpartner/Contractpartner";
+import type { ContractpartnerChangedEventTransport } from "@/model/rest/wsevent/ContractpartnerChangedEventTransport";
 import { defineStore } from "pinia";
+import type { Message } from "webstomp-client";
 
 export const useContractpartnerStore = defineStore("contractpartner", {
   state: () => ({
@@ -14,6 +18,45 @@ export const useContractpartnerStore = defineStore("contractpartner", {
           await ContractpartnerControllerHandler.fetchAllContractpartner();
         this.contractpartner = contractpartnerArray;
         this.contractpartner.sort(this.compareContractpartnerByName);
+        WebSocketHandler.subscribe(
+          "/topic/contractpartnerChanged",
+          this.subscribeCallback
+        );
+      }
+    },
+    subscribeCallback(tick: Message) {
+      if (tick.body) {
+        const event: ContractpartnerChangedEventTransport = JSON.parse(
+          tick.body
+        );
+        const innerEvent = event.contractpartnerChangedEventTransport;
+        const mcp = mapContractpartnerTransportToModel(
+          innerEvent.contractpartnerTransport
+        );
+
+        console.log(mcp);
+
+        switch (innerEvent.eventType) {
+          case "CREATE": {
+            this.contractpartner.push(mcp);
+            break;
+          }
+          case "UPDATE": {
+            const pos = this.contractpartner.findIndex(
+              (entry) => entry.id === mcp.id
+            );
+            if (pos !== undefined) this.contractpartner.splice(pos, 1, mcp);
+            break;
+          }
+          case "DELETE": {
+            this.contractpartner = this.contractpartner.filter(
+              (originalMcp) => mcp.id !== originalMcp.id
+            );
+            break;
+          }
+        }
+
+        this.contractpartner.sort(this.compareContractpartnerByName);
       }
     },
     getValidContractpartner(validityDate: Date) {
@@ -25,8 +68,6 @@ export const useContractpartnerStore = defineStore("contractpartner", {
       comment: String,
       validNow?: boolean
     ): Promise<Array<Contractpartner>> {
-      await this.initContractpartnerStore();
-
       let mcp = this.contractpartner;
       if (validNow) {
         mcp = this.getValidContractpartner(new Date());
@@ -39,24 +80,6 @@ export const useContractpartnerStore = defineStore("contractpartner", {
       const commentUpper = comment.toUpperCase();
       return mcp.filter((entry) =>
         entry.name.toUpperCase().includes(commentUpper)
-      );
-    },
-    async addContractpartnerToStore(mcp: Contractpartner) {
-      if (this.contractpartner.length > 0) {
-        this.contractpartner.push(mcp);
-        this.contractpartner.sort(this.compareContractpartnerByName);
-      }
-    },
-    updateContractpartnerInStore(mcs: Contractpartner) {
-      const pos = this.contractpartner.findIndex(
-        (entry) => entry.id === mcs.id
-      );
-      if (pos !== undefined) this.contractpartner.splice(pos, 1, mcs);
-      this.contractpartner.sort(this.compareContractpartnerByName);
-    },
-    deleteContractpartner(mcs: Contractpartner) {
-      this.contractpartner = this.contractpartner.filter(
-        (originalMcs) => mcs.id !== originalMcs.id
       );
     },
     getContractpartner(id: number): Contractpartner | undefined {

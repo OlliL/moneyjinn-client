@@ -167,8 +167,6 @@ import { getError } from "@/tools/views/ThrowError";
 import { validateInputField } from "@/tools/views/ValidateInputField";
 import { defineComponent } from "vue";
 import ModalVue from "../Modal.vue";
-import { mapActions } from "pinia";
-import { useContractpartnerStore } from "@/stores/ContractpartnerStore";
 import type { ValidationResult } from "@/model/validation/ValidationResult";
 import DatepickerVue from "../Datepicker.vue";
 
@@ -242,8 +240,6 @@ export default defineComponent({
       this.resetForm();
       (this.$refs.modalComponent as typeof ModalVue)._show();
     },
-    ...mapActions(useContractpartnerStore, ["addContractpartnerToStore"]),
-    ...mapActions(useContractpartnerStore, ["updateContractpartnerInStore"]),
     resetForm() {
       if (this.origMcp) {
         const validFrom = new Date(this.origMcp.validFrom);
@@ -337,7 +333,6 @@ export default defineComponent({
             );
           if (!this.handleServerError(validationResult)) {
             (this.$refs.modalComponent as typeof ModalVue)._hide();
-            this.updateContractpartnerInStore(this.mcp);
             this.$emit("contractpartnerUpdated", this.mcp);
           }
         } else {
@@ -351,7 +346,6 @@ export default defineComponent({
           if (!this.handleServerError(validationResult)) {
             this.mcp = (await contractpartnerValidation).mcp;
             (this.$refs.modalComponent as typeof ModalVue)._hide();
-            this.addContractpartnerToStore(this.mcp);
             this.$emit("contractpartnerCreated", this.mcp);
           }
         }
