@@ -19,27 +19,21 @@ export const usePostingAccountStore = defineStore("postingAccount", {
         this.postingAccount = postingAccountArray;
       }
     },
-    getPostingAccountForLetter(letter: string): Array<PostingAccount> {
+    async searchPostingAccounts(
+      comment: String
+    ): Promise<Array<PostingAccount>> {
+      await this.initPostingAccountStore();
+
       const mpa = this.postingAccount;
 
-      if (letter === "") {
+      if (comment === "") {
         return mpa;
       }
-      return mpa.filter(
-        (entry) => entry.name.substring(0, 1).toUpperCase() === letter
-      );
-    },
-    async getPostingAccountLetters(): Promise<Array<string>> {
-      await this.initPostingAccountStore();
-      const mpa = this.postingAccount;
 
-      const letters = mpa.map((entry) =>
-        entry.name.substring(0, 1).toUpperCase()
+      const commentUpper = comment.toUpperCase();
+      return mpa.filter((entry) =>
+        entry.name.toUpperCase().includes(commentUpper)
       );
-      const uniqueLetters = letters
-        .filter((v, i, a) => a.indexOf(v) === i)
-        .sort();
-      return uniqueLetters;
     },
     updatePostingAccountInStore(mcs: PostingAccount) {
       const pos = this.postingAccount.findIndex((entry) => entry.id === mcs.id);

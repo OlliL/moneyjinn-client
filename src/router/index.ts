@@ -75,38 +75,35 @@ const router = createRouter({
           meta: { keepAlive: true },
         },
         {
-          path: "listCapitalsources/:letter?",
+          path: "listCapitalsources",
           name: Routes.ListCapitalsources,
           component: () =>
             import("@/views/capitalsource/ListCapitalsources.vue"),
         },
         {
-          path: "listPostingAccounts/:letter?",
+          path: "listPostingAccounts",
           name: Routes.ListPostingAccounts,
           component: () =>
             import("@/views/postingaccount/ListPostingAccounts.vue"),
-          props: true,
         },
         {
-          path: "listContractpartners/:letter?",
+          path: "listContractpartners",
           name: Routes.ListContractpartners,
           component: () =>
             import("@/views/contractpartner/ListContractpartners.vue"),
         },
         {
-          path: "listGroups/:letter?",
+          path: "listGroups",
           name: Routes.ListGroups,
           component: () => import("@/views/group/ListGroups.vue"),
-          props: true,
         },
         {
-          path: "listUsers/:letter?",
+          path: "listUsers",
           name: Routes.ListUsers,
           component: () => import("@/views/user/ListUsers.vue"),
-          props: true,
         },
         {
-          path: "listPreDefMoneyflows/:letter?",
+          path: "listPreDefMoneyflows",
           name: Routes.ListPreDefMoneyflows,
           component: () =>
             import("@/views/predefmoneyflow/ListPreDefMoneyflows.vue"),

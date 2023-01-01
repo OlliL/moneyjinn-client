@@ -2,11 +2,12 @@
   <CreatePostingAccountModalVue
     ref="createPostingAccountModalList"
     id-suffix="List"
-    @postingAccount-created="postingAccountCreated"
+    @postingAccount-created="searchContent"
+    @posting-account-updated="searchContent"
   />
   <DeletePostingAccountModalVue
     ref="deleteModal"
-    @postingAccount-deleted="postingAccountDeleted"
+    @postingAccount-deleted="searchContent"
   />
 
   <div class="container-fluid text-center">
@@ -29,32 +30,22 @@
               </button>
             </td>
             <td>
-              <nav aria-label="Start letter navigation" v-if="dataLoaded">
-                <ul class="pagination month-selection">
-                  <li class="page-item">
-                    <a
-                      :class="
-                        $props.letter === '' ? 'page-link active' : 'page-link'
-                      "
-                      href="#"
-                      @click="selectLetter('')"
-                      >Alle</a
-                    >
-                  </li>
-                  <li class="page-item" v-for="letter in letters" :key="letter">
-                    <a
-                      :class="
-                        $props.letter === letter
-                          ? 'page-link active'
-                          : 'page-link'
-                      "
-                      href="#"
-                      @click="selectLetter(letter)"
-                      >{{ letter }}</a
-                    >
-                  </li>
-                </ul>
-              </nav>
+              <div class="input-group">
+                <button
+                  type="button"
+                  class="btn btn-primary"
+                  @click="searchAllContent"
+                >
+                  Alle
+                </button>
+                <input
+                  class="form-control"
+                  type="text"
+                  placeholder="Suchen nach Name..."
+                  v-model="searchString"
+                  @input="searchContent"
+                />
+              </div>
             </td>
           </tr>
         </table>
@@ -86,7 +77,6 @@
 
 <script lang="ts">
 import { usePostingAccountStore } from "@/stores/PostingAccountStore";
-import router, { Routes } from "@/router";
 import { defineComponent } from "vue";
 import { mapActions, mapState } from "pinia";
 import type { PostingAccount } from "@/model/postingaccount/PostingAccount";
@@ -98,50 +88,23 @@ export default defineComponent({
   name: "ListPostingAccounts",
   data() {
     return {
-      dataLoaded: false,
-      letters: {} as Array<string>,
       postingAccounts: {} as Array<PostingAccount>,
+      searchString: "",
     };
   },
-  props: {
-    letter: {
-      type: String,
-      default: "",
-    },
-  },
   async mounted() {
-    this.loadData(this.$props.letter);
-    this.dataLoaded = true;
+    this.searchAllContent();
   },
   computed: {
     ...mapState(useUserSessionStore, ["getUserId"]),
   },
   methods: {
-    ...mapActions(usePostingAccountStore, ["getPostingAccountLetters"]),
-    ...mapActions(usePostingAccountStore, ["getPostingAccountForLetter"]),
-    reloadView() {
-      this.loadData(this.$props.letter);
-    },
-    async loadData(letter: string) {
-      this.letters = await this.getPostingAccountLetters();
-      this.postingAccounts = this.getPostingAccountForLetter(letter);
-      if (this.postingAccounts.length === 0) this.selectLetter("");
-    },
-    selectLetter(letter: string) {
-      router.push({
-        name: Routes.ListPostingAccounts,
-        params: { letter: letter },
-      });
-      this.loadData(letter);
-    },
+    ...mapActions(usePostingAccountStore, ["searchPostingAccounts"]),
     showCreatePostingAccountModal() {
       (
         this.$refs
           .createPostingAccountModalList as typeof CreatePostingAccountModalVue
       )._show();
-    },
-    postingAccountCreated() {
-      this.reloadView();
     },
     deletePostingAccount(mpa: PostingAccount) {
       (this.$refs.deleteModal as typeof DeletePostingAccountModalVue)._show(
@@ -154,8 +117,14 @@ export default defineComponent({
           .createPostingAccountModalList as typeof CreatePostingAccountModalVue
       )._show(mpa);
     },
-    postingAccountDeleted() {
-      this.reloadView();
+    searchAllContent() {
+      this.searchString = "";
+      this.searchContent();
+    },
+    async searchContent() {
+      this.postingAccounts = await this.searchPostingAccounts(
+        this.searchString
+      );
     },
   },
   components: {
