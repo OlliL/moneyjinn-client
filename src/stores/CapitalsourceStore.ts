@@ -40,35 +40,25 @@ export const useCapitalsourceStore = defineStore("capitalsource", {
         );
       });
     },
-    getCapitalsourceForLetter(
-      letter: string,
+    async searchCapitalsources(
+      comment: String,
       validNow?: boolean
-    ): Array<Capitalsource> {
+    ): Promise<Array<Capitalsource>> {
+      await this.initCapitalsourceStore();
+
       let mcs = this.capitalsource;
       if (validNow) {
         mcs = this.getBookableValidCapitalsources(new Date());
       }
 
-      if (letter === "") {
+      if (comment === "") {
         return mcs;
       }
-      return mcs.filter(
-        (entry) => entry.comment.substring(0, 1).toUpperCase() === letter
+
+      const commentUpper = comment.toUpperCase();
+      return mcs.filter((entry) =>
+        entry.comment.toUpperCase().includes(commentUpper)
       );
-    },
-    async getCapitalsourceLetters(validNow?: boolean): Promise<Array<string>> {
-      await this.initCapitalsourceStore();
-      let mcs = this.capitalsource;
-      if (validNow) {
-        mcs = this.getBookableValidCapitalsources(new Date());
-      }
-      const letters = mcs.map((entry) =>
-        entry.comment.substring(0, 1).toUpperCase()
-      );
-      const uniqueLetters = letters
-        .filter((v, i, a) => a.indexOf(v) === i)
-        .sort();
-      return uniqueLetters;
     },
     async addCapitalsourceToStore(mcs: Capitalsource) {
       if (this.capitalsource.length > 0) {

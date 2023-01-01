@@ -46,14 +46,13 @@
                   <div class="input-group">
                     <input
                       v-model="mms.amount"
-                      id="amount"
+                      :id="'amount' + mms.id"
                       type="number"
                       step="0.01"
                       @change="validateAmount(mms)"
                       :class="
                         ' form-control text-end ' + mms.errorData.inputClass
                       "
-                      ref="amountRef"
                       :disabled="mms.imported"
                     />
                     <span class="input-group-text"
@@ -83,14 +82,13 @@
                   <div class="input-group">
                     <input
                       v-model="mms.amount"
-                      id="amountCredit"
+                      :id="'amountCredit' + mms.id"
                       type="number"
                       step="0.01"
                       @change="validateAmount(mms)"
                       :class="
                         ' form-control text-end ' + mms.errorData.inputClass
                       "
-                      ref="amountCreditRef"
                       :disabled="mms.imported"
                     />
                     <span class="input-group-text"

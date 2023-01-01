@@ -21,37 +21,25 @@ export const useContractpartnerStore = defineStore("contractpartner", {
         return validityDate >= mcp.validFrom && validityDate <= mcp.validTil;
       });
     },
-    getContractpartnerForLetter(
-      letter: string,
+    async searchContractpartner(
+      comment: String,
       validNow?: boolean
-    ): Array<Contractpartner> {
-      let mcs = this.contractpartner;
+    ): Promise<Array<Contractpartner>> {
+      await this.initContractpartnerStore();
+
+      let mcp = this.contractpartner;
       if (validNow) {
-        mcs = this.getValidContractpartner(new Date());
+        mcp = this.getValidContractpartner(new Date());
       }
 
-      if (letter === "") {
-        return mcs;
+      if (comment === "") {
+        return mcp;
       }
-      return mcs.filter(
-        (entry) => entry.name.substring(0, 1).toUpperCase() === letter
+
+      const commentUpper = comment.toUpperCase();
+      return mcp.filter((entry) =>
+        entry.name.toUpperCase().includes(commentUpper)
       );
-    },
-    async getContractpartnerLetters(
-      validNow?: boolean
-    ): Promise<Array<string>> {
-      await this.initContractpartnerStore();
-      let mcs = this.contractpartner;
-      if (validNow) {
-        mcs = this.getValidContractpartner(new Date());
-      }
-      const letters = mcs.map((entry) =>
-        entry.name.substring(0, 1).toUpperCase()
-      );
-      const uniqueLetters = letters
-        .filter((v, i, a) => a.indexOf(v) === i)
-        .sort();
-      return uniqueLetters;
     },
     async addContractpartnerToStore(mcp: Contractpartner) {
       if (this.contractpartner.length > 0) {

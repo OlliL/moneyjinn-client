@@ -2,11 +2,12 @@
   <CreateCapitalsourceModalVue
     ref="createCapitalsourceModalList"
     id-suffix="List"
-    @capitalsource-created="capitalsourceCreated"
+    @capitalsource-created="searchContent"
+    @capitalsource-updated="searchContent"
   />
   <DeleteCapitalsourceModalVue
     ref="deleteModal"
-    @capitalsource-deleted="capitalsourceDeleted"
+    @capitalsource-deleted="searchContent"
   />
 
   <div class="container-fluid text-center">
@@ -29,53 +30,37 @@
               </button>
             </td>
             <td>
-              <nav aria-label="Start letter navigation" v-if="dataLoaded">
-                <ul class="pagination month-selection">
-                  <li class="page-item">
-                    <a
-                      :class="
-                        $props.letter === '' ? 'page-link active' : 'page-link'
-                      "
-                      href="#"
-                      @click="selectLetter('')"
-                      >Alle</a
-                    >
-                  </li>
-                  <li class="page-item" v-for="letter in letters" :key="letter">
-                    <a
-                      :class="
-                        $props.letter === letter
-                          ? 'page-link active'
-                          : 'page-link'
-                      "
-                      href="#"
-                      @click="selectLetter(letter)"
-                      >{{ letter }}</a
-                    >
-                  </li>
-                </ul>
-              </nav>
+              <div class="input-group">
+                <button
+                  type="button"
+                  class="btn btn-primary"
+                  @click="searchAllContent"
+                >
+                  Alle
+                </button>
+                <input
+                  class="form-control"
+                  type="text"
+                  placeholder="Suchen nach Kommentar..."
+                  v-model="searchString"
+                  @input="searchContent"
+                />
+                <div class="form-check form-switch align-self-center ms-2">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    id="capitalsourcesValid"
+                    v-model="validNow"
+                    @change="searchContent"
+                  />
+                  <label class="form-check-label" for="capitalsourcesValid"
+                    >Jetzt g&uuml;ltig</label
+                  >
+                </div>
+              </div>
             </td>
           </tr>
         </table>
-      </div>
-    </div>
-    <div class="row justify-content-md-center mb-4">
-      <div class="col-md-auto">
-        <form action="#">
-          <div class="form-check form-switch">
-            <input
-              class="form-check-input"
-              type="checkbox"
-              id="capitalsourcesValid"
-              v-model="validNow"
-              @change="reloadView"
-            />
-            <label class="form-check-label" for="capitalsourcesValid"
-              >Jetzt g&uuml;ltig</label
-            >
-          </div>
-        </form>
       </div>
     </div>
     <div class="row justify-content-md-center">
@@ -113,7 +98,6 @@
 
 <script lang="ts">
 import { useCapitalsourceStore } from "@/stores/CapitalsourceStore";
-import router, { Routes } from "@/router";
 import { defineComponent } from "vue";
 import { mapActions, mapState } from "pinia";
 import type { Capitalsource } from "@/model/capitalsource/Capitalsource";
@@ -125,54 +109,24 @@ export default defineComponent({
   name: "ListCapitalsources",
   data() {
     return {
-      dataLoaded: false,
-      validNow: false,
-      letters: {} as Array<string>,
+      validNow: true,
       capitalsources: {} as Array<Capitalsource>,
+      searchString: "",
     };
   },
-  props: {
-    letter: {
-      type: String,
-      default: "",
-    },
-  },
   async mounted() {
-    this.loadData(this.$props.letter);
-    this.dataLoaded = true;
+    this.searchAllContent();
   },
   computed: {
     ...mapState(useUserSessionStore, ["getUserId"]),
   },
   methods: {
-    ...mapActions(useCapitalsourceStore, ["getCapitalsourceLetters"]),
-    ...mapActions(useCapitalsourceStore, ["getCapitalsourceForLetter"]),
-    reloadView() {
-      this.loadData(this.$props.letter);
-    },
-    async loadData(letter: string) {
-      this.letters = await this.getCapitalsourceLetters(this.validNow);
-      this.capitalsources = this.getCapitalsourceForLetter(
-        letter,
-        this.validNow
-      );
-      if (this.capitalsources.length === 0) this.selectLetter("");
-    },
-    selectLetter(letter: string) {
-      router.push({
-        name: Routes.ListCapitalsources,
-        params: { letter: letter },
-      });
-      this.loadData(letter);
-    },
+    ...mapActions(useCapitalsourceStore, ["searchCapitalsources"]),
     showCreateCapitalsourceModal() {
       (
         this.$refs
           .createCapitalsourceModalList as typeof CreateCapitalsourceModalVue
       )._show();
-    },
-    capitalsourceCreated() {
-      this.reloadView();
     },
     deleteCapitalsource(mcs: Capitalsource) {
       (this.$refs.deleteModal as typeof DeleteCapitalsourceModalVue)._show(mcs);
@@ -183,8 +137,15 @@ export default defineComponent({
           .createCapitalsourceModalList as typeof CreateCapitalsourceModalVue
       )._show(mcs);
     },
-    capitalsourceDeleted() {
-      this.reloadView();
+    searchAllContent() {
+      this.searchString = "";
+      this.searchContent();
+    },
+    async searchContent() {
+      this.capitalsources = await this.searchCapitalsources(
+        this.searchString,
+        this.validNow
+      );
     },
   },
   components: {
