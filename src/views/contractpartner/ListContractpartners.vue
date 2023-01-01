@@ -97,11 +97,10 @@
 <script lang="ts">
 import { useContractpartnerStore } from "@/stores/ContractpartnerStore";
 import { defineComponent } from "vue";
-import { mapActions, mapState } from "pinia";
+import { mapActions } from "pinia";
 import type { Contractpartner } from "@/model/contractpartner/Contractpartner";
 import CreateContractpartnerModalVue from "@/components/contractpartner/CreateContractpartnerModal.vue";
 import ListContractpartnerRowVue from "@/components/contractpartner/ListContractpartnerRow.vue";
-import { useUserSessionStore } from "@/stores/UserSessionStore";
 import DeleteContractpartnerModalVue from "@/components/contractpartner/DeleteContractpartnerModal.vue";
 import ListContractpartnerAccountsModalVue from "@/components/contractpartneraccount/ListContractpartnerAccountsModal.vue";
 export default defineComponent({
@@ -116,9 +115,7 @@ export default defineComponent({
   async mounted() {
     this.searchAllContent();
   },
-  computed: {
-    ...mapState(useUserSessionStore, ["getUserId"]),
-  },
+  computed: {},
   methods: {
     ...mapActions(useContractpartnerStore, ["searchContractpartner"]),
     showCreateContractpartnerModal() {
