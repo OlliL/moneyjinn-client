@@ -285,6 +285,8 @@ import { version } from "../../package.json";
 import WebSocketHandler from "@/handler/WebSocketHandler";
 import WebServer from "@/handler/WebServer";
 import { useContractpartnerStore } from "@/stores/ContractpartnerStore";
+import { usePostingAccountStore } from "@/stores/PostingAccountStore";
+import { useCapitalsourceStore } from "@/stores/CapitalsourceStore";
 
 export default {
   name: "AppNavigation",
@@ -309,16 +311,19 @@ export default {
     const userSessionStore = useUserSessionStore();
     this.userIsAdmin = userSessionStore.isAdmin;
     this.markDropdownActive(this.$route.name);
-    console.log("mounted");
   },
-  created() {
+  async created() {
+    // make WebSocket connection
     WebSocketHandler.connectStompClient(
       "ws://" + WebServer.getWebServer() + "/websocket"
     );
-
     // initialize Stores
     const contractpartnerStore = useContractpartnerStore();
     contractpartnerStore.initContractpartnerStore();
+    const postingAccountStore = usePostingAccountStore();
+    postingAccountStore.initPostingAccountStore();
+    const capitalsourceStore = useCapitalsourceStore();
+    capitalsourceStore.initCapitalsourceStore();
   },
   watch: {
     $route(to) {
@@ -374,6 +379,7 @@ export default {
     },
     logout() {
       const userSessionStore = useUserSessionStore();
+      WebSocketHandler.disconnectStompClient();
       userSessionStore.logout();
       router.push({
         name: Routes.Login,

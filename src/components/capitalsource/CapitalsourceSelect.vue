@@ -40,7 +40,6 @@
 <script lang="ts">
 import type { Capitalsource } from "@/model/capitalsource/Capitalsource";
 import { useCapitalsourceStore } from "@/stores/CapitalsourceStore";
-import { mapActions } from "pinia";
 import { defineComponent } from "vue";
 import CreateCapitalsourceModalVue from "./CreateCapitalsourceModal.vue";
 
@@ -92,11 +91,7 @@ export default defineComponent({
       immediate: true,
     },
   },
-  created() {
-    this.initCapitalsourceStore();
-  },
   methods: {
-    ...mapActions(useCapitalsourceStore, ["initCapitalsourceStore"]),
     emitCapitalsourceSelected() {
       this.$emit(
         "capitalsourceSelected",

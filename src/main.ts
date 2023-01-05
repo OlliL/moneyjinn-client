@@ -26,5 +26,5 @@ app.use(router);
 
 app.mount("#app");
 
-const server = devtools ? "localhost:8080" : "bomba.salatschuessel.net:8080";
+const server = devtools ? location.host : "bomba.salatschuessel.net:8080";
 WebServer.setWebServer(server);

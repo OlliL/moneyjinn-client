@@ -1,6 +1,8 @@
+import { useContractpartnerStore } from "@/stores/ContractpartnerStore";
 import { useUserSessionStore } from "@/stores/UserSessionStore";
 import Stomp, {
   Client,
+  type ConnectionHeaders,
   type Message,
   type SubscribeHeaders,
   type Subscription,
@@ -9,15 +11,22 @@ import Stomp, {
 class WebSocketHandler {
   private stompClient: Client = {} as Client;
 
-  public connectStompClient(url: string) {
+  public async connectStompClient(url: string) {
     const userSessionStore = useUserSessionStore();
     const token = userSessionStore.getAuthorizationToken;
+    const csrfToken = userSessionStore.csrfToken;
 
-    this.stompClient = Stomp.over(new WebSocket(url + "?token=" + token), {
+    this.stompClient = Stomp.client(url, {
       debug: true,
       protocols: Stomp.VERSIONS.supportedProtocols(),
     });
-    this.stompClient.connect({}, () => {});
+    const headers: ConnectionHeaders = { Authorization: "Bearer " + token };
+    headers["X-CSRF-TOKEN"] = csrfToken;
+
+    this.stompClient.connect(headers, () => {
+      const contractpartnerStore = useContractpartnerStore();
+      contractpartnerStore.subscribeToWebsocket();
+    });
   }
 
   public disconnectStompClient() {
@@ -29,7 +38,14 @@ class WebSocketHandler {
     callback?: (message: Message) => any,
     headers?: SubscribeHeaders
   ): Subscription {
-    return this.stompClient.subscribe(destination, callback, headers);
+    const userSessionStore = useUserSessionStore();
+    const csrfToken = userSessionStore.csrfToken;
+
+    const privateHeaders: SubscribeHeaders = {
+      ...headers,
+      "X-CSRF-TOKEN": csrfToken,
+    };
+    return this.stompClient.subscribe(destination, callback, privateHeaders);
   }
 }
 export default new WebSocketHandler();

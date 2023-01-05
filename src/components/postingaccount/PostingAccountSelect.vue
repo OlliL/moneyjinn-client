@@ -43,7 +43,6 @@ import type { PostingAccount } from "@/model/postingaccount/PostingAccount";
 import { usePostingAccountStore } from "@/stores/PostingAccountStore";
 import CreatePostingAccountModalVue from "../postingaccount/CreatePostingAccountModal.vue";
 
-import { mapActions } from "pinia";
 import { defineComponent } from "vue";
 import { useUserSessionStore } from "@/stores/UserSessionStore";
 
@@ -95,10 +94,8 @@ export default defineComponent({
   created() {
     const userSessionStore = useUserSessionStore();
     this.userIsAdmin = userSessionStore.isAdmin;
-    this.initPostingAccountStore();
   },
   methods: {
-    ...mapActions(usePostingAccountStore, ["initPostingAccountStore"]),
     emitPostingAccountSelected() {
       this.$emit(
         "postingAccountSelected",
