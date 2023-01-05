@@ -282,11 +282,8 @@ import CreatePreDefMoneyflowModalVue from "@/components/predefmoneyflow/CreatePr
 import { useUserSessionStore } from "@/stores/UserSessionStore";
 import type { RouteRecordName } from "vue-router";
 import { version } from "../../package.json";
-import WebSocketHandler from "@/handler/WebSocketHandler";
-import WebServer from "@/handler/WebServer";
-import { useContractpartnerStore } from "@/stores/ContractpartnerStore";
-import { usePostingAccountStore } from "@/stores/PostingAccountStore";
-import { useCapitalsourceStore } from "@/stores/CapitalsourceStore";
+import { WebSocketHandler } from "@/handler/WebSocketHandler";
+import { StoreService } from "@/stores/StoreService";
 
 export default {
   name: "AppNavigation",
@@ -314,16 +311,9 @@ export default {
   },
   async created() {
     // make WebSocket connection
-    WebSocketHandler.connectStompClient(
-      "ws://" + WebServer.getWebServer() + "/websocket"
-    );
+    WebSocketHandler.getInstance().connectStompClient();
     // initialize Stores
-    const contractpartnerStore = useContractpartnerStore();
-    contractpartnerStore.initContractpartnerStore();
-    const postingAccountStore = usePostingAccountStore();
-    postingAccountStore.initPostingAccountStore();
-    const capitalsourceStore = useCapitalsourceStore();
-    capitalsourceStore.initCapitalsourceStore();
+    StoreService.getInstance().initAllStores();
   },
   watch: {
     $route(to) {
@@ -378,8 +368,8 @@ export default {
       )._show();
     },
     logout() {
+      WebSocketHandler.getInstance().disconnectStompClient();
       const userSessionStore = useUserSessionStore();
-      WebSocketHandler.disconnectStompClient();
       userSessionStore.logout();
       router.push({
         name: Routes.Login,

@@ -1,10 +1,9 @@
 import ContractpartnerControllerHandler from "@/handler/ContractpartnerControllerHandler";
 import { mapContractpartnerTransportToModel } from "@/handler/mapper/ContractpartnerTransportMapper";
-import WebSocketHandler from "@/handler/WebSocketHandler";
+import { WebSocketHandler } from "@/handler/WebSocketHandler";
 import type { Contractpartner } from "@/model/contractpartner/Contractpartner";
 import type { ContractpartnerChangedEventTransport } from "@/model/rest/wsevent/ContractpartnerChangedEventTransport";
 import { defineStore } from "pinia";
-import type { Message } from "webstomp-client";
 
 export const useContractpartnerStore = defineStore("contractpartner", {
   state: () => ({
@@ -21,16 +20,14 @@ export const useContractpartnerStore = defineStore("contractpartner", {
       }
     },
     subscribeToWebsocket() {
-      WebSocketHandler.subscribe(
+      WebSocketHandler.getInstance().subscribe(
         "/topic/contractpartnerChanged",
         this.subscribeCallback
       );
     },
-    subscribeCallback(tick: Message) {
-      if (tick.body) {
-        const event: ContractpartnerChangedEventTransport = JSON.parse(
-          tick.body
-        );
+    subscribeCallback(body: string) {
+      if (body) {
+        const event: ContractpartnerChangedEventTransport = JSON.parse(body);
         const innerEvent = event.contractpartnerChangedEventTransport;
         const mcp = mapContractpartnerTransportToModel(
           innerEvent.contractpartnerTransport
