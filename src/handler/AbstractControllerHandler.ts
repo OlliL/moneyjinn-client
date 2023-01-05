@@ -6,18 +6,12 @@ import { HeaderUtil } from "./util/HeaderUtil";
 import { WebServer } from "./WebServer";
 
 abstract class AbstractControllerHandler {
-  private getHeadersWithCsrf(): Record<string, string> {
-    const headers = this.getHeaders();
-    HeaderUtil.getInstance().addCsrfHeader(headers);
-    return headers;
-  }
-
-  private getHeaders(): Record<string, string> {
-    const headers = {} as Record<string, string>;
-    HeaderUtil.getInstance().addContentTypeJson(headers);
-    HeaderUtil.getInstance().addAuthorizationHeader(headers);
-    return headers;
-  }
+  private static NO_CSRF_METHODS: Array<string> = [
+    "GET",
+    "HEAD",
+    "TRACE",
+    "OPTIONS",
+  ];
 
   private getWebRoot(): String {
     return (
@@ -29,19 +23,19 @@ abstract class AbstractControllerHandler {
     controller: string,
     usecase: string
   ): Promise<Response> {
-    let response = await this.internalWithBody(
-      requestBody,
+    let response = await this.internalFetch(
       controller,
       usecase,
-      "post"
+      "post",
+      requestBody
     );
     if ((await response.status) === 403) {
       await this.refreshAuthToken();
-      response = await this.internalWithBody(
-        requestBody,
+      response = await this.internalFetch(
         controller,
         usecase,
-        "post"
+        "post",
+        requestBody
       );
     }
     return response;
@@ -52,29 +46,29 @@ abstract class AbstractControllerHandler {
     controller: string,
     usecase: string
   ): Promise<Response> {
-    let response = await this.internalWithBody(
-      requestBody,
+    let response = await this.internalFetch(
       controller,
       usecase,
-      "put"
+      "put",
+      requestBody
     );
     if ((await response.status) === 403) {
       await this.refreshAuthToken();
-      response = await this.internalWithBody(
-        requestBody,
+      response = await this.internalFetch(
         controller,
         usecase,
-        "put"
+        "put",
+        requestBody
       );
     }
     return response;
   }
 
   protected async get(controller: string, usecase: string): Promise<Response> {
-    let response = await this.internalWithoutBody(controller, usecase, "get");
+    let response = await this.internalFetch(controller, usecase, "get");
     if ((await response.status) === 403) {
       await this.refreshAuthToken();
-      response = await this.internalWithoutBody(controller, usecase, "get");
+      response = await this.internalFetch(controller, usecase, "get");
     }
     return response;
   }
@@ -83,53 +77,43 @@ abstract class AbstractControllerHandler {
     controller: string,
     usecase: string
   ): Promise<Response> {
-    let response = await this.internalWithoutBody(
-      controller,
-      usecase,
-      "delete"
-    );
+    let response = await this.internalFetch(controller, usecase, "delete");
     if ((await response.status) === 403) {
       await this.refreshAuthToken();
-      response = await this.internalWithoutBody(controller, usecase, "delete");
+      response = await this.internalFetch(controller, usecase, "delete");
     }
     return response;
   }
 
-  private async internalWithBody(
-    requestBody: any,
+  private async internalFetch(
     controller: string,
     usecase: string,
-    httpMethod: string
-  ) {
-    const requestInfo = new Request(
-      this.getWebRoot() + controller + "/" + usecase,
-      {
-        method: httpMethod,
-        body: JSON.stringify(requestBody),
-        headers: this.getHeadersWithCsrf(),
-        credentials: "include",
-      }
-    );
-
-    const response = await fetch(requestInfo);
-    return response;
-  }
-
-  private async internalWithoutBody(
-    controller: string,
-    usecase: string,
-    httpMethod: string
+    httpMethod: string,
+    requestBody?: any
   ): Promise<Response> {
+    const requestInit: RequestInit = {
+      method: httpMethod,
+      credentials: "include",
+    };
+
+    if (requestBody) requestInit["body"] = JSON.stringify(requestBody);
+
+    const headers = {} as Record<string, string>;
+    HeaderUtil.getInstance().addContentTypeJson(headers);
+    HeaderUtil.getInstance().addAuthorizationHeader(headers);
+
+    if (
+      !AbstractControllerHandler.NO_CSRF_METHODS.includes(
+        httpMethod.toUpperCase()
+      )
+    ) {
+      HeaderUtil.getInstance().addCsrfHeader(headers);
+    }
+    requestInit["headers"] = headers;
+
     const requestInfo = new Request(
       this.getWebRoot() + controller + "/" + usecase,
-      {
-        method: httpMethod,
-        headers:
-          httpMethod === "delete"
-            ? this.getHeadersWithCsrf()
-            : this.getHeaders(),
-        credentials: "include",
-      }
+      requestInit
     );
 
     const response = await fetch(requestInfo);
@@ -137,11 +121,12 @@ abstract class AbstractControllerHandler {
   }
 
   protected async retrieveAndStoreCsrfToken() {
+    const headers = {} as Record<string, string>;
+    HeaderUtil.getInstance().addCsrfHeader(headers);
+
     const requestInfo = new Request(this.getWebRoot() + "csrf/csrf", {
       method: "get",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: headers,
       credentials: "include",
     });
 
@@ -160,17 +145,16 @@ abstract class AbstractControllerHandler {
 
     if (userSessionStore.getRefreshToken.length === 0) return;
 
+    const headers = {} as Record<string, string>;
+    HeaderUtil.getInstance().addCsrfHeader(headers);
+    headers["Authorization"] = "Bearer " + userSessionStore.getRefreshToken;
+
     const requestInfo = new Request(this.getWebRoot() + "user/refreshToken", {
       method: "get",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: headers,
       credentials: "include",
     });
-    requestInfo.headers.append(
-      "Authorization",
-      "Bearer " + userSessionStore.getRefreshToken
-    );
+
     const response = await fetch(requestInfo);
     const loginResponse = (await response.json()) as LoginResponse;
 
