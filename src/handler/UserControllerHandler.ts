@@ -68,9 +68,11 @@ class UserControllerHandler extends AbstractControllerHandler {
       userIsAdmin: userTransport.userIsAdmin === 1 ? true : false,
       userAuthorizationToken: innerLoginResponse.token,
       userRefreshToken: innerLoginResponse.refreshToken,
+      csrfToken: "",
     };
 
     userSessionStore.setUserSession(userSession);
+    await super.retrieveAndStoreCsrfToken();
   }
 
   async changePassword(oldPassword: string, password: string) {

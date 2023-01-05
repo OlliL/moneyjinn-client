@@ -18,11 +18,13 @@ export const useContractpartnerStore = defineStore("contractpartner", {
           await ContractpartnerControllerHandler.fetchAllContractpartner();
         this.contractpartner = contractpartnerArray;
         this.contractpartner.sort(this.compareContractpartnerByName);
-        WebSocketHandler.subscribe(
-          "/topic/contractpartnerChanged",
-          this.subscribeCallback
-        );
       }
+    },
+    subscribeToWebsocket() {
+      WebSocketHandler.subscribe(
+        "/topic/contractpartnerChanged",
+        this.subscribeCallback
+      );
     },
     subscribeCallback(tick: Message) {
       if (tick.body) {
@@ -33,8 +35,6 @@ export const useContractpartnerStore = defineStore("contractpartner", {
         const mcp = mapContractpartnerTransportToModel(
           innerEvent.contractpartnerTransport
         );
-
-        console.log(mcp);
 
         switch (innerEvent.eventType) {
           case "CREATE": {
