@@ -2,35 +2,27 @@ import type { LoginResponse } from "@/model/rest/user/LoginResponse";
 import type { SupplierCsrfToken } from "@/model/SupplierCsrfToken";
 import { useUserSessionStore } from "@/stores/UserSessionStore";
 import { throwError } from "@/tools/views/ThrowError";
-import WebServer from "./WebServer";
+import { HeaderUtil } from "./util/HeaderUtil";
+import { WebServer } from "./WebServer";
 
 abstract class AbstractControllerHandler {
-  private async getHeadersWithCsrf() {
-    const userSessionStore = useUserSessionStore();
-    const csrfToken = userSessionStore.csrfToken;
-
-    const newHeaders: HeadersInit = {
-      ...this.getHeaders(),
-      "X-CSRF-TOKEN": csrfToken,
-    };
-    return newHeaders;
+  private getHeadersWithCsrf(): Record<string, string> {
+    const headers = this.getHeaders();
+    HeaderUtil.getInstance().addCsrfHeader(headers);
+    return headers;
   }
 
-  private getHeaders(): HeadersInit {
-    const userSessionStore = useUserSessionStore();
-    const headersInit: HeadersInit = {
-      "Content-Type": "application/json",
-    };
-
-    if (userSessionStore.getAuthorizationToken.length > 0) {
-      headersInit["Authorization"] =
-        "Bearer " + userSessionStore.getAuthorizationToken;
-    }
-    return headersInit;
+  private getHeaders(): Record<string, string> {
+    const headers = {} as Record<string, string>;
+    HeaderUtil.getInstance().addContentTypeJson(headers);
+    HeaderUtil.getInstance().addAuthorizationHeader(headers);
+    return headers;
   }
 
   private getWebRoot(): String {
-    return "http://" + WebServer.getWebServer() + "/moneyflow/server/";
+    return (
+      "http://" + WebServer.getInstance().getWebServer() + "/moneyflow/server/"
+    );
   }
   protected async post(
     requestBody: any,
@@ -114,7 +106,7 @@ abstract class AbstractControllerHandler {
       {
         method: httpMethod,
         body: JSON.stringify(requestBody),
-        headers: await this.getHeadersWithCsrf(),
+        headers: this.getHeadersWithCsrf(),
         credentials: "include",
       }
     );
@@ -134,8 +126,8 @@ abstract class AbstractControllerHandler {
         method: httpMethod,
         headers:
           httpMethod === "delete"
-            ? await this.getHeadersWithCsrf()
-            : await this.getHeaders(),
+            ? this.getHeadersWithCsrf()
+            : this.getHeaders(),
         credentials: "include",
       }
     );
