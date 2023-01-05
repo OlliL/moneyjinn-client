@@ -444,6 +444,8 @@ export default defineComponent({
     onContractpartnerSelected(contractpartner: Contractpartner) {
       if (contractpartner) {
         this.contractpartnerId = contractpartner.id;
+      } else {
+        this.contractpartnerId = 0;
       }
     },
     onPostingAccountSelected(postingAccount: PostingAccount) {
