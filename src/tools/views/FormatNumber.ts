@@ -1,3 +1,5 @@
+import { toFixed } from "../math";
+
 export function redIfNegativeEnd(check?: number): string {
   const cssClass =
     "text-end" + (check != null && check < 0 ? " text-danger" : "");
@@ -12,18 +14,19 @@ export function redIfNegativeStart(check?: number): string {
 
 export function formatNumber(num: number, decimalPlaces: number): string {
   if (num !== undefined) {
-    // save decimal places of the given number, ignore negative sign
-    const decimals: string = Math.abs(num % 1)
-      .toFixed(decimalPlaces)
-      .substring(2);
-    // delete decimal places of the given number
-    num = ~~num;
-    // format number with thousand delimiter and add decimal places again
-    let numStr = num.toLocaleString("de");
-    if (decimalPlaces > 0) {
-      numStr = numStr.concat(",", decimals);
+    const fixedNum = toFixed(num, decimalPlaces);
+    let fixedNumStr = fixedNum.toLocaleString("de");
+
+    const decimalPlace = fixedNumStr.indexOf(",");
+    if (decimalPlace === -1) {
+      // 7   --> 7,00
+      fixedNumStr += ",00";
+    } else if (decimalPlace == fixedNumStr.length - 2) {
+      // 7,5 --> 7,50
+      fixedNumStr += "0";
     }
-    return numStr;
+
+    return fixedNumStr;
   }
   return "";
 }
