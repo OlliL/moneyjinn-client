@@ -146,7 +146,6 @@ abstract class AbstractControllerHandler {
     if (userSessionStore.getRefreshToken.length === 0) return;
 
     const headers = {} as Record<string, string>;
-    HeaderUtil.getInstance().addCsrfHeader(headers);
     headers["Authorization"] = "Bearer " + userSessionStore.getRefreshToken;
 
     const requestInfo = new Request(this.getWebRoot() + "user/refreshToken", {
@@ -165,7 +164,7 @@ abstract class AbstractControllerHandler {
     userSessionStore.setAuthorizationToken(innerLoginResponse.token);
     userSessionStore.setRefreshToken(innerLoginResponse.refreshToken);
 
-    this.retrieveAndStoreCsrfToken();
+    await this.retrieveAndStoreCsrfToken();
   }
 }
 

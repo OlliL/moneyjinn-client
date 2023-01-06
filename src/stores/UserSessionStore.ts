@@ -27,6 +27,9 @@ export const useUserSessionStore = defineStore("userSession", {
     getAuthorizationToken(): string {
       return this.userAuthorizationToken;
     },
+    getCsrfToken(): string {
+      return this.csrfToken;
+    },
     getRefreshToken(): string {
       return this.userRefreshToken;
     },
