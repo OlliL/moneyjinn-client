@@ -1,5 +1,5 @@
 import { StoreService } from "@/stores/StoreService";
-import Stomp, { Client, type Subscription } from "webstomp-client";
+import { Client, StompSubscription } from "@stomp/stompjs";
 import { HeaderUtil } from "./util/HeaderUtil";
 import { WebServer } from "./WebServer";
 
@@ -18,38 +18,45 @@ export class WebSocketHandler {
 
   public async connectStompClient() {
     const url = "ws://" + WebServer.getInstance().getWebServer() + "/websocket";
-
-    this.stompClient = Stomp.client(url, {
-      debug: true,
-      protocols: ["v12.stomp"],
-    });
-
     const headers = {} as Record<string, string>;
     HeaderUtil.getInstance().addAuthorizationHeader(headers);
     HeaderUtil.getInstance().addCsrfHeader(headers);
 
-    this.stompClient.connect(headers, () => {
-      StoreService.getInstance().subscribeAllStores();
+    this.stompClient = new Client({
+      brokerURL: url,
+      connectHeaders: headers,
+      debug: function (str) {
+        console.log(str);
+      },
+      reconnectDelay: 5000,
+      heartbeatIncoming: 1000,
+      heartbeatOutgoing: 1000,
     });
+
+    this.stompClient.onConnect = function () {
+      StoreService.getInstance().subscribeAllStores();
+    };
+
+    this.stompClient.activate();
   }
 
   public disconnectStompClient() {
-    this.stompClient.disconnect();
+    this.stompClient.deactivate();
   }
 
   public subscribe(
     destination: string,
-    callback?: (body: string) => any,
-    headers?: Record<string, string>
-  ): Subscription {
-    const privateHeaders = { ...headers } as Record<string, string>;
-    HeaderUtil.getInstance().addCsrfHeader(privateHeaders);
+    callback: (body: string) => any
+  ): StompSubscription {
+    const headers = {} as Record<string, string>;
+    HeaderUtil.getInstance().addCsrfHeader(headers);
+
     return this.stompClient.subscribe(
       destination,
       (message) => {
-        if (callback) callback(message.body);
+        callback(message.body);
       },
-      privateHeaders
+      headers
     );
   }
 }
