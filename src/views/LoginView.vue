@@ -64,7 +64,7 @@
           </div>
         </div>
         <div class="card-footer text-center">
-          <small>moneyjinn 0.99.0 - &copy; by Oliver Lehmann</small>
+          <small>moneyjin {{ appVersion }} - &copy; by Oliver Lehmann</small>
         </div>
       </div>
     </div>
@@ -77,6 +77,7 @@ import { generateErrorData } from "@/tools/views/ErrorData";
 import UserControllerHandler from "@/handler/UserControllerHandler";
 import router, { Routes } from "@/router";
 import { validateInputField } from "@/tools/views/ValidateInputField";
+import { version } from "../../package.json";
 
 type LoginViewData = {
   username: string;
@@ -86,6 +87,7 @@ type LoginViewData = {
   passwordIsValid: boolean | null;
   passwordErrorMessage: string;
   serverError: string;
+  appVersion: string;
 };
 
 export default {
@@ -100,6 +102,7 @@ export default {
       passwordIsValid: null,
       passwordErrorMessage: "",
       serverError: "",
+      appVersion: version,
     };
   },
   mounted() {
