@@ -1,5 +1,8 @@
+import { mapPostingAccountTransportToModel } from "@/handler/mapper/PostingAccountTransportMapper";
 import PostingAccountControllerHandler from "@/handler/PostingAccountControllerHandler";
+import { WebSocketHandler } from "@/handler/WebSocketHandler";
 import type { PostingAccount } from "@/model/postingaccount/PostingAccount";
+import type { PostingAccountChangedEventTransport } from "@/model/rest/wsevent/PostingAccountChangedEventTransport";
 import { defineStore } from "pinia";
 
 export const usePostingAccountStore = defineStore("postingAccount", {
@@ -19,6 +22,43 @@ export const usePostingAccountStore = defineStore("postingAccount", {
         this.postingAccount = postingAccountArray;
       }
     },
+    subscribeToWebsocket() {
+      WebSocketHandler.getInstance().subscribe(
+        "/topic/postingAccountChanged",
+        this.subscribeCallback
+      );
+    },
+    subscribeCallback(body: string) {
+      if (body) {
+        const event: PostingAccountChangedEventTransport = JSON.parse(body);
+        const innerEvent = event.postingAccountChangedEventTransport;
+        const mpa = mapPostingAccountTransportToModel(
+          innerEvent.postingAccountTransport
+        );
+
+        switch (innerEvent.eventType) {
+          case "CREATE": {
+            this.postingAccount.push(mpa);
+            break;
+          }
+          case "UPDATE": {
+            const pos = this.postingAccount.findIndex(
+              (entry) => entry.id === mpa.id
+            );
+            if (pos !== undefined) this.postingAccount.splice(pos, 1, mpa);
+            break;
+          }
+          case "DELETE": {
+            this.postingAccount = this.postingAccount.filter(
+              (originalMpa) => mpa.id !== originalMpa.id
+            );
+            break;
+          }
+        }
+
+        this.postingAccount.sort((a, b) => a.name.localeCompare(b.name));
+      }
+    },
     async searchPostingAccounts(
       comment: String
     ): Promise<Array<PostingAccount>> {
@@ -34,22 +74,6 @@ export const usePostingAccountStore = defineStore("postingAccount", {
       return mpa.filter((entry) =>
         entry.name.toUpperCase().includes(commentUpper)
       );
-    },
-    updatePostingAccountInStore(mcs: PostingAccount) {
-      const pos = this.postingAccount.findIndex((entry) => entry.id === mcs.id);
-      if (pos !== undefined) this.postingAccount.splice(pos, 1, mcs);
-      this.postingAccount.sort((a, b) => a.name.localeCompare(b.name));
-    },
-    deletePostingAccount(mcs: PostingAccount) {
-      this.postingAccount = this.postingAccount.filter(
-        (originalMcs) => mcs.id !== originalMcs.id
-      );
-    },
-    async addPostingAccountToStore(mpa: PostingAccount) {
-      if (this.postingAccount.length > 0) {
-        this.postingAccount.push(mpa);
-        this.postingAccount.sort((a, b) => a.name.localeCompare(b.name));
-      }
     },
   },
 });

@@ -25,6 +25,8 @@ export class StoreService {
 
   public subscribeAllStores() {
     this.subscribeContractpartner();
+    this.subscribePostingAccount();
+    this.subscribeCapitalsource();
   }
 
   private initContractpartner() {
@@ -41,5 +43,13 @@ export class StoreService {
 
   private subscribeContractpartner() {
     this.contractpartnerStore.subscribeToWebsocket();
+  }
+
+  private subscribePostingAccount() {
+    this.postingAccountStore.subscribeToWebsocket();
+  }
+
+  private subscribeCapitalsource() {
+    this.capitalsourceStore.subscribeToWebsocket();
   }
 }
