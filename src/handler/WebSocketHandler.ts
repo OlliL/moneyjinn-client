@@ -21,7 +21,7 @@ export class WebSocketHandler {
 
     this.stompClient = Stomp.client(url, {
       debug: true,
-      protocols: Stomp.VERSIONS.supportedProtocols(),
+      protocols: ["v12.stomp"],
     });
 
     const headers = {} as Record<string, string>;
