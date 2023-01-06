@@ -103,7 +103,6 @@ import type { Capitalsource } from "@/model/capitalsource/Capitalsource";
 import { capitalsourceImportNames } from "@/model/capitalsource/CapitalsourceImport";
 import { capitalsourceStateNames } from "@/model/capitalsource/CapitalsourceState";
 import { capitalsourceTypeNames } from "@/model/capitalsource/CapitalsourceType";
-import { useCapitalsourceStore } from "@/stores/CapitalsourceStore";
 import { formatDate } from "@/tools/views/FormatDate";
 import { defineComponent } from "vue";
 import ModalVue from "../Modal.vue";
@@ -148,8 +147,6 @@ export default defineComponent({
     },
     async deleteCapitalsource() {
       await CapitalsourceControllerHandler.deleteCapitalsource(this.mcs.id);
-      const capitalsourceStore = useCapitalsourceStore();
-      capitalsourceStore.deleteCapitalsource(this.mcs);
       (this.$refs.modalComponent as typeof ModalVue)._hide();
       this.$emit("capitalsourceDeleted", this.mcs);
     },

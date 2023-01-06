@@ -1,6 +1,9 @@
 import CapitalsourceControllerHandler from "@/handler/CapitalsourceControllerHandler";
+import { mapCapitalsourceTransportToModel } from "@/handler/mapper/CapitalsourceTransportMapper";
+import { WebSocketHandler } from "@/handler/WebSocketHandler";
 import type { Capitalsource } from "@/model/capitalsource/Capitalsource";
 import { CapitalsourceType } from "@/model/capitalsource/CapitalsourceType";
+import type { CapitalsourceChangedEventTransport } from "@/model/rest/wsevent/CapitalsourceChangedEventTransport";
 import { defineStore, mapState } from "pinia";
 import { useUserSessionStore } from "./UserSessionStore";
 
@@ -17,6 +20,43 @@ export const useCapitalsourceStore = defineStore("capitalsource", {
         const capitalsourceArray =
           await CapitalsourceControllerHandler.fetchAllCapitalsource();
         this.capitalsource = capitalsourceArray;
+        this.capitalsource.sort(this.compareCapitalsource);
+      }
+    },
+    subscribeToWebsocket() {
+      WebSocketHandler.getInstance().subscribe(
+        "/topic/capitalsourceChanged",
+        this.subscribeCallback
+      );
+    },
+    subscribeCallback(body: string) {
+      if (body) {
+        const event: CapitalsourceChangedEventTransport = JSON.parse(body);
+        const innerEvent = event.capitalsourceChangedEventTransport;
+        const mcs = mapCapitalsourceTransportToModel(
+          innerEvent.capitalsourceTransport
+        );
+
+        switch (innerEvent.eventType) {
+          case "CREATE": {
+            this.capitalsource.push(mcs);
+            break;
+          }
+          case "UPDATE": {
+            const pos = this.capitalsource.findIndex(
+              (entry) => entry.id === mcs.id
+            );
+            if (pos !== undefined) this.capitalsource.splice(pos, 1, mcs);
+            break;
+          }
+          case "DELETE": {
+            this.capitalsource = this.capitalsource.filter(
+              (originalMcs) => mcs.id !== originalMcs.id
+            );
+            break;
+          }
+        }
+
         this.capitalsource.sort(this.compareCapitalsource);
       }
     },
@@ -58,22 +98,6 @@ export const useCapitalsourceStore = defineStore("capitalsource", {
       const commentUpper = comment.toUpperCase();
       return mcs.filter((entry) =>
         entry.comment.toUpperCase().includes(commentUpper)
-      );
-    },
-    async addCapitalsourceToStore(mcs: Capitalsource) {
-      if (this.capitalsource.length > 0) {
-        this.capitalsource.push(mcs);
-        this.capitalsource.sort(this.compareCapitalsource);
-      }
-    },
-    updateCapitalsourceInStore(mcs: Capitalsource) {
-      const pos = this.capitalsource.findIndex((entry) => entry.id === mcs.id);
-      if (pos !== undefined) this.capitalsource.splice(pos, 1, mcs);
-      this.capitalsource.sort(this.compareCapitalsource);
-    },
-    deleteCapitalsource(mcs: Capitalsource) {
-      this.capitalsource = this.capitalsource.filter(
-        (originalMcs) => mcs.id !== originalMcs.id
       );
     },
     compareCapitalsource(a: Capitalsource, b: Capitalsource): number {

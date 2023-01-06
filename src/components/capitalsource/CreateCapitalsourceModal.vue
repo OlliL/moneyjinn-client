@@ -258,8 +258,6 @@ import {
   CapitalsourceState,
   capitalsourceStateNames,
 } from "@/model/capitalsource/CapitalsourceState";
-import { mapActions } from "pinia";
-import { useCapitalsourceStore } from "@/stores/CapitalsourceStore";
 import type { ValidationResult } from "@/model/validation/ValidationResult";
 import DatepickerVue from "../Datepicker.vue";
 
@@ -403,8 +401,6 @@ export default defineComponent({
       this.resetForm();
       (this.$refs.modalComponent as typeof ModalVue)._show();
     },
-    ...mapActions(useCapitalsourceStore, ["addCapitalsourceToStore"]),
-    ...mapActions(useCapitalsourceStore, ["updateCapitalsourceInStore"]),
     resetForm() {
       if (this.origMcs) {
         const validFrom = new Date(this.origMcs.validFrom);
@@ -531,7 +527,6 @@ export default defineComponent({
             await CapitalsourceControllerHandler.updateCapitalsource(this.mcs);
           if (!this.handleServerError(validationResult)) {
             (this.$refs.modalComponent as typeof ModalVue)._hide();
-            this.updateCapitalsourceInStore(this.mcs);
             this.$emit("capitalsourceUpdated", this.mcs);
           }
         } else {
@@ -545,7 +540,6 @@ export default defineComponent({
           if (!this.handleServerError(validationResult)) {
             this.mcs = (await capitalsourceValidation).mcs;
             (this.$refs.modalComponent as typeof ModalVue)._hide();
-            this.addCapitalsourceToStore(this.mcs);
             this.$emit("capitalsourceCreated", this.mcs);
           }
         }

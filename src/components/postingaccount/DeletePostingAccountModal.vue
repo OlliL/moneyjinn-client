@@ -26,7 +26,6 @@
 <script lang="ts">
 import PostingAccountControllerHandler from "@/handler/PostingAccountControllerHandler";
 import type { PostingAccount } from "@/model/postingaccount/PostingAccount";
-import { usePostingAccountStore } from "@/stores/PostingAccountStore";
 import { defineComponent } from "vue";
 import ModalVue from "../Modal.vue";
 
@@ -45,8 +44,6 @@ export default defineComponent({
     },
     async deletePostingAccount() {
       await PostingAccountControllerHandler.deletePostingAccount(this.mpa.id);
-      const postingAccountStore = usePostingAccountStore();
-      postingAccountStore.deletePostingAccount(this.mpa);
       (this.$refs.modalComponent as typeof ModalVue)._hide();
       this.$emit("postingAccountDeleted", this.mpa);
     },

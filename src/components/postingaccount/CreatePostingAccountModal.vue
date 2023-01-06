@@ -59,8 +59,6 @@ import { validateInputField } from "@/tools/views/ValidateInputField";
 import { defineComponent } from "vue";
 import ModalVue from "../Modal.vue";
 import { getError } from "@/tools/views/ThrowError";
-import { mapActions } from "pinia";
-import { usePostingAccountStore } from "@/stores/PostingAccountStore";
 import type { ValidationResult } from "@/model/validation/ValidationResult";
 
 type CreatePostingAccountModalData = {
@@ -109,8 +107,6 @@ export default defineComponent({
       this.resetForm();
       (this.$refs.modalComponent as typeof ModalVue)._show();
     },
-    ...mapActions(usePostingAccountStore, ["addPostingAccountToStore"]),
-    ...mapActions(usePostingAccountStore, ["updatePostingAccountInStore"]),
     resetForm() {
       if (this.origMpa) {
         this.mpa = { id: this.origMpa.id, name: this.origMpa.name };
@@ -147,7 +143,6 @@ export default defineComponent({
             );
           if (!this.handleServerError(validationResult)) {
             (this.$refs.modalComponent as typeof ModalVue)._hide();
-            this.updatePostingAccountInStore(this.mpa);
             this.$emit("postingAccountUpdated", this.mpa);
           }
         } else {
@@ -161,27 +156,8 @@ export default defineComponent({
           if (!this.handleServerError(validationResult)) {
             this.mpa = (await postingAccountValidation).mpa;
             (this.$refs.modalComponent as typeof ModalVue)._hide();
-            this.addPostingAccountToStore(this.mpa);
             this.$emit("postingAccountCreated", this.mpa);
           }
-        }
-
-        const postingAccountValidation =
-          PostingAccountControllerHandler.createPostingAccount(this.mpa);
-        const validationResult = await (
-          await postingAccountValidation
-        ).validationResult;
-
-        if (!validationResult.result) {
-          this.serverError = new Array<string>();
-          for (let resultItem of validationResult.validationResultItems) {
-            this.serverError.push(getError(resultItem.error));
-          }
-        } else {
-          this.mpa = (await postingAccountValidation).mpa;
-          (this.$refs.modalComponent as typeof ModalVue)._hide();
-          this.addPostingAccountToStore(this.mpa);
-          this.$emit("postingAccountCreated", this.mpa);
         }
       }
     },
