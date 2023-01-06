@@ -9,9 +9,7 @@ export class WebServer {
   public static getInstance(): WebServer {
     if (!WebServer.instance) {
       WebServer.instance = new WebServer();
-      WebServer.instance.webServer = devtools
-        ? location.host
-        : "bomba.salatschuessel.net:8080";
+      WebServer.instance.webServer = location.host;
     }
     return WebServer.instance;
   }
