@@ -19,7 +19,7 @@ export class HeaderUtil {
   }
 
   public addCsrfHeader(headers: Record<string, string>) {
-    const csrfToken = this.userSessionStore.csrfToken;
+    const csrfToken = this.userSessionStore.getCsrfToken;
     headers["X-CSRF-TOKEN"] = csrfToken;
   }
 
