@@ -1,5 +1,5 @@
 import type { LoginResponse } from "@/model/rest/user/LoginResponse";
-import type { SupplierCsrfToken } from "@/model/SupplierCsrfToken";
+import type { SupplierCsrfToken } from "@/model/rest/SupplierCsrfToken";
 import { useUserSessionStore } from "@/stores/UserSessionStore";
 import { throwError } from "@/tools/views/ThrowError";
 import { HeaderUtil } from "./util/HeaderUtil";
