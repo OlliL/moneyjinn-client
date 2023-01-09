@@ -1,11 +1,6 @@
-import type { ErrorResponse } from "../ErrorResponse";
 import type { MoneyflowTransport } from "../transport/MoneyflowTransport";
-import type { ValidationItemTransport } from "../transport/ValidationItemTransport";
+import type { ValidationResponse } from "../ValidationResponse";
 
-export type SearchMoneyflowsResponse = ErrorResponse & {
-  searchMoneyflowsResponse: {
-    result: boolean;
-    validationItemTransport: Array<ValidationItemTransport>;
-    moneyflowTransport: Array<MoneyflowTransport>;
-  };
+export type SearchMoneyflowsResponse = ValidationResponse & {
+  moneyflowTransports: Array<MoneyflowTransport>;
 };

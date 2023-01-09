@@ -28,13 +28,12 @@ class ImportedMoneyflowControllerHandler extends AbstractControllerHandler {
     const showAddImportedMoneyflowsResponse =
       (await response.json()) as ShowAddImportedMoneyflowsResponse;
 
-    const data =
-      showAddImportedMoneyflowsResponse.showAddImportedMoneyflowsResponse;
-
     const result: Array<ImportedMoneyflow> =
-      data.importedMoneyflowTransport?.map((mim) => {
-        return mapImportedMoneyflowTransportToModel(mim);
-      });
+      showAddImportedMoneyflowsResponse.importedMoneyflowTransports?.map(
+        (mim) => {
+          return mapImportedMoneyflowTransportToModel(mim);
+        }
+      );
 
     return result;
   }
@@ -45,13 +44,10 @@ class ImportedMoneyflowControllerHandler extends AbstractControllerHandler {
     const usecase = "importImportedMoneyflows";
 
     const transport = mapImportedMoneyflowToTransport(importedMoneyflow);
-    const request = {
-      importImportedMoneyflowRequest: {},
-    } as ImportImportedMoneyflowRequest;
-    const innerRequest = request.importImportedMoneyflowRequest;
-    innerRequest.importedMoneyflowTransport = transport;
+    const request = {} as ImportImportedMoneyflowRequest;
+    request.importedMoneyflowTransport = transport;
     if (importedMoneyflow.moneyflowSplitEntries) {
-      innerRequest.insertMoneyflowSplitEntryTransport =
+      request.insertMoneyflowSplitEntryTransports =
         importedMoneyflow.moneyflowSplitEntries.map((mse) => {
           return mapMoneyflowSplitEntryToTransport(mse);
         });
@@ -70,10 +66,9 @@ class ImportedMoneyflowControllerHandler extends AbstractControllerHandler {
       return { result: true } as ValidationResult;
     }
     const validationResponse = (await response.json()) as ValidationResponse;
-    const innerResponse = validationResponse.validationResponse;
     const validationResult: ValidationResult = {
-      result: innerResponse.result,
-      validationResultItems: innerResponse.validationItemTransport?.map(
+      result: validationResponse.result,
+      validationResultItems: validationResponse.validationItemTransports?.map(
         (vit) => {
           return mapValidationItemTransportToModel(vit);
         }

@@ -1,10 +1,5 @@
-import type { ErrorResponse } from "../ErrorResponse";
-import type { ValidationItemTransport } from "../transport/ValidationItemTransport";
+import type { ValidationResponse } from "../ValidationResponse";
 
-export type CreateUserResponse = ErrorResponse & {
-  createUserResponse: {
-    result: boolean;
-    validationItemTransport: Array<ValidationItemTransport>;
-    userId: number;
-  };
+export type CreateUserResponse = ValidationResponse & {
+  userId: number;
 };

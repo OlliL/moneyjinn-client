@@ -1,9 +1,5 @@
-import type { ValidationItemTransport } from "../transport/ValidationItemTransport";
+import type { ValidationResponse } from "../ValidationResponse";
 
-export type CreateEtfFlowResponse = {
-  createEtfFlowResponse: {
-    result: boolean;
-    validationItemTransport: Array<ValidationItemTransport>;
-    etfFlowId: number;
-  };
+export type CreateEtfFlowResponse = ValidationResponse & {
+  etfFlowId: number;
 };

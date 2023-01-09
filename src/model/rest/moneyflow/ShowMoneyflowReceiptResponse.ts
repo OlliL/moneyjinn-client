@@ -1,8 +1,6 @@
-import type { ErrorResponse } from "../ErrorResponse";
+import type { AbstractResponse } from "../AbstractResponse";
 
-export type ShowMoneyflowReceiptResponse = ErrorResponse & {
-  showMoneyflowReceiptResponse: {
-    receipt: string;
-    receiptType: number;
-  };
+export type ShowMoneyflowReceiptResponse = AbstractResponse & {
+  receipt: string;
+  receiptType: number;
 };

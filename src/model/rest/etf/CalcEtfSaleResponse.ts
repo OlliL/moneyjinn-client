@@ -1,18 +1,14 @@
-import type { ValidationItemTransport } from "../transport/ValidationItemTransport";
+import type { ValidationResponse } from "../ValidationResponse";
 
-export type CalcEtfSaleResponse = {
-  calcEtfSaleResponse: {
-    result: boolean;
-    validationItemTransport: Array<ValidationItemTransport>;
-    isin: string;
-    originalBuyPrice: number;
-    sellPrice: number;
-    newBuyPrice: number;
-    profit: number;
-    chargeable: number;
-    transactionCosts: number;
-    rebuyLosses: number;
-    overallCosts: number;
-    pieces: number;
-  };
+export type CalcEtfSaleResponse = ValidationResponse & {
+  isin: string;
+  originalBuyPrice: number;
+  sellPrice: number;
+  newBuyPrice: number;
+  profit: number;
+  chargeable: number;
+  transactionCosts: number;
+  rebuyLosses: number;
+  overallCosts: number;
+  pieces: number;
 };

@@ -30,14 +30,14 @@ class PostingAccountControllerHandler extends AbstractControllerHandler {
     const showPostingAccountListResponse =
       (await response.json()) as ShowPostingAccountListResponse;
 
-    if (showPostingAccountListResponse.error) {
-      throwError(showPostingAccountListResponse.error.code);
+    if (showPostingAccountListResponse.errorResponse) {
+      throwError(showPostingAccountListResponse.errorResponse.code);
     }
 
     const postingAccountArray = new Array<PostingAccount>();
-    const transport = await showPostingAccountListResponse
-      .showPostingAccountListResponse.postingAccountTransport;
-    transport?.forEach((value) => {
+    const transports =
+      await showPostingAccountListResponse.postingAccountTransports;
+    transports?.forEach((value) => {
       postingAccountArray.push(mapPostingAccountTransportToModel(value));
     });
 
@@ -48,11 +48,8 @@ class PostingAccountControllerHandler extends AbstractControllerHandler {
     mpa: PostingAccount
   ): Promise<PostingAccountValidation> {
     const usecase = "createPostingAccount";
-    const request = {
-      createPostingAccountRequest: {},
-    } as CreatePostingAccountRequest;
-    const innerRequest = request.createPostingAccountRequest;
-    innerRequest.postingAccountTransport = mapPostingAccountToTransport(mpa);
+    const request = {} as CreatePostingAccountRequest;
+    request.postingAccountTransport = mapPostingAccountToTransport(mpa);
 
     const response = await super.post(
       request,
@@ -66,23 +63,20 @@ class PostingAccountControllerHandler extends AbstractControllerHandler {
 
     const createPostingAccountResponse =
       (await response.json()) as CreatePostingAccountResponse;
-    const innerResponse =
-      createPostingAccountResponse.createPostingAccountResponse;
     const postingAccountValidation = {} as PostingAccountValidation;
     const validationResult: ValidationResult = {
-      result: innerResponse.result,
-      validationResultItems: innerResponse.validationItemTransport?.map(
-        (vit) => {
+      result: createPostingAccountResponse.result,
+      validationResultItems:
+        createPostingAccountResponse.validationItemTransports?.map((vit) => {
           return mapValidationItemTransportToModel(vit);
-        }
-      ),
+        }),
     };
 
     postingAccountValidation.validationResult = validationResult;
 
     if (validationResult.result) {
       const createdMpa: PostingAccount = {
-        id: innerResponse.postingAccountId,
+        id: createPostingAccountResponse.postingAccountId,
         name: mpa.name,
       };
       postingAccountValidation.mpa = createdMpa;
@@ -92,11 +86,8 @@ class PostingAccountControllerHandler extends AbstractControllerHandler {
 
   async updatePostingAccount(mcp: PostingAccount): Promise<ValidationResult> {
     const usecase = "updatePostingAccount";
-    const request = {
-      updatePostingAccountRequest: {},
-    } as UpdatePostingAccountRequest;
-    const innerRequest = request.updatePostingAccountRequest;
-    innerRequest.postingAccountTransport = mapPostingAccountToTransport(mcp);
+    const request = {} as UpdatePostingAccountRequest;
+    request.postingAccountTransport = mapPostingAccountToTransport(mcp);
 
     const response = await super.put(
       request,
@@ -109,10 +100,9 @@ class PostingAccountControllerHandler extends AbstractControllerHandler {
     }
 
     const validationResponse = (await response.json()) as ValidationResponse;
-    const innerResponse = validationResponse.validationResponse;
     const validationResult: ValidationResult = {
-      result: innerResponse.result,
-      validationResultItems: innerResponse.validationItemTransport?.map(
+      result: validationResponse.result,
+      validationResultItems: validationResponse.validationItemTransports?.map(
         (vit) => {
           return mapValidationItemTransportToModel(vit);
         }

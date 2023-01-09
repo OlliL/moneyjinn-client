@@ -1,10 +1,5 @@
-import type { ErrorResponse } from "../ErrorResponse";
-import type { ValidationItemTransport } from "../transport/ValidationItemTransport";
+import type { ValidationResponse } from "../ValidationResponse";
 
-export type CreateGroupResponse = ErrorResponse & {
-  createGroupResponse: {
-    result: boolean;
-    validationItemTransport: Array<ValidationItemTransport>;
-    groupId: number;
-  };
+export type CreateGroupResponse = ValidationResponse & {
+  groupId: number;
 };

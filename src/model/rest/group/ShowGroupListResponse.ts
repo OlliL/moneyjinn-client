@@ -1,8 +1,6 @@
-import type { ErrorResponse } from "../ErrorResponse";
+import type { AbstractResponse } from "../AbstractResponse";
 import type { GroupTransport } from "../transport/GroupTransport";
 
-export type ShowGroupListResponse = ErrorResponse & {
-  showGroupListResponse: {
-    groupTransport: Array<GroupTransport>;
-  };
+export type ShowGroupListResponse = AbstractResponse & {
+  groupTransports: Array<GroupTransport>;
 };

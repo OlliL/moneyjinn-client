@@ -2,8 +2,6 @@ import type { AccessRelationTransport } from "../transport/AccessRelationTranspo
 import type { UserTransport } from "../transport/UserTransport";
 
 export type UpdateUserRequest = {
-  updateUserRequest: {
-    userTransport: UserTransport;
-    accessRelationTransport: AccessRelationTransport;
-  };
+  userTransport: UserTransport;
+  accessRelationTransport: AccessRelationTransport;
 };

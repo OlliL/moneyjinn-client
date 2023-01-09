@@ -1,17 +1,15 @@
-import type { ErrorResponse } from "../ErrorResponse";
 import type { MoneyflowTransport } from "../transport/MoneyflowTransport";
 import type { MoneyflowSplitEntryTransport } from "../transport/MoneyflowSplitEntryTransport";
 import type { ReportTurnoverCapitalsourceTransport } from "./transport/ReportTurnoverCapitalsourceTransport";
+import type { AbstractResponse } from "../AbstractResponse";
 
-export type ListReportsResponse = ErrorResponse & {
-  listReportsResponse: {
-    year: number;
-    month: number;
-    moneyflowTransport: Array<MoneyflowTransport>;
-    moneyflowSplitEntryTransport: Array<MoneyflowSplitEntryTransport>;
-    reportTurnoverCapitalsourceTransport: Array<ReportTurnoverCapitalsourceTransport>;
-    turnoverEndOfYearCalculated: number;
-    amountBeginOfYear: number;
-    moneyflowsWithReceipt: Array<number>;
-  };
+export type ListReportsResponse = AbstractResponse & {
+  year: number;
+  month: number;
+  moneyflowTransports: Array<MoneyflowTransport>;
+  moneyflowSplitEntryTransports: Array<MoneyflowSplitEntryTransport>;
+  reportTurnoverCapitalsourceTransports: Array<ReportTurnoverCapitalsourceTransport>;
+  turnoverEndOfYearCalculated: number;
+  amountBeginOfYear: number;
+  moneyflowsWithReceipt: Array<number>;
 };

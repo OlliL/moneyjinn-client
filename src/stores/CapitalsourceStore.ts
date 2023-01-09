@@ -32,12 +32,11 @@ export const useCapitalsourceStore = defineStore("capitalsource", {
     subscribeCallback(body: string) {
       if (body) {
         const event: CapitalsourceChangedEventTransport = JSON.parse(body);
-        const innerEvent = event.capitalsourceChangedEventTransport;
         const mcs = mapCapitalsourceTransportToModel(
-          innerEvent.capitalsourceTransport
+          event.capitalsourceTransport
         );
 
-        switch (innerEvent.eventType) {
+        switch (event.eventType) {
           case "CREATE": {
             this.capitalsource.push(mcs);
             break;

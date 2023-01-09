@@ -2,10 +2,8 @@ import type { MoneyflowSplitEntryTransport } from "../transport/MoneyflowSplitEn
 import type { MoneyflowTransport } from "../transport/MoneyflowTransport";
 
 export type CreateMoneyflowRequest = {
-  createMoneyflowRequest: {
-    moneyflowTransport: MoneyflowTransport;
-    insertMoneyflowSplitEntryTransport?: Array<MoneyflowSplitEntryTransport>;
-    usedPreDefMoneyflowId?: number;
-    saveAsPreDefMoneyflow?: number;
-  };
+  moneyflowTransport: MoneyflowTransport;
+  insertMoneyflowSplitEntryTransports?: Array<MoneyflowSplitEntryTransport>;
+  usedPreDefMoneyflowId?: number;
+  saveAsPreDefMoneyflow?: number;
 };

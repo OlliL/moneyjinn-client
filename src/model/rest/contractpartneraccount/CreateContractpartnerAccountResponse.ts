@@ -1,9 +1,5 @@
-import type { ValidationItemTransport } from "../transport/ValidationItemTransport";
+import type { ValidationResponse } from "../ValidationResponse";
 
-export type CreateContractpartnerAccountResponse = {
-  createContractpartnerAccountResponse: {
-    result: boolean;
-    validationItemTransport: Array<ValidationItemTransport>;
-    contractpartnerAccountId: number;
-  };
+export type CreateContractpartnerAccountResponse = ValidationResponse & {
+  contractpartnerAccountId: number;
 };

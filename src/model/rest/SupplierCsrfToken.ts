@@ -1,7 +1,5 @@
 export type SupplierCsrfToken = {
-  SupplierCsrfToken: {
-    token: string;
-    parameterName: string;
-    headerName: string;
-  };
+  token: string;
+  parameterName: string;
+  headerName: string;
 };

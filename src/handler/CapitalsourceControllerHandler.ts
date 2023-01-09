@@ -31,13 +31,13 @@ class CapitalsourceControllerHandler extends AbstractControllerHandler {
     const showCapitalsourceListResponse =
       (await response.json()) as ShowCapitalsourceListResponse;
 
-    if (showCapitalsourceListResponse.error) {
-      throwError(showCapitalsourceListResponse.error.code);
+    if (showCapitalsourceListResponse.errorResponse) {
+      throwError(showCapitalsourceListResponse.errorResponse.code);
     }
 
     const capitalsourceArray = new Array<Capitalsource>();
-    const transport = await showCapitalsourceListResponse
-      .showCapitalsourceListResponse.capitalsourceTransport;
+    const transport =
+      await showCapitalsourceListResponse.capitalsourceTransports;
     transport?.forEach((value) => {
       capitalsourceArray.push(mapCapitalsourceTransportToModel(value));
     });
@@ -49,11 +49,8 @@ class CapitalsourceControllerHandler extends AbstractControllerHandler {
     mcs: Capitalsource
   ): Promise<CapitalsourceValidation> {
     const usecase = "createCapitalsource";
-    const request = {
-      createCapitalsourceRequest: {},
-    } as CreateCapitalsourceRequest;
-    const innerRequest = request.createCapitalsourceRequest;
-    innerRequest.capitalsourceTransport = mapCapitalsourceToTransport(mcs);
+    const request = {} as CreateCapitalsourceRequest;
+    request.capitalsourceTransport = mapCapitalsourceToTransport(mcs);
 
     const response = await super.post(
       request,
@@ -67,16 +64,13 @@ class CapitalsourceControllerHandler extends AbstractControllerHandler {
 
     const createCapitalsourceResponse =
       (await response.json()) as CreateCapitalsourceResponse;
-    const innerResponse =
-      createCapitalsourceResponse.createCapitalsourceResponse;
     const capitalsourceValidation = {} as CapitalsourceValidation;
     const validationResult: ValidationResult = {
-      result: innerResponse.result,
-      validationResultItems: innerResponse.validationItemTransport?.map(
-        (vit) => {
+      result: createCapitalsourceResponse.result,
+      validationResultItems:
+        createCapitalsourceResponse.validationItemTransports?.map((vit) => {
           return mapValidationItemTransportToModel(vit);
-        }
-      ),
+        }),
     };
 
     capitalsourceValidation.validationResult = validationResult;
@@ -84,7 +78,7 @@ class CapitalsourceControllerHandler extends AbstractControllerHandler {
     if (validationResult.result) {
       const userSessionStore = useUserSessionStore();
       const createdMcs: Capitalsource = mcs;
-      createdMcs.id = innerResponse.capitalsourceId;
+      createdMcs.id = createCapitalsourceResponse.capitalsourceId;
       createdMcs.userId = userSessionStore.getUserId;
       capitalsourceValidation.mcs = createdMcs;
     }
@@ -93,11 +87,8 @@ class CapitalsourceControllerHandler extends AbstractControllerHandler {
 
   async updateCapitalsource(mcs: Capitalsource): Promise<ValidationResult> {
     const usecase = "updateCapitalsource";
-    const request = {
-      updateCapitalsourceRequest: {},
-    } as UpdateCapitalsourceRequest;
-    const innerRequest = request.updateCapitalsourceRequest;
-    innerRequest.capitalsourceTransport = mapCapitalsourceToTransport(mcs);
+    const request = {} as UpdateCapitalsourceRequest;
+    request.capitalsourceTransport = mapCapitalsourceToTransport(mcs);
 
     const response = await super.put(
       request,
@@ -110,10 +101,9 @@ class CapitalsourceControllerHandler extends AbstractControllerHandler {
     }
 
     const validationResponse = (await response.json()) as ValidationResponse;
-    const innerResponse = validationResponse.validationResponse;
     const validationResult: ValidationResult = {
-      result: innerResponse.result,
-      validationResultItems: innerResponse.validationItemTransport?.map(
+      result: validationResponse.result,
+      validationResultItems: validationResponse.validationItemTransports?.map(
         (vit) => {
           return mapValidationItemTransportToModel(vit);
         }

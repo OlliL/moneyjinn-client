@@ -2,8 +2,6 @@ import type { ImportedMoneyflowTransport } from "../transport/ImportedMoneyflowT
 import type { MoneyflowSplitEntryTransport } from "../transport/MoneyflowSplitEntryTransport";
 
 export type ImportImportedMoneyflowRequest = {
-  importImportedMoneyflowRequest: {
-    importedMoneyflowTransport: ImportedMoneyflowTransport;
-    insertMoneyflowSplitEntryTransport?: Array<MoneyflowSplitEntryTransport>;
-  };
+  importedMoneyflowTransport: ImportedMoneyflowTransport;
+  insertMoneyflowSplitEntryTransports?: Array<MoneyflowSplitEntryTransport>;
 };

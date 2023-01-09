@@ -1,8 +1,6 @@
 export type ShowMonthlyReportGraphRequest = {
-  showMonthlyReportGraphRequest: {
-    postingAccountIdsYes: Array<number>;
-    postingAccountIdsNo: Array<number>;
-    startDate: string;
-    endDate: string;
-  };
+  postingAccountIdsYes: Array<number>;
+  postingAccountIdsNo: Array<number>;
+  startDate: string;
+  endDate: string;
 };

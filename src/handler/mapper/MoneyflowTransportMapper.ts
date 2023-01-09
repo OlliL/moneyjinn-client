@@ -20,7 +20,7 @@ export function mapMoneyflowTransportToModel(
     contractpartnerId: transport.contractpartnerid,
     contractpartnerName: transport.contractpartnername,
     comment: transport.comment,
-    private: transport.private == 1 ? true : false,
+    private: transport.privat == 1 ? true : false,
     postingAccountId: transport.postingaccountid,
     postingAccountName: transport.postingaccountname,
     hasReceipt: hasReceipt,
@@ -45,7 +45,7 @@ export function mapMoneyflowToTransport(model: Moneyflow): MoneyflowTransport {
     capitalsourceid: model.capitalsourceId,
     contractpartnerid: model.contractpartnerId,
     comment: model.comment,
-    private: model.private ? 1 : 0,
+    privat: model.private ? 1 : 0,
     postingaccountid: model.postingAccountId,
   };
   return transport;

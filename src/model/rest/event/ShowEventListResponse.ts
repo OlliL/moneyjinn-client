@@ -1,10 +1,8 @@
-import type { ErrorResponse } from "../ErrorResponse";
+import type { AbstractResponse } from "../AbstractResponse";
 
-export type ShowEventListResponse = ErrorResponse & {
-  showEventListResponse: {
-    monthlySettlementMissing: boolean;
-    monthlySettlementMonth: number;
-    monthlySettlementYear: number;
-    numberOfImportedMoneyflows: number;
-  };
+export type ShowEventListResponse = AbstractResponse & {
+  monthlySettlementMissing: boolean;
+  monthlySettlementMonth: number;
+  monthlySettlementYear: number;
+  numberOfImportedMoneyflows: number;
 };

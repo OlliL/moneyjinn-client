@@ -34,17 +34,16 @@ class MoneyflowControllerHandler extends AbstractControllerHandler {
   ): Promise<ValidationResult> {
     const usecase = "createMoneyflow";
 
-    const request = { createMoneyflowRequest: {} } as CreateMoneyflowRequest;
-    const innerRequest = request.createMoneyflowRequest;
-    innerRequest.moneyflowTransport = mapMoneyflowToTransport(moneyflow);
+    const request = {} as CreateMoneyflowRequest;
+    request.moneyflowTransport = mapMoneyflowToTransport(moneyflow);
     if (usedPreDefMoneyflowId != 0) {
-      innerRequest.usedPreDefMoneyflowId = usedPreDefMoneyflowId;
+      request.usedPreDefMoneyflowId = usedPreDefMoneyflowId;
     }
     if (saveAsPreDefMoneyflow) {
-      innerRequest.saveAsPreDefMoneyflow = saveAsPreDefMoneyflow ? 1 : 0;
+      request.saveAsPreDefMoneyflow = saveAsPreDefMoneyflow ? 1 : 0;
     }
     if (moneyflow.moneyflowSplitEntries) {
-      innerRequest.insertMoneyflowSplitEntryTransport =
+      request.insertMoneyflowSplitEntryTransports =
         moneyflow.moneyflowSplitEntries.map((mse) => {
           return mapMoneyflowSplitEntryToTransport(mse);
         });
@@ -64,10 +63,9 @@ class MoneyflowControllerHandler extends AbstractControllerHandler {
     }
 
     const validationResponse = (await response.json()) as ValidationResponse;
-    const innerResponse = validationResponse.validationResponse;
     const validationResult: ValidationResult = {
-      result: innerResponse.result,
-      validationResultItems: innerResponse.validationItemTransport?.map(
+      result: validationResponse.result,
+      validationResultItems: validationResponse.validationItemTransports?.map(
         (vit) => {
           return mapValidationItemTransportToModel(vit);
         }
@@ -84,18 +82,17 @@ class MoneyflowControllerHandler extends AbstractControllerHandler {
   ): Promise<MoneyflowValidation> {
     const usecase = "updateMoneyflowV2";
 
-    const request = { updateMoneyflowRequest: {} } as UpdateMoneyflowRequest;
-    const innerRequest = request.updateMoneyflowRequest;
-    innerRequest.moneyflowTransport = mapMoneyflowToTransport(moneyflow);
-    innerRequest.insertMoneyflowSplitEntryTransport =
+    const request = {} as UpdateMoneyflowRequest;
+    request.moneyflowTransport = mapMoneyflowToTransport(moneyflow);
+    request.insertMoneyflowSplitEntryTransports =
       createMoneyflowSplitEntries.map((mse) => {
         return mapMoneyflowSplitEntryToTransport(mse);
       });
-    innerRequest.updateMoneyflowSplitEntryTransport =
+    request.updateMoneyflowSplitEntryTransports =
       updateMoneyflowSplitEntries.map((mse) => {
         return mapMoneyflowSplitEntryToTransport(mse);
       });
-    innerRequest.deleteMoneyflowSplitEntryIds = deleteMoneyflowSplitEntryIds;
+    request.deleteMoneyflowSplitEntryIds = deleteMoneyflowSplitEntryIds;
 
     const response = await super.put(
       request,
@@ -108,24 +105,22 @@ class MoneyflowControllerHandler extends AbstractControllerHandler {
     }
     const updateMoneyflowResponse =
       (await response.json()) as UpdateMoneyflowResponse;
-    const innerResponse = updateMoneyflowResponse.updateMoneyflowResponse;
     const moneyflowValidation = {} as MoneyflowValidation;
     const validationResult: ValidationResult = {
-      result: innerResponse.result,
-      validationResultItems: innerResponse.validationItemTransport?.map(
-        (vit) => {
+      result: updateMoneyflowResponse.result,
+      validationResultItems:
+        updateMoneyflowResponse.validationItemTransports?.map((vit) => {
           return mapValidationItemTransportToModel(vit);
-        }
-      ),
+        }),
     };
 
     moneyflowValidation.validationResult = validationResult;
 
     if (validationResult.result) {
       const mmf: Moneyflow = mapMoneyflowTransportToModel(
-        innerResponse.moneyflowTransport,
-        innerResponse.hasReceipt,
-        innerResponse.moneyflowSplitEntryTransport
+        updateMoneyflowResponse.moneyflowTransport,
+        updateMoneyflowResponse.hasReceipt,
+        updateMoneyflowResponse.moneyflowSplitEntryTransports
       );
       moneyflowValidation.mmf = mmf;
     }
@@ -149,9 +144,8 @@ class MoneyflowControllerHandler extends AbstractControllerHandler {
   ): Promise<MoneyflowValidation> {
     const usecase = "searchMoneyflows";
 
-    const request = { searchMoneyflowsRequest: {} } as SearchMoneyflowsRequest;
-    const innerRequest = request.searchMoneyflowsRequest;
-    innerRequest.moneyflowSearchParamsTransport =
+    const request = {} as SearchMoneyflowsRequest;
+    request.moneyflowSearchParamsTransport =
       mapMoneyflowSearchParamsToTransport(searchParams);
 
     const moneyflowsValidation = {} as MoneyflowsValidation;
@@ -168,24 +162,22 @@ class MoneyflowControllerHandler extends AbstractControllerHandler {
     const searchMoneyflowsResponse =
       (await response.json()) as SearchMoneyflowsResponse;
 
-    if (searchMoneyflowsResponse.error) {
-      throwError(searchMoneyflowsResponse.error.code);
+    if (searchMoneyflowsResponse.errorResponse) {
+      throwError(searchMoneyflowsResponse.errorResponse.code);
     }
 
-    const innerResponse = searchMoneyflowsResponse.searchMoneyflowsResponse;
     const validationResult: ValidationResult = {
-      result: innerResponse.result,
-      validationResultItems: innerResponse.validationItemTransport?.map(
-        (vit) => {
+      result: searchMoneyflowsResponse.result,
+      validationResultItems:
+        searchMoneyflowsResponse.validationItemTransports?.map((vit) => {
           return mapValidationItemTransportToModel(vit);
-        }
-      ),
+        }),
     };
     moneyflowsValidation.validationResult = validationResult;
 
     if (validationResult.result) {
       const moneyflows: Array<Moneyflow> =
-        innerResponse.moneyflowTransport?.map((mmf) => {
+        searchMoneyflowsResponse.moneyflowTransports?.map((mmf) => {
           return mapMoneyflowTransportToModel(mmf, false);
         });
       moneyflowsValidation.moneyflows = moneyflows;
@@ -207,16 +199,14 @@ class MoneyflowControllerHandler extends AbstractControllerHandler {
     const showEditMoneyflowResponse =
       (await response.json()) as ShowEditMoneyflowResponse;
 
-    if (showEditMoneyflowResponse.error) {
-      throwError(showEditMoneyflowResponse.error.code);
+    if (showEditMoneyflowResponse.errorResponse) {
+      throwError(showEditMoneyflowResponse.errorResponse.code);
     }
 
-    const innerResponse = showEditMoneyflowResponse.showEditMoneyflowResponse;
-
     const moneyflow = mapMoneyflowTransportToModel(
-      innerResponse.moneyflowTransport,
-      innerResponse.hasReceipt,
-      innerResponse.moneyflowSplitEntryTransport
+      showEditMoneyflowResponse.moneyflowTransport,
+      showEditMoneyflowResponse.hasReceipt,
+      showEditMoneyflowResponse.moneyflowSplitEntryTransports
     );
 
     return moneyflow;
@@ -245,13 +235,13 @@ class MoneyflowControllerHandler extends AbstractControllerHandler {
     const searchMoneyflowsByAmountResponse =
       (await response.json()) as SearchMoneyflowsByAmountResponse;
 
-    const data =
-      searchMoneyflowsByAmountResponse.searchMoneyflowsByAmountResponse;
-
     const mseMap = new Map<number, Array<MoneyflowSplitEntryTransport>>();
 
-    if (data.moneyflowSplitEntryTransport !== undefined) {
-      for (const mse of data.moneyflowSplitEntryTransport) {
+    if (
+      searchMoneyflowsByAmountResponse.moneyflowSplitEntryTransports !==
+      undefined
+    ) {
+      for (const mse of searchMoneyflowsByAmountResponse.moneyflowSplitEntryTransports) {
         let mseMapArray = mseMap.get(mse.moneyflowid);
         if (mseMapArray == null) {
           mseMapArray = new Array<MoneyflowSplitEntryTransport>();
@@ -261,9 +251,10 @@ class MoneyflowControllerHandler extends AbstractControllerHandler {
       }
     }
 
-    const moneyflows: Array<Moneyflow> = data.moneyflowTransport?.map((mmf) => {
-      return mapMoneyflowTransportToModel(mmf, false, mseMap.get(mmf.id));
-    });
+    const moneyflows: Array<Moneyflow> =
+      searchMoneyflowsByAmountResponse.moneyflowTransports?.map((mmf) => {
+        return mapMoneyflowTransportToModel(mmf, false, mseMap.get(mmf.id));
+      });
 
     return moneyflows;
   }

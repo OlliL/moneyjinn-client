@@ -31,12 +31,11 @@ export const usePostingAccountStore = defineStore("postingAccount", {
     subscribeCallback(body: string) {
       if (body) {
         const event: PostingAccountChangedEventTransport = JSON.parse(body);
-        const innerEvent = event.postingAccountChangedEventTransport;
         const mpa = mapPostingAccountTransportToModel(
-          innerEvent.postingAccountTransport
+          event.postingAccountTransport
         );
 
-        switch (innerEvent.eventType) {
+        switch (event.eventType) {
           case "CREATE": {
             this.postingAccount.push(mpa);
             break;

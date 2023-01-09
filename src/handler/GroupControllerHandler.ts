@@ -1,7 +1,7 @@
 import AbstractControllerHandler from "@/handler/AbstractControllerHandler";
 import type { Group } from "@/model/group/Group";
 import type { GroupValidation } from "@/model/group/GroupValidation";
-import type { ErrorResponse } from "@/model/rest/ErrorResponse";
+import type { AbstractResponse } from "@/model/rest/AbstractResponse";
 import type { CreateGroupRequest } from "@/model/rest/group/CreateGroupRequest";
 import type { CreateGroupResponse } from "@/model/rest/group/CreateGroupResponse";
 import type { ShowGroupListResponse } from "@/model/rest/group/ShowGroupListResponse";
@@ -32,14 +32,13 @@ class GroupControllerHandler extends AbstractControllerHandler {
     const showGroupListResponse =
       (await response.json()) as ShowGroupListResponse;
 
-    if (showGroupListResponse.error) {
-      throwError(showGroupListResponse.error.code);
+    if (showGroupListResponse.errorResponse) {
+      throwError(showGroupListResponse.errorResponse.code);
     }
 
     const GroupArray = new Array<Group>();
-    const transport = await showGroupListResponse.showGroupListResponse
-      .groupTransport;
-    transport?.forEach((value) => {
+    const transports = await showGroupListResponse.groupTransports;
+    transports?.forEach((value) => {
       GroupArray.push(mapGroupTransportToModel(value));
     });
 
@@ -48,11 +47,8 @@ class GroupControllerHandler extends AbstractControllerHandler {
 
   async createGroup(mpm: Group): Promise<GroupValidation> {
     const usecase = "createGroup";
-    const request = {
-      createGroupRequest: {},
-    } as CreateGroupRequest;
-    const innerRequest = request.createGroupRequest;
-    innerRequest.groupTransport = mapGroupToTransport(mpm);
+    const request = {} as CreateGroupRequest;
+    request.groupTransport = mapGroupToTransport(mpm);
 
     const response = await super.post(
       request,
@@ -65,11 +61,10 @@ class GroupControllerHandler extends AbstractControllerHandler {
     }
 
     const createGroupResponse = (await response.json()) as CreateGroupResponse;
-    const innerResponse = createGroupResponse.createGroupResponse;
     const groupValidation = {} as GroupValidation;
     const validationResult: ValidationResult = {
-      result: innerResponse.result,
-      validationResultItems: innerResponse.validationItemTransport?.map(
+      result: createGroupResponse.result,
+      validationResultItems: createGroupResponse.validationItemTransports?.map(
         (vit) => {
           return mapValidationItemTransportToModel(vit);
         }
@@ -80,18 +75,15 @@ class GroupControllerHandler extends AbstractControllerHandler {
 
     if (validationResult.result) {
       const createMpm: Group = mpm;
-      createMpm.id = innerResponse.groupId;
+      createMpm.id = createGroupResponse.groupId;
       groupValidation.group = createMpm;
     }
     return groupValidation;
   }
   async updateGroup(mpm: Group): Promise<ValidationResult> {
     const usecase = "updateGroup";
-    const request = {
-      updateGroupRequest: {},
-    } as UpdateGroupRequest;
-    const innerRequest = request.updateGroupRequest;
-    innerRequest.groupTransport = mapGroupToTransport(mpm);
+    const request = {} as UpdateGroupRequest;
+    request.groupTransport = mapGroupToTransport(mpm);
 
     const response = await super.put(
       request,
@@ -104,10 +96,9 @@ class GroupControllerHandler extends AbstractControllerHandler {
     }
 
     const validationResponse = (await response.json()) as ValidationResponse;
-    const innerResponse = validationResponse.validationResponse;
     const validationResult: ValidationResult = {
-      result: innerResponse.result,
-      validationResultItems: innerResponse.validationItemTransport?.map(
+      result: validationResponse.result,
+      validationResultItems: validationResponse.validationItemTransports?.map(
         (vit) => {
           return mapValidationItemTransportToModel(vit);
         }
@@ -132,9 +123,9 @@ class GroupControllerHandler extends AbstractControllerHandler {
     if (response.status === 204) {
       validationResult.result = true;
     } else {
-      const errorResponse = (await response.json()) as ErrorResponse;
+      const errorResponse = (await response.json()) as AbstractResponse;
       const validationResultItem = {
-        error: errorResponse.error.code,
+        error: errorResponse.errorResponse.code,
       } as ValidationResultItem;
       validationResult.result = false;
       validationResult.validationResultItems = [validationResultItem];

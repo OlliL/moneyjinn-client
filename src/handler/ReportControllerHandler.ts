@@ -48,13 +48,12 @@ class ReportControllerHandler extends AbstractControllerHandler {
     const getAvailableMonthResponse =
       (await response.json()) as GetAvailableMonthResponse;
 
-    if (getAvailableMonthResponse.error) {
-      throwError(getAvailableMonthResponse.error.code);
+    if (getAvailableMonthResponse.errorResponse) {
+      throwError(getAvailableMonthResponse.errorResponse.code);
     }
 
     // easy mapping for now - same attributes
-    const availableMonth: AvailableMonth =
-      getAvailableMonthResponse.getAvailableMonthResponse;
+    const availableMonth: AvailableMonth = getAvailableMonthResponse;
 
     return availableMonth;
   }
@@ -74,16 +73,14 @@ class ReportControllerHandler extends AbstractControllerHandler {
 
     const listReportsResponse = (await response.json()) as ListReportsResponse;
 
-    if (listReportsResponse.error) {
-      throwError(listReportsResponse.error.code);
+    if (listReportsResponse.errorResponse) {
+      throwError(listReportsResponse.errorResponse.code);
     }
-
-    const data = listReportsResponse.listReportsResponse;
 
     const mseMap = new Map<number, Array<MoneyflowSplitEntryTransport>>();
 
-    if (data.moneyflowSplitEntryTransport !== undefined) {
-      for (const mse of data.moneyflowSplitEntryTransport) {
+    if (listReportsResponse.moneyflowSplitEntryTransports !== undefined) {
+      for (const mse of listReportsResponse.moneyflowSplitEntryTransports) {
         let mseMapArray = mseMap.get(mse.moneyflowid);
         if (mseMapArray == null) {
           mseMapArray = new Array<MoneyflowSplitEntryTransport>();
@@ -94,18 +91,21 @@ class ReportControllerHandler extends AbstractControllerHandler {
     }
 
     const report: Report = {
-      year: data.year,
-      month: data.month,
-      amountBeginOfYear: data.amountBeginOfYear,
-      turnoverEndOfYearCalculated: data.turnoverEndOfYearCalculated,
+      year: listReportsResponse.year,
+      month: listReportsResponse.month,
+      amountBeginOfYear: listReportsResponse.amountBeginOfYear,
+      turnoverEndOfYearCalculated:
+        listReportsResponse.turnoverEndOfYearCalculated,
       reportTurnoverCapitalsources:
-        data.reportTurnoverCapitalsourceTransport?.map((rtcp) => {
-          return mapReportTurnoverCapitalsourceTransportToModel(rtcp);
-        }),
-      moneyflows: data.moneyflowTransport?.map((mmf) => {
+        listReportsResponse.reportTurnoverCapitalsourceTransports?.map(
+          (rtcp) => {
+            return mapReportTurnoverCapitalsourceTransportToModel(rtcp);
+          }
+        ),
+      moneyflows: listReportsResponse.moneyflowTransports?.map((mmf) => {
         return mapMoneyflowTransportToModel(
           mmf,
-          data.moneyflowsWithReceipt?.includes(mmf.id),
+          listReportsResponse.moneyflowsWithReceipt?.includes(mmf.id),
           mseMap.get(mmf.id)
         );
       }),
@@ -128,16 +128,15 @@ class ReportControllerHandler extends AbstractControllerHandler {
     const showTrendsFormResponse =
       (await response.json()) as ShowTrendsFormResponse;
 
-    if (showTrendsFormResponse.error) {
-      throwError(showTrendsFormResponse.error.code);
+    if (showTrendsFormResponse.errorResponse) {
+      throwError(showTrendsFormResponse.errorResponse.code);
     }
 
-    const innerResponse = showTrendsFormResponse.showTrendsFormResponse;
-
     const trendsTransporter: TrendsParameter = {
-      startDate: new Date(innerResponse.minDate),
-      endDate: new Date(innerResponse.maxDate),
-      selectedCapitalsourceIds: innerResponse.settingTrendCapitalsourceId,
+      startDate: new Date(showTrendsFormResponse.minDate),
+      endDate: new Date(showTrendsFormResponse.maxDate),
+      selectedCapitalsourceIds:
+        showTrendsFormResponse.settingTrendCapitalsourceIds,
     };
 
     return trendsTransporter;
@@ -145,14 +144,11 @@ class ReportControllerHandler extends AbstractControllerHandler {
 
   async showTrendsGraph(trendsParameter: TrendsParameter): Promise<Trends> {
     const usecase = "showTrendsGraph";
-    const request = {
-      showTrendsGraphRequest: {},
-    } as ShowTrendsGraphRequest;
-    const innerRequest = request.showTrendsGraphRequest;
+    const request = {} as ShowTrendsGraphRequest;
 
-    innerRequest.startDate = trendsParameter.startDate.toISOString();
-    innerRequest.endDate = trendsParameter.endDate.toISOString();
-    innerRequest.capitalSourceIds = trendsParameter.selectedCapitalsourceIds;
+    request.startDate = trendsParameter.startDate.toISOString();
+    request.endDate = trendsParameter.endDate.toISOString();
+    request.capitalSourceIds = trendsParameter.selectedCapitalsourceIds;
 
     const response = await super.put(
       request,
@@ -166,10 +162,9 @@ class ReportControllerHandler extends AbstractControllerHandler {
 
     const showTrendsGraphResponse =
       (await response.json()) as ShowTrendsGraphResponse;
-    const innerResponse = showTrendsGraphResponse.showTrendsGraphResponse;
     const result: Trends = {
-      trendsCalculated: innerResponse.trendsCalculatedTransport,
-      trendsSettled: innerResponse.trendsSettledTransport,
+      trendsCalculated: showTrendsGraphResponse.trendsCalculatedTransports,
+      trendsSettled: showTrendsGraphResponse.trendsSettledTransports,
     };
 
     return result;
@@ -189,31 +184,29 @@ class ReportControllerHandler extends AbstractControllerHandler {
     const showReportingFormResponse =
       (await response.json()) as ShowReportingFormResponse;
 
-    if (showReportingFormResponse.error) {
-      throwError(showReportingFormResponse.error.code);
+    if (showReportingFormResponse.errorResponse) {
+      throwError(showReportingFormResponse.errorResponse.code);
     }
-
-    const innerResponse = showReportingFormResponse.showReportingFormResponse;
 
     const postingAccountStore = usePostingAccountStore();
     const postingAccounts = postingAccountStore.getPostingAccount;
 
     let postingAccountsYes: Array<PostingAccount> | undefined;
     let postingAccountsNo: Array<PostingAccount> | undefined;
-    if (innerResponse.postingAccountIdsNo) {
+    if (showReportingFormResponse.postingAccountIds) {
       postingAccountsYes = postingAccounts.filter((pa) => {
-        return !innerResponse.postingAccountIdsNo.includes(pa.id);
+        return !showReportingFormResponse.postingAccountIds.includes(pa.id);
       });
       postingAccountsNo = postingAccounts.filter((pa) => {
-        return innerResponse.postingAccountIdsNo.includes(pa.id);
+        return showReportingFormResponse.postingAccountIds.includes(pa.id);
       });
     } else {
       postingAccountsYes = postingAccounts;
     }
 
     const reportingParameter: ReportingParameter = {
-      startDate: new Date(innerResponse.minDate),
-      endDate: new Date(innerResponse.maxDate),
+      startDate: new Date(showReportingFormResponse.minDate),
+      endDate: new Date(showReportingFormResponse.maxDate),
       selectedPostingAccounts: postingAccountsYes,
       unselectedPostingAccounts: postingAccountsNo,
     };
@@ -225,17 +218,14 @@ class ReportControllerHandler extends AbstractControllerHandler {
     reportingParameter: ReportingParameter
   ): Promise<Array<ReportingMonthAmount>> {
     const usecase = "showMonthlyReportGraph";
-    const request = {
-      showMonthlyReportGraphRequest: {},
-    } as ShowMonthlyReportGraphRequest;
-    const innerRequest = request.showMonthlyReportGraphRequest;
+    const request = {} as ShowMonthlyReportGraphRequest;
 
-    innerRequest.startDate = reportingParameter.startDate.toISOString();
-    innerRequest.endDate = reportingParameter.endDate.toISOString();
-    innerRequest.postingAccountIdsYes =
+    request.startDate = reportingParameter.startDate.toISOString();
+    request.endDate = reportingParameter.endDate.toISOString();
+    request.postingAccountIdsYes =
       reportingParameter.selectedPostingAccounts.map((mpa) => mpa.id);
     if (reportingParameter.unselectedPostingAccounts)
-      innerRequest.postingAccountIdsNo =
+      request.postingAccountIdsNo =
         reportingParameter.unselectedPostingAccounts.map((mpa) => mpa.id);
 
     const response = await super.put(
@@ -250,12 +240,10 @@ class ReportControllerHandler extends AbstractControllerHandler {
 
     const showMonthlyReportGraphResponse =
       (await response.json()) as ShowMonthlyReportGraphResponse;
-    const innerResponse =
-      showMonthlyReportGraphResponse.showMonthlyReportGraphResponse;
 
     const result: Array<ReportingMonthAmount> =
-      innerResponse.postingAccountAmountTransport.map((paat) =>
-        mapPostingAccountAmountTransportToModel(paat)
+      showMonthlyReportGraphResponse.postingAccountAmountTransports.map(
+        (paat) => mapPostingAccountAmountTransportToModel(paat)
       );
 
     return result;
@@ -265,17 +253,14 @@ class ReportControllerHandler extends AbstractControllerHandler {
     reportingParameter: ReportingParameter
   ): Promise<Array<ReportingMonthAmount>> {
     const usecase = "showYearlyReportGraph";
-    const request = {
-      showYearlyReportGraphRequest: {},
-    } as ShowYearlyReportGraphRequest;
-    const innerRequest = request.showYearlyReportGraphRequest;
+    const request = {} as ShowYearlyReportGraphRequest;
 
-    innerRequest.startDate = reportingParameter.startDate.toISOString();
-    innerRequest.endDate = reportingParameter.endDate.toISOString();
-    innerRequest.postingAccountIdsYes =
+    request.startDate = reportingParameter.startDate.toISOString();
+    request.endDate = reportingParameter.endDate.toISOString();
+    request.postingAccountIdsYes =
       reportingParameter.selectedPostingAccounts.map((mpa) => mpa.id);
     if (reportingParameter.unselectedPostingAccounts)
-      innerRequest.postingAccountIdsNo =
+      request.postingAccountIdsNo =
         reportingParameter.unselectedPostingAccounts.map((mpa) => mpa.id);
 
     const response = await super.put(
@@ -290,11 +275,9 @@ class ReportControllerHandler extends AbstractControllerHandler {
 
     const showYearlyReportGraphResponse =
       (await response.json()) as ShowYearlyReportGraphResponse;
-    const innerResponse =
-      showYearlyReportGraphResponse.showYearlyReportGraphResponse;
 
     const result: Array<ReportingMonthAmount> =
-      innerResponse.postingAccountAmountTransport.map((paat) =>
+      showYearlyReportGraphResponse.postingAccountAmountTransports.map((paat) =>
         mapPostingAccountAmountTransportToModel(paat)
       );
 

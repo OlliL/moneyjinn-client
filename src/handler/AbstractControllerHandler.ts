@@ -137,7 +137,7 @@ abstract class AbstractControllerHandler {
     }
     const userSessionStore = useUserSessionStore();
     const supplierCsrfToken = (await csrfResponse.json()) as SupplierCsrfToken;
-    userSessionStore.setCsrfToken(supplierCsrfToken.SupplierCsrfToken.token);
+    userSessionStore.setCsrfToken(supplierCsrfToken.token);
   }
 
   private async refreshAuthToken() {
@@ -157,12 +157,11 @@ abstract class AbstractControllerHandler {
     const response = await fetch(requestInfo);
     const loginResponse = (await response.json()) as LoginResponse;
 
-    if (loginResponse.error) {
-      throwError(loginResponse.error.code);
+    if (loginResponse.errorResponse) {
+      throwError(loginResponse.errorResponse.code);
     }
-    const innerLoginResponse = loginResponse.loginResponse;
-    userSessionStore.setAuthorizationToken(innerLoginResponse.token);
-    userSessionStore.setRefreshToken(innerLoginResponse.refreshToken);
+    userSessionStore.setAuthorizationToken(loginResponse.token);
+    userSessionStore.setRefreshToken(loginResponse.refreshToken);
 
     await this.retrieveAndStoreCsrfToken();
   }
