@@ -1,9 +1,5 @@
-import type { ValidationItemTransport } from "../transport/ValidationItemTransport";
+import type { ValidationResponse } from "../ValidationResponse";
 
-export type CreatePreDefMoneyflowResponse = {
-  createPreDefMoneyflowResponse: {
-    result: boolean;
-    validationItemTransport: Array<ValidationItemTransport>;
-    preDefMoneyflowId: number;
-  };
+export type CreatePreDefMoneyflowResponse = ValidationResponse & {
+  preDefMoneyflowId: number;
 };

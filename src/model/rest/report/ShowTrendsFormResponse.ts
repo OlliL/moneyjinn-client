@@ -1,9 +1,7 @@
-import type { ErrorResponse } from "../ErrorResponse";
+import type { AbstractResponse } from "../AbstractResponse";
 
-export type ShowTrendsFormResponse = ErrorResponse & {
-  showTrendsFormResponse: {
-    minDate: string;
-    maxDate: string;
-    settingTrendCapitalsourceId: Array<number>;
-  };
+export type ShowTrendsFormResponse = AbstractResponse & {
+  minDate: string;
+  maxDate: string;
+  settingTrendCapitalsourceIds: Array<number>;
 };

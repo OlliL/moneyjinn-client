@@ -24,19 +24,18 @@ class CompareDataControllerHandler extends AbstractControllerHandler {
     const showCompareDataFormResponse =
       (await response.json()) as ShowCompareDataFormResponse;
 
-    if (showCompareDataFormResponse.error) {
-      throwError(showCompareDataFormResponse.error.code);
+    if (showCompareDataFormResponse.errorResponse) {
+      throwError(showCompareDataFormResponse.errorResponse.code);
     }
 
-    const innerResponse =
-      showCompareDataFormResponse.showCompareDataFormResponse;
-
     const compareDataParameter = {
-      compareDataFormats: innerResponse.compareDataFormatTransport,
-      selectedCapitalSourceId: innerResponse.selectedCapitalsourceId,
+      compareDataFormats:
+        showCompareDataFormResponse.compareDataFormatTransports,
+      selectedCapitalSourceId:
+        showCompareDataFormResponse.selectedCapitalsourceId,
       selectedSourceIsImport:
-        innerResponse.selectedSourceIsFile === 1 ? true : false,
-      selectedCompareDataFormat: innerResponse.selectedDataFormat,
+        showCompareDataFormResponse.selectedSourceIsFile === 1 ? true : false,
+      selectedCompareDataFormat: showCompareDataFormResponse.selectedDataFormat,
     } as CompareDataParameter;
 
     return compareDataParameter;
@@ -46,17 +45,14 @@ class CompareDataControllerHandler extends AbstractControllerHandler {
     compareDataParameter: CompareDataParameter
   ): Promise<CompareDataResult> {
     const usecase = "compareData";
-    const request = {
-      compareDataRequest: {},
-    } as CompareDataRequest;
-    const innerRequest = request.compareDataRequest;
+    const request = {} as CompareDataRequest;
 
-    innerRequest.startDate = compareDataParameter.startDate.toISOString();
-    innerRequest.endDate = compareDataParameter.endDate.toISOString();
-    innerRequest.capitalSourceId = compareDataParameter.selectedCapitalSourceId;
-    innerRequest.fileContents = compareDataParameter.fileContents;
-    innerRequest.formatId = compareDataParameter.selectedCompareDataFormat;
-    innerRequest.useImportedData = compareDataParameter.selectedSourceIsImport
+    request.startDate = compareDataParameter.startDate.toISOString();
+    request.endDate = compareDataParameter.endDate.toISOString();
+    request.capitalsourceId = compareDataParameter.selectedCapitalSourceId;
+    request.fileContents = compareDataParameter.fileContents;
+    request.formatId = compareDataParameter.selectedCompareDataFormat;
+    request.useImportedData = compareDataParameter.selectedSourceIsImport
       ? 1
       : 0;
 
@@ -71,27 +67,26 @@ class CompareDataControllerHandler extends AbstractControllerHandler {
     }
 
     const compareDataResponse = (await response.json()) as CompareDataResponse;
-    if (compareDataResponse.error) {
-      throwError(compareDataResponse.error.code);
+    if (compareDataResponse.errorResponse) {
+      throwError(compareDataResponse.errorResponse.code);
     }
-    const innerResponse = compareDataResponse.compareDataResponse;
 
     const result = {} as CompareDataResult;
 
     result.compareDatasMatching =
-      innerResponse.compareDataMatchingTransport.map((t) =>
+      compareDataResponse.compareDataMatchingTransports.map((t) =>
         mapCompareDataTransportToModel(t)
       );
     result.compareDatasNotInDatabase =
-      innerResponse.compareDataNotInDatabaseTransport.map((t) =>
+      compareDataResponse.compareDataNotInDatabaseTransports.map((t) =>
         mapCompareDataTransportToModel(t)
       );
     result.compareDatasNotInFile =
-      innerResponse.compareDataNotInFileTransport.map((t) =>
+      compareDataResponse.compareDataNotInFileTransports.map((t) =>
         mapCompareDataTransportToModel(t)
       );
     result.compareDatasWrongCapitalsource =
-      innerResponse.compareDataWrongCapitalsourceTransport.map((t) =>
+      compareDataResponse.compareDataWrongCapitalsourceTransports.map((t) =>
         mapCompareDataTransportToModel(t)
       );
 

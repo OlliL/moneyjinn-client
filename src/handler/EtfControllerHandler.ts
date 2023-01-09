@@ -40,13 +40,12 @@ class EtfControllerHandler extends AbstractControllerHandler {
     const listEtfOverviewResponse =
       (await response.json()) as ListEtfOverviewResponse;
 
-    if (listEtfOverviewResponse.error) {
-      throwError(listEtfOverviewResponse.error.code);
+    if (listEtfOverviewResponse.errorResponse) {
+      throwError(listEtfOverviewResponse.errorResponse.code);
     }
     const etfSummaryArray = new Array<EtfSummary>();
-    const transport =
-      listEtfOverviewResponse.listEtfOverviewResponse.etfSummaryTransport;
-    transport?.forEach((value) => {
+    const transports = listEtfOverviewResponse.etfSummaryTransports;
+    transports?.forEach((value) => {
       etfSummaryArray.push(mapEtfSummaryTransportToEtfSummary(value));
     });
 
@@ -64,26 +63,27 @@ class EtfControllerHandler extends AbstractControllerHandler {
     const listEtfFlowsResponse =
       (await response.json()) as ListEtfFlowsResponse;
 
-    if (listEtfFlowsResponse.error) {
-      throwError(listEtfFlowsResponse.error.code);
+    if (listEtfFlowsResponse.errorResponse) {
+      throwError(listEtfFlowsResponse.errorResponse.code);
     }
 
-    const innerResponse = listEtfFlowsResponse.listEtfFlowsResponse;
     const etfListViewData = {} as EtfDepot;
-    etfListViewData.calcEtfAskPrice = innerResponse.calcEtfAskPrice;
-    etfListViewData.calcEtfBidPrice = innerResponse.calcEtfBidPrice;
-    etfListViewData.calcEtfSaleIsin = innerResponse.calcEtfSaleIsin;
-    etfListViewData.calcEtfSalePieces = innerResponse.calcEtfSalePieces;
+    etfListViewData.calcEtfAskPrice = listEtfFlowsResponse.calcEtfAskPrice;
+    etfListViewData.calcEtfBidPrice = listEtfFlowsResponse.calcEtfBidPrice;
+    etfListViewData.calcEtfSaleIsin = listEtfFlowsResponse.calcEtfSaleIsin;
+    etfListViewData.calcEtfSalePieces = listEtfFlowsResponse.calcEtfSalePieces;
     etfListViewData.calcEtfTransactionCosts =
-      innerResponse.calcEtfTransactionCosts;
-    etfListViewData.etfFlows = innerResponse.etfFlowTransport?.map((flow) => {
-      return mapEtfFlowTransportToModel(flow);
-    });
+      listEtfFlowsResponse.calcEtfTransactionCosts;
+    etfListViewData.etfFlows = listEtfFlowsResponse.etfFlowTransports?.map(
+      (flow) => {
+        return mapEtfFlowTransportToModel(flow);
+      }
+    );
     etfListViewData.etfEffectiveFlows =
-      innerResponse.etfEffectiveFlowTransport?.map((flow) => {
+      listEtfFlowsResponse.etfEffectiveFlowTransports?.map((flow) => {
         return mapEtfEffectiveFlowTransportToModel(flow);
       });
-    etfListViewData.etfs = innerResponse.etfTransport;
+    etfListViewData.etfs = listEtfFlowsResponse.etfTransports;
 
     return etfListViewData;
   }
@@ -95,15 +95,12 @@ class EtfControllerHandler extends AbstractControllerHandler {
     transactionCosts: number
   ): Promise<EtfSalesCalculation> {
     const usecase = "calcEtfSale";
-    const request = {
-      calcEtfSaleRequest: {},
-    } as CalcEtfSaleRequest;
-    const innerRequest = request.calcEtfSaleRequest;
-    innerRequest.isin = isin;
-    innerRequest.pieces = pieces;
-    innerRequest.bidPrice = bidPrice;
-    innerRequest.askPrice = askPrice;
-    innerRequest.transactionCosts = transactionCosts;
+    const request = {} as CalcEtfSaleRequest;
+    request.isin = isin;
+    request.pieces = pieces;
+    request.bidPrice = bidPrice;
+    request.askPrice = askPrice;
+    request.transactionCosts = transactionCosts;
 
     const response = await super.put(
       request,
@@ -116,11 +113,10 @@ class EtfControllerHandler extends AbstractControllerHandler {
     }
 
     const calcEtfSaleResponse = (await response.json()) as CalcEtfSaleResponse;
-    const innerResponse = calcEtfSaleResponse.calcEtfSaleResponse;
     const etfSalesCalculation = {} as EtfSalesCalculation;
     const validationResult: ValidationResult = {
-      result: innerResponse.result,
-      validationResultItems: innerResponse.validationItemTransport?.map(
+      result: calcEtfSaleResponse.result,
+      validationResultItems: calcEtfSaleResponse.validationItemTransports?.map(
         (vit) => {
           return mapValidationItemTransportToModel(vit);
         }
@@ -128,28 +124,27 @@ class EtfControllerHandler extends AbstractControllerHandler {
     };
 
     etfSalesCalculation.validationResult = validationResult;
-    if (innerResponse.result) {
-      etfSalesCalculation.chargeable = innerResponse.chargeable;
-      etfSalesCalculation.isin = innerResponse.isin;
-      etfSalesCalculation.newBuyPrice = innerResponse.newBuyPrice;
-      etfSalesCalculation.originalBuyPrice = innerResponse.originalBuyPrice;
-      etfSalesCalculation.overallCosts = innerResponse.overallCosts;
-      etfSalesCalculation.pieces = innerResponse.pieces;
-      etfSalesCalculation.profit = innerResponse.profit;
-      etfSalesCalculation.rebuyLosses = innerResponse.rebuyLosses;
-      etfSalesCalculation.sellPrice = innerResponse.sellPrice;
-      etfSalesCalculation.transactionCosts = innerResponse.transactionCosts;
+    if (calcEtfSaleResponse.result) {
+      etfSalesCalculation.chargeable = calcEtfSaleResponse.chargeable;
+      etfSalesCalculation.isin = calcEtfSaleResponse.isin;
+      etfSalesCalculation.newBuyPrice = calcEtfSaleResponse.newBuyPrice;
+      etfSalesCalculation.originalBuyPrice =
+        calcEtfSaleResponse.originalBuyPrice;
+      etfSalesCalculation.overallCosts = calcEtfSaleResponse.overallCosts;
+      etfSalesCalculation.pieces = calcEtfSaleResponse.pieces;
+      etfSalesCalculation.profit = calcEtfSaleResponse.profit;
+      etfSalesCalculation.rebuyLosses = calcEtfSaleResponse.rebuyLosses;
+      etfSalesCalculation.sellPrice = calcEtfSaleResponse.sellPrice;
+      etfSalesCalculation.transactionCosts =
+        calcEtfSaleResponse.transactionCosts;
     }
     return etfSalesCalculation;
   }
 
   async createEtfFlow(etfFlow: EtfFlow): Promise<EtfFlowValidation> {
     const usecase = "createEtfFlow";
-    const request = {
-      createEtfFlowRequest: {},
-    } as CreateEtfFlowRequest;
-    const innerRequest = request.createEtfFlowRequest;
-    innerRequest.etfFlowTransport = mapEtfFlowModelToTransport(etfFlow);
+    const request = {} as CreateEtfFlowRequest;
+    request.etfFlowTransport = mapEtfFlowModelToTransport(etfFlow);
 
     const response = await super.post(
       request,
@@ -163,11 +158,10 @@ class EtfControllerHandler extends AbstractControllerHandler {
 
     const createEtfFlowResponse =
       (await response.json()) as CreateEtfFlowResponse;
-    const innerResponse = createEtfFlowResponse.createEtfFlowResponse;
     const etfFlowValidation = {} as EtfFlowValidation;
     const validationResult: ValidationResult = {
-      result: innerResponse.result,
-      validationResultItems: innerResponse.validationItemTransport?.map(
+      result: createEtfFlowResponse.result,
+      validationResultItems: createEtfFlowResponse.validationItemTransports?.map(
         (vit) => {
           return mapValidationItemTransportToModel(vit);
         }
@@ -185,11 +179,8 @@ class EtfControllerHandler extends AbstractControllerHandler {
 
   async updateEtfFlow(etfFlow: EtfFlow): Promise<ValidationResult> {
     const usecase = "updateEtfFlow";
-    const request = {
-      updateEtfFlowRequest: {},
-    } as UpdateEtfFlowRequest;
-    const innerRequest = request.updateEtfFlowRequest;
-    innerRequest.etfFlowTransport = mapEtfFlowModelToTransport(etfFlow);
+    const request = {} as UpdateEtfFlowRequest;
+    request.etfFlowTransport = mapEtfFlowModelToTransport(etfFlow);
 
     const response = await super.put(
       request,
@@ -202,10 +193,9 @@ class EtfControllerHandler extends AbstractControllerHandler {
     }
 
     const validationResponse = (await response.json()) as ValidationResponse;
-    const innerResponse = validationResponse.validationResponse;
     const validationResult: ValidationResult = {
-      result: innerResponse.result,
-      validationResultItems: innerResponse.validationItemTransport?.map(
+      result: validationResponse.result,
+      validationResultItems: validationResponse.validationItemTransports?.map(
         (vit) => {
           return mapValidationItemTransportToModel(vit);
         }

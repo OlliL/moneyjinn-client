@@ -28,12 +28,11 @@ export const useContractpartnerStore = defineStore("contractpartner", {
     subscribeCallback(body: string) {
       if (body) {
         const event: ContractpartnerChangedEventTransport = JSON.parse(body);
-        const innerEvent = event.contractpartnerChangedEventTransport;
         const mcp = mapContractpartnerTransportToModel(
-          innerEvent.contractpartnerTransport
+          event.contractpartnerTransport
         );
 
-        switch (innerEvent.eventType) {
+        switch (event.eventType) {
           case "CREATE": {
             this.contractpartner.push(mcp);
             break;

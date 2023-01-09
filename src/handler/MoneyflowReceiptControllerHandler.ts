@@ -21,14 +21,12 @@ class MoneyflowReceiptControllerHandler extends AbstractControllerHandler {
     const showMoneyflowReceiptResponse =
       (await response.json()) as ShowMoneyflowReceiptResponse;
 
-    if (showMoneyflowReceiptResponse.error) {
-      throwError(showMoneyflowReceiptResponse.error.code);
+    if (showMoneyflowReceiptResponse.errorResponse) {
+      throwError(showMoneyflowReceiptResponse.errorResponse.code);
     }
 
     let receiptType: MoneyflowReceiptType;
-    switch (
-      showMoneyflowReceiptResponse.showMoneyflowReceiptResponse.receiptType
-    ) {
+    switch (showMoneyflowReceiptResponse.receiptType) {
       case 1: {
         receiptType = MoneyflowReceiptType.JPEG;
         break;
@@ -45,8 +43,7 @@ class MoneyflowReceiptControllerHandler extends AbstractControllerHandler {
 
     const moneyflowReceipt: MoneyflowReceipt = {
       moneyflowId: moneyflowId,
-      receipt:
-        showMoneyflowReceiptResponse.showMoneyflowReceiptResponse.receipt,
+      receipt: showMoneyflowReceiptResponse.receipt,
       receiptType: receiptType,
     };
 

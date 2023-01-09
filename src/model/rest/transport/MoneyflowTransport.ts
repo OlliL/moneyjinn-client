@@ -9,7 +9,7 @@ export type MoneyflowTransport = {
   contractpartnerid: number;
   contractpartnername?: string;
   comment: string;
-  private: number;
+  privat: number;
   postingaccountid: number;
   postingaccountname?: string;
 };

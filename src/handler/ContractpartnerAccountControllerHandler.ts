@@ -32,14 +32,14 @@ class ContractpartnerAccountControllerHandler extends AbstractControllerHandler 
     const showContractpartnerAccountListResponse =
       (await response.json()) as ShowContractpartnerAccountListResponse;
 
-    if (showContractpartnerAccountListResponse.error) {
-      throwError(showContractpartnerAccountListResponse.error.code);
+    if (showContractpartnerAccountListResponse.errorResponse) {
+      throwError(showContractpartnerAccountListResponse.errorResponse.code);
     }
 
     const contractpartnerAccountArray = new Array<ContractpartnerAccount>();
-    const transport = await showContractpartnerAccountListResponse
-      .showContractpartnerAccountListResponse.contractpartnerAccountTransport;
-    transport?.forEach((value) => {
+    const transports =
+      await showContractpartnerAccountListResponse.contractpartnerAccountTransports;
+    transports?.forEach((value) => {
       contractpartnerAccountArray.push(
         mapContractpartnerAccountTransportToModel(value)
       );
@@ -52,11 +52,8 @@ class ContractpartnerAccountControllerHandler extends AbstractControllerHandler 
     mca: ContractpartnerAccount
   ): Promise<ContractpartnerAccountValidation> {
     const usecase = "createContractpartnerAccount";
-    const request = {
-      createContractpartnerAccountRequest: {},
-    } as CreateContractpartnerAccountRequest;
-    const innerRequest = request.createContractpartnerAccountRequest;
-    innerRequest.contractpartnerAccountTransport =
+    const request = {} as CreateContractpartnerAccountRequest;
+    request.contractpartnerAccountTransport =
       mapContractpartnerAccountToTransport(mca);
 
     const response = await super.post(
@@ -71,23 +68,23 @@ class ContractpartnerAccountControllerHandler extends AbstractControllerHandler 
 
     const createContractpartnerAccountResponse =
       (await response.json()) as CreateContractpartnerAccountResponse;
-    const innerResponse =
-      createContractpartnerAccountResponse.createContractpartnerAccountResponse;
     const contractpartnerAccountValidation =
       {} as ContractpartnerAccountValidation;
     const validationResult: ValidationResult = {
-      result: innerResponse.result,
-      validationResultItems: innerResponse.validationItemTransport?.map(
-        (vit) => {
-          return mapValidationItemTransportToModel(vit);
-        }
-      ),
+      result: createContractpartnerAccountResponse.result,
+      validationResultItems:
+        createContractpartnerAccountResponse.validationItemTransports?.map(
+          (vit) => {
+            return mapValidationItemTransportToModel(vit);
+          }
+        ),
     };
 
     contractpartnerAccountValidation.validationResult = validationResult;
     if (validationResult.result) {
       const createdMca: ContractpartnerAccount = mca;
-      createdMca.id = innerResponse.contractpartnerAccountId;
+      createdMca.id =
+        createContractpartnerAccountResponse.contractpartnerAccountId;
       contractpartnerAccountValidation.mca = createdMca;
     }
     return contractpartnerAccountValidation;
@@ -97,11 +94,8 @@ class ContractpartnerAccountControllerHandler extends AbstractControllerHandler 
     mca: ContractpartnerAccount
   ): Promise<ValidationResult> {
     const usecase = "updateContractpartnerAccount";
-    const request = {
-      updateContractpartnerAccountRequest: {},
-    } as UpdateContractpartnerAccountRequest;
-    const innerRequest = request.updateContractpartnerAccountRequest;
-    innerRequest.contractpartnerAccountTransport =
+    const request = {} as UpdateContractpartnerAccountRequest;
+    request.contractpartnerAccountTransport =
       mapContractpartnerAccountToTransport(mca);
 
     const response = await super.put(
@@ -115,10 +109,9 @@ class ContractpartnerAccountControllerHandler extends AbstractControllerHandler 
     }
 
     const validationResponse = (await response.json()) as ValidationResponse;
-    const innerResponse = validationResponse.validationResponse;
     const validationResult: ValidationResult = {
-      result: innerResponse.result,
-      validationResultItems: innerResponse.validationItemTransport?.map(
+      result: validationResponse.result,
+      validationResultItems: validationResponse.validationItemTransports?.map(
         (vit) => {
           return mapValidationItemTransportToModel(vit);
         }

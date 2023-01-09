@@ -2,10 +2,8 @@ import type { MoneyflowSplitEntryTransport } from "../transport/MoneyflowSplitEn
 import type { MoneyflowTransport } from "../transport/MoneyflowTransport";
 
 export type UpdateMoneyflowRequest = {
-  updateMoneyflowRequest: {
-    moneyflowTransport: MoneyflowTransport;
-    deleteMoneyflowSplitEntryIds?: Array<number>;
-    updateMoneyflowSplitEntryTransport?: Array<MoneyflowSplitEntryTransport>;
-    insertMoneyflowSplitEntryTransport?: Array<MoneyflowSplitEntryTransport>;
-  };
+  moneyflowTransport: MoneyflowTransport;
+  deleteMoneyflowSplitEntryIds?: Array<number>;
+  updateMoneyflowSplitEntryTransports?: Array<MoneyflowSplitEntryTransport>;
+  insertMoneyflowSplitEntryTransports?: Array<MoneyflowSplitEntryTransport>;
 };

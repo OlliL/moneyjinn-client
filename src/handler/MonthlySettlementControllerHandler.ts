@@ -40,13 +40,12 @@ class MonthlySettlementControllerHandler extends AbstractControllerHandler {
     const getAvailableMonthResponse =
       (await response.json()) as GetAvailableMonthResponse;
 
-    if (getAvailableMonthResponse.error) {
-      throwError(getAvailableMonthResponse.error.code);
+    if (getAvailableMonthResponse.errorResponse) {
+      throwError(getAvailableMonthResponse.errorResponse.code);
     }
 
     // easy mapping for now - same attributes
-    const availableMonth: AvailableMonth =
-      getAvailableMonthResponse.getAvailableMonthResponse;
+    const availableMonth: AvailableMonth = getAvailableMonthResponse;
 
     return availableMonth;
   }
@@ -70,17 +69,16 @@ class MonthlySettlementControllerHandler extends AbstractControllerHandler {
     const showMonthlySettlementListResponse =
       (await response.json()) as ShowMonthlySettlementListResponse;
 
-    if (showMonthlySettlementListResponse.error) {
-      throwError(showMonthlySettlementListResponse.error.code);
+    if (showMonthlySettlementListResponse.errorResponse) {
+      throwError(showMonthlySettlementListResponse.errorResponse.code);
     }
 
-    const innerRequest =
-      showMonthlySettlementListResponse.showMonthlySettlementListResponse;
-
     const monthlySettlements: Array<MonthlySettlement> =
-      innerRequest.monthlySettlementTransport?.map((mms) => {
-        return mapMonthlySettlementTransportToModel(mms);
-      });
+      showMonthlySettlementListResponse.monthlySettlementTransports?.map(
+        (mms) => {
+          return mapMonthlySettlementTransportToModel(mms);
+        }
+      );
 
     return monthlySettlements;
   }
@@ -108,30 +106,35 @@ class MonthlySettlementControllerHandler extends AbstractControllerHandler {
     const showMonthlySettlementCreateResponse =
       (await response.json()) as ShowMonthlySettlementCreateResponse;
 
-    if (showMonthlySettlementCreateResponse.error) {
-      throwError(showMonthlySettlementCreateResponse.error.code);
+    if (showMonthlySettlementCreateResponse.errorResponse) {
+      throwError(showMonthlySettlementCreateResponse.errorResponse.code);
     }
 
-    const innerResult =
-      showMonthlySettlementCreateResponse.showMonthlySettlementCreateResponse;
     const result = {} as MonthlySettlementEditTransporter;
 
     const monthlySettlements: Array<MonthlySettlement> =
-      innerResult.monthlySettlementTransport?.map((mms) => {
-        return mapMonthlySettlementTransportToModel(mms);
-      });
-    if (innerResult.importedMonthlySettlementTransport) {
-      const importedMonthlySettlements: Array<MonthlySettlement> =
-        innerResult.importedMonthlySettlementTransport?.map((mms) => {
+      showMonthlySettlementCreateResponse.monthlySettlementTransports?.map(
+        (mms) => {
           return mapMonthlySettlementTransportToModel(mms);
-        });
+        }
+      );
+    if (
+      showMonthlySettlementCreateResponse.importedMonthlySettlementTransports
+    ) {
+      const importedMonthlySettlements: Array<MonthlySettlement> =
+        showMonthlySettlementCreateResponse.importedMonthlySettlementTransports?.map(
+          (mms) => {
+            return mapMonthlySettlementTransportToModel(mms);
+          }
+        );
       result.importedMonthlySettlements = importedMonthlySettlements;
     }
 
     result.monthlySettlements = monthlySettlements;
-    result.year = innerResult.year;
-    result.month = innerResult.month;
-    result.editMode = innerResult.editMode == 1 ? true : false;
+    result.year = showMonthlySettlementCreateResponse.year;
+    result.month = showMonthlySettlementCreateResponse.month;
+    result.editMode =
+      showMonthlySettlementCreateResponse.editMode == 1 ? true : false;
 
     return result;
   }
@@ -140,11 +143,8 @@ class MonthlySettlementControllerHandler extends AbstractControllerHandler {
     monthlySettlements: Array<MonthlySettlement>
   ): Promise<ValidationResult> {
     const usecase = "upsertMonthlySettlement";
-    const request = {
-      upsertMonthlySettlementRequest: {},
-    } as UpsertMonthlySettlementRequest;
-    const innerRequest = request.upsertMonthlySettlementRequest;
-    innerRequest.monthlySettlementTransport = monthlySettlements?.map((mms) =>
+    const request = {} as UpsertMonthlySettlementRequest;
+    request.monthlySettlementTransports = monthlySettlements?.map((mms) =>
       mapMonthlySettlementToTransport(mms)
     );
 
@@ -159,10 +159,9 @@ class MonthlySettlementControllerHandler extends AbstractControllerHandler {
     }
 
     const validationResponse = (await response.json()) as ValidationResponse;
-    const innerResponse = validationResponse.validationResponse;
     const validationResult: ValidationResult = {
-      result: innerResponse.result,
-      validationResultItems: innerResponse.validationItemTransport?.map(
+      result: validationResponse.result,
+      validationResultItems: validationResponse.validationItemTransports?.map(
         (vit) => {
           return mapValidationItemTransportToModel(vit);
         }

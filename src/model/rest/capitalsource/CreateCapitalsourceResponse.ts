@@ -1,9 +1,5 @@
-import type { ValidationItemTransport } from "../transport/ValidationItemTransport";
+import type { ValidationResponse } from "../ValidationResponse";
 
-export type CreateCapitalsourceResponse = {
-  createCapitalsourceResponse: {
-    result: boolean;
-    validationItemTransport: Array<ValidationItemTransport>;
-    capitalsourceId: number;
-  };
+export type CreateCapitalsourceResponse = ValidationResponse & {
+  capitalsourceId: number;
 };

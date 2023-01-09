@@ -1,8 +1,6 @@
-import type { ErrorResponse } from "../ErrorResponse";
+import type { AbstractResponse } from "../AbstractResponse";
 import type { MonthlySettlementTransport } from "../transport/MonthlySettlementTransport";
 
-export type ShowMonthlySettlementListResponse = ErrorResponse & {
-  showMonthlySettlementListResponse: {
-    monthlySettlementTransport: Array<MonthlySettlementTransport>;
-  };
+export type ShowMonthlySettlementListResponse = AbstractResponse & {
+  monthlySettlementTransports: Array<MonthlySettlementTransport>;
 };

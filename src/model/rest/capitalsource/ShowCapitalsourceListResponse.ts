@@ -1,8 +1,6 @@
-import type { ErrorResponse } from "../ErrorResponse";
 import type { CapitalsourceTransport } from "@/model/rest/transport/CapitalsourceTransport";
+import type { AbstractResponse } from "../AbstractResponse";
 
-export type ShowCapitalsourceListResponse = ErrorResponse & {
-  showCapitalsourceListResponse: {
-    capitalsourceTransport: Array<CapitalsourceTransport>;
-  };
+export type ShowCapitalsourceListResponse = AbstractResponse & {
+  capitalsourceTransports: Array<CapitalsourceTransport>;
 };

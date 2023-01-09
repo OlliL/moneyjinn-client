@@ -1,5 +1,5 @@
 import type { ImportedMoneyflowReceipt } from "@/model/moneyflow/ImportedMoneyflowReceipt";
-import type { ErrorResponse } from "@/model/rest/ErrorResponse";
+import type { AbstractResponse } from "@/model/rest/AbstractResponse";
 import type { CreateImportedMoneyflowReceiptsRequest } from "@/model/rest/importedmoneyflowreceipt/CreateImportedMoneyflowReceiptsRequest";
 import type { ShowImportImportedMoneyflowReceiptsResponse } from "@/model/rest/importedmoneyflowreceipt/ShowImportImportedMoneyflowReceiptsResponse";
 import type { ValidationResponse } from "@/model/rest/ValidationResponse";
@@ -28,11 +28,8 @@ class ImportedMoneyflowReceiptControllerHandler extends AbstractControllerHandle
     const showImportImportedMoneyflowReceiptsResponse =
       (await response.json()) as ShowImportImportedMoneyflowReceiptsResponse;
 
-    const data =
-      showImportImportedMoneyflowReceiptsResponse.showImportImportedMoneyflowReceiptsResponse;
-
     const result: Array<ImportedMoneyflowReceipt> =
-      data.importedMoneyflowReceiptTransport;
+      showImportImportedMoneyflowReceiptsResponse.importedMoneyflowReceiptTransports;
 
     return result;
   }
@@ -69,9 +66,9 @@ class ImportedMoneyflowReceiptControllerHandler extends AbstractControllerHandle
     if (response.status === 204) {
       validationResult.result = true;
     } else {
-      const errorResponse = (await response.json()) as ErrorResponse;
+      const errorResponse = (await response.json()) as AbstractResponse;
       const validationResultItem = {
-        error: errorResponse.error.code,
+        error: errorResponse.errorResponse.code,
       } as ValidationResultItem;
       validationResult.result = false;
       validationResult.validationResultItems = [validationResultItem];
@@ -84,11 +81,8 @@ class ImportedMoneyflowReceiptControllerHandler extends AbstractControllerHandle
   ): Promise<ValidationResult> {
     const usecase = "createImportedMoneyflowReceipts";
 
-    const request = {
-      createImportedMoneyflowReceiptsRequest: {},
-    } as CreateImportedMoneyflowReceiptsRequest;
-    const innerRequest = request.createImportedMoneyflowReceiptsRequest;
-    innerRequest.importedMoneyflowReceiptTransport = receipts;
+    const request = {} as CreateImportedMoneyflowReceiptsRequest;
+    request.importedMoneyflowReceiptTransports = receipts;
 
     const response = await super.post(
       request,
@@ -104,14 +98,13 @@ class ImportedMoneyflowReceiptControllerHandler extends AbstractControllerHandle
     } else {
       const validationResponse = (await response.json()) as ValidationResponse;
 
-      if (validationResponse.error) {
-        throwError(validationResponse.error.code);
+      if (validationResponse.errorResponse) {
+        throwError(validationResponse.errorResponse.code);
       }
 
-      const innerResponse = validationResponse.validationResponse;
-      validationResult.result = innerResponse.result;
+      validationResult.result = validationResponse.result;
       validationResult.validationResultItems =
-        innerResponse.validationItemTransport?.map((vit) => {
+        validationResponse.validationItemTransports?.map((vit) => {
           return mapValidationItemTransportToModel(vit);
         });
     }

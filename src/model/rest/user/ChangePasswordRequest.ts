@@ -1,6 +1,4 @@
 export type ChangePasswordRequest = {
-  changePasswordRequest: {
-    password: string;
-    oldPassword: string;
-  };
+  password: string;
+  oldPassword: string;
 };

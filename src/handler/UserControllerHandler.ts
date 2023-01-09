@@ -1,6 +1,5 @@
 import AbstractControllerHandler from "@/handler/AbstractControllerHandler";
 import { ErrorCode } from "@/model/ErrorCode";
-import type { ErrorResponse } from "@/model/rest/ErrorResponse";
 import type { ChangePasswordRequest } from "@/model/rest/user/ChangePasswordRequest";
 import type { CreateUserRequest } from "@/model/rest/user/CreateUserRequest";
 import type { CreateUserResponse } from "@/model/rest/user/CreateUserResponse";
@@ -31,6 +30,7 @@ import type { UpdateUserResponse } from "@/model/rest/user/UpdateUserResponse";
 import { mapGroupTransportToModel } from "./mapper/GroupTransportMapper";
 import type { Group } from "@/model/group/Group";
 import type { ShowEditUserResponse } from "@/model/rest/user/ShowEditUserResponse";
+import type { AbstractResponse } from "@/model/rest/AbstractResponse";
 
 class UserControllerHandler extends AbstractControllerHandler {
   private static CONTROLLER = "user";
@@ -54,11 +54,10 @@ class UserControllerHandler extends AbstractControllerHandler {
 
     const loginResponse = (await response.json()) as LoginResponse;
 
-    if (loginResponse.error) {
-      throwError(loginResponse.error.code);
+    if (loginResponse.errorResponse) {
+      throwError(loginResponse.errorResponse.code);
     }
-    const innerLoginResponse = loginResponse.loginResponse;
-    const userTransport = innerLoginResponse.userTransport;
+    const userTransport = loginResponse.userTransport;
 
     const userSession: UserSession = {
       userId: userTransport.id,
@@ -66,8 +65,8 @@ class UserControllerHandler extends AbstractControllerHandler {
       userCanLogin: userTransport.userCanLogin === 1 ? true : false,
       userIsNew: userTransport.userIsNew === 1 ? true : false,
       userIsAdmin: userTransport.userIsAdmin === 1 ? true : false,
-      userAuthorizationToken: innerLoginResponse.token,
-      userRefreshToken: innerLoginResponse.refreshToken,
+      userAuthorizationToken: loginResponse.token,
+      userRefreshToken: loginResponse.refreshToken,
       csrfToken: "",
     };
 
@@ -78,7 +77,8 @@ class UserControllerHandler extends AbstractControllerHandler {
   async changePassword(oldPassword: string, password: string) {
     const usecase = "changePassword";
     const request: ChangePasswordRequest = {
-      changePasswordRequest: { password: password, oldPassword: oldPassword },
+      password: password,
+      oldPassword: oldPassword,
     };
 
     const response = await super.put(
@@ -95,10 +95,10 @@ class UserControllerHandler extends AbstractControllerHandler {
       return;
     }
 
-    const errorResponse = (await response.json()) as ErrorResponse;
+    const errorResponse = (await response.json()) as AbstractResponse;
 
-    if (errorResponse.error) {
-      throwError(errorResponse.error.code);
+    if (errorResponse.errorResponse) {
+      throwError(errorResponse.errorResponse.code);
     }
   }
 
@@ -112,20 +112,22 @@ class UserControllerHandler extends AbstractControllerHandler {
     const showUserListResponse =
       (await response.json()) as ShowUserListResponse;
 
-    if (showUserListResponse.error) {
-      throwError(showUserListResponse.error.code);
+    if (showUserListResponse.errorResponse) {
+      throwError(showUserListResponse.errorResponse.code);
     }
 
-    const innerResponse = await showUserListResponse.showUserListResponse;
-
-    const groups: Array<Group> = innerResponse.groupTransport.map((value) => {
-      return mapGroupTransportToModel(value);
-    });
-    const users: Array<User> = innerResponse.userTransport.map((value) => {
-      return mapUserTransportToModel(value);
-    });
+    const groups: Array<Group> = showUserListResponse.groupTransports.map(
+      (value) => {
+        return mapGroupTransportToModel(value);
+      }
+    );
+    const users: Array<User> = showUserListResponse.userTransports.map(
+      (value) => {
+        return mapUserTransportToModel(value);
+      }
+    );
     const accessRelations: Array<AccessRelation> =
-      innerResponse.accessRelationTransport.map((value) => {
+      showUserListResponse.accessRelationTransports.map((value) => {
         return mapAccessRelationTransportToModel(value);
       });
 
@@ -164,10 +166,8 @@ class UserControllerHandler extends AbstractControllerHandler {
     const showEditUserResponse =
       (await response.json()) as ShowEditUserResponse;
 
-    const innerResponse = await showEditUserResponse.showEditUserResponse;
-
     const accessRelations: Array<AccessRelation> =
-      innerResponse.accessRelationTransport.map((value) => {
+      showEditUserResponse.accessRelationTransports.map((value) => {
         return mapAccessRelationTransportToModel(value);
       });
 
@@ -176,18 +176,15 @@ class UserControllerHandler extends AbstractControllerHandler {
 
   async createUser(mpm: User): Promise<UserValidation> {
     const usecase = "createUser";
-    const request = {
-      createUserRequest: {},
-    } as CreateUserRequest;
-    const innerRequest = request.createUserRequest;
-    innerRequest.userTransport = mapUserToTransport(mpm);
+    const request = {} as CreateUserRequest;
+    request.userTransport = mapUserToTransport(mpm);
 
     if (mpm.groupId) {
       const mar: AccessRelation = {
         refId: mpm.groupId,
         validFrom: new Date(),
       };
-      innerRequest.accessRelationTransport = mapAccessRelationToTransport(mar);
+      request.accessRelationTransport = mapAccessRelationToTransport(mar);
     }
 
     const response = await super.post(
@@ -201,11 +198,10 @@ class UserControllerHandler extends AbstractControllerHandler {
     }
 
     const createUserResponse = (await response.json()) as CreateUserResponse;
-    const innerResponse = createUserResponse.createUserResponse;
     const UserValidation = {} as UserValidation;
     const validationResult: ValidationResult = {
-      result: innerResponse.result,
-      validationResultItems: innerResponse.validationItemTransport?.map(
+      result: createUserResponse.result,
+      validationResultItems: createUserResponse.validationItemTransports?.map(
         (vit) => {
           return mapValidationItemTransportToModel(vit);
         }
@@ -216,19 +212,16 @@ class UserControllerHandler extends AbstractControllerHandler {
 
     if (validationResult.result) {
       const createMpm: User = mpm;
-      createMpm.id = innerResponse.userId;
+      createMpm.id = createUserResponse.userId;
       UserValidation.user = createMpm;
     }
     return UserValidation;
   }
   async updateUser(mpm: User, mar: AccessRelation): Promise<ValidationResult> {
     const usecase = "updateUser";
-    const request = {
-      updateUserRequest: {},
-    } as UpdateUserRequest;
-    const innerRequest = request.updateUserRequest;
-    innerRequest.userTransport = mapUserToTransport(mpm);
-    innerRequest.accessRelationTransport = mapAccessRelationToTransport(mar);
+    const request = {} as UpdateUserRequest;
+    request.userTransport = mapUserToTransport(mpm);
+    request.accessRelationTransport = mapAccessRelationToTransport(mar);
 
     const response = await super.put(
       request,
@@ -241,10 +234,9 @@ class UserControllerHandler extends AbstractControllerHandler {
     }
 
     const updateUserResponse = (await response.json()) as UpdateUserResponse;
-    const innerResponse = updateUserResponse.updateUserResponse;
     const validationResult: ValidationResult = {
-      result: innerResponse.result,
-      validationResultItems: innerResponse.validationItemTransport?.map(
+      result: updateUserResponse.result,
+      validationResultItems: updateUserResponse.validationItemTransports?.map(
         (vit) => {
           return mapValidationItemTransportToModel(vit);
         }
@@ -269,9 +261,9 @@ class UserControllerHandler extends AbstractControllerHandler {
     if (response.status === 204) {
       validationResult.result = true;
     } else {
-      const errorResponse = (await response.json()) as ErrorResponse;
+      const errorResponse = (await response.json()) as AbstractResponse;
       const validationResultItem = {
-        error: errorResponse.error.code,
+        error: errorResponse.errorResponse.code,
       } as ValidationResultItem;
       validationResult.result = false;
       validationResult.validationResultItems = [validationResultItem];

@@ -31,14 +31,14 @@ class ContractpartnerControllerHandler extends AbstractControllerHandler {
     const showContractpartnerListResponse =
       (await response.json()) as ShowContractpartnerListResponse;
 
-    if (showContractpartnerListResponse.error) {
-      throwError(showContractpartnerListResponse.error.code);
+    if (showContractpartnerListResponse.errorResponse) {
+      throwError(showContractpartnerListResponse.errorResponse.code);
     }
 
     const contractpartnerArray = new Array<Contractpartner>();
-    const transport = await showContractpartnerListResponse
-      .showContractpartnerListResponse.contractpartnerTransport;
-    transport?.forEach((value) => {
+    const transports =
+      await showContractpartnerListResponse.contractpartnerTransports;
+    transports?.forEach((value) => {
       contractpartnerArray.push(mapContractpartnerTransportToModel(value));
     });
 
@@ -49,11 +49,8 @@ class ContractpartnerControllerHandler extends AbstractControllerHandler {
     mcp: Contractpartner
   ): Promise<ContractpartnerValidation> {
     const usecase = "createContractpartner";
-    const request = {
-      createContractpartnerRequest: {},
-    } as CreateContractpartnerRequest;
-    const innerRequest = request.createContractpartnerRequest;
-    innerRequest.contractpartnerTransport = mapContractpartnerToTransport(mcp);
+    const request = {} as CreateContractpartnerRequest;
+    request.contractpartnerTransport = mapContractpartnerToTransport(mcp);
 
     const response = await super.post(
       request,
@@ -67,23 +64,20 @@ class ContractpartnerControllerHandler extends AbstractControllerHandler {
 
     const createContractpartnerResponse =
       (await response.json()) as CreateContractpartnerResponse;
-    const innerResponse =
-      createContractpartnerResponse.createContractpartnerResponse;
     const contractpartnerValidation = {} as ContractpartnerValidation;
     const validationResult: ValidationResult = {
-      result: innerResponse.result,
-      validationResultItems: innerResponse.validationItemTransport?.map(
-        (vit) => {
+      result: createContractpartnerResponse.result,
+      validationResultItems:
+        createContractpartnerResponse.validationItemTransports?.map((vit) => {
           return mapValidationItemTransportToModel(vit);
-        }
-      ),
+        }),
     };
 
     contractpartnerValidation.validationResult = validationResult;
     if (validationResult.result) {
       const userSessionStore = useUserSessionStore();
       const createdMcp: Contractpartner = mcp;
-      createdMcp.id = innerResponse.contractpartnerId;
+      createdMcp.id = createContractpartnerResponse.contractpartnerId;
       createdMcp.userId = userSessionStore.getUserId;
       contractpartnerValidation.mcp = createdMcp;
     }
@@ -92,11 +86,8 @@ class ContractpartnerControllerHandler extends AbstractControllerHandler {
 
   async updateContractpartner(mcp: Contractpartner): Promise<ValidationResult> {
     const usecase = "updateContractpartner";
-    const request = {
-      updateContractpartnerRequest: {},
-    } as UpdateContractpartnerRequest;
-    const innerRequest = request.updateContractpartnerRequest;
-    innerRequest.contractpartnerTransport = mapContractpartnerToTransport(mcp);
+    const request = {} as UpdateContractpartnerRequest;
+    request.contractpartnerTransport = mapContractpartnerToTransport(mcp);
 
     const response = await super.put(
       request,
@@ -109,10 +100,9 @@ class ContractpartnerControllerHandler extends AbstractControllerHandler {
     }
 
     const validationResponse = (await response.json()) as ValidationResponse;
-    const innerResponse = validationResponse.validationResponse;
     const validationResult: ValidationResult = {
-      result: innerResponse.result,
-      validationResultItems: innerResponse.validationItemTransport?.map(
+      result: validationResponse.result,
+      validationResultItems: validationResponse.validationItemTransports?.map(
         (vit) => {
           return mapValidationItemTransportToModel(vit);
         }

@@ -1,10 +1,8 @@
-import type { ErrorResponse } from "@/model/rest/ErrorResponse";
 import type { UserTransport } from "@/model/rest/transport/UserTransport";
+import type { ValidationResponse } from "../ValidationResponse";
 
-export type LoginResponse = ErrorResponse & {
-  loginResponse: {
-    userTransport: UserTransport;
-    token: string;
-    refreshToken: string;
-  };
+export type LoginResponse = ValidationResponse & {
+  userTransport: UserTransport;
+  token: string;
+  refreshToken: string;
 };

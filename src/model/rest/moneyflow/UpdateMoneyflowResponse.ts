@@ -1,14 +1,9 @@
-import type { ErrorResponse } from "../ErrorResponse";
 import type { MoneyflowSplitEntryTransport } from "../transport/MoneyflowSplitEntryTransport";
 import type { MoneyflowTransport } from "../transport/MoneyflowTransport";
-import type { ValidationItemTransport } from "../transport/ValidationItemTransport";
+import type { ValidationResponse } from "../ValidationResponse";
 
-export type UpdateMoneyflowResponse = ErrorResponse & {
-  updateMoneyflowResponse: {
-    result: boolean;
-    validationItemTransport: Array<ValidationItemTransport>;
-    moneyflowTransport: MoneyflowTransport;
-    moneyflowSplitEntryTransport?: Array<MoneyflowSplitEntryTransport>;
-    hasReceipt: boolean;
-  };
+export type UpdateMoneyflowResponse = ValidationResponse & {
+  moneyflowTransport: MoneyflowTransport;
+  moneyflowSplitEntryTransports?: Array<MoneyflowSplitEntryTransport>;
+  hasReceipt: boolean;
 };
