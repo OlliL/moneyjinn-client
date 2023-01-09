@@ -157,8 +157,8 @@ abstract class AbstractControllerHandler {
     const response = await fetch(requestInfo);
     const loginResponse = (await response.json()) as LoginResponse;
 
-    if (loginResponse.errorResponse) {
-      throwError(loginResponse.errorResponse.code);
+    if (loginResponse.code) {
+      throwError(loginResponse.code);
     }
     userSessionStore.setAuthorizationToken(loginResponse.token);
     userSessionStore.setRefreshToken(loginResponse.refreshToken);

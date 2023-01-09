@@ -1,6 +1,6 @@
-import type { AbstractResponse } from "../AbstractResponse";
+import type { ErrorResponse } from "../ErrorResponse";
 import type { EtfSummaryTransport } from "../transport/EtfSummaryTransport";
 
-export type ListEtfOverviewResponse = AbstractResponse & {
+export type ListEtfOverviewResponse = ErrorResponse & {
   etfSummaryTransports: Array<EtfSummaryTransport>;
 };

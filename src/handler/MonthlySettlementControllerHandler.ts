@@ -40,8 +40,8 @@ class MonthlySettlementControllerHandler extends AbstractControllerHandler {
     const getAvailableMonthResponse =
       (await response.json()) as GetAvailableMonthResponse;
 
-    if (getAvailableMonthResponse.errorResponse) {
-      throwError(getAvailableMonthResponse.errorResponse.code);
+    if (getAvailableMonthResponse.code) {
+      throwError(getAvailableMonthResponse.code);
     }
 
     // easy mapping for now - same attributes
@@ -69,8 +69,8 @@ class MonthlySettlementControllerHandler extends AbstractControllerHandler {
     const showMonthlySettlementListResponse =
       (await response.json()) as ShowMonthlySettlementListResponse;
 
-    if (showMonthlySettlementListResponse.errorResponse) {
-      throwError(showMonthlySettlementListResponse.errorResponse.code);
+    if (showMonthlySettlementListResponse.code) {
+      throwError(showMonthlySettlementListResponse.code);
     }
 
     const monthlySettlements: Array<MonthlySettlement> =
@@ -106,8 +106,8 @@ class MonthlySettlementControllerHandler extends AbstractControllerHandler {
     const showMonthlySettlementCreateResponse =
       (await response.json()) as ShowMonthlySettlementCreateResponse;
 
-    if (showMonthlySettlementCreateResponse.errorResponse) {
-      throwError(showMonthlySettlementCreateResponse.errorResponse.code);
+    if (showMonthlySettlementCreateResponse.code) {
+      throwError(showMonthlySettlementCreateResponse.code);
     }
 
     const result = {} as MonthlySettlementEditTransporter;

@@ -1,5 +1,5 @@
 import type { ImportedMoneyflowReceipt } from "@/model/moneyflow/ImportedMoneyflowReceipt";
-import type { AbstractResponse } from "@/model/rest/AbstractResponse";
+import type { ErrorResponse } from "@/model/rest/ErrorResponse";
 import type { CreateImportedMoneyflowReceiptsRequest } from "@/model/rest/importedmoneyflowreceipt/CreateImportedMoneyflowReceiptsRequest";
 import type { ShowImportImportedMoneyflowReceiptsResponse } from "@/model/rest/importedmoneyflowreceipt/ShowImportImportedMoneyflowReceiptsResponse";
 import type { ValidationResponse } from "@/model/rest/ValidationResponse";
@@ -66,9 +66,9 @@ class ImportedMoneyflowReceiptControllerHandler extends AbstractControllerHandle
     if (response.status === 204) {
       validationResult.result = true;
     } else {
-      const errorResponse = (await response.json()) as AbstractResponse;
+      const errorResponse = (await response.json()) as ErrorResponse;
       const validationResultItem = {
-        error: errorResponse.errorResponse.code,
+        error: errorResponse.code,
       } as ValidationResultItem;
       validationResult.result = false;
       validationResult.validationResultItems = [validationResultItem];
@@ -98,8 +98,8 @@ class ImportedMoneyflowReceiptControllerHandler extends AbstractControllerHandle
     } else {
       const validationResponse = (await response.json()) as ValidationResponse;
 
-      if (validationResponse.errorResponse) {
-        throwError(validationResponse.errorResponse.code);
+      if (validationResponse.code) {
+        throwError(validationResponse.code);
       }
 
       validationResult.result = validationResponse.result;

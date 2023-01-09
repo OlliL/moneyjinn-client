@@ -30,8 +30,8 @@ class PostingAccountControllerHandler extends AbstractControllerHandler {
     const showPostingAccountListResponse =
       (await response.json()) as ShowPostingAccountListResponse;
 
-    if (showPostingAccountListResponse.errorResponse) {
-      throwError(showPostingAccountListResponse.errorResponse.code);
+    if (showPostingAccountListResponse.code) {
+      throwError(showPostingAccountListResponse.code);
     }
 
     const postingAccountArray = new Array<PostingAccount>();

@@ -40,8 +40,8 @@ class EtfControllerHandler extends AbstractControllerHandler {
     const listEtfOverviewResponse =
       (await response.json()) as ListEtfOverviewResponse;
 
-    if (listEtfOverviewResponse.errorResponse) {
-      throwError(listEtfOverviewResponse.errorResponse.code);
+    if (listEtfOverviewResponse.code) {
+      throwError(listEtfOverviewResponse.code);
     }
     const etfSummaryArray = new Array<EtfSummary>();
     const transports = listEtfOverviewResponse.etfSummaryTransports;
@@ -63,8 +63,8 @@ class EtfControllerHandler extends AbstractControllerHandler {
     const listEtfFlowsResponse =
       (await response.json()) as ListEtfFlowsResponse;
 
-    if (listEtfFlowsResponse.errorResponse) {
-      throwError(listEtfFlowsResponse.errorResponse.code);
+    if (listEtfFlowsResponse.code) {
+      throwError(listEtfFlowsResponse.code);
     }
 
     const etfListViewData = {} as EtfDepot;
@@ -161,11 +161,10 @@ class EtfControllerHandler extends AbstractControllerHandler {
     const etfFlowValidation = {} as EtfFlowValidation;
     const validationResult: ValidationResult = {
       result: createEtfFlowResponse.result,
-      validationResultItems: createEtfFlowResponse.validationItemTransports?.map(
-        (vit) => {
+      validationResultItems:
+        createEtfFlowResponse.validationItemTransports?.map((vit) => {
           return mapValidationItemTransportToModel(vit);
-        }
-      ),
+        }),
     };
 
     etfFlowValidation.validationResult = validationResult;

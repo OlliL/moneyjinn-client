@@ -48,8 +48,8 @@ class ReportControllerHandler extends AbstractControllerHandler {
     const getAvailableMonthResponse =
       (await response.json()) as GetAvailableMonthResponse;
 
-    if (getAvailableMonthResponse.errorResponse) {
-      throwError(getAvailableMonthResponse.errorResponse.code);
+    if (getAvailableMonthResponse.code) {
+      throwError(getAvailableMonthResponse.code);
     }
 
     // easy mapping for now - same attributes
@@ -73,8 +73,8 @@ class ReportControllerHandler extends AbstractControllerHandler {
 
     const listReportsResponse = (await response.json()) as ListReportsResponse;
 
-    if (listReportsResponse.errorResponse) {
-      throwError(listReportsResponse.errorResponse.code);
+    if (listReportsResponse.code) {
+      throwError(listReportsResponse.code);
     }
 
     const mseMap = new Map<number, Array<MoneyflowSplitEntryTransport>>();
@@ -128,8 +128,8 @@ class ReportControllerHandler extends AbstractControllerHandler {
     const showTrendsFormResponse =
       (await response.json()) as ShowTrendsFormResponse;
 
-    if (showTrendsFormResponse.errorResponse) {
-      throwError(showTrendsFormResponse.errorResponse.code);
+    if (showTrendsFormResponse.code) {
+      throwError(showTrendsFormResponse.code);
     }
 
     const trendsTransporter: TrendsParameter = {
@@ -184,8 +184,8 @@ class ReportControllerHandler extends AbstractControllerHandler {
     const showReportingFormResponse =
       (await response.json()) as ShowReportingFormResponse;
 
-    if (showReportingFormResponse.errorResponse) {
-      throwError(showReportingFormResponse.errorResponse.code);
+    if (showReportingFormResponse.code) {
+      throwError(showReportingFormResponse.code);
     }
 
     const postingAccountStore = usePostingAccountStore();

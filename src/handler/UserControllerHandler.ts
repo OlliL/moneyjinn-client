@@ -30,7 +30,7 @@ import type { UpdateUserResponse } from "@/model/rest/user/UpdateUserResponse";
 import { mapGroupTransportToModel } from "./mapper/GroupTransportMapper";
 import type { Group } from "@/model/group/Group";
 import type { ShowEditUserResponse } from "@/model/rest/user/ShowEditUserResponse";
-import type { AbstractResponse } from "@/model/rest/AbstractResponse";
+import type { ErrorResponse } from "@/model/rest/ErrorResponse";
 
 class UserControllerHandler extends AbstractControllerHandler {
   private static CONTROLLER = "user";
@@ -54,8 +54,8 @@ class UserControllerHandler extends AbstractControllerHandler {
 
     const loginResponse = (await response.json()) as LoginResponse;
 
-    if (loginResponse.errorResponse) {
-      throwError(loginResponse.errorResponse.code);
+    if (loginResponse.code) {
+      throwError(loginResponse.code);
     }
     const userTransport = loginResponse.userTransport;
 
@@ -95,10 +95,10 @@ class UserControllerHandler extends AbstractControllerHandler {
       return;
     }
 
-    const errorResponse = (await response.json()) as AbstractResponse;
+    const errorResponse = (await response.json()) as ErrorResponse;
 
-    if (errorResponse.errorResponse) {
-      throwError(errorResponse.errorResponse.code);
+    if (errorResponse.code) {
+      throwError(errorResponse.code);
     }
   }
 
@@ -112,8 +112,8 @@ class UserControllerHandler extends AbstractControllerHandler {
     const showUserListResponse =
       (await response.json()) as ShowUserListResponse;
 
-    if (showUserListResponse.errorResponse) {
-      throwError(showUserListResponse.errorResponse.code);
+    if (showUserListResponse.code) {
+      throwError(showUserListResponse.code);
     }
 
     const groups: Array<Group> = showUserListResponse.groupTransports.map(
@@ -261,9 +261,9 @@ class UserControllerHandler extends AbstractControllerHandler {
     if (response.status === 204) {
       validationResult.result = true;
     } else {
-      const errorResponse = (await response.json()) as AbstractResponse;
+      const errorResponse = (await response.json()) as ErrorResponse;
       const validationResultItem = {
-        error: errorResponse.errorResponse.code,
+        error: errorResponse.code,
       } as ValidationResultItem;
       validationResult.result = false;
       validationResult.validationResultItems = [validationResultItem];

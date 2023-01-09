@@ -1,9 +1,9 @@
 import type { MoneyflowTransport } from "../transport/MoneyflowTransport";
 import type { MoneyflowSplitEntryTransport } from "../transport/MoneyflowSplitEntryTransport";
 import type { ReportTurnoverCapitalsourceTransport } from "./transport/ReportTurnoverCapitalsourceTransport";
-import type { AbstractResponse } from "../AbstractResponse";
+import type { ErrorResponse } from "../ErrorResponse";
 
-export type ListReportsResponse = AbstractResponse & {
+export type ListReportsResponse = ErrorResponse & {
   year: number;
   month: number;
   moneyflowTransports: Array<MoneyflowTransport>;

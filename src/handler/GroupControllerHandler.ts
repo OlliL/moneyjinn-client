@@ -1,7 +1,7 @@
 import AbstractControllerHandler from "@/handler/AbstractControllerHandler";
 import type { Group } from "@/model/group/Group";
 import type { GroupValidation } from "@/model/group/GroupValidation";
-import type { AbstractResponse } from "@/model/rest/AbstractResponse";
+import type { ErrorResponse } from "@/model/rest/ErrorResponse";
 import type { CreateGroupRequest } from "@/model/rest/group/CreateGroupRequest";
 import type { CreateGroupResponse } from "@/model/rest/group/CreateGroupResponse";
 import type { ShowGroupListResponse } from "@/model/rest/group/ShowGroupListResponse";
@@ -32,8 +32,8 @@ class GroupControllerHandler extends AbstractControllerHandler {
     const showGroupListResponse =
       (await response.json()) as ShowGroupListResponse;
 
-    if (showGroupListResponse.errorResponse) {
-      throwError(showGroupListResponse.errorResponse.code);
+    if (showGroupListResponse.code) {
+      throwError(showGroupListResponse.code);
     }
 
     const GroupArray = new Array<Group>();
@@ -123,9 +123,9 @@ class GroupControllerHandler extends AbstractControllerHandler {
     if (response.status === 204) {
       validationResult.result = true;
     } else {
-      const errorResponse = (await response.json()) as AbstractResponse;
+      const errorResponse = (await response.json()) as ErrorResponse;
       const validationResultItem = {
-        error: errorResponse.errorResponse.code,
+        error: errorResponse.code,
       } as ValidationResultItem;
       validationResult.result = false;
       validationResult.validationResultItems = [validationResultItem];

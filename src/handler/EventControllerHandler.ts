@@ -20,8 +20,8 @@ class EventControllerHandler extends AbstractControllerHandler {
     const showEventListResponse =
       (await response.json()) as ShowEventListResponse;
 
-    if (showEventListResponse.errorResponse) {
-      throwError(showEventListResponse.errorResponse.code);
+    if (showEventListResponse.code) {
+      throwError(showEventListResponse.code);
     }
 
     return showEventListResponse;

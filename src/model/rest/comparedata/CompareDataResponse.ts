@@ -1,7 +1,7 @@
-import type { AbstractResponse } from "../AbstractResponse";
+import type { ErrorResponse } from "../ErrorResponse";
 import type { CompareDataTransport } from "./transport/CompareDataTransport";
 
-export type CompareDataResponse = AbstractResponse & {
+export type CompareDataResponse = ErrorResponse & {
   compareDataMatchingTransports: Array<CompareDataTransport>;
   compareDataWrongCapitalsourceTransports: Array<CompareDataTransport>;
   compareDataNotInFileTransports: Array<CompareDataTransport>;
