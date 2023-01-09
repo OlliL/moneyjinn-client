@@ -1,6 +1,6 @@
-import type { AbstractResponse } from "../AbstractResponse";
+import type { ErrorResponse } from "../ErrorResponse";
 
-export type GetAvailableMonthResponse = AbstractResponse & {
+export type GetAvailableMonthResponse = ErrorResponse & {
   year: number;
   month: number;
   allYears: Array<number>;

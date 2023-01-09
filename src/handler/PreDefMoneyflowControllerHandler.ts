@@ -30,8 +30,8 @@ class PreDefMoneyflowControllerHandler extends AbstractControllerHandler {
     const showPreDefMoneyflowListResponse =
       (await response.json()) as ShowPreDefMoneyflowListResponse;
 
-    if (showPreDefMoneyflowListResponse.errorResponse) {
-      throwError(showPreDefMoneyflowListResponse.errorResponse.code);
+    if (showPreDefMoneyflowListResponse.code) {
+      throwError(showPreDefMoneyflowListResponse.code);
     }
 
     const PreDefMoneyflowArray = new Array<PreDefMoneyflow>();

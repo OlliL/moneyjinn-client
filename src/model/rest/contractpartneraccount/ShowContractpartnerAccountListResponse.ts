@@ -1,6 +1,6 @@
 import type { ContractpartnerAccountTransport } from "@/model/rest/transport/ContractpartnerAccountTransport";
-import type { AbstractResponse } from "../AbstractResponse";
+import type { ErrorResponse } from "../ErrorResponse";
 
-export type ShowContractpartnerAccountListResponse = AbstractResponse & {
+export type ShowContractpartnerAccountListResponse = ErrorResponse & {
   contractpartnerAccountTransports: Array<ContractpartnerAccountTransport>;
 };

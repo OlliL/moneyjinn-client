@@ -21,8 +21,8 @@ class MoneyflowReceiptControllerHandler extends AbstractControllerHandler {
     const showMoneyflowReceiptResponse =
       (await response.json()) as ShowMoneyflowReceiptResponse;
 
-    if (showMoneyflowReceiptResponse.errorResponse) {
-      throwError(showMoneyflowReceiptResponse.errorResponse.code);
+    if (showMoneyflowReceiptResponse.code) {
+      throwError(showMoneyflowReceiptResponse.code);
     }
 
     let receiptType: MoneyflowReceiptType;

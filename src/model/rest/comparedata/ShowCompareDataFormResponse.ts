@@ -1,7 +1,7 @@
-import type { AbstractResponse } from "../AbstractResponse";
+import type { ErrorResponse } from "../ErrorResponse";
 import type { CompareDataFormatTransport } from "./transport/CompareDataFormatTransport";
 
-export type ShowCompareDataFormResponse = AbstractResponse & {
+export type ShowCompareDataFormResponse = ErrorResponse & {
   compareDataFormatTransports: Array<CompareDataFormatTransport>;
   selectedCapitalsourceId: number;
   selectedDataFormat: number;

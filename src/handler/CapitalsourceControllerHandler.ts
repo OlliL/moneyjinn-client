@@ -31,8 +31,8 @@ class CapitalsourceControllerHandler extends AbstractControllerHandler {
     const showCapitalsourceListResponse =
       (await response.json()) as ShowCapitalsourceListResponse;
 
-    if (showCapitalsourceListResponse.errorResponse) {
-      throwError(showCapitalsourceListResponse.errorResponse.code);
+    if (showCapitalsourceListResponse.code) {
+      throwError(showCapitalsourceListResponse.code);
     }
 
     const capitalsourceArray = new Array<Capitalsource>();

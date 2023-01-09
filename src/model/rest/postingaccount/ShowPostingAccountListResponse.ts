@@ -1,6 +1,6 @@
-import type { AbstractResponse } from "../AbstractResponse";
+import type { ErrorResponse } from "../ErrorResponse";
 import type { PostingAccountTransport } from "../transport/PostingAccountTransport";
 
-export type ShowPostingAccountListResponse = AbstractResponse & {
+export type ShowPostingAccountListResponse = ErrorResponse & {
   postingAccountTransports: Array<PostingAccountTransport>;
 };

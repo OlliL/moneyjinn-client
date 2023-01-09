@@ -32,8 +32,8 @@ class ContractpartnerAccountControllerHandler extends AbstractControllerHandler 
     const showContractpartnerAccountListResponse =
       (await response.json()) as ShowContractpartnerAccountListResponse;
 
-    if (showContractpartnerAccountListResponse.errorResponse) {
-      throwError(showContractpartnerAccountListResponse.errorResponse.code);
+    if (showContractpartnerAccountListResponse.code) {
+      throwError(showContractpartnerAccountListResponse.code);
     }
 
     const contractpartnerAccountArray = new Array<ContractpartnerAccount>();

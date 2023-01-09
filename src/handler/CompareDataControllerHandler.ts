@@ -24,8 +24,8 @@ class CompareDataControllerHandler extends AbstractControllerHandler {
     const showCompareDataFormResponse =
       (await response.json()) as ShowCompareDataFormResponse;
 
-    if (showCompareDataFormResponse.errorResponse) {
-      throwError(showCompareDataFormResponse.errorResponse.code);
+    if (showCompareDataFormResponse.code) {
+      throwError(showCompareDataFormResponse.code);
     }
 
     const compareDataParameter = {
@@ -67,8 +67,8 @@ class CompareDataControllerHandler extends AbstractControllerHandler {
     }
 
     const compareDataResponse = (await response.json()) as CompareDataResponse;
-    if (compareDataResponse.errorResponse) {
-      throwError(compareDataResponse.errorResponse.code);
+    if (compareDataResponse.code) {
+      throwError(compareDataResponse.code);
     }
 
     const result = {} as CompareDataResult;

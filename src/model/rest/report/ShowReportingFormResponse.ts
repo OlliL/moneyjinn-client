@@ -1,6 +1,6 @@
-import type { AbstractResponse } from "../AbstractResponse";
+import type { ErrorResponse } from "../ErrorResponse";
 
-export type ShowReportingFormResponse = AbstractResponse & {
+export type ShowReportingFormResponse = ErrorResponse & {
   postingAccountIds: Array<number>;
   minDate: string;
   maxDate: string;

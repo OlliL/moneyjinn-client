@@ -162,8 +162,8 @@ class MoneyflowControllerHandler extends AbstractControllerHandler {
     const searchMoneyflowsResponse =
       (await response.json()) as SearchMoneyflowsResponse;
 
-    if (searchMoneyflowsResponse.errorResponse) {
-      throwError(searchMoneyflowsResponse.errorResponse.code);
+    if (searchMoneyflowsResponse.code) {
+      throwError(searchMoneyflowsResponse.code);
     }
 
     const validationResult: ValidationResult = {
@@ -199,8 +199,8 @@ class MoneyflowControllerHandler extends AbstractControllerHandler {
     const showEditMoneyflowResponse =
       (await response.json()) as ShowEditMoneyflowResponse;
 
-    if (showEditMoneyflowResponse.errorResponse) {
-      throwError(showEditMoneyflowResponse.errorResponse.code);
+    if (showEditMoneyflowResponse.code) {
+      throwError(showEditMoneyflowResponse.code);
     }
 
     const moneyflow = mapMoneyflowTransportToModel(
