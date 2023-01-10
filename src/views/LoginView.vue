@@ -84,26 +84,28 @@ import {
   useIsFormDirty,
   useIsFormValid,
 } from "vee-validate";
-import { toFormValidator } from "@vee-validate/zod";
-import { object, string } from "zod";
+import { toFieldValidator } from "@vee-validate/zod";
+import { string } from "zod";
 import {
   generateErrorDataVeeValidate,
   type ErrorData,
 } from "@/tools/views/ErrorData";
 
-const validationSchema = toFormValidator(
-  object({
-    username: string().min(1, "Bitte Benutzernamen angeben!"),
-    password: string().min(1, "Bitte Passwort angeben!"),
-  })
+const schema = {
+  username: string().min(1, "Bitte Benutzernamen angeben!"),
+  password: string().min(1, "Bitte Passwort angeben!"),
+};
+
+const { handleSubmit, errors } = useForm();
+
+const { value: username, meta: usernameMeta } = useField(
+  "username",
+  toFieldValidator(schema.username)
 );
-
-const { handleSubmit, errors } = useForm({
-  validationSchema,
-});
-
-const { value: username, meta: usernameMeta } = useField("username");
-const { value: password, meta: passwordMeta } = useField("password");
+const { value: password, meta: passwordMeta } = useField(
+  "password",
+  toFieldValidator(schema.password)
+);
 
 const usernameRef = ref(null);
 const serverError = ref("");
