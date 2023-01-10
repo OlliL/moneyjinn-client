@@ -16,148 +16,134 @@
           <div class="alert alert-danger" v-if="serverError">
             {{ serverError }}
           </div>
-          <div class="input-group mb-3 p1">
-            <span class="input-group-text"><i class="bi bi-person"></i></span>
-            <div class="form-floating">
-              <input
-                v-model="username"
-                ref="usernameRef"
-                id="username"
-                type="text"
-                @input="validateUsername"
-                :class="'form-control ' + usernameErrorData.inputClass"
-              />
-              <label
-                for="username"
-                :style="'color: ' + usernameErrorData.fieldColor"
-                >{{ usernameErrorData.fieldLabel }}</label
-              >
+          <div class="row no-gutters flex-lg-nowrap mb-2">
+            <div class="input-group">
+              <div class="form-floating">
+                <input
+                  v-model="username"
+                  ref="usernameRef"
+                  id="username"
+                  type="text"
+                  :class="'form-control ' + usernameErrorData.inputClass"
+                />
+                <label
+                  for="username"
+                  :style="'color: ' + usernameErrorData.fieldColor"
+                  >{{ usernameErrorData.fieldLabel }}</label
+                >
+              </div>
+              <span class="input-group-text"><i class="bi bi-person"></i></span>
             </div>
           </div>
-
-          <div class="input-group mb-3 p-1">
-            <span class="input-group-text"><i class="bi bi-lock"></i></span>
-            <div class="form-floating">
-              <input
-                v-model="password"
-                id="password"
-                type="password"
-                @input="validatePassword"
-                :class="'form-control ' + passwordErrorData.inputClass"
-              />
-              <label
-                for="password"
-                :style="'color: ' + passwordErrorData.fieldColor"
-                >{{ passwordErrorData.fieldLabel }}</label
-              >
+          <div class="row no-gutters flex-lg-nowrap mb-2">
+            <div class="input-group">
+              <div class="form-floating">
+                <input
+                  v-model="password"
+                  id="password"
+                  type="password"
+                  :class="'form-control ' + passwordErrorData.inputClass"
+                />
+                <label
+                  for="password"
+                  :style="'color: ' + passwordErrorData.fieldColor"
+                  >{{ passwordErrorData.fieldLabel }}</label
+                >
+              </div>
+              <span class="input-group-text"><i class="bi bi-lock"></i></span>
             </div>
           </div>
-
-          <div class="p-1 form-group col-sm-12 text-center">
-            <button
-              type="submit"
-              class="btn btn-primary"
-              :disabled="!formIsValid"
-            >
-              <i class="bi bi-box-arrow-in-right"></i> Anmelden
-            </button>
+          <div class="row no-gutters flex-lg-nowrap mb-2">
+            <div class="p-1 form-group col-sm-12 text-center">
+              <button
+                type="submit"
+                class="btn btn-primary"
+                :disabled="isDisabled"
+              >
+                <i class="bi bi-box-arrow-in-right"></i> Anmelden
+              </button>
+            </div>
           </div>
         </div>
         <div class="card-footer text-center">
-          <small>moneyjin {{ appVersion }} - &copy; by Oliver Lehmann</small>
+          <small>moneyjin {{ version }} - &copy; by Oliver Lehmann</small>
         </div>
       </div>
     </div>
   </form>
 </template>
 
-<script lang="ts">
-import type { ErrorData } from "@/tools/views/ErrorData";
-import { generateErrorData } from "@/tools/views/ErrorData";
+<script lang="ts" setup>
 import UserControllerHandler from "@/handler/UserControllerHandler";
 import router, { Routes } from "@/router";
-import { validateInputField } from "@/tools/views/ValidateInputField";
 import { version } from "../../package.json";
+import { onMounted, ref, computed } from "vue";
+import {
+  useField,
+  useForm,
+  useIsFormDirty,
+  useIsFormValid,
+} from "vee-validate";
+import { toFormValidator } from "@vee-validate/zod";
+import { object, string } from "zod";
+import {
+  generateErrorDataVeeValidate,
+  type ErrorData,
+} from "@/tools/views/ErrorData";
 
-type LoginViewData = {
-  username: string;
-  password: string;
-  usernameIsValid: boolean | null;
-  usernameErrorMessage: string;
-  passwordIsValid: boolean | null;
-  passwordErrorMessage: string;
-  serverError: string;
-  appVersion: string;
-};
+const validationSchema = toFormValidator(
+  object({
+    username: string().min(1, "Bitte Benutzernamen angeben!"),
+    password: string().min(1, "Bitte Passwort angeben!"),
+  })
+);
 
-export default {
-  name: "LoginView",
+const { handleSubmit, errors } = useForm({
+  validationSchema,
+});
 
-  data(): LoginViewData {
-    return {
-      username: "",
-      password: "",
-      usernameIsValid: null,
-      usernameErrorMessage: "",
-      passwordIsValid: null,
-      passwordErrorMessage: "",
-      serverError: "",
-      appVersion: version,
-    };
-  },
-  mounted() {
-    (this.$refs.usernameRef as any).focus();
-  },
-  computed: {
-    usernameErrorData(): ErrorData {
-      return generateErrorData(
-        this.usernameIsValid,
-        "Benutzername",
-        this.usernameErrorMessage
-      );
-    },
-    passwordErrorData(): ErrorData {
-      return generateErrorData(
-        this.passwordIsValid,
-        "Passwort",
-        this.passwordErrorMessage
-      );
-    },
-    formIsValid() {
-      return this.passwordIsValid && this.usernameIsValid;
-    },
-  },
-  methods: {
-    validateUsername() {
-      [this.usernameIsValid, this.usernameErrorMessage] = validateInputField(
-        this.username,
-        "Bitte Benutzernamen angeben!"
-      );
-    },
+const { value: username, meta: usernameMeta } = useField("username");
+const { value: password, meta: passwordMeta } = useField("password");
 
-    validatePassword() {
-      [this.passwordIsValid, this.passwordErrorMessage] = validateInputField(
-        this.password,
-        "Bitte Passwort angeben!"
-      );
-    },
-    async handleLogin() {
-      this.serverError = "";
+const usernameRef = ref(null);
+const serverError = ref("");
 
-      this.validateUsername();
-      this.validatePassword();
+const isDirty = useIsFormDirty();
+const isValid = useIsFormValid();
 
-      if (this.formIsValid) {
-        await UserControllerHandler.login(this.username, this.password)
-          .then(() => {
-            router.push({ name: Routes.Home });
-          })
-          .catch((error) => {
-            this.serverError = error.message;
-            this.password = "";
-          });
-      }
-    },
-  },
-};
+const isDisabled = computed(() => {
+  return !isDirty.value || !isValid.value;
+});
+
+const passwordErrorData = computed((): ErrorData => {
+  return generateErrorDataVeeValidate(
+    passwordMeta.dirty,
+    "Passwort",
+    errors.value.password
+  );
+});
+
+const usernameErrorData = computed((): ErrorData => {
+  return generateErrorDataVeeValidate(
+    usernameMeta.dirty,
+    "Benutzername",
+    errors.value.username
+  );
+});
+onMounted(() => {
+  (usernameRef.value as any).focus();
+});
+
+const handleLogin = handleSubmit((values) => {
+  serverError.value = "";
+
+  UserControllerHandler.login(values.username, values.password)
+    .then(() => {
+      router.push({ name: Routes.Home });
+    })
+    .catch((error) => {
+      serverError.value = error.message;
+      password.value = "";
+    });
+});
 </script>
