@@ -21,3 +21,15 @@ export function generateErrorData(
   }
   return errorData;
 }
+
+export function generateErrorDataVeeValidate(
+  dirtyFlag: boolean,
+  validLabel: string,
+  errorLabel: string | undefined
+): ErrorData {
+  return generateErrorData(
+    dirtyFlag === false ? null : errorLabel === undefined,
+    validLabel,
+    errorLabel || ""
+  );
+}

@@ -14,6 +14,7 @@
     "@stomp/stompjs": "^6.1.2",
     "@types/bootstrap": "^5.2.6",
     "@types/vanillajs-datepicker": "^1.2.1",
+    "@vee-validate/zod": "^4.7.3",
     "bootstrap": "^5.2.2",
     "bootstrap-icons": "^1.10.2",
     "chart.js": "^4.1.1",
@@ -21,9 +22,11 @@
     "pinia-plugin-persistedstate": "^3.0.1",
     "pinia-shared-state": "^0.2.10",
     "vanillajs-datepicker": "^1.2.0",
+    "vee-validate": "^4.7.3",
     "vue": "^3.2.41",
     "vue-chartjs": "^5.1.0",
-    "vue-router": "^4.1.5"
+    "vue-router": "^4.1.5",
+    "zod": "^3.20.2"
   },
   "devDependencies": {
     "@rushstack/eslint-patch": "^1.1.4",
