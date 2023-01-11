@@ -17,41 +17,26 @@
             {{ serverError }}
           </div>
           <div class="row no-gutters flex-lg-nowrap mb-2">
-            <div class="input-group">
-              <div class="form-floating">
-                <input
-                  v-model="username"
-                  ref="usernameRef"
-                  id="username"
-                  type="text"
-                  :class="'form-control ' + usernameErrorData.inputClass"
-                />
-                <label
-                  for="username"
-                  :style="'color: ' + usernameErrorData.fieldColor"
-                  >{{ usernameErrorData.fieldLabel }}</label
-                >
-              </div>
-              <span class="input-group-text"><i class="bi bi-person"></i></span>
-            </div>
+            <input-standard
+              v-model="username"
+              :validation-schema="schema.username"
+              id="username"
+              field-label="Benutzername"
+              :focus="true"
+            >
+              <template #icon><i class="bi bi-person"></i></template>
+            </input-standard>
           </div>
           <div class="row no-gutters flex-lg-nowrap mb-2">
-            <div class="input-group">
-              <div class="form-floating">
-                <input
-                  v-model="password"
-                  id="password"
-                  type="password"
-                  :class="'form-control ' + passwordErrorData.inputClass"
-                />
-                <label
-                  for="password"
-                  :style="'color: ' + passwordErrorData.fieldColor"
-                  >{{ passwordErrorData.fieldLabel }}</label
-                >
-              </div>
-              <span class="input-group-text"><i class="bi bi-lock"></i></span>
-            </div>
+            <input-standard
+              v-model="password"
+              :validation-schema="schema.password"
+              type="password"
+              id="password"
+              field-label="Passwort"
+            >
+              <template #icon><i class="bi bi-lock"></i></template>
+            </input-standard>
           </div>
           <div class="row no-gutters flex-lg-nowrap mb-2">
             <div class="p-1 form-group col-sm-12 text-center">
@@ -77,63 +62,30 @@
 import UserControllerHandler from "@/handler/UserControllerHandler";
 import router, { Routes } from "@/router";
 import { version } from "../../package.json";
-import { onMounted, ref, computed } from "vue";
-import {
-  useField,
-  useForm,
-  useIsFormDirty,
-  useIsFormValid,
-} from "vee-validate";
-import { toFieldValidator } from "@vee-validate/zod";
+import { ref, computed } from "vue";
+import { useForm, useIsFormDirty, useIsFormValid } from "vee-validate";
 import { string } from "zod";
-import {
-  generateErrorDataVeeValidate,
-  type ErrorData,
-} from "@/tools/views/ErrorData";
+
+import InputStandard from "@/components/InputStandard.vue";
 
 const schema = {
   username: string().min(1, "Bitte Benutzernamen angeben!"),
   password: string().min(1, "Bitte Passwort angeben!"),
 };
 
-const { handleSubmit, errors } = useForm();
+const username = ref("");
+const password = ref("");
 
-const { value: username, meta: usernameMeta } = useField(
-  "username",
-  toFieldValidator(schema.username)
-);
-const { value: password, meta: passwordMeta } = useField(
-  "password",
-  toFieldValidator(schema.password)
-);
+const { handleSubmit } = useForm();
 
-const usernameRef = ref(null);
 const serverError = ref("");
 
+// TODO - extra Submit-Button component?!
 const isDirty = useIsFormDirty();
 const isValid = useIsFormValid();
 
 const isDisabled = computed(() => {
   return !isDirty.value || !isValid.value;
-});
-
-const passwordErrorData = computed((): ErrorData => {
-  return generateErrorDataVeeValidate(
-    passwordMeta.dirty,
-    "Passwort",
-    errors.value.password
-  );
-});
-
-const usernameErrorData = computed((): ErrorData => {
-  return generateErrorDataVeeValidate(
-    usernameMeta.dirty,
-    "Benutzername",
-    errors.value.username
-  );
-});
-onMounted(() => {
-  (usernameRef.value as any).focus();
 });
 
 const handleLogin = handleSubmit((values) => {
