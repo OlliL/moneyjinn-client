@@ -23,12 +23,12 @@ export function generateErrorData(
 }
 
 export function generateErrorDataVeeValidate(
-  dirtyFlag: boolean,
+  validatedFlag: boolean,
   validLabel: string,
   errorLabel: string | undefined
 ): ErrorData {
   return generateErrorData(
-    dirtyFlag === false ? null : errorLabel === undefined,
+    validatedFlag === false ? null : errorLabel === undefined,
     validLabel,
     errorLabel || ""
   );
