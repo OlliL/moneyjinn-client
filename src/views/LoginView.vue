@@ -13,9 +13,7 @@
               Geben Sie Ihre Nutzerdaten ein und klicken Sie auf „Anmelden“.
             </h5>
           </div>
-          <div class="alert alert-danger" v-if="serverError">
-            {{ serverError }}
-          </div>
+          <DivError :server-errors="serverErrors" />
           <div class="row no-gutters flex-lg-nowrap mb-2">
             <input-standard
               v-model="username"
@@ -40,13 +38,11 @@
           </div>
           <div class="row no-gutters flex-lg-nowrap mb-2">
             <div class="p-1 form-group col-sm-12 text-center">
-              <button
-                type="submit"
-                class="btn btn-primary"
-                :disabled="isDisabled"
-              >
-                <i class="bi bi-box-arrow-in-right"></i> Anmelden
-              </button>
+              <button-submit button-label="Anmelden">
+                <template #icon
+                  ><i class="bi bi-box-arrow-in-right"></i>&nbsp;
+                </template>
+              </button-submit>
             </div>
           </div>
         </div>
@@ -59,14 +55,18 @@
 </template>
 
 <script lang="ts" setup>
-import UserControllerHandler from "@/handler/UserControllerHandler";
-import router, { Routes } from "@/router";
-import { version } from "../../package.json";
-import { ref, computed } from "vue";
-import { useForm, useIsFormDirty, useIsFormValid } from "vee-validate";
+import { useForm } from "vee-validate";
+import { ref } from "vue";
 import { string } from "zod";
 
+import router, { Routes } from "@/router";
+import { version } from "../../package.json";
+
 import InputStandard from "@/components/InputStandard.vue";
+import ButtonSubmit from "@/components/ButtonSubmit.vue";
+import DivError from "@/components/DivError.vue";
+
+import UserControllerHandler from "@/handler/UserControllerHandler";
 
 const schema = {
   username: string().min(1, "Bitte Benutzernamen angeben!"),
@@ -78,25 +78,17 @@ const password = ref("");
 
 const { handleSubmit } = useForm();
 
-const serverError = ref("");
-
-// TODO - extra Submit-Button component?!
-const isDirty = useIsFormDirty();
-const isValid = useIsFormValid();
-
-const isDisabled = computed(() => {
-  return !isDirty.value || !isValid.value;
-});
+const serverErrors = ref(new Array<String>());
 
 const handleLogin = handleSubmit((values) => {
-  serverError.value = "";
+  serverErrors.value.splice(0, serverErrors.value.length);
 
   UserControllerHandler.login(values.username, values.password)
     .then(() => {
       router.push({ name: Routes.Home });
     })
     .catch((error) => {
-      serverError.value = error.message;
+      serverErrors.value.push(error.message);
       password.value = "";
     });
 });
