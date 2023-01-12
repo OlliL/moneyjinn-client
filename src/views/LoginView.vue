@@ -68,6 +68,8 @@ import DivError from "@/components/DivError.vue";
 
 import UserControllerHandler from "@/handler/UserControllerHandler";
 
+const serverErrors = ref(new Array<String>());
+
 const schema = {
   username: string().min(1, "Bitte Benutzernamen angeben!"),
   password: string().min(1, "Bitte Passwort angeben!"),
@@ -77,8 +79,6 @@ const username = ref("");
 const password = ref("");
 
 const { handleSubmit } = useForm();
-
-const serverErrors = ref(new Array<String>());
 
 const handleLogin = handleSubmit((values) => {
   serverErrors.value.splice(0, serverErrors.value.length);
