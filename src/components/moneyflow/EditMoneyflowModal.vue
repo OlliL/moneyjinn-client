@@ -32,14 +32,15 @@
 
 <script lang="ts" setup>
 import { ref } from "vue";
+import { useForm } from "vee-validate";
 
 import EditMoneyflowVueInternal from "@/components/moneyflow/EditMoneyflowInternal.vue";
 import ButtonSubmit from "@/components/ButtonSubmit.vue";
 import ModalVue from "../Modal.vue";
 
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
+
 import MoneyflowReceiptControllerHandler from "@/handler/MoneyflowReceiptControllerHandler";
-import { useForm } from "vee-validate";
 
 const mmf = ref({} as Moneyflow);
 const modalComponent = ref();
