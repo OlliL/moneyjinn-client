@@ -64,7 +64,9 @@
         >
           g&uuml;ltig bis
         </div>
-        <div class="text-start col-sm-9"><SpanDate :date="mcs.validTil" /></div>
+        <div class="text-start col-sm-9">
+          <SpanDate :date="mcs.validTil" />
+        </div>
       </div>
       <div class="row">
         <div
