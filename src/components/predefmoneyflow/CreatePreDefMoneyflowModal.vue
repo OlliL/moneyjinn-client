@@ -253,7 +253,21 @@ export default defineComponent({
     },
     resetForm() {
       if (this.origMpm) {
-        this.mpm = JSON.parse(JSON.stringify(this.origMpm));
+        this.mpm = {
+          amount: this.origMpm.amount,
+          capitalsourceId: this.origMpm.capitalsourceId,
+          comment: this.origMpm.comment,
+          contractpartnerId: this.origMpm.contractpartnerId,
+          id: this.origMpm.id,
+          postingAccountId: this.origMpm.postingAccountId,
+          userId: this.origMpm.userId,
+          capitalsourceComment: this.origMpm.capitalsourceComment,
+          contractpartnerName: this.origMpm.contractpartnerName,
+          postingAccountName: this.origMpm.postingAccountName,
+          onceAMonth: this.origMpm.onceAMonth,
+          createDate: this.origMpm.createDate,
+          lastUsed: this.origMpm.lastUsed,
+        };
       } else {
         this.mpm = {} as PreDefMoneyflow;
         this.mpm.contractpartnerId = 0;
