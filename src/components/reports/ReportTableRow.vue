@@ -8,9 +8,11 @@
         @click="showReceipt"
       ></i>
     </td>
-    <td>{{ bookingdateString }}</td>
-    <td>{{ invoicedateString }}</td>
-    <td colspan="2" :class="amountClass">{{ amountString }} &euro;</td>
+    <td><SpanDate :date="mmf.bookingDate" /></td>
+    <td><SpanDate :date="mmf.invoiceDate" /></td>
+    <td colspan="2" class="text-end">
+      <SpanAmount :amount="mmf.amount" />
+    </td>
     <td class="text-start">{{ mmf.contractpartnerName }}</td>
     <td class="text-start">{{ mmf.comment }}</td>
     <td class="text-start">{{ mmf.postingAccountName }}</td>
@@ -38,13 +40,17 @@
         @click="showReceipt"
       ></i>
     </td>
-    <td :rowspan="rowspan" v-if="index == 0">{{ bookingdateString }}</td>
-    <td :rowspan="rowspan" v-if="index == 0">{{ invoicedateString }}</td>
-    <td :rowspan="rowspan" v-if="index == 0" :class="amountClass">
-      {{ amountString }} &euro;
+    <td :rowspan="rowspan" v-if="index == 0">
+      <SpanDate :date="mmf.bookingDate" />
     </td>
-    <td :class="mseAmountClass(mse.amount)">
-      {{ mseAmountString(mse.amount) }} &euro;
+    <td :rowspan="rowspan" v-if="index == 0">
+      <SpanDate :date="mmf.invoiceDate" />
+    </td>
+    <td :rowspan="rowspan" v-if="index == 0" class="text-end">
+      <SpanAmount :amount="mmf.amount" />
+    </td>
+    <td class="text-end">
+      <SpanAmount :amount="mse.amount" />
     </td>
     <td :rowspan="rowspan" v-if="index == 0" class="text-start">
       {{ mmf.contractpartnerName }}
@@ -78,9 +84,9 @@
 <script lang="ts">
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 import { defineComponent, type PropType } from "vue";
-import { formatDate } from "@/tools/views/FormatDate";
-import { redIfNegativeEnd, formatNumber } from "@/tools/views/FormatNumber";
 import { useUserSessionStore } from "@/stores/UserSessionStore";
+import SpanAmount from "../SpanAmount.vue";
+import SpanDate from "../SpanDate.vue";
 
 export default defineComponent({
   name: "ReportTableRow",
@@ -92,18 +98,6 @@ export default defineComponent({
   },
   emits: ["showReceipt", "deleteMoneyflow", "editMoneyflow"],
   computed: {
-    bookingdateString() {
-      return formatDate(this.mmf.bookingDate);
-    },
-    invoicedateString() {
-      return this.mmf.invoiceDate ? formatDate(this.mmf.invoiceDate) : "";
-    },
-    amountClass(): string {
-      return redIfNegativeEnd(this.mmf.amount);
-    },
-    amountString(): string {
-      return formatNumber(this.mmf.amount, 2);
-    },
     rowspan(): number {
       if (this.mmf.moneyflowSplitEntries != null) {
         return this.mmf.moneyflowSplitEntries.length;
@@ -122,12 +116,6 @@ export default defineComponent({
     },
   },
   methods: {
-    mseAmountString(amount: number): string {
-      return formatNumber(amount, 2);
-    },
-    mseAmountClass(amount: number): string {
-      return redIfNegativeEnd(amount);
-    },
     showReceipt() {
       this.$emit("showReceipt", this.mmf.id);
     },
@@ -138,5 +126,6 @@ export default defineComponent({
       this.$emit("editMoneyflow", this.mmf);
     },
   },
+  components: { SpanAmount, SpanDate },
 });
 </script>

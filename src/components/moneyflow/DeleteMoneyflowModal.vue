@@ -8,7 +8,9 @@
         >
           Buchungsdatum
         </div>
-        <div class="text-start col-sm-9">{{ bookingdateString }}</div>
+        <div class="text-start col-sm-9">
+          <SpanDate :date="mmf.bookingDate" />
+        </div>
       </div>
       <div class="row">
         <div
@@ -17,7 +19,9 @@
         >
           Rechnungsdatum
         </div>
-        <div class="text-start col-sm-9">{{ bookingdateString }}</div>
+        <div class="text-start col-sm-9">
+          <SpanDate :date="mmf.invoiceDate" />
+        </div>
       </div>
       <div class="row">
         <div
@@ -45,7 +49,7 @@
           Betrag
         </div>
         <div class="text-start col-sm-9">
-          <span :class="amountClass">{{ amountString }} &euro;</span>
+          <SpanAmount :amount="mmf.amount" />
         </div>
       </div>
       <div class="row">
@@ -78,10 +82,10 @@
 <script lang="ts">
 import MoneyflowControllerHandler from "@/handler/MoneyflowControllerHandler";
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
-import { formatDate } from "@/tools/views/FormatDate";
-import { formatNumber, redIfNegativeStart } from "@/tools/views/FormatNumber";
 import { defineComponent } from "vue";
 import ModalVue from "../Modal.vue";
+import SpanAmount from "../SpanAmount.vue";
+import SpanDate from "../SpanDate.vue";
 
 export default defineComponent({
   name: "DeleteMoneyflowModal",
@@ -89,20 +93,6 @@ export default defineComponent({
     return {
       mmf: {} as Moneyflow,
     };
-  },
-  computed: {
-    bookingdateString() {
-      return formatDate(this.mmf.bookingDate);
-    },
-    invoicedateString() {
-      return this.mmf.invoiceDate ? formatDate(this.mmf.invoiceDate) : "";
-    },
-    amountClass(): string {
-      return redIfNegativeStart(this.mmf.amount);
-    },
-    amountString(): string {
-      return formatNumber(this.mmf.amount, 2);
-    },
   },
   methods: {
     async _show(mmf: Moneyflow) {
@@ -117,6 +107,6 @@ export default defineComponent({
   },
   expose: ["_show"],
   emits: ["moneyflowDeleted"],
-  components: { ModalVue },
+  components: { ModalVue, SpanAmount, SpanDate },
 });
 </script>
