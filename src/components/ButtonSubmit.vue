@@ -1,5 +1,10 @@
 <template>
-  <button type="submit" class="btn btn-primary" :disabled="isDisabled">
+  <button
+    type="submit"
+    class="btn btn-primary"
+    :disabled="isDisabled"
+    :form="formId"
+  >
     <slot name="icon"></slot>{{ buttonLabel }}
   </button>
 </template>
@@ -13,7 +18,12 @@ defineProps({
     type: String,
     required: true,
   },
+  formId: {
+    type: String,
+    required: false,
+  },
 });
+
 const isDirty = useIsFormDirty();
 const isValid = useIsFormValid();
 
