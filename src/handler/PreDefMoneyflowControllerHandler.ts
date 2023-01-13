@@ -94,6 +94,8 @@ class PreDefMoneyflowControllerHandler extends AbstractControllerHandler {
 
     if (!response.ok) {
       throw new Error(response.statusText);
+    } else if (response.status === 204) {
+      return { result: true } as ValidationResult;
     }
 
     const validationResponse = (await response.json()) as ValidationResponse;
