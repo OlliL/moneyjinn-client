@@ -37,80 +37,75 @@
     ></span>
   </div>
 </template>
-<script lang="ts">
-import type { Capitalsource } from "@/model/capitalsource/Capitalsource";
-import { useCapitalsourceStore } from "@/stores/CapitalsourceStore";
-import { defineComponent } from "vue";
+<script lang="ts" setup>
+import { computed, ref, watch } from "vue";
+
 import CreateCapitalsourceModalVue from "./CreateCapitalsourceModal.vue";
 
-export default defineComponent({
-  name: "CapitalsourceSelect",
-  data() {
-    return { capitalsourceId: 0 };
+import { useCapitalsourceStore } from "@/stores/CapitalsourceStore";
+
+import type { Capitalsource } from "@/model/capitalsource/Capitalsource";
+
+const props = defineProps({
+  validityDate: {
+    type: Date,
+    required: true,
   },
-  emits: ["capitalsourceSelected"],
-  props: {
-    validityDate: {
-      type: Date,
-      required: true,
-    },
-    selectedId: {
-      type: Number,
-      required: false,
-    },
-    inputClass: {
-      type: String,
-      required: true,
-    },
-    fieldColor: {
-      type: String,
-      required: true,
-    },
-    fieldLabel: {
-      type: String,
-      required: true,
-    },
-    idSuffix: {
-      type: String,
-      default: "",
-    },
+  selectedId: {
+    type: Number,
+    required: false,
   },
-  computed: {
-    capitalsourceArray(): Array<Capitalsource> {
-      const capitalsourceStore = useCapitalsourceStore();
-      return capitalsourceStore.getBookableValidCapitalsources(
-        this.validityDate
-      );
-    },
+  inputClass: {
+    type: String,
+    required: true,
   },
-  watch: {
-    selectedId: {
-      handler(newVal: number, oldVal: number) {
-        if (newVal != oldVal) this.capitalsourceId = newVal;
-      },
-      immediate: true,
-    },
+  fieldColor: {
+    type: String,
+    required: true,
   },
-  methods: {
-    emitCapitalsourceSelected() {
-      this.$emit(
-        "capitalsourceSelected",
-        this.capitalsourceArray.filter((mcs) => {
-          return mcs.id === +this.capitalsourceId;
-        })[0]
-      );
-    },
-    showCreateCapitalsourceModal() {
-      (
-        this.$refs
-          .createCapitalsourceModal as typeof CreateCapitalsourceModalVue
-      )._show();
-    },
-    capitalsourceCreated(mcs: Capitalsource) {
-      this.capitalsourceId = mcs.id;
-      this.emitCapitalsourceSelected();
-    },
+  fieldLabel: {
+    type: String,
+    required: true,
   },
-  components: { CreateCapitalsourceModalVue },
+  idSuffix: {
+    type: String,
+    default: "",
+  },
 });
+
+const capitalsourceId = ref(0);
+const createCapitalsourceModal = ref();
+const emit = defineEmits(["capitalsourceSelected"]);
+
+const capitalsourceArray = computed((): Array<Capitalsource> => {
+  const capitalsourceStore = useCapitalsourceStore();
+  return capitalsourceStore.getBookableValidCapitalsources(props.validityDate);
+});
+
+const emitCapitalsourceSelected = () => {
+  emit(
+    "capitalsourceSelected",
+    capitalsourceArray.value.filter((mcs) => {
+      return mcs.id === +capitalsourceId.value;
+    })[0]
+  );
+};
+const showCreateCapitalsourceModal = () => {
+  createCapitalsourceModal.value._show();
+};
+
+const capitalsourceCreated = (mcs: Capitalsource) => {
+  capitalsourceId.value = mcs.id;
+  emitCapitalsourceSelected();
+};
+
+watch(
+  () => props.selectedId,
+  (newVal, oldVal) => {
+    if (newVal != oldVal) {
+      if (newVal != oldVal) capitalsourceId.value = newVal ? newVal : 0;
+    }
+  },
+  { immediate: true }
+);
 </script>
