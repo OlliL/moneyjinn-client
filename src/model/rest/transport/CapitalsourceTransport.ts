@@ -3,8 +3,8 @@ export type CapitalsourceTransport = {
   userid: number;
   type: number;
   state: number;
-  accountNumber: number;
-  bankCode: number;
+  accountNumber: string;
+  bankCode: string;
   comment: string;
   validTil: string;
   validFrom: string;

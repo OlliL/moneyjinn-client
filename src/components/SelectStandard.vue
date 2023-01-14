@@ -1,14 +1,22 @@
 <template>
   <div class="input-group">
     <div class="form-floating">
-      <input
+      <select
         v-model="fieldValue"
         ref="fieldRef"
         :id="id"
-        :type="type"
-        :class="'form-control ' + alignmentClass + ' ' + errorData.inputClass"
+        :class="'form-select form-control ' + errorData.inputClass"
         @input="onInput($event)"
-      />
+      >
+        <option
+          v-for="selectBoxValue in selectBoxValues"
+          :key="selectBoxValue.id"
+          :value="selectBoxValue.id"
+        >
+          {{ selectBoxValue.value }}
+        </option>
+      </select>
+
       <label :for="id" :style="'color: ' + errorData.fieldColor">{{
         errorData.fieldLabel
       }}</label>
@@ -20,6 +28,7 @@
 </template>
 
 <script lang="ts" setup>
+import type { SelectBoxValue } from "@/model/SelectBoxValue";
 import {
   generateErrorDataVeeValidate,
   type ErrorData,
@@ -31,9 +40,12 @@ import type { ZodType } from "zod";
 
 const props = defineProps({
   modelValue: {
-    type: String,
+    type: undefined,
     required: false,
-    default: "",
+  },
+  selectBoxValues: {
+    type: Array<SelectBoxValue>,
+    required: true,
   },
   validationSchema: {
     type: Object as PropType<ZodType>,
@@ -47,18 +59,10 @@ const props = defineProps({
     type: String,
     required: true,
   },
-  type: {
-    type: String,
-    default: "text",
-  },
   focus: {
     type: Boolean,
     required: false,
     default: false,
-  },
-  align: {
-    type: String,
-    required: false,
   },
 });
 const emit = defineEmits(["update:modelValue"]);
@@ -89,7 +93,6 @@ const errorData = computed((): ErrorData => {
 
 const slots = useSlots();
 const iconProvided = slots["icon"] !== undefined;
-const alignmentClass = props.align ? "text-" + props.align : "";
 
 const fieldRef = ref(null);
 

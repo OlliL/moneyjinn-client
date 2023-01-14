@@ -15,7 +15,7 @@
           </div>
           <DivError :server-errors="serverErrors" />
           <div class="row no-gutters flex-lg-nowrap mb-2">
-            <input-standard
+            <InputStandard
               v-model="username"
               :validation-schema="schema.username"
               id="username"
@@ -23,10 +23,10 @@
               :focus="true"
             >
               <template #icon><i class="bi bi-person"></i></template>
-            </input-standard>
+            </InputStandard>
           </div>
           <div class="row no-gutters flex-lg-nowrap mb-2">
-            <input-standard
+            <InputStandard
               v-model="password"
               :validation-schema="schema.password"
               type="password"
@@ -34,15 +34,15 @@
               field-label="Passwort"
             >
               <template #icon><i class="bi bi-lock"></i></template>
-            </input-standard>
+            </InputStandard>
           </div>
           <div class="row no-gutters flex-lg-nowrap mb-2">
             <div class="p-1 form-group col-sm-12 text-center">
-              <button-submit button-label="Anmelden">
+              <ButtonSubmit button-label="Anmelden">
                 <template #icon
                   ><i class="bi bi-box-arrow-in-right"></i>&nbsp;
                 </template>
-              </button-submit>
+              </ButtonSubmit>
             </div>
           </div>
         </div>

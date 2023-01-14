@@ -6,218 +6,101 @@
         :id="'createCapitalsourceForm' + idSuffix"
       >
         <div class="container-fluid">
-          <div v-if="serverError">
-            <div
-              class="alert alert-danger"
-              v-for="(error, index) in serverError"
-              :key="index"
-            >
-              {{ error }}
-            </div>
-          </div>
+          <DivError :server-errors="serverErrors" />
           <div class="row">
             <div class="col-xs-12">
               <div class="form-floating">
-                <input
+                <InputStandard
                   v-model="mcs.comment"
+                  :validation-schema="schema.comment"
                   :id="'comment' + idSuffix"
-                  type="text"
-                  @input="validateComment"
-                  :class="'form-control ' + commentErrorData.inputClass"
+                  field-label="Kapitalquelle"
                 />
-                <label
-                  :for="'comment' + idSuffix"
-                  :style="'color: ' + commentErrorData.fieldColor"
-                  >{{ commentErrorData.fieldLabel }}</label
-                >
               </div>
             </div>
           </div>
           <div class="row pt-2">
             <div class="col-xs-12">
-              <div class="form-floating">
-                <select
-                  v-model="mcs.type"
-                  :id="'type' + idSuffix"
-                  @change="validateType"
-                  :class="
-                    'form-select form-control ' + typeErrorData.inputClass
-                  "
-                >
-                  <option :value="CapitalsourceType.__PLACEHOLDER"></option>
-                  <option :value="CapitalsourceType.CURRENT_ASSET">
-                    {{
-                      capitalsourceTypeNames[CapitalsourceType.CURRENT_ASSET]
-                    }}
-                  </option>
-                  <option :value="CapitalsourceType.LONG_TERM_ASSET">
-                    {{
-                      capitalsourceTypeNames[CapitalsourceType.LONG_TERM_ASSET]
-                    }}
-                  </option>
-                  <option :value="CapitalsourceType.RESERVE_ASSET">
-                    {{
-                      capitalsourceTypeNames[CapitalsourceType.RESERVE_ASSET]
-                    }}
-                  </option>
-                  <option :value="CapitalsourceType.PROVISION_ASSET">
-                    {{
-                      capitalsourceTypeNames[CapitalsourceType.PROVISION_ASSET]
-                    }}
-                  </option>
-                  <option :value="CapitalsourceType.CREDIT">
-                    {{ capitalsourceTypeNames[CapitalsourceType.CREDIT] }}
-                  </option>
-                </select>
-
-                <label
-                  :for="'type' + idSuffix"
-                  :style="'color: ' + typeErrorData.fieldColor"
-                  >{{ typeErrorData.fieldLabel }}</label
-                >
-              </div>
+              <SelectStandard
+                v-model="mcs.type"
+                :validation-schema="schema.type"
+                :id="'type' + idSuffix"
+                field-label="Typ"
+                :select-box-values="typeValues"
+              />
             </div>
           </div>
           <div class="row pt-2">
             <div class="col-xs-12">
-              <div class="form-floating">
-                <select
-                  v-model="mcs.state"
-                  :id="'state' + idSuffix"
-                  @change="validateState"
-                  :class="
-                    'form-select form-control ' + stateErrorData.inputClass
-                  "
-                >
-                  <option :value="CapitalsourceState.__PLACEHOLDER"></option>
-                  <option :value="CapitalsourceState.NON_CACHE">
-                    {{ capitalsourceStateNames[CapitalsourceState.NON_CACHE] }}
-                  </option>
-                  <option :value="CapitalsourceState.CACHE">
-                    {{ capitalsourceStateNames[CapitalsourceState.CACHE] }}
-                  </option>
-                </select>
-
-                <label
-                  :for="'state' + idSuffix"
-                  :style="'color: ' + stateErrorData.fieldColor"
-                  >{{ stateErrorData.fieldLabel }}</label
-                >
-              </div>
+              <SelectStandard
+                v-model="mcs.state"
+                :validation-schema="schema.state"
+                :id="'state' + idSuffix"
+                field-label="Status"
+                :select-box-values="stateValues"
+              />
             </div>
           </div>
           <div class="row pt-2">
             <div class="col-xs-12">
-              <div class="form-floating">
-                <input
-                  v-model="mcs.accountNumber"
-                  :id="'accountNumber' + idSuffix"
-                  type="text"
-                  class="form-control"
-                />
-                <label :for="'accountNumber' + idSuffix">IBAN</label>
-              </div>
+              <InputStandard
+                v-model="mcs.accountNumber"
+                :validation-schema="schema.accountNumber"
+                :id="'accountNumber' + idSuffix"
+                field-label="IBAN"
+              />
             </div>
           </div>
           <div class="row pt-2">
             <div class="col-xs-12">
-              <div class="form-floating">
-                <input
-                  v-model="mcs.bankCode"
-                  :id="'bankCode' + idSuffix"
-                  type="text"
-                  class="form-control"
-                />
-                <label :for="'bankCode' + idSuffix">BIC</label>
-              </div>
+              <InputStandard
+                v-model="mcs.bankCode"
+                :validation-schema="schema.bankCode"
+                :id="'bankCode' + idSuffix"
+                field-label="BIC"
+              />
             </div>
           </div>
           <div class="row pt-2">
             <div class="col-xs-12">
-              <DatepickerVue
+              <InputDate
+                v-model="mcs.validFrom"
+                :validation-schema="schema.validFrom"
                 :id="'validFrom' + idSuffix"
-                :label="validFromErrorData.fieldLabel"
-                :default-date="mcs.validFrom"
-                :input-class="' form-control ' + validFromErrorData.inputClass"
-                :label-style="'color: ' + validFromErrorData.fieldColor"
-                @date-selected="validFromSelected"
+                field-label="Gültig ab"
               />
             </div>
           </div>
           <div class="row pt-2">
             <div class="col-xs-12">
-              <DatepickerVue
+              <InputDate
+                v-model="mcs.validTil"
+                :validation-schema="schema.validTil"
                 :id="'validTil' + idSuffix"
-                :label="validTilErrorData.fieldLabel"
-                :default-date="mcs.validTil"
-                :input-class="' form-control ' + validTilErrorData.inputClass"
-                :label-style="'color: ' + validTilErrorData.fieldColor"
-                @date-selected="validTilSelected"
+                field-label="Gültig bis"
               />
             </div>
           </div>
           <div class="row pt-2">
             <div class="col-xs-12">
-              <div class="form-floating">
-                <select
-                  v-model="groupUse"
-                  :id="'groupUse' + idSuffix"
-                  @change="validateGroupUse"
-                  :class="
-                    'form-select form-control ' + groupUseErrorData.inputClass
-                  "
-                >
-                  <option value=""></option>
-                  <option value="0">Nein</option>
-                  <option value="1">Ja</option>
-                </select>
-
-                <label
-                  :for="'groupUse' + idSuffix"
-                  :style="'color: ' + groupUseErrorData.fieldColor"
-                  >{{ groupUseErrorData.fieldLabel }}</label
-                >
-              </div>
+              <SelectStandard
+                v-model="mcs.groupUse"
+                :validation-schema="schema.groupUse"
+                :id="'groupUse' + idSuffix"
+                field-label="Gruppe"
+                :select-box-values="groupUseValues"
+              />
             </div>
           </div>
           <div class="pt-2">
             <div class="col-xs-12">
-              <div class="form-floating">
-                <select
-                  v-model="mcs.importAllowed"
-                  :id="'importAllowed' + idSuffix"
-                  @change="validateImportAllowed"
-                  :class="
-                    'form-select form-control ' +
-                    importAllowedErrorData.inputClass
-                  "
-                >
-                  <option value=""></option>
-                  <option :value="CapitalsourceImport.NOT_ALLOWED">
-                    {{
-                      capitalsourceImportNames[CapitalsourceImport.NOT_ALLOWED]
-                    }}
-                  </option>
-                  <option :value="CapitalsourceImport.ALL_ALLOWED">
-                    {{
-                      capitalsourceImportNames[CapitalsourceImport.ALL_ALLOWED]
-                    }}
-                  </option>
-                  <option :value="CapitalsourceImport.BALANCE_ALLOWED">
-                    {{
-                      capitalsourceImportNames[
-                        CapitalsourceImport.BALANCE_ALLOWED
-                      ]
-                    }}
-                  </option>
-                </select>
-
-                <label
-                  :for="'importAllowed' + idSuffix"
-                  :style="'color: ' + importAllowedErrorData.fieldColor"
-                  >{{ importAllowedErrorData.fieldLabel }}</label
-                >
-              </div>
+              <SelectStandard
+                v-model="mcs.importAllowed"
+                :validation-schema="schema.importAllowed"
+                :id="'importAllowed' + idSuffix"
+                field-label="DatenImport"
+                :select-box-values="importAllowedValues"
+              />
             </div>
           </div>
         </div>
@@ -227,23 +110,18 @@
       <button type="button" class="btn btn-secondary" @click="resetForm">
         r&uuml;cksetzen
       </button>
-      <button
-        type="submit"
-        class="btn btn-primary"
-        :form="'createCapitalsourceForm' + idSuffix"
-      >
-        Speichern
-      </button>
+      <ButtonSubmit
+        button-label="Speichern"
+        :form-id="'createCapitalsourceForm' + idSuffix"
+      />
     </template>
   </ModalVue>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import type { Capitalsource } from "@/model/capitalsource/Capitalsource";
 import CapitalsourceControllerHandler from "@/handler/CapitalsourceControllerHandler";
-import { generateErrorData, type ErrorData } from "@/tools/views/ErrorData";
-import { validateInputField } from "@/tools/views/ValidateInputField";
-import { defineComponent } from "vue";
+import { computed, ref } from "vue";
 import ModalVue from "../Modal.vue";
 import { getError } from "@/tools/views/ThrowError";
 import {
@@ -259,295 +137,164 @@ import {
   capitalsourceStateNames,
 } from "@/model/capitalsource/CapitalsourceState";
 import type { ValidationResult } from "@/model/validation/ValidationResult";
-import DatepickerVue from "../Datepicker.vue";
+import type { SelectBoxValue } from "@/model/SelectBoxValue";
+import { boolean, date, number, string } from "zod";
+import { useForm } from "vee-validate";
+import DivError from "../DivError.vue";
+import InputStandard from "../InputStandard.vue";
+import SelectStandard from "../SelectStandard.vue";
+import InputDate from "../InputDate.vue";
+import ButtonSubmit from "../ButtonSubmit.vue";
 
-type CreateCapitalsourceModalData = {
-  mcs: Capitalsource;
-  origMcs: Capitalsource | undefined;
-  groupUse: string;
-  serverError: Array<String>;
-  commentIsValid: boolean | null;
-  commentErrorMessage: string;
-  typeIsValid: boolean | null;
-  typeErrorMessage: string;
-  stateIsValid: boolean | null;
-  stateErrorMessage: string;
-  validFromIsValid: boolean | null;
-  validFromErrorMessage: string;
-  validTilIsValid: boolean | null;
-  validTilErrorMessage: string;
-  groupUseIsValid: boolean | null;
-  groupUseErrorMessage: string;
-  importAllowedIsValid: boolean | null;
-  importAllowedErrorMessage: string;
-};
-export default defineComponent({
-  name: "CreateCapitalsourceModal",
-  data(): CreateCapitalsourceModalData {
-    return {
-      mcs: {} as Capitalsource,
-      origMcs: undefined,
-      groupUse: "",
-      serverError: {} as Array<String>,
-      commentIsValid: null,
-      commentErrorMessage: "",
-      typeIsValid: null,
-      typeErrorMessage: "",
-      stateIsValid: null,
-      stateErrorMessage: "",
-      validFromIsValid: null,
-      validFromErrorMessage: "",
-      validTilIsValid: null,
-      validTilErrorMessage: "",
-      groupUseIsValid: null,
-      groupUseErrorMessage: "",
-      importAllowedIsValid: null,
-      importAllowedErrorMessage: "",
-    };
+defineProps({
+  idSuffix: {
+    type: String,
+    default: "",
   },
-  props: {
-    idSuffix: {
-      type: String,
-      default: "",
-    },
-  },
-  computed: {
-    formIsValid(): boolean {
-      const isValid =
-        this.commentIsValid &&
-        this.typeIsValid &&
-        this.stateIsValid &&
-        this.validFromIsValid &&
-        this.validTilIsValid &&
-        this.groupUseIsValid &&
-        this.importAllowedIsValid;
-      if (isValid) {
-        return true;
-      }
-      return false;
-    },
-    title(): string {
-      return this.origMcs === undefined
-        ? "Kapitalquelle hinzufügen"
-        : "Kapitalquelle bearbeiten";
-    },
-    commentErrorData(): ErrorData {
-      return generateErrorData(
-        this.commentIsValid,
-        "Kapitalquelle",
-        this.commentErrorMessage
-      );
-    },
-    typeErrorData(): ErrorData {
-      return generateErrorData(this.typeIsValid, "Typ", this.typeErrorMessage);
-    },
-    stateErrorData(): ErrorData {
-      return generateErrorData(
-        this.stateIsValid,
-        "Status",
-        this.stateErrorMessage
-      );
-    },
-    validFromErrorData(): ErrorData {
-      return generateErrorData(
-        this.validFromIsValid,
-        "Gültig ab",
-        this.validFromErrorMessage
-      );
-    },
-    validTilErrorData(): ErrorData {
-      return generateErrorData(
-        this.validTilIsValid,
-        "Gültig bis",
-        this.validTilErrorMessage
-      );
-    },
-    groupUseErrorData(): ErrorData {
-      return generateErrorData(
-        this.groupUseIsValid,
-        "Gruppe",
-        this.groupUseErrorMessage
-      );
-    },
-    importAllowedErrorData(): ErrorData {
-      return generateErrorData(
-        this.importAllowedIsValid,
-        "Datenimport",
-        this.importAllowedErrorMessage
-      );
-    },
-    capitalsourceTypeNames() {
-      return capitalsourceTypeNames;
-    },
-    CapitalsourceType() {
-      return CapitalsourceType;
-    },
-    capitalsourceStateNames() {
-      return capitalsourceStateNames;
-    },
-    CapitalsourceState() {
-      return CapitalsourceState;
-    },
-    capitalsourceImportNames() {
-      return capitalsourceImportNames;
-    },
-    CapitalsourceImport() {
-      return CapitalsourceImport;
-    },
-  },
-  methods: {
-    async _show(mcs?: Capitalsource) {
-      this.origMcs = mcs ? mcs : undefined;
-      this.resetForm();
-      (this.$refs.modalComponent as typeof ModalVue)._show();
-    },
-    resetForm() {
-      if (this.origMcs) {
-        const validFrom = new Date(this.origMcs.validFrom);
-        const validTil = new Date(this.origMcs.validTil);
-
-        this.mcs = {
-          accountNumber: this.origMcs.accountNumber,
-          bankCode: this.origMcs.bankCode,
-          comment: this.origMcs.comment,
-          groupUse: this.origMcs.groupUse,
-          id: this.origMcs.id,
-          importAllowed: this.origMcs.importAllowed,
-          state: this.origMcs.state,
-          type: this.origMcs.type,
-          userId: this.origMcs.userId,
-          validFrom: validFrom,
-          validTil: validTil,
-        };
-
-        this.groupUse = this.mcs.groupUse ? "1" : "0";
-      } else {
-        const validFrom = new Date();
-        const validTil = new Date("2999-12-31");
-
-        this.mcs = {} as Capitalsource;
-        this.mcs.validFrom = validFrom;
-        this.mcs.validTil = validTil;
-        this.groupUse = "";
-      }
-      this.commentIsValid = null;
-      this.commentErrorMessage = "";
-      this.typeIsValid = null;
-      this.typeErrorMessage = "";
-      this.stateIsValid = null;
-      this.stateErrorMessage = "";
-      this.validFromIsValid = null;
-      this.validFromErrorMessage = "";
-      this.validTilIsValid = null;
-      this.validTilErrorMessage = "";
-      this.groupUseIsValid = null;
-      this.groupUseErrorMessage = "";
-      this.importAllowedIsValid = null;
-      this.importAllowedErrorMessage = "";
-      this.serverError = {} as Array<String>;
-    },
-    validateComment() {
-      [this.commentIsValid, this.commentErrorMessage] = validateInputField(
-        this.mcs.comment,
-        "Kapitalquelle angeben!"
-      );
-    },
-    validateType() {
-      [this.typeIsValid, this.typeErrorMessage] = validateInputField(
-        +this.mcs.type,
-        "Typ auswählen!"
-      );
-    },
-    validateState() {
-      [this.stateIsValid, this.stateErrorMessage] = validateInputField(
-        +this.mcs.state,
-        "Status auswählen!"
-      );
-    },
-    validateValidFrom() {
-      [this.validFromIsValid, this.validFromErrorMessage] = validateInputField(
-        this.mcs.validFrom,
-        "Gültig ab muss angegeben werden!"
-      );
-    },
-    validateValidTil() {
-      [this.validTilIsValid, this.validTilErrorMessage] = validateInputField(
-        this.mcs.validTil,
-        "Gültig bis muss angegeben werden!"
-      );
-    },
-    validateGroupUse() {
-      [this.groupUseIsValid, this.groupUseErrorMessage] = validateInputField(
-        this.groupUse,
-        "Bitte Gruppennutzung auswählen!"
-      );
-    },
-    validateImportAllowed() {
-      let valid = true;
-      if (
-        this.mcs.importAllowed === undefined ||
-        this.mcs.importAllowed + "" === ""
-      )
-        valid = false;
-      [this.importAllowedIsValid, this.importAllowedErrorMessage] =
-        validateInputField(valid, "Bitte Importart auswählen!");
-    },
-    validFromSelected(date: Date) {
-      this.mcs.validFrom = date;
-      this.validateValidFrom();
-    },
-    validTilSelected(date: Date) {
-      this.mcs.validTil = date;
-      this.validateValidTil();
-    },
-    handleServerError(validationResult: ValidationResult): boolean {
-      if (!validationResult.result) {
-        this.serverError = new Array<string>();
-        for (let resultItem of validationResult.validationResultItems) {
-          this.serverError.push(getError(resultItem.error));
-        }
-      }
-      return !validationResult.result;
-    },
-    async createCapitalsource() {
-      this.validateComment();
-      this.validateType();
-      this.validateState();
-      this.validateValidFrom();
-      this.validateValidTil();
-      this.validateGroupUse();
-      this.validateImportAllowed();
-
-      if (this.formIsValid) {
-        this.mcs.groupUse = this.groupUse === "1" ? true : false;
-
-        if (this.mcs.id > 0) {
-          //update
-          const validationResult =
-            await CapitalsourceControllerHandler.updateCapitalsource(this.mcs);
-          if (!this.handleServerError(validationResult)) {
-            (this.$refs.modalComponent as typeof ModalVue)._hide();
-            this.$emit("capitalsourceUpdated", this.mcs);
-          }
-        } else {
-          //create
-          const capitalsourceValidation =
-            CapitalsourceControllerHandler.createCapitalsource(this.mcs);
-          const validationResult = await (
-            await capitalsourceValidation
-          ).validationResult;
-
-          if (!this.handleServerError(validationResult)) {
-            this.mcs = (await capitalsourceValidation).mcs;
-            (this.$refs.modalComponent as typeof ModalVue)._hide();
-            this.$emit("capitalsourceCreated", this.mcs);
-          }
-        }
-      }
-    },
-  },
-  expose: ["_show"],
-  emits: ["capitalsourceCreated", "capitalsourceUpdated"],
-  components: { ModalVue, DatepickerVue },
 });
+
+const serverErrors = ref(new Array<String>());
+
+const globErr = (message: string) => {
+  return {
+    errorMap: () => {
+      return { message: message };
+    },
+  };
+};
+
+const schema = {
+  comment: string(globErr("Bitte Kommentar angeben!")).min(1),
+  type: number(globErr("Bitte Typ angeben!")).min(1),
+  state: number(globErr("Bitte Status angeben!")).min(1).max(2),
+  accountNumber: string().optional(),
+  bankCode: string().optional(),
+  validFrom: date(globErr("Bitte Gültig ab angeben!")),
+  validTil: date(globErr("Bitte Gültig bis angeben!")),
+  groupUse: boolean(globErr("Bitte Gruppennutzung auswählen!")),
+  importAllowed: number(globErr("Bitte Importart auswählen!")).min(0).max(2),
+};
+
+const mcs = ref({} as Capitalsource);
+const origMcs = ref({} as Capitalsource | undefined);
+const modalComponent = ref();
+const emit = defineEmits(["capitalsourceUpdated", "capitalsourceCreated"]);
+
+/* select box values following */
+const typeValues = new Array<SelectBoxValue>();
+for (let type in CapitalsourceType) {
+  const typeNum = Number(type);
+  if (!isNaN(typeNum)) {
+    typeValues.push({ id: typeNum, value: capitalsourceTypeNames[typeNum] });
+  }
+}
+const stateValues = new Array<SelectBoxValue>();
+for (let state in CapitalsourceState) {
+  const stateNum = Number(state);
+  if (!isNaN(stateNum)) {
+    stateValues.push({
+      id: stateNum,
+      value: capitalsourceStateNames[stateNum],
+    });
+  }
+}
+const groupUseValues = [
+  { id: undefined, value: "" },
+  { id: false, value: "Nein" },
+  { id: true, value: "Ja" },
+] as Array<SelectBoxValue>;
+const importAllowedValues = [
+  { id: undefined, value: "" },
+] as Array<SelectBoxValue>;
+for (let importAllowed in CapitalsourceImport) {
+  const importNum = Number(importAllowed);
+  if (!isNaN(importNum)) {
+    importAllowedValues.push({
+      id: importNum,
+      value: capitalsourceImportNames[importNum],
+    });
+  }
+}
+
+const { handleSubmit, values, setFieldTouched } = useForm();
+
+const title = computed(() => {
+  return origMcs.value === undefined
+    ? "Kapitalquelle hinzufügen"
+    : "Kapitalquelle bearbeiten";
+});
+
+const resetForm = () => {
+  if (origMcs.value) {
+    const validFrom = new Date(origMcs.value.validFrom);
+    const validTil = new Date(origMcs.value.validTil);
+
+    mcs.value = {
+      accountNumber: origMcs.value.accountNumber,
+      bankCode: origMcs.value.bankCode,
+      comment: origMcs.value.comment,
+      groupUse: origMcs.value.groupUse,
+      id: origMcs.value.id,
+      importAllowed: origMcs.value.importAllowed,
+      state: origMcs.value.state,
+      type: origMcs.value.type,
+      userId: origMcs.value.userId,
+      validFrom: validFrom,
+      validTil: validTil,
+    };
+  } else {
+    const validFrom = new Date();
+    const validTil = new Date("2999-12-31");
+
+    mcs.value = {} as Capitalsource;
+    mcs.value.validFrom = validFrom;
+    mcs.value.validTil = validTil;
+  }
+  serverErrors.value = new Array<String>();
+  Object.keys(values).forEach((field) => setFieldTouched(field, false));
+};
+
+const _show = async (_mcs?: Capitalsource) => {
+  origMcs.value = _mcs ? _mcs : undefined;
+  resetForm();
+  modalComponent.value._show();
+};
+
+const handleServerError = (validationResult: ValidationResult): boolean => {
+  if (!validationResult.result) {
+    serverErrors.value = new Array<string>();
+    for (let resultItem of validationResult.validationResultItems) {
+      serverErrors.value.push(getError(resultItem.error));
+    }
+  }
+  return !validationResult.result;
+};
+
+const createCapitalsource = handleSubmit(() => {
+  if (mcs.value.id > 0) {
+    //update
+    CapitalsourceControllerHandler.updateCapitalsource(mcs.value).then(
+      (validationResult) => {
+        if (!handleServerError(validationResult)) {
+          modalComponent.value._hide();
+          emit("capitalsourceUpdated", mcs.value);
+        }
+      }
+    );
+  } else {
+    //create
+    CapitalsourceControllerHandler.createCapitalsource(mcs.value).then(
+      (capitalsourceValidation) => {
+        const validationResult = capitalsourceValidation.validationResult;
+
+        if (!handleServerError(validationResult)) {
+          mcs.value = capitalsourceValidation.mcs;
+          modalComponent.value._hide();
+          emit("capitalsourceCreated", mcs.value);
+        }
+      }
+    );
+  }
+});
+defineExpose({ _show });
 </script>
