@@ -26,7 +26,7 @@
                 :validation-schema="schema.type"
                 :id="'type' + idSuffix"
                 field-label="Typ"
-                :select-box-values="typeValues"
+                :select-box-values="capitalsourceTypeValues"
               />
             </div>
           </div>
@@ -37,7 +37,7 @@
                 :validation-schema="schema.state"
                 :id="'state' + idSuffix"
                 field-label="Status"
-                :select-box-values="stateValues"
+                :select-box-values="capitalsourceStateValues"
               />
             </div>
           </div>
@@ -99,7 +99,7 @@
                 :validation-schema="schema.importAllowed"
                 :id="'importAllowed' + idSuffix"
                 field-label="DatenImport"
-                :select-box-values="importAllowedValues"
+                :select-box-values="capitalsourceImportValues"
               />
             </div>
           </div>
@@ -119,32 +119,27 @@
 </template>
 
 <script lang="ts" setup>
-import type { Capitalsource } from "@/model/capitalsource/Capitalsource";
-import CapitalsourceControllerHandler from "@/handler/CapitalsourceControllerHandler";
-import { computed, ref } from "vue";
-import ModalVue from "../Modal.vue";
-import { getError } from "@/tools/views/ThrowError";
-import {
-  CapitalsourceImport,
-  capitalsourceImportNames,
-} from "@/model/capitalsource/CapitalsourceImport";
-import {
-  CapitalsourceType,
-  capitalsourceTypeNames,
-} from "@/model/capitalsource/CapitalsourceType";
-import {
-  CapitalsourceState,
-  capitalsourceStateNames,
-} from "@/model/capitalsource/CapitalsourceState";
-import type { ValidationResult } from "@/model/validation/ValidationResult";
-import type { SelectBoxValue } from "@/model/SelectBoxValue";
-import { boolean, date, number, string } from "zod";
 import { useForm } from "vee-validate";
-import DivError from "../DivError.vue";
-import InputStandard from "../InputStandard.vue";
-import SelectStandard from "../SelectStandard.vue";
-import InputDate from "../InputDate.vue";
+import { computed, ref } from "vue";
+import { boolean, date, number, string } from "zod";
+
 import ButtonSubmit from "../ButtonSubmit.vue";
+import DivError from "../DivError.vue";
+import InputDate from "../InputDate.vue";
+import InputStandard from "../InputStandard.vue";
+import ModalVue from "../Modal.vue";
+import SelectStandard from "../SelectStandard.vue";
+
+import { handleServerError } from "@/tools/views/ThrowError";
+import { globErr } from "@/tools/views/ZodUtil";
+
+import type { Capitalsource } from "@/model/capitalsource/Capitalsource";
+import type { SelectBoxValue } from "@/model/SelectBoxValue";
+import { capitalsourceImportValues } from "@/model/capitalsource/CapitalsourceImport";
+import { capitalsourceStateValues } from "@/model/capitalsource/CapitalsourceState";
+import { capitalsourceTypeValues } from "@/model/capitalsource/CapitalsourceType";
+
+import CapitalsourceControllerHandler from "@/handler/CapitalsourceControllerHandler";
 
 defineProps({
   idSuffix: {
@@ -153,15 +148,7 @@ defineProps({
   },
 });
 
-const serverErrors = ref(new Array<String>());
-
-const globErr = (message: string) => {
-  return {
-    errorMap: () => {
-      return { message: message };
-    },
-  };
-};
+const serverErrors = ref(new Array<string>());
 
 const schema = {
   comment: string(globErr("Bitte Kommentar angeben!")).min(1),
@@ -180,41 +167,11 @@ const origMcs = ref({} as Capitalsource | undefined);
 const modalComponent = ref();
 const emit = defineEmits(["capitalsourceUpdated", "capitalsourceCreated"]);
 
-/* select box values following */
-const typeValues = new Array<SelectBoxValue>();
-for (let type in CapitalsourceType) {
-  const typeNum = Number(type);
-  if (!isNaN(typeNum)) {
-    typeValues.push({ id: typeNum, value: capitalsourceTypeNames[typeNum] });
-  }
-}
-const stateValues = new Array<SelectBoxValue>();
-for (let state in CapitalsourceState) {
-  const stateNum = Number(state);
-  if (!isNaN(stateNum)) {
-    stateValues.push({
-      id: stateNum,
-      value: capitalsourceStateNames[stateNum],
-    });
-  }
-}
 const groupUseValues = [
   { id: undefined, value: "" },
   { id: false, value: "Nein" },
   { id: true, value: "Ja" },
 ] as Array<SelectBoxValue>;
-const importAllowedValues = [
-  { id: undefined, value: "" },
-] as Array<SelectBoxValue>;
-for (let importAllowed in CapitalsourceImport) {
-  const importNum = Number(importAllowed);
-  if (!isNaN(importNum)) {
-    importAllowedValues.push({
-      id: importNum,
-      value: capitalsourceImportNames[importNum],
-    });
-  }
-}
 
 const { handleSubmit, values, setFieldTouched } = useForm();
 
@@ -226,31 +183,14 @@ const title = computed(() => {
 
 const resetForm = () => {
   if (origMcs.value) {
-    const validFrom = new Date(origMcs.value.validFrom);
-    const validTil = new Date(origMcs.value.validTil);
-
-    mcs.value = {
-      accountNumber: origMcs.value.accountNumber,
-      bankCode: origMcs.value.bankCode,
-      comment: origMcs.value.comment,
-      groupUse: origMcs.value.groupUse,
-      id: origMcs.value.id,
-      importAllowed: origMcs.value.importAllowed,
-      state: origMcs.value.state,
-      type: origMcs.value.type,
-      userId: origMcs.value.userId,
-      validFrom: validFrom,
-      validTil: validTil,
-    };
+    Object.assign(mcs.value, origMcs.value);
   } else {
-    const validFrom = new Date();
-    const validTil = new Date("2999-12-31");
-
-    mcs.value = {} as Capitalsource;
-    mcs.value.validFrom = validFrom;
-    mcs.value.validTil = validTil;
+    mcs.value = {
+      validFrom: new Date(),
+      validTil: new Date("2999-12-31"),
+    } as Capitalsource;
   }
-  serverErrors.value = new Array<String>();
+  serverErrors.value = new Array<string>();
   Object.keys(values).forEach((field) => setFieldTouched(field, false));
 };
 
@@ -260,22 +200,12 @@ const _show = async (_mcs?: Capitalsource) => {
   modalComponent.value._show();
 };
 
-const handleServerError = (validationResult: ValidationResult): boolean => {
-  if (!validationResult.result) {
-    serverErrors.value = new Array<string>();
-    for (let resultItem of validationResult.validationResultItems) {
-      serverErrors.value.push(getError(resultItem.error));
-    }
-  }
-  return !validationResult.result;
-};
-
 const createCapitalsource = handleSubmit(() => {
   if (mcs.value.id > 0) {
     //update
     CapitalsourceControllerHandler.updateCapitalsource(mcs.value).then(
       (validationResult) => {
-        if (!handleServerError(validationResult)) {
+        if (!handleServerError(validationResult, serverErrors)) {
           modalComponent.value._hide();
           emit("capitalsourceUpdated", mcs.value);
         }
@@ -287,7 +217,7 @@ const createCapitalsource = handleSubmit(() => {
       (capitalsourceValidation) => {
         const validationResult = capitalsourceValidation.validationResult;
 
-        if (!handleServerError(validationResult)) {
+        if (!handleServerError(validationResult, serverErrors)) {
           mcs.value = capitalsourceValidation.mcs;
           modalComponent.value._hide();
           emit("capitalsourceCreated", mcs.value);

@@ -28,15 +28,17 @@
 </template>
 
 <script lang="ts" setup>
+import { useField } from "vee-validate";
+import { toFieldValidator } from "@vee-validate/zod";
+import { computed, onMounted, ref, useSlots, type PropType } from "vue";
+import type { ZodType } from "zod";
+
 import type { SelectBoxValue } from "@/model/SelectBoxValue";
+
 import {
   generateErrorDataVeeValidate,
   type ErrorData,
 } from "@/tools/views/ErrorData";
-import { toFieldValidator } from "@vee-validate/zod";
-import { useField } from "vee-validate";
-import { computed, onMounted, ref, useSlots, type PropType } from "vue";
-import type { ZodType } from "zod";
 
 const props = defineProps({
   modelValue: {

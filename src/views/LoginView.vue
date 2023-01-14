@@ -62,9 +62,9 @@ import { string } from "zod";
 import router, { Routes } from "@/router";
 import { version } from "../../package.json";
 
-import InputStandard from "@/components/InputStandard.vue";
 import ButtonSubmit from "@/components/ButtonSubmit.vue";
 import DivError from "@/components/DivError.vue";
+import InputStandard from "@/components/InputStandard.vue";
 
 import UserControllerHandler from "@/handler/UserControllerHandler";
 
