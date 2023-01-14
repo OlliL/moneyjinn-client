@@ -3,8 +3,9 @@
 </template>
 
 <script lang="ts" setup>
-import { formatNumber, redIfNegative } from "@/tools/views/FormatNumber";
 import { computed } from "vue";
+
+import { formatNumber, redIfNegative } from "@/tools/views/FormatNumber";
 
 const props = defineProps({
   amount: {

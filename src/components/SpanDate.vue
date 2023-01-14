@@ -3,8 +3,9 @@
 </template>
 
 <script lang="ts" setup>
-import { formatDate } from "@/tools/views/FormatDate";
 import { computed } from "vue";
+
+import { formatDate } from "@/tools/views/FormatDate";
 
 const props = defineProps({
   date: {

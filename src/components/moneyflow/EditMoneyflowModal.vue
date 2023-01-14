@@ -31,11 +31,11 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
 import { useForm } from "vee-validate";
+import { ref } from "vue";
 
-import EditMoneyflowVueInternal from "@/components/moneyflow/EditMoneyflowInternal.vue";
 import ButtonSubmit from "@/components/ButtonSubmit.vue";
+import EditMoneyflowVueInternal from "@/components/moneyflow/EditMoneyflowInternal.vue";
 import ModalVue from "../Modal.vue";
 
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
