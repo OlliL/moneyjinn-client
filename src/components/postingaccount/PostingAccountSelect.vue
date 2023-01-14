@@ -38,85 +38,78 @@
     ></span>
   </div>
 </template>
-<script lang="ts">
-import type { PostingAccount } from "@/model/postingaccount/PostingAccount";
-import { usePostingAccountStore } from "@/stores/PostingAccountStore";
-import CreatePostingAccountModalVue from "../postingaccount/CreatePostingAccountModal.vue";
+<script lang="ts" setup>
+import { computed, onMounted, ref, watch } from "vue";
 
-import { defineComponent } from "vue";
+import CreatePostingAccountModalVue from "./CreatePostingAccountModal.vue";
+
+import { usePostingAccountStore } from "@/stores/PostingAccountStore";
+
+import type { PostingAccount } from "@/model/postingaccount/PostingAccount";
 import { useUserSessionStore } from "@/stores/UserSessionStore";
 
-export default defineComponent({
-  name: "PostingAccountSelect",
-  data() {
-    return {
-      postingAccountId: 0,
-      userIsAdmin: false,
-    };
+const props = defineProps({
+  selectedId: {
+    type: Number,
+    required: false,
   },
-  emits: ["postingAccountSelected"],
-  props: {
-    selectedId: {
-      type: Number,
-      required: false,
-    },
-    inputClass: {
-      type: String,
-      required: true,
-    },
-    fieldColor: {
-      type: String,
-      required: true,
-    },
-    fieldLabel: {
-      type: String,
-      required: true,
-    },
-    idSuffix: {
-      type: String,
-      default: "",
-    },
+  inputClass: {
+    type: String,
+    required: true,
   },
-  computed: {
-    postingAccountArray(): Array<PostingAccount> {
-      const postingAccountStore = usePostingAccountStore();
-      return postingAccountStore.getPostingAccount;
-    },
+  fieldColor: {
+    type: String,
+    required: true,
   },
-  watch: {
-    selectedId: {
-      handler(newVal: number, oldVal: number) {
-        if (newVal != oldVal) this.postingAccountId = newVal;
-      },
-      immediate: true,
-    },
+  fieldLabel: {
+    type: String,
+    required: true,
   },
-  created() {
-    const userSessionStore = useUserSessionStore();
-    this.userIsAdmin = userSessionStore.isAdmin;
-  },
-  methods: {
-    emitPostingAccountSelected() {
-      this.$emit(
-        "postingAccountSelected",
-        this.postingAccountArray.filter((mpa) => {
-          return mpa.id === +this.postingAccountId;
-        })[0]
-      );
-    },
-    showCreatePostingAccountModal() {
-      (
-        this.$refs
-          .createPostingAccountModal as typeof CreatePostingAccountModalVue
-      )._show();
-    },
-    postingAccountCreated(mpa: PostingAccount) {
-      this.postingAccountId = mpa.id;
-      this.emitPostingAccountSelected();
-    },
-  },
-  components: {
-    CreatePostingAccountModalVue,
+  idSuffix: {
+    type: String,
+    default: "",
   },
 });
+
+const postingAccountId = ref(0);
+const createPostingAccountModal = ref();
+const userIsAdmin = ref(false);
+const emit = defineEmits(["postingAccountSelected"]);
+
+const postingAccountArray = computed((): Array<PostingAccount> => {
+  const postingAccountStore = usePostingAccountStore();
+  return postingAccountStore.getPostingAccount;
+});
+
+onMounted(() => {
+  const userSessionStore = useUserSessionStore();
+  userIsAdmin.value = userSessionStore.isAdmin;
+});
+
+const emitPostingAccountSelected = () => {
+  emit(
+    "postingAccountSelected",
+    postingAccountArray.value.filter((mcs) => {
+      return mcs.id === +postingAccountId.value;
+    })[0]
+  );
+};
+const showCreatePostingAccountModal = () => {
+  createPostingAccountModal.value._show();
+};
+
+const postingAccountCreated = (mcs: PostingAccount) => {
+  postingAccountId.value = mcs.id;
+  emitPostingAccountSelected();
+};
+
+watch(
+  () => props.selectedId,
+  (newVal, oldVal) => {
+    if (newVal != oldVal) {
+      if (newVal != oldVal) postingAccountId.value = newVal ? newVal : 0;
+    }
+  },
+  { immediate: true }
+);
 </script>
