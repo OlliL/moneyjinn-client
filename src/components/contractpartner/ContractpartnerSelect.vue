@@ -37,81 +37,75 @@
     ></span>
   </div>
 </template>
-<script lang="ts">
-import type { Contractpartner } from "@/model/contractpartner/Contractpartner";
-import { useContractpartnerStore } from "@/stores/ContractpartnerStore";
-import { defineComponent } from "vue";
+<script lang="ts" setup>
+import { computed, ref, watch } from "vue";
+
 import CreateContractpartnerModalVue from "./CreateContractpartnerModal.vue";
 
-export default defineComponent({
-  name: "ContractpartnerSelect",
-  data() {
-    return { contractpartnerId: 0 };
+import { useContractpartnerStore } from "@/stores/ContractpartnerStore";
+
+import type { Contractpartner } from "@/model/contractpartner/Contractpartner";
+
+const props = defineProps({
+  validityDate: {
+    type: Date,
+    required: true,
   },
-  emits: ["contractpartnerSelected"],
-  props: {
-    validityDate: {
-      type: Date,
-      required: false,
-    },
-    selectedId: {
-      type: Number,
-      required: false,
-    },
-    inputClass: {
-      type: String,
-      required: true,
-    },
-    fieldColor: {
-      type: String,
-      required: true,
-    },
-    fieldLabel: {
-      type: String,
-      required: true,
-    },
-    idSuffix: {
-      type: String,
-      default: "",
-    },
+  selectedId: {
+    type: Number,
+    required: false,
   },
-  computed: {
-    contractpartnerArray(): Array<Contractpartner> {
-      const contractpartnerStore = useContractpartnerStore();
-      if (this.validityDate) {
-        return contractpartnerStore.getValidContractpartner(this.validityDate);
-      }
-      return contractpartnerStore.contractpartner;
-    },
+  inputClass: {
+    type: String,
+    required: true,
   },
-  watch: {
-    selectedId: {
-      handler(newVal: number, oldVal: number) {
-        if (newVal != oldVal) this.contractpartnerId = newVal;
-      },
-      immediate: true,
-    },
+  fieldColor: {
+    type: String,
+    required: true,
   },
-  methods: {
-    emitContractpartnerSelected() {
-      this.$emit(
-        "contractpartnerSelected",
-        this.contractpartnerArray.find((mcp) => {
-          return mcp.id === +this.contractpartnerId;
-        })
-      );
-    },
-    showCreateContractpartnerModal() {
-      (
-        this.$refs
-          .createContractpartnerModal as typeof CreateContractpartnerModalVue
-      )._show();
-    },
-    async contractpartnerCreated(mcp: Contractpartner) {
-      this.contractpartnerId = mcp.id;
-      this.emitContractpartnerSelected();
-    },
+  fieldLabel: {
+    type: String,
+    required: true,
   },
-  components: { CreateContractpartnerModalVue },
+  idSuffix: {
+    type: String,
+    default: "",
+  },
 });
+
+const contractpartnerId = ref(0);
+const createContractpartnerModal = ref();
+const emit = defineEmits(["contractpartnerSelected"]);
+
+const contractpartnerArray = computed((): Array<Contractpartner> => {
+  const contractpartnerStore = useContractpartnerStore();
+  return contractpartnerStore.getValidContractpartner(props.validityDate);
+});
+
+const emitContractpartnerSelected = () => {
+  emit(
+    "contractpartnerSelected",
+    contractpartnerArray.value.filter((mcs) => {
+      return mcs.id === +contractpartnerId.value;
+    })[0]
+  );
+};
+const showCreateContractpartnerModal = () => {
+  createContractpartnerModal.value._show();
+};
+
+const contractpartnerCreated = (mcs: Contractpartner) => {
+  contractpartnerId.value = mcs.id;
+  emitContractpartnerSelected();
+};
+
+watch(
+  () => props.selectedId,
+  (newVal, oldVal) => {
+    if (newVal != oldVal) {
+      if (newVal != oldVal) contractpartnerId.value = newVal ? newVal : 0;
+    }
+  },
+  { immediate: true }
+);
 </script>

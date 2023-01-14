@@ -149,7 +149,7 @@ const _show = (_mcs: Capitalsource) => {
 const deleteCapitalsource = () => {
   CapitalsourceControllerHandler.deleteCapitalsource(mcs.value.id).then(() => {
     modalComponent.value._hide();
-    emit("capitalsourceDeleted", mcs);
+    emit("capitalsourceDeleted", mcs.value);
   });
 };
 
