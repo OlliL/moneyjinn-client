@@ -53,7 +53,9 @@
         >
           g&uuml;ltig ab
         </div>
-        <div class="text-start col-sm-9">{{ validFromString }}</div>
+        <div class="text-start col-sm-9">
+          <SpanDate :date="mcp.validFrom" />
+        </div>
       </div>
       <div class="row">
         <div
@@ -62,7 +64,7 @@
         >
           g&uuml;ltig bis
         </div>
-        <div class="text-start col-sm-9">{{ validTilString }}</div>
+        <div class="text-start col-sm-9"><SpanDate :date="mcp.validTil" /></div>
       </div>
       <div class="row">
         <div
@@ -97,41 +99,33 @@
   </ModalVue>
 </template>
 
-<script lang="ts">
-import ContractpartnerControllerHandler from "@/handler/ContractpartnerControllerHandler";
-import type { Contractpartner } from "@/model/contractpartner/Contractpartner";
-import { formatDate } from "@/tools/views/FormatDate";
-import { defineComponent } from "vue";
-import ModalVue from "../Modal.vue";
+<script lang="ts" setup>
+import { ref } from "vue";
 
-export default defineComponent({
-  name: "DeleteContractpartnerModal",
-  data() {
-    return {
-      mcp: {} as Contractpartner,
-    };
-  },
-  computed: {
-    validFromString(): string {
-      return formatDate(this.mcp.validFrom);
-    },
-    validTilString(): string {
-      return formatDate(this.mcp.validTil);
-    },
-  },
-  methods: {
-    async _show(mcp: Contractpartner) {
-      this.mcp = mcp;
-      (this.$refs.modalComponent as typeof ModalVue)._show();
-    },
-    async deleteContractpartner() {
-      await ContractpartnerControllerHandler.deleteContractpartner(this.mcp.id);
-      (this.$refs.modalComponent as typeof ModalVue)._hide();
-      this.$emit("contractpartnerDeleted", this.mcp);
-    },
-  },
-  expose: ["_show"],
-  emits: ["contractpartnerDeleted"],
-  components: { ModalVue },
-});
+import ModalVue from "../Modal.vue";
+import SpanDate from "../SpanDate.vue";
+
+import type { Contractpartner } from "@/model/contractpartner/Contractpartner";
+
+import ContractpartnerControllerHandler from "@/handler/ContractpartnerControllerHandler";
+
+const mcp = ref({} as Contractpartner);
+const modalComponent = ref();
+const emit = defineEmits(["contractpartnerDeleted"]);
+
+const _show = (_mcp: Contractpartner) => {
+  mcp.value = _mcp;
+  modalComponent.value._show();
+};
+
+const deleteContractpartner = () => {
+  ContractpartnerControllerHandler.deleteContractpartner(mcp.value.id).then(
+    () => {
+      modalComponent.value._hide();
+      emit("contractpartnerDeleted", mcp.value);
+    }
+  );
+};
+
+defineExpose({ _show });
 </script>
