@@ -67,7 +67,7 @@ const typeString = computed(() => {
 });
 
 const stateString = computed(() => {
-  return capitalsourceStateNames[props.mcs.type];
+  return capitalsourceStateNames[props.mcs.state];
 });
 
 const deleteCapitalsource = () => {
