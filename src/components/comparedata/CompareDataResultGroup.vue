@@ -64,72 +64,64 @@
     </td>
   </tr>
 </template>
-<script lang="ts">
-import { defineComponent, type PropType } from "vue";
+<script lang="ts" setup>
+import { computed, onMounted, ref, type PropType } from "vue";
+
 import CompareDataResultRowVue from "./CompareDataResultRow.vue";
-import { Routes } from "@/router";
+
 import type { CompareData } from "@/model/comparedata/CompareData";
 
-export default defineComponent({
-  name: "CompareDataResultGroup",
-  data() {
-    return {
-      Routes: Routes,
-      collapseIconClass: "bi bi-caret-right-fill",
-      showDetails: false,
-    };
+const props = defineProps({
+  compareDataKey: {
+    type: String,
+    required: true,
   },
-  props: {
-    compareDataKey: {
-      type: String,
-      required: true,
-    },
-    compareData: {
-      type: Object as PropType<Array<CompareData>>,
-      required: false,
-    },
-    comment: {
-      type: String,
-      required: true,
-    },
-    amountClass: {
-      type: String,
-      required: true,
-    },
-    capitalsourceComment: {
-      type: String,
-      required: true,
-    },
+  compareData: {
+    type: Object as PropType<Array<CompareData>>,
+    required: false,
   },
-  mounted() {
-    document
-      .getElementById("collapseResults" + this.compareDataKey)
-      ?.addEventListener("show.bs.collapse", () => this.toggleButtonShow());
-    document
-      .getElementById("collapseResults" + this.compareDataKey)
-      ?.addEventListener("hide.bs.collapse", () => this.toggleButtonHide());
+  comment: {
+    type: String,
+    required: true,
   },
-  emits: ["deleteMoneyflow", "editMoneyflow"],
-  computed: {
-    compareDatasCount(): number {
-      return this.$props.compareData ? this.$props.compareData.length : 0;
-    },
+  amountClass: {
+    type: String,
+    required: true,
   },
-  methods: {
-    toggleButtonShow() {
-      this.collapseIconClass = "bi bi-caret-down-fill";
-      this.showDetails = true;
-    },
-    toggleButtonHide() {
-      this.collapseIconClass = "bi bi-caret-right-fill";
-    },
-    emitDeleteMoneyflow(id: number) {
-      this.$emit("deleteMoneyflow", id);
-    },
-    emitEditMoneyflow(id: number) {
-      this.$emit("editMoneyflow", id);
-    },
+  capitalsourceComment: {
+    type: String,
+    required: true,
   },
-  components: { CompareDataResultRowVue },
+});
+
+const collapseIconClass = ref("bi bi-caret-right-fill");
+const showDetails = ref(false);
+const emit = defineEmits(["deleteMoneyflow", "editMoneyflow"]);
+
+const toggleButtonShow = () => {
+  collapseIconClass.value = "bi bi-caret-down-fill";
+  showDetails.value = true;
+};
+const toggleButtonHide = () => {
+  collapseIconClass.value = "bi bi-caret-right-fill";
+  showDetails.value = false;
+};
+const emitDeleteMoneyflow = (id: number) => {
+  emit("deleteMoneyflow", id);
+};
+const emitEditMoneyflow = (id: number) => {
+  emit("editMoneyflow", id);
+};
+const compareDatasCount = computed(() => {
+  return props.compareData ? props.compareData.length : 0;
+});
+
+onMounted(() => {
+  document
+    .getElementById("collapseResults" + props.compareDataKey)
+    ?.addEventListener("show.bs.collapse", () => toggleButtonShow());
+  document
+    .getElementById("collapseResults" + props.compareDataKey)
+    ?.addEventListener("hide.bs.collapse", () => toggleButtonHide());
 });
 </script>
