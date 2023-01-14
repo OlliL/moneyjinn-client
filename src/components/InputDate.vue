@@ -21,7 +21,7 @@ import { Datepicker } from "vanillajs-datepicker";
 import { useField } from "vee-validate";
 import { toFieldValidator } from "@vee-validate/zod";
 import { computed, onMounted, ref, watch, type PropType } from "vue";
-import { preprocess, type ZodType } from "zod";
+import { date, preprocess, type ZodType } from "zod";
 
 import {
   generateErrorDataVeeValidate,
@@ -31,7 +31,8 @@ import {
 const props = defineProps({
   validationSchema: {
     type: Object as PropType<ZodType>,
-    required: true,
+    required: false,
+    default: date().optional(),
   },
   id: {
     type: String,
@@ -182,7 +183,7 @@ const setDate = (newVal?: Date) => {
     }
   }
 };
-const onInput = (event: any) => {
+const onInput = (event: Event) => {
   handleChange(event, true);
   if (datepicker.dates.length === 0) {
     if (props.modelValue !== undefined) {

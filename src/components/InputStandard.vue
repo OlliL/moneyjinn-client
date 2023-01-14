@@ -5,7 +5,7 @@
         v-model="fieldValue"
         ref="fieldRef"
         :id="id"
-        :type="type"
+        :type="fieldType"
         :class="'form-control ' + alignmentClass + ' ' + errorData.inputClass"
         @input="onInput($event)"
       />
@@ -23,7 +23,7 @@
 import { useField } from "vee-validate";
 import { toFieldValidator } from "@vee-validate/zod";
 import { computed, onMounted, ref, useSlots, type PropType } from "vue";
-import type { ZodType } from "zod";
+import { any, type ZodType } from "zod";
 
 import {
   generateErrorDataVeeValidate,
@@ -32,13 +32,13 @@ import {
 
 const props = defineProps({
   modelValue: {
-    type: String,
+    type: undefined,
     required: false,
-    default: "",
   },
   validationSchema: {
     type: Object as PropType<ZodType>,
-    required: true,
+    required: false,
+    default: any().optional(),
   },
   id: {
     type: String,
@@ -48,7 +48,7 @@ const props = defineProps({
     type: String,
     required: true,
   },
-  type: {
+  fieldType: {
     type: String,
     default: "text",
   },
@@ -74,7 +74,7 @@ const {
   initialValue: props.modelValue,
 });
 
-const onInput = (event: any) => {
+const onInput = (event: Event) => {
   setState({ touched: true });
   handleChange(event, true);
   emit("update:modelValue", fieldValue.value);
