@@ -29,7 +29,7 @@
             <InputStandard
               v-model="password"
               :validation-schema="schema.password"
-              type="password"
+              field-type="password"
               id="password"
               field-label="Passwort"
             >

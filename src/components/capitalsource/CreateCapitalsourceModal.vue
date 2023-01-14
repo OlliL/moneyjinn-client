@@ -121,7 +121,7 @@
 <script lang="ts" setup>
 import { useForm } from "vee-validate";
 import { computed, ref } from "vue";
-import { boolean, date, number, string } from "zod";
+import { boolean, date, number, string, ZodType } from "zod";
 
 import ButtonSubmit from "../ButtonSubmit.vue";
 import DivError from "../DivError.vue";
@@ -150,7 +150,7 @@ defineProps({
 
 const serverErrors = ref(new Array<string>());
 
-const schema = {
+const schema: Partial<{ [key in keyof Capitalsource]: ZodType }> = {
   comment: string(globErr("Bitte Kommentar angeben!")).min(1),
   type: number(globErr("Bitte Typ angeben!")).min(1),
   state: number(globErr("Bitte Status angeben!")).min(1).max(2),

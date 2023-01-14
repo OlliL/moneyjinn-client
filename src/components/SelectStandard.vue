@@ -31,7 +31,7 @@
 import { useField } from "vee-validate";
 import { toFieldValidator } from "@vee-validate/zod";
 import { computed, onMounted, ref, useSlots, type PropType } from "vue";
-import type { ZodType } from "zod";
+import { any, type ZodType } from "zod";
 
 import type { SelectBoxValue } from "@/model/SelectBoxValue";
 
@@ -51,7 +51,8 @@ const props = defineProps({
   },
   validationSchema: {
     type: Object as PropType<ZodType>,
-    required: true,
+    required: false,
+    default: any().optional(),
   },
   id: {
     type: String,
@@ -79,7 +80,7 @@ const {
   initialValue: props.modelValue,
 });
 
-const onInput = (event: any) => {
+const onInput = (event: Event) => {
   setState({ touched: true });
   handleChange(event, true);
   emit("update:modelValue", fieldValue.value);
