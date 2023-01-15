@@ -10,7 +10,6 @@ import { formatNumber, redIfNegative } from "@/tools/views/FormatNumber";
 const props = defineProps({
   amount: {
     type: Number,
-    required: true,
   },
 });
 
@@ -19,6 +18,6 @@ const amountClass = computed(() => {
 });
 
 const amountString = computed(() => {
-  return formatNumber(props.amount, 2);
+  return props.amount ? formatNumber(props.amount, 2) : "";
 });
 </script>

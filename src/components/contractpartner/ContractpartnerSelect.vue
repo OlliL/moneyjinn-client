@@ -49,7 +49,7 @@ import type { Contractpartner } from "@/model/contractpartner/Contractpartner";
 const props = defineProps({
   validityDate: {
     type: Date,
-    required: true,
+    required: false,
   },
   selectedId: {
     type: Number,
@@ -75,11 +75,13 @@ const props = defineProps({
 
 const contractpartnerId = ref(0);
 const createContractpartnerModal = ref();
+const contractpartnerStore = useContractpartnerStore();
 const emit = defineEmits(["contractpartnerSelected"]);
 
 const contractpartnerArray = computed((): Array<Contractpartner> => {
-  const contractpartnerStore = useContractpartnerStore();
-  return contractpartnerStore.getValidContractpartner(props.validityDate);
+  if (props.validityDate)
+    return contractpartnerStore.getValidContractpartner(props.validityDate);
+  return contractpartnerStore.contractpartner;
 });
 
 const emitContractpartnerSelected = () => {
