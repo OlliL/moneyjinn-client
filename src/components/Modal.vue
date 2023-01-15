@@ -37,51 +37,48 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+export default { name: "MyModal" };
+</script>
+
+<script lang="ts" setup>
+import { computed, onMounted, ref } from "vue";
 import { Modal } from "bootstrap";
 
-export default defineComponent({
-  name: "MyModal",
+const thisModalObj = ref({} as Modal);
+const modalEle = ref();
 
-  data() {
-    return {
-      thisModalObj: {} as Modal,
-    };
+const props = defineProps({
+  title: {
+    type: String,
+    default: "",
   },
-  props: {
-    title: {
-      type: String,
-      default: "",
-    },
-    maxWidth: {
-      type: String,
-      default: "",
-    },
-    zIndex: {
-      type: String,
-      default: "2000",
-    },
+  maxWidth: {
+    type: String,
+    default: "",
   },
-  computed: {
-    modalStyle(): string {
-      if (this.maxWidth) {
-        return "max-width: " + this.maxWidth;
-      }
-      return "";
-    },
+  zIndex: {
+    type: String,
+    default: "2000",
   },
-  methods: {
-    async _show() {
-      this.thisModalObj.show();
-    },
-    async _hide() {
-      this.thisModalObj.hide();
-    },
-  },
-  expose: ["_show", "_hide"],
+});
 
-  mounted() {
-    this.thisModalObj = new Modal(this.$refs.modalEle as HTMLDivElement);
-  },
+const modalStyle = computed(() => {
+  if (props.maxWidth) {
+    return "max-width: " + props.maxWidth;
+  }
+  return "";
+});
+
+const _show = async () => {
+  thisModalObj.value.show();
+};
+const _hide = async () => {
+  thisModalObj.value.hide();
+};
+
+defineExpose({ _show, _hide });
+
+onMounted(() => {
+  thisModalObj.value = new Modal(modalEle.value as HTMLDivElement);
 });
 </script>
