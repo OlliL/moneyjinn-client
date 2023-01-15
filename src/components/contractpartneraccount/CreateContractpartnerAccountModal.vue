@@ -6,49 +6,25 @@
         :id="'createContractpartnerAccountForm' + idSuffix"
       >
         <div class="container-fluid">
-          <div v-if="serverError">
-            <div
-              class="alert alert-danger"
-              v-for="(error, index) in serverError"
-              :key="index"
-            >
-              {{ error }}
-            </div>
-          </div>
+          <DivError :server-errors="serverErrors" />
           <div class="row">
             <div class="col-xs-12">
-              <div class="form-floating">
-                <input
-                  v-model="mca.accountNumber"
-                  :id="'comment' + idSuffix"
-                  type="text"
-                  @input="validateAccountNumber"
-                  :class="'form-control ' + accountNumberErrorData.inputClass"
-                />
-                <label
-                  :for="'comment' + idSuffix"
-                  :style="'color: ' + accountNumberErrorData.fieldColor"
-                  >{{ accountNumberErrorData.fieldLabel }}</label
-                >
-              </div>
+              <InputStandard
+                v-model="mca.accountNumber"
+                :validation-schema="schema.accountNumber"
+                :id="'accountNumber' + idSuffix"
+                field-label="IBAN"
+              />
             </div>
           </div>
           <div class="row pt-2">
             <div class="col-xs-12">
-              <div class="form-floating">
-                <input
-                  v-model="mca.bankCode"
-                  :id="'comment' + idSuffix"
-                  type="text"
-                  @input="validateBankCode"
-                  :class="'form-control ' + bankCodeErrorData.inputClass"
-                />
-                <label
-                  :for="'comment' + idSuffix"
-                  :style="'color: ' + bankCodeErrorData.fieldColor"
-                  >{{ bankCodeErrorData.fieldLabel }}</label
-                >
-              </div>
+              <InputStandard
+                v-model="mca.bankCode"
+                :validation-schema="schema.bankCode"
+                :id="'bankCode' + idSuffix"
+                field-label="BIC"
+              />
             </div>
           </div>
         </div>
@@ -58,162 +34,113 @@
       <button type="button" class="btn btn-secondary" @click="resetForm">
         r&uuml;cksetzen
       </button>
-      <button
-        type="submit"
-        class="btn btn-primary"
-        :form="'createContractpartnerAccountForm' + idSuffix"
-      >
-        Speichern
-      </button>
+      <ButtonSubmit
+        button-label="Speichern"
+        :form-id="'createContractpartnerAccountForm' + idSuffix"
+      />
     </template>
   </ModalVue>
 </template>
 
-<script lang="ts">
-import type { ContractpartnerAccount } from "@/model/contractpartneraccount/ContractpartnerAccount";
-import ContractpartnerAccountControllerHandler from "@/handler/ContractpartnerAccountControllerHandler";
-import { generateErrorData, type ErrorData } from "@/tools/views/ErrorData";
-import { validateInputField } from "@/tools/views/ValidateInputField";
-import { defineComponent } from "vue";
+<script lang="ts" setup>
+import { computed, ref } from "vue";
+import { useForm } from "vee-validate";
+import { string, ZodType } from "zod";
+
+import ButtonSubmit from "../ButtonSubmit.vue";
+import DivError from "../DivError.vue";
+import InputStandard from "../InputStandard.vue";
 import ModalVue from "../Modal.vue";
-import { getError } from "@/tools/views/ThrowError";
-import type { ValidationResult } from "@/model/validation/ValidationResult";
 
-type CreateContractpartnerAccountModalData = {
-  mca: ContractpartnerAccount;
-  origMca: ContractpartnerAccount | undefined;
-  serverError: Array<String>;
-  accountNumberIsValid: boolean | null;
-  accountNumberErrorMessage: string;
-  bankCodeIsValid: boolean | null;
-  bankCodeErrorMessage: string;
-};
-export default defineComponent({
-  name: "CreateContractpartnerAccountModal",
-  data(): CreateContractpartnerAccountModalData {
-    return {
-      mca: {} as ContractpartnerAccount,
-      origMca: undefined,
-      serverError: {} as Array<String>,
-      accountNumberIsValid: null,
-      accountNumberErrorMessage: "",
-      bankCodeIsValid: null,
-      bankCodeErrorMessage: "",
-    };
-  },
-  props: {
-    idSuffix: {
-      type: String,
-      default: "",
-    },
-    contractpartnerId: {
-      type: Number,
-      required: true,
-    },
-  },
-  computed: {
-    formIsValid(): boolean {
-      const isValid = this.accountNumberIsValid && this.bankCodeIsValid;
-      if (isValid) {
-        return true;
-      }
-      return false;
-    },
-    title(): string {
-      return this.origMca === undefined
-        ? "Vertragspartnerkonto  hinzufügen"
-        : "Vertragspartnerkonto  bearbeiten";
-    },
-    accountNumberErrorData(): ErrorData {
-      return generateErrorData(
-        this.accountNumberIsValid,
-        "IBAN",
-        this.accountNumberErrorMessage
-      );
-    },
-    bankCodeErrorData(): ErrorData {
-      return generateErrorData(
-        this.bankCodeIsValid,
-        "BIC",
-        this.bankCodeErrorMessage
-      );
-    },
-  },
-  methods: {
-    async _show(mca?: ContractpartnerAccount) {
-      this.origMca = mca ? mca : undefined;
-      this.resetForm();
-      (this.$refs.modalComponent as typeof ModalVue)._show();
-    },
-    resetForm() {
-      if (this.origMca) {
-        this.mca = JSON.parse(JSON.stringify(this.origMca));
-      } else {
-        this.mca = {} as ContractpartnerAccount;
-        this.mca.contractpartnerid = this.contractpartnerId;
-      }
-      this.accountNumberIsValid = null;
-      this.accountNumberErrorMessage = "";
-      this.bankCodeIsValid = null;
-      this.bankCodeErrorMessage = "";
-      this.serverError = {} as Array<String>;
-    },
-    validateAccountNumber() {
-      [this.accountNumberIsValid, this.accountNumberErrorMessage] =
-        validateInputField(this.mca.accountNumber, "IBAN angeben!");
-    },
-    validateBankCode() {
-      [this.bankCodeIsValid, this.bankCodeErrorMessage] = validateInputField(
-        this.mca.bankCode,
-        "BIC angeben!"
-      );
-    },
-    handleServerError(validationResult: ValidationResult): boolean {
-      if (!validationResult.result) {
-        this.serverError = new Array<string>();
-        for (let resultItem of validationResult.validationResultItems) {
-          this.serverError.push(
-            getError(resultItem.error, resultItem.variableArray)
-          );
-        }
-      }
-      return !validationResult.result;
-    },
-    async createContractpartnerAccount() {
-      this.validateAccountNumber();
-      this.validateBankCode();
+import { handleServerError } from "@/tools/views/ThrowError";
+import { globErr } from "@/tools/views/ZodUtil";
 
-      if (this.formIsValid) {
-        if (this.mca.id > 0) {
-          //update
-          const validationResult =
-            await ContractpartnerAccountControllerHandler.updateContractpartnerAccount(
-              this.mca
-            );
-          if (!this.handleServerError(validationResult)) {
-            (this.$refs.modalComponent as typeof ModalVue)._hide();
-            this.$emit("contractpartnerAccountUpdated", this.mca);
-          }
-        } else {
-          // create
-          const contractpartnerAccountValidation =
-            ContractpartnerAccountControllerHandler.createContractpartnerAccount(
-              this.mca
-            );
-          const validationResult = await (
-            await contractpartnerAccountValidation
-          ).validationResult;
-          if (!this.handleServerError(validationResult)) {
-            this.mca = (await contractpartnerAccountValidation).mca;
-            (this.$refs.modalComponent as typeof ModalVue)._hide();
-            this.$emit("contractpartnerAccountCreated", this.mca);
-          }
-        }
-      }
-    },
+import type { ContractpartnerAccount } from "@/model/contractpartneraccount/ContractpartnerAccount";
+
+import ContractpartnerAccountControllerHandler from "@/handler/ContractpartnerAccountControllerHandler";
+
+const props = defineProps({
+  idSuffix: {
+    type: String,
+    default: "",
   },
-  expose: ["_show"],
-  emits: ["contractpartnerAccountCreated", "contractpartnerAccountUpdated"],
-  components: { ModalVue },
+  contractpartnerId: {
+    type: Number,
+    required: true,
+  },
 });
+
+const serverErrors = ref(new Array<string>());
+
+const schema: Partial<{ [key in keyof ContractpartnerAccount]: ZodType }> = {
+  accountNumber: string(globErr("Bitte IBAN angeben!"))
+    .min(1)
+    .max(22, "Die IBAN darf maximal 22 Stellen haben!"),
+  bankCode: string(globErr("Bitte BIC angeben!"))
+    .min(1)
+    .max(11, "Die BIC darf maximal 11 Stellen haben!"),
+};
+
+const mca = ref({} as ContractpartnerAccount);
+const origMca = ref({} as ContractpartnerAccount | undefined);
+const modalComponent = ref();
+const emit = defineEmits([
+  "contractpartnerAccountCreated",
+  "contractpartnerAccountUpdated",
+]);
+
+const { handleSubmit, values, setFieldTouched } = useForm();
+
+const title = computed(() => {
+  return origMca.value === undefined
+    ? "Vertragspartnerkonto hinzufügen"
+    : "Vertragspartnerkonto bearbeiten";
+});
+
+const resetForm = () => {
+  if (origMca.value) {
+    Object.assign(mca.value, origMca.value);
+  } else {
+    mca.value = {
+      contractpartnerid: props.contractpartnerId,
+    } as ContractpartnerAccount;
+  }
+  serverErrors.value = new Array<string>();
+  Object.keys(values).forEach((field) => setFieldTouched(field, false));
+};
+
+const _show = async (_mca?: ContractpartnerAccount) => {
+  origMca.value = _mca ? _mca : undefined;
+  resetForm();
+  modalComponent.value._show();
+};
+
+const createContractpartnerAccount = handleSubmit(() => {
+  if (mca.value.id > 0) {
+    //update
+    ContractpartnerAccountControllerHandler.updateContractpartnerAccount(
+      mca.value
+    ).then((validationResult) => {
+      if (!handleServerError(validationResult, serverErrors)) {
+        modalComponent.value._hide();
+        emit("contractpartnerAccountUpdated", mca.value);
+      }
+    });
+  } else {
+    //create
+    ContractpartnerAccountControllerHandler.createContractpartnerAccount(
+      mca.value
+    ).then((contractpartnerAccountValidation) => {
+      const validationResult =
+        contractpartnerAccountValidation.validationResult;
+
+      if (!handleServerError(validationResult, serverErrors)) {
+        mca.value = contractpartnerAccountValidation.mca;
+        modalComponent.value._hide();
+        emit("contractpartnerAccountCreated", mca.value);
+      }
+    });
+  }
+});
+defineExpose({ _show });
 </script>
