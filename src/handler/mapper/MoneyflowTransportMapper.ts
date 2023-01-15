@@ -28,6 +28,8 @@ export function mapMoneyflowTransportToModel(
       return mapMoneyflowSplitEntryTransportToModel(mse);
     }),
   };
+  model.bookingDate.setHours(0, 0, 0, 0);
+  model.bookingDate.setHours(0, 0, 0, 0);
   return model;
 }
 

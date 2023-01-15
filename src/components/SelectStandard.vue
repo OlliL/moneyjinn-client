@@ -21,9 +21,7 @@
         errorData.fieldLabel
       }}</label>
     </div>
-    <span class="input-group-text" v-if="iconProvided">
-      <slot name="icon"></slot>
-    </span>
+    <slot name="icon"></slot>
   </div>
 </template>
 
@@ -93,9 +91,6 @@ const errorData = computed((): ErrorData => {
     errorMessage.value
   );
 });
-
-const slots = useSlots();
-const iconProvided = slots["icon"] !== undefined;
 
 const fieldRef = ref(null);
 

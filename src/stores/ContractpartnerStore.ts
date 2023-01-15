@@ -66,7 +66,9 @@ export const useContractpartnerStore = defineStore("contractpartner", {
     ): Promise<Array<Contractpartner>> {
       let mcp = this.contractpartner;
       if (validNow) {
-        mcp = this.getValidContractpartner(new Date());
+        const date = new Date();
+        date.setHours(0, 0, 0, 0);
+        mcp = this.getValidContractpartner(date);
       }
 
       if (comment === "") {

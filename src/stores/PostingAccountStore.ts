@@ -3,6 +3,7 @@ import PostingAccountControllerHandler from "@/handler/PostingAccountControllerH
 import { WebSocketHandler } from "@/handler/WebSocketHandler";
 import type { PostingAccount } from "@/model/postingaccount/PostingAccount";
 import type { PostingAccountChangedEventTransport } from "@/model/rest/wsevent/PostingAccountChangedEventTransport";
+import type { SelectBoxValue } from "@/model/SelectBoxValue";
 import { defineStore } from "pinia";
 
 export const usePostingAccountStore = defineStore("postingAccount", {
@@ -12,6 +13,11 @@ export const usePostingAccountStore = defineStore("postingAccount", {
   getters: {
     getPostingAccount(): Array<PostingAccount> {
       return this.postingAccount;
+    },
+    getAsSelectBoxValues(): Array<SelectBoxValue> {
+      return this.postingAccount.map((mpa) => {
+        return { id: mpa.id, value: mpa.name } as SelectBoxValue;
+      });
     },
   },
   actions: {

@@ -1,5 +1,6 @@
 import type { Contractpartner } from "@/model/contractpartner/Contractpartner";
 import type { ContractpartnerTransport } from "@/model/rest/transport/ContractpartnerTransport";
+import { getISOStringDate } from "@/tools/views/FormatDate";
 
 export function mapContractpartnerTransportToModel(
   transport: ContractpartnerTransport
@@ -18,6 +19,8 @@ export function mapContractpartnerTransportToModel(
     validFrom: new Date(transport.validFrom),
     validTil: new Date(transport.validTil),
   };
+  model.validFrom.setHours(0, 0, 0, 0);
+  model.validTil.setHours(0, 0, 0, 0);
   return model;
 }
 
@@ -35,8 +38,8 @@ export function mapContractpartnerToTransport(
     postingAccountName: model.postingAccountName,
     street: model.street,
     town: model.town,
-    validFrom: model.validFrom?.toISOString(),
-    validTil: model.validTil?.toISOString(),
+    validFrom: getISOStringDate(model.validFrom),
+    validTil: getISOStringDate(model.validTil),
   };
   return transport;
 }

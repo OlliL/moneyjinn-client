@@ -1,5 +1,6 @@
 import type { PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
 import type { PreDefMoneyflowTransport } from "@/model/rest/transport/PreDefMoneyflowTransport";
+import { getISOStringDate } from "@/tools/views/FormatDate";
 
 export function mapPreDefMoneyflowTransportToModel(
   transport: PreDefMoneyflowTransport
@@ -21,6 +22,8 @@ export function mapPreDefMoneyflowTransportToModel(
     postingAccountId: transport.postingaccountid,
     postingAccountName: transport.postingaccountname,
   };
+  model.createDate?.setHours(0, 0, 0, 0);
+  model.lastUsed?.setHours(0, 0, 0, 0);
   return model;
 }
 
@@ -40,11 +43,11 @@ export function mapPreDefMoneyflowToTransport(
     postingaccountid: model.postingAccountId,
     postingaccountname: model.postingAccountName,
     createdate: model.createDate
-      ? model.createDate.toISOString()
-      : new Date().toISOString(),
+      ? getISOStringDate(model.createDate)
+      : getISOStringDate(new Date()),
     lastUsed: model.lastUsed
-      ? model.lastUsed.toISOString()
-      : new Date().toISOString(),
+      ? getISOStringDate(model.lastUsed)
+      : getISOStringDate(new Date()),
   };
   return transport;
 }
