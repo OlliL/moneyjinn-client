@@ -20,27 +20,26 @@
     </td>
   </tr>
 </template>
-<script lang="ts">
+<script lang="ts" setup>
 import type { ContractpartnerAccount } from "@/model/contractpartneraccount/ContractpartnerAccount";
-import { defineComponent, type PropType } from "vue";
+import type { PropType } from "vue";
 
-export default defineComponent({
-  name: "ReportTableRow",
-  props: {
-    mca: {
-      type: Object as PropType<ContractpartnerAccount>,
-      required: true,
-    },
-  },
-  emits: ["deleteContractpartnerAccount", "editContractpartnerAccount"],
-
-  methods: {
-    deleteContractpartnerAccount() {
-      this.$emit("deleteContractpartnerAccount", this.mca);
-    },
-    editContractpartnerAccount() {
-      this.$emit("editContractpartnerAccount", this.mca);
-    },
+const props = defineProps({
+  mca: {
+    type: Object as PropType<ContractpartnerAccount>,
+    required: true,
   },
 });
+
+const emit = defineEmits([
+  "deleteContractpartnerAccount",
+  "editContractpartnerAccount",
+]);
+
+const deleteContractpartnerAccount = () => {
+  emit("deleteContractpartnerAccount", props.mca);
+};
+const editContractpartnerAccount = () => {
+  emit("editContractpartnerAccount", props.mca);
+};
 </script>

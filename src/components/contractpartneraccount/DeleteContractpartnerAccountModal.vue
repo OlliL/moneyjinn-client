@@ -36,35 +36,32 @@
   </ModalVue>
 </template>
 
-<script lang="ts">
-import ContractpartnerAccountControllerHandler from "@/handler/ContractpartnerAccountControllerHandler";
-import type { ContractpartnerAccount } from "@/model/contractpartneraccount/ContractpartnerAccount";
-import { defineComponent } from "vue";
+<script lang="ts" setup>
+import { ref } from "vue";
+
 import ModalVue from "../Modal.vue";
 
-export default defineComponent({
-  name: "DeleteContractpartnerAccountModal",
-  data() {
-    return {
-      mca: {} as ContractpartnerAccount,
-    };
-  },
-  methods: {
-    async _show(mca: ContractpartnerAccount) {
-      this.mca = mca;
-      (this.$refs.modalComponent as typeof ModalVue)._show();
-    },
-    async deleteContractpartnerAccount() {
-      // wait for result otherwise we reload before the server deleted the data
-      await ContractpartnerAccountControllerHandler.deleteContractpartnerAccount(
-        this.mca.id
-      );
-      (this.$refs.modalComponent as typeof ModalVue)._hide();
-      this.$emit("contractpartnerAccountDeleted", this.mca);
-    },
-  },
-  expose: ["_show"],
-  emits: ["contractpartnerAccountDeleted"],
-  components: { ModalVue },
-});
+import type { ContractpartnerAccount } from "@/model/contractpartneraccount/ContractpartnerAccount";
+
+import ContractpartnerAccountControllerHandler from "@/handler/ContractpartnerAccountControllerHandler";
+
+const mca = ref({} as ContractpartnerAccount);
+const modalComponent = ref();
+const emit = defineEmits(["contractpartnerAccountDeleted"]);
+
+const _show = (_mca: ContractpartnerAccount) => {
+  mca.value = _mca;
+  modalComponent.value._show();
+};
+
+const deleteContractpartnerAccount = () => {
+  ContractpartnerAccountControllerHandler.deleteContractpartnerAccount(
+    mca.value.id
+  ).then(() => {
+    modalComponent.value._hide();
+    emit("contractpartnerAccountDeleted", mca.value);
+  });
+};
+
+defineExpose({ _show });
 </script>

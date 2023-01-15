@@ -4,13 +4,13 @@
     ref="createContractpartnerAccountModal"
     id-suffix="listAccounts"
     :contractpartner-id="mcp.id"
-    @contractpartner-account-created="contractpartnerAccountCreated"
-    @contractpartner-account-updated="contractpartnerAccountUpdated"
+    @contractpartner-account-created="loadData"
+    @contractpartner-account-updated="loadData"
   />
   <DeleteContractpartnerAccountModalVue
     v-if="dataLoaded"
     ref="deleteModal"
-    @contractpartner-account-deleted="contractpartnerAccountDeleted"
+    @contractpartner-account-deleted="loadData"
   />
 
   <ModalVue
@@ -54,73 +54,52 @@
   </ModalVue>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
+import { ref } from "vue";
+
+import CreateContractpartnerAccountModalVue from "./CreateContractpartnerAccountModal.vue";
+import DeleteContractpartnerAccountModalVue from "./DeleteContractpartnerAccountModal.vue";
+import ListContractpartnerAccountRowVue from "./ListContractpartnerAccountRow.vue";
+import ModalVue from "../Modal.vue";
+
 import type { Contractpartner } from "@/model/contractpartner/Contractpartner";
 import type { ContractpartnerAccount } from "@/model/contractpartneraccount/ContractpartnerAccount";
 import ContractpartnerAccountControllerHandler from "@/handler/ContractpartnerAccountControllerHandler";
-import ListContractpartnerAccountRowVue from "./ListContractpartnerAccountRow.vue";
-import CreateContractpartnerAccountModalVue from "./CreateContractpartnerAccountModal.vue";
-import { defineComponent } from "vue";
-import ModalVue from "../Modal.vue";
-import DeleteContractpartnerAccountModalVue from "./DeleteContractpartnerAccountModal.vue";
 
-export default defineComponent({
-  name: "ListContractpartnerAccountsModal",
-  data() {
-    return {
-      mcp: {} as Contractpartner,
-      contractpartnerAccount: {} as Array<ContractpartnerAccount>,
-      dataLoaded: false,
-    };
-  },
-  computed: {},
-  methods: {
-    async _show(mcp: Contractpartner) {
-      this.dataLoaded = false;
-      this.mcp = mcp;
-      this.loadData();
-      (this.$refs.modalComponent as typeof ModalVue)._show();
-      this.dataLoaded = true;
-    },
-    async loadData() {
-      this.contractpartnerAccount =
-        await ContractpartnerAccountControllerHandler.fetchAllContractpartnerAccount(
-          this.mcp.id
-        );
-    },
-    editContractpartnerAccount(mca: ContractpartnerAccount) {
-      (
-        this.$refs
-          .createContractpartnerAccountModal as typeof CreateContractpartnerAccountModalVue
-      )._show(mca);
-    },
-    contractpartnerAccountUpdated() {
-      this.loadData();
-    },
-    deleteContractpartnerAccount(mca: ContractpartnerAccount) {
-      (
-        this.$refs.deleteModal as typeof DeleteContractpartnerAccountModalVue
-      )._show(mca);
-    },
-    contractpartnerAccountDeleted() {
-      this.loadData();
-    },
-    showCreateContractpartnerAccountModal() {
-      (
-        this.$refs
-          .createContractpartnerAccountModal as typeof CreateContractpartnerAccountModalVue
-      )._show();
-    },
-    contractpartnerAccountCreated() {
-      this.loadData();
-    },
-  },
-  expose: ["_show"],
-  components: {
-    ModalVue,
-    ListContractpartnerAccountRowVue,
-    CreateContractpartnerAccountModalVue,
-    DeleteContractpartnerAccountModalVue,
-  },
-});
+const mcp = ref({} as Contractpartner);
+const contractpartnerAccount = ref({} as Array<ContractpartnerAccount>);
+const dataLoaded = ref(false);
+const modalComponent = ref();
+const createContractpartnerAccountModal = ref();
+const deleteModal = ref();
+
+const loadData = () => {
+  dataLoaded.value = false;
+  ContractpartnerAccountControllerHandler.fetchAllContractpartnerAccount(
+    mcp.value.id
+  ).then((mcaArray: Array<ContractpartnerAccount>) => {
+    contractpartnerAccount.value = mcaArray;
+    dataLoaded.value = true;
+  });
+};
+
+const _show = (_mcp: Contractpartner) => {
+  mcp.value = _mcp;
+  loadData();
+  modalComponent.value._show();
+};
+
+const showCreateContractpartnerAccountModal = () => {
+  createContractpartnerAccountModal.value._show();
+};
+
+const editContractpartnerAccount = (_mca: ContractpartnerAccount) => {
+  createContractpartnerAccountModal.value._show(_mca);
+};
+
+const deleteContractpartnerAccount = (_mca: ContractpartnerAccount) => {
+  deleteModal.value._show(_mca);
+};
+
+defineExpose({ _show });
 </script>
