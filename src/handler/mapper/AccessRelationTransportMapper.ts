@@ -1,5 +1,6 @@
 import type { AccessRelation } from "@/model/user/AccessRelation";
 import type { AccessRelationTransport } from "@/model/rest/transport/AccessRelationTransport";
+import { getISOStringDate } from "@/tools/views/FormatDate";
 
 export function mapAccessRelationTransportToModel(
   transport: AccessRelationTransport
@@ -10,6 +11,8 @@ export function mapAccessRelationTransportToModel(
     validFrom: new Date(transport.validfrom),
     validTil: transport.validtil ? new Date(transport.validtil) : undefined,
   };
+  model.validFrom.setHours(0, 0, 0, 0);
+  model.validTil?.setHours(0, 0, 0, 0);
   return model;
 }
 
@@ -19,8 +22,8 @@ export function mapAccessRelationToTransport(
   const transport: AccessRelationTransport = {
     id: model.id,
     refId: model.refId,
-    validfrom: model.validFrom.toISOString(),
-    validtil: model.validTil ? model.validTil.toISOString() : undefined,
+    validfrom: getISOStringDate(model.validFrom),
+    validtil: model.validTil ? getISOStringDate(model.validTil) : undefined,
   };
   return transport;
 }

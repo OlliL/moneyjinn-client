@@ -1,5 +1,6 @@
 import type { Capitalsource } from "@/model/capitalsource/Capitalsource";
 import type { CapitalsourceTransport } from "@/model/rest/transport/CapitalsourceTransport";
+import { getISOStringDate } from "@/tools/views/FormatDate";
 import {
   mapCapitalsourceImportEnumToTransport,
   mapCapitalsourceImportTransportToEnum,
@@ -31,6 +32,9 @@ export function mapCapitalsourceTransportToModel(
       transport.importAllowed
     ),
   };
+  model.validFrom.setHours(0, 0, 0, 0);
+  model.validTil.setHours(0, 0, 0, 0);
+
   return model;
 }
 
@@ -45,8 +49,8 @@ export function mapCapitalsourceToTransport(
     accountNumber: model.accountNumber,
     bankCode: model.bankCode,
     comment: model.comment,
-    validFrom: model.validFrom?.toISOString(),
-    validTil: model.validTil?.toISOString(),
+    validFrom: getISOStringDate(model.validFrom),
+    validTil: getISOStringDate(model.validTil),
     groupUse: model.groupUse ? 1 : 0,
     importAllowed: mapCapitalsourceImportEnumToTransport(model.importAllowed),
   };

@@ -26,6 +26,9 @@ export function mapCompareDataTransportToModel(
         ? new Date(transport.compareDataDatasetTransport.invoiceDate)
         : undefined,
     };
+    compareDataDataset.bookingDate.setHours(0, 0, 0, 0);
+    compareDataDataset.invoiceDate?.setHours(0, 0, 0, 0);
+
     model.compareDataDataset = compareDataDataset;
   }
 

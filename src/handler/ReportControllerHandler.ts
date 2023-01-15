@@ -22,6 +22,7 @@ import type { ShowYearlyReportGraphRequest } from "@/model/rest/report/ShowYearl
 import type { ShowYearlyReportGraphResponse } from "@/model/rest/report/ShowYearlyReportGraphResponse";
 import { mapPostingAccountAmountTransportToModel } from "./mapper/PostingAccountAmountTransportMapper";
 import type { PostingAccount } from "@/model/postingaccount/PostingAccount";
+import { getISOStringDate } from "@/tools/views/FormatDate";
 
 class ReportControllerHandler extends AbstractControllerHandler {
   private static CONTROLLER = "report";
@@ -146,8 +147,8 @@ class ReportControllerHandler extends AbstractControllerHandler {
     const usecase = "showTrendsGraph";
     const request = {} as ShowTrendsGraphRequest;
 
-    request.startDate = trendsParameter.startDate.toISOString();
-    request.endDate = trendsParameter.endDate.toISOString();
+    request.startDate = getISOStringDate(trendsParameter.startDate);
+    request.endDate = getISOStringDate(trendsParameter.endDate);
     request.capitalSourceIds = trendsParameter.selectedCapitalsourceIds;
 
     const response = await super.put(
@@ -220,8 +221,8 @@ class ReportControllerHandler extends AbstractControllerHandler {
     const usecase = "showMonthlyReportGraph";
     const request = {} as ShowMonthlyReportGraphRequest;
 
-    request.startDate = reportingParameter.startDate.toISOString();
-    request.endDate = reportingParameter.endDate.toISOString();
+    request.startDate = getISOStringDate(reportingParameter.startDate);
+    request.endDate = getISOStringDate(reportingParameter.endDate);
     request.postingAccountIdsYes =
       reportingParameter.selectedPostingAccounts.map((mpa) => mpa.id);
     if (reportingParameter.unselectedPostingAccounts)
@@ -255,8 +256,8 @@ class ReportControllerHandler extends AbstractControllerHandler {
     const usecase = "showYearlyReportGraph";
     const request = {} as ShowYearlyReportGraphRequest;
 
-    request.startDate = reportingParameter.startDate.toISOString();
-    request.endDate = reportingParameter.endDate.toISOString();
+    request.startDate = getISOStringDate(reportingParameter.startDate);
+    request.endDate = getISOStringDate(reportingParameter.endDate);
     request.postingAccountIdsYes =
       reportingParameter.selectedPostingAccounts.map((mpa) => mpa.id);
     if (reportingParameter.unselectedPostingAccounts)

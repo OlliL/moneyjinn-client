@@ -6,6 +6,7 @@ import type { ShowCompareDataFormResponse } from "@/model/rest/comparedata/ShowC
 import type { CompareDataRequest } from "@/model/rest/comparedata/CompareDataRequest";
 import type { CompareDataResponse } from "@/model/rest/comparedata/CompareDataResponse";
 import { mapCompareDataTransportToModel } from "./mapper/CompareDataMapper";
+import { getISOStringDate } from "@/tools/views/FormatDate";
 
 class CompareDataControllerHandler extends AbstractControllerHandler {
   private static CONTROLLER = "comparedata";
@@ -47,8 +48,8 @@ class CompareDataControllerHandler extends AbstractControllerHandler {
     const usecase = "compareData";
     const request = {} as CompareDataRequest;
 
-    request.startDate = compareDataParameter.startDate.toISOString();
-    request.endDate = compareDataParameter.endDate.toISOString();
+    request.startDate = getISOStringDate(compareDataParameter.startDate);
+    request.endDate = getISOStringDate(compareDataParameter.endDate);
     request.capitalsourceId = compareDataParameter.selectedCapitalSourceId;
     request.fileContents = compareDataParameter.fileContents;
     request.formatId = compareDataParameter.selectedCompareDataFormat;

@@ -13,16 +13,14 @@
         errorData.fieldLabel
       }}</label>
     </div>
-    <span class="input-group-text" v-if="iconProvided">
-      <slot name="icon"></slot>
-    </span>
+    <slot name="icon"></slot>
   </div>
 </template>
 
 <script lang="ts" setup>
 import { useField } from "vee-validate";
 import { toFieldValidator } from "@vee-validate/zod";
-import { computed, onMounted, ref, useSlots, type PropType } from "vue";
+import { computed, onMounted, ref, type PropType } from "vue";
 import { any, type ZodType } from "zod";
 
 import {
@@ -88,8 +86,6 @@ const errorData = computed((): ErrorData => {
   );
 });
 
-const slots = useSlots();
-const iconProvided = slots["icon"] !== undefined;
 const alignmentClass = props.align ? "text-" + props.align : "";
 
 const fieldRef = ref(null);

@@ -22,7 +22,10 @@
               field-label="Benutzername"
               :focus="true"
             >
-              <template #icon><i class="bi bi-person"></i></template>
+              <template #icon
+                ><span class="input-group-text"
+                  ><i class="bi bi-person"></i></span
+              ></template>
             </InputStandard>
           </div>
           <div class="row no-gutters flex-lg-nowrap mb-2">
@@ -33,7 +36,9 @@
               id="password"
               field-label="Passwort"
             >
-              <template #icon><i class="bi bi-lock"></i></template>
+              <template #icon
+                ><span class="input-group-text"><i class="bi bi-lock"></i></span
+              ></template>
             </InputStandard>
           </div>
           <div class="row no-gutters flex-lg-nowrap mb-2">
