@@ -404,7 +404,9 @@ export default defineComponent({
       } else if (this.bookingdateIsValid) {
         return this.mmf.bookingDate;
       } else {
-        return new Date();
+        const date = new Date();
+        date.setHours(0, 0, 0, 0);
+        return date;
       }
     },
     mseRemainder(): number {
@@ -426,9 +428,12 @@ export default defineComponent({
     resetForm() {
       if (this.mmfToEdit && this.mmfToEdit.bookingDate) {
         const bookingDate = new Date(this.mmfToEdit.bookingDate);
-        const invoiceDate = this.mmfToEdit.invoiceDate
-          ? new Date(this.mmfToEdit.invoiceDate)
-          : undefined;
+        bookingDate.setHours(0, 0, 0, 0);
+        let invoiceDate: Date | undefined = undefined;
+        if (this.mmfToEdit.invoiceDate) {
+          invoiceDate = new Date(this.mmfToEdit.invoiceDate);
+          invoiceDate.setHours(0, 0, 0, 0);
+        }
 
         this.mmf = {
           amount: this.mmfToEdit.amount,
@@ -496,6 +501,7 @@ export default defineComponent({
         this.amount = undefined;
 
         const bookingDate = new Date();
+        bookingDate.setHours(0, 0, 0, 0);
         this.mmf.bookingDate = bookingDate;
         this.mmf.invoiceDate = undefined;
         this.mmf.contractpartnerId = 0;
