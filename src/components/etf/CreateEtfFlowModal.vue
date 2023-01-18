@@ -3,111 +3,64 @@
     <template #body
       ><form @submit.prevent="createEtfFlow" id="createEtfFlowForm">
         <div class="container-fluid">
-          <div v-if="serverError">
-            <div
-              class="alert alert-danger"
-              v-for="(error, index) in serverError"
-              :key="index"
-            >
-              {{ error }}
-            </div>
-          </div>
+          <DivError :server-errors="serverErrors" />
           <div class="row">
             <div class="col-xs-12">
-              <div class="form-floating">
-                <select
-                  v-model="etfFlow.isin"
-                  id="etf"
-                  @change="validateEtf"
-                  :class="'form-select form-control ' + etfErrorData.inputClass"
-                >
-                  <option v-for="etf in etfs" :key="etf.isin" :value="etf.isin">
-                    {{ etf.name }}
-                  </option>
-                </select>
-
-                <label for="etf" :style="'color: ' + etfErrorData.fieldColor">{{
-                  etfErrorData.fieldLabel
-                }}</label>
-              </div>
-            </div>
-          </div>
-          <div class="row pt-2">
-            <div class="col-xs-12">
-              <DatepickerVue
-                id="bookingdate"
-                :label="bookingdateErrorData.fieldLabel"
-                :default-date="bookingdate"
-                :input-class="
-                  ' form-control ' + bookingdateErrorData.inputClass
-                "
-                :label-style="'color: ' + bookingdateErrorData.fieldColor"
-                @date-selected="bookingdateSelected"
+              <SelectStandard
+                v-model="etfFlow.isin"
+                :validation-schema="schema.isin"
+                id="etf"
+                field-label="ETF"
+                :select-box-values="etfs"
               />
             </div>
           </div>
           <div class="row pt-2">
             <div class="col-xs-12">
-              <div class="form-floating">
-                <input
-                  v-model="bookingtime"
-                  id="bookingtime"
-                  type="text"
-                  @change="validateBookingtime"
-                  :class="'form-control ' + bookingtimeErrorData.inputClass"
-                />
-                <label
-                  for="bookingtime"
-                  :style="'color: ' + bookingtimeErrorData.fieldColor"
-                  >{{ bookingtimeErrorData.fieldLabel }}</label
-                >
-              </div>
+              <InputDate
+                v-model="bookingdate"
+                :validation-schema="schema.timestamp"
+                id="bookingdate"
+                field-label="Buchungsdatum"
+              />
             </div>
           </div>
           <div class="row pt-2">
             <div class="col-xs-12">
-              <div class="form-floating">
-                <input
-                  v-model="etfFlow.amount"
-                  id="amount"
-                  type="number"
-                  step="0.001"
-                  @change="validateAmount"
-                  :class="'form-control ' + amountErrorData.inputClass"
-                />
-                <label
-                  for="amount"
-                  :style="'color: ' + amountErrorData.fieldColor"
-                  >{{ amountErrorData.fieldLabel }}</label
-                >
-              </div>
+              <InputStandard
+                v-model="bookingtime"
+                :validation-schema="schema.nanoseconds"
+                id="bookingtime"
+                field-label="Buchungszeit"
+              />
+            </div>
+          </div>
+          <div class="row pt-2">
+            <div class="col-xs-12">
+              <InputStandard
+                v-model="etfFlow.amount"
+                :validation-schema="schema.amount"
+                id="amount"
+                field-type="number"
+                field-label="Stück"
+              />
             </div>
           </div>
 
           <div class="row pt-2">
             <div class="col-xs-12">
-              <div class="input-group">
-                <div class="form-floating">
-                  <input
-                    v-model="etfFlow.price"
-                    id="price"
-                    type="number"
-                    step="0.001"
-                    @change="validatePrice"
-                    :class="
-                      ' form-control text-end ' + priceErrorData.inputClass
-                    "
-                  />
-                  <label
-                    for="price"
-                    :style="'color: ' + priceErrorData.fieldColor"
-                    >{{ priceErrorData.fieldLabel }}</label
-                  >
-                </div>
-                <span class="input-group-text"
-                  ><i class="bi bi-currency-euro"></i
-                ></span>
-              </div>
+              <InputStandard
+                v-model="etfFlow.price"
+                :validation-schema="schema.price"
+                id="price"
+                field-type="number"
+                field-label="Stückpreis"
+              >
+                <template #icon
+                  ><span class="input-group-text"
+                    ><i class="bi bi-currency-euro"></i></span
+                ></template>
+              </InputStandard>
             </div>
           </div>
         </div>
@@ -117,261 +70,137 @@
       <button type="button" class="btn btn-secondary" @click="resetForm">
         r&uuml;cksetzen
       </button>
-      <button
-        type="submit"
-        class="btn btn-primary"
-        :form="'createEtfFlowForm' + idSuffix"
-      >
-        Speichern
-      </button>
+      <ButtonSubmit button-label="Speichern" form-id="createEtfFlowForm" />
     </template>
   </ModalVue>
 </template>
 
-<script lang="ts">
-import type { EtfFlow } from "@/model/etf/EtfFlow";
-import EtfFlowControllerHandler from "@/handler/EtfControllerHandler";
-import { generateErrorData, type ErrorData } from "@/tools/views/ErrorData";
-import { validateInputField } from "@/tools/views/ValidateInputField";
-import { defineComponent } from "vue";
+<script lang="ts" setup>
+import { useForm } from "vee-validate";
+import { computed, ref } from "vue";
+import { coerce, date, string, type ZodType, union } from "zod";
+
+import ButtonSubmit from "../ButtonSubmit.vue";
+import DivError from "../DivError.vue";
+import InputDate from "../InputDate.vue";
+import InputStandard from "../InputStandard.vue";
 import ModalVue from "../Modal.vue";
-import { getError } from "@/tools/views/ThrowError";
-import type { ValidationResult } from "@/model/validation/ValidationResult";
+import SelectStandard from "../SelectStandard.vue";
+
 import { formatTime } from "@/tools/views/FormatDate";
+import { globErr } from "@/tools/views/ZodUtil";
+import { handleServerError } from "@/tools/views/ThrowError";
+
 import type { Etf } from "@/model/etf/Etf";
-import DatepickerVue from "../Datepicker.vue";
+import type { EtfFlow } from "@/model/etf/EtfFlow";
+import type { SelectBoxValue } from "@/model/SelectBoxValue";
 
-type CreateEtfFlowModalData = {
-  etfs: Array<Etf>;
-  etfFlow: EtfFlow;
-  origEtfFlow: EtfFlow | undefined;
-  bookingdate: Date | undefined;
-  bookingtime: string;
-  serverError: Array<String>;
-  etfIsValid: boolean | null;
-  etfErrorMessage: string;
-  bookingdateIsValid: boolean | null;
-  bookingdateErrorMessage: string;
-  bookingtimeIsValid: boolean | null;
-  bookingtimeErrorMessage: string;
-  amountIsValid: boolean | null;
-  amountErrorMessage: string;
-  priceIsValid: boolean | null;
-  priceErrorMessage: string;
+import EtfFlowControllerHandler from "@/handler/EtfControllerHandler";
+
+const serverErrors = ref(new Array<string>());
+
+const amountErrMsg = globErr("Bitte Stück angeben!");
+const priceErrMsg = globErr("Bitte Stückpreis angeben!");
+
+const schema: Partial<{ [key in keyof EtfFlow]: ZodType }> = {
+  isin: string(globErr("Bitte ETF angeben!")),
+  timestamp: date(globErr("Bitte Buchungsdatum angeben!")),
+  nanoseconds: string(
+    globErr("Bitte Buchungszeit im Format 00:00:00:000 angeben!")
+  ).regex(new RegExp("^[0-9][0-9]:[0-9][0-9]:[0-9][0-9]:[0-9]{3}$")),
+  amount: union(
+    [coerce.number(amountErrMsg).gt(0), coerce.number(amountErrMsg).lt(0)],
+    amountErrMsg
+  ),
+  price: union(
+    [coerce.number(priceErrMsg).gt(0), coerce.number(priceErrMsg).lt(0)],
+    priceErrMsg
+  ),
 };
-export default defineComponent({
-  name: "CreateEtfFlowModal",
-  data(): CreateEtfFlowModalData {
-    return {
-      etfs: {} as Array<Etf>,
-      etfFlow: {} as EtfFlow,
-      origEtfFlow: undefined,
-      bookingdate: undefined,
-      bookingtime: "",
-      serverError: {} as Array<String>,
-      etfIsValid: null,
-      etfErrorMessage: "",
-      bookingdateIsValid: null,
-      bookingdateErrorMessage: "",
-      bookingtimeIsValid: null,
-      bookingtimeErrorMessage: "",
-      amountIsValid: null,
-      amountErrorMessage: "",
-      priceIsValid: null,
-      priceErrorMessage: "",
-    };
-  },
-  props: {
-    idSuffix: {
-      type: String,
-      default: "",
-    },
-  },
-  computed: {
-    formIsValid(): boolean {
-      const isValid =
-        this.etfIsValid &&
-        this.bookingdateIsValid &&
-        this.bookingtimeIsValid &&
-        this.amountIsValid &&
-        this.priceIsValid;
-      if (isValid) {
-        return true;
-      }
-      return false;
-    },
-    title(): string {
-      return this.origEtfFlow === undefined
-        ? "ETF Buchung hinzufügen"
-        : "ETF Buchung bearbeiten";
-    },
-    etfErrorData(): ErrorData {
-      return generateErrorData(this.etfIsValid, "ETF", this.etfErrorMessage);
-    },
-    bookingdateErrorData(): ErrorData {
-      return generateErrorData(
-        this.bookingdateIsValid,
-        "Buchungsdatum",
-        this.bookingdateErrorMessage
-      );
-    },
-    bookingtimeErrorData(): ErrorData {
-      return generateErrorData(
-        this.bookingtimeIsValid,
-        "Buchungszeit",
-        this.bookingtimeErrorMessage
-      );
-    },
-    amountErrorData(): ErrorData {
-      return generateErrorData(
-        this.amountIsValid,
-        "Stück",
-        this.amountErrorMessage
-      );
-    },
-    priceErrorData(): ErrorData {
-      return generateErrorData(
-        this.priceIsValid,
-        "Stückpreis",
-        this.priceErrorMessage
-      );
-    },
-  },
-  methods: {
-    async _show(etfs: Array<Etf>, etfFlow?: EtfFlow) {
-      this.etfs = etfs;
-      this.origEtfFlow = etfFlow ? etfFlow : undefined;
-      this.resetForm();
-      (this.$refs.modalComponent as typeof ModalVue)._show();
-    },
-    resetForm() {
-      if (this.origEtfFlow) {
-        const bookingDate = new Date(this.origEtfFlow.timestamp);
 
-        this.etfFlow = {
-          amount: this.origEtfFlow.amount,
-          etfflowid: this.origEtfFlow.etfflowid,
-          isin: this.origEtfFlow.isin,
-          nanoseconds: this.origEtfFlow.nanoseconds,
-          price: this.origEtfFlow.price,
-          timestamp: this.origEtfFlow.timestamp,
-        };
+const etfs = ref({} as Array<SelectBoxValue>);
+const etfFlow = ref({} as EtfFlow);
+const origEtfFlow = ref({} as EtfFlow | undefined);
+const bookingdate = ref({} as Date);
+const bookingtime = ref("");
+const modalComponent = ref();
+const emit = defineEmits(["etfFlowCreated", "etfFlowUpdated"]);
 
-        const timestamp = new Date(this.etfFlow.timestamp);
-        this.bookingdate = bookingDate;
-        this.bookingtime =
-          formatTime(timestamp) +
-          ":" +
-          String(this.etfFlow.nanoseconds + 1000000000).substring(1, 4); //80000000 -> 1080000000 -> 080
-      } else {
-        const bookingDate = new Date();
+const { handleSubmit, values, setFieldTouched } = useForm();
 
-        this.etfFlow = {} as EtfFlow;
-        this.bookingdate = bookingDate;
-        this.bookingtime = "";
-        this.etfFlow.isin = this.etfs[0].isin;
-      }
-      this.etfIsValid = null;
-      this.etfErrorMessage = "";
-      this.bookingdateIsValid = null;
-      this.bookingdateErrorMessage = "";
-      this.bookingtimeIsValid = null;
-      this.bookingtimeErrorMessage = "";
-      this.amountIsValid = null;
-      this.amountErrorMessage = "";
-      this.priceIsValid = null;
-      this.priceErrorMessage = "";
+const title = computed(() => {
+  return etfFlow.value === undefined
+    ? "ETF Buchung hinzufügen"
+    : "ETF Buchung bearbeiten";
+});
 
-      this.serverError = {} as Array<String>;
-    },
-    validateEtf() {
-      [this.etfIsValid, this.etfErrorMessage] = validateInputField(
-        this.etfFlow.isin,
-        "ETF auswählen!"
-      );
-    },
-    validateBookingdate() {
-      [this.bookingdateIsValid, this.bookingdateErrorMessage] =
-        validateInputField(this.etfFlow.timestamp, "Buchungsdatum angeben!");
-    },
-    validateBookingtime() {
-      const message = "Buchungszeit im Format 00:00:00:000 angeben!";
-      [this.bookingtimeIsValid, this.bookingtimeErrorMessage] =
-        validateInputField(this.bookingtime, message);
-      if (
-        !/^[0-9][0-9]:[0-9][0-9]:[0-9][0-9]:[0-9]{3}$/.test(this.bookingtime)
-      ) {
-        this.bookingtimeIsValid = false;
-        this.bookingtimeErrorMessage = message;
-      }
-    },
-    validateAmount() {
-      [this.amountIsValid, this.amountErrorMessage] = validateInputField(
-        this.etfFlow.amount,
-        "Stück angeben!"
-      );
-    },
-    validatePrice() {
-      [this.priceIsValid, this.priceErrorMessage] = validateInputField(
-        this.etfFlow.price,
-        "Stückpreis angeben!"
-      );
-    },
-    bookingdateSelected(date: Date) {
-      this.etfFlow.timestamp = date;
-      this.validateBookingdate();
-    },
-    handleServerError(validationResult: ValidationResult): boolean {
-      if (!validationResult.result) {
-        this.serverError = new Array<string>();
-        for (let resultItem of validationResult.validationResultItems) {
-          this.serverError.push(getError(resultItem.error));
-        }
-      }
-      return !validationResult.result;
-    },
+const resetForm = () => {
+  if (origEtfFlow.value) {
+    Object.assign(etfFlow.value, origEtfFlow.value);
+    bookingdate.value = new Date(origEtfFlow.value.timestamp);
+    bookingdate.value.setHours(0, 0, 0, 0);
 
-    async createEtfFlow() {
-      this.validateEtf();
-      this.validateBookingdate();
-      this.validateBookingtime();
-      this.validateAmount();
-      this.validatePrice();
+    bookingtime.value =
+      formatTime(origEtfFlow.value.timestamp) +
+      ":" +
+      String(origEtfFlow.value.nanoseconds + 1000000000).substring(1, 4); //80000000 -> 1080000000 -> 080
+  } else {
+    etfFlow.value = {
+      isin: etfs.value[0].id,
+    } as EtfFlow;
 
-      if (this.formIsValid) {
-        const times: Array<string> = this.bookingtime.split(":");
-        const bookingDate = this.bookingdate;
-        if (times && times.length == 4 && bookingDate) {
-          this.etfFlow.timestamp = bookingDate;
-          this.etfFlow.timestamp.setHours(+times[0], +times[1], +times[2], 0);
-          this.etfFlow.nanoseconds = +times[3] * 1000000;
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    bookingdate.value = today;
+    bookingtime.value = "";
+  }
+  serverErrors.value = new Array<string>();
+  Object.keys(values).forEach((field) => setFieldTouched(field, false));
+};
 
-          if (this.etfFlow.etfflowid > 0) {
-            //update
-            const validationResult =
-              await EtfFlowControllerHandler.updateEtfFlow(this.etfFlow);
-            if (!this.handleServerError(validationResult)) {
-              (this.$refs.modalComponent as typeof ModalVue)._hide();
-              this.$emit("etfFlowUpdated", this.etfFlow);
-            }
-          } else {
-            //create
-            const etfFlowValidation =
-              await EtfFlowControllerHandler.createEtfFlow(this.etfFlow);
-            const validationResult = etfFlowValidation.validationResult;
+const _show = (_etfs: Array<Etf>, _etfFlow?: EtfFlow) => {
+  etfs.value = new Array<SelectBoxValue>();
+  for (let etf of _etfs) {
+    etfs.value.push({ id: etf.isin, value: etf.name });
+  }
+  origEtfFlow.value = _etfFlow ? _etfFlow : undefined;
+  resetForm();
+  modalComponent.value._show();
+};
 
-            if (!this.handleServerError(validationResult)) {
-              this.etfFlow = etfFlowValidation.etfFlow;
-              (this.$refs.modalComponent as typeof ModalVue)._hide();
-              this.$emit("etfFlowCreated", this.etfFlow);
-            }
+const createEtfFlow = handleSubmit(() => {
+  const times: Array<string> = bookingtime.value.split(":");
+  const bookingDate = bookingdate.value;
+  if (times && times.length == 4 && bookingDate) {
+    etfFlow.value.timestamp = bookingDate;
+    etfFlow.value.timestamp.setHours(+times[0], +times[1], +times[2], 0);
+    etfFlow.value.nanoseconds = +times[3] * 1000000;
+
+    if (etfFlow.value.etfflowid > 0) {
+      //update
+      EtfFlowControllerHandler.updateEtfFlow(etfFlow.value).then(
+        (validationResult) => {
+          if (!handleServerError(validationResult, serverErrors)) {
+            modalComponent.value._hide();
+            emit("etfFlowUpdated", etfFlow.value);
           }
         }
-      }
-    },
-  },
-  expose: ["_show"],
-  emits: ["etfFlowCreated", "etfFlowUpdated"],
-  components: { ModalVue, DatepickerVue },
+      );
+    } else {
+      //create
+      EtfFlowControllerHandler.createEtfFlow(etfFlow.value).then(
+        (etfFlowValidation) => {
+          const validationResult = etfFlowValidation.validationResult;
+
+          if (!handleServerError(validationResult, serverErrors)) {
+            etfFlow.value = etfFlowValidation.etfFlow;
+            modalComponent.value._hide();
+            emit("etfFlowCreated", etfFlow.value);
+          }
+        }
+      );
+    }
+  }
 });
+defineExpose({ _show });
 </script>
