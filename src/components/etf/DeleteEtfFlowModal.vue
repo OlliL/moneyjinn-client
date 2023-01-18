@@ -35,7 +35,9 @@
         >
           Preis pro St&uuml;ck
         </div>
-        <div :class="'col-sm-9 ' + priceClass">{{ priceString }} &euro;</div>
+        <div class="col-sm-9 text-start">
+          <SpanAmount :amount="etfFlow.price" />
+        </div>
       </div>
     </template>
     <template #footer>
@@ -46,57 +48,50 @@
   </ModalVue>
 </template>
 
-<script lang="ts">
-import EtfFlowControllerHandler from "@/handler/EtfControllerHandler";
-import type { EtfFlow } from "@/model/etf/EtfFlow";
+<script lang="ts" setup>
+import { computed, ref } from "vue";
+
+import ModalVue from "../Modal.vue";
+import SpanAmount from "../SpanAmount.vue";
+
 import { formatDateWithTime } from "@/tools/views/FormatDate";
 import { formatNumber, redIfNegativeStart } from "@/tools/views/FormatNumber";
-import { defineComponent } from "vue";
-import ModalVue from "../Modal.vue";
 
-export default defineComponent({
-  name: "DeleteEtfFlowModal",
-  data() {
-    return {
-      etfFlow: {} as EtfFlow,
-      etfName: "",
-    };
-  },
-  computed: {
-    amountClass() {
-      return redIfNegativeStart(this.etfFlow.amount);
-    },
-    amountString() {
-      return formatNumber(this.etfFlow.amount, 3);
-    },
-    priceClass() {
-      return redIfNegativeStart(this.etfFlow.price);
-    },
-    priceString() {
-      return formatNumber(this.etfFlow.price, 3);
-    },
-    timestampString() {
-      return (
-        formatDateWithTime(this.etfFlow.timestamp) +
-        ":" +
-        String(this.etfFlow.nanoseconds + 1000000000).substring(1, 4) //80000000 -> 1080000000 -> 080
-      );
-    },
-  },
-  methods: {
-    async _show(etfFlow: EtfFlow, etfName: string) {
-      this.etfFlow = etfFlow;
-      this.etfName = etfName;
-      (this.$refs.modalComponent as typeof ModalVue)._show();
-    },
-    async deleteEtfFlow() {
-      await EtfFlowControllerHandler.deleteEtfFlow(this.etfFlow.etfflowid);
-      (this.$refs.modalComponent as typeof ModalVue)._hide();
-      this.$emit("etfFlowDeleted", this.etfFlow);
-    },
-  },
-  expose: ["_show"],
-  emits: ["etfFlowDeleted"],
-  components: { ModalVue },
+import type { EtfFlow } from "@/model/etf/EtfFlow";
+
+import EtfFlowControllerHandler from "@/handler/EtfControllerHandler";
+
+const etfFlow = ref({} as EtfFlow);
+const etfName = ref("");
+const modalComponent = ref();
+const emit = defineEmits(["etfFlowDeleted"]);
+
+const amountClass = computed(() => {
+  return redIfNegativeStart(etfFlow.value.amount);
 });
+const amountString = computed(() => {
+  return formatNumber(etfFlow.value.amount, 3);
+});
+
+const timestampString = computed(() => {
+  return (
+    formatDateWithTime(etfFlow.value.timestamp) +
+    ":" +
+    String(etfFlow.value.nanoseconds + 1000000000).substring(1, 4) //80000000 -> 1080000000 -> 080
+  );
+});
+
+const _show = (_etfFlow: EtfFlow, _etfName: string) => {
+  etfFlow.value = _etfFlow;
+  etfName.value = _etfName;
+  modalComponent.value._show();
+};
+const deleteEtfFlow = () => {
+  EtfFlowControllerHandler.deleteEtfFlow(etfFlow.value.etfflowid).then(() => {
+    modalComponent.value._hide();
+    emit("etfFlowDeleted", etfFlow.value);
+  });
+};
+
+defineExpose({ _show });
 </script>
