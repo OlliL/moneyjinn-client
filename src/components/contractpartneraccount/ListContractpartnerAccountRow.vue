@@ -21,8 +21,9 @@
   </tr>
 </template>
 <script lang="ts" setup>
-import type { ContractpartnerAccount } from "@/model/contractpartneraccount/ContractpartnerAccount";
 import type { PropType } from "vue";
+
+import type { ContractpartnerAccount } from "@/model/contractpartneraccount/ContractpartnerAccount";
 
 const props = defineProps({
   mca: {

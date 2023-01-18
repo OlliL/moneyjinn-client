@@ -7,8 +7,8 @@
       {{ timestampString }}
     </td>
     <td :class="amountClass">{{ amountString }}</td>
-    <td class="text-end">{{ priceString }} &euro;</td>
-    <td :class="amountPriceClass">{{ amountPriceString }} &euro;</td>
+    <td class="text-end"><SpanAmount :amount="flow.price" /></td>
+    <td class="text-end"><SpanAmount :amount="flow.amount * flow.price" /></td>
     <td class="text-center">
       <span role="button" class="link-primary" @click="editEtfFlow"
         >bearbeiten</span
@@ -21,52 +21,44 @@
     </td>
   </tr>
 </template>
-<script lang="ts">
-import type { ListDepotRowData } from "./ListDepotRowData";
-import { defineComponent, type PropType } from "vue";
-import { formatNumber, redIfNegativeEnd } from "@/tools/views/FormatNumber";
-import { formatDateWithTime } from "@/tools/views/FormatDate";
+<script lang="ts" setup>
+import { computed, type PropType } from "vue";
 
-export default defineComponent({
-  name: "ListEtfFlowRow",
-  props: {
-    flow: {
-      type: Object as PropType<ListDepotRowData>,
-      required: true,
-    },
-  },
-  emits: ["deleteEtfFlow", "editEtfFlow"],
-  computed: {
-    amountClass() {
-      return redIfNegativeEnd(this.flow.amount);
-    },
-    amountPriceClass() {
-      return redIfNegativeEnd(this.flow.amount);
-    },
-    amountString() {
-      return formatNumber(this.flow.amount, 3);
-    },
-    priceString() {
-      return formatNumber(this.flow.price, 3);
-    },
-    amountPriceString() {
-      return formatNumber(this.flow.amount * this.flow.price, 2);
-    },
-    timestampString() {
-      return (
-        formatDateWithTime(this.flow.timestamp) +
-        ":" +
-        String(this.flow.nanoseconds + 1000000000).substring(1, 4) //80000000 -> 1080000000 -> 080
-      );
-    },
-  },
-  methods: {
-    deleteEtfFlow() {
-      this.$emit("deleteEtfFlow", this.flow, this.flow.name);
-    },
-    editEtfFlow() {
-      this.$emit("editEtfFlow", this.flow);
-    },
+import SpanAmount from "../SpanAmount.vue";
+
+import { formatDateWithTime } from "@/tools/views/FormatDate";
+import { formatNumber, redIfNegativeEnd } from "@/tools/views/FormatNumber";
+
+import type { ListDepotRowData } from "./ListDepotRowData";
+
+const props = defineProps({
+  flow: {
+    type: Object as PropType<ListDepotRowData>,
+    required: true,
   },
 });
+
+const emit = defineEmits(["deleteEtfFlow", "editEtfFlow"]);
+
+const amountClass = computed(() => {
+  return redIfNegativeEnd(props.flow.amount);
+});
+const amountString = computed(() => {
+  return formatNumber(props.flow.amount, 3);
+});
+
+const timestampString = computed(() => {
+  return (
+    formatDateWithTime(props.flow.timestamp) +
+    ":" +
+    String(props.flow.nanoseconds + 1000000000).substring(1, 4) //80000000 -> 1080000000 -> 080
+  );
+});
+
+const deleteEtfFlow = () => {
+  emit("deleteEtfFlow", props.flow, props.flow.name);
+};
+const editEtfFlow = () => {
+  emit("editEtfFlow", props.flow);
+};
 </script>
