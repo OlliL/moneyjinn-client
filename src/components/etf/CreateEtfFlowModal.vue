@@ -118,10 +118,12 @@ const schema: Partial<{ [key in keyof EtfFlow]: ZodType }> = {
   ),
 };
 
+//FIXME: console warning selectboxvalues
+
 const etfs = ref({} as Array<SelectBoxValue>);
 const etfFlow = ref({} as EtfFlow);
 const origEtfFlow = ref({} as EtfFlow | undefined);
-const bookingdate = ref({} as Date);
+const bookingdate = ref(new Date());
 const bookingtime = ref("");
 const modalComponent = ref();
 const emit = defineEmits(["etfFlowCreated", "etfFlowUpdated"]);
