@@ -92,13 +92,13 @@
                     <tbody>
                       <ImportReceiptSearchRowVue
                         v-for="moneyflow in moneyflows"
+                        v-model="selectedMoneyflowId"
                         :key="moneyflow.id"
                         :mmf="moneyflow"
                         :preselected="preselected"
                         :receipt-id="receipt.id"
                         @delete-moneyflow="emitDeleteMoneyflow"
                         @edit-moneyflow="emitEditMoneyflow"
-                        @emit-selection="selectMoneyflow"
                       />
                     </tbody>
                   </table>
@@ -198,9 +198,7 @@ const emitDeleteMoneyflow = (id: number) => {
 const emitEditMoneyflow = (id: number) => {
   emit("editMoneyflow", id);
 };
-const selectMoneyflow = (id: number) => {
-  selectedMoneyflowId.value = id;
-};
+
 const searchMoneyflows = handleSubmit(() => {
   searchExecuted.value = false;
   MoneyflowControllerHandler.searchMoneyflowsByAmount(
@@ -213,9 +211,9 @@ const searchMoneyflows = handleSubmit(() => {
     searchSuccessful.value = moneyflows.value.length > 0;
     if (moneyflows.value.length === 1) {
       preselected.value = true;
-      selectMoneyflow(moneyflows.value[0].id);
+      selectedMoneyflowId.value = moneyflows.value[0].id;
     } else {
-      selectMoneyflow(0);
+      selectedMoneyflowId.value = 0;
     }
   });
 });
