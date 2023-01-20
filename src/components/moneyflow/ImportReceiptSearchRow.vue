@@ -7,7 +7,7 @@
           type="radio"
           :name="'selectMoneyflow' + receiptId"
           :checked="preselected"
-          @change="emitSelection"
+          @change="moneyflowSelected"
         />
       </div>
     </td>
@@ -54,7 +54,11 @@ const props = defineProps({
 });
 
 const userSessionStore = useUserSessionStore();
-const emit = defineEmits(["deleteMoneyflow", "editMoneyflow", "emitSelection"]);
+const emit = defineEmits([
+  "deleteMoneyflow",
+  "editMoneyflow",
+  "update:modelValue",
+]);
 
 const isOwnMoneyflow = computed(() => {
   return props.mmf.userId === userSessionStore.getUserId;
@@ -66,7 +70,7 @@ const deleteMoneyflow = () => {
 const editMoneyflow = () => {
   emit("editMoneyflow", props.mmf.id);
 };
-const emitSelection = () => {
-  emit("emitSelection", props.mmf.id);
+const moneyflowSelected = () => {
+  emit("update:modelValue", props.mmf.id);
 };
 </script>
