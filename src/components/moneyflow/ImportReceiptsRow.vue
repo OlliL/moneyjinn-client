@@ -3,15 +3,7 @@
     <div class="col-md-9 col-xs-12">
       <div class="card w-100 bg-light">
         <div class="card-body">
-          <div v-if="serverError">
-            <div
-              class="alert alert-danger"
-              v-for="(error, index) in serverError"
-              :key="index"
-            >
-              {{ error }}
-            </div>
-          </div>
+          <DivError :server-errors="serverErrors" />
           <div class="row">
             <div
               style="overflow-x: scroll; white-space: nowrap; height: 400px"
@@ -31,64 +23,50 @@
               ></object>
             </div>
             <div class="col-md-9 col-xs-12">
-              <form @submit.prevent="searchMoneyflows">
+              <form
+                @submit.prevent="searchMoneyflows"
+                :id="'searchReceipt' + receipt.id"
+              >
                 <div
                   class="row no-gutters flex-lg-nowrap mb-4 justify-content-center"
                 >
                   <div
                     class="col-md-1 col-xs-6 d-flex align-items-center justify-content-end"
                   >
-                    <button type="submit" class="btn btn-primary">
-                      <i class="bi bi-search"></i>
-                    </button>
+                    <ButtonSubmit :form-id="'searchReceipt' + receipt.id">
+                      <template #icon
+                        ><i class="bi bi-search"></i>&nbsp;
+                      </template></ButtonSubmit
+                    >
                   </div>
                   <div class="col-md-3 col-xs-12">
-                    <div class="input-group">
-                      <div class="form-floating">
-                        <input
-                          v-model="amount"
-                          id="receiptAmount"
-                          type="number"
-                          step="0.01"
-                          @change="validateAmount"
-                          :class="
-                            ' form-control text-end ' +
-                            amountErrorData.inputClass
-                          "
-                        />
-                        <label
-                          for="amount"
-                          :style="'color: ' + amountErrorData.fieldColor"
-                          >{{ amountErrorData.fieldLabel }}</label
-                        >
-                      </div>
-                      <span class="input-group-text"
-                        ><i class="bi bi-currency-euro"></i
-                      ></span>
-                    </div>
+                    <InputStandard
+                      v-model="amount"
+                      :validation-schema="schema.amount"
+                      id="amount"
+                      field-type="number"
+                      field-label="Betrag"
+                    >
+                      <template #icon
+                        ><span class="input-group-text"
+                          ><i class="bi bi-currency-euro"></i></span
+                      ></template>
+                    </InputStandard>
                   </div>
                   <div class="col-md-3 col-xs-12">
-                    <DatepickerVue
-                      id="receiptStartDate"
-                      :label="startDateErrorData.fieldLabel"
-                      :default-date="startDate"
-                      :input-class="
-                        ' form-control ' + startDateErrorData.inputClass
-                      "
-                      :label-style="'color: ' + startDateErrorData.fieldColor"
-                      @date-selected="startDateSelected"
+                    <InputDate
+                      v-model="startDate"
+                      :validation-schema="schema.startDate"
+                      id="startDate"
+                      field-label="Startdatum"
                     />
                   </div>
                   <div class="col-md-3 col-xs-12">
-                    <DatepickerVue
-                      id="receiptEndDate"
-                      :label="endDateErrorData.fieldLabel"
-                      :default-date="endDate"
-                      :input-class="
-                        ' form-control ' + endDateErrorData.inputClass
-                      "
-                      :label-style="'color: ' + endDateErrorData.fieldColor"
-                      @date-selected="endDateSelected"
+                    <InputDate
+                      v-model="endDate"
+                      :validation-schema="schema.endDate"
+                      id="endDate"
+                      field-label="Enddatum"
                     />
                   </div>
                 </div>
@@ -157,205 +135,137 @@
   </div>
 </template>
 
-<script lang="ts">
-import ImportedMoneyflowReceiptControllerHandler from "@/handler/ImportedMoneyflowReceiptControllerHandler";
-import MoneyflowControllerHandler from "@/handler/MoneyflowControllerHandler";
+<script lang="ts" setup>
+import { useForm } from "vee-validate";
+import { computed, nextTick, onMounted, ref, type PropType } from "vue";
+import { coerce, date, union } from "zod";
+
+import ButtonSubmit from "../ButtonSubmit.vue";
+import DivError from "../DivError.vue";
+import ImportReceiptSearchRowVue from "./ImportReceiptSearchRow.vue";
+import InputStandard from "../InputStandard.vue";
+import InputDate from "../InputDate.vue";
+import { globErr } from "@/tools/views/ZodUtil";
+
+import { toFixed } from "@/tools/math";
+import { handleServerError } from "@/tools/views/ThrowError";
+
 import type { ImportedMoneyflowReceipt } from "@/model/moneyflow/ImportedMoneyflowReceipt";
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
-import type { ValidationResult } from "@/model/validation/ValidationResult";
-import { toFixed } from "@/tools/math";
-import { generateErrorData, type ErrorData } from "@/tools/views/ErrorData";
-import { getError } from "@/tools/views/ThrowError";
-import { validateInputField } from "@/tools/views/ValidateInputField";
-import { defineComponent, type PropType } from "vue";
-import ImportReceiptSearchRowVue from "./ImportReceiptSearchRow.vue";
-import DatepickerVue from "../Datepicker.vue";
 
-type ImportReceiptsRowData = {
-  serverError: Array<String> | undefined;
-  startDate: Date | undefined;
-  endDate: Date | undefined;
-  amount: number;
-  moneyflows: Array<Moneyflow>;
-  searchExecuted: boolean;
-  searchSuccessful: boolean;
-  selectedMoneyflowId: number;
-  startDateIsValid: boolean | null;
-  startDateErrorMessage: string;
-  endDateIsValid: boolean | null;
-  endDateErrorMessage: string;
-  amountIsValid: boolean | null;
-  amountErrorMessage: string;
-  preselected: boolean;
+import ImportedMoneyflowReceiptControllerHandler from "@/handler/ImportedMoneyflowReceiptControllerHandler";
+import MoneyflowControllerHandler from "@/handler/MoneyflowControllerHandler";
+
+const serverErrors = ref(new Array<string>());
+
+const amountErrMsg = globErr("Bitte Betrag angeben!");
+
+const schema = {
+  amount: union(
+    [coerce.number(amountErrMsg).gt(0), coerce.number(amountErrMsg).lt(0)],
+    amountErrMsg
+  ),
+  startDate: date(globErr("Bitte Startdatum angeben!")),
+  endDate: date(globErr("Bitte Enddatum angeben!")),
 };
 
-export default defineComponent({
-  name: "ImportReceiptsRow",
-  data(): ImportReceiptsRowData {
-    return {
-      serverError: undefined,
-      startDate: undefined,
-      endDate: undefined,
-      amount: 0,
-      moneyflows: {} as Array<Moneyflow>,
-      searchExecuted: false,
-      searchSuccessful: false,
-      selectedMoneyflowId: 0,
-      startDateIsValid: null,
-      startDateErrorMessage: "",
-      endDateIsValid: null,
-      endDateErrorMessage: "",
-      amountIsValid: null,
-      amountErrorMessage: "",
-      preselected: false,
-    };
-  },
-  mounted() {
-    const today = new Date();
-    const todayMinus30 = new Date();
-    todayMinus30.setDate(todayMinus30.getDate() - 30);
+const startDate = ref(new Date());
+const endDate = ref(new Date());
+const amount = ref(0);
+const moneyflows = ref({} as Array<Moneyflow>);
+const searchExecuted = ref(false);
+const searchSuccessful = ref(false);
+const selectedMoneyflowId = ref(0);
+const preselected = ref(false);
+const emit = defineEmits([
+  "deleteMoneyflow",
+  "editMoneyflow",
+  "removeReceiptFromView",
+]);
 
-    this.startDate = todayMinus30;
-    this.endDate = today;
-
-    const posOfDot = this.receipt.filename.indexOf(".");
-    const amountFromFilename = this.receipt.filename.substring(0, posOfDot);
-    if (!isNaN(Number(amountFromFilename))) {
-      this.amount = toFixed(+amountFromFilename / 100, 2);
-      this.searchMoneyflows();
-    }
+const props = defineProps({
+  receipt: {
+    type: Object as PropType<ImportedMoneyflowReceipt>,
+    required: true,
   },
-  props: {
-    receipt: {
-      type: Object as PropType<ImportedMoneyflowReceipt>,
-      required: true,
-    },
-  },
-  computed: {
-    isJpeg() {
-      return this.receipt.mediaType === "image/jpeg";
-    },
-    isPdf() {
-      return this.receipt.mediaType === "application/pdf";
-    },
-    moneyflowSelected() {
-      return this.selectedMoneyflowId > 0;
-    },
-    formIsValid(): boolean {
-      const isValid =
-        this.startDateIsValid && this.endDateIsValid && this.amountIsValid;
-      if (isValid === null || isValid === undefined || isValid === true) {
-        return true;
-      }
-      return false;
-    },
-    startDateErrorData(): ErrorData {
-      return generateErrorData(
-        this.startDateIsValid,
-        "Startdatum",
-        this.startDateErrorMessage
-      );
-    },
-    endDateErrorData(): ErrorData {
-      return generateErrorData(
-        this.endDateIsValid,
-        "Enddatum",
-        this.endDateErrorMessage
-      );
-    },
-    amountErrorData(): ErrorData {
-      return generateErrorData(
-        this.amountIsValid,
-        "Betrag",
-        this.amountErrorMessage
-      );
-    },
-  },
-  emits: ["deleteMoneyflow", "editMoneyflow", "removeReceiptFromView"],
-  methods: {
-    async searchMoneyflows() {
-      this.validateAmount();
-      this.validateEndDate();
-      this.validateStartDate();
-
-      if (this.formIsValid && this.startDate && this.endDate) {
-        this.searchExecuted = false;
-        this.moneyflows =
-          await MoneyflowControllerHandler.searchMoneyflowsByAmount(
-            this.amount,
-            this.startDate,
-            this.endDate
-          );
-        this.searchExecuted = true;
-        this.searchSuccessful = this.moneyflows.length > 0;
-        if (this.moneyflows.length === 1) {
-          this.preselected = true;
-          this.selectMoneyflow(this.moneyflows[0].id);
-        }
-      }
-    },
-    validateStartDate() {
-      [this.startDateIsValid, this.startDateErrorMessage] = validateInputField(
-        this.startDate,
-        "Startdatum angeben!"
-      );
-    },
-    validateEndDate() {
-      [this.endDateIsValid, this.endDateErrorMessage] = validateInputField(
-        this.endDate,
-        "Enddatum angeben!"
-      );
-    },
-    validateAmount() {
-      [this.amountIsValid, this.amountErrorMessage] = validateInputField(
-        this.amount,
-        "Betrag angeben!"
-      );
-    },
-    emitDeleteMoneyflow(id: number) {
-      this.$emit("deleteMoneyflow", id);
-    },
-    emitEditMoneyflow(id: number) {
-      this.$emit("editMoneyflow", id);
-    },
-    selectMoneyflow(id: number) {
-      this.selectedMoneyflowId = id;
-    },
-    startDateSelected(date: Date) {
-      this.startDate = date;
-      this.validateStartDate();
-    },
-    endDateSelected(date: Date) {
-      this.endDate = date;
-      this.validateEndDate();
-    },
-    followUpServerCall(validationResult: ValidationResult): boolean {
-      if (!validationResult.result) {
-        this.serverError = new Array<string>();
-        for (let resultItem of validationResult.validationResultItems) {
-          this.serverError.push(getError(resultItem.error));
-        }
-        return false;
-      }
-      return true;
-    },
-    async importReceipt() {
-      const validationResult: ValidationResult =
-        await ImportedMoneyflowReceiptControllerHandler.importImportedMoneyflowReceipt(
-          this.receipt.id,
-          this.selectedMoneyflowId
-        );
-      if (this.followUpServerCall(validationResult)) {
-        this.$emit("removeReceiptFromView", this.receipt.id);
-      }
-    },
-    deleteReceipt() {
-      ImportedMoneyflowReceiptControllerHandler.deleteImportedMoneyflowReceiptById(
-        this.receipt.id
-      );
-      this.$emit("removeReceiptFromView", this.receipt.id);
-    },
-  },
-  components: { ImportReceiptSearchRowVue, DatepickerVue },
 });
+
+const { handleSubmit } = useForm();
+
+const emitDeleteMoneyflow = (id: number) => {
+  emit("deleteMoneyflow", id);
+};
+const emitEditMoneyflow = (id: number) => {
+  emit("editMoneyflow", id);
+};
+const selectMoneyflow = (id: number) => {
+  selectedMoneyflowId.value = id;
+};
+const searchMoneyflows = handleSubmit(() => {
+  searchExecuted.value = false;
+  MoneyflowControllerHandler.searchMoneyflowsByAmount(
+    amount.value,
+    startDate.value,
+    endDate.value
+  ).then((_moneyflows) => {
+    moneyflows.value = _moneyflows;
+    searchExecuted.value = true;
+    searchSuccessful.value = moneyflows.value.length > 0;
+    if (moneyflows.value.length === 1) {
+      preselected.value = true;
+      selectMoneyflow(moneyflows.value[0].id);
+    } else {
+      selectMoneyflow(0);
+    }
+  });
+});
+
+onMounted(() => {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const todayMinus30 = new Date();
+  todayMinus30.setHours(0, 0, 0, 0);
+  todayMinus30.setDate(todayMinus30.getDate() - 30);
+
+  startDate.value = todayMinus30;
+  endDate.value = today;
+
+  const posOfDot = props.receipt.filename.indexOf(".");
+  const amountFromFilename = props.receipt.filename.substring(0, posOfDot);
+  if (!isNaN(Number(amountFromFilename))) {
+    amount.value = toFixed(+amountFromFilename / 100, 2);
+    nextTick(() => {
+      searchMoneyflows();
+    });
+  }
+});
+
+const isJpeg = computed(() => {
+  return props.receipt.mediaType === "image/jpeg";
+});
+const isPdf = computed(() => {
+  return props.receipt.mediaType === "application/pdf";
+});
+const moneyflowSelected = computed(() => {
+  return selectedMoneyflowId.value > 0;
+});
+
+const importReceipt = () => {
+  ImportedMoneyflowReceiptControllerHandler.importImportedMoneyflowReceipt(
+    props.receipt.id,
+    selectedMoneyflowId.value
+  ).then((validationResult) => {
+    if (!handleServerError(validationResult, serverErrors)) {
+      emit("removeReceiptFromView", props.receipt.id);
+    }
+  });
+};
+
+const deleteReceipt = () => {
+  ImportedMoneyflowReceiptControllerHandler.deleteImportedMoneyflowReceiptById(
+    props.receipt.id
+  ).then(() => {
+    emit("removeReceiptFromView", props.receipt.id);
+  });
+};
 </script>
