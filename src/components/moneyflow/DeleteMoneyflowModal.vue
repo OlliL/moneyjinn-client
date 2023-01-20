@@ -79,34 +79,31 @@
   </ModalVue>
 </template>
 
-<script lang="ts">
-import MoneyflowControllerHandler from "@/handler/MoneyflowControllerHandler";
-import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
-import { defineComponent } from "vue";
+<script lang="ts" setup>
+import { ref } from "vue";
+
 import ModalVue from "../Modal.vue";
 import SpanAmount from "../SpanAmount.vue";
 import SpanDate from "../SpanDate.vue";
 
-export default defineComponent({
-  name: "DeleteMoneyflowModal",
-  data() {
-    return {
-      mmf: {} as Moneyflow,
-    };
-  },
-  methods: {
-    async _show(mmf: Moneyflow) {
-      this.mmf = mmf;
-      (this.$refs.modalComponent as typeof ModalVue)._show();
-    },
-    async deleteMoneyflow() {
-      await MoneyflowControllerHandler.deleteMoneyflow(this.mmf.id);
-      (this.$refs.modalComponent as typeof ModalVue)._hide();
-      this.$emit("moneyflowDeleted", this.mmf);
-    },
-  },
-  expose: ["_show"],
-  emits: ["moneyflowDeleted"],
-  components: { ModalVue, SpanAmount, SpanDate },
-});
+import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
+
+import MoneyflowControllerHandler from "@/handler/MoneyflowControllerHandler";
+
+const mmf = ref({} as Moneyflow);
+const modalComponent = ref();
+const emit = defineEmits(["moneyflowDeleted"]);
+
+const _show = (_mmf: Moneyflow) => {
+  mmf.value = _mmf;
+  modalComponent.value._show();
+};
+
+const deleteMoneyflow = () => {
+  MoneyflowControllerHandler.deleteMoneyflow(mmf.value.id).then(() => {
+    modalComponent.value._hide();
+    emit("moneyflowDeleted", mmf.value);
+  });
+};
+defineExpose({ _show });
 </script>
