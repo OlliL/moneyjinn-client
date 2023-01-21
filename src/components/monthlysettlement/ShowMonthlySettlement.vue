@@ -1,7 +1,7 @@
 <template>
   <table
     class="table table-striped table-bordered table-hover"
-    v-if="monthlySettlementsNoCredit"
+    v-if="monthlySettlementsNoCredit.length"
   >
     <col style="width: 70%" />
     <col style="width: 30%" />
@@ -14,23 +14,23 @@
     <tbody>
       <tr v-for="mms in monthlySettlementsNoCredit" :key="mms.id">
         <td class="text-start">{{ mms.capitalsourceComment }}</td>
-        <td :class="mms.amountClass">{{ mms.amountString }} &euro;</td>
+        <td class="text-end"><SpanAmount :amount="mms.amount" /></td>
       </tr>
       <tr>
         <td class="text-end">&sum;</td>
-        <td :class="monthlySettlementNoCreditSumClass">
-          <u>{{ monthlySettlementNoCreditSumString }} &euro;</u>
+        <td class="text-end">
+          <u><SpanAmount :amount="monthlySettlementNoCreditSum" /></u>
         </td>
       </tr>
     </tbody>
   </table>
   <table
     class="table table-striped table-bordered table-hover"
-    v-if="monthlySettlementsCredit"
+    v-if="monthlySettlementsCredit.length"
   >
     <col style="width: 70%" />
     <col style="width: 30%" />
-    <thead v-if="!monthlySettlementsNoCredit">
+    <thead v-if="!monthlySettlementsNoCredit.length">
       <tr>
         <th>Kapitalquelle</th>
         <th>Betrag</th>
@@ -39,122 +39,81 @@
     <tbody>
       <tr v-for="mms in monthlySettlementsCredit" :key="mms.id">
         <td class="text-start">{{ mms.capitalsourceComment }}</td>
-        <td :class="mms.amountClass">{{ mms.amountString }} &euro;</td>
+        <td class="text-end"><SpanAmount :amount="mms.amount" /></td>
       </tr>
       <tr>
         <td class="text-end">&sum;</td>
-        <td :class="monthlySettlementCreditSumClass">
-          <u>{{ monthlySettlementCreditSumString }} &euro;</u>
+        <td class="text-end">
+          <u>
+            <SpanAmount :amount="monthlySettlementCreditSum" />
+          </u>
         </td>
       </tr>
     </tbody>
   </table>
 </template>
 
-<script lang="ts">
-import MonthlySettlementControllerHandler from "@/handler/MonthlySettlementControllerHandler";
-import type { MonthlySettlement } from "@/model/monthlysettlement/MonthlySettlement";
-import { getMonthName } from "@/tools/views/MonthName";
-import { defineComponent } from "vue";
-import { formatNumber, redIfNegativeEnd } from "@/tools/views/FormatNumber";
+<script lang="ts" setup>
+import { onMounted, ref, watch } from "vue";
+
+import SpanAmount from "../SpanAmount.vue";
+
 import { CapitalsourceType } from "@/model/capitalsource/CapitalsourceType";
+import type { MonthlySettlement } from "@/model/monthlysettlement/MonthlySettlement";
 
-type MonthlySettlementData = MonthlySettlement & {
-  amountClass: string;
-  amountString: string;
-};
+import MonthlySettlementControllerHandler from "@/handler/MonthlySettlementControllerHandler";
 
-export default defineComponent({
-  name: "ShowMonthlySettlement",
-  data() {
-    return {
-      dataLoaded: false,
-      monthlySettlementsNoCredit: {} as Array<MonthlySettlementData>,
-      monthlySettlementsCredit: {} as Array<MonthlySettlementData>,
-      monthlySettlementNoCreditSumClass: "",
-      monthlySettlementNoCreditSumString: "",
-      monthlySettlementCreditSumClass: "",
-      monthlySettlementCreditSumString: "",
-    };
+const props = defineProps({
+  year: {
+    type: Number,
+    required: true,
   },
-  props: {
-    year: {
-      type: Number,
-      required: true,
-    },
-    month: {
-      type: Number,
-      required: true,
-    },
+  month: {
+    type: Number,
+    required: true,
   },
-  watch: {
-    month: {
-      handler(newVal: number, oldVal: number) {
-        if (newVal != oldVal)
-          this.loadMonthlySettlements(this.$props.year, newVal);
-      },
-      immediate: true,
-    },
-  },
-  created() {
-    this.loadMonthlySettlements(this.$props.year, this.$props.month);
-  },
-  computed: {
-    monthName(): string {
-      return getMonthName(this.$props.month);
-    },
-  },
-  methods: {
-    getMonthName(month: number): string {
-      return getMonthName(month);
-    },
-    async loadMonthlySettlements(year: number, month: number) {
-      const monthlySettlements: Array<MonthlySettlement> =
-        await MonthlySettlementControllerHandler.getMonthlySettlementList(
-          year,
-          month
-        );
+});
 
-      const monthlySettlementsCredit = new Array<MonthlySettlementData>();
-      const monthlySettlementsNoCredit = new Array<MonthlySettlementData>();
-      let monthlySettlementNoCreditSum = 0;
-      let monthlySettlementCreditSum = 0;
+const dataLoaded = ref(false);
+const monthlySettlementsNoCredit = ref({} as Array<MonthlySettlement>);
+const monthlySettlementsCredit = ref({} as Array<MonthlySettlement>);
+const monthlySettlementNoCreditSum = ref(0);
+const monthlySettlementCreditSum = ref(0);
+
+const loadMonthlySettlements = (year: number, month: number) => {
+  dataLoaded.value = false;
+  MonthlySettlementControllerHandler.getMonthlySettlementList(year, month).then(
+    (monthlySettlements: Array<MonthlySettlement>) => {
+      monthlySettlementsCredit.value = new Array<MonthlySettlement>();
+      monthlySettlementsNoCredit.value = new Array<MonthlySettlement>();
+      monthlySettlementCreditSum.value = 0;
+      monthlySettlementNoCreditSum.value = 0;
 
       for (let mms of monthlySettlements) {
-        const data: MonthlySettlementData = {
-          ...mms,
-          amountClass: redIfNegativeEnd(mms.amount),
-          amountString: formatNumber(mms.amount, 2),
-        };
         if (mms.capitalsourceType === CapitalsourceType.CREDIT) {
-          monthlySettlementsCredit.push(data);
-          monthlySettlementCreditSum += mms.amount;
+          monthlySettlementsCredit.value.push(mms);
+          monthlySettlementCreditSum.value += mms.amount;
         } else {
-          monthlySettlementsNoCredit.push(data);
-          monthlySettlementNoCreditSum += mms.amount;
+          monthlySettlementsNoCredit.value.push(mms);
+          monthlySettlementNoCreditSum.value += mms.amount;
         }
-
-        this.monthlySettlementsCredit = monthlySettlementsCredit;
-        this.monthlySettlementsNoCredit = monthlySettlementsNoCredit;
-
-        this.monthlySettlementNoCreditSumClass = redIfNegativeEnd(
-          monthlySettlementNoCreditSum
-        );
-        this.monthlySettlementNoCreditSumString = formatNumber(
-          monthlySettlementNoCreditSum,
-          2
-        );
-        this.monthlySettlementCreditSumClass = redIfNegativeEnd(
-          monthlySettlementCreditSum
-        );
-        this.monthlySettlementCreditSumString = formatNumber(
-          monthlySettlementCreditSum,
-          2
-        );
       }
-      this.dataLoaded = true;
-    },
-  },
-  components: {},
+      dataLoaded.value = true;
+    }
+  );
+};
+
+onMounted(() => {
+  loadMonthlySettlements(props.year, props.month);
 });
+
+watch(
+  () => props.month,
+  (newVal, oldVal) => {
+    if (newVal != oldVal) {
+      loadMonthlySettlements(props.year, newVal);
+    }
+  },
+  { immediate: true }
+);
 </script>
