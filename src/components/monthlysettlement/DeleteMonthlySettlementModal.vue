@@ -22,43 +22,38 @@
   </ModalVue>
 </template>
 
-<script lang="ts">
-import MonthlySettlementControllerHandler from "@/handler/MonthlySettlementControllerHandler";
-import { getMonthName } from "@/tools/views/MonthName";
-import { defineComponent } from "vue";
+<script lang="ts" setup>
+import { ref } from "vue";
+
 import ModalVue from "../Modal.vue";
 import ShowMonthlySettlementVue from "./ShowMonthlySettlement.vue";
 
-export default defineComponent({
-  name: "DeleteMonthlySettlementModal",
-  data() {
-    return {
-      year: 0,
-      month: 0,
-    };
-  },
-  computed: {
-    monthName(): string {
-      return getMonthName(this.month);
-    },
-  },
-  methods: {
-    async _show(year: number, month: number) {
-      this.year = year;
-      this.month = month;
-      (this.$refs.modalComponent as typeof ModalVue)._show();
-    },
-    async deleteMonthlySettlement() {
-      await MonthlySettlementControllerHandler.deleteMonthlySettlement(
-        this.year,
-        this.month
-      );
-      (this.$refs.modalComponent as typeof ModalVue)._hide();
-      this.$emit("monthlySettlementDeleted", this.year, this.month);
-    },
-  },
-  expose: ["_show"],
-  emits: ["monthlySettlementDeleted"],
-  components: { ModalVue, ShowMonthlySettlementVue },
-});
+import { getMonthName } from "@/tools/views/MonthName";
+
+import MonthlySettlementControllerHandler from "@/handler/MonthlySettlementControllerHandler";
+
+const month = ref(0);
+const monthName = ref("");
+const year = ref(0);
+const modalComponent = ref();
+const emit = defineEmits(["monthlySettlementDeleted"]);
+
+const _show = (_year: number, _month: number) => {
+  year.value = _year;
+  month.value = _month;
+  monthName.value = getMonthName(month.value);
+  modalComponent.value._show();
+};
+
+const deleteMonthlySettlement = () => {
+  MonthlySettlementControllerHandler.deleteMonthlySettlement(
+    year.value,
+    month.value
+  ).then(() => {
+    modalComponent.value._hide();
+    emit("monthlySettlementDeleted", year.value, month.value);
+  });
+};
+
+defineExpose({ _show });
 </script>
