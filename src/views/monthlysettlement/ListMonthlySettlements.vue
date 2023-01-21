@@ -189,6 +189,8 @@ export default defineComponent({
       );
     },
     monthlySettlementUpserted(year: number, month: number) {
+      this.selectedYear = 0;
+      this.selectedMonth = 0;
       this.loadMonth(year, month);
       router.push({
         name: Routes.ListMonthlySettlements,

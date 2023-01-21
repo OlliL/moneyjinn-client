@@ -18,6 +18,6 @@ const amountClass = computed(() => {
 });
 
 const amountString = computed(() => {
-  return props.amount ? formatNumber(props.amount, 2) : "";
+  return props.amount !== undefined ? formatNumber(props.amount, 2) : "";
 });
 </script>

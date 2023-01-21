@@ -1,5 +1,5 @@
 <template>
-  <div class="input-group">
+  <div class="input-group" v-if="fieldLabel">
     <div class="form-floating">
       <input
         v-model="fieldValue"
@@ -7,12 +7,27 @@
         :id="id"
         :type="fieldType"
         :class="'form-control ' + alignmentClass + ' ' + errorData.inputClass"
+        :disabled="disabled"
+        :step="step"
         @input="onInput($event)"
       />
       <label :for="id" :style="'color: ' + errorData.fieldColor">{{
         errorData.fieldLabel
       }}</label>
     </div>
+    <slot name="icon"></slot>
+  </div>
+  <div class="input-group" v-else>
+    <input
+      v-model="fieldValue"
+      ref="fieldRef"
+      :id="id"
+      :type="fieldType"
+      :class="'form-control ' + alignmentClass + ' ' + errorData.inputClass"
+      :disabled="disabled"
+      :step="step"
+      @input="onInput($event)"
+    />
     <slot name="icon"></slot>
   </div>
 </template>
@@ -44,7 +59,7 @@ const props = defineProps({
   },
   fieldLabel: {
     type: String,
-    required: true,
+    required: false,
   },
   fieldType: {
     type: String,
@@ -59,6 +74,15 @@ const props = defineProps({
     type: String,
     required: false,
   },
+  disabled: {
+    type: Boolean,
+    required: false,
+    default: false,
+  },
+  step: {
+    type: String,
+    requred: false,
+  },
 });
 const emit = defineEmits(["update:modelValue"]);
 
@@ -68,9 +92,7 @@ const {
   errorMessage,
   setState,
   handleChange,
-} = useField(props.id, toFieldValidator(props.validationSchema), {
-  initialValue: props.modelValue,
-});
+} = useField(props.id, toFieldValidator(props.validationSchema));
 
 const onInput = (event: Event) => {
   setState({ touched: true });
@@ -81,7 +103,7 @@ const onInput = (event: Event) => {
 const errorData = computed((): ErrorData => {
   return generateErrorDataVeeValidate(
     fieldMeta.touched,
-    props.fieldLabel,
+    props.fieldLabel ? props.fieldLabel : "",
     errorMessage.value
   );
 });
@@ -91,6 +113,8 @@ const alignmentClass = props.align ? "text-" + props.align : "";
 const fieldRef = ref(null);
 
 onMounted(() => {
+  fieldValue.value = props.modelValue;
+
   if (props.focus) {
     (fieldRef.value as any).focus();
   }
