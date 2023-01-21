@@ -28,7 +28,7 @@
 <script lang="ts" setup>
 import { useField } from "vee-validate";
 import { toFieldValidator } from "@vee-validate/zod";
-import { computed, onMounted, ref, useSlots, type PropType } from "vue";
+import { computed, onMounted, ref, type PropType } from "vue";
 import { any, type ZodType } from "zod";
 
 import type { SelectBoxValue } from "@/model/SelectBoxValue";
