@@ -42,11 +42,8 @@
       {{ moneyflowGroup.contractpartnerName }}
     </td>
 
-    <td
-      :class="amountClass"
-      style="white-space: nowrap; vertical-align: middle"
-    >
-      {{ amountString }} &euro;
+    <td class="text-end" style="white-space: nowrap; vertical-align: middle">
+      <SpanAmount :amount="moneyflowGroup.amount" />
     </td>
     <td class="text-start" style="vertical-align: middle">
       {{ moneyflowGroup.commentString }}
@@ -84,12 +81,15 @@
     </td>
   </tr>
 </template>
-<script lang="ts">
-import { defineComponent, type PropType } from "vue";
-import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
-import { formatNumber, redIfNegativeEnd } from "@/tools/views/FormatNumber";
-import SearchMoneyflowResultRowVue from "./SearchMoneyflowResultRow.vue";
+<script lang="ts" setup>
+import { onMounted, ref, type PropType } from "vue";
+
 import { Routes } from "@/router";
+
+import SearchMoneyflowResultRowVue from "./SearchMoneyflowResultRow.vue";
+import SpanAmount from "../SpanAmount.vue";
+
+import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 
 type MoneyflowGroup = {
   month: number;
@@ -102,69 +102,53 @@ type MoneyflowGroup = {
   moneyflows: Array<Moneyflow>;
 };
 
-export default defineComponent({
-  name: "SearchMoneyflowResultGroup",
-  data() {
-    return {
-      Routes: Routes,
-      collapseIconClass: "bi bi-caret-right-fill",
-      showDetails: false,
-    };
+const props = defineProps({
+  moneyflowGroupKey: {
+    type: String,
+    required: true,
   },
-  props: {
-    moneyflowGroupKey: {
-      type: String,
-      required: true,
-    },
-    moneyflowGroup: {
-      type: Object as PropType<MoneyflowGroup>,
-      required: true,
-    },
-    colBookingMonth: {
-      type: Boolean,
-      required: true,
-    },
-    colBookingYear: {
-      type: Boolean,
-      required: true,
-    },
-    colContractpartner: {
-      type: Boolean,
-      required: true,
-    },
+  moneyflowGroup: {
+    type: Object as PropType<MoneyflowGroup>,
+    required: true,
   },
-  mounted() {
-    document
-      .getElementById("collapseResults" + this.moneyflowGroupKey)
-      ?.addEventListener("show.bs.collapse", () => this.toggleButtonShow());
-    document
-      .getElementById("collapseResults" + this.moneyflowGroupKey)
-      ?.addEventListener("hide.bs.collapse", () => this.toggleButtonHide());
+  colBookingMonth: {
+    type: Boolean,
+    required: true,
   },
-  emits: ["deleteMoneyflow", "editMoneyflow"],
-  computed: {
-    amountClass(): string {
-      return redIfNegativeEnd(this.moneyflowGroup.amount);
-    },
-    amountString(): string {
-      return formatNumber(this.moneyflowGroup.amount, 2);
-    },
+  colBookingYear: {
+    type: Boolean,
+    required: true,
   },
-  methods: {
-    toggleButtonShow() {
-      this.collapseIconClass = "bi bi-caret-down-fill";
-      this.showDetails = true;
-    },
-    toggleButtonHide() {
-      this.collapseIconClass = "bi bi-caret-right-fill";
-    },
-    emitDeleteMoneyflow(id: number) {
-      this.$emit("deleteMoneyflow", id);
-    },
-    emitEditMoneyflow(id: number) {
-      this.$emit("editMoneyflow", id);
-    },
+  colContractpartner: {
+    type: Boolean,
+    required: true,
   },
-  components: { SearchMoneyflowResultRowVue },
+});
+
+const collapseIconClass = ref("bi bi-caret-right-fill");
+const showDetails = ref(false);
+const emit = defineEmits(["deleteMoneyflow", "editMoneyflow"]);
+
+const toggleButtonShow = () => {
+  collapseIconClass.value = "bi bi-caret-down-fill";
+  showDetails.value = true;
+};
+const toggleButtonHide = () => {
+  collapseIconClass.value = "bi bi-caret-right-fill";
+};
+const emitDeleteMoneyflow = (id: number) => {
+  emit("deleteMoneyflow", id);
+};
+const emitEditMoneyflow = (id: number) => {
+  emit("editMoneyflow", id);
+};
+
+onMounted(() => {
+  document
+    .getElementById("collapseResults" + props.moneyflowGroupKey)
+    ?.addEventListener("show.bs.collapse", () => toggleButtonShow());
+  document
+    .getElementById("collapseResults" + props.moneyflowGroupKey)
+    ?.addEventListener("hide.bs.collapse", () => toggleButtonHide());
 });
 </script>
