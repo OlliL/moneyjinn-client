@@ -11,7 +11,9 @@
         >
           Betrag
         </div>
-        <div :class="'col-sm-9 ' + amountClass">{{ amountString }}</div>
+        <div class="text-start col-sm-9">
+          <SpanAmount :amount="mpm.amount" />
+        </div>
       </div>
       <div class="row">
         <div
@@ -60,7 +62,9 @@
         >
           1x
         </div>
-        <div class="text-start col-sm-9">{{ mpm.onceAMonth }}</div>
+        <div class="text-start col-sm-9">
+          <b :style="'color:' + onceAMonthColor">{{ onceAMonthString }}</b>
+        </div>
       </div>
       <div class="row">
         <div
@@ -69,7 +73,9 @@
         >
           angelegt am
         </div>
-        <div class="text-start col-sm-9">{{ createDateString }}</div>
+        <div class="text-start col-sm-9">
+          <SpanDate :date="mpm.createDate" />
+        </div>
       </div>
       <div class="row">
         <div
@@ -78,7 +84,7 @@
         >
           verwendet am
         </div>
-        <div class="text-start col-sm-9">{{ lastUsedString }}</div>
+        <div class="text-start col-sm-9"><SpanDate :date="mpm.lastUsed" /></div>
       </div>
     </template>
     <template #footer>
@@ -93,54 +99,41 @@
   </ModalVue>
 </template>
 
-<script lang="ts">
-import PreDefMoneyflowControllerHandler from "@/handler/PreDefMoneyflowControllerHandler";
-import type { PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
-import { formatDate } from "@/tools/views/FormatDate";
-import { formatNumber, redIfNegativeStart } from "@/tools/views/FormatNumber";
-import { defineComponent } from "vue";
-import ModalVue from "../Modal.vue";
+<script lang="ts" setup>
+import { computed, ref } from "vue";
 
-export default defineComponent({
-  name: "DeletePreDefMoneyflowModal",
-  data() {
-    return {
-      mpm: {} as PreDefMoneyflow,
-    };
-  },
-  computed: {
-    createDateString(): string {
-      return this.mpm.createDate ? formatDate(this.mpm.createDate) : "";
-    },
-    lastUsedString(): string {
-      return this.mpm.lastUsed ? formatDate(this.mpm.lastUsed) : "";
-    },
-    onceAMonthColor(): string {
-      return this.mpm.onceAMonth ? "green" : "red";
-    },
-    onceAMonthString(): string {
-      return this.mpm.onceAMonth ? "Ja" : "Nein";
-    },
-    amountClass(): string {
-      return redIfNegativeStart(this.mpm.amount);
-    },
-    amountString(): string {
-      return formatNumber(this.mpm.amount, 2);
-    },
-  },
-  methods: {
-    async _show(mpm: PreDefMoneyflow) {
-      this.mpm = mpm;
-      (this.$refs.modalComponent as typeof ModalVue)._show();
-    },
-    async deletePreDefMoneyflow() {
-      await PreDefMoneyflowControllerHandler.deletePreDefMoneyflow(this.mpm.id);
-      (this.$refs.modalComponent as typeof ModalVue)._hide();
-      this.$emit("preDefMoneyflowDeleted", this.mpm);
-    },
-  },
-  expose: ["_show"],
-  emits: ["preDefMoneyflowDeleted"],
-  components: { ModalVue },
+import ModalVue from "../Modal.vue";
+import SpanAmount from "../SpanAmount.vue";
+import SpanDate from "../SpanDate.vue";
+
+import type { PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
+
+import PreDefMoneyflowControllerHandler from "@/handler/PreDefMoneyflowControllerHandler";
+
+const mpm = ref({} as PreDefMoneyflow);
+const modalComponent = ref();
+const emit = defineEmits(["preDefMoneyflowDeleted"]);
+
+const onceAMonthColor = computed(() => {
+  return mpm.value.onceAMonth ? "green" : "red";
 });
+const onceAMonthString = computed(() => {
+  return mpm.value.onceAMonth ? "Ja" : "Nein";
+});
+
+const _show = (_mpm: PreDefMoneyflow) => {
+  mpm.value = _mpm;
+  modalComponent.value._show();
+};
+
+const deletePreDefMoneyflow = () => {
+  PreDefMoneyflowControllerHandler.deletePreDefMoneyflow(mpm.value.id).then(
+    () => {
+      modalComponent.value._hide();
+      emit("preDefMoneyflowDeleted", mpm.value);
+    }
+  );
+};
+
+defineExpose({ _show });
 </script>
