@@ -117,7 +117,7 @@ import InputStandard from "../InputStandard.vue";
 import ModalVue from "../Modal.vue";
 
 import { handleServerError } from "@/tools/views/ThrowError";
-import { globErr } from "@/tools/views/ZodUtil";
+import { amountSchema, globErr } from "@/tools/views/ZodUtil";
 
 import { CapitalsourceType } from "@/model/capitalsource/CapitalsourceType";
 import type { MonthlySettlement } from "@/model/monthlysettlement/MonthlySettlement";
@@ -144,10 +144,7 @@ const { handleSubmit, values, setFieldTouched } = useForm();
 
 const schema: Partial<{ [key in keyof MonthlySettlement]: ZodType }> = {
   month: date(globErr("Bitte Monat auswählen!")),
-  amount: union([
-    string().regex(new RegExp("^-{0,1}[0-9][0-9]*(.[0-9]{1,2}){0,1}$")),
-    number(),
-  ]),
+  amount: amountSchema("Bitte Betrag angeben!"),
 };
 
 const _show = (_year?: number, _month?: number) => {
