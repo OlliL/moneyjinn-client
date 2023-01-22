@@ -4,6 +4,7 @@ import { WebSocketHandler } from "@/handler/WebSocketHandler";
 import type { Capitalsource } from "@/model/capitalsource/Capitalsource";
 import { CapitalsourceType } from "@/model/capitalsource/CapitalsourceType";
 import type { CapitalsourceChangedEventTransport } from "@/model/rest/wsevent/CapitalsourceChangedEventTransport";
+import type { SelectBoxValue } from "@/model/SelectBoxValue";
 import { defineStore, mapState } from "pinia";
 import { useUserSessionStore } from "./UserSessionStore";
 
@@ -58,6 +59,20 @@ export const useCapitalsourceStore = defineStore("capitalsource", {
 
         this.capitalsource.sort(this.compareCapitalsource);
       }
+    },
+    getAsSelectBoxValues(validityDate: Date): Array<SelectBoxValue> {
+      return this.capitalsource
+        .filter((mcs) => {
+          return (
+            validityDate >= mcs.validFrom &&
+            validityDate <= mcs.validTil &&
+            mcs.type != CapitalsourceType.CREDIT &&
+            (mcs.userId === this.getUserId || mcs.groupUse)
+          );
+        })
+        .map((mcs) => {
+          return { id: mcs.id, value: mcs.comment } as SelectBoxValue;
+        });
     },
     getCapitalsource(id: number): Capitalsource | undefined {
       return this.capitalsource.find((mcp) => {

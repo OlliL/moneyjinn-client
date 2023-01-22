@@ -3,6 +3,7 @@ import { mapContractpartnerTransportToModel } from "@/handler/mapper/Contractpar
 import { WebSocketHandler } from "@/handler/WebSocketHandler";
 import type { Contractpartner } from "@/model/contractpartner/Contractpartner";
 import type { ContractpartnerChangedEventTransport } from "@/model/rest/wsevent/ContractpartnerChangedEventTransport";
+import type { SelectBoxValue } from "@/model/SelectBoxValue";
 import { defineStore } from "pinia";
 
 export const useContractpartnerStore = defineStore("contractpartner", {
@@ -54,6 +55,17 @@ export const useContractpartnerStore = defineStore("contractpartner", {
 
         this.contractpartner.sort(this.compareContractpartnerByName);
       }
+    },
+    getAsSelectBoxValues(validityDate?: Date): Array<SelectBoxValue> {
+      return this.contractpartner
+        .filter((mcs) => {
+          return validityDate
+            ? validityDate >= mcs.validFrom && validityDate <= mcs.validTil
+            : true;
+        })
+        .map((mcs) => {
+          return { id: mcs.id, value: mcs.name } as SelectBoxValue;
+        });
     },
     getValidContractpartner(validityDate: Date) {
       return this.contractpartner.filter((mcp) => {

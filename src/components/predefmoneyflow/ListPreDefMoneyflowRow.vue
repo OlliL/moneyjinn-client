@@ -1,6 +1,6 @@
 <template>
   <tr>
-    <td :class="amountClass">{{ amountString }} &euro;</td>
+    <td class="text-end"><SpanAmount :amount="mpm.amount" /></td>
     <td class="text-start">{{ mpm.contractpartnerName }}</td>
     <td class="text-start">{{ mpm.comment }}</td>
     <td class="text-start">{{ mpm.postingAccountName }}</td>
@@ -9,8 +9,8 @@
       <b :style="'color:' + onceAMonthColor">{{ onceAMonthString }}</b>
     </td>
 
-    <td class="text-center">{{ createDateString }}</td>
-    <td class="text-center">{{ lastUsedString }}</td>
+    <td class="text-center"><SpanDate :date="mpm.createDate" /></td>
+    <td class="text-center"><SpanDate :date="mpm.lastUsed" /></td>
     <td class="text-center">
       <span role="button" class="link-primary" @click="editPreDefMoneyflow"
         >bearbeiten</span
@@ -23,48 +23,34 @@
     </td>
   </tr>
 </template>
-<script lang="ts">
-import type { PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
-import { formatDate } from "@/tools/views/FormatDate";
-import { formatNumber, redIfNegativeEnd } from "@/tools/views/FormatNumber";
-import { defineComponent, type PropType } from "vue";
+<script lang="ts" setup>
+import { computed, type PropType } from "vue";
 
-export default defineComponent({
-  name: "ListPreDefMoneyflowRow",
-  props: {
-    mpm: {
-      type: Object as PropType<PreDefMoneyflow>,
-      required: true,
-    },
-  },
-  emits: ["deletePreDefMoneyflow", "editPreDefMoneyflow"],
-  computed: {
-    createDateString(): string {
-      return this.mpm.createDate ? formatDate(this.mpm.createDate) : "";
-    },
-    lastUsedString(): string {
-      return this.mpm.lastUsed ? formatDate(this.mpm.lastUsed) : "";
-    },
-    onceAMonthColor(): string {
-      return this.mpm.onceAMonth ? "green" : "red";
-    },
-    onceAMonthString(): string {
-      return this.mpm.onceAMonth ? "Ja" : "Nein";
-    },
-    amountClass(): string {
-      return redIfNegativeEnd(this.mpm.amount);
-    },
-    amountString(): string {
-      return formatNumber(this.mpm.amount, 2);
-    },
-  },
-  methods: {
-    deletePreDefMoneyflow() {
-      this.$emit("deletePreDefMoneyflow", this.mpm);
-    },
-    editPreDefMoneyflow() {
-      this.$emit("editPreDefMoneyflow", this.mpm);
-    },
+import SpanAmount from "../SpanAmount.vue";
+import SpanDate from "../SpanDate.vue";
+
+import type { PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
+
+const props = defineProps({
+  mpm: {
+    type: Object as PropType<PreDefMoneyflow>,
+    required: true,
   },
 });
+const emit = defineEmits(["deletePreDefMoneyflow", "editPreDefMoneyflow"]);
+
+const onceAMonthColor = computed(() => {
+  return props.mpm.onceAMonth ? "green" : "red";
+});
+const onceAMonthString = computed(() => {
+  return props.mpm.onceAMonth ? "Ja" : "Nein";
+});
+
+const deletePreDefMoneyflow = () => {
+  emit("deletePreDefMoneyflow", props.mpm);
+};
+
+const editPreDefMoneyflow = () => {
+  emit("editPreDefMoneyflow", props.mpm);
+};
 </script>
