@@ -11,6 +11,10 @@ const props = defineProps({
   amount: {
     type: Number,
   },
+  decimalPlaces: {
+    type: Number,
+    default: 2,
+  },
 });
 
 const amountClass = computed(() => {
@@ -18,6 +22,8 @@ const amountClass = computed(() => {
 });
 
 const amountString = computed(() => {
-  return props.amount !== undefined ? formatNumber(props.amount, 2) : "";
+  return props.amount !== undefined
+    ? formatNumber(props.amount, props.decimalPlaces)
+    : "";
 });
 </script>
