@@ -45,6 +45,7 @@
                       :validation-schema="schema.amount"
                       id="amount"
                       field-type="number"
+                      step="0.01"
                       field-label="Betrag"
                     >
                       <template #icon
@@ -138,7 +139,7 @@
 <script lang="ts" setup>
 import { useForm } from "vee-validate";
 import { computed, nextTick, onMounted, ref, type PropType } from "vue";
-import { coerce, date, union } from "zod";
+import { date, number, string, union } from "zod";
 
 import ButtonSubmit from "../ButtonSubmit.vue";
 import DivError from "../DivError.vue";
@@ -158,12 +159,17 @@ import MoneyflowControllerHandler from "@/handler/MoneyflowControllerHandler";
 
 const serverErrors = ref(new Array<string>());
 
-const amountErrMsg = globErr("Bitte Betrag angeben!");
+const amountErr = globErr("Bitte Betrag angeben!");
 
 const schema = {
   amount: union(
-    [coerce.number(amountErrMsg).gt(0), coerce.number(amountErrMsg).lt(0)],
-    amountErrMsg
+    [
+      string(amountErr).regex(
+        new RegExp("^-{0,1}[0-9][0-9]*(.[0-9]{1,2}){0,1}$")
+      ),
+      number(amountErr),
+    ],
+    amountErr
   ),
   startDate: date(globErr("Bitte Startdatum angeben!")),
   endDate: date(globErr("Bitte Enddatum angeben!")),
