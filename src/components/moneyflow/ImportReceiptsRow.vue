@@ -139,7 +139,7 @@
 <script lang="ts" setup>
 import { useForm } from "vee-validate";
 import { computed, nextTick, onMounted, ref, type PropType } from "vue";
-import { date, number, string, union } from "zod";
+import { date } from "zod";
 
 import ButtonSubmit from "../ButtonSubmit.vue";
 import DivError from "../DivError.vue";

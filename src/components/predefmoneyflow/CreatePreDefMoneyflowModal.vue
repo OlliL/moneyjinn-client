@@ -98,7 +98,7 @@
 <script lang="ts" setup>
 import { useForm } from "vee-validate";
 import { computed, ref } from "vue";
-import { boolean, number, string, union, ZodType } from "zod";
+import { boolean, number, string, ZodType } from "zod";
 
 import ButtonSubmit from "../ButtonSubmit.vue";
 import DivError from "../DivError.vue";

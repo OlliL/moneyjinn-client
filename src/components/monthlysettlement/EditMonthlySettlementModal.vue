@@ -108,7 +108,7 @@
 <script lang="ts" setup>
 import { useForm } from "vee-validate";
 import { ref, watch } from "vue";
-import { date, number, string, union, ZodType } from "zod";
+import { date, ZodType } from "zod";
 
 import ButtonSubmit from "../ButtonSubmit.vue";
 import DivError from "../DivError.vue";
