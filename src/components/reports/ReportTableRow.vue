@@ -81,51 +81,43 @@
     <td colspan="2" v-if="index == 0 && !isOwnMoneyflow"></td>
   </tr>
 </template>
-<script lang="ts">
-import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
-import { defineComponent, type PropType } from "vue";
-import { useUserSessionStore } from "@/stores/UserSessionStore";
+<script lang="ts" setup>
+import { computed, type PropType } from "vue";
+
 import SpanAmount from "../SpanAmount.vue";
 import SpanDate from "../SpanDate.vue";
 
-export default defineComponent({
-  name: "ReportTableRow",
-  props: {
-    mmf: {
-      type: Object as PropType<Moneyflow>,
-      required: true,
-    },
+import { useUserSessionStore } from "@/stores/UserSessionStore";
+
+import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
+
+const props = defineProps({
+  mmf: {
+    type: Object as PropType<Moneyflow>,
+    required: true,
   },
-  emits: ["showReceipt", "deleteMoneyflow", "editMoneyflow"],
-  computed: {
-    rowspan(): number {
-      if (this.mmf.moneyflowSplitEntries != null) {
-        return this.mmf.moneyflowSplitEntries.length;
-      }
-      return 1;
-    },
-    amountColspan(): number {
-      if (this.mmf.moneyflowSplitEntries == null) {
-        return 2;
-      }
-      return 1;
-    },
-    isOwnMoneyflow(): boolean {
-      const userSessionStore = useUserSessionStore();
-      return this.mmf.userId === userSessionStore.getUserId;
-    },
-  },
-  methods: {
-    showReceipt() {
-      this.$emit("showReceipt", this.mmf.id);
-    },
-    deleteMoneyflow() {
-      this.$emit("deleteMoneyflow", this.mmf);
-    },
-    editMoneyflow() {
-      this.$emit("editMoneyflow", this.mmf);
-    },
-  },
-  components: { SpanAmount, SpanDate },
 });
+
+const emit = defineEmits(["showReceipt", "deleteMoneyflow", "editMoneyflow"]);
+
+const rowspan = computed(() => {
+  if (props.mmf.moneyflowSplitEntries != null) {
+    return props.mmf.moneyflowSplitEntries.length;
+  }
+  return 1;
+});
+const isOwnMoneyflow = computed(() => {
+  const userSessionStore = useUserSessionStore();
+  return props.mmf.userId === userSessionStore.getUserId;
+});
+
+const showReceipt = () => {
+  emit("showReceipt", props.mmf.id);
+};
+const deleteMoneyflow = () => {
+  emit("deleteMoneyflow", props.mmf);
+};
+const editMoneyflow = () => {
+  emit("editMoneyflow", props.mmf);
+};
 </script>

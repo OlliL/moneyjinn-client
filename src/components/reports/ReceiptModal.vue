@@ -17,40 +17,35 @@
   </ModalVue>
 </template>
 
-<script lang="ts">
-import { defineComponent } from "vue";
-import MoneyflowReceiptControllerHandler from "@/handler/MoneyflowReceiptControllerHandler";
+<script lang="ts" setup>
+import { ref } from "vue";
+
 import ModalVue from "../Modal.vue";
+
 import { MoneyflowReceiptType } from "@/model/moneyflow/MoneyflowReceiptType";
 
-export default defineComponent({
-  name: "ReceiptModal",
-  data() {
-    return {
-      receiptBase64: "",
-      isJpeg: false,
-      isPdf: false,
-    };
-  },
-  methods: {
-    async _show(moneyflowId: number) {
-      let response = await MoneyflowReceiptControllerHandler.fetchReceipt(
-        moneyflowId
-      );
-      this.receiptBase64 = response.receipt;
+import MoneyflowReceiptControllerHandler from "@/handler/MoneyflowReceiptControllerHandler";
 
-      this.isJpeg = false;
-      this.isPdf = false;
+const receiptBase64 = ref("");
+const isJpeg = ref(false);
+const isPdf = ref(false);
+const modalComponent = ref();
+
+const _show = (moneyflowId: number) => {
+  MoneyflowReceiptControllerHandler.fetchReceipt(moneyflowId).then(
+    (response) => {
+      receiptBase64.value = response.receipt;
+
       if (response.receiptType === MoneyflowReceiptType.JPEG) {
-        this.isJpeg = true;
+        isJpeg.value = true;
       } else if (response.receiptType === MoneyflowReceiptType.PDF) {
-        this.isPdf = true;
+        isJpeg.value = false;
       }
+      isPdf.value = !isJpeg.value;
 
-      (this.$refs.modalComponent as typeof ModalVue)._show();
-    },
-  },
-  expose: ["_show"],
-  components: { ModalVue },
-});
+      modalComponent.value._show();
+    }
+  );
+};
+defineExpose({ _show });
 </script>
