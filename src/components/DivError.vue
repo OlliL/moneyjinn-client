@@ -1,7 +1,7 @@
 <template>
   <div v-if="serverErrors">
     <div
-      class="alert alert-danger"
+      class="alert alert-danger text-center"
       v-for="(error, index) in serverErrors"
       :key="index"
     >
