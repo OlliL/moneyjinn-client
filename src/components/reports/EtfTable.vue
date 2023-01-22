@@ -58,56 +58,49 @@
   </div>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import EtfControllerHandler from "@/handler/EtfControllerHandler";
 import type { EtfSummary } from "@/model/etf/EtfSummary";
-import { defineComponent } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 import EtfTableRowVue from "./EtfTableRow.vue";
-export default defineComponent({
-  name: "EtfTable",
-  data() {
-    return {
-      etfSummaryArray: new Array<EtfSummary>(),
-      dataLoaded: false,
-    };
+
+const etfSummaryArray = ref(new Array<EtfSummary>());
+const dataLoaded = ref(false);
+
+const props = defineProps({
+  year: {
+    type: String,
+    required: true,
   },
-  props: {
-    year: {
-      type: String,
-      required: true,
-    },
-    month: {
-      type: String,
-      required: true,
-    },
+  month: {
+    type: String,
+    required: true,
   },
-  created() {
-    this.loadData(this.$props.year, this.$props.month);
-    this.$watch(
-      () => ({
-        year: this.year,
-        month: this.month,
-      }),
-      (data) => {
-        if (data.year && data.month) this.loadData(data.year, data.month);
-      }
-    );
-  },
-  computed: {
-    etfSummaryReceived(): boolean {
-      return this.etfSummaryArray.length > 0;
-    },
-  },
-  methods: {
-    async loadData(year: string, month: string) {
-      this.dataLoaded = false;
-      this.etfSummaryArray = await EtfControllerHandler.listEtfOverview(
-        year,
-        month
-      );
-      this.dataLoaded = true;
-    },
-  },
-  components: { EtfTableRowVue },
+});
+
+const loadData = (year: string, month: string) => {
+  dataLoaded.value = false;
+  EtfControllerHandler.listEtfOverview(year, month).then((_etfSummeryArray) => {
+    etfSummaryArray.value = _etfSummeryArray;
+    dataLoaded.value = true;
+  });
+};
+
+onMounted(() => {
+  loadData(props.year, props.month);
+});
+
+watch(
+  () => ({
+    year: props.year,
+    month: props.month,
+  }),
+  (data) => {
+    if (data.year && data.month) loadData(data.year, data.month);
+  }
+);
+
+const etfSummaryReceived = computed(() => {
+  return etfSummaryArray.value.length > 0;
 });
 </script>

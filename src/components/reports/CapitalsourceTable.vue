@@ -41,26 +41,20 @@
           />
           <tr>
             <td class="text-end" colspan="3">&sum;</td>
-            <td :class="amountBeginOfMonthFixedSumClass">
-              <u>{{ amountBeginOfMonthFixedSumString }} &euro;</u>
+            <td class="text-end">
+              <u><SpanAmount :amount="amountBeginOfMonthFixedSum" /></u>
             </td>
-            <td
-              :class="amountEndOfMonthFixedSumClass"
-              v-if="currentMonthIsSettled"
-            >
-              <u>{{ amountEndOfMonthFixedSumString }} &euro;</u>
+            <td class="text-end" v-if="currentMonthIsSettled">
+              <u><SpanAmount :amount="amountEndOfMonthFixedSum" /></u>
             </td>
-            <td :class="amountEndOfMonthCalculatedSumClass">
-              <u>{{ amountEndOfMonthCalculatedSumString }} &euro;</u>
+            <td class="text-end">
+              <u><SpanAmount :amount="amountEndOfMonthCalculatedSum" /></u>
             </td>
-            <td :class="amountCurrentSumClass" v-if="!currentMonthIsSettled">
-              <u>{{ amountCurrentSumString }} &euro;</u>
+            <td class="text-end" v-if="!currentMonthIsSettled">
+              <u><SpanAmount :amount="amountCurrentSum" /></u>
             </td>
-            <td
-              :class="differenceFixedCalculatedSumClass"
-              v-if="currentMonthIsSettled"
-            >
-              <u>{{ differenceFixedCalculatedSumString }} &euro;</u>
+            <td class="text-end" v-if="currentMonthIsSettled">
+              <u><SpanAmount :amount="differenceFixedCalculatedSum" /></u>
             </td>
           </tr>
         </tbody>
@@ -69,93 +63,57 @@
   </div>
 </template>
 
-<script lang="ts">
-import type { ReportTurnoverCapitalsource } from "@/model/report/ReportTurnoverCapitalsource";
-import { formatNumber, redIfNegativeEnd } from "@/tools/views/FormatNumber";
-import { defineComponent } from "vue";
+<script lang="ts" setup>
+import { computed } from "vue";
+
 import CapitalsourceTableRowVue from "./CapitalsourceTableRow.vue";
-export default defineComponent({
-  name: "CapitalsourceTable",
-  props: {
-    capitalsourceData: {
-      type: Array<ReportTurnoverCapitalsource>,
-      required: true,
-    },
-    currentMonthIsSettled: {
-      type: Boolean,
-      required: true,
-    },
+import SpanAmount from "../SpanAmount.vue";
+
+import type { ReportTurnoverCapitalsource } from "@/model/report/ReportTurnoverCapitalsource";
+
+const props = defineProps({
+  capitalsourceData: {
+    type: Array<ReportTurnoverCapitalsource>,
+    required: true,
   },
-  computed: {
-    amountBeginOfMonthFixedSum(): number {
-      return this.capitalsourceData.reduce(
-        (acc, cur) => acc + cur.amountBeginOfMonthFixed,
-        0
-      );
-    },
-    amountBeginOfMonthFixedSumClass(): string {
-      return redIfNegativeEnd(this.amountBeginOfMonthFixedSum);
-    },
-    amountBeginOfMonthFixedSumString(): string {
-      return formatNumber(this.amountBeginOfMonthFixedSum, 2);
-    },
-
-    amountEndOfMonthCalculatedSum(): number {
-      return this.capitalsourceData.reduce(
-        (acc, cur) => acc + cur.amountEndOfMonthCalculated,
-        0
-      );
-    },
-    amountEndOfMonthCalculatedSumClass(): string {
-      return redIfNegativeEnd(this.amountEndOfMonthCalculatedSum);
-    },
-    amountEndOfMonthCalculatedSumString(): string {
-      return formatNumber(this.amountEndOfMonthCalculatedSum, 2);
-    },
-
-    amountEndOfMonthFixedSum(): number {
-      return this.capitalsourceData.reduce(
-        (acc, cur) =>
-          acc + (cur.amountEndOfMonthFixed ? cur.amountEndOfMonthFixed : 0),
-        0
-      );
-    },
-    amountEndOfMonthFixedSumClass(): string {
-      return redIfNegativeEnd(this.amountEndOfMonthFixedSum);
-    },
-    amountEndOfMonthFixedSumString(): string {
-      return formatNumber(this.amountEndOfMonthFixedSum, 2);
-    },
-
-    amountCurrentSum(): number {
-      return this.capitalsourceData.reduce(
-        (acc, cur) => acc + (cur.amountCurrent ? cur.amountCurrent : 0),
-        0
-      );
-    },
-    amountCurrentSumClass(): string {
-      return redIfNegativeEnd(this.amountCurrentSum);
-    },
-    amountCurrentSumString(): string {
-      return formatNumber(this.amountCurrentSum, 2);
-    },
-
-    differenceFixedCalculatedSum(): number {
-      return this.capitalsourceData.reduce(
-        (acc, cur) =>
-          acc +
-          ((cur.amountEndOfMonthFixed ? cur.amountEndOfMonthFixed : 0) -
-            cur.amountEndOfMonthCalculated),
-        0
-      );
-    },
-    differenceFixedCalculatedSumClass(): string {
-      return redIfNegativeEnd(this.differenceFixedCalculatedSum);
-    },
-    differenceFixedCalculatedSumString(): string {
-      return formatNumber(this.differenceFixedCalculatedSum, 2);
-    },
+  currentMonthIsSettled: {
+    type: Boolean,
+    required: true,
   },
-  components: { CapitalsourceTableRowVue },
+});
+
+const amountBeginOfMonthFixedSum = computed(() => {
+  return props.capitalsourceData.reduce(
+    (acc, cur) => acc + cur.amountBeginOfMonthFixed,
+    0
+  );
+});
+const amountEndOfMonthCalculatedSum = computed(() => {
+  return props.capitalsourceData.reduce(
+    (acc, cur) => acc + cur.amountEndOfMonthCalculated,
+    0
+  );
+});
+const amountEndOfMonthFixedSum = computed(() => {
+  return props.capitalsourceData.reduce(
+    (acc, cur) =>
+      acc + (cur.amountEndOfMonthFixed ? cur.amountEndOfMonthFixed : 0),
+    0
+  );
+});
+const amountCurrentSum = computed(() => {
+  return props.capitalsourceData.reduce(
+    (acc, cur) => acc + (cur.amountCurrent ? cur.amountCurrent : 0),
+    0
+  );
+});
+const differenceFixedCalculatedSum = computed(() => {
+  return props.capitalsourceData.reduce(
+    (acc, cur) =>
+      acc +
+      ((cur.amountEndOfMonthFixed ? cur.amountEndOfMonthFixed : 0) -
+        cur.amountEndOfMonthCalculated),
+    0
+  );
 });
 </script>
