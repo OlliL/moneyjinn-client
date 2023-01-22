@@ -1,36 +1,20 @@
 <template>
-  <ModalVue title="Buchungskonto hinzuf&uuml;gen" ref="modalComponent">
+  <ModalVue :title="title" ref="modalComponent">
     <template #body
       ><form
         @submit.prevent="createPostingAccount"
         :id="'createPostingAccountForm' + idSuffix"
       >
         <div class="container-fluid">
-          <div v-if="serverError">
-            <div
-              class="alert alert-danger"
-              v-for="(error, index) in serverError"
-              :key="index"
-            >
-              {{ error }}
-            </div>
-          </div>
+          <DivError :server-errors="serverErrors" />
           <div class="row">
             <div class="col-xs-12">
-              <div class="form-floating">
-                <input
-                  v-model="mpa.name"
-                  :id="'comment' + idSuffix"
-                  type="text"
-                  @input="validateName"
-                  :class="'form-control ' + nameErrorData.inputClass"
-                />
-                <label
-                  :for="'comment' + idSuffix"
-                  :style="'color: ' + nameErrorData.fieldColor"
-                  >{{ nameErrorData.fieldLabel }}</label
-                >
-              </div>
+              <InputStandard
+                v-model="mpa.name"
+                :validation-schema="schema.name"
+                :id="'name' + idSuffix"
+                field-label="Name"
+              />
             </div>
           </div>
         </div>
@@ -40,130 +24,98 @@
       <button type="button" class="btn btn-secondary" @click="resetForm">
         r&uuml;cksetzen
       </button>
-      <button
-        type="submit"
-        class="btn btn-primary"
-        :form="'createPostingAccountForm' + idSuffix"
-      >
-        Speichern
-      </button>
+      <ButtonSubmit
+        button-label="Speichern"
+        :form-id="'createPostingAccountForm' + idSuffix"
+      />
     </template>
   </ModalVue>
 </template>
 
-<script lang="ts">
-import type { PostingAccount } from "@/model/postingaccount/PostingAccount";
-import PostingAccountControllerHandler from "@/handler/PostingAccountControllerHandler";
-import { generateErrorData, type ErrorData } from "@/tools/views/ErrorData";
-import { validateInputField } from "@/tools/views/ValidateInputField";
-import { defineComponent } from "vue";
+<script lang="ts" setup>
+import { useForm } from "vee-validate";
+import { computed, ref } from "vue";
+import { string, ZodType } from "zod";
+
+import ButtonSubmit from "../ButtonSubmit.vue";
+import DivError from "../DivError.vue";
+import InputStandard from "../InputStandard.vue";
 import ModalVue from "../Modal.vue";
-import { getError } from "@/tools/views/ThrowError";
-import type { ValidationResult } from "@/model/validation/ValidationResult";
 
-type CreatePostingAccountModalData = {
-  mpa: PostingAccount;
-  origMpa: PostingAccount | undefined;
-  serverError: Array<String>;
-  nameIsValid: boolean | null;
-  nameErrorMessage: string;
-};
-export default defineComponent({
-  name: "CreatePostingAccountModal",
-  data(): CreatePostingAccountModalData {
-    return {
-      mpa: {} as PostingAccount,
-      origMpa: undefined,
-      serverError: {} as Array<String>,
-      nameIsValid: null,
-      nameErrorMessage: "",
-    };
-  },
-  props: {
-    idSuffix: {
-      type: String,
-      default: "",
-    },
-  },
-  computed: {
-    formIsValid(): boolean {
-      const isValid = this.nameIsValid;
-      if (isValid) {
-        return true;
-      }
-      return false;
-    },
-    nameErrorData(): ErrorData {
-      return generateErrorData(
-        this.nameIsValid,
-        "Buchungskonto",
-        this.nameErrorMessage
-      );
-    },
-  },
-  methods: {
-    async _show(mpa?: PostingAccount) {
-      this.origMpa = mpa ? mpa : undefined;
-      this.resetForm();
-      (this.$refs.modalComponent as typeof ModalVue)._show();
-    },
-    resetForm() {
-      if (this.origMpa) {
-        this.mpa = { id: this.origMpa.id, name: this.origMpa.name };
-      } else {
-        this.mpa = {} as PostingAccount;
-      }
-      this.nameIsValid = null;
-      this.nameErrorMessage = "";
-      this.serverError = {} as Array<String>;
-    },
-    validateName() {
-      [this.nameIsValid, this.nameErrorMessage] = validateInputField(
-        this.mpa.name,
-        "Buchungskonto angeben!"
-      );
-    },
-    handleServerError(validationResult: ValidationResult): boolean {
-      if (!validationResult.result) {
-        this.serverError = new Array<string>();
-        for (let resultItem of validationResult.validationResultItems) {
-          this.serverError.push(getError(resultItem.error));
-        }
-      }
-      return !validationResult.result;
-    },
-    async createPostingAccount() {
-      this.validateName();
-      if (this.formIsValid) {
-        if (this.mpa.id > 0) {
-          //update
-          const validationResult =
-            await PostingAccountControllerHandler.updatePostingAccount(
-              this.mpa
-            );
-          if (!this.handleServerError(validationResult)) {
-            (this.$refs.modalComponent as typeof ModalVue)._hide();
-            this.$emit("postingAccountUpdated", this.mpa);
-          }
-        } else {
-          //create
-          const postingAccountValidation =
-            PostingAccountControllerHandler.createPostingAccount(this.mpa);
-          const validationResult = await (
-            await postingAccountValidation
-          ).validationResult;
+import { handleServerError } from "@/tools/views/ThrowError";
+import { globErr } from "@/tools/views/ZodUtil";
 
-          if (!this.handleServerError(validationResult)) {
-            this.mpa = (await postingAccountValidation).mpa;
-            (this.$refs.modalComponent as typeof ModalVue)._hide();
-            this.$emit("postingAccountCreated", this.mpa);
-          }
-        }
-      }
-    },
+import type { PostingAccount } from "@/model/postingaccount/PostingAccount";
+
+import PostingAccountControllerHandler from "@/handler/PostingAccountControllerHandler";
+
+defineProps({
+  idSuffix: {
+    type: String,
+    default: "",
   },
-  expose: ["_show"],
-  emits: ["postingAccountCreated", "postingAccountUpdated"],
-  components: { ModalVue },
 });
+
+const serverErrors = ref(new Array<string>());
+
+const schema: Partial<{ [key in keyof PostingAccount]: ZodType }> = {
+  name: string(globErr("Bitte Name angeben!")).min(1),
+};
+
+const mpa = ref({} as PostingAccount);
+const origMpa = ref({} as PostingAccount | undefined);
+const modalComponent = ref();
+const emit = defineEmits(["postingAccountCreated", "postingAccountUpdated"]);
+
+const { handleSubmit, values, setFieldTouched } = useForm();
+
+const title = computed(() => {
+  return origMpa.value === undefined
+    ? "Buchungskonto hinzufügen"
+    : "Buchungskonto bearbeiten";
+});
+
+const resetForm = () => {
+  if (origMpa.value) {
+    Object.assign(mpa.value, origMpa.value);
+  } else {
+    mpa.value = {} as PostingAccount;
+  }
+  serverErrors.value = new Array<string>();
+  Object.keys(values).forEach((field) => setFieldTouched(field, false));
+};
+
+const _show = async (_mpa?: PostingAccount) => {
+  origMpa.value = _mpa ? _mpa : undefined;
+  resetForm();
+  modalComponent.value._show();
+};
+
+const createPostingAccount = handleSubmit(() => {
+  if (mpa.value.id > 0) {
+    //update
+    PostingAccountControllerHandler.updatePostingAccount(mpa.value).then(
+      (validationResult) => {
+        if (!handleServerError(validationResult, serverErrors)) {
+          modalComponent.value._hide();
+          emit("postingAccountUpdated", mpa.value);
+        }
+      }
+    );
+  } else {
+    //create
+    PostingAccountControllerHandler.createPostingAccount(mpa.value).then(
+      (postingAccountValidation) => {
+        const validationResult = postingAccountValidation.validationResult;
+
+        if (!handleServerError(validationResult, serverErrors)) {
+          mpa.value = postingAccountValidation.mpa;
+          modalComponent.value._hide();
+          emit("postingAccountCreated", mpa.value);
+        }
+      }
+    );
+  }
+});
+defineExpose({ _show });
 </script>

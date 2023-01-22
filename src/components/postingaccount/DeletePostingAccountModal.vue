@@ -23,33 +23,32 @@
   </ModalVue>
 </template>
 
-<script lang="ts">
-import PostingAccountControllerHandler from "@/handler/PostingAccountControllerHandler";
-import type { PostingAccount } from "@/model/postingaccount/PostingAccount";
-import { defineComponent } from "vue";
+<script lang="ts" setup>
+import { ref } from "vue";
+
 import ModalVue from "../Modal.vue";
 
-export default defineComponent({
-  name: "DeletePostingAccountModal",
-  data() {
-    return {
-      mpa: {} as PostingAccount,
-    };
-  },
-  computed: {},
-  methods: {
-    async _show(mpa: PostingAccount) {
-      this.mpa = mpa;
-      (this.$refs.modalComponent as typeof ModalVue)._show();
-    },
-    async deletePostingAccount() {
-      await PostingAccountControllerHandler.deletePostingAccount(this.mpa.id);
-      (this.$refs.modalComponent as typeof ModalVue)._hide();
-      this.$emit("postingAccountDeleted", this.mpa);
-    },
-  },
-  expose: ["_show"],
-  emits: ["postingAccountDeleted"],
-  components: { ModalVue },
-});
+import type { PostingAccount } from "@/model/postingaccount/PostingAccount";
+
+import PostingAccountControllerHandler from "@/handler/PostingAccountControllerHandler";
+
+const mpa = ref({} as PostingAccount);
+const modalComponent = ref();
+const emit = defineEmits(["postingAccountDeleted"]);
+
+const _show = (_mpa: PostingAccount) => {
+  mpa.value = _mpa;
+  modalComponent.value._show();
+};
+
+const deletePostingAccount = () => {
+  PostingAccountControllerHandler.deletePostingAccount(mpa.value.id).then(
+    () => {
+      modalComponent.value._hide();
+      emit("postingAccountDeleted", mpa.value);
+    }
+  );
+};
+
+defineExpose({ _show });
 </script>
