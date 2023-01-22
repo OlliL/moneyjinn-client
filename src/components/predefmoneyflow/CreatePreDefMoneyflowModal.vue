@@ -110,7 +110,7 @@ import SelectContractpartner from "../contractpartner/SelectContractpartner.vue"
 import SelectCapitalsource from "../capitalsource/SelectCapitalsource.vue";
 
 import { handleServerError } from "@/tools/views/ThrowError";
-import { globErr } from "@/tools/views/ZodUtil";
+import { amountSchema, globErr } from "@/tools/views/ZodUtil";
 
 import type { PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
 import type { SelectBoxValue } from "@/model/SelectBoxValue";
@@ -125,18 +125,9 @@ defineProps({
 });
 
 const serverErrors = ref(new Array<string>());
-const amountErr = globErr("Bitte Betrag angeben!");
 
 const schema: Partial<{ [key in keyof PreDefMoneyflow]: ZodType }> = {
-  amount: union(
-    [
-      string(amountErr).regex(
-        new RegExp("^-{0,1}[0-9][0-9]*(.[0-9]{1,2}){0,1}$")
-      ),
-      number(amountErr),
-    ],
-    amountErr
-  ),
+  amount: amountSchema("Bitte Betrag angeben!"),
   contractpartnerId: number(globErr("Bitte Vertragspartner angeben!")).gt(0),
   comment: string(globErr("Bitte Kommentar angeben!")).min(1),
   postingAccountId: number(globErr("Bitte Buchungskonto angeben!")).gt(0),
