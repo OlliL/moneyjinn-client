@@ -91,8 +91,8 @@
             />
             <tr>
               <td class="text-end" colspan="3">&sum;</td>
-              <td colspan="2" :class="amountSumClass">
-                <u>{{ amountSumString }} &euro;</u>
+              <td colspan="2" class="text-end">
+                <u><SpanAmount :amount="amountSum" /></u>
               </td>
               <td colspan="6"></td>
             </tr>
@@ -135,31 +135,31 @@
                   <tbody>
                     <tr v-if="currentMonthIsSettled">
                       <th class="text-end">Gewinn (fix)</th>
-                      <td :class="assetsMonthlyFixedTurnoverClass">
-                        {{ assetsMonthlyFixedTurnoverString }} &euro;
+                      <td class="text-end">
+                        <SpanAmount :amount="assetsMonthlyFixedTurnover" />
                       </td>
-                      <td :class="assetsYearlyFixedTurnoverClass">
-                        {{ assetsYearlyFixedTurnoverString }} &euro;
+                      <td class="text-end">
+                        <SpanAmount :amount="assetsYearlyFixedTurnover" />
                       </td>
                     </tr>
                     <tr>
                       <th class="text-end">Gewinn (errechnet)</th>
-                      <td :class="assetsMonthlyCalculatedTurnoverClass">
-                        {{ assetsMonthlyCalculatedTurnoverString }} &euro;
+                      <td class="text-end">
+                        <SpanAmount :amount="assetsMonthlyCalculatedTurnover" />
                       </td>
-                      <td :class="turnoverEndOfYearCalculatedClass">
-                        {{ turnoverEndOfYearCalculatedString }} &euro;
+                      <td class="text-end">
+                        <SpanAmount
+                          :amount="report.turnoverEndOfYearCalculated"
+                        />
                       </td>
                     </tr>
                     <tr v-if="currentMonthIsSettled">
                       <th class="text-end">Differenz</th>
-                      <td :class="assetsMonthlyDifferenceClass">
-                        {{ assetsMonthlyDifferenceString }}
-                        &euro;
+                      <td class="text-end">
+                        <SpanAmount :amount="assetsMonthlyDifference" />
                       </td>
-                      <td :class="assetsYearlyDifferenceClass">
-                        {{ assetsYearlyDifferenceString }}
-                        &euro;
+                      <td class="text-end">
+                        <SpanAmount :amount="assetsYearlyDifference" />
                       </td>
                     </tr>
                   </tbody>
@@ -227,8 +227,8 @@ import CapitalsourceTableVue from "./CapitalsourceTable.vue";
 import DeleteMoneyflowModalVue from "../moneyflow/DeleteMoneyflowModal.vue";
 import EditMoneyflowModalVue from "../moneyflow/EditMoneyflowModal.vue";
 
-import { redIfNegativeEnd, formatNumber } from "@/tools/views/FormatNumber";
 import { getMonthName } from "@/tools/views/MonthName";
+import SpanAmount from "../SpanAmount.vue";
 
 export default defineComponent({
   name: "ReportTable",
@@ -239,13 +239,6 @@ export default defineComponent({
       assetsMonthlyFixedTurnover: 0,
       assetsYearlyFixedTurnover: 0,
       assetsMonthlyCalculatedTurnover: 0,
-      sortBookingdateAsc: true,
-      sortInvoicedateAsc: null,
-      sortAmountAsc: null,
-      sortContractpartnerAsc: null,
-      sortCommentAsc: null,
-      sortPostingAccountAsc: null,
-      sortCapitalsourceAsc: null,
       sortBy: new Map<String, Boolean>(),
     };
   },
@@ -259,7 +252,7 @@ export default defineComponent({
       required: true,
     },
   },
-  created() {
+  mounted() {
     this.loadData(this.$props.year, this.$props.month);
     this.$watch(
       () => ({
@@ -322,60 +315,15 @@ export default defineComponent({
       }
       return sum;
     },
-    amountSumClass(): string {
-      return redIfNegativeEnd(this.amountSum);
-    },
-    amountSumString(): string {
-      return formatNumber(this.amountSum, 2);
-    },
-    assetsMonthlyFixedTurnoverClass(): string {
-      return redIfNegativeEnd(this.assetsMonthlyFixedTurnover);
-    },
-    assetsMonthlyFixedTurnoverString(): string {
-      return formatNumber(this.assetsMonthlyFixedTurnover, 2);
-    },
-    assetsYearlyFixedTurnoverClass(): string {
-      return redIfNegativeEnd(this.assetsYearlyFixedTurnover);
-    },
-    assetsYearlyFixedTurnoverString(): string {
-      return formatNumber(this.assetsYearlyFixedTurnover, 2);
-    },
-    assetsMonthlyCalculatedTurnoverClass(): string {
-      return redIfNegativeEnd(this.assetsMonthlyCalculatedTurnover);
-    },
-    assetsMonthlyCalculatedTurnoverString(): string {
-      return formatNumber(this.assetsMonthlyCalculatedTurnover, 2);
-    },
-    turnoverEndOfYearCalculatedClass(): string {
-      return redIfNegativeEnd(this.report.turnoverEndOfYearCalculated);
-    },
-    turnoverEndOfYearCalculatedString(): string {
-      return formatNumber(this.report.turnoverEndOfYearCalculated, 2);
-    },
     assetsMonthlyDifference(): number {
       return +(
         this.assetsMonthlyFixedTurnover - this.assetsMonthlyCalculatedTurnover
       );
     },
-    assetsMonthlyDifferenceClass(): string {
-      return redIfNegativeEnd(this.assetsMonthlyDifference);
-    },
-    assetsMonthlyDifferenceString(): string {
-      return formatNumber(this.assetsMonthlyDifference, 2);
-    },
     assetsYearlyDifference(): number {
       return +(
         this.assetsYearlyFixedTurnover - this.report.turnoverEndOfYearCalculated
       );
-    },
-    assetsYearlyDifferenceClass(): string {
-      return redIfNegativeEnd(this.assetsYearlyDifference);
-    },
-    assetsYearlyDifferenceString(): string {
-      return formatNumber(this.assetsYearlyDifference, 2);
-    },
-    bookingdateSortIcon(): string {
-      return this.sortIcon("bookingdate");
     },
   },
   methods: {
@@ -523,6 +471,7 @@ export default defineComponent({
     ReceiptModalVue,
     DeleteMoneyflowModalVue,
     EditMoneyflowModalVue,
+    SpanAmount,
   },
 });
 </script>
