@@ -8,7 +8,9 @@
     "@vue/eslint-config-typescript",
     "@vue/tsconfig",
     "eslint-plugin-vue",
-    "prettier"
+    "prettier",
+    "@vee-validate/zod",
+    "vee-validate"
     ]
     }
 }
