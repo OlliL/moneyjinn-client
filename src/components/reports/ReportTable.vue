@@ -211,8 +211,17 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from "vue";
+<script lang="ts" setup>
+import { computed, onMounted, ref, watch } from "vue";
+
+import CapitalsourceTableVue from "./CapitalsourceTable.vue";
+import DeleteMoneyflowModalVue from "../moneyflow/DeleteMoneyflowModal.vue";
+import EditMoneyflowModalVue from "../moneyflow/EditMoneyflowModal.vue";
+import ReceiptModalVue from "./ReceiptModal.vue";
+import ReportTableRowVue from "./ReportTableRow.vue";
+import SpanAmount from "../SpanAmount.vue";
+
+import { getMonthName } from "@/tools/views/MonthName";
 
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 import type { Report } from "@/model/report/Report";
@@ -221,257 +230,241 @@ import type { ReportTurnoverCapitalsource } from "@/model/report/ReportTurnoverC
 
 import ReportControllerHandler from "@/handler/ReportControllerHandler";
 
-import ReportTableRowVue from "./ReportTableRow.vue";
-import ReceiptModalVue from "./ReceiptModal.vue";
-import CapitalsourceTableVue from "./CapitalsourceTable.vue";
-import DeleteMoneyflowModalVue from "../moneyflow/DeleteMoneyflowModal.vue";
-import EditMoneyflowModalVue from "../moneyflow/EditMoneyflowModal.vue";
+const report = ref({} as Report);
+const dataLoaded = ref(false);
+const assetsMonthlyFixedTurnover = ref(0);
+const assetsYearlyFixedTurnover = ref(0);
+const assetsMonthlyCalculatedTurnover = ref(0);
+const sortBy = ref(new Map<String, Boolean>());
+const receiptModal = ref();
+const deleteModal = ref();
+const editModal = ref();
 
-import { getMonthName } from "@/tools/views/MonthName";
-import SpanAmount from "../SpanAmount.vue";
+const props = defineProps({
+  year: {
+    type: String,
+    required: true,
+  },
+  month: {
+    type: String,
+    required: true,
+  },
+});
 
-export default defineComponent({
-  name: "ReportTable",
-  data() {
-    return {
-      report: {} as Report,
-      dataLoaded: false,
-      assetsMonthlyFixedTurnover: 0,
-      assetsYearlyFixedTurnover: 0,
-      assetsMonthlyCalculatedTurnover: 0,
-      sortBy: new Map<String, Boolean>(),
-    };
-  },
-  props: {
-    year: {
-      type: String,
-      required: true,
-    },
-    month: {
-      type: String,
-      required: true,
-    },
-  },
-  mounted() {
-    this.loadData(this.$props.year, this.$props.month);
-    this.$watch(
-      () => ({
-        year: this.year,
-        month: this.month,
-      }),
-      (data) => {
-        if (data.year && data.month) this.loadData(data.year, data.month);
-      }
+const monthName = computed(() => {
+  return getMonthName(report.value.month);
+});
+const assetsTurnoverCapitalsources = computed(() => {
+  if (dataLoaded.value) {
+    return report.value.reportTurnoverCapitalsources?.filter(
+      (data) =>
+        data.capitalsourceType === CapitalsourceType.CURRENT_ASSET ||
+        data.capitalsourceType === CapitalsourceType.LONG_TERM_ASSET
     );
-  },
-  computed: {
-    monthName(): string {
-      return getMonthName(this.report.month);
-    },
-    assetsTurnoverCapitalsources(): Array<ReportTurnoverCapitalsource> {
-      if (this.dataLoaded) {
-        return this.report.reportTurnoverCapitalsources?.filter(
-          (data) =>
-            data.capitalsourceType === CapitalsourceType.CURRENT_ASSET ||
-            data.capitalsourceType === CapitalsourceType.LONG_TERM_ASSET
-        );
+  }
+  return new Array<ReportTurnoverCapitalsource>();
+});
+const liabilitiesTurnoverCapitalsources = computed(() => {
+  if (dataLoaded.value) {
+    return report.value.reportTurnoverCapitalsources?.filter(
+      (data) =>
+        data.capitalsourceType === CapitalsourceType.RESERVE_ASSET ||
+        data.capitalsourceType === CapitalsourceType.PROVISION_ASSET
+    );
+  }
+  return new Array<ReportTurnoverCapitalsource>();
+});
+const creditTurnoverCapitalsources = computed(() => {
+  if (dataLoaded.value) {
+    return report.value.reportTurnoverCapitalsources?.filter(
+      (data) => data.capitalsourceType === CapitalsourceType.CREDIT
+    );
+  }
+  return new Array<ReportTurnoverCapitalsource>();
+});
+const currentMonthIsSettled = computed(() => {
+  if (dataLoaded.value) {
+    for (let data of report.value.reportTurnoverCapitalsources) {
+      if (data.amountEndOfMonthFixed) {
+        return true;
       }
-      return new Array<ReportTurnoverCapitalsource>();
-    },
-    liabilitiesTurnoverCapitalsources(): Array<ReportTurnoverCapitalsource> {
-      if (this.dataLoaded) {
-        return this.report.reportTurnoverCapitalsources?.filter(
-          (data) =>
-            data.capitalsourceType === CapitalsourceType.RESERVE_ASSET ||
-            data.capitalsourceType === CapitalsourceType.PROVISION_ASSET
-        );
-      }
-      return new Array<ReportTurnoverCapitalsource>();
-    },
-    creditTurnoverCapitalsources(): Array<ReportTurnoverCapitalsource> {
-      if (this.dataLoaded) {
-        return this.report.reportTurnoverCapitalsources?.filter(
-          (data) => data.capitalsourceType === CapitalsourceType.CREDIT
-        );
-      }
-      return new Array<ReportTurnoverCapitalsource>();
-    },
-    currentMonthIsSettled(): boolean {
-      if (this.dataLoaded) {
-        for (let data of this.report.reportTurnoverCapitalsources) {
-          if (data.amountEndOfMonthFixed) {
-            return true;
-          }
+    }
+  }
+  return false;
+});
+const amountSum = computed(() => {
+  let sum = 0;
+  if (dataLoaded.value) {
+    for (const mmf of report.value.moneyflows) {
+      sum += mmf.amount;
+    }
+  }
+  return sum;
+});
+const assetsMonthlyDifference = computed(() => {
+  return +(
+    assetsMonthlyFixedTurnover.value - assetsMonthlyCalculatedTurnover.value
+  );
+});
+const assetsYearlyDifference = computed(() => {
+  return +(
+    assetsYearlyFixedTurnover.value - report.value.turnoverEndOfYearCalculated
+  );
+});
+
+const loadData = (year: string, month: string) => {
+  dataLoaded.value = false;
+  ReportControllerHandler.listReports(year, month).then((_report) => {
+    report.value = _report;
+
+    assetsMonthlyCalculatedTurnover.value = 0;
+
+    var assetsLastAmount = 0;
+    var assetsFixAmount = 0;
+    if (report.value.reportTurnoverCapitalsources) {
+      for (const data of report.value.reportTurnoverCapitalsources) {
+        if (
+          data.capitalsourceType === CapitalsourceType.CURRENT_ASSET ||
+          data.capitalsourceType === CapitalsourceType.LONG_TERM_ASSET
+        ) {
+          assetsMonthlyCalculatedTurnover.value += +(
+            data.amountEndOfMonthCalculated - data.amountBeginOfMonthFixed
+          );
+          assetsLastAmount += data.amountBeginOfMonthFixed;
+          if (data.amountEndOfMonthFixed)
+            assetsFixAmount = +(assetsFixAmount + data.amountEndOfMonthFixed);
         }
       }
-      return false;
-    },
-    amountSum(): number {
-      let sum = 0;
-      if (this.dataLoaded) {
-        for (const mmf of this.report.moneyflows) {
-          sum += mmf.amount;
-        }
-      }
-      return sum;
-    },
-    assetsMonthlyDifference(): number {
-      return +(
-        this.assetsMonthlyFixedTurnover - this.assetsMonthlyCalculatedTurnover
-      );
-    },
-    assetsYearlyDifference(): number {
-      return +(
-        this.assetsYearlyFixedTurnover - this.report.turnoverEndOfYearCalculated
-      );
-    },
-  },
-  methods: {
-    async loadData(year: string, month: string) {
-      this.dataLoaded = false;
-      this.report = await ReportControllerHandler.listReports(year, month);
+    }
+    assetsMonthlyFixedTurnover.value = +(assetsFixAmount - assetsLastAmount);
+    assetsYearlyFixedTurnover.value = +(
+      assetsFixAmount - report.value.amountBeginOfYear
+    );
 
-      this.assetsMonthlyCalculatedTurnover = 0;
+    sortBy.value.clear();
+    sortBy.value.set("bookingDate", true);
+    dataLoaded.value = true;
+  });
+};
+const showReceipt = (moneyflowId: number) => {
+  receiptModal.value._show(moneyflowId);
+};
+const deleteMoneyflow = (mmf: Moneyflow) => {
+  deleteModal.value._show(mmf);
+};
+const editMoneyflow = (mmf: Moneyflow) => {
+  editModal.value._show(mmf);
+};
+/**
+ * recalculate End of Month amount (for matching Capitalsource),
+ * recalculate End of Month amount (overall),
+ * recalculate End of Year amount,
+ * @param capitalsourceComment
+ * @param amount
+ */
+const bookCapitalsourceAmounts = (mmf: Moneyflow, bookOut: boolean) => {
+  const bookingDate = mmf.bookingDate;
+  bookingDate.setHours(0, 0, 0, 0);
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const capitalsourceComment = mmf.capitalsourceComment;
+  let direction = bookOut ? -1 : 1;
+  const amount = mmf.amount * direction;
 
-      var assetsLastAmount = 0;
-      var assetsFixAmount = 0;
-      if (this.report.reportTurnoverCapitalsources) {
-        for (const data of this.report.reportTurnoverCapitalsources) {
-          if (
-            data.capitalsourceType === CapitalsourceType.CURRENT_ASSET ||
-            data.capitalsourceType === CapitalsourceType.LONG_TERM_ASSET
-          ) {
-            this.assetsMonthlyCalculatedTurnover += +(
-              data.amountEndOfMonthCalculated - data.amountBeginOfMonthFixed
-            );
-            assetsLastAmount += data.amountBeginOfMonthFixed;
-            if (data.amountEndOfMonthFixed)
-              assetsFixAmount = +(assetsFixAmount + data.amountEndOfMonthFixed);
-          }
-        }
+  for (const mcs of report.value.reportTurnoverCapitalsources) {
+    if (mcs.capitalsourceComment === capitalsourceComment) {
+      mcs.amountEndOfMonthCalculated += amount;
+      if (
+        !mcs.amountCurrentState &&
+        mcs.amountCurrent &&
+        bookingDate <= today
+      ) {
+        mcs.amountCurrent += amount;
       }
-      this.assetsMonthlyFixedTurnover = +(assetsFixAmount - assetsLastAmount);
-      this.assetsYearlyFixedTurnover = +(
-        assetsFixAmount - this.report.amountBeginOfYear
-      );
+      if (
+        mcs.capitalsourceType === CapitalsourceType.CURRENT_ASSET ||
+        mcs.capitalsourceType === CapitalsourceType.LONG_TERM_ASSET
+      ) {
+        assetsMonthlyCalculatedTurnover.value += amount;
+      }
+    }
+  }
+  report.value.turnoverEndOfYearCalculated += amount;
+};
+const moneyflowDeleted = (mmf: Moneyflow) => {
+  bookCapitalsourceAmounts(mmf, true);
+  report.value.moneyflows = report.value.moneyflows.filter((originalMmf) => {
+    return mmf.id !== originalMmf.id;
+  });
+};
+const moneyflowReceiptDeleted = (mmfId: number) => {
+  const oldMmf = report.value.moneyflows.find(
+    (originalMmf) => mmfId === originalMmf.id
+  );
+  if (oldMmf) oldMmf.hasReceipt = false;
+};
+const moneyflowUpdated = (mmf: Moneyflow) => {
+  const oldMmf = report.value.moneyflows.find(
+    (originalMmf) => mmf.id === originalMmf.id
+  );
+  if (oldMmf) {
+    bookCapitalsourceAmounts(oldMmf, true);
+  }
 
-      this.sortBy.clear();
-      this.sortBy.set("bookingDate", true);
-      this.dataLoaded = true;
-    },
-    showReceipt(moneyflowId: number) {
-      (this.$refs.receiptModal as typeof ReceiptModalVue)._show(moneyflowId);
-    },
-    deleteMoneyflow(mmf: Moneyflow) {
-      (this.$refs.deleteModal as typeof DeleteMoneyflowModalVue)._show(mmf);
-    },
-    editMoneyflow(mmf: Moneyflow) {
-      (this.$refs.editModal as typeof EditMoneyflowModalVue)._show(mmf);
-    },
-    /**
-     * recalculate End of Month amount (for matching Capitalsource),
-     * recalculate End of Month amount (overall),
-     * recalculate End of Year amount,
-     * @param capitalsourceComment
-     * @param amount
-     */
-    bookCapitalsourceAmounts(mmf: Moneyflow, bookOut: boolean) {
-      const bookingDate = mmf.bookingDate;
-      bookingDate.setHours(0, 0, 0, 0);
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
-      const capitalsourceComment = mmf.capitalsourceComment;
-      let direction = bookOut ? -1 : 1;
-      const amount = mmf.amount * direction;
+  for (var i = 0; i < report.value.moneyflows.length; i++) {
+    if (mmf.id === report.value.moneyflows[i].id) {
+      report.value.moneyflows[i] = mmf;
+      break;
+    }
+  }
+  bookCapitalsourceAmounts(mmf, false);
+};
+const sortIcon = (sortedField: string) => {
+  if (sortBy.value.get(sortedField) === undefined) {
+    return "bi-caret-down-square";
+  } else if (sortBy.value.get(sortedField)) {
+    return "bi-caret-down-square-fill";
+  }
+  return "bi-caret-up-square-fill";
+};
+const compareColumns = (
+  a: Moneyflow,
+  b: Moneyflow,
+  field: keyof Moneyflow
+): number => {
+  let aField = a[field];
+  let bField = b[field];
+  if (aField === undefined || bField === undefined) return 0;
+  if (typeof aField === "string" && typeof bField === "string") {
+    aField = aField.toLowerCase();
+    bField = bField.toLowerCase();
+  }
+  return aField > bField ? 1 : bField > aField ? -1 : 0;
+};
+const sortByColumn = (field: keyof Moneyflow) => {
+  let sortByField = sortBy.value.get(field);
+  if (sortByField == undefined || !sortByField) {
+    report.value.moneyflows.sort((a, b) => compareColumns(a, b, field));
+    sortByField = true;
+  } else {
+    report.value.moneyflows.sort((a, b) => -1 * compareColumns(a, b, field));
+    sortByField = false;
+  }
+  sortBy.value.clear();
+  sortBy.value.set(field, sortByField);
+};
 
-      for (const mcs of this.report.reportTurnoverCapitalsources) {
-        if (mcs.capitalsourceComment === capitalsourceComment) {
-          mcs.amountEndOfMonthCalculated += amount;
-          if (
-            !mcs.amountCurrentState &&
-            mcs.amountCurrent &&
-            bookingDate <= today
-          ) {
-            mcs.amountCurrent += amount;
-          }
-          if (
-            mcs.capitalsourceType === CapitalsourceType.CURRENT_ASSET ||
-            mcs.capitalsourceType === CapitalsourceType.LONG_TERM_ASSET
-          ) {
-            this.assetsMonthlyCalculatedTurnover += amount;
-          }
-        }
-      }
-      this.report.turnoverEndOfYearCalculated += amount;
-    },
-    moneyflowDeleted(mmf: Moneyflow) {
-      this.bookCapitalsourceAmounts(mmf, true);
-      this.report.moneyflows = this.report.moneyflows.filter((originalMmf) => {
-        return mmf.id !== originalMmf.id;
-      });
-    },
-    moneyflowReceiptDeleted(mmfId: number) {
-      const oldMmf = this.report.moneyflows.find(
-        (originalMmf) => mmfId === originalMmf.id
-      );
-      if (oldMmf) oldMmf.hasReceipt = false;
-    },
-    moneyflowUpdated(mmf: Moneyflow) {
-      const oldMmf = this.report.moneyflows.find(
-        (originalMmf) => mmf.id === originalMmf.id
-      );
-      if (oldMmf) {
-        this.bookCapitalsourceAmounts(oldMmf, true);
-      }
+watch(
+  () => ({
+    year: props.year,
+    month: props.month,
+  }),
+  (data) => {
+    if (data.year && data.month) loadData(data.year, data.month);
+  }
+);
 
-      for (var i = 0; i < this.report.moneyflows.length; i++) {
-        if (mmf.id === this.report.moneyflows[i].id) {
-          this.report.moneyflows[i] = mmf;
-          break;
-        }
-      }
-      this.bookCapitalsourceAmounts(mmf, false);
-    },
-    sortIcon(sortedField: string) {
-      if (this.sortBy.get(sortedField) === undefined) {
-        return "bi-caret-down-square";
-      } else if (this.sortBy.get(sortedField)) {
-        return "bi-caret-down-square-fill";
-      }
-      return "bi-caret-up-square-fill";
-    },
-    compareColumns(a: Moneyflow, b: Moneyflow, field: keyof Moneyflow): number {
-      let aField = a[field];
-      let bField = b[field];
-      if (aField === undefined || bField === undefined) return 0;
-      if (typeof aField === "string" && typeof bField === "string") {
-        aField = aField.toLowerCase();
-        bField = bField.toLowerCase();
-      }
-      return aField > bField ? 1 : bField > aField ? -1 : 0;
-    },
-    sortByColumn(field: keyof Moneyflow) {
-      let sortByField = this.sortBy.get(field);
-      if (sortByField == undefined || !sortByField) {
-        this.report.moneyflows.sort((a, b) => this.compareColumns(a, b, field));
-        sortByField = true;
-      } else {
-        this.report.moneyflows.sort(
-          (a, b) => -1 * this.compareColumns(a, b, field)
-        );
-        sortByField = false;
-      }
-      this.sortBy.clear();
-      this.sortBy.set(field, sortByField);
-    },
-  },
-  components: {
-    CapitalsourceTableVue,
-    ReportTableRowVue,
-    ReceiptModalVue,
-    DeleteMoneyflowModalVue,
-    EditMoneyflowModalVue,
-    SpanAmount,
-  },
+onMounted(() => {
+  loadData(props.year, props.month);
 });
 </script>
