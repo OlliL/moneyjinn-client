@@ -7,9 +7,7 @@
     <td class="text-start">{{ mcs.bankCode }}</td>
     <td class="text-start"><SpanDate :date="mcs.validFrom" /></td>
     <td class="text-start"><SpanDate :date="mcs.validTil" /></td>
-    <td class="text-center">
-      <b :style="'color:' + groupUseColor">{{ groupUseString }}</b>
-    </td>
+    <td class="text-center"><SpanBoolean :value="mcs.groupUse" /></td>
     <td class="text-center">
       <b :style="'color:' + importAllowedColor">{{ importAllowedString }}</b>
     </td>
@@ -34,6 +32,7 @@ import type { Capitalsource } from "@/model/capitalsource/Capitalsource";
 import { capitalsourceImportNames } from "@/model/capitalsource/CapitalsourceImport";
 import { capitalsourceStateNames } from "@/model/capitalsource/CapitalsourceState";
 import { capitalsourceTypeNames } from "@/model/capitalsource/CapitalsourceType";
+import SpanBoolean from "../SpanBoolean.vue";
 
 const props = defineProps({
   mcs: {
@@ -46,13 +45,6 @@ const props = defineProps({
   },
 });
 const emit = defineEmits(["deleteCapitalsource", "editCapitalsource"]);
-
-const groupUseColor = computed(() => {
-  return props.mcs.groupUse ? "green" : "red";
-});
-const groupUseString = computed(() => {
-  return props.mcs.groupUse ? "Ja" : "Nein";
-});
 
 const importAllowedColor = computed(() => {
   return props.mcs.importAllowed > 0 ? "green" : "red";

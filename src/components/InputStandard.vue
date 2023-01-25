@@ -35,7 +35,7 @@
 <script lang="ts" setup>
 import { useField } from "vee-validate";
 import { toFieldValidator } from "@vee-validate/zod";
-import { computed, onMounted, ref, type PropType } from "vue";
+import { computed, onMounted, ref, type PropType, type Ref } from "vue";
 import { any, type ZodType } from "zod";
 
 import {
@@ -52,6 +52,10 @@ const props = defineProps({
     type: Object as PropType<ZodType>,
     required: false,
     default: any().optional(),
+  },
+  validationSchemaRef: {
+    type: Object as PropType<Ref<ZodType>>,
+    required: false,
   },
   id: {
     type: String,
@@ -86,13 +90,20 @@ const props = defineProps({
 });
 const emit = defineEmits(["update:modelValue"]);
 
+const schema = computed(() => {
+  if (props.validationSchemaRef) {
+    return toFieldValidator(props.validationSchemaRef.value);
+  }
+  return toFieldValidator(props.validationSchema);
+});
+
 const {
   value: fieldValue,
   meta: fieldMeta,
   errorMessage,
   setState,
   handleChange,
-} = useField(props.id, toFieldValidator(props.validationSchema));
+} = useField(props.id, schema);
 
 const onInput = (event: Event) => {
   setState({ touched: true });

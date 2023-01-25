@@ -9,14 +9,12 @@
           <DivError :server-errors="serverErrors" />
           <div class="row">
             <div class="col-xs-12">
-              <div class="form-floating">
-                <InputStandard
-                  v-model="mcp.name"
-                  :validation-schema="schema.name"
-                  :id="'name' + idSuffix"
-                  field-label="Name"
-                />
-              </div>
+              <InputStandard
+                v-model="mcp.name"
+                :validation-schema="schema.name"
+                :id="'name' + idSuffix"
+                field-label="Name"
+              />
             </div>
           </div>
           <div class="row pt-2">

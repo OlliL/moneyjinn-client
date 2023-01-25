@@ -63,7 +63,7 @@
           1x
         </div>
         <div class="text-start col-sm-9">
-          <b :style="'color:' + onceAMonthColor">{{ onceAMonthString }}</b>
+          <SpanBoolean :value="mpm.onceAMonth" />
         </div>
       </div>
       <div class="row">
@@ -100,7 +100,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref } from "vue";
+import { ref } from "vue";
 
 import ModalVue from "../Modal.vue";
 import SpanAmount from "../SpanAmount.vue";
@@ -109,17 +109,11 @@ import SpanDate from "../SpanDate.vue";
 import type { PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
 
 import PreDefMoneyflowControllerHandler from "@/handler/PreDefMoneyflowControllerHandler";
+import SpanBoolean from "../SpanBoolean.vue";
 
 const mpm = ref({} as PreDefMoneyflow);
 const modalComponent = ref();
 const emit = defineEmits(["preDefMoneyflowDeleted"]);
-
-const onceAMonthColor = computed(() => {
-  return mpm.value.onceAMonth ? "green" : "red";
-});
-const onceAMonthString = computed(() => {
-  return mpm.value.onceAMonth ? "Ja" : "Nein";
-});
 
 const _show = (_mpm: PreDefMoneyflow) => {
   mpm.value = _mpm;
