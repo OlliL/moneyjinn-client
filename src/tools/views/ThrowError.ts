@@ -81,6 +81,9 @@ export function getError(code: number, variableArray?: Array<string>) {
     case ErrorCode.CONTRACTPARTNER_NO_LONGER_VALID: {
       return "Der ausgewählte Vertragspartner ist zum gewählten Datum nicht mehr gültig!";
     }
+    case ErrorCode.USER_WITH_SAME_NAME_ALREADY_EXISTS: {
+      return "Es existiert bereits ein Benutzer mit diesem Namen!";
+    }
     case ErrorCode.BOOKINGDATE_OUTSIDE_GROUP_ASSIGNMENT: {
       return "Sie können keine Geldbewegung zu einem Datum anlegen, an dem Sie in einer anderen Gruppe als Ihrer aktuellen sind!";
     }

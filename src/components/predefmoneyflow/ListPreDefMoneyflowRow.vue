@@ -5,9 +5,7 @@
     <td class="text-start">{{ mpm.comment }}</td>
     <td class="text-start">{{ mpm.postingAccountName }}</td>
     <td class="text-start">{{ mpm.capitalsourceComment }}</td>
-    <td class="text-center">
-      <b :style="'color:' + onceAMonthColor">{{ onceAMonthString }}</b>
-    </td>
+    <td class="text-center"><SpanBoolean :value="mpm.onceAMonth" /></td>
 
     <td class="text-center"><SpanDate :date="mpm.createDate" /></td>
     <td class="text-center"><SpanDate :date="mpm.lastUsed" /></td>
@@ -24,12 +22,13 @@
   </tr>
 </template>
 <script lang="ts" setup>
-import { computed, type PropType } from "vue";
+import type { PropType } from "vue";
 
 import SpanAmount from "../SpanAmount.vue";
 import SpanDate from "../SpanDate.vue";
 
 import type { PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
+import SpanBoolean from "../SpanBoolean.vue";
 
 const props = defineProps({
   mpm: {
@@ -38,13 +37,6 @@ const props = defineProps({
   },
 });
 const emit = defineEmits(["deletePreDefMoneyflow", "editPreDefMoneyflow"]);
-
-const onceAMonthColor = computed(() => {
-  return props.mpm.onceAMonth ? "green" : "red";
-});
-const onceAMonthString = computed(() => {
-  return props.mpm.onceAMonth ? "Ja" : "Nein";
-});
 
 const deletePreDefMoneyflow = () => {
   emit("deletePreDefMoneyflow", props.mpm);

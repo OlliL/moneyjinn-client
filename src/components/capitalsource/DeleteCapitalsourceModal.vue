@@ -76,7 +76,7 @@
           Gruppe
         </div>
         <div class="text-start col-sm-9">
-          <b :style="'color:' + groupUseColor">{{ groupUseString }}</b>
+          <SpanBoolean :value="mcs.groupUse" />
         </div>
       </div>
       <div class="row">
@@ -113,17 +113,11 @@ import { capitalsourceStateNames } from "@/model/capitalsource/CapitalsourceStat
 import { capitalsourceTypeNames } from "@/model/capitalsource/CapitalsourceType";
 
 import CapitalsourceControllerHandler from "@/handler/CapitalsourceControllerHandler";
+import SpanBoolean from "../SpanBoolean.vue";
 
 const mcs = ref({} as Capitalsource);
 const modalComponent = ref();
 const emit = defineEmits(["capitalsourceDeleted"]);
-
-const groupUseColor = computed(() => {
-  return mcs.value.groupUse ? "green" : "red";
-});
-const groupUseString = computed(() => {
-  return mcs.value.groupUse ? "Ja" : "Nein";
-});
 
 const importAllowedColor = computed(() => {
   return mcs.value.importAllowed > 0 ? "green" : "red";

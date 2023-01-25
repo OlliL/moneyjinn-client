@@ -2,14 +2,12 @@
   <tr>
     <td class="text-start">{{ user.userName }}</td>
     <td class="text-start">{{ user.groupName }}</td>
+    <td class="text-center"><SpanBoolean :value="user.userCanLogin" /></td>
     <td class="text-center">
-      <b :style="'color:' + userCanLoginColor">{{ userCanLoginString }}</b>
+      <SpanBoolean :value="user.userIsAdmin" />
     </td>
     <td class="text-center">
-      <b :style="'color:' + userIsAdminColor">{{ userIsAdminString }}</b>
-    </td>
-    <td class="text-center">
-      <b :style="'color:' + userIsNewColor">{{ userIsNewString }}</b>
+      <SpanBoolean :value="user.userIsNew" />
     </td>
     <td class="text-center">
       <span role="button" class="link-primary" @click="editUser"
@@ -23,46 +21,26 @@
     </td>
   </tr>
 </template>
-<script lang="ts">
-import type { User } from "@/model/user/User";
-import { defineComponent, type PropType } from "vue";
+<script lang="ts" setup>
+import type { PropType } from "vue";
 
-export default defineComponent({
-  name: "ListUserRow",
-  props: {
-    user: {
-      type: Object as PropType<User>,
-      required: true,
-    },
-  },
-  emits: ["deleteUser", "editUser"],
-  computed: {
-    userCanLoginColor(): string {
-      return this.user.userCanLogin ? "green" : "red";
-    },
-    userCanLoginString(): string {
-      return this.user.userCanLogin ? "Ja" : "Nein";
-    },
-    userIsAdminColor(): string {
-      return this.user.userIsAdmin ? "green" : "red";
-    },
-    userIsAdminString(): string {
-      return this.user.userIsAdmin ? "Ja" : "Nein";
-    },
-    userIsNewColor(): string {
-      return this.user.userIsNew ? "green" : "red";
-    },
-    userIsNewString(): string {
-      return this.user.userIsNew ? "Ja" : "Nein";
-    },
-  },
-  methods: {
-    deleteUser() {
-      this.$emit("deleteUser", this.user);
-    },
-    editUser() {
-      this.$emit("editUser", this.user);
-    },
+import SpanBoolean from "../SpanBoolean.vue";
+
+import type { User } from "@/model/user/User";
+
+const props = defineProps({
+  user: {
+    type: Object as PropType<User>,
+    required: true,
   },
 });
+
+const emit = defineEmits(["deleteUser", "editUser"]);
+
+const deleteUser = () => {
+  emit("deleteUser", props.user);
+};
+const editUser = () => {
+  emit("editUser", props.user);
+};
 </script>
