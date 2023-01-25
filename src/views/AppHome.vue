@@ -50,54 +50,46 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from "vue";
+<script lang="ts" setup>
+import { onMounted, ref } from "vue";
+
 import EditMonthlySettlementModalVue from "@/components/monthlysettlement/EditMonthlySettlementModal.vue";
-import type { Events } from "@/model/event/Events";
-import EventControllerHandler from "@/handler/EventControllerHandler";
+
 import router, { Routes } from "@/router";
 
-export default defineComponent({
-  name: "HomeView",
-  data() {
-    return {
-      importedMoneyflows: false,
-      monthlySettlementMissing: false,
-      monthlySettlementMonth: 0,
-      monthlySettlementYear: 0,
-    };
-  },
-  mounted() {
-    this.loadData();
-  },
-  methods: {
-    async loadData() {
-      const events: Events = await EventControllerHandler.showEventList();
+import EventControllerHandler from "@/handler/EventControllerHandler";
 
-      if (events.numberOfImportedMoneyflows > 0) {
-        this.importedMoneyflows = true;
-      }
-      this.monthlySettlementMissing = events.monthlySettlementMissing;
-      this.monthlySettlementMonth = events.monthlySettlementMonth;
-      this.monthlySettlementYear = events.monthlySettlementYear;
-    },
-    showEditMonthlySettlementModal() {
-      (this.$refs.editModal as typeof EditMonthlySettlementModalVue)._show(
-        this.monthlySettlementYear,
-        this.monthlySettlementMonth
-      );
-    },
-    monthlySettlementUpserted() {
-      this.monthlySettlementMissing = false;
-    },
-    navigateImportMoneyflows() {
-      router.push({
-        name: Routes.ImportMoneyflows,
-      });
-    },
-  },
-  components: {
-    EditMonthlySettlementModalVue,
-  },
+const importedMoneyflows = ref(false);
+const monthlySettlementMissing = ref(false);
+const monthlySettlementMonth = ref(0);
+const monthlySettlementYear = ref(0);
+const editModal = ref();
+
+const loadData = () => {
+  EventControllerHandler.showEventList().then((events) => {
+    if (events.numberOfImportedMoneyflows > 0) {
+      importedMoneyflows.value = true;
+    }
+    monthlySettlementMissing.value = events.monthlySettlementMissing;
+    monthlySettlementMonth.value = events.monthlySettlementMonth;
+    monthlySettlementYear.value = events.monthlySettlementYear;
+  });
+};
+const showEditMonthlySettlementModal = () => {
+  editModal.value._show(
+    monthlySettlementYear.value,
+    monthlySettlementMonth.value
+  );
+};
+const monthlySettlementUpserted = () => {
+  monthlySettlementMissing.value = false;
+};
+const navigateImportMoneyflows = () => {
+  router.push({
+    name: Routes.ImportMoneyflows,
+  });
+};
+onMounted(() => {
+  loadData();
 });
 </script>
