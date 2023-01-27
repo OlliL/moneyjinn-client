@@ -1,5 +1,5 @@
 <template>
-  <ModalVue title="Kapitalquelle l&ouml;schen" ref="modalComponent">
+  <ModalVue title="Buchungskonto l&ouml;schen" ref="modalComponent">
     <template #body>
       <div class="row">
         <div

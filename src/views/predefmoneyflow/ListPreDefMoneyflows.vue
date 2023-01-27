@@ -6,7 +6,7 @@
     @pre-def-moneyflow-updated="reloadView"
   />
   <DeletePreDefMoneyflowModalVue
-    ref="deletePreDefMoneyflowModalList"
+    ref="deleteModal"
     id-suffix="List"
     @pre-def-moneyflow-deleted="reloadView"
   />
@@ -82,78 +82,69 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from "vue";
-import type { PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
-import PreDefMoneyflowControllerHandler from "@/handler/PreDefMoneyflowControllerHandler";
-import ListPreDefMoneyflowRowVue from "@/components/predefmoneyflow/ListPreDefMoneyflowRow.vue";
+<script lang="ts" setup>
+import { onMounted, ref } from "vue";
+
 import CreatePreDefMoneyflowModalVue from "@/components/predefmoneyflow/CreatePreDefMoneyflowModal.vue";
 import DeletePreDefMoneyflowModalVue from "@/components/predefmoneyflow/DeletePreDefMoneyflowModal.vue";
+import ListPreDefMoneyflowRowVue from "@/components/predefmoneyflow/ListPreDefMoneyflowRow.vue";
 
-export default defineComponent({
-  name: "ListPreDefMoneyflows",
-  data() {
-    return {
-      preDefMoneyflows: {} as Array<PreDefMoneyflow>,
-      allPreDefMoneyflows: {} as Array<PreDefMoneyflow>,
-      searchString: "",
-    };
-  },
-  async mounted() {
-    this.searchString = "";
-    this.reloadView();
-  },
-  computed: {},
-  methods: {
-    async reloadView() {
-      this.allPreDefMoneyflows =
-        await PreDefMoneyflowControllerHandler.fetchAllPreDefMoneyflow();
+import type { PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
 
-      this.allPreDefMoneyflows.sort((a, b) => {
+import PreDefMoneyflowControllerHandler from "@/handler/PreDefMoneyflowControllerHandler";
+
+const preDefMoneyflows = ref(new Array<PreDefMoneyflow>());
+const allPreDefMoneyflows = ref(new Array<PreDefMoneyflow>());
+const searchString = ref("");
+
+const createPreDefMoneyflowModalList = ref();
+const deleteModal = ref();
+
+const showCreatePreDefMoneyflowModal = () => {
+  createPreDefMoneyflowModalList.value._show();
+};
+
+const deletePreDefMoneyflow = (mcs: PreDefMoneyflow) => {
+  deleteModal.value._show(mcs);
+};
+
+const editPreDefMoneyflow = (mcs: PreDefMoneyflow) => {
+  createPreDefMoneyflowModalList.value._show(mcs);
+};
+
+const searchAllContent = () => {
+  searchString.value = "";
+  searchContent();
+};
+
+const searchContent = () => {
+  if (searchString.value === "") {
+    preDefMoneyflows.value = allPreDefMoneyflows.value;
+    return;
+  }
+
+  const commentUpper = searchString.value.toUpperCase();
+  preDefMoneyflows.value = allPreDefMoneyflows.value.filter((entry) =>
+    entry.contractpartnerName.toUpperCase().includes(commentUpper)
+  );
+};
+
+const reloadView = () => {
+  PreDefMoneyflowControllerHandler.fetchAllPreDefMoneyflow().then(
+    (_preDefMoneyflows) => {
+      _preDefMoneyflows.sort((a, b) => {
         return a.contractpartnerName
           .toUpperCase()
           .localeCompare(b.contractpartnerName.toUpperCase());
       });
-      this.searchContent();
-    },
-    showCreatePreDefMoneyflowModal() {
-      (
-        this.$refs
-          .createPreDefMoneyflowModalList as typeof CreatePreDefMoneyflowModalVue
-      )._show();
-    },
-    editPreDefMoneyflow(mpm: PreDefMoneyflow) {
-      (
-        this.$refs
-          .createPreDefMoneyflowModalList as typeof CreatePreDefMoneyflowModalVue
-      )._show(mpm);
-    },
-    deletePreDefMoneyflow(mpm: PreDefMoneyflow) {
-      (
-        this.$refs
-          .deletePreDefMoneyflowModalList as typeof DeletePreDefMoneyflowModalVue
-      )._show(mpm);
-    },
-    searchAllContent() {
-      this.searchString = "";
-      this.searchContent();
-    },
-    searchContent() {
-      let mpm = this.allPreDefMoneyflows;
-      if (this.searchString === "") {
-        this.preDefMoneyflows = mpm;
-      }
+      allPreDefMoneyflows.value = _preDefMoneyflows;
+      searchContent();
+    }
+  );
+};
 
-      const commentUpper = this.searchString.toUpperCase();
-      this.preDefMoneyflows = mpm.filter((entry) =>
-        entry.contractpartnerName.toUpperCase().includes(commentUpper)
-      );
-    },
-  },
-  components: {
-    ListPreDefMoneyflowRowVue,
-    CreatePreDefMoneyflowModalVue,
-    DeletePreDefMoneyflowModalVue,
-  },
+onMounted(() => {
+  searchString.value = "";
+  reloadView();
 });
 </script>

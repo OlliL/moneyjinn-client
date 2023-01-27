@@ -51,11 +51,11 @@
                   <input
                     class="form-check-input"
                     type="checkbox"
-                    id="capitalsourcesValid"
+                    id="contractpartnersValid"
                     v-model="validNow"
                     @change="searchContent"
                   />
-                  <label class="form-check-label" for="capitalsourcesValid"
+                  <label class="form-check-label" for="contractpartnersValid"
                     >Jetzt g&uuml;ltig</label
                   >
                 </div>
@@ -94,68 +94,57 @@
   </div>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
+import { onMounted, ref } from "vue";
+
 import { useContractpartnerStore } from "@/stores/ContractpartnerStore";
-import { defineComponent } from "vue";
-import { mapActions } from "pinia";
-import type { Contractpartner } from "@/model/contractpartner/Contractpartner";
+
 import CreateContractpartnerModalVue from "@/components/contractpartner/CreateContractpartnerModal.vue";
-import ListContractpartnerRowVue from "@/components/contractpartner/ListContractpartnerRow.vue";
 import DeleteContractpartnerModalVue from "@/components/contractpartner/DeleteContractpartnerModal.vue";
-import ListContractpartnerAccountsModalVue from "@/components/contractpartneraccount/ListContractpartnerAccountsModal.vue";
-export default defineComponent({
-  name: "ListContractpartners",
-  data() {
-    return {
-      validNow: true,
-      contractpartners: {} as Array<Contractpartner>,
-      searchString: "",
-    };
-  },
-  async mounted() {
-    this.searchAllContent();
-  },
-  computed: {},
-  methods: {
-    ...mapActions(useContractpartnerStore, ["searchContractpartner"]),
-    showCreateContractpartnerModal() {
-      (
-        this.$refs
-          .createContractpartnerModalList as typeof CreateContractpartnerModalVue
-      )._show();
-    },
-    editContractpartner(mcp: Contractpartner) {
-      (
-        this.$refs
-          .createContractpartnerModalList as typeof CreateContractpartnerModalVue
-      )._show(mcp);
-    },
-    deleteContractpartner(mcp: Contractpartner) {
-      (this.$refs.deleteModal as typeof DeleteContractpartnerModalVue)._show(
-        mcp
-      );
-    },
-    searchAllContent() {
-      this.searchString = "";
-      this.searchContent();
-    },
-    async searchContent() {
-      this.contractpartners = await this.searchContractpartner(
-        this.searchString,
-        this.validNow
-      );
-    },
-    listContractpartnerAccounts(mcp: Contractpartner) {
-      (
-        this.$refs.accountsModal as typeof ListContractpartnerAccountsModalVue
-      )._show(mcp);
-    },
-  },
-  components: {
-    CreateContractpartnerModalVue,
-    ListContractpartnerRowVue,
-    DeleteContractpartnerModalVue,
-    ListContractpartnerAccountsModalVue,
-  },
+import ListContractpartnerRowVue from "@/components/contractpartner/ListContractpartnerRow.vue";
+
+import type { Contractpartner } from "@/model/contractpartner/Contractpartner";
+
+const validNow = ref(true);
+const contractpartners = ref(new Array<Contractpartner>());
+const searchString = ref("");
+
+const createContractpartnerModalList = ref();
+const deleteModal = ref();
+const accountsModal = ref();
+
+const searchContractpartners = useContractpartnerStore().searchContractpartners;
+
+const showCreateContractpartnerModal = () => {
+  createContractpartnerModalList.value._show();
+};
+
+const deleteContractpartner = (mcs: Contractpartner) => {
+  deleteModal.value._show(mcs);
+};
+
+const editContractpartner = (mcs: Contractpartner) => {
+  createContractpartnerModalList.value._show(mcs);
+};
+
+const searchAllContent = () => {
+  searchString.value = "";
+  searchContent();
+};
+
+const searchContent = () => {
+  searchContractpartners(searchString.value, validNow.value).then(
+    (_contractpartners) => {
+      contractpartners.value = _contractpartners;
+    }
+  );
+};
+
+onMounted(() => {
+  searchAllContent();
 });
+
+const listContractpartnerAccounts = (mcp: Contractpartner) => {
+  accountsModal.value._show(mcp);
+};
 </script>

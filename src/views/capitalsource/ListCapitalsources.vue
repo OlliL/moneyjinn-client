@@ -85,7 +85,7 @@
               v-for="mcs in capitalsources"
               :key="mcs.id"
               :mcs="mcs"
-              :owner="mcs.userId === getUserId"
+              :owner="mcs.userId === userId"
               @delete-capitalsource="deleteCapitalsource"
               @edit-capitalsource="editCapitalsource"
             />
@@ -96,62 +96,54 @@
   </div>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
+import { onMounted, ref } from "vue";
+
 import { useCapitalsourceStore } from "@/stores/CapitalsourceStore";
-import { defineComponent } from "vue";
-import { mapActions, mapState } from "pinia";
-import type { Capitalsource } from "@/model/capitalsource/Capitalsource";
-import CreateCapitalsourceModalVue from "@/components/capitalsource/CreateCapitalsourceModal.vue";
-import ListCapitalsourceRowVue from "@/components/capitalsource/ListCapitalsourceRow.vue";
 import { useUserSessionStore } from "@/stores/UserSessionStore";
+
+import CreateCapitalsourceModalVue from "@/components/capitalsource/CreateCapitalsourceModal.vue";
 import DeleteCapitalsourceModalVue from "@/components/capitalsource/DeleteCapitalsourceModal.vue";
-export default defineComponent({
-  name: "ListCapitalsources",
-  data() {
-    return {
-      validNow: true,
-      capitalsources: {} as Array<Capitalsource>,
-      searchString: "",
-    };
-  },
-  async mounted() {
-    this.searchAllContent();
-  },
-  computed: {
-    ...mapState(useUserSessionStore, ["getUserId"]),
-  },
-  methods: {
-    ...mapActions(useCapitalsourceStore, ["searchCapitalsources"]),
-    showCreateCapitalsourceModal() {
-      (
-        this.$refs
-          .createCapitalsourceModalList as typeof CreateCapitalsourceModalVue
-      )._show();
-    },
-    deleteCapitalsource(mcs: Capitalsource) {
-      (this.$refs.deleteModal as typeof DeleteCapitalsourceModalVue)._show(mcs);
-    },
-    editCapitalsource(mcs: Capitalsource) {
-      (
-        this.$refs
-          .createCapitalsourceModalList as typeof CreateCapitalsourceModalVue
-      )._show(mcs);
-    },
-    searchAllContent() {
-      this.searchString = "";
-      this.searchContent();
-    },
-    async searchContent() {
-      this.capitalsources = await this.searchCapitalsources(
-        this.searchString,
-        this.validNow
-      );
-    },
-  },
-  components: {
-    CreateCapitalsourceModalVue,
-    ListCapitalsourceRowVue,
-    DeleteCapitalsourceModalVue,
-  },
+import ListCapitalsourceRowVue from "@/components/capitalsource/ListCapitalsourceRow.vue";
+
+import type { Capitalsource } from "@/model/capitalsource/Capitalsource";
+
+const validNow = ref(true);
+const capitalsources = ref(new Array<Capitalsource>());
+const searchString = ref("");
+
+const createCapitalsourceModalList = ref();
+const deleteModal = ref();
+
+const userId = useUserSessionStore().getUserId;
+const searchCapitalsources = useCapitalsourceStore().searchCapitalsources;
+
+const showCreateCapitalsourceModal = () => {
+  createCapitalsourceModalList.value._show();
+};
+
+const deleteCapitalsource = (mcs: Capitalsource) => {
+  deleteModal.value._show(mcs);
+};
+
+const editCapitalsource = (mcs: Capitalsource) => {
+  createCapitalsourceModalList.value._show(mcs);
+};
+
+const searchAllContent = () => {
+  searchString.value = "";
+  searchContent();
+};
+
+const searchContent = () => {
+  searchCapitalsources(searchString.value, validNow.value).then(
+    (_capitalsources) => {
+      capitalsources.value = _capitalsources;
+    }
+  );
+};
+
+onMounted(() => {
+  searchAllContent();
 });
 </script>

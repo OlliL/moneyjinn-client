@@ -72,7 +72,7 @@ export const useContractpartnerStore = defineStore("contractpartner", {
         return validityDate >= mcp.validFrom && validityDate <= mcp.validTil;
       });
     },
-    async searchContractpartner(
+    async searchContractpartners(
       comment: String,
       validNow?: boolean
     ): Promise<Array<Contractpartner>> {

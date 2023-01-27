@@ -75,62 +75,49 @@
   </div>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
+import { onMounted, ref } from "vue";
+
 import { usePostingAccountStore } from "@/stores/PostingAccountStore";
-import { defineComponent } from "vue";
-import { mapActions, mapState } from "pinia";
-import type { PostingAccount } from "@/model/postingaccount/PostingAccount";
+
 import CreatePostingAccountModalVue from "@/components/postingaccount/CreatePostingAccountModal.vue";
-import ListPostingAccountRowVue from "@/components/postingaccount/ListPostingAccountRow.vue";
-import { useUserSessionStore } from "@/stores/UserSessionStore";
 import DeletePostingAccountModalVue from "@/components/postingaccount/DeletePostingAccountModal.vue";
-export default defineComponent({
-  name: "ListPostingAccounts",
-  data() {
-    return {
-      postingAccounts: {} as Array<PostingAccount>,
-      searchString: "",
-    };
-  },
-  async mounted() {
-    this.searchAllContent();
-  },
-  computed: {
-    ...mapState(useUserSessionStore, ["getUserId"]),
-  },
-  methods: {
-    ...mapActions(usePostingAccountStore, ["searchPostingAccounts"]),
-    showCreatePostingAccountModal() {
-      (
-        this.$refs
-          .createPostingAccountModalList as typeof CreatePostingAccountModalVue
-      )._show();
-    },
-    deletePostingAccount(mpa: PostingAccount) {
-      (this.$refs.deleteModal as typeof DeletePostingAccountModalVue)._show(
-        mpa
-      );
-    },
-    editPostingAccount(mpa: PostingAccount) {
-      (
-        this.$refs
-          .createPostingAccountModalList as typeof CreatePostingAccountModalVue
-      )._show(mpa);
-    },
-    searchAllContent() {
-      this.searchString = "";
-      this.searchContent();
-    },
-    async searchContent() {
-      this.postingAccounts = await this.searchPostingAccounts(
-        this.searchString
-      );
-    },
-  },
-  components: {
-    CreatePostingAccountModalVue,
-    ListPostingAccountRowVue,
-    DeletePostingAccountModalVue,
-  },
+import ListPostingAccountRowVue from "@/components/postingaccount/ListPostingAccountRow.vue";
+
+import type { PostingAccount } from "@/model/postingaccount/PostingAccount";
+
+const postingAccounts = ref(new Array<PostingAccount>());
+const searchString = ref("");
+
+const createPostingAccountModalList = ref();
+const deleteModal = ref();
+
+const searchPostingAccounts = usePostingAccountStore().searchPostingAccounts;
+
+const showCreatePostingAccountModal = () => {
+  createPostingAccountModalList.value._show();
+};
+
+const deletePostingAccount = (mcs: PostingAccount) => {
+  deleteModal.value._show(mcs);
+};
+
+const editPostingAccount = (mcs: PostingAccount) => {
+  createPostingAccountModalList.value._show(mcs);
+};
+
+const searchAllContent = () => {
+  searchString.value = "";
+  searchContent();
+};
+
+const searchContent = () => {
+  searchPostingAccounts(searchString.value).then((_postingAccounts) => {
+    postingAccounts.value = _postingAccounts;
+  });
+};
+
+onMounted(() => {
+  searchAllContent();
 });
 </script>
