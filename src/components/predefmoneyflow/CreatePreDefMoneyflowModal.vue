@@ -152,8 +152,8 @@ const { handleSubmit, values, setFieldTouched } = useForm();
 
 const title = computed(() => {
   return origMpm.value === undefined
-    ? "Vertragspartner hinzufügen"
-    : "Vertragspartner bearbeiten";
+    ? "Vordefinierte Geldbewegung hinzufügen"
+    : "Vordefinierte Geldbewegung bearbeiten";
 });
 
 const resetForm = () => {

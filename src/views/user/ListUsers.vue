@@ -6,7 +6,7 @@
     @user-updated="reloadView"
   />
   <DeleteUserModalVue
-    ref="deleteUserModalList"
+    ref="deleteModal"
     id-suffix="List"
     @user-deleted="reloadView"
   />
@@ -80,68 +80,65 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from "vue";
-import type { User } from "@/model/user/User";
-import UserControllerHandler from "@/handler/UserControllerHandler";
-import ListUserRowVue from "@/components/user/ListUserRow.vue";
+<script lang="ts" setup>
+import { onMounted, ref } from "vue";
+
 import CreateUserModalVue from "@/components/user/CreateUserModal.vue";
 import DeleteUserModalVue from "@/components/user/DeleteUserModal.vue";
+import ListUserRowVue from "@/components/user/ListUserRow.vue";
 
-export default defineComponent({
-  name: "ListUsers",
-  data() {
-    return {
-      users: {} as Array<User>,
-      allUsers: {} as Array<User>,
-      searchString: "",
-    };
-  },
-  async mounted() {
-    this.searchString = "";
-    this.reloadView();
-  },
-  computed: {},
-  methods: {
-    async reloadView() {
-      this.allUsers = await UserControllerHandler.fetchAllUser();
+import type { User } from "@/model/user/User";
 
-      this.allUsers.sort((a, b) => {
-        return a.userName.toUpperCase().localeCompare(b.userName.toUpperCase());
-      });
+import UserControllerHandler from "@/handler/UserControllerHandler";
 
-      this.searchContent();
-    },
+const users = ref(new Array<User>());
+const allUsers = ref(new Array<User>());
+const searchString = ref("");
 
-    showCreateUserModal() {
-      (this.$refs.createUserModalList as typeof CreateUserModalVue)._show();
-    },
-    editUser(user: User) {
-      (this.$refs.createUserModalList as typeof CreateUserModalVue)._show(user);
-    },
-    deleteUser(user: User) {
-      (this.$refs.deleteUserModalList as typeof DeleteUserModalVue)._show(user);
-    },
-    searchAllContent() {
-      this.searchString = "";
-      this.searchContent();
-    },
-    searchContent() {
-      let users = this.allUsers;
-      if (this.searchString === "") {
-        this.users = users;
-      }
+const createUserModalList = ref();
+const deleteModal = ref();
 
-      const commentUpper = this.searchString.toUpperCase();
-      this.users = users.filter((entry) =>
-        entry.userName.toUpperCase().includes(commentUpper)
-      );
-    },
-  },
-  components: {
-    ListUserRowVue,
-    CreateUserModalVue,
-    DeleteUserModalVue,
-  },
+const showCreateUserModal = () => {
+  createUserModalList.value._show();
+};
+
+const deleteUser = (mcs: User) => {
+  deleteModal.value._show(mcs);
+};
+
+const editUser = (mcs: User) => {
+  createUserModalList.value._show(mcs);
+};
+
+const searchAllContent = () => {
+  searchString.value = "";
+  searchContent();
+};
+
+const searchContent = () => {
+  if (searchString.value === "") {
+    users.value = allUsers.value;
+    return;
+  }
+
+  const commentUpper = searchString.value.toUpperCase();
+  users.value = allUsers.value.filter((entry) =>
+    entry.userName.toUpperCase().includes(commentUpper)
+  );
+};
+
+const reloadView = () => {
+  UserControllerHandler.fetchAllUser().then((_users) => {
+    _users.sort((a, b) => {
+      return a.userName.toUpperCase().localeCompare(b.userName.toUpperCase());
+    });
+    allUsers.value = _users;
+    searchContent();
+  });
+};
+
+onMounted(() => {
+  searchString.value = "";
+  reloadView();
 });
 </script>

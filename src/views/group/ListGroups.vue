@@ -6,7 +6,7 @@
     @group-updated="reloadView"
   />
   <DeleteGroupModalVue
-    ref="deleteGroupModalList"
+    ref="deleteModal"
     id-suffix="List"
     @group-deleted="reloadView"
   />
@@ -76,71 +76,65 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from "vue";
-import type { Group } from "@/model/group/Group";
-import GroupControllerHandler from "@/handler/GroupControllerHandler";
-import ListGroupRowVue from "@/components/group/ListGroupRow.vue";
+<script lang="ts" setup>
+import { onMounted, ref } from "vue";
+
 import CreateGroupModalVue from "@/components/group/CreateGroupModal.vue";
 import DeleteGroupModalVue from "@/components/group/DeleteGroupModal.vue";
+import ListGroupRowVue from "@/components/group/ListGroupRow.vue";
 
-export default defineComponent({
-  name: "ListGroups",
-  data() {
-    return {
-      groups: {} as Array<Group>,
-      allGroups: {} as Array<Group>,
-      searchString: "",
-    };
-  },
-  async mounted() {
-    this.searchString = "";
-    this.reloadView();
-  },
-  computed: {},
-  methods: {
-    async reloadView() {
-      this.allGroups = await GroupControllerHandler.fetchAllGroup();
+import type { Group } from "@/model/group/Group";
 
-      this.allGroups.sort((a, b) => {
-        return a.name.toUpperCase().localeCompare(b.name.toUpperCase());
-      });
+import GroupControllerHandler from "@/handler/GroupControllerHandler";
 
-      this.searchContent();
-    },
-    showCreateGroupModal() {
-      (this.$refs.createGroupModalList as typeof CreateGroupModalVue)._show();
-    },
-    editGroup(group: Group) {
-      (this.$refs.createGroupModalList as typeof CreateGroupModalVue)._show(
-        group
-      );
-    },
-    deleteGroup(group: Group) {
-      (this.$refs.deleteGroupModalList as typeof DeleteGroupModalVue)._show(
-        group
-      );
-    },
-    searchAllContent() {
-      this.searchString = "";
-      this.searchContent();
-    },
-    searchContent() {
-      let groups = this.allGroups;
-      if (this.searchString === "") {
-        this.groups = groups;
-      }
+const groups = ref(new Array<Group>());
+const allGroups = ref(new Array<Group>());
+const searchString = ref("");
 
-      const commentUpper = this.searchString.toUpperCase();
-      this.groups = groups.filter((entry) =>
-        entry.name.toUpperCase().includes(commentUpper)
-      );
-    },
-  },
-  components: {
-    ListGroupRowVue,
-    CreateGroupModalVue,
-    DeleteGroupModalVue,
-  },
+const createGroupModalList = ref();
+const deleteModal = ref();
+
+const showCreateGroupModal = () => {
+  createGroupModalList.value._show();
+};
+
+const deleteGroup = (mcs: Group) => {
+  deleteModal.value._show(mcs);
+};
+
+const editGroup = (mcs: Group) => {
+  createGroupModalList.value._show(mcs);
+};
+
+const searchAllContent = () => {
+  searchString.value = "";
+  searchContent();
+};
+
+const searchContent = () => {
+  if (searchString.value === "") {
+    groups.value = allGroups.value;
+    return;
+  }
+
+  const commentUpper = searchString.value.toUpperCase();
+  groups.value = allGroups.value.filter((entry) =>
+    entry.name.toUpperCase().includes(commentUpper)
+  );
+};
+
+const reloadView = () => {
+  GroupControllerHandler.fetchAllGroup().then((_groups) => {
+    _groups.sort((a, b) => {
+      return a.name.toUpperCase().localeCompare(b.name.toUpperCase());
+    });
+    allGroups.value = _groups;
+    searchContent();
+  });
+};
+
+onMounted(() => {
+  searchString.value = "";
+  reloadView();
 });
 </script>

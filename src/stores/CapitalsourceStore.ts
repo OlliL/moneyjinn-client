@@ -104,7 +104,7 @@ export const useCapitalsourceStore = defineStore("capitalsource", {
       if (validNow) {
         const date = new Date();
         date.setHours(0, 0, 0, 0);
-        mcs = this.getBookableValidCapitalsources(date);
+        mcs = this.getValidCapitalsource(date);
       }
 
       if (comment === "") {
