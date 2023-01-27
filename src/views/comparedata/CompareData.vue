@@ -12,51 +12,33 @@
       <div class="col-xxl-7 col-md-8 col-sm-10 col-xs-12">
         <div class="card w-100 bg-light">
           <div class="card-body">
-            <form @submit.prevent="compareData">
+            <form @submit.prevent="compareData" id="compareDataForm">
               <div class="container-fluid">
-                <div v-if="serverError">
-                  <div
-                    class="alert alert-danger"
-                    v-for="(error, index) in serverError"
-                    :key="index"
-                  >
-                    {{ error }}
-                  </div>
-                </div>
-                <div class="row no-gutters flex-lg-nowrap">
+                <DivError :server-errors="serverErrors" />
+                <div class="row">
                   <div class="col-md-3 col-xs-12 mb-2">
-                    <DatepickerVue
+                    <InputDate
+                      v-model="startDate"
+                      :validation-schema="schema.startDate"
                       id="startDate"
-                      :label="startDateErrorData.fieldLabel"
-                      :default-date="startDate"
-                      :input-class="
-                        ' form-control ' + startDateErrorData.inputClass
-                      "
-                      :label-style="'color: ' + startDateErrorData.fieldColor"
-                      @date-selected="startDateSelected"
+                      field-label="Startdatum"
                     />
                   </div>
                   <div class="col-md-3 col-xs-12">
-                    <DatepickerVue
+                    <InputDate
+                      v-model="endDate"
+                      :validation-schema="schema.endDate"
                       id="endDate"
-                      :label="endDateErrorData.fieldLabel"
-                      :default-date="endDate"
-                      :input-class="
-                        ' form-control ' + endDateErrorData.inputClass
-                      "
-                      :label-style="'color: ' + endDateErrorData.fieldColor"
-                      @date-selected="endDateSelected"
+                      field-label="Enddatum"
                     />
                   </div>
                   <div class="col-md-4 col-xs-12">
-                    <CapitalsourceSelectVue
-                      :field-color="capitalsourceErrorData.fieldColor"
-                      :field-label="capitalsourceErrorData.fieldLabel"
-                      :input-class="capitalsourceErrorData.inputClass"
-                      :validity-date="new Date()"
-                      :selected-id="capitalsourceId"
+                    <SelectCapitalsource
+                      v-model="capitalsourceId"
+                      :validation-schema="schema.capitalsourceId"
                       id-suffix="CompareData"
-                      @capitalsource-selected="onCapitalsourceSelected"
+                      field-label="Kapitalquelle"
+                      :validity-date="new Date()"
                     />
                   </div>
                   <div class="col-md-2 col-xs-12 d-flex align-items-center">
@@ -73,64 +55,31 @@
                     </div>
                   </div>
                 </div>
-                <div
-                  class="row no-gutters flex-lg-nowrap d-flex align-items-center"
-                  v-if="!sourceIsImport"
-                >
+                <div class="row align-items-center" v-show="!sourceIsImport">
                   <div class="col-md-6 col-xs-12 mb-2 text-start">
-                    <label
-                      for="input"
-                      :style="
-                        'opacity: .65; color: ' + uploadFileErrorData.fieldColor
-                      "
-                      ><small>{{
-                        uploadFileErrorData.fieldLabel
-                      }}</small></label
-                    >
-                    <input
-                      type="file"
-                      :class="' form-control ' + uploadFileErrorData.inputClass"
-                      id="input"
-                      multiple
-                      ref="fileUpload"
-                      @change="validateUploadFile"
+                    <InputFile
+                      v-model="files"
+                      :validation-schema-ref="schema.files"
+                      id="fileUpload"
+                      field-label="Importdatei"
                     />
                   </div>
                   <div class="col-md-4 col-xs-12 mb-2">
-                    <div class="form-floating">
-                      <select
-                        v-model="compareDataFormat"
-                        id="compareDataFormat"
-                        @change="validateCompareDataFormat"
-                        :class="
-                          'form-select form-control ' +
-                          compareDataFormatErrorData.inputClass
-                        "
-                      >
-                        <option
-                          v-for="cdf of compareDataFormats"
-                          :key="cdf.formatId"
-                          :value="cdf.formatId"
-                        >
-                          {{ cdf.name }}
-                        </option>
-                      </select>
-
-                      <label
-                        for="compareDataFormat"
-                        :style="
-                          'color: ' + compareDataFormatErrorData.fieldColor
-                        "
-                        >{{ compareDataFormatErrorData.fieldLabel }}</label
-                      >
-                    </div>
+                    <SelectStandard
+                      v-model="compareDataFormat"
+                      :validation-schema="schema.compareDataFormat"
+                      id="compareDataFormat"
+                      field-label="Format"
+                      :select-box-values="compareDataFormats"
+                    />
                   </div>
                 </div>
-                <div class="row no-gutters flex-lg-nowrap mt-2">
+                <div class="row mt-2">
                   <div class="col-12">
-                    <button type="submit" class="btn btn-primary">
-                      anzeigen
-                    </button>
+                    <ButtonSubmit
+                      button-label="anzeigen"
+                      form-id="compareDataForm"
+                    />
                   </div>
                 </div>
               </div>
@@ -187,323 +136,200 @@
   </div>
 </template>
 
-<script lang="ts">
-import CompareDataControllerHandler from "@/handler/CompareDataControllerHandler";
-import type { CompareDataParameter } from "@/model/comparedata/CompareDataParameter";
-import type { CompareDataResult } from "@/model/comparedata/CompareDataResult";
-import { generateErrorData, type ErrorData } from "@/tools/views/ErrorData";
-import { validateInputField } from "@/tools/views/ValidateInputField";
-import { defineComponent } from "vue";
-import DatepickerVue from "@/components/Datepicker.vue";
-import CapitalsourceSelectVue from "@/components/capitalsource/CapitalsourceSelect.vue";
-import type { Capitalsource } from "@/model/capitalsource/Capitalsource";
-import type { CompareDataFormat } from "@/model/comparedata/CompareDataFormat";
-import type { CompareData } from "@/model/comparedata/CompareData";
+<script lang="ts" setup>
+import { useForm } from "vee-validate";
+import { computed, onMounted, ref } from "vue";
+import { any, date, number, array as arr, instanceof as instof } from "zod";
+
+import ButtonSubmit from "@/components/ButtonSubmit.vue";
 import CompareDataResultGroupVue from "@/components/comparedata/CompareDataResultGroup.vue";
-import MoneyflowControllerHandler from "@/handler/MoneyflowControllerHandler";
 import DeleteMoneyflowModalVue from "@/components/moneyflow/DeleteMoneyflowModal.vue";
+import DivError from "@/components/DivError.vue";
 import EditMoneyflowModalVue from "@/components/moneyflow/EditMoneyflowModal.vue";
+import InputDate from "@/components/InputDate.vue";
+import InputFile from "@/components/InputFile.vue";
+import SelectCapitalsource from "@/components/capitalsource/SelectCapitalsource.vue";
+import SelectStandard from "@/components/SelectStandard.vue";
+
 import { useCapitalsourceStore } from "@/stores/CapitalsourceStore";
 
-type CompareDataData = {
-  serverError: Array<String> | undefined;
-  dataLoaded: boolean;
-  dataCompared: boolean;
-  startDate: Date | undefined;
-  endDate: Date | undefined;
-  capitalsourceId: number;
-  capitalsourceComment: string;
-  sourceIsImport: boolean;
-  compareDataFormat: number;
-  compareDataFormats: Array<CompareDataFormat>;
-  startDateIsValid: boolean | null;
-  startDateErrorMessage: string;
-  endDateIsValid: boolean | null;
-  endDateErrorMessage: string;
-  capitalsourceIsValid: boolean | null;
-  capitalsourceErrorMessage: string;
-  compareDataFormatIsValid: boolean | null;
-  compareDataFormatErrorMessage: string;
-  uploadFileIsValid: boolean | null;
-  uploadFileErrorMessage: string;
-  compareDatasMatching: Array<CompareData> | undefined;
-  compareDatasWrongCapitalsource: Array<CompareData> | undefined;
-  compareDatasNotInFile: Array<CompareData> | undefined;
-  compareDatasNotInDatabase: Array<CompareData> | undefined;
+import { globErr } from "@/tools/views/ZodUtil";
+
+import type { CompareData } from "@/model/comparedata/CompareData";
+import type { CompareDataParameter } from "@/model/comparedata/CompareDataParameter";
+import type { SelectBoxValue } from "@/model/SelectBoxValue";
+
+import CompareDataControllerHandler from "@/handler/CompareDataControllerHandler";
+import MoneyflowControllerHandler from "@/handler/MoneyflowControllerHandler";
+
+const serverErrors = ref(new Array<string>());
+
+const schema = {
+  startDate: date(globErr("Bitte Startdatum angeben!")),
+  endDate: date(globErr("Bitte Enddatum angeben!")),
+  capitalsourceId: number(globErr("Bitte Kapitalquelle angeben!")).gt(0),
+  compareDataFormat: number(globErr("Bitte Format angeben!")).gt(0),
+  files: computed(() => {
+    if (!sourceIsImport.value) {
+      return arr(instof(File), globErr("Bitte Importdatei angeben!"));
+    } else {
+      return any().optional();
+    }
+  }),
 };
-export default defineComponent({
-  name: "CompareData",
-  data(): CompareDataData {
-    return {
-      serverError: undefined,
-      dataLoaded: false,
-      dataCompared: false,
-      startDate: undefined,
-      endDate: undefined,
-      capitalsourceId: 0,
-      capitalsourceComment: "",
-      sourceIsImport: true,
-      compareDataFormat: 0,
-      compareDataFormats: {} as Array<CompareDataFormat>,
-      startDateIsValid: null,
-      startDateErrorMessage: "",
-      endDateIsValid: null,
-      endDateErrorMessage: "",
-      capitalsourceIsValid: null,
-      capitalsourceErrorMessage: "",
-      compareDataFormatIsValid: null,
-      compareDataFormatErrorMessage: "",
-      uploadFileIsValid: null,
-      uploadFileErrorMessage: "",
-      compareDatasMatching: undefined,
-      compareDatasWrongCapitalsource: undefined,
-      compareDatasNotInFile: undefined,
-      compareDatasNotInDatabase: undefined,
-    };
-  },
-  mounted() {
-    this.loadData();
-  },
-  computed: {
-    sourceIsImportLabel(): string {
-      return this.sourceIsImport ? "Datenimport" : "Datei";
-    },
-    formIsValid(): boolean {
-      const isValid =
-        this.startDateIsValid &&
-        this.endDateIsValid &&
-        this.capitalsourceIsValid;
-      if (isValid === null || isValid === undefined || isValid === true) {
-        return true;
+
+const dataLoaded = ref(false);
+const dataCompared = ref(false);
+const startDate = ref(new Date() as Date | undefined);
+const endDate = ref(new Date() as Date | undefined);
+const capitalsourceId = ref(0);
+const capitalsourceComment = ref("");
+const sourceIsImport = ref(true);
+const compareDataFormat = ref(0);
+const compareDataFormats = ref(new Array<SelectBoxValue>());
+const compareDatasMatching = ref({} as Array<CompareData> | undefined);
+const compareDatasWrongCapitalsource = ref(
+  {} as Array<CompareData> | undefined
+);
+const compareDatasNotInFile = ref({} as Array<CompareData> | undefined);
+const compareDatasNotInDatabase = ref({} as Array<CompareData> | undefined);
+const files = ref({} as FileList);
+
+const deleteModal = ref();
+const editModal = ref();
+
+const { handleSubmit, values, setFieldTouched } = useForm();
+
+onMounted(() => {
+  loadData();
+});
+
+const sourceIsImportLabel = computed(() => {
+  return sourceIsImport.value ? "Datenimport" : "Datei";
+});
+const compareDatasMatchingCount = computed(() => {
+  return compareDatasMatching.value ? compareDatasMatching.value.length : 0;
+});
+const compareDatasMatchingCountClass = computed(() => {
+  return compareDatasMatchingCount.value > 0 ? "text-success" : "text-danger";
+});
+const compareDatasWrongCapitalsourceCount = computed(() => {
+  return compareDatasWrongCapitalsource.value
+    ? compareDatasWrongCapitalsource.value.length
+    : 0;
+});
+const compareDatasWrongCapitalsourceCountClass = computed(() => {
+  return compareDatasWrongCapitalsourceCount.value > 0
+    ? "text-danger"
+    : "text-success";
+});
+const compareDatasNotInFileCount = computed(() => {
+  return compareDatasNotInFile.value ? compareDatasNotInFile.value.length : 0;
+});
+const compareDatasNotInFileCountClass = computed(() => {
+  return compareDatasNotInFileCount.value > 0 ? "text-danger" : "text-success";
+});
+const compareDatasNotInDatabaseCount = computed(() => {
+  return compareDatasNotInDatabase.value
+    ? compareDatasNotInDatabase.value.length
+    : 0;
+});
+const compareDatasNotInDatabaseCountClass = computed(() => {
+  return compareDatasNotInDatabaseCount.value > 0
+    ? "text-danger"
+    : "text-success";
+});
+
+const loadData = () => {
+  dataLoaded.value = false;
+  const _startDate = new Date();
+  _startDate.setDate(1);
+  const _endDate = new Date();
+  _endDate.setMonth(_endDate.getMonth() + 1);
+  _endDate.setDate(0);
+
+  startDate.value = _startDate;
+  endDate.value = _endDate;
+
+  CompareDataControllerHandler.showCompareDataForm().then(
+    (compareDataParameter) => {
+      sourceIsImport.value = compareDataParameter.selectedSourceIsImport;
+      compareDataFormat.value = compareDataParameter.selectedCompareDataFormat;
+
+      compareDataFormats.value = new Array<SelectBoxValue>();
+      for (let fmt of compareDataParameter.compareDataFormats) {
+        compareDataFormats.value.push({ id: fmt.formatId, value: fmt.name });
       }
-      return false;
-    },
-    startDateErrorData(): ErrorData {
-      return generateErrorData(
-        this.startDateIsValid,
-        "Startdatum",
-        this.startDateErrorMessage
-      );
-    },
-    endDateErrorData(): ErrorData {
-      return generateErrorData(
-        this.endDateIsValid,
-        "Enddatum",
-        this.endDateErrorMessage
-      );
-    },
-    capitalsourceErrorData(): ErrorData {
-      return generateErrorData(
-        this.capitalsourceIsValid,
-        "Kapitalquelle",
-        this.capitalsourceErrorMessage
-      );
-    },
-    compareDataFormatErrorData(): ErrorData {
-      return generateErrorData(
-        this.compareDataFormatIsValid,
-        "Format",
-        this.compareDataFormatErrorMessage
-      );
-    },
-    uploadFileErrorData(): ErrorData {
-      return generateErrorData(
-        this.uploadFileIsValid,
-        "Importdatei",
-        this.uploadFileErrorMessage
-      );
-    },
-    compareDatasMatchingCount(): number {
-      return this.compareDatasMatching ? this.compareDatasMatching.length : 0;
-    },
-    compareDatasMatchingCountClass(): string {
-      return this.compareDatasMatchingCount > 0
-        ? "text-success"
-        : "text-danger";
-    },
-    compareDatasWrongCapitalsourceCount(): number {
-      return this.compareDatasWrongCapitalsource
-        ? this.compareDatasWrongCapitalsource.length
-        : 0;
-    },
-    compareDatasWrongCapitalsourceCountClass(): string {
-      return this.compareDatasWrongCapitalsourceCount > 0
-        ? "text-danger"
-        : "text-success";
-    },
-    compareDatasNotInFileCount(): number {
-      return this.compareDatasNotInFile ? this.compareDatasNotInFile.length : 0;
-    },
-    compareDatasNotInFileCountClass(): string {
-      return this.compareDatasNotInFileCount > 0
-        ? "text-danger"
-        : "text-success";
-    },
-    compareDatasNotInDatabaseCount(): number {
-      return this.compareDatasNotInDatabase
-        ? this.compareDatasNotInDatabase.length
-        : 0;
-    },
-    compareDatasNotInDatabaseCountClass(): string {
-      return this.compareDatasNotInDatabaseCount > 0
-        ? "text-danger"
-        : "text-success";
-    },
-  },
-  methods: {
-    async loadData() {
-      this.dataLoaded = false;
-      const compareDataParameter: CompareDataParameter =
-        await CompareDataControllerHandler.showCompareDataForm();
 
-      const startDate = new Date();
-      startDate.setDate(1);
-      const endDate = new Date();
-      endDate.setMonth(endDate.getMonth() + 1);
-      endDate.setDate(0);
-
-      this.startDate = startDate;
-      this.endDate = endDate;
-      this.sourceIsImport = compareDataParameter.selectedSourceIsImport;
-      this.compareDataFormat = compareDataParameter.selectedCompareDataFormat;
-      this.compareDataFormats = compareDataParameter.compareDataFormats;
-      this.capitalsourceId = compareDataParameter.selectedCapitalSourceId;
-      if (this.capitalsourceId) {
+      capitalsourceId.value = compareDataParameter.selectedCapitalSourceId;
+      if (capitalsourceId.value) {
         const capitalsourceStore = useCapitalsourceStore();
         const capitalsource = capitalsourceStore.getCapitalsource(
-          this.capitalsourceId
+          capitalsourceId.value
         );
         if (capitalsource) {
-          this.capitalsourceComment = capitalsource.comment;
+          capitalsourceComment.value = capitalsource.comment;
         }
       }
 
-      this.dataLoaded = true;
-    },
-    validateStartDate() {
-      [this.startDateIsValid, this.startDateErrorMessage] = validateInputField(
-        this.startDate,
-        "Startdatum angeben!"
-      );
-    },
-    validateEndDate() {
-      [this.endDateIsValid, this.endDateErrorMessage] = validateInputField(
-        this.endDate,
-        "Enddatum angeben!"
-      );
-    },
-    validateCompareDataFormat() {
-      [this.compareDataFormatIsValid, this.compareDataFormatErrorMessage] =
-        validateInputField(this.compareDataFormat, "Format angeben!");
-    },
-    validateCapitalsource() {
-      [this.capitalsourceIsValid, this.capitalsourceErrorMessage] =
-        validateInputField(this.capitalsourceId, "Kapitalquelle angeben!");
-    },
-    validateUploadFile() {
-      const filesElement = this.$refs.fileUpload as HTMLInputElement;
-      const files = filesElement.files;
-      [this.uploadFileIsValid, this.uploadFileErrorMessage] =
-        validateInputField(
-          files != null && files.length === 1,
-          "Datei angeben!"
-        );
-    },
-    startDateSelected(date: Date) {
-      this.startDate = date;
-      this.validateStartDate();
-    },
-    endDateSelected(date: Date) {
-      this.endDate = date;
-      this.validateEndDate();
-    },
-    onCapitalsourceSelected(capitalsource: Capitalsource) {
-      if (capitalsource) {
-        this.capitalsourceId = capitalsource.id;
-        this.capitalsourceComment = capitalsource.comment;
-      } else {
-        this.capitalsourceId = 0;
-        this.capitalsourceComment = "";
-      }
-      this.validateCapitalsource();
-    },
-    async compareData() {
-      this.validateEndDate();
-      this.validateStartDate();
-      this.validateCapitalsource();
-      this.dataCompared = false;
-      this.serverError = undefined;
+      dataLoaded.value = true;
+    }
+  );
+  Object.keys(values).forEach((field) => setFieldTouched(field, false));
+};
 
-      let formIsValid: boolean | null = this.formIsValid;
-      if (!this.sourceIsImport) {
-        this.validateCompareDataFormat();
-        this.validateUploadFile();
-        formIsValid =
-          formIsValid &&
-          this.compareDataFormatIsValid &&
-          this.uploadFileIsValid;
-      }
+const compareData = handleSubmit(async () => {
+  dataCompared.value = false;
+  serverErrors.value = new Array<string>();
 
-      if (formIsValid && this.startDate && this.endDate) {
-        const compareDataParameter = {
-          startDate: this.startDate,
-          endDate: this.endDate,
-          selectedCapitalSourceId: this.capitalsourceId,
-          selectedSourceIsImport: this.sourceIsImport,
-        } as CompareDataParameter;
+  if (startDate.value && endDate.value) {
+    const compareDataParameter = {
+      startDate: startDate.value,
+      endDate: endDate.value,
+      selectedCapitalSourceId: capitalsourceId.value,
+      selectedSourceIsImport: sourceIsImport.value,
+    } as CompareDataParameter;
 
-        if (!this.sourceIsImport) {
-          const filesElement = this.$refs.fileUpload as HTMLInputElement;
-          const files = filesElement.files;
-
-          if (files != null && files.length === 1) {
-            const file = files[0];
-            const arrayBuffer = new Uint8Array(await file.arrayBuffer());
-            let fileContents: string = "";
-            for (var i = 0; i < arrayBuffer.byteLength; i++) {
-              fileContents += String.fromCharCode(arrayBuffer[i]);
-            }
-            compareDataParameter.fileContents = btoa(fileContents);
-            compareDataParameter.selectedCompareDataFormat =
-              this.compareDataFormat;
-          }
+    if (!sourceIsImport.value) {
+      if (files.value != null && files.value.length === 1) {
+        const file = files.value[0];
+        const arrayBuffer = new Uint8Array(await file.arrayBuffer());
+        let fileContents: string = "";
+        for (var i = 0; i < arrayBuffer.byteLength; i++) {
+          fileContents += String.fromCharCode(arrayBuffer[i]);
         }
-
-        try {
-          const compareDataResult: CompareDataResult =
-            await CompareDataControllerHandler.compareData(
-              compareDataParameter
-            );
-
-          this.compareDatasMatching = compareDataResult.compareDatasMatching;
-          this.compareDatasNotInDatabase =
-            compareDataResult.compareDatasNotInDatabase;
-          this.compareDatasNotInFile = compareDataResult.compareDatasNotInFile;
-          this.compareDatasWrongCapitalsource =
-            compareDataResult.compareDatasWrongCapitalsource;
-
-          this.dataCompared = true;
-        } catch (e) {
-          this.serverError = new Array<string>();
-          this.serverError.push((e as Error).message);
-        }
+        compareDataParameter.fileContents = btoa(fileContents);
+        compareDataParameter.selectedCompareDataFormat =
+          compareDataFormat.value;
       }
-    },
-    async deleteMoneyflow(id: number) {
-      const mmf = await MoneyflowControllerHandler.fetchMoneyflow(id);
-      (this.$refs.deleteModal as typeof DeleteMoneyflowModalVue)._show(mmf);
-    },
-    async editMoneyflow(id: number) {
-      const mmf = await MoneyflowControllerHandler.fetchMoneyflow(id);
-      (this.$refs.editModal as typeof EditMoneyflowModalVue)._show(mmf);
-    },
-  },
-  components: {
-    DatepickerVue,
-    CapitalsourceSelectVue,
-    CompareDataResultGroupVue,
-    DeleteMoneyflowModalVue,
-    EditMoneyflowModalVue,
-  },
+    }
+
+    CompareDataControllerHandler.compareData(compareDataParameter)
+      .then((compareDataResult) => {
+        compareDatasMatching.value = compareDataResult.compareDatasMatching;
+        compareDatasNotInDatabase.value =
+          compareDataResult.compareDatasNotInDatabase;
+        compareDatasNotInFile.value = compareDataResult.compareDatasNotInFile;
+        compareDatasWrongCapitalsource.value =
+          compareDataResult.compareDatasWrongCapitalsource;
+
+        dataCompared.value = true;
+      })
+      .catch((e) => {
+        serverErrors.value = new Array<string>();
+        serverErrors.value.push((e as Error).message);
+      });
+  }
 });
+
+const deleteMoneyflow = (id: number) => {
+  MoneyflowControllerHandler.fetchMoneyflow(id).then((mmf) => {
+    deleteModal.value._show(mmf);
+  });
+};
+const editMoneyflow = (id: number) => {
+  MoneyflowControllerHandler.fetchMoneyflow(id).then((mmf) => {
+    editModal.value._show(mmf);
+  });
+};
 </script>
