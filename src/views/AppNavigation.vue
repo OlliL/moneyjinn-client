@@ -7,11 +7,6 @@
     ref="createCapitalsourceModalNav"
     id-suffix="Nav"
   />
-  <CreatePostingAccountModalVue
-    ref="createPostingAccountModalNav"
-    id-suffix="Nav"
-  />
-
   <CreatePreDefMoneyflowModalVue
     ref="createPreDedMoneyflowModalNav"
     id-suffix="Nav"
@@ -20,7 +15,7 @@
   <nav class="navbar navbar-expand-lg navbar-light fixed-top bg-light">
     <div class="container-fluid">
       <router-link class="navbar-brand bg-light" :to="{ name: Routes.Home }"
-        ><small>moneyjin {{ appVersion }}</small></router-link
+        ><small>moneyjin {{ version }}</small></router-link
       >
       <button
         class="navbar-toggler"
@@ -273,110 +268,91 @@
   </main>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
+import { onMounted, ref, watch } from "vue";
+import { useRoute, type RouteRecordName } from "vue-router";
+
 import router, { Routes } from "@/router";
+import { version } from "../../package.json";
+
 import CreateContractpartnerModalVue from "@/components/contractpartner/CreateContractpartnerModal.vue";
 import CreateCapitalsourceModalVue from "@/components/capitalsource/CreateCapitalsourceModal.vue";
-import CreatePostingAccountModalVue from "@/components/postingaccount/CreatePostingAccountModal.vue";
 import CreatePreDefMoneyflowModalVue from "@/components/predefmoneyflow/CreatePreDefMoneyflowModal.vue";
+
 import { useUserSessionStore } from "@/stores/UserSessionStore";
-import type { RouteRecordName } from "vue-router";
-import { version } from "../../package.json";
-import { WebSocketHandler } from "@/handler/WebSocketHandler";
 import { StoreService } from "@/stores/StoreService";
 
-export default {
-  name: "AppNavigation",
+import { WebSocketHandler } from "@/handler/WebSocketHandler";
 
-  data() {
-    return {
-      Routes: Routes,
-      router: router,
-      year: new Date().getFullYear(),
-      month: new Date().getMonth() + 1,
-      userIsAdmin: false,
-      appVersion: version,
-    };
-  },
-  components: {
-    CreateContractpartnerModalVue,
-    CreateCapitalsourceModalVue,
-    CreatePostingAccountModalVue,
-    CreatePreDefMoneyflowModalVue,
-  },
-  mounted() {
-    const userSessionStore = useUserSessionStore();
-    this.userIsAdmin = userSessionStore.isAdmin;
-    this.markDropdownActive(this.$route.name);
-  },
-  async created() {
-    // make WebSocket connection
-    WebSocketHandler.getInstance().connectStompClient();
-    // initialize Stores
-    StoreService.getInstance().initAllStores();
-  },
-  watch: {
-    $route(to) {
-      this.markDropdownActive(to.name);
-    },
-  },
-  methods: {
-    markDropdownActive(routeName: RouteRecordName | null | undefined) {
-      const wrenchClassList = (this.$refs.dropdownWrench as HTMLElement)
-        .classList;
-      const plusClassList = (this.$refs.dropdownPlus as HTMLElement).classList;
-      const routerLinkActive = "router-link-active";
+const year = new Date().getFullYear();
+const month = new Date().getMonth() + 1;
+const userIsAdmin = ref(false);
+const route = useRoute();
 
-      wrenchClassList.remove(routerLinkActive);
-      plusClassList.remove(routerLinkActive);
-      switch (routeName) {
-        case Routes.ListPreDefMoneyflows:
-        case Routes.ListCapitalsources:
-        case Routes.ListContractpartners:
-        case Routes.ListMonthlySettlements: {
-          wrenchClassList.add(routerLinkActive);
-          break;
-        }
-        case Routes.ImportReceipts: {
-          plusClassList.add(routerLinkActive);
-          break;
-        }
-      }
-    },
-    showCreateContractpartnerModal() {
-      (
-        this.$refs
-          .createContractpartnerModalNav as typeof CreateContractpartnerModalVue
-      )._show();
-    },
-    showCreateCapitalsourceModal() {
-      (
-        this.$refs
-          .createCapitalsourceModalNav as typeof CreateCapitalsourceModalVue
-      )._show();
-    },
-    showCreatePostingAccountModal() {
-      (
-        this.$refs
-          .createPostingAccountModalNav as typeof CreatePostingAccountModalVue
-      )._show();
-    },
-    showPreDefMoneyflowModal() {
-      (
-        this.$refs
-          .createPreDedMoneyflowModalNav as typeof CreatePreDefMoneyflowModalVue
-      )._show();
-    },
-    logout() {
-      WebSocketHandler.getInstance().disconnectStompClient();
-      const userSessionStore = useUserSessionStore();
-      userSessionStore.logout();
-      router.push({
-        name: Routes.Login,
-      });
-    },
-  },
+const dropdownWrench = ref();
+const dropdownPlus = ref();
+const createContractpartnerModalNav = ref();
+const createCapitalsourceModalNav = ref();
+const createPreDedMoneyflowModalNav = ref();
+
+const markDropdownActive = (routeName: RouteRecordName | null | undefined) => {
+  const wrenchClassList = dropdownWrench.value.classList;
+  const plusClassList = dropdownPlus.value.classList;
+  const routerLinkActive = "router-link-active";
+
+  wrenchClassList.remove(routerLinkActive);
+  plusClassList.remove(routerLinkActive);
+  switch (routeName) {
+    case Routes.ListPreDefMoneyflows:
+    case Routes.ListCapitalsources:
+    case Routes.ListContractpartners:
+    case Routes.ListMonthlySettlements: {
+      wrenchClassList.add(routerLinkActive);
+      break;
+    }
+    case Routes.ImportReceipts: {
+      plusClassList.add(routerLinkActive);
+      break;
+    }
+  }
 };
+
+const showCreateContractpartnerModal = () => {
+  createContractpartnerModalNav.value._show();
+};
+
+const showCreateCapitalsourceModal = () => {
+  createCapitalsourceModalNav.value._show();
+};
+const showPreDefMoneyflowModal = () => {
+  createPreDedMoneyflowModalNav.value._show();
+};
+const logout = () => {
+  WebSocketHandler.getInstance().disconnectStompClient();
+  const userSessionStore = useUserSessionStore();
+  userSessionStore.logout();
+  router.push({
+    name: Routes.Login,
+  });
+};
+
+onMounted(() => {
+  const userSessionStore = useUserSessionStore();
+  userIsAdmin.value = userSessionStore.isAdmin;
+  markDropdownActive(route.name);
+
+  // make WebSocket connection
+  WebSocketHandler.getInstance().connectStompClient();
+  // initialize Stores
+  StoreService.getInstance().initAllStores();
+});
+
+watch(
+  () => route.name,
+  (newVal) => {
+    markDropdownActive(newVal);
+  }
+);
 </script>
 <style scoped>
 .router-link-active {
