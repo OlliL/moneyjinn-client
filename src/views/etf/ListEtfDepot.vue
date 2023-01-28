@@ -79,10 +79,16 @@
                     <u>{{ etfEffectiveFlowAmountSumString }}</u>
                   </td>
                   <td class="text-end">
-                    <u>{{ etfEffectiveFlowPriceAvgString }} &euro;</u>
+                    <u
+                      ><SpanAmount
+                        :amount="etfEffectiveFlowPriceAvg"
+                        :decimal-places="4"
+                    /></u>
                   </td>
                   <td class="text-end">
-                    <u>{{ etfEffectiveFlowAmountPriceSumString }} &euro;</u>
+                    <u
+                      ><SpanAmount :amount="etfEffectiveFlowAmountPriceSum"
+                    /></u>
                   </td>
                   <td colspan="2"></td>
                 </tr>
@@ -127,10 +133,14 @@
                     <u>{{ etfFlowAmountSumString }}</u>
                   </td>
                   <td class="text-end">
-                    <u>{{ etfFlowPriceAvgString }} &euro;</u>
+                    <u
+                      ><SpanAmount
+                        :amount="etfFlowPriceAvg"
+                        :decimal-places="4"
+                    /></u>
                   </td>
                   <td class="text-end">
-                    <u>{{ etfFlowAmountPriceSumString }} &euro;</u>
+                    <u><SpanAmount :amount="etfFlowAmountPriceSum" /></u>
                   </td>
                   <td colspan="2"></td>
                 </tr>
@@ -146,153 +156,89 @@
       </div>
     </div>
 
-    <form @submit.prevent="calculateEtfSale" v-if="dataLoaded">
+    <form
+      @submit.prevent="calculateEtfSale"
+      v-if="dataLoaded"
+      id="calculateEtfSaleForm"
+    >
       <div class="row justify-content-md-center">
         <div class="col-md-8 col-xs-12 mb-4">
           <div class="card w-100 bg-light">
             <div class="card-body">
               <div class="container-fluid">
-                <div v-if="serverError">
-                  <div
-                    class="alert alert-danger"
-                    v-for="(error, index) in serverError"
-                    :key="index"
-                  >
-                    {{ error }}
-                  </div>
-                </div>
+                <DivError :server-errors="serverErrors" />
                 <div class="row no-gutters flex-lg-nowrap mb-4">
                   <div class="col-md-4 col-xs-12">
-                    <div class="form-floating">
-                      <select
-                        v-model="calcEtfSaleIsin"
-                        id="etfIsin"
-                        class="form-select form-control"
-                      >
-                        <option
-                          v-for="etf in etfs"
-                          :key="etf.isin"
-                          :value="etf.isin"
-                        >
-                          {{ etf.name }}
-                        </option>
-                      </select>
-
-                      <label for="etfIsin">ETF</label>
-                    </div>
+                    <SelectStandard
+                      v-model="calcEtfSaleIsin"
+                      :validation-schema="schema.isin"
+                      id="etf"
+                      field-label="ETF"
+                      :select-box-values="etfsSelectValues"
+                    />
                   </div>
                   <div class="col-md-2 col-xs-12">
-                    <div class="form-floating">
-                      <input
-                        v-model="calcEtfSalePieces"
-                        id="calcEtfSalePieces"
-                        type="number"
-                        step="0.01"
-                        @change="validateCalcEtfSalePieces"
-                        :class="
-                          ' form-control text-end ' +
-                          calcEtfSalePiecesErrorData.inputClass
-                        "
-                      />
-                      <label
-                        for="calcEtfSalePieces"
-                        :style="
-                          'color: ' + calcEtfSalePiecesErrorData.fieldColor
-                        "
-                        >{{ calcEtfSalePiecesErrorData.fieldLabel }}</label
-                      >
-                    </div>
+                    <InputStandard
+                      v-model="calcEtfSalePieces"
+                      :validation-schema="schema.pieces"
+                      id="calcEtfSalePieces"
+                      field-type="number"
+                      step="0.01"
+                      field-label="Stück"
+                    />
                   </div>
                   <div class="col-md-2 col-xs-12">
-                    <div class="input-group">
-                      <div class="form-floating">
-                        <input
-                          v-model="calcEtfBidPrice"
-                          id="calcEtfBidPrice"
-                          type="number"
-                          step="0.001"
-                          @change="validateCalcEtfBidPrice"
-                          :class="
-                            ' form-control text-end ' +
-                            calcEtfBidPriceErrorData.inputClass
-                          "
-                        />
-                        <label
-                          for="calcEtfBidPrice"
-                          :style="
-                            'color: ' + calcEtfBidPriceErrorData.fieldColor
-                          "
-                          >{{ calcEtfBidPriceErrorData.fieldLabel }}</label
-                        >
-                      </div>
-                      <span class="input-group-text"
-                        ><i class="bi bi-currency-euro"></i
-                      ></span>
-                    </div>
+                    <InputStandard
+                      v-model="calcEtfBidPrice"
+                      :validation-schema="schema.bidPrice"
+                      id="calcEtfBidPrice"
+                      field-type="number"
+                      step="0.01"
+                      field-label="Verkauf"
+                    >
+                      <template #icon
+                        ><span class="input-group-text"
+                          ><i class="bi bi-currency-euro"></i></span
+                      ></template>
+                    </InputStandard>
                   </div>
                   <div class="col-md-2 col-xs-12">
-                    <div class="input-group">
-                      <div class="form-floating">
-                        <input
-                          v-model="calcEtfAskPrice"
-                          id="calcEtfAskPrice"
-                          type="number"
-                          step="0.001"
-                          @change="validateCalcEtfAskPrice"
-                          :class="
-                            ' form-control text-end ' +
-                            calcEtfAskPriceErrorData.inputClass
-                          "
-                        />
-                        <label
-                          for="calcEtfAskPrice"
-                          :style="
-                            'color: ' + calcEtfAskPriceErrorData.fieldColor
-                          "
-                          >{{ calcEtfAskPriceErrorData.fieldLabel }}</label
-                        >
-                      </div>
-                      <span class="input-group-text"
-                        ><i class="bi bi-currency-euro"></i
-                      ></span>
-                    </div>
+                    <InputStandard
+                      v-model="calcEtfAskPrice"
+                      :validation-schema="schema.askPrice"
+                      id="calcEtfAskPrice"
+                      field-type="number"
+                      step="0.01"
+                      field-label="Einkauf"
+                    >
+                      <template #icon
+                        ><span class="input-group-text"
+                          ><i class="bi bi-currency-euro"></i></span
+                      ></template>
+                    </InputStandard>
                   </div>
                   <div class="col-md-2 col-xs-12">
-                    <div class="input-group">
-                      <div class="form-floating">
-                        <input
-                          v-model="calcEtfTransactionCosts"
-                          id="calcEtfTransactionCosts"
-                          type="number"
-                          step="0.01"
-                          @change="validateCalcEtfTransactionCosts"
-                          :class="
-                            ' form-control text-end ' +
-                            calcEtfTransactionCostsErrorData.inputClass
-                          "
-                        />
-                        <label
-                          for="calcEtfTransactionCosts"
-                          :style="
-                            'color: ' +
-                            calcEtfTransactionCostsErrorData.fieldColor
-                          "
-                          >{{
-                            calcEtfTransactionCostsErrorData.fieldLabel
-                          }}</label
-                        >
-                      </div>
-                      <span class="input-group-text"
-                        ><i class="bi bi-currency-euro"></i
-                      ></span>
-                    </div>
+                    <InputStandard
+                      v-model="calcEtfTransactionCosts"
+                      :validation-schema="schema.transactionCosts"
+                      id="calcEtfTransactionCosts"
+                      field-type="number"
+                      step="0.01"
+                      field-label="Transaktionskosten"
+                    >
+                      <template #icon
+                        ><span class="input-group-text"
+                          ><i class="bi bi-currency-euro"></i></span
+                      ></template>
+                    </InputStandard>
                   </div>
                 </div>
                 <div class="row no-gutters flex-lg-nowrap">
                   <div class="col-12">
-                    <button type="submit" class="btn btn-primary mx-2">
-                      berechnen
-                    </button>
+                    <ButtonSubmit
+                      button-label="berechnen"
+                      form-id="calculateEtfSaleForm"
+                    />
                   </div>
                 </div>
               </div>
@@ -313,11 +259,15 @@
             </tr>
             <tr>
               <th class="text-start">ursprünglicher Kaufpreis</th>
-              <td class="text-end">{{ originalBuyPrice }} &euro;</td>
+              <td class="text-end">
+                <SpanAmount :amount="calcResults.originalBuyPrice" />
+              </td>
             </tr>
             <tr>
               <th class="text-start">Verkaufspreis</th>
-              <td class="text-end">{{ sellPrice }} &euro;</td>
+              <td class="text-end">
+                <SpanAmount :amount="calcResults.sellPrice" />
+              </td>
             </tr>
           </tbody>
         </table>
@@ -327,12 +277,14 @@
           <tbody>
             <tr>
               <th class="text-start">Gewinn</th>
-              <td class="text-end">{{ profit }} &euro;</td>
+              <td class="text-end">
+                <SpanAmount :amount="calcResults.profit" />
+              </td>
             </tr>
             <tr>
               <th class="text-start">davon steuerlich relevant</th>
               <td class="text-end">
-                <b>{{ chargeable }} &euro;</b>
+                <b><SpanAmount :amount="calcResults.chargeable" /></b>
               </td>
             </tr>
           </tbody>
@@ -343,20 +295,26 @@
           <tbody>
             <tr>
               <th class="text-start">neuer Kaufpreis</th>
-              <td class="text-end">{{ newBuyPrice }} &euro;</td>
+              <td class="text-end">
+                <SpanAmount :amount="calcResults.newBuyPrice" />
+              </td>
             </tr>
             <tr>
               <th class="text-start">Wiederkaufverlust</th>
-              <td class="text-end">{{ rebuyLosses }} &euro;</td>
+              <td class="text-end">
+                <SpanAmount :amount="calcResults.rebuyLosses" />
+              </td>
             </tr>
             <tr>
               <th class="text-start">Transaktionskosten</th>
-              <td class="text-end">{{ transactionCosts }} &euro;</td>
+              <td class="text-end">
+                <SpanAmount :amount="calcResults.transactionCosts" />
+              </td>
             </tr>
             <tr>
               <th class="text-start">Gesamtkosten</th>
               <td class="text-end">
-                <b>{{ overallCosts }} &euro;</b>
+                <b><SpanAmount :amount="calcResults.overallCosts" /></b>
               </td>
             </tr>
           </tbody>
@@ -366,338 +324,222 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from "vue";
-import ListEtfDepotRowVue from "@/components/etf/ListEtfDepotRow.vue";
-import DeleteEtfFlowModalVue from "@/components/etf/DeleteEtfFlowModal.vue";
+<script lang="ts" setup>
+import { useForm } from "vee-validate";
+import { computed, onMounted, ref } from "vue";
+import { string } from "zod";
+
+import ButtonSubmit from "@/components/ButtonSubmit.vue";
 import CreateEtfFlowModalVue from "@/components/etf/CreateEtfFlowModal.vue";
+import DeleteEtfFlowModalVue from "@/components/etf/DeleteEtfFlowModal.vue";
+import InputStandard from "@/components/InputStandard.vue";
+import ListEtfDepotRowVue from "@/components/etf/ListEtfDepotRow.vue";
+import SelectStandard from "@/components/SelectStandard.vue";
+import SpanAmount from "@/components/SpanAmount.vue";
 import type { ListDepotRowData } from "@/components/etf/ListDepotRowData";
+
+import { formatNumber } from "@/tools/views/FormatNumber";
+import { handleServerError } from "@/tools/views/ThrowError";
+import { amountSchema, globErr } from "@/tools/views/ZodUtil";
+
 import type { Etf } from "@/model/etf/Etf";
-import type { EtfDepot } from "@/model/etf/EtfDepot";
 import type { EtfFlow } from "@/model/etf/EtfFlow";
 import type { EtfSalesCalculation } from "@/model/etf/EtfSalesCalculation";
-import type { ValidationResult } from "@/model/validation/ValidationResult";
+import type { SelectBoxValue } from "@/model/SelectBoxValue";
+
 import EtfControllerHandler from "@/handler/EtfControllerHandler";
-import { formatNumber } from "@/tools/views/FormatNumber";
-import { generateErrorData, type ErrorData } from "@/tools/views/ErrorData";
-import { validateInputField } from "@/tools/views/ValidateInputField";
-import { getError } from "@/tools/views/ThrowError";
 
-type ListEtfsData = {
-  serverError: Array<String> | undefined;
-  dataLoaded: boolean;
-  etfFlows: Array<ListDepotRowData>;
-  etfEffectiveFlows: Array<ListDepotRowData>;
-  etfs: Array<Etf>;
-  calcEtfAskPrice: number;
-  calcEtfBidPrice: number;
-  calcEtfSaleIsin: string;
-  calcEtfSalePieces: number;
-  calcEtfTransactionCosts: number;
-  calcEtfAskPriceIsValid: boolean | null;
-  calcEtfAskPriceErrorMessage: string;
-  calcEtfBidPriceIsValid: boolean | null;
-  calcEtfBidPriceErrorMessage: string;
-  calcEtfSalePiecesIsValid: boolean | null;
-  calcEtfSalePiecesErrorMessage: string;
-  calcEtfTransactionCostsIsValid: boolean | null;
-  calcEtfTransactionCostsErrorMessage: string;
-  calcResults: EtfSalesCalculation;
+const serverErrors = ref(new Array<string>());
+
+const schema = {
+  isin: string(globErr("Bitte ETF angeben!")),
+  pieces: amountSchema("Bitte Stück angeben!"),
+  askPrice: amountSchema("Bitte Einkauf angeben!"),
+  bidPrice: amountSchema("Bitte Verkauf angeben!"),
+  transactionCosts: amountSchema("Bitte Transaktionskosten angeben!"),
 };
-export default defineComponent({
-  name: "ListEtfs",
-  data(): ListEtfsData {
-    return {
-      serverError: undefined,
-      dataLoaded: false,
-      etfFlows: {} as Array<ListDepotRowData>,
-      etfEffectiveFlows: {} as Array<ListDepotRowData>,
-      etfs: {} as Array<Etf>,
-      calcEtfAskPrice: 0,
-      calcEtfBidPrice: 0,
-      calcEtfSaleIsin: "",
-      calcEtfSalePieces: 0,
-      calcEtfTransactionCosts: 0,
-      calcEtfAskPriceIsValid: null,
-      calcEtfAskPriceErrorMessage: "",
-      calcEtfBidPriceIsValid: null,
-      calcEtfBidPriceErrorMessage: "",
-      calcEtfSalePiecesIsValid: null,
-      calcEtfSalePiecesErrorMessage: "",
-      calcEtfTransactionCostsIsValid: null,
-      calcEtfTransactionCostsErrorMessage: "",
-      calcResults: {} as EtfSalesCalculation,
-    };
-  },
-  mounted() {
-    this.loadData();
-  },
-  computed: {
-    etfEffectiveFlowAmountSum() {
-      return this.etfEffectiveFlows.reduce((a, b) => a + (b["amount"] || 0), 0);
-    },
-    etfEffectiveFlowAmountPriceSum() {
-      return this.etfEffectiveFlows.reduce(
-        (a, b) => a + (b["amount"] * b["price"] || 0),
-        0
-      );
-    },
-    etfEffectiveFlowAmountSumString() {
-      return formatNumber(this.etfEffectiveFlowAmountSum, 3);
-    },
-    etfEffectiveFlowPriceAvgString() {
-      return formatNumber(
-        this.etfEffectiveFlowAmountPriceSum / this.etfEffectiveFlowAmountSum,
-        3
-      );
-    },
-    etfEffectiveFlowAmountPriceSumString() {
-      return formatNumber(this.etfEffectiveFlowAmountPriceSum, 2);
-    },
-    etfFlowAmountSum() {
-      return this.etfFlows.reduce((a, b) => a + (b["amount"] || 0), 0);
-    },
-    etfFlowAmountPriceSum() {
-      return this.etfFlows.reduce(
-        (a, b) => a + (b["amount"] * b["price"] || 0),
-        0
-      );
-    },
-    etfFlowAmountSumString() {
-      return formatNumber(this.etfFlowAmountSum, 3);
-    },
-    etfFlowPriceAvgString() {
-      return formatNumber(
-        this.etfFlowAmountPriceSum / this.etfFlowAmountSum,
-        3
-      );
-    },
-    etfFlowAmountPriceSumString() {
-      return formatNumber(this.etfFlowAmountPriceSum, 2);
-    },
-    calcEtfAskPriceErrorData(): ErrorData {
-      return generateErrorData(
-        this.calcEtfAskPriceIsValid,
-        "Einkauf",
-        this.calcEtfAskPriceErrorMessage
-      );
-    },
-    calcEtfBidPriceErrorData(): ErrorData {
-      return generateErrorData(
-        this.calcEtfBidPriceIsValid,
-        "Verkauf",
-        this.calcEtfBidPriceErrorMessage
-      );
-    },
-    calcEtfSalePiecesErrorData(): ErrorData {
-      return generateErrorData(
-        this.calcEtfSalePiecesIsValid,
-        "Stück",
-        this.calcEtfSalePiecesErrorMessage
-      );
-    },
-    calcEtfTransactionCostsErrorData(): ErrorData {
-      return generateErrorData(
-        this.calcEtfTransactionCostsIsValid,
-        "Transaktionskosten",
-        this.calcEtfTransactionCostsErrorMessage
-      );
-    },
-    formIsValid(): boolean {
-      const isValid =
-        this.calcEtfAskPriceIsValid &&
-        this.calcEtfBidPriceIsValid &&
-        this.calcEtfSalePiecesIsValid &&
-        this.calcEtfTransactionCostsIsValid;
-      if (isValid === null || isValid === undefined || isValid === true) {
-        return true;
-      }
-      return false;
-    },
-    chargeable() {
-      return formatNumber(this.calcResults.chargeable, 2);
-    },
+const dataLoaded = ref(false);
+const etfFlows = ref({} as Array<ListDepotRowData>);
+const etfEffectiveFlows = ref({} as Array<ListDepotRowData>);
+const etfs = ref({} as Array<Etf>);
+const etfsSelectValues = ref({} as Array<SelectBoxValue>);
 
-    newBuyPrice() {
-      return formatNumber(this.calcResults.newBuyPrice, 2);
-    },
-    originalBuyPrice() {
-      return formatNumber(this.calcResults.originalBuyPrice, 2);
-    },
-    overallCosts() {
-      return formatNumber(this.calcResults.overallCosts, 2);
-    },
-    pieces() {
-      return formatNumber(this.calcResults.pieces, 2);
-    },
-    profit() {
-      return formatNumber(this.calcResults.profit, 2);
-    },
-    rebuyLosses() {
-      return formatNumber(this.calcResults.rebuyLosses, 2);
-    },
-    sellPrice() {
-      return formatNumber(this.calcResults.sellPrice, 2);
-    },
-    transactionCosts() {
-      return formatNumber(this.calcResults.transactionCosts, 2);
-    },
-  },
-  methods: {
-    async loadData() {
-      this.dataLoaded = false;
-      this.etfFlows = new Array<ListDepotRowData>();
-      this.etfEffectiveFlows = new Array<ListDepotRowData>();
-      this.etfs = {} as Array<Etf>;
-      const etfDepot: EtfDepot = await EtfControllerHandler.listEtfFlows();
-      if (etfDepot.etfs) {
-        this.etfs = etfDepot.etfs;
-        this.calcEtfAskPrice = etfDepot.calcEtfAskPrice;
-        this.calcEtfBidPrice = etfDepot.calcEtfBidPrice;
-        this.calcEtfSaleIsin = etfDepot.calcEtfSaleIsin;
-        this.calcEtfSalePieces = etfDepot.calcEtfSalePieces;
-        this.calcEtfTransactionCosts = etfDepot.calcEtfTransactionCosts;
-        const etfMap = new Map<String, Etf>();
-        for (let etf of etfDepot.etfs) {
-          etfMap.set(etf.isin, etf);
-        }
-        for (let etfFlow of etfDepot.etfFlows) {
-          const etf = etfMap.get(etfFlow.isin);
-          if (etf)
-            this.etfFlows.push({
-              ...etfFlow,
-              name: etf.name,
-              chartUrl: etf.chartUrl,
-            });
-        }
-        for (let etfFlow of etfDepot.etfEffectiveFlows) {
-          const etf = etfMap.get(etfFlow.isin);
-          if (etf)
-            this.etfEffectiveFlows.push({
-              ...etfFlow,
-              name: etf.name,
-              chartUrl: etf.chartUrl,
-            });
-        }
-        this.dataLoaded = true;
-      }
-    },
-    showEffective() {
-      const effectiveTabButton = (this.$refs.effectiveTabButton as HTMLElement)
-        .classList;
-      const allTabButton = (this.$refs.allTabButton as HTMLElement).classList;
-      const effectiveTab = (this.$refs.effectiveTab as HTMLElement).classList;
-      const allTab = (this.$refs.allTab as HTMLElement).classList;
-      const active = "active";
-      const show = "show";
-      const fade = "fade";
+const calcEtfAskPrice = ref(0);
+const calcEtfBidPrice = ref(0);
+const calcEtfSaleIsin = ref("");
+const calcEtfSalePieces = ref(0);
+const calcEtfTransactionCosts = ref(0);
+const calcResults = ref({} as EtfSalesCalculation);
 
-      allTabButton.remove(active);
-      allTab.add(fade);
-      allTab.remove(show, active);
+const effectiveTabButton = ref();
+const allTabButton = ref();
+const effectiveTab = ref();
+const allTab = ref();
+const deleteModal = ref();
+const createModal = ref();
 
-      effectiveTabButton.add(active);
-      effectiveTab.remove(fade);
-      effectiveTab.add(show, active);
-    },
-    showAll() {
-      const effectiveTabButton = (this.$refs.effectiveTabButton as HTMLElement)
-        .classList;
-      const allTabButton = (this.$refs.allTabButton as HTMLElement).classList;
-      const effectiveTab = (this.$refs.effectiveTab as HTMLElement).classList;
-      const allTab = (this.$refs.allTab as HTMLElement).classList;
-      const active = "active";
-      const show = "show";
-      const fade = "fade";
+const { handleSubmit, values, setFieldTouched } = useForm();
 
-      effectiveTabButton.remove(active);
-      effectiveTab.add(fade);
-      effectiveTab.remove(show, active);
-
-      allTabButton.add(active);
-      allTab.remove(fade);
-      allTab.add(show, active);
-    },
-    validateCalcEtfAskPrice() {
-      [this.calcEtfAskPriceIsValid, this.calcEtfAskPriceErrorMessage] =
-        validateInputField(this.calcEtfAskPrice, "Einkauf angeben!");
-    },
-    validateCalcEtfBidPrice() {
-      [this.calcEtfBidPriceIsValid, this.calcEtfBidPriceErrorMessage] =
-        validateInputField(this.calcEtfBidPrice, "Verkauf angeben!");
-    },
-    validateCalcEtfSalePieces() {
-      [this.calcEtfSalePiecesIsValid, this.calcEtfSalePiecesErrorMessage] =
-        validateInputField(this.calcEtfSalePieces, "Stück angeben!");
-    },
-    validateCalcEtfTransactionCosts() {
-      [
-        this.calcEtfTransactionCostsIsValid,
-        this.calcEtfTransactionCostsErrorMessage,
-      ] = validateInputField(
-        this.calcEtfTransactionCosts,
-        "Transaktionskosten angeben!"
-      );
-    },
-    followUpServerCall(validationResult: ValidationResult): boolean {
-      if (!validationResult.result) {
-        this.serverError = new Array<string>();
-        for (let resultItem of validationResult.validationResultItems) {
-          this.serverError.push(getError(resultItem.error));
-        }
-        return false;
-      }
-      return true;
-    },
-    async calculateEtfSale() {
-      this.validateCalcEtfAskPrice();
-      this.validateCalcEtfBidPrice();
-      this.validateCalcEtfSalePieces();
-      this.validateCalcEtfTransactionCosts();
-
-      if (this.formIsValid) {
-        this.calcResults = await EtfControllerHandler.calcEtfSale(
-          this.calcEtfSaleIsin,
-          this.calcEtfSalePieces,
-          this.calcEtfBidPrice,
-          this.calcEtfAskPrice,
-          this.calcEtfTransactionCosts
-        );
-        this.followUpServerCall(this.calcResults.validationResult);
-      }
-    },
-    deleteEtfFlow(etfFlow: EtfFlow, etfName: string) {
-      (this.$refs.deleteModal as typeof DeleteEtfFlowModalVue)._show(
-        etfFlow,
-        etfName
-      );
-    },
-    etfFlowDeleted() {
-      // reload because effective/all logic happens on server
-      this.loadData();
-    },
-    createEtfFlow() {
-      (this.$refs.createModal as typeof CreateEtfFlowModalVue)._show(this.etfs);
-    },
-    etfFlowCreated() {
-      // reload because effective/all logic happens on server
-      this.loadData();
-    },
-    editEtfFlow(etfFlow: EtfFlow) {
-      (this.$refs.createModal as typeof CreateEtfFlowModalVue)._show(
-        this.etfs,
-        etfFlow
-      );
-    },
-    etfFlowUpdated() {
-      // reload because effective/all logic happens on server
-      this.loadData();
-    },
-  },
-  components: {
-    ListEtfDepotRowVue,
-    DeleteEtfFlowModalVue,
-    CreateEtfFlowModalVue,
-  },
+onMounted(() => {
+  loadData();
 });
+
+const etfEffectiveFlowAmountSum = computed(() => {
+  return etfEffectiveFlows.value.reduce((a, b) => a + (b["amount"] || 0), 0);
+});
+
+const etfEffectiveFlowAmountPriceSum = computed(() => {
+  return etfEffectiveFlows.value.reduce(
+    (a, b) => a + (b["amount"] * b["price"] || 0),
+    0
+  );
+});
+
+const etfEffectiveFlowAmountSumString = computed(() => {
+  return formatNumber(etfEffectiveFlowAmountSum.value, 3);
+});
+
+const etfEffectiveFlowPriceAvg = computed(() => {
+  return etfEffectiveFlowAmountPriceSum.value / etfEffectiveFlowAmountSum.value;
+});
+
+const etfFlowAmountSum = computed(() => {
+  return etfFlows.value.reduce((a, b) => a + (b["amount"] || 0), 0);
+});
+
+const etfFlowAmountPriceSum = computed(() => {
+  return etfFlows.value.reduce(
+    (a, b) => a + (b["amount"] * b["price"] || 0),
+    0
+  );
+});
+
+const etfFlowAmountSumString = computed(() => {
+  return formatNumber(etfFlowAmountSum.value, 3);
+});
+
+const etfFlowPriceAvg = computed(() => {
+  return etfFlowAmountPriceSum.value / etfFlowAmountSum.value;
+});
+
+const loadData = () => {
+  dataLoaded.value = false;
+  etfFlows.value = new Array<ListDepotRowData>();
+  etfEffectiveFlows.value = new Array<ListDepotRowData>();
+  etfs.value = new Array<Etf>();
+  etfsSelectValues.value = new Array<SelectBoxValue>();
+
+  EtfControllerHandler.listEtfFlows().then((etfDepot) => {
+    if (etfDepot.etfs) {
+      for (let etf of etfDepot.etfs) {
+        etfsSelectValues.value.push({ id: etf.isin, value: etf.name });
+      }
+      etfs.value = etfDepot.etfs;
+      calcEtfAskPrice.value = etfDepot.calcEtfAskPrice;
+      calcEtfBidPrice.value = etfDepot.calcEtfBidPrice;
+      calcEtfSaleIsin.value = etfDepot.calcEtfSaleIsin;
+      calcEtfSalePieces.value = etfDepot.calcEtfSalePieces;
+      calcEtfTransactionCosts.value = etfDepot.calcEtfTransactionCosts;
+      const etfMap = new Map<String, Etf>();
+      for (let etf of etfDepot.etfs) {
+        etfMap.set(etf.isin, etf);
+      }
+      for (let etfFlow of etfDepot.etfFlows) {
+        const etf = etfMap.get(etfFlow.isin);
+        if (etf)
+          etfFlows.value.push({
+            ...etfFlow,
+            name: etf.name,
+            chartUrl: etf.chartUrl,
+          });
+      }
+      for (let etfFlow of etfDepot.etfEffectiveFlows) {
+        const etf = etfMap.get(etfFlow.isin);
+        if (etf)
+          etfEffectiveFlows.value.push({
+            ...etfFlow,
+            name: etf.name,
+            chartUrl: etf.chartUrl,
+          });
+      }
+      dataLoaded.value = true;
+    }
+    Object.keys(values).forEach((field) => setFieldTouched(field, false));
+  });
+};
+
+const showEffective = () => {
+  const effectiveTabButtonClassList = (effectiveTabButton.value as HTMLElement)
+    .classList;
+  const allTabButtonClassList = (allTabButton.value as HTMLElement).classList;
+  const effectiveTabClassList = (effectiveTab.value as HTMLElement).classList;
+  const allTabClassList = (allTab.value as HTMLElement).classList;
+  const active = "active";
+  const show = "show";
+  const fade = "fade";
+
+  allTabButtonClassList.remove(active);
+  allTabClassList.add(fade);
+  allTabClassList.remove(show, active);
+
+  effectiveTabButtonClassList.add(active);
+  effectiveTabClassList.remove(fade);
+  effectiveTabClassList.add(show, active);
+};
+
+const showAll = () => {
+  const effectiveTabButtonClassList = (effectiveTabButton.value as HTMLElement)
+    .classList;
+  const allTabButtonClassList = (allTabButton.value as HTMLElement).classList;
+  const effectiveTabClassList = (effectiveTab.value as HTMLElement).classList;
+  const allTabClassList = (allTab.value as HTMLElement).classList;
+  const active = "active";
+  const show = "show";
+  const fade = "fade";
+
+  effectiveTabButtonClassList.remove(active);
+  effectiveTabClassList.add(fade);
+  effectiveTabClassList.remove(show, active);
+
+  allTabButtonClassList.add(active);
+  allTabClassList.remove(fade);
+  allTabClassList.add(show, active);
+};
+
+const calculateEtfSale = handleSubmit(() => {
+  EtfControllerHandler.calcEtfSale(
+    calcEtfSaleIsin.value,
+    calcEtfSalePieces.value,
+    calcEtfBidPrice.value,
+    calcEtfAskPrice.value,
+    calcEtfTransactionCosts.value
+  ).then((_calcResults) => {
+    calcResults.value = _calcResults;
+    handleServerError(calcResults.value.validationResult, serverErrors);
+  });
+});
+
+const deleteEtfFlow = (etfFlow: EtfFlow, etfName: string) => {
+  (deleteModal.value as typeof DeleteEtfFlowModalVue)._show(etfFlow, etfName);
+};
+const etfFlowDeleted = () => {
+  // reload because effective/all logic happens on server
+  loadData();
+};
+
+const createEtfFlow = () => {
+  createModal.value._show(etfs.value);
+};
+const etfFlowCreated = () => {
+  // reload because effective/all logic happens on server
+  loadData();
+};
+
+const editEtfFlow = (etfFlow: EtfFlow) => {
+  createModal.value._show(etfs.value, etfFlow);
+};
+const etfFlowUpdated = () => {
+  // reload because effective/all logic happens on server
+  loadData();
+};
 </script>
