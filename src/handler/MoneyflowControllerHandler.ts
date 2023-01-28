@@ -141,7 +141,7 @@ class MoneyflowControllerHandler extends AbstractControllerHandler {
 
   async searchMoneyflows(
     searchParams: MoneyflowSearchParams
-  ): Promise<MoneyflowValidation> {
+  ): Promise<MoneyflowsValidation> {
     const usecase = "searchMoneyflows";
 
     const request = {} as SearchMoneyflowsRequest;
