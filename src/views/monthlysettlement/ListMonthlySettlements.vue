@@ -99,130 +99,118 @@
   </div>
 </template>
 
-<script lang="ts">
-import MonthlySettlementControllerHandler from "@/handler/MonthlySettlementControllerHandler";
-import { getMonthName } from "@/tools/views/MonthName";
-import ShowMontlySettlementVue from "@/components/monthlysettlement/ShowMonthlySettlement.vue";
-import router, { Routes } from "@/router";
-import { defineComponent } from "vue";
+<script lang="ts" setup>
+import { computed, onMounted, ref } from "vue";
+
 import DeleteMonthlySettlementModalVue from "@/components/monthlysettlement/DeleteMonthlySettlementModal.vue";
 import EditMonthlySettlementModalVue from "@/components/monthlysettlement/EditMonthlySettlementModal.vue";
+import ShowMontlySettlementVue from "@/components/monthlysettlement/ShowMonthlySettlement.vue";
 
-export default defineComponent({
-  name: "ListMonthlySettlements",
-  data() {
-    return {
-      Routes: Routes,
-      dataLoaded: false,
-      months: [] as number[],
-      years: [] as number[],
-      selectedYear: 0,
-      selectedMonth: 0,
-      currentlyShownYear: 0,
-    };
+import router, { Routes } from "@/router";
+
+import { getMonthName } from "@/tools/views/MonthName";
+
+import MonthlySettlementControllerHandler from "@/handler/MonthlySettlementControllerHandler";
+
+const dataLoaded = ref(false);
+const months = ref([] as number[]);
+const years = ref([] as number[]);
+const selectedYear = ref(0);
+const selectedMonth = ref(0);
+const currentlyShownYear = ref(0);
+
+const editModal = ref();
+const deleteModal = ref();
+
+const props = defineProps({
+  year: {
+    type: String,
+    default: undefined,
   },
-  props: {
-    year: {
-      type: String,
-      default: undefined,
-    },
-    month: {
-      type: String,
-      default: undefined,
-    },
-  },
-  created() {
-    const year: number | undefined = this.$props.year
-      ? +this.$props.year
-      : undefined;
-    const month: number | undefined = this.$props.month
-      ? +this.$props.month
-      : undefined;
-    this.loadMonth(year, month);
-  },
-  computed: {
-    monthName(): string {
-      return getMonthName(this.selectedMonth);
-    },
-  },
-  methods: {
-    getMonthName(month: number): string {
-      return getMonthName(month);
-    },
-    async loadMonth(year?: number, month?: number) {
-      let response = await MonthlySettlementControllerHandler.getAvailableMonth(
-        year,
-        month
-      );
-      this.months = response.allMonth;
-      this.years = response.allYears;
-
-      this.selectedYear = response.year;
-      this.selectedMonth = response.month;
-
-      if (this.selectedYear != this.currentlyShownYear)
-        this.currentlyShownYear = this.selectedYear;
-
-      this.dataLoaded = true;
-    },
-
-    selectMonth(year: string, month?: string) {
-      router.push({
-        name: Routes.ListMonthlySettlements,
-        params: { year: year, month: month },
-      });
-
-      if (this.currentlyShownYear + "" != year) {
-        this.loadMonth(+year);
-      }
-
-      if (month) {
-        this.selectedMonth = +month;
-      } else {
-        this.selectedMonth = 0;
-      }
-    },
-    showEditMonthlySettlementModal(year?: number, month?: number) {
-      (this.$refs.editModal as typeof EditMonthlySettlementModalVue)._show(
-        year,
-        month
-      );
-    },
-    monthlySettlementUpserted(year: number, month: number) {
-      this.selectedYear = 0;
-      this.selectedMonth = 0;
-      this.loadMonth(year, month);
-      router.push({
-        name: Routes.ListMonthlySettlements,
-        params: { year: year, month: month },
-      });
-    },
-    showDeleteMonthlySettlementModal() {
-      (this.$refs.deleteModal as typeof DeleteMonthlySettlementModalVue)._show(
-        this.selectedYear,
-        this.selectedMonth
-      );
-    },
-    monthlySettlementDeleted() {
-      if (this.months.length > 1) {
-        this.loadMonth(this.selectedYear, undefined);
-        router.push({
-          name: Routes.ListMonthlySettlements,
-          params: { year: this.selectedYear },
-        });
-      } else {
-        this.loadMonth(undefined, undefined);
-        router.push({
-          name: Routes.ListMonthlySettlements,
-          params: {},
-        });
-      }
-    },
-  },
-  components: {
-    ShowMontlySettlementVue,
-    DeleteMonthlySettlementModalVue,
-    EditMonthlySettlementModalVue,
+  month: {
+    type: String,
+    default: undefined,
   },
 });
+
+onMounted(() => {
+  const year: number | undefined = props.year ? +props.year : undefined;
+  const month: number | undefined = props.month ? +props.month : undefined;
+  loadMonth(year, month);
+});
+
+const monthName = computed(() => {
+  return getMonthName(selectedMonth.value);
+});
+
+const loadMonth = (year?: number, month?: number) => {
+  MonthlySettlementControllerHandler.getAvailableMonth(year, month).then(
+    (response) => {
+      months.value = response.allMonth;
+      years.value = response.allYears;
+
+      selectedYear.value = response.year;
+      selectedMonth.value = response.month;
+
+      if (selectedYear.value != currentlyShownYear.value)
+        currentlyShownYear.value = selectedYear.value;
+
+      dataLoaded.value = true;
+    }
+  );
+};
+
+const selectMonth = (year: string, month?: string) => {
+  router.push({
+    name: Routes.ListMonthlySettlements,
+    params: { year: year, month: month },
+  });
+
+  if (currentlyShownYear.value + "" != year) {
+    loadMonth(+year);
+  }
+
+  if (month) {
+    selectedMonth.value = +month;
+  } else {
+    selectedMonth.value = 0;
+  }
+};
+
+const showEditMonthlySettlementModal = (year?: number, month?: number) => {
+  (editModal.value as typeof EditMonthlySettlementModalVue)._show(year, month);
+};
+
+const monthlySettlementUpserted = (year: number, month: number) => {
+  selectedYear.value = 0;
+  selectedMonth.value = 0;
+  loadMonth(year, month);
+  router.push({
+    name: Routes.ListMonthlySettlements,
+    params: { year: year, month: month },
+  });
+};
+
+const showDeleteMonthlySettlementModal = () => {
+  (deleteModal.value as typeof DeleteMonthlySettlementModalVue)._show(
+    selectedYear.value,
+    selectedMonth.value
+  );
+};
+
+const monthlySettlementDeleted = () => {
+  if (months.value.length > 1) {
+    loadMonth(selectedYear.value, undefined);
+    router.push({
+      name: Routes.ListMonthlySettlements,
+      params: { year: selectedYear.value },
+    });
+  } else {
+    loadMonth(undefined, undefined);
+    router.push({
+      name: Routes.ListMonthlySettlements,
+      params: {},
+    });
+  }
+};
 </script>
