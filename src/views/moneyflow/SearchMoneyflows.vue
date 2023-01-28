@@ -41,7 +41,7 @@
                   <div class="col-md-4 col-xs-12">
                     <SelectContractpartner
                       v-model="contractpartnerId"
-                      :validation-schema="schema.contractpartnerId"
+                      :validation-schema-ref="schema.searchCriteria"
                       id-suffix="SearchMoneyflows"
                       field-label="Vertragspartner"
                     />
@@ -49,7 +49,7 @@
                   <div class="col-md-4 col-xs-12">
                     <SelectPostingAccount
                       v-model="postingAccountId"
-                      :validation-schema="schema.postingAccountId"
+                      :validation-schema-ref="schema.searchCriteria"
                       id-suffix="SearchMoneyflows"
                       field-label="Buchungskonto"
                     />
@@ -59,7 +59,7 @@
                   <div class="col-md-4 col-xs-12">
                     <InputStandard
                       v-model="comment"
-                      :validation-schema="schema.comment"
+                      :validation-schema-ref="schema.searchCriteria"
                       id="comment"
                       field-label="Kommentar"
                     />
@@ -215,8 +215,8 @@
 </template>
 <script lang="ts" setup>
 import { useForm } from "vee-validate";
-import { onMounted, ref } from "vue";
-import { date, number, string } from "zod";
+import { computed, onMounted, ref } from "vue";
+import { any, date } from "zod";
 
 import ButtonSubmit from "@/components/ButtonSubmit.vue";
 import DeleteMoneyflowModalVue from "@/components/moneyflow/DeleteMoneyflowModal.vue";
@@ -286,16 +286,19 @@ const dataLoaded = ref(false);
 const deleteModal = ref();
 const editModal = ref();
 
-const oneCriteria = () =>
-  contractpartnerId.value || postingAccountId.value || comment.value;
-const oneCriteriaMsg = "Bitte mindestens 1 Suchkriterium angeben!";
-
 const schema = {
   startDate: date(globErr("Bitte Startdatum angeben!")),
   endDate: date(globErr("Bitte Enddatum angeben!")),
-  contractpartnerId: number().refine(oneCriteria, oneCriteriaMsg),
-  postingAccountId: number().refine(oneCriteria, oneCriteriaMsg),
-  comment: string().refine(oneCriteria, oneCriteriaMsg),
+  searchCriteria: computed(() => {
+    contractpartnerId.value;
+    postingAccountId.value;
+    comment.value;
+
+    return any().refine(
+      () => contractpartnerId.value || postingAccountId.value || comment.value,
+      "Bitte mindestens 1 Suchkriterium angeben!"
+    );
+  }),
 };
 
 type MoneyflowGroup = {

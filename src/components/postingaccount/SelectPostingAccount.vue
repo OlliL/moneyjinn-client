@@ -10,6 +10,7 @@
       <SelectStandard
         v-model="postingAccountId"
         :validation-schema="validationSchema"
+        :validation-schema-ref="validationSchemaRef"
         :id="'postingAccount' + idSuffix"
         :field-label="fieldLabel"
         :select-box-values="selectBoxValues"
@@ -27,7 +28,7 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { computed, onMounted, ref, watch, type PropType } from "vue";
+import { computed, onMounted, ref, watch, type PropType, type Ref } from "vue";
 import { any, type ZodType } from "zod";
 
 import CreatePostingAccountModalVue from "./CreatePostingAccountModal.vue";
@@ -48,6 +49,10 @@ const props = defineProps({
     type: Object as PropType<ZodType>,
     required: false,
     default: any().optional(),
+  },
+  validationSchemaRef: {
+    type: Object as PropType<Ref<ZodType>>,
+    required: false,
   },
   fieldLabel: {
     type: String,

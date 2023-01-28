@@ -182,13 +182,22 @@ const schema = {
   userIsNew: boolean(globErr("Bitte Gruppennutzung auswählen!")),
   userCanLogin: boolean(globErr("Bitte Gruppennutzung auswählen!")),
   password: computed(() => {
-    if (!editMode.value) {
-      return string(globErr("Bitte Passwort angeben!")).min(1);
-    } else {
-      return string().optional();
-    }
+    password1.value;
+    password2.value;
+    editMode.value;
+
+    return string()
+      .refine(
+        () => password1.value == password2.value,
+        "Die Passwörter stimmen nicht überein!"
+      )
+      .refine((data) => editMode.value || data, "Bitte Passwort angeben!");
   }),
 };
+
+computed(() => {
+  return password1.value;
+});
 
 const origUser = ref({} as User | undefined);
 const user = ref({} as User);
@@ -269,54 +278,41 @@ const _show = async (_user?: User) => {
   modalComponent.value._show();
 };
 
-const validatePasswordsAreEqual = () => {
-  if (password1.value != password2.value) {
-    serverErrors.value = new Array<string>();
-    serverErrors.value.push("Die Passwörter stimmen nicht überein!");
-    return false;
-  }
-  return true;
-};
-
 const createUser = handleSubmit(() => {
   if (user.value.id > 0) {
     //update
-    if (validatePasswordsAreEqual()) {
-      if (password1.value) {
-        user.value.userPassword = password1.value;
-      }
+    if (password1.value) {
+      user.value.userPassword = password1.value;
+    }
 
-      if (user.value.groupId) {
-        const mar: AccessRelation = {
-          id: user.value.id,
-          refId: user.value.groupId,
-          validFrom: validFrom.value,
-        };
-        UserControllerHandler.updateUser(user.value, mar).then(
-          (validationResult) => {
-            if (!handleServerError(validationResult, serverErrors)) {
-              modalComponent.value._hide();
-              emit("userUpdated", user.value);
-            }
+    if (user.value.groupId) {
+      const mar: AccessRelation = {
+        id: user.value.id,
+        refId: user.value.groupId,
+        validFrom: validFrom.value,
+      };
+      UserControllerHandler.updateUser(user.value, mar).then(
+        (validationResult) => {
+          if (!handleServerError(validationResult, serverErrors)) {
+            modalComponent.value._hide();
+            emit("userUpdated", user.value);
           }
-        );
-      }
+        }
+      );
     }
   } else {
     //create
-    if (validatePasswordsAreEqual()) {
-      user.value.userPassword = password1.value;
-      //create
-      UserControllerHandler.createUser(user.value).then((userValidation) => {
-        const validationResult = userValidation.validationResult;
+    user.value.userPassword = password1.value;
+    //create
+    UserControllerHandler.createUser(user.value).then((userValidation) => {
+      const validationResult = userValidation.validationResult;
 
-        if (!handleServerError(validationResult, serverErrors)) {
-          user.value = userValidation.user;
-          modalComponent.value._hide();
-          emit("userCreated", user.value);
-        }
-      });
-    }
+      if (!handleServerError(validationResult, serverErrors)) {
+        user.value = userValidation.user;
+        modalComponent.value._hide();
+        emit("userCreated", user.value);
+      }
+    });
   }
 });
 

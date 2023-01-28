@@ -26,7 +26,6 @@ export function formatNumber(num: number, decimalPlaces: number): string {
     const fillUpZeroes = Math.abs(
       fixedNumStr.length - 1 - decimalPlaces - decimalPlace
     );
-    console.log(num, decimalPlaces, decimalPlace, fixedNumStr.length);
 
     if (decimalPlace === -1) {
       // 7   --> 7,00
