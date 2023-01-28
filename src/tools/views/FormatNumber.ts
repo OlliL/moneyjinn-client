@@ -23,12 +23,17 @@ export function formatNumber(num: number, decimalPlaces: number): string {
     let fixedNumStr = fixedNum.toLocaleString("de");
 
     const decimalPlace = fixedNumStr.indexOf(",");
+    const fillUpZeroes = Math.abs(
+      fixedNumStr.length - 1 - decimalPlaces - decimalPlace
+    );
+    console.log(num, decimalPlaces, decimalPlace, fixedNumStr.length);
+
     if (decimalPlace === -1) {
       // 7   --> 7,00
-      fixedNumStr += ",00";
-    } else if (decimalPlace == fixedNumStr.length - 2) {
+      fixedNumStr += "," + "0".repeat(decimalPlaces);
+    } else if (fillUpZeroes > 0) {
       // 7,5 --> 7,50
-      fixedNumStr += "0";
+      fixedNumStr += "0".repeat(fillUpZeroes);
     }
 
     return fixedNumStr;
