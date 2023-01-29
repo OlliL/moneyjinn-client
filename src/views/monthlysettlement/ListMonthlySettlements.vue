@@ -111,6 +111,7 @@ import router, { Routes } from "@/router";
 import { getMonthName } from "@/tools/views/MonthName";
 
 import MonthlySettlementControllerHandler from "@/handler/MonthlySettlementControllerHandler";
+import { onBeforeRouteUpdate } from "vue-router";
 
 const dataLoaded = ref(false);
 const months = ref([] as number[]);
@@ -160,21 +161,27 @@ const loadMonth = (year?: number, month?: number) => {
   );
 };
 
+onBeforeRouteUpdate((to, from, next) => {
+  const year = +to.params.year;
+  const month = +to.params.month;
+  if (currentlyShownYear.value != year) {
+    loadMonth(year, month);
+  }
+
+  if (month) {
+    selectedMonth.value = month;
+  } else {
+    selectedMonth.value = 0;
+  }
+
+  next();
+});
+
 const selectMonth = (year: string, month?: string) => {
   router.push({
     name: Routes.ListMonthlySettlements,
     params: { year: year, month: month },
   });
-
-  if (currentlyShownYear.value + "" != year) {
-    loadMonth(+year);
-  }
-
-  if (month) {
-    selectedMonth.value = +month;
-  } else {
-    selectedMonth.value = 0;
-  }
 };
 
 const showEditMonthlySettlementModal = (year?: number, month?: number) => {
@@ -182,12 +189,11 @@ const showEditMonthlySettlementModal = (year?: number, month?: number) => {
 };
 
 const monthlySettlementUpserted = (year: number, month: number) => {
-  selectedYear.value = 0;
   selectedMonth.value = 0;
-  loadMonth(year, month);
   router.push({
     name: Routes.ListMonthlySettlements,
     params: { year: year, month: month },
+    force: true,
   });
 };
 
@@ -198,15 +204,13 @@ const showDeleteMonthlySettlementModal = () => {
   );
 };
 
-const monthlySettlementDeleted = () => {
+const monthlySettlementDeleted = (year: number) => {
   if (months.value.length > 1) {
-    loadMonth(selectedYear.value, undefined);
     router.push({
       name: Routes.ListMonthlySettlements,
-      params: { year: selectedYear.value },
+      params: { year: year },
     });
   } else {
-    loadMonth(undefined, undefined);
     router.push({
       name: Routes.ListMonthlySettlements,
       params: {},
