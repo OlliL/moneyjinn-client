@@ -1,5 +1,8 @@
 <template>
-  <label for="input" :style="'opacity: .65; color: ' + errorData.fieldColor"
+  <label
+    for="input"
+    :style="'opacity: .65; color: ' + errorData.fieldColor"
+    v-if="errorData.fieldLabel"
     ><small>{{ errorData.fieldLabel }}</small></label
   >
   <input

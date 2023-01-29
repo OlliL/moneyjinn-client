@@ -10,28 +10,17 @@
     </div>
     <div class="row justify-content-md-center">
       <div class="col-sm-3 mb-5">
-        <div v-if="serverError">
-          <div
-            class="alert alert-danger"
-            v-for="(error, index) in serverError"
-            :key="index"
-          >
-            {{ error }}
-          </div>
-        </div>
-        <form @submit.prevent="uploadReceipts">
+        <DivError :server-errors="serverErrors" />
+        <form
+          @submit.prevent="uploadReceipts"
+          id="uploadReceiptsForm"
+          ref="uploadReceiptsForm"
+        >
           <div class="input-group">
-            <button type="submit" class="btn btn-primary">
-              <i class="bi bi-upload"></i> Hochladen
-            </button>
-
-            <input
-              type="file"
-              class="form-control"
-              id="input"
-              multiple
-              ref="fileUpload"
-            />
+            <ButtonSubmit button-label="Hochladen" form-id="uploadReceiptsForm">
+              <template #icon><i class="bi bi-upload"></i>&nbsp; </template>
+            </ButtonSubmit>
+            <InputFile v-model="files" id="fileUpload" />
           </div>
         </form>
       </div>
@@ -47,98 +36,98 @@
   </div>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
+import { onMounted, ref } from "vue";
+
 import DeleteMoneyflowModalVue from "@/components/moneyflow/DeleteMoneyflowModal.vue";
+import DivError from "@/components/DivError.vue";
 import EditMoneyflowModalVue from "@/components/moneyflow/EditMoneyflowModal.vue";
 import ImportReceiptsRowVue from "@/components/moneyflow/ImportReceiptsRow.vue";
+import InputFile from "@/components/InputFile.vue";
+
+import { handleServerError } from "@/tools/views/ThrowError";
+
+import type { ImportedMoneyflowReceipt } from "@/model/moneyflow/ImportedMoneyflowReceipt";
+
 import ImportedMoneyflowReceiptControllerHandler from "@/handler/ImportedMoneyflowReceiptControllerHandler";
 import MoneyflowControllerHandler from "@/handler/MoneyflowControllerHandler";
-import type { ImportedMoneyflowReceipt } from "@/model/moneyflow/ImportedMoneyflowReceipt";
-import type { ValidationResult } from "@/model/validation/ValidationResult";
-import { getError } from "@/tools/views/ThrowError";
-import { defineComponent } from "vue";
+import { useForm } from "vee-validate";
+import ButtonSubmit from "@/components/ButtonSubmit.vue";
 
-export default defineComponent({
-  name: "ImportReceipts",
-  data() {
-    return {
-      importedMoneyflowReceipts: new Array<ImportedMoneyflowReceipt>(),
-      serverError: new Array<string>(),
-    };
-  },
-  mounted() {
-    this.loadData();
-  },
-  computed: {},
-  methods: {
-    async loadData() {
-      this.importedMoneyflowReceipts =
-        await ImportedMoneyflowReceiptControllerHandler.showImportImportedMoneyflowReceipts();
-    },
-    async deleteMoneyflow(id: number) {
-      const mmf = await MoneyflowControllerHandler.fetchMoneyflow(id);
-      (this.$refs.deleteModal as typeof DeleteMoneyflowModalVue)._show(mmf);
-    },
-    async editMoneyflow(id: number) {
-      const mmf = await MoneyflowControllerHandler.fetchMoneyflow(id);
-      (this.$refs.editModal as typeof EditMoneyflowModalVue)._show(mmf);
-    },
-    removeReceiptFromView(id: number) {
-      this.importedMoneyflowReceipts = this.importedMoneyflowReceipts.filter(
-        (receipt) => {
-          return receipt.id !== id;
-        }
-      );
-    },
-    followUpServerCall(validationResult: ValidationResult): boolean {
-      if (!validationResult.result) {
-        this.serverError = new Array<string>();
-        for (let resultItem of validationResult.validationResultItems) {
-          this.serverError.push(getError(resultItem.error));
-        }
-        return false;
-      }
-      return true;
-    },
-    async uploadReceipts() {
-      this.serverError = new Array<string>();
-      const filesElement = this.$refs.fileUpload as HTMLInputElement;
-      const files = filesElement.files;
-      const receipts = new Array<ImportedMoneyflowReceipt>();
-      if (files != null) {
-        for (let file of files) {
-          const arrayBuffer = new Uint8Array(await file.arrayBuffer());
-          let fileContents: string = "";
-          for (var i = 0; i < arrayBuffer.byteLength; i++) {
-            fileContents += String.fromCharCode(arrayBuffer[i]);
-          }
-          const base64Encoded = btoa(fileContents);
+const importedMoneyflowReceipts = ref(new Array<ImportedMoneyflowReceipt>());
+const serverErrors = ref(new Array<string>());
+const files = ref({} as FileList);
 
-          const receipt: ImportedMoneyflowReceipt = {
-            filename: file.name,
-            id: 0,
-            mediaType: file.type,
-            receipt: base64Encoded,
-          };
-          receipts.push(receipt);
-        }
+const deleteModal = ref();
+const editModal = ref();
+const uploadReceiptsForm = ref();
+
+const { handleSubmit, values, setFieldTouched } = useForm();
+
+onMounted(() => {
+  loadData();
+});
+
+const loadData = () => {
+  ImportedMoneyflowReceiptControllerHandler.showImportImportedMoneyflowReceipts().then(
+    (imr) => {
+      importedMoneyflowReceipts.value = imr;
+    }
+  );
+  Object.keys(values).forEach((field) => setFieldTouched(field, false));
+};
+
+const deleteMoneyflow = (id: number) => {
+  MoneyflowControllerHandler.fetchMoneyflow(id).then((mmf) => {
+    (deleteModal.value as typeof DeleteMoneyflowModalVue)._show(mmf);
+  });
+};
+
+const editMoneyflow = (id: number) => {
+  MoneyflowControllerHandler.fetchMoneyflow(id).then((mmf) => {
+    (editModal.value as typeof EditMoneyflowModalVue)._show(mmf);
+  });
+};
+
+const removeReceiptFromView = (id: number) => {
+  importedMoneyflowReceipts.value = importedMoneyflowReceipts.value.filter(
+    (receipt) => {
+      return receipt.id !== id;
+    }
+  );
+};
+
+const uploadReceipts = handleSubmit(async () => {
+  serverErrors.value = new Array<string>();
+  const receipts = new Array<ImportedMoneyflowReceipt>();
+  if (files.value != null) {
+    for (let file of files.value) {
+      const arrayBuffer = new Uint8Array(await file.arrayBuffer());
+      let fileContents: string = "";
+      for (var i = 0; i < arrayBuffer.byteLength; i++) {
+        fileContents += String.fromCharCode(arrayBuffer[i]);
       }
-      if (receipts.length > 0) {
-        const validationResult: ValidationResult =
-          await ImportedMoneyflowReceiptControllerHandler.createImportedMoneyflowReceipts(
-            receipts
-          );
-        if (this.followUpServerCall(validationResult)) {
-          filesElement.value = "";
-          this.loadData();
-        }
+      const base64Encoded = btoa(fileContents);
+
+      const receipt: ImportedMoneyflowReceipt = {
+        filename: file.name,
+        id: 0,
+        mediaType: file.type,
+        receipt: base64Encoded,
+      };
+      receipts.push(receipt);
+    }
+  }
+  if (receipts.length > 0) {
+    ImportedMoneyflowReceiptControllerHandler.createImportedMoneyflowReceipts(
+      receipts
+    ).then((validationResult) => {
+      if (!handleServerError(validationResult, serverErrors)) {
+        loadData();
       }
-    },
-  },
-  components: {
-    ImportReceiptsRowVue,
-    DeleteMoneyflowModalVue,
-    EditMoneyflowModalVue,
-  },
+    });
+    uploadReceiptsForm.value.reset();
+    files.value = {} as FileList;
+  }
 });
 </script>
