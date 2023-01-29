@@ -43,7 +43,7 @@
     </div>
     <div
       class="text-center text-success"
-      v-if="!importedMoneyflows && !monthlySettlementMissing"
+      v-if="dataLoaded && !importedMoneyflows && !monthlySettlementMissing"
     >
       Alles erledigt! <i class="bi bi-emoji-smile"></i>
     </div>
@@ -64,8 +64,10 @@ const monthlySettlementMissing = ref(false);
 const monthlySettlementMonth = ref(0);
 const monthlySettlementYear = ref(0);
 const editModal = ref();
+const dataLoaded = ref(false);
 
 const loadData = () => {
+  dataLoaded.value = false;
   EventControllerHandler.showEventList().then((events) => {
     if (events.numberOfImportedMoneyflows > 0) {
       importedMoneyflows.value = true;
@@ -73,6 +75,7 @@ const loadData = () => {
     monthlySettlementMissing.value = events.monthlySettlementMissing;
     monthlySettlementMonth.value = events.monthlySettlementMonth;
     monthlySettlementYear.value = events.monthlySettlementYear;
+    dataLoaded.value = true;
   });
 };
 const showEditMonthlySettlementModal = () => {
