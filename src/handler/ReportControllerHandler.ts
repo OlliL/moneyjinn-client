@@ -28,8 +28,8 @@ class ReportControllerHandler extends AbstractControllerHandler {
   private static CONTROLLER = "report";
 
   async getAvailableMonth(
-    year?: string,
-    month?: string
+    year?: number,
+    month?: number
   ): Promise<AvailableMonth> {
     let usecase = "getAvailableMonth";
     if (year) {

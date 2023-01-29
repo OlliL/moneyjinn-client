@@ -77,83 +77,101 @@
   </div>
 </template>
 
-<script lang="ts">
-import ReportTableVue from "@/components/reports/ReportTable.vue";
-import EtfTableVue from "@/components/reports/EtfTable.vue";
-import ReportControllerHandler from "@/handler/ReportControllerHandler";
-import { getMonthName } from "@/tools/views/MonthName";
+<script lang="ts" setup>
+import { onMounted, ref } from "vue";
+
 import router, { Routes } from "@/router";
-import { defineComponent } from "vue";
-export default defineComponent({
-  name: "ListReports",
-  data() {
-    return {
-      Routes: Routes,
-      dataLoaded: false,
-      months: [] as number[],
-      years: [] as number[],
-      previousMonth: 0,
-      previousYear: 0,
-      nextMonth: 0,
-      nextYear: 0,
-      previousMonthLink: false,
-      nextMonthLink: false,
-      selectedYear: 0,
-    };
-  },
-  props: {
-    year: {
-      type: String,
-      default: "",
-    },
-    month: {
-      type: String,
-      default: "",
-    },
-  },
-  created() {
-    this.loadData(this.$props.year, this.$props.month);
-  },
-  methods: {
-    getMonthName(month: number): string {
-      return getMonthName(month);
-    },
-    async loadData(year?: string, month?: string) {
-      this.dataLoaded = false;
-      let response = await ReportControllerHandler.getAvailableMonth(
-        year,
-        month
-      );
-      this.months = response.allMonth;
-      this.years = response.allYears;
 
-      this.previousMonth = response.previousMonth;
-      this.previousMonthLink = response.previousMonthHasMoneyflows === 1;
-      this.previousYear = response.previousYear;
+import EtfTableVue from "@/components/reports/EtfTable.vue";
+import ReportTableVue from "@/components/reports/ReportTable.vue";
 
-      this.nextMonth = response.nextMonth;
-      this.nextMonthLink = response.nextMonthHasMoneyflows === 1;
-      this.nextYear = response.nextYear;
+import { getMonthName } from "@/tools/views/MonthName";
 
-      this.selectedYear = response.year;
+import ReportControllerHandler from "@/handler/ReportControllerHandler";
+import { onBeforeRouteUpdate } from "vue-router";
 
-      this.dataLoaded = true;
-    },
-    navigateToPreviousMonth() {
-      this.selectMonth(this.previousYear + "", this.previousMonth + "");
-    },
-    navigateToNextMonth() {
-      this.selectMonth(this.nextYear + "", this.nextMonth + "");
-    },
-    selectMonth(year: string, month?: string) {
-      this.dataLoaded = false;
-      router.push({
-        name: Routes.ListReports,
-        params: { year: year, month: month },
-      });
-      this.loadData(year, month);
-    },
+const dataLoaded = ref(false);
+const months = ref([] as number[]);
+const years = ref([] as number[]);
+const previousMonth = ref(0);
+const previousYear = ref(0);
+const nextMonth = ref(0);
+const nextYear = ref(0);
+const previousMonthLink = ref(false);
+const nextMonthLink = ref(false);
+const selectedYear = ref(0);
+const currentlyShownYear = ref(0);
+
+const props = defineProps({
+  year: {
+    type: String,
+    default: "",
   },
-  components: { ReportTableVue, EtfTableVue },
+  month: {
+    type: String,
+    default: "",
+  },
 });
+
+onMounted(() => {
+  const year: number | undefined = props.year ? +props.year : undefined;
+  const month: number | undefined = props.month ? +props.month : undefined;
+  loadData(year, month);
+});
+
+const loadData = (year?: number, month?: number) => {
+  dataLoaded.value = false;
+  ReportControllerHandler.getAvailableMonth(year, month).then((response) => {
+    months.value = response.allMonth;
+    years.value = response.allYears;
+
+    previousMonth.value = response.previousMonth;
+    previousMonthLink.value = response.previousMonthHasMoneyflows === 1;
+    previousYear.value = response.previousYear;
+
+    nextMonth.value = response.nextMonth;
+    nextMonthLink.value = response.nextMonthHasMoneyflows === 1;
+    nextYear.value = response.nextYear;
+
+    selectedYear.value = response.year;
+
+    if (selectedYear.value != currentlyShownYear.value)
+      currentlyShownYear.value = selectedYear.value;
+
+    dataLoaded.value = true;
+  });
+};
+
+const navigateToPreviousMonth = () => {
+  selectMonth(previousYear.value + "", previousMonth.value + "");
+};
+
+const navigateToNextMonth = () => {
+  selectMonth(nextYear.value + "", nextMonth.value + "");
+};
+
+onBeforeRouteUpdate((to, from, next) => {
+  const year = +to.params.year;
+  const month = +to.params.month;
+  const isFirstMonth = months.value.indexOf(month) == 0;
+  const isLastMonth = months.value.indexOf(month) == months.value.length - 1;
+
+  if (year != currentlyShownYear.value || isFirstMonth || isLastMonth) {
+    loadData(year, month);
+  } else {
+    nextMonth.value = month + 1;
+    nextYear.value = currentlyShownYear.value;
+
+    previousMonth.value = month - 1;
+    previousYear.value = currentlyShownYear.value;
+  }
+  next();
+});
+
+const selectMonth = (year: string, month?: string) => {
+  router.push({
+    name: Routes.ListReports,
+    params: { year: year, month: month },
+  });
+};
 </script>
