@@ -20,7 +20,7 @@
     "chart.js": "^4.1.1",
     "pinia": "^2.0.28",
     "pinia-plugin-persistedstate": "^3.0.1",
-    "pinia-shared-state": "^0.2.13",
+    "pinia-shared-state": "^0.3.0",
     "vanillajs-datepicker": "^1.2.0",
     "vee-validate": "^4.7.3",
     "vue": "^3.2.41",
