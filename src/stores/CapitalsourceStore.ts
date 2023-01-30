@@ -16,12 +16,14 @@ export const useCapitalsourceStore = defineStore("capitalsource", {
     ...mapState(useUserSessionStore, ["getUserId"]),
   },
   actions: {
-    async initCapitalsourceStore() {
+    initCapitalsourceStore() {
       if (this.capitalsource.length === 0) {
-        const capitalsourceArray =
-          await CapitalsourceControllerHandler.fetchAllCapitalsource();
-        this.capitalsource = capitalsourceArray;
-        this.capitalsource.sort(this.compareCapitalsource);
+        CapitalsourceControllerHandler.fetchAllCapitalsource().then(
+          (capitalsourceArray) => {
+            this.capitalsource = capitalsourceArray;
+            this.capitalsource.sort(this.compareCapitalsource);
+          }
+        );
       }
     },
     subscribeToWebsocket() {
