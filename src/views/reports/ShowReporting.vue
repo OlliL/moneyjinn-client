@@ -15,7 +15,7 @@
                   <div class="col-md-4 col-xs-12" v-show="!groupByYear">
                     <InputDate
                       v-model="startDateMonth"
-                      :validation-schema="schema.any"
+                      :validation-schema-ref="schema.startDateMonth"
                       id="startDateMonth"
                       pickMode="month"
                       field-label="Startdatum"
@@ -24,7 +24,7 @@
                   <div class="col-md-4 col-xs-12" v-show="!groupByYear">
                     <InputDate
                       v-model="endDateMonth"
-                      :validation-schema="schema.any"
+                      :validation-schema-ref="schema.endDateMonth"
                       id="endDateMonth"
                       pickMode="month"
                       field-label="Enddatum"
@@ -34,7 +34,7 @@
                   <div class="col-md-4 col-xs-12" v-show="groupByYear">
                     <InputDate
                       v-model="startDateYear"
-                      :validation-schema="schema.any"
+                      :validation-schema-ref="schema.startDateYear"
                       id="startDateYear"
                       pickMode="year"
                       field-label="Startdatum"
@@ -43,7 +43,7 @@
                   <div class="col-md-4 col-xs-12" v-show="groupByYear">
                     <InputDate
                       v-model="endDateYear"
-                      :validation-schema="schema.any"
+                      :validation-schema-ref="schema.endDateYear"
                       id="endDateYear"
                       pickMode="year"
                       field-label="Enddatum"
@@ -84,13 +84,22 @@
                   <div class="col-5 text-start">
                     <label
                       for="postingAccountIdsYes"
-                      :style="'opacity: .65; color: black'"
-                      ><small>eingeschlossen</small></label
+                      :style="
+                        'opacity: .65; color: ' +
+                        errorDatasPostingAccountsYes.fieldColor
+                      "
+                      ><small>{{
+                        errorDatasPostingAccountsYes.fieldLabel
+                      }}</small></label
                     >
                     <select
                       v-model="selectedPostingAccountsYes"
                       id="postingAccountIdsYes"
-                      class="form-select form-control"
+                      name="postingAccountIdsYes"
+                      :class="
+                        'form-select form-control ' +
+                        errorDatasPostingAccountsYes.inputClass
+                      "
                       multiple
                       size="5"
                     >
@@ -170,7 +179,7 @@
                   <div class="col-12 col-sm-6">
                     <SelectPostingAccount
                       v-model="selectedPostingAccount"
-                      :validation-schema="schema.any"
+                      :validation-schema-ref="schema.selectedPostingAccount"
                       id-suffix="ShowReporting"
                       field-label="Buchungskonto"
                     />
@@ -179,9 +188,7 @@
 
                 <div class="row no-gutters flex-lg-nowrap mt-3">
                   <div class="col-12">
-                    <button type="submit" class="btn btn-primary mx-2">
-                      anzeigen
-                    </button>
+                    <ButtonSubmit button-label="anzeigen" />
                   </div>
                 </div>
               </div>
@@ -215,10 +222,11 @@ import {
   CategoryScale,
   LinearScale,
 } from "chart.js";
-import { computed, onMounted, ref } from "vue";
+import { computed, nextTick, onMounted, ref } from "vue";
 import { Bar } from "vue-chartjs";
-import { any } from "zod";
+import { any, date, number } from "zod";
 
+import ButtonSubmit from "@/components/ButtonSubmit.vue";
 import InputDate from "@/components/InputDate.vue";
 import SelectPostingAccount from "@/components/postingaccount/SelectPostingAccount.vue";
 
@@ -231,24 +239,13 @@ import type { ReportingParameter } from "@/model/report/ReportingParameter";
 import type { ReportingMonthAmount } from "@/model/report/ReportingMonthAmount";
 
 import ReportControllerHandler from "@/handler/ReportControllerHandler";
-
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend
-);
-
-type ChartDataDataset = {
-  data: Array<number | null>;
-  backgroundColor: Array<string>;
-};
-type ChartData = {
-  labels: Array<string>;
-  datasets: Array<ChartDataDataset>;
-};
+import { useField, useForm } from "vee-validate";
+import { globErr } from "@/tools/views/ZodUtil";
+import { toFieldValidator } from "@vee-validate/zod";
+import {
+  generateErrorDataVeeValidate,
+  type ErrorData,
+} from "@/tools/views/ErrorData";
 
 const dataLoaded = ref(false);
 const reportingGraphLoaded = ref(false);
@@ -260,7 +257,6 @@ const startDateYear = ref(new Date());
 const endDateYear = ref(new Date());
 
 const postingAccounts = ref(new Array<PostingAccount>());
-const postingAccountsYes = ref(new Array<PostingAccount>());
 const postingAccountsNo = ref(new Array<PostingAccount>());
 const selectedPostingAccountsYes = ref(new Array<number>());
 const selectedPostingAccountsNo = ref(new Array<number>());
@@ -314,9 +310,72 @@ const chartOptions = ref({
   },
 });
 
+const startDateSchema = date(globErr("Bitte Startdatum angeben!"));
+const endDateSchema = date(globErr("Bitte Enddatum angeben!"));
+const optionalSchema = any().optional();
 const schema = {
-  any: any().nullish(),
+  startDateMonth: computed(() =>
+    !groupByYear.value ? startDateSchema : optionalSchema
+  ),
+  endDateMonth: computed(() =>
+    !groupByYear.value ? endDateSchema : optionalSchema
+  ),
+  startDateYear: computed(() =>
+    groupByYear.value ? startDateSchema : optionalSchema
+  ),
+  endDateYear: computed(() =>
+    groupByYear.value ? endDateSchema : optionalSchema
+  ),
+  selectedPostingAccount: computed(() =>
+    singlePostingAccounts.value
+      ? number(globErr("Bitte Buchungskonto angeben!")).gt(0)
+      : optionalSchema
+  ),
 };
+
+const postingAccountIdsYesSchema = computed(() =>
+  singlePostingAccounts.value
+    ? toFieldValidator(optionalSchema)
+    : toFieldValidator(number().array().min(1, "Bitte Buchungskonto angeben!"))
+);
+const {
+  value: postingAccountsYes,
+  meta: postingAccountsYesMeta,
+  errorMessage,
+  setState,
+} = useField<Array<PostingAccount>>(
+  "postingAccountIdsYes",
+  postingAccountIdsYesSchema,
+  { initialValue: new Array<PostingAccount>() }
+);
+
+const errorDatasPostingAccountsYes = computed((): ErrorData => {
+  return generateErrorDataVeeValidate(
+    postingAccountsYesMeta.touched,
+    "eingeschlossen",
+    errorMessage.value
+  );
+});
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend
+);
+
+type ChartDataDataset = {
+  data: Array<number | null>;
+  backgroundColor: Array<string>;
+};
+type ChartData = {
+  labels: Array<string>;
+  datasets: Array<ChartDataDataset>;
+};
+
+const { handleSubmit, values, setFieldTouched } = useForm();
 
 onMounted(() => {
   loadData();
@@ -354,13 +413,10 @@ const loadData = () => {
       postingAccountsNo.value
     );
     dataLoaded.value = true;
+    Object.keys(values).forEach((field) => setFieldTouched(field, false));
   });
 };
 
-const removeAllPostingAccounts = () => {
-  postingAccountsNo.value = postingAccounts.value;
-  postingAccountsYes.value = new Array<PostingAccount>();
-};
 const movePostingAccounts = (
   from: Array<PostingAccount>,
   to: Array<PostingAccount>,
@@ -376,7 +432,13 @@ const movePostingAccounts = (
     to.push(mpa);
   }
   to.sort((a, b) => a.name.localeCompare(b.name));
+  setState({ touched: true });
   return newFrom;
+};
+const removeAllPostingAccounts = () => {
+  postingAccountsNo.value = postingAccounts.value;
+  postingAccountsYes.value = new Array<PostingAccount>();
+  setState({ touched: true });
 };
 const removeSelectedPostingAccounts = () => {
   postingAccountsYes.value = movePostingAccounts(
@@ -389,6 +451,7 @@ const removeSelectedPostingAccounts = () => {
 const addAllPostingAccounts = () => {
   postingAccountsNo.value = new Array<PostingAccount>();
   postingAccountsYes.value = postingAccounts.value;
+  setState({ touched: true });
 };
 const addSelectedPostingAccounts = () => {
   postingAccountsNo.value = movePostingAccounts(
@@ -456,7 +519,8 @@ const makeChartTitle = (reportingParameter: ReportingParameter): string => {
   }
   return chartTitle;
 };
-const showReportingGraph = () => {
+const showReportingGraph = handleSubmit(() => {
+  nextTick();
   const reportingParameter = {} as ReportingParameter;
   if (groupByYear.value) {
     if (startDateYear.value && endDateYear.value) {
@@ -495,7 +559,10 @@ const showReportingGraph = () => {
       const resultMap = new Map<string, number>();
 
       if (singlePostingAccounts.value) {
-        chartTitle = postingAccountsYes.value[0].name + " - " + chartTitle;
+        chartTitle =
+          reportingParameter.selectedPostingAccounts[0].name +
+          " - " +
+          chartTitle;
         for (let reportingMonthAmount of reportingMonthAmounts) {
           let key: string = "";
           if (groupByYear.value) {
@@ -536,5 +603,5 @@ const showReportingGraph = () => {
     }
     reportingGraphLoaded.value = true;
   });
-};
+});
 </script>
