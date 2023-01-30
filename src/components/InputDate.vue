@@ -20,7 +20,7 @@
 import { Datepicker } from "vanillajs-datepicker";
 import { useField } from "vee-validate";
 import { toFieldValidator } from "@vee-validate/zod";
-import { computed, onMounted, ref, watch, type PropType } from "vue";
+import { computed, onMounted, ref, watch, type PropType, type Ref } from "vue";
 import { date, preprocess, type ZodType } from "zod";
 
 import {
@@ -33,6 +33,10 @@ const props = defineProps({
     type: Object as PropType<ZodType>,
     required: false,
     default: date().optional(),
+  },
+  validationSchemaRef: {
+    type: Object as PropType<Ref<ZodType>>,
+    required: false,
   },
   id: {
     type: String,
@@ -56,7 +60,21 @@ const props = defineProps({
   },
 });
 const emit = defineEmits(["update:modelValue"]);
-const schema = ref();
+const viewMounted = ref(false);
+
+const schema = computed(() => {
+  if (viewMounted.value) {
+    if (props.validationSchemaRef) {
+      return toFieldValidator(
+        preprocess(() => datepicker.getDate(), props.validationSchemaRef.value)
+      );
+    }
+    return toFieldValidator(
+      preprocess(() => datepicker.getDate(), props.validationSchema)
+    );
+  }
+  return undefined;
+});
 
 const {
   meta: fieldMeta,
@@ -154,9 +172,7 @@ onMounted(() => {
       language: "de",
       format: format,
     });
-    schema.value = toFieldValidator(
-      preprocess(() => datepicker.getDate(), props.validationSchema)
-    );
+    viewMounted.value = true;
   }
 });
 
