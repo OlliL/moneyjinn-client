@@ -12,12 +12,14 @@ export const useContractpartnerStore = defineStore("contractpartner", {
   }),
   getters: {},
   actions: {
-    async initContractpartnerStore() {
+    initContractpartnerStore() {
       if (this.contractpartner.length === 0) {
-        const contractpartnerArray =
-          await ContractpartnerControllerHandler.fetchAllContractpartner();
-        this.contractpartner = contractpartnerArray;
-        this.contractpartner.sort(this.compareContractpartnerByName);
+        ContractpartnerControllerHandler.fetchAllContractpartner().then(
+          (contractpartnerArray) => {
+            this.contractpartner = contractpartnerArray;
+            this.contractpartner.sort(this.compareContractpartnerByName);
+          }
+        );
       }
     },
     subscribeToWebsocket() {
