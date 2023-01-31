@@ -222,7 +222,7 @@ import {
   CategoryScale,
   LinearScale,
 } from "chart.js";
-import { computed, nextTick, onMounted, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { Bar } from "vue-chartjs";
 import { any, date, number } from "zod";
 
