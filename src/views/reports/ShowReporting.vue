@@ -338,24 +338,6 @@ const postingAccountIdsYesSchema = computed(() =>
     ? toFieldValidator(optionalSchema)
     : toFieldValidator(number().array().min(1, "Bitte Buchungskonto angeben!"))
 );
-const {
-  value: postingAccountsYes,
-  meta: postingAccountsYesMeta,
-  errorMessage,
-  setState,
-} = useField<Array<PostingAccount>>(
-  "postingAccountIdsYes",
-  postingAccountIdsYesSchema,
-  { initialValue: new Array<PostingAccount>() }
-);
-
-const errorDatasPostingAccountsYes = computed((): ErrorData => {
-  return generateErrorDataVeeValidate(
-    postingAccountsYesMeta.touched,
-    "eingeschlossen",
-    errorMessage.value
-  );
-});
 
 ChartJS.register(
   CategoryScale,
@@ -376,6 +358,25 @@ type ChartData = {
 };
 
 const { handleSubmit, values, setFieldTouched } = useForm();
+
+const {
+  value: postingAccountsYes,
+  meta: postingAccountsYesMeta,
+  errorMessage,
+  setState,
+} = useField<Array<PostingAccount>>(
+  "postingAccountIdsYes",
+  postingAccountIdsYesSchema,
+  { initialValue: new Array<PostingAccount>() }
+);
+
+const errorDatasPostingAccountsYes = computed((): ErrorData => {
+  return generateErrorDataVeeValidate(
+    postingAccountsYesMeta.touched,
+    "eingeschlossen",
+    errorMessage.value
+  );
+});
 
 onMounted(() => {
   loadData();
@@ -520,7 +521,7 @@ const makeChartTitle = (reportingParameter: ReportingParameter): string => {
   return chartTitle;
 };
 const showReportingGraph = handleSubmit(() => {
-  nextTick();
+  console.log("requesting!", postingAccountsYesMeta.valid);
   const reportingParameter = {} as ReportingParameter;
   if (groupByYear.value) {
     if (startDateYear.value && endDateYear.value) {
