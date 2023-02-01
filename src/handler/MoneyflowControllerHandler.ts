@@ -36,12 +36,13 @@ class MoneyflowControllerHandler extends AbstractControllerHandler {
 
     const request = {} as CreateMoneyflowRequest;
     request.moneyflowTransport = mapMoneyflowToTransport(moneyflow);
+    request.saveAsPreDefMoneyflow = saveAsPreDefMoneyflow ? 1 : 0;
+
     if (usedPreDefMoneyflowId != 0) {
       request.usedPreDefMoneyflowId = usedPreDefMoneyflowId;
+      request.saveAsPreDefMoneyflow = 1;
     }
-    if (saveAsPreDefMoneyflow) {
-      request.saveAsPreDefMoneyflow = saveAsPreDefMoneyflow ? 1 : 0;
-    }
+
     if (moneyflow.moneyflowSplitEntries) {
       request.insertMoneyflowSplitEntryTransports =
         moneyflow.moneyflowSplitEntries.map((mse) => {
