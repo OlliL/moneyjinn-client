@@ -42,6 +42,7 @@
                 :validation-schema="schema.amount"
                 id="amount"
                 field-type="number"
+                step="0.001"
                 field-label="Stück"
               />
             </div>
@@ -53,6 +54,7 @@
                 v-model="etfFlow.price"
                 :validation-schema="schema.price"
                 id="price"
+                step="0.01"
                 field-type="number"
                 field-label="Stückpreis"
               >
