@@ -521,7 +521,6 @@ const makeChartTitle = (reportingParameter: ReportingParameter): string => {
   return chartTitle;
 };
 const showReportingGraph = handleSubmit(() => {
-  console.log("requesting!", postingAccountsYesMeta.valid);
   const reportingParameter = {} as ReportingParameter;
   if (groupByYear.value) {
     if (startDateYear.value && endDateYear.value) {

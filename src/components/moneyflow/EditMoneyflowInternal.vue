@@ -759,6 +759,7 @@ export default defineComponent({
 
           this.toggleTextOff = this.toggleTextOffPreDefMoneyflow;
           this.toggleTextOn = this.toggleTextOnPreDefMoneyflow;
+          this.preDefMoneyflowId = preDefMoneyflow.id;
         }
       }
     },
