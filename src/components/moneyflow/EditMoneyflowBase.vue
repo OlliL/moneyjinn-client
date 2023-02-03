@@ -205,8 +205,8 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, type PropType } from "vue";
+<script lang="ts" setup>
+import { computed, onMounted, ref, watch, type PropType } from "vue";
 
 import CapitalsourceSelectVue from "@/components/capitalsource/CapitalsourceSelect.vue";
 import ContractpartnerSelectVue from "@/components/contractpartner/ContractpartnerSelect.vue";
@@ -214,8 +214,16 @@ import EditMoneyflowBaseSplitEntryRowVue from "@/components/moneyflow/EditMoneyf
 import PostingAccountSelectVue from "@/components/postingaccount/PostingAccountSelect.vue";
 import DatepickerVue from "@/components/Datepicker.vue";
 
+import { useContractpartnerStore } from "@/stores/ContractpartnerStore";
+
+import { generateErrorData } from "@/tools/views/ErrorData";
+import { getError } from "@/tools/views/ThrowError";
+import { toFixed } from "@/tools/math";
+import { validateInputField } from "@/tools/views/ValidateInputField";
+
 import type { Capitalsource } from "@/model/capitalsource/Capitalsource";
 import type { Contractpartner } from "@/model/contractpartner/Contractpartner";
+import type { ImportedMoneyflow } from "@/model/moneyflow/ImportedMoneyflow";
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 import type { MoneyflowSplitEntry } from "@/model/moneyflow/MoneyflowSplitEntry";
 import type { MoneyflowValidation } from "@/model/moneyflow/MoneyflowValidation";
@@ -224,693 +232,634 @@ import type { PostingAccount } from "@/model/postingaccount/PostingAccount";
 import type { ValidationResult } from "@/model/validation/ValidationResult";
 
 import MoneyflowControllerHandler from "@/handler/MoneyflowControllerHandler";
-import { useContractpartnerStore } from "@/stores/ContractpartnerStore";
 
-import { generateErrorData, type ErrorData } from "@/tools/views/ErrorData";
-import { getError } from "@/tools/views/ThrowError";
-import { validateInputField } from "@/tools/views/ValidateInputField";
 import ImportedMoneyflowControllerHandler from "@/handler/ImportedMoneyflowControllerHandler";
-import type { ImportedMoneyflow } from "@/model/moneyflow/ImportedMoneyflow";
-import { toFixed } from "@/tools/math";
-import { mapActions } from "pinia";
 
-type EditMoneyflowData = {
-  serverError: Array<string> | undefined;
-  mmf: Moneyflow;
-  amount: number | undefined;
-  bookingdateIsValid: boolean | null;
-  bookingdateErrorMessage: string;
-  contractpartnerIsValid: boolean | null;
-  contractpartnerErrorMessage: string;
-  capitalsourceIsValid: boolean | null;
-  capitalsourceErrorMessage: string;
-  amountIsValid: boolean | null;
-  amountErrorMessage: string;
-  commentIsValid: boolean | null;
-  commentErrorMessage: string;
-  postingaccountIsValid: boolean | null;
-  postingaccountErrorMessage: string;
-  previousCommentSetByContractpartnerDefaults: string;
-  previousPostingAccountSetByContractpartnerDefaults: number;
-  preDefMoneyflowId: number;
-  saveAsPreDefMoneyflow: boolean;
-  toggleTextOffNoPreDefMoneyflow: string;
-  toggleTextOnNoPreDefMoneyflow: string;
-  toggleTextOffPreDefMoneyflow: string;
-  toggleTextOnPreDefMoneyflow: string;
-  toggleTextOff: string;
-  toggleTextOn: string;
-  mseRowsAreValid: boolean | null;
-  mseRemainderIsValid: boolean | undefined;
-  showMoneyflowFields: boolean;
-  originalMoneyflowSplitEntryIds: Array<number>;
-};
-export default defineComponent({
-  name: "EditMoneyflowBase",
-  data(): EditMoneyflowData {
-    return {
-      serverError: undefined,
-      mmf: {} as Moneyflow,
-      amount: undefined,
-      bookingdateIsValid: null,
-      bookingdateErrorMessage: "",
-      contractpartnerIsValid: null,
-      contractpartnerErrorMessage: "",
-      capitalsourceIsValid: null,
-      capitalsourceErrorMessage: "",
-      amountIsValid: null,
-      amountErrorMessage: "",
-      commentIsValid: null,
-      commentErrorMessage: "",
-      postingaccountIsValid: null,
-      postingaccountErrorMessage: "",
-      previousCommentSetByContractpartnerDefaults: "",
-      previousPostingAccountSetByContractpartnerDefaults: 0,
-      preDefMoneyflowId: 0,
-      saveAsPreDefMoneyflow: false,
-      toggleTextOffNoPreDefMoneyflow: "einmalig",
-      toggleTextOnNoPreDefMoneyflow: "Favorit",
-      toggleTextOffPreDefMoneyflow: "belassen",
-      toggleTextOnPreDefMoneyflow: "erneuern",
-      toggleTextOff: "",
-      toggleTextOn: "",
-      mseRowsAreValid: null,
-      mseRemainderIsValid: undefined,
-      showMoneyflowFields: true,
-      originalMoneyflowSplitEntryIds: new Array<number>(),
-    };
+const serverError = ref(undefined as Array<string> | undefined);
+const mmf = ref({} as Moneyflow);
+const amount = ref(undefined as number | undefined);
+const bookingdateIsValid = ref(null as boolean | null);
+const bookingdateErrorMessage = ref("");
+const contractpartnerIsValid = ref(null as boolean | null);
+const contractpartnerErrorMessage = ref("");
+const capitalsourceIsValid = ref(null as boolean | null);
+const capitalsourceErrorMessage = ref("");
+const amountIsValid = ref(null as boolean | null);
+const amountErrorMessage = ref("");
+const commentIsValid = ref(null as boolean | null);
+const commentErrorMessage = ref("");
+const postingaccountIsValid = ref(null as boolean | null);
+const postingaccountErrorMessage = ref("");
+const previousCommentSetByContractpartnerDefaults = ref("");
+const previousPostingAccountSetByContractpartnerDefaults = ref(0);
+const preDefMoneyflowId = ref(0);
+const saveAsPreDefMoneyflow = ref(false);
+const toggleTextOffNoPreDefMoneyflow = ref("einmalig");
+const toggleTextOnNoPreDefMoneyflow = ref("Favorit");
+const toggleTextOffPreDefMoneyflow = ref("belassen");
+const toggleTextOnPreDefMoneyflow = ref("erneuern");
+const toggleTextOff = ref("");
+const toggleTextOn = ref("");
+const mseRowsAreValid = ref(null as boolean | null);
+const mseRemainderIsValid = ref(undefined as boolean | undefined);
+const showMoneyflowFields = ref(true);
+const originalMoneyflowSplitEntryIds = ref(new Array<number>());
+const amountRef = ref();
+const mseRow = ref();
+const contractpartnerStore = useContractpartnerStore();
+
+const props = defineProps({
+  mmfToEdit: {
+    type: Object as PropType<Moneyflow>,
+    required: false,
   },
-  props: {
-    mmfToEdit: {
-      type: Object as PropType<Moneyflow>,
-      required: false,
-    },
-    selectedPreDefMoneyflow: {
-      type: Object as PropType<PreDefMoneyflow>,
-      required: false,
-    },
-    idSuffix: {
-      type: String,
-      default: "",
-    },
-    fillContractpartnerDefaults: {
-      type: Boolean,
-      default: false,
-    },
+  selectedPreDefMoneyflow: {
+    type: Object as PropType<PreDefMoneyflow>,
+    required: false,
   },
-  mounted() {
-    if (this.fillContractpartnerDefaults) this.resetForm();
+  idSuffix: {
+    type: String,
+    default: "",
   },
-  watch: {
-    selectedPreDefMoneyflow: function (
-      newVal: PreDefMoneyflow | undefined,
-      oldVal: PreDefMoneyflow
-    ) {
-      if (newVal !== oldVal) this.selectPreDefMoneyflow(newVal);
-    },
-    mmfToEdit: {
-      handler(newVal: Moneyflow | undefined, oldVal: Moneyflow) {
-        if (newVal !== oldVal) this.resetForm();
-      },
-    },
-  },
-  computed: {
-    editMode(): boolean {
-      if (this.mmfToEdit) {
-        return true;
-      }
-      return false;
-    },
-    formIsValid(): boolean {
-      const isValid =
-        this.bookingdateIsValid &&
-        this.contractpartnerIsValid &&
-        this.capitalsourceIsValid &&
-        this.amountIsValid &&
-        this.commentIsValid &&
-        this.postingaccountIsValid &&
-        this.mseRowsAreValid &&
-        this.mseRemainderIsValid;
-      if (isValid === null || isValid === undefined || isValid === true) {
-        return true;
-      }
-      return false;
-    },
-    bookingdateErrorData(): ErrorData {
-      return generateErrorData(
-        this.bookingdateIsValid,
-        "Buchungsdatum",
-        this.bookingdateErrorMessage
-      );
-    },
-    contractpartnerErrorData(): ErrorData {
-      return generateErrorData(
-        this.contractpartnerIsValid,
-        "Vertragspartner",
-        this.contractpartnerErrorMessage
-      );
-    },
-    capitalsourceErrorData(): ErrorData {
-      return generateErrorData(
-        this.capitalsourceIsValid,
-        "Kapitalquelle",
-        this.capitalsourceErrorMessage
-      );
-    },
-    amountErrorData(): ErrorData {
-      return generateErrorData(
-        this.amountIsValid,
-        "Betrag",
-        this.amountErrorMessage
-      );
-    },
-    commentErrorData(): ErrorData {
-      return generateErrorData(
-        this.commentIsValid,
-        "Kommentar",
-        this.commentErrorMessage
-      );
-    },
-    postingaccountErrorData(): ErrorData {
-      return generateErrorData(
-        this.postingaccountIsValid,
-        "Buchungskonto",
-        this.postingaccountErrorMessage
-      );
-    },
-    validityDate(): Date {
-      if (this.mmf.invoiceDate) {
-        return this.mmf.invoiceDate;
-      } else if (this.bookingdateIsValid) {
-        return this.mmf.bookingDate;
-      } else {
-        const date = new Date();
-        date.setHours(0, 0, 0, 0);
-        return date;
-      }
-    },
-    mseRemainder(): number {
-      // avoid floating arithmetic problems by using fixed point arithmetics
-      let remainder = 0;
-      if (this.amount) {
-        remainder = toFixed(this.amount, 2);
-        if (this.mmf.moneyflowSplitEntries != undefined) {
-          for (const mse of this.mmf.moneyflowSplitEntries) {
-            if (mse.amount) remainder = toFixed(remainder - mse.amount, 2);
-          }
-        }
-      }
-      return remainder;
-    },
-  },
-  methods: {
-    ...mapActions(useContractpartnerStore, ["getContractpartner"]),
-    resetForm() {
-      if (this.mmfToEdit && this.mmfToEdit.bookingDate) {
-        const bookingDate = new Date(this.mmfToEdit.bookingDate);
-        bookingDate.setHours(0, 0, 0, 0);
-        let invoiceDate: Date | undefined = undefined;
-        if (this.mmfToEdit.invoiceDate) {
-          invoiceDate = new Date(this.mmfToEdit.invoiceDate);
-          invoiceDate.setHours(0, 0, 0, 0);
-        }
-
-        this.mmf = {
-          amount: this.mmfToEdit.amount,
-          bookingDate: bookingDate,
-          capitalsourceId: this.mmfToEdit.capitalsourceId,
-          comment: this.mmfToEdit.comment,
-          contractpartnerId: this.mmfToEdit.contractpartnerId,
-          hasReceipt: this.mmfToEdit.hasReceipt,
-          id: this.mmfToEdit.id,
-          invoiceDate: invoiceDate,
-          postingAccountId: this.mmfToEdit.postingAccountId,
-          private: this.mmfToEdit.private,
-          userId: this.mmfToEdit.userId,
-          capitalsourceComment: this.mmfToEdit.capitalsourceComment,
-          contractpartnerName: this.mmfToEdit.contractpartnerName,
-          moneyflowSplitEntries: this.mmfToEdit.moneyflowSplitEntries,
-          postingAccountName: this.mmfToEdit.postingAccountName,
-        };
-
-        this.amount = this.mmf.amount;
-
-        // set correct defaults for imported moneyflows
-        if (this.mmf.comment === undefined) this.mmf.comment = "";
-        if (this.mmf.postingAccountId === undefined)
-          this.mmf.postingAccountId = 0;
-
-        this.originalMoneyflowSplitEntryIds = new Array<number>();
-        if (
-          this.fillContractpartnerDefaults &&
-          this.mmf.contractpartnerId > 0
-        ) {
-          this.previousCommentSetByContractpartnerDefaults = this.mmf.comment;
-          this.previousPostingAccountSetByContractpartnerDefaults =
-            this.mmf.postingAccountId;
-
-          const contractpartner = this.getContractpartner(
-            this.mmf.contractpartnerId
-          );
-          if (contractpartner) {
-            this.onContractpartnerSelected(contractpartner);
-          }
-        } else {
-          this.previousCommentSetByContractpartnerDefaults = "";
-          this.previousPostingAccountSetByContractpartnerDefaults = 0;
-        }
-
-        if (this.mmf.moneyflowSplitEntries == undefined) {
-          this.mmf.moneyflowSplitEntries = new Array<MoneyflowSplitEntry>();
-          this.addNewMoneyflowSplitEntryRow();
-          this.addNewMoneyflowSplitEntryRow();
-          document
-            .getElementById("collapseSplitEntries")
-            ?.classList.remove("show");
-        } else {
-          for (let mse of this.mmf.moneyflowSplitEntries) {
-            this.originalMoneyflowSplitEntryIds.push(mse.id);
-          }
-          this.addNewMoneyflowSplitEntryRow();
-          document
-            .getElementById("collapseSplitEntries")
-            ?.classList.add("show");
-        }
-        this.toggleMoneyflowFieldsForMse();
-      } else {
-        this.amount = undefined;
-
-        const bookingDate = new Date();
-        bookingDate.setHours(0, 0, 0, 0);
-        this.mmf.bookingDate = bookingDate;
-        this.mmf.invoiceDate = undefined;
-        this.mmf.contractpartnerId = 0;
-        this.mmf.contractpartnerName = "";
-        this.mmf.capitalsourceId = 0;
-        this.mmf.capitalsourceComment = "";
-        this.mmf.postingAccountId = 0;
-        this.mmf.postingAccountName = "";
-        this.mmf.comment = "";
-        this.mmf.private = false;
-
-        this.mmf.moneyflowSplitEntries = new Array<MoneyflowSplitEntry>();
-        this.addNewMoneyflowSplitEntryRow();
-        this.addNewMoneyflowSplitEntryRow();
-        this.showMoneyflowFields = true;
-
-        (this.$refs.amountRef as any).focus();
-        this.previousCommentSetByContractpartnerDefaults = "";
-        this.previousPostingAccountSetByContractpartnerDefaults = 0;
-      }
-      this.serverError = undefined;
-      this.mseRowsAreValid = null;
-      this.mseRemainderIsValid = undefined;
-
-      this.saveAsPreDefMoneyflow = false;
-      this.preDefMoneyflowId = 0;
-
-      this.bookingdateIsValid = null;
-      this.contractpartnerIsValid = null;
-      this.capitalsourceIsValid = null;
-      this.amountIsValid = null;
-      this.commentIsValid = null;
-      this.postingaccountIsValid = null;
-
-      this.toggleTextOff = this.toggleTextOffNoPreDefMoneyflow;
-      this.toggleTextOn = this.toggleTextOnNoPreDefMoneyflow;
-    },
-    /*
-     * Moneyflow Split Entry handling
-     */
-    addNewMoneyflowSplitEntryRow() {
-      if (this.mmf.moneyflowSplitEntries !== undefined) {
-        const mse = this.mmf.moneyflowSplitEntries;
-        const mseLength = mse.length;
-        let newMseId = -1;
-        if (mseLength > 0) {
-          // existing MoneyflowSplitEntries have positive IDs, new created rows must always have negative IDs
-          newMseId =
-            Math.abs(this.mmf.moneyflowSplitEntries[mseLength - 1].id) * -1 - 1;
-        }
-        const newMse = {
-          id: newMseId,
-          moneyflowId: this.mmf.id,
-          amount: 0,
-          comment: "",
-          postingAccountId: 0,
-        } as MoneyflowSplitEntry;
-        mse.push(newMse);
-      }
-    },
-    onDeleteMoneyflowSplitEntryRow(index: number) {
-      const mse = this.mmf.moneyflowSplitEntries;
-      if (mse !== undefined) {
-        if (mse.length === 2) {
-          this.addNewMoneyflowSplitEntryRow();
-        }
-        mse.splice(index, 1);
-        this.validateMseRemainder();
-        this.toggleMoneyflowFieldsForMse();
-      }
-    },
-    onAddMoneyflowSplitEntryRow() {
-      this.addNewMoneyflowSplitEntryRow();
-    },
-    onMoneyflowSplitEntryRowAmountChanged(index: number, amount: number) {
-      const mse = this.mmf.moneyflowSplitEntries;
-      if (mse !== undefined) {
-        mse[index]["amount"] = amount;
-      }
-      this.validateMseRemainder();
-      this.toggleMoneyflowFieldsForMse();
-    },
-    onMoneyflowSplitEntryRowCommentChanged(index: number, comment: string) {
-      const mse = this.mmf.moneyflowSplitEntries;
-      if (mse !== undefined) {
-        mse[index]["comment"] = comment;
-      }
-      this.validateMseRemainder();
-      this.toggleMoneyflowFieldsForMse();
-    },
-    onMoneyflowSplitEntryRowPostingAccountIdChanged(
-      index: number,
-      postingAccountId: number,
-      postingAccountName: string
-    ) {
-      const mse = this.mmf.moneyflowSplitEntries;
-      if (mse !== undefined) {
-        mse[index]["postingAccountId"] = postingAccountId;
-        mse[index]["postingAccountName"] = postingAccountName;
-      }
-      this.validateMseRemainder();
-      this.toggleMoneyflowFieldsForMse();
-    },
-    toggleMoneyflowFieldsForMse() {
-      this.showMoneyflowFields = this.allMseRowsAreEmpty();
-    },
-    allMseRowsAreEmpty(): boolean {
-      let allMseRowsAreEmpty = true;
-      const mse = this.mmf.moneyflowSplitEntries;
-      if (mse !== undefined) {
-        for (let entry of mse) {
-          if (
-            entry.amount !== 0 ||
-            entry.comment != "" ||
-            entry.postingAccountId !== 0
-          ) {
-            allMseRowsAreEmpty = false;
-            break;
-          }
-        }
-      }
-      return allMseRowsAreEmpty;
-    },
-    validateMseRemainder() {
-      if (this.allMseRowsAreEmpty() || this.mseRemainder === 0) {
-        this.mseRemainderIsValid = undefined;
-      } else {
-        this.mseRemainderIsValid = false;
-      }
-    },
-    validateMseRows() {
-      let mseRowsValid = true;
-
-      const mseRowRefs = this.$refs.mseRow as Array<
-        typeof EditMoneyflowBaseSplitEntryRowVue
-      >;
-      for (let ref of mseRowRefs) {
-        const valid = ref.validateRow() as boolean;
-        mseRowsValid &&= valid;
-      }
-
-      this.mseRowsAreValid = mseRowsValid;
-    },
-    /*
-     * Moneyflow handling
-     */
-    validateBookingdate() {
-      [this.bookingdateIsValid, this.bookingdateErrorMessage] =
-        validateInputField(this.mmf.bookingDate, "Datum angeben!");
-    },
-    validateContractpartner() {
-      [this.contractpartnerIsValid, this.contractpartnerErrorMessage] =
-        validateInputField(
-          this.mmf.contractpartnerId,
-          "Vertragspartner angeben!"
-        );
-    },
-    validateCapitalsource() {
-      [this.capitalsourceIsValid, this.capitalsourceErrorMessage] =
-        validateInputField(this.mmf.capitalsourceId, "Kapitalquelle angeben!");
-    },
-    validateAmount() {
-      [this.amountIsValid, this.amountErrorMessage] = validateInputField(
-        this.amount,
-        "Betrag angeben!"
-      );
-    },
-    validateComment() {
-      [this.commentIsValid, this.commentErrorMessage] = validateInputField(
-        this.mmf.comment,
-        "Kommentar angeben!"
-      );
-    },
-    validatePostingaccount() {
-      [this.postingaccountIsValid, this.postingaccountErrorMessage] =
-        validateInputField(this.mmf.postingAccountId, "Buchungskonto angeben!");
-    },
-    onContractpartnerSelected(contractpartner: Contractpartner) {
-      if (contractpartner) {
-        this.mmf.contractpartnerId = contractpartner.id;
-        this.mmf.contractpartnerName = contractpartner.name;
-        if (
-          this.mmf.comment === this.previousCommentSetByContractpartnerDefaults
-        ) {
-          this.mmf.comment = contractpartner.moneyflowComment;
-          this.previousCommentSetByContractpartnerDefaults =
-            contractpartner.moneyflowComment;
-          if (contractpartner.moneyflowComment) this.validateComment();
-          else this.commentIsValid = null;
-        }
-        if (
-          this.mmf.postingAccountId ===
-          this.previousPostingAccountSetByContractpartnerDefaults
-        ) {
-          const mpaId = contractpartner.postingAccountId
-            ? contractpartner.postingAccountId
-            : 0;
-
-          this.mmf.postingAccountId = mpaId;
-          this.previousPostingAccountSetByContractpartnerDefaults = mpaId;
-          if (contractpartner.postingAccountId) this.validatePostingaccount();
-          else this.postingaccountIsValid = null;
-        }
-      } else {
-        this.mmf.contractpartnerId = 0;
-        this.mmf.contractpartnerName = "";
-        if (
-          this.mmf.comment === this.previousCommentSetByContractpartnerDefaults
-        ) {
-          this.mmf.comment = "";
-          this.previousCommentSetByContractpartnerDefaults = "";
-          this.commentIsValid = null;
-        }
-        if (
-          this.mmf.postingAccountId ===
-          this.previousPostingAccountSetByContractpartnerDefaults
-        ) {
-          this.mmf.postingAccountId = 0;
-          this.previousPostingAccountSetByContractpartnerDefaults = 0;
-          this.postingaccountIsValid = null;
-        }
-      }
-      this.validateContractpartner();
-    },
-    onCapitalsourceSelected(capitalsource: Capitalsource) {
-      if (capitalsource) {
-        this.mmf.capitalsourceId = capitalsource.id;
-        this.mmf.capitalsourceComment = capitalsource.comment;
-      } else {
-        this.mmf.capitalsourceId = 0;
-        this.mmf.capitalsourceComment = "";
-      }
-      this.validateCapitalsource();
-    },
-    onPostingAccountSelected(postingAccount: PostingAccount) {
-      if (postingAccount) {
-        this.mmf.postingAccountId = postingAccount.id;
-        this.mmf.postingAccountName = postingAccount.name;
-      } else {
-        this.mmf.postingAccountId = 0;
-        this.mmf.postingAccountName = "";
-      }
-      this.validatePostingaccount();
-    },
-    selectPreDefMoneyflow(preDefMoneyflow: PreDefMoneyflow | undefined) {
-      if (preDefMoneyflow === undefined) {
-        this.resetForm();
-      } else {
-        if (preDefMoneyflow) {
-          this.amount = preDefMoneyflow.amount;
-          this.mmf.contractpartnerId = preDefMoneyflow.contractpartnerId;
-          this.mmf.comment = preDefMoneyflow.comment;
-          this.mmf.postingAccountId = preDefMoneyflow.postingAccountId;
-          this.mmf.capitalsourceId = preDefMoneyflow.capitalsourceId;
-
-          this.toggleTextOff = this.toggleTextOffPreDefMoneyflow;
-          this.toggleTextOn = this.toggleTextOnPreDefMoneyflow;
-          this.preDefMoneyflowId = preDefMoneyflow.id;
-        }
-      }
-    },
-    bookingdateSelected(date: Date) {
-      this.mmf.bookingDate = date;
-      this.validateBookingdate();
-    },
-    invoicedateSelected(date: Date) {
-      this.mmf.invoiceDate = date;
-    },
-    prepareServerCall(): boolean {
-      this.validateMseRows();
-      this.validateMseRemainder();
-      if (!this.allMseRowsAreEmpty() && this.mmf.moneyflowSplitEntries) {
-        let mse = {} as MoneyflowSplitEntry;
-        for (let filledMse of this.mmf.moneyflowSplitEntries) {
-          if (filledMse.comment && filledMse.postingAccountId) {
-            mse = filledMse;
-            break;
-          }
-        }
-        if (!this.mmf.comment) {
-          this.mmf.comment = mse.comment;
-        }
-        if (!this.mmf.postingAccountId) {
-          this.mmf.postingAccountId = mse.postingAccountId;
-        }
-      }
-
-      this.validateAmount();
-      this.validateBookingdate();
-      this.validateCapitalsource();
-      this.validateComment();
-      this.validateContractpartner();
-      this.validatePostingaccount();
-
-      if (this.formIsValid) {
-        if (this.amount) this.mmf.amount = this.amount;
-        // remove empty rows
-        if (this.mmf.moneyflowSplitEntries) {
-          this.mmf.moneyflowSplitEntries =
-            this.mmf.moneyflowSplitEntries.filter(
-              (mse) => mse.amount && mse.comment && mse.postingAccountId
-            );
-        }
-        return true;
-      }
-      return false;
-    },
-    followUpServerCall(validationResult: ValidationResult): boolean {
-      if (!validationResult.result) {
-        this.serverError = new Array<string>();
-        for (let resultItem of validationResult.validationResultItems) {
-          this.serverError.push(getError(resultItem.error));
-        }
-        if (this.mmf.moneyflowSplitEntries) {
-          while (this.mmf.moneyflowSplitEntries.length < 2) {
-            this.addNewMoneyflowSplitEntryRow();
-          }
-        }
-        return false;
-      }
-      return true;
-    },
-    async importImportedMoneyflow(mim: ImportedMoneyflow) {
-      if (this.prepareServerCall()) {
-        const importedMoneyflow: ImportedMoneyflow = {
-          ...this.mmf,
-          accountNumber: mim.accountNumber,
-          bankCode: mim.bankCode,
-          externalid: mim.externalid,
-          name: mim.name,
-          usage: mim.usage,
-          accountNumberCapitalsource: mim.accountNumberCapitalsource,
-          bankCodeCapitalsource: mim.bankCodeCapitalsource,
-        };
-        const validationResult =
-          await ImportedMoneyflowControllerHandler.importImportedMoneyflow(
-            importedMoneyflow
-          );
-        if (this.followUpServerCall(validationResult)) {
-          return true;
-        }
-      }
-      return false;
-    },
-    async deleteImportedMoneyflow(id: number) {
-      await ImportedMoneyflowControllerHandler.deleteImportedMoneyflow(id);
-    },
-    async createMoneyflow(): Promise<boolean> {
-      if (this.prepareServerCall()) {
-        const validationResult =
-          await MoneyflowControllerHandler.createMoneyflow(
-            this.mmf,
-            this.preDefMoneyflowId,
-            this.saveAsPreDefMoneyflow
-          );
-        if (this.followUpServerCall(validationResult)) {
-          return true;
-        }
-      }
-      return false;
-    },
-    async updateMoneyflow(): Promise<Moneyflow | undefined> {
-      if (this.prepareServerCall()) {
-        const createMses = new Array<MoneyflowSplitEntry>();
-        const updateMses = new Array<MoneyflowSplitEntry>();
-        const updateMseIds = new Array<number>();
-        if (this.mmf.moneyflowSplitEntries) {
-          for (let mse of this.mmf.moneyflowSplitEntries) {
-            if (mse.id < 0) {
-              createMses.push(mse);
-            } else {
-              updateMses.push(mse);
-              updateMseIds.push(mse.id);
-            }
-          }
-        }
-        const deleteMseIds = this.originalMoneyflowSplitEntryIds.filter(
-          (mseId) => !updateMseIds.includes(mseId)
-        );
-
-        const moneyflowValidation: MoneyflowValidation =
-          await MoneyflowControllerHandler.updateMoneyflow(
-            this.mmf,
-            createMses,
-            updateMses,
-            deleteMseIds
-          );
-        const validationResult: ValidationResult =
-          moneyflowValidation.validationResult;
-        if (this.followUpServerCall(validationResult)) {
-          return moneyflowValidation.mmf;
-        }
-      }
-      return undefined;
-    },
-  },
-  expose: [
-    "createMoneyflow",
-    "updateMoneyflow",
-    "resetForm",
-    "importImportedMoneyflow",
-    "deleteImportedMoneyflow",
-  ],
-  components: {
-    ContractpartnerSelectVue,
-    CapitalsourceSelectVue,
-    PostingAccountSelectVue,
-    EditMoneyflowBaseSplitEntryRowVue,
-    DatepickerVue,
+  fillContractpartnerDefaults: {
+    type: Boolean,
+    default: false,
   },
 });
+onMounted(() => {
+  if (props.fillContractpartnerDefaults) resetForm();
+});
+
+watch(
+  () => props.selectedPreDefMoneyflow,
+  (newVal, oldVal) => {
+    if (newVal !== oldVal) selectPreDefMoneyflow(newVal);
+  }
+);
+
+watch(
+  () => props.mmfToEdit,
+  (newVal, oldVal) => {
+    if (newVal !== oldVal) resetForm();
+  }
+);
+
+const formIsValid = computed(() => {
+  const isValid =
+    bookingdateIsValid.value &&
+    contractpartnerIsValid.value &&
+    capitalsourceIsValid.value &&
+    amountIsValid.value &&
+    commentIsValid.value &&
+    postingaccountIsValid.value &&
+    mseRowsAreValid.value &&
+    mseRemainderIsValid.value;
+  if (isValid === null || isValid === undefined || isValid === true) {
+    return true;
+  }
+  return false;
+});
+const bookingdateErrorData = computed(() => {
+  return generateErrorData(
+    bookingdateIsValid.value,
+    "Buchungsdatum",
+    bookingdateErrorMessage.value
+  );
+});
+const contractpartnerErrorData = computed(() => {
+  return generateErrorData(
+    contractpartnerIsValid.value,
+    "Vertragspartner",
+    contractpartnerErrorMessage.value
+  );
+});
+const capitalsourceErrorData = computed(() => {
+  return generateErrorData(
+    capitalsourceIsValid.value,
+    "Kapitalquelle",
+    capitalsourceErrorMessage.value
+  );
+});
+const amountErrorData = computed(() => {
+  return generateErrorData(
+    amountIsValid.value,
+    "Betrag",
+    amountErrorMessage.value
+  );
+});
+const commentErrorData = computed(() => {
+  return generateErrorData(
+    commentIsValid.value,
+    "Kommentar",
+    commentErrorMessage.value
+  );
+});
+const postingaccountErrorData = computed(() => {
+  return generateErrorData(
+    postingaccountIsValid.value,
+    "Buchungskonto",
+    postingaccountErrorMessage.value
+  );
+});
+const validityDate = computed(() => {
+  if (mmf.value.invoiceDate) {
+    return mmf.value.invoiceDate;
+  } else if (bookingdateIsValid.value) {
+    return mmf.value.bookingDate;
+  } else {
+    const date = new Date();
+    date.setHours(0, 0, 0, 0);
+    return date;
+  }
+});
+const mseRemainder = computed(() => {
+  // avoid floating arithmetic problems by using fixed point arithmetics
+  let remainder = 0;
+  if (amount.value) {
+    remainder = toFixed(amount.value, 2);
+    if (mmf.value.moneyflowSplitEntries != undefined) {
+      for (const mse of mmf.value.moneyflowSplitEntries) {
+        if (mse.amount) remainder = toFixed(remainder - mse.amount, 2);
+      }
+    }
+  }
+  return remainder;
+});
+
+const resetForm = () => {
+  if (props.mmfToEdit && props.mmfToEdit.bookingDate) {
+    const bookingDate = new Date(props.mmfToEdit.bookingDate);
+    bookingDate.setHours(0, 0, 0, 0);
+    let invoiceDate: Date | undefined = undefined;
+    if (props.mmfToEdit.invoiceDate) {
+      invoiceDate = new Date(props.mmfToEdit.invoiceDate);
+      invoiceDate.setHours(0, 0, 0, 0);
+    }
+
+    mmf.value = {
+      amount: props.mmfToEdit.amount,
+      bookingDate: bookingDate,
+      capitalsourceId: props.mmfToEdit.capitalsourceId,
+      comment: props.mmfToEdit.comment,
+      contractpartnerId: props.mmfToEdit.contractpartnerId,
+      hasReceipt: props.mmfToEdit.hasReceipt,
+      id: props.mmfToEdit.id,
+      invoiceDate: invoiceDate,
+      postingAccountId: props.mmfToEdit.postingAccountId,
+      private: props.mmfToEdit.private,
+      userId: props.mmfToEdit.userId,
+      capitalsourceComment: props.mmfToEdit.capitalsourceComment,
+      contractpartnerName: props.mmfToEdit.contractpartnerName,
+      moneyflowSplitEntries: props.mmfToEdit.moneyflowSplitEntries,
+      postingAccountName: props.mmfToEdit.postingAccountName,
+    };
+
+    amount.value = mmf.value.amount;
+
+    // set correct defaults for imported moneyflows
+    if (mmf.value.comment === undefined) mmf.value.comment = "";
+    if (mmf.value.postingAccountId === undefined)
+      mmf.value.postingAccountId = 0;
+
+    originalMoneyflowSplitEntryIds.value = new Array<number>();
+    if (props.fillContractpartnerDefaults && mmf.value.contractpartnerId > 0) {
+      previousCommentSetByContractpartnerDefaults.value = mmf.value.comment;
+      previousPostingAccountSetByContractpartnerDefaults.value =
+        mmf.value.postingAccountId;
+
+      const contractpartner = contractpartnerStore.getContractpartner(
+        mmf.value.contractpartnerId
+      );
+      if (contractpartner) {
+        onContractpartnerSelected(contractpartner);
+      }
+    } else {
+      previousCommentSetByContractpartnerDefaults.value = "";
+      previousPostingAccountSetByContractpartnerDefaults.value = 0;
+    }
+
+    if (mmf.value.moneyflowSplitEntries == undefined) {
+      mmf.value.moneyflowSplitEntries = new Array<MoneyflowSplitEntry>();
+      addNewMoneyflowSplitEntryRow();
+      addNewMoneyflowSplitEntryRow();
+      document.getElementById("collapseSplitEntries")?.classList.remove("show");
+    } else {
+      for (let mse of mmf.value.moneyflowSplitEntries) {
+        originalMoneyflowSplitEntryIds.value.push(mse.id);
+      }
+      addNewMoneyflowSplitEntryRow();
+      document.getElementById("collapseSplitEntries")?.classList.add("show");
+    }
+    toggleMoneyflowFieldsForMse();
+  } else {
+    amount.value = undefined;
+
+    const bookingDate = new Date();
+    bookingDate.setHours(0, 0, 0, 0);
+    mmf.value.bookingDate = bookingDate;
+    mmf.value.invoiceDate = undefined;
+    mmf.value.contractpartnerId = 0;
+    mmf.value.contractpartnerName = "";
+    mmf.value.capitalsourceId = 0;
+    mmf.value.capitalsourceComment = "";
+    mmf.value.postingAccountId = 0;
+    mmf.value.postingAccountName = "";
+    mmf.value.comment = "";
+    mmf.value.private = false;
+
+    mmf.value.moneyflowSplitEntries = new Array<MoneyflowSplitEntry>();
+    addNewMoneyflowSplitEntryRow();
+    addNewMoneyflowSplitEntryRow();
+    showMoneyflowFields.value = true;
+
+    (amountRef.value as any).focus();
+    previousCommentSetByContractpartnerDefaults.value = "";
+    previousPostingAccountSetByContractpartnerDefaults.value = 0;
+  }
+  serverError.value = undefined;
+  mseRowsAreValid.value = null;
+  mseRemainderIsValid.value = undefined;
+
+  saveAsPreDefMoneyflow.value = false;
+  preDefMoneyflowId.value = 0;
+
+  bookingdateIsValid.value = null;
+  contractpartnerIsValid.value = null;
+  capitalsourceIsValid.value = null;
+  amountIsValid.value = null;
+  commentIsValid.value = null;
+  postingaccountIsValid.value = null;
+
+  toggleTextOff.value = toggleTextOffNoPreDefMoneyflow.value;
+  toggleTextOn.value = toggleTextOnNoPreDefMoneyflow.value;
+};
+/*
+ * Moneyflow Split Entry handling
+ */
+const addNewMoneyflowSplitEntryRow = () => {
+  if (mmf.value.moneyflowSplitEntries !== undefined) {
+    const mse = mmf.value.moneyflowSplitEntries;
+    const mseLength = mse.length;
+    let newMseId = -1;
+    if (mseLength > 0) {
+      // existing MoneyflowSplitEntries have positive IDs, new created rows must always have negative IDs
+      newMseId =
+        Math.abs(mmf.value.moneyflowSplitEntries[mseLength - 1].id) * -1 - 1;
+    }
+    const newMse = {
+      id: newMseId,
+      moneyflowId: mmf.value.id,
+      amount: 0,
+      comment: "",
+      postingAccountId: 0,
+    } as MoneyflowSplitEntry;
+    mse.push(newMse);
+  }
+};
+const onDeleteMoneyflowSplitEntryRow = (index: number) => {
+  const mse = mmf.value.moneyflowSplitEntries;
+  if (mse !== undefined) {
+    if (mse.length === 2) {
+      addNewMoneyflowSplitEntryRow();
+    }
+    mse.splice(index, 1);
+    validateMseRemainder();
+    toggleMoneyflowFieldsForMse();
+  }
+};
+const onAddMoneyflowSplitEntryRow = () => {
+  addNewMoneyflowSplitEntryRow();
+};
+const onMoneyflowSplitEntryRowAmountChanged = (
+  index: number,
+  amount: number
+) => {
+  const mse = mmf.value.moneyflowSplitEntries;
+  if (mse !== undefined) {
+    mse[index]["amount"] = amount;
+  }
+  validateMseRemainder();
+  toggleMoneyflowFieldsForMse();
+};
+const onMoneyflowSplitEntryRowCommentChanged = (
+  index: number,
+  comment: string
+) => {
+  const mse = mmf.value.moneyflowSplitEntries;
+  if (mse !== undefined) {
+    mse[index]["comment"] = comment;
+  }
+  validateMseRemainder();
+  toggleMoneyflowFieldsForMse();
+};
+const onMoneyflowSplitEntryRowPostingAccountIdChanged = (
+  index: number,
+  postingAccountId: number,
+  postingAccountName: string
+) => {
+  const mse = mmf.value.moneyflowSplitEntries;
+  if (mse !== undefined) {
+    mse[index]["postingAccountId"] = postingAccountId;
+    mse[index]["postingAccountName"] = postingAccountName;
+  }
+  validateMseRemainder();
+  toggleMoneyflowFieldsForMse();
+};
+const toggleMoneyflowFieldsForMse = () => {
+  showMoneyflowFields.value = allMseRowsAreEmpty();
+};
+const allMseRowsAreEmpty = (): boolean => {
+  let allMseRowsAreEmpty = true;
+  const mse = mmf.value.moneyflowSplitEntries;
+  if (mse !== undefined) {
+    for (let entry of mse) {
+      if (
+        entry.amount !== 0 ||
+        entry.comment != "" ||
+        entry.postingAccountId !== 0
+      ) {
+        allMseRowsAreEmpty = false;
+        break;
+      }
+    }
+  }
+  return allMseRowsAreEmpty;
+};
+const validateMseRemainder = () => {
+  if (allMseRowsAreEmpty() || mseRemainder.value === 0) {
+    mseRemainderIsValid.value = undefined;
+  } else {
+    mseRemainderIsValid.value = false;
+  }
+};
+const validateMseRows = () => {
+  let mseRowsValid = true;
+
+  const mseRowRefs = mseRow.value as Array<
+    typeof EditMoneyflowBaseSplitEntryRowVue
+  >;
+  for (let ref of mseRowRefs) {
+    const valid = ref.validateRow() as boolean;
+    mseRowsValid &&= valid;
+  }
+
+  mseRowsAreValid.value = mseRowsValid;
+};
+/*
+ * Moneyflow handling
+ */
+const validateBookingdate = () => {
+  [bookingdateIsValid.value, bookingdateErrorMessage.value] =
+    validateInputField(mmf.value.bookingDate, "Datum angeben!");
+};
+const validateContractpartner = () => {
+  [contractpartnerIsValid.value, contractpartnerErrorMessage.value] =
+    validateInputField(mmf.value.contractpartnerId, "Vertragspartner angeben!");
+};
+const validateCapitalsource = () => {
+  [capitalsourceIsValid.value, capitalsourceErrorMessage.value] =
+    validateInputField(mmf.value.capitalsourceId, "Kapitalquelle angeben!");
+};
+const validateAmount = () => {
+  [amountIsValid.value, amountErrorMessage.value] = validateInputField(
+    amount.value,
+    "Betrag angeben!"
+  );
+};
+const validateComment = () => {
+  [commentIsValid.value, commentErrorMessage.value] = validateInputField(
+    mmf.value.comment,
+    "Kommentar angeben!"
+  );
+};
+const validatePostingaccount = () => {
+  [postingaccountIsValid.value, postingaccountErrorMessage.value] =
+    validateInputField(mmf.value.postingAccountId, "Buchungskonto angeben!");
+};
+const onContractpartnerSelected = (contractpartner: Contractpartner) => {
+  if (contractpartner) {
+    mmf.value.contractpartnerId = contractpartner.id;
+    mmf.value.contractpartnerName = contractpartner.name;
+    if (
+      mmf.value.comment === previousCommentSetByContractpartnerDefaults.value
+    ) {
+      mmf.value.comment = contractpartner.moneyflowComment;
+      previousCommentSetByContractpartnerDefaults.value =
+        contractpartner.moneyflowComment;
+      if (contractpartner.moneyflowComment) validateComment();
+      else commentIsValid.value = null;
+    }
+    if (
+      mmf.value.postingAccountId ===
+      previousPostingAccountSetByContractpartnerDefaults.value
+    ) {
+      const mpaId = contractpartner.postingAccountId
+        ? contractpartner.postingAccountId
+        : 0;
+
+      mmf.value.postingAccountId = mpaId;
+      previousPostingAccountSetByContractpartnerDefaults.value = mpaId;
+      if (contractpartner.postingAccountId) validatePostingaccount();
+      else postingaccountIsValid.value = null;
+    }
+  } else {
+    mmf.value.contractpartnerId = 0;
+    mmf.value.contractpartnerName = "";
+    if (
+      mmf.value.comment === previousCommentSetByContractpartnerDefaults.value
+    ) {
+      mmf.value.comment = "";
+      previousCommentSetByContractpartnerDefaults.value = "";
+      commentIsValid.value = null;
+    }
+    if (
+      mmf.value.postingAccountId ===
+      previousPostingAccountSetByContractpartnerDefaults.value
+    ) {
+      mmf.value.postingAccountId = 0;
+      previousPostingAccountSetByContractpartnerDefaults.value = 0;
+      postingaccountIsValid.value = null;
+    }
+  }
+  validateContractpartner();
+};
+const onCapitalsourceSelected = (capitalsource: Capitalsource) => {
+  if (capitalsource) {
+    mmf.value.capitalsourceId = capitalsource.id;
+    mmf.value.capitalsourceComment = capitalsource.comment;
+  } else {
+    mmf.value.capitalsourceId = 0;
+    mmf.value.capitalsourceComment = "";
+  }
+  validateCapitalsource();
+};
+const onPostingAccountSelected = (postingAccount: PostingAccount) => {
+  if (postingAccount) {
+    mmf.value.postingAccountId = postingAccount.id;
+    mmf.value.postingAccountName = postingAccount.name;
+  } else {
+    mmf.value.postingAccountId = 0;
+    mmf.value.postingAccountName = "";
+  }
+  validatePostingaccount();
+};
+const selectPreDefMoneyflow = (
+  preDefMoneyflow: PreDefMoneyflow | undefined
+) => {
+  if (preDefMoneyflow === undefined) {
+    resetForm();
+  } else {
+    if (preDefMoneyflow) {
+      amount.value = preDefMoneyflow.amount;
+      mmf.value.contractpartnerId = preDefMoneyflow.contractpartnerId;
+      mmf.value.comment = preDefMoneyflow.comment;
+      mmf.value.postingAccountId = preDefMoneyflow.postingAccountId;
+      mmf.value.capitalsourceId = preDefMoneyflow.capitalsourceId;
+
+      toggleTextOff.value = toggleTextOffPreDefMoneyflow.value;
+      toggleTextOn.value = toggleTextOnPreDefMoneyflow.value;
+      preDefMoneyflowId.value = preDefMoneyflow.id;
+    }
+  }
+};
+const bookingdateSelected = (date: Date) => {
+  mmf.value.bookingDate = date;
+  validateBookingdate();
+};
+const invoicedateSelected = (date: Date) => {
+  mmf.value.invoiceDate = date;
+};
+const prepareServerCall = (): boolean => {
+  validateMseRows();
+  validateMseRemainder();
+  if (!allMseRowsAreEmpty() && mmf.value.moneyflowSplitEntries) {
+    let mse = {} as MoneyflowSplitEntry;
+    for (let filledMse of mmf.value.moneyflowSplitEntries) {
+      if (filledMse.comment && filledMse.postingAccountId) {
+        mse = filledMse;
+        break;
+      }
+    }
+    if (!mmf.value.comment) {
+      mmf.value.comment = mse.comment;
+    }
+    if (!mmf.value.postingAccountId) {
+      mmf.value.postingAccountId = mse.postingAccountId;
+    }
+  }
+
+  validateAmount();
+  validateBookingdate();
+  validateCapitalsource();
+  validateComment();
+  validateContractpartner();
+  validatePostingaccount();
+
+  if (formIsValid.value) {
+    if (amount.value) mmf.value.amount = amount.value;
+    // remove empty rows
+    if (mmf.value.moneyflowSplitEntries) {
+      mmf.value.moneyflowSplitEntries = mmf.value.moneyflowSplitEntries.filter(
+        (mse) => mse.amount && mse.comment && mse.postingAccountId
+      );
+    }
+    return true;
+  }
+  return false;
+};
+const followUpServerCall = (validationResult: ValidationResult): boolean => {
+  if (!validationResult.result) {
+    serverError.value = new Array<string>();
+    for (let resultItem of validationResult.validationResultItems) {
+      serverError.value.push(getError(resultItem.error));
+    }
+    if (mmf.value.moneyflowSplitEntries) {
+      while (mmf.value.moneyflowSplitEntries.length < 2) {
+        addNewMoneyflowSplitEntryRow();
+      }
+    }
+    return false;
+  }
+  return true;
+};
+const importImportedMoneyflow = async (mim: ImportedMoneyflow) => {
+  if (prepareServerCall()) {
+    const importedMoneyflow: ImportedMoneyflow = {
+      ...mmf.value,
+      accountNumber: mim.accountNumber,
+      bankCode: mim.bankCode,
+      externalid: mim.externalid,
+      name: mim.name,
+      usage: mim.usage,
+      accountNumberCapitalsource: mim.accountNumberCapitalsource,
+      bankCodeCapitalsource: mim.bankCodeCapitalsource,
+    };
+    const validationResult =
+      await ImportedMoneyflowControllerHandler.importImportedMoneyflow(
+        importedMoneyflow
+      );
+    if (followUpServerCall(validationResult)) {
+      return true;
+    }
+  }
+  return false;
+};
+const deleteImportedMoneyflow = async (id: number) => {
+  await ImportedMoneyflowControllerHandler.deleteImportedMoneyflow(id);
+};
+const createMoneyflow = async (): Promise<boolean> => {
+  if (prepareServerCall()) {
+    const validationResult = await MoneyflowControllerHandler.createMoneyflow(
+      mmf.value,
+      preDefMoneyflowId.value,
+      saveAsPreDefMoneyflow.value
+    );
+    if (followUpServerCall(validationResult)) {
+      return true;
+    }
+  }
+  return false;
+};
+const updateMoneyflow = async (): Promise<Moneyflow | undefined> => {
+  if (prepareServerCall()) {
+    const createMses = new Array<MoneyflowSplitEntry>();
+    const updateMses = new Array<MoneyflowSplitEntry>();
+    const updateMseIds = new Array<number>();
+    if (mmf.value.moneyflowSplitEntries) {
+      for (let mse of mmf.value.moneyflowSplitEntries) {
+        if (mse.id < 0) {
+          createMses.push(mse);
+        } else {
+          updateMses.push(mse);
+          updateMseIds.push(mse.id);
+        }
+      }
+    }
+    const deleteMseIds = originalMoneyflowSplitEntryIds.value.filter(
+      (mseId) => !updateMseIds.includes(mseId)
+    );
+
+    const moneyflowValidation: MoneyflowValidation =
+      await MoneyflowControllerHandler.updateMoneyflow(
+        mmf.value,
+        createMses,
+        updateMses,
+        deleteMseIds
+      );
+    const validationResult: ValidationResult =
+      moneyflowValidation.validationResult;
+    if (followUpServerCall(validationResult)) {
+      return moneyflowValidation.mmf;
+    }
+  }
+  return undefined;
+};
+
+defineExpose([
+  createMoneyflow,
+  updateMoneyflow,
+  resetForm,
+  importImportedMoneyflow,
+  deleteImportedMoneyflow,
+]);
 </script>
