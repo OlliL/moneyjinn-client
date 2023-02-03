@@ -84,271 +84,247 @@
     </div>
   </div>
 </template>
-<script lang="ts">
+<script lang="ts" setup>
+import { computed, ref, watch } from "vue";
+
 import PostingAccountSelectVue from "@/components/postingaccount/PostingAccountSelect.vue";
 
-import type { PostingAccount } from "@/model/postingaccount/PostingAccount";
-import { generateErrorData, type ErrorData } from "@/tools/views/ErrorData";
+import { generateErrorData } from "@/tools/views/ErrorData";
 import { validateInputField } from "@/tools/views/ValidateInputField";
-import { defineComponent } from "vue";
 
-type EditMoneyflowSplitEntryData = {
-  mseAmount: number | undefined;
-  mseComment: string | undefined;
-  msePostingAccountId: number;
-  msePostingAccountName: string | undefined;
-  amountIsValid: boolean | null;
-  amountErrorMessage: string;
-  commentIsValid: boolean | null;
-  commentErrorMessage: string;
-  postingaccountIsValid: boolean | null;
-  postingaccountErrorMessage: string;
-};
-export default defineComponent({
-  name: "EditMoneyflowBaseSplitEntryRow",
-  data(): EditMoneyflowSplitEntryData {
-    return {
-      amountIsValid: null,
-      amountErrorMessage: "",
-      commentIsValid: null,
-      commentErrorMessage: "",
-      postingaccountIsValid: null,
-      postingaccountErrorMessage: "",
-      mseAmount: undefined,
-      mseComment: undefined,
-      msePostingAccountId: 0,
-      msePostingAccountName: undefined,
-    };
-  },
-  emits: [
-    "deleteMoneyflowSplitEntryRow",
-    "addMoneyflowSplitEntryRow",
-    "amountChanged",
-    "commentChanged",
-    "postingAccountIdChanged",
-  ],
-  expose: ["validateRow"],
-  props: {
-    amount: {
-      type: Number,
-      required: false,
-    },
-    comment: {
-      type: String,
-      required: false,
-    },
-    postingAccountId: {
-      type: Number,
-      required: false,
-    },
-    isLastRow: {
-      type: Boolean,
-      required: true,
-    },
-    index: {
-      type: Number,
-      required: true,
-    },
-    remainder: {
-      type: Number,
-      required: true,
-    },
-    remainderIsValid: {
-      type: Boolean,
-      required: false,
-    },
-    moneyflowComment: {
-      type: String,
-      required: false,
-    },
-    moneyflowPostingAccountId: {
-      type: Number,
-      required: false,
-    },
-  },
-  watch: {
-    amount: {
-      handler(newVal: number, oldVal: number) {
-        // we want to display an empty amount field when 0 is the amount!
-        if (newVal === 0) this.mseAmount = undefined;
-        else if (newVal !== oldVal) this.mseAmount = newVal;
-      },
-      immediate: true,
-    },
-    comment: {
-      handler(newVal: string, oldVal: string) {
-        if (newVal != oldVal) this.mseComment = newVal;
-      },
-      immediate: true,
-    },
-    postingAccountId: {
-      handler(newVal: number, oldVal: number) {
-        if (newVal != oldVal) this.msePostingAccountId = newVal;
-      },
-      immediate: true,
-    },
-    rowEmpty: function (newVal: boolean, oldVal: boolean) {
-      // remove all form errors when the row becomes empty again
-      if (newVal != oldVal && newVal == true) this.validateRow();
-    },
-  },
-  computed: {
-    showRemainder() {
-      return this.isLastRow && this.remainder != 0;
-    },
-    rowEmpty() {
-      return !this.mseAmount && !this.mseComment && !this.msePostingAccountId;
-    },
-    formIsValid() {
-      return (
-        this.rowEmpty ||
-        (this.amountIsValid &&
-          this.commentIsValid &&
-          this.postingaccountIsValid)
-      );
-    },
-    amountErrorData(): ErrorData {
-      return generateErrorData(
-        this.amountIsValid,
-        "Betrag",
-        this.amountErrorMessage
-      );
-    },
-    commentErrorData(): ErrorData {
-      return generateErrorData(
-        this.commentIsValid,
-        "Kommentar",
-        this.commentErrorMessage
-      );
-    },
-    postingaccountErrorData(): ErrorData {
-      return generateErrorData(
-        this.postingaccountIsValid,
-        "Buchungskonto",
-        this.postingaccountErrorMessage
-      );
-    },
-    remainderErrorData(): ErrorData {
-      return generateErrorData(
-        this.remainderIsValid,
-        "Rest",
-        "Rest muss 0 sein!"
-      );
-    },
-  },
-  methods: {
-    deleteMoneyflowSplitEntryRow() {
-      this.$emit("deleteMoneyflowSplitEntryRow", this.index);
-    },
-    addMoneyflowSplitEntryRow() {
-      this.$emit("addMoneyflowSplitEntryRow");
-    },
-    /*
-     * Amount
-     */
-    amountChangedWithNewRow() {
-      this.amountChanged();
-      if (this.isLastRow) this.addMoneyflowSplitEntryRow();
-    },
-    amountChanged() {
-      this.validateAmount();
-      let amount = this.mseAmount;
-      // when amount is empty, we must send 0 because its a number
-      if (!amount) amount = 0;
-      this.$emit("amountChanged", this.index, amount);
-    },
-    validateAmount() {
-      if (!this.rowEmpty) {
-        [this.amountIsValid, this.amountErrorMessage] = validateInputField(
-          this.mseAmount,
-          "Betrag angeben!"
-        );
-      } else {
-        this.amountIsValid = null;
-      }
-    },
-    /*
-     * Comment
-     */
-    commentChangedWithNewRow() {
-      this.commentChanged();
-      if (this.isLastRow) this.addMoneyflowSplitEntryRow();
-    },
-    commentChanged() {
-      this.validateComment();
-      this.$emit("commentChanged", this.index, this.mseComment);
-    },
-    validateComment() {
-      if (!this.rowEmpty) {
-        [this.commentIsValid, this.commentErrorMessage] = validateInputField(
-          this.mseComment,
-          "Kommentar angeben!"
-        );
-      } else {
-        this.commentIsValid = null;
-      }
-    },
-    /*
-     * PostingAccount
-     */
-    postingaccountChangedWithNewRow() {
-      this.postingaccountChanged();
-      if (this.isLastRow) this.addMoneyflowSplitEntryRow();
-    },
-    postingaccountChanged() {
-      this.validatePostingaccount();
-      this.$emit(
-        "postingAccountIdChanged",
-        this.index,
-        this.msePostingAccountId,
-        this.msePostingAccountName
-      );
-    },
-    validatePostingaccount() {
-      if (!this.rowEmpty) {
-        [this.postingaccountIsValid, this.postingaccountErrorMessage] =
-          validateInputField(
-            this.msePostingAccountId,
-            "Buchungskonto angeben!"
-          );
-      } else {
-        this.postingaccountIsValid = null;
-      }
-    },
-    validateRow(): boolean {
-      this.validateAmount();
-      this.validateComment();
-      this.validatePostingaccount();
-      return !!this.formIsValid;
-    },
-    onPostingAccountSelected(postingAccount: PostingAccount) {
-      // can be undefined when first empty option is selected
-      if (postingAccount) {
-        this.msePostingAccountId = postingAccount.id;
-        this.msePostingAccountName = postingAccount.name;
-      } else {
-        this.msePostingAccountId = 0;
-        this.msePostingAccountName = "";
-      }
-      this.postingaccountChangedWithNewRow();
-    },
-    useRemainder() {
-      this.mseAmount = this.remainder;
-      this.amountChanged();
+import type { PostingAccount } from "@/model/postingaccount/PostingAccount";
 
-      if (this.moneyflowComment) {
-        this.mseComment = this.moneyflowComment;
-        this.commentChanged();
-      }
+const amountIsValid = ref(null as boolean | null);
+const amountErrorMessage = ref("");
+const commentIsValid = ref(null as boolean | null);
+const commentErrorMessage = ref("");
+const postingaccountIsValid = ref(null as boolean | null);
+const postingaccountErrorMessage = ref("");
+const mseAmount = ref(undefined as number | undefined);
+const mseComment = ref(undefined as string | undefined);
+const msePostingAccountId = ref(0);
+const msePostingAccountName = ref(undefined as string | undefined);
 
-      if (this.moneyflowPostingAccountId) {
-        this.msePostingAccountId = this.moneyflowPostingAccountId;
-        this.postingaccountChanged();
-      }
+const emit = defineEmits([
+  "deleteMoneyflowSplitEntryRow",
+  "addMoneyflowSplitEntryRow",
+  "amountChanged",
+  "commentChanged",
+  "postingAccountIdChanged",
+]);
 
-      if (this.isLastRow) this.addMoneyflowSplitEntryRow();
-    },
+const props = defineProps({
+  amount: {
+    type: Number,
+    required: false,
   },
-  components: { PostingAccountSelectVue },
+  comment: {
+    type: String,
+    required: false,
+  },
+  postingAccountId: {
+    type: Number,
+    required: false,
+  },
+  isLastRow: {
+    type: Boolean,
+    required: true,
+  },
+  index: {
+    type: Number,
+    required: true,
+  },
+  remainder: {
+    type: Number,
+    required: true,
+  },
+  remainderIsValid: {
+    type: Boolean,
+    required: false,
+  },
+  moneyflowComment: {
+    type: String,
+    required: false,
+  },
+  moneyflowPostingAccountId: {
+    type: Number,
+    required: false,
+  },
 });
+
+const showRemainder = computed(() => {
+  return props.isLastRow && props.remainder != 0;
+});
+const rowEmpty = computed(() => {
+  return !mseAmount.value && !mseComment.value && !msePostingAccountId.value;
+});
+const formIsValid = computed(() => {
+  return (
+    rowEmpty.value ||
+    (amountIsValid.value && commentIsValid.value && postingaccountIsValid.value)
+  );
+});
+const amountErrorData = computed(() => {
+  return generateErrorData(
+    amountIsValid.value,
+    "Betrag",
+    amountErrorMessage.value
+  );
+});
+const commentErrorData = computed(() => {
+  return generateErrorData(
+    commentIsValid.value,
+    "Kommentar",
+    commentErrorMessage.value
+  );
+});
+const postingaccountErrorData = computed(() => {
+  return generateErrorData(
+    postingaccountIsValid.value,
+    "Buchungskonto",
+    postingaccountErrorMessage.value
+  );
+});
+const remainderErrorData = computed(() => {
+  return generateErrorData(props.remainderIsValid, "Rest", "Rest muss 0 sein!");
+});
+
+watch(
+  () => props.amount,
+  (newVal, oldVal) => {
+    // we want to display an empty amount field when 0 is the amount!
+    if (newVal === 0) mseAmount.value = undefined;
+    else if (newVal !== oldVal) mseAmount.value = newVal;
+  },
+  { immediate: true }
+);
+
+watch(
+  () => props.comment,
+  (newVal, oldVal) => {
+    if (newVal != oldVal) mseComment.value = newVal;
+  },
+  { immediate: true }
+);
+watch(
+  () => props.postingAccountId,
+  (newVal, oldVal) => {
+    if (newVal != oldVal) msePostingAccountId.value = newVal ? newVal : 0;
+  },
+  { immediate: true }
+);
+watch(rowEmpty, (newVal, oldVal) => {
+  // remove all form errors when the row becomes empty again
+  if (newVal != oldVal && newVal == true) validateRow();
+});
+
+const deleteMoneyflowSplitEntryRow = () => {
+  emit("deleteMoneyflowSplitEntryRow", props.index);
+};
+const addMoneyflowSplitEntryRow = () => {
+  emit("addMoneyflowSplitEntryRow");
+};
+/*
+ * Amount
+ */
+const amountChangedWithNewRow = () => {
+  amountChanged();
+  if (props.isLastRow) addMoneyflowSplitEntryRow();
+};
+const amountChanged = () => {
+  validateAmount();
+  let amount = mseAmount.value;
+  // when amount is empty, we must send 0 because its a number
+  if (!amount) amount = 0;
+  emit("amountChanged", props.index, amount);
+};
+const validateAmount = () => {
+  if (!rowEmpty.value) {
+    [amountIsValid.value, amountErrorMessage.value] = validateInputField(
+      mseAmount.value,
+      "Betrag angeben!"
+    );
+  } else {
+    amountIsValid.value = null;
+  }
+};
+/*
+ * Comment
+ */
+const commentChangedWithNewRow = () => {
+  commentChanged();
+  if (props.isLastRow) addMoneyflowSplitEntryRow();
+};
+const commentChanged = () => {
+  validateComment();
+  emit("commentChanged", props.index, mseComment.value);
+};
+const validateComment = () => {
+  if (!rowEmpty.value) {
+    [commentIsValid.value, commentErrorMessage.value] = validateInputField(
+      mseComment.value,
+      "Kommentar angeben!"
+    );
+  } else {
+    commentIsValid.value = null;
+  }
+};
+/*
+ * PostingAccount
+ */
+const postingaccountChangedWithNewRow = () => {
+  postingaccountChanged();
+  if (props.isLastRow) addMoneyflowSplitEntryRow();
+};
+const postingaccountChanged = () => {
+  validatePostingaccount();
+  emit(
+    "postingAccountIdChanged",
+    props.index,
+    msePostingAccountId.value,
+    msePostingAccountName.value
+  );
+};
+const validatePostingaccount = () => {
+  if (!rowEmpty.value) {
+    [postingaccountIsValid.value, postingaccountErrorMessage.value] =
+      validateInputField(msePostingAccountId.value, "Buchungskonto angeben!");
+  } else {
+    postingaccountIsValid.value = null;
+  }
+};
+const validateRow = (): boolean => {
+  validateAmount();
+  validateComment();
+  validatePostingaccount();
+  return !!formIsValid.value;
+};
+const onPostingAccountSelected = (postingAccount: PostingAccount) => {
+  // can be undefined when first empty option is selected
+  if (postingAccount) {
+    msePostingAccountId.value = postingAccount.id;
+    msePostingAccountName.value = postingAccount.name;
+  } else {
+    msePostingAccountId.value = 0;
+    msePostingAccountName.value = "";
+  }
+  postingaccountChangedWithNewRow();
+};
+const useRemainder = () => {
+  mseAmount.value = props.remainder;
+  amountChanged();
+
+  if (props.moneyflowComment) {
+    mseComment.value = props.moneyflowComment;
+    commentChanged();
+  }
+
+  if (props.moneyflowPostingAccountId) {
+    msePostingAccountId.value = props.moneyflowPostingAccountId;
+    postingaccountChanged();
+  }
+
+  if (props.isLastRow) addMoneyflowSplitEntryRow();
+};
+defineExpose({ validateRow });
 </script>
