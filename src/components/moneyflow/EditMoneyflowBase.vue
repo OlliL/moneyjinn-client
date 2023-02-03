@@ -177,7 +177,7 @@
         </div>
         <div class="collapse" :id="'collapseSplitEntries' + idSuffix">
           <div class="card-body">
-            <EditMoneyflowSplitEntryRowVue
+            <EditMoneyflowBaseSplitEntryRowVue
               v-for="(mse, index) in mmf.moneyflowSplitEntries"
               ref="mseRow"
               :key="mse.id"
@@ -210,7 +210,7 @@ import { defineComponent, type PropType } from "vue";
 
 import CapitalsourceSelectVue from "@/components/capitalsource/CapitalsourceSelect.vue";
 import ContractpartnerSelectVue from "@/components/contractpartner/ContractpartnerSelect.vue";
-import EditMoneyflowSplitEntryRowVue from "@/components/moneyflow/EditMoneyflowSplitEntryRow.vue";
+import EditMoneyflowBaseSplitEntryRowVue from "@/components/moneyflow/EditMoneyflowBaseSplitEntryRow.vue";
 import PostingAccountSelectVue from "@/components/postingaccount/PostingAccountSelect.vue";
 import DatepickerVue from "@/components/Datepicker.vue";
 
@@ -636,7 +636,7 @@ export default defineComponent({
       let mseRowsValid = true;
 
       const mseRowRefs = this.$refs.mseRow as Array<
-        typeof EditMoneyflowSplitEntryRowVue
+        typeof EditMoneyflowBaseSplitEntryRowVue
       >;
       for (let ref of mseRowRefs) {
         const valid = ref.validateRow() as boolean;
@@ -909,7 +909,7 @@ export default defineComponent({
     ContractpartnerSelectVue,
     CapitalsourceSelectVue,
     PostingAccountSelectVue,
-    EditMoneyflowSplitEntryRowVue,
+    EditMoneyflowBaseSplitEntryRowVue,
     DatepickerVue,
   },
 });
