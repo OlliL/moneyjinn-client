@@ -348,6 +348,7 @@ import type { EtfSalesCalculation } from "@/model/etf/EtfSalesCalculation";
 import type { SelectBoxValue } from "@/model/SelectBoxValue";
 
 import EtfControllerHandler from "@/handler/EtfControllerHandler";
+import DivError from "@/components/DivError.vue";
 
 const serverErrors = ref(new Array<string>());
 

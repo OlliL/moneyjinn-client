@@ -76,6 +76,11 @@ export const useCapitalsourceStore = defineStore("capitalsource", {
           return { id: mcs.id, value: mcs.comment } as SelectBoxValue;
         });
     },
+    getAllAsSelectBoxValues(): Array<SelectBoxValue> {
+      return this.capitalsource.map((mcs) => {
+        return { id: mcs.id, value: mcs.comment } as SelectBoxValue;
+      });
+    },
     getCapitalsource(id: number): Capitalsource | undefined {
       return this.capitalsource.find((mcp) => {
         return mcp.id === id;
