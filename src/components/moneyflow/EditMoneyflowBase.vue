@@ -855,11 +855,11 @@ const updateMoneyflow = async (): Promise<Moneyflow | undefined> => {
   return undefined;
 };
 
-defineExpose([
+defineExpose({
   createMoneyflow,
   updateMoneyflow,
   resetForm,
   importImportedMoneyflow,
   deleteImportedMoneyflow,
-]);
+});
 </script>
