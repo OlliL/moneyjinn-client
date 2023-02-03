@@ -64,11 +64,14 @@ import { preDefMoneyflowAlreadyUsedThisMonth } from "@/model/moneyflow/PreDefMon
 import type { PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
 
 import PreDefMoneyflowControllerHandler from "@/handler/PreDefMoneyflowControllerHandler";
+import { useForm } from "vee-validate";
 
 const preDefMoneyflows = ref(new Array<PreDefMoneyflow>());
 const preDefMoneyflowId = ref(0);
 const selectedPreDefMoneyflow = ref({} as PreDefMoneyflow | undefined);
 const editMoneyflowVue = ref();
+
+const { handleSubmit, values, setFieldTouched } = useForm();
 
 onMounted(() => {
   PreDefMoneyflowControllerHandler.fetchAllPreDefMoneyflow().then(
@@ -97,14 +100,17 @@ const selectPreDefMoneyflow = () => {
     }
   }
 };
-const createMoneyflow = () => {
-  editMoneyflowVue.value.createMoneyflow().then(() => {
-    resetForm();
+
+const createMoneyflow = handleSubmit(() => {
+  editMoneyflowVue.value.createMoneyflow().then((ret: boolean) => {
+    if (ret) resetForm();
   });
-};
+});
+
 const resetForm = () => {
   preDefMoneyflowId.value = 0;
   selectPreDefMoneyflow();
   editMoneyflowVue.value.resetForm();
+  Object.keys(values).forEach((field) => setFieldTouched(field, false));
 };
 </script>
