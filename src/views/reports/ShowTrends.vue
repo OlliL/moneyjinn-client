@@ -13,29 +13,21 @@
               <div class="container-fluid">
                 <div class="row no-gutters flex-lg-nowrap">
                   <div class="col-md-6 col-xs-12 mb-2">
-                    <DatepickerVue
+                    <InputDate
+                      v-model="startDate"
+                      :validation-schema="schema.startDate"
                       id="startDate"
-                      :label="startDateErrorData.fieldLabel"
-                      :default-date="startDate"
-                      pick-mode="month"
-                      :input-class="
-                        ' form-control ' + startDateErrorData.inputClass
-                      "
-                      :label-style="'color: ' + startDateErrorData.fieldColor"
-                      @date-selected="startDateSelected"
+                      pickMode="month"
+                      field-label="Startdatum"
                     />
                   </div>
                   <div class="col-md-6 col-xs-12">
-                    <DatepickerVue
+                    <InputDate
+                      v-model="endDate"
+                      :validation-schema="schema.endDate"
                       id="endDate"
-                      :label="endDateErrorData.fieldLabel"
-                      :default-date="endDate"
-                      pick-mode="month"
-                      :input-class="
-                        ' form-control ' + endDateErrorData.inputClass
-                      "
-                      :label-style="'color: ' + endDateErrorData.fieldColor"
-                      @date-selected="endDateSelected"
+                      pickMode="month"
+                      field-label="Enddatum"
                     />
                   </div>
                 </div>
@@ -43,31 +35,32 @@
                 <div class="row no-gutters flex-lg-nowrap">
                   <div class="col-12 mb-3 text-start">
                     <label
-                      for="capitalsourceIds2"
+                      for="capitalsourceIds"
                       :style="
                         'opacity: .65; color: ' +
-                        capitalsourceErrorData.fieldColor
+                        errorCapitalsourceIds.fieldColor
                       "
                       ><small>{{
-                        capitalsourceErrorData.fieldLabel
+                        errorCapitalsourceIds.fieldLabel
                       }}</small></label
                     >
                     <select
                       v-model="capitalsourceIds"
-                      id="capitalsourceIds2"
+                      id="capitalsourceIds"
+                      name="capitalsourceIds"
                       :class="
                         'form-select form-control ' +
-                        capitalsourceErrorData.inputClass
+                        errorCapitalsourceIds.inputClass
                       "
                       multiple
                       size="4"
                     >
                       <option
-                        v-for="capitalsource of capitalsourceArray"
-                        :key="capitalsource.id"
-                        :value="capitalsource.id"
+                        v-for="value of selectBoxValues"
+                        :key="value.id"
+                        :value="value.id"
                       >
-                        {{ capitalsource.comment }}
+                        {{ value.value }}
                       </option>
                     </select>
                   </div>
@@ -101,16 +94,7 @@
   </div>
 </template>
 
-<script lang="ts">
-import ReportControllerHandler from "@/handler/ReportControllerHandler";
-import type { Capitalsource } from "@/model/capitalsource/Capitalsource";
-import type { TrendsParameter } from "@/model/report/TrendsParameter";
-import type { Trends } from "@/model/report/Trends";
-import { useCapitalsourceStore } from "@/stores/CapitalsourceStore";
-import { generateErrorData, type ErrorData } from "@/tools/views/ErrorData";
-import { validateInputField } from "@/tools/views/ValidateInputField";
-import DatepickerVue from "@/components/Datepicker.vue";
-import { defineComponent } from "vue";
+<script lang="ts" setup>
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -122,9 +106,120 @@ import {
   Legend,
   Filler,
 } from "chart.js";
-
+import { useField, useForm } from "vee-validate";
+import { toFieldValidator } from "@vee-validate/zod";
+import { computed, onMounted, ref } from "vue";
 import { Line } from "vue-chartjs";
+import { date, number } from "zod";
+
+import InputDate from "@/components/InputDate.vue";
+
 import { formatNumber } from "@/tools/views/FormatNumber";
+import { useCapitalsourceStore } from "@/stores/CapitalsourceStore";
+import {
+  generateErrorDataVeeValidate,
+  type ErrorData,
+} from "@/tools/views/ErrorData";
+import { globErr } from "@/tools/views/ZodUtil";
+
+import type { SelectBoxValue } from "@/model/SelectBoxValue";
+import type { TrendsParameter } from "@/model/report/TrendsParameter";
+
+import ReportControllerHandler from "@/handler/ReportControllerHandler";
+
+const schema = {
+  startDate: date(globErr("Bitte Startdatum angeben!")),
+  endDate: date(globErr("Bitte Enddatum angeben!")),
+  capitalsourceIds: number().array().min(1, "Bitte Buchungskonto angeben!"),
+};
+
+const dataLoaded = ref(false);
+const trendsGraphLoaded = ref(false);
+const startDate = ref(new Date());
+const endDate = ref(new Date());
+const chartData = ref({
+  labels: new Array<string>(),
+  datasets: [
+    {
+      label: "festgeschrieben",
+      data: new Array<number | null>(),
+      fill: true,
+      borderColor: "#B0C4DE",
+      backgroundColor: (ctx: any) => {
+        const canvas = ctx.chart.ctx;
+        const gradient = canvas.createLinearGradient(0, 500, 0, 0);
+
+        gradient.addColorStop(0, "rgba(176, 196, 222, 1)");
+        gradient.addColorStop(1, "rgba(230, 230, 250, 1)");
+
+        return gradient;
+      },
+    },
+    {
+      label: "berechnet",
+      data: new Array<number | null>(),
+      fill: true,
+      borderColor: "#689bde",
+      backgroundColor: (ctx: any) => {
+        const canvas = ctx.chart.ctx;
+        const gradient = canvas.createLinearGradient(0, 500, 0, 0);
+
+        gradient.addColorStop(0, "rgba(104, 155, 222, 1)");
+        gradient.addColorStop(1, "rgba(174, 174, 250, 1)");
+
+        return gradient;
+      },
+    },
+  ],
+} as ChartData);
+
+const chartOptions = ref({
+  responsive: true,
+  maintainAspectRatio: false,
+  plugins: {
+    title: {
+      display: true,
+      text: "",
+    },
+    tooltip: {
+      callbacks: {
+        label: function (context: any) {
+          let label = context.dataset.label || "";
+
+          if (label) label += ": ";
+
+          if (context.parsed.y !== null) {
+            label += formatNumber(+context.parsed.y, 2) + "€";
+          }
+          return label;
+        },
+      },
+    },
+  },
+  interaction: {
+    mode: "index" as "index",
+    intersect: false,
+  },
+  scales: {
+    x: {
+      title: {
+        text: "Monat/Jahr",
+        display: true,
+      },
+    },
+    y: {
+      title: {
+        text: "Betrag",
+        display: true,
+      },
+      ticks: {
+        callback: function (value: number) {
+          return formatNumber(value, 0) + "€";
+        },
+      },
+    },
+  },
+});
 
 ChartJS.register(
   CategoryScale,
@@ -150,292 +245,125 @@ type ChartData = {
   datasets: Array<ChartDataDataset>;
 };
 
-type ShowTrendsData = {
-  dataLoaded: boolean;
-  trendsGraphLoaded: boolean;
-  startDate: Date | undefined;
-  endDate: Date | undefined;
-  startDateIsValid: boolean | null;
-  startDateErrorMessage: string;
-  endDateIsValid: boolean | null;
-  endDateErrorMessage: string;
-  capitalsourceIsValid: boolean | null;
-  capitalsourceErrorMessage: string;
-  capitalsourceIds: Array<number>;
-  chartData: ChartData;
-  chartOptions: any;
-};
+const capitalsourceStore = useCapitalsourceStore();
+const selectBoxValues = computed((): Array<SelectBoxValue> => {
+  return capitalsourceStore.getAllAsSelectBoxValues();
+});
 
-function getXLabel(month: number, year: number) {
+const { handleSubmit, values, setFieldTouched } = useForm();
+const {
+  value: capitalsourceIds,
+  meta: capitalsourceIdsMeta,
+  errorMessage,
+} = useField<Array<number>>(
+  "postingAccountIdsYes",
+  toFieldValidator(schema.capitalsourceIds),
+  { initialValue: new Array<number>() }
+);
+
+const errorCapitalsourceIds = computed((): ErrorData => {
+  return generateErrorDataVeeValidate(
+    capitalsourceIdsMeta.touched,
+    "Kapitalquellen",
+    errorMessage.value
+  );
+});
+
+const getXLabel = (month: number, year: number) => {
   if (month < 10) {
     return "0" + month + "/" + year;
   } else {
     return month + "/" + year;
   }
-}
+};
 
-export default defineComponent({
-  name: "ShowTrends",
-  data(): ShowTrendsData {
-    return {
-      dataLoaded: false,
-      trendsGraphLoaded: false,
-      startDate: undefined,
-      endDate: undefined,
-      startDateIsValid: null,
-      startDateErrorMessage: "",
-      endDateIsValid: null,
-      endDateErrorMessage: "",
-      capitalsourceIds: new Array<number>(),
-      capitalsourceIsValid: null,
-      capitalsourceErrorMessage: "",
-      chartOptions: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          title: {
-            display: true,
-            text: "",
-          },
-          tooltip: {
-            callbacks: {
-              label: function (context: any) {
-                let label = context.dataset.label || "";
+onMounted(() => {
+  loadData();
+});
 
-                if (label) label += ": ";
+const loadData = () => {
+  dataLoaded.value = false;
+  ReportControllerHandler.showTrendsForm().then((trendsTransporter) => {
+    const minDate = trendsTransporter.startDate;
+    const maxDate = trendsTransporter.endDate;
 
-                if (context.parsed.y !== null) {
-                  label += formatNumber(+context.parsed.y, 2) + "€";
-                }
-                return label;
-              },
-            },
-          },
-        },
-        interaction: {
-          mode: "index",
-          intersect: false,
-        },
-        scales: {
-          x: {
-            title: {
-              text: "Monat/Jahr",
-              display: true,
-            },
-          },
-          y: {
-            title: {
-              text: "Betrag",
-              display: true,
-            },
-            ticks: {
-              callback: function (value: number) {
-                return formatNumber(value, 0) + "€";
-              },
-            },
-          },
-        },
-      },
-      chartData: {
-        labels: new Array<string>(),
-        datasets: [
-          {
-            label: "festgeschrieben",
-            data: new Array<number | null>(),
-            fill: true,
-            borderColor: "#B0C4DE",
-            backgroundColor: (ctx: any) => {
-              const canvas = ctx.chart.ctx;
-              const gradient = canvas.createLinearGradient(0, 500, 0, 0);
+    startDate.value = minDate;
+    endDate.value = maxDate;
 
-              gradient.addColorStop(0, "rgba(176, 196, 222, 1)");
-              gradient.addColorStop(1, "rgba(230, 230, 250, 1)");
+    capitalsourceIds.value = trendsTransporter.selectedCapitalsourceIds;
 
-              return gradient;
-            },
-          },
-          {
-            label: "berechnet",
-            data: new Array<number | null>(),
-            fill: true,
-            borderColor: "#689bde",
-            backgroundColor: (ctx: any) => {
-              const canvas = ctx.chart.ctx;
-              const gradient = canvas.createLinearGradient(0, 500, 0, 0);
+    dataLoaded.value = true;
+    Object.keys(values).forEach((field) => setFieldTouched(field, false));
+  });
+};
 
-              gradient.addColorStop(0, "rgba(104, 155, 222, 1)");
-              gradient.addColorStop(1, "rgba(174, 174, 250, 1)");
+const showTrends = handleSubmit(() => {
+  trendsGraphLoaded.value = false;
 
-              return gradient;
-            },
-          },
-        ],
-      },
-    };
-  },
-  created() {
-    this.loadData();
-  },
-  computed: {
-    formIsValid(): boolean {
-      const isValid =
-        this.startDateIsValid &&
-        this.endDateIsValid &&
-        this.capitalsourceIsValid;
-      if (isValid === null || isValid === undefined || isValid === true) {
-        return true;
-      }
-      return false;
-    },
-    startDateErrorData(): ErrorData {
-      return generateErrorData(
-        this.startDateIsValid,
-        "Startdatum",
-        this.startDateErrorMessage
-      );
-    },
-    endDateErrorData(): ErrorData {
-      return generateErrorData(
-        this.endDateIsValid,
-        "Enddatum",
-        this.endDateErrorMessage
-      );
-    },
-    capitalsourceErrorData(): ErrorData {
-      return generateErrorData(
-        this.capitalsourceIsValid,
-        "Kapitalquellen",
-        this.capitalsourceErrorMessage
-      );
-    },
-    capitalsourceArray(): Array<Capitalsource> {
-      const capitalsourceStore = useCapitalsourceStore();
-      return capitalsourceStore.capitalsource;
-    },
-  },
-  methods: {
-    async loadData() {
-      this.dataLoaded = false;
-      const trendsTransporter: TrendsParameter =
-        await ReportControllerHandler.showTrendsForm();
+  const _endDate = endDate.value;
+  _endDate.setMonth(_endDate.getMonth() + 1);
+  _endDate.setDate(0);
+  const trendsParameter: TrendsParameter = {
+    startDate: startDate.value,
+    endDate: _endDate,
+    selectedCapitalsourceIds: capitalsourceIds.value,
+  };
+  ReportControllerHandler.showTrendsGraph(trendsParameter).then((trends) => {
+    if (trends && trends.trendsSettled && trends.trendsSettled.length > 0) {
+      const labelsSettled: Array<string> = trends.trendsSettled.map(function (
+        e
+      ) {
+        return getXLabel(e.month, e.year);
+      });
 
-      const minDate = trendsTransporter.startDate;
-      const maxDate = trendsTransporter.endDate;
+      const dataSettled: Array<number> = trends.trendsSettled.map(function (e) {
+        return e.amount;
+      });
 
-      this.startDate = minDate;
-      this.endDate = maxDate;
+      chartData.value.labels = labelsSettled;
+      chartData.value.datasets[0].data = dataSettled;
 
-      this.capitalsourceIds = trendsTransporter.selectedCapitalsourceIds;
-
-      this.dataLoaded = true;
-    },
-    validateStartDate() {
-      [this.startDateIsValid, this.startDateErrorMessage] = validateInputField(
-        this.startDate,
-        "Startdatum angeben!"
-      );
-    },
-    validateEndDate() {
-      [this.endDateIsValid, this.endDateErrorMessage] = validateInputField(
-        this.endDate,
-        "Enddatum angeben!"
-      );
-    },
-    validateCapitalsource() {
-      [this.capitalsourceIsValid, this.capitalsourceErrorMessage] =
-        validateInputField(
-          this.capitalsourceIds ? this.capitalsourceIds.length : false,
-          "Kapitalquellen angeben!"
-        );
-    },
-    startDateSelected(date: Date) {
-      this.startDate = date;
-      this.validateStartDate();
-    },
-    endDateSelected(date: Date) {
-      this.endDate = date;
-      this.validateEndDate();
-    },
-
-    async showTrends() {
-      this.validateEndDate();
-      this.validateStartDate();
-      this.validateCapitalsource();
-      this.trendsGraphLoaded = false;
-
-      if (this.formIsValid && this.startDate && this.endDate) {
-        const endDate = this.endDate;
-        endDate.setMonth(endDate.getMonth() + 1);
-        endDate.setDate(0);
-        const trendsParameter: TrendsParameter = {
-          startDate: this.startDate,
-          endDate: this.endDate,
-          selectedCapitalsourceIds: this.capitalsourceIds,
-        };
-        const trends: Trends = await ReportControllerHandler.showTrendsGraph(
-          trendsParameter
-        );
-        if (trends && trends.trendsSettled && trends.trendsSettled.length > 0) {
-          const labelsSettled: Array<string> = trends.trendsSettled.map(
-            function (e) {
-              return getXLabel(e.month, e.year);
-            }
-          );
-
-          const dataSettled: Array<number> = trends.trendsSettled.map(function (
-            e
-          ) {
-            return e.amount;
-          });
-
-          this.chartData.labels = labelsSettled;
-          this.chartData.datasets[0].data = dataSettled;
-
-          if (trends.trendsCalculated && trends.trendsCalculated.length > 0) {
-            const labelsCalculated: Array<string> = trends.trendsCalculated.map(
-              function (e) {
-                return getXLabel(e.month, e.year);
-              }
-            );
-
-            const dataCalculated = new Array<number | null>();
-
-            for (let i = 0; i < dataSettled.length; i++) {
-              if (i + 1 == dataSettled.length) {
-                dataCalculated.push(dataSettled[i]);
-              } else {
-                dataCalculated.push(null);
-              }
-            }
-
-            trends.trendsCalculated.forEach((data) => {
-              dataCalculated.push(data.amount);
-            });
-
-            labelsCalculated.forEach((label) => {
-              this.chartData.labels.push(label);
-            });
-
-            this.chartData.datasets[1].data = dataCalculated;
-            this.chartData.datasets[1].hidden = false;
-          } else {
-            this.chartData.datasets[1].hidden = true;
+      if (trends.trendsCalculated && trends.trendsCalculated.length > 0) {
+        const labelsCalculated: Array<string> = trends.trendsCalculated.map(
+          function (e) {
+            return getXLabel(e.month, e.year);
           }
+        );
 
-          const startLabel = this.chartData.labels[0];
-          const endLabel =
-            this.chartData.labels[this.chartData.labels.length - 1];
-          this.chartOptions.plugins.title.text =
-            "Vermögenstrend der ausgewählten Kapitalquellen " +
-            startLabel +
-            " bis " +
-            endLabel;
-          this.trendsGraphLoaded = true;
+        const dataCalculated = new Array<number | null>();
+
+        for (let i = 0; i < dataSettled.length; i++) {
+          if (i + 1 == dataSettled.length) {
+            dataCalculated.push(dataSettled[i]);
+          } else {
+            dataCalculated.push(null);
+          }
         }
+
+        trends.trendsCalculated.forEach((data) => {
+          dataCalculated.push(data.amount);
+        });
+
+        labelsCalculated.forEach((label) => {
+          chartData.value.labels.push(label);
+        });
+
+        chartData.value.datasets[1].data = dataCalculated;
+        chartData.value.datasets[1].hidden = false;
+      } else {
+        chartData.value.datasets[1].hidden = true;
       }
-    },
-  },
-  // eslint-disable-next-line vue/no-reserved-component-names
-  components: { Line, DatepickerVue },
+
+      const startLabel = chartData.value.labels[0];
+      const endLabel =
+        chartData.value.labels[chartData.value.labels.length - 1];
+      chartOptions.value.plugins.title.text =
+        "Vermögenstrend der ausgewählten Kapitalquellen " +
+        startLabel +
+        " bis " +
+        endLabel;
+      trendsGraphLoaded.value = true;
+    }
+  });
 });
 </script>
