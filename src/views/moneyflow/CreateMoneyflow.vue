@@ -25,9 +25,9 @@
       <div class="col-md-9 col-xs-12">
         <div class="card w-100 bg-light">
           <div class="card-body">
-            <form @submit.prevent="createMoneyflow">
+            <form @submit.prevent="createMoneyflow" id="createMoneyflowForm">
               <div class="container-fluid">
-                <EditMoneyflowVue
+                <EditMoneyflowBase
                   :selected-pre-def-moneyflow="selectedPreDefMoneyflow"
                   ref="editMoneyflowVue"
                 />
@@ -40,9 +40,10 @@
                     >
                       r&uuml;cksetzen
                     </button>
-                    <button type="submit" class="btn btn-primary mx-2">
-                      Speichern
-                    </button>
+                    <ButtonSubmit
+                      button-label="Speichern"
+                      form-id="createMoneyflowForm"
+                    />
                   </div>
                 </div>
               </div>
@@ -53,68 +54,57 @@
     </div>
   </div>
 </template>
-<script lang="ts">
-import PreDefMoneyflowControllerHandler from "@/handler/PreDefMoneyflowControllerHandler";
-import type { PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
-import { defineComponent } from "vue";
-import EditMoneyflowVue from "@/components/moneyflow/EditMoneyflowInternal.vue";
+<script lang="ts" setup>
+import { onMounted, ref } from "vue";
+
+import EditMoneyflowBase from "@/components/moneyflow/EditMoneyflowBase.vue";
+
+import ButtonSubmit from "@/components/ButtonSubmit.vue";
 import { preDefMoneyflowAlreadyUsedThisMonth } from "@/model/moneyflow/PreDefMoneyflow";
+import type { PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
 
-type CreateMoneyflowData = {
-  preDefMoneyflows: Array<PreDefMoneyflow>;
-  preDefMoneyflowId: number;
-  selectedPreDefMoneyflow: PreDefMoneyflow | undefined;
-};
-export default defineComponent({
-  name: "CreateMoneyflow",
-  data(): CreateMoneyflowData {
-    return {
-      preDefMoneyflows: new Array<PreDefMoneyflow>(),
-      preDefMoneyflowId: 0,
-      selectedPreDefMoneyflow: undefined,
-    };
-  },
-  async mounted() {
-    const allPreDefMoneyflows =
-      await PreDefMoneyflowControllerHandler.fetchAllPreDefMoneyflow();
+import PreDefMoneyflowControllerHandler from "@/handler/PreDefMoneyflowControllerHandler";
 
-    // remove those PreDefMoneyflows which where used this month already and have onceMonth set
-    const today = new Date();
-    this.preDefMoneyflows = allPreDefMoneyflows.filter((mpm) => {
-      return (
-        !mpm.onceAMonth || !preDefMoneyflowAlreadyUsedThisMonth(today, mpm)
-      );
-    });
-    this.resetForm();
-  },
-  methods: {
-    selectPreDefMoneyflow() {
-      if (this.preDefMoneyflowId <= 0) {
-        this.selectedPreDefMoneyflow = undefined;
-      } else {
-        const preDefMoneyflow = this.preDefMoneyflows.find((mpm) => {
-          return mpm.id === +this.preDefMoneyflowId;
-        });
-        if (preDefMoneyflow) {
-          this.selectedPreDefMoneyflow = preDefMoneyflow;
-        }
-      }
-    },
-    async createMoneyflow() {
-      if (
-        await (
-          this.$refs.editMoneyflowVue as typeof EditMoneyflowVue
-        ).createMoneyflow()
-      ) {
-        this.resetForm();
-      }
-    },
-    resetForm() {
-      this.preDefMoneyflowId = 0;
-      this.selectPreDefMoneyflow();
-      (this.$refs.editMoneyflowVue as typeof EditMoneyflowVue).resetForm();
-    },
-  },
-  components: { EditMoneyflowVue },
+const preDefMoneyflows = ref(new Array<PreDefMoneyflow>());
+const preDefMoneyflowId = ref(0);
+const selectedPreDefMoneyflow = ref({} as PreDefMoneyflow | undefined);
+const editMoneyflowVue = ref();
+
+onMounted(() => {
+  PreDefMoneyflowControllerHandler.fetchAllPreDefMoneyflow().then(
+    (allPreDefMoneyflows) => {
+      // remove those PreDefMoneyflows which where used this month already and have onceMonth set
+      const today = new Date();
+      preDefMoneyflows.value = allPreDefMoneyflows.filter((mpm) => {
+        return (
+          !mpm.onceAMonth || !preDefMoneyflowAlreadyUsedThisMonth(today, mpm)
+        );
+      });
+      resetForm();
+    }
+  );
 });
+
+const selectPreDefMoneyflow = () => {
+  if (preDefMoneyflowId.value <= 0) {
+    selectedPreDefMoneyflow.value = undefined;
+  } else {
+    const preDefMoneyflow = preDefMoneyflows.value.find((mpm) => {
+      return mpm.id === +preDefMoneyflowId.value;
+    });
+    if (preDefMoneyflow) {
+      selectedPreDefMoneyflow.value = preDefMoneyflow;
+    }
+  }
+};
+const createMoneyflow = () => {
+  editMoneyflowVue.value.createMoneyflow().then(() => {
+    resetForm();
+  });
+};
+const resetForm = () => {
+  preDefMoneyflowId.value = 0;
+  selectPreDefMoneyflow();
+  editMoneyflowVue.value.resetForm();
+};
 </script>
