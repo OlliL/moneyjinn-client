@@ -1,106 +1,75 @@
 <template>
-  <div v-if="serverError">
-    <div
-      class="alert alert-danger"
-      v-for="(error, index) in serverError"
-      :key="index"
-    >
-      {{ error }}
-    </div>
-  </div>
+  <DivError :server-errors="serverErrors" />
   <div class="row no-gutters flex-lg-nowrap mb-2">
     <div class="col-md-2 col-xs-12 mb-2">
-      <DatepickerVue
-        id="bookingdate"
-        :label="bookingdateErrorData.fieldLabel"
-        :default-date="mmf.bookingDate"
-        :input-class="' form-control ' + bookingdateErrorData.inputClass"
-        :label-style="'color: ' + bookingdateErrorData.fieldColor"
-        @date-selected="bookingdateSelected"
+      <InputDate
+        v-model="mmf.bookingDate"
+        :validation-schema="schema.bookingDate"
+        id="bookingDate"
+        field-label="Buchungsdatum"
       />
     </div>
     <div class="col-md-2 col-xs-12 mb-2">
-      <DatepickerVue
-        id="invoicedate"
-        label="Rechnungsdatum"
-        :default-date="mmf.invoiceDate"
-        @date-selected="invoicedateSelected"
+      <InputDate
+        v-model="mmf.invoiceDate"
+        :validation-schema="schema.invoiceDate"
+        id="invoiceDate"
+        field-label="Rechnungsdatum"
       />
     </div>
     <div class="col-md-4 col-xs-12 mb-2">
-      <ContractpartnerSelectVue
-        :field-color="contractpartnerErrorData.fieldColor"
-        :field-label="contractpartnerErrorData.fieldLabel"
-        :input-class="contractpartnerErrorData.inputClass"
-        :validity-date="validityDate"
-        :selected-id="mmf.contractpartnerId"
+      <SelectContractpartner
+        v-model="mmf.contractpartnerId"
+        :validation-schema="schema.contractpartnerId"
         :id-suffix="'CreateMoneyflow' + idSuffix"
-        @contractpartner-selected="onContractpartnerSelected"
+        field-label="Vertragspartner"
+        :validity-date="validityDate"
       />
     </div>
 
     <div class="col-md-4 col-xs-12 mb-2">
-      <CapitalsourceSelectVue
-        :field-color="capitalsourceErrorData.fieldColor"
-        :field-label="capitalsourceErrorData.fieldLabel"
-        :input-class="capitalsourceErrorData.inputClass"
-        :validity-date="validityDate"
-        :selected-id="mmf.capitalsourceId"
+      <SelectCapitalsource
+        v-model="mmf.capitalsourceId"
+        :validation-schema="schema.capitalsourceId"
         :id-suffix="'CreateMoneyflow' + idSuffix"
-        @capitalsource-selected="onCapitalsourceSelected"
+        field-label="Kapitalquelle"
+        :validity-date="validityDate"
       />
     </div>
   </div>
 
   <div class="row no-gutters flex-lg-nowrap mb-2">
     <div class="col-md-2 col-xs-12 mb-2">
-      <div class="input-group">
-        <div class="form-floating">
-          <input
-            v-model="amount"
-            :id="'amount' + idSuffix"
-            type="number"
-            step="0.01"
-            @change="validateAmount"
-            :class="' form-control text-end ' + amountErrorData.inputClass"
-            ref="amountRef"
-          />
-          <label
-            :for="'amount' + idSuffix"
-            :style="'color: ' + amountErrorData.fieldColor"
-            >{{ amountErrorData.fieldLabel }}</label
-          >
-        </div>
-        <span class="input-group-text"
-          ><i class="bi bi-currency-euro"></i
-        ></span>
-      </div>
+      <InputStandard
+        v-model="amount"
+        :validation-schema="schema.amount"
+        :id="'amount' + idSuffix"
+        field-type="number"
+        step="0.01"
+        field-label="Betrag"
+        :focus="true"
+      >
+        <template #icon
+          ><span class="input-group-text"
+            ><i class="bi bi-currency-euro"></i></span
+        ></template>
+      </InputStandard>
     </div>
     <div class="col-md-7" v-show="!showMoneyflowFields"></div>
     <div class="col-md-4 col-xs-12 mb-2" v-show="showMoneyflowFields">
-      <div class="form-floating">
-        <input
-          v-model="mmf.comment"
-          :id="'comment' + idSuffix"
-          type="text"
-          @input="validateComment"
-          :class="'form-control ' + commentErrorData.inputClass"
-        />
-        <label
-          :for="'comment' + idSuffix"
-          :style="'color: ' + commentErrorData.fieldColor"
-          >{{ commentErrorData.fieldLabel }}</label
-        >
-      </div>
+      <InputStandard
+        v-model="mmf.comment"
+        :validation-schema-ref="schema.comment"
+        :id="'comment' + idSuffix"
+        field-label="Kommentar"
+      />
     </div>
     <div class="col-md-3 col-xs-12 mb-2" v-show="showMoneyflowFields">
-      <PostingAccountSelectVue
-        :field-color="postingaccountErrorData.fieldColor"
-        :field-label="postingaccountErrorData.fieldLabel"
-        :input-class="postingaccountErrorData.inputClass"
-        :selected-id="mmf.postingAccountId"
+      <SelectPostingAccount
+        v-model="mmf.postingAccountId"
+        :validation-schema-ref="schema.postingAccountId"
         :id-suffix="'CreateMoneyflow' + idSuffix"
-        @posting-account-selected="onPostingAccountSelected"
+        field-label="Buchungskonto"
       />
     </div>
     <div
@@ -208,48 +177,53 @@
 <script lang="ts" setup>
 import { computed, onMounted, ref, watch, type PropType } from "vue";
 
-import CapitalsourceSelectVue from "@/components/capitalsource/CapitalsourceSelect.vue";
-import ContractpartnerSelectVue from "@/components/contractpartner/ContractpartnerSelect.vue";
 import EditMoneyflowBaseSplitEntryRowVue from "@/components/moneyflow/EditMoneyflowBaseSplitEntryRow.vue";
-import PostingAccountSelectVue from "@/components/postingaccount/PostingAccountSelect.vue";
-import DatepickerVue from "@/components/Datepicker.vue";
 
 import { useContractpartnerStore } from "@/stores/ContractpartnerStore";
 
-import { generateErrorData } from "@/tools/views/ErrorData";
-import { getError } from "@/tools/views/ThrowError";
+import { handleServerError } from "@/tools/views/ThrowError";
 import { toFixed } from "@/tools/math";
-import { validateInputField } from "@/tools/views/ValidateInputField";
 
-import type { Capitalsource } from "@/model/capitalsource/Capitalsource";
-import type { Contractpartner } from "@/model/contractpartner/Contractpartner";
 import type { ImportedMoneyflow } from "@/model/moneyflow/ImportedMoneyflow";
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 import type { MoneyflowSplitEntry } from "@/model/moneyflow/MoneyflowSplitEntry";
 import type { MoneyflowValidation } from "@/model/moneyflow/MoneyflowValidation";
 import type { PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
-import type { PostingAccount } from "@/model/postingaccount/PostingAccount";
 import type { ValidationResult } from "@/model/validation/ValidationResult";
 
 import MoneyflowControllerHandler from "@/handler/MoneyflowControllerHandler";
 
 import ImportedMoneyflowControllerHandler from "@/handler/ImportedMoneyflowControllerHandler";
+import { date, number, string } from "zod";
+import { amountSchema, globErr } from "@/tools/views/ZodUtil";
+import InputDate from "../InputDate.vue";
+import SelectContractpartner from "../contractpartner/SelectContractpartner.vue";
+import SelectCapitalsource from "../capitalsource/SelectCapitalsource.vue";
+import InputStandard from "../InputStandard.vue";
+import SelectPostingAccount from "../postingaccount/SelectPostingAccount.vue";
+import DivError from "../DivError.vue";
 
-const serverError = ref(undefined as Array<string> | undefined);
+const schema = {
+  amount: amountSchema("Bitte Betrag angeben!"),
+  bookingDate: date(globErr("Bitte Buchungsdatum angeben!")),
+  invoiceDate: date().optional(),
+  contractpartnerId: number(globErr("Bitte Vertragspartner angeben!")).gt(0),
+  comment: computed(() =>
+    showMoneyflowFields.value
+      ? string(globErr("Bitte Kommentar angeben!")).min(1)
+      : string().optional()
+  ),
+  postingAccountId: computed(() =>
+    showMoneyflowFields.value
+      ? number(globErr("Bitte Buchungskonto angeben!")).gt(0)
+      : number().optional()
+  ),
+  capitalsourceId: number(globErr("Bitte Kapitalquelle angeben!")).gt(0),
+};
+
+const serverErrors = ref(new Array<string>());
 const mmf = ref({} as Moneyflow);
 const amount = ref(undefined as number | undefined);
-const bookingdateIsValid = ref(null as boolean | null);
-const bookingdateErrorMessage = ref("");
-const contractpartnerIsValid = ref(null as boolean | null);
-const contractpartnerErrorMessage = ref("");
-const capitalsourceIsValid = ref(null as boolean | null);
-const capitalsourceErrorMessage = ref("");
-const amountIsValid = ref(null as boolean | null);
-const amountErrorMessage = ref("");
-const commentIsValid = ref(null as boolean | null);
-const commentErrorMessage = ref("");
-const postingaccountIsValid = ref(null as boolean | null);
-const postingaccountErrorMessage = ref("");
 const previousCommentSetByContractpartnerDefaults = ref("");
 const previousPostingAccountSetByContractpartnerDefaults = ref(0);
 const preDefMoneyflowId = ref(0);
@@ -264,7 +238,6 @@ const mseRowsAreValid = ref(null as boolean | null);
 const mseRemainderIsValid = ref(undefined as boolean | undefined);
 const showMoneyflowFields = ref(true);
 const originalMoneyflowSplitEntryIds = ref(new Array<number>());
-const amountRef = ref();
 const mseRow = ref();
 const contractpartnerStore = useContractpartnerStore();
 
@@ -304,67 +277,26 @@ watch(
   }
 );
 
+watch(
+  () => mmf.value.contractpartnerId,
+  (newVal, oldVal) => {
+    if (newVal !== oldVal) onContractpartnerSelected(newVal);
+  }
+);
+
 const formIsValid = computed(() => {
-  const isValid =
-    bookingdateIsValid.value &&
-    contractpartnerIsValid.value &&
-    capitalsourceIsValid.value &&
-    amountIsValid.value &&
-    commentIsValid.value &&
-    postingaccountIsValid.value &&
-    mseRowsAreValid.value &&
-    mseRemainderIsValid.value;
+  console.log(mseRowsAreValid.value, mseRemainderIsValid.value);
+  const isValid = mseRowsAreValid.value && mseRemainderIsValid.value;
   if (isValid === null || isValid === undefined || isValid === true) {
     return true;
   }
   return false;
 });
-const bookingdateErrorData = computed(() => {
-  return generateErrorData(
-    bookingdateIsValid.value,
-    "Buchungsdatum",
-    bookingdateErrorMessage.value
-  );
-});
-const contractpartnerErrorData = computed(() => {
-  return generateErrorData(
-    contractpartnerIsValid.value,
-    "Vertragspartner",
-    contractpartnerErrorMessage.value
-  );
-});
-const capitalsourceErrorData = computed(() => {
-  return generateErrorData(
-    capitalsourceIsValid.value,
-    "Kapitalquelle",
-    capitalsourceErrorMessage.value
-  );
-});
-const amountErrorData = computed(() => {
-  return generateErrorData(
-    amountIsValid.value,
-    "Betrag",
-    amountErrorMessage.value
-  );
-});
-const commentErrorData = computed(() => {
-  return generateErrorData(
-    commentIsValid.value,
-    "Kommentar",
-    commentErrorMessage.value
-  );
-});
-const postingaccountErrorData = computed(() => {
-  return generateErrorData(
-    postingaccountIsValid.value,
-    "Buchungskonto",
-    postingaccountErrorMessage.value
-  );
-});
+
 const validityDate = computed(() => {
   if (mmf.value.invoiceDate) {
     return mmf.value.invoiceDate;
-  } else if (bookingdateIsValid.value) {
+  } else if (mmf.value.bookingDate) {
     return mmf.value.bookingDate;
   } else {
     const date = new Date();
@@ -427,12 +359,7 @@ const resetForm = () => {
       previousPostingAccountSetByContractpartnerDefaults.value =
         mmf.value.postingAccountId;
 
-      const contractpartner = contractpartnerStore.getContractpartner(
-        mmf.value.contractpartnerId
-      );
-      if (contractpartner) {
-        onContractpartnerSelected(contractpartner);
-      }
+      onContractpartnerSelected(mmf.value.contractpartnerId);
     } else {
       previousCommentSetByContractpartnerDefaults.value = "";
       previousPostingAccountSetByContractpartnerDefaults.value = 0;
@@ -472,23 +399,15 @@ const resetForm = () => {
     addNewMoneyflowSplitEntryRow();
     showMoneyflowFields.value = true;
 
-    (amountRef.value as any).focus();
     previousCommentSetByContractpartnerDefaults.value = "";
     previousPostingAccountSetByContractpartnerDefaults.value = 0;
   }
-  serverError.value = undefined;
+  serverErrors.value = new Array<string>();
   mseRowsAreValid.value = null;
   mseRemainderIsValid.value = undefined;
 
   saveAsPreDefMoneyflow.value = false;
   preDefMoneyflowId.value = 0;
-
-  bookingdateIsValid.value = null;
-  contractpartnerIsValid.value = null;
-  capitalsourceIsValid.value = null;
-  amountIsValid.value = null;
-  commentIsValid.value = null;
-  postingaccountIsValid.value = null;
 
   toggleTextOff.value = toggleTextOffNoPreDefMoneyflow.value;
   toggleTextOn.value = toggleTextOnNoPreDefMoneyflow.value;
@@ -608,35 +527,10 @@ const validateMseRows = () => {
 /*
  * Moneyflow handling
  */
-const validateBookingdate = () => {
-  [bookingdateIsValid.value, bookingdateErrorMessage.value] =
-    validateInputField(mmf.value.bookingDate, "Datum angeben!");
-};
-const validateContractpartner = () => {
-  [contractpartnerIsValid.value, contractpartnerErrorMessage.value] =
-    validateInputField(mmf.value.contractpartnerId, "Vertragspartner angeben!");
-};
-const validateCapitalsource = () => {
-  [capitalsourceIsValid.value, capitalsourceErrorMessage.value] =
-    validateInputField(mmf.value.capitalsourceId, "Kapitalquelle angeben!");
-};
-const validateAmount = () => {
-  [amountIsValid.value, amountErrorMessage.value] = validateInputField(
-    amount.value,
-    "Betrag angeben!"
-  );
-};
-const validateComment = () => {
-  [commentIsValid.value, commentErrorMessage.value] = validateInputField(
-    mmf.value.comment,
-    "Kommentar angeben!"
-  );
-};
-const validatePostingaccount = () => {
-  [postingaccountIsValid.value, postingaccountErrorMessage.value] =
-    validateInputField(mmf.value.postingAccountId, "Buchungskonto angeben!");
-};
-const onContractpartnerSelected = (contractpartner: Contractpartner) => {
+
+const onContractpartnerSelected = (contractpartnerId: number) => {
+  const contractpartner =
+    contractpartnerStore.getContractpartner(contractpartnerId);
   if (contractpartner) {
     mmf.value.contractpartnerId = contractpartner.id;
     mmf.value.contractpartnerName = contractpartner.name;
@@ -646,8 +540,6 @@ const onContractpartnerSelected = (contractpartner: Contractpartner) => {
       mmf.value.comment = contractpartner.moneyflowComment;
       previousCommentSetByContractpartnerDefaults.value =
         contractpartner.moneyflowComment;
-      if (contractpartner.moneyflowComment) validateComment();
-      else commentIsValid.value = null;
     }
     if (
       mmf.value.postingAccountId ===
@@ -659,8 +551,6 @@ const onContractpartnerSelected = (contractpartner: Contractpartner) => {
 
       mmf.value.postingAccountId = mpaId;
       previousPostingAccountSetByContractpartnerDefaults.value = mpaId;
-      if (contractpartner.postingAccountId) validatePostingaccount();
-      else postingaccountIsValid.value = null;
     }
   } else {
     mmf.value.contractpartnerId = 0;
@@ -670,7 +560,6 @@ const onContractpartnerSelected = (contractpartner: Contractpartner) => {
     ) {
       mmf.value.comment = "";
       previousCommentSetByContractpartnerDefaults.value = "";
-      commentIsValid.value = null;
     }
     if (
       mmf.value.postingAccountId ===
@@ -678,31 +567,10 @@ const onContractpartnerSelected = (contractpartner: Contractpartner) => {
     ) {
       mmf.value.postingAccountId = 0;
       previousPostingAccountSetByContractpartnerDefaults.value = 0;
-      postingaccountIsValid.value = null;
     }
   }
-  validateContractpartner();
 };
-const onCapitalsourceSelected = (capitalsource: Capitalsource) => {
-  if (capitalsource) {
-    mmf.value.capitalsourceId = capitalsource.id;
-    mmf.value.capitalsourceComment = capitalsource.comment;
-  } else {
-    mmf.value.capitalsourceId = 0;
-    mmf.value.capitalsourceComment = "";
-  }
-  validateCapitalsource();
-};
-const onPostingAccountSelected = (postingAccount: PostingAccount) => {
-  if (postingAccount) {
-    mmf.value.postingAccountId = postingAccount.id;
-    mmf.value.postingAccountName = postingAccount.name;
-  } else {
-    mmf.value.postingAccountId = 0;
-    mmf.value.postingAccountName = "";
-  }
-  validatePostingaccount();
-};
+
 const selectPreDefMoneyflow = (
   preDefMoneyflow: PreDefMoneyflow | undefined
 ) => {
@@ -722,13 +590,7 @@ const selectPreDefMoneyflow = (
     }
   }
 };
-const bookingdateSelected = (date: Date) => {
-  mmf.value.bookingDate = date;
-  validateBookingdate();
-};
-const invoicedateSelected = (date: Date) => {
-  mmf.value.invoiceDate = date;
-};
+
 const prepareServerCall = (): boolean => {
   validateMseRows();
   validateMseRemainder();
@@ -748,13 +610,6 @@ const prepareServerCall = (): boolean => {
     }
   }
 
-  validateAmount();
-  validateBookingdate();
-  validateCapitalsource();
-  validateComment();
-  validateContractpartner();
-  validatePostingaccount();
-
   if (formIsValid.value) {
     if (amount.value) mmf.value.amount = amount.value;
     // remove empty rows
@@ -768,11 +623,7 @@ const prepareServerCall = (): boolean => {
   return false;
 };
 const followUpServerCall = (validationResult: ValidationResult): boolean => {
-  if (!validationResult.result) {
-    serverError.value = new Array<string>();
-    for (let resultItem of validationResult.validationResultItems) {
-      serverError.value.push(getError(resultItem.error));
-    }
+  if (handleServerError(validationResult, serverErrors)) {
     if (mmf.value.moneyflowSplitEntries) {
       while (mmf.value.moneyflowSplitEntries.length < 2) {
         addNewMoneyflowSplitEntryRow();
@@ -808,6 +659,7 @@ const deleteImportedMoneyflow = async (id: number) => {
   await ImportedMoneyflowControllerHandler.deleteImportedMoneyflow(id);
 };
 const createMoneyflow = async (): Promise<boolean> => {
+  console.log("createMoneyflow");
   if (prepareServerCall()) {
     const validationResult = await MoneyflowControllerHandler.createMoneyflow(
       mmf.value,
