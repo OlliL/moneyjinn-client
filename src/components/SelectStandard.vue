@@ -28,7 +28,7 @@
 <script lang="ts" setup>
 import { useField } from "vee-validate";
 import { toFieldValidator } from "@vee-validate/zod";
-import { computed, onMounted, ref, type PropType, type Ref } from "vue";
+import { computed, onMounted, ref, watch, type PropType, type Ref } from "vue";
 import { any, type ZodType } from "zod";
 
 import type { SelectBoxValue } from "@/model/SelectBoxValue";
@@ -90,6 +90,7 @@ const {
 });
 
 const onInput = (event: Event) => {
+  console.log("onInput");
   setState({ touched: true });
   handleChange(event, true);
   emit("update:modelValue", fieldValue.value);
@@ -110,4 +111,16 @@ onMounted(() => {
     (fieldRef.value as any).focus();
   }
 });
+
+watch(
+  () => props.selectBoxValues,
+  (newVal, oldVal) => {
+    if (newVal != oldVal) {
+      const foundElement = newVal.filter((sbv) => sbv.id == fieldValue.value);
+      if (foundElement.length === 0) {
+        fieldValue.value = undefined;
+      }
+    }
+  }
+);
 </script>
