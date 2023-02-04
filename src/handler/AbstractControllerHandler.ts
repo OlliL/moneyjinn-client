@@ -1,5 +1,4 @@
 import type { LoginResponse } from "@/model/rest/user/LoginResponse";
-import type { SupplierCsrfToken } from "@/model/rest/SupplierCsrfToken";
 import { useUserSessionStore } from "@/stores/UserSessionStore";
 import { throwError } from "@/tools/views/ThrowError";
 import { HeaderUtil } from "./util/HeaderUtil";
@@ -107,8 +106,9 @@ abstract class AbstractControllerHandler {
         httpMethod.toUpperCase()
       )
     ) {
-      HeaderUtil.getInstance().addCsrfHeader(headers);
+      HeaderUtil.getInstance().addXsrfHeader(headers);
     }
+
     requestInit["headers"] = headers;
 
     const requestInfo = new Request(
@@ -118,26 +118,6 @@ abstract class AbstractControllerHandler {
 
     const response = await fetch(requestInfo);
     return response;
-  }
-
-  protected async retrieveAndStoreCsrfToken() {
-    const headers = {} as Record<string, string>;
-    HeaderUtil.getInstance().addCsrfHeader(headers);
-
-    const requestInfo = new Request(this.getWebRoot() + "csrf/csrf", {
-      method: "get",
-      headers: headers,
-      credentials: "include",
-    });
-
-    const csrfResponse = await fetch(requestInfo);
-
-    if (!csrfResponse.ok) {
-      throw new Error(csrfResponse.statusText);
-    }
-    const userSessionStore = useUserSessionStore();
-    const supplierCsrfToken = (await csrfResponse.json()) as SupplierCsrfToken;
-    userSessionStore.setCsrfToken(supplierCsrfToken.token);
   }
 
   private async refreshAuthToken() {
@@ -162,8 +142,6 @@ abstract class AbstractControllerHandler {
     }
     userSessionStore.setAuthorizationToken(loginResponse.token);
     userSessionStore.setRefreshToken(loginResponse.refreshToken);
-
-    await this.retrieveAndStoreCsrfToken();
   }
 }
 

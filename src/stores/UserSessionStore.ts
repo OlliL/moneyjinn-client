@@ -8,7 +8,6 @@ export type UserSession = {
   userIsAdmin: boolean;
   userCanLogin: boolean;
   userIsNew: boolean;
-  csrfToken: string;
 };
 
 export const useUserSessionStore = defineStore("userSession", {
@@ -21,14 +20,10 @@ export const useUserSessionStore = defineStore("userSession", {
       userIsAdmin: false,
       userCanLogin: false,
       userIsNew: true,
-      csrfToken: "",
     } as UserSession),
   getters: {
     getAuthorizationToken(): string {
       return this.userAuthorizationToken;
-    },
-    getCsrfToken(): string {
-      return this.csrfToken;
     },
     getRefreshToken(): string {
       return this.userRefreshToken;
@@ -50,9 +45,6 @@ export const useUserSessionStore = defineStore("userSession", {
       this.userCanLogin = userSess.userCanLogin;
       this.userIsNew = userSess.userIsNew;
     },
-    setCsrfToken(token: string) {
-      this.csrfToken = token;
-    },
     setAuthorizationToken(token: string) {
       this.userAuthorizationToken = token;
     },
@@ -67,7 +59,6 @@ export const useUserSessionStore = defineStore("userSession", {
       this.userIsAdmin = false;
       this.userCanLogin = false;
       this.userIsNew = true;
-      this.csrfToken = "";
     },
   },
   persist: true,

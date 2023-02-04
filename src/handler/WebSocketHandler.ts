@@ -20,7 +20,7 @@ export class WebSocketHandler {
     const url = "ws://" + WebServer.getInstance().getWebServer() + "/websocket";
     const headers = {} as Record<string, string>;
     HeaderUtil.getInstance().addAuthorizationHeader(headers);
-    HeaderUtil.getInstance().addCsrfHeader(headers);
+    HeaderUtil.getInstance().addXsrfHeader(headers);
 
     this.stompClient = new Client({
       brokerURL: url,
@@ -49,7 +49,7 @@ export class WebSocketHandler {
     callback: (body: string) => any
   ): StompSubscription {
     const headers = {} as Record<string, string>;
-    HeaderUtil.getInstance().addCsrfHeader(headers);
+    HeaderUtil.getInstance().addXsrfHeader(headers);
 
     return this.stompClient.subscribe(
       destination,
