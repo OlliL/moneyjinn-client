@@ -22,7 +22,7 @@
         Bon l&ouml;schen
       </button>
 
-      <button-submit button-label="Speichern" form-id="updateMoneyflowForm" />
+      <ButtonSubmit button-label="Speichern" form-id="updateMoneyflowForm" />
     </template>
   </ModalVue>
 </template>
