@@ -192,7 +192,7 @@ const emitDeleteMoneyflow = (id: number) => {
   emit("deleteMoneyflow", id);
 };
 const emitEditMoneyflow = (id: number) => {
-  emit("editMoneyflow", id);
+  emit("editMoneyflow", id, props.receipt);
 };
 
 const searchMoneyflows = handleSubmit(() => {
