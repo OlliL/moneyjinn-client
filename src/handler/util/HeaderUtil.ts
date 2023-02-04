@@ -18,9 +18,18 @@ export class HeaderUtil {
     headers["Authorization"] = "Bearer " + token;
   }
 
-  public addCsrfHeader(headers: Record<string, string>) {
-    const csrfToken = this.userSessionStore.getCsrfToken;
-    headers["X-CSRF-TOKEN"] = csrfToken;
+  private getCookie(name: string) {
+    const match = document.cookie.match(
+      new RegExp("(^|;\\s*)(" + name + ")=([^;]*)")
+    );
+    return match ? decodeURIComponent(match[3]) : null;
+  }
+
+  public addXsrfHeader(headers: Record<string, string>) {
+    const xsrfToken = this.getCookie("XSRF-TOKEN");
+    if (xsrfToken) {
+      headers["X-XSRF-TOKEN"] = xsrfToken;
+    }
   }
 
   public addContentTypeJson(headers: Record<string, string>) {
