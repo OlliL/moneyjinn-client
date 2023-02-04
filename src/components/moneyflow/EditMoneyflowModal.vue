@@ -47,11 +47,7 @@ const emit = defineEmits(["moneyflowUpdated", "moneyflowReceiptDeleted"]);
 const { handleSubmit, values, setFieldTouched } = useForm();
 
 const _show = (_mmf: Moneyflow) => {
-  mmf.value = JSON.parse(JSON.stringify(_mmf));
-  mmf.value.bookingDate = new Date(mmf.value.bookingDate);
-  mmf.value.invoiceDate = mmf.value.invoiceDate
-    ? new Date(mmf.value.invoiceDate)
-    : undefined;
+  mmf.value = _mmf;
   modalComponent.value._show();
   Object.keys(values).forEach((field) => setFieldTouched(field, false));
 };

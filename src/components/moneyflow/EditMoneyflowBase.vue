@@ -321,31 +321,7 @@ const mseRemainder = computed(() => {
 
 const resetForm = () => {
   if (props.mmfToEdit && props.mmfToEdit.bookingDate) {
-    const bookingDate = new Date(props.mmfToEdit.bookingDate);
-    bookingDate.setHours(0, 0, 0, 0);
-    let invoiceDate: Date | undefined = undefined;
-    if (props.mmfToEdit.invoiceDate) {
-      invoiceDate = new Date(props.mmfToEdit.invoiceDate);
-      invoiceDate.setHours(0, 0, 0, 0);
-    }
-
-    mmf.value = {
-      amount: props.mmfToEdit.amount,
-      bookingDate: bookingDate,
-      capitalsourceId: props.mmfToEdit.capitalsourceId,
-      comment: props.mmfToEdit.comment,
-      contractpartnerId: props.mmfToEdit.contractpartnerId,
-      hasReceipt: props.mmfToEdit.hasReceipt,
-      id: props.mmfToEdit.id,
-      invoiceDate: invoiceDate,
-      postingAccountId: props.mmfToEdit.postingAccountId,
-      private: props.mmfToEdit.private,
-      userId: props.mmfToEdit.userId,
-      capitalsourceComment: props.mmfToEdit.capitalsourceComment,
-      contractpartnerName: props.mmfToEdit.contractpartnerName,
-      moneyflowSplitEntries: props.mmfToEdit.moneyflowSplitEntries,
-      postingAccountName: props.mmfToEdit.postingAccountName,
-    };
+    Object.assign(mmf.value, props.mmfToEdit);
 
     amount.value = mmf.value.amount;
 
