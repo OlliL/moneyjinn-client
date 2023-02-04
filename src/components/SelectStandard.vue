@@ -90,7 +90,6 @@ const {
 });
 
 const onInput = (event: Event) => {
-  console.log("onInput");
   setState({ touched: true });
   handleChange(event, true);
   emit("update:modelValue", fieldValue.value);
