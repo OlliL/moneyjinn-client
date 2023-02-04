@@ -159,6 +159,7 @@
               :index="index"
               :remainder="mseRemainder"
               :remainder-is-valid="mseRemainderIsValid"
+              :id-suffix="idSuffix + '#' + mse.id"
               @delete-moneyflow-split-entry-row="onDeleteMoneyflowSplitEntryRow"
               @add-moneyflow-split-entry-row="onAddMoneyflowSplitEntryRow"
               @amount-changed="onMoneyflowSplitEntryRowAmountChanged"
@@ -234,7 +235,6 @@ const toggleTextOffPreDefMoneyflow = ref("belassen");
 const toggleTextOnPreDefMoneyflow = ref("erneuern");
 const toggleTextOff = ref("");
 const toggleTextOn = ref("");
-const mseRowsAreValid = ref(null as boolean | null);
 const mseRemainderIsValid = ref(undefined as boolean | undefined);
 const showMoneyflowFields = ref(true);
 const originalMoneyflowSplitEntryIds = ref(new Array<number>());
@@ -285,8 +285,7 @@ watch(
 );
 
 const formIsValid = computed(() => {
-  console.log(mseRowsAreValid.value, mseRemainderIsValid.value);
-  const isValid = mseRowsAreValid.value && mseRemainderIsValid.value;
+  const isValid = mseRemainderIsValid.value;
   if (isValid === null || isValid === undefined || isValid === true) {
     return true;
   }
@@ -403,7 +402,6 @@ const resetForm = () => {
     previousPostingAccountSetByContractpartnerDefaults.value = 0;
   }
   serverErrors.value = new Array<string>();
-  mseRowsAreValid.value = null;
   mseRemainderIsValid.value = undefined;
 
   saveAsPreDefMoneyflow.value = false;
@@ -511,19 +509,6 @@ const validateMseRemainder = () => {
     mseRemainderIsValid.value = false;
   }
 };
-const validateMseRows = () => {
-  let mseRowsValid = true;
-
-  const mseRowRefs = mseRow.value as Array<
-    typeof EditMoneyflowBaseSplitEntryRowVue
-  >;
-  for (let ref of mseRowRefs) {
-    const valid = ref.validateRow() as boolean;
-    mseRowsValid &&= valid;
-  }
-
-  mseRowsAreValid.value = mseRowsValid;
-};
 /*
  * Moneyflow handling
  */
@@ -592,7 +577,6 @@ const selectPreDefMoneyflow = (
 };
 
 const prepareServerCall = (): boolean => {
-  validateMseRows();
   validateMseRemainder();
   if (!allMseRowsAreEmpty() && mmf.value.moneyflowSplitEntries) {
     let mse = {} as MoneyflowSplitEntry;
@@ -659,7 +643,6 @@ const deleteImportedMoneyflow = async (id: number) => {
   await ImportedMoneyflowControllerHandler.deleteImportedMoneyflow(id);
 };
 const createMoneyflow = async (): Promise<boolean> => {
-  console.log("createMoneyflow");
   if (prepareServerCall()) {
     const validationResult = await MoneyflowControllerHandler.createMoneyflow(
       mmf.value,
