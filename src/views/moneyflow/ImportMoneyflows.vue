@@ -56,7 +56,7 @@
                     {{ importedMoneyflow.usage }}
                   </div>
                 </div>
-                <EditMoneyflowInternalVue
+                <EditMoneyflowBase
                   :ref="(el) => editMoneyflowRefs.set(importedMoneyflow.id, el)"
                   :mmf-to-edit="importedMoneyflow"
                   :id-suffix="importedMoneyflow.id + ''"
@@ -86,7 +86,7 @@
 import { onMounted, ref } from "vue";
 
 import ButtonSubmit from "@/components/ButtonSubmit.vue";
-import EditMoneyflowInternalVue from "@/components/moneyflow/EditMoneyflowInternal.vue";
+import EditMoneyflowBase from "@/components/moneyflow/EditMoneyflowBase.vue";
 
 import type { ImportedMoneyflow } from "@/model/moneyflow/ImportedMoneyflow";
 
