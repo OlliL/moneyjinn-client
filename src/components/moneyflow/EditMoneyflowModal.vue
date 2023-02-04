@@ -8,7 +8,7 @@
     <template #body>
       <form @submit.prevent="updateMoneyflow" id="updateMoneyflowForm">
         <div class="container-fluid">
-          <EditMoneyflowVueInternal :mmf-to-edit="mmf" ref="editMoneyflowVue" />
+          <EditMoneyflowBase :mmf-to-edit="mmf" ref="editMoneyflowVue" />
         </div>
       </form>
     </template>
@@ -22,10 +22,7 @@
         Bon l&ouml;schen
       </button>
 
-      <!--<button-submit button-label="Speichern" form-id="updateMoneyflowForm" />-->
-      <button type="submit" class="btn btn-primary" form="updateMoneyflowForm">
-        Speichern
-      </button>
+      <button-submit button-label="Speichern" form-id="updateMoneyflowForm" />
     </template>
   </ModalVue>
 </template>
@@ -35,7 +32,7 @@ import { useForm } from "vee-validate";
 import { ref } from "vue";
 
 import ButtonSubmit from "@/components/ButtonSubmit.vue";
-import EditMoneyflowVueInternal from "@/components/moneyflow/EditMoneyflowInternal.vue";
+import EditMoneyflowBase from "@/components/moneyflow/EditMoneyflowBase.vue";
 import ModalVue from "../Modal.vue";
 
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
@@ -47,7 +44,7 @@ const modalComponent = ref();
 const editMoneyflowVue = ref();
 const emit = defineEmits(["moneyflowUpdated", "moneyflowReceiptDeleted"]);
 
-const { handleSubmit } = useForm();
+const { handleSubmit, values, setFieldTouched } = useForm();
 
 const _show = (_mmf: Moneyflow) => {
   mmf.value = JSON.parse(JSON.stringify(_mmf));
@@ -56,6 +53,7 @@ const _show = (_mmf: Moneyflow) => {
     ? new Date(mmf.value.invoiceDate)
     : undefined;
   modalComponent.value._show();
+  Object.keys(values).forEach((field) => setFieldTouched(field, false));
 };
 
 const updateMoneyflow = handleSubmit(() => {
