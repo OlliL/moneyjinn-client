@@ -83,9 +83,9 @@ const deleteMoneyflow = (id: number) => {
   });
 };
 
-const editMoneyflow = (id: number) => {
+const editMoneyflow = (id: number, receipt: ImportedMoneyflowReceipt) => {
   MoneyflowControllerHandler.fetchMoneyflow(id).then((mmf) => {
-    (editModal.value as typeof EditMoneyflowModalVue)._show(mmf);
+    (editModal.value as typeof EditMoneyflowModalVue)._show(mmf, receipt);
   });
 };
 
