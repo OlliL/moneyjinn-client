@@ -177,14 +177,24 @@
 
 <script lang="ts" setup>
 import { computed, onMounted, ref, watch, type PropType } from "vue";
+import { date, number, string } from "zod";
 
+import DivError from "../DivError.vue";
 import EditMoneyflowBaseSplitEntryRowVue from "@/components/moneyflow/EditMoneyflowBaseSplitEntryRow.vue";
+import InputDate from "../InputDate.vue";
+import InputStandard from "../InputStandard.vue";
+import SelectContractpartner from "../contractpartner/SelectContractpartner.vue";
+import SelectCapitalsource from "../capitalsource/SelectCapitalsource.vue";
+import SelectPostingAccount from "../postingaccount/SelectPostingAccount.vue";
 
+import { useCapitalsourceStore } from "@/stores/CapitalsourceStore";
 import { useContractpartnerStore } from "@/stores/ContractpartnerStore";
 
+import { amountSchema, globErr } from "@/tools/views/ZodUtil";
 import { handleServerError } from "@/tools/views/ThrowError";
 import { toFixed } from "@/tools/math";
 
+import { CapitalsourceState } from "@/model/capitalsource/CapitalsourceState";
 import type { ImportedMoneyflow } from "@/model/moneyflow/ImportedMoneyflow";
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 import type { MoneyflowSplitEntry } from "@/model/moneyflow/MoneyflowSplitEntry";
@@ -193,16 +203,7 @@ import type { PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
 import type { ValidationResult } from "@/model/validation/ValidationResult";
 
 import MoneyflowControllerHandler from "@/handler/MoneyflowControllerHandler";
-
 import ImportedMoneyflowControllerHandler from "@/handler/ImportedMoneyflowControllerHandler";
-import { date, number, string } from "zod";
-import { amountSchema, globErr } from "@/tools/views/ZodUtil";
-import InputDate from "../InputDate.vue";
-import SelectContractpartner from "../contractpartner/SelectContractpartner.vue";
-import SelectCapitalsource from "../capitalsource/SelectCapitalsource.vue";
-import InputStandard from "../InputStandard.vue";
-import SelectPostingAccount from "../postingaccount/SelectPostingAccount.vue";
-import DivError from "../DivError.vue";
 
 const schema = {
   amount: amountSchema("Bitte Betrag angeben!"),
@@ -240,6 +241,7 @@ const showMoneyflowFields = ref(true);
 const originalMoneyflowSplitEntryIds = ref(new Array<number>());
 const mseRow = ref();
 const contractpartnerStore = useContractpartnerStore();
+const capitalsourceStore = useCapitalsourceStore();
 
 const props = defineProps({
   mmfToEdit: {
@@ -386,8 +388,20 @@ const resetForm = () => {
     mmf.value.invoiceDate = undefined;
     mmf.value.contractpartnerId = 0;
     mmf.value.contractpartnerName = "";
-    mmf.value.capitalsourceId = 0;
-    mmf.value.capitalsourceComment = "";
+
+    const capitalsources = capitalsourceStore
+      .getBookableValidCapitalsources(bookingDate)
+      .filter((mcs) => (mcs.state = CapitalsourceState.CACHE));
+
+    if (capitalsources && capitalsources.length > 0) {
+      const mcs = capitalsources[0];
+      mmf.value.capitalsourceId = mcs.id;
+      mmf.value.capitalsourceComment = mcs.comment;
+    } else {
+      mmf.value.capitalsourceId = 0;
+      mmf.value.capitalsourceComment = "";
+    }
+
     mmf.value.postingAccountId = 0;
     mmf.value.postingAccountName = "";
     mmf.value.comment = "";
