@@ -57,16 +57,14 @@
                   </div>
                 </div>
                 <EditMoneyflowInternalVue
-                  :ref="'editMoneyflowVue' + importedMoneyflow.id"
+                  :ref="(el) => editMoneyflowRefs.set(importedMoneyflow.id, el)"
                   :mmf-to-edit="importedMoneyflow"
                   :id-suffix="importedMoneyflow.id + ''"
                   :fill-contractpartner-defaults="true"
                 />
                 <div class="row no-gutters flex-lg-nowrap">
                   <div class="col-12">
-                    <button type="submit" class="btn btn-primary mx-2">
-                      &Uuml;bernehmen
-                    </button>
+                    <ButtonSubmit button-label="Übernehmen" />
                     <button
                       type="button"
                       class="btn btn-danger mx-2"
@@ -84,48 +82,45 @@
     </div>
   </div>
 </template>
-<script lang="ts">
-import { defineComponent } from "vue";
-import type { ImportedMoneyflow } from "@/model/moneyflow/ImportedMoneyflow";
-import ImportedMoneyflowControllerHandler from "@/handler/ImportedMoneyflowControllerHandler";
+<script lang="ts" setup>
+import { onMounted, ref } from "vue";
+
+import ButtonSubmit from "@/components/ButtonSubmit.vue";
 import EditMoneyflowInternalVue from "@/components/moneyflow/EditMoneyflowInternal.vue";
 
-export default defineComponent({
-  name: "ImportMoneyflows",
-  data() {
-    return {
-      importMoneyflows: {} as Array<ImportedMoneyflow>,
-    };
-  },
-  async mounted() {
-    this.importMoneyflows =
-      await ImportedMoneyflowControllerHandler.showAddImportedMoneyflows();
-  },
-  methods: {
-    async deleteImportedMoneyflow(mim: ImportedMoneyflow) {
-      const ref = (
-        this.$refs[
-          "editMoneyflowVue" + mim.id
-        ] as typeof EditMoneyflowInternalVue
-      )[0];
-      await ref.deleteImportedMoneyflow(mim.id);
-      this.importMoneyflows = this.importMoneyflows.filter(
+import type { ImportedMoneyflow } from "@/model/moneyflow/ImportedMoneyflow";
+
+import ImportedMoneyflowControllerHandler from "@/handler/ImportedMoneyflowControllerHandler";
+
+const importMoneyflows = ref({} as Array<ImportedMoneyflow>);
+const editMoneyflowRefs = new Map<number, any>();
+
+onMounted(() => {
+  ImportedMoneyflowControllerHandler.showAddImportedMoneyflows().then((imf) => {
+    importMoneyflows.value = imf;
+  });
+});
+
+const deleteImportedMoneyflow = (mim: ImportedMoneyflow) => {
+  editMoneyflowRefs
+    .get(mim.id)
+    .deleteImportedMoneyflow(mim.id)
+    .then(() => {
+      importMoneyflows.value = importMoneyflows.value.filter(
         (entry) => entry.id !== mim.id
       );
-    },
-    async importImportedMoneyflow(mim: ImportedMoneyflow) {
-      const ref = (
-        this.$refs[
-          "editMoneyflowVue" + mim.id
-        ] as typeof EditMoneyflowInternalVue
-      )[0];
-      if (await ref.importImportedMoneyflow(mim)) {
-        this.importMoneyflows = this.importMoneyflows.filter(
+    });
+};
+const importImportedMoneyflow = (mim: ImportedMoneyflow) => {
+  editMoneyflowRefs
+    .get(mim.id)
+    .importImportedMoneyflow(mim)
+    .then((res: boolean) => {
+      if (res) {
+        importMoneyflows.value = importMoneyflows.value.filter(
           (entry) => entry.id !== mim.id
         );
       }
-    },
-  },
-  components: { EditMoneyflowInternalVue },
-});
+    });
+};
 </script>
