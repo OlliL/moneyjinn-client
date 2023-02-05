@@ -3,7 +3,6 @@ import { ErrorCode } from "@/model/ErrorCode";
 import type { ChangePasswordRequest } from "@/model/rest/user/ChangePasswordRequest";
 import type { CreateUserRequest } from "@/model/rest/user/CreateUserRequest";
 import { LoginRequest } from "@/model/rest/user/LoginRequest";
-import type { LoginResponse } from "@/model/rest/user/LoginResponse";
 import type { ShowUserListResponse } from "@/model/rest/user/ShowUserListResponse";
 import type { UpdateUserRequest } from "@/model/rest/user/UpdateUserRequest";
 import type { UserValidation } from "@/model/user/UserValidation";
@@ -54,40 +53,38 @@ class UserControllerHandler extends AbstractControllerHandler {
     const userSessionStore = useUserSessionStore();
 
     userSessionStore.logout();
-    const response = await super.post(
-      loginRequest,
-      UserControllerHandler.CONTROLLER,
-      "login"
-    );
-    if (!response.ok) {
-      if (response.status === 403) {
-        throwError(ErrorCode.USERNAME_PASSWORD_WRONG);
-      }
-      throw new Error(response.statusText);
-    }
 
-    const loginResponse = (await response.json()) as LoginResponse;
+    return this.userControllerApi
+      .login(loginRequest)
+      .then((response) => {
+        const loginResponse = response.data;
 
-    if (loginResponse.code) {
-      throwError(loginResponse.code);
-    }
-    const userTransport = loginResponse.userTransport;
+        if (loginResponse.code) {
+          throwError(loginResponse.code);
+        }
+        const userTransport = loginResponse.userTransport;
 
-    const userSession: UserSession = {
-      userId: userTransport.id,
-      userName: userTransport.userName,
-      userCanLogin: userTransport.userCanLogin === 1 ? true : false,
-      userIsNew: userTransport.userIsNew === 1 ? true : false,
-      userIsAdmin: userTransport.userIsAdmin === 1 ? true : false,
-      userAuthorizationToken: loginResponse.token,
-      userRefreshToken: loginResponse.refreshToken,
-    };
+        const userSession: UserSession = {
+          userId: userTransport.id,
+          userName: userTransport.userName,
+          userCanLogin: userTransport.userCanLogin === 1 ? true : false,
+          userIsNew: userTransport.userIsNew === 1 ? true : false,
+          userIsAdmin: userTransport.userIsAdmin === 1 ? true : false,
+          userAuthorizationToken: loginResponse.token,
+          userRefreshToken: loginResponse.refreshToken,
+        };
 
-    userSessionStore.setUserSession(userSession);
-    setAuthTokens({
-      accessToken: loginResponse.token,
-      refreshToken: loginResponse.refreshToken,
-    });
+        userSessionStore.setUserSession(userSession);
+        setAuthTokens({
+          accessToken: loginResponse.token,
+          refreshToken: loginResponse.refreshToken,
+        });
+      })
+      .catch((reason) => {
+        if (reason.response.status === 403)
+          throwError(ErrorCode.USERNAME_PASSWORD_WRONG);
+        throw new Error(reason.response.statusText);
+      });
   }
 
   async changePassword(oldPassword: string, password: string) {
