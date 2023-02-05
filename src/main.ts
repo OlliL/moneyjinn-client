@@ -10,6 +10,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import "bootstrap";
 import "../node_modules/vanillajs-datepicker/dist/css/datepicker-bs5.min.css";
+import { AxiosInstanceHolder } from "./handler/AxiosInstanceHolder";
 
 const app = createApp(App);
 const pinia = createPinia();
@@ -22,5 +23,7 @@ pinia.use(
 
 app.use(pinia);
 app.use(router);
+
+AxiosInstanceHolder.getInstance();
 
 app.mount("#app");

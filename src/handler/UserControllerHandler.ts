@@ -31,21 +31,23 @@ import type { Group } from "@/model/group/Group";
 import type { ShowEditUserResponse } from "@/model/rest/user/ShowEditUserResponse";
 import type { ErrorResponse } from "@/model/rest/ErrorResponse";
 import { UserControllerApi } from "@/api";
-import { WebServer } from "./WebServer";
 import type { ValidationItemTransport } from "@/model/rest/transport/ValidationItemTransport";
-import axios from "axios";
-import {
-  setAuthTokens,
-  getBrowserLocalStorage,
-  applyAuthTokenInterceptor,
-  type TokenRefreshRequest,
-  getBrowserSessionStorage,
-  getAccessToken,
-  getRefreshToken,
-} from "axios-jwt";
+import { setAuthTokens } from "axios-jwt";
+import { AxiosInstanceHolder } from "./AxiosInstanceHolder";
 
 class UserControllerHandler extends AbstractControllerHandler {
   private static CONTROLLER = "user";
+  private userControllerApi: UserControllerApi;
+
+  public constructor() {
+    super();
+
+    this.userControllerApi = new UserControllerApi(
+      undefined,
+      "",
+      AxiosInstanceHolder.getInstance().getAxiosInstance()
+    );
+  }
 
   async login(username: string, password: string): Promise<void> {
     const loginRequest = new LoginRequest(username, password);
@@ -200,36 +202,7 @@ class UserControllerHandler extends AbstractControllerHandler {
       request.accessRelationTransport = mapAccessRelationToTransport(mar);
     }
 
-    const axiosInstance = axios.create({
-      baseURL: "http://" + WebServer.getInstance().getWebServer(),
-      withCredentials: true,
-    });
-
-    const requestRefresh: TokenRefreshRequest = async (
-      refreshToken: string
-    ) => {
-      await super.refreshAuthToken();
-      const userSessionStore = useUserSessionStore();
-      return {
-        accessToken: userSessionStore.getAuthorizationToken,
-        refreshToken: userSessionStore.getRefreshToken,
-      };
-    };
-
-    applyAuthTokenInterceptor(axiosInstance, { requestRefresh });
-
-    const userSessionStore = useUserSessionStore();
-    setAuthTokens({
-      accessToken: userSessionStore.getAuthorizationToken,
-      refreshToken: userSessionStore.getRefreshToken,
-    });
-
-    const userControllerApi = new UserControllerApi(
-      undefined,
-      undefined,
-      axiosInstance
-    );
-    const response = await userControllerApi.createUser(request);
+    const response = await this.userControllerApi.createUser(request);
 
     const createUserResponse = response.data;
     const UserValidation = {} as UserValidation;
