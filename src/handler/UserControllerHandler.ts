@@ -2,7 +2,6 @@ import AbstractControllerHandler from "@/handler/AbstractControllerHandler";
 import { ErrorCode } from "@/model/ErrorCode";
 import type { ChangePasswordRequest } from "@/model/rest/user/ChangePasswordRequest";
 import type { CreateUserRequest } from "@/model/rest/user/CreateUserRequest";
-import type { CreateUserResponse } from "@/model/rest/user/CreateUserResponse";
 import { LoginRequest } from "@/model/rest/user/LoginRequest";
 import type { LoginResponse } from "@/model/rest/user/LoginResponse";
 import type { ShowUserListResponse } from "@/model/rest/user/ShowUserListResponse";
@@ -31,6 +30,19 @@ import { mapGroupTransportToModel } from "./mapper/GroupTransportMapper";
 import type { Group } from "@/model/group/Group";
 import type { ShowEditUserResponse } from "@/model/rest/user/ShowEditUserResponse";
 import type { ErrorResponse } from "@/model/rest/ErrorResponse";
+import { UserControllerApi } from "@/api";
+import { WebServer } from "./WebServer";
+import type { ValidationItemTransport } from "@/model/rest/transport/ValidationItemTransport";
+import axios from "axios";
+import {
+  setAuthTokens,
+  getBrowserLocalStorage,
+  applyAuthTokenInterceptor,
+  type TokenRefreshRequest,
+  getBrowserSessionStorage,
+  getAccessToken,
+  getRefreshToken,
+} from "axios-jwt";
 
 class UserControllerHandler extends AbstractControllerHandler {
   private static CONTROLLER = "user";
@@ -70,6 +82,10 @@ class UserControllerHandler extends AbstractControllerHandler {
     };
 
     userSessionStore.setUserSession(userSession);
+    setAuthTokens({
+      accessToken: loginResponse.token,
+      refreshToken: loginResponse.refreshToken,
+    });
   }
 
   async changePassword(oldPassword: string, password: string) {
@@ -173,7 +189,6 @@ class UserControllerHandler extends AbstractControllerHandler {
   }
 
   async createUser(mpm: User): Promise<UserValidation> {
-    const usecase = "createUser";
     const request = {} as CreateUserRequest;
     request.userTransport = mapUserToTransport(mpm);
 
@@ -185,22 +200,43 @@ class UserControllerHandler extends AbstractControllerHandler {
       request.accessRelationTransport = mapAccessRelationToTransport(mar);
     }
 
-    const response = await super.post(
-      request,
-      UserControllerHandler.CONTROLLER,
-      usecase
+    const axiosInstance = axios.create({
+      baseURL: "http://" + WebServer.getInstance().getWebServer(),
+      withCredentials: true,
+    });
+
+    const requestRefresh: TokenRefreshRequest = async (
+      refreshToken: string
+    ) => {
+      await super.refreshAuthToken();
+      const userSessionStore = useUserSessionStore();
+      return {
+        accessToken: userSessionStore.getAuthorizationToken,
+        refreshToken: userSessionStore.getRefreshToken,
+      };
+    };
+
+    applyAuthTokenInterceptor(axiosInstance, { requestRefresh });
+
+    const userSessionStore = useUserSessionStore();
+    setAuthTokens({
+      accessToken: userSessionStore.getAuthorizationToken,
+      refreshToken: userSessionStore.getRefreshToken,
+    });
+
+    const userControllerApi = new UserControllerApi(
+      undefined,
+      undefined,
+      axiosInstance
     );
+    const response = await userControllerApi.createUser(request);
 
-    if (!response.ok) {
-      throw new Error(response.statusText);
-    }
-
-    const createUserResponse = (await response.json()) as CreateUserResponse;
+    const createUserResponse = response.data;
     const UserValidation = {} as UserValidation;
     const validationResult: ValidationResult = {
       result: createUserResponse.result,
       validationResultItems: createUserResponse.validationItemTransports?.map(
-        (vit) => {
+        (vit: ValidationItemTransport) => {
           return mapValidationItemTransportToModel(vit);
         }
       ),

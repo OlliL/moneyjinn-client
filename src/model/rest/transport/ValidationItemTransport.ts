@@ -1,5 +1,5 @@
 export type ValidationItemTransport = {
-  key?: number;
+  key?: string;
   error: number;
   variableArray?: Array<string>;
 };

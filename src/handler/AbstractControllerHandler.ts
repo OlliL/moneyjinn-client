@@ -120,7 +120,7 @@ abstract class AbstractControllerHandler {
     return response;
   }
 
-  private async refreshAuthToken() {
+  protected async refreshAuthToken() {
     const userSessionStore = useUserSessionStore();
 
     if (userSessionStore.getRefreshToken.length === 0) return;
