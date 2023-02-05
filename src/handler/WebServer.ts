@@ -1,5 +1,3 @@
-import { devtools } from "vue";
-
 export class WebServer {
   private static instance: WebServer;
   private webServer: String = "";
