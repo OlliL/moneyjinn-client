@@ -283,6 +283,7 @@ import { useUserSessionStore } from "@/stores/UserSessionStore";
 import { StoreService } from "@/stores/StoreService";
 
 import { WebSocketHandler } from "@/handler/WebSocketHandler";
+import { clearAuthTokens } from "axios-jwt";
 
 const year = new Date().getFullYear();
 const month = new Date().getMonth() + 1;
@@ -331,6 +332,7 @@ const logout = () => {
   WebSocketHandler.getInstance().disconnectStompClient();
   const userSessionStore = useUserSessionStore();
   userSessionStore.logout();
+  clearAuthTokens();
   router.push({
     name: Routes.Login,
   });
