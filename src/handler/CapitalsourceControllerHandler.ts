@@ -1,10 +1,7 @@
 import AbstractControllerHandler from "@/handler/AbstractControllerHandler";
 import type { Capitalsource } from "@/model/capitalsource/Capitalsource";
 import type { CapitalsourceValidation } from "@/model/capitalsource/CapitalsourceValidation";
-import type { ShowCapitalsourceListResponse } from "@/model/rest/capitalsource/ShowCapitalsourceListResponse";
 import type { CreateCapitalsourceRequest } from "@/model/rest/capitalsource/CreateCapitalsourceRequest";
-import type { CreateCapitalsourceResponse } from "@/model/rest/capitalsource/CreateCapitalsourceResponse";
-import { throwError } from "@/tools/views/ThrowError";
 import {
   mapCapitalsourceToTransport,
   mapCapitalsourceTransportToModel,
@@ -13,31 +10,32 @@ import { mapValidationItemTransportToModel } from "./mapper/ValidationItemTransp
 import type { ValidationResult } from "@/model/validation/ValidationResult";
 import { useUserSessionStore } from "@/stores/UserSessionStore";
 import type { UpdateCapitalsourceRequest } from "@/model/rest/capitalsource/UpdateCapitalsourceRequest";
-import type { ValidationResponse } from "@/model/rest/ValidationResponse";
+import { CapitalsourceControllerApi } from "@/api";
+import { AxiosInstanceHolder } from "./AxiosInstanceHolder";
 
 class CapitalsourceControllerHandler extends AbstractControllerHandler {
-  private static CONTROLLER = "capitalsource";
+  private api: CapitalsourceControllerApi;
+
+  public constructor() {
+    super();
+
+    this.api = new CapitalsourceControllerApi(
+      undefined,
+      "",
+      AxiosInstanceHolder.getInstance().getAxiosInstance()
+    );
+  }
 
   async fetchAllCapitalsource(): Promise<Array<Capitalsource>> {
-    const usecase = "showCapitalsourceList";
-    const response = await super.get(
-      CapitalsourceControllerHandler.CONTROLLER,
-      usecase
-    );
-    if (!response.ok) {
-      throw new Error(response.statusText);
-    }
+    const response = await this.api.showCapitalsourceList();
 
-    const showCapitalsourceListResponse =
-      (await response.json()) as ShowCapitalsourceListResponse;
+    super.handleResponseError(response);
 
-    if (showCapitalsourceListResponse.code) {
-      throwError(showCapitalsourceListResponse.code);
-    }
+    const showCapitalsourceListResponse = response.data;
 
     const capitalsourceArray = new Array<Capitalsource>();
-    const transport =
-      await showCapitalsourceListResponse.capitalsourceTransports;
+
+    const transport = showCapitalsourceListResponse.capitalsourceTransports;
     transport?.forEach((value) => {
       capitalsourceArray.push(mapCapitalsourceTransportToModel(value));
     });
@@ -48,22 +46,14 @@ class CapitalsourceControllerHandler extends AbstractControllerHandler {
   async createCapitalsource(
     mcs: Capitalsource
   ): Promise<CapitalsourceValidation> {
-    const usecase = "createCapitalsource";
     const request = {} as CreateCapitalsourceRequest;
     request.capitalsourceTransport = mapCapitalsourceToTransport(mcs);
 
-    const response = await super.post(
-      request,
-      CapitalsourceControllerHandler.CONTROLLER,
-      usecase
-    );
+    const response = await this.api.createCapitalsource(request);
 
-    if (!response.ok) {
-      throw new Error(response.statusText);
-    }
+    super.handleResponseError(response);
 
-    const createCapitalsourceResponse =
-      (await response.json()) as CreateCapitalsourceResponse;
+    const createCapitalsourceResponse = response.data;
     const capitalsourceValidation = {} as CapitalsourceValidation;
     const validationResult: ValidationResult = {
       result: createCapitalsourceResponse.result,
@@ -86,21 +76,14 @@ class CapitalsourceControllerHandler extends AbstractControllerHandler {
   }
 
   async updateCapitalsource(mcs: Capitalsource): Promise<ValidationResult> {
-    const usecase = "updateCapitalsource";
     const request = {} as UpdateCapitalsourceRequest;
     request.capitalsourceTransport = mapCapitalsourceToTransport(mcs);
 
-    const response = await super.put(
-      request,
-      CapitalsourceControllerHandler.CONTROLLER,
-      usecase
-    );
+    const response = await this.api.updateCapitalsource(request);
 
-    if (!response.ok) {
-      throw new Error(response.statusText);
-    }
+    super.handleResponseError(response);
 
-    const validationResponse = (await response.json()) as ValidationResponse;
+    const validationResponse = response.data;
     const validationResult: ValidationResult = {
       result: validationResponse.result,
       validationResultItems: validationResponse.validationItemTransports?.map(
@@ -114,16 +97,8 @@ class CapitalsourceControllerHandler extends AbstractControllerHandler {
   }
 
   async deleteCapitalsource(capitalsourceId: number) {
-    const usecase = "deleteCapitalsourceById/" + capitalsourceId;
-
-    const response = await super.delete(
-      CapitalsourceControllerHandler.CONTROLLER,
-      usecase
-    );
-
-    if (!response.ok) {
-      throw new Error(response.statusText);
-    }
+    const response = await this.api.deleteCapitalsourceById(capitalsourceId);
+    return super.handleResponseError(response);
   }
 }
 

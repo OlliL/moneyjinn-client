@@ -1,44 +1,42 @@
 import AbstractControllerHandler from "@/handler/AbstractControllerHandler";
 import type { Contractpartner } from "@/model/contractpartner/Contractpartner";
 import type { ContractpartnerValidation } from "@/model/contractpartner/ContractpartnerValidation";
-import type { ShowContractpartnerListResponse } from "@/model/rest/contractpartner/ShowContractpartnerListResponse";
 import type { CreateContractpartnerRequest } from "@/model/rest/contractpartner/CreateContractpartnerRequest";
-import type { CreateContractpartnerResponse } from "@/model/rest/contractpartner/CreateContractpartnerResponse";
-import type { ValidationResult } from "@/model/validation/ValidationResult";
-import { throwError } from "@/tools/views/ThrowError";
 import {
-  mapContractpartnerTransportToModel,
   mapContractpartnerToTransport,
+  mapContractpartnerTransportToModel,
 } from "./mapper/ContractpartnerTransportMapper";
 import { mapValidationItemTransportToModel } from "./mapper/ValidationItemTransportMapper";
+import type { ValidationResult } from "@/model/validation/ValidationResult";
 import { useUserSessionStore } from "@/stores/UserSessionStore";
-import type { ValidationResponse } from "@/model/rest/ValidationResponse";
 import type { UpdateContractpartnerRequest } from "@/model/rest/contractpartner/UpdateContractpartnerRequest";
+import { ContractpartnerControllerApi } from "@/api";
+import { AxiosInstanceHolder } from "./AxiosInstanceHolder";
 
 class ContractpartnerControllerHandler extends AbstractControllerHandler {
-  private static CONTROLLER = "contractpartner";
+  private api: ContractpartnerControllerApi;
+
+  public constructor() {
+    super();
+
+    this.api = new ContractpartnerControllerApi(
+      undefined,
+      "",
+      AxiosInstanceHolder.getInstance().getAxiosInstance()
+    );
+  }
 
   async fetchAllContractpartner(): Promise<Array<Contractpartner>> {
-    const usecase = "showContractpartnerList";
-    const response = await super.get(
-      ContractpartnerControllerHandler.CONTROLLER,
-      usecase
-    );
-    if (!response.ok) {
-      throw new Error(response.statusText);
-    }
+    const response = await this.api.showContractpartnerList();
 
-    const showContractpartnerListResponse =
-      (await response.json()) as ShowContractpartnerListResponse;
+    super.handleResponseError(response);
 
-    if (showContractpartnerListResponse.code) {
-      throwError(showContractpartnerListResponse.code);
-    }
+    const showContractpartnerListResponse = response.data;
 
     const contractpartnerArray = new Array<Contractpartner>();
-    const transports =
-      await showContractpartnerListResponse.contractpartnerTransports;
-    transports?.forEach((value) => {
+
+    const transport = showContractpartnerListResponse.contractpartnerTransports;
+    transport?.forEach((value) => {
       contractpartnerArray.push(mapContractpartnerTransportToModel(value));
     });
 
@@ -48,22 +46,14 @@ class ContractpartnerControllerHandler extends AbstractControllerHandler {
   async createContractpartner(
     mcp: Contractpartner
   ): Promise<ContractpartnerValidation> {
-    const usecase = "createContractpartner";
     const request = {} as CreateContractpartnerRequest;
     request.contractpartnerTransport = mapContractpartnerToTransport(mcp);
 
-    const response = await super.post(
-      request,
-      ContractpartnerControllerHandler.CONTROLLER,
-      usecase
-    );
+    const response = await this.api.createContractpartner(request);
 
-    if (!response.ok) {
-      throw new Error(response.statusText);
-    }
+    super.handleResponseError(response);
 
-    const createContractpartnerResponse =
-      (await response.json()) as CreateContractpartnerResponse;
+    const createContractpartnerResponse = response.data;
     const contractpartnerValidation = {} as ContractpartnerValidation;
     const validationResult: ValidationResult = {
       result: createContractpartnerResponse.result,
@@ -74,6 +64,7 @@ class ContractpartnerControllerHandler extends AbstractControllerHandler {
     };
 
     contractpartnerValidation.validationResult = validationResult;
+
     if (validationResult.result) {
       const userSessionStore = useUserSessionStore();
       const createdMcp: Contractpartner = mcp;
@@ -85,21 +76,14 @@ class ContractpartnerControllerHandler extends AbstractControllerHandler {
   }
 
   async updateContractpartner(mcp: Contractpartner): Promise<ValidationResult> {
-    const usecase = "updateContractpartner";
     const request = {} as UpdateContractpartnerRequest;
     request.contractpartnerTransport = mapContractpartnerToTransport(mcp);
 
-    const response = await super.put(
-      request,
-      ContractpartnerControllerHandler.CONTROLLER,
-      usecase
-    );
+    const response = await this.api.updateContractpartner(request);
 
-    if (!response.ok) {
-      throw new Error(response.statusText);
-    }
+    super.handleResponseError(response);
 
-    const validationResponse = (await response.json()) as ValidationResponse;
+    const validationResponse = response.data;
     const validationResult: ValidationResult = {
       result: validationResponse.result,
       validationResultItems: validationResponse.validationItemTransports?.map(
@@ -113,16 +97,8 @@ class ContractpartnerControllerHandler extends AbstractControllerHandler {
   }
 
   async deleteContractpartner(contractpartnerId: number) {
-    const usecase = "deleteContractpartner/" + contractpartnerId;
-
-    const response = await super.delete(
-      ContractpartnerControllerHandler.CONTROLLER,
-      usecase
-    );
-
-    if (!response.ok) {
-      throw new Error(response.statusText);
-    }
+    const response = await this.api.deleteContractpartner(contractpartnerId);
+    return super.handleResponseError(response);
   }
 }
 

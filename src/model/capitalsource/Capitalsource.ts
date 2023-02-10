@@ -7,8 +7,8 @@ export type Capitalsource = {
   userId: number;
   type: CapitalsourceType;
   state: CapitalsourceState;
-  accountNumber: string;
-  bankCode: string;
+  accountNumber?: string;
+  bankCode?: string;
   comment: string;
   validTil: Date;
   validFrom: Date;
