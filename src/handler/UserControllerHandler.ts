@@ -37,13 +37,12 @@ import type { ValidationResult } from "@/model/validation/ValidationResult";
 import AbstractControllerHandler from "@/handler/AbstractControllerHandler";
 
 class UserControllerHandler extends AbstractControllerHandler {
-  private static CONTROLLER = "user";
-  private userControllerApi: UserControllerApi;
+  private api: UserControllerApi;
 
   public constructor() {
     super();
 
-    this.userControllerApi = new UserControllerApi(
+    this.api = new UserControllerApi(
       undefined,
       "",
       AxiosInstanceHolder.getInstance().getAxiosInstance()
@@ -60,38 +59,36 @@ class UserControllerHandler extends AbstractControllerHandler {
     userSessionStore.logout();
     clearAuthTokens();
 
-    return this.userControllerApi
-      .login(loginRequest)
-      .then((response) => {
-        const loginResponse = response.data;
+    try {
+      const response = await this.api.login(loginRequest);
+      const loginResponse = response.data;
 
-        if (loginResponse.code) {
-          throwError(loginResponse.code);
-        }
-        const userTransport = loginResponse.userTransport;
+      if (loginResponse.code) {
+        throwError(loginResponse.code);
+      }
+      const userTransport = loginResponse.userTransport;
 
-        const userSession: UserSession = {
-          userId: userTransport.id,
-          userName: userTransport.userName,
-          userCanLogin: userTransport.userCanLogin === 1 ? true : false,
-          userIsNew: userTransport.userIsNew === 1 ? true : false,
-          userIsAdmin: userTransport.userIsAdmin === 1 ? true : false,
-          userAuthorizationToken: loginResponse.token,
-          userRefreshToken: loginResponse.refreshToken,
-        };
+      const userSession: UserSession = {
+        userId: userTransport.id,
+        userName: userTransport.userName,
+        userCanLogin: userTransport.userCanLogin === 1 ? true : false,
+        userIsNew: userTransport.userIsNew === 1 ? true : false,
+        userIsAdmin: userTransport.userIsAdmin === 1 ? true : false,
+        userAuthorizationToken: loginResponse.token,
+        userRefreshToken: loginResponse.refreshToken,
+      };
 
-        userSessionStore.setUserSession(userSession);
+      userSessionStore.setUserSession(userSession);
 
-        setAuthTokens({
-          accessToken: loginResponse.token,
-          refreshToken: loginResponse.refreshToken,
-        });
-      })
-      .catch((reason) => {
-        if (reason.response.status === 403)
-          throwError(ErrorCode.USERNAME_PASSWORD_WRONG);
-        throw new Error(reason.response.statusText);
+      setAuthTokens({
+        accessToken: loginResponse.token,
+        refreshToken: loginResponse.refreshToken,
       });
+    } catch (reason: any) {
+      if (reason.response.status === 403)
+        throwError(ErrorCode.USERNAME_PASSWORD_WRONG);
+      throw new Error(reason.response.statusText);
+    }
   }
 
   async changePassword(oldPassword: string, password: string) {
@@ -100,71 +97,59 @@ class UserControllerHandler extends AbstractControllerHandler {
       oldPassword: oldPassword,
     };
 
-    return this.userControllerApi.changePassword(request).then((response) => {
-      return super.handleResponseError(response);
-    });
+    const response = await this.api.changePassword(request);
+    return super.handleResponseError(response);
   }
 
   async fetchAllUser(): Promise<Array<User>> {
-    return this.userControllerApi.showUserList().then((response) => {
-      super.handleResponseError(response);
-
-      const showUserListResponse = response.data;
-
-      const groups: Array<Group> = showUserListResponse.groupTransports.map(
-        (value) => {
-          return mapGroupTransportToModel(value);
-        }
-      );
-      const users: Array<User> = showUserListResponse.userTransports.map(
-        (value) => {
-          return mapUserTransportToModel(value);
-        }
-      );
-      const accessRelations: Array<AccessRelation> =
-        showUserListResponse.accessRelationTransports.map((value) => {
-          return mapAccessRelationTransportToModel(value);
-        });
-
-      const groupsById = new Map<number, Group>();
-      for (const group of groups) {
-        groupsById.set(group.id, group);
+    const response = await this.api.showUserList();
+    super.handleResponseError(response);
+    const showUserListResponse = response.data;
+    const groups: Array<Group> = showUserListResponse.groupTransports.map(
+      (value) => {
+        return mapGroupTransportToModel(value);
       }
-
-      const accessRelationsById = new Map<number, AccessRelation>();
-      for (const accessRelation of accessRelations) {
-        if (accessRelation.id)
-          accessRelationsById.set(accessRelation.id, accessRelation);
+    );
+    const users: Array<User> = showUserListResponse.userTransports.map(
+      (value_1) => {
+        return mapUserTransportToModel(value_1);
       }
-
-      for (const user of users) {
-        const accessRelation = accessRelationsById.get(user.id);
-        if (accessRelation) {
-          user.groupId = accessRelation.refId;
-          const group = groupsById.get(user.groupId);
-          if (group) {
-            user.groupName = group.name;
-          }
+    );
+    const accessRelations: Array<AccessRelation> =
+      showUserListResponse.accessRelationTransports.map((value_2) => {
+        return mapAccessRelationTransportToModel(value_2);
+      });
+    const groupsById = new Map<number, Group>();
+    for (const group of groups) {
+      groupsById.set(group.id, group);
+    }
+    const accessRelationsById = new Map<number, AccessRelation>();
+    for (const accessRelation of accessRelations) {
+      if (accessRelation.id)
+        accessRelationsById.set(accessRelation.id, accessRelation);
+    }
+    for (const user of users) {
+      const accessRelation_1 = accessRelationsById.get(user.id);
+      if (accessRelation_1) {
+        user.groupId = accessRelation_1.refId;
+        const group_1 = groupsById.get(user.groupId);
+        if (group_1) {
+          user.groupName = group_1.name;
         }
       }
-
-      return users;
-    });
+    }
+    return users;
   }
 
   async getAllAccessRelations(userId: number): Promise<Array<AccessRelation>> {
-    return this.userControllerApi.showEditUser(userId).then((response) => {
-      super.handleResponseError(response);
-
-      const showEditUserResponse = response.data;
-
-      const accessRelations: Array<AccessRelation> =
-        showEditUserResponse.accessRelationTransports.map((value) => {
-          return mapAccessRelationTransportToModel(value);
-        });
-
-      return accessRelations;
-    });
+    const response = await this.api.showEditUser(userId);
+    super.handleResponseError(response);
+    const showEditUserResponse = response.data;
+    const accessRelations: Array<AccessRelation> =
+      showEditUserResponse.accessRelationTransports.map((value) => {
+        return mapAccessRelationTransportToModel(value);
+      });
+    return accessRelations;
   }
 
   async createUser(mpm: User): Promise<UserValidation> {
@@ -179,30 +164,27 @@ class UserControllerHandler extends AbstractControllerHandler {
       request.accessRelationTransport = mapAccessRelationToTransport(mar);
     }
 
-    return this.userControllerApi.createUser(request).then((response) => {
-      super.handleResponseError(response);
+    const response = await this.api.createUser(request);
 
-      const createUserResponse = response.data;
+    super.handleResponseError(response);
 
-      const UserValidation = {} as UserValidation;
-      const validationResult: ValidationResult = {
-        result: createUserResponse.result,
-        validationResultItems: createUserResponse.validationItemTransports?.map(
-          (vit: ValidationItemTransport) => {
-            return mapValidationItemTransportToModel(vit);
-          }
-        ),
-      };
-
-      UserValidation.validationResult = validationResult;
-
-      if (validationResult.result) {
-        const createMpm: User = mpm;
-        createMpm.id = createUserResponse.userId;
-        UserValidation.user = createMpm;
-      }
-      return UserValidation;
-    });
+    const createUserResponse = response.data;
+    const UserValidation = {} as UserValidation;
+    const validationResult: ValidationResult = {
+      result: createUserResponse.result,
+      validationResultItems: createUserResponse.validationItemTransports?.map(
+        (vit: ValidationItemTransport) => {
+          return mapValidationItemTransportToModel(vit);
+        }
+      ),
+    };
+    UserValidation.validationResult = validationResult;
+    if (validationResult.result) {
+      const createMpm: User = mpm;
+      createMpm.id = createUserResponse.userId;
+      UserValidation.user = createMpm;
+    }
+    return UserValidation;
   }
 
   async updateUser(mpm: User, mar: AccessRelation): Promise<ValidationResult> {
@@ -210,28 +192,23 @@ class UserControllerHandler extends AbstractControllerHandler {
     request.userTransport = mapUserToTransport(mpm);
     request.accessRelationTransport = mapAccessRelationToTransport(mar);
 
-    return this.userControllerApi.updateUser(request).then((response) => {
-      super.handleResponseError(response);
-
-      const updateUserResponse = response.data;
-
-      const validationResult: ValidationResult = {
-        result: updateUserResponse.result,
-        validationResultItems: updateUserResponse.validationItemTransports?.map(
-          (vit) => {
-            return mapValidationItemTransportToModel(vit);
-          }
-        ),
-      };
-
-      return validationResult;
-    });
+    const response = await this.api.updateUser(request);
+    super.handleResponseError(response);
+    const updateUserResponse = response.data;
+    const validationResult: ValidationResult = {
+      result: updateUserResponse.result,
+      validationResultItems: updateUserResponse.validationItemTransports?.map(
+        (vit) => {
+          return mapValidationItemTransportToModel(vit);
+        }
+      ),
+    };
+    return validationResult;
   }
 
   async deleteUser(id: number): Promise<ValidationResult> {
-    return this.userControllerApi.deleteUserById(id).then((response) => {
-      return super.handleResponseErrorAsValidationResult(response);
-    });
+    const response = await this.api.deleteUserById(id);
+    return super.handleResponseErrorAsValidationResult(response);
   }
 }
 
