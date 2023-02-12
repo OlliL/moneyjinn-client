@@ -10,7 +10,7 @@
     @contractpartner-deleted="searchContent"
   />
 
-  <ListContractpartnerAccountsModalVue ref="accountsModal" />
+  <ListContractpartnerAccountsModal ref="accountsModal" />
 
   <div class="container-fluid text-center">
     <div class="row justify-content-md-center">
@@ -101,6 +101,7 @@ import { useContractpartnerStore } from "@/stores/ContractpartnerStore";
 
 import CreateContractpartnerModalVue from "@/components/contractpartner/CreateContractpartnerModal.vue";
 import DeleteContractpartnerModalVue from "@/components/contractpartner/DeleteContractpartnerModal.vue";
+import ListContractpartnerAccountsModal from "@/components/contractpartneraccount/ListContractpartnerAccountsModal.vue";
 import ListContractpartnerRowVue from "@/components/contractpartner/ListContractpartnerRow.vue";
 
 import type { Contractpartner } from "@/model/contractpartner/Contractpartner";
