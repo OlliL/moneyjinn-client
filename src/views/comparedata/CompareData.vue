@@ -67,7 +67,7 @@
                   <div class="col-md-4 col-xs-12 mb-2">
                     <SelectStandard
                       v-model="compareDataFormat"
-                      :validation-schema="schema.compareDataFormat"
+                      :validation-schema-ref="schema.compareDataFormat"
                       id="compareDataFormat"
                       field-label="Format"
                       :select-box-values="compareDataFormats"
@@ -168,7 +168,13 @@ const schema = {
   startDate: date(globErr("Bitte Startdatum angeben!")),
   endDate: date(globErr("Bitte Enddatum angeben!")),
   capitalsourceId: number(globErr("Bitte Kapitalquelle angeben!")).gt(0),
-  compareDataFormat: number(globErr("Bitte Format angeben!")).gt(0),
+  compareDataFormat: computed(() => {
+    if (!sourceIsImport.value) {
+      return number(globErr("Bitte Format angeben!")).gt(0);
+    } else {
+      return any().optional();
+    }
+  }),
   files: computed(() => {
     if (!sourceIsImport.value) {
       return arr(instof(File), globErr("Bitte Importdatei angeben!"));
@@ -279,6 +285,7 @@ const loadData = () => {
 };
 
 const compareData = handleSubmit(async () => {
+  console.log("handleSubmit");
   dataCompared.value = false;
   serverErrors.value = new Array<string>();
 

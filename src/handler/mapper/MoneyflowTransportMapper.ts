@@ -1,6 +1,6 @@
+import type { MoneyflowTransport } from "@/api";
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 import type { MoneyflowSplitEntryTransport } from "@/model/rest/transport/MoneyflowSplitEntryTransport";
-import type { MoneyflowTransport } from "@/model/rest/transport/MoneyflowTransport";
 import { getISOStringDate } from "@/tools/views/FormatDate";
 import { mapMoneyflowSplitEntryTransportToModel } from "./MoneyflowSplitEntryTransportMapper";
 
