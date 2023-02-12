@@ -1,5 +1,5 @@
 import { StoreService } from "@/stores/StoreService";
-import { Client, StompSubscription } from "@stomp/stompjs";
+import { Client, type StompSubscription } from "@stomp/stompjs";
 import { HeaderUtil } from "./util/HeaderUtil";
 import { WebServer } from "./WebServer";
 

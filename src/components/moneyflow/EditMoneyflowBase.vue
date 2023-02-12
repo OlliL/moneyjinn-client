@@ -512,9 +512,11 @@ const onContractpartnerSelected = (contractpartnerId: number) => {
     if (
       mmf.value.comment === previousCommentSetByContractpartnerDefaults.value
     ) {
-      mmf.value.comment = contractpartner.moneyflowComment;
-      previousCommentSetByContractpartnerDefaults.value =
-        contractpartner.moneyflowComment;
+      const mcpComment = contractpartner.moneyflowComment;
+      if (mcpComment) {
+        mmf.value.comment = mcpComment;
+        previousCommentSetByContractpartnerDefaults.value = mcpComment;
+      }
     }
     if (
       mmf.value.postingAccountId ===
