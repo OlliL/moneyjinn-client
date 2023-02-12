@@ -1,33 +1,33 @@
 import AbstractControllerHandler from "@/handler/AbstractControllerHandler";
-import { throwError } from "@/tools/views/ThrowError";
 import type { CompareDataParameter } from "@/model/comparedata/CompareDataParameter";
 import type { CompareDataResult } from "@/model/comparedata/CompareDataResult";
-import type { ShowCompareDataFormResponse } from "@/model/rest/comparedata/ShowCompareDataFormResponse";
 import type { CompareDataRequest } from "@/model/rest/comparedata/CompareDataRequest";
-import type { CompareDataResponse } from "@/model/rest/comparedata/CompareDataResponse";
-import { mapCompareDataTransportToModel } from "./mapper/CompareDataMapper";
 import { getISOStringDate } from "@/tools/views/FormatDate";
+import { CompareDataControllerApi } from "@/api";
+import { AxiosInstanceHolder } from "./AxiosInstanceHolder";
+import type { CompareData } from "@/model/comparedata/CompareData";
+import { mapMoneyflowTransportToModel } from "./mapper/MoneyflowTransportMapper";
+import { mapCCompareDataDatasetTransportToModel } from "./mapper/CompareCompareDataDataset";
 
 class CompareDataControllerHandler extends AbstractControllerHandler {
-  private static CONTROLLER = "comparedata";
+  private api: CompareDataControllerApi;
+
+  public constructor() {
+    super();
+
+    this.api = new CompareDataControllerApi(
+      undefined,
+      "",
+      AxiosInstanceHolder.getInstance().getAxiosInstance()
+    );
+  }
 
   async showCompareDataForm(): Promise<CompareDataParameter> {
-    const usecase = "showCompareDataForm";
+    const response = await this.api.showCompareDataForm();
 
-    const response = await super.get(
-      CompareDataControllerHandler.CONTROLLER,
-      usecase
-    );
-    if (!response.ok) {
-      throw new Error(response.statusText);
-    }
+    super.handleResponseError(response);
 
-    const showCompareDataFormResponse =
-      (await response.json()) as ShowCompareDataFormResponse;
-
-    if (showCompareDataFormResponse.code) {
-      throwError(showCompareDataFormResponse.code);
-    }
+    const showCompareDataFormResponse = response.data;
 
     const compareDataParameter = {
       compareDataFormats:
@@ -45,7 +45,6 @@ class CompareDataControllerHandler extends AbstractControllerHandler {
   async compareData(
     compareDataParameter: CompareDataParameter
   ): Promise<CompareDataResult> {
-    const usecase = "compareData";
     const request = {} as CompareDataRequest;
 
     request.startDate = getISOStringDate(compareDataParameter.startDate);
@@ -57,40 +56,70 @@ class CompareDataControllerHandler extends AbstractControllerHandler {
       ? 1
       : 0;
 
-    const response = await super.put(
-      request,
-      CompareDataControllerHandler.CONTROLLER,
-      usecase
-    );
+    const response = await this.api.compareData(request);
 
-    if (!response.ok) {
-      throw new Error(response.statusText);
-    }
+    super.handleResponseError(response);
 
-    const compareDataResponse = (await response.json()) as CompareDataResponse;
-    if (compareDataResponse.code) {
-      throwError(compareDataResponse.code);
-    }
+    const compareDataResponse = response.data;
 
     const result = {} as CompareDataResult;
 
-    result.compareDatasMatching =
-      compareDataResponse.compareDataMatchingTransports.map((t) =>
-        mapCompareDataTransportToModel(t)
-      );
-    result.compareDatasNotInDatabase =
-      compareDataResponse.compareDataNotInDatabaseTransports.map((t) =>
-        mapCompareDataTransportToModel(t)
-      );
-    result.compareDatasNotInFile =
-      compareDataResponse.compareDataNotInFileTransports.map((t) =>
-        mapCompareDataTransportToModel(t)
-      );
-    result.compareDatasWrongCapitalsource =
-      compareDataResponse.compareDataWrongCapitalsourceTransports.map((t) =>
-        mapCompareDataTransportToModel(t)
-      );
+    if (compareDataResponse.compareDataMatchingTransports) {
+      const compareData = Array<CompareData>();
+      for (const transport of compareDataResponse.compareDataMatchingTransports) {
+        compareData.push({
+          moneyflow: mapMoneyflowTransportToModel(
+            transport.moneyflowTransport,
+            false
+          ),
+          compareDataDataset: mapCCompareDataDatasetTransportToModel(
+            transport.compareDataDatasetTransport
+          ),
+        });
+      }
+      result.compareDatasMatching = compareData;
+    }
 
+    if (compareDataResponse.compareDataNotInDatabaseTransports) {
+      const compareData = Array<CompareData>();
+      for (const transport of compareDataResponse.compareDataNotInDatabaseTransports) {
+        compareData.push({
+          compareDataDataset: mapCCompareDataDatasetTransportToModel(
+            transport.compareDataDatasetTransport
+          ),
+        });
+      }
+      result.compareDatasNotInDatabase = compareData;
+    }
+
+    if (compareDataResponse.compareDataNotInFileTransports) {
+      const compareData = Array<CompareData>();
+      for (const transport of compareDataResponse.compareDataNotInFileTransports) {
+        compareData.push({
+          moneyflow: mapMoneyflowTransportToModel(
+            transport.moneyflowTransport,
+            false
+          ),
+        });
+      }
+      result.compareDatasNotInFile = compareData;
+    }
+
+    if (compareDataResponse.compareDataWrongCapitalsourceTransports) {
+      const compareData = Array<CompareData>();
+      for (const transport of compareDataResponse.compareDataWrongCapitalsourceTransports) {
+        compareData.push({
+          moneyflow: mapMoneyflowTransportToModel(
+            transport.moneyflowTransport,
+            false
+          ),
+          compareDataDataset: mapCCompareDataDatasetTransportToModel(
+            transport.compareDataDatasetTransport
+          ),
+        });
+      }
+      result.compareDatasWrongCapitalsource = compareData;
+    }
     return result;
   }
 }
