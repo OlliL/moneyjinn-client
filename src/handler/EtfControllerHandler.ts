@@ -1,19 +1,17 @@
+import {
+  EtfControllerApi,
+  type CalcEtfSaleRequest,
+  type CreateEtfFlowRequest,
+  type UpdateEtfFlowRequest,
+} from "@/api";
 import AbstractControllerHandler from "@/handler/AbstractControllerHandler";
 import type { EtfDepot } from "@/model/etf/EtfDepot";
 import type { EtfFlow } from "@/model/etf/EtfFlow";
 import type { EtfFlowValidation } from "@/model/etf/EtfFlowValidation";
 import type { EtfSalesCalculation } from "@/model/etf/EtfSalesCalculation";
 import type { EtfSummary } from "@/model/etf/EtfSummary";
-import type { CalcEtfSaleRequest } from "@/model/rest/etf/CalcEtfSaleRequest";
-import type { CalcEtfSaleResponse } from "@/model/rest/etf/CalcEtfSaleResponse";
-import type { CreateEtfFlowRequest } from "@/model/rest/etf/CreateEtfFlowRequest";
-import type { CreateEtfFlowResponse } from "@/model/rest/etf/CreateEtfFlowResponse";
-import type { ListEtfFlowsResponse } from "@/model/rest/etf/ListEtfFlowsResponse";
-import type { ListEtfOverviewResponse } from "@/model/rest/etf/ListEtfOverviewResponse";
-import type { UpdateEtfFlowRequest } from "@/model/rest/etf/UpdateEtfFlowRequest";
-import type { ValidationResponse } from "@/model/rest/ValidationResponse";
 import type { ValidationResult } from "@/model/validation/ValidationResult";
-import { throwError } from "@/tools/views/ThrowError";
+import { AxiosInstanceHolder } from "./AxiosInstanceHolder";
 import { mapEtfEffectiveFlowTransportToModel } from "./mapper/EtfEffectiveFlowTransportMapper";
 import {
   mapEtfFlowModelToTransport,
@@ -23,26 +21,28 @@ import { mapEtfSummaryTransportToEtfSummary } from "./mapper/EtfTSummaryTranspor
 import { mapValidationItemTransportToModel } from "./mapper/ValidationItemTransportMapper";
 
 class EtfControllerHandler extends AbstractControllerHandler {
-  private static CONTROLLER = "etf";
+  private api: EtfControllerApi;
+
+  public constructor() {
+    super();
+
+    this.api = new EtfControllerApi(
+      undefined,
+      "",
+      AxiosInstanceHolder.getInstance().getAxiosInstance()
+    );
+  }
 
   async listEtfOverview(
-    year: string,
-    month: string
+    year: number,
+    month: number
   ): Promise<Array<EtfSummary>> {
-    let usecase = "listEtfOverview";
-    usecase += "/" + year;
-    usecase += "/" + month;
-    const response = await super.get(EtfControllerHandler.CONTROLLER, usecase);
-    if (!response.ok) {
-      throw new Error(response.statusText);
-    }
+    const response = await this.api.listEtfOverview(year, month);
 
-    const listEtfOverviewResponse =
-      (await response.json()) as ListEtfOverviewResponse;
+    super.handleResponseError(response);
 
-    if (listEtfOverviewResponse.code) {
-      throwError(listEtfOverviewResponse.code);
-    }
+    const listEtfOverviewResponse = response.data;
+
     const etfSummaryArray = new Array<EtfSummary>();
     const transports = listEtfOverviewResponse.etfSummaryTransports;
     transports?.forEach((value) => {
@@ -53,19 +53,11 @@ class EtfControllerHandler extends AbstractControllerHandler {
   }
 
   async listEtfFlows(): Promise<EtfDepot> {
-    const usecase = "listEtfFlows";
+    const response = await this.api.listEtfFlows();
 
-    const response = await super.get(EtfControllerHandler.CONTROLLER, usecase);
-    if (!response.ok) {
-      throw new Error(response.statusText);
-    }
+    super.handleResponseError(response);
 
-    const listEtfFlowsResponse =
-      (await response.json()) as ListEtfFlowsResponse;
-
-    if (listEtfFlowsResponse.code) {
-      throwError(listEtfFlowsResponse.code);
-    }
+    const listEtfFlowsResponse = response.data;
 
     const etfListViewData = {} as EtfDepot;
     etfListViewData.calcEtfAskPrice = listEtfFlowsResponse.calcEtfAskPrice;
@@ -94,7 +86,6 @@ class EtfControllerHandler extends AbstractControllerHandler {
     askPrice: number,
     transactionCosts: number
   ): Promise<EtfSalesCalculation> {
-    const usecase = "calcEtfSale";
     const request = {} as CalcEtfSaleRequest;
     request.isin = isin;
     request.pieces = pieces;
@@ -102,17 +93,12 @@ class EtfControllerHandler extends AbstractControllerHandler {
     request.askPrice = askPrice;
     request.transactionCosts = transactionCosts;
 
-    const response = await super.put(
-      request,
-      EtfControllerHandler.CONTROLLER,
-      usecase
-    );
+    const response = await this.api.calcEtfSale(request);
 
-    if (!response.ok) {
-      throw new Error(response.statusText);
-    }
+    super.handleResponseError(response);
 
-    const calcEtfSaleResponse = (await response.json()) as CalcEtfSaleResponse;
+    const calcEtfSaleResponse = response.data;
+
     const etfSalesCalculation = {} as EtfSalesCalculation;
     const validationResult: ValidationResult = {
       result: calcEtfSaleResponse.result,
@@ -142,22 +128,15 @@ class EtfControllerHandler extends AbstractControllerHandler {
   }
 
   async createEtfFlow(etfFlow: EtfFlow): Promise<EtfFlowValidation> {
-    const usecase = "createEtfFlow";
     const request = {} as CreateEtfFlowRequest;
     request.etfFlowTransport = mapEtfFlowModelToTransport(etfFlow);
 
-    const response = await super.post(
-      request,
-      EtfControllerHandler.CONTROLLER,
-      usecase
-    );
+    const response = await this.api.createEtfFlow(request);
 
-    if (!response.ok) {
-      throw new Error(response.statusText);
-    }
+    super.handleResponseError(response);
 
-    const createEtfFlowResponse =
-      (await response.json()) as CreateEtfFlowResponse;
+    const createEtfFlowResponse = response.data;
+
     const etfFlowValidation = {} as EtfFlowValidation;
     const validationResult: ValidationResult = {
       result: createEtfFlowResponse.result,
@@ -177,21 +156,15 @@ class EtfControllerHandler extends AbstractControllerHandler {
   }
 
   async updateEtfFlow(etfFlow: EtfFlow): Promise<ValidationResult> {
-    const usecase = "updateEtfFlow";
     const request = {} as UpdateEtfFlowRequest;
     request.etfFlowTransport = mapEtfFlowModelToTransport(etfFlow);
 
-    const response = await super.put(
-      request,
-      EtfControllerHandler.CONTROLLER,
-      usecase
-    );
+    const response = await this.api.updateEtfFlow(request);
 
-    if (!response.ok) {
-      throw new Error(response.statusText);
-    }
+    super.handleResponseError(response);
 
-    const validationResponse = (await response.json()) as ValidationResponse;
+    const validationResponse = response.data;
+
     const validationResult: ValidationResult = {
       result: validationResponse.result,
       validationResultItems: validationResponse.validationItemTransports?.map(
@@ -205,16 +178,8 @@ class EtfControllerHandler extends AbstractControllerHandler {
   }
 
   async deleteEtfFlow(etfFlowId: number) {
-    const usecase = "deleteEtfFlow/" + etfFlowId;
-
-    const response = await super.delete(
-      EtfControllerHandler.CONTROLLER,
-      usecase
-    );
-
-    if (!response.ok) {
-      throw new Error(response.statusText);
-    }
+    const response = await this.api.deleteEtfFlow(etfFlowId);
+    return super.handleResponseError(response);
   }
 }
 
