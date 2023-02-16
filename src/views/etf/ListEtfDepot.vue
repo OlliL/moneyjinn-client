@@ -436,32 +436,46 @@ const loadData = () => {
         etfsSelectValues.value.push({ id: etf.isin, value: etf.name });
       }
       etfs.value = etfDepot.etfs;
-      calcEtfAskPrice.value = etfDepot.calcEtfAskPrice;
-      calcEtfBidPrice.value = etfDepot.calcEtfBidPrice;
-      calcEtfSaleIsin.value = etfDepot.calcEtfSaleIsin;
-      calcEtfSalePieces.value = etfDepot.calcEtfSalePieces;
-      calcEtfTransactionCosts.value = etfDepot.calcEtfTransactionCosts;
+      calcEtfAskPrice.value = etfDepot.calcEtfAskPrice
+        ? etfDepot.calcEtfAskPrice
+        : 0;
+      calcEtfBidPrice.value = etfDepot.calcEtfBidPrice
+        ? etfDepot.calcEtfBidPrice
+        : 0;
+      calcEtfSaleIsin.value = etfDepot.calcEtfSaleIsin
+        ? etfDepot.calcEtfSaleIsin
+        : "";
+      calcEtfSalePieces.value = etfDepot.calcEtfSalePieces
+        ? etfDepot.calcEtfSalePieces
+        : 0;
+      calcEtfTransactionCosts.value = etfDepot.calcEtfTransactionCosts
+        ? etfDepot.calcEtfTransactionCosts
+        : 0;
       const etfMap = new Map<String, Etf>();
       for (let etf of etfDepot.etfs) {
         etfMap.set(etf.isin, etf);
       }
-      for (let etfFlow of etfDepot.etfFlows) {
-        const etf = etfMap.get(etfFlow.isin);
-        if (etf)
-          etfFlows.value.push({
-            ...etfFlow,
-            name: etf.name,
-            chartUrl: etf.chartUrl,
-          });
+      if (etfDepot.etfFlows) {
+        for (let etfFlow of etfDepot.etfFlows) {
+          const etf = etfMap.get(etfFlow.isin);
+          if (etf)
+            etfFlows.value.push({
+              ...etfFlow,
+              name: etf.name,
+              chartUrl: etf.chartUrl,
+            });
+        }
       }
-      for (let etfFlow of etfDepot.etfEffectiveFlows) {
-        const etf = etfMap.get(etfFlow.isin);
-        if (etf)
-          etfEffectiveFlows.value.push({
-            ...etfFlow,
-            name: etf.name,
-            chartUrl: etf.chartUrl,
-          });
+      if (etfDepot.etfEffectiveFlows) {
+        for (let etfFlow of etfDepot.etfEffectiveFlows) {
+          const etf = etfMap.get(etfFlow.isin);
+          if (etf)
+            etfEffectiveFlows.value.push({
+              ...etfFlow,
+              name: etf.name,
+              chartUrl: etf.chartUrl,
+            });
+        }
       }
       dataLoaded.value = true;
     }
