@@ -1,7 +1,6 @@
 import AbstractControllerHandler from "@/handler/AbstractControllerHandler";
 import type { Contractpartner } from "@/model/contractpartner/Contractpartner";
 import type { ContractpartnerValidation } from "@/model/contractpartner/ContractpartnerValidation";
-import type { CreateContractpartnerRequest } from "@/model/rest/contractpartner/CreateContractpartnerRequest";
 import {
   mapContractpartnerToTransport,
   mapContractpartnerTransportToModel,
@@ -9,8 +8,11 @@ import {
 import { mapValidationItemTransportToModel } from "./mapper/ValidationItemTransportMapper";
 import type { ValidationResult } from "@/model/validation/ValidationResult";
 import { useUserSessionStore } from "@/stores/UserSessionStore";
-import type { UpdateContractpartnerRequest } from "@/model/rest/contractpartner/UpdateContractpartnerRequest";
-import { ContractpartnerControllerApi } from "@/api";
+import {
+  ContractpartnerControllerApi,
+  type CreateContractpartnerRequest,
+  type UpdateContractpartnerRequest,
+} from "@/api";
 import { AxiosInstanceHolder } from "./AxiosInstanceHolder";
 
 class ContractpartnerControllerHandler extends AbstractControllerHandler {

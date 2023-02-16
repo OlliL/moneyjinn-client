@@ -1,9 +1,8 @@
 import AbstractControllerHandler from "@/handler/AbstractControllerHandler";
 import type { CompareDataParameter } from "@/model/comparedata/CompareDataParameter";
 import type { CompareDataResult } from "@/model/comparedata/CompareDataResult";
-import type { CompareDataRequest } from "@/model/rest/comparedata/CompareDataRequest";
 import { getISOStringDate } from "@/tools/views/FormatDate";
-import { CompareDataControllerApi } from "@/api";
+import { CompareDataControllerApi, type CompareDataRequest } from "@/api";
 import { AxiosInstanceHolder } from "./AxiosInstanceHolder";
 import type { CompareData } from "@/model/comparedata/CompareData";
 import { mapMoneyflowTransportToModel } from "./mapper/MoneyflowTransportMapper";
