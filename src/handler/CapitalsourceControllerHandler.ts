@@ -1,7 +1,6 @@
 import AbstractControllerHandler from "@/handler/AbstractControllerHandler";
 import type { Capitalsource } from "@/model/capitalsource/Capitalsource";
 import type { CapitalsourceValidation } from "@/model/capitalsource/CapitalsourceValidation";
-import type { CreateCapitalsourceRequest } from "@/model/rest/capitalsource/CreateCapitalsourceRequest";
 import {
   mapCapitalsourceToTransport,
   mapCapitalsourceTransportToModel,
@@ -9,8 +8,11 @@ import {
 import { mapValidationItemTransportToModel } from "./mapper/ValidationItemTransportMapper";
 import type { ValidationResult } from "@/model/validation/ValidationResult";
 import { useUserSessionStore } from "@/stores/UserSessionStore";
-import type { UpdateCapitalsourceRequest } from "@/model/rest/capitalsource/UpdateCapitalsourceRequest";
-import { CapitalsourceControllerApi } from "@/api";
+import {
+  CapitalsourceControllerApi,
+  type CreateCapitalsourceRequest,
+  type UpdateCapitalsourceRequest,
+} from "@/api";
 import { AxiosInstanceHolder } from "./AxiosInstanceHolder";
 
 class CapitalsourceControllerHandler extends AbstractControllerHandler {

@@ -1,7 +1,6 @@
 import { EventControllerApi } from "@/api";
 import AbstractControllerHandler from "@/handler/AbstractControllerHandler";
 import type { Events } from "@/model/event/Events";
-import { throwError } from "@/tools/views/ThrowError";
 import { AxiosInstanceHolder } from "./AxiosInstanceHolder";
 
 class EventControllerHandler extends AbstractControllerHandler {
