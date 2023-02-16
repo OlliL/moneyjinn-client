@@ -7,10 +7,10 @@ import {
   mapContractpartnerAccountToTransport,
 } from "./mapper/ContractpartnerAccountTransportMapper";
 import { mapValidationItemTransportToModel } from "./mapper/ValidationItemTransportMapper";
-import type { UpdateContractpartnerAccountRequest } from "@/model/rest/contractpartneraccount/UpdateContractpartnerAccountRequest";
 import {
   ContractpartnerAccountControllerApi,
   type CreateContractpartnerAccountRequest,
+  type UpdateContractpartnerAccountRequest,
 } from "@/api";
 import { AxiosInstanceHolder } from "./AxiosInstanceHolder";
 

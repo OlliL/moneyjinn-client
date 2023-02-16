@@ -1,28 +1,28 @@
+import { EventControllerApi } from "@/api";
 import AbstractControllerHandler from "@/handler/AbstractControllerHandler";
 import type { Events } from "@/model/event/Events";
-import type { ShowEventListResponse } from "@/model/rest/event/ShowEventListResponse";
 import { throwError } from "@/tools/views/ThrowError";
+import { AxiosInstanceHolder } from "./AxiosInstanceHolder";
 
 class EventControllerHandler extends AbstractControllerHandler {
-  private static CONTROLLER = "event";
+  private api: EventControllerApi;
+
+  public constructor() {
+    super();
+
+    this.api = new EventControllerApi(
+      undefined,
+      "",
+      AxiosInstanceHolder.getInstance().getAxiosInstance()
+    );
+  }
 
   async showEventList(): Promise<Events> {
-    const usecase = "showEventList";
+    const response = await this.api.showEventList();
 
-    const response = await super.get(
-      EventControllerHandler.CONTROLLER,
-      usecase
-    );
-    if (!response.ok) {
-      throw new Error(response.statusText);
-    }
+    super.handleResponseError(response);
 
-    const showEventListResponse =
-      (await response.json()) as ShowEventListResponse;
-
-    if (showEventListResponse.code) {
-      throwError(showEventListResponse.code);
-    }
+    const showEventListResponse = response.data;
 
     return showEventListResponse;
   }

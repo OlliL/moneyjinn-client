@@ -69,12 +69,21 @@ const dataLoaded = ref(false);
 const loadData = () => {
   dataLoaded.value = false;
   EventControllerHandler.showEventList().then((events) => {
-    if (events.numberOfImportedMoneyflows > 0) {
+    if (
+      events.numberOfImportedMoneyflows &&
+      events.numberOfImportedMoneyflows > 0
+    ) {
       importedMoneyflows.value = true;
     }
-    monthlySettlementMissing.value = events.monthlySettlementMissing;
-    monthlySettlementMonth.value = events.monthlySettlementMonth;
-    monthlySettlementYear.value = events.monthlySettlementYear;
+    monthlySettlementMissing.value = events.monthlySettlementMissing
+      ? events.monthlySettlementMissing
+      : false;
+    monthlySettlementMonth.value = events.monthlySettlementMonth
+      ? events.monthlySettlementMonth
+      : 0;
+    monthlySettlementYear.value = events.monthlySettlementYear
+      ? events.monthlySettlementYear
+      : 0;
     dataLoaded.value = true;
   });
 };

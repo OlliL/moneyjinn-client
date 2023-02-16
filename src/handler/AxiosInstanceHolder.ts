@@ -1,4 +1,4 @@
-import type { LoginResponse } from "@/model/rest/user/LoginResponse";
+import type { LoginResponse } from "@/api";
 import { useUserSessionStore } from "@/stores/UserSessionStore";
 import { throwError } from "@/tools/views/ThrowError";
 import type { AxiosInstance } from "axios";
