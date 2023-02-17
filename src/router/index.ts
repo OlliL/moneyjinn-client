@@ -5,6 +5,7 @@ import {
   type RouteLocationNormalized,
 } from "vue-router";
 import { useUserSessionStore } from "@/stores/UserSessionStore";
+import { isLoggedIn } from "axios-jwt";
 
 export enum Routes {
   Login = "login",
@@ -155,14 +156,13 @@ router.beforeEach(
     from: RouteLocationNormalized,
     next: NavigationGuardNext
   ) => {
-    const userSessionStore = useUserSessionStore();
-    const userIsLoggedIn = userSessionStore.getAuthorizationToken?.length > 0;
     const loginNeeded = !to.matched.some((record) => record.meta.hideForAuth);
 
-    if (userIsLoggedIn || !loginNeeded) {
+    if (isLoggedIn() || !loginNeeded) {
       if (to.name === Routes.ChangePassword || to.name === Routes.Login) {
         next();
       }
+      const userSessionStore = useUserSessionStore();
       if (userSessionStore.userIsNew) {
         next({ name: Routes.ChangePassword });
       }
