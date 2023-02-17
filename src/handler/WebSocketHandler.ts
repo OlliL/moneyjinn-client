@@ -18,13 +18,9 @@ export class WebSocketHandler {
 
   public async connectStompClient() {
     const url = "ws://" + WebServer.getInstance().getWebServer() + "/websocket";
-    const headers = {} as Record<string, string>;
-    HeaderUtil.getInstance().addAuthorizationHeader(headers);
-    HeaderUtil.getInstance().addXsrfHeader(headers);
 
     this.stompClient = new Client({
       brokerURL: url,
-      connectHeaders: headers,
       debug: function (str) {
         console.log(str);
       },
@@ -32,6 +28,13 @@ export class WebSocketHandler {
       heartbeatIncoming: 1000,
       heartbeatOutgoing: 1000,
     });
+
+    this.stompClient.beforeConnect = () => {
+      const headers = {} as Record<string, string>;
+      HeaderUtil.getInstance().addAuthorizationHeader(headers);
+      HeaderUtil.getInstance().addXsrfHeader(headers);
+      this.stompClient.connectHeaders = headers;
+    };
 
     this.stompClient.onConnect = function () {
       StoreService.getInstance().subscribeAllStores();
