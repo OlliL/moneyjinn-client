@@ -1,13 +1,13 @@
+import {
+  PostingAccountControllerApi,
+  type CreatePostingAccountRequest,
+  type UpdatePostingAccountRequest,
+} from "@/api";
 import AbstractControllerHandler from "@/handler/AbstractControllerHandler";
 import type { PostingAccount } from "@/model/postingaccount/PostingAccount";
 import type { PostingAccountValidation } from "@/model/postingaccount/PostingAccountValidation";
-import type { CreatePostingAccountRequest } from "@/model/rest/postingaccount/CreatePostingAccountRequest";
-import type { CreatePostingAccountResponse } from "@/model/rest/postingaccount/CreatePostingAccountResponse";
-import type { ShowPostingAccountListResponse } from "@/model/rest/postingaccount/ShowPostingAccountListResponse";
-import type { UpdatePostingAccountRequest } from "@/model/rest/postingaccount/UpdatePostingAccountRequest";
-import type { ValidationResponse } from "@/model/rest/ValidationResponse";
 import type { ValidationResult } from "@/model/validation/ValidationResult";
-import { throwError } from "@/tools/views/ThrowError";
+import { AxiosInstanceHolder } from "./AxiosInstanceHolder";
 import {
   mapPostingAccountToTransport,
   mapPostingAccountTransportToModel,
@@ -15,24 +15,26 @@ import {
 import { mapValidationItemTransportToModel } from "./mapper/ValidationItemTransportMapper";
 
 class PostingAccountControllerHandler extends AbstractControllerHandler {
+  private api: PostingAccountControllerApi;
+
+  public constructor() {
+    super();
+
+    this.api = new PostingAccountControllerApi(
+      undefined,
+      "",
+      AxiosInstanceHolder.getInstance().getAxiosInstance()
+    );
+  }
+
   private static CONTROLLER = "postingaccount";
 
   async fetchAllPostingAccount(): Promise<Array<PostingAccount>> {
-    const usecase = "showPostingAccountList";
-    const response = await super.get(
-      PostingAccountControllerHandler.CONTROLLER,
-      usecase
-    );
-    if (!response.ok) {
-      throw new Error(response.statusText);
-    }
+    const response = await this.api.showPostingAccountList();
 
-    const showPostingAccountListResponse =
-      (await response.json()) as ShowPostingAccountListResponse;
+    super.handleResponseError(response);
 
-    if (showPostingAccountListResponse.code) {
-      throwError(showPostingAccountListResponse.code);
-    }
+    const showPostingAccountListResponse = response.data;
 
     const postingAccountArray = new Array<PostingAccount>();
     const transports =
@@ -47,22 +49,15 @@ class PostingAccountControllerHandler extends AbstractControllerHandler {
   async createPostingAccount(
     mpa: PostingAccount
   ): Promise<PostingAccountValidation> {
-    const usecase = "createPostingAccount";
     const request = {} as CreatePostingAccountRequest;
     request.postingAccountTransport = mapPostingAccountToTransport(mpa);
 
-    const response = await super.post(
-      request,
-      PostingAccountControllerHandler.CONTROLLER,
-      usecase
-    );
+    const response = await this.api.createPostingAccount(request);
 
-    if (!response.ok) {
-      throw new Error(response.statusText);
-    }
+    super.handleResponseError(response);
 
-    const createPostingAccountResponse =
-      (await response.json()) as CreatePostingAccountResponse;
+    const createPostingAccountResponse = response.data;
+
     const postingAccountValidation = {} as PostingAccountValidation;
     const validationResult: ValidationResult = {
       result: createPostingAccountResponse.result,
@@ -85,21 +80,15 @@ class PostingAccountControllerHandler extends AbstractControllerHandler {
   }
 
   async updatePostingAccount(mcp: PostingAccount): Promise<ValidationResult> {
-    const usecase = "updatePostingAccount";
     const request = {} as UpdatePostingAccountRequest;
     request.postingAccountTransport = mapPostingAccountToTransport(mcp);
 
-    const response = await super.put(
-      request,
-      PostingAccountControllerHandler.CONTROLLER,
-      usecase
-    );
+    const response = await this.api.updatePostingAccount(request);
 
-    if (!response.ok) {
-      throw new Error(response.statusText);
-    }
+    super.handleResponseError(response);
 
-    const validationResponse = (await response.json()) as ValidationResponse;
+    const validationResponse = response.data;
+
     const validationResult: ValidationResult = {
       result: validationResponse.result,
       validationResultItems: validationResponse.validationItemTransports?.map(
@@ -112,17 +101,9 @@ class PostingAccountControllerHandler extends AbstractControllerHandler {
     return validationResult;
   }
 
-  async deletePostingAccount(postingAccountId: number) {
-    const usecase = "deletePostingAccountById/" + postingAccountId;
-
-    const response = await super.delete(
-      PostingAccountControllerHandler.CONTROLLER,
-      usecase
-    );
-
-    if (!response.ok) {
-      throw new Error(response.statusText);
-    }
+  async deletePostingAccount(id: number) {
+    const response = await this.api.deletePostingAccountById(id);
+    return super.handleResponseError(response);
   }
 }
 

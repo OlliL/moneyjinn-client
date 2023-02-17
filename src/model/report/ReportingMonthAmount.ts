@@ -3,5 +3,5 @@ export type ReportingMonthAmount = {
   month: number;
   amount: number;
   postingAccountId: number;
-  postingAccountName: string;
+  postingAccountName?: string;
 };
