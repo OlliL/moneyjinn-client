@@ -1,5 +1,5 @@
+import type { PreDefMoneyflowTransport } from "@/api";
 import type { PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
-import type { PreDefMoneyflowTransport } from "@/model/rest/transport/PreDefMoneyflowTransport";
 import { getISOStringDate } from "@/tools/views/FormatDate";
 
 export function mapPreDefMoneyflowTransportToModel(

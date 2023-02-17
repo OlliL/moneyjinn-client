@@ -1,13 +1,13 @@
+import {
+  PreDefMoneyflowControllerApi,
+  type CreatePreDefMoneyflowRequest,
+  type UpdatePreDefMoneyflowRequest,
+} from "@/api";
 import AbstractControllerHandler from "@/handler/AbstractControllerHandler";
 import type { PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
 import type { PreDefMoneyflowValidation } from "@/model/moneyflow/PreDefMoneyflowValidation";
-import type { CreatePreDefMoneyflowRequest } from "@/model/rest/predefmoneyflow/CreatePreDefMoneyflowRequest";
-import type { CreatePreDefMoneyflowResponse } from "@/model/rest/predefmoneyflow/CreatePreDefMoneyflowResponse";
-import type { ShowPreDefMoneyflowListResponse } from "@/model/rest/predefmoneyflow/ShowPreDefMoneyflowListResponse";
-import type { UpdatePreDefMoneyflowRequest } from "@/model/rest/predefmoneyflow/UpdatePreDefMoneyflowRequest";
-import type { ValidationResponse } from "@/model/rest/ValidationResponse";
 import type { ValidationResult } from "@/model/validation/ValidationResult";
-import { throwError } from "@/tools/views/ThrowError";
+import { AxiosInstanceHolder } from "./AxiosInstanceHolder";
 import {
   mapPreDefMoneyflowToTransport,
   mapPreDefMoneyflowTransportToModel,
@@ -15,24 +15,24 @@ import {
 import { mapValidationItemTransportToModel } from "./mapper/ValidationItemTransportMapper";
 
 class PreDefMoneyflowControllerHandler extends AbstractControllerHandler {
-  private static CONTROLLER = "predefmoneyflow";
+  private api: PreDefMoneyflowControllerApi;
+
+  public constructor() {
+    super();
+
+    this.api = new PreDefMoneyflowControllerApi(
+      undefined,
+      "",
+      AxiosInstanceHolder.getInstance().getAxiosInstance()
+    );
+  }
 
   async fetchAllPreDefMoneyflow(): Promise<Array<PreDefMoneyflow>> {
-    const usecase = "showPreDefMoneyflowList";
-    const response = await super.get(
-      PreDefMoneyflowControllerHandler.CONTROLLER,
-      usecase
-    );
-    if (!response.ok) {
-      throw new Error(response.statusText);
-    }
+    const response = await this.api.showPreDefMoneyflowList();
 
-    const showPreDefMoneyflowListResponse =
-      (await response.json()) as ShowPreDefMoneyflowListResponse;
+    super.handleResponseError(response);
 
-    if (showPreDefMoneyflowListResponse.code) {
-      throwError(showPreDefMoneyflowListResponse.code);
-    }
+    const showPreDefMoneyflowListResponse = response.data;
 
     const PreDefMoneyflowArray = new Array<PreDefMoneyflow>();
     const transports =
@@ -47,22 +47,15 @@ class PreDefMoneyflowControllerHandler extends AbstractControllerHandler {
   async createPreDefMoneyflow(
     mpm: PreDefMoneyflow
   ): Promise<PreDefMoneyflowValidation> {
-    const usecase = "createPreDefMoneyflow";
     const request = {} as CreatePreDefMoneyflowRequest;
     request.preDefMoneyflowTransport = mapPreDefMoneyflowToTransport(mpm);
 
-    const response = await super.post(
-      request,
-      PreDefMoneyflowControllerHandler.CONTROLLER,
-      usecase
-    );
+    const response = await this.api.createPreDefMoneyflow(request);
 
-    if (!response.ok) {
-      throw new Error(response.statusText);
-    }
+    super.handleResponseError(response);
 
-    const createPreDefMoneyflowResponse =
-      (await response.json()) as CreatePreDefMoneyflowResponse;
+    const createPreDefMoneyflowResponse = response.data;
+
     const preDefMoneyflowValidation = {} as PreDefMoneyflowValidation;
     const validationResult: ValidationResult = {
       result: createPreDefMoneyflowResponse.result,
@@ -82,23 +75,19 @@ class PreDefMoneyflowControllerHandler extends AbstractControllerHandler {
     return preDefMoneyflowValidation;
   }
   async updatePreDefMoneyflow(mpm: PreDefMoneyflow): Promise<ValidationResult> {
-    const usecase = "updatePreDefMoneyflow";
     const request = {} as UpdatePreDefMoneyflowRequest;
     request.preDefMoneyflowTransport = mapPreDefMoneyflowToTransport(mpm);
 
-    const response = await super.put(
-      request,
-      PreDefMoneyflowControllerHandler.CONTROLLER,
-      usecase
-    );
+    const response = await this.api.updatePreDefMoneyflow(request);
 
-    if (!response.ok) {
-      throw new Error(response.statusText);
-    } else if (response.status === 204) {
+    super.handleResponseError(response);
+
+    if (response.status === 204) {
       return { result: true } as ValidationResult;
     }
 
-    const validationResponse = (await response.json()) as ValidationResponse;
+    const validationResponse = response.data;
+
     const validationResult: ValidationResult = {
       result: validationResponse.result,
       validationResultItems: validationResponse.validationItemTransports?.map(
@@ -111,16 +100,8 @@ class PreDefMoneyflowControllerHandler extends AbstractControllerHandler {
     return validationResult;
   }
   async deletePreDefMoneyflow(id: number) {
-    const usecase = "deletePreDefMoneyflow/" + id;
-
-    const response = await super.delete(
-      PreDefMoneyflowControllerHandler.CONTROLLER,
-      usecase
-    );
-
-    if (!response.ok) {
-      throw new Error(response.statusText);
-    }
+    const response = await this.api.deletePreDefMoneyflowById(id);
+    return super.handleResponseError(response);
   }
 }
 

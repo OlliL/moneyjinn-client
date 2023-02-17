@@ -1,5 +1,5 @@
+import type { PostingAccountAmountTransport } from "@/api";
 import type { ReportingMonthAmount } from "@/model/report/ReportingMonthAmount";
-import type { PostingAccountAmountTransport } from "@/model/rest/report/transport/PostingAccountAmountTransport";
 
 export function mapPostingAccountAmountTransportToModel(
   transport: PostingAccountAmountTransport

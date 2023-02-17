@@ -91,12 +91,12 @@ import ReportControllerHandler from "@/handler/ReportControllerHandler";
 import { onBeforeRouteUpdate } from "vue-router";
 
 const dataLoaded = ref(false);
-const months = ref([] as number[]);
-const years = ref([] as number[]);
-const previousMonth = ref(0);
-const previousYear = ref(0);
-const nextMonth = ref(0);
-const nextYear = ref(0);
+const months = ref([] as number[] | undefined);
+const years = ref([] as number[] | undefined);
+const previousMonth = ref(0 as number | undefined);
+const previousYear = ref(0 as number | undefined);
+const nextMonth = ref(0 as number | undefined);
+const nextYear = ref(0 as number | undefined);
 const previousMonthLink = ref(false);
 const nextMonthLink = ref(false);
 const selectedYear = ref(0);
@@ -153,8 +153,10 @@ const navigateToNextMonth = () => {
 onBeforeRouteUpdate((to, from, next) => {
   const year = +to.params.year;
   const month = +to.params.month;
-  const isFirstMonth = months.value.indexOf(month) == 0;
-  const isLastMonth = months.value.indexOf(month) == months.value.length - 1;
+  const isFirstMonth = months.value ? months.value.indexOf(month) == 0 : true;
+  const isLastMonth = months.value
+    ? months.value.indexOf(month) == months.value.length - 1
+    : true;
 
   if (year != currentlyShownYear.value || isFirstMonth || isLastMonth) {
     loadData(year, month);

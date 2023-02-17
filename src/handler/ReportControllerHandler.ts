@@ -1,57 +1,54 @@
 import AbstractControllerHandler from "@/handler/AbstractControllerHandler";
-import type { GetAvailableMonthResponse } from "@/model/rest/report/GetAvailableMonthResponse";
-import type { ListReportsResponse } from "@/model/rest/report/ListReportsResponse";
 import type { AvailableMonth } from "@/model/report/AvailableMonth";
-import { throwError } from "@/tools/views/ThrowError";
 import type { Report } from "@/model/report/Report";
 import { mapReportTurnoverCapitalsourceTransportToModel } from "./mapper/ReportTurnoverCapitalsourceTransportMapper";
 import { mapMoneyflowTransportToModel } from "./mapper/MoneyflowTransportMapper";
-import type { MoneyflowSplitEntryTransport } from "@/model/rest/transport/MoneyflowSplitEntryTransport";
 import type { TrendsParameter } from "@/model/report/TrendsParameter";
-import type { ShowTrendsFormResponse } from "@/model/rest/report/ShowTrendsFormResponse";
 import type { Trends } from "@/model/report/Trends";
-import type { ShowTrendsGraphRequest } from "@/model/rest/report/ShowTrendsGraphRequest";
-import type { ShowTrendsGraphResponse } from "@/model/rest/report/ShowTrendsGraphResponse";
 import type { ReportingParameter } from "@/model/report/ReportingParameter";
-import type { ShowReportingFormResponse } from "@/model/rest/report/ShowReportingFormResponse";
 import { usePostingAccountStore } from "@/stores/PostingAccountStore";
 import type { ReportingMonthAmount } from "@/model/report/ReportingMonthAmount";
-import type { ShowMonthlyReportGraphRequest } from "@/model/rest/report/ShowMonthlyReportGraphRequest";
-import type { ShowMonthlyReportGraphResponse } from "@/model/rest/report/ShowMonthlyReportGraphResponse";
-import type { ShowYearlyReportGraphRequest } from "@/model/rest/report/ShowYearlyReportGraphRequest";
-import type { ShowYearlyReportGraphResponse } from "@/model/rest/report/ShowYearlyReportGraphResponse";
 import { mapPostingAccountAmountTransportToModel } from "./mapper/PostingAccountAmountTransportMapper";
 import type { PostingAccount } from "@/model/postingaccount/PostingAccount";
 import { getISOStringDate } from "@/tools/views/FormatDate";
+import {
+  ReportControllerApi,
+  type GetAvailableReportMonthResponse,
+  type MoneyflowSplitEntryTransport,
+  type ShowMonthlyReportGraphRequest,
+  type ShowTrendsGraphRequest,
+  type ShowYearlyReportGraphRequest,
+} from "@/api";
+import { AxiosInstanceHolder } from "./AxiosInstanceHolder";
+import type { AxiosResponse } from "axios";
 
 class ReportControllerHandler extends AbstractControllerHandler {
+  private api: ReportControllerApi;
+
+  public constructor() {
+    super();
+
+    this.api = new ReportControllerApi(
+      undefined,
+      "",
+      AxiosInstanceHolder.getInstance().getAxiosInstance()
+    );
+  }
+
   private static CONTROLLER = "report";
 
   async getAvailableMonth(
     year?: number,
     month?: number
   ): Promise<AvailableMonth> {
-    let usecase = "getAvailableMonth";
-    if (year) {
-      usecase += "/" + year;
-      if (month) {
-        usecase += "/" + month;
-      }
-    }
-    const response = await super.get(
-      ReportControllerHandler.CONTROLLER,
-      usecase
-    );
-    if (!response.ok) {
-      throw new Error(response.statusText);
-    }
+    let response: AxiosResponse<GetAvailableReportMonthResponse>;
+    if (year) response = await this.api.getAvailableMonthYear(year);
+    if (year && month)
+      response = await this.api.getAvailableMonthYearMonth(year, month);
+    else response = await this.api.getAvailableMonth();
+    super.handleResponseError(response);
 
-    const getAvailableMonthResponse =
-      (await response.json()) as GetAvailableMonthResponse;
-
-    if (getAvailableMonthResponse.code) {
-      throwError(getAvailableMonthResponse.code);
-    }
+    const getAvailableMonthResponse = response.data;
 
     // easy mapping for now - same attributes
     const availableMonth: AvailableMonth = getAvailableMonthResponse;
@@ -59,24 +56,12 @@ class ReportControllerHandler extends AbstractControllerHandler {
     return availableMonth;
   }
 
-  async listReports(year: string, month: string): Promise<Report> {
-    let usecase = "listReportsV2";
-    usecase += "/" + year;
-    usecase += "/" + month;
+  async listReports(year: number, month: number): Promise<Report> {
+    const response = await this.api.listReportsV2(year, month);
 
-    const response = await super.get(
-      ReportControllerHandler.CONTROLLER,
-      usecase
-    );
-    if (!response.ok) {
-      throw new Error(response.statusText);
-    }
+    super.handleResponseError(response);
 
-    const listReportsResponse = (await response.json()) as ListReportsResponse;
-
-    if (listReportsResponse.code) {
-      throwError(listReportsResponse.code);
-    }
+    const listReportsResponse = response.data;
 
     const mseMap = new Map<number, Array<MoneyflowSplitEntryTransport>>();
 
@@ -106,7 +91,9 @@ class ReportControllerHandler extends AbstractControllerHandler {
       moneyflows: listReportsResponse.moneyflowTransports?.map((mmf) => {
         return mapMoneyflowTransportToModel(
           mmf,
-          listReportsResponse.moneyflowsWithReceipt?.includes(mmf.id),
+          listReportsResponse.moneyflowsWithReceipt
+            ? listReportsResponse.moneyflowsWithReceipt.includes(mmf.id)
+            : false,
           mseMap.get(mmf.id)
         );
       }),
@@ -116,22 +103,11 @@ class ReportControllerHandler extends AbstractControllerHandler {
   }
 
   async showTrendsForm(): Promise<TrendsParameter> {
-    const usecase = "showTrendsForm";
+    const response = await this.api.showTrendsForm();
 
-    const response = await super.get(
-      ReportControllerHandler.CONTROLLER,
-      usecase
-    );
-    if (!response.ok) {
-      throw new Error(response.statusText);
-    }
+    super.handleResponseError(response);
 
-    const showTrendsFormResponse =
-      (await response.json()) as ShowTrendsFormResponse;
-
-    if (showTrendsFormResponse.code) {
-      throwError(showTrendsFormResponse.code);
-    }
+    const showTrendsFormResponse = response.data;
 
     const trendsTransporter: TrendsParameter = {
       startDate: new Date(showTrendsFormResponse.minDate),
@@ -144,25 +120,18 @@ class ReportControllerHandler extends AbstractControllerHandler {
   }
 
   async showTrendsGraph(trendsParameter: TrendsParameter): Promise<Trends> {
-    const usecase = "showTrendsGraph";
     const request = {} as ShowTrendsGraphRequest;
 
     request.startDate = getISOStringDate(trendsParameter.startDate);
     request.endDate = getISOStringDate(trendsParameter.endDate);
     request.capitalSourceIds = trendsParameter.selectedCapitalsourceIds;
 
-    const response = await super.put(
-      request,
-      ReportControllerHandler.CONTROLLER,
-      usecase
-    );
+    const response = await this.api.showTrendsGraph(request);
 
-    if (!response.ok) {
-      throw new Error(response.statusText);
-    }
+    super.handleResponseError(response);
 
-    const showTrendsGraphResponse =
-      (await response.json()) as ShowTrendsGraphResponse;
+    const showTrendsGraphResponse = response.data;
+
     const result: Trends = {
       trendsCalculated: showTrendsGraphResponse.trendsCalculatedTransports,
       trendsSettled: showTrendsGraphResponse.trendsSettledTransports,
@@ -172,34 +141,24 @@ class ReportControllerHandler extends AbstractControllerHandler {
   }
 
   async showReportingForm(): Promise<ReportingParameter> {
-    const usecase = "showReportingForm";
+    const response = await this.api.showReportingForm();
 
-    const response = await super.get(
-      ReportControllerHandler.CONTROLLER,
-      usecase
-    );
-    if (!response.ok) {
-      throw new Error(response.statusText);
-    }
+    super.handleResponseError(response);
 
-    const showReportingFormResponse =
-      (await response.json()) as ShowReportingFormResponse;
-
-    if (showReportingFormResponse.code) {
-      throwError(showReportingFormResponse.code);
-    }
+    const showReportingFormResponse = response.data;
 
     const postingAccountStore = usePostingAccountStore();
     const postingAccounts = postingAccountStore.getPostingAccount;
 
     let postingAccountsYes: Array<PostingAccount> | undefined;
     let postingAccountsNo: Array<PostingAccount> | undefined;
-    if (showReportingFormResponse.postingAccountIds) {
+    const mpas = showReportingFormResponse.postingAccountIds;
+    if (mpas) {
       postingAccountsYes = postingAccounts.filter((pa) => {
-        return !showReportingFormResponse.postingAccountIds.includes(pa.id);
+        return !mpas.includes(pa.id);
       });
       postingAccountsNo = postingAccounts.filter((pa) => {
-        return showReportingFormResponse.postingAccountIds.includes(pa.id);
+        return mpas.includes(pa.id);
       });
     } else {
       postingAccountsYes = postingAccounts;
@@ -218,7 +177,6 @@ class ReportControllerHandler extends AbstractControllerHandler {
   async showMonthlyReportGraph(
     reportingParameter: ReportingParameter
   ): Promise<Array<ReportingMonthAmount>> {
-    const usecase = "showMonthlyReportGraph";
     const request = {} as ShowMonthlyReportGraphRequest;
 
     request.startDate = getISOStringDate(reportingParameter.startDate);
@@ -229,31 +187,26 @@ class ReportControllerHandler extends AbstractControllerHandler {
       request.postingAccountIdsNo =
         reportingParameter.unselectedPostingAccounts.map((mpa) => mpa.id);
 
-    const response = await super.put(
-      request,
-      ReportControllerHandler.CONTROLLER,
-      usecase
-    );
+    const response = await this.api.showMonthlyReportGraph(request);
 
-    if (!response.ok) {
-      throw new Error(response.statusText);
+    super.handleResponseError(response);
+
+    const showMonthlyReportGraphResponse = response.data;
+
+    if (showMonthlyReportGraphResponse.postingAccountAmountTransports) {
+      const result: Array<ReportingMonthAmount> =
+        showMonthlyReportGraphResponse.postingAccountAmountTransports.map(
+          (paat) => mapPostingAccountAmountTransportToModel(paat)
+        );
+
+      return result;
     }
-
-    const showMonthlyReportGraphResponse =
-      (await response.json()) as ShowMonthlyReportGraphResponse;
-
-    const result: Array<ReportingMonthAmount> =
-      showMonthlyReportGraphResponse.postingAccountAmountTransports.map(
-        (paat) => mapPostingAccountAmountTransportToModel(paat)
-      );
-
-    return result;
+    return new Array<ReportingMonthAmount>();
   }
 
   async showYearlyReportGraph(
     reportingParameter: ReportingParameter
   ): Promise<Array<ReportingMonthAmount>> {
-    const usecase = "showYearlyReportGraph";
     const request = {} as ShowYearlyReportGraphRequest;
 
     request.startDate = getISOStringDate(reportingParameter.startDate);
@@ -264,25 +217,21 @@ class ReportControllerHandler extends AbstractControllerHandler {
       request.postingAccountIdsNo =
         reportingParameter.unselectedPostingAccounts.map((mpa) => mpa.id);
 
-    const response = await super.put(
-      request,
-      ReportControllerHandler.CONTROLLER,
-      usecase
-    );
+    const response = await this.api.showYearlyReportGraph(request);
 
-    if (!response.ok) {
-      throw new Error(response.statusText);
+    super.handleResponseError(response);
+
+    const showYearlyReportGraphResponse = response.data;
+
+    if (showYearlyReportGraphResponse.postingAccountAmountTransports) {
+      const result: Array<ReportingMonthAmount> =
+        showYearlyReportGraphResponse.postingAccountAmountTransports.map(
+          (paat) => mapPostingAccountAmountTransportToModel(paat)
+        );
+
+      return result;
     }
-
-    const showYearlyReportGraphResponse =
-      (await response.json()) as ShowYearlyReportGraphResponse;
-
-    const result: Array<ReportingMonthAmount> =
-      showYearlyReportGraphResponse.postingAccountAmountTransports.map((paat) =>
-        mapPostingAccountAmountTransportToModel(paat)
-      );
-
-    return result;
+    return new Array<ReportingMonthAmount>();
   }
 }
 

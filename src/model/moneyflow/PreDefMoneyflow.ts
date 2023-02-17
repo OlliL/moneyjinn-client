@@ -3,15 +3,15 @@ export type PreDefMoneyflow = {
   userId: number;
   amount: number;
   capitalsourceId: number;
-  capitalsourceComment: string;
+  capitalsourceComment?: string;
   contractpartnerId: number;
-  contractpartnerName: string;
+  contractpartnerName?: string;
   comment: string;
   createDate?: Date;
   onceAMonth: boolean;
   lastUsed?: Date;
   postingAccountId: number;
-  postingAccountName: string;
+  postingAccountName?: string;
 };
 
 export function preDefMoneyflowAlreadyUsedThisMonth(
