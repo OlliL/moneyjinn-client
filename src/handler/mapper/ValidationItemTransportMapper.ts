@@ -1,4 +1,4 @@
-import type { ValidationItemTransport } from "@/model/rest/transport/ValidationItemTransport";
+import type { ValidationItemTransport } from "@/api";
 import type { ValidationResultItem } from "@/model/validation/ValidationResultItem";
 
 export function mapValidationItemTransportToModel(

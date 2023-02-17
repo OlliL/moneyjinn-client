@@ -1,6 +1,4 @@
 import type { LoginResponse } from "@/model/rest/user/LoginResponse";
-import type { ValidationResult } from "@/model/validation/ValidationResult";
-import type { ValidationResultItem } from "@/model/validation/ValidationResultItem";
 import { useUserSessionStore } from "@/stores/UserSessionStore";
 import { throwError } from "@/tools/views/ThrowError";
 import type { AxiosResponse } from "axios";
@@ -34,21 +32,6 @@ abstract class AbstractControllerHandler {
     if (errorResponse.code) {
       throwError(errorResponse.code);
     }
-  }
-
-  protected handleResponseErrorAsValidationResult(response: AxiosResponse) {
-    const validationResult = {} as ValidationResult;
-    if (response.status === 204) {
-      validationResult.result = true;
-    } else {
-      const errorResponse = response.data;
-      const validationResultItem = {
-        error: errorResponse.code,
-      } as ValidationResultItem;
-      validationResult.result = false;
-      validationResult.validationResultItems = [validationResultItem];
-    }
-    return validationResult;
   }
 
   protected async post(

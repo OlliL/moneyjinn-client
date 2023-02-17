@@ -1,5 +1,5 @@
+import type { CapitalsourceTransport } from "@/api";
 import type { Capitalsource } from "@/model/capitalsource/Capitalsource";
-import type { CapitalsourceTransport } from "@/model/rest/transport/CapitalsourceTransport";
 import { getISOStringDate } from "@/tools/views/FormatDate";
 import {
   mapCapitalsourceImportEnumToTransport,

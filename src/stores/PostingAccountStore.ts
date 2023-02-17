@@ -2,7 +2,7 @@ import { mapPostingAccountTransportToModel } from "@/handler/mapper/PostingAccou
 import PostingAccountControllerHandler from "@/handler/PostingAccountControllerHandler";
 import { WebSocketHandler } from "@/handler/WebSocketHandler";
 import type { PostingAccount } from "@/model/postingaccount/PostingAccount";
-import type { PostingAccountChangedEventTransport } from "@/model/rest/wsevent/PostingAccountChangedEventTransport";
+import type { PostingAccountChangedEventTransport } from "@/model/wsevent/PostingAccountChangedEventTransport";
 import type { SelectBoxValue } from "@/model/SelectBoxValue";
 import { defineStore } from "pinia";
 

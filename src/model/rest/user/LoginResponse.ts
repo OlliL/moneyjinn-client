@@ -1,4 +1,4 @@
-import type { UserTransport } from "@/model/rest/transport/UserTransport";
+import type { UserTransport } from "@/api";
 import type { ValidationResponse } from "../ValidationResponse";
 
 export type LoginResponse = ValidationResponse & {

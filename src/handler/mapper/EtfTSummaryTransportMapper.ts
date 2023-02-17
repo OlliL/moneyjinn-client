@@ -1,5 +1,5 @@
+import type { EtfSummaryTransport } from "@/api";
 import type { EtfSummary } from "@/model/etf/EtfSummary";
-import type { EtfSummaryTransport } from "@/model/rest/transport/EtfSummaryTransport";
 
 export function mapEtfSummaryTransportToEtfSummary(
   transport: EtfSummaryTransport

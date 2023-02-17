@@ -35,6 +35,7 @@ import type { User } from "@/model/user/User";
 import type { ValidationResult } from "@/model/validation/ValidationResult";
 
 import AbstractControllerHandler from "@/handler/AbstractControllerHandler";
+import type { ValidationResultItem } from "@/model/validation/ValidationResultItem";
 
 class UserControllerHandler extends AbstractControllerHandler {
   private api: UserControllerApi;
@@ -208,7 +209,19 @@ class UserControllerHandler extends AbstractControllerHandler {
 
   async deleteUser(id: number): Promise<ValidationResult> {
     const response = await this.api.deleteUserById(id);
-    return super.handleResponseErrorAsValidationResult(response);
+
+    const validationResult = {} as ValidationResult;
+    if (response.status === 204) {
+      validationResult.result = true;
+    } else {
+      const errorResponse = response.data;
+      const validationResultItem = {
+        error: errorResponse.code,
+      } as ValidationResultItem;
+      validationResult.result = false;
+      validationResult.validationResultItems = [validationResultItem];
+    }
+    return validationResult;
   }
 }
 

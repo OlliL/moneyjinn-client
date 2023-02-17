@@ -1,5 +1,5 @@
+import type { MoneyflowSplitEntryTransport } from "@/api";
 import type { MoneyflowSplitEntry } from "@/model/moneyflow/MoneyflowSplitEntry";
-import type { MoneyflowSplitEntryTransport } from "@/model/rest/transport/MoneyflowSplitEntryTransport";
 
 export function mapMoneyflowSplitEntryTransportToModel(
   transport: MoneyflowSplitEntryTransport

@@ -1,5 +1,5 @@
+import type { ContractpartnerTransport } from "@/api";
 import type { Contractpartner } from "@/model/contractpartner/Contractpartner";
-import type { ContractpartnerTransport } from "@/model/rest/transport/ContractpartnerTransport";
 import { getISOStringDate } from "@/tools/views/FormatDate";
 
 export function mapContractpartnerTransportToModel(

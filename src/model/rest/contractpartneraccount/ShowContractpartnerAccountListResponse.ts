@@ -1,4 +1,4 @@
-import type { ContractpartnerAccountTransport } from "@/model/rest/transport/ContractpartnerAccountTransport";
+import type { ContractpartnerAccountTransport } from "@/api";
 import type { ErrorResponse } from "../ErrorResponse";
 
 export type ShowContractpartnerAccountListResponse = ErrorResponse & {

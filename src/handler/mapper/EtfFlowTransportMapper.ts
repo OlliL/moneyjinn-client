@@ -1,5 +1,5 @@
+import type { EtfFlowTransport } from "@/api";
 import type { EtfFlow } from "@/model/etf/EtfFlow";
-import type { EtfFlowTransport } from "@/model/rest/transport/EtfFlowTransport";
 
 export function mapEtfFlowTransportToModel(
   transport: EtfFlowTransport

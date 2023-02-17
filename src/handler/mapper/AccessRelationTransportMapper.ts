@@ -1,5 +1,5 @@
+import type { AccessRelationTransport } from "@/api";
 import type { AccessRelation } from "@/model/user/AccessRelation";
-import type { AccessRelationTransport } from "@/model/rest/transport/AccessRelationTransport";
 import { getISOStringDate } from "@/tools/views/FormatDate";
 
 export function mapAccessRelationTransportToModel(

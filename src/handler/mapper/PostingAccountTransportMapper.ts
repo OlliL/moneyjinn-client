@@ -1,5 +1,5 @@
+import type { PostingAccountTransport } from "@/api";
 import type { PostingAccount } from "@/model/postingaccount/PostingAccount";
-import type { PostingAccountTransport } from "@/model/rest/transport/PostingAccountTransport";
 
 export function mapPostingAccountTransportToModel(
   transport: PostingAccountTransport

@@ -1,5 +1,5 @@
+import type { UserTransport } from "@/api";
 import type { User } from "@/model/user/User";
-import type { UserTransport } from "@/model/rest/transport/UserTransport";
 
 export function mapUserTransportToModel(transport: UserTransport): User {
   const model: User = {
