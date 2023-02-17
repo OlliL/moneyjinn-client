@@ -6,6 +6,6 @@ export type ImportedMoneyflow = Moneyflow & {
   externalid: string;
   name: string;
   usage: string;
-  accountNumberCapitalsource: string;
-  bankCodeCapitalsource: string;
+  accountNumberCapitalsource?: string;
+  bankCodeCapitalsource?: string;
 };

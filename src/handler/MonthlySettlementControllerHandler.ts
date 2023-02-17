@@ -1,5 +1,4 @@
 import AbstractControllerHandler from "@/handler/AbstractControllerHandler";
-import type { GetAvailableMonthResponse } from "@/model/rest/monthlysettlement/GetAvailableMonthResponse";
 import type { MonthlySettlement } from "@/model/monthlysettlement/MonthlySettlement";
 import type { AvailableMonth } from "@/model/monthlysettlement/AvailableMonth";
 import type { MonthlySettlementEditTransporter } from "@/model/monthlysettlement/MonthlySettlementEditTransporter";
@@ -7,42 +6,43 @@ import {
   mapMonthlySettlementToTransport,
   mapMonthlySettlementTransportToModel,
 } from "./mapper/MonthlySettlementTransportMapper";
-import type { ShowMonthlySettlementListResponse } from "@/model/rest/monthlysettlement/ShowMonthlySettlementListResponse";
-import type { ShowMonthlySettlementCreateResponse } from "@/model/rest/monthlysettlement/ShowMonthlySettlementCreateResponse";
-import type { UpsertMonthlySettlementRequest } from "@/model/rest/monthlysettlement/UpsertMonthlySettlementRequest";
 import type { ValidationResult } from "@/model/validation/ValidationResult";
-import { throwError } from "@/tools/views/ThrowError";
-import type { ValidationResponse } from "@/model/rest/ValidationResponse";
 import { mapValidationItemTransportToModel } from "./mapper/ValidationItemTransportMapper";
+import {
+  MonthlySettlementControllerApi,
+  type GetAvailableMonthlySettlementMonthResponse,
+  type ShowMonthlySettlementCreateResponse,
+  type UpsertMonthlySettlementRequest,
+} from "@/api";
+import { AxiosInstanceHolder } from "./AxiosInstanceHolder";
+import type { AxiosResponse } from "axios";
 
 class MonthlySettlementControllerHandler extends AbstractControllerHandler {
-  private static CONTROLLER = "monthlysettlement";
+  private api: MonthlySettlementControllerApi;
+
+  public constructor() {
+    super();
+
+    this.api = new MonthlySettlementControllerApi(
+      undefined,
+      "",
+      AxiosInstanceHolder.getInstance().getAxiosInstance()
+    );
+  }
 
   async getAvailableMonth(
     year?: number,
     month?: number
   ): Promise<AvailableMonth> {
-    let usecase = "getAvailableMonth";
-    if (year) {
-      usecase += "/" + year;
-      if (month) {
-        usecase += "/" + month;
-      }
-    }
-    const response = await super.get(
-      MonthlySettlementControllerHandler.CONTROLLER,
-      usecase
-    );
-    if (!response.ok) {
-      throw new Error(response.statusText);
-    }
+    let response: AxiosResponse<GetAvailableMonthlySettlementMonthResponse>;
+    if (year) response = await this.api.getAvailableMonthYear(year);
+    if (year && month)
+      response = await this.api.getAvailableMonthYearMonth(year, month);
+    else response = await this.api.getAvailableMonth();
 
-    const getAvailableMonthResponse =
-      (await response.json()) as GetAvailableMonthResponse;
+    super.handleResponseError(response);
 
-    if (getAvailableMonthResponse.code) {
-      throwError(getAvailableMonthResponse.code);
-    }
+    const getAvailableMonthResponse = response.data;
 
     // easy mapping for now - same attributes
     const availableMonth: AvailableMonth = getAvailableMonthResponse;
@@ -54,24 +54,11 @@ class MonthlySettlementControllerHandler extends AbstractControllerHandler {
     year: number,
     month: number
   ): Promise<Array<MonthlySettlement>> {
-    let usecase = "showMonthlySettlementListV2";
-    usecase += "/" + year;
-    usecase += "/" + month;
+    const response = await this.api.showMonthlySettlementListV2(year, month);
 
-    const response = await super.get(
-      MonthlySettlementControllerHandler.CONTROLLER,
-      usecase
-    );
-    if (!response.ok) {
-      throw new Error(response.statusText);
-    }
+    super.handleResponseError(response);
 
-    const showMonthlySettlementListResponse =
-      (await response.json()) as ShowMonthlySettlementListResponse;
-
-    if (showMonthlySettlementListResponse.code) {
-      throwError(showMonthlySettlementListResponse.code);
-    }
+    const showMonthlySettlementListResponse = response.data;
 
     const monthlySettlements: Array<MonthlySettlement> =
       showMonthlySettlementListResponse.monthlySettlementTransports?.map(
@@ -87,33 +74,23 @@ class MonthlySettlementControllerHandler extends AbstractControllerHandler {
     year?: number,
     month?: number
   ): Promise<MonthlySettlementEditTransporter> {
-    let usecase = "showMonthlySettlementCreate";
-    if (year) {
-      usecase += "/" + year;
-      if (month) {
-        usecase += "/" + month;
-      }
-    }
+    let response: AxiosResponse<ShowMonthlySettlementCreateResponse>;
+    if (year) response = await this.api.showMonthlySettlementCreateYear(year);
+    if (year && month)
+      response = await this.api.showMonthlySettlementCreateYearMonth(
+        year,
+        month
+      );
+    else response = await this.api.showMonthlySettlementCreate();
 
-    const response = await super.get(
-      MonthlySettlementControllerHandler.CONTROLLER,
-      usecase
-    );
-    if (!response.ok) {
-      throw new Error(response.statusText);
-    }
+    super.handleResponseError(response);
 
-    const showMonthlySettlementCreateResponse =
-      (await response.json()) as ShowMonthlySettlementCreateResponse;
-
-    if (showMonthlySettlementCreateResponse.code) {
-      throwError(showMonthlySettlementCreateResponse.code);
-    }
+    const showMonthlySettlementCreateResponse = response.data;
 
     const result = {} as MonthlySettlementEditTransporter;
 
     const monthlySettlements: Array<MonthlySettlement> =
-      showMonthlySettlementCreateResponse.monthlySettlementTransports?.map(
+      showMonthlySettlementCreateResponse.monthlySettlementTransports.map(
         (mms) => {
           return mapMonthlySettlementTransportToModel(mms);
         }
@@ -142,23 +119,17 @@ class MonthlySettlementControllerHandler extends AbstractControllerHandler {
   async upsertMonthlySettlement(
     monthlySettlements: Array<MonthlySettlement>
   ): Promise<ValidationResult> {
-    const usecase = "upsertMonthlySettlement";
     const request = {} as UpsertMonthlySettlementRequest;
     request.monthlySettlementTransports = monthlySettlements?.map((mms) =>
       mapMonthlySettlementToTransport(mms)
     );
 
-    const response = await super.post(
-      request,
-      MonthlySettlementControllerHandler.CONTROLLER,
-      usecase
-    );
+    const response = await this.api.upsertMonthlySettlement(request);
 
-    if (!response.ok) {
-      throw new Error(response.statusText);
-    }
+    super.handleResponseError(response);
 
-    const validationResponse = (await response.json()) as ValidationResponse;
+    const validationResponse = response.data;
+
     const validationResult: ValidationResult = {
       result: validationResponse.result,
       validationResultItems: validationResponse.validationItemTransports?.map(
@@ -172,18 +143,8 @@ class MonthlySettlementControllerHandler extends AbstractControllerHandler {
   }
 
   async deleteMonthlySettlement(year: number, month: number) {
-    let usecase = "deleteMonthlySettlement";
-    usecase += "/" + year;
-    usecase += "/" + month;
-
-    const response = await super.delete(
-      MonthlySettlementControllerHandler.CONTROLLER,
-      usecase
-    );
-
-    if (!response.ok) {
-      throw new Error(response.statusText);
-    }
+    const response = await this.api.deleteMonthlySettlement(year, month);
+    return super.handleResponseError(response);
   }
 }
 

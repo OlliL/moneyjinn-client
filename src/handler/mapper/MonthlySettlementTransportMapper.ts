@@ -1,5 +1,5 @@
+import type { MonthlySettlementTransport } from "@/api";
 import type { MonthlySettlement } from "@/model/monthlysettlement/MonthlySettlement";
-import type { MonthlySettlementTransport } from "@/model/rest/transport/MonthlySettlementTransport";
 import {
   mapCapitalsourceTypeEnumToTransport,
   mapCapitalsourceTypeTransportToEnum,
@@ -17,9 +17,9 @@ export function mapMonthlySettlementTransportToModel(
     capitalsourceId: transport.capitalsourceid,
     capitalsourceComment: transport.capitalsourcecomment,
     capitalsourceGroupUse: transport.capitalsourcegroupuse === 1 ? true : false,
-    capitalsourceType: mapCapitalsourceTypeTransportToEnum(
-      transport.capitalsourcetype
-    ),
+    capitalsourceType: transport.capitalsourcetype
+      ? mapCapitalsourceTypeTransportToEnum(transport.capitalsourcetype)
+      : undefined,
   };
   return model;
 }
@@ -36,9 +36,9 @@ export function mapMonthlySettlementToTransport(
     capitalsourceid: model.capitalsourceId,
     capitalsourcecomment: model.capitalsourceComment,
     capitalsourcegroupuse: model.capitalsourceGroupUse ? 1 : 0,
-    capitalsourcetype: mapCapitalsourceTypeEnumToTransport(
-      model.capitalsourceType
-    ),
+    capitalsourcetype: model.capitalsourceType
+      ? mapCapitalsourceTypeEnumToTransport(model.capitalsourceType)
+      : undefined,
   };
   return transport;
 }
