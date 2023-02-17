@@ -125,7 +125,9 @@ const searchContent = () => {
 
   const commentUpper = searchString.value.toUpperCase();
   preDefMoneyflows.value = allPreDefMoneyflows.value.filter((entry) =>
-    entry.contractpartnerName.toUpperCase().includes(commentUpper)
+    entry.contractpartnerName
+      ? entry.contractpartnerName.toUpperCase().includes(commentUpper)
+      : true
   );
 };
 
@@ -133,6 +135,10 @@ const reloadView = () => {
   PreDefMoneyflowControllerHandler.fetchAllPreDefMoneyflow().then(
     (_preDefMoneyflows) => {
       _preDefMoneyflows.sort((a, b) => {
+        if (!a.contractpartnerName && !b.contractpartnerName) return 0;
+        else if (!a.contractpartnerName) return -1;
+        else if (!b.contractpartnerName) return 1;
+
         return a.contractpartnerName
           .toUpperCase()
           .localeCompare(b.contractpartnerName.toUpperCase());

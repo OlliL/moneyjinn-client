@@ -2,7 +2,7 @@ import ContractpartnerControllerHandler from "@/handler/ContractpartnerControlle
 import { mapContractpartnerTransportToModel } from "@/handler/mapper/ContractpartnerTransportMapper";
 import { WebSocketHandler } from "@/handler/WebSocketHandler";
 import type { Contractpartner } from "@/model/contractpartner/Contractpartner";
-import type { ContractpartnerChangedEventTransport } from "@/model/rest/wsevent/ContractpartnerChangedEventTransport";
+import type { ContractpartnerChangedEventTransport } from "@/model/wsevent/ContractpartnerChangedEventTransport";
 import type { SelectBoxValue } from "@/model/SelectBoxValue";
 import { defineStore } from "pinia";
 

@@ -290,7 +290,8 @@ const loadData = () => {
     startDate.value = minDate;
     endDate.value = maxDate;
 
-    capitalsourceIds.value = trendsTransporter.selectedCapitalsourceIds;
+    if (trendsTransporter.selectedCapitalsourceIds)
+      capitalsourceIds.value = trendsTransporter.selectedCapitalsourceIds;
 
     dataLoaded.value = true;
     Object.keys(values).forEach((field) => setFieldTouched(field, false));

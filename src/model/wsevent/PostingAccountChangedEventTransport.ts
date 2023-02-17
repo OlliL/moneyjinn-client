@@ -1,4 +1,4 @@
-import type { PostingAccountTransport } from "../transport/PostingAccountTransport";
+import type { PostingAccountTransport } from "@/api";
 
 export type PostingAccountChangedEventTransport = {
   eventType: string;

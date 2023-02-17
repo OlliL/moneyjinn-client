@@ -1,4 +1,4 @@
-import type { CapitalsourceTransport } from "@/model/rest/transport/CapitalsourceTransport";
+import type { CapitalsourceTransport } from "@/api";
 import type { ErrorResponse } from "../ErrorResponse";
 
 export type ShowCapitalsourceListResponse = ErrorResponse & {

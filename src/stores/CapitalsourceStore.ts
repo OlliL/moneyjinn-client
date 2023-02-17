@@ -3,8 +3,8 @@ import { mapCapitalsourceTransportToModel } from "@/handler/mapper/Capitalsource
 import { WebSocketHandler } from "@/handler/WebSocketHandler";
 import type { Capitalsource } from "@/model/capitalsource/Capitalsource";
 import { CapitalsourceType } from "@/model/capitalsource/CapitalsourceType";
-import type { CapitalsourceChangedEventTransport } from "@/model/rest/wsevent/CapitalsourceChangedEventTransport";
 import type { SelectBoxValue } from "@/model/SelectBoxValue";
+import type { CapitalsourceChangedEventTransport } from "@/model/wsevent/CapitalsourceChangedEventTransport";
 import { defineStore, mapState } from "pinia";
 import { useUserSessionStore } from "./UserSessionStore";
 

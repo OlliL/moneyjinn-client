@@ -1,5 +1,5 @@
+import type { MoneyflowSearchParamsTransport } from "@/api";
 import type { MoneyflowSearchParams } from "@/model/moneyflow/MoneyflowSearchParams";
-import type { MoneyflowSearchParamsTransport } from "@/model/rest/transport/MoneyflowSearchParamsTransport";
 import { getISOStringDate } from "@/tools/views/FormatDate";
 
 export function mapMoneyflowSearchParamsToTransport(

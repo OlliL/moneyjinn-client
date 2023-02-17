@@ -1,5 +1,5 @@
+import type { ContractpartnerAccountTransport } from "@/api";
 import type { ContractpartnerAccount } from "@/model/contractpartneraccount/ContractpartnerAccount";
-import type { ContractpartnerAccountTransport } from "@/model/rest/transport/ContractpartnerAccountTransport";
 
 export function mapContractpartnerAccountTransportToModel(
   transport: ContractpartnerAccountTransport

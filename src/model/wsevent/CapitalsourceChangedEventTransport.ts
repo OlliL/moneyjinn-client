@@ -1,4 +1,4 @@
-import type { CapitalsourceTransport } from "../transport/CapitalsourceTransport";
+import type { CapitalsourceTransport } from "@/api";
 
 export type CapitalsourceChangedEventTransport = {
   eventType: string;

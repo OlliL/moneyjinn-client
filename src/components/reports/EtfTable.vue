@@ -78,7 +78,7 @@ const props = defineProps({
   },
 });
 
-const loadData = (year: string, month: string) => {
+const loadData = (year: number, month: number) => {
   dataLoaded.value = false;
   EtfControllerHandler.listEtfOverview(year, month).then((_etfSummeryArray) => {
     etfSummaryArray.value = _etfSummeryArray;
@@ -87,7 +87,7 @@ const loadData = (year: string, month: string) => {
 };
 
 onMounted(() => {
-  loadData(props.year, props.month);
+  loadData(+props.year, +props.month);
 });
 
 watch(
@@ -96,7 +96,7 @@ watch(
     month: props.month,
   }),
   (data) => {
-    if (data.year && data.month) loadData(data.year, data.month);
+    if (data.year && data.month) loadData(+data.year, +data.month);
   }
 );
 

@@ -1,5 +1,5 @@
+import type { GroupTransport } from "@/api";
 import type { Group } from "@/model/group/Group";
-import type { GroupTransport } from "@/model/rest/transport/GroupTransport";
 
 export function mapGroupTransportToModel(transport: GroupTransport): Group {
   const model: Group = {

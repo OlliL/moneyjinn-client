@@ -110,7 +110,9 @@
 
     <div
       class="row justify-content-md-center py-4"
-      v-if="assetsTurnoverCapitalsources.length > 0"
+      v-if="
+        assetsTurnoverCapitalsources && assetsTurnoverCapitalsources.length > 0
+      "
     >
       <div class="col col-lg-8">
         <div class="card">
@@ -173,7 +175,10 @@
 
     <div
       class="row justify-content-md-center py-4"
-      v-if="liabilitiesTurnoverCapitalsources.length > 0"
+      v-if="
+        liabilitiesTurnoverCapitalsources &&
+        liabilitiesTurnoverCapitalsources.length > 0
+      "
     >
       <div class="col col-lg-8">
         <div class="card">
@@ -192,7 +197,9 @@
 
     <div
       class="row justify-content-md-center py-4"
-      v-if="creditTurnoverCapitalsources.length > 0"
+      v-if="
+        creditTurnoverCapitalsources && creditTurnoverCapitalsources.length > 0
+      "
     >
       <div class="col col-lg-8">
         <div class="card">
@@ -283,7 +290,7 @@ const creditTurnoverCapitalsources = computed(() => {
   return new Array<ReportTurnoverCapitalsource>();
 });
 const currentMonthIsSettled = computed(() => {
-  if (dataLoaded.value) {
+  if (dataLoaded.value && report.value.reportTurnoverCapitalsources) {
     for (let data of report.value.reportTurnoverCapitalsources) {
       if (data.amountEndOfMonthFixed) {
         return true;
@@ -294,7 +301,7 @@ const currentMonthIsSettled = computed(() => {
 });
 const amountSum = computed(() => {
   let sum = 0;
-  if (dataLoaded.value) {
+  if (dataLoaded.value && report.value.moneyflows) {
     for (const mmf of report.value.moneyflows) {
       sum += mmf.amount;
     }
@@ -308,11 +315,14 @@ const assetsMonthlyDifference = computed(() => {
 });
 const assetsYearlyDifference = computed(() => {
   return +(
-    assetsYearlyFixedTurnover.value - report.value.turnoverEndOfYearCalculated
+    assetsYearlyFixedTurnover.value -
+    (report.value.turnoverEndOfYearCalculated
+      ? report.value.turnoverEndOfYearCalculated
+      : 0)
   );
 });
 
-const loadData = (year: string, month: string) => {
+const loadData = (year: number, month: number) => {
   dataLoaded.value = false;
   ReportControllerHandler.listReports(year, month).then((_report) => {
     report.value = _report;
@@ -338,7 +348,8 @@ const loadData = (year: string, month: string) => {
     }
     assetsMonthlyFixedTurnover.value = +(assetsFixAmount - assetsLastAmount);
     assetsYearlyFixedTurnover.value = +(
-      assetsFixAmount - report.value.amountBeginOfYear
+      assetsFixAmount -
+      (report.value.amountBeginOfYear ? report.value.amountBeginOfYear : 0)
     );
 
     sortBy.value.clear();
@@ -371,25 +382,28 @@ const bookCapitalsourceAmounts = (mmf: Moneyflow, bookOut: boolean) => {
   let direction = bookOut ? -1 : 1;
   const amount = mmf.amount * direction;
 
-  for (const mcs of report.value.reportTurnoverCapitalsources) {
-    if (mcs.capitalsourceComment === capitalsourceComment) {
-      mcs.amountEndOfMonthCalculated += amount;
-      if (
-        !mcs.amountCurrentState &&
-        mcs.amountCurrent &&
-        bookingDate <= today
-      ) {
-        mcs.amountCurrent += amount;
-      }
-      if (
-        mcs.capitalsourceType === CapitalsourceType.CURRENT_ASSET ||
-        mcs.capitalsourceType === CapitalsourceType.LONG_TERM_ASSET
-      ) {
-        assetsMonthlyCalculatedTurnover.value += amount;
+  if (report.value.reportTurnoverCapitalsources) {
+    for (const mcs of report.value.reportTurnoverCapitalsources) {
+      if (mcs.capitalsourceComment === capitalsourceComment) {
+        mcs.amountEndOfMonthCalculated += amount;
+        if (
+          !mcs.amountCurrentState &&
+          mcs.amountCurrent &&
+          bookingDate <= today
+        ) {
+          mcs.amountCurrent += amount;
+        }
+        if (
+          mcs.capitalsourceType === CapitalsourceType.CURRENT_ASSET ||
+          mcs.capitalsourceType === CapitalsourceType.LONG_TERM_ASSET
+        ) {
+          assetsMonthlyCalculatedTurnover.value += amount;
+        }
       }
     }
   }
-  report.value.turnoverEndOfYearCalculated += amount;
+  if (report.value.turnoverEndOfYearCalculated)
+    report.value.turnoverEndOfYearCalculated += amount;
 };
 const moneyflowDeleted = (mmf: Moneyflow) => {
   bookCapitalsourceAmounts(mmf, true);
@@ -460,11 +474,11 @@ watch(
     month: props.month,
   }),
   (data) => {
-    if (data.year && data.month) loadData(data.year, data.month);
+    if (data.year && data.month) loadData(+data.year, +data.month);
   }
 );
 
 onMounted(() => {
-  loadData(props.year, props.month);
+  loadData(+props.year, +props.month);
 });
 </script>
