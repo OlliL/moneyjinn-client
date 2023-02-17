@@ -284,6 +284,8 @@ import { StoreService } from "@/stores/StoreService";
 
 import { WebSocketHandler } from "@/handler/WebSocketHandler";
 import { clearAuthTokens } from "axios-jwt";
+import { LogoutApi } from "@/api";
+import { AxiosInstanceHolder } from "@/handler/AxiosInstanceHolder";
 
 const year = new Date().getFullYear();
 const month = new Date().getMonth() + 1;
@@ -328,10 +330,17 @@ const showCreateCapitalsourceModal = () => {
 const showPreDefMoneyflowModal = () => {
   createPreDedMoneyflowModalNav.value._show();
 };
-const logout = () => {
+const logout = async () => {
   WebSocketHandler.getInstance().disconnectStompClient();
   const userSessionStore = useUserSessionStore();
   userSessionStore.logout();
+
+  await new LogoutApi(
+    undefined,
+    "",
+    AxiosInstanceHolder.getInstance().getAxiosInstance()
+  ).logout();
+
   clearAuthTokens();
   router.push({
     name: Routes.Login,
