@@ -1,8 +1,7 @@
-import { useUserSessionStore } from "@/stores/UserSessionStore";
+import { getAccessToken } from "axios-jwt";
 
 export class HeaderUtil {
   private static instance: HeaderUtil;
-  private userSessionStore = useUserSessionStore();
 
   private constructor() {}
 
@@ -14,8 +13,8 @@ export class HeaderUtil {
   }
 
   public addAuthorizationHeader(headers: Record<string, string>) {
-    const token = this.userSessionStore.getAuthorizationToken;
-    headers["Authorization"] = "Bearer " + token;
+    const accessToken = getAccessToken();
+    headers["Authorization"] = "Bearer " + accessToken;
   }
 
   private getCookie(name: string) {
@@ -30,9 +29,5 @@ export class HeaderUtil {
     if (xsrfToken) {
       headers["X-XSRF-TOKEN"] = xsrfToken;
     }
-  }
-
-  public addContentTypeJson(headers: Record<string, string>) {
-    headers["Content-Type"] = "application/json";
   }
 }

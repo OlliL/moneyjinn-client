@@ -1,5 +1,4 @@
 import type { LoginResponse } from "@/api";
-import { useUserSessionStore } from "@/stores/UserSessionStore";
 import { throwError } from "@/tools/views/ThrowError";
 import type { AxiosInstance } from "axios";
 import axios from "axios";
@@ -48,8 +47,6 @@ export class AxiosInstanceHolder {
   }
 
   public async refreshAuthToken(refreshToken: Token): Promise<IAuthTokens> {
-    const userSessionStore = useUserSessionStore();
-
     const headers = {} as Record<string, string>;
     headers["Authorization"] = "Bearer " + refreshToken;
 
@@ -68,8 +65,6 @@ export class AxiosInstanceHolder {
     if (loginResponse.code) {
       throwError(loginResponse.code);
     }
-    userSessionStore.setAuthorizationToken(loginResponse.token);
-    userSessionStore.setRefreshToken(loginResponse.refreshToken);
 
     return {
       accessToken: loginResponse.token,

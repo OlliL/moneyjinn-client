@@ -75,8 +75,6 @@ class UserControllerHandler extends AbstractControllerHandler {
         userCanLogin: userTransport.userCanLogin === 1 ? true : false,
         userIsNew: userTransport.userIsNew === 1 ? true : false,
         userIsAdmin: userTransport.userIsAdmin === 1 ? true : false,
-        userAuthorizationToken: loginResponse.token,
-        userRefreshToken: loginResponse.refreshToken,
       };
 
       userSessionStore.setUserSession(userSession);
