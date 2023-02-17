@@ -7,7 +7,7 @@ export type MonthlySettlement = {
   month: number;
   amount: number;
   capitalsourceId: number;
-  capitalsourceComment: string;
-  capitalsourceGroupUse: boolean;
-  capitalsourceType: CapitalsourceType;
+  capitalsourceComment?: string;
+  capitalsourceGroupUse?: boolean;
+  capitalsourceType?: CapitalsourceType;
 };

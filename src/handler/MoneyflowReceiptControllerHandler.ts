@@ -1,29 +1,30 @@
+import { MoneyflowReceiptControllerApi } from "@/api";
 import AbstractControllerHandler from "@/handler/AbstractControllerHandler";
 import { ErrorCode } from "@/model/ErrorCode";
 import type { MoneyflowReceipt } from "@/model/moneyflow/MoneyflowReceipt";
 import { MoneyflowReceiptType } from "@/model/moneyflow/MoneyflowReceiptType";
-import type { ShowMoneyflowReceiptResponse } from "@/model/rest/moneyflow/ShowMoneyflowReceiptResponse";
 import { throwError } from "@/tools/views/ThrowError";
+import { AxiosInstanceHolder } from "./AxiosInstanceHolder";
 
 class MoneyflowReceiptControllerHandler extends AbstractControllerHandler {
-  private static CONTROLLER = "moneyflowreceipt";
+  private api: MoneyflowReceiptControllerApi;
+
+  public constructor() {
+    super();
+
+    this.api = new MoneyflowReceiptControllerApi(
+      undefined,
+      "",
+      AxiosInstanceHolder.getInstance().getAxiosInstance()
+    );
+  }
 
   async fetchReceipt(moneyflowId: number): Promise<MoneyflowReceipt> {
-    const usecase = "showMoneyflowReceipt/" + moneyflowId;
-    const response = await super.get(
-      MoneyflowReceiptControllerHandler.CONTROLLER,
-      usecase
-    );
-    if (!response.ok) {
-      throw new Error(response.statusText);
-    }
+    const response = await this.api.showMoneyflowReceipt(moneyflowId);
 
-    const showMoneyflowReceiptResponse =
-      (await response.json()) as ShowMoneyflowReceiptResponse;
+    super.handleResponseError(response);
 
-    if (showMoneyflowReceiptResponse.code) {
-      throwError(showMoneyflowReceiptResponse.code);
-    }
+    const showMoneyflowReceiptResponse = response.data;
 
     let receiptType: MoneyflowReceiptType;
     switch (showMoneyflowReceiptResponse.receiptType) {
@@ -49,17 +50,9 @@ class MoneyflowReceiptControllerHandler extends AbstractControllerHandler {
 
     return moneyflowReceipt;
   }
-  async deleteMoneyflowReceipt(moneyflowId: number) {
-    const usecase = "deleteMoneyflowReceipt/" + moneyflowId;
-
-    const response = await super.delete(
-      MoneyflowReceiptControllerHandler.CONTROLLER,
-      usecase
-    );
-
-    if (!response.ok) {
-      throw new Error(response.statusText);
-    }
+  async deleteMoneyflowReceipt(id: number) {
+    const response = await this.api.deleteMoneyflowReceipt(id);
+    return super.handleResponseError(response);
   }
 }
 
