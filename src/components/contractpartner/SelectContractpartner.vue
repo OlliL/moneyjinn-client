@@ -2,7 +2,7 @@
   <CreateContractpartnerModalVue
     ref="createContractpartnerModal"
     :id-suffix="idSuffix"
-    @posting-account-created="contractpartnerCreated"
+    @contractpartner-created="contractpartnerCreated"
   />
 
   <div class="input-group">
