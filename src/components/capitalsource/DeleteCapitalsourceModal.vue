@@ -105,8 +105,12 @@
 <script lang="ts" setup>
 import { computed, ref } from "vue";
 
+import DivError from "../DivError.vue";
 import ModalVue from "../Modal.vue";
+import SpanBoolean from "../SpanBoolean.vue";
 import SpanDate from "../SpanDate.vue";
+
+import { handleBackendError } from "@/tools/views/ThrowError";
 
 import type { Capitalsource } from "@/model/capitalsource/Capitalsource";
 import { capitalsourceImportNames } from "@/model/capitalsource/CapitalsourceImport";
@@ -114,9 +118,6 @@ import { capitalsourceStateNames } from "@/model/capitalsource/CapitalsourceStat
 import { capitalsourceTypeNames } from "@/model/capitalsource/CapitalsourceType";
 
 import CapitalsourceControllerHandler from "@/handler/CapitalsourceControllerHandler";
-import SpanBoolean from "../SpanBoolean.vue";
-import { handleBackendError } from "@/tools/views/ThrowError";
-import DivError from "../DivError.vue";
 
 const serverErrors = ref(new Array<string>());
 

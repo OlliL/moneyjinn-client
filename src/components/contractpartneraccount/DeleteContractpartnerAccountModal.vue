@@ -40,13 +40,14 @@
 <script lang="ts" setup>
 import { ref } from "vue";
 
+import DivError from "../DivError.vue";
 import ModalVue from "../Modal.vue";
+
+import { handleBackendError } from "@/tools/views/ThrowError";
 
 import type { ContractpartnerAccount } from "@/model/contractpartneraccount/ContractpartnerAccount";
 
 import ContractpartnerAccountControllerHandler from "@/handler/ContractpartnerAccountControllerHandler";
-import { handleBackendError } from "@/tools/views/ThrowError";
-import DivError from "../DivError.vue";
 
 const serverErrors = ref(new Array<string>());
 

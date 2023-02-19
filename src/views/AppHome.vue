@@ -9,6 +9,7 @@
         <h4>Aufgabenliste</h4>
       </div>
     </div>
+    <DivError :server-errors="serverErrors" />
     <div class="row justify-content-md-center" v-if="importedMoneyflows">
       <div class="col-4 col-sm-2 col-lg-2 col-xl-1 col-xxl-1 mb-4 text-end">
         <button
@@ -58,6 +59,10 @@ import EditMonthlySettlementModalVue from "@/components/monthlysettlement/EditMo
 import router, { Routes } from "@/router";
 
 import EventControllerHandler from "@/handler/EventControllerHandler";
+import { handleBackendError } from "@/tools/views/ThrowError";
+import DivError from "@/components/DivError.vue";
+
+const serverErrors = ref(new Array<string>());
 
 const importedMoneyflows = ref(false);
 const monthlySettlementMissing = ref(false);
@@ -68,24 +73,28 @@ const dataLoaded = ref(false);
 
 const loadData = () => {
   dataLoaded.value = false;
-  EventControllerHandler.showEventList().then((events) => {
-    if (
-      events.numberOfImportedMoneyflows &&
-      events.numberOfImportedMoneyflows > 0
-    ) {
-      importedMoneyflows.value = true;
-    }
-    monthlySettlementMissing.value = events.monthlySettlementMissing
-      ? events.monthlySettlementMissing
-      : false;
-    monthlySettlementMonth.value = events.monthlySettlementMonth
-      ? events.monthlySettlementMonth
-      : 0;
-    monthlySettlementYear.value = events.monthlySettlementYear
-      ? events.monthlySettlementYear
-      : 0;
-    dataLoaded.value = true;
-  });
+  EventControllerHandler.showEventList()
+    .then((events) => {
+      if (
+        events.numberOfImportedMoneyflows &&
+        events.numberOfImportedMoneyflows > 0
+      ) {
+        importedMoneyflows.value = true;
+      }
+      monthlySettlementMissing.value = events.monthlySettlementMissing
+        ? events.monthlySettlementMissing
+        : false;
+      monthlySettlementMonth.value = events.monthlySettlementMonth
+        ? events.monthlySettlementMonth
+        : 0;
+      monthlySettlementYear.value = events.monthlySettlementYear
+        ? events.monthlySettlementYear
+        : 0;
+      dataLoaded.value = true;
+    })
+    .catch((backendError) => {
+      handleBackendError(backendError, serverErrors);
+    });
 };
 const showEditMonthlySettlementModal = () => {
   editModal.value._show(

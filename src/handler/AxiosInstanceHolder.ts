@@ -48,6 +48,17 @@ export class AxiosInstanceHolder {
           return response;
         },
         (error) => {
+          console.log(error);
+          if (error instanceof Error && !("response" in error)) {
+            return Promise.reject(
+              new BackendError(
+                BackendErrorType.ERROR,
+                undefined,
+                "Technischer Fehler"
+              )
+            );
+          }
+
           if (error.response.status === 400) {
             const errorResponse: ErrorResponse = error.response.data;
             return Promise.reject(

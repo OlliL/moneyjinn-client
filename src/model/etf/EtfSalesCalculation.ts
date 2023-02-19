@@ -1,7 +1,4 @@
-import type { ValidationResult } from "../validation/ValidationResult";
-
 export type EtfSalesCalculation = {
-  validationResult: ValidationResult;
   isin: string;
   originalBuyPrice: number;
   sellPrice: number;

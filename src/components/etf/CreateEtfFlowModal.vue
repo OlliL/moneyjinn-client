@@ -91,7 +91,7 @@ import SelectStandard from "../SelectStandard.vue";
 
 import { formatTime } from "@/tools/views/FormatDate";
 import { globErr } from "@/tools/views/ZodUtil";
-import { handleServerError } from "@/tools/views/ThrowError";
+import { handleBackendError } from "@/tools/views/ThrowError";
 
 import type { Etf } from "@/model/etf/Etf";
 import type { EtfFlow } from "@/model/etf/EtfFlow";
@@ -171,6 +171,8 @@ const _show = (_etfs: Array<Etf>, _etfFlow?: EtfFlow) => {
 };
 
 const createEtfFlow = handleSubmit(() => {
+  serverErrors.value = new Array<string>();
+
   const times: Array<string> = bookingtime.value.split(":");
   const bookingDate = bookingdate.value;
   if (times && times.length == 4 && bookingDate) {
@@ -180,27 +182,25 @@ const createEtfFlow = handleSubmit(() => {
 
     if (etfFlow.value.etfflowid > 0) {
       //update
-      EtfFlowControllerHandler.updateEtfFlow(etfFlow.value).then(
-        (validationResult) => {
-          if (!handleServerError(validationResult, serverErrors)) {
-            modalComponent.value._hide();
-            emit("etfFlowUpdated", etfFlow.value);
-          }
-        }
-      );
+      EtfFlowControllerHandler.updateEtfFlow(etfFlow.value)
+        .then(() => {
+          modalComponent.value._hide();
+          emit("etfFlowUpdated", etfFlow.value);
+        })
+        .catch((backendError) => {
+          handleBackendError(backendError, serverErrors);
+        });
     } else {
       //create
-      EtfFlowControllerHandler.createEtfFlow(etfFlow.value).then(
-        (etfFlowValidation) => {
-          const validationResult = etfFlowValidation.validationResult;
-
-          if (!handleServerError(validationResult, serverErrors)) {
-            etfFlow.value = etfFlowValidation.etfFlow;
-            modalComponent.value._hide();
-            emit("etfFlowCreated", etfFlow.value);
-          }
-        }
-      );
+      EtfFlowControllerHandler.createEtfFlow(etfFlow.value)
+        .then((_etfFlow) => {
+          etfFlow.value = _etfFlow;
+          modalComponent.value._hide();
+          emit("etfFlowCreated", etfFlow.value);
+        })
+        .catch((backendError) => {
+          handleBackendError(backendError, serverErrors);
+        });
     }
   }
 });

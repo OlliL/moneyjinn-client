@@ -103,14 +103,15 @@
 <script lang="ts" setup>
 import { ref } from "vue";
 
+import DivError from "../DivError.vue";
 import ModalVue from "../Modal.vue";
 import SpanDate from "../SpanDate.vue";
+
+import { handleBackendError } from "@/tools/views/ThrowError";
 
 import type { Contractpartner } from "@/model/contractpartner/Contractpartner";
 
 import ContractpartnerControllerHandler from "@/handler/ContractpartnerControllerHandler";
-import { handleBackendError } from "@/tools/views/ThrowError";
-import DivError from "../DivError.vue";
 
 const serverErrors = ref(new Array<string>());
 

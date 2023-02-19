@@ -1,6 +1,7 @@
 <template>
   <ModalVue title="ETF Buchung l&ouml;schen" ref="modalComponent">
     <template #body>
+      <DivError :server-errors="serverErrors" />
       <div class="row">
         <div
           class="text-start d-flex align-items-center col-sm-3 col-xs-5"
@@ -51,15 +52,19 @@
 <script lang="ts" setup>
 import { computed, ref } from "vue";
 
+import DivError from "../DivError.vue";
 import ModalVue from "../Modal.vue";
 import SpanAmount from "../SpanAmount.vue";
 
 import { formatDateWithTime } from "@/tools/views/FormatDate";
 import { formatNumber, redIfNegativeStart } from "@/tools/views/FormatNumber";
+import { handleBackendError } from "@/tools/views/ThrowError";
 
 import type { EtfFlow } from "@/model/etf/EtfFlow";
 
 import EtfFlowControllerHandler from "@/handler/EtfControllerHandler";
+
+const serverErrors = ref(new Array<string>());
 
 const etfFlow = ref({} as EtfFlow);
 const etfName = ref("");
@@ -87,10 +92,16 @@ const _show = (_etfFlow: EtfFlow, _etfName: string) => {
   modalComponent.value._show();
 };
 const deleteEtfFlow = () => {
-  EtfFlowControllerHandler.deleteEtfFlow(etfFlow.value.etfflowid).then(() => {
-    modalComponent.value._hide();
-    emit("etfFlowDeleted", etfFlow.value);
-  });
+  serverErrors.value = new Array<string>();
+
+  EtfFlowControllerHandler.deleteEtfFlow(etfFlow.value.etfflowid)
+    .then(() => {
+      modalComponent.value._hide();
+      emit("etfFlowDeleted", etfFlow.value);
+    })
+    .catch((backendError) => {
+      handleBackendError(backendError, serverErrors);
+    });
 };
 
 defineExpose({ _show });
