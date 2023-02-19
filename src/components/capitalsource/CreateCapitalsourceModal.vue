@@ -14,7 +14,7 @@
                   v-model="mcs.comment"
                   :validation-schema="schema.comment"
                   :id="'comment' + idSuffix"
-                  field-label="Kapitalquelle"
+                  field-label="Name"
                 />
               </div>
             </div>
@@ -216,8 +216,8 @@ const createCapitalsource = handleSubmit(() => {
   } else {
     //create
     CapitalsourceControllerHandler.createCapitalsource(mcs.value)
-      .then((capitalsourceValidation) => {
-        mcs.value = capitalsourceValidation.mcs;
+      .then((_mcs) => {
+        mcs.value = _mcs;
         modalComponent.value._hide();
         emit("capitalsourceCreated", mcs.value);
       })

@@ -1,6 +1,7 @@
 <template>
   <ModalVue title="Kapitalquelle l&ouml;schen" ref="modalComponent">
     <template #body>
+      <DivError :server-errors="serverErrors" />
       <div class="row">
         <div
           class="text-start d-flex align-items-center col-sm-3 col-xs-5"
@@ -114,6 +115,10 @@ import { capitalsourceTypeNames } from "@/model/capitalsource/CapitalsourceType"
 
 import CapitalsourceControllerHandler from "@/handler/CapitalsourceControllerHandler";
 import SpanBoolean from "../SpanBoolean.vue";
+import { handleBackendError } from "@/tools/views/ThrowError";
+import DivError from "../DivError.vue";
+
+const serverErrors = ref(new Array<string>());
 
 const mcs = ref({} as Capitalsource);
 const modalComponent = ref();
@@ -141,10 +146,16 @@ const _show = (_mcs: Capitalsource) => {
 };
 
 const deleteCapitalsource = () => {
-  CapitalsourceControllerHandler.deleteCapitalsource(mcs.value.id).then(() => {
-    modalComponent.value._hide();
-    emit("capitalsourceDeleted", mcs.value);
-  });
+  serverErrors.value = new Array<string>();
+
+  CapitalsourceControllerHandler.deleteCapitalsource(mcs.value.id)
+    .then(() => {
+      modalComponent.value._hide();
+      emit("capitalsourceDeleted", mcs.value);
+    })
+    .catch((backendError) => {
+      handleBackendError(backendError, serverErrors);
+    });
 };
 
 defineExpose({ _show });

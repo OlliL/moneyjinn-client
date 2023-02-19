@@ -68,7 +68,7 @@
         <table class="table table-striped table-bordered table-hover">
           <thead>
             <tr>
-              <th>Kommentar</th>
+              <th>Name</th>
               <th>Typ</th>
               <th>Status</th>
               <th>IBAN</th>
