@@ -97,7 +97,7 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref } from "vue";
+import { onMounted, ref, watch } from "vue";
 
 import { useCapitalsourceStore } from "@/stores/CapitalsourceStore";
 import { useUserSessionStore } from "@/stores/UserSessionStore";
@@ -107,6 +107,7 @@ import DeleteCapitalsourceModalVue from "@/components/capitalsource/DeleteCapita
 import ListCapitalsourceRowVue from "@/components/capitalsource/ListCapitalsourceRow.vue";
 
 import type { Capitalsource } from "@/model/capitalsource/Capitalsource";
+import { storeToRefs } from "pinia";
 
 const validNow = ref(true);
 const capitalsources = ref(new Array<Capitalsource>());
@@ -116,7 +117,14 @@ const createCapitalsourceModalList = ref();
 const deleteModal = ref();
 
 const userId = useUserSessionStore().getUserId;
-const searchCapitalsources = useCapitalsourceStore().searchCapitalsources;
+
+const capitalsourceStore = useCapitalsourceStore();
+const searchCapitalsources = capitalsourceStore.searchCapitalsources;
+const { capitalsource } = storeToRefs(capitalsourceStore);
+
+watch(capitalsource, () => {
+  searchAllContent();
+});
 
 const showCreateCapitalsourceModal = () => {
   createCapitalsourceModalList.value._show();
