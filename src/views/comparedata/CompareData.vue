@@ -161,6 +161,7 @@ import type { SelectBoxValue } from "@/model/SelectBoxValue";
 
 import CompareDataControllerHandler from "@/handler/CompareDataControllerHandler";
 import MoneyflowControllerHandler from "@/handler/MoneyflowControllerHandler";
+import { handleBackendError } from "@/tools/views/ThrowError";
 
 const serverErrors = ref(new Array<string>());
 
@@ -257,8 +258,8 @@ const loadData = () => {
   startDate.value = _startDate;
   endDate.value = _endDate;
 
-  CompareDataControllerHandler.showCompareDataForm().then(
-    (compareDataParameter) => {
+  CompareDataControllerHandler.showCompareDataForm()
+    .then((compareDataParameter) => {
       sourceIsImport.value = compareDataParameter.selectedSourceIsImport;
       compareDataFormat.value = compareDataParameter.selectedCompareDataFormat;
 
@@ -279,8 +280,11 @@ const loadData = () => {
       }
 
       dataLoaded.value = true;
-    }
-  );
+    })
+    .catch((backendError) => {
+      handleBackendError(backendError, serverErrors);
+    });
+
   Object.keys(values).forEach((field) => setFieldTouched(field, false));
 };
 
@@ -321,8 +325,8 @@ const compareData = handleSubmit(async () => {
 
         dataCompared.value = true;
       })
-      .catch((error) => {
-        serverErrors.value.push(error);
+      .catch((backendError) => {
+        handleBackendError(backendError, serverErrors);
       });
   }
 });

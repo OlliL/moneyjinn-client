@@ -29,9 +29,10 @@ class CapitalsourceControllerHandler extends AbstractControllerHandler {
     const response = await this.api.showCapitalsourceList();
 
     const showCapitalsourceListResponse = response.data;
-    const transport = showCapitalsourceListResponse.capitalsourceTransports;
 
     const capitalsourceArray = new Array<Capitalsource>();
+
+    const transport = showCapitalsourceListResponse.capitalsourceTransports;
     transport?.forEach((value) => {
       capitalsourceArray.push(mapCapitalsourceTransportToModel(value));
     });
