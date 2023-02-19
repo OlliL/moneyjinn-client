@@ -52,7 +52,7 @@ import DivError from "../DivError.vue";
 import InputStandard from "../InputStandard.vue";
 import ModalVue from "../Modal.vue";
 
-import { handleServerError } from "@/tools/views/ThrowError";
+import { handleBackendError } from "@/tools/views/ThrowError";
 import { globErr } from "@/tools/views/ZodUtil";
 
 import type { ContractpartnerAccount } from "@/model/contractpartneraccount/ContractpartnerAccount";
@@ -116,30 +116,33 @@ const _show = async (_mca?: ContractpartnerAccount) => {
 };
 
 const createContractpartnerAccount = handleSubmit(() => {
+  serverErrors.value = new Array<string>();
+
   if (mca.value.id > 0) {
     //update
     ContractpartnerAccountControllerHandler.updateContractpartnerAccount(
       mca.value
-    ).then((validationResult) => {
-      if (!handleServerError(validationResult, serverErrors)) {
+    )
+      .then(() => {
         modalComponent.value._hide();
         emit("contractpartnerAccountUpdated", mca.value);
-      }
-    });
+      })
+      .catch((backendError) => {
+        handleBackendError(backendError, serverErrors);
+      });
   } else {
     //create
     ContractpartnerAccountControllerHandler.createContractpartnerAccount(
       mca.value
-    ).then((contractpartnerAccountValidation) => {
-      const validationResult =
-        contractpartnerAccountValidation.validationResult;
-
-      if (!handleServerError(validationResult, serverErrors)) {
-        mca.value = contractpartnerAccountValidation.mca;
+    )
+      .then((_mca) => {
+        mca.value = _mca;
         modalComponent.value._hide();
         emit("contractpartnerAccountCreated", mca.value);
-      }
-    });
+      })
+      .catch((backendError) => {
+        handleBackendError(backendError, serverErrors);
+      });
   }
 });
 defineExpose({ _show });

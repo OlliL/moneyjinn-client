@@ -5,6 +5,7 @@
     zIndex="2001"
   >
     <template #body>
+      <DivError :server-errors="serverErrors" />
       <div class="row">
         <div
           class="text-start d-flex align-items-center col-sm-3 col-xs-5"
@@ -44,6 +45,10 @@ import ModalVue from "../Modal.vue";
 import type { ContractpartnerAccount } from "@/model/contractpartneraccount/ContractpartnerAccount";
 
 import ContractpartnerAccountControllerHandler from "@/handler/ContractpartnerAccountControllerHandler";
+import { handleBackendError } from "@/tools/views/ThrowError";
+import DivError from "../DivError.vue";
+
+const serverErrors = ref(new Array<string>());
 
 const mca = ref({} as ContractpartnerAccount);
 const modalComponent = ref();
@@ -55,12 +60,18 @@ const _show = (_mca: ContractpartnerAccount) => {
 };
 
 const deleteContractpartnerAccount = () => {
+  serverErrors.value = new Array<string>();
+
   ContractpartnerAccountControllerHandler.deleteContractpartnerAccount(
     mca.value.id
-  ).then(() => {
-    modalComponent.value._hide();
-    emit("contractpartnerAccountDeleted", mca.value);
-  });
+  )
+    .then(() => {
+      modalComponent.value._hide();
+      emit("contractpartnerAccountDeleted", mca.value);
+    })
+    .catch((backendError) => {
+      handleBackendError(backendError, serverErrors);
+    });
 };
 
 defineExpose({ _show });
