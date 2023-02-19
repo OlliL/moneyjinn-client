@@ -125,7 +125,7 @@ import InputDate from "../InputDate.vue";
 import InputStandard from "../InputStandard.vue";
 import ModalVue from "../Modal.vue";
 
-import { handleServerError } from "@/tools/views/ThrowError";
+import { handleBackendError } from "@/tools/views/ThrowError";
 import { globErr } from "@/tools/views/ZodUtil";
 
 import type { Contractpartner } from "@/model/contractpartner/Contractpartner";
@@ -188,29 +188,29 @@ const _show = async (_mcp?: Contractpartner) => {
 };
 
 const createContractpartner = handleSubmit(() => {
+  serverErrors.value = new Array<string>();
+
   if (mcp.value.id > 0) {
     //update
-    ContractpartnerControllerHandler.updateContractpartner(mcp.value).then(
-      (validationResult) => {
-        if (!handleServerError(validationResult, serverErrors)) {
-          modalComponent.value._hide();
-          emit("contractpartnerUpdated", mcp.value);
-        }
-      }
-    );
+    ContractpartnerControllerHandler.updateContractpartner(mcp.value)
+      .then(() => {
+        modalComponent.value._hide();
+        emit("contractpartnerUpdated", mcp.value);
+      })
+      .catch((backendError) => {
+        handleBackendError(backendError, serverErrors);
+      });
   } else {
     //create
-    ContractpartnerControllerHandler.createContractpartner(mcp.value).then(
-      (contractpartnerValidation) => {
-        const validationResult = contractpartnerValidation.validationResult;
-
-        if (!handleServerError(validationResult, serverErrors)) {
-          mcp.value = contractpartnerValidation.mcp;
-          modalComponent.value._hide();
-          emit("contractpartnerCreated", mcp.value);
-        }
-      }
-    );
+    ContractpartnerControllerHandler.createContractpartner(mcp.value)
+      .then((contractpartner) => {
+        mcp.value = contractpartner;
+        modalComponent.value._hide();
+        emit("contractpartnerCreated", mcp.value);
+      })
+      .catch((backendError) => {
+        handleBackendError(backendError, serverErrors);
+      });
   }
 });
 defineExpose({ _show });

@@ -1,6 +1,7 @@
 <template>
   <ModalVue title="Kapitalquelle l&ouml;schen" ref="modalComponent">
     <template #body>
+      <DivError :server-errors="serverErrors" />
       <div class="row">
         <div
           class="text-start d-flex align-items-center col-sm-3 col-xs-5"
@@ -108,6 +109,10 @@ import SpanDate from "../SpanDate.vue";
 import type { Contractpartner } from "@/model/contractpartner/Contractpartner";
 
 import ContractpartnerControllerHandler from "@/handler/ContractpartnerControllerHandler";
+import { handleBackendError } from "@/tools/views/ThrowError";
+import DivError from "../DivError.vue";
+
+const serverErrors = ref(new Array<string>());
 
 const mcp = ref({} as Contractpartner);
 const modalComponent = ref();
@@ -119,12 +124,16 @@ const _show = (_mcp: Contractpartner) => {
 };
 
 const deleteContractpartner = () => {
-  ContractpartnerControllerHandler.deleteContractpartner(mcp.value.id).then(
-    () => {
+  serverErrors.value = new Array<string>();
+
+  ContractpartnerControllerHandler.deleteContractpartner(mcp.value.id)
+    .then(() => {
       modalComponent.value._hide();
       emit("contractpartnerDeleted", mcp.value);
-    }
-  );
+    })
+    .catch((backendError) => {
+      handleBackendError(backendError, serverErrors);
+    });
 };
 
 defineExpose({ _show });
