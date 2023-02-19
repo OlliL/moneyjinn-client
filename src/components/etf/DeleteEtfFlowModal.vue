@@ -27,7 +27,9 @@
         >
           St&uuml;ck
         </div>
-        <div :class="'col-sm-9 ' + amountClass">{{ amountString }}</div>
+        <div class="col-sm-9 text-start">
+          <span :class="amountClass">{{ amountString }}</span>
+        </div>
       </div>
       <div class="row">
         <div
@@ -57,7 +59,7 @@ import ModalVue from "../Modal.vue";
 import SpanAmount from "../SpanAmount.vue";
 
 import { formatDateWithTime } from "@/tools/views/FormatDate";
-import { formatNumber, redIfNegativeStart } from "@/tools/views/FormatNumber";
+import { formatNumber, redIfNegative } from "@/tools/views/FormatNumber";
 import { handleBackendError } from "@/tools/views/ThrowError";
 
 import type { EtfFlow } from "@/model/etf/EtfFlow";
@@ -72,7 +74,7 @@ const modalComponent = ref();
 const emit = defineEmits(["etfFlowDeleted"]);
 
 const amountClass = computed(() => {
-  return redIfNegativeStart(etfFlow.value.amount);
+  return redIfNegative(etfFlow.value.amount);
 });
 const amountString = computed(() => {
   return formatNumber(etfFlow.value.amount, 3);
