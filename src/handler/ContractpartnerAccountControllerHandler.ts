@@ -51,7 +51,7 @@ class ContractpartnerAccountControllerHandler extends AbstractControllerHandler 
 
   async createContractpartnerAccount(
     mca: ContractpartnerAccount
-  ): Promise<ContractpartnerAccountValidation> {
+  ): Promise<ContractpartnerAccount> {
     const request = {} as CreateContractpartnerAccountRequest;
     request.contractpartnerAccountTransport =
       mapContractpartnerAccountToTransport(mca);
@@ -59,49 +59,20 @@ class ContractpartnerAccountControllerHandler extends AbstractControllerHandler 
     const response = await this.api.createContractpartnerAccount(request);
 
     const createContractpartnerAccountResponse = response.data;
-    const contractpartnerAccountValidation =
-      {} as ContractpartnerAccountValidation;
-    const validationResult: ValidationResult = {
-      result: createContractpartnerAccountResponse.result,
-      validationResultItems:
-        createContractpartnerAccountResponse.validationItemTransports?.map(
-          (vit) => {
-            return mapValidationItemTransportToModel(vit);
-          }
-        ),
-    };
 
-    contractpartnerAccountValidation.validationResult = validationResult;
+    const createdMca: ContractpartnerAccount = mca;
+    createdMca.id =
+      createContractpartnerAccountResponse.contractpartnerAccountId;
 
-    if (validationResult.result) {
-      const createdMca: ContractpartnerAccount = mca;
-      createdMca.id =
-        createContractpartnerAccountResponse.contractpartnerAccountId;
-      contractpartnerAccountValidation.mca = createdMca;
-    }
-    return contractpartnerAccountValidation;
+    return createdMca;
   }
 
-  async updateContractpartnerAccount(
-    mca: ContractpartnerAccount
-  ): Promise<ValidationResult> {
+  async updateContractpartnerAccount(mca: ContractpartnerAccount) {
     const request = {} as UpdateContractpartnerAccountRequest;
     request.contractpartnerAccountTransport =
       mapContractpartnerAccountToTransport(mca);
 
-    const response = await this.api.updateContractpartnerAccount(request);
-
-    const validationResponse = response.data;
-    const validationResult: ValidationResult = {
-      result: validationResponse.result,
-      validationResultItems: validationResponse.validationItemTransports?.map(
-        (vit) => {
-          return mapValidationItemTransportToModel(vit);
-        }
-      ),
-    };
-
-    return validationResult;
+    await this.api.updateContractpartnerAccount(request);
   }
 
   async deleteContractpartnerAccount(id: number) {

@@ -19,27 +19,26 @@
     max-width="600px"
   >
     <template #body>
-      <div class="row justify-content-md-center">
-        <div class="col">
-          <table class="table table-striped table-bordered table-hover">
-            <thead>
-              <tr>
-                <th width="40%" class="text-center">IBAN</th>
-                <th width="30%" class="text-center">BIC</th>
-                <th width="30%" class="text-center" colspan="2"></th>
-              </tr>
-            </thead>
-            <tbody>
-              <ListContractpartnerAccountRowVue
-                v-for="mca in contractpartnerAccount"
-                :key="mca.accountNumber"
-                :mca="mca"
-                @delete-contractpartner-account="deleteContractpartnerAccount"
-                @edit-contractpartner-account="editContractpartnerAccount"
-              />
-            </tbody>
-          </table>
-        </div>
+      <DivError :server-errors="serverErrors" />
+      <div class="col">
+        <table class="table table-striped table-bordered table-hover">
+          <thead>
+            <tr>
+              <th width="40%" class="text-center">IBAN</th>
+              <th width="30%" class="text-center">BIC</th>
+              <th width="30%" class="text-center" colspan="2"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <ListContractpartnerAccountRowVue
+              v-for="mca in contractpartnerAccount"
+              :key="mca.accountNumber"
+              :mca="mca"
+              @delete-contractpartner-account="deleteContractpartnerAccount"
+              @edit-contractpartner-account="editContractpartnerAccount"
+            />
+          </tbody>
+        </table>
       </div>
     </template>
     <template #footer>
@@ -65,6 +64,10 @@ import ModalVue from "../Modal.vue";
 import type { Contractpartner } from "@/model/contractpartner/Contractpartner";
 import type { ContractpartnerAccount } from "@/model/contractpartneraccount/ContractpartnerAccount";
 import ContractpartnerAccountControllerHandler from "@/handler/ContractpartnerAccountControllerHandler";
+import DivError from "../DivError.vue";
+import { handleBackendError } from "@/tools/views/ThrowError";
+
+const serverErrors = ref(new Array<string>());
 
 const mcp = ref({} as Contractpartner);
 const contractpartnerAccount = ref({} as Array<ContractpartnerAccount>);
@@ -77,10 +80,14 @@ const loadData = () => {
   dataLoaded.value = false;
   ContractpartnerAccountControllerHandler.fetchAllContractpartnerAccount(
     mcp.value.id
-  ).then((mcaArray: Array<ContractpartnerAccount>) => {
-    contractpartnerAccount.value = mcaArray;
-    dataLoaded.value = true;
-  });
+  )
+    .then((mcaArray: Array<ContractpartnerAccount>) => {
+      contractpartnerAccount.value = mcaArray;
+      dataLoaded.value = true;
+    })
+    .catch((backendError) => {
+      handleBackendError(backendError, serverErrors);
+    });
 };
 
 const _show = (_mcp: Contractpartner) => {
