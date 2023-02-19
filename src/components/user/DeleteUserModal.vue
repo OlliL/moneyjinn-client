@@ -71,7 +71,6 @@ import SpanBoolean from "../SpanBoolean.vue";
 import type { User } from "@/model/user/User";
 
 import UserControllerHandler from "@/handler/UserControllerHandler";
-import { handleServerError } from "@/tools/views/ThrowError";
 import DivError from "../DivError.vue";
 
 const user = ref({} as User);
@@ -86,12 +85,16 @@ const _show = (_user: User) => {
 };
 
 const deleteUser = () => {
-  UserControllerHandler.deleteUser(user.value.id).then((validationResult) => {
-    if (!handleServerError(validationResult, serverErrors)) {
+  serverErrors.value = new Array<string>();
+
+  UserControllerHandler.deleteUser(user.value.id)
+    .then(() => {
       modalComponent.value._hide();
       emit("userDeleted", user.value);
-    }
-  });
+    })
+    .catch((error) => {
+      serverErrors.value.push(error);
+    });
 };
 
 defineExpose({ _show });

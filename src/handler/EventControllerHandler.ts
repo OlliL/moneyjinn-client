@@ -19,8 +19,6 @@ class EventControllerHandler extends AbstractControllerHandler {
   async showEventList(): Promise<Events> {
     const response = await this.api.showEventList();
 
-    super.handleResponseError(response);
-
     const showEventListResponse = response.data;
 
     return showEventListResponse;

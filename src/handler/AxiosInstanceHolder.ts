@@ -1,5 +1,6 @@
 import type { LoginResponse } from "@/api";
-import { throwError } from "@/tools/views/ThrowError";
+import { ErrorCode } from "@/model/ErrorCode";
+import { getError, throwError } from "@/tools/views/ThrowError";
 import type { AxiosInstance } from "axios";
 import axios from "axios";
 import {
@@ -38,6 +39,30 @@ export class AxiosInstanceHolder {
       applyAuthTokenInterceptor(AxiosInstanceHolder.instance.axiosInstance, {
         requestRefresh,
       });
+
+      AxiosInstanceHolder.instance.axiosInstance.interceptors.response.use(
+        (response) => {
+          if (response.status === 204) {
+            return response;
+          }
+
+          if (response.status !== 200) {
+            return Promise.reject(response.statusText);
+          }
+
+          const errorResponse = response.data;
+          if (errorResponse.code) {
+            return Promise.reject(getError(errorResponse.code));
+          }
+
+          return response;
+        },
+        (error) => {
+          if (error.response.status === 403)
+            return Promise.reject(getError(ErrorCode.USERNAME_PASSWORD_WRONG));
+          return Promise.reject(error.response.statusText);
+        }
+      );
     }
     return AxiosInstanceHolder.instance;
   }

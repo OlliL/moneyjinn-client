@@ -130,8 +130,8 @@ const changePassword = () => {
         });
       }
     })
-    .catch((e) => {
-      serverErrors.value.push((e as Error).message);
+    .catch((error) => {
+      serverErrors.value.push(error);
     });
 };
 </script>

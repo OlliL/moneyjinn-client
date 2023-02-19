@@ -149,7 +149,6 @@ import InputDate from "../InputDate.vue";
 import { amountSchema, globErr } from "@/tools/views/ZodUtil";
 
 import { toFixed } from "@/tools/math";
-import { handleServerError } from "@/tools/views/ThrowError";
 
 import type { ImportedMoneyflowReceipt } from "@/model/moneyflow/ImportedMoneyflowReceipt";
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
@@ -196,22 +195,27 @@ const emitEditMoneyflow = (id: number) => {
 };
 
 const searchMoneyflows = handleSubmit(() => {
+  serverErrors.value = new Array<string>();
   searchExecuted.value = false;
   MoneyflowControllerHandler.searchMoneyflowsByAmount(
     amount.value,
     startDate.value,
     endDate.value
-  ).then((_moneyflows) => {
-    moneyflows.value = _moneyflows;
-    searchExecuted.value = true;
-    searchSuccessful.value = moneyflows.value.length > 0;
-    if (moneyflows.value.length === 1) {
-      preselected.value = true;
-      selectedMoneyflowId.value = moneyflows.value[0].id;
-    } else {
-      selectedMoneyflowId.value = 0;
-    }
-  });
+  )
+    .then((_moneyflows) => {
+      moneyflows.value = _moneyflows;
+      searchExecuted.value = true;
+      searchSuccessful.value = moneyflows.value.length > 0;
+      if (moneyflows.value.length === 1) {
+        preselected.value = true;
+        selectedMoneyflowId.value = moneyflows.value[0].id;
+      } else {
+        selectedMoneyflowId.value = 0;
+      }
+    })
+    .catch((error) => {
+      serverErrors.value.push(error);
+    });
 });
 
 onMounted(() => {
@@ -245,21 +249,31 @@ const moneyflowSelected = computed(() => {
 });
 
 const importReceipt = () => {
+  serverErrors.value = new Array<string>();
+
   ImportedMoneyflowReceiptControllerHandler.importImportedMoneyflowReceipt(
     props.receipt.id,
     selectedMoneyflowId.value
-  ).then((validationResult) => {
-    if (!handleServerError(validationResult, serverErrors)) {
+  )
+    .then(() => {
       emit("removeReceiptFromView", props.receipt.id);
-    }
-  });
+    })
+    .catch((error) => {
+      serverErrors.value.push(error);
+    });
 };
 
 const deleteReceipt = () => {
+  serverErrors.value = new Array<string>();
+
   ImportedMoneyflowReceiptControllerHandler.deleteImportedMoneyflowReceiptById(
     props.receipt.id
-  ).then(() => {
-    emit("removeReceiptFromView", props.receipt.id);
-  });
+  )
+    .then(() => {
+      emit("removeReceiptFromView", props.receipt.id);
+    })
+    .catch((error) => {
+      serverErrors.value.push(error);
+    });
 };
 </script>

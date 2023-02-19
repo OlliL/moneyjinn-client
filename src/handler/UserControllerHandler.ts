@@ -14,8 +14,6 @@ import {
   type UserSession,
 } from "@/stores/UserSessionStore";
 
-import { throwError } from "@/tools/views/ThrowError";
-
 import { mapGroupTransportToModel } from "./mapper/GroupTransportMapper";
 import {
   mapUserToTransport,
@@ -27,7 +25,6 @@ import {
 } from "./mapper/AccessRelationTransportMapper";
 import { mapValidationItemTransportToModel } from "./mapper/ValidationItemTransportMapper";
 
-import { ErrorCode } from "@/model/ErrorCode";
 import type { Group } from "@/model/group/Group";
 import type { UserValidation } from "@/model/user/UserValidation";
 import type { AccessRelation } from "@/model/user/AccessRelation";
@@ -35,7 +32,6 @@ import type { User } from "@/model/user/User";
 import type { ValidationResult } from "@/model/validation/ValidationResult";
 
 import AbstractControllerHandler from "@/handler/AbstractControllerHandler";
-import type { ValidationResultItem } from "@/model/validation/ValidationResultItem";
 
 class UserControllerHandler extends AbstractControllerHandler {
   private api: UserControllerApi;
@@ -60,34 +56,25 @@ class UserControllerHandler extends AbstractControllerHandler {
     userSessionStore.logout();
     clearAuthTokens();
 
-    try {
-      const response = await this.api.login(loginRequest);
-      const loginResponse = response.data;
+    const response = await this.api.login(loginRequest);
+    const loginResponse = response.data;
 
-      if (loginResponse.code) {
-        throwError(loginResponse.code);
-      }
-      const userTransport = loginResponse.userTransport;
+    const userTransport = loginResponse.userTransport;
 
-      const userSession: UserSession = {
-        userId: userTransport.id,
-        userName: userTransport.userName,
-        userCanLogin: userTransport.userCanLogin === 1 ? true : false,
-        userIsNew: userTransport.userIsNew === 1 ? true : false,
-        userIsAdmin: userTransport.userIsAdmin === 1 ? true : false,
-      };
+    const userSession: UserSession = {
+      userId: userTransport.id,
+      userName: userTransport.userName,
+      userCanLogin: userTransport.userCanLogin === 1 ? true : false,
+      userIsNew: userTransport.userIsNew === 1 ? true : false,
+      userIsAdmin: userTransport.userIsAdmin === 1 ? true : false,
+    };
 
-      userSessionStore.setUserSession(userSession);
+    userSessionStore.setUserSession(userSession);
 
-      setAuthTokens({
-        accessToken: loginResponse.token,
-        refreshToken: loginResponse.refreshToken,
-      });
-    } catch (reason: any) {
-      if (reason.response.status === 403)
-        throwError(ErrorCode.USERNAME_PASSWORD_WRONG);
-      throw new Error(reason.response.statusText);
-    }
+    setAuthTokens({
+      accessToken: loginResponse.token,
+      refreshToken: loginResponse.refreshToken,
+    });
   }
 
   async changePassword(oldPassword: string, password: string) {
@@ -96,13 +83,11 @@ class UserControllerHandler extends AbstractControllerHandler {
       oldPassword: oldPassword,
     };
 
-    const response = await this.api.changePassword(request);
-    return super.handleResponseError(response);
+    await this.api.changePassword(request);
   }
 
   async fetchAllUser(): Promise<Array<User>> {
     const response = await this.api.showUserList();
-    super.handleResponseError(response);
     const showUserListResponse = response.data;
     const groups: Array<Group> = showUserListResponse.groupTransports.map(
       (value) => {
@@ -142,7 +127,6 @@ class UserControllerHandler extends AbstractControllerHandler {
 
   async getAllAccessRelations(userId: number): Promise<Array<AccessRelation>> {
     const response = await this.api.showEditUser(userId);
-    super.handleResponseError(response);
     const showEditUserResponse = response.data;
     const accessRelations: Array<AccessRelation> =
       showEditUserResponse.accessRelationTransports.map((value) => {
@@ -164,8 +148,6 @@ class UserControllerHandler extends AbstractControllerHandler {
     }
 
     const response = await this.api.createUser(request);
-
-    super.handleResponseError(response);
 
     const createUserResponse = response.data;
     const UserValidation = {} as UserValidation;
@@ -192,7 +174,6 @@ class UserControllerHandler extends AbstractControllerHandler {
     request.accessRelationTransport = mapAccessRelationToTransport(mar);
 
     const response = await this.api.updateUser(request);
-    super.handleResponseError(response);
     const updateUserResponse = response.data;
     const validationResult: ValidationResult = {
       result: updateUserResponse.result,
@@ -205,21 +186,8 @@ class UserControllerHandler extends AbstractControllerHandler {
     return validationResult;
   }
 
-  async deleteUser(id: number): Promise<ValidationResult> {
-    const response = await this.api.deleteUserById(id);
-
-    const validationResult = {} as ValidationResult;
-    if (response.status === 204) {
-      validationResult.result = true;
-    } else {
-      const errorResponse = response.data;
-      const validationResultItem = {
-        error: errorResponse.code,
-      } as ValidationResultItem;
-      validationResult.result = false;
-      validationResult.validationResultItems = [validationResultItem];
-    }
-    return validationResult;
+  async deleteUser(id: number) {
+    await this.api.deleteUserById(id);
   }
 }
 

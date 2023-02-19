@@ -22,8 +22,6 @@ class MoneyflowReceiptControllerHandler extends AbstractControllerHandler {
   async fetchReceipt(moneyflowId: number): Promise<MoneyflowReceipt> {
     const response = await this.api.showMoneyflowReceipt(moneyflowId);
 
-    super.handleResponseError(response);
-
     const showMoneyflowReceiptResponse = response.data;
 
     let receiptType: MoneyflowReceiptType;
@@ -51,8 +49,7 @@ class MoneyflowReceiptControllerHandler extends AbstractControllerHandler {
     return moneyflowReceipt;
   }
   async deleteMoneyflowReceipt(id: number) {
-    const response = await this.api.deleteMoneyflowReceipt(id);
-    return super.handleResponseError(response);
+    await this.api.deleteMoneyflowReceipt(id);
   }
 }
 

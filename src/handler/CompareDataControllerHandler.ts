@@ -24,8 +24,6 @@ class CompareDataControllerHandler extends AbstractControllerHandler {
   async showCompareDataForm(): Promise<CompareDataParameter> {
     const response = await this.api.showCompareDataForm();
 
-    super.handleResponseError(response);
-
     const showCompareDataFormResponse = response.data;
 
     const compareDataParameter = {
@@ -56,8 +54,6 @@ class CompareDataControllerHandler extends AbstractControllerHandler {
       : 0;
 
     const response = await this.api.compareData(request);
-
-    super.handleResponseError(response);
 
     const compareDataResponse = response.data;
 

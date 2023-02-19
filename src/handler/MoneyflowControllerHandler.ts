@@ -58,8 +58,6 @@ class MoneyflowControllerHandler extends AbstractControllerHandler {
 
     const response = await this.api.createMoneyflows(request);
 
-    super.handleResponseError(response);
-
     if (response.status === 204) {
       return { result: true } as ValidationResult;
     }
@@ -96,8 +94,6 @@ class MoneyflowControllerHandler extends AbstractControllerHandler {
 
     const response = await this.api.updateMoneyflowV2(request);
 
-    super.handleResponseError(response);
-
     const updateMoneyflowResponse = response.data;
     const moneyflowValidation = {} as MoneyflowValidation;
     const validationResult: ValidationResult = {
@@ -122,8 +118,7 @@ class MoneyflowControllerHandler extends AbstractControllerHandler {
   }
 
   async deleteMoneyflow(id: number) {
-    const response = await this.api.deleteMoneyflowById(id);
-    return super.handleResponseError(response);
+    await this.api.deleteMoneyflowById(id);
   }
 
   async searchMoneyflows(
@@ -134,8 +129,6 @@ class MoneyflowControllerHandler extends AbstractControllerHandler {
       mapMoneyflowSearchParamsToTransport(searchParams);
 
     const response = await this.api.searchMoneyflows(request);
-
-    super.handleResponseError(response);
 
     const searchMoneyflowsResponse = response.data;
 
@@ -165,8 +158,6 @@ class MoneyflowControllerHandler extends AbstractControllerHandler {
   async fetchMoneyflow(id: number): Promise<Moneyflow> {
     const response = await this.api.showEditMoneyflow(id);
 
-    super.handleResponseError(response);
-
     const showEditMoneyflowResponse = response.data;
 
     const moneyflow = mapMoneyflowTransportToModel(
@@ -188,8 +179,6 @@ class MoneyflowControllerHandler extends AbstractControllerHandler {
       getISOStringDate(startDate).replace(/[-]/gi, ""),
       getISOStringDate(endDate).replace(/[-]/gi, "")
     );
-
-    super.handleResponseError(response);
 
     if (response.status === 204) return new Array<Moneyflow>();
 

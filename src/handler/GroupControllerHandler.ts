@@ -7,7 +7,6 @@ import AbstractControllerHandler from "@/handler/AbstractControllerHandler";
 import type { Group } from "@/model/group/Group";
 import type { GroupValidation } from "@/model/group/GroupValidation";
 import type { ValidationResult } from "@/model/validation/ValidationResult";
-import type { ValidationResultItem } from "@/model/validation/ValidationResultItem";
 import { AxiosInstanceHolder } from "./AxiosInstanceHolder";
 import {
   mapGroupToTransport,
@@ -31,8 +30,6 @@ class GroupControllerHandler extends AbstractControllerHandler {
   async fetchAllGroup(): Promise<Array<Group>> {
     const response = await this.api.showGroupList();
 
-    super.handleResponseError(response);
-
     const showGroupListResponse = response.data;
 
     const GroupArray = new Array<Group>();
@@ -49,8 +46,6 @@ class GroupControllerHandler extends AbstractControllerHandler {
     request.groupTransport = mapGroupToTransport(mpm);
 
     const response = await this.api.createGroup(request);
-
-    super.handleResponseError(response);
 
     const createGroupResponse = response.data;
 
@@ -80,8 +75,6 @@ class GroupControllerHandler extends AbstractControllerHandler {
 
     const response = await this.api.updateGroup(request);
 
-    super.handleResponseError(response);
-
     const validationResponse = response.data;
 
     const validationResult: ValidationResult = {
@@ -95,23 +88,8 @@ class GroupControllerHandler extends AbstractControllerHandler {
 
     return validationResult;
   }
-  async deleteGroup(id: number): Promise<ValidationResult> {
-    const response = await this.api.deleteGroupById(id);
-
-    super.handleResponseError(response);
-
-    const validationResult = {} as ValidationResult;
-    if (response.status === 204) {
-      validationResult.result = true;
-    } else {
-      const errorResponse = response.data;
-      const validationResultItem = {
-        error: errorResponse.code,
-      } as ValidationResultItem;
-      validationResult.result = false;
-      validationResult.validationResultItems = [validationResultItem];
-    }
-    return validationResult;
+  async deleteGroup(id: number) {
+    await this.api.deleteGroupById(id);
   }
 }
 

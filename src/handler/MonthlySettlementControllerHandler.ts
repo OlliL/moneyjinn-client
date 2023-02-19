@@ -40,8 +40,6 @@ class MonthlySettlementControllerHandler extends AbstractControllerHandler {
       response = await this.api.getAvailableMonthYearMonth(year, month);
     else response = await this.api.getAvailableMonth();
 
-    super.handleResponseError(response);
-
     const getAvailableMonthResponse = response.data;
 
     // easy mapping for now - same attributes
@@ -55,8 +53,6 @@ class MonthlySettlementControllerHandler extends AbstractControllerHandler {
     month: number
   ): Promise<Array<MonthlySettlement>> {
     const response = await this.api.showMonthlySettlementListV2(year, month);
-
-    super.handleResponseError(response);
 
     const showMonthlySettlementListResponse = response.data;
 
@@ -82,8 +78,6 @@ class MonthlySettlementControllerHandler extends AbstractControllerHandler {
         month
       );
     else response = await this.api.showMonthlySettlementCreate();
-
-    super.handleResponseError(response);
 
     const showMonthlySettlementCreateResponse = response.data;
 
@@ -126,8 +120,6 @@ class MonthlySettlementControllerHandler extends AbstractControllerHandler {
 
     const response = await this.api.upsertMonthlySettlement(request);
 
-    super.handleResponseError(response);
-
     const validationResponse = response.data;
 
     const validationResult: ValidationResult = {
@@ -143,8 +135,7 @@ class MonthlySettlementControllerHandler extends AbstractControllerHandler {
   }
 
   async deleteMonthlySettlement(year: number, month: number) {
-    const response = await this.api.deleteMonthlySettlement(year, month);
-    return super.handleResponseError(response);
+    await this.api.deleteMonthlySettlement(year, month);
   }
 }
 

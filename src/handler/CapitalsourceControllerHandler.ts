@@ -31,8 +31,6 @@ class CapitalsourceControllerHandler extends AbstractControllerHandler {
   async fetchAllCapitalsource(): Promise<Array<Capitalsource>> {
     const response = await this.api.showCapitalsourceList();
 
-    super.handleResponseError(response);
-
     const showCapitalsourceListResponse = response.data;
 
     const capitalsourceArray = new Array<Capitalsource>();
@@ -52,8 +50,6 @@ class CapitalsourceControllerHandler extends AbstractControllerHandler {
     request.capitalsourceTransport = mapCapitalsourceToTransport(mcs);
 
     const response = await this.api.createCapitalsource(request);
-
-    super.handleResponseError(response);
 
     const createCapitalsourceResponse = response.data;
     const capitalsourceValidation = {} as CapitalsourceValidation;
@@ -83,8 +79,6 @@ class CapitalsourceControllerHandler extends AbstractControllerHandler {
 
     const response = await this.api.updateCapitalsource(request);
 
-    super.handleResponseError(response);
-
     const validationResponse = response.data;
     const validationResult: ValidationResult = {
       result: validationResponse.result,
@@ -99,8 +93,7 @@ class CapitalsourceControllerHandler extends AbstractControllerHandler {
   }
 
   async deleteCapitalsource(capitalsourceId: number) {
-    const response = await this.api.deleteCapitalsourceById(capitalsourceId);
-    return super.handleResponseError(response);
+    await this.api.deleteCapitalsourceById(capitalsourceId);
   }
 }
 

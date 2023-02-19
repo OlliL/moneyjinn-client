@@ -30,8 +30,6 @@ class PreDefMoneyflowControllerHandler extends AbstractControllerHandler {
   async fetchAllPreDefMoneyflow(): Promise<Array<PreDefMoneyflow>> {
     const response = await this.api.showPreDefMoneyflowList();
 
-    super.handleResponseError(response);
-
     const showPreDefMoneyflowListResponse = response.data;
 
     const PreDefMoneyflowArray = new Array<PreDefMoneyflow>();
@@ -51,8 +49,6 @@ class PreDefMoneyflowControllerHandler extends AbstractControllerHandler {
     request.preDefMoneyflowTransport = mapPreDefMoneyflowToTransport(mpm);
 
     const response = await this.api.createPreDefMoneyflow(request);
-
-    super.handleResponseError(response);
 
     const createPreDefMoneyflowResponse = response.data;
 
@@ -80,8 +76,6 @@ class PreDefMoneyflowControllerHandler extends AbstractControllerHandler {
 
     const response = await this.api.updatePreDefMoneyflow(request);
 
-    super.handleResponseError(response);
-
     if (response.status === 204) {
       return { result: true } as ValidationResult;
     }
@@ -100,8 +94,7 @@ class PreDefMoneyflowControllerHandler extends AbstractControllerHandler {
     return validationResult;
   }
   async deletePreDefMoneyflow(id: number) {
-    const response = await this.api.deletePreDefMoneyflowById(id);
-    return super.handleResponseError(response);
+    await this.api.deletePreDefMoneyflowById(id);
   }
 }
 

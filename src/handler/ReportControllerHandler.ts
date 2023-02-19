@@ -46,8 +46,6 @@ class ReportControllerHandler extends AbstractControllerHandler {
     if (year && month)
       response = await this.api.getAvailableMonthYearMonth(year, month);
     else response = await this.api.getAvailableMonth();
-    super.handleResponseError(response);
-
     const getAvailableMonthResponse = response.data;
 
     // easy mapping for now - same attributes
@@ -58,8 +56,6 @@ class ReportControllerHandler extends AbstractControllerHandler {
 
   async listReports(year: number, month: number): Promise<Report> {
     const response = await this.api.listReportsV2(year, month);
-
-    super.handleResponseError(response);
 
     const listReportsResponse = response.data;
 
@@ -105,8 +101,6 @@ class ReportControllerHandler extends AbstractControllerHandler {
   async showTrendsForm(): Promise<TrendsParameter> {
     const response = await this.api.showTrendsForm();
 
-    super.handleResponseError(response);
-
     const showTrendsFormResponse = response.data;
 
     const trendsTransporter: TrendsParameter = {
@@ -128,8 +122,6 @@ class ReportControllerHandler extends AbstractControllerHandler {
 
     const response = await this.api.showTrendsGraph(request);
 
-    super.handleResponseError(response);
-
     const showTrendsGraphResponse = response.data;
 
     const result: Trends = {
@@ -142,8 +134,6 @@ class ReportControllerHandler extends AbstractControllerHandler {
 
   async showReportingForm(): Promise<ReportingParameter> {
     const response = await this.api.showReportingForm();
-
-    super.handleResponseError(response);
 
     const showReportingFormResponse = response.data;
 
@@ -189,8 +179,6 @@ class ReportControllerHandler extends AbstractControllerHandler {
 
     const response = await this.api.showMonthlyReportGraph(request);
 
-    super.handleResponseError(response);
-
     const showMonthlyReportGraphResponse = response.data;
 
     if (showMonthlyReportGraphResponse.postingAccountAmountTransports) {
@@ -218,8 +206,6 @@ class ReportControllerHandler extends AbstractControllerHandler {
         reportingParameter.unselectedPostingAccounts.map((mpa) => mpa.id);
 
     const response = await this.api.showYearlyReportGraph(request);
-
-    super.handleResponseError(response);
 
     const showYearlyReportGraphResponse = response.data;
 
