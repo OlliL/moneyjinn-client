@@ -1,12 +1,9 @@
 import AbstractControllerHandler from "@/handler/AbstractControllerHandler";
 import type { Capitalsource } from "@/model/capitalsource/Capitalsource";
-import type { CapitalsourceValidation } from "@/model/capitalsource/CapitalsourceValidation";
 import {
   mapCapitalsourceToTransport,
   mapCapitalsourceTransportToModel,
 } from "./mapper/CapitalsourceTransportMapper";
-import { mapValidationItemTransportToModel } from "./mapper/ValidationItemTransportMapper";
-import type { ValidationResult } from "@/model/validation/ValidationResult";
 import { useUserSessionStore } from "@/stores/UserSessionStore";
 import {
   CapitalsourceControllerApi,
@@ -32,10 +29,9 @@ class CapitalsourceControllerHandler extends AbstractControllerHandler {
     const response = await this.api.showCapitalsourceList();
 
     const showCapitalsourceListResponse = response.data;
+    const transport = showCapitalsourceListResponse.capitalsourceTransports;
 
     const capitalsourceArray = new Array<Capitalsource>();
-
-    const transport = showCapitalsourceListResponse.capitalsourceTransports;
     transport?.forEach((value) => {
       capitalsourceArray.push(mapCapitalsourceTransportToModel(value));
     });
@@ -43,53 +39,28 @@ class CapitalsourceControllerHandler extends AbstractControllerHandler {
     return capitalsourceArray;
   }
 
-  async createCapitalsource(
-    mcs: Capitalsource
-  ): Promise<CapitalsourceValidation> {
+  async createCapitalsource(mcs: Capitalsource): Promise<Capitalsource> {
     const request = {} as CreateCapitalsourceRequest;
     request.capitalsourceTransport = mapCapitalsourceToTransport(mcs);
 
     const response = await this.api.createCapitalsource(request);
 
     const createCapitalsourceResponse = response.data;
-    const capitalsourceValidation = {} as CapitalsourceValidation;
-    const validationResult: ValidationResult = {
-      result: createCapitalsourceResponse.result,
-      validationResultItems:
-        createCapitalsourceResponse.validationItemTransports?.map((vit) => {
-          return mapValidationItemTransportToModel(vit);
-        }),
-    };
 
-    capitalsourceValidation.validationResult = validationResult;
+    const userSessionStore = useUserSessionStore();
 
-    if (validationResult.result) {
-      const userSessionStore = useUserSessionStore();
-      const createdMcs: Capitalsource = mcs;
-      createdMcs.id = createCapitalsourceResponse.capitalsourceId;
-      createdMcs.userId = userSessionStore.getUserId;
-      capitalsourceValidation.mcs = createdMcs;
-    }
-    return capitalsourceValidation;
+    const createdMcs: Capitalsource = mcs;
+    createdMcs.id = createCapitalsourceResponse.capitalsourceId;
+    createdMcs.userId = userSessionStore.getUserId;
+
+    return createdMcs;
   }
 
-  async updateCapitalsource(mcs: Capitalsource): Promise<ValidationResult> {
+  async updateCapitalsource(mcs: Capitalsource) {
     const request = {} as UpdateCapitalsourceRequest;
     request.capitalsourceTransport = mapCapitalsourceToTransport(mcs);
 
-    const response = await this.api.updateCapitalsource(request);
-
-    const validationResponse = response.data;
-    const validationResult: ValidationResult = {
-      result: validationResponse.result,
-      validationResultItems: validationResponse.validationItemTransports?.map(
-        (vit) => {
-          return mapValidationItemTransportToModel(vit);
-        }
-      ),
-    };
-
-    return validationResult;
+    await this.api.updateCapitalsource(request);
   }
 
   async deleteCapitalsource(capitalsourceId: number) {

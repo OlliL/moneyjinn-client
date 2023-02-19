@@ -16,6 +16,9 @@ export function getError(code: number, variableArray?: Array<string>) {
     case ErrorCode.CAPITALSOURCE_DOES_NOT_EXIST: {
       return "Die gewählte Kapitalquelle existiert nicht!";
     }
+    case ErrorCode.CAPITALSOURCE_STILL_REFERENCED: {
+      return "Die Kapitalquelle kann nicht gelöscht werden, da sie noch verwendet wird!";
+    }
     case ErrorCode.CAPITALSOURCE_IN_USE_PERIOD: {
       return "Es existieren Geldbewegungen für diese Kapitalquelle ausserhalb des gwählten Gültigkeitszeitraums";
     }
