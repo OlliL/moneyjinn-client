@@ -1,12 +1,9 @@
 import AbstractControllerHandler from "@/handler/AbstractControllerHandler";
 import type { ContractpartnerAccount } from "@/model/contractpartneraccount/ContractpartnerAccount";
-import type { ContractpartnerAccountValidation } from "@/model/contractpartneraccount/ContractpartnerAccountValidation";
-import type { ValidationResult } from "@/model/validation/ValidationResult";
 import {
   mapContractpartnerAccountTransportToModel,
   mapContractpartnerAccountToTransport,
 } from "./mapper/ContractpartnerAccountTransportMapper";
-import { mapValidationItemTransportToModel } from "./mapper/ValidationItemTransportMapper";
 import {
   ContractpartnerAccountControllerApi,
   type CreateContractpartnerAccountRequest,

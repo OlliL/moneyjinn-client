@@ -22,6 +22,7 @@
         </button>
       </div>
     </div>
+    <DivError :server-errors="serverErrors" />
     <div class="row justify-content-md-center mb-4" v-if="dataLoaded">
       <div class="col-md-8 col-xs-12">
         <ul class="nav nav-tabs">
@@ -339,7 +340,7 @@ import SpanAmount from "@/components/SpanAmount.vue";
 import type { ListDepotRowData } from "@/components/etf/ListDepotRowData";
 
 import { formatNumber } from "@/tools/views/FormatNumber";
-import { handleServerError } from "@/tools/views/ThrowError";
+import { handleBackendError } from "@/tools/views/ThrowError";
 import { amountSchema, globErr } from "@/tools/views/ZodUtil";
 
 import type { Etf } from "@/model/etf/Etf";
@@ -430,57 +431,61 @@ const loadData = () => {
   etfs.value = new Array<Etf>();
   etfsSelectValues.value = new Array<SelectBoxValue>();
 
-  EtfControllerHandler.listEtfFlows().then((etfDepot) => {
-    if (etfDepot.etfs) {
-      for (let etf of etfDepot.etfs) {
-        etfsSelectValues.value.push({ id: etf.isin, value: etf.name });
-      }
-      etfs.value = etfDepot.etfs;
-      calcEtfAskPrice.value = etfDepot.calcEtfAskPrice
-        ? etfDepot.calcEtfAskPrice
-        : 0;
-      calcEtfBidPrice.value = etfDepot.calcEtfBidPrice
-        ? etfDepot.calcEtfBidPrice
-        : 0;
-      calcEtfSaleIsin.value = etfDepot.calcEtfSaleIsin
-        ? etfDepot.calcEtfSaleIsin
-        : "";
-      calcEtfSalePieces.value = etfDepot.calcEtfSalePieces
-        ? etfDepot.calcEtfSalePieces
-        : 0;
-      calcEtfTransactionCosts.value = etfDepot.calcEtfTransactionCosts
-        ? etfDepot.calcEtfTransactionCosts
-        : 0;
-      const etfMap = new Map<String, Etf>();
-      for (let etf of etfDepot.etfs) {
-        etfMap.set(etf.isin, etf);
-      }
-      if (etfDepot.etfFlows) {
-        for (let etfFlow of etfDepot.etfFlows) {
-          const etf = etfMap.get(etfFlow.isin);
-          if (etf)
-            etfFlows.value.push({
-              ...etfFlow,
-              name: etf.name,
-              chartUrl: etf.chartUrl,
-            });
+  EtfControllerHandler.listEtfFlows()
+    .then((etfDepot) => {
+      if (etfDepot.etfs) {
+        for (let etf of etfDepot.etfs) {
+          etfsSelectValues.value.push({ id: etf.isin, value: etf.name });
         }
-      }
-      if (etfDepot.etfEffectiveFlows) {
-        for (let etfFlow of etfDepot.etfEffectiveFlows) {
-          const etf = etfMap.get(etfFlow.isin);
-          if (etf)
-            etfEffectiveFlows.value.push({
-              ...etfFlow,
-              name: etf.name,
-              chartUrl: etf.chartUrl,
-            });
+        etfs.value = etfDepot.etfs;
+        calcEtfAskPrice.value = etfDepot.calcEtfAskPrice
+          ? etfDepot.calcEtfAskPrice
+          : 0;
+        calcEtfBidPrice.value = etfDepot.calcEtfBidPrice
+          ? etfDepot.calcEtfBidPrice
+          : 0;
+        calcEtfSaleIsin.value = etfDepot.calcEtfSaleIsin
+          ? etfDepot.calcEtfSaleIsin
+          : "";
+        calcEtfSalePieces.value = etfDepot.calcEtfSalePieces
+          ? etfDepot.calcEtfSalePieces
+          : 0;
+        calcEtfTransactionCosts.value = etfDepot.calcEtfTransactionCosts
+          ? etfDepot.calcEtfTransactionCosts
+          : 0;
+        const etfMap = new Map<String, Etf>();
+        for (let etf of etfDepot.etfs) {
+          etfMap.set(etf.isin, etf);
         }
+        if (etfDepot.etfFlows) {
+          for (let etfFlow of etfDepot.etfFlows) {
+            const etf = etfMap.get(etfFlow.isin);
+            if (etf)
+              etfFlows.value.push({
+                ...etfFlow,
+                name: etf.name,
+                chartUrl: etf.chartUrl,
+              });
+          }
+        }
+        if (etfDepot.etfEffectiveFlows) {
+          for (let etfFlow of etfDepot.etfEffectiveFlows) {
+            const etf = etfMap.get(etfFlow.isin);
+            if (etf)
+              etfEffectiveFlows.value.push({
+                ...etfFlow,
+                name: etf.name,
+                chartUrl: etf.chartUrl,
+              });
+          }
+        }
+        dataLoaded.value = true;
       }
-      dataLoaded.value = true;
-    }
-    Object.keys(values).forEach((field) => setFieldTouched(field, false));
-  });
+    })
+    .catch((backendError) => {
+      handleBackendError(backendError, serverErrors);
+    });
+  Object.keys(values).forEach((field) => setFieldTouched(field, false));
 };
 
 const showEffective = () => {
@@ -528,10 +533,13 @@ const calculateEtfSale = handleSubmit(() => {
     calcEtfBidPrice.value,
     calcEtfAskPrice.value,
     calcEtfTransactionCosts.value
-  ).then((_calcResults) => {
-    calcResults.value = _calcResults;
-    handleServerError(calcResults.value.validationResult, serverErrors);
-  });
+  )
+    .then((_calcResults) => {
+      calcResults.value = _calcResults;
+    })
+    .catch((backendError) => {
+      handleBackendError(backendError, serverErrors);
+    });
 });
 
 const deleteEtfFlow = (etfFlow: EtfFlow, etfName: string) => {
