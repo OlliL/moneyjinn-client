@@ -76,7 +76,7 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref } from "vue";
+import { onMounted, ref, watch } from "vue";
 
 import { usePostingAccountStore } from "@/stores/PostingAccountStore";
 
@@ -85,6 +85,7 @@ import DeletePostingAccountModalVue from "@/components/postingaccount/DeletePost
 import ListPostingAccountRowVue from "@/components/postingaccount/ListPostingAccountRow.vue";
 
 import type { PostingAccount } from "@/model/postingaccount/PostingAccount";
+import { storeToRefs } from "pinia";
 
 const postingAccounts = ref(new Array<PostingAccount>());
 const searchString = ref("");
@@ -92,7 +93,13 @@ const searchString = ref("");
 const createPostingAccountModalList = ref();
 const deleteModal = ref();
 
-const searchPostingAccounts = usePostingAccountStore().searchPostingAccounts;
+const postinAccountStore = usePostingAccountStore();
+const searchPostingAccounts = postinAccountStore.searchPostingAccounts;
+const { postingAccount } = storeToRefs(postinAccountStore);
+
+watch(postingAccount, () => {
+  searchAllContent();
+});
 
 const showCreatePostingAccountModal = () => {
   createPostingAccountModalList.value._show();

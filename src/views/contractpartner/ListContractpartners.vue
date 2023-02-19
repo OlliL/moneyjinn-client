@@ -95,7 +95,7 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref } from "vue";
+import { onMounted, ref, watch } from "vue";
 
 import { useContractpartnerStore } from "@/stores/ContractpartnerStore";
 
@@ -105,6 +105,7 @@ import ListContractpartnerAccountsModal from "@/components/contractpartneraccoun
 import ListContractpartnerRowVue from "@/components/contractpartner/ListContractpartnerRow.vue";
 
 import type { Contractpartner } from "@/model/contractpartner/Contractpartner";
+import { storeToRefs } from "pinia";
 
 const validNow = ref(true);
 const contractpartners = ref(new Array<Contractpartner>());
@@ -114,7 +115,13 @@ const createContractpartnerModalList = ref();
 const deleteModal = ref();
 const accountsModal = ref();
 
-const searchContractpartners = useContractpartnerStore().searchContractpartners;
+const contractpartnerStore = useContractpartnerStore();
+const searchContractpartners = contractpartnerStore.searchContractpartners;
+const { contractpartner } = storeToRefs(contractpartnerStore);
+
+watch(contractpartner, () => {
+  searchAllContent();
+});
 
 const showCreateContractpartnerModal = () => {
   createContractpartnerModalList.value._show();
