@@ -130,7 +130,7 @@ import InputStandard from "../InputStandard.vue";
 import ModalVue from "../Modal.vue";
 import SelectStandard from "../SelectStandard.vue";
 
-import { handleServerError } from "@/tools/views/ThrowError";
+import { handleBackendError } from "@/tools/views/ThrowError";
 import { globErr } from "@/tools/views/ZodUtil";
 
 import type { Capitalsource } from "@/model/capitalsource/Capitalsource";
@@ -201,29 +201,29 @@ const _show = async (_mcs?: Capitalsource) => {
 };
 
 const createCapitalsource = handleSubmit(() => {
+  serverErrors.value = new Array<string>();
+
   if (mcs.value.id > 0) {
     //update
-    CapitalsourceControllerHandler.updateCapitalsource(mcs.value).then(
-      (validationResult) => {
-        if (!handleServerError(validationResult, serverErrors)) {
-          modalComponent.value._hide();
-          emit("capitalsourceUpdated", mcs.value);
-        }
-      }
-    );
+    CapitalsourceControllerHandler.updateCapitalsource(mcs.value)
+      .then(() => {
+        modalComponent.value._hide();
+        emit("capitalsourceUpdated", mcs.value);
+      })
+      .catch((backendError) => {
+        handleBackendError(backendError, serverErrors);
+      });
   } else {
     //create
-    CapitalsourceControllerHandler.createCapitalsource(mcs.value).then(
-      (capitalsourceValidation) => {
-        const validationResult = capitalsourceValidation.validationResult;
-
-        if (!handleServerError(validationResult, serverErrors)) {
-          mcs.value = capitalsourceValidation.mcs;
-          modalComponent.value._hide();
-          emit("capitalsourceCreated", mcs.value);
-        }
-      }
-    );
+    CapitalsourceControllerHandler.createCapitalsource(mcs.value)
+      .then((capitalsourceValidation) => {
+        mcs.value = capitalsourceValidation.mcs;
+        modalComponent.value._hide();
+        emit("capitalsourceCreated", mcs.value);
+      })
+      .catch((backendError) => {
+        handleBackendError(backendError, serverErrors);
+      });
   }
 });
 defineExpose({ _show });

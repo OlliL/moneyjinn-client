@@ -1,6 +1,8 @@
-import type { LoginResponse } from "@/api";
+import type { ErrorResponse, LoginResponse, ValidationResponse } from "@/api";
+import { BackendError, BackendErrorType } from "@/model/BackendError";
 import { ErrorCode } from "@/model/ErrorCode";
-import { getError, throwError } from "@/tools/views/ThrowError";
+import type { ValidationResult } from "@/model/validation/ValidationResult";
+import { throwError } from "@/tools/views/ThrowError";
 import type { AxiosInstance } from "axios";
 import axios from "axios";
 import {
@@ -9,6 +11,7 @@ import {
   type TokenRefreshRequest,
 } from "axios-jwt";
 import type { Token } from "axios-jwt/dist/src/Token";
+import { mapValidationItemTransportToModel } from "./mapper/ValidationItemTransportMapper";
 import { WebServer } from "./WebServer";
 
 export class AxiosInstanceHolder {
@@ -42,25 +45,53 @@ export class AxiosInstanceHolder {
 
       AxiosInstanceHolder.instance.axiosInstance.interceptors.response.use(
         (response) => {
-          if (response.status === 204) {
-            return response;
-          }
-
-          if (response.status !== 200) {
-            return Promise.reject(response.statusText);
-          }
-
-          const errorResponse = response.data;
-          if (errorResponse.code) {
-            return Promise.reject(getError(errorResponse.code));
-          }
-
           return response;
         },
         (error) => {
-          if (error.response.status === 403)
-            return Promise.reject(getError(ErrorCode.USERNAME_PASSWORD_WRONG));
-          return Promise.reject(error.response.statusText);
+          if (error.response.status === 400) {
+            const errorResponse: ErrorResponse = error.response.data;
+            return Promise.reject(
+              new BackendError(
+                BackendErrorType.CLIENT_ERROR,
+                errorResponse.code
+              )
+            );
+          } else if (error.response.status === 403) {
+            return Promise.reject(
+              new BackendError(
+                BackendErrorType.AUTH_ERROR,
+                ErrorCode.USERNAME_PASSWORD_WRONG.valueOf()
+              )
+            );
+          } else if (error.response.status === 422) {
+            const validationResponse: ValidationResponse = error.response.data;
+            const validationResult: ValidationResult = {
+              result: validationResponse.result,
+              validationResultItems:
+                validationResponse.validationItemTransports?.map((vit) => {
+                  return mapValidationItemTransportToModel(vit);
+                }),
+            };
+
+            return Promise.reject(
+              new BackendError(
+                BackendErrorType.VALIDATION_ERROR,
+                undefined,
+                undefined,
+                validationResult
+              )
+            );
+          }
+          return Promise.reject(
+            new BackendError(
+              BackendErrorType.ERROR,
+              undefined,
+              "Technischer Fehler: (" +
+                error.response.status +
+                ") " +
+                error.response.statusText
+            )
+          );
         }
       );
     }
@@ -87,6 +118,7 @@ export class AxiosInstanceHolder {
     const response = await fetch(requestInfo);
     const loginResponse = (await response.json()) as LoginResponse;
 
+    // TODO: mmmmh.... that looks wrong
     if (loginResponse.code) {
       throwError(loginResponse.code);
     }

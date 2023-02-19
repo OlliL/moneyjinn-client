@@ -72,8 +72,9 @@ import DivError from "@/components/DivError.vue";
 import InputStandard from "@/components/InputStandard.vue";
 
 import UserControllerHandler from "@/handler/UserControllerHandler";
+import { handleBackendError } from "@/tools/views/ThrowError";
 
-const serverErrors = ref(new Array<String>());
+const serverErrors = ref(new Array<string>());
 
 const schema = {
   username: string().min(1, "Bitte Benutzernamen angeben!"),
@@ -92,8 +93,8 @@ const handleLogin = handleSubmit((values) => {
     .then(() => {
       router.push({ name: Routes.Home });
     })
-    .catch((error) => {
-      serverErrors.value.push(error);
+    .catch((backendError) => {
+      handleBackendError(backendError, serverErrors);
       password.value = "";
     });
 });
