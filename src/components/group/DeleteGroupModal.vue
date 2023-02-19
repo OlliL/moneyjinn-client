@@ -26,8 +26,6 @@ import { ref } from "vue";
 import DivError from "../DivError.vue";
 import ModalVue from "../Modal.vue";
 
-import { handleServerError } from "@/tools/views/ThrowError";
-
 import type { Group } from "@/model/group/Group";
 
 import GroupControllerHandler from "@/handler/GroupControllerHandler";
@@ -44,14 +42,16 @@ const _show = (_group: Group) => {
 };
 
 const deleteGroup = () => {
-  GroupControllerHandler.deleteGroup(group.value.id).then(
-    (validationResult) => {
-      if (!handleServerError(validationResult, serverErrors)) {
-        modalComponent.value._hide();
-        emit("groupDeleted", group.value);
-      }
-    }
-  );
+  serverErrors.value = new Array<string>();
+
+  GroupControllerHandler.deleteGroup(group.value.id)
+    .then(() => {
+      modalComponent.value._hide();
+      emit("groupDeleted", group.value);
+    })
+    .catch((error) => {
+      serverErrors.value.push(error);
+    });
 };
 defineExpose({ _show });
 </script>

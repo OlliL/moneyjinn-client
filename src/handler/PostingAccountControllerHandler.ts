@@ -32,8 +32,6 @@ class PostingAccountControllerHandler extends AbstractControllerHandler {
   async fetchAllPostingAccount(): Promise<Array<PostingAccount>> {
     const response = await this.api.showPostingAccountList();
 
-    super.handleResponseError(response);
-
     const showPostingAccountListResponse = response.data;
 
     const postingAccountArray = new Array<PostingAccount>();
@@ -53,8 +51,6 @@ class PostingAccountControllerHandler extends AbstractControllerHandler {
     request.postingAccountTransport = mapPostingAccountToTransport(mpa);
 
     const response = await this.api.createPostingAccount(request);
-
-    super.handleResponseError(response);
 
     const createPostingAccountResponse = response.data;
 
@@ -85,8 +81,6 @@ class PostingAccountControllerHandler extends AbstractControllerHandler {
 
     const response = await this.api.updatePostingAccount(request);
 
-    super.handleResponseError(response);
-
     const validationResponse = response.data;
 
     const validationResult: ValidationResult = {
@@ -102,8 +96,7 @@ class PostingAccountControllerHandler extends AbstractControllerHandler {
   }
 
   async deletePostingAccount(id: number) {
-    const response = await this.api.deletePostingAccountById(id);
-    return super.handleResponseError(response);
+    await this.api.deletePostingAccountById(id);
   }
 }
 

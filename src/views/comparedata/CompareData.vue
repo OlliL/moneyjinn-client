@@ -285,7 +285,6 @@ const loadData = () => {
 };
 
 const compareData = handleSubmit(async () => {
-  console.log("handleSubmit");
   dataCompared.value = false;
   serverErrors.value = new Array<string>();
 
@@ -322,9 +321,8 @@ const compareData = handleSubmit(async () => {
 
         dataCompared.value = true;
       })
-      .catch((e) => {
-        serverErrors.value = new Array<string>();
-        serverErrors.value.push((e as Error).message);
+      .catch((error) => {
+        serverErrors.value.push(error);
       });
   }
 });

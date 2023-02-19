@@ -86,14 +86,14 @@ const password = ref("");
 const { handleSubmit } = useForm();
 
 const handleLogin = handleSubmit((values) => {
-  serverErrors.value.splice(0, serverErrors.value.length);
+  serverErrors.value = new Array<string>();
 
   UserControllerHandler.login(values.username, values.password)
     .then(() => {
       router.push({ name: Routes.Home });
     })
     .catch((error) => {
-      serverErrors.value.push(error.message);
+      serverErrors.value.push(error);
       password.value = "";
     });
 });

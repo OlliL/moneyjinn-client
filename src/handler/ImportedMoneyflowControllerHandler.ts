@@ -29,8 +29,6 @@ class ImportedMoneyflowControllerHandler extends AbstractControllerHandler {
   async showAddImportedMoneyflows(): Promise<Array<ImportedMoneyflow>> {
     const response = await this.api.showAddImportedMoneyflows();
 
-    super.handleResponseError(response);
-
     const showAddImportedMoneyflowsResponse = response.data;
 
     const result = new Array<ImportedMoneyflow>();
@@ -58,8 +56,6 @@ class ImportedMoneyflowControllerHandler extends AbstractControllerHandler {
 
     const response = await this.api.importImportedMoneyflows(request);
 
-    super.handleResponseError(response);
-
     if (response.status === 204) {
       return { result: true } as ValidationResult;
     }
@@ -77,8 +73,7 @@ class ImportedMoneyflowControllerHandler extends AbstractControllerHandler {
     return validationResult;
   }
   async deleteImportedMoneyflow(id: number) {
-    const response = await this.api.deleteImportedMoneyflowById(id);
-    return super.handleResponseError(response);
+    await this.api.deleteImportedMoneyflowById(id);
   }
 }
 

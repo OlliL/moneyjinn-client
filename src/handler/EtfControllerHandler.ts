@@ -39,8 +39,6 @@ class EtfControllerHandler extends AbstractControllerHandler {
   ): Promise<Array<EtfSummary>> {
     const response = await this.api.listEtfOverview(year, month);
 
-    super.handleResponseError(response);
-
     const listEtfOverviewResponse = response.data;
 
     const etfSummaryArray = new Array<EtfSummary>();
@@ -54,8 +52,6 @@ class EtfControllerHandler extends AbstractControllerHandler {
 
   async listEtfFlows(): Promise<EtfDepot> {
     const response = await this.api.listEtfFlows();
-
-    super.handleResponseError(response);
 
     const listEtfFlowsResponse = response.data;
 
@@ -95,8 +91,6 @@ class EtfControllerHandler extends AbstractControllerHandler {
 
     const response = await this.api.calcEtfSale(request);
 
-    super.handleResponseError(response);
-
     const calcEtfSaleResponse = response.data;
 
     const etfSalesCalculation = {} as EtfSalesCalculation;
@@ -133,8 +127,6 @@ class EtfControllerHandler extends AbstractControllerHandler {
 
     const response = await this.api.createEtfFlow(request);
 
-    super.handleResponseError(response);
-
     const createEtfFlowResponse = response.data;
 
     const etfFlowValidation = {} as EtfFlowValidation;
@@ -161,8 +153,6 @@ class EtfControllerHandler extends AbstractControllerHandler {
 
     const response = await this.api.updateEtfFlow(request);
 
-    super.handleResponseError(response);
-
     const validationResponse = response.data;
 
     const validationResult: ValidationResult = {
@@ -177,9 +167,8 @@ class EtfControllerHandler extends AbstractControllerHandler {
     return validationResult;
   }
 
-  async deleteEtfFlow(etfFlowId: number) {
-    const response = await this.api.deleteEtfFlow(etfFlowId);
-    return super.handleResponseError(response);
+  async deleteEtfFlow(id: number) {
+    await this.api.deleteEtfFlow(id);
   }
 }
 

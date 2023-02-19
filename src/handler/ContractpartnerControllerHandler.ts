@@ -31,8 +31,6 @@ class ContractpartnerControllerHandler extends AbstractControllerHandler {
   async fetchAllContractpartner(): Promise<Array<Contractpartner>> {
     const response = await this.api.showContractpartnerList();
 
-    super.handleResponseError(response);
-
     const showContractpartnerListResponse = response.data;
 
     const contractpartnerArray = new Array<Contractpartner>();
@@ -52,8 +50,6 @@ class ContractpartnerControllerHandler extends AbstractControllerHandler {
     request.contractpartnerTransport = mapContractpartnerToTransport(mcp);
 
     const response = await this.api.createContractpartner(request);
-
-    super.handleResponseError(response);
 
     const createContractpartnerResponse = response.data;
     const contractpartnerValidation = {} as ContractpartnerValidation;
@@ -83,8 +79,6 @@ class ContractpartnerControllerHandler extends AbstractControllerHandler {
 
     const response = await this.api.updateContractpartner(request);
 
-    super.handleResponseError(response);
-
     const validationResponse = response.data;
     const validationResult: ValidationResult = {
       result: validationResponse.result,
@@ -98,9 +92,8 @@ class ContractpartnerControllerHandler extends AbstractControllerHandler {
     return validationResult;
   }
 
-  async deleteContractpartner(contractpartnerId: number) {
-    const response = await this.api.deleteContractpartner(contractpartnerId);
-    return super.handleResponseError(response);
+  async deleteContractpartner(id: number) {
+    await this.api.deleteContractpartner(id);
   }
 }
 

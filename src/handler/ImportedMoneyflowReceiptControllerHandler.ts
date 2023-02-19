@@ -28,8 +28,6 @@ class ImportedMoneyflowReceiptControllerHandler extends AbstractControllerHandle
   > {
     const response = await this.api.showImportImportedMoneyflowReceipts();
 
-    super.handleResponseError(response);
-
     const showImportImportedMoneyflowReceiptsResponse = response.data;
 
     const result = new Array<ImportedMoneyflowReceipt>();
@@ -45,33 +43,11 @@ class ImportedMoneyflowReceiptControllerHandler extends AbstractControllerHandle
   }
 
   async deleteImportedMoneyflowReceiptById(id: number) {
-    const response = await this.api.deleteImportedMoneyflowReceiptById(id);
-    return super.handleResponseError(response);
+    await this.api.deleteImportedMoneyflowReceiptById(id);
   }
 
-  async importImportedMoneyflowReceipt(
-    id: number,
-    moneyflowId: number
-  ): Promise<ValidationResult> {
-    const response = await this.api.importImportedMoneyflowReceipt(
-      id,
-      moneyflowId
-    );
-
-    super.handleResponseError(response);
-
-    const validationResult = {} as ValidationResult;
-    if (response.status === 204) {
-      validationResult.result = true;
-    } else {
-      const errorResponse = response.data;
-      const validationResultItem = {
-        error: errorResponse.code,
-      } as ValidationResultItem;
-      validationResult.result = false;
-      validationResult.validationResultItems = [validationResultItem];
-    }
-    return validationResult;
+  async importImportedMoneyflowReceipt(id: number, moneyflowId: number) {
+    await this.api.importImportedMoneyflowReceipt(id, moneyflowId);
   }
 
   async createImportedMoneyflowReceipts(
@@ -82,17 +58,11 @@ class ImportedMoneyflowReceiptControllerHandler extends AbstractControllerHandle
 
     const response = await this.api.createImportedMoneyflowReceipts(request);
 
-    super.handleResponseError(response);
-
     const validationResult = {} as ValidationResult;
     if (response.status === 204) {
       validationResult.result = true;
     } else {
       const validationResponse = response.data;
-
-      if (validationResponse.code) {
-        throwError(validationResponse.code);
-      }
 
       validationResult.result = validationResponse.result;
       validationResult.validationResultItems =

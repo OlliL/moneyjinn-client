@@ -34,8 +34,6 @@ class ContractpartnerAccountControllerHandler extends AbstractControllerHandler 
       contractpartnerId
     );
 
-    super.handleResponseError(response);
-
     const showContractpartnerAccountListResponse = response.data;
 
     const contractpartnerAccountArray = new Array<ContractpartnerAccount>();
@@ -59,8 +57,6 @@ class ContractpartnerAccountControllerHandler extends AbstractControllerHandler 
       mapContractpartnerAccountToTransport(mca);
 
     const response = await this.api.createContractpartnerAccount(request);
-
-    super.handleResponseError(response);
 
     const createContractpartnerAccountResponse = response.data;
     const contractpartnerAccountValidation =
@@ -95,8 +91,6 @@ class ContractpartnerAccountControllerHandler extends AbstractControllerHandler 
 
     const response = await this.api.updateContractpartnerAccount(request);
 
-    super.handleResponseError(response);
-
     const validationResponse = response.data;
     const validationResult: ValidationResult = {
       result: validationResponse.result,
@@ -110,11 +104,8 @@ class ContractpartnerAccountControllerHandler extends AbstractControllerHandler 
     return validationResult;
   }
 
-  async deleteContractpartnerAccount(contractpartnerAccountId: number) {
-    const response = await this.api.deleteContractpartnerAccount(
-      contractpartnerAccountId
-    );
-    return super.handleResponseError(response);
+  async deleteContractpartnerAccount(id: number) {
+    await this.api.deleteContractpartnerAccount(id);
   }
 }
 
