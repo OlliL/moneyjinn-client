@@ -76,7 +76,7 @@ const emit = defineEmits(["moneyflowUpdated", "moneyflowReceiptDeleted"]);
 const { handleSubmit, values, setFieldTouched } = useForm();
 
 const modalWidth = computed(() => {
-  return mmf.value.hasReceipt ? "100%" : "75%";
+  return receiptBase64.value ? "100%" : "75%";
 });
 const _show = (_mmf: Moneyflow, receipt?: ImportedMoneyflowReceipt) => {
   mmf.value = _mmf;
