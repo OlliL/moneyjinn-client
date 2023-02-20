@@ -52,6 +52,7 @@
         </table>
       </div>
     </div>
+    <DivError :server-errors="serverErrors" />
     <div class="row justify-content-md-center">
       <div class="col-md-3 col-xs-12">
         <table class="table table-striped table-bordered table-hover">
@@ -79,13 +80,18 @@
 <script lang="ts" setup>
 import { onMounted, ref } from "vue";
 
+import { handleBackendError } from "@/tools/views/ThrowError";
+
 import CreateGroupModalVue from "@/components/group/CreateGroupModal.vue";
 import DeleteGroupModalVue from "@/components/group/DeleteGroupModal.vue";
+import DivError from "@/components/DivError.vue";
 import ListGroupRowVue from "@/components/group/ListGroupRow.vue";
 
 import type { Group } from "@/model/group/Group";
 
 import GroupControllerHandler from "@/handler/GroupControllerHandler";
+
+const serverErrors = ref(new Array<string>());
 
 const groups = ref(new Array<Group>());
 const allGroups = ref(new Array<Group>());
@@ -124,13 +130,19 @@ const searchContent = () => {
 };
 
 const reloadView = () => {
-  GroupControllerHandler.fetchAllGroup().then((_groups) => {
-    _groups.sort((a, b) => {
-      return a.name.toUpperCase().localeCompare(b.name.toUpperCase());
+  serverErrors.value = new Array<string>();
+
+  GroupControllerHandler.fetchAllGroup()
+    .then((_groups) => {
+      _groups.sort((a, b) => {
+        return a.name.toUpperCase().localeCompare(b.name.toUpperCase());
+      });
+      allGroups.value = _groups;
+      searchContent();
+    })
+    .catch((backendError) => {
+      handleBackendError(backendError, serverErrors);
     });
-    allGroups.value = _groups;
-    searchContent();
-  });
 };
 
 onMounted(() => {

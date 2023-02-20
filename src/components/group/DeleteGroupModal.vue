@@ -26,12 +26,15 @@ import { ref } from "vue";
 import DivError from "../DivError.vue";
 import ModalVue from "../Modal.vue";
 
+import { handleBackendError } from "@/tools/views/ThrowError";
+
 import type { Group } from "@/model/group/Group";
 
 import GroupControllerHandler from "@/handler/GroupControllerHandler";
 
-const group = ref({} as Group);
 const serverErrors = ref(new Array<string>());
+
+const group = ref({} as Group);
 const modalComponent = ref();
 const emit = defineEmits(["groupDeleted"]);
 
@@ -49,8 +52,8 @@ const deleteGroup = () => {
       modalComponent.value._hide();
       emit("groupDeleted", group.value);
     })
-    .catch((error) => {
-      serverErrors.value.push(error);
+    .catch((backendError) => {
+      handleBackendError(backendError, serverErrors);
     });
 };
 defineExpose({ _show });

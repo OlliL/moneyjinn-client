@@ -85,6 +85,9 @@ export function getError(code: number, variableArray?: Array<string>) {
     case ErrorCode.CONTRACTPARTNER_NO_LONGER_VALID: {
       return "Der ausgewählte Vertragspartner ist zum gewählten Datum nicht mehr gültig!";
     }
+    case ErrorCode.GROUP_WITH_SAME_NAME_ALREADY_EXISTS: {
+      return "Es existiert bereits eine Gruppe mit diesem Namen!";
+    }
     case ErrorCode.USER_WITH_SAME_NAME_ALREADY_EXISTS: {
       return "Es existiert bereits ein Benutzer mit diesem Namen!";
     }
