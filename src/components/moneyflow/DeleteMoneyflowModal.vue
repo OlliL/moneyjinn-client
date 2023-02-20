@@ -1,6 +1,7 @@
 <template>
   <ModalVue title="Geldbewegung l&ouml;schen" ref="modalComponent">
     <template #body>
+      <DivError :server-errors="serverErrors" />
       <div class="row">
         <div
           class="text-start d-flex align-items-center col-sm-3 col-xs-5"
@@ -89,6 +90,10 @@ import SpanDate from "../SpanDate.vue";
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 
 import MoneyflowControllerHandler from "@/handler/MoneyflowControllerHandler";
+import DivError from "../DivError.vue";
+import { handleBackendError } from "@/tools/views/ThrowError";
+
+const serverErrors = ref(new Array<string>());
 
 const mmf = ref({} as Moneyflow);
 const modalComponent = ref();
@@ -100,10 +105,16 @@ const _show = (_mmf: Moneyflow) => {
 };
 
 const deleteMoneyflow = () => {
-  MoneyflowControllerHandler.deleteMoneyflow(mmf.value.id).then(() => {
-    modalComponent.value._hide();
-    emit("moneyflowDeleted", mmf.value);
-  });
+  serverErrors.value = new Array<string>();
+
+  MoneyflowControllerHandler.deleteMoneyflow(mmf.value.id)
+    .then(() => {
+      modalComponent.value._hide();
+      emit("moneyflowDeleted", mmf.value);
+    })
+    .catch((backendError) => {
+      handleBackendError(backendError, serverErrors);
+    });
 };
 defineExpose({ _show });
 </script>

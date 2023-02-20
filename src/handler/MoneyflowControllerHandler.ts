@@ -2,16 +2,12 @@ import AbstractControllerHandler from "@/handler/AbstractControllerHandler";
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 import type { MoneyflowSearchParams } from "@/model/moneyflow/MoneyflowSearchParams";
 import type { MoneyflowSplitEntry } from "@/model/moneyflow/MoneyflowSplitEntry";
-import type { MoneyflowValidation } from "@/model/moneyflow/MoneyflowValidation";
-import type { MoneyflowsValidation } from "@/model/moneyflow/MoneyflowsValidation";
-import type { ValidationResult } from "@/model/validation/ValidationResult";
 import { mapMoneyflowSearchParamsToTransport } from "./mapper/MoneyflowSearchParamsTransportMapper";
 import { mapMoneyflowSplitEntryToTransport } from "./mapper/MoneyflowSplitEntryTransportMapper";
 import {
   mapMoneyflowToTransport,
   mapMoneyflowTransportToModel,
 } from "./mapper/MoneyflowTransportMapper";
-import { mapValidationItemTransportToModel } from "./mapper/ValidationItemTransportMapper";
 import { getISOStringDate } from "@/tools/views/FormatDate";
 import {
   MoneyflowControllerApi,
@@ -39,7 +35,7 @@ class MoneyflowControllerHandler extends AbstractControllerHandler {
     moneyflow: Moneyflow,
     usedPreDefMoneyflowId: number,
     saveAsPreDefMoneyflow: boolean
-  ): Promise<ValidationResult> {
+  ) {
     const request = {} as CreateMoneyflowRequest;
     request.moneyflowTransport = mapMoneyflowToTransport(moneyflow);
     request.saveAsPreDefMoneyflow = saveAsPreDefMoneyflow ? 1 : 0;
@@ -56,30 +52,15 @@ class MoneyflowControllerHandler extends AbstractControllerHandler {
         });
     }
 
-    const response = await this.api.createMoneyflows(request);
-
-    if (response.status === 204) {
-      return { result: true } as ValidationResult;
-    }
-
-    const validationResponse = response.data;
-    const validationResult: ValidationResult = {
-      result: validationResponse.result,
-      validationResultItems: validationResponse.validationItemTransports?.map(
-        (vit) => {
-          return mapValidationItemTransportToModel(vit);
-        }
-      ),
-    };
-
-    return validationResult;
+    await this.api.createMoneyflows(request);
   }
+
   async updateMoneyflow(
     moneyflow: Moneyflow,
     createMoneyflowSplitEntries: Array<MoneyflowSplitEntry>,
     updateMoneyflowSplitEntries: Array<MoneyflowSplitEntry>,
     deleteMoneyflowSplitEntryIds: Array<number>
-  ): Promise<MoneyflowValidation> {
+  ): Promise<Moneyflow> {
     const request = {} as UpdateMoneyflowRequest;
     request.moneyflowTransport = mapMoneyflowToTransport(moneyflow);
     request.insertMoneyflowSplitEntryTransports =
@@ -95,26 +76,13 @@ class MoneyflowControllerHandler extends AbstractControllerHandler {
     const response = await this.api.updateMoneyflowV2(request);
 
     const updateMoneyflowResponse = response.data;
-    const moneyflowValidation = {} as MoneyflowValidation;
-    const validationResult: ValidationResult = {
-      result: updateMoneyflowResponse.result,
-      validationResultItems:
-        updateMoneyflowResponse.validationItemTransports?.map((vit) => {
-          return mapValidationItemTransportToModel(vit);
-        }),
-    };
+    const mmf: Moneyflow = mapMoneyflowTransportToModel(
+      updateMoneyflowResponse.moneyflowTransport,
+      updateMoneyflowResponse.hasReceipt,
+      updateMoneyflowResponse.moneyflowSplitEntryTransports
+    );
 
-    moneyflowValidation.validationResult = validationResult;
-
-    if (validationResult.result) {
-      const mmf: Moneyflow = mapMoneyflowTransportToModel(
-        updateMoneyflowResponse.moneyflowTransport,
-        updateMoneyflowResponse.hasReceipt,
-        updateMoneyflowResponse.moneyflowSplitEntryTransports
-      );
-      moneyflowValidation.mmf = mmf;
-    }
-    return moneyflowValidation;
+    return mmf;
   }
 
   async deleteMoneyflow(id: number) {
@@ -123,7 +91,7 @@ class MoneyflowControllerHandler extends AbstractControllerHandler {
 
   async searchMoneyflows(
     searchParams: MoneyflowSearchParams
-  ): Promise<MoneyflowsValidation> {
+  ): Promise<Array<Moneyflow>> {
     const request = {} as SearchMoneyflowsRequest;
     request.moneyflowSearchParamsTransport =
       mapMoneyflowSearchParamsToTransport(searchParams);
@@ -132,29 +100,17 @@ class MoneyflowControllerHandler extends AbstractControllerHandler {
 
     const searchMoneyflowsResponse = response.data;
 
-    const validationResult: ValidationResult = {
-      result: searchMoneyflowsResponse.result,
-      validationResultItems:
-        searchMoneyflowsResponse.validationItemTransports?.map((vit) => {
-          return mapValidationItemTransportToModel(vit);
-        }),
-    };
-    const moneyflowsValidation = {} as MoneyflowsValidation;
-    moneyflowsValidation.validationResult = validationResult;
-
-    if (
-      validationResult.result &&
-      searchMoneyflowsResponse.moneyflowTransports
-    ) {
+    if (searchMoneyflowsResponse.moneyflowTransports) {
       const moneyflows: Array<Moneyflow> =
         searchMoneyflowsResponse.moneyflowTransports?.map((mmf) => {
           return mapMoneyflowTransportToModel(mmf, false);
         });
-      moneyflowsValidation.moneyflows = moneyflows;
+      return moneyflows;
     }
 
-    return moneyflowsValidation;
+    return new Array<Moneyflow>();
   }
+
   async fetchMoneyflow(id: number): Promise<Moneyflow> {
     const response = await this.api.showEditMoneyflow(id);
 

@@ -230,7 +230,7 @@ import SelectPostingAccount from "@/components/postingaccount/SelectPostingAccou
 import SelectStandard from "@/components/SelectStandard.vue";
 
 import { toFixed } from "@/tools/math";
-import { handleServerError } from "@/tools/views/ThrowError";
+import { handleBackendError } from "@/tools/views/ThrowError";
 import { getMonthName } from "@/tools/views/MonthName";
 import { globErr } from "@/tools/views/ZodUtil";
 
@@ -371,16 +371,9 @@ const searchMoneyflows = handleSubmit(() => {
     colContractpartner.value =
       groupByFirst.value == GROUP_CONTRACTPARTNER ||
       groupBySecond.value == GROUP_CONTRACTPARTNER;
-    MoneyflowControllerHandler.searchMoneyflows(searchParams).then(
-      (moneyflowsValidation) => {
-        const moneyflows = moneyflowsValidation.moneyflows;
-        if (
-          !handleServerError(
-            moneyflowsValidation.validationResult,
-            serverErrors
-          ) &&
-          moneyflows
-        ) {
+    MoneyflowControllerHandler.searchMoneyflows(searchParams)
+      .then((moneyflows) => {
+        if (moneyflows) {
           groupBy(moneyflows);
           makeCommentString();
           switch (orderBy.value) {
@@ -412,8 +405,10 @@ const searchMoneyflows = handleSubmit(() => {
 
           dataLoaded.value = true;
         }
-      }
-    );
+      })
+      .catch((backendError) => {
+        handleBackendError(backendError, serverErrors);
+      });
   }
 });
 
