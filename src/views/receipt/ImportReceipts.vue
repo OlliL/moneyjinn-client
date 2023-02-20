@@ -37,8 +37,10 @@
 </template>
 
 <script lang="ts" setup>
+import { useForm } from "vee-validate";
 import { onMounted, ref } from "vue";
 
+import ButtonSubmit from "@/components/ButtonSubmit.vue";
 import DeleteMoneyflowModalVue from "@/components/moneyflow/DeleteMoneyflowModal.vue";
 import DivError from "@/components/DivError.vue";
 import EditMoneyflowModalVue from "@/components/moneyflow/EditMoneyflowModal.vue";
@@ -51,11 +53,10 @@ import type { ImportedMoneyflowReceipt } from "@/model/moneyflow/ImportedMoneyfl
 
 import ImportedMoneyflowReceiptControllerHandler from "@/handler/ImportedMoneyflowReceiptControllerHandler";
 import MoneyflowControllerHandler from "@/handler/MoneyflowControllerHandler";
-import { useForm } from "vee-validate";
-import ButtonSubmit from "@/components/ButtonSubmit.vue";
+
+const serverErrors = ref(new Array<string>());
 
 const importedMoneyflowReceipts = ref(new Array<ImportedMoneyflowReceipt>());
-const serverErrors = ref(new Array<string>());
 const files = ref({} as FileList);
 
 const deleteModal = ref();
