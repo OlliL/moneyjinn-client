@@ -36,7 +36,7 @@ import DivError from "../DivError.vue";
 import ModalVue from "../Modal.vue";
 
 import { globErr } from "@/tools/views/ZodUtil";
-import { handleServerError } from "@/tools/views/ThrowError";
+import { handleBackendError } from "@/tools/views/ThrowError";
 
 import type { Group } from "@/model/group/Group";
 
@@ -79,25 +79,29 @@ const _show = async (_group?: Group) => {
 };
 
 const createGroup = handleSubmit(() => {
+  serverErrors.value = new Array<string>();
+
   if (group.value.id > 0) {
     //update
-    GroupControllerHandler.updateGroup(group.value).then((validationResult) => {
-      if (!handleServerError(validationResult, serverErrors)) {
+    GroupControllerHandler.updateGroup(group.value)
+      .then(() => {
         modalComponent.value._hide();
         emit("groupUpdated", group.value);
-      }
-    });
+      })
+      .catch((backendError) => {
+        handleBackendError(backendError, serverErrors);
+      });
   } else {
     //create
-    GroupControllerHandler.createGroup(group.value).then((groupValidation) => {
-      const validationResult = groupValidation.validationResult;
-
-      if (!handleServerError(validationResult, serverErrors)) {
-        group.value = groupValidation.group;
+    GroupControllerHandler.createGroup(group.value)
+      .then((_group) => {
+        group.value = _group;
         modalComponent.value._hide();
         emit("groupCreated", group.value);
-      }
-    });
+      })
+      .catch((backendError) => {
+        handleBackendError(backendError, serverErrors);
+      });
   }
 });
 defineExpose({ _show });

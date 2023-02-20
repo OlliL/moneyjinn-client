@@ -425,6 +425,7 @@ const etfFlowPriceAvg = computed(() => {
 });
 
 const loadData = () => {
+  serverErrors.value = new Array<string>();
   dataLoaded.value = false;
   etfFlows.value = new Array<ListDepotRowData>();
   etfEffectiveFlows.value = new Array<ListDepotRowData>();

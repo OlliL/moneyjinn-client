@@ -5,14 +5,11 @@ import {
 } from "@/api";
 import AbstractControllerHandler from "@/handler/AbstractControllerHandler";
 import type { Group } from "@/model/group/Group";
-import type { GroupValidation } from "@/model/group/GroupValidation";
-import type { ValidationResult } from "@/model/validation/ValidationResult";
 import { AxiosInstanceHolder } from "./AxiosInstanceHolder";
 import {
   mapGroupToTransport,
   mapGroupTransportToModel,
 } from "./mapper/GroupTransportMapper";
-import { mapValidationItemTransportToModel } from "./mapper/ValidationItemTransportMapper";
 
 class GroupControllerHandler extends AbstractControllerHandler {
   private api: GroupControllerApi;
@@ -41,7 +38,7 @@ class GroupControllerHandler extends AbstractControllerHandler {
     return GroupArray;
   }
 
-  async createGroup(mpm: Group): Promise<GroupValidation> {
+  async createGroup(mpm: Group): Promise<Group> {
     const request = {} as CreateGroupRequest;
     request.groupTransport = mapGroupToTransport(mpm);
 
@@ -49,45 +46,18 @@ class GroupControllerHandler extends AbstractControllerHandler {
 
     const createGroupResponse = response.data;
 
-    const groupValidation = {} as GroupValidation;
-    const validationResult: ValidationResult = {
-      result: createGroupResponse.result,
-      validationResultItems: createGroupResponse.validationItemTransports?.map(
-        (vit) => {
-          return mapValidationItemTransportToModel(vit);
-        }
-      ),
-    };
+    const createMpm: Group = mpm;
+    createMpm.id = createGroupResponse.groupId;
 
-    groupValidation.validationResult = validationResult;
-
-    if (validationResult.result && createGroupResponse.groupId) {
-      const createMpm: Group = mpm;
-      createMpm.id = createGroupResponse.groupId;
-      groupValidation.group = createMpm;
-    }
-
-    return groupValidation;
+    return createMpm;
   }
-  async updateGroup(mpm: Group): Promise<ValidationResult> {
+  async updateGroup(mpm: Group) {
     const request = {} as UpdateGroupRequest;
     request.groupTransport = mapGroupToTransport(mpm);
 
-    const response = await this.api.updateGroup(request);
-
-    const validationResponse = response.data;
-
-    const validationResult: ValidationResult = {
-      result: validationResponse.result,
-      validationResultItems: validationResponse.validationItemTransports?.map(
-        (vit) => {
-          return mapValidationItemTransportToModel(vit);
-        }
-      ),
-    };
-
-    return validationResult;
+    await this.api.updateGroup(request);
   }
+
   async deleteGroup(id: number) {
     await this.api.deleteGroupById(id);
   }
