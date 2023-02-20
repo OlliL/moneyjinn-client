@@ -191,19 +191,14 @@ import { useCapitalsourceStore } from "@/stores/CapitalsourceStore";
 import { useContractpartnerStore } from "@/stores/ContractpartnerStore";
 
 import { amountSchema, globErr } from "@/tools/views/ZodUtil";
-import {
-  handleBackendError,
-  handleServerError,
-} from "@/tools/views/ThrowError";
+import { handleBackendError } from "@/tools/views/ThrowError";
 import { toFixed } from "@/tools/math";
 
 import { CapitalsourceState } from "@/model/capitalsource/CapitalsourceState";
 import type { ImportedMoneyflow } from "@/model/moneyflow/ImportedMoneyflow";
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 import type { MoneyflowSplitEntry } from "@/model/moneyflow/MoneyflowSplitEntry";
-import type { MoneyflowValidation } from "@/model/moneyflow/MoneyflowValidation";
 import type { PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
-import type { ValidationResult } from "@/model/validation/ValidationResult";
 
 import MoneyflowControllerHandler from "@/handler/MoneyflowControllerHandler";
 import ImportedMoneyflowControllerHandler from "@/handler/ImportedMoneyflowControllerHandler";
@@ -601,17 +596,15 @@ const prepareServerCall = (): boolean => {
   }
   return false;
 };
-const followUpServerCall = (validationResult: ValidationResult): boolean => {
-  if (handleServerError(validationResult, serverErrors)) {
-    if (mmf.value.moneyflowSplitEntries) {
-      while (mmf.value.moneyflowSplitEntries.length < 2) {
-        addNewMoneyflowSplitEntryRow();
-      }
+
+const followUpServerCall = () => {
+  if (mmf.value.moneyflowSplitEntries) {
+    while (mmf.value.moneyflowSplitEntries.length < 2) {
+      addNewMoneyflowSplitEntryRow();
     }
-    return false;
   }
-  return true;
 };
+
 const importImportedMoneyflow = async (
   mim: ImportedMoneyflow
 ): Promise<Boolean> => {
@@ -631,6 +624,7 @@ const importImportedMoneyflow = async (
       importedMoneyflow
     )
       .then(() => {
+        followUpServerCall();
         return true;
       })
       .catch((backendError) => {
@@ -652,16 +646,21 @@ const deleteImportedMoneyflow = async (id: number): Promise<Boolean> => {
 };
 const createMoneyflow = async (): Promise<boolean> => {
   if (prepareServerCall()) {
-    const validationResult = await MoneyflowControllerHandler.createMoneyflow(
+    return MoneyflowControllerHandler.createMoneyflow(
       mmf.value,
       preDefMoneyflowId.value,
       saveAsPreDefMoneyflow.value
-    );
-    if (followUpServerCall(validationResult)) {
-      return true;
-    }
+    )
+      .then(() => {
+        followUpServerCall();
+        return true;
+      })
+      .catch((backendError) => {
+        handleBackendError(backendError, serverErrors);
+        return false;
+      });
   }
-  return false;
+  return Promise.resolve(false);
 };
 const updateMoneyflow = async (): Promise<Moneyflow | undefined> => {
   if (prepareServerCall()) {
@@ -682,18 +681,20 @@ const updateMoneyflow = async (): Promise<Moneyflow | undefined> => {
       (mseId) => !updateMseIds.includes(mseId)
     );
 
-    const moneyflowValidation: MoneyflowValidation =
-      await MoneyflowControllerHandler.updateMoneyflow(
-        mmf.value,
-        createMses,
-        updateMses,
-        deleteMseIds
-      );
-    const validationResult: ValidationResult =
-      moneyflowValidation.validationResult;
-    if (followUpServerCall(validationResult)) {
-      return moneyflowValidation.mmf;
-    }
+    return MoneyflowControllerHandler.updateMoneyflow(
+      mmf.value,
+      createMses,
+      updateMses,
+      deleteMseIds
+    )
+      .then((mmf) => {
+        followUpServerCall();
+        return mmf;
+      })
+      .catch((backendError) => {
+        handleBackendError(backendError, serverErrors);
+        return undefined;
+      });
   }
   return undefined;
 };

@@ -6,6 +6,7 @@
     v-if="mmf"
   >
     <template #body>
+      <DivError :server-errors="serverErrors" />
       <form @submit.prevent="updateMoneyflow" id="updateMoneyflowForm">
         <div class="container-fluid">
           <div class="row">
@@ -62,6 +63,10 @@ import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 import MoneyflowReceiptControllerHandler from "@/handler/MoneyflowReceiptControllerHandler";
 import { MoneyflowReceiptType } from "@/model/moneyflow/MoneyflowReceiptType";
 import type { ImportedMoneyflowReceipt } from "@/model/moneyflow/ImportedMoneyflowReceipt";
+import { handleBackendError } from "@/tools/views/ThrowError";
+import DivError from "../DivError.vue";
+
+const serverErrors = ref(new Array<string>());
 
 const mmf = ref({} as Moneyflow);
 const modalComponent = ref();
@@ -127,12 +132,14 @@ const processReceipt = (receiptType: MoneyflowReceiptType, receipt: string) => {
 };
 
 const deleteMoneyflowReceipt = () => {
-  MoneyflowReceiptControllerHandler.deleteMoneyflowReceipt(mmf.value.id).then(
-    () => {
+  MoneyflowReceiptControllerHandler.deleteMoneyflowReceipt(mmf.value.id)
+    .then(() => {
       emit("moneyflowReceiptDeleted", mmf.value.id);
       modalComponent.value._hide();
-    }
-  );
+    })
+    .catch((backendError) => {
+      handleBackendError(backendError, serverErrors);
+    });
 };
 
 defineExpose({ _show });

@@ -21,6 +21,9 @@
         </select>
       </div>
     </div>
+
+    <DivError :server-errors="serverErrors" />
+
     <div class="row justify-content-md-center">
       <div class="col-md-9 col-xs-12">
         <div class="card w-100 bg-light">
@@ -65,6 +68,10 @@ import type { PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
 
 import PreDefMoneyflowControllerHandler from "@/handler/PreDefMoneyflowControllerHandler";
 import { useForm } from "vee-validate";
+import DivError from "@/components/DivError.vue";
+import { handleBackendError } from "@/tools/views/ThrowError";
+
+const serverErrors = ref(new Array<string>());
 
 const preDefMoneyflows = ref(new Array<PreDefMoneyflow>());
 const preDefMoneyflowId = ref(0);
@@ -74,8 +81,8 @@ const editMoneyflowVue = ref();
 const { handleSubmit, values, setFieldTouched } = useForm();
 
 onMounted(() => {
-  PreDefMoneyflowControllerHandler.fetchAllPreDefMoneyflow().then(
-    (allPreDefMoneyflows) => {
+  PreDefMoneyflowControllerHandler.fetchAllPreDefMoneyflow()
+    .then((allPreDefMoneyflows) => {
       // remove those PreDefMoneyflows which where used this month already and have onceMonth set
       const today = new Date();
       preDefMoneyflows.value = allPreDefMoneyflows.filter((mpm) => {
@@ -84,8 +91,10 @@ onMounted(() => {
         );
       });
       resetForm();
-    }
-  );
+    })
+    .catch((backendError) => {
+      handleBackendError(backendError, serverErrors);
+    });
 });
 
 const selectPreDefMoneyflow = () => {
