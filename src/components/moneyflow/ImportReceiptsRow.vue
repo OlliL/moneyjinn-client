@@ -155,6 +155,7 @@ import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 
 import ImportedMoneyflowReceiptControllerHandler from "@/handler/ImportedMoneyflowReceiptControllerHandler";
 import MoneyflowControllerHandler from "@/handler/MoneyflowControllerHandler";
+import { handleBackendError } from "@/tools/views/ThrowError";
 
 const serverErrors = ref(new Array<string>());
 
@@ -213,8 +214,8 @@ const searchMoneyflows = handleSubmit(() => {
         selectedMoneyflowId.value = 0;
       }
     })
-    .catch((error) => {
-      serverErrors.value.push(error);
+    .catch((backendError) => {
+      handleBackendError(backendError, serverErrors);
     });
 });
 
@@ -258,8 +259,8 @@ const importReceipt = () => {
     .then(() => {
       emit("removeReceiptFromView", props.receipt.id);
     })
-    .catch((error) => {
-      serverErrors.value.push(error);
+    .catch((backendError) => {
+      handleBackendError(backendError, serverErrors);
     });
 };
 
@@ -272,8 +273,8 @@ const deleteReceipt = () => {
     .then(() => {
       emit("removeReceiptFromView", props.receipt.id);
     })
-    .catch((error) => {
-      serverErrors.value.push(error);
+    .catch((backendError) => {
+      handleBackendError(backendError, serverErrors);
     });
 };
 </script>
