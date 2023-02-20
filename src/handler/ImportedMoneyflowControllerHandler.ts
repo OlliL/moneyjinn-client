@@ -4,9 +4,7 @@ import {
   mapImportedMoneyflowTransportToModel,
 } from "./mapper/ImportedMoneyflowTransportMapper";
 import type { ImportedMoneyflow } from "@/model/moneyflow/ImportedMoneyflow";
-import type { ValidationResult } from "@/model/validation/ValidationResult";
 import { mapMoneyflowSplitEntryToTransport } from "./mapper/MoneyflowSplitEntryTransportMapper";
-import { mapValidationItemTransportToModel } from "./mapper/ValidationItemTransportMapper";
 import {
   ImportedMoneyflowControllerApi,
   type ImportImportedMoneyflowRequest,
@@ -41,9 +39,7 @@ class ImportedMoneyflowControllerHandler extends AbstractControllerHandler {
     return result;
   }
 
-  async importImportedMoneyflow(
-    importedMoneyflow: ImportedMoneyflow
-  ): Promise<ValidationResult> {
+  async importImportedMoneyflow(importedMoneyflow: ImportedMoneyflow) {
     const transport = mapImportedMoneyflowToTransport(importedMoneyflow);
     const request = {} as ImportImportedMoneyflowRequest;
     request.importedMoneyflowTransport = transport;
@@ -54,24 +50,9 @@ class ImportedMoneyflowControllerHandler extends AbstractControllerHandler {
         });
     }
 
-    const response = await this.api.importImportedMoneyflows(request);
-
-    if (response.status === 204) {
-      return { result: true } as ValidationResult;
-    }
-
-    const validationResponse = response.data;
-    const validationResult: ValidationResult = {
-      result: validationResponse.result,
-      validationResultItems: validationResponse.validationItemTransports?.map(
-        (vit) => {
-          return mapValidationItemTransportToModel(vit);
-        }
-      ),
-    };
-
-    return validationResult;
+    await this.api.importImportedMoneyflows(request);
   }
+
   async deleteImportedMoneyflow(id: number) {
     await this.api.deleteImportedMoneyflowById(id);
   }
