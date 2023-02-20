@@ -191,7 +191,10 @@ import { useCapitalsourceStore } from "@/stores/CapitalsourceStore";
 import { useContractpartnerStore } from "@/stores/ContractpartnerStore";
 
 import { amountSchema, globErr } from "@/tools/views/ZodUtil";
-import { handleServerError } from "@/tools/views/ThrowError";
+import {
+  handleBackendError,
+  handleServerError,
+} from "@/tools/views/ThrowError";
 import { toFixed } from "@/tools/math";
 
 import { CapitalsourceState } from "@/model/capitalsource/CapitalsourceState";
@@ -609,7 +612,9 @@ const followUpServerCall = (validationResult: ValidationResult): boolean => {
   }
   return true;
 };
-const importImportedMoneyflow = async (mim: ImportedMoneyflow) => {
+const importImportedMoneyflow = async (
+  mim: ImportedMoneyflow
+): Promise<Boolean> => {
   if (prepareServerCall()) {
     const importedMoneyflow: ImportedMoneyflow = {
       ...mmf.value,
@@ -621,18 +626,29 @@ const importImportedMoneyflow = async (mim: ImportedMoneyflow) => {
       accountNumberCapitalsource: mim.accountNumberCapitalsource,
       bankCodeCapitalsource: mim.bankCodeCapitalsource,
     };
-    const validationResult =
-      await ImportedMoneyflowControllerHandler.importImportedMoneyflow(
-        importedMoneyflow
-      );
-    if (followUpServerCall(validationResult)) {
-      return true;
-    }
+
+    return ImportedMoneyflowControllerHandler.importImportedMoneyflow(
+      importedMoneyflow
+    )
+      .then(() => {
+        return true;
+      })
+      .catch((backendError) => {
+        handleBackendError(backendError, serverErrors);
+        return false;
+      });
   }
-  return false;
+  return Promise.resolve(false);
 };
-const deleteImportedMoneyflow = async (id: number) => {
-  await ImportedMoneyflowControllerHandler.deleteImportedMoneyflow(id);
+const deleteImportedMoneyflow = async (id: number): Promise<Boolean> => {
+  return ImportedMoneyflowControllerHandler.deleteImportedMoneyflow(id)
+    .then(() => {
+      return true;
+    })
+    .catch((backendError) => {
+      handleBackendError(backendError, serverErrors);
+      return false;
+    });
 };
 const createMoneyflow = async (): Promise<boolean> => {
   if (prepareServerCall()) {

@@ -6,6 +6,8 @@
       </div>
     </div>
 
+    <DivError :server-errors="serverErrors" />
+
     <div
       class="row justify-content-md-center mb-5"
       v-for="importedMoneyflow in importMoneyflows"
@@ -91,24 +93,34 @@ import EditMoneyflowBase from "@/components/moneyflow/EditMoneyflowBase.vue";
 import type { ImportedMoneyflow } from "@/model/moneyflow/ImportedMoneyflow";
 
 import ImportedMoneyflowControllerHandler from "@/handler/ImportedMoneyflowControllerHandler";
+import DivError from "@/components/DivError.vue";
+import { handleBackendError } from "@/tools/views/ThrowError";
+
+const serverErrors = ref(new Array<string>());
 
 const importMoneyflows = ref({} as Array<ImportedMoneyflow>);
 const editMoneyflowRefs = new Map<number, any>();
 
 onMounted(() => {
-  ImportedMoneyflowControllerHandler.showAddImportedMoneyflows().then((imf) => {
-    importMoneyflows.value = imf;
-  });
+  ImportedMoneyflowControllerHandler.showAddImportedMoneyflows()
+    .then((imf) => {
+      importMoneyflows.value = imf;
+    })
+    .catch((backendError) => {
+      handleBackendError(backendError, serverErrors);
+    });
 });
 
 const deleteImportedMoneyflow = (mim: ImportedMoneyflow) => {
   editMoneyflowRefs
     .get(mim.id)
     .deleteImportedMoneyflow(mim.id)
-    .then(() => {
-      importMoneyflows.value = importMoneyflows.value.filter(
-        (entry) => entry.id !== mim.id
-      );
+    .then((res: boolean) => {
+      if (res) {
+        importMoneyflows.value = importMoneyflows.value.filter(
+          (entry) => entry.id !== mim.id
+        );
+      }
     });
 };
 const importImportedMoneyflow = (mim: ImportedMoneyflow) => {
