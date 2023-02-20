@@ -45,7 +45,7 @@ import EditMoneyflowModalVue from "@/components/moneyflow/EditMoneyflowModal.vue
 import ImportReceiptsRowVue from "@/components/moneyflow/ImportReceiptsRow.vue";
 import InputFile from "@/components/InputFile.vue";
 
-import { handleServerError } from "@/tools/views/ThrowError";
+import { handleBackendError } from "@/tools/views/ThrowError";
 
 import type { ImportedMoneyflowReceipt } from "@/model/moneyflow/ImportedMoneyflowReceipt";
 
@@ -69,11 +69,14 @@ onMounted(() => {
 });
 
 const loadData = () => {
-  ImportedMoneyflowReceiptControllerHandler.showImportImportedMoneyflowReceipts().then(
-    (imr) => {
+  ImportedMoneyflowReceiptControllerHandler.showImportImportedMoneyflowReceipts()
+    .then((imr) => {
       importedMoneyflowReceipts.value = imr;
-    }
-  );
+    })
+    .catch((backendError) => {
+      handleBackendError(backendError, serverErrors);
+    });
+
   Object.keys(values).forEach((field) => setFieldTouched(field, false));
 };
 
@@ -121,11 +124,13 @@ const uploadReceipts = handleSubmit(async () => {
   if (receipts.length > 0) {
     ImportedMoneyflowReceiptControllerHandler.createImportedMoneyflowReceipts(
       receipts
-    ).then((validationResult) => {
-      if (!handleServerError(validationResult, serverErrors)) {
+    )
+      .then(() => {
         loadData();
-      }
-    });
+      })
+      .catch((backendError) => {
+        handleBackendError(backendError, serverErrors);
+      });
     uploadReceiptsForm.value.reset();
     files.value = {} as FileList;
   }
