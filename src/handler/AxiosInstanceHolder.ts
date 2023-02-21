@@ -48,7 +48,6 @@ export class AxiosInstanceHolder {
           return response;
         },
         (error) => {
-          console.log(error);
           if (error instanceof Error && !("response" in error)) {
             return Promise.reject(
               new BackendError(

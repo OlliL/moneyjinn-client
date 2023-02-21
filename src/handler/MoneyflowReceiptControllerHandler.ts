@@ -48,6 +48,7 @@ class MoneyflowReceiptControllerHandler extends AbstractControllerHandler {
 
     return moneyflowReceipt;
   }
+
   async deleteMoneyflowReceipt(id: number) {
     await this.api.deleteMoneyflowReceipt(id);
   }
