@@ -6,8 +6,6 @@ import {
   mapMonthlySettlementToTransport,
   mapMonthlySettlementTransportToModel,
 } from "./mapper/MonthlySettlementTransportMapper";
-import type { ValidationResult } from "@/model/validation/ValidationResult";
-import { mapValidationItemTransportToModel } from "./mapper/ValidationItemTransportMapper";
 import {
   MonthlySettlementControllerApi,
   type GetAvailableMonthlySettlementMonthResponse,
@@ -110,28 +108,13 @@ class MonthlySettlementControllerHandler extends AbstractControllerHandler {
     return result;
   }
 
-  async upsertMonthlySettlement(
-    monthlySettlements: Array<MonthlySettlement>
-  ): Promise<ValidationResult> {
+  async upsertMonthlySettlement(monthlySettlements: Array<MonthlySettlement>) {
     const request = {} as UpsertMonthlySettlementRequest;
     request.monthlySettlementTransports = monthlySettlements?.map((mms) =>
       mapMonthlySettlementToTransport(mms)
     );
 
-    const response = await this.api.upsertMonthlySettlement(request);
-
-    const validationResponse = response.data;
-
-    const validationResult: ValidationResult = {
-      result: validationResponse.result,
-      validationResultItems: validationResponse.validationItemTransports?.map(
-        (vit) => {
-          return mapValidationItemTransportToModel(vit);
-        }
-      ),
-    };
-
-    return validationResult;
+    await this.api.upsertMonthlySettlement(request);
   }
 
   async deleteMonthlySettlement(year: number, month: number) {

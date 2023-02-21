@@ -62,6 +62,8 @@
         </form>
       </div>
     </div>
+    <DivError :server-errors="serverErrors" />
+
     <div class="row justify-content-md-center mb-4" v-if="selectedMonth">
       <div class="col-md-4 col-xs-12">
         <div class="card">
@@ -103,15 +105,19 @@
 import { computed, onMounted, ref } from "vue";
 
 import DeleteMonthlySettlementModalVue from "@/components/monthlysettlement/DeleteMonthlySettlementModal.vue";
+import DivError from "@/components/DivError.vue";
 import EditMonthlySettlementModalVue from "@/components/monthlysettlement/EditMonthlySettlementModal.vue";
 import ShowMontlySettlementVue from "@/components/monthlysettlement/ShowMonthlySettlement.vue";
 
 import router, { Routes } from "@/router";
 
 import { getMonthName } from "@/tools/views/MonthName";
+import { handleBackendError } from "@/tools/views/ThrowError";
 
 import MonthlySettlementControllerHandler from "@/handler/MonthlySettlementControllerHandler";
 import { onBeforeRouteUpdate } from "vue-router";
+
+const serverErrors = ref(new Array<string>());
 
 const dataLoaded = ref(false);
 const months = ref([] as number[]);
@@ -145,8 +151,10 @@ const monthName = computed(() => {
 });
 
 const loadMonth = (year?: number, month?: number) => {
-  MonthlySettlementControllerHandler.getAvailableMonth(year, month).then(
-    (response) => {
+  serverErrors.value = new Array<string>();
+
+  MonthlySettlementControllerHandler.getAvailableMonth(year, month)
+    .then((response) => {
       months.value = response.allMonth;
       years.value = response.allYears;
 
@@ -157,8 +165,10 @@ const loadMonth = (year?: number, month?: number) => {
         currentlyShownYear.value = selectedYear.value;
 
       dataLoaded.value = true;
-    }
-  );
+    })
+    .catch((backendError) => {
+      handleBackendError(backendError, serverErrors);
+    });
 };
 
 onBeforeRouteUpdate((to, from, next) => {
