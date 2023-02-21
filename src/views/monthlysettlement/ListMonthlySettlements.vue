@@ -103,6 +103,7 @@
 
 <script lang="ts" setup>
 import { computed, onMounted, ref } from "vue";
+import { onBeforeRouteUpdate } from "vue-router";
 
 import DeleteMonthlySettlementModalVue from "@/components/monthlysettlement/DeleteMonthlySettlementModal.vue";
 import DivError from "@/components/DivError.vue";
@@ -115,7 +116,6 @@ import { getMonthName } from "@/tools/views/MonthName";
 import { handleBackendError } from "@/tools/views/ThrowError";
 
 import MonthlySettlementControllerHandler from "@/handler/MonthlySettlementControllerHandler";
-import { onBeforeRouteUpdate } from "vue-router";
 
 const serverErrors = ref(new Array<string>());
 
