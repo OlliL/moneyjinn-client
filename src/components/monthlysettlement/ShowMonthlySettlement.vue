@@ -1,4 +1,5 @@
 <template>
+  <DivError :server-errors="serverErrors" />
   <table
     class="table table-striped table-bordered table-hover"
     v-if="monthlySettlementsNoCredit.length"
@@ -56,12 +57,17 @@
 <script lang="ts" setup>
 import { onMounted, ref, watch } from "vue";
 
+import DivError from "../DivError.vue";
 import SpanAmount from "../SpanAmount.vue";
+
+import { handleBackendError } from "@/tools/views/ThrowError";
 
 import { CapitalsourceType } from "@/model/capitalsource/CapitalsourceType";
 import type { MonthlySettlement } from "@/model/monthlysettlement/MonthlySettlement";
 
 import MonthlySettlementControllerHandler from "@/handler/MonthlySettlementControllerHandler";
+
+const serverErrors = ref(new Array<string>());
 
 const props = defineProps({
   year: {
@@ -81,9 +87,11 @@ const monthlySettlementNoCreditSum = ref(0);
 const monthlySettlementCreditSum = ref(0);
 
 const loadMonthlySettlements = (year: number, month: number) => {
+  serverErrors.value = new Array<string>();
+
   dataLoaded.value = false;
-  MonthlySettlementControllerHandler.getMonthlySettlementList(year, month).then(
-    (monthlySettlements: Array<MonthlySettlement>) => {
+  MonthlySettlementControllerHandler.getMonthlySettlementList(year, month)
+    .then((monthlySettlements: Array<MonthlySettlement>) => {
       monthlySettlementsCredit.value = new Array<MonthlySettlement>();
       monthlySettlementsNoCredit.value = new Array<MonthlySettlement>();
       monthlySettlementCreditSum.value = 0;
@@ -99,8 +107,10 @@ const loadMonthlySettlements = (year: number, month: number) => {
         }
       }
       dataLoaded.value = true;
-    }
-  );
+    })
+    .catch((backendError) => {
+      handleBackendError(backendError, serverErrors);
+    });
 };
 
 onMounted(() => {

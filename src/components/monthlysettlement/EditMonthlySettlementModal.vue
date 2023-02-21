@@ -116,7 +116,7 @@ import InputDate from "../InputDate.vue";
 import InputStandard from "../InputStandard.vue";
 import ModalVue from "../Modal.vue";
 
-import { handleServerError } from "@/tools/views/ThrowError";
+import { handleBackendError } from "@/tools/views/ThrowError";
 import { amountSchema, globErr } from "@/tools/views/ZodUtil";
 
 import { CapitalsourceType } from "@/model/capitalsource/CapitalsourceType";
@@ -155,6 +155,8 @@ const _show = (_year?: number, _month?: number) => {
 };
 
 const loadMonthlySettlements = async (_year?: number, _month?: number) => {
+  serverErrors.value = new Array<string>();
+
   monthlySettlementsCredit.value = new Array<MonthlySettlementFormData>();
   monthlySettlementsNoCredit.value = new Array<MonthlySettlementFormData>();
 
@@ -163,64 +165,71 @@ const loadMonthlySettlements = async (_year?: number, _month?: number) => {
   return MonthlySettlementControllerHandler.getMonthlySettlementForEdit(
     _year,
     _month
-  ).then((transporter: MonthlySettlementEditTransporter) => {
-    const monthlySettlements = new Array<MonthlySettlementFormData>();
+  )
+    .then((transporter: MonthlySettlementEditTransporter) => {
+      const monthlySettlements = new Array<MonthlySettlementFormData>();
 
-    for (let mms of transporter.monthlySettlements) {
-      monthlySettlements.push({
-        ...mms,
-        imported: false,
-      });
-    }
-    if (transporter.importedMonthlySettlements) {
-      for (let mms of transporter.importedMonthlySettlements) {
+      for (let mms of transporter.monthlySettlements) {
         monthlySettlements.push({
           ...mms,
-          imported: true,
+          imported: false,
         });
       }
-    }
-
-    for (let mms of monthlySettlements) {
-      if (mms.capitalsourceType === CapitalsourceType.CREDIT) {
-        monthlySettlementsCredit.value.push(mms);
-      } else {
-        monthlySettlementsNoCredit.value.push(mms);
+      if (transporter.importedMonthlySettlements) {
+        for (let mms of transporter.importedMonthlySettlements) {
+          monthlySettlements.push({
+            ...mms,
+            imported: true,
+          });
+        }
       }
-    }
 
-    year.value = transporter.year;
-    month.value = transporter.month;
-    const monthDate = new Date();
-    monthDate.setFullYear(transporter.year);
-    monthDate.setDate(1);
-    monthDate.setMonth(transporter.month - 1);
-    monthDate.setHours(0, 0, 0, 0);
+      for (let mms of monthlySettlements) {
+        if (mms.capitalsourceType === CapitalsourceType.CREDIT) {
+          monthlySettlementsCredit.value.push(mms);
+        } else {
+          monthlySettlementsNoCredit.value.push(mms);
+        }
+      }
 
-    editMode.value = transporter.editMode;
+      year.value = transporter.year;
+      month.value = transporter.month;
+      const monthDate = new Date();
+      monthDate.setFullYear(transporter.year);
+      monthDate.setDate(1);
+      monthDate.setMonth(transporter.month - 1);
+      monthDate.setHours(0, 0, 0, 0);
 
-    Object.keys(values).forEach((field) => setFieldTouched(field, false));
+      editMode.value = transporter.editMode;
 
-    loadedMonth.value = monthDate;
+      Object.keys(values).forEach((field) => setFieldTouched(field, false));
 
-    return monthDate;
-  });
+      loadedMonth.value = monthDate;
+
+      return monthDate;
+    })
+    .catch((backendError) => {
+      handleBackendError(backendError, serverErrors);
+      return undefined;
+    });
 };
 
 const upsertMonthlySettlement = handleSubmit(() => {
+  serverErrors.value = new Array<string>();
+
   let monthlySettlements = new Array<MonthlySettlementFormData>();
   monthlySettlements = monthlySettlementsCredit.value.concat(
     monthlySettlementsNoCredit.value
   );
 
-  MonthlySettlementControllerHandler.upsertMonthlySettlement(
-    monthlySettlements
-  ).then((validationResult) => {
-    if (!handleServerError(validationResult, serverErrors)) {
+  MonthlySettlementControllerHandler.upsertMonthlySettlement(monthlySettlements)
+    .then(() => {
       modalComponent.value._hide();
       emit("monthlySettlementUpserted", year.value, month.value);
-    }
-  });
+    })
+    .catch((backendError) => {
+      handleBackendError(backendError, serverErrors);
+    });
 });
 
 watch(
