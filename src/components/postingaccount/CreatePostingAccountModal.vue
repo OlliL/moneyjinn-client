@@ -42,7 +42,7 @@ import DivError from "../DivError.vue";
 import InputStandard from "../InputStandard.vue";
 import ModalVue from "../Modal.vue";
 
-import { handleServerError } from "@/tools/views/ThrowError";
+import { handleBackendError } from "@/tools/views/ThrowError";
 import { globErr } from "@/tools/views/ZodUtil";
 
 import type { PostingAccount } from "@/model/postingaccount/PostingAccount";
@@ -92,29 +92,29 @@ const _show = async (_mpa?: PostingAccount) => {
 };
 
 const createPostingAccount = handleSubmit(() => {
+  serverErrors.value = new Array<string>();
+
   if (mpa.value.id > 0) {
     //update
-    PostingAccountControllerHandler.updatePostingAccount(mpa.value).then(
-      (validationResult) => {
-        if (!handleServerError(validationResult, serverErrors)) {
-          modalComponent.value._hide();
-          emit("postingAccountUpdated", mpa.value);
-        }
-      }
-    );
+    PostingAccountControllerHandler.updatePostingAccount(mpa.value)
+      .then(() => {
+        modalComponent.value._hide();
+        emit("postingAccountUpdated", mpa.value);
+      })
+      .catch((backendError) => {
+        handleBackendError(backendError, serverErrors);
+      });
   } else {
     //create
-    PostingAccountControllerHandler.createPostingAccount(mpa.value).then(
-      (postingAccountValidation) => {
-        const validationResult = postingAccountValidation.validationResult;
-
-        if (!handleServerError(validationResult, serverErrors)) {
-          mpa.value = postingAccountValidation.mpa;
-          modalComponent.value._hide();
-          emit("postingAccountCreated", mpa.value);
-        }
-      }
-    );
+    PostingAccountControllerHandler.createPostingAccount(mpa.value)
+      .then((_mpa) => {
+        mpa.value = _mpa;
+        modalComponent.value._hide();
+        emit("postingAccountCreated", mpa.value);
+      })
+      .catch((backendError) => {
+        handleBackendError(backendError, serverErrors);
+      });
   }
 });
 defineExpose({ _show });

@@ -1,6 +1,7 @@
 <template>
   <ModalVue title="Buchungskonto l&ouml;schen" ref="modalComponent">
     <template #body>
+      <DivError :server-errors="serverErrors" />
       <div class="row">
         <div
           class="text-start d-flex align-items-center col-sm-3 col-xs-5"
@@ -26,11 +27,16 @@
 <script lang="ts" setup>
 import { ref } from "vue";
 
+import DivError from "../DivError.vue";
 import ModalVue from "../Modal.vue";
+
+import { handleBackendError } from "@/tools/views/ThrowError";
 
 import type { PostingAccount } from "@/model/postingaccount/PostingAccount";
 
 import PostingAccountControllerHandler from "@/handler/PostingAccountControllerHandler";
+
+const serverErrors = ref(new Array<string>());
 
 const mpa = ref({} as PostingAccount);
 const modalComponent = ref();
@@ -42,12 +48,16 @@ const _show = (_mpa: PostingAccount) => {
 };
 
 const deletePostingAccount = () => {
-  PostingAccountControllerHandler.deletePostingAccount(mpa.value.id).then(
-    () => {
+  serverErrors.value = new Array<string>();
+
+  PostingAccountControllerHandler.deletePostingAccount(mpa.value.id)
+    .then(() => {
       modalComponent.value._hide();
       emit("postingAccountDeleted", mpa.value);
-    }
-  );
+    })
+    .catch((backendError) => {
+      handleBackendError(backendError, serverErrors);
+    });
 };
 
 defineExpose({ _show });
