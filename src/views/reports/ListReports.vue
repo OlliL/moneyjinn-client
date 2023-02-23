@@ -44,6 +44,8 @@
         </form>
       </div>
     </div>
+    <DivError :server-errors="serverErrors" />
+
     <div class="row">
       <div
         class="col-md-3 text-start g-0"
@@ -79,16 +81,20 @@
 
 <script lang="ts" setup>
 import { onMounted, ref } from "vue";
+import { onBeforeRouteUpdate } from "vue-router";
 
 import router, { Routes } from "@/router";
 
+import DivError from "@/components/DivError.vue";
 import EtfTableVue from "@/components/reports/EtfTable.vue";
 import ReportTableVue from "@/components/reports/ReportTable.vue";
 
 import { getMonthName } from "@/tools/views/MonthName";
 
 import ReportControllerHandler from "@/handler/ReportControllerHandler";
-import { onBeforeRouteUpdate } from "vue-router";
+import { handleBackendError } from "@/tools/views/ThrowError";
+
+const serverErrors = ref(new Array<string>());
 
 const dataLoaded = ref(false);
 const months = ref([] as number[] | undefined);
@@ -120,26 +126,32 @@ onMounted(() => {
 });
 
 const loadData = (year?: number, month?: number) => {
+  serverErrors.value = new Array<string>();
+
   dataLoaded.value = false;
-  ReportControllerHandler.getAvailableMonth(year, month).then((response) => {
-    months.value = response.allMonth;
-    years.value = response.allYears;
+  ReportControllerHandler.getAvailableMonth(year, month)
+    .then((response) => {
+      months.value = response.allMonth;
+      years.value = response.allYears;
 
-    previousMonth.value = response.previousMonth;
-    previousMonthLink.value = response.previousMonthHasMoneyflows === 1;
-    previousYear.value = response.previousYear;
+      previousMonth.value = response.previousMonth;
+      previousMonthLink.value = response.previousMonthHasMoneyflows === 1;
+      previousYear.value = response.previousYear;
 
-    nextMonth.value = response.nextMonth;
-    nextMonthLink.value = response.nextMonthHasMoneyflows === 1;
-    nextYear.value = response.nextYear;
+      nextMonth.value = response.nextMonth;
+      nextMonthLink.value = response.nextMonthHasMoneyflows === 1;
+      nextYear.value = response.nextYear;
 
-    selectedYear.value = response.year;
+      selectedYear.value = response.year;
 
-    if (selectedYear.value != currentlyShownYear.value)
-      currentlyShownYear.value = selectedYear.value;
+      if (selectedYear.value != currentlyShownYear.value)
+        currentlyShownYear.value = selectedYear.value;
 
-    dataLoaded.value = true;
-  });
+      dataLoaded.value = true;
+    })
+    .catch((backendError) => {
+      handleBackendError(backendError, serverErrors);
+    });
 };
 
 const navigateToPreviousMonth = () => {

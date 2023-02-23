@@ -5,6 +5,8 @@
         <h4>Ausgabenauswertung</h4>
       </div>
     </div>
+    <DivError :server-errors="serverErrors" />
+
     <div class="row justify-content-md-center mb-4">
       <div class="col-xl-6 col-md-12 col-xs-12">
         <div class="card w-100 bg-light">
@@ -222,30 +224,34 @@ import {
   CategoryScale,
   LinearScale,
 } from "chart.js";
+import { toFieldValidator } from "@vee-validate/zod";
+import { useField, useForm } from "vee-validate";
 import { computed, onMounted, ref } from "vue";
 import { Bar } from "vue-chartjs";
 import { any, date, number } from "zod";
 
 import ButtonSubmit from "@/components/ButtonSubmit.vue";
+import DivError from "@/components/DivError.vue";
 import InputDate from "@/components/InputDate.vue";
 import SelectPostingAccount from "@/components/postingaccount/SelectPostingAccount.vue";
 
-import { toFixed } from "@/tools/math";
-import { getMonthName } from "@/tools/views/MonthName";
 import { formatNumber } from "@/tools/views/FormatNumber";
+import {
+  generateErrorDataVeeValidate,
+  type ErrorData,
+} from "@/tools/views/ErrorData";
+import { getMonthName } from "@/tools/views/MonthName";
+import { globErr } from "@/tools/views/ZodUtil";
+import { handleBackendError } from "@/tools/views/ThrowError";
+import { toFixed } from "@/tools/math";
 
 import type { PostingAccount } from "@/model/postingaccount/PostingAccount";
 import type { ReportingParameter } from "@/model/report/ReportingParameter";
 import type { ReportingMonthAmount } from "@/model/report/ReportingMonthAmount";
 
 import ReportControllerHandler from "@/handler/ReportControllerHandler";
-import { useField, useForm } from "vee-validate";
-import { globErr } from "@/tools/views/ZodUtil";
-import { toFieldValidator } from "@vee-validate/zod";
-import {
-  generateErrorDataVeeValidate,
-  type ErrorData,
-} from "@/tools/views/ErrorData";
+
+const serverErrors = ref(new Array<string>());
 
 const dataLoaded = ref(false);
 const reportingGraphLoaded = ref(false);
@@ -392,30 +398,36 @@ const singlePostingAccountsLabel = computed(() => {
 });
 
 const loadData = () => {
+  serverErrors.value = new Array<string>();
+
   dataLoaded.value = false;
-  ReportControllerHandler.showReportingForm().then((reportingParameter) => {
-    const minDate = reportingParameter.startDate;
-    const maxDate = reportingParameter.endDate;
+  ReportControllerHandler.showReportingForm()
+    .then((reportingParameter) => {
+      const minDate = reportingParameter.startDate;
+      const maxDate = reportingParameter.endDate;
 
-    if (minDate) {
-      startDateMonth.value = new Date(minDate.getTime());
-      startDateYear.value = new Date(minDate.getTime());
-    }
-    if (maxDate) {
-      endDateMonth.value = new Date(maxDate.getTime());
-      endDateYear.value = new Date(maxDate.getTime());
-    }
+      if (minDate) {
+        startDateMonth.value = new Date(minDate.getTime());
+        startDateYear.value = new Date(minDate.getTime());
+      }
+      if (maxDate) {
+        endDateMonth.value = new Date(maxDate.getTime());
+        endDateYear.value = new Date(maxDate.getTime());
+      }
 
-    postingAccountsYes.value = reportingParameter.selectedPostingAccounts;
-    postingAccountsNo.value = reportingParameter.unselectedPostingAccounts
-      ? reportingParameter.unselectedPostingAccounts
-      : new Array();
-    postingAccounts.value = postingAccountsYes.value.concat(
-      postingAccountsNo.value
-    );
-    dataLoaded.value = true;
-    Object.keys(values).forEach((field) => setFieldTouched(field, false));
-  });
+      postingAccountsYes.value = reportingParameter.selectedPostingAccounts;
+      postingAccountsNo.value = reportingParameter.unselectedPostingAccounts
+        ? reportingParameter.unselectedPostingAccounts
+        : new Array();
+      postingAccounts.value = postingAccountsYes.value.concat(
+        postingAccountsNo.value
+      );
+      dataLoaded.value = true;
+      Object.keys(values).forEach((field) => setFieldTouched(field, false));
+    })
+    .catch((backendError) => {
+      handleBackendError(backendError, serverErrors);
+    });
 };
 
 const movePostingAccounts = (
@@ -521,6 +533,8 @@ const makeChartTitle = (reportingParameter: ReportingParameter): string => {
   return chartTitle;
 };
 const showReportingGraph = handleSubmit(() => {
+  serverErrors.value = new Array<string>();
+
   const reportingParameter = {} as ReportingParameter;
   if (groupByYear.value) {
     if (startDateYear.value && endDateYear.value) {
@@ -552,56 +566,60 @@ const showReportingGraph = handleSubmit(() => {
   }
   reportingGraphLoaded.value = false;
 
-  retrieveGraphData(reportingParameter).then((reportingMonthAmounts) => {
-    if (reportingMonthAmounts) {
-      let chartTitle = makeChartTitle(reportingParameter);
+  retrieveGraphData(reportingParameter)
+    .then((reportingMonthAmounts) => {
+      if (reportingMonthAmounts) {
+        let chartTitle = makeChartTitle(reportingParameter);
 
-      const resultMap = new Map<string, number>();
+        const resultMap = new Map<string, number>();
 
-      if (singlePostingAccounts.value) {
-        chartTitle =
-          reportingParameter.selectedPostingAccounts[0].name +
-          " - " +
-          chartTitle;
-        for (let reportingMonthAmount of reportingMonthAmounts) {
-          let key: string = "";
-          if (groupByYear.value) {
-            key = reportingMonthAmount.year + "";
-          } else {
-            key =
-              getMonthName(reportingMonthAmount.month) +
-              " '" +
-              reportingMonthAmount.year.toString().substring(2, 4);
+        if (singlePostingAccounts.value) {
+          chartTitle =
+            reportingParameter.selectedPostingAccounts[0].name +
+            " - " +
+            chartTitle;
+          for (let reportingMonthAmount of reportingMonthAmounts) {
+            let key: string = "";
+            if (groupByYear.value) {
+              key = reportingMonthAmount.year + "";
+            } else {
+              key =
+                getMonthName(reportingMonthAmount.month) +
+                " '" +
+                reportingMonthAmount.year.toString().substring(2, 4);
+            }
+            resultMap.set(key, reportingMonthAmount.amount * -1);
           }
-          resultMap.set(key, reportingMonthAmount.amount * -1);
-        }
-      } else {
-        for (let reportingMonthAmount of reportingMonthAmounts) {
-          const key = reportingMonthAmount.postingAccountName;
-          let amount = resultMap.get(key);
-          if (amount === undefined) {
-            amount = 0;
+        } else {
+          for (let reportingMonthAmount of reportingMonthAmounts) {
+            const key = reportingMonthAmount.postingAccountName;
+            let amount = resultMap.get(key);
+            if (amount === undefined) {
+              amount = 0;
+            }
+            amount = toFixed(amount + reportingMonthAmount.amount * -1, 2);
+            resultMap.set(key, amount);
           }
-          amount = toFixed(amount + reportingMonthAmount.amount * -1, 2);
-          resultMap.set(key, amount);
+
+          resultMap[Symbol.iterator] = function* () {
+            yield* [...this.entries()].sort((a, b) => b[1] - a[1]);
+          };
         }
 
-        resultMap[Symbol.iterator] = function* () {
-          yield* [...this.entries()].sort((a, b) => b[1] - a[1]);
-        };
-      }
+        chartData.value.labels = new Array();
+        chartData.value.datasets[0].data = new Array();
+        chartOptions.value.plugins.title.text = chartTitle;
 
-      chartData.value.labels = new Array();
-      chartData.value.datasets[0].data = new Array();
-      chartOptions.value.plugins.title.text = chartTitle;
-
-      for (let [key, value] of resultMap) {
-        chartData.value.labels.push(key);
-        chartData.value.datasets[0].data.push(value);
-        chartData.value.datasets[0].backgroundColor.push(randomColor());
+        for (let [key, value] of resultMap) {
+          chartData.value.labels.push(key);
+          chartData.value.datasets[0].data.push(value);
+          chartData.value.datasets[0].backgroundColor.push(randomColor());
+        }
       }
-    }
-    reportingGraphLoaded.value = true;
-  });
+      reportingGraphLoaded.value = true;
+    })
+    .catch((backendError) => {
+      handleBackendError(backendError, serverErrors);
+    });
 });
 </script>

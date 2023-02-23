@@ -5,6 +5,8 @@
         <h5>Geldbewegung {{ monthName }} {{ year }}</h5>
       </div>
 
+      <DivError :server-errors="serverErrors" />
+
       <ReceiptModalVue ref="receiptModal" />
       <DeleteMoneyflowModalVue
         ref="deleteModal"
@@ -223,12 +225,14 @@ import { computed, onMounted, ref, watch } from "vue";
 
 import CapitalsourceTableVue from "./CapitalsourceTable.vue";
 import DeleteMoneyflowModalVue from "../moneyflow/DeleteMoneyflowModal.vue";
+import DivError from "../DivError.vue";
 import EditMoneyflowModalVue from "../moneyflow/EditMoneyflowModal.vue";
 import ReceiptModalVue from "./ReceiptModal.vue";
 import ReportTableRowVue from "./ReportTableRow.vue";
 import SpanAmount from "../SpanAmount.vue";
 
 import { getMonthName } from "@/tools/views/MonthName";
+import { handleBackendError } from "@/tools/views/ThrowError";
 
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 import type { Report } from "@/model/report/Report";
@@ -236,6 +240,8 @@ import { CapitalsourceType } from "@/model/capitalsource/CapitalsourceType";
 import type { ReportTurnoverCapitalsource } from "@/model/report/ReportTurnoverCapitalsource";
 
 import ReportControllerHandler from "@/handler/ReportControllerHandler";
+
+const serverErrors = ref(new Array<string>());
 
 const report = ref({} as Report);
 const dataLoaded = ref(false);
@@ -323,39 +329,45 @@ const assetsYearlyDifference = computed(() => {
 });
 
 const loadData = (year: number, month: number) => {
+  serverErrors.value = new Array<string>();
+
   dataLoaded.value = false;
-  ReportControllerHandler.listReports(year, month).then((_report) => {
-    report.value = _report;
+  ReportControllerHandler.listReports(year, month)
+    .then((_report) => {
+      report.value = _report;
 
-    assetsMonthlyCalculatedTurnover.value = 0;
+      assetsMonthlyCalculatedTurnover.value = 0;
 
-    var assetsLastAmount = 0;
-    var assetsFixAmount = 0;
-    if (report.value.reportTurnoverCapitalsources) {
-      for (const data of report.value.reportTurnoverCapitalsources) {
-        if (
-          data.capitalsourceType === CapitalsourceType.CURRENT_ASSET ||
-          data.capitalsourceType === CapitalsourceType.LONG_TERM_ASSET
-        ) {
-          assetsMonthlyCalculatedTurnover.value += +(
-            data.amountEndOfMonthCalculated - data.amountBeginOfMonthFixed
-          );
-          assetsLastAmount += data.amountBeginOfMonthFixed;
-          if (data.amountEndOfMonthFixed)
-            assetsFixAmount = +(assetsFixAmount + data.amountEndOfMonthFixed);
+      var assetsLastAmount = 0;
+      var assetsFixAmount = 0;
+      if (report.value.reportTurnoverCapitalsources) {
+        for (const data of report.value.reportTurnoverCapitalsources) {
+          if (
+            data.capitalsourceType === CapitalsourceType.CURRENT_ASSET ||
+            data.capitalsourceType === CapitalsourceType.LONG_TERM_ASSET
+          ) {
+            assetsMonthlyCalculatedTurnover.value += +(
+              data.amountEndOfMonthCalculated - data.amountBeginOfMonthFixed
+            );
+            assetsLastAmount += data.amountBeginOfMonthFixed;
+            if (data.amountEndOfMonthFixed)
+              assetsFixAmount = +(assetsFixAmount + data.amountEndOfMonthFixed);
+          }
         }
       }
-    }
-    assetsMonthlyFixedTurnover.value = +(assetsFixAmount - assetsLastAmount);
-    assetsYearlyFixedTurnover.value = +(
-      assetsFixAmount -
-      (report.value.amountBeginOfYear ? report.value.amountBeginOfYear : 0)
-    );
+      assetsMonthlyFixedTurnover.value = +(assetsFixAmount - assetsLastAmount);
+      assetsYearlyFixedTurnover.value = +(
+        assetsFixAmount -
+        (report.value.amountBeginOfYear ? report.value.amountBeginOfYear : 0)
+      );
 
-    sortBy.value.clear();
-    sortBy.value.set("bookingDate", true);
-    dataLoaded.value = true;
-  });
+      sortBy.value.clear();
+      sortBy.value.set("bookingDate", true);
+      dataLoaded.value = true;
+    })
+    .catch((backendError) => {
+      handleBackendError(backendError, serverErrors);
+    });
 };
 const showReceipt = (moneyflowId: number) => {
   receiptModal.value._show(moneyflowId);
