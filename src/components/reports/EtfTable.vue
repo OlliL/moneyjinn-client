@@ -1,4 +1,5 @@
 <template>
+  <DivError :server-errors="serverErrors" />
   <div
     class="row justify-content-md-center py-4"
     v-if="dataLoaded && etfSummaryReceived"
@@ -61,8 +62,12 @@
 <script lang="ts" setup>
 import EtfControllerHandler from "@/handler/EtfControllerHandler";
 import type { EtfSummary } from "@/model/etf/EtfSummary";
+import { handleBackendError } from "@/tools/views/ThrowError";
 import { computed, onMounted, ref, watch } from "vue";
+import DivError from "../DivError.vue";
 import EtfTableRowVue from "./EtfTableRow.vue";
+
+const serverErrors = ref(new Array<string>());
 
 const etfSummaryArray = ref(new Array<EtfSummary>());
 const dataLoaded = ref(false);
@@ -79,11 +84,17 @@ const props = defineProps({
 });
 
 const loadData = (year: number, month: number) => {
+  serverErrors.value = new Array<string>();
+
   dataLoaded.value = false;
-  EtfControllerHandler.listEtfOverview(year, month).then((_etfSummeryArray) => {
-    etfSummaryArray.value = _etfSummeryArray;
-    dataLoaded.value = true;
-  });
+  EtfControllerHandler.listEtfOverview(year, month)
+    .then((_etfSummeryArray) => {
+      etfSummaryArray.value = _etfSummeryArray;
+      dataLoaded.value = true;
+    })
+    .catch((backendError) => {
+      handleBackendError(backendError, serverErrors);
+    });
 };
 
 onMounted(() => {
