@@ -52,6 +52,7 @@
         </table>
       </div>
     </div>
+    <DivError :server-errors="serverErrors" />
     <div class="row justify-content-md-center">
       <div class="col-md-9 col-xs-12">
         <table class="table table-striped table-bordered table-hover">
@@ -92,6 +93,10 @@ import ListPreDefMoneyflowRowVue from "@/components/predefmoneyflow/ListPreDefMo
 import type { PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
 
 import PreDefMoneyflowControllerHandler from "@/handler/PreDefMoneyflowControllerHandler";
+import { handleBackendError } from "@/tools/views/ThrowError";
+import DivError from "@/components/DivError.vue";
+
+const serverErrors = ref(new Array<string>());
 
 const preDefMoneyflows = ref(new Array<PreDefMoneyflow>());
 const allPreDefMoneyflows = ref(new Array<PreDefMoneyflow>());
@@ -132,8 +137,10 @@ const searchContent = () => {
 };
 
 const reloadView = () => {
-  PreDefMoneyflowControllerHandler.fetchAllPreDefMoneyflow().then(
-    (_preDefMoneyflows) => {
+  serverErrors.value = new Array<string>();
+
+  PreDefMoneyflowControllerHandler.fetchAllPreDefMoneyflow()
+    .then((_preDefMoneyflows) => {
       _preDefMoneyflows.sort((a, b) => {
         if (!a.contractpartnerName && !b.contractpartnerName) return 0;
         else if (!a.contractpartnerName) return -1;
@@ -145,8 +152,10 @@ const reloadView = () => {
       });
       allPreDefMoneyflows.value = _preDefMoneyflows;
       searchContent();
-    }
-  );
+    })
+    .catch((backendError) => {
+      handleBackendError(backendError, serverErrors);
+    });
 };
 
 onMounted(() => {

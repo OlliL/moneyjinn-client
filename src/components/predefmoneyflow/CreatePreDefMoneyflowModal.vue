@@ -109,7 +109,7 @@ import SelectPostingAccount from "../postingaccount/SelectPostingAccount.vue";
 import SelectContractpartner from "../contractpartner/SelectContractpartner.vue";
 import SelectCapitalsource from "../capitalsource/SelectCapitalsource.vue";
 
-import { handleServerError } from "@/tools/views/ThrowError";
+import { handleBackendError } from "@/tools/views/ThrowError";
 import { amountSchema, globErr } from "@/tools/views/ZodUtil";
 
 import type { PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
@@ -173,29 +173,29 @@ const _show = async (_mpm?: PreDefMoneyflow) => {
 };
 
 const createPreDefMoneyflow = handleSubmit(() => {
+  serverErrors.value = new Array<string>();
+
   if (mpm.value.id > 0) {
     //update
-    PreDefMoneyflowControllerHandler.updatePreDefMoneyflow(mpm.value).then(
-      (validationResult) => {
-        if (!handleServerError(validationResult, serverErrors)) {
-          modalComponent.value._hide();
-          emit("preDefMoneyflowUpdated", mpm.value);
-        }
-      }
-    );
+    PreDefMoneyflowControllerHandler.updatePreDefMoneyflow(mpm.value)
+      .then(() => {
+        modalComponent.value._hide();
+        emit("preDefMoneyflowUpdated", mpm.value);
+      })
+      .catch((backendError) => {
+        handleBackendError(backendError, serverErrors);
+      });
   } else {
     //create
-    PreDefMoneyflowControllerHandler.createPreDefMoneyflow(mpm.value).then(
-      (preDefMoneyflowValidation) => {
-        const validationResult = preDefMoneyflowValidation.validationResult;
-
-        if (!handleServerError(validationResult, serverErrors)) {
-          mpm.value = preDefMoneyflowValidation.preDefMoneyflow;
-          modalComponent.value._hide();
-          emit("preDefMoneyflowCreated", mpm.value);
-        }
-      }
-    );
+    PreDefMoneyflowControllerHandler.createPreDefMoneyflow(mpm.value)
+      .then((_mpm) => {
+        mpm.value = _mpm;
+        modalComponent.value._hide();
+        emit("preDefMoneyflowCreated", mpm.value);
+      })
+      .catch((backendError) => {
+        handleBackendError(backendError, serverErrors);
+      });
   }
 });
 defineExpose({ _show });
