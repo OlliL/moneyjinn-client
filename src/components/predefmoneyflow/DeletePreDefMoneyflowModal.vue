@@ -4,6 +4,7 @@
     ref="modalComponent"
   >
     <template #body>
+      <DivError :server-errors="serverErrors" />
       <div class="row">
         <div
           class="text-start d-flex align-items-center col-sm-3 col-xs-5"
@@ -102,14 +103,19 @@
 <script lang="ts" setup>
 import { ref } from "vue";
 
+import DivError from "../DivError.vue";
 import ModalVue from "../Modal.vue";
 import SpanAmount from "../SpanAmount.vue";
+import SpanBoolean from "../SpanBoolean.vue";
 import SpanDate from "../SpanDate.vue";
+
+import { handleBackendError } from "@/tools/views/ThrowError";
 
 import type { PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
 
 import PreDefMoneyflowControllerHandler from "@/handler/PreDefMoneyflowControllerHandler";
-import SpanBoolean from "../SpanBoolean.vue";
+
+const serverErrors = ref(new Array<string>());
 
 const mpm = ref({} as PreDefMoneyflow);
 const modalComponent = ref();
@@ -121,12 +127,16 @@ const _show = (_mpm: PreDefMoneyflow) => {
 };
 
 const deletePreDefMoneyflow = () => {
-  PreDefMoneyflowControllerHandler.deletePreDefMoneyflow(mpm.value.id).then(
-    () => {
+  serverErrors.value = new Array<string>();
+
+  PreDefMoneyflowControllerHandler.deletePreDefMoneyflow(mpm.value.id)
+    .then(() => {
       modalComponent.value._hide();
       emit("preDefMoneyflowDeleted", mpm.value);
-    }
-  );
+    })
+    .catch((backendError) => {
+      handleBackendError(backendError, serverErrors);
+    });
 };
 
 defineExpose({ _show });
