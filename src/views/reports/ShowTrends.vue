@@ -5,6 +5,8 @@
         <h4>Trends</h4>
       </div>
     </div>
+    <DivError :server-errors="serverErrors" />
+
     <div class="row justify-content-md-center mb-2">
       <div class="col-xxl-4 col-md-6 col-sm-10 col-xs-12">
         <div class="card w-100 bg-light">
@@ -112,6 +114,7 @@ import { computed, onMounted, ref } from "vue";
 import { Line } from "vue-chartjs";
 import { date, number } from "zod";
 
+import DivError from "@/components/DivError.vue";
 import InputDate from "@/components/InputDate.vue";
 
 import { formatNumber } from "@/tools/views/FormatNumber";
@@ -126,6 +129,9 @@ import type { SelectBoxValue } from "@/model/SelectBoxValue";
 import type { TrendsParameter } from "@/model/report/TrendsParameter";
 
 import ReportControllerHandler from "@/handler/ReportControllerHandler";
+import { handleBackendError } from "@/tools/views/ThrowError";
+
+const serverErrors = ref(new Array<string>());
 
 const schema = {
   startDate: date(globErr("Bitte Startdatum angeben!")),
@@ -282,23 +288,30 @@ onMounted(() => {
 });
 
 const loadData = () => {
+  serverErrors.value = new Array<string>();
+
   dataLoaded.value = false;
-  ReportControllerHandler.showTrendsForm().then((trendsTransporter) => {
-    const minDate = trendsTransporter.startDate;
-    const maxDate = trendsTransporter.endDate;
+  ReportControllerHandler.showTrendsForm()
+    .then((trendsTransporter) => {
+      const minDate = trendsTransporter.startDate;
+      const maxDate = trendsTransporter.endDate;
 
-    startDate.value = minDate;
-    endDate.value = maxDate;
+      startDate.value = minDate;
+      endDate.value = maxDate;
 
-    if (trendsTransporter.selectedCapitalsourceIds)
-      capitalsourceIds.value = trendsTransporter.selectedCapitalsourceIds;
+      if (trendsTransporter.selectedCapitalsourceIds)
+        capitalsourceIds.value = trendsTransporter.selectedCapitalsourceIds;
 
-    dataLoaded.value = true;
-    Object.keys(values).forEach((field) => setFieldTouched(field, false));
-  });
+      dataLoaded.value = true;
+      Object.keys(values).forEach((field) => setFieldTouched(field, false));
+    })
+    .catch((backendError) => {
+      handleBackendError(backendError, serverErrors);
+    });
 };
 
 const showTrends = handleSubmit(() => {
+  serverErrors.value = new Array<string>();
   trendsGraphLoaded.value = false;
 
   const _endDate = endDate.value;
@@ -309,62 +322,68 @@ const showTrends = handleSubmit(() => {
     endDate: _endDate,
     selectedCapitalsourceIds: capitalsourceIds.value,
   };
-  ReportControllerHandler.showTrendsGraph(trendsParameter).then((trends) => {
-    if (trends && trends.trendsSettled && trends.trendsSettled.length > 0) {
-      const labelsSettled: Array<string> = trends.trendsSettled.map(function (
-        e
-      ) {
-        return getXLabel(e.month, e.year);
-      });
+  ReportControllerHandler.showTrendsGraph(trendsParameter)
+    .then((trends) => {
+      if (trends && trends.trendsSettled && trends.trendsSettled.length > 0) {
+        const labelsSettled: Array<string> = trends.trendsSettled.map(function (
+          e
+        ) {
+          return getXLabel(e.month, e.year);
+        });
 
-      const dataSettled: Array<number> = trends.trendsSettled.map(function (e) {
-        return e.amount;
-      });
+        const dataSettled: Array<number> = trends.trendsSettled.map(function (
+          e
+        ) {
+          return e.amount;
+        });
 
-      chartData.value.labels = labelsSettled;
-      chartData.value.datasets[0].data = dataSettled;
+        chartData.value.labels = labelsSettled;
+        chartData.value.datasets[0].data = dataSettled;
 
-      if (trends.trendsCalculated && trends.trendsCalculated.length > 0) {
-        const labelsCalculated: Array<string> = trends.trendsCalculated.map(
-          function (e) {
-            return getXLabel(e.month, e.year);
+        if (trends.trendsCalculated && trends.trendsCalculated.length > 0) {
+          const labelsCalculated: Array<string> = trends.trendsCalculated.map(
+            function (e) {
+              return getXLabel(e.month, e.year);
+            }
+          );
+
+          const dataCalculated = new Array<number | null>();
+
+          for (let i = 0; i < dataSettled.length; i++) {
+            if (i + 1 == dataSettled.length) {
+              dataCalculated.push(dataSettled[i]);
+            } else {
+              dataCalculated.push(null);
+            }
           }
-        );
 
-        const dataCalculated = new Array<number | null>();
+          trends.trendsCalculated.forEach((data) => {
+            dataCalculated.push(data.amount);
+          });
 
-        for (let i = 0; i < dataSettled.length; i++) {
-          if (i + 1 == dataSettled.length) {
-            dataCalculated.push(dataSettled[i]);
-          } else {
-            dataCalculated.push(null);
-          }
+          labelsCalculated.forEach((label) => {
+            chartData.value.labels.push(label);
+          });
+
+          chartData.value.datasets[1].data = dataCalculated;
+          chartData.value.datasets[1].hidden = false;
+        } else {
+          chartData.value.datasets[1].hidden = true;
         }
 
-        trends.trendsCalculated.forEach((data) => {
-          dataCalculated.push(data.amount);
-        });
-
-        labelsCalculated.forEach((label) => {
-          chartData.value.labels.push(label);
-        });
-
-        chartData.value.datasets[1].data = dataCalculated;
-        chartData.value.datasets[1].hidden = false;
-      } else {
-        chartData.value.datasets[1].hidden = true;
+        const startLabel = chartData.value.labels[0];
+        const endLabel =
+          chartData.value.labels[chartData.value.labels.length - 1];
+        chartOptions.value.plugins.title.text =
+          "Vermögenstrend der ausgewählten Kapitalquellen " +
+          startLabel +
+          " bis " +
+          endLabel;
+        trendsGraphLoaded.value = true;
       }
-
-      const startLabel = chartData.value.labels[0];
-      const endLabel =
-        chartData.value.labels[chartData.value.labels.length - 1];
-      chartOptions.value.plugins.title.text =
-        "Vermögenstrend der ausgewählten Kapitalquellen " +
-        startLabel +
-        " bis " +
-        endLabel;
-      trendsGraphLoaded.value = true;
-    }
-  });
+    })
+    .catch((backendError) => {
+      handleBackendError(backendError, serverErrors);
+    });
 });
 </script>
