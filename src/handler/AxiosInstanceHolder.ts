@@ -2,7 +2,6 @@ import type { ErrorResponse, LoginResponse, ValidationResponse } from "@/api";
 import { BackendError, BackendErrorType } from "@/model/BackendError";
 import { ErrorCode } from "@/model/ErrorCode";
 import type { ValidationResult } from "@/model/validation/ValidationResult";
-import { throwError } from "@/tools/views/ThrowError";
 import type { AxiosInstance } from "axios";
 import axios from "axios";
 import {
