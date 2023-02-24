@@ -3,7 +3,7 @@ import AbstractControllerHandler from "@/handler/AbstractControllerHandler";
 import { ErrorCode } from "@/model/ErrorCode";
 import type { MoneyflowReceipt } from "@/model/moneyflow/MoneyflowReceipt";
 import { MoneyflowReceiptType } from "@/model/moneyflow/MoneyflowReceiptType";
-import { throwError } from "@/tools/views/ThrowError";
+import { getError } from "@/tools/views/ThrowError";
 import { AxiosInstanceHolder } from "./AxiosInstanceHolder";
 
 class MoneyflowReceiptControllerHandler extends AbstractControllerHandler {
@@ -36,7 +36,7 @@ class MoneyflowReceiptControllerHandler extends AbstractControllerHandler {
       }
       default: {
         receiptType = MoneyflowReceiptType.UNKNOWN;
-        throwError(ErrorCode.MEDIA_TYPE_UNKNOWN);
+        throw new Error(getError(ErrorCode.MEDIA_TYPE_UNKNOWN));
       }
     }
 

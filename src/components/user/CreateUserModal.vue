@@ -150,7 +150,7 @@ import ModalVue from "../Modal.vue";
 import SelectStandard from "../SelectStandard.vue";
 import SpanDate from "../SpanDate.vue";
 
-import { handleServerError } from "@/tools/views/ThrowError";
+import { handleBackendError } from "@/tools/views/ThrowError";
 import { globErr } from "@/tools/views/ZodUtil";
 
 import type { AccessRelation } from "@/model/user/AccessRelation";
@@ -291,28 +291,28 @@ const createUser = handleSubmit(() => {
         refId: user.value.groupId,
         validFrom: validFrom.value,
       };
-      UserControllerHandler.updateUser(user.value, mar).then(
-        (validationResult) => {
-          if (!handleServerError(validationResult, serverErrors)) {
-            modalComponent.value._hide();
-            emit("userUpdated", user.value);
-          }
-        }
-      );
+      UserControllerHandler.updateUser(user.value, mar)
+        .then(() => {
+          modalComponent.value._hide();
+          emit("userUpdated", user.value);
+        })
+        .catch((backendError) => {
+          handleBackendError(backendError, serverErrors);
+        });
     }
   } else {
     //create
     user.value.userPassword = password1.value;
-    //create
-    UserControllerHandler.createUser(user.value).then((userValidation) => {
-      const validationResult = userValidation.validationResult;
 
-      if (!handleServerError(validationResult, serverErrors)) {
-        user.value = userValidation.user;
+    UserControllerHandler.createUser(user.value)
+      .then((_user) => {
+        user.value = _user;
         modalComponent.value._hide();
         emit("userCreated", user.value);
-      }
-    });
+      })
+      .catch((backendError) => {
+        handleBackendError(backendError, serverErrors);
+      });
   }
 });
 

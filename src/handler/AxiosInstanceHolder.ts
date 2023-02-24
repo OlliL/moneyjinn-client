@@ -128,11 +128,6 @@ export class AxiosInstanceHolder {
     const response = await fetch(requestInfo);
     const loginResponse = (await response.json()) as LoginResponse;
 
-    // TODO: mmmmh.... that looks wrong
-    if (loginResponse.code) {
-      throwError(loginResponse.code);
-    }
-
     return {
       accessToken: loginResponse.token,
       refreshToken: loginResponse.refreshToken,

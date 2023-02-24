@@ -65,13 +65,15 @@
 <script lang="ts" setup>
 import { ref } from "vue";
 
+import DivError from "../DivError.vue";
 import ModalVue from "../Modal.vue";
 import SpanBoolean from "../SpanBoolean.vue";
+
+import { handleBackendError } from "@/tools/views/ThrowError";
 
 import type { User } from "@/model/user/User";
 
 import UserControllerHandler from "@/handler/UserControllerHandler";
-import DivError from "../DivError.vue";
 
 const user = ref({} as User);
 const serverErrors = ref(new Array<string>());
@@ -92,8 +94,8 @@ const deleteUser = () => {
       modalComponent.value._hide();
       emit("userDeleted", user.value);
     })
-    .catch((error) => {
-      serverErrors.value.push(error);
+    .catch((backendError) => {
+      handleBackendError(backendError, serverErrors);
     });
 };
 
