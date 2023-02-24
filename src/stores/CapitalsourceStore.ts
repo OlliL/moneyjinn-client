@@ -17,14 +17,12 @@ export const useCapitalsourceStore = defineStore("capitalsource", {
   },
   actions: {
     initCapitalsourceStore() {
-      if (this.capitalsource.length === 0) {
-        CapitalsourceControllerHandler.fetchAllCapitalsource().then(
-          (capitalsourceArray) => {
-            this.capitalsource = capitalsourceArray;
-            this.capitalsource.sort(this.compareCapitalsource);
-          }
-        );
-      }
+      return CapitalsourceControllerHandler.fetchAllCapitalsource().then(
+        (capitalsourceArray) => {
+          this.capitalsource = capitalsourceArray;
+          this.capitalsource.sort(this.compareCapitalsource);
+        }
+      );
     },
     subscribeToWebsocket() {
       WebSocketHandler.getInstance().subscribe(

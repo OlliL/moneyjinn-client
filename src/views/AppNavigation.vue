@@ -199,6 +199,15 @@
             ></router-link>
           </li>
         </ul>
+        <div v-if="serverErrors">
+          <div
+            class="alert alert-danger text-center"
+            v-for="(error, index) in serverErrors"
+            :key="index"
+          >
+            {{ error }}
+          </div>
+        </div>
         <div class="collapse navbar-collapse dropstart">
           <ul class="navbar-nav ms-auto">
             <li class="nav-item dropdown">
@@ -287,6 +296,8 @@ import { clearAuthTokens } from "axios-jwt";
 import { LogoutApi } from "@/api";
 import { AxiosInstanceHolder } from "@/handler/AxiosInstanceHolder";
 
+const serverErrors = ref(new Array<string>());
+
 const year = new Date().getFullYear();
 const month = new Date().getMonth() + 1;
 const userIsAdmin = ref(false);
@@ -361,7 +372,11 @@ onMounted(() => {
   // make WebSocket connection
   WebSocketHandler.getInstance().connectStompClient();
   // initialize Stores
-  StoreService.getInstance().initAllStores();
+  StoreService.getInstance()
+    .initAllStores()
+    .catch(() => {
+      serverErrors.value.push("Technischer Fehler beim Laden der Stammdaten");
+    });
 });
 
 watch(
@@ -372,6 +387,11 @@ watch(
 );
 </script>
 <style scoped>
+.alert {
+  margin-bottom: 0px !important;
+  margin-left: 20px !important;
+}
+
 .router-link-active {
   background-color: lightgrey;
 }
