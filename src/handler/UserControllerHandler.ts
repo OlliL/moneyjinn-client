@@ -6,7 +6,6 @@ import {
   type CreateUserRequest,
   type LoginRequest,
   type UpdateUserRequest,
-  type ValidationItemTransport,
 } from "@/api";
 
 import {
@@ -23,13 +22,10 @@ import {
   mapAccessRelationToTransport,
   mapAccessRelationTransportToModel,
 } from "./mapper/AccessRelationTransportMapper";
-import { mapValidationItemTransportToModel } from "./mapper/ValidationItemTransportMapper";
 
 import type { Group } from "@/model/group/Group";
-import type { UserValidation } from "@/model/user/UserValidation";
 import type { AccessRelation } from "@/model/user/AccessRelation";
 import type { User } from "@/model/user/User";
-import type { ValidationResult } from "@/model/validation/ValidationResult";
 
 import AbstractControllerHandler from "@/handler/AbstractControllerHandler";
 
@@ -135,7 +131,7 @@ class UserControllerHandler extends AbstractControllerHandler {
     return accessRelations;
   }
 
-  async createUser(mpm: User): Promise<UserValidation> {
+  async createUser(mpm: User): Promise<User> {
     const request = {} as CreateUserRequest;
     request.userTransport = mapUserToTransport(mpm);
 
@@ -150,40 +146,18 @@ class UserControllerHandler extends AbstractControllerHandler {
     const response = await this.api.createUser(request);
 
     const createUserResponse = response.data;
-    const UserValidation = {} as UserValidation;
-    const validationResult: ValidationResult = {
-      result: createUserResponse.result,
-      validationResultItems: createUserResponse.validationItemTransports?.map(
-        (vit: ValidationItemTransport) => {
-          return mapValidationItemTransportToModel(vit);
-        }
-      ),
-    };
-    UserValidation.validationResult = validationResult;
-    if (validationResult.result) {
-      const createMpm: User = mpm;
-      createMpm.id = createUserResponse.userId;
-      UserValidation.user = createMpm;
-    }
-    return UserValidation;
+    const createMpm: User = mpm;
+    createMpm.id = createUserResponse.userId;
+
+    return createMpm;
   }
 
-  async updateUser(mpm: User, mar: AccessRelation): Promise<ValidationResult> {
+  async updateUser(mpm: User, mar: AccessRelation) {
     const request = {} as UpdateUserRequest;
     request.userTransport = mapUserToTransport(mpm);
     request.accessRelationTransport = mapAccessRelationToTransport(mar);
 
-    const response = await this.api.updateUser(request);
-    const updateUserResponse = response.data;
-    const validationResult: ValidationResult = {
-      result: updateUserResponse.result,
-      validationResultItems: updateUserResponse.validationItemTransports?.map(
-        (vit) => {
-          return mapValidationItemTransportToModel(vit);
-        }
-      ),
-    };
-    return validationResult;
+    await this.api.updateUser(request);
   }
 
   async deleteUser(id: number) {

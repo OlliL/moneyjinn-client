@@ -52,8 +52,9 @@
         </table>
       </div>
     </div>
+    <DivError :server-errors="serverErrors" />
     <div class="row justify-content-md-center">
-      <div class="col-md-3 col-xs-12">
+      <div class="col-md-5 col-xs-12">
         <table class="table table-striped table-bordered table-hover">
           <thead>
             <tr>
@@ -90,6 +91,10 @@ import ListUserRowVue from "@/components/user/ListUserRow.vue";
 import type { User } from "@/model/user/User";
 
 import UserControllerHandler from "@/handler/UserControllerHandler";
+import { handleBackendError } from "@/tools/views/ThrowError";
+import DivError from "@/components/DivError.vue";
+
+const serverErrors = ref(new Array<string>());
 
 const users = ref(new Array<User>());
 const allUsers = ref(new Array<User>());
@@ -128,13 +133,19 @@ const searchContent = () => {
 };
 
 const reloadView = () => {
-  UserControllerHandler.fetchAllUser().then((_users) => {
-    _users.sort((a, b) => {
-      return a.userName.toUpperCase().localeCompare(b.userName.toUpperCase());
+  serverErrors.value = new Array<string>();
+
+  UserControllerHandler.fetchAllUser()
+    .then((_users) => {
+      _users.sort((a, b) => {
+        return a.userName.toUpperCase().localeCompare(b.userName.toUpperCase());
+      });
+      allUsers.value = _users;
+      searchContent();
+    })
+    .catch((backendError) => {
+      handleBackendError(backendError, serverErrors);
     });
-    allUsers.value = _users;
-    searchContent();
-  });
 };
 
 onMounted(() => {

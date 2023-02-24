@@ -1,13 +1,7 @@
 import { BackendErrorType, type BackendError } from "@/model/BackendError";
 import { ErrorCode } from "@/model/ErrorCode";
-import type { ValidationResult } from "@/model/validation/ValidationResult";
 import type { Ref } from "vue";
 
-export function throwError(code: number) {
-  throw new Error(getError(code));
-}
-
-// TODO export can be removed after everything is migrated to composition API and vee-validate
 export function getError(code: number, variableArray?: Array<string>) {
   switch (code) {
     case ErrorCode.CONTRACTPARTNER_DOES_NOT_EXIST: {
@@ -154,19 +148,6 @@ export function getError(code: number, variableArray?: Array<string>) {
       return "Fehlertext zu Fehler-ID '" + code + "' ist unbekannt!";
     }
   }
-}
-
-export function handleServerError(
-  validationResult: ValidationResult,
-  serverErrors: Ref<Array<string>>
-): boolean {
-  if (!validationResult.result) {
-    serverErrors.value = new Array<string>();
-    for (const resultItem of validationResult.validationResultItems) {
-      serverErrors.value.push(getError(resultItem.error));
-    }
-  }
-  return !validationResult.result;
 }
 
 export function handleBackendError(

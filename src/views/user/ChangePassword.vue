@@ -72,7 +72,7 @@ import InputStandard from "@/components/InputStandard.vue";
 
 import { useUserSessionStore } from "@/stores/UserSessionStore";
 
-import { getError } from "@/tools/views/ThrowError";
+import { getError, handleBackendError } from "@/tools/views/ThrowError";
 import { globErr } from "@/tools/views/ZodUtil";
 
 import { ErrorCode } from "@/model/ErrorCode";
@@ -102,6 +102,7 @@ const userIsNew = ref(false);
 
 onMounted(() => {
   serverErrors.value = new Array<string>();
+
   const userSessionStore = useUserSessionStore();
   if (userSessionStore.userIsNew) {
     userIsNew.value = true;
@@ -130,8 +131,8 @@ const changePassword = () => {
         });
       }
     })
-    .catch((error) => {
-      serverErrors.value.push(error);
+    .catch((backendError) => {
+      handleBackendError(backendError, serverErrors);
     });
 };
 </script>
