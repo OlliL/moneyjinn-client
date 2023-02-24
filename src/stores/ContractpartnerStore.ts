@@ -13,14 +13,12 @@ export const useContractpartnerStore = defineStore("contractpartner", {
   getters: {},
   actions: {
     initContractpartnerStore() {
-      if (this.contractpartner.length === 0) {
-        ContractpartnerControllerHandler.fetchAllContractpartner().then(
-          (contractpartnerArray) => {
-            this.contractpartner = contractpartnerArray;
-            this.contractpartner.sort(this.compareContractpartnerByName);
-          }
-        );
-      }
+      return ContractpartnerControllerHandler.fetchAllContractpartner().then(
+        (contractpartnerArray) => {
+          this.contractpartner = contractpartnerArray;
+          this.contractpartner.sort(this.compareContractpartnerByName);
+        }
+      );
     },
     subscribeToWebsocket() {
       WebSocketHandler.getInstance().subscribe(

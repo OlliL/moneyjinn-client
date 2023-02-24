@@ -18,9 +18,15 @@ export class StoreService {
   }
 
   public initAllStores() {
-    this.initContractpartner();
-    this.initPostingAccount();
-    this.initCapitalsource();
+    const promiseContractpartner = this.initContractpartner();
+    const promisePostingAccount = this.initPostingAccount();
+    const promiseCapitalsource = this.initCapitalsource();
+
+    return Promise.all([
+      promiseContractpartner,
+      promisePostingAccount,
+      promiseCapitalsource,
+    ]);
   }
 
   public subscribeAllStores() {
@@ -30,15 +36,15 @@ export class StoreService {
   }
 
   private initContractpartner() {
-    this.contractpartnerStore.initContractpartnerStore();
+    return this.contractpartnerStore.initContractpartnerStore();
   }
 
   private initPostingAccount() {
-    this.postingAccountStore.initPostingAccountStore();
+    return this.postingAccountStore.initPostingAccountStore();
   }
 
   private initCapitalsource() {
-    this.capitalsourceStore.initCapitalsourceStore();
+    return this.capitalsourceStore.initCapitalsourceStore();
   }
 
   private subscribeContractpartner() {

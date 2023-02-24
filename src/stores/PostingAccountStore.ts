@@ -22,13 +22,11 @@ export const usePostingAccountStore = defineStore("postingAccount", {
   },
   actions: {
     initPostingAccountStore() {
-      if (this.postingAccount.length === 0) {
-        PostingAccountControllerHandler.fetchAllPostingAccount().then(
-          (postingAccountArray) => {
-            this.postingAccount = postingAccountArray;
-          }
-        );
-      }
+      return PostingAccountControllerHandler.fetchAllPostingAccount().then(
+        (postingAccountArray) => {
+          this.postingAccount = postingAccountArray;
+        }
+      );
     },
     subscribeToWebsocket() {
       WebSocketHandler.getInstance().subscribe(
