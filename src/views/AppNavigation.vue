@@ -83,14 +83,14 @@
                 <router-link
                   class="dropdown-item"
                   :to="{ name: Routes.ShowTrends }"
-                  >Trends</router-link
+                  >{{ $t("ShowTrends.trends") }}</router-link
                 >
               </li>
               <li>
                 <router-link
                   class="dropdown-item"
                   :to="{ name: Routes.ShowReporting }"
-                  >Ausgabenauswertung</router-link
+                  >{{ $t("ShowReporting.costReporting") }}</router-link
                 >
               </li>
             </ul>
@@ -110,7 +110,7 @@
                 <router-link
                   class="dropdown-item"
                   :to="{ name: Routes.CreateMoneyflow }"
-                  >Geldbewegung hinzuf&uuml;gen</router-link
+                  >{{ $t("General.moneyflows") }}</router-link
                 >
               </li>
               <li>
@@ -120,7 +120,7 @@
                 <router-link
                   class="dropdown-item"
                   :to="{ name: Routes.ImportReceipts }"
-                  >Bons importieren</router-link
+                  >{{ $t("ImportReceipts.importReceipts") }}</router-link
                 >
               </li>
               <li>
@@ -131,7 +131,7 @@
                   class="dropdown-item"
                   role="button"
                   @click="showCreateCapitalsourceModal"
-                  >Kapitalquellen</span
+                  >{{ $t("General.capitalsources") }}</span
                 >
               </li>
               <li>
@@ -139,7 +139,7 @@
                   class="dropdown-item"
                   role="button"
                   @click="showCreateContractpartnerModal"
-                  >Vertragspartner</span
+                  >{{ $t("General.contractpartners") }}</span
                 >
               </li>
               <li>
@@ -147,7 +147,7 @@
                   class="dropdown-item"
                   role="button"
                   @click="showPreDefMoneyflowModal"
-                  >vordefinierte Geldbewegungen</span
+                  >{{ $t("General.preDefMoneyflows") }}</span
                 >
               </li>
             </ul>
@@ -167,28 +167,28 @@
                 <router-link
                   class="dropdown-item"
                   :to="{ name: Routes.ListCapitalsources }"
-                  >Kapitalquellen</router-link
+                  >{{ $t("General.capitalsources") }}</router-link
                 >
               </li>
               <li>
                 <router-link
                   class="dropdown-item"
                   :to="{ name: Routes.ListContractpartners }"
-                  >Vertragspartner</router-link
+                  >{{ $t("General.contractpartners") }}</router-link
                 >
               </li>
               <li>
                 <router-link
                   class="dropdown-item"
                   :to="{ name: Routes.ListPreDefMoneyflows }"
-                  >vordefinierte Geldbewegungen</router-link
+                  >{{ $t("General.preDefMoneyflows") }}</router-link
                 >
               </li>
               <li>
                 <router-link
                   class="dropdown-item"
                   :to="{ name: Routes.ListMonthlySettlements }"
-                  >Monatsabschl&uuml;sse</router-link
+                  >{{ $t("General.monthlysettlements") }}</router-link
                 >
               </li>
             </ul>
@@ -224,7 +224,7 @@
                   <router-link
                     class="dropdown-item"
                     :to="{ name: Routes.ChangePassword }"
-                    >Passwortwechsel</router-link
+                    >{{ $t("ChangePassword.changePassword") }}</router-link
                   >
                 </li>
                 <li v-if="userIsAdmin">
@@ -234,7 +234,7 @@
                   <router-link
                     class="dropdown-item"
                     :to="{ name: Routes.ListPostingAccounts }"
-                    >Buchungskonten</router-link
+                    >{{ $t("General.postingAccounts") }}</router-link
                   >
                 </li>
                 <li v-if="userIsAdmin">
@@ -244,14 +244,14 @@
                   <router-link
                     class="dropdown-item"
                     :to="{ name: Routes.ListUsers }"
-                    >Benutzerkonten</router-link
+                    >{{ $t("General.users") }}</router-link
                   >
                 </li>
                 <li v-if="userIsAdmin">
                   <router-link
                     class="dropdown-item"
                     :to="{ name: Routes.ListGroups }"
-                    >Benutzergruppen</router-link
+                    >{{ $t("General.groups") }}</router-link
                   >
                 </li>
               </ul>
@@ -295,6 +295,8 @@ import { WebSocketHandler } from "@/handler/WebSocketHandler";
 import { clearAuthTokens } from "axios-jwt";
 import { LogoutApi } from "@/api";
 import { AxiosInstanceHolder } from "@/handler/AxiosInstanceHolder";
+import { useI18n } from "vue-i18n";
+const { t } = useI18n();
 
 const serverErrors = ref(new Array<string>());
 
@@ -375,7 +377,7 @@ onMounted(() => {
   StoreService.getInstance()
     .initAllStores()
     .catch(() => {
-      serverErrors.value.push("Technischer Fehler beim Laden der Stammdaten");
+      serverErrors.value.push(t("Errors.noMasterData"));
     });
 });
 
