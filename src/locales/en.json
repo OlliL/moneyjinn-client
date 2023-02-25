@@ -1,0 +1,12 @@
+{
+    "General": {
+        "username": "username",
+        "password": "password"
+    },
+    "LoginView": {
+        "welcome": "Welcome!",
+        "enterYourData": "Please enter your user credentials and press „login“.",
+        "login": "login",
+        "by": "by"
+    }
+}

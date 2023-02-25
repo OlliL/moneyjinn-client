@@ -5,12 +5,12 @@
     >
       <div class="card">
         <div class="card-header text-center p-3">
-          <h4>Willkommen!</h4>
+          <h4>{{ $t("LoginView.welcome") }}</h4>
         </div>
         <div class="card-body">
           <div class="text-center p-3">
             <h5>
-              Geben Sie Ihre Nutzerdaten ein und klicken Sie auf „Anmelden“.
+              {{ $t("LoginView.enterYourData") }}
             </h5>
           </div>
           <DivError :server-errors="serverErrors" />
@@ -19,7 +19,7 @@
               v-model="username"
               :validation-schema="schema.username"
               id="username"
-              field-label="Benutzername"
+              :field-label="$t('General.username')"
               :focus="true"
             >
               <template #icon
@@ -34,7 +34,7 @@
               :validation-schema="schema.password"
               field-type="password"
               id="password"
-              field-label="Passwort"
+              :field-label="$t('General.password')"
             >
               <template #icon
                 ><span class="input-group-text"><i class="bi bi-lock"></i></span
@@ -43,7 +43,7 @@
           </div>
           <div class="row no-gutters flex-lg-nowrap mb-2">
             <div class="p-1 form-group col-sm-12 text-center">
-              <ButtonSubmit button-label="Anmelden">
+              <ButtonSubmit :button-label="$t('LoginView.login')">
                 <template #icon
                   ><i class="bi bi-box-arrow-in-right"></i>&nbsp;
                 </template>
@@ -52,7 +52,10 @@
           </div>
         </div>
         <div class="card-footer text-center">
-          <small>moneyjin {{ version }} - &copy; by Oliver Lehmann</small>
+          <small
+            >moneyjin {{ version }} - &copy; {{ $t("LoginView.by") }} Oliver
+            Lehmann</small
+          >
         </div>
       </div>
     </div>
