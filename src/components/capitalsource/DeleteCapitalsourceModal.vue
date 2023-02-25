@@ -7,7 +7,7 @@
           class="text-start d-flex align-items-center col-sm-3 col-xs-5"
           style="font-weight: 700; font-size: 10.5px"
         >
-          Kommentar
+          {{ $t("Capitalsource.name") }}
         </div>
         <div class="text-start col-sm-9">{{ mcs.comment }}</div>
       </div>
@@ -16,7 +16,7 @@
           class="text-start d-flex align-items-center col-sm-3 col-xs-5"
           style="font-weight: 700; font-size: 10.5px"
         >
-          Typ
+          {{ $t("Capitalsource.type") }}
         </div>
         <div class="text-start col-sm-9">{{ typeString }}</div>
       </div>
@@ -25,7 +25,7 @@
           class="text-start d-flex align-items-center col-sm-3 col-xs-5"
           style="font-weight: 700; font-size: 10.5px"
         >
-          Status
+          {{ $t("Capitalsource.state") }}
         </div>
         <div class="text-start col-sm-9">{{ stateString }}</div>
       </div>
@@ -34,7 +34,7 @@
           class="text-start d-flex align-items-center col-sm-3 col-xs-5"
           style="font-weight: 700; font-size: 10.5px"
         >
-          IBAN
+          {{ $t("General.iban") }}
         </div>
         <div class="text-start col-sm-9">{{ mcs.accountNumber }}&nbsp;</div>
       </div>
@@ -43,7 +43,7 @@
           class="text-start d-flex align-items-center col-sm-3 col-xs-5"
           style="font-weight: 700; font-size: 10.5px"
         >
-          BIC
+          {{ $t("General.bic") }}
         </div>
         <div class="text-start col-sm-9">{{ mcs.bankCode }}&nbsp;</div>
       </div>
@@ -52,7 +52,7 @@
           class="text-start d-flex align-items-center col-sm-3 col-xs-5"
           style="font-weight: 700; font-size: 10.5px"
         >
-          g&uuml;ltig ab
+          {{ $t("General.validFrom") }}
         </div>
         <div class="text-start col-sm-9">
           <SpanDate :date="mcs.validFrom" />
@@ -63,7 +63,7 @@
           class="text-start d-flex align-items-center col-sm-3 col-xs-5"
           style="font-weight: 700; font-size: 10.5px"
         >
-          g&uuml;ltig bis
+          {{ $t("General.validTo") }}
         </div>
         <div class="text-start col-sm-9">
           <SpanDate :date="mcs.validTil" />
@@ -74,7 +74,7 @@
           class="text-start d-flex align-items-center col-sm-3 col-xs-5"
           style="font-weight: 700; font-size: 10.5px"
         >
-          Gruppe
+          {{ $t("Capitalsource.groupUse") }}
         </div>
         <div class="text-start col-sm-9">
           <SpanBoolean :value="mcs.groupUse" />
@@ -85,7 +85,7 @@
           class="text-start d-flex align-items-center col-sm-3 col-xs-5"
           style="font-weight: 700; font-size: 10.5px"
         >
-          Datenimport
+          {{ $t("Capitalsource.importAllowed") }}
         </div>
         <div class="text-start col-sm-9">
           <b :style="'color:' + importAllowedColor">{{
@@ -96,7 +96,7 @@
     </template>
     <template #footer>
       <button type="button" class="btn btn-danger" @click="deleteCapitalsource">
-        L&ouml;schen
+        {{ $t("General.delete") }}
       </button>
     </template>
   </ModalVue>

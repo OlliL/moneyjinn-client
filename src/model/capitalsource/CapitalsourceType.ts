@@ -1,3 +1,4 @@
+import i18n from "@/main";
 import type { SelectBoxValue } from "../SelectBoxValue";
 
 export enum CapitalsourceType {
@@ -11,11 +12,11 @@ export enum CapitalsourceType {
 
 export const capitalsourceTypeNames = [
   "",
-  "Umlaufvermögen",
-  "Anlagevermögen",
-  "Rücklagevermögen",
-  "Rückstellungsvermögen",
-  "Kredit",
+  i18n.global.t("Capitalsource.currentAsset"),
+  i18n.global.t("Capitalsource.longTermAsset"),
+  i18n.global.t("Capitalsource.reserveAsset"),
+  i18n.global.t("Capitalsource.provisionAsset"),
+  i18n.global.t("Capitalsource.credit"),
 ];
 
 export const capitalsourceTypeValues = new Array<SelectBoxValue>();

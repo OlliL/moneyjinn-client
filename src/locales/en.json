@@ -9,10 +9,63 @@
         "monthlysettlements": "monthly balances",
         "postingAccounts": "posting accounts",
         "users": "user accounts",
-        "groups": "user groups"
+        "groups": "user groups",
+        "iban": "IBAN",
+        "bic": "BIC",
+        "validFrom": "valid from",
+        "validTil": "valid til",
+        "delete": "delete",
+        "edit": "edit",
+        "reset": "reset",
+        "save": "save",
+        "yes": "yes",
+        "no": "no",
+        "all": "all",
+        "new": "new",
+        "validNow": "valid now",
+        "validation": {
+            "validFrom": "Bitte Gültig ab angeben!",
+            "validTil": "Bitte Gültig bis angeben!"
+        }
     },
     "Errors": {
         "noMasterData": "Technical error while loading master data!"
+    },
+    "ChangePassword": {
+        "changePassword": "change password"
+    },
+    "Capitalsource": {
+        "name": "name",
+        "type": "type",
+        "state": "state",
+        "groupUse": "group usage",
+        "importAllowed": "data import",
+        "nonCash": "non cash",
+        "cash": "cash",
+        "balance": "balance",
+        "currentAsset": "current asset",
+        "longTermAsset": "long term asset",
+        "reserveAsset": "reserve asset",
+        "provisionAsset": "provision asset",
+        "credit": "credit",
+        "searchBy": "search by name...",
+        "title": {
+            "create": "create capitalsource",
+            "update": "update capitalsource"
+        },
+        "validation": {
+            "comment": "Please specify a name!",
+            "type": "Please specify a type!",
+            "state": "Please specify a state!",
+            "groupUse": "Please select a value for group usage!",
+            "importAllowed": "Please select what kind of data import is allowed!"
+        }
+    },
+    "Contractpartner": {},
+    "Moneyflow": {},
+    "PreDefMoneyflow": {},
+    "ImportReceipts": {
+        "importReceipts": "import receipts"
     },
     "LoginView": {
         "welcome": "Welcome!",
@@ -20,20 +73,13 @@
         "login": "login",
         "by": "by"
     },
+    "Modal": {
+        "cancel": "cancel"
+    },
     "ShowReporting": {
         "costReporting": "cost reporting"
     },
     "ShowTrends": {
         "trends": "trends"
-    },
-    "CreateMoneyflow": {},
-    "ImportReceipts": {
-        "importReceipts": "import receipts"
-    },
-    "CreateCapitalsourceModal": {},
-    "CreateContractpartnerModal": {},
-    "CreatePreDefMoneyflowModal": {},
-    "ChangePassword": {
-        "changePassword": "change password"
     }
 }

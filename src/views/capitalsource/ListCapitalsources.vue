@@ -13,7 +13,7 @@
   <div class="container-fluid text-center">
     <div class="row justify-content-md-center">
       <div class="col-xs-12 mb-4">
-        <h4>Kapitalquellen</h4>
+        <h4>{{ $t("General.capitalsources") }}</h4>
       </div>
     </div>
     <div class="row justify-content-md-center mb-4">
@@ -26,7 +26,7 @@
                 class="btn btn-primary"
                 @click="showCreateCapitalsourceModal"
               >
-                Neu
+                {{ $t("General.new") }}
               </button>
             </td>
             <td>
@@ -36,12 +36,12 @@
                   class="btn btn-primary"
                   @click="searchAllContent"
                 >
-                  Alle
+                  {{ $t("General.all") }}
                 </button>
                 <input
                   class="form-control"
                   type="text"
-                  placeholder="Suchen nach Kommentar..."
+                  :placeholder="$t('Capitalsource.searchBy')"
                   v-model="searchString"
                   @input="searchContent"
                 />
@@ -53,9 +53,9 @@
                     v-model="validNow"
                     @change="searchContent"
                   />
-                  <label class="form-check-label" for="capitalsourcesValid"
-                    >Jetzt g&uuml;ltig</label
-                  >
+                  <label class="form-check-label" for="capitalsourcesValid">{{
+                    $t("General.validNow")
+                  }}</label>
                 </div>
               </div>
             </td>
@@ -68,15 +68,15 @@
         <table class="table table-striped table-bordered table-hover">
           <thead>
             <tr>
-              <th>Name</th>
-              <th>Typ</th>
-              <th>Status</th>
-              <th>IBAN</th>
-              <th>BIC</th>
-              <th>g&uuml;ltig ab</th>
-              <th>g&uuml;ltig bis</th>
-              <th>Gruppe</th>
-              <th>Datenimport</th>
+              <th>{{ $t("Capitalsource.name") }}</th>
+              <th>{{ $t("Capitalsource.type") }}</th>
+              <th>{{ $t("Capitalsource.state") }}</th>
+              <th>{{ $t("General.iban") }}</th>
+              <th>{{ $t("General.bic") }}</th>
+              <th>{{ $t("General.validFrom") }}</th>
+              <th>{{ $t("General.validTil") }}</th>
+              <th>{{ $t("Capitalsource.groupUse") }}</th>
+              <th>{{ $t("Capitalsource.importAllowed") }}</th>
               <th colspan="2"></th>
             </tr>
           </thead>

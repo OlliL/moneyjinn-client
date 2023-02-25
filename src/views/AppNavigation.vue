@@ -279,6 +279,7 @@
 
 <script lang="ts" setup>
 import { onMounted, ref, watch } from "vue";
+import { useI18n } from "vue-i18n";
 import { useRoute, type RouteRecordName } from "vue-router";
 
 import router, { Routes } from "@/router";
@@ -295,7 +296,7 @@ import { WebSocketHandler } from "@/handler/WebSocketHandler";
 import { clearAuthTokens } from "axios-jwt";
 import { LogoutApi } from "@/api";
 import { AxiosInstanceHolder } from "@/handler/AxiosInstanceHolder";
-import { useI18n } from "vue-i18n";
+
 const { t } = useI18n();
 
 const serverErrors = ref(new Array<string>());

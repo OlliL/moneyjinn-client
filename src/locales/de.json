@@ -9,10 +9,63 @@
         "monthlysettlements": "Monatsabschlüsse",
         "postingAccounts": "Buchungskonten",
         "users": "Benutzerkonten",
-        "groups": "Benutzergruppen"
+        "groups": "Benutzergruppen",
+        "iban": "IBAN",
+        "bic": "BIC",
+        "validFrom": "Gültig ab",
+        "validTil": "Gültig bis",
+        "delete": "Löschen",
+        "edit": "Bearbeiten",
+        "reset": "Rücksetzen",
+        "save": "Speichern",
+        "yes": "Ja",
+        "no": "Nein",
+        "all": "Alle",
+        "new": "Neu",
+        "validNow": "jetzt gültig",
+        "validation": {
+            "validFrom": "Bitte Gültig ab angeben!",
+            "validTil": "Bitte Gültig bis angeben!"
+        }
     },
     "Errors": {
         "noMasterData": "Technischer Fehler beim Laden der Stammdaten"
+    },
+    "ChangePassword": {
+        "changePassword": "Passwortwechsel"
+    },
+    "Capitalsource": {
+        "name": "Name",
+        "type": "Typ",
+        "state": "Status",
+        "groupUse": "Gruppennutzung",
+        "importAllowed": "Datenimport",
+        "nonCash": "unbar",
+        "cash": "bar",
+        "balance": "Salden",
+        "currentAsset": "Umlaufvermögen",
+        "longTermAsset": "Anlagevermögen",
+        "reserveAsset": "Rücklagevermögen",
+        "provisionAsset": "Rückstellungsvermögen",
+        "credit": "Kredit",
+        "searchBy": "Suchen nach Name...",
+        "title": {
+            "create": "Kapitalquelle hinzufügen",
+            "update": "Kapitalquelle bearbeiten"
+        },
+        "validation": {
+            "comment": "Bitte Name angeben!",
+            "type": "Bitte Typ angeben!",
+            "state": "Bitte Status angeben!",
+            "groupUse": "Bitte Gruppennutzung auswählen!",
+            "importAllowed": "Bitte Importart auswählen!"
+        }
+    },
+    "Contractpartner": {},
+    "Moneyflow": {},
+    "PreDefMoneyflow": {},
+    "ImportReceipts": {
+        "importReceipts": "Bons importieren"
     },
     "LoginView": {
         "welcome": "Willkommen!",
@@ -20,20 +73,13 @@
         "login": "Anmelden",
         "by": "von"
     },
+    "Modal": {
+        "cancel": "Abbrechen"
+    },
     "ShowReporting": {
         "costReporting": "Ausgabenauswertung"
     },
     "ShowTrends": {
         "trends": "trends"
-    },
-    "CreateMoneyflow": {},
-    "ImportReceipts": {
-        "importReceipts": "Bons importieren"
-    },
-    "CreateCapitalsourceModal": {},
-    "CreateContractpartnerModal": {},
-    "CreatePreDefMoneyflowModal": {},
-    "ChangePassword": {
-        "changePassword": "Passwortwechsel"
     }
 }

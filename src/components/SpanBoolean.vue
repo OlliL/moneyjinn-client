@@ -6,6 +6,9 @@
 
 <script lang="ts" setup>
 import { computed } from "vue";
+import { useI18n } from "vue-i18n";
+
+const { t } = useI18n();
 
 const props = defineProps({
   value: {
@@ -19,6 +22,6 @@ const color = computed(() => {
 });
 
 const text = computed(() => {
-  return props.value ? "Ja" : "Nein";
+  return props.value ? t("General.yes") : t("General.no");
 });
 </script>

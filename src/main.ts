@@ -40,3 +40,5 @@ app.use(i18n);
 AxiosInstanceHolder.getInstance();
 
 app.mount("#app");
+
+export default i18n;

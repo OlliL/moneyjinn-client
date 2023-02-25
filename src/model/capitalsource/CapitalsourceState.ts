@@ -1,3 +1,4 @@
+import i18n from "@/main";
 import type { SelectBoxValue } from "../SelectBoxValue";
 
 export enum CapitalsourceState {
@@ -6,7 +7,11 @@ export enum CapitalsourceState {
   CACHE,
 }
 
-export const capitalsourceStateNames = ["", "unbar", "bar"];
+export const capitalsourceStateNames = [
+  "",
+  i18n.global.t("Capitalsource.nonCash"),
+  i18n.global.t("Capitalsource.cash"),
+];
 
 export const capitalsourceStateValues = new Array<SelectBoxValue>();
 for (const state in CapitalsourceState) {
