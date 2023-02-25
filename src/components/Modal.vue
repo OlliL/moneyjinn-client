@@ -27,7 +27,7 @@
             class="btn btn-secondary"
             data-bs-dismiss="modal"
           >
-            Abbrechen
+            {{ $t("Modal.cancel") }}
           </button>
           <slot name="footer"></slot>
         </div>

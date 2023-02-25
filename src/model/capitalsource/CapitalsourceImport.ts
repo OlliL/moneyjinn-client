@@ -1,3 +1,4 @@
+import i18n from "@/main";
 import type { SelectBoxValue } from "../SelectBoxValue";
 
 export enum CapitalsourceImport {
@@ -6,7 +7,11 @@ export enum CapitalsourceImport {
   BALANCE_ALLOWED,
 }
 
-export const capitalsourceImportNames = ["Nein", "Alle", "Salden"];
+export const capitalsourceImportNames = [
+  i18n.global.t("General.no"),
+  i18n.global.t("General.all"),
+  i18n.global.t("Capitalsource.balance"),
+];
 
 export const capitalsourceImportValues = [
   { id: undefined, value: "" },

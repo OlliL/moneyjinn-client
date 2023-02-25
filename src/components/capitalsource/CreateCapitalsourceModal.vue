@@ -14,7 +14,7 @@
                   v-model="mcs.comment"
                   :validation-schema="schema.comment"
                   :id="'comment' + idSuffix"
-                  field-label="Name"
+                  :field-label="$t('Capitalsource.name')"
                 />
               </div>
             </div>
@@ -25,7 +25,7 @@
                 v-model="mcs.type"
                 :validation-schema="schema.type"
                 :id="'type' + idSuffix"
-                field-label="Typ"
+                :field-label="$t('Capitalsource.type')"
                 :select-box-values="capitalsourceTypeValues"
               />
             </div>
@@ -36,7 +36,7 @@
                 v-model="mcs.state"
                 :validation-schema="schema.state"
                 :id="'state' + idSuffix"
-                field-label="Status"
+                :field-label="$t('Capitalsource.state')"
                 :select-box-values="capitalsourceStateValues"
               />
             </div>
@@ -47,7 +47,7 @@
                 v-model="mcs.accountNumber"
                 :validation-schema="schema.accountNumber"
                 :id="'accountNumber' + idSuffix"
-                field-label="IBAN"
+                :field-label="$t('General.iban')"
               />
             </div>
           </div>
@@ -57,7 +57,7 @@
                 v-model="mcs.bankCode"
                 :validation-schema="schema.bankCode"
                 :id="'bankCode' + idSuffix"
-                field-label="BIC"
+                :field-label="$t('General.bic')"
               />
             </div>
           </div>
@@ -67,7 +67,7 @@
                 v-model="mcs.validFrom"
                 :validation-schema="schema.validFrom"
                 :id="'validFrom' + idSuffix"
-                field-label="Gültig ab"
+                :field-label="$t('General.validFrom')"
               />
             </div>
           </div>
@@ -77,7 +77,7 @@
                 v-model="mcs.validTil"
                 :validation-schema="schema.validTil"
                 :id="'validTil' + idSuffix"
-                field-label="Gültig bis"
+                :field-label="$t('General.validTil')"
               />
             </div>
           </div>
@@ -87,7 +87,7 @@
                 v-model="mcs.groupUse"
                 :validation-schema="schema.groupUse"
                 :id="'groupUse' + idSuffix"
-                field-label="Gruppe"
+                :field-label="$t('Capitalsource.groupUse')"
                 :select-box-values="groupUseValues"
               />
             </div>
@@ -98,7 +98,7 @@
                 v-model="mcs.importAllowed"
                 :validation-schema="schema.importAllowed"
                 :id="'importAllowed' + idSuffix"
-                field-label="DatenImport"
+                :field-label="$t('Capitalsource.importAllowed')"
                 :select-box-values="capitalsourceImportValues"
               />
             </div>
@@ -108,10 +108,10 @@
     </template>
     <template #footer>
       <button type="button" class="btn btn-secondary" @click="resetForm">
-        r&uuml;cksetzen
+        {{ $t("General.reset") }}
       </button>
       <ButtonSubmit
-        button-label="Speichern"
+        :button-label="$t('General.save')"
         :form-id="'createCapitalsourceForm' + idSuffix"
       />
     </template>
@@ -121,6 +121,7 @@
 <script lang="ts" setup>
 import { useForm } from "vee-validate";
 import { computed, ref } from "vue";
+import { useI18n } from "vue-i18n";
 import { boolean, date, number, string, ZodType } from "zod";
 
 import ButtonSubmit from "../ButtonSubmit.vue";
@@ -141,6 +142,8 @@ import { capitalsourceTypeValues } from "@/model/capitalsource/CapitalsourceType
 
 import CapitalsourceControllerHandler from "@/handler/CapitalsourceControllerHandler";
 
+const { t } = useI18n();
+
 defineProps({
   idSuffix: {
     type: String,
@@ -151,15 +154,19 @@ defineProps({
 const serverErrors = ref(new Array<string>());
 
 const schema: Partial<{ [key in keyof Capitalsource]: ZodType }> = {
-  comment: string(globErr("Bitte Kommentar angeben!")).min(1),
-  type: number(globErr("Bitte Typ angeben!")).min(1),
-  state: number(globErr("Bitte Status angeben!")).min(1).max(2),
+  comment: string(globErr(t("Capitalsource.validation.comment"))).min(1),
+  type: number(globErr(t("Capitalsource.validation.type"))).min(1),
+  state: number(globErr(t("Capitalsource.validation.state")))
+    .min(1)
+    .max(2),
   accountNumber: string().optional(),
   bankCode: string().optional(),
-  validFrom: date(globErr("Bitte Gültig ab angeben!")),
-  validTil: date(globErr("Bitte Gültig bis angeben!")),
-  groupUse: boolean(globErr("Bitte Gruppennutzung auswählen!")),
-  importAllowed: number(globErr("Bitte Importart auswählen!")).min(0).max(2),
+  validFrom: date(globErr(t("General.validation.validFrom"))),
+  validTil: date(globErr(t("General.validation.validTil"))),
+  groupUse: boolean(globErr(t("Capitalsource.validation.groupUse"))),
+  importAllowed: number(globErr(t("Capitalsource.validation.importAllowed")))
+    .min(0)
+    .max(2),
 };
 
 const mcs = ref({} as Capitalsource);
@@ -169,16 +176,16 @@ const emit = defineEmits(["capitalsourceUpdated", "capitalsourceCreated"]);
 
 const groupUseValues = [
   { id: undefined, value: "" },
-  { id: false, value: "Nein" },
-  { id: true, value: "Ja" },
+  { id: false, value: t("General.no") },
+  { id: true, value: t("General.yes") },
 ] as Array<SelectBoxValue>;
 
 const { handleSubmit, values, setFieldTouched } = useForm();
 
 const title = computed(() => {
   return origMcs.value === undefined
-    ? "Kapitalquelle hinzufügen"
-    : "Kapitalquelle bearbeiten";
+    ? t("Capitalsource.title.create")
+    : t("Capitalsource.title.update");
 });
 
 const resetForm = () => {
