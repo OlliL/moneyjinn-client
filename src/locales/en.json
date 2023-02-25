@@ -31,6 +31,12 @@
     "Errors": {
         "noMasterData": "Technical error while loading master data!"
     },
+    "AppHome": {
+        "taskList": "task list",
+        "importableMoneyflows": "There are moneyflows waiting to be imported!",
+        "createSettlements": "There exists no monthly settlement for the previous month!",
+        "allDone": "It's all done!"
+    },
     "ChangePassword": {
         "changePassword": "change password"
     },

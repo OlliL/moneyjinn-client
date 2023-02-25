@@ -6,7 +6,7 @@
   <div class="container-fluid">
     <div class="row justify-content-md-center text-center">
       <div class="col-xs-12 mb-4">
-        <h4>Aufgabenliste</h4>
+        <h4>{{ $t("AppHome.taskList") }}</h4>
       </div>
     </div>
     <DivError :server-errors="serverErrors" />
@@ -17,13 +17,13 @@
           class="btn btn-primary"
           @click="navigateImportMoneyflows()"
         >
-          bearbeiten
+          {{ $t("General.edit") }}
         </button>
       </div>
       <div
         class="col-8 col-sm-10 col-lg-8 col-xl-6 col-xxl-4 mb-4 d-flex align-items-center"
       >
-        Es liegen noch nicht bearbeitete importierte Geldbewegungen vor!
+        {{ $t("AppHome.importableMoneyflows") }}
       </div>
     </div>
     <div class="row justify-content-md-center" v-if="monthlySettlementMissing">
@@ -33,20 +33,20 @@
           class="btn btn-primary"
           @click="showEditMonthlySettlementModal()"
         >
-          bearbeiten
+          {{ $t("General.edit") }}
         </button>
       </div>
       <div
         class="col-8 col-sm-10 col-lg-8 col-xl-6 col-xxl-4 mb-4 d-flex align-items-center"
       >
-        F&uuml;r den vergangenen Monat existiert kein Monatsabschlu&szlig;!
+        {{ $t("AppHome.createSettlements") }}
       </div>
     </div>
     <div
       class="text-center text-success"
       v-if="dataLoaded && !importedMoneyflows && !monthlySettlementMissing"
     >
-      Alles erledigt! <i class="bi bi-emoji-smile"></i>
+      {{ $t("AppHome.allDone") }} <i class="bi bi-emoji-smile"></i>
     </div>
   </div>
 </template>
