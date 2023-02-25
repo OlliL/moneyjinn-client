@@ -18,6 +18,7 @@ import de from "./locales/de.json";
 import en from "./locales/en.json";
 
 const i18n = createI18n({
+  legacy: false,
   locale: navigator.language,
   fallbackLocale: "en",
   messages: { de, en },

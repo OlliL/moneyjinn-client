@@ -1,12 +1,39 @@
 {
     "General": {
         "username": "username",
-        "password": "password"
+        "password": "password",
+        "moneyflows": "flows of money",
+        "capitalsources": "capitalsources",
+        "contractpartners": "contractpartners",
+        "preDefMoneyflows": "predefined flows of money",
+        "monthlysettlements": "monthly balances",
+        "postingAccounts": "posting accounts",
+        "users": "user accounts",
+        "groups": "user groups"
+    },
+    "Errors": {
+        "noMasterData": "Technical error while loading master data!"
     },
     "LoginView": {
         "welcome": "Welcome!",
         "enterYourData": "Please enter your user credentials and press „login“.",
         "login": "login",
         "by": "by"
+    },
+    "ShowReporting": {
+        "costReporting": "cost reporting"
+    },
+    "ShowTrends": {
+        "trends": "trends"
+    },
+    "CreateMoneyflow": {},
+    "ImportReceipts": {
+        "importReceipts": "import receipts"
+    },
+    "CreateCapitalsourceModal": {},
+    "CreateContractpartnerModal": {},
+    "CreatePreDefMoneyflowModal": {},
+    "ChangePassword": {
+        "changePassword": "change password"
     }
 }

@@ -1,12 +1,39 @@
 {
     "General": {
         "username": "Benutzername",
-        "password": "Passwort"
+        "password": "Passwort",
+        "moneyflows": "Geldbewegungen",
+        "capitalsources": "Kapitalquellen",
+        "contractpartners": "Vertragspartner",
+        "preDefMoneyflows": "vordefinierte Geldbewegungen",
+        "monthlysettlements": "Monatsabschlüsse",
+        "postingAccounts": "Buchungskonten",
+        "users": "Benutzerkonten",
+        "groups": "Benutzergruppen"
+    },
+    "Errors": {
+        "noMasterData": "Technischer Fehler beim Laden der Stammdaten"
     },
     "LoginView": {
         "welcome": "Willkommen!",
         "enterYourData": "Geben Sie Ihre Nutzerdaten ein und klicken Sie auf „Anmelden“.",
         "login": "Anmelden",
         "by": "von"
+    },
+    "ShowReporting": {
+        "costReporting": "Ausgabenauswertung"
+    },
+    "ShowTrends": {
+        "trends": "trends"
+    },
+    "CreateMoneyflow": {},
+    "ImportReceipts": {
+        "importReceipts": "Bons importieren"
+    },
+    "CreateCapitalsourceModal": {},
+    "CreateContractpartnerModal": {},
+    "CreatePreDefMoneyflowModal": {},
+    "ChangePassword": {
+        "changePassword": "Passwortwechsel"
     }
 }
