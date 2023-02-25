@@ -46,6 +46,9 @@ export function getError(code: number, variableArray?: Array<string>) {
     case ErrorCode.NO_SEARCH_CRITERIA_ENTERED: {
       return "Keine Suchkriterien angegeben!";
     }
+    case ErrorCode.USER_HAS_DATA: {
+      return "Der Benutzer hat bereits Daten im System erfasst und darf daher nicht gelöscht werden!";
+    }
     case ErrorCode.WRONG_FILE_FORMAT: {
       return "Die angegebene Datei konnte nicht geparsed werden! Eventuell haben Sie eine falsche Datei oder das falsche Format angegeben?";
     }
@@ -79,14 +82,29 @@ export function getError(code: number, variableArray?: Array<string>) {
     case ErrorCode.CONTRACTPARTNER_NO_LONGER_VALID: {
       return "Der ausgewählte Vertragspartner ist zum gewählten Datum nicht mehr gültig!";
     }
+    case ErrorCode.MONEYFLOWS_OUTSIDE_VALIDITY_PERIOD: {
+      return "Es existieren Geldbewegungen ausserhalb des gewählten Gültigkeitszeitraumes!";
+    }
     case ErrorCode.GROUP_WITH_SAME_NAME_ALREADY_EXISTS: {
       return "Es existiert bereits eine Gruppe mit diesem Namen!";
+    }
+    case ErrorCode.VALIDFROM_NOT_DEFINED: {
+      return "Gültig ab muss angegeben werden!";
     }
     case ErrorCode.USER_WITH_SAME_NAME_ALREADY_EXISTS: {
       return "Es existiert bereits ein Benutzer mit diesem Namen!";
     }
+    case ErrorCode.GROUP_MUST_BE_SPECIFIED: {
+      return "Sie müssen eine Gruppe angeben!";
+    }
+    case ErrorCode.VALIDFROM_EARLIER_THAN_TOMORROW: {
+      return "Gültig ab muss nach heute liegen!";
+    }
     case ErrorCode.BOOKINGDATE_OUTSIDE_GROUP_ASSIGNMENT: {
       return "Sie können keine Geldbewegung zu einem Datum anlegen, an dem Sie in einer anderen Gruppe als Ihrer aktuellen sind!";
+    }
+    case ErrorCode.POSTINGACCOUNT_STILL_REFERENCED: {
+      return "Dieses Buchungskonto kann nicht gelöscht werden, da es noch von einer Geldbewegung oder vordefinierten Geldbewegung referenziert wird!";
     }
     case ErrorCode.POSTINGACCOUNT_WITH_SAME_NAME_ALREADY_EXISTS: {
       return "Es existiert bereits ein Buchungskonto mit diesem Namen!";
@@ -143,6 +161,9 @@ export function getError(code: number, variableArray?: Array<string>) {
     }
     case ErrorCode.AMOUNT_HAS_TO_BE_SPECIFIED: {
       return "Es muss ein Betrag angegeben werden!";
+    }
+    case ErrorCode.MONEYFLOW_DOES_NOT_EXISTS: {
+      return "Die angegebene Geldbewegung existiert nicht!";
     }
     default: {
       return "Fehlertext zu Fehler-ID '" + code + "' ist unbekannt!";
