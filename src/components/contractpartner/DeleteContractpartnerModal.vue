@@ -1,5 +1,5 @@
 <template>
-  <ModalVue title="Kapitalquelle l&ouml;schen" ref="modalComponent">
+  <ModalVue :title="$t('Contractpartner.title.delete')" ref="modalComponent">
     <template #body>
       <DivError :server-errors="serverErrors" />
       <div class="row">
@@ -7,34 +7,34 @@
           class="text-start d-flex align-items-center col-sm-3 col-xs-5"
           style="font-weight: 700; font-size: 10.5px"
         >
-          Name
+          {{ $t("Contractpartner.name") }}
         </div>
-        <div class="text-start col-sm-9">{{ mcp.name }}</div>
+        <div class="text-start col-sm-9">{{ mcp.name }}&nbsp;</div>
       </div>
       <div class="row">
         <div
           class="text-start d-flex align-items-center col-sm-3 col-xs-5"
           style="font-weight: 700; font-size: 10.5px"
         >
-          Stra&szlig;e
+          {{ $t("Contractpartner.street") }}
         </div>
-        <div class="text-start col-sm-9">{{ mcp.street }}</div>
+        <div class="text-start col-sm-9">{{ mcp.street }}&nbsp;</div>
       </div>
       <div class="row">
         <div
           class="text-start d-flex align-items-center col-sm-3 col-xs-5"
           style="font-weight: 700; font-size: 10.5px"
         >
-          Postleitzahl
+          {{ $t("Contractpartner.postcode") }}
         </div>
-        <div class="text-start col-sm-9">{{ mcp.postcode }}</div>
+        <div class="text-start col-sm-9">{{ mcp.postcode }}&nbsp;</div>
       </div>
       <div class="row">
         <div
           class="text-start d-flex align-items-center col-sm-3 col-xs-5"
           style="font-weight: 700; font-size: 10.5px"
         >
-          Stadt
+          {{ $t("Contractpartner.town") }}
         </div>
         <div class="text-start col-sm-9">{{ mcp.town }}&nbsp;</div>
       </div>
@@ -43,7 +43,7 @@
           class="text-start d-flex align-items-center col-sm-3 col-xs-5"
           style="font-weight: 700; font-size: 10.5px"
         >
-          Land
+          {{ $t("Contractpartner.country") }}
         </div>
         <div class="text-start col-sm-9">{{ mcp.country }}&nbsp;</div>
       </div>
@@ -52,7 +52,7 @@
           class="text-start d-flex align-items-center col-sm-3 col-xs-5"
           style="font-weight: 700; font-size: 10.5px"
         >
-          g&uuml;ltig ab
+          {{ $t("General.validFrom") }}
         </div>
         <div class="text-start col-sm-9">
           <SpanDate :date="mcp.validFrom" />
@@ -63,7 +63,7 @@
           class="text-start d-flex align-items-center col-sm-3 col-xs-5"
           style="font-weight: 700; font-size: 10.5px"
         >
-          g&uuml;ltig bis
+          {{ $t("General.validTil") }}
         </div>
         <div class="text-start col-sm-9"><SpanDate :date="mcp.validTil" /></div>
       </div>
@@ -72,7 +72,7 @@
           class="text-start d-flex align-items-center col-sm-3 col-xs-5"
           style="font-weight: 700; font-size: 10.5px"
         >
-          Standard Kommentar
+          {{ $t("Contractpartner.moneyflowComment") }}
         </div>
         <div class="text-start col-sm-9">{{ mcp.moneyflowComment }}&nbsp;</div>
       </div>
@@ -81,7 +81,7 @@
           class="text-start d-flex align-items-center col-sm-3 col-xs-5"
           style="font-weight: 700; font-size: 10.5px"
         >
-          Standard Buchungskonto
+          {{ $t("General.postingAccount") }}
         </div>
         <div class="text-start col-sm-9">
           {{ mcp.postingAccountName }}&nbsp;
@@ -94,7 +94,7 @@
         class="btn btn-danger"
         @click="deleteContractpartner"
       >
-        L&ouml;schen
+        {{ $t("General.delete") }}
       </button>
     </template>
   </ModalVue>

@@ -11,6 +11,7 @@
         "preDefMoneyflow": "predefined flow of money",
         "preDefMoneyflows": "predefined flows of money",
         "monthlysettlements": "monthly balances",
+        "postingAccount": "posting account",
         "postingAccounts": "posting accounts",
         "amount": "amount",
         "comment": "comment",
@@ -34,8 +35,11 @@
         "all": "all",
         "new": "new",
         "validation": {
-            "validFrom": "Bitte Gültig ab angeben!",
-            "validTil": "Bitte Gültig bis angeben!"
+            "validFrom": "Please specify a valid from date!",
+            "validTil": "Please specify a valid to date!",
+            "startDate": "Please specify a start date!",
+            "endDate": "Please specify an end date!",
+            "capitalsource": "Please specify a capitalsource!"
         }
     },
     "Errors": {
@@ -63,7 +67,8 @@
         "searchBy": "search by name...",
         "title": {
             "create": "create capitalsource",
-            "update": "update capitalsource"
+            "update": "update capitalsource",
+            "delete": "delete capitalsource"
         },
         "validation": {
             "comment": "Please specify a name!",
@@ -76,7 +81,24 @@
     "ChangePassword": {
         "changePassword": "change password"
     },
-    "Contractpartner": {},
+    "Contractpartner": {
+        "moneyflowComment": "the moneyflows default comment",
+        "street": "street",
+        "postcode": "postcode",
+        "town": "town",
+        "country": "country",
+        "accounts": "accounts",
+        "searchBy": "search by name...",
+        "title": {
+            "create": "create contractpartner",
+            "update": "update contractpartner",
+            "delete": "delete contractpartner"
+        },
+        "validation": {
+            "name": "Please specify a name!",
+            "postcode": "Postcode must be a number!"
+        }
+    },
     "CompareData": {
         "source": "source",
         "title": "compare data",

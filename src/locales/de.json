@@ -11,6 +11,7 @@
         "preDefMoneyflow": "vordefinierte Geldbewegung",
         "preDefMoneyflows": "vordefinierte Geldbewegungen",
         "monthlysettlements": "Monatsabschlüsse",
+        "postingAccount": "Buchungskonto",
         "postingAccounts": "Buchungskonten",
         "amount": "Betrag",
         "comment": "Kommentar",
@@ -47,7 +48,7 @@
     "AppHome": {
         "taskList": "Aufgabenliste",
         "importableMoneyflows": "Es liegen noch nicht bearbeitete importierte Geldbewegungen vor!",
-        "createSettlements":"Für den vergangenen Monat existiert kein Monatsabschluß!",
+        "createSettlements": "Für den vergangenen Monat existiert kein Monatsabschluß!",
         "allDone": "Alles erledigt!"
     },
     "Capitalsource": {
@@ -66,7 +67,8 @@
         "searchBy": "Suchen nach Name...",
         "title": {
             "create": "Kapitalquelle hinzufügen",
-            "update": "Kapitalquelle bearbeiten"
+            "update": "Kapitalquelle bearbeiten",
+            "delete": "Kapitalquelle löschen"
         },
         "validation": {
             "comment": "Bitte Name angeben!",
@@ -79,7 +81,24 @@
     "ChangePassword": {
         "changePassword": "Passwortwechsel"
     },
-    "Contractpartner": {},
+    "Contractpartner": {
+        "moneyflowComment": "Standard-Kommentar der Geldbewegung",
+        "street": "Straße",
+        "postcode": "Postleitzahl",
+        "town": "Stadt",
+        "country": "Land",
+        "accounts": "Konten",
+        "searchBy": "Suchen nach Name...",
+        "title": {
+            "create": "Vertragspartner hinzufügen",
+            "update": "Vertragspartner bearbeiten",
+            "delete": "Vertragspartner löschen"
+        },
+        "validation": {
+            "name": "Bitte Name angeben!",
+            "postcode": "Postleitzahl muss nummerisch sein"
+        }
+    },
     "CompareData": {
         "source": "Quelle",
         "title": "Datenvergleich",

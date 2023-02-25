@@ -1,5 +1,5 @@
 <template>
-  <ModalVue title="Kapitalquelle l&ouml;schen" ref="modalComponent">
+  <ModalVue :title="$t('Capitalsource.title.delete')" ref="modalComponent">
     <template #body>
       <DivError :server-errors="serverErrors" />
       <div class="row">
