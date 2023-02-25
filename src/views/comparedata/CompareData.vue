@@ -5,7 +5,7 @@
   <div class="container-fluid text-center">
     <div class="row justify-content-md-center">
       <div class="col-xs-12 mb-4">
-        <h4>Datenvergleich</h4>
+        <h4>{{ $t("CompareData.title") }}</h4>
       </div>
     </div>
     <div class="row justify-content-md-center mb-2">
@@ -21,7 +21,7 @@
                       v-model="startDate"
                       :validation-schema="schema.startDate"
                       id="startDate"
-                      field-label="Startdatum"
+                      :field-label="$t('General.startDate')"
                     />
                   </div>
                   <div class="col-md-3 col-xs-12">
@@ -29,7 +29,7 @@
                       v-model="endDate"
                       :validation-schema="schema.endDate"
                       id="endDate"
-                      field-label="Enddatum"
+                      :field-label="$t('General.endDate')"
                     />
                   </div>
                   <div class="col-md-4 col-xs-12">
@@ -37,7 +37,7 @@
                       v-model="capitalsourceId"
                       :validation-schema="schema.capitalsourceId"
                       id-suffix="CompareData"
-                      field-label="Kapitalquelle"
+                      :field-label="$t('General.capitalsource')"
                       :validity-date="new Date()"
                     />
                   </div>
@@ -59,9 +59,9 @@
                   <div class="col-md-6 col-xs-12 mb-2 text-start">
                     <InputFile
                       v-model="files"
-                      :validation-schema-ref="schema.files"
+                      :validation-schema-ref="schema.importfile"
                       id="fileUpload"
-                      field-label="Importdatei"
+                      :field-label="$t('CompareData.importfile')"
                     />
                   </div>
                   <div class="col-md-4 col-xs-12 mb-2">
@@ -69,7 +69,7 @@
                       v-model="compareDataFormat"
                       :validation-schema-ref="schema.compareDataFormat"
                       id="compareDataFormat"
-                      field-label="Format"
+                      :field-label="$t('CompareData.format')"
                       :select-box-values="compareDataFormats"
                     />
                   </div>
@@ -77,7 +77,7 @@
                 <div class="row mt-2">
                   <div class="col-12">
                     <ButtonSubmit
-                      button-label="anzeigen"
+                      :button-label="$t('General.show')"
                       form-id="compareDataForm"
                     />
                   </div>
@@ -96,14 +96,14 @@
           <col style="width: 90%" />
           <tbody>
             <CompareDataResultGroupVue
-              comment="Datens&auml;tze die in der Quelle, aber nicht in der Datenbank, enthalten sind"
+              :comment="$t('CompareData.dataInSourceNotInDb')"
               :compare-data="compareDatasNotInDatabase"
               compare-data-key="notInDatabase"
               :amount-class="compareDatasNotInDatabaseCountClass"
               :capitalsource-comment="capitalsourceComment"
             />
             <CompareDataResultGroupVue
-              comment="Datensätze die in der Datenbank, aber nicht in der Quelle, enthalten sind"
+              :comment="$t('CompareData.dataNotInSourceInDb')"
               :compare-data="compareDatasNotInFile"
               compare-data-key="notInFile"
               :amount-class="compareDatasNotInFileCountClass"
@@ -112,7 +112,7 @@
               @edit-moneyflow="editMoneyflow"
             />
             <CompareDataResultGroupVue
-              comment="passende Datens&auml;tze jedoch mit falscher Kapitalquelle"
+              :comment="$t('CompareData.dataMatchingButWrongCapitalsource')"
               :compare-data="compareDatasWrongCapitalsource"
               compare-data-key="wrongCapitalsource"
               :amount-class="compareDatasWrongCapitalsourceCountClass"
@@ -121,7 +121,7 @@
               @edit-moneyflow="editMoneyflow"
             />
             <CompareDataResultGroupVue
-              comment="passende Datens&auml;tze"
+              :comment="$t('CompareData.dataMatching')"
               :compare-data="compareDatasMatching"
               compare-data-key="matching"
               :amount-class="compareDatasMatchingCountClass"
@@ -139,6 +139,7 @@
 <script lang="ts" setup>
 import { useForm } from "vee-validate";
 import { computed, onMounted, ref } from "vue";
+import { useI18n } from "vue-i18n";
 import { any, date, number, array as arr, instanceof as instof } from "zod";
 
 import ButtonSubmit from "@/components/ButtonSubmit.vue";
@@ -163,22 +164,26 @@ import CompareDataControllerHandler from "@/handler/CompareDataControllerHandler
 import MoneyflowControllerHandler from "@/handler/MoneyflowControllerHandler";
 import { handleBackendError } from "@/tools/views/ThrowError";
 
+const { t } = useI18n();
+
 const serverErrors = ref(new Array<string>());
 
 const schema = {
-  startDate: date(globErr("Bitte Startdatum angeben!")),
-  endDate: date(globErr("Bitte Enddatum angeben!")),
-  capitalsourceId: number(globErr("Bitte Kapitalquelle angeben!")).gt(0),
+  startDate: date(globErr(t("General.validation.startDate"))),
+  endDate: date(globErr(t("General.validation.endDate"))),
+  capitalsourceId: number(globErr(t("General.validation.capitalsource"))).gt(0),
   compareDataFormat: computed(() => {
     if (!sourceIsImport.value) {
-      return number(globErr("Bitte Format angeben!")).gt(0);
+      return number(globErr(t("CompareData.validation.compareDataFormat"))).gt(
+        0
+      );
     } else {
       return any().optional();
     }
   }),
-  files: computed(() => {
+  importfile: computed(() => {
     if (!sourceIsImport.value) {
-      return arr(instof(File), globErr("Bitte Importdatei angeben!"));
+      return arr(instof(File), globErr(t("CompareData.validation.importfile")));
     } else {
       return any().optional();
     }
@@ -212,7 +217,7 @@ onMounted(() => {
 });
 
 const sourceIsImportLabel = computed(() => {
-  return sourceIsImport.value ? "Datenimport" : "Datei";
+  return sourceIsImport.value ? t("CompareData.import") : t("CompareData.file");
 });
 const compareDatasMatchingCount = computed(() => {
   return compareDatasMatching.value ? compareDatasMatching.value.length : 0;

@@ -68,7 +68,7 @@
         <table class="table table-striped table-bordered table-hover">
           <thead>
             <tr>
-              <th>{{ $t("Capitalsource.name") }}</th>
+              <th>{{ $t("General.name") }}</th>
               <th>{{ $t("Capitalsource.type") }}</th>
               <th>{{ $t("Capitalsource.state") }}</th>
               <th>{{ $t("General.iban") }}</th>
