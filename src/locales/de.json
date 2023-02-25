@@ -31,6 +31,12 @@
     "Errors": {
         "noMasterData": "Technischer Fehler beim Laden der Stammdaten"
     },
+    "AppHome": {
+        "taskList": "Aufgabenliste",
+        "importableMoneyflows": "Es liegen noch nicht bearbeitete importierte Geldbewegungen vor!",
+        "createSettlements":"Für den vergangenen Monat existiert kein Monatsabschluß!",
+        "allDone": "Alles erledigt!"
+    },
     "ChangePassword": {
         "changePassword": "Passwortwechsel"
     },
