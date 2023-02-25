@@ -14,7 +14,7 @@
                   v-model="mcs.comment"
                   :validation-schema="schema.comment"
                   :id="'comment' + idSuffix"
-                  :field-label="$t('Capitalsource.name')"
+                  :field-label="$t('General.name')"
                 />
               </div>
             </div>

@@ -2,30 +2,43 @@
     "General": {
         "username": "Benutzername",
         "password": "Passwort",
+        "moneyflow": "Geldbewegung",
         "moneyflows": "Geldbewegungen",
+        "capitalsource": "Kapitalquelle",
         "capitalsources": "Kapitalquellen",
+        "contractpartner": "Vertragspartner",
         "contractpartners": "Vertragspartner",
+        "preDefMoneyflow": "vordefinierte Geldbewegung",
         "preDefMoneyflows": "vordefinierte Geldbewegungen",
         "monthlysettlements": "Monatsabschlüsse",
         "postingAccounts": "Buchungskonten",
+        "amount": "Betrag",
+        "comment": "Kommentar",
+        "name": "Name",
         "users": "Benutzerkonten",
         "groups": "Benutzergruppen",
         "iban": "IBAN",
         "bic": "BIC",
         "validFrom": "Gültig ab",
         "validTil": "Gültig bis",
+        "validNow": "jetzt gültig",
+        "startDate": "Startdatum",
+        "endDate": "Enddatum",
         "delete": "Löschen",
         "edit": "Bearbeiten",
         "reset": "Rücksetzen",
         "save": "Speichern",
+        "show": "Anzeigen",
         "yes": "Ja",
         "no": "Nein",
         "all": "Alle",
         "new": "Neu",
-        "validNow": "jetzt gültig",
         "validation": {
             "validFrom": "Bitte Gültig ab angeben!",
-            "validTil": "Bitte Gültig bis angeben!"
+            "validTil": "Bitte Gültig bis angeben!",
+            "startDate": "Bitte Startdatum angeben!",
+            "endDate": "Bitte Enddatum angeben!",
+            "capitalsource": "Bitte Kapitalquelle angeben!"
         }
     },
     "Errors": {
@@ -37,11 +50,7 @@
         "createSettlements":"Für den vergangenen Monat existiert kein Monatsabschluß!",
         "allDone": "Alles erledigt!"
     },
-    "ChangePassword": {
-        "changePassword": "Passwortwechsel"
-    },
     "Capitalsource": {
-        "name": "Name",
         "type": "Typ",
         "state": "Status",
         "groupUse": "Gruppennutzung",
@@ -67,8 +76,30 @@
             "importAllowed": "Bitte Importart auswählen!"
         }
     },
+    "ChangePassword": {
+        "changePassword": "Passwortwechsel"
+    },
     "Contractpartner": {},
-    "Moneyflow": {},
+    "CompareData": {
+        "source": "Quelle",
+        "title": "Datenvergleich",
+        "import": "Datenimport",
+        "file": "Datei",
+        "importfile": "Importdatei",
+        "format": "Format",
+        "dataInSourceNotInDb": "Datensätze die in der Quelle, aber nicht in der Datenbank, enthalten sind",
+        "dataNotInSourceInDb": "Datensätze die in der Datenbank, aber nicht in der Quelle, enthalten sind",
+        "dataMatchingButWrongCapitalsource": "passende Datensätze jedoch mit falscher Kapitalquelle",
+        "dataMatching": "passende Datensätze",
+        "validation": {
+            "compareDataFormat": "Bitte Format angeben!",
+            "importfile": "Bitte die Importdatei angeben!"
+        }
+    },
+    "Moneyflow": {
+        "bookingdate": "Buchungsdatum",
+        "invoicedate": "Rechnungsdatum"
+    },
     "PreDefMoneyflow": {},
     "ImportReceipts": {
         "importReceipts": "Bons importieren"

@@ -2,27 +2,37 @@
     "General": {
         "username": "username",
         "password": "password",
+        "moneyflow": "flow of money",
         "moneyflows": "flows of money",
+        "capitalsource": "capitalsource",
         "capitalsources": "capitalsources",
+        "contractpartner": "contractpartner",
         "contractpartners": "contractpartners",
+        "preDefMoneyflow": "predefined flow of money",
         "preDefMoneyflows": "predefined flows of money",
         "monthlysettlements": "monthly balances",
         "postingAccounts": "posting accounts",
+        "amount": "amount",
+        "comment": "comment",
+        "name": "name",
         "users": "user accounts",
         "groups": "user groups",
         "iban": "IBAN",
         "bic": "BIC",
         "validFrom": "valid from",
         "validTil": "valid til",
+        "validNow": "valid now",
+        "startDate": "startdate",
+        "endDate": "enddate",
         "delete": "delete",
         "edit": "edit",
         "reset": "reset",
         "save": "save",
+        "show": "show",
         "yes": "yes",
         "no": "no",
         "all": "all",
         "new": "new",
-        "validNow": "valid now",
         "validation": {
             "validFrom": "Bitte Gültig ab angeben!",
             "validTil": "Bitte Gültig bis angeben!"
@@ -37,11 +47,7 @@
         "createSettlements": "There exists no monthly settlement for the previous month!",
         "allDone": "It's all done!"
     },
-    "ChangePassword": {
-        "changePassword": "change password"
-    },
     "Capitalsource": {
-        "name": "name",
         "type": "type",
         "state": "state",
         "groupUse": "group usage",
@@ -67,8 +73,30 @@
             "importAllowed": "Please select what kind of data import is allowed!"
         }
     },
+    "ChangePassword": {
+        "changePassword": "change password"
+    },
     "Contractpartner": {},
-    "Moneyflow": {},
+    "CompareData": {
+        "source": "source",
+        "title": "compare data",
+        "import": "data import",
+        "file": "file",
+        "importfile": "import file",
+        "format": "format",
+        "dataInSourceNotInDb": "Data the source contains, but not the database",
+        "dataNotInSourceInDb": "Data the database contains, but not the source",
+        "dataMatchingButWrongCapitalsource": "matching data but with wrong capitalsource",
+        "dataMatching": "matching data",
+        "validation": {
+            "compareDataFormat": "Please specify a format!",
+            "importfile": "Please specifiy the import file!"
+        }
+    },
+    "Moneyflow": {
+        "bookingdate": "bookingdate",
+        "invoicedate": "invoicedate"
+    },
     "PreDefMoneyflow": {},
     "ImportReceipts": {
         "importReceipts": "import receipts"
