@@ -15,7 +15,7 @@
   <div class="container-fluid text-center">
     <div class="row justify-content-md-center">
       <div class="col-xs-12 mb-4">
-        <h4>Vertragspartner</h4>
+        <h4>{{ $t("General.contractpartner") }}</h4>
       </div>
     </div>
     <div class="row justify-content-md-center mb-4">
@@ -28,7 +28,7 @@
                 class="btn btn-primary"
                 @click="showCreateContractpartnerModal"
               >
-                Neu
+                {{ $t("General.new") }}
               </button>
             </td>
             <td>
@@ -38,12 +38,12 @@
                   class="btn btn-primary"
                   @click="searchAllContent"
                 >
-                  Alle
+                  {{ $t("General.all") }}
                 </button>
                 <input
                   class="form-control"
                   type="text"
-                  placeholder="Suchen nach Name..."
+                  :placeholder="$t('Contractpartner.searchBy')"
                   v-model="searchString"
                   @input="searchContent"
                 />
@@ -55,9 +55,9 @@
                     v-model="validNow"
                     @change="searchContent"
                   />
-                  <label class="form-check-label" for="contractpartnersValid"
-                    >Jetzt g&uuml;ltig</label
-                  >
+                  <label class="form-check-label" for="contractpartnersValid">{{
+                    $t("General.validNow")
+                  }}</label>
                 </div>
               </div>
             </td>
@@ -70,11 +70,11 @@
         <table class="table table-striped table-bordered table-hover">
           <thead>
             <tr>
-              <th>Name</th>
-              <th>g&uuml;ltig ab</th>
-              <th>g&uuml;ltig bis</th>
-              <th>Standard Kommentar</th>
-              <th>Standard Buchungskonto</th>
+              <th>{{ $t("General.name") }}</th>
+              <th>{{ $t("General.validFrom") }}</th>
+              <th>{{ $t("General.validTil") }}</th>
+              <th>{{ $t("Contractpartner.moneyflowComment") }}</th>
+              <th>{{ $t("General.postingAccount") }}</th>
               <th colspan="3"></th>
             </tr>
           </thead>

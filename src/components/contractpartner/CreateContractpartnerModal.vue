@@ -13,7 +13,7 @@
                 v-model="mcp.name"
                 :validation-schema="schema.name"
                 :id="'name' + idSuffix"
-                field-label="Name"
+                :field-label="$t('General.name')"
               />
             </div>
           </div>
@@ -23,7 +23,7 @@
                 v-model="mcp.moneyflowComment"
                 :validation-schema="schema.moneyflowComment"
                 :id="'moneyflowComment' + idSuffix"
-                field-label="Standard-Kommentar der Geldbewegung"
+                :field-label="$t('Contractpartner.moneyflowComment')"
               />
             </div>
           </div>
@@ -34,7 +34,7 @@
                 v-model="mcp.postingAccountId"
                 :validation-schema="schema.postingAccountId"
                 :id-suffix="idSuffix + 'CreateContractpartner'"
-                field-label="Buchungskonto"
+                :field-label="$t('General.postingAccount')"
               />
             </div>
           </div>
@@ -45,7 +45,7 @@
                 v-model="mcp.street"
                 :validation-schema="schema.street"
                 :id="'street' + idSuffix"
-                field-label="Stra&szlig;e"
+                :field-label="$t('Contractpartner.street')"
               />
             </div>
           </div>
@@ -55,7 +55,7 @@
                 v-model="mcp.postcode"
                 :validation-schema="schema.postcode"
                 :id="'postcode' + idSuffix"
-                field-label="Postleitzahl"
+                :field-label="$t('Contractpartner.postcode')"
               />
             </div>
           </div>
@@ -65,7 +65,7 @@
                 v-model="mcp.town"
                 :validation-schema="schema.town"
                 :id="'town' + idSuffix"
-                field-label="Stadt"
+                :field-label="$t('Contractpartner.town')"
               />
             </div>
           </div>
@@ -75,7 +75,7 @@
                 v-model="mcp.country"
                 :validation-schema="schema.country"
                 :id="'country' + idSuffix"
-                field-label="Land"
+                :field-label="$t('Contractpartner.country')"
               />
             </div>
           </div>
@@ -85,7 +85,7 @@
                 v-model="mcp.validFrom"
                 :validation-schema="schema.validFrom"
                 :id="'validFrom' + idSuffix"
-                field-label="Gültig ab"
+                :field-label="$t('General.validFrom')"
               />
             </div>
           </div>
@@ -95,7 +95,7 @@
                 v-model="mcp.validTil"
                 :validation-schema="schema.validTil"
                 :id="'validTil' + idSuffix"
-                field-label="Gültig bis"
+                :field-label="$t('General.validTil')"
               />
             </div>
           </div>
@@ -104,10 +104,10 @@
     </template>
     <template #footer>
       <button type="button" class="btn btn-secondary" @click="resetForm">
-        r&uuml;cksetzen
+        {{ $t("General.reset") }}
       </button>
       <ButtonSubmit
-        button-label="Speichern"
+        :button-label="$t('General.save')"
         :form-id="'createContractpartnerForm' + idSuffix"
       />
     </template>
@@ -117,6 +117,7 @@
 <script lang="ts" setup>
 import { useForm } from "vee-validate";
 import { computed, ref } from "vue";
+import { useI18n } from "vue-i18n";
 import { coerce, date, number, string, ZodType } from "zod";
 
 import ButtonSubmit from "../ButtonSubmit.vue";
@@ -132,6 +133,8 @@ import type { Contractpartner } from "@/model/contractpartner/Contractpartner";
 import ContractpartnerControllerHandler from "@/handler/ContractpartnerControllerHandler";
 import SelectPostingAccount from "../postingaccount/SelectPostingAccount.vue";
 
+const { t } = useI18n();
+
 defineProps({
   idSuffix: {
     type: String,
@@ -142,17 +145,17 @@ defineProps({
 const serverErrors = ref(new Array<string>());
 
 const schema: Partial<{ [key in keyof Contractpartner]: ZodType }> = {
-  name: string(globErr("Bitte Name angeben!")).min(1),
+  name: string(globErr(t("Contractpartner.validation.name"))).min(1),
   moneyflowComment: string().optional(),
   postingAccountId: number().optional(),
   street: string().optional(),
   postcode: coerce
-    .number(globErr("Postleitzahl muss nummerisch sein!"))
+    .number(globErr(t("Contractpartner.validation.postcode")))
     .optional(),
   town: string().optional(),
   country: string().optional(),
-  validFrom: date(globErr("Bitte Gültig ab angeben!")),
-  validTil: date(globErr("Bitte Gültig bis angeben!")),
+  validFrom: date(globErr(t("General.validation.validFrom"))),
+  validTil: date(globErr(t("General.validation.validTil"))),
 };
 
 const mcp = ref({} as Contractpartner);
@@ -164,8 +167,8 @@ const { handleSubmit, values, setFieldTouched } = useForm();
 
 const title = computed(() => {
   return origMcp.value === undefined
-    ? "Vertragspartner hinzufügen"
-    : "Vertragspartner bearbeiten";
+    ? t("Contractpartner.title.create")
+    : t("Contractpartner.title.update");
 });
 
 const resetForm = () => {
