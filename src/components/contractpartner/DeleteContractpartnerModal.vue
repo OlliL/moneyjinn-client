@@ -7,7 +7,7 @@
           class="text-start d-flex align-items-center col-sm-3 col-xs-5"
           style="font-weight: 700; font-size: 10.5px"
         >
-          {{ $t("Contractpartner.name") }}
+          {{ $t("General.name") }}
         </div>
         <div class="text-start col-sm-9">{{ mcp.name }}&nbsp;</div>
       </div>
