@@ -14,7 +14,7 @@
   />
 
   <ModalVue
-    :title="mcp.name + ': Vertragspartnerkonten'"
+    :title="mcp.name + ': ' + $t('General.contractpartnerAccounts')"
     ref="modalComponent"
     max-width="600px"
   >
@@ -24,8 +24,8 @@
         <table class="table table-striped table-bordered table-hover">
           <thead>
             <tr>
-              <th width="40%" class="text-center">IBAN</th>
-              <th width="30%" class="text-center">BIC</th>
+              <th width="40%" class="text-center">{{ $t("General.iban") }}</th>
+              <th width="30%" class="text-center">{{ $t("General.bic") }}</th>
               <th width="30%" class="text-center" colspan="2"></th>
             </tr>
           </thead>
@@ -47,7 +47,7 @@
         class="btn btn-primary"
         @click="showCreateContractpartnerAccountModal"
       >
-        Neu
+        {{ $t("General.new") }}
       </button>
     </template>
   </ModalVue>

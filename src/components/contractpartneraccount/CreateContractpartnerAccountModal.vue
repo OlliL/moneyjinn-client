@@ -13,7 +13,7 @@
                 v-model="mca.accountNumber"
                 :validation-schema="schema.accountNumber"
                 :id="'accountNumber' + idSuffix"
-                field-label="IBAN"
+                :field-label="$t('General.iban')"
               />
             </div>
           </div>
@@ -23,7 +23,7 @@
                 v-model="mca.bankCode"
                 :validation-schema="schema.bankCode"
                 :id="'bankCode' + idSuffix"
-                field-label="BIC"
+                :field-label="$t('General.bic')"
               />
             </div>
           </div>
@@ -32,10 +32,10 @@
     </template>
     <template #footer>
       <button type="button" class="btn btn-secondary" @click="resetForm">
-        r&uuml;cksetzen
+        {{ $t("General.reset") }}
       </button>
       <ButtonSubmit
-        button-label="Speichern"
+        :button-label="$t('General.save')"
         :form-id="'createContractpartnerAccountForm' + idSuffix"
       />
     </template>
@@ -43,8 +43,9 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref } from "vue";
 import { useForm } from "vee-validate";
+import { computed, ref } from "vue";
+import { useI18n } from "vue-i18n";
 import { string, ZodType } from "zod";
 
 import ButtonSubmit from "../ButtonSubmit.vue";
@@ -58,6 +59,8 @@ import { globErr } from "@/tools/views/ZodUtil";
 import type { ContractpartnerAccount } from "@/model/contractpartneraccount/ContractpartnerAccount";
 
 import ContractpartnerAccountControllerHandler from "@/handler/ContractpartnerAccountControllerHandler";
+
+const { t } = useI18n();
 
 const props = defineProps({
   idSuffix: {
@@ -73,12 +76,14 @@ const props = defineProps({
 const serverErrors = ref(new Array<string>());
 
 const schema: Partial<{ [key in keyof ContractpartnerAccount]: ZodType }> = {
-  accountNumber: string(globErr("Bitte IBAN angeben!"))
+  accountNumber: string(
+    globErr(t("ContractpartnerAccount.validation.accountNumber"))
+  )
     .min(1)
-    .max(22, "Die IBAN darf maximal 22 Stellen haben!"),
-  bankCode: string(globErr("Bitte BIC angeben!"))
+    .max(22, t("ContractpartnerAccount.validation.accountNumberMax")),
+  bankCode: string(globErr(t("ContractpartnerAccount.validation.bankCode")))
     .min(1)
-    .max(11, "Die BIC darf maximal 11 Stellen haben!"),
+    .max(11, t("ContractpartnerAccount.validation.bankCodeMax")),
 };
 
 const mca = ref({} as ContractpartnerAccount);
@@ -93,8 +98,8 @@ const { handleSubmit, values, setFieldTouched } = useForm();
 
 const title = computed(() => {
   return origMca.value === undefined
-    ? "Vertragspartnerkonto hinzufügen"
-    : "Vertragspartnerkonto bearbeiten";
+    ? t("ContractpartnerAccount.title.create")
+    : t("ContractpartnerAccount.title.update");
 });
 
 const resetForm = () => {
