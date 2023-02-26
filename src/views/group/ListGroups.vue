@@ -14,7 +14,7 @@
   <div class="container-fluid text-center">
     <div class="row justify-content-md-center">
       <div class="col-xs-12 mb-4">
-        <h4>Benutzergruppen</h4>
+        <h4>{{ $t("General.groups") }}</h4>
       </div>
     </div>
     <div class="row justify-content-md-center mb-4">
@@ -27,7 +27,7 @@
                 class="btn btn-primary"
                 @click="showCreateGroupModal"
               >
-                Neu
+                {{ $t("General.new") }}
               </button>
             </td>
             <td>
@@ -37,12 +37,12 @@
                   class="btn btn-primary"
                   @click="searchAllContent"
                 >
-                  Alle
+                  {{ $t("General.all") }}
                 </button>
                 <input
                   class="form-control"
                   type="text"
-                  placeholder="Suchen nach Name..."
+                  :placeholder="$t('Group.searchBy')"
                   v-model="searchString"
                   @input="searchContent"
                 />
@@ -58,7 +58,7 @@
         <table class="table table-striped table-bordered table-hover">
           <thead>
             <tr>
-              <th>Name</th>
+              <th>{{ $t("General.name") }}</th>
               <th colspan="2"></th>
             </tr>
           </thead>

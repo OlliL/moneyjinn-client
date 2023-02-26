@@ -2,13 +2,13 @@
   <tr>
     <td class="text-start">{{ group.name }}</td>
     <td class="text-center">
-      <span role="button" class="link-primary" @click="editGroup"
-        >bearbeiten</span
+      <span role="button" class="link-primary" @click="editGroup">
+        {{ $t("General.edit") }}</span
       >
     </td>
     <td class="text-center">
-      <span role="button" class="link-primary" @click="deleteGroup"
-        >l&ouml;schen</span
+      <span role="button" class="link-primary" @click="deleteGroup">
+        {{ $t("General.delete") }}</span
       >
     </td>
   </tr>

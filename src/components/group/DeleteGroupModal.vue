@@ -1,5 +1,5 @@
 <template>
-  <ModalVue title="Benutzergruppe l&ouml;schen" ref="modalComponent">
+  <ModalVue :title="$t('Group.title.delete')" ref="modalComponent">
     <template #body>
       <DivError :server-errors="serverErrors" />
       <div class="row">
@@ -7,14 +7,14 @@
           class="text-start d-flex align-items-center col-sm-3 col-xs-5"
           style="font-weight: 700; font-size: 10.5px"
         >
-          Name
+          {{ $t("General.name") }}
         </div>
         <div class="text-start col-sm-9">{{ group.name }}</div>
       </div>
     </template>
     <template #footer>
       <button type="button" class="btn btn-danger" @click="deleteGroup">
-        L&ouml;schen
+        {{ $t("General.delete") }}
       </button>
     </template>
   </ModalVue>

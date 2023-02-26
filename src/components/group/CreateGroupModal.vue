@@ -10,7 +10,7 @@
                 v-model="group.name"
                 :validation-schema="schema.name"
                 id="name"
-                field-label="Name"
+                :field-label="$t('General.name')"
               />
             </div>
           </div>
@@ -19,9 +19,12 @@
     </template>
     <template #footer>
       <button type="button" class="btn btn-secondary" @click="resetForm">
-        r&uuml;cksetzen
+        {{ $t("General.reset") }}
       </button>
-      <ButtonSubmit button-label="Speichern" form-id="createGroupForm" />
+      <ButtonSubmit
+        :button-label="$t('General.save')"
+        form-id="createGroupForm"
+      />
     </template>
   </ModalVue>
 </template>
@@ -29,6 +32,7 @@
 <script lang="ts" setup>
 import { useForm } from "vee-validate";
 import { computed, ref } from "vue";
+import { useI18n } from "vue-i18n";
 import { string, ZodType } from "zod";
 
 import ButtonSubmit from "../ButtonSubmit.vue";
@@ -43,10 +47,12 @@ import type { Group } from "@/model/group/Group";
 import GroupControllerHandler from "@/handler/GroupControllerHandler";
 import InputStandard from "../InputStandard.vue";
 
+const { t } = useI18n();
+
 const serverErrors = ref(new Array<string>());
 
 const schema: Partial<{ [key in keyof Group]: ZodType }> = {
-  name: string(globErr("Bitte Name angeben!")).min(1),
+  name: string(globErr(t("Group.validation.name"))).min(1),
 };
 
 const group = ref({} as Group);
@@ -58,8 +64,8 @@ const { handleSubmit, values, setFieldTouched } = useForm();
 
 const title = computed(() => {
   return origGroup.value === undefined
-    ? "Gruppe hinzufügen"
-    : "Gruppe bearbeiten";
+    ? t("Group.title.create")
+    : t("Group.title.update");
 });
 
 const resetForm = () => {
