@@ -170,6 +170,17 @@
             "transactionCosts": "Please specify the transaction costs!"
         }
     },
+    "Group": {
+        "searchBy": "search by name...",
+        "title": {
+            "create": "create group",
+            "update": "update group",
+            "delete": "delete group"
+        },
+        "validation": {
+            "name": "Please specify a name!"
+        }
+    },
     "Moneyflow": {
         "bookingdate": "bookingdate",
         "invoicedate": "invoicedate"
