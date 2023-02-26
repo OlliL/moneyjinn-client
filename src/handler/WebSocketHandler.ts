@@ -51,15 +51,8 @@ export class WebSocketHandler {
     destination: string,
     callback: (body: string) => any
   ): StompSubscription {
-    const headers = {} as Record<string, string>;
-    HeaderUtil.getInstance().addXsrfHeader(headers);
-
-    return this.stompClient.subscribe(
-      destination,
-      (message) => {
-        callback(message.body);
-      },
-      headers
-    );
+    return this.stompClient.subscribe(destination, (message) => {
+      callback(message.body);
+    });
   }
 }
