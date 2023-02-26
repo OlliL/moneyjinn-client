@@ -12,13 +12,13 @@
     <td class="text-end"><SpanAmount :amount="flow.price" /></td>
     <td class="text-end"><SpanAmount :amount="flow.amount * flow.price" /></td>
     <td class="text-center">
-      <span role="button" class="link-primary" @click="editEtfFlow"
-        >bearbeiten</span
+      <span role="button" class="link-primary" @click="editEtfFlow">
+        {{ $t("General.edit") }}</span
       >
     </td>
     <td class="text-center">
-      <span role="button" class="link-primary" @click="deleteEtfFlow"
-        >l&ouml;schen</span
+      <span role="button" class="link-primary" @click="deleteEtfFlow">
+        {{ $t("General.delete") }}</span
       >
     </td>
   </tr>
