@@ -129,6 +129,47 @@
             "importfile": "Please specifiy the import file!"
         }
     },
+    "ETF": {
+        "etf": "ETF",
+        "etfDepot": "ETF depot",
+        "bookingdate": "bookingdate",
+        "bookingtime": "bookingtime",
+        "amount": "amount",
+        "price": "price per piece",
+        "sumprice": "sum price",
+        "newBooking": "new booking",
+        "effective": "effective",
+        "calculateSale": "calculate sale",
+        "bid": "bid",
+        "ask": "ask",
+        "transactionCosts": "transaction costs",
+        "calculate": "calculate",
+        "calculateResults": {
+            "pieces": "pieces to be sold",
+            "originalBuyPrice": "original buy price",
+            "sellPrice": "sales price",
+            "profit": "profit",
+            "chargeable": "tax relevant part",
+            "newBuyPrice": "new buy price",
+            "rebuyLosses": "resale loss",
+            "overallCosts": "final costs"
+        },
+        "title": {
+            "create": "create ETF booking",
+            "update": "update ETF booking",
+            "delete": "delete ETF booking"
+        },
+        "validation": {
+            "amount": "Please specify an amount!",
+            "price": "Please specify a price per piece!",
+            "isin": "Please select an ETF!",
+            "timestamp": "Please specify a bookingtime!",
+            "nanoseconds": "The bookingtime must be specified in the format 00:00:00:000!",
+            "askPrice": "Please specify the ask price!",
+            "bidPrice": "Please specify the bid price!",
+            "transactionCosts": "Please specify the transaction costs!"
+        }
+    },
     "Moneyflow": {
         "bookingdate": "bookingdate",
         "invoicedate": "invoicedate"

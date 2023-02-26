@@ -129,6 +129,47 @@
             "importfile": "Bitte die Importdatei angeben!"
         }
     },
+    "ETF": {
+        "etf": "ETF",
+        "etfDepot": "ETF Depot",
+        "bookingdate": "Buchungsdatum",
+        "bookingtime": "Buchungszeit",
+        "amount": "Stück",
+        "price": "Stückpreis",
+        "sumprice": "Gesamtpreis",
+        "newBooking": "neue Buchunug",
+        "effective": "Wirksam",
+        "calculateSale": "Verkauf berechnen",
+        "bid": "Verkauf",
+        "ask": "Einkauf",
+        "transactionCosts": "Transaktionskosten",
+        "calculate": "Berechnen",
+        "calculateResults": {
+            "pieces": "zu verkaufende Stück",
+            "originalBuyPrice": "ursprünglicher Kaufpreis",
+            "sellPrice": "Verkaufspreis",
+            "profit": "Gewinn",
+            "chargeable": "davon steuerlich relevant",
+            "newBuyPrice": "neuer Kaufpreis",
+            "rebuyLosses": "Wiederverkaufsverlust",
+            "overallCosts": "Gesamtkosten"
+        },
+        "title": {
+            "create": "ETF Buchung hinzufügen",
+            "update": "ETF Buchung  bearbeiten",
+            "delete": "ETF Buchung  löschen"
+        },
+        "validation": {
+            "amount": "Bitte Stück angeben!",
+            "price": "Bitte Stückpreis angeben!",
+            "isin": "Bitte ETF auswählen!",
+            "timestamp": "Bitte Buchungsdatum angeben!",
+            "nanoseconds": "Bitte Buchungszeit im Format 00:00:00:000 angeben!",
+            "askPrice": "Bitte Einkauf angeben!",
+            "bidPrice": "Bitte Verkauf angeben!",
+            "transactionCosts": "Bitte Transaktionskosten angeben!"
+        }
+    },
     "Moneyflow": {
         "bookingdate": "Buchungsdatum",
         "invoicedate": "Rechnungsdatum"

@@ -10,7 +10,7 @@
                 v-model="etfFlow.isin"
                 :validation-schema="schema.isin"
                 id="etf"
-                field-label="ETF"
+                :field-label="$t('ETF.etf')"
                 :select-box-values="etfs"
               />
             </div>
@@ -21,7 +21,7 @@
                 v-model="bookingdate"
                 :validation-schema="schema.timestamp"
                 id="bookingdate"
-                field-label="Buchungsdatum"
+                :field-label="$t('ETF.bookingdate')"
               />
             </div>
           </div>
@@ -31,7 +31,7 @@
                 v-model="bookingtime"
                 :validation-schema="schema.nanoseconds"
                 id="bookingtime"
-                field-label="Buchungszeit"
+                :field-label="$t('ETF.bookingtime')"
               />
             </div>
           </div>
@@ -43,7 +43,7 @@
                 id="amount"
                 field-type="number"
                 step="0.001"
-                field-label="Stück"
+                :field-label="$t('ETF.amount')"
               />
             </div>
           </div>
@@ -56,7 +56,7 @@
                 id="price"
                 step="0.01"
                 field-type="number"
-                field-label="Stückpreis"
+                :field-label="$t('ETF.price')"
               >
                 <template #icon
                   ><span class="input-group-text"
@@ -70,9 +70,12 @@
     </template>
     <template #footer>
       <button type="button" class="btn btn-secondary" @click="resetForm">
-        r&uuml;cksetzen
+        {{ $t("General.reset") }}
       </button>
-      <ButtonSubmit button-label="Speichern" form-id="createEtfFlowForm" />
+      <ButtonSubmit
+        :button-label="$t('General.save')"
+        form-id="createEtfFlowForm"
+      />
     </template>
   </ModalVue>
 </template>
@@ -80,6 +83,7 @@
 <script lang="ts" setup>
 import { useForm } from "vee-validate";
 import { computed, ref } from "vue";
+import { useI18n } from "vue-i18n";
 import { coerce, date, string, type ZodType, union } from "zod";
 
 import ButtonSubmit from "../ButtonSubmit.vue";
@@ -99,17 +103,19 @@ import type { SelectBoxValue } from "@/model/SelectBoxValue";
 
 import EtfFlowControllerHandler from "@/handler/EtfControllerHandler";
 
+const { t } = useI18n();
+
 const serverErrors = ref(new Array<string>());
 
-const amountErrMsg = globErr("Bitte Stück angeben!");
-const priceErrMsg = globErr("Bitte Stückpreis angeben!");
+const amountErrMsg = globErr(t("ETF.validation.amount"));
+const priceErrMsg = globErr(t("ETF.validation.price"));
 
 const schema: Partial<{ [key in keyof EtfFlow]: ZodType }> = {
-  isin: string(globErr("Bitte ETF angeben!")),
-  timestamp: date(globErr("Bitte Buchungsdatum angeben!")),
-  nanoseconds: string(
-    globErr("Bitte Buchungszeit im Format 00:00:00:000 angeben!")
-  ).regex(new RegExp("^[0-9][0-9]:[0-9][0-9]:[0-9][0-9]:[0-9]{3}$")),
+  isin: string(globErr(t("ETF.validation.isin"))),
+  timestamp: date(globErr(t("ETF.validation.timestamp"))),
+  nanoseconds: string(globErr(t("ETF.validation.nanoseconds"))).regex(
+    new RegExp("^[0-9][0-9]:[0-9][0-9]:[0-9][0-9]:[0-9]{3}$")
+  ),
   amount: union(
     [coerce.number(amountErrMsg).gt(0), coerce.number(amountErrMsg).lt(0)],
     amountErrMsg
@@ -132,8 +138,8 @@ const { handleSubmit, values, setFieldTouched } = useForm();
 
 const title = computed(() => {
   return etfFlow.value === undefined
-    ? "ETF Buchung hinzufügen"
-    : "ETF Buchung bearbeiten";
+    ? t("ETF.title.create")
+    : t("ETF.title.update");
 });
 
 const resetForm = () => {

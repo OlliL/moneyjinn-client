@@ -1,5 +1,5 @@
 <template>
-  <ModalVue title="ETF Buchung l&ouml;schen" ref="modalComponent">
+  <ModalVue :title="$t('ETF.title.delete')" ref="modalComponent">
     <template #body>
       <DivError :server-errors="serverErrors" />
       <div class="row">
@@ -7,7 +7,7 @@
           class="text-start d-flex align-items-center col-sm-3 col-xs-5"
           style="font-weight: 700; font-size: 10.5px"
         >
-          ETF
+          {{ $t("ETF.etf") }}
         </div>
         <div class="text-start col-sm-9">{{ etfName }}</div>
       </div>
@@ -16,7 +16,7 @@
           class="text-start d-flex align-items-center col-sm-3 col-xs-5"
           style="font-weight: 700; font-size: 10.5px"
         >
-          Buchungsdatum
+          {{ $t("ETF.bookingdate") }}
         </div>
         <div class="text-start col-sm-9">{{ timestampString }}</div>
       </div>
@@ -25,7 +25,7 @@
           class="text-start d-flex align-items-center col-sm-3 col-xs-5"
           style="font-weight: 700; font-size: 10.5px"
         >
-          St&uuml;ck
+          {{ $t("ETF.amount") }}
         </div>
         <div class="col-sm-9 text-start">
           <span :class="amountClass">{{ amountString }}</span>
@@ -36,7 +36,7 @@
           class="text-start d-flex align-items-center col-sm-3 col-xs-5"
           style="font-weight: 700; font-size: 10.5px"
         >
-          Preis pro St&uuml;ck
+          {{ $t("ETF.price") }}
         </div>
         <div class="col-sm-9 text-start">
           <SpanAmount :amount="etfFlow.price" />
@@ -45,7 +45,7 @@
     </template>
     <template #footer>
       <button type="button" class="btn btn-danger" @click="deleteEtfFlow">
-        L&ouml;schen
+        {{ $t("General.delete") }}
       </button>
     </template>
   </ModalVue>
