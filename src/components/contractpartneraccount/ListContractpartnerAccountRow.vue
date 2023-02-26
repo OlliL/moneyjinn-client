@@ -7,7 +7,7 @@
         role="button"
         class="link-primary"
         @click="editContractpartnerAccount"
-        >bearbeiten</span
+        >{{ $t("General.edit") }}</span
       >
     </td>
     <td class="text-center">
@@ -15,7 +15,7 @@
         role="button"
         class="link-primary"
         @click="deleteContractpartnerAccount"
-        >l&ouml;schen</span
+        >{{ $t("General.delete") }}</span
       >
     </td>
   </tr>

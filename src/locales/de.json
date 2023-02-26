@@ -8,6 +8,7 @@
         "capitalsources": "Kapitalquellen",
         "contractpartner": "Vertragspartner",
         "contractpartners": "Vertragspartner",
+        "contractpartnerAccounts": "Vertragspartnerkonten",
         "preDefMoneyflow": "vordefinierte Geldbewegung",
         "preDefMoneyflows": "vordefinierte Geldbewegungen",
         "monthlysettlements": "Monatsabschlüsse",
@@ -97,6 +98,19 @@
         "validation": {
             "name": "Bitte Name angeben!",
             "postcode": "Postleitzahl muss nummerisch sein"
+        }
+    },
+    "ContractpartnerAccount": {
+        "title": {
+            "create": "Vertragspartnerkonto hinzufügen",
+            "update": "Vertragspartnerkonto bearbeiten",
+            "delete": "Vertragspartnerkonto löschen"
+        },
+        "validation": {
+            "accountNumber": "Bitte IBAN angeben!",
+            "accountNumberMax": "Die IBAN darf maximal 22 Stellen haben!",
+            "bankCode": "Bitte BIC angeben!",
+            "bankCodeMax": "Die BIC darf maximal 11 Stellen haben!"
         }
     },
     "CompareData": {

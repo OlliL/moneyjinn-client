@@ -8,6 +8,7 @@
         "capitalsources": "capitalsources",
         "contractpartner": "contractpartner",
         "contractpartners": "contractpartners",
+        "contractpartnerAccounts": "contractpartner accounts",
         "preDefMoneyflow": "predefined flow of money",
         "preDefMoneyflows": "predefined flows of money",
         "monthlysettlements": "monthly balances",
@@ -97,6 +98,19 @@
         "validation": {
             "name": "Please specify a name!",
             "postcode": "Postcode must be a number!"
+        }
+    },
+    "ContractpartnerAccount": {
+        "title": {
+            "create": "create contractpartner account",
+            "update": "update contractpartner account",
+            "delete": "delete contractpartner account"
+        },
+        "validation": {
+            "accountNumber": "Please specify the IBAN!",
+            "accountNumberMax": "The IBAN must not exceed 22 characters!",
+            "bankCode": "Please specify the BIC!",
+            "bankCodeMax": "The BIC must not exceed 11 characters!"
         }
     },
     "CompareData": {

@@ -1,6 +1,6 @@
 <template>
   <ModalVue
-    title="Vertragspartnerkonto l&ouml;schen"
+    :title="$t('ContractpartnerAccount.title.delete')"
     ref="modalComponent"
     zIndex="2001"
   >
@@ -11,7 +11,7 @@
           class="text-start d-flex align-items-center col-sm-3 col-xs-5"
           style="font-weight: 700; font-size: 10.5px"
         >
-          IBAN
+          {{ $t("General.iban") }}
         </div>
         <div class="text-start col-sm-9">{{ mca.accountNumber }}</div>
       </div>
@@ -20,7 +20,7 @@
           class="text-start d-flex align-items-center col-sm-3 col-xs-5"
           style="font-weight: 700; font-size: 10.5px"
         >
-          BIC
+          {{ $t("General.bic") }}
         </div>
         <div class="text-start col-sm-9">{{ mca.bankCode }}</div>
       </div>
@@ -31,7 +31,7 @@
         class="btn btn-danger"
         @click="deleteContractpartnerAccount"
       >
-        L&ouml;schen
+        {{ $t("General.delete") }}
       </button>
     </template>
   </ModalVue>
