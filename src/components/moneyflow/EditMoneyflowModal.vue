@@ -1,6 +1,6 @@
 <template>
   <ModalVue
-    title="Geldbewegung bearbeiten"
+    :title="$t('Moneyflow.title.update')"
     ref="modalComponent"
     :max-width="modalWidth"
     v-if="mmf"
@@ -42,10 +42,13 @@
         @click="deleteMoneyflowReceipt"
         v-if="mmf.hasReceipt"
       >
-        Bon l&ouml;schen
+        {{ $t("Moneyflow.deleteReceipt") }}
       </button>
 
-      <ButtonSubmit button-label="Speichern" form-id="updateMoneyflowForm" />
+      <ButtonSubmit
+        :button-label="$t('General.save')"
+        form-id="updateMoneyflowForm"
+      />
     </template>
   </ModalVue>
 </template>
@@ -55,16 +58,17 @@ import { useForm } from "vee-validate";
 import { computed, ref } from "vue";
 
 import ButtonSubmit from "@/components/ButtonSubmit.vue";
+import DivError from "../DivError.vue";
 import EditMoneyflowBase from "@/components/moneyflow/EditMoneyflowBase.vue";
 import ModalVue from "../Modal.vue";
 
-import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
+import { handleBackendError } from "@/tools/views/ThrowError";
 
-import MoneyflowReceiptControllerHandler from "@/handler/MoneyflowReceiptControllerHandler";
+import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 import { MoneyflowReceiptType } from "@/model/moneyflow/MoneyflowReceiptType";
 import type { ImportedMoneyflowReceipt } from "@/model/moneyflow/ImportedMoneyflowReceipt";
-import { handleBackendError } from "@/tools/views/ThrowError";
-import DivError from "../DivError.vue";
+
+import MoneyflowReceiptControllerHandler from "@/handler/MoneyflowReceiptControllerHandler";
 
 const serverErrors = ref(new Array<string>());
 

@@ -6,7 +6,7 @@
         v-model="mmf.bookingDate"
         :validation-schema="schema.bookingDate"
         id="bookingDate"
-        field-label="Buchungsdatum"
+        :field-label="$t('Moneyflow.bookingdate')"
       />
     </div>
     <div class="col-md-2 col-xs-12 mb-2">
@@ -14,7 +14,7 @@
         v-model="mmf.invoiceDate"
         :validation-schema="schema.invoiceDate"
         id="invoiceDate"
-        field-label="Rechnungsdatum"
+        :field-label="$t('Moneyflow.invoicedate')"
       />
     </div>
     <div class="col-md-4 col-xs-12 mb-2">
@@ -22,7 +22,7 @@
         v-model="mmf.contractpartnerId"
         :validation-schema="schema.contractpartnerId"
         :id-suffix="'CreateMoneyflow' + idSuffix"
-        field-label="Vertragspartner"
+        :field-label="$t('General.contractpartner')"
         :validity-date="validityDate"
       />
     </div>
@@ -32,7 +32,7 @@
         v-model="mmf.capitalsourceId"
         :validation-schema="schema.capitalsourceId"
         :id-suffix="'CreateMoneyflow' + idSuffix"
-        field-label="Kapitalquelle"
+        :field-label="$t('General.capitalsource')"
         :validity-date="validityDate"
       />
     </div>
@@ -46,7 +46,7 @@
         :id="'amount' + idSuffix"
         field-type="number"
         step="0.01"
-        field-label="Betrag"
+        :field-label="$t('General.amount')"
         :focus="true"
       >
         <template #icon
@@ -61,7 +61,7 @@
         v-model="mmf.comment"
         :validation-schema-ref="schema.comment"
         :id="'comment' + idSuffix"
-        field-label="Kommentar"
+        :field-label="$t('General.comment')"
       />
     </div>
     <div class="col-md-3 col-xs-12 mb-2" v-show="showMoneyflowFields">
@@ -69,7 +69,7 @@
         v-model="mmf.postingAccountId"
         :validation-schema-ref="schema.postingAccountId"
         :id-suffix="'CreateMoneyflow' + idSuffix"
-        field-label="Buchungskonto"
+        :field-label="$t('General.postingAccount')"
       />
     </div>
     <div
@@ -86,7 +86,7 @@
           :value="false"
         />
         <label class="btn btn-outline-success" :for="'public' + idSuffix"
-          ><small>&ouml;ffentlich</small></label
+          ><small> {{ $t("Moneyflow.public") }}</small></label
         >
 
         <input
@@ -99,7 +99,7 @@
           :value="true"
         />
         <label class="btn btn-outline-danger" :for="'private' + idSuffix"
-          ><small>privat</small></label
+          ><small>{{ $t("Moneyflow.private") }}</small></label
         >
       </div>
       <div class="btn-group mx-2" role="group">
@@ -141,7 +141,7 @@
             :href="'#collapseSplitEntries' + idSuffix"
             :id="'mseContainer' + idSuffix"
             ref="mseContainer"
-            >Unterbuchungen</a
+            >{{ $t("Moneyflow.subbooking") }}</a
           >
         </div>
         <div class="collapse" :id="'collapseSplitEntries' + idSuffix">
@@ -177,6 +177,7 @@
 
 <script lang="ts" setup>
 import { computed, onMounted, ref, watch, type PropType } from "vue";
+import { useI18n } from "vue-i18n";
 import { date, number, string } from "zod";
 
 import DivError from "../DivError.vue";
@@ -203,22 +204,26 @@ import type { PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
 import MoneyflowControllerHandler from "@/handler/MoneyflowControllerHandler";
 import ImportedMoneyflowControllerHandler from "@/handler/ImportedMoneyflowControllerHandler";
 
+const { t } = useI18n();
+
 const schema = {
-  amount: amountSchema("Bitte Betrag angeben!"),
-  bookingDate: date(globErr("Bitte Buchungsdatum angeben!")),
+  amount: amountSchema(t("Moneyflow.validation.amount")),
+  bookingDate: date(globErr(t("Moneyflow.validation.bookingDate"))),
   invoiceDate: date().optional(),
-  contractpartnerId: number(globErr("Bitte Vertragspartner angeben!")).gt(0),
+  contractpartnerId: number(
+    globErr(t("Moneyflow.validation.contractpartnerId"))
+  ).gt(0),
   comment: computed(() =>
     showMoneyflowFields.value
-      ? string(globErr("Bitte Kommentar angeben!")).min(1)
+      ? string(globErr(t("Moneyflow.validation.comment"))).min(1)
       : string().optional()
   ),
   postingAccountId: computed(() =>
     showMoneyflowFields.value
-      ? number(globErr("Bitte Buchungskonto angeben!")).gt(0)
+      ? number(globErr(t("Moneyflow.validation.postingAccountId"))).gt(0)
       : number().optional()
   ),
-  capitalsourceId: number(globErr("Bitte Kapitalquelle angeben!")).gt(0),
+  capitalsourceId: number(globErr(t("General.validation.capitalsource"))).gt(0),
 };
 
 const serverErrors = ref(new Array<string>());
@@ -228,10 +233,10 @@ const previousCommentSetByContractpartnerDefaults = ref("");
 const previousPostingAccountSetByContractpartnerDefaults = ref(0);
 const preDefMoneyflowId = ref(0);
 const saveAsPreDefMoneyflow = ref(false);
-const toggleTextOffNoPreDefMoneyflow = ref("einmalig");
-const toggleTextOnNoPreDefMoneyflow = ref("Favorit");
-const toggleTextOffPreDefMoneyflow = ref("belassen");
-const toggleTextOnPreDefMoneyflow = ref("erneuern");
+const toggleTextOffNoPreDefMoneyflow = ref(t("Moneyflow.once"));
+const toggleTextOnNoPreDefMoneyflow = ref(t("Moneyflow.favorite"));
+const toggleTextOffPreDefMoneyflow = ref(t("Moneyflow.keep"));
+const toggleTextOnPreDefMoneyflow = ref(t("Moneyflow.renew"));
 const toggleTextOff = ref("");
 const toggleTextOn = ref("");
 const mseRemainderIsValid = ref(undefined as boolean | undefined);

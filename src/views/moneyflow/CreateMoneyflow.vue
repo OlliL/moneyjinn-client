@@ -2,7 +2,7 @@
   <div class="container-fluid text-center">
     <div class="row justify-content-md-center">
       <div class="col-xs-12 mb-4">
-        <h4>Geldbewegung hinzuf&uuml;gen</h4>
+        <h4>{{ $t("Moneyflow.title.create") }}</h4>
       </div>
     </div>
     <div class="row justify-content-md-center mb-4">
@@ -13,7 +13,7 @@
           v-model="preDefMoneyflowId"
           @change="selectPreDefMoneyflow"
         >
-          <option value="0">Neue Buchung</option>
+          <option value="0">{{ $t("Moneyflow.newBooking") }}</option>
           <option v-for="mcp of preDefMoneyflows" :key="mcp.id" :value="mcp.id">
             {{ mcp.contractpartnerName }} | {{ mcp.amount.toFixed(2) }} &euro; |
             {{ mcp.comment }}
@@ -41,10 +41,10 @@
                       class="btn btn-secondary mx-2"
                       @click="resetForm"
                     >
-                      r&uuml;cksetzen
+                      {{ $t("General.reset") }}
                     </button>
                     <ButtonSubmit
-                      button-label="Speichern"
+                      :button-label="$t('General.save')"
                       form-id="createMoneyflowForm"
                     />
                   </div>

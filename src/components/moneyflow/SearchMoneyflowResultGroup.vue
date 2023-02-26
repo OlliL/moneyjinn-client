@@ -58,12 +58,12 @@
         >
           <thead>
             <tr>
-              <th>Buchungsdatum</th>
-              <th>Betrag</th>
-              <th>Vertragspartner</th>
-              <th>Kommentar</th>
-              <th>Buchungskonto</th>
-              <th>Kapitalquelle</th>
+              <th>{{ $t("Moneyflow.bookingdate") }}</th>
+              <th>{{ $t("General.amount") }}</th>
+              <th>{{ $t("General.contractpartner") }}</th>
+              <th>{{ $t("General.comment") }}</th>
+              <th>{{ $t("General.postingAccount") }}</th>
+              <th>{{ $t("General.capitalsource") }}</th>
               <th colspan="2"></th>
             </tr>
           </thead>

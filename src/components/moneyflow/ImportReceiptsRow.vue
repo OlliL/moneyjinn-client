@@ -46,7 +46,7 @@
                       id="amount"
                       field-type="number"
                       step="0.01"
-                      field-label="Betrag"
+                      :field-label="$t('General.amount')"
                     >
                       <template #icon
                         ><span class="input-group-text"
@@ -59,7 +59,7 @@
                       v-model="startDate"
                       :validation-schema="schema.startDate"
                       id="startDate"
-                      field-label="Startdatum"
+                      :field-label="$t('General.startDate')"
                     />
                   </div>
                   <div class="col-md-3 col-xs-12">
@@ -67,7 +67,7 @@
                       v-model="endDate"
                       :validation-schema="schema.endDate"
                       id="endDate"
-                      field-label="Enddatum"
+                      :field-label="$t('General.endDate')"
                     />
                   </div>
                 </div>
@@ -83,10 +83,10 @@
                     <thead>
                       <tr>
                         <th></th>
-                        <th>Rechnungsdatum</th>
-                        <th>Betrag</th>
-                        <th>Vertragspartner</th>
-                        <th>Kommentar</th>
+                        <th>{{ $t("Moneyflow.invoicedate") }}</th>
+                        <th>{{ $t("General.amount") }}</th>
+                        <th>{{ $t("General.contractpartner") }}</th>
+                        <th>{{ $t("General.comment") }}</th>
                         <th colspan="2"></th>
                       </tr>
                     </thead>
@@ -104,7 +104,7 @@
                     </tbody>
                   </table>
                   <div v-if="searchExecuted && !searchSuccessful">
-                    Keine passenden Geldbewegungen gefunden!
+                    {{ $t("Moneyflow.noMatchingMoneyflow") }}
                   </div>
                 </div>
               </div>
@@ -119,14 +119,14 @@
                 v-if="searchExecuted && searchSuccessful"
                 :disabled="!moneyflowSelected"
               >
-                &uuml;bernehmen
+                {{ $t("Moneyflow.apply") }}
               </button>
               <button
                 type="button"
                 class="btn btn-danger mx-2"
                 @click="deleteReceipt"
               >
-                l&ouml;schen
+                {{ $t("General.delete") }}
               </button>
             </div>
           </div>
@@ -139,6 +139,7 @@
 <script lang="ts" setup>
 import { useForm } from "vee-validate";
 import { computed, nextTick, onMounted, ref, type PropType } from "vue";
+import { useI18n } from "vue-i18n";
 import { date } from "zod";
 
 import ButtonSubmit from "../ButtonSubmit.vue";
@@ -146,8 +147,9 @@ import DivError from "../DivError.vue";
 import ImportReceiptSearchRowVue from "./ImportReceiptSearchRow.vue";
 import InputStandard from "../InputStandard.vue";
 import InputDate from "../InputDate.vue";
-import { amountSchema, globErr } from "@/tools/views/ZodUtil";
 
+import { amountSchema, globErr } from "@/tools/views/ZodUtil";
+import { handleBackendError } from "@/tools/views/ThrowError";
 import { toFixed } from "@/tools/math";
 
 import type { ImportedMoneyflowReceipt } from "@/model/moneyflow/ImportedMoneyflowReceipt";
@@ -155,14 +157,15 @@ import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 
 import ImportedMoneyflowReceiptControllerHandler from "@/handler/ImportedMoneyflowReceiptControllerHandler";
 import MoneyflowControllerHandler from "@/handler/MoneyflowControllerHandler";
-import { handleBackendError } from "@/tools/views/ThrowError";
+
+const { t } = useI18n();
 
 const serverErrors = ref(new Array<string>());
 
 const schema = {
-  amount: amountSchema("Bitte Betrag angeben!"),
-  startDate: date(globErr("Bitte Startdatum angeben!")),
-  endDate: date(globErr("Bitte Enddatum angeben!")),
+  amount: amountSchema(t("Moneyflow.validation.amount")),
+  startDate: date(globErr(t("General.validation.startDate"))),
+  endDate: date(globErr(t("General.validation.endDate"))),
 };
 
 const startDate = ref(new Date());
