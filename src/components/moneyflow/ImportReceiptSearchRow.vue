@@ -16,14 +16,14 @@
     <td class="text-start">{{ mmf.contractpartnerName }}</td>
     <td class="text-start">{{ mmf.comment }}</td>
     <td class="text-center" v-if="isOwnMoneyflow">
-      <span role="button" class="link-primary" @click="editMoneyflow"
-        >bearbeiten</span
-      >
+      <span role="button" class="link-primary" @click="editMoneyflow">{{
+        $t("General.edit")
+      }}</span>
     </td>
     <td class="text-center" v-if="isOwnMoneyflow">
-      <span role="button" class="link-primary" @click="deleteMoneyflow"
-        >l&ouml;schen</span
-      >
+      <span role="button" class="link-primary" @click="deleteMoneyflow">{{
+        $t("General.delete")
+      }}</span>
     </td>
     <td colspan="2" v-if="!isOwnMoneyflow"></td>
   </tr>

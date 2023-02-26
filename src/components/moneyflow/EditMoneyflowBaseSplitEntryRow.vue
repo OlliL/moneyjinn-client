@@ -25,7 +25,7 @@
         :id="'amountSplitEntry' + idSuffix"
         field-type="number"
         step="0.01"
-        field-label="Betrag"
+        :field-label="$t('General.amount')"
       >
         <template #icon
           ><span class="input-group-text"
@@ -38,14 +38,14 @@
         v-model="mseComment"
         :validation-schema-ref="schema.comment"
         :id="'commentSplitEntry' + idSuffix"
-        field-label="Kommentar"
+        :field-label="$t('General.comment')"
       />
     </div>
     <div class="col-md-3 col-xs-12">
       <SelectPostingAccount
         v-model="msePostingAccountId"
         :validation-schema-ref="schema.postingAccountId"
-        field-label="Buchungskonto"
+        :field-label="$t('General.postingAccount')"
         :id-suffix="'SplitEntry' + idSuffix"
       />
     </div>
@@ -74,6 +74,7 @@
 </template>
 <script lang="ts" setup>
 import { computed, ref, watch } from "vue";
+import { useI18n } from "vue-i18n";
 
 import { generateErrorData } from "@/tools/views/ErrorData";
 
@@ -82,18 +83,22 @@ import { any, number, string } from "zod";
 import InputStandard from "../InputStandard.vue";
 import SelectPostingAccount from "../postingaccount/SelectPostingAccount.vue";
 
+const { t } = useI18n();
+
 const schema = {
   amount: computed(() =>
-    !rowEmpty.value ? amountSchema("Bitte Betrag angeben!") : any().optional()
+    !rowEmpty.value
+      ? amountSchema(t("Moneyflow.validation.amount"))
+      : any().optional()
   ),
   comment: computed(() =>
     !rowEmpty.value
-      ? string(globErr("Bitte Kommentar angeben!")).min(1)
+      ? string(globErr(t("Moneyflow.validation.comment"))).min(1)
       : string().optional()
   ),
   postingAccountId: computed(() =>
     !rowEmpty.value
-      ? number(globErr("Bitte Buchungskonto angeben!")).gt(0)
+      ? number(globErr(t("Moneyflow.validation.postingAccountId"))).gt(0)
       : number().optional()
   ),
 };
@@ -163,7 +168,11 @@ const rowEmpty = computed(() => {
 });
 
 const remainderErrorData = computed(() => {
-  return generateErrorData(props.remainderIsValid, "Rest", "Rest muss 0 sein!");
+  return generateErrorData(
+    props.remainderIsValid,
+    t("Moneyflow.remainder"),
+    t("Moneyflow.validation.remainder")
+  );
 });
 
 watch(

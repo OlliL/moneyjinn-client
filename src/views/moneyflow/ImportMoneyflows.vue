@@ -2,7 +2,7 @@
   <div class="container-fluid text-center">
     <div class="row justify-content-md-center">
       <div class="col-xs-12 mb-4">
-        <h4>Importierte Geldbewegungen</h4>
+        <h4>{{ $t("Moneyflow.title.import") }}</h4>
       </div>
     </div>
 
@@ -23,7 +23,7 @@
                     class="col-md-1 col-xs-6 d-flex justify-content-end align-items-center"
                     style="font-weight: 700; font-size: 10.5px"
                   >
-                    IBAN:
+                    {{ $t("General.iban") }}:
                   </div>
                   <div class="col-md-2 col-xs-6 text-start">
                     {{ importedMoneyflow.accountNumber }}
@@ -32,7 +32,7 @@
                     class="col-md-1 col-xs-6 d-flex justify-content-end align-items-center"
                     style="font-weight: 700; font-size: 10.5px"
                   >
-                    BIC:
+                    {{ $t("General.bic") }}:
                   </div>
                   <div class="col-md-2 col-xs-6 text-start">
                     {{ importedMoneyflow.bankCode }}
@@ -41,7 +41,7 @@
                     class="col-md-2 col-xs-6 d-flex justify-content-end align-items-center"
                     style="font-weight: 700; font-size: 10.5px"
                   >
-                    Transaktionspartner:
+                    {{ $t("Moneyflow.partner") }}:
                   </div>
                   <div class="col-md-4 col-xs-6 text-start">
                     {{ importedMoneyflow.name }}
@@ -52,7 +52,7 @@
                     class="col-md-1 col-xs-6 d-flex justify-content-end align-items-center"
                     style="font-weight: 700; font-size: 10.5px"
                   >
-                    Verwendungszweck:
+                    {{ $t("Moneyflow.reference") }}:
                   </div>
                   <div class="col-md-11 col-xs-6 text-start">
                     {{ importedMoneyflow.usage }}
@@ -66,13 +66,13 @@
                 />
                 <div class="row no-gutters flex-lg-nowrap">
                   <div class="col-12">
-                    <ButtonSubmit button-label="Übernehmen" />
+                    <ButtonSubmit :button-label="$t('Moneyflow.apply')" />
                     <button
                       type="button"
                       class="btn btn-danger mx-2"
                       @click="deleteImportedMoneyflow(importedMoneyflow)"
                     >
-                      l&ouml;schen
+                      {{ $t("General.delete") }}
                     </button>
                   </div>
                 </div>

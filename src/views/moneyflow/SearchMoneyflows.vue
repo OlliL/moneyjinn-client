@@ -11,7 +11,7 @@
   <div class="container-fluid text-center">
     <div class="row justify-content-md-center">
       <div class="col-xs-12 mb-4">
-        <h4>Suche nach Geldbewegungen</h4>
+        <h4>{{ $t("Moneyflow.title.search") }}</h4>
       </div>
     </div>
     <div class="row justify-content-md-center mb-4">
@@ -27,7 +27,7 @@
                       v-model="startDate"
                       :validation-schema="schema.startDate"
                       id="startDate"
-                      field-label="Startdatum"
+                      :field-label="$t('General.startDate')"
                     />
                   </div>
                   <div class="col-md-2 col-xs-12">
@@ -35,7 +35,7 @@
                       v-model="endDate"
                       :validation-schema="schema.endDate"
                       id="endDate"
-                      field-label="Enddatum"
+                      :field-label="$t('General.endDate')"
                     />
                   </div>
                   <div class="col-md-4 col-xs-12">
@@ -43,7 +43,7 @@
                       v-model="contractpartnerId"
                       :validation-schema-ref="schema.searchCriteria"
                       id-suffix="SearchMoneyflows"
-                      field-label="Vertragspartner"
+                      :field-label="$t('General.contractpartner')"
                     />
                   </div>
                   <div class="col-md-4 col-xs-12">
@@ -51,7 +51,7 @@
                       v-model="postingAccountId"
                       :validation-schema-ref="schema.searchCriteria"
                       id-suffix="SearchMoneyflows"
-                      field-label="Buchungskonto"
+                      :field-label="$t('General.postingAccount')"
                     />
                   </div>
                 </div>
@@ -61,7 +61,7 @@
                       v-model="comment"
                       :validation-schema-ref="schema.searchCriteria"
                       id="comment"
-                      field-label="Kommentar"
+                      :field-label="$t('General.comment')"
                     />
                   </div>
                   <div
@@ -76,7 +76,7 @@
                         role="switch"
                       />
                       <label class="form-check-label" for="featureEqual">
-                        gleich
+                        {{ $t("Moneyflow.equal") }}
                       </label>
                     </div>
                   </div>
@@ -95,7 +95,7 @@
                         class="form-check-label"
                         for="featureCaseSensitive"
                       >
-                        Groß-, Kleinschreibung beachten
+                        {{ $t("Moneyflow.caseSensitivity") }}
                       </label>
                     </div>
                   </div>
@@ -111,7 +111,7 @@
                         role="switch"
                       />
                       <label class="form-check-label" for="featureRegexp">
-                        regulärer Ausdruck
+                        {{ $t("Moneyflow.regexp") }}
                       </label>
                     </div>
                   </div>
@@ -130,7 +130,7 @@
                         class="form-check-label"
                         for="featureOnlyMinusAmounts"
                       >
-                        nur negative Beträge
+                        {{ $t("Moneyflow.onlyNegative") }}
                       </label>
                     </div>
                   </div>
@@ -140,7 +140,7 @@
                     class="col-md-3 col-xs-12 mx-auto d-flex align-items-center justify-content-center"
                   >
                     <ButtonSubmit
-                      button-label="Suchen"
+                      :button-label="$t('Moneyflow.search')"
                       form-id="searchMoneyflowsForm"
                     />
                     <button
@@ -148,14 +148,14 @@
                       class="btn btn-secondary mx-2"
                       @click="resetForm"
                     >
-                      r&uuml;cksetzen
+                      {{ $t("General.reset") }}
                     </button>
                   </div>
                   <div class="col-md-3 col-xs-12">
                     <SelectStandard
                       v-model="groupByFirst"
                       id="groupByFirst"
-                      field-label="1. Gruppierungskriterium"
+                      :field-label="$t('Moneyflow.1stGroupingCriteria')"
                       :select-box-values="groupValues"
                     />
                   </div>
@@ -163,7 +163,7 @@
                     <SelectStandard
                       v-model="groupBySecond"
                       id="groupBySecond"
-                      field-label="2. Gruppierungskriterium"
+                      :field-label="$t('Moneyflow.2ndGroupingCriteria')"
                       :select-box-values="groupValues"
                     />
                   </div>
@@ -171,7 +171,7 @@
                     <SelectStandard
                       v-model="orderBy"
                       id="orderBy"
-                      field-label="Sortieren nach"
+                      :field-label="$t('Moneyflow.orderBy')"
                       :select-box-values="orderValues"
                     />
                   </div>
@@ -188,11 +188,13 @@
           <thead>
             <tr>
               <th></th>
-              <th v-if="colBookingMonth">Buchungsmonat</th>
-              <th v-if="colBookingYear">Buchungsjahr</th>
-              <th v-if="colContractpartner">Vertragspartner</th>
-              <th>Betrag</th>
-              <th>Kommentar</th>
+              <th v-if="colBookingMonth">{{ $t("Moneyflow.bookingMonth") }}</th>
+              <th v-if="colBookingYear">{{ $t("Moneyflow.bookingYear") }}</th>
+              <th v-if="colContractpartner">
+                {{ $t("General.contractpartner") }}
+              </th>
+              <th>{{ $t("General.amount") }}</th>
+              <th>{{ $t("General.comment") }}</th>
             </tr>
           </thead>
           <tbody>
@@ -216,6 +218,7 @@
 <script lang="ts" setup>
 import { useForm } from "vee-validate";
 import { computed, onMounted, ref } from "vue";
+import { useI18n } from "vue-i18n";
 import { any, date } from "zod";
 
 import ButtonSubmit from "@/components/ButtonSubmit.vue";
@@ -240,6 +243,8 @@ import type { SelectBoxValue } from "@/model/SelectBoxValue";
 
 import MoneyflowControllerHandler from "@/handler/MoneyflowControllerHandler";
 
+const { t } = useI18n();
+
 const serverErrors = ref(new Array<string>());
 
 const GROUP_NONE: number = 0;
@@ -253,16 +258,16 @@ const ORDER_COMMENT: number = 3;
 
 const groupValues = [
   { id: GROUP_NONE, value: "" },
-  { id: GROUP_YEAR, value: "Jahr" },
-  { id: GROUP_MONTH, value: "Monat" },
-  { id: GROUP_CONTRACTPARTNER, value: "Vertragspartner" },
+  { id: GROUP_YEAR, value: t("Moneyflow.year") },
+  { id: GROUP_MONTH, value: t("Moneyflow.month") },
+  { id: GROUP_CONTRACTPARTNER, value: t("General.contractpartner") },
 ] as Array<SelectBoxValue>;
 
 const orderValues = [
   { id: ORDER_NONE, value: "" },
-  { id: ORDER_GROUP, value: "Gruppierung" },
-  { id: ORDER_AMOUNT, value: "Betrag" },
-  { id: ORDER_COMMENT, value: "Kommentar" },
+  { id: ORDER_GROUP, value: t("Moneyflow.grouping") },
+  { id: ORDER_AMOUNT, value: t("General.amount") },
+  { id: ORDER_COMMENT, value: t("General.comment") },
 ] as Array<SelectBoxValue>;
 
 const startDate = ref(new Date());
@@ -287,8 +292,8 @@ const deleteModal = ref();
 const editModal = ref();
 
 const schema = {
-  startDate: date(globErr("Bitte Startdatum angeben!")),
-  endDate: date(globErr("Bitte Enddatum angeben!")),
+  startDate: date(globErr(t("General.validation.startDate"))),
+  endDate: date(globErr(t("General.validation.endDate"))),
   searchCriteria: computed(() => {
     contractpartnerId.value;
     postingAccountId.value;
@@ -296,7 +301,7 @@ const schema = {
 
     return any().refine(
       () => contractpartnerId.value || postingAccountId.value || comment.value,
-      "Bitte mindestens 1 Suchkriterium angeben!"
+      t("Moneyflow.validation.oneSearchCriteria")
     );
   }),
 };

@@ -1,5 +1,5 @@
 <template>
-  <ModalVue title="Geldbewegung l&ouml;schen" ref="modalComponent">
+  <ModalVue :title="$t('Moneyflow.title.delete')" ref="modalComponent">
     <template #body>
       <DivError :server-errors="serverErrors" />
       <div class="row">
@@ -7,7 +7,7 @@
           class="text-start d-flex align-items-center col-sm-3 col-xs-5"
           style="font-weight: 700; font-size: 10.5px"
         >
-          Buchungsdatum
+          {{ $t("Moneyflow.bookingdate") }}
         </div>
         <div class="text-start col-sm-9">
           <SpanDate :date="mmf.bookingDate" />
@@ -18,7 +18,7 @@
           class="text-start d-flex align-items-center col-sm-3 col-xs-5"
           style="font-weight: 700; font-size: 10.5px"
         >
-          Rechnungsdatum
+          {{ $t("Moneyflow.invoicedate") }}
         </div>
         <div class="text-start col-sm-9">
           <SpanDate :date="mmf.invoiceDate" />
@@ -29,7 +29,7 @@
           class="text-start d-flex align-items-center col-sm-3 col-xs-5"
           style="font-weight: 700; font-size: 10.5px"
         >
-          Vertragspartner
+          {{ $t("General.contractpartner") }}
         </div>
         <div class="text-start col-sm-9">{{ mmf.contractpartnerName }}</div>
       </div>
@@ -38,7 +38,7 @@
           class="text-start d-flex align-items-center col-sm-3 col-xs-5"
           style="font-weight: 700; font-size: 10.5px"
         >
-          Kapitalquelle
+          {{ $t("General.capitalsource") }}
         </div>
         <div class="text-start col-sm-9">{{ mmf.capitalsourceComment }}</div>
       </div>
@@ -47,7 +47,7 @@
           class="text-start d-flex align-items-center col-sm-3 col-xs-5"
           style="font-weight: 700; font-size: 10.5px"
         >
-          Betrag
+          {{ $t("General.amount") }}
         </div>
         <div class="text-start col-sm-9">
           <SpanAmount :amount="mmf.amount" />
@@ -58,7 +58,7 @@
           class="text-start d-flex align-items-center col-sm-3 col-xs-5"
           style="font-weight: 700; font-size: 10.5px"
         >
-          Kommentar
+          {{ $t("General.comment") }}
         </div>
         <div class="text-start col-sm-9">{{ mmf.comment }}</div>
       </div>
@@ -67,14 +67,14 @@
           class="text-start d-flex align-items-center col-sm-3 col-xs-5"
           style="font-weight: 700; font-size: 10.5px"
         >
-          Buchungskonto
+          {{ $t("General.postingAccount") }}
         </div>
         <div class="text-start col-sm-9">{{ mmf.postingAccountName }}</div>
       </div>
     </template>
     <template #footer>
       <button type="button" class="btn btn-danger" @click="deleteMoneyflow">
-        L&ouml;schen
+        {{ $t("General.delete") }}
       </button>
     </template>
   </ModalVue>
