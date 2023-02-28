@@ -1,6 +1,10 @@
 <template>
   <ModalVue
-    :title="'Monatsabschluss ' + (editMode ? 'bearbeiten' : 'hinzufügen')"
+    :title="
+      editMode
+        ? $t('MonthlySettlement.title.update')
+        : $t('MonthlySettlement.title.create')
+    "
     ref="modalComponent"
   >
     <template #body>
@@ -30,8 +34,8 @@
               <col style="width: 40%" />
               <thead>
                 <tr>
-                  <th>Kapitalquelle</th>
-                  <th>Betrag</th>
+                  <th>{{ $t("General.capitalsource") }}</th>
+                  <th>{{ $t("General.amount") }}</th>
                 </tr>
               </thead>
               <tbody>
@@ -66,8 +70,8 @@
               <col style="width: 40%" />
               <thead v-if="!monthlySettlementsNoCredit">
                 <tr>
-                  <th>Kapitalquelle</th>
-                  <th>Betrag</th>
+                  <th>{{ $t("General.capitalsource") }}</th>
+                  <th>{{ $t("General.amount") }}</th>
                 </tr>
               </thead>
               <tbody>
@@ -98,7 +102,7 @@
     </template>
     <template #footer>
       <ButtonSubmit
-        button-label="Speichern"
+        :button-label="$t('General.save')"
         form-id="upsertMonthlySettlementForm"
       />
     </template>
@@ -108,6 +112,7 @@
 <script lang="ts" setup>
 import { useForm } from "vee-validate";
 import { ref, watch } from "vue";
+import { useI18n } from "vue-i18n";
 import { date, ZodType } from "zod";
 
 import ButtonSubmit from "../ButtonSubmit.vue";
@@ -124,6 +129,8 @@ import type { MonthlySettlement } from "@/model/monthlysettlement/MonthlySettlem
 import type { MonthlySettlementEditTransporter } from "@/model/monthlysettlement/MonthlySettlementEditTransporter";
 
 import MonthlySettlementControllerHandler from "@/handler/MonthlySettlementControllerHandler";
+
+const { t } = useI18n();
 
 type MonthlySettlementFormData = MonthlySettlement & {
   imported: boolean;
@@ -143,8 +150,8 @@ const emit = defineEmits(["monthlySettlementUpserted"]);
 const { handleSubmit, values, setFieldTouched } = useForm();
 
 const schema: Partial<{ [key in keyof MonthlySettlement]: ZodType }> = {
-  month: date(globErr("Bitte Monat auswählen!")),
-  amount: amountSchema("Bitte Betrag angeben!"),
+  month: date(globErr(t("MonthlySettlement.validation.month"))),
+  amount: amountSchema(t("MonthlySettlement.validation.amount")),
 };
 
 const _show = (_year?: number, _month?: number) => {

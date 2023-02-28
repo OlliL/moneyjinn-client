@@ -228,6 +228,17 @@
             "oneSearchCriteria": "At least 1 search criteria must be specified!"
         }
     },
+    "MonthlySettlement": {
+        "title": {
+            "create": "create monthlysettlement",
+            "update": "update monthlysettlement",
+            "delete": "delete monthlysettlement {month} {year}"
+        },
+        "validation": {
+            "amount": "Please specify an amount!",
+            "month": "Please specify a month!"
+        }
+    },
     "PreDefMoneyflow": {},
     "ImportReceipts": {
         "importReceipts": "import receipts"
