@@ -8,8 +8,8 @@
     <col style="width: 30%" />
     <thead>
       <tr>
-        <th>Kapitalquelle</th>
-        <th>Betrag</th>
+        <th>{{ $t("General.capitalsource") }}</th>
+        <th>{{ $t("General.amount") }}</th>
       </tr>
     </thead>
     <tbody>
@@ -33,8 +33,8 @@
     <col style="width: 30%" />
     <thead v-if="!monthlySettlementsNoCredit.length">
       <tr>
-        <th>Kapitalquelle</th>
-        <th>Betrag</th>
+        <th>{{ $t("General.capitalsource") }}</th>
+        <th>{{ $t("General.amount") }}</th>
       </tr>
     </thead>
     <tbody>

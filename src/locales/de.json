@@ -228,6 +228,17 @@
             "oneSearchCriteria": "Bitte mindestens 1 Suchkriterium angeben!"
         }
     },
+    "MonthlySettlement": {
+        "title": {
+            "create": "Monatsabschluss hinzufügen",
+            "update": "Monatsabschluss bearbeiten",
+            "delete": "Monatsabschluss {month} {year} löschen"
+        },
+        "validation": {
+            "amount": "Bitte Betrag angeben!",
+            "month": "Bitte Monat angeben!"
+        }
+    },
     "PreDefMoneyflow": {},
     "ImportReceipts": {
         "importReceipts": "Bons importieren"

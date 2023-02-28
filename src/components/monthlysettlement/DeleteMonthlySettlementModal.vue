@@ -1,6 +1,8 @@
 <template>
   <ModalVue
-    :title="'Monatsabschluss ' + monthName + ' ' + year + ' l&ouml;schen?'"
+    :title="
+      $t('MonthlySettlement.title.delete', { month: monthName, year: year })
+    "
     ref="modalComponent"
   >
     <template #body>
@@ -17,7 +19,7 @@
         class="btn btn-danger"
         @click="deleteMonthlySettlement"
       >
-        L&ouml;schen
+        {{ $t("General.delete") }}
       </button>
     </template>
   </ModalVue>
