@@ -229,6 +229,7 @@
         }
     },
     "MonthlySettlement": {
+        "headline": "monthlysettlement {month} {year}",
         "title": {
             "create": "create monthlysettlement",
             "update": "update monthlysettlement",

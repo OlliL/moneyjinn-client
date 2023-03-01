@@ -229,6 +229,7 @@
         }
     },
     "MonthlySettlement": {
+        "headline": "Monatsabschluss {month} {year}",
         "title": {
             "create": "Monatsabschluss hinzufügen",
             "update": "Monatsabschluss bearbeiten",
