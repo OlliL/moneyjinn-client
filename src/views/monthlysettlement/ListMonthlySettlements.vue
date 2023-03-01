@@ -10,7 +10,7 @@
   <div class="container-fluid text-center">
     <div class="row justify-content-md-center">
       <div class="col-xs-12 mb-4">
-        <h4>Monatsabschl&uuml;sse</h4>
+        <h4>{{ $t("General.monthlysettlements") }}</h4>
       </div>
     </div>
     <div class="row justify-content-md-center mb-4">
@@ -24,7 +24,7 @@
                   class="btn btn-primary"
                   @click="showEditMonthlySettlementModal()"
                 >
-                  Neu
+                  {{ $t("General.new") }}
                 </button>
               </td>
 
@@ -68,7 +68,14 @@
       <div class="col-md-4 col-xs-12">
         <div class="card">
           <div class="card-header text-center p-3">
-            <h5>Monatsabschluss {{ monthName }} {{ year }}</h5>
+            <h5>
+              {{
+                $t("MonthlySettlement.headline", {
+                  month: monthName,
+                  year: year,
+                })
+              }}
+            </h5>
           </div>
           <div class="card-body">
             <ShowMontlySettlementVue
@@ -86,14 +93,14 @@
           class="btn btn-primary mx-2"
           @click="showEditMonthlySettlementModal(selectedYear, selectedMonth)"
         >
-          Bearbeiten
+          {{ $t("General.edit") }}
         </button>
         <button
           type="button"
           class="btn btn-danger mx-2"
           @click="showDeleteMonthlySettlementModal"
         >
-          L&ouml;schen
+          {{ $t("General.delete") }}
         </button>
       </div>
     </div>
