@@ -13,7 +13,7 @@
                 v-model="mpa.name"
                 :validation-schema="schema.name"
                 :id="'name' + idSuffix"
-                field-label="Name"
+                :field-label="$t('General.name')"
               />
             </div>
           </div>
@@ -22,10 +22,10 @@
     </template>
     <template #footer>
       <button type="button" class="btn btn-secondary" @click="resetForm">
-        r&uuml;cksetzen
+        {{ $t("General.reset") }}
       </button>
       <ButtonSubmit
-        button-label="Speichern"
+        :button-label="$t('General.save')"
         :form-id="'createPostingAccountForm' + idSuffix"
       />
     </template>
@@ -35,6 +35,7 @@
 <script lang="ts" setup>
 import { useForm } from "vee-validate";
 import { computed, ref } from "vue";
+import { useI18n } from "vue-i18n";
 import { string, ZodType } from "zod";
 
 import ButtonSubmit from "../ButtonSubmit.vue";
@@ -49,6 +50,8 @@ import type { PostingAccount } from "@/model/postingaccount/PostingAccount";
 
 import PostingAccountControllerHandler from "@/handler/PostingAccountControllerHandler";
 
+const { t } = useI18n();
+
 defineProps({
   idSuffix: {
     type: String,
@@ -59,7 +62,7 @@ defineProps({
 const serverErrors = ref(new Array<string>());
 
 const schema: Partial<{ [key in keyof PostingAccount]: ZodType }> = {
-  name: string(globErr("Bitte Name angeben!")).min(1),
+  name: string(globErr(t("PostingAccount.validation.name"))).min(1),
 };
 
 const mpa = ref({} as PostingAccount);
@@ -71,8 +74,8 @@ const { handleSubmit, values, setFieldTouched } = useForm();
 
 const title = computed(() => {
   return origMpa.value === undefined
-    ? "Buchungskonto hinzufügen"
-    : "Buchungskonto bearbeiten";
+    ? t("PostingAccount.title.create")
+    : t("PostingAccount.title.update");
 });
 
 const resetForm = () => {

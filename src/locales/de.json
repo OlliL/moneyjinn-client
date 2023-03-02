@@ -240,6 +240,17 @@
             "month": "Bitte Monat angeben!"
         }
     },
+    "PostingAccount": {
+        "searchBy": "Suchen nach Name...",
+        "title": {
+            "create": "Buchungskonto hinzufügen",
+            "update": "Buchungskonto bearbeiten",
+            "delete": "Buchungskonto löschen"
+        },
+        "validation": {
+            "name": "Bitte Name angeben!"
+        }
+    },
     "PreDefMoneyflow": {},
     "ImportReceipts": {
         "importReceipts": "Bons importieren"

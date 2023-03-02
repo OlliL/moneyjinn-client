@@ -1,5 +1,5 @@
 <template>
-  <ModalVue title="Buchungskonto l&ouml;schen" ref="modalComponent">
+  <ModalVue :title="$t('PostingAccount.title.delete')" ref="modalComponent">
     <template #body>
       <DivError :server-errors="serverErrors" />
       <div class="row">
@@ -7,7 +7,7 @@
           class="text-start d-flex align-items-center col-sm-3 col-xs-5"
           style="font-weight: 700; font-size: 10.5px"
         >
-          Name
+          {{ $t("General.name") }}
         </div>
         <div class="text-start col-sm-9">{{ mpa.name }}</div>
       </div>
@@ -18,7 +18,7 @@
         class="btn btn-danger"
         @click="deletePostingAccount"
       >
-        L&ouml;schen
+        {{ $t("General.delete") }}
       </button>
     </template>
   </ModalVue>
