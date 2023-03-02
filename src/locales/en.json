@@ -251,7 +251,20 @@
             "name": "Please specify a name!"
         }
     },
-    "PreDefMoneyflow": {},
+    "PreDefMoneyflow": {
+        "onceAMonth": "only once a month",
+        "onceAMonthShort": "1x",
+        "lastUsed": "last used",
+        "createDate": "created",
+        "title": {
+            "create": "create predefined moneyflows",
+            "update": "update predefined moneyflows",
+            "delete": "delete predefined moneyflows"
+        },
+        "validation": {
+            "onceAMonth": "Please specify if only once a month!"
+        }
+    },
     "ImportReceipts": {
         "importReceipts": "import receipts"
     },

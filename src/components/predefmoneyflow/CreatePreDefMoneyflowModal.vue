@@ -15,7 +15,7 @@
                 id="amount"
                 field-type="number"
                 step="0.01"
-                field-label="Betrag"
+                :field-label="$t('General.amount')"
               >
                 <template #icon
                   ><span class="input-group-text"
@@ -30,7 +30,7 @@
                 v-model="mpm.contractpartnerId"
                 :validation-schema="schema.contractpartnerId"
                 :id-suffix="'CreatePreDefMoneyflow' + idSuffix"
-                field-label="Vertragspartner"
+                :field-label="$t('General.contractpartner')"
                 :validity-date="validityDate"
               />
             </div>
@@ -42,7 +42,7 @@
                 v-model="mpm.comment"
                 :validation-schema="schema.comment"
                 :id="'comment' + idSuffix"
-                field-label="Kommentar"
+                :field-label="$t('General.comment')"
               />
             </div>
           </div>
@@ -53,7 +53,7 @@
                 v-model="mpm.postingAccountId"
                 :validation-schema="schema.postingAccountId"
                 :id-suffix="'CreatePreDefMoneyflow' + idSuffix"
-                field-label="Buchungskonto"
+                :field-label="$t('General.postingAccount')"
               />
             </div>
           </div>
@@ -64,7 +64,7 @@
                 v-model="mpm.capitalsourceId"
                 :validation-schema="schema.capitalsourceId"
                 :id-suffix="'CreatePreDefMoneyflow' + idSuffix"
-                field-label="Kapitalquelle"
+                :field-label="$t('General.capitalsource')"
                 :validity-date="validityDate"
               />
             </div>
@@ -75,7 +75,7 @@
                 v-model="mpm.onceAMonth"
                 :validation-schema="schema.onceAMonth"
                 :id="'onceAMonth' + idSuffix"
-                field-label="nur 1x pro Monat"
+                :field-label="$t('PreDefMoneyflow.onceAMonth')"
                 :select-box-values="onceAMonthValues"
               />
             </div>
@@ -85,10 +85,10 @@
     </template>
     <template #footer>
       <button type="button" class="btn btn-secondary" @click="resetForm">
-        r&uuml;cksetzen
+        {{ $t("General.reset") }}
       </button>
       <ButtonSubmit
-        button-label="Speichern"
+        :button-label="$t('General.save')"
         :form-id="'createPreDefMoneyflowForm' + idSuffix"
       />
     </template>
@@ -98,6 +98,7 @@
 <script lang="ts" setup>
 import { useForm } from "vee-validate";
 import { computed, ref } from "vue";
+import { useI18n } from "vue-i18n";
 import { boolean, number, string, ZodType } from "zod";
 
 import ButtonSubmit from "../ButtonSubmit.vue";
@@ -117,6 +118,8 @@ import type { SelectBoxValue } from "@/model/SelectBoxValue";
 
 import PreDefMoneyflowControllerHandler from "@/handler/PreDefMoneyflowControllerHandler";
 
+const { t } = useI18n();
+
 defineProps({
   idSuffix: {
     type: String,
@@ -127,12 +130,16 @@ defineProps({
 const serverErrors = ref(new Array<string>());
 
 const schema: Partial<{ [key in keyof PreDefMoneyflow]: ZodType }> = {
-  amount: amountSchema("Bitte Betrag angeben!"),
-  contractpartnerId: number(globErr("Bitte Vertragspartner angeben!")).gt(0),
-  comment: string(globErr("Bitte Kommentar angeben!")).min(1),
-  postingAccountId: number(globErr("Bitte Buchungskonto angeben!")).gt(0),
-  capitalsourceId: number(globErr("Bitte Kapitalquelle angeben!")).gt(0),
-  onceAMonth: boolean(globErr("Bitte ob nur 1x pro Monat auswählen!")),
+  amount: amountSchema(t("Moneyflow.validation.amount")),
+  contractpartnerId: number(
+    globErr(t("Moneyflow.validation.contractpartnerId"))
+  ).gt(0),
+  comment: string(globErr(t("Moneyflow.validation.comment"))).min(1),
+  postingAccountId: number(
+    globErr(t("Moneyflow.validation.postingAccountId"))
+  ).gt(0),
+  capitalsourceId: number(globErr(t("General.validation.capitalsource"))).gt(0),
+  onceAMonth: boolean(globErr(t("PreDefMoneyflow.validation.onceAMonth"))),
 };
 
 const mpm = ref({} as PreDefMoneyflow);
@@ -144,16 +151,16 @@ const emit = defineEmits(["preDefMoneyflowCreated", "preDefMoneyflowUpdated"]);
 
 const onceAMonthValues = [
   { id: undefined, value: "" },
-  { id: false, value: "Nein" },
-  { id: true, value: "Ja" },
+  { id: false, value: t("General.no") },
+  { id: true, value: t("General.yes") },
 ] as Array<SelectBoxValue>;
 
 const { handleSubmit, values, setFieldTouched } = useForm();
 
 const title = computed(() => {
   return origMpm.value === undefined
-    ? "Vordefinierte Geldbewegung hinzufügen"
-    : "Vordefinierte Geldbewegung bearbeiten";
+    ? t("PreDefMoneyflow.title.create")
+    : t("PreDefMoneyflow.title.update");
 });
 
 const resetForm = () => {
