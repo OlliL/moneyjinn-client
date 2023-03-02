@@ -1,8 +1,5 @@
 <template>
-  <ModalVue
-    title="Vordefinierte Geldbewegung l&ouml;schen"
-    ref="modalComponent"
-  >
+  <ModalVue :title="$t('PreDefMoneyflow.title.delete')" ref="modalComponent">
     <template #body>
       <DivError :server-errors="serverErrors" />
       <div class="row">
@@ -10,7 +7,7 @@
           class="text-start d-flex align-items-center col-sm-3 col-xs-5"
           style="font-weight: 700; font-size: 10.5px"
         >
-          Betrag
+          {{ $t("General.amount") }}
         </div>
         <div class="text-start col-sm-9">
           <SpanAmount :amount="mpm.amount" />
@@ -21,7 +18,7 @@
           class="text-start d-flex align-items-center col-sm-3 col-xs-5"
           style="font-weight: 700; font-size: 10.5px"
         >
-          Vertragspartner
+          {{ $t("General.contractpartner") }}
         </div>
         <div class="text-start col-sm-9">{{ mpm.contractpartnerName }}</div>
       </div>
@@ -30,7 +27,7 @@
           class="text-start d-flex align-items-center col-sm-3 col-xs-5"
           style="font-weight: 700; font-size: 10.5px"
         >
-          Kommentar
+          {{ $t("General.comment") }}
         </div>
         <div class="text-start col-sm-9">{{ mpm.comment }}</div>
       </div>
@@ -39,7 +36,7 @@
           class="text-start d-flex align-items-center col-sm-3 col-xs-5"
           style="font-weight: 700; font-size: 10.5px"
         >
-          Buchungskonto
+          {{ $t("General.postingAccount") }}
         </div>
         <div class="text-start col-sm-9">
           {{ mpm.postingAccountName }}&nbsp;
@@ -50,7 +47,7 @@
           class="text-start d-flex align-items-center col-sm-3 col-xs-5"
           style="font-weight: 700; font-size: 10.5px"
         >
-          Kapitalquelle
+          {{ $t("General.capitalsource") }}
         </div>
         <div class="text-start col-sm-9">
           {{ mpm.capitalsourceComment }}&nbsp;
@@ -61,7 +58,7 @@
           class="text-start d-flex align-items-center col-sm-3 col-xs-5"
           style="font-weight: 700; font-size: 10.5px"
         >
-          1x
+          {{ $t("PreDefMoneyflow.onceAMonth") }}
         </div>
         <div class="text-start col-sm-9">
           <SpanBoolean :value="mpm.onceAMonth" />
@@ -72,7 +69,7 @@
           class="text-start d-flex align-items-center col-sm-3 col-xs-5"
           style="font-weight: 700; font-size: 10.5px"
         >
-          angelegt am
+          {{ $t("PreDefMoneyflow.createDate") }}
         </div>
         <div class="text-start col-sm-9">
           <SpanDate :date="mpm.createDate" />
@@ -83,7 +80,7 @@
           class="text-start d-flex align-items-center col-sm-3 col-xs-5"
           style="font-weight: 700; font-size: 10.5px"
         >
-          verwendet am
+          {{ $t("PreDefMoneyflow.lastUsed") }}
         </div>
         <div class="text-start col-sm-9"><SpanDate :date="mpm.lastUsed" /></div>
       </div>
@@ -94,7 +91,7 @@
         class="btn btn-danger"
         @click="deletePreDefMoneyflow"
       >
-        L&ouml;schen
+        {{ $t("General.delete") }}
       </button>
     </template>
   </ModalVue>

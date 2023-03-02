@@ -251,7 +251,20 @@
             "name": "Bitte Name angeben!"
         }
     },
-    "PreDefMoneyflow": {},
+    "PreDefMoneyflow": {
+        "onceAMonth": "nur 1x pro Monat",
+        "onceAMonthShort": "1x",
+        "lastUsed": "zuletzt verwendet",
+        "createDate": "angelegt",
+        "title": {
+            "create": "vordefinierte Geldbewegung hinzufügen",
+            "update": "vordefinierte Geldbewegung bearbeiten",
+            "delete": "vordefinierte Geldbewegung löschen"
+        },
+        "validation": {
+            "onceAMonth": "Bitte auswählen ob nur 1x im Monat!"
+        }
+    },
     "ImportReceipts": {
         "importReceipts": "Bons importieren"
     },

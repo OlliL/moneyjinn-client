@@ -14,7 +14,7 @@
   <div class="container-fluid text-center">
     <div class="row justify-content-md-center">
       <div class="col-xs-12 mb-4">
-        <h4>Vordefinierte Geldbewegungen</h4>
+        <h4>{{ $t("General.preDefMoneyflows") }}</h4>
       </div>
     </div>
     <div class="row justify-content-md-center mb-4">
@@ -27,7 +27,7 @@
                 class="btn btn-primary"
                 @click="showCreatePreDefMoneyflowModal"
               >
-                Neu
+                {{ $t("General.new") }}
               </button>
             </td>
             <td>
@@ -37,7 +37,7 @@
                   class="btn btn-primary"
                   @click="searchAllContent"
                 >
-                  Alle
+                  {{ $t("General.all") }}
                 </button>
                 <input
                   class="form-control"
@@ -58,14 +58,14 @@
         <table class="table table-striped table-bordered table-hover">
           <thead>
             <tr>
-              <th>Betrag</th>
-              <th>Vertragspartner</th>
-              <th>Kommentar</th>
-              <th>Buchungskonto</th>
-              <th>Kapitalquelle</th>
-              <th>1x</th>
-              <th>angelegt am</th>
-              <th>verwendet am</th>
+              <th>{{ $t("General.amount") }}</th>
+              <th>{{ $t("General.contractpartner") }}</th>
+              <th>{{ $t("General.comment") }}</th>
+              <th>{{ $t("General.postingAccount") }}</th>
+              <th>{{ $t("General.capitalsource") }}</th>
+              <th>{{ $t("PreDefMoneyflow.onceAMonthShort") }}</th>
+              <th>{{ $t("PreDefMoneyflow.createDate") }}</th>
+              <th>{{ $t("PreDefMoneyflow.lastUsed") }}</th>
               <th colspan="2"></th>
             </tr>
             <ListPreDefMoneyflowRowVue
