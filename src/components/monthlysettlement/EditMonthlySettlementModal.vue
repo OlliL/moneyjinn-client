@@ -86,6 +86,8 @@
                       :validation-schema="schema.amount"
                       :disabled="mms.imported"
                       :id="'amountCredit' + idx"
+                      field-type="number"
+                      step="0.01"
                     >
                       <template #icon
                         ><span class="input-group-text"
