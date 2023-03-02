@@ -181,7 +181,12 @@ const loadMonth = (year?: number, month?: number) => {
 onBeforeRouteUpdate((to, from, next) => {
   const year = +to.params.year;
   const month = +to.params.month;
-  if (currentlyShownYear.value != year) {
+  if (
+    // only reload month when switching years, deleting a settlement or creating a new settlement
+    currentlyShownYear.value != year ||
+    (selectedMonth.value > 0 && isNaN(month)) ||
+    !months.value.includes(month)
+  ) {
     loadMonth(year, month);
   }
 
@@ -206,6 +211,7 @@ const showEditMonthlySettlementModal = (year?: number, month?: number) => {
 };
 
 const monthlySettlementUpserted = (year: number, month: number) => {
+  console.log("-------------------->", year, month);
   selectedMonth.value = 0;
   router.push({
     name: Routes.ListMonthlySettlements,
