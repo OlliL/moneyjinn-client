@@ -240,6 +240,17 @@
             "month": "Please specify a month!"
         }
     },
+    "PostingAccount": {
+        "searchBy": "Search by name...",
+        "title": {
+            "create": "create postingaccount",
+            "update": "update postingaccount",
+            "delete": "delete postingaccount"
+        },
+        "validation": {
+            "name": "Please specify a name!"
+        }
+    },
     "PreDefMoneyflow": {},
     "ImportReceipts": {
         "importReceipts": "import receipts"
