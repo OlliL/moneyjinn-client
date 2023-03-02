@@ -211,7 +211,6 @@ const showEditMonthlySettlementModal = (year?: number, month?: number) => {
 };
 
 const monthlySettlementUpserted = (year: number, month: number) => {
-  console.log("-------------------->", year, month);
   selectedMonth.value = 0;
   router.push({
     name: Routes.ListMonthlySettlements,
