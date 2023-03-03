@@ -82,9 +82,6 @@
             "importAllowed": "Bitte Importart auswählen!"
         }
     },
-    "ChangePassword": {
-        "changePassword": "Passwortwechsel"
-    },
     "Contractpartner": {
         "moneyflowComment": "Standard-Kommentar der Geldbewegung",
         "street": "Straße",
@@ -123,6 +120,7 @@
         "file": "Datei",
         "importfile": "Importdatei",
         "format": "Format",
+        "database": "Datenbank",
         "dataInSourceNotInDb": "Datensätze die in der Quelle, aber nicht in der Datenbank, enthalten sind",
         "dataNotInSourceInDb": "Datensätze die in der Datenbank, aber nicht in der Quelle, enthalten sind",
         "dataMatchingButWrongCapitalsource": "passende Datensätze jedoch mit falscher Kapitalquelle",
@@ -317,5 +315,31 @@
         "singlePostingAccount": "Einzelnes Buchungskonto",
         "multiplePostingAccounts": "Mehrere Buchungskonten",
         "settled": "festgeschrieben"
+    },
+    "User": {
+        "title": {
+            "create": "Benutzerkonto hinzufügen",
+            "update": "Benutzerkonto bearbeiten",
+            "delete": "Benutzerkonto löschen",
+            "changePassword": "Passwortwechsel"
+        },
+        "groupHistory": "Gruppenhistorie",
+        "new": "neu",
+        "admin": "Administrator",
+        "canLogin": "Anmeldung erlaubt",
+        "oldPassword": "altes Passwort",
+        "newPassword": "neues Passwort",
+        "passwordVerify": "Passwort wiederholen",
+        "searchBy": "Suchen nach Name...",
+        "validation": {
+            "name": "Bitte Name angeben!",
+            "groupId": "Bitte Benutzergruppe auswählen!",
+            "userIsAdmin": "Bitte auswählen ob Admin",
+            "userIsNew": "Bitte auswählen ob neu",
+            "userCanLogin": "Bitte auswählen ob Login möglich",
+            "passwordNotEqual": "Die Passwörter stimmen nicht überein!",
+            "password": "Bitte Passwort angeben!",
+            "passwordOld": "Bitte altes Passwort angeben!"
+        }
     }
 }
