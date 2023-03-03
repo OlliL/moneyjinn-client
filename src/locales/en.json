@@ -35,6 +35,8 @@
         "no": "no",
         "all": "all",
         "new": "new",
+        "year": "year",
+        "month": "month",
         "validation": {
             "validFrom": "Please specify a valid from date!",
             "validTil": "Please specify a valid to date!",
@@ -181,6 +183,15 @@
             "name": "Please specify a name!"
         }
     },
+    "LoginView": {
+        "welcome": "Welcome!",
+        "enterYourData": "Please enter your user credentials and press „login“.",
+        "login": "login",
+        "by": "by"
+    },
+    "Modal": {
+        "cancel": "cancel"
+    },
     "Moneyflow": {
         "bookingdate": "bookingdate",
         "invoicedate": "invoicedate",
@@ -208,8 +219,6 @@
         "orderBy": "order by",
         "bookingMonth": "bookingmonth",
         "bookingYear": "bookingyear",
-        "year": "year",
-        "month": "month",
         "grouping": "grouping",
         "title": {
             "create": "create moneyflow",
@@ -265,22 +274,44 @@
             "onceAMonth": "Please specify if only once a month!"
         }
     },
-    "ImportReceipts": {
-        "importReceipts": "import receipts"
+    "Receipt": {
+        "importReceipts": "import receipts",
+        "receipt": "receipt",
+        "upload": "upload"
     },
-    "LoginView": {
-        "welcome": "Welcome!",
-        "enterYourData": "Please enter your user credentials and press „login“.",
-        "login": "login",
-        "by": "by"
-    },
-    "Modal": {
-        "cancel": "cancel"
-    },
-    "ShowReporting": {
-        "costReporting": "cost reporting"
-    },
-    "ShowTrends": {
-        "trends": "trends"
+    "Reports": {
+        "title": {
+            "reports": "reports",
+            "report": "moneyflows {month} {year}",
+            "costReporting": "cost reporting",
+            "costReportYear": "{year}",
+            "costReportYearTilYear": "{yearFrom} til {yearTil}",
+            "costReportMonthYear": "{month} {year}",
+            "costReportMonthYearTilMonthYear": "{monthFrom} {yearFrom} til {monthTil} {yearTil}",
+            "trends": "trends",
+            "trendGraph": "amount trends of selected capitalsources starting from {startLabel} til {endLabel}",
+            "trendMonthYear": "month / year",
+            "trendAmount": "amount"
+        },
+        "beginOfMonth": "start balance",
+        "endOfMonthFixed": "fixed end balance",
+        "endOfMonthCalculated": "calculated end balance",
+        "currentAmount": "current balance",
+        "state": "state",
+        "difference": "difference",
+        "calculated": "calculated",
+        "overview": "overview",
+        "ownCapital": "own capital",
+        "debtCapital": "debt capital",
+        "loans": "loans",
+        "fixedProfit": "fixed profit",
+        "calculatedProfit": "caluclated profit",
+        "included": "included",
+        "excluded": "excluded",
+        "aggregationOnMonths": "aggregation on months",
+        "aggregationOnYears": "aggregation on years",
+        "singlePostingAccount": "single postingaccount",
+        "multiplePostingAccounts": "multiple postingaccounts",
+        "settled": "settled"
     }
 }

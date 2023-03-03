@@ -1,5 +1,5 @@
 <template>
-  <ModalVue title="Beleg" ref="modalComponent">
+  <ModalVue :title="$t('Receipt.receipt')" ref="modalComponent">
     <template #body>
       <DivError :server-errors="serverErrors" />
       <img

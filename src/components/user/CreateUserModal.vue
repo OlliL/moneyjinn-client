@@ -105,9 +105,9 @@
                   <table class="table table-striped table-bordered table-hover">
                     <thead>
                       <tr>
-                        <th>Gruppe</th>
-                        <th>g&uuml;ltig ab</th>
-                        <th>g&uuml;ltig bis</th>
+                        <th>{{ $t("General.group") }}</th>
+                        <th>{{ $t("General.validFrom") }}</th>
+                        <th>{{ $t("General.validTil") }}</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -127,10 +127,10 @@
     </template>
     <template #footer>
       <button type="button" class="btn btn-secondary" @click="resetForm">
-        r&uuml;cksetzen
+        {{ $t("General.reset") }}
       </button>
       <ButtonSubmit
-        button-label="Speichern"
+        :button-label="$t('General.save')"
         :form-id="'createUserForm' + idSuffix"
       />
     </template>

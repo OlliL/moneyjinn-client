@@ -284,7 +284,7 @@
           <tbody>
             <tr>
               <th class="text-start">
-                {{ $t("ETF.calculateResults.profit") }}
+                {{ $t("ETF.profit") }}
               </th>
               <td class="text-end">
                 <SpanAmount :amount="calcResults.profit" />

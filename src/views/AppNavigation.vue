@@ -83,14 +83,14 @@
                 <router-link
                   class="dropdown-item"
                   :to="{ name: Routes.ShowTrends }"
-                  >{{ $t("ShowTrends.trends") }}</router-link
+                  >{{ $t("Reports.title.trends") }}</router-link
                 >
               </li>
               <li>
                 <router-link
                   class="dropdown-item"
                   :to="{ name: Routes.ShowReporting }"
-                  >{{ $t("ShowReporting.costReporting") }}</router-link
+                  >{{ $t("Reports.title.costReporting") }}</router-link
                 >
               </li>
             </ul>
@@ -120,7 +120,7 @@
                 <router-link
                   class="dropdown-item"
                   :to="{ name: Routes.ImportReceipts }"
-                  >{{ $t("ImportReceipts.importReceipts") }}</router-link
+                  >{{ $t("Receipt.importReceipts") }}</router-link
                 >
               </li>
               <li>

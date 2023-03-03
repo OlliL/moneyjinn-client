@@ -24,6 +24,7 @@
 
 <script lang="ts" setup>
 import { computed, type PropType } from "vue";
+import { useI18n } from "vue-i18n";
 
 import SpanAmount from "../SpanAmount.vue";
 
@@ -37,6 +38,8 @@ import {
   CapitalsourceState,
   capitalsourceStateNames,
 } from "@/model/capitalsource/CapitalsourceState";
+
+const { t } = useI18n();
 
 const props = defineProps({
   capitalsourceType: {
@@ -91,6 +94,6 @@ const differenceFixedCalculated = computed(() => {
 const amountCurrentStateString = computed(() => {
   return props.amountCurrentState != null
     ? formatDateWithTime(props.amountCurrentState)
-    : "berechnet";
+    : t("Reports.calculated");
 });
 </script>

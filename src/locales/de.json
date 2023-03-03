@@ -18,6 +18,7 @@
         "comment": "Kommentar",
         "name": "Name",
         "users": "Benutzerkonten",
+        "group": "Benutzergruppe",
         "groups": "Benutzergruppen",
         "iban": "IBAN",
         "bic": "BIC",
@@ -35,6 +36,8 @@
         "no": "Nein",
         "all": "Alle",
         "new": "Neu",
+        "year": "Jahr",
+        "month": "Monat",
         "validation": {
             "validFrom": "Bitte Gültig ab angeben!",
             "validTil": "Bitte Gültig bis angeben!",
@@ -144,11 +147,14 @@
         "ask": "Einkauf",
         "transactionCosts": "Transaktionskosten",
         "calculate": "Berechnen",
+        "shares": "Anteile",
+        "overall": "Gesamt",
+        "payed": "Bezahlt",
+        "profit": "Gewinn",
         "calculateResults": {
             "pieces": "zu verkaufende Stück",
             "originalBuyPrice": "ursprünglicher Kaufpreis",
             "sellPrice": "Verkaufspreis",
-            "profit": "Gewinn",
             "chargeable": "davon steuerlich relevant",
             "newBuyPrice": "neuer Kaufpreis",
             "rebuyLosses": "Wiederverkaufsverlust",
@@ -181,6 +187,15 @@
             "name": "Bitte Name angeben!"
         }
     },
+    "LoginView": {
+        "welcome": "Willkommen!",
+        "enterYourData": "Geben Sie Ihre Nutzerdaten ein und klicken Sie auf „Anmelden“.",
+        "login": "Anmelden",
+        "by": "von"
+    },
+    "Modal": {
+        "cancel": "Abbrechen"
+    },
     "Moneyflow": {
         "bookingdate": "Buchungsdatum",
         "invoicedate": "Rechnungsdatum",
@@ -208,8 +223,6 @@
         "orderBy": "Sortieren nach",
         "bookingMonth": "Buchungsmonat",
         "bookingYear": "Buchungsjahr",
-        "year": "Jahr",
-        "month": "Monat",
         "grouping": "Gruppierung",
         "title": {
             "create": "Geldbewegung hinzufügen",
@@ -265,22 +278,44 @@
             "onceAMonth": "Bitte auswählen ob nur 1x im Monat!"
         }
     },
-    "ImportReceipts": {
-        "importReceipts": "Bons importieren"
+    "Receipt": {
+        "importReceipts": "Bons importieren",
+        "receipt": "Bon",
+        "upload": "Hochladen"
     },
-    "LoginView": {
-        "welcome": "Willkommen!",
-        "enterYourData": "Geben Sie Ihre Nutzerdaten ein und klicken Sie auf „Anmelden“.",
-        "login": "Anmelden",
-        "by": "von"
-    },
-    "Modal": {
-        "cancel": "Abbrechen"
-    },
-    "ShowReporting": {
-        "costReporting": "Ausgabenauswertung"
-    },
-    "ShowTrends": {
-        "trends": "trends"
+    "Reports": {
+        "title": {
+            "reports": "Reports",
+            "report": "Geldbewegungen {month} {year}",
+            "costReporting": "Ausgabenauswertung",
+            "costReportYear": "{year}",
+            "costReportYearTilYear": "{yearFrom} bis {yearTil}",
+            "costReportMonthYear": "{month} {year}",
+            "costReportMonthYearTilMonthYear": "{monthFrom} {yearFrom} bis {monthTil} {yearTil}",
+            "trends": "Trends",
+            "trendGraph": "Vermögenstrend der ausgewählten Kapitalquellen {startLabel} bis {endLabel}",
+            "trendMonthYear": "Monat / Jahr",
+            "trendAmount": "Betrag"
+        },
+        "beginOfMonth": "Anfangsbetrag",
+        "endOfMonthFixed": "Endbetrag (fix)",
+        "endOfMonthCalculated": "Endbetrag (berechnet)",
+        "currentAmount": "aktueller Betrag",
+        "state": "Stand",
+        "difference": "Differenz",
+        "calculated": "berechnet",
+        "overview": "Monatsbilanz",
+        "ownCapital": "Eigenkapital",
+        "debtCapital": "Fremdkapital",
+        "loans": "Kredite",
+        "fixedProfit": "Gewinn (fix)",
+        "calculatedProfit": "Gewinn (errechnet)",
+        "included": "eingeschlossen",
+        "excluded": "ausgeschlossen",
+        "aggregationOnMonths": "Aggregation auf Monate",
+        "aggregationOnYears": "Aggregation auf Jahre",
+        "singlePostingAccount": "Einzelnes Buchungskonto",
+        "multiplePostingAccounts": "Mehrere Buchungskonten",
+        "settled": "festgeschrieben"
     }
 }
