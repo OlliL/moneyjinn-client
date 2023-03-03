@@ -19,7 +19,7 @@
               v-model="selectedMonth"
               :validation-schema="schema.month"
               id="selectedMonth"
-              field-label="Monat"
+              :field-label="$t('General.month')"
               pick-mode="month"
             />
           </div>

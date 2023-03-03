@@ -14,19 +14,25 @@
         <col style="width: 15%" />
         <thead>
           <tr>
-            <th class="text-center">Typ</th>
-            <th class="text-center">Status</th>
-            <th class="text-center">Kommentar</th>
-            <th class="text-center">Anfangsbetrag</th>
+            <th class="text-center">{{ $t("Capitalsource.type") }}</th>
+            <th class="text-center">{{ $t("Capitalsource.state") }}</th>
+            <th class="text-center">{{ $t("General.comment") }}</th>
+            <th class="text-center">{{ $t("Reports.beginOfMonth") }}</th>
             <th class="text-center" v-if="currentMonthIsSettled">
-              Endbetrag (fix)
+              {{ $t("Reports.endOfMonthFixed") }}
             </th>
-            <th class="text-center">Endbetrag (errechnet)</th>
+            <th class="text-center">
+              {{ $t("Reports.endOfMonthCalculated") }}
+            </th>
             <th class="text-center" v-if="!currentMonthIsSettled">
-              Aktueller Betrag
+              {{ $t("Reports.currentAmount") }}
             </th>
-            <th class="text-center" v-if="!currentMonthIsSettled">Stand</th>
-            <th class="text-center" v-if="currentMonthIsSettled">Differenz</th>
+            <th class="text-center" v-if="!currentMonthIsSettled">
+              {{ $t("Reports.state") }}
+            </th>
+            <th class="text-center" v-if="currentMonthIsSettled">
+              {{ $t("Reports.difference") }}
+            </th>
           </tr>
         </thead>
 

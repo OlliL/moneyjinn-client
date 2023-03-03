@@ -258,8 +258,8 @@ const ORDER_COMMENT: number = 3;
 
 const groupValues = [
   { id: GROUP_NONE, value: "" },
-  { id: GROUP_YEAR, value: t("Moneyflow.year") },
-  { id: GROUP_MONTH, value: t("Moneyflow.month") },
+  { id: GROUP_YEAR, value: t("General.year") },
+  { id: GROUP_MONTH, value: t("General.month") },
   { id: GROUP_CONTRACTPARTNER, value: t("General.contractpartner") },
 ] as Array<SelectBoxValue>;
 

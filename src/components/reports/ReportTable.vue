@@ -2,7 +2,9 @@
   <div class="row" style="margin-top: 20px" v-if="dataLoaded">
     <div class="card">
       <div class="card-header text-center p-3">
-        <h5>Geldbewegung {{ monthName }} {{ year }}</h5>
+        <h5>
+          {{ $t("Reports.title.report", { month: monthName, year: year }) }}
+        </h5>
       </div>
 
       <DivError :server-errors="serverErrors" />
@@ -24,7 +26,7 @@
             <tr>
               <th></th>
               <th>
-                Buchungsdatum
+                {{ $t("Moneyflow.bookingdate") }}
                 <i
                   :class="`bi ${sortIcon('bookingDate')} link-primary`"
                   role="button"
@@ -32,7 +34,7 @@
                 ></i>
               </th>
               <th>
-                Rechnungsdatum
+                {{ $t("Moneyflow.invoicedate") }}
                 <i
                   :class="`bi ${sortIcon('invoiceDate')} link-primary`"
                   role="button"
@@ -40,7 +42,7 @@
                 ></i>
               </th>
               <th colspan="2">
-                Betrag
+                {{ $t("General.amount") }}
                 <i
                   :class="`bi ${sortIcon('amount')} link-primary`"
                   role="button"
@@ -48,7 +50,7 @@
                 ></i>
               </th>
               <th>
-                Vertragspartner
+                {{ $t("General.contractpartner") }}
                 <i
                   :class="`bi ${sortIcon('contractpartnerName')} link-primary`"
                   role="button"
@@ -56,7 +58,7 @@
                 ></i>
               </th>
               <th>
-                Kommentar
+                {{ $t("General.comment") }}
                 <i
                   :class="`bi ${sortIcon('comment')} link-primary`"
                   role="button"
@@ -64,7 +66,7 @@
                 ></i>
               </th>
               <th>
-                Buchungskonto
+                {{ $t("General.postingAccount") }}
                 <i
                   :class="`bi ${sortIcon('postingAccountName')} link-primary`"
                   role="button"
@@ -72,7 +74,7 @@
                 ></i>
               </th>
               <th>
-                Kapitalquelle
+                {{ $t("General.capitalsource") }}
                 <i
                   :class="`bi ${sortIcon('capitalsourceComment')} link-primary`"
                   role="button"
@@ -106,7 +108,7 @@
   <div v-if="report.reportTurnoverCapitalsources">
     <div class="row" style="margin-top: 40px">
       <div class="col-xs-12 text-center">
-        <h1>Monatsbilanz</h1>
+        <h1>{{ $t("Reports.overview") }}</h1>
       </div>
     </div>
 
@@ -119,7 +121,7 @@
       <div class="col col-lg-8">
         <div class="card">
           <div class="card-header text-center p-3">
-            <h4>Eigenkapital</h4>
+            <h4>{{ $t("Reports.ownCapital") }}</h4>
           </div>
           <div class="card-body">
             <CapitalsourceTableVue
@@ -132,13 +134,13 @@
                   <thead>
                     <tr>
                       <th></th>
-                      <th>Monat</th>
-                      <th>Jahr</th>
+                      <th>{{ $t("General.month") }}</th>
+                      <th>{{ $t("General.year") }}</th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr v-if="currentMonthIsSettled">
-                      <th class="text-end">Gewinn (fix)</th>
+                      <th class="text-end">{{ $t("Reports.fixedProfit") }}</th>
                       <td class="text-end">
                         <SpanAmount :amount="assetsMonthlyFixedTurnover" />
                       </td>
@@ -147,7 +149,9 @@
                       </td>
                     </tr>
                     <tr>
-                      <th class="text-end">Gewinn (errechnet)</th>
+                      <th class="text-end">
+                        {{ $t("Reports.calculatedProfit") }}
+                      </th>
                       <td class="text-end">
                         <SpanAmount :amount="assetsMonthlyCalculatedTurnover" />
                       </td>
@@ -158,7 +162,7 @@
                       </td>
                     </tr>
                     <tr v-if="currentMonthIsSettled">
-                      <th class="text-end">Differenz</th>
+                      <th class="text-end">{{ $t("Reports.difference") }}</th>
                       <td class="text-end">
                         <SpanAmount :amount="assetsMonthlyDifference" />
                       </td>
@@ -185,7 +189,7 @@
       <div class="col col-lg-8">
         <div class="card">
           <div class="card-header text-center p-3">
-            <h4>Fremdkapital</h4>
+            <h4>{{ $t("Reports.debtCapital") }}</h4>
           </div>
           <div class="card-body">
             <CapitalsourceTableVue
@@ -206,7 +210,7 @@
       <div class="col col-lg-8">
         <div class="card">
           <div class="card-header text-center p-3">
-            <h4>Kredite</h4>
+            <h4>{{ $t("Reports.loans") }}</h4>
           </div>
           <div class="card-body">
             <CapitalsourceTableVue

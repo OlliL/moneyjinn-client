@@ -7,7 +7,7 @@
     <div class="col col-lg-8">
       <div class="card">
         <div class="card-header text-center p-3">
-          <h4>ETF</h4>
+          <h4>{{ $t("ETF.etf") }}</h4>
         </div>
         <div class="card-body">
           <div class="row">
@@ -27,19 +27,27 @@
                 <col style="width: 14%" />
                 <thead>
                   <tr>
-                    <th class="text-center" rowspan="2">Name</th>
-                    <th class="text-center" rowspan="2">Anteile</th>
-                    <th class="text-center" colspan="3">St&uuml;ck</th>
-                    <th class="text-center" colspan="3">Gesamt</th>
-                    <th class="text-center" rowspan="2">Stand</th>
+                    <th class="text-center" rowspan="2">{{ $t("ETF.etf") }}</th>
+                    <th class="text-center" rowspan="2">
+                      {{ $t("ETF.shares") }}
+                    </th>
+                    <th class="text-center" colspan="3">
+                      {{ $t("ETF.amount") }}
+                    </th>
+                    <th class="text-center" colspan="3">
+                      {{ $t("ETF.overall") }}
+                    </th>
+                    <th class="text-center" rowspan="2">
+                      {{ $t("Reports.state") }}
+                    </th>
                   </tr>
                   <tr>
-                    <th class="text-center">Bezahlt &#8709;</th>
-                    <th class="text-center">Verkauf</th>
-                    <th class="text-center">Einkauf</th>
-                    <th class="text-center">Bezahlt</th>
-                    <th class="text-center">Verkauf</th>
-                    <th class="text-center">Gewinn</th>
+                    <th class="text-center">{{ $t("ETF.payed") }} &#8709;</th>
+                    <th class="text-center">{{ $t("ETF.bid") }}</th>
+                    <th class="text-center">{{ $t("ETF.ask") }}</th>
+                    <th class="text-center">{{ $t("ETF.payed") }}</th>
+                    <th class="text-center">{{ $t("ETF.bid") }}</th>
+                    <th class="text-center">{{ $t("ETF.profit") }}</th>
                   </tr>
                 </thead>
 

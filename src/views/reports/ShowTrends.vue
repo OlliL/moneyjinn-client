@@ -2,7 +2,7 @@
   <div class="container-fluid text-center">
     <div class="row justify-content-md-center">
       <div class="col-xs-12 mb-4">
-        <h4>Trends</h4>
+        <h4>{{ $t("Reports.title.trends") }}</h4>
       </div>
     </div>
     <DivError :server-errors="serverErrors" />
@@ -20,7 +20,7 @@
                       :validation-schema="schema.startDate"
                       id="startDate"
                       pickMode="month"
-                      field-label="Startdatum"
+                      :field-label="$t('General.startDate')"
                     />
                   </div>
                   <div class="col-md-6 col-xs-12">
@@ -29,7 +29,7 @@
                       :validation-schema="schema.endDate"
                       id="endDate"
                       pickMode="month"
-                      field-label="Enddatum"
+                      :field-label="$t('General.endDate')"
                     />
                   </div>
                 </div>
@@ -71,7 +71,7 @@
                 <div class="row no-gutters flex-lg-nowrap">
                   <div class="col-12">
                     <button type="submit" class="btn btn-primary">
-                      anzeigen
+                      {{ $t("General.show") }}
                     </button>
                   </div>
                 </div>
@@ -111,6 +111,7 @@ import {
 import { useField, useForm } from "vee-validate";
 import { toFieldValidator } from "@vee-validate/zod";
 import { computed, onMounted, ref } from "vue";
+import { useI18n } from "vue-i18n";
 import { Line } from "vue-chartjs";
 import { date, number } from "zod";
 
@@ -131,12 +132,16 @@ import type { TrendsParameter } from "@/model/report/TrendsParameter";
 import ReportControllerHandler from "@/handler/ReportControllerHandler";
 import { handleBackendError } from "@/tools/views/ThrowError";
 
+const { t } = useI18n();
+
 const serverErrors = ref(new Array<string>());
 
 const schema = {
-  startDate: date(globErr("Bitte Startdatum angeben!")),
-  endDate: date(globErr("Bitte Enddatum angeben!")),
-  capitalsourceIds: number().array().min(1, "Bitte Buchungskonto angeben!"),
+  startDate: date(globErr(t("General.validation.startDate"))),
+  endDate: date(globErr(t("General.validation.endDate"))),
+  capitalsourceIds: number()
+    .array()
+    .min(1, t("Moneyflow.validation.postingAccountId")),
 };
 
 const dataLoaded = ref(false);
@@ -147,7 +152,7 @@ const chartData = ref({
   labels: new Array<string>(),
   datasets: [
     {
-      label: "festgeschrieben",
+      label: t("Reports.settled"),
       data: new Array<number | null>(),
       fill: true,
       borderColor: "#B0C4DE",
@@ -162,7 +167,7 @@ const chartData = ref({
       },
     },
     {
-      label: "berechnet",
+      label: t("Reports.calculated"),
       data: new Array<number | null>(),
       fill: true,
       borderColor: "#689bde",
@@ -209,13 +214,13 @@ const chartOptions = ref({
   scales: {
     x: {
       title: {
-        text: "Monat/Jahr",
+        text: t("Reports.title.trendMonthYear"),
         display: true,
       },
     },
     y: {
       title: {
-        text: "Betrag",
+        text: t("Reports.title.trendAmount"),
         display: true,
       },
       ticks: {
@@ -270,7 +275,7 @@ const {
 const errorCapitalsourceIds = computed((): ErrorData => {
   return generateErrorDataVeeValidate(
     capitalsourceIdsMeta.touched,
-    "Kapitalquellen",
+    t("General.capitalsources"),
     errorMessage.value
   );
 });
@@ -374,11 +379,10 @@ const showTrends = handleSubmit(() => {
         const startLabel = chartData.value.labels[0];
         const endLabel =
           chartData.value.labels[chartData.value.labels.length - 1];
-        chartOptions.value.plugins.title.text =
-          "Vermögenstrend der ausgewählten Kapitalquellen " +
-          startLabel +
-          " bis " +
-          endLabel;
+        chartOptions.value.plugins.title.text = t("Reports.title.trendGraph", {
+          startLabel: startLabel,
+          endLabel: endLabel,
+        });
         trendsGraphLoaded.value = true;
       }
     })

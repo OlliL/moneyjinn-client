@@ -2,7 +2,7 @@
   <div class="container-fluid text-center">
     <div class="row justify-content-md-center">
       <div class="col-xs-12 mb-4">
-        <h4>Ausgabenauswertung</h4>
+        <h4>{{ $t("Reports.title.costReporting") }}</h4>
       </div>
     </div>
     <DivError :server-errors="serverErrors" />
@@ -20,7 +20,7 @@
                       :validation-schema-ref="schema.startDateMonth"
                       id="startDateMonth"
                       pickMode="month"
-                      field-label="Startdatum"
+                      :field-label="$t('General.startDate')"
                     />
                   </div>
                   <div class="col-md-4 col-xs-12" v-show="!groupByYear">
@@ -29,7 +29,7 @@
                       :validation-schema-ref="schema.endDateMonth"
                       id="endDateMonth"
                       pickMode="month"
-                      field-label="Enddatum"
+                      :field-label="$t('General.endDate')"
                     />
                   </div>
 
@@ -39,7 +39,7 @@
                       :validation-schema-ref="schema.startDateYear"
                       id="startDateYear"
                       pickMode="year"
-                      field-label="Startdatum"
+                      :field-label="$t('General.startDate')"
                     />
                   </div>
                   <div class="col-md-4 col-xs-12" v-show="groupByYear">
@@ -48,7 +48,7 @@
                       :validation-schema-ref="schema.endDateYear"
                       id="endDateYear"
                       pickMode="year"
-                      field-label="Enddatum"
+                      :field-label="$t('General.endDate')"
                     />
                   </div>
                   <div class="col-md-4 col-xs-12">
@@ -155,7 +155,7 @@
                   </div>
                   <div class="col-5 text-start">
                     <label for="postingAccountIdsYes" style="opacity: 0.65"
-                      ><small>ausgeschlossen</small></label
+                      ><small>{{ $t("Reports.excluded") }}</small></label
                     >
                     <select
                       v-model="selectedPostingAccountsNo"
@@ -183,14 +183,14 @@
                       v-model="selectedPostingAccount"
                       :validation-schema-ref="schema.selectedPostingAccount"
                       id-suffix="ShowReporting"
-                      field-label="Buchungskonto"
+                      :field-label="$t('General.postingAccount')"
                     />
                   </div>
                 </div>
 
                 <div class="row no-gutters flex-lg-nowrap mt-3">
                   <div class="col-12">
-                    <ButtonSubmit button-label="anzeigen" />
+                    <ButtonSubmit :button-label="$t('General.show')" />
                   </div>
                 </div>
               </div>
@@ -228,6 +228,7 @@ import { toFieldValidator } from "@vee-validate/zod";
 import { useField, useForm } from "vee-validate";
 import { computed, onMounted, ref } from "vue";
 import { Bar } from "vue-chartjs";
+import { useI18n } from "vue-i18n";
 import { any, date, number } from "zod";
 
 import ButtonSubmit from "@/components/ButtonSubmit.vue";
@@ -250,6 +251,8 @@ import type { ReportingParameter } from "@/model/report/ReportingParameter";
 import type { ReportingMonthAmount } from "@/model/report/ReportingMonthAmount";
 
 import ReportControllerHandler from "@/handler/ReportControllerHandler";
+
+const { t } = useI18n();
 
 const serverErrors = ref(new Array<string>());
 
@@ -316,8 +319,8 @@ const chartOptions = ref({
   },
 });
 
-const startDateSchema = date(globErr("Bitte Startdatum angeben!"));
-const endDateSchema = date(globErr("Bitte Enddatum angeben!"));
+const startDateSchema = date(globErr(t("General.validation.startDate")));
+const endDateSchema = date(globErr(t("General.validation.endDate")));
 const optionalSchema = any().optional();
 const schema = {
   startDateMonth: computed(() =>
@@ -334,7 +337,7 @@ const schema = {
   ),
   selectedPostingAccount: computed(() =>
     singlePostingAccounts.value
-      ? number(globErr("Bitte Buchungskonto angeben!")).gt(0)
+      ? number(globErr(t("Moneyflow.validation.postingAccountId"))).gt(0)
       : optionalSchema
   ),
 };
@@ -342,7 +345,9 @@ const schema = {
 const postingAccountIdsYesSchema = computed(() =>
   singlePostingAccounts.value
     ? toFieldValidator(optionalSchema)
-    : toFieldValidator(number().array().min(1, "Bitte Buchungskonto angeben!"))
+    : toFieldValidator(
+        number().array().min(1, t("Moneyflow.validation.postingAccountId"))
+      )
 );
 
 ChartJS.register(
@@ -379,7 +384,7 @@ const {
 const errorDatasPostingAccountsYes = computed((): ErrorData => {
   return generateErrorDataVeeValidate(
     postingAccountsYesMeta.touched,
-    "eingeschlossen",
+    t("Reports.included"),
     errorMessage.value
   );
 });
@@ -389,12 +394,14 @@ onMounted(() => {
 });
 
 const groupByYearLabel = computed(() => {
-  return groupByYear.value ? "Aggregation auf Jahre" : "Aggregation auf Monate";
+  return groupByYear.value
+    ? t("Reports.aggregationOnYears")
+    : t("Reports.aggregationOnMonths");
 });
 const singlePostingAccountsLabel = computed(() => {
   return singlePostingAccounts.value
-    ? "Einzelnes Buchungskonto"
-    : "Mehrere Buchungskonten";
+    ? t("Reports.singlePostingAccount")
+    : t("Reports.multiplePostingAccounts");
 });
 
 const loadData = () => {
@@ -506,28 +513,28 @@ const makeChartTitle = (reportingParameter: ReportingParameter): string => {
   let chartTitle: string;
   if (groupByYear.value) {
     if (sameYear) {
-      chartTitle = reportingParameter.startDate.getFullYear().toString();
+      chartTitle = t("Reports.title.costReportYear", {
+        year: reportingParameter.startDate.getFullYear().toString(),
+      });
     } else {
-      chartTitle =
-        reportingParameter.startDate.getFullYear() +
-        " bis " +
-        reportingParameter.endDate.getFullYear();
+      chartTitle = t("Reports.title.costReportYearTilYear", {
+        yearFrom: reportingParameter.startDate.getFullYear(),
+        yearTil: reportingParameter.endDate.getFullYear(),
+      });
     }
   } else {
     if (sameMonth) {
-      chartTitle =
-        getMonthName(reportingParameter.startDate.getMonth()) +
-        " " +
-        reportingParameter.startDate.getFullYear();
+      chartTitle = t("Reports.title.costReportMonthYear", {
+        month: getMonthName(reportingParameter.startDate.getMonth() + 1),
+        year: reportingParameter.startDate.getFullYear(),
+      });
     } else {
-      chartTitle =
-        getMonthName(reportingParameter.startDate.getMonth()) +
-        " " +
-        reportingParameter.startDate.getFullYear() +
-        " bis " +
-        getMonthName(reportingParameter.endDate.getMonth()) +
-        " " +
-        reportingParameter.endDate.getFullYear();
+      chartTitle = t("Reports.title.costReportMonthYearTilMonthYear", {
+        monthFrom: getMonthName(reportingParameter.startDate.getMonth() + 1),
+        yearFrom: reportingParameter.startDate.getFullYear(),
+        monthTil: getMonthName(reportingParameter.endDate.getMonth() + 1),
+        yearTil: reportingParameter.endDate.getFullYear(),
+      });
     }
   }
   return chartTitle;
@@ -538,15 +545,15 @@ const showReportingGraph = handleSubmit(() => {
   const reportingParameter = {} as ReportingParameter;
   if (groupByYear.value) {
     if (startDateYear.value && endDateYear.value) {
-      reportingParameter.startDate = startDateYear.value;
-      reportingParameter.endDate = endDateYear.value;
+      reportingParameter.startDate = new Date(startDateYear.value);
+      reportingParameter.endDate = new Date(endDateYear.value);
       reportingParameter.endDate.setMonth(11);
       reportingParameter.endDate.setDate(31);
     }
   } else {
     if (startDateMonth.value && endDateMonth.value) {
-      reportingParameter.startDate = startDateMonth.value;
-      reportingParameter.endDate = endDateMonth.value;
+      reportingParameter.startDate = new Date(startDateMonth.value);
+      reportingParameter.endDate = new Date(endDateMonth.value);
       reportingParameter.endDate.setMonth(
         reportingParameter.endDate.getMonth() + 1
       );
