@@ -23,6 +23,9 @@ import { toFieldValidator } from "@vee-validate/zod";
 import { computed, onMounted, ref, watch, type PropType, type Ref } from "vue";
 import { date, preprocess, type ZodType } from "zod";
 
+// @ts-ignore
+import de from "../../node_modules/vanillajs-datepicker/js/i18n/locales/de.js";
+
 import {
   generateErrorDataVeeValidate,
   type ErrorData,
@@ -86,55 +89,6 @@ const {
   syncVModel: false,
 });
 
-const de = {
-  de: {
-    days: [
-      "Sonntag",
-      "Montag",
-      "Dienstag",
-      "Mittwoch",
-      "Donnerstag",
-      "Freitag",
-      "Samstag",
-    ],
-    daysShort: ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"],
-    daysMin: ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"],
-    months: [
-      "Januar",
-      "Februar",
-      "März",
-      "April",
-      "Mai",
-      "Juni",
-      "Juli",
-      "August",
-      "September",
-      "Oktober",
-      "November",
-      "Dezember",
-    ],
-    monthsShort: [
-      "Jan",
-      "Feb",
-      "Mär",
-      "Apr",
-      "Mai",
-      "Jun",
-      "Jul",
-      "Aug",
-      "Sep",
-      "Okt",
-      "Nov",
-      "Dez",
-    ],
-    today: "Heute",
-    monthsTitle: "Monate",
-    clear: "Löschen",
-    weekStart: 1,
-    format: "dd.mm.yyyy",
-  },
-};
-
 Object.assign(Datepicker.locales, de);
 let pickLevel = 0;
 let format = "dd.mm.yyyy";
@@ -169,7 +123,7 @@ onMounted(() => {
       todayBtn: true,
       todayBtnMode: 1,
       autohide: true,
-      language: "de",
+      language: navigator.language,
       format: format,
     });
     viewMounted.value = true;

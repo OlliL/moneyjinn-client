@@ -18,6 +18,7 @@
         "comment": "comment",
         "name": "name",
         "users": "user accounts",
+        "group": "user group",
         "groups": "user groups",
         "iban": "IBAN",
         "bic": "BIC",
@@ -146,6 +147,10 @@
         "ask": "ask",
         "transactionCosts": "transaction costs",
         "calculate": "calculate",
+        "shares": "shares",
+        "overall": "overall",
+        "payed": "payes",
+        "profit": "profit",
         "calculateResults": {
             "pieces": "pieces to be sold",
             "originalBuyPrice": "original buy price",
@@ -166,7 +171,7 @@
             "price": "Please specify a price per piece!",
             "isin": "Please select an ETF!",
             "timestamp": "Please specify a bookingtime!",
-            "nanoseconds": "The bookingtime must be specified in the format 00:00:00:000!",
+            "nanoseconds": "Bookingtime must be in the format 00:00:00:000!",
             "askPrice": "Please specify the ask price!",
             "bidPrice": "Please specify the bid price!",
             "transactionCosts": "Please specify the transaction costs!"
