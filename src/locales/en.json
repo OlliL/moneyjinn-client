@@ -82,9 +82,6 @@
             "importAllowed": "Please select what kind of data import is allowed!"
         }
     },
-    "ChangePassword": {
-        "changePassword": "change password"
-    },
     "Contractpartner": {
         "moneyflowComment": "the moneyflows default comment",
         "street": "street",
@@ -123,6 +120,7 @@
         "file": "file",
         "importfile": "import file",
         "format": "format",
+        "database": "database",
         "dataInSourceNotInDb": "Data the source contains, but not the database",
         "dataNotInSourceInDb": "Data the database contains, but not the source",
         "dataMatchingButWrongCapitalsource": "matching data but with wrong capitalsource",
@@ -155,7 +153,6 @@
             "pieces": "pieces to be sold",
             "originalBuyPrice": "original buy price",
             "sellPrice": "sales price",
-            "profit": "profit",
             "chargeable": "tax relevant part",
             "newBuyPrice": "new buy price",
             "rebuyLosses": "resale loss",
@@ -318,5 +315,31 @@
         "singlePostingAccount": "single postingaccount",
         "multiplePostingAccounts": "multiple postingaccounts",
         "settled": "settled"
+    },
+    "User": {
+        "title": {
+            "create": "create user",
+            "update": "update user",
+            "delete": "delete user",
+            "changePassword": "change password"
+        },
+        "groupHistory": "group history",
+        "new": "new",
+        "admin": "administrator",
+        "canLogin": "login allowed",
+        "oldPassword": "current password",
+        "newPassword": "new password",
+        "passwordVerify": "repeat password",
+                "searchBy": "search by name...",
+        "validation": {
+            "name": "Please specify a name!",
+            "groupId": "Please select a group!",
+            "userIsAdmin": "Please select if admin!",
+            "userIsNew": "Please select if new!",
+            "userCanLogin": "Please select if login possible!",
+            "passwordNotEqual": "Both passwords do not match!",
+            "password": "Please specify a passowrd!",
+            "passwordOld": "Please specify the old password!"
+        }
     }
 }

@@ -1,5 +1,5 @@
 <template>
-  <ModalVue title="Benutzerkonto l&ouml;schen" ref="modalComponent">
+  <ModalVue :title="$t('User.title.delete')" ref="modalComponent">
     <template #body>
       <DivError :server-errors="serverErrors" />
       <div class="row">
@@ -7,7 +7,7 @@
           class="text-start d-flex align-items-center col-sm-3 col-xs-5"
           style="font-weight: 700; font-size: 10.5px"
         >
-          Name
+          {{ $t("General.name") }}
         </div>
         <div class="text-start col-sm-9">{{ user.userName }}</div>
       </div>
@@ -16,7 +16,7 @@
           class="text-start d-flex align-items-center col-sm-3 col-xs-5"
           style="font-weight: 700; font-size: 10.5px"
         >
-          Gruppe
+          {{ $t("General.group") }}
         </div>
         <div class="text-start col-sm-9">{{ user.groupName }}</div>
       </div>
@@ -25,7 +25,7 @@
           class="text-start d-flex align-items-center col-sm-3 col-xs-5"
           style="font-weight: 700; font-size: 10.5px"
         >
-          Anmeldung erlaubt
+          {{ $t("User.canLogin") }}
         </div>
         <div class="text-start col-sm-9">
           <SpanBoolean :value="user.userCanLogin" />
@@ -36,7 +36,7 @@
           class="text-start d-flex align-items-center col-sm-3 col-xs-5"
           style="font-weight: 700; font-size: 10.5px"
         >
-          Administrator
+          {{ $t("User.admin") }}
         </div>
         <div class="text-start col-sm-9">
           <SpanBoolean :value="user.userIsAdmin" />
@@ -47,7 +47,7 @@
           class="text-start d-flex align-items-center col-sm-3 col-xs-5"
           style="font-weight: 700; font-size: 10.5px"
         >
-          Neu
+          {{ $t("User.new") }}
         </div>
         <div class="text-start col-sm-9">
           <SpanBoolean :value="user.userIsNew" />
@@ -56,7 +56,7 @@
     </template>
     <template #footer>
       <button type="button" class="btn btn-danger" @click="deleteUser">
-        L&ouml;schen
+        {{ $t("General.delete") }}
       </button>
     </template>
   </ModalVue>

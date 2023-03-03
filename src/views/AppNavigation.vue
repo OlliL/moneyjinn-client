@@ -224,7 +224,7 @@
                   <router-link
                     class="dropdown-item"
                     :to="{ name: Routes.ChangePassword }"
-                    >{{ $t("ChangePassword.changePassword") }}</router-link
+                    >{{ $t("User.title.changePassword") }}</router-link
                   >
                 </li>
                 <li v-if="userIsAdmin">

@@ -1,6 +1,6 @@
 <template>
   <tr v-if="mmf">
-    <th>Datenbank</th>
+    <th>{{ $t("CompareData.database") }}</th>
     <td><SpanDate :date="mmf.bookingDate" /></td>
     <td><SpanDate :date="mmf.invoiceDate" /></td>
     <td class="text-end"><SpanAmount :amount="mmf.amount" /></td>

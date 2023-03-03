@@ -12,7 +12,7 @@
                     v-model="user.userName"
                     :validation-schema="schema.userName"
                     :id="'name' + idSuffix"
-                    field-label="Name"
+                    :field-label="$t('General.username')"
                   />
                 </div>
               </div>
@@ -22,7 +22,7 @@
                     v-model="password1"
                     :validation-schema-ref="schema.password"
                     :id="'password1' + idSuffix"
-                    field-label="Passwort"
+                    :field-label="$t('General.password')"
                     field-type="password"
                   />
                 </div>
@@ -33,7 +33,7 @@
                     v-model="password2"
                     :validation-schema-ref="schema.password"
                     :id="'password2' + idSuffix"
-                    field-label="Passwort wiederholen"
+                    :field-label="$t('User.passwordVerify')"
                     field-type="password"
                   />
                 </div>
@@ -44,7 +44,7 @@
                     v-model="user.userCanLogin"
                     :validation-schema="schema.userCanLogin"
                     :id="'userCanLogin' + idSuffix"
-                    field-label="Anmeldung erlaubt"
+                    :field-label="$t('User.canLogin')"
                     :select-box-values="yesNoValues"
                   />
                 </div>
@@ -55,7 +55,7 @@
                     v-model="user.userIsAdmin"
                     :validation-schema="schema.userIsAdmin"
                     :id="'userIsAdmin' + idSuffix"
-                    field-label="Administrator"
+                    :field-label="$t('User.admin')"
                     :select-box-values="yesNoValues"
                   />
                 </div>
@@ -66,7 +66,7 @@
                     v-model="user.userIsNew"
                     :validation-schema="schema.userIsNew"
                     :id="'userIsNew' + idSuffix"
-                    field-label="neu"
+                    :field-label="$t('User.new')"
                     :select-box-values="yesNoValues"
                   />
                 </div>
@@ -78,7 +78,7 @@
                     v-model="user.groupId"
                     :validation-schema="schema.groupId"
                     :id="'groupId' + idSuffix"
-                    field-label="Gruppe"
+                    :field-label="$t('General.group')"
                     :select-box-values="groupValues"
                   />
                 </div>
@@ -89,7 +89,7 @@
                     v-model="validFrom"
                     :validation-schema="schema.validFrom"
                     :id="'validFrom' + idSuffix"
-                    field-label="Gültig ab"
+                    :field-label="$t('General.validFrom')"
                   />
                 </div>
               </div>
@@ -97,7 +97,7 @@
             <div class="col" v-if="editMode">
               <div class="row justify-content-md-center">
                 <div class="col-xs-12 mb-4 text-center">
-                  <h5>Gruppenhistorie</h5>
+                  <h5>{{ $t("User.groupHistory") }}</h5>
                 </div>
               </div>
               <div class="row justify-content-md-center">
@@ -140,6 +140,7 @@
 <script lang="ts" setup>
 import { useForm } from "vee-validate";
 import { computed, ref } from "vue";
+import { useI18n } from "vue-i18n";
 import { boolean, date, number, string } from "zod";
 
 import ButtonSubmit from "../ButtonSubmit.vue";
@@ -161,6 +162,8 @@ import type { SelectBoxValue } from "@/model/SelectBoxValue";
 import GroupControllerHandler from "@/handler/GroupControllerHandler";
 import UserControllerHandler from "@/handler/UserControllerHandler";
 
+const { t } = useI18n();
+
 defineProps({
   idSuffix: {
     type: String,
@@ -175,12 +178,12 @@ type UserGroup = AccessRelation & {
 const serverErrors = ref(new Array<string>());
 
 const schema = {
-  userName: string(globErr("Bitte Name angeben!")).min(1),
-  groupId: number(globErr("Bitte Gruppe angeben!")).gt(0),
-  validFrom: date(globErr("Bitte Gültig ab angeben!")),
-  userIsAdmin: boolean(globErr("Bitte Gruppennutzung auswählen!")),
-  userIsNew: boolean(globErr("Bitte Gruppennutzung auswählen!")),
-  userCanLogin: boolean(globErr("Bitte Gruppennutzung auswählen!")),
+  userName: string(globErr(t("User.validation.name"))).min(1),
+  groupId: number(globErr(t("User.validation.groupId"))).gt(0),
+  validFrom: date(globErr(t("General.validation.validFrom"))),
+  userIsAdmin: boolean(globErr(t("User.validation.userIsAdmin"))),
+  userIsNew: boolean(globErr(t("User.validation.userIsNew"))),
+  userCanLogin: boolean(globErr(t("User.validation.userCanLogin"))),
   password: computed(() => {
     password1.value;
     password2.value;
@@ -189,9 +192,9 @@ const schema = {
     return string()
       .refine(
         () => password1.value == password2.value,
-        "Die Passwörter stimmen nicht überein!"
+        t("User.validation.passwordNotEqual")
       )
-      .refine((data) => editMode.value || data, "Bitte Passwort angeben!");
+      .refine((data) => editMode.value || data, t("User.validation.password"));
   }),
 };
 
@@ -207,8 +210,8 @@ const password2 = ref("");
 const userGroups = ref(new Array<UserGroup>());
 const validFrom = ref(new Date());
 const yesNoValues = [
-  { id: false, value: "Nein" },
-  { id: true, value: "Ja" },
+  { id: false, value: t("General.no") },
+  { id: true, value: t("General.yes") },
 ] as Array<SelectBoxValue>;
 const modalComponent = ref();
 const emit = defineEmits(["userCreated", "userUpdated"]);
@@ -221,8 +224,8 @@ const editMode = computed(() => {
 
 const title = computed(() => {
   return origUser.value === undefined
-    ? "Benutzerkonto hinzufügen"
-    : "Benutzerkonto bearbeiten";
+    ? t("User.title.create")
+    : t("User.title.update");
 });
 
 const maxWidth = computed(() => {
