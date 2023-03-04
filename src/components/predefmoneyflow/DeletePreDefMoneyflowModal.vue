@@ -106,7 +106,7 @@ import SpanAmount from "../SpanAmount.vue";
 import SpanBoolean from "../SpanBoolean.vue";
 import SpanDate from "../SpanDate.vue";
 
-import { handleBackendError } from "@/tools/views/ThrowError";
+import { handleBackendError } from "@/tools/views/HandleBackendError";
 
 import type { PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
 

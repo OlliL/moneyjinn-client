@@ -26,7 +26,7 @@ import { ref } from "vue";
 import DivError from "../DivError.vue";
 import ModalVue from "../Modal.vue";
 
-import { handleBackendError } from "@/tools/views/ThrowError";
+import { handleBackendError } from "@/tools/views/HandleBackendError";
 
 import type { Group } from "@/model/group/Group";
 

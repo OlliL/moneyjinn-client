@@ -1,5 +1,4 @@
 import { createApp } from "vue";
-import { createI18n } from "vue-i18n";
 import { createPinia } from "pinia";
 import piniaPluginPersistedstate from "pinia-plugin-persistedstate";
 import { PiniaSharedState } from "pinia-shared-state";
@@ -13,16 +12,7 @@ import "bootstrap";
 import "../node_modules/vanillajs-datepicker/dist/css/datepicker-bs5.min.css";
 
 import { AxiosInstanceHolder } from "./handler/AxiosInstanceHolder";
-
-import de from "./locales/de.json";
-import en from "./locales/en.json";
-
-const i18n = createI18n({
-  legacy: false,
-  locale: navigator.language,
-  fallbackLocale: "en",
-  messages: { de, en },
-});
+import I18nHolder from "./handler/I18nHolder";
 
 const app = createApp(App);
 const pinia = createPinia();
@@ -35,10 +25,8 @@ pinia.use(
 
 app.use(pinia);
 app.use(router);
-app.use(i18n);
+app.use(I18nHolder.getI18n());
 
 AxiosInstanceHolder.getInstance();
 
 app.mount("#app");
-
-export default i18n;

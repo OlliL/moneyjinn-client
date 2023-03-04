@@ -69,7 +69,7 @@ import DivError from "../DivError.vue";
 import ModalVue from "../Modal.vue";
 import SpanBoolean from "../SpanBoolean.vue";
 
-import { handleBackendError } from "@/tools/views/ThrowError";
+import { handleBackendError } from "@/tools/views/HandleBackendError";
 
 import type { User } from "@/model/user/User";
 

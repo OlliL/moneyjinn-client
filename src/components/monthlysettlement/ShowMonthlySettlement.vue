@@ -60,7 +60,7 @@ import { onMounted, ref, watch } from "vue";
 import DivError from "../DivError.vue";
 import SpanAmount from "../SpanAmount.vue";
 
-import { handleBackendError } from "@/tools/views/ThrowError";
+import { handleBackendError } from "@/tools/views/HandleBackendError";
 
 import { CapitalsourceType } from "@/model/capitalsource/CapitalsourceType";
 import type { MonthlySettlement } from "@/model/monthlysettlement/MonthlySettlement";

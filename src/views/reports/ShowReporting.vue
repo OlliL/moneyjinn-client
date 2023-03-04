@@ -243,7 +243,7 @@ import {
 } from "@/tools/views/ErrorData";
 import { getMonthName } from "@/tools/views/MonthName";
 import { globErr } from "@/tools/views/ZodUtil";
-import { handleBackendError } from "@/tools/views/ThrowError";
+import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { toFixed } from "@/tools/math";
 
 import type { PostingAccount } from "@/model/postingaccount/PostingAccount";

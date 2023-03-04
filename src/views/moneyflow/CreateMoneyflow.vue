@@ -69,7 +69,7 @@ import type { PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
 import PreDefMoneyflowControllerHandler from "@/handler/PreDefMoneyflowControllerHandler";
 import { useForm } from "vee-validate";
 import DivError from "@/components/DivError.vue";
-import { handleBackendError } from "@/tools/views/ThrowError";
+import { handleBackendError } from "@/tools/views/HandleBackendError";
 
 const serverErrors = ref(new Array<string>());
 

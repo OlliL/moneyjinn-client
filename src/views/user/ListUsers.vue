@@ -91,7 +91,7 @@ import ListUserRowVue from "@/components/user/ListUserRow.vue";
 import type { User } from "@/model/user/User";
 
 import UserControllerHandler from "@/handler/UserControllerHandler";
-import { handleBackendError } from "@/tools/views/ThrowError";
+import { handleBackendError } from "@/tools/views/HandleBackendError";
 import DivError from "@/components/DivError.vue";
 
 const serverErrors = ref(new Array<string>());

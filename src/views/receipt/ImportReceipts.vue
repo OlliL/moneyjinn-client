@@ -50,7 +50,7 @@ import EditMoneyflowModalVue from "@/components/moneyflow/EditMoneyflowModal.vue
 import ImportReceiptsRowVue from "@/components/moneyflow/ImportReceiptsRow.vue";
 import InputFile from "@/components/InputFile.vue";
 
-import { handleBackendError } from "@/tools/views/ThrowError";
+import { handleBackendError } from "@/tools/views/HandleBackendError";
 
 import type { ImportedMoneyflowReceipt } from "@/model/moneyflow/ImportedMoneyflowReceipt";
 

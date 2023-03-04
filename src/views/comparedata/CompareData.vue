@@ -162,7 +162,7 @@ import type { SelectBoxValue } from "@/model/SelectBoxValue";
 
 import CompareDataControllerHandler from "@/handler/CompareDataControllerHandler";
 import MoneyflowControllerHandler from "@/handler/MoneyflowControllerHandler";
-import { handleBackendError } from "@/tools/views/ThrowError";
+import { handleBackendError } from "@/tools/views/HandleBackendError";
 
 const { t } = useI18n();
 

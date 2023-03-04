@@ -151,7 +151,7 @@ import ModalVue from "../Modal.vue";
 import SelectStandard from "../SelectStandard.vue";
 import SpanDate from "../SpanDate.vue";
 
-import { handleBackendError } from "@/tools/views/ThrowError";
+import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { globErr } from "@/tools/views/ZodUtil";
 
 import type { AccessRelation } from "@/model/user/AccessRelation";

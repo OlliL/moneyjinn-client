@@ -1,4 +1,4 @@
-import { getError } from "@/tools/views/ThrowError";
+import { getErrorMessage } from "./ErrorCode";
 import type { ValidationResult } from "./validation/ValidationResult";
 
 export enum BackendErrorType {
@@ -38,7 +38,7 @@ export class BackendError {
     return this.errorMessage
       ? this.errorMessage
       : this.errorCode
-      ? getError(this.errorCode)
+      ? getErrorMessage(this.errorCode)
       : "";
   }
 

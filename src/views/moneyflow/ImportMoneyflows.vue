@@ -94,7 +94,7 @@ import type { ImportedMoneyflow } from "@/model/moneyflow/ImportedMoneyflow";
 
 import ImportedMoneyflowControllerHandler from "@/handler/ImportedMoneyflowControllerHandler";
 import DivError from "@/components/DivError.vue";
-import { handleBackendError } from "@/tools/views/ThrowError";
+import { handleBackendError } from "@/tools/views/HandleBackendError";
 
 const serverErrors = ref(new Array<string>());
 

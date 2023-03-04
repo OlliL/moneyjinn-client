@@ -192,7 +192,7 @@ import { useCapitalsourceStore } from "@/stores/CapitalsourceStore";
 import { useContractpartnerStore } from "@/stores/ContractpartnerStore";
 
 import { amountSchema, globErr } from "@/tools/views/ZodUtil";
-import { handleBackendError } from "@/tools/views/ThrowError";
+import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { toFixed } from "@/tools/math";
 
 import { CapitalsourceState } from "@/model/capitalsource/CapitalsourceState";

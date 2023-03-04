@@ -107,7 +107,7 @@ import DivError from "../DivError.vue";
 import ModalVue from "../Modal.vue";
 import SpanDate from "../SpanDate.vue";
 
-import { handleBackendError } from "@/tools/views/ThrowError";
+import { handleBackendError } from "@/tools/views/HandleBackendError";
 
 import type { Contractpartner } from "@/model/contractpartner/Contractpartner";
 

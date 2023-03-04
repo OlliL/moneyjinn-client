@@ -120,7 +120,7 @@ import ShowMontlySettlementVue from "@/components/monthlysettlement/ShowMonthlyS
 import router, { Routes } from "@/router";
 
 import { getMonthName } from "@/tools/views/MonthName";
-import { handleBackendError } from "@/tools/views/ThrowError";
+import { handleBackendError } from "@/tools/views/HandleBackendError";
 
 import MonthlySettlementControllerHandler from "@/handler/MonthlySettlementControllerHandler";
 

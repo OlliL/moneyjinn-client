@@ -110,7 +110,7 @@ import ModalVue from "../Modal.vue";
 import SpanBoolean from "../SpanBoolean.vue";
 import SpanDate from "../SpanDate.vue";
 
-import { handleBackendError } from "@/tools/views/ThrowError";
+import { handleBackendError } from "@/tools/views/HandleBackendError";
 
 import type { Capitalsource } from "@/model/capitalsource/Capitalsource";
 import { capitalsourceImportNames } from "@/model/capitalsource/CapitalsourceImport";

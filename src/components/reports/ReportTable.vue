@@ -236,7 +236,7 @@ import ReportTableRowVue from "./ReportTableRow.vue";
 import SpanAmount from "../SpanAmount.vue";
 
 import { getMonthName } from "@/tools/views/MonthName";
-import { handleBackendError } from "@/tools/views/ThrowError";
+import { handleBackendError } from "@/tools/views/HandleBackendError";
 
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 import type { Report } from "@/model/report/Report";

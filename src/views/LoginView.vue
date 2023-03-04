@@ -75,7 +75,7 @@ import DivError from "@/components/DivError.vue";
 import InputStandard from "@/components/InputStandard.vue";
 
 import UserControllerHandler from "@/handler/UserControllerHandler";
-import { handleBackendError } from "@/tools/views/ThrowError";
+import { handleBackendError } from "@/tools/views/HandleBackendError";
 
 const serverErrors = ref(new Array<string>());
 

@@ -60,7 +60,7 @@ import SpanAmount from "../SpanAmount.vue";
 
 import { formatDateWithTime } from "@/tools/views/FormatDate";
 import { formatNumber, redIfNegative } from "@/tools/views/FormatNumber";
-import { handleBackendError } from "@/tools/views/ThrowError";
+import { handleBackendError } from "@/tools/views/HandleBackendError";
 
 import type { EtfFlow } from "@/model/etf/EtfFlow";
 

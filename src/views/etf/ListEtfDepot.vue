@@ -357,7 +357,7 @@ import SpanAmount from "@/components/SpanAmount.vue";
 import type { ListDepotRowData } from "@/components/etf/ListDepotRowData";
 
 import { formatNumber } from "@/tools/views/FormatNumber";
-import { handleBackendError } from "@/tools/views/ThrowError";
+import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { amountSchema, globErr } from "@/tools/views/ZodUtil";
 
 import type { Etf } from "@/model/etf/Etf";

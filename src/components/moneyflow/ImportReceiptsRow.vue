@@ -149,7 +149,7 @@ import InputStandard from "../InputStandard.vue";
 import InputDate from "../InputDate.vue";
 
 import { amountSchema, globErr } from "@/tools/views/ZodUtil";
-import { handleBackendError } from "@/tools/views/ThrowError";
+import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { toFixed } from "@/tools/math";
 
 import type { ImportedMoneyflowReceipt } from "@/model/moneyflow/ImportedMoneyflowReceipt";

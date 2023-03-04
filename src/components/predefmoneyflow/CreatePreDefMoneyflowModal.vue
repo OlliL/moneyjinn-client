@@ -110,7 +110,7 @@ import SelectPostingAccount from "../postingaccount/SelectPostingAccount.vue";
 import SelectContractpartner from "../contractpartner/SelectContractpartner.vue";
 import SelectCapitalsource from "../capitalsource/SelectCapitalsource.vue";
 
-import { handleBackendError } from "@/tools/views/ThrowError";
+import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { amountSchema, globErr } from "@/tools/views/ZodUtil";
 
 import type { PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
