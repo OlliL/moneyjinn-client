@@ -80,7 +80,7 @@
 <script lang="ts" setup>
 import { onMounted, ref } from "vue";
 
-import { handleBackendError } from "@/tools/views/ThrowError";
+import { handleBackendError } from "@/tools/views/HandleBackendError";
 
 import CreateGroupModalVue from "@/components/group/CreateGroupModal.vue";
 import DeleteGroupModalVue from "@/components/group/DeleteGroupModal.vue";

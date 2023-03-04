@@ -233,7 +233,7 @@ import SelectPostingAccount from "@/components/postingaccount/SelectPostingAccou
 import SelectStandard from "@/components/SelectStandard.vue";
 
 import { toFixed } from "@/tools/math";
-import { handleBackendError } from "@/tools/views/ThrowError";
+import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { getMonthName } from "@/tools/views/MonthName";
 import { globErr } from "@/tools/views/ZodUtil";
 

@@ -1,4 +1,4 @@
-import i18n from "@/main";
+import I18nHolder from "@/handler/I18nHolder";
 import type { SelectBoxValue } from "../SelectBoxValue";
 
 export enum CapitalsourceImport {
@@ -8,9 +8,10 @@ export enum CapitalsourceImport {
 }
 
 export const capitalsourceImportNames = [
-  i18n.global.t("General.no"),
-  i18n.global.t("General.all"),
-  i18n.global.t("Capitalsource.balance"),
+  I18nHolder.t()("General.no"),
+  I18nHolder.t()("General.no"),
+  I18nHolder.t()("General.all"),
+  I18nHolder.t()("Capitalsource.balance"),
 ];
 
 export const capitalsourceImportValues = [

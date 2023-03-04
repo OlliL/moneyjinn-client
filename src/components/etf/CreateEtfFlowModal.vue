@@ -95,7 +95,7 @@ import SelectStandard from "../SelectStandard.vue";
 
 import { formatTime } from "@/tools/views/FormatDate";
 import { globErr } from "@/tools/views/ZodUtil";
-import { handleBackendError } from "@/tools/views/ThrowError";
+import { handleBackendError } from "@/tools/views/HandleBackendError";
 
 import type { Etf } from "@/model/etf/Etf";
 import type { EtfFlow } from "@/model/etf/EtfFlow";

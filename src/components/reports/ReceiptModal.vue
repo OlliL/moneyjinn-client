@@ -23,7 +23,7 @@ import { ref } from "vue";
 
 import ModalVue from "../Modal.vue";
 
-import { handleBackendError } from "@/tools/views/ThrowError";
+import { handleBackendError } from "@/tools/views/HandleBackendError";
 
 import { MoneyflowReceiptType } from "@/model/moneyflow/MoneyflowReceiptType";
 

@@ -33,7 +33,7 @@ import ModalVue from "../Modal.vue";
 import ShowMonthlySettlementVue from "./ShowMonthlySettlement.vue";
 
 import { getMonthName } from "@/tools/views/MonthName";
-import { handleBackendError } from "@/tools/views/ThrowError";
+import { handleBackendError } from "@/tools/views/HandleBackendError";
 
 import MonthlySettlementControllerHandler from "@/handler/MonthlySettlementControllerHandler";
 

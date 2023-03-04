@@ -92,7 +92,7 @@ import ReportTableVue from "@/components/reports/ReportTable.vue";
 import { getMonthName } from "@/tools/views/MonthName";
 
 import ReportControllerHandler from "@/handler/ReportControllerHandler";
-import { handleBackendError } from "@/tools/views/ThrowError";
+import { handleBackendError } from "@/tools/views/HandleBackendError";
 
 const serverErrors = ref(new Array<string>());
 

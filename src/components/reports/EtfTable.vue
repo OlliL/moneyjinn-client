@@ -70,7 +70,7 @@
 <script lang="ts" setup>
 import EtfControllerHandler from "@/handler/EtfControllerHandler";
 import type { EtfSummary } from "@/model/etf/EtfSummary";
-import { handleBackendError } from "@/tools/views/ThrowError";
+import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { computed, onMounted, ref, watch } from "vue";
 import DivError from "../DivError.vue";
 import EtfTableRowVue from "./EtfTableRow.vue";

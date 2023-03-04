@@ -130,7 +130,7 @@ import type { SelectBoxValue } from "@/model/SelectBoxValue";
 import type { TrendsParameter } from "@/model/report/TrendsParameter";
 
 import ReportControllerHandler from "@/handler/ReportControllerHandler";
-import { handleBackendError } from "@/tools/views/ThrowError";
+import { handleBackendError } from "@/tools/views/HandleBackendError";
 
 const { t } = useI18n();
 

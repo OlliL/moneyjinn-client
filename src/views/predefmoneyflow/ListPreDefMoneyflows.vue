@@ -42,7 +42,7 @@
                 <input
                   class="form-control"
                   type="text"
-                  placeholder="Suchen nach Vertragspartner..."
+                  :placeholder="$t('PreDefMoneyflow.searchBy')"
                   v-model="searchString"
                   @input="searchContent"
                 />
@@ -93,7 +93,7 @@ import ListPreDefMoneyflowRowVue from "@/components/predefmoneyflow/ListPreDefMo
 import type { PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
 
 import PreDefMoneyflowControllerHandler from "@/handler/PreDefMoneyflowControllerHandler";
-import { handleBackendError } from "@/tools/views/ThrowError";
+import { handleBackendError } from "@/tools/views/HandleBackendError";
 import DivError from "@/components/DivError.vue";
 
 const serverErrors = ref(new Array<string>());

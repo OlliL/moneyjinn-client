@@ -73,10 +73,10 @@ import InputStandard from "@/components/InputStandard.vue";
 
 import { useUserSessionStore } from "@/stores/UserSessionStore";
 
-import { getError, handleBackendError } from "@/tools/views/ThrowError";
+import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { globErr } from "@/tools/views/ZodUtil";
 
-import { ErrorCode } from "@/model/ErrorCode";
+import { ErrorCode, getErrorMessage } from "@/model/ErrorCode";
 
 import UserControllerHandler from "@/handler/UserControllerHandler";
 import { useForm } from "vee-validate";
@@ -116,7 +116,9 @@ onMounted(() => {
     userIsNew.value = false;
   }
   if (userIsNew.value) {
-    serverErrors.value.push(getError(ErrorCode.PASSWORD_MUST_BE_CHANGED));
+    serverErrors.value.push(
+      getErrorMessage(ErrorCode.PASSWORD_MUST_BE_CHANGED)
+    );
   }
   Object.keys(values).forEach((field) => setFieldTouched(field, false));
 });

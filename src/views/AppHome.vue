@@ -59,7 +59,7 @@ import EditMonthlySettlementModalVue from "@/components/monthlysettlement/EditMo
 import router, { Routes } from "@/router";
 
 import EventControllerHandler from "@/handler/EventControllerHandler";
-import { handleBackendError } from "@/tools/views/ThrowError";
+import { handleBackendError } from "@/tools/views/HandleBackendError";
 import DivError from "@/components/DivError.vue";
 
 const serverErrors = ref(new Array<string>());
