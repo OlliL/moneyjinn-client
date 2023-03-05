@@ -103,8 +103,6 @@ export const useCapitalsourceStore = defineStore("capitalsource", {
       comment: String,
       validNow?: boolean
     ): Promise<Array<Capitalsource>> {
-      await this.initCapitalsourceStore();
-
       let mcs = this.capitalsource;
       if (validNow) {
         const date = new Date();

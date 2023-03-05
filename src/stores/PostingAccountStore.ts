@@ -67,8 +67,6 @@ export const usePostingAccountStore = defineStore("postingAccount", {
     async searchPostingAccounts(
       comment: String
     ): Promise<Array<PostingAccount>> {
-      await this.initPostingAccountStore();
-
       const mpa = this.postingAccount;
 
       if (comment === "") {
