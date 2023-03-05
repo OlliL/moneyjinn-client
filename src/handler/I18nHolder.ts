@@ -7,11 +7,17 @@ export class I18nHolder {
   private i18n;
 
   public constructor() {
+    const messages = {
+      de: de,
+      "de-DE": de,
+      en: en,
+    };
+
     this.i18n = createI18n({
       legacy: false,
       locale: navigator.language,
       fallbackLocale: "en",
-      messages: { de, en },
+      messages: messages,
     });
   }
 
