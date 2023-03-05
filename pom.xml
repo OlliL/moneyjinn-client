@@ -3,13 +3,13 @@
 
 	<groupId>org.laladev.moneyjinn</groupId>
 	<artifactId>moneyjinn-client</artifactId>
-	<version>1.3.1</version>
+	<version>1.3.2-SNAPSHOT</version>
 
 	<packaging>pom</packaging>
 
 	<scm>
 		<developerConnection>scm:git:https://github.com/OlliL/moneyjinn-client.git</developerConnection>
-	  <tag>v1.3.1</tag>
+	  <tag>HEAD</tag>
   </scm>
 
 	<build>
