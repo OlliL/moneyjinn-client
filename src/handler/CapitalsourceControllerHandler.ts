@@ -4,21 +4,16 @@ import {
   mapCapitalsourceToTransport,
   mapCapitalsourceTransportToModel,
 } from "./mapper/CapitalsourceTransportMapper";
-import { useUserSessionStore } from "@/stores/UserSessionStore";
-import {
-  CapitalsourceControllerApi,
-  type CreateCapitalsourceRequest,
-  type UpdateCapitalsourceRequest,
-} from "@/api";
+import { CrudCapitalsourceControllerApi } from "@/api";
 import { AxiosInstanceHolder } from "./AxiosInstanceHolder";
 
 class CapitalsourceControllerHandler extends AbstractControllerHandler {
-  private api: CapitalsourceControllerApi;
+  private api: CrudCapitalsourceControllerApi;
 
   public constructor() {
     super();
 
-    this.api = new CapitalsourceControllerApi(
+    this.api = new CrudCapitalsourceControllerApi(
       undefined,
       "",
       AxiosInstanceHolder.getInstance().getAxiosInstance()
@@ -26,14 +21,11 @@ class CapitalsourceControllerHandler extends AbstractControllerHandler {
   }
 
   async fetchAllCapitalsource(): Promise<Array<Capitalsource>> {
-    const response = await this.api.showCapitalsourceList();
-
-    const showCapitalsourceListResponse = response.data;
+    const response = await this.api.readAll();
 
     const capitalsourceArray = new Array<Capitalsource>();
 
-    const transport = showCapitalsourceListResponse.capitalsourceTransports;
-    transport?.forEach((value) => {
+    response.data?.forEach((value) => {
       capitalsourceArray.push(mapCapitalsourceTransportToModel(value));
     });
 
@@ -41,31 +33,19 @@ class CapitalsourceControllerHandler extends AbstractControllerHandler {
   }
 
   async createCapitalsource(mcs: Capitalsource): Promise<Capitalsource> {
-    const request = {} as CreateCapitalsourceRequest;
-    request.capitalsourceTransport = mapCapitalsourceToTransport(mcs);
+    const response = await this.api.create(mapCapitalsourceToTransport(mcs), [
+      this.RET_REPRESENTATION,
+    ]);
 
-    const response = await this.api.createCapitalsource(request);
-
-    const createCapitalsourceResponse = response.data;
-
-    const userSessionStore = useUserSessionStore();
-
-    const createdMcs: Capitalsource = mcs;
-    createdMcs.id = createCapitalsourceResponse.capitalsourceId;
-    createdMcs.userId = userSessionStore.getUserId;
-
-    return createdMcs;
+    return mapCapitalsourceTransportToModel(response.data);
   }
 
   async updateCapitalsource(mcs: Capitalsource) {
-    const request = {} as UpdateCapitalsourceRequest;
-    request.capitalsourceTransport = mapCapitalsourceToTransport(mcs);
-
-    await this.api.updateCapitalsource(request);
+    await this.api.update(mapCapitalsourceToTransport(mcs), [this.RET_MINIMAL]);
   }
 
   async deleteCapitalsource(capitalsourceId: number) {
-    await this.api.deleteCapitalsourceById(capitalsourceId);
+    await this.api._delete(capitalsourceId);
   }
 }
 
