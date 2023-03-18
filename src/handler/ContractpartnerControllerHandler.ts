@@ -4,21 +4,16 @@ import {
   mapContractpartnerToTransport,
   mapContractpartnerTransportToModel,
 } from "./mapper/ContractpartnerTransportMapper";
-import { useUserSessionStore } from "@/stores/UserSessionStore";
-import {
-  ContractpartnerControllerApi,
-  type CreateContractpartnerRequest,
-  type UpdateContractpartnerRequest,
-} from "@/api";
+import { CrudContractpartnerControllerApi } from "@/api";
 import { AxiosInstanceHolder } from "./AxiosInstanceHolder";
 
 class ContractpartnerControllerHandler extends AbstractControllerHandler {
-  private api: ContractpartnerControllerApi;
+  private api: CrudContractpartnerControllerApi;
 
   public constructor() {
     super();
 
-    this.api = new ContractpartnerControllerApi(
+    this.api = new CrudContractpartnerControllerApi(
       undefined,
       "",
       AxiosInstanceHolder.getInstance().getAxiosInstance()
@@ -26,46 +21,33 @@ class ContractpartnerControllerHandler extends AbstractControllerHandler {
   }
 
   async fetchAllContractpartner(): Promise<Array<Contractpartner>> {
-    const response = await this.api.showContractpartnerList();
-
-    const showContractpartnerListResponse = response.data;
+    const response = await this.api.readAll();
 
     const contractpartnerArray = new Array<Contractpartner>();
 
-    const transport = showContractpartnerListResponse.contractpartnerTransports;
-    transport?.forEach((value) => {
+    response.data?.forEach((value) => {
       contractpartnerArray.push(mapContractpartnerTransportToModel(value));
     });
 
     return contractpartnerArray;
   }
 
-  async createContractpartner(mcp: Contractpartner): Promise<Contractpartner> {
-    const request = {} as CreateContractpartnerRequest;
-    request.contractpartnerTransport = mapContractpartnerToTransport(mcp);
+  async createContractpartner(mcs: Contractpartner): Promise<Contractpartner> {
+    const response = await this.api.create(mapContractpartnerToTransport(mcs), [
+      this.RET_REPRESENTATION,
+    ]);
 
-    const response = await this.api.createContractpartner(request);
-
-    const createContractpartnerResponse = response.data;
-
-    const userSessionStore = useUserSessionStore();
-
-    const createdMcp: Contractpartner = mcp;
-    createdMcp.id = createContractpartnerResponse.contractpartnerId;
-    createdMcp.userId = userSessionStore.getUserId;
-
-    return createdMcp;
+    return mapContractpartnerTransportToModel(response.data);
   }
 
-  async updateContractpartner(mcp: Contractpartner) {
-    const request = {} as UpdateContractpartnerRequest;
-    request.contractpartnerTransport = mapContractpartnerToTransport(mcp);
-
-    await this.api.updateContractpartner(request);
+  async updateContractpartner(mcs: Contractpartner) {
+    await this.api.update(mapContractpartnerToTransport(mcs), [
+      this.RET_MINIMAL,
+    ]);
   }
 
-  async deleteContractpartner(id: number) {
-    await this.api.deleteContractpartner(id);
+  async deleteContractpartner(contractpartnerId: number) {
+    await this.api._delete(contractpartnerId);
   }
 }
 

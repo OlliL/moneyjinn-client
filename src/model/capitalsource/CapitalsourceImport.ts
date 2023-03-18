@@ -9,7 +9,6 @@ export enum CapitalsourceImport {
 
 export const capitalsourceImportNames = [
   I18nHolder.t()("General.no"),
-  I18nHolder.t()("General.no"),
   I18nHolder.t()("General.all"),
   I18nHolder.t()("Capitalsource.balance"),
 ];
