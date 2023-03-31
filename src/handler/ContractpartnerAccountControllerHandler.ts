@@ -4,20 +4,16 @@ import {
   mapContractpartnerAccountTransportToModel,
   mapContractpartnerAccountToTransport,
 } from "./mapper/ContractpartnerAccountTransportMapper";
-import {
-  ContractpartnerAccountControllerApi,
-  type CreateContractpartnerAccountRequest,
-  type UpdateContractpartnerAccountRequest,
-} from "@/api";
+import { CrudContractpartnerAccountControllerApi } from "@/api";
 import { AxiosInstanceHolder } from "./AxiosInstanceHolder";
 
 class ContractpartnerAccountControllerHandler extends AbstractControllerHandler {
-  private api: ContractpartnerAccountControllerApi;
+  private api: CrudContractpartnerAccountControllerApi;
 
   public constructor() {
     super();
 
-    this.api = new ContractpartnerAccountControllerApi(
+    this.api = new CrudContractpartnerAccountControllerApi(
       undefined,
       "",
       AxiosInstanceHolder.getInstance().getAxiosInstance()
@@ -27,17 +23,11 @@ class ContractpartnerAccountControllerHandler extends AbstractControllerHandler 
   async fetchAllContractpartnerAccount(
     contractpartnerId: number
   ): Promise<Array<ContractpartnerAccount>> {
-    const response = await this.api.showContractpartnerAccountList(
-      contractpartnerId
-    );
-
-    const showContractpartnerAccountListResponse = response.data;
+    const response = await this.api.readAll(contractpartnerId);
 
     const contractpartnerAccountArray = new Array<ContractpartnerAccount>();
 
-    const transport =
-      showContractpartnerAccountListResponse.contractpartnerAccountTransports;
-    transport?.forEach((value) => {
+    response.data?.forEach((value) => {
       contractpartnerAccountArray.push(
         mapContractpartnerAccountTransportToModel(value)
       );
@@ -49,31 +39,22 @@ class ContractpartnerAccountControllerHandler extends AbstractControllerHandler 
   async createContractpartnerAccount(
     mca: ContractpartnerAccount
   ): Promise<ContractpartnerAccount> {
-    const request = {} as CreateContractpartnerAccountRequest;
-    request.contractpartnerAccountTransport =
-      mapContractpartnerAccountToTransport(mca);
+    const response = await this.api.create(
+      mapContractpartnerAccountToTransport(mca),
+      [this.RET_REPRESENTATION]
+    );
 
-    const response = await this.api.createContractpartnerAccount(request);
-
-    const createContractpartnerAccountResponse = response.data;
-
-    const createdMca: ContractpartnerAccount = mca;
-    createdMca.id =
-      createContractpartnerAccountResponse.contractpartnerAccountId;
-
-    return createdMca;
+    return mapContractpartnerAccountTransportToModel(response.data);
   }
 
   async updateContractpartnerAccount(mca: ContractpartnerAccount) {
-    const request = {} as UpdateContractpartnerAccountRequest;
-    request.contractpartnerAccountTransport =
-      mapContractpartnerAccountToTransport(mca);
-
-    await this.api.updateContractpartnerAccount(request);
+    await this.api.update(mapContractpartnerAccountToTransport(mca), [
+      this.RET_MINIMAL,
+    ]);
   }
 
   async deleteContractpartnerAccount(id: number) {
-    await this.api.deleteContractpartnerAccount(id);
+    await this.api._delete(id);
   }
 }
 
