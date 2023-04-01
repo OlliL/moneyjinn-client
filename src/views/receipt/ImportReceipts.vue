@@ -17,13 +17,13 @@
           ref="uploadReceiptsForm"
         >
           <div class="input-group">
+            <InputFile v-model="files" id="fileUpload" />
             <ButtonSubmit
               :button-label="$t('Receipt.upload')"
               form-id="uploadReceiptsForm"
             >
               <template #icon><i class="bi bi-upload"></i>&nbsp; </template>
             </ButtonSubmit>
-            <InputFile v-model="files" id="fileUpload" />
           </div>
         </form>
       </div>
