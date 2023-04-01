@@ -178,6 +178,15 @@ onBeforeRouteUpdate((to, from, next) => {
 
     previousMonth.value = month - 1;
     previousYear.value = currentlyShownYear.value;
+
+    if (months.value) {
+      if (months.value.indexOf(month) + 1 < months.value.length) {
+        nextMonthLink.value = true;
+      }
+      if (months.value.indexOf(month) > 0) {
+        previousMonthLink.value = true;
+      }
+    }
   }
   next();
 });
