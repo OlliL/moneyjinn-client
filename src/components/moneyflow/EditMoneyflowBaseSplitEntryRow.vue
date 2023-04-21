@@ -39,6 +39,7 @@
         :validation-schema-ref="schema.comment"
         :id="'commentSplitEntry' + idSuffix"
         :field-label="$t('General.comment')"
+        name="comment"
       />
     </div>
     <div class="col-md-3 col-xs-12">
