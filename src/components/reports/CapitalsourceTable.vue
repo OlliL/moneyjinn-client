@@ -1,10 +1,7 @@
 <template>
   <div class="row">
-    <div class="col-xs-12 text-center">
-      <table
-        class="table table-striped table-bordered table-hover"
-        style="table-layout: fixed"
-      >
+    <div class="col-xs-12 text-center table-responsive">
+      <table class="table table-striped table-bordered table-hover">
         <col style="width: 15%" />
         <col style="width: 10%" />
         <col style="width: 20%" />

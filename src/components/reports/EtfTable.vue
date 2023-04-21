@@ -11,11 +11,8 @@
         </div>
         <div class="card-body">
           <div class="row">
-            <div class="col-xs-12 text-center">
-              <table
-                class="table table-striped table-bordered table-hover"
-                style="table-layout: fixed"
-              >
+            <div class="col-xs-12 text-center table-responsive">
+              <table class="table table-striped table-bordered table-hover">
                 <col style="width: 26%" />
                 <col style="width: 6%" />
                 <col style="width: 9%" />

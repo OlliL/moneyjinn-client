@@ -20,7 +20,7 @@
         @moneyflow-receipt-deleted="moneyflowReceiptDeleted"
       />
 
-      <div class="card-body" v-if="report.moneyflows">
+      <div class="card-body table-responsive" v-if="report.moneyflows">
         <table class="table table-striped table-bordered table-hover">
           <thead>
             <tr>
