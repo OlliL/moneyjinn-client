@@ -27,6 +27,7 @@
       :class="'form-control ' + alignmentClass + ' ' + errorData.inputClass"
       :disabled="disabled"
       :step="step"
+      :name="name"
       @input="onInput($event)"
     />
     <slot name="icon"></slot>
