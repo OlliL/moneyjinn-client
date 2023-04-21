@@ -123,6 +123,7 @@
                       @click="removeAllPostingAccounts"
                     >
                       <i class="bi bi-caret-right-fill"></i>
+                      <i class="bi bi-caret-right-fill"></i>
                     </button>
                     <br />
                     <button
@@ -150,6 +151,7 @@
                       style="padding: 0.1rem 0.3rem !important"
                       @click="addAllPostingAccounts"
                     >
+                      <i class="bi bi-caret-left-fill"></i>
                       <i class="bi bi-caret-left-fill"></i>
                     </button>
                   </div>
