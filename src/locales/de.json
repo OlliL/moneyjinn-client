@@ -72,7 +72,7 @@
         "title": {
             "create": "Kapitalquelle hinzufügen",
             "update": "Kapitalquelle bearbeiten",
-            "delete": "Kapitalquelle löschen"
+            "delete": "Diese Kapitalquelle löschen?"
         },
         "validation": {
             "comment": "Bitte Name angeben!",

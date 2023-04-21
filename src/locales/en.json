@@ -72,7 +72,7 @@
         "title": {
             "create": "create capitalsource",
             "update": "update capitalsource",
-            "delete": "delete capitalsource"
+            "delete": "Delete this capitalsource?"
         },
         "validation": {
             "comment": "Please specify a name!",
