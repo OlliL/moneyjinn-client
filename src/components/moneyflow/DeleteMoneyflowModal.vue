@@ -101,6 +101,7 @@ const emit = defineEmits(["moneyflowDeleted"]);
 
 const _show = (_mmf: Moneyflow) => {
   mmf.value = _mmf;
+  serverErrors.value = new Array<string>();
   modalComponent.value._show();
 };
 

@@ -57,6 +57,7 @@ const emit = defineEmits(["contractpartnerAccountDeleted"]);
 
 const _show = (_mca: ContractpartnerAccount) => {
   mca.value = _mca;
+  serverErrors.value = new Array<string>();
   modalComponent.value._show();
 };
 

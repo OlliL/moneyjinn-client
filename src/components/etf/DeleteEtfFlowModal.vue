@@ -91,6 +91,7 @@ const timestampString = computed(() => {
 const _show = (_etfFlow: EtfFlow, _etfName: string) => {
   etfFlow.value = _etfFlow;
   etfName.value = _etfName;
+  serverErrors.value = new Array<string>();
   modalComponent.value._show();
 };
 const deleteEtfFlow = () => {

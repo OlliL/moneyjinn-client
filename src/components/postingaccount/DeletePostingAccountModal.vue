@@ -44,6 +44,7 @@ const emit = defineEmits(["postingAccountDeleted"]);
 
 const _show = (_mpa: PostingAccount) => {
   mpa.value = _mpa;
+  serverErrors.value = new Array<string>();
   modalComponent.value._show();
 };
 
