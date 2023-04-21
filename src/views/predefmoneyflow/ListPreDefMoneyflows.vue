@@ -68,6 +68,9 @@
               <th>{{ $t("PreDefMoneyflow.lastUsed") }}</th>
               <th colspan="2"></th>
             </tr>
+          </thead>
+
+          <tbody>
             <ListPreDefMoneyflowRowVue
               v-for="mpm in preDefMoneyflows"
               :key="mpm.id"
@@ -75,8 +78,7 @@
               @edit-pre-def-moneyflow="editPreDefMoneyflow"
               @delete-pre-def-moneyflow="deletePreDefMoneyflow"
             />
-          </thead>
-          <tbody></tbody>
+          </tbody>
         </table>
       </div>
     </div>
