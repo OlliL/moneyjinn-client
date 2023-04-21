@@ -3,95 +3,53 @@
     <template #body>
       <DivError :server-errors="serverErrors" />
       <div class="row">
-        <div
-          class="text-start d-flex align-items-center col-sm-3 col-xs-5"
-          style="font-weight: 700; font-size: 10.5px"
-        >
-          {{ $t("General.name") }}
-        </div>
-        <div class="text-start col-sm-9">{{ mcs.comment }}</div>
-      </div>
-      <div class="row">
-        <div
-          class="text-start d-flex align-items-center col-sm-3 col-xs-5"
-          style="font-weight: 700; font-size: 10.5px"
-        >
-          {{ $t("Capitalsource.type") }}
-        </div>
-        <div class="text-start col-sm-9">{{ typeString }}</div>
-      </div>
-      <div class="row">
-        <div
-          class="text-start d-flex align-items-center col-sm-3 col-xs-5"
-          style="font-weight: 700; font-size: 10.5px"
-        >
-          {{ $t("Capitalsource.state") }}
-        </div>
-        <div class="text-start col-sm-9">{{ stateString }}</div>
-      </div>
-      <div class="row">
-        <div
-          class="text-start d-flex align-items-center col-sm-3 col-xs-5"
-          style="font-weight: 700; font-size: 10.5px"
-        >
-          {{ $t("General.iban") }}
-        </div>
-        <div class="text-start col-sm-9">{{ mcs.accountNumber }}&nbsp;</div>
-      </div>
-      <div class="row">
-        <div
-          class="text-start d-flex align-items-center col-sm-3 col-xs-5"
-          style="font-weight: 700; font-size: 10.5px"
-        >
-          {{ $t("General.bic") }}
-        </div>
-        <div class="text-start col-sm-9">{{ mcs.bankCode }}&nbsp;</div>
-      </div>
-      <div class="row">
-        <div
-          class="text-start d-flex align-items-center col-sm-3 col-xs-5"
-          style="font-weight: 700; font-size: 10.5px"
-        >
-          {{ $t("General.validFrom") }}
-        </div>
-        <div class="text-start col-sm-9">
-          <SpanDate :date="mcs.validFrom" />
-        </div>
-      </div>
-      <div class="row">
-        <div
-          class="text-start d-flex align-items-center col-sm-3 col-xs-5"
-          style="font-weight: 700; font-size: 10.5px"
-        >
-          {{ $t("General.validTil") }}
-        </div>
-        <div class="text-start col-sm-9">
-          <SpanDate :date="mcs.validTil" />
-        </div>
-      </div>
-      <div class="row">
-        <div
-          class="text-start d-flex align-items-center col-sm-3 col-xs-5"
-          style="font-weight: 700; font-size: 10.5px"
-        >
-          {{ $t("Capitalsource.groupUse") }}
-        </div>
-        <div class="text-start col-sm-9">
-          <SpanBoolean :value="mcs.groupUse" />
-        </div>
-      </div>
-      <div class="row">
-        <div
-          class="text-start d-flex align-items-center col-sm-3 col-xs-5"
-          style="font-weight: 700; font-size: 10.5px"
-        >
-          {{ $t("Capitalsource.importAllowed") }}
-        </div>
-        <div class="text-start col-sm-9">
-          <b :style="'color:' + importAllowedColor">{{
-            importAllowedString
-          }}</b>
-        </div>
+        <table class="table table-bordered table-hover">
+          <colgroup>
+            <col span="1" style="background-color: #f2f2f2" width="35%" />
+          </colgroup>
+          <tbody>
+            <tr>
+              <th>{{ $t("General.name") }}</th>
+              <td>{{ mcs.comment }}</td>
+            </tr>
+            <tr>
+              <th>{{ $t("Capitalsource.type") }}</th>
+              <td>{{ typeString }}</td>
+            </tr>
+            <tr>
+              <th>{{ $t("Capitalsource.state") }}</th>
+              <td>{{ stateString }}</td>
+            </tr>
+            <tr>
+              <th>{{ $t("General.iban") }}</th>
+              <td>{{ mcs.accountNumber }}</td>
+            </tr>
+            <tr>
+              <th>{{ $t("General.bic") }}</th>
+              <td>{{ mcs.bankCode }}</td>
+            </tr>
+            <tr>
+              <th>{{ $t("General.validFrom") }}</th>
+              <td><SpanDate :date="mcs.validFrom" /></td>
+            </tr>
+            <tr>
+              <th>{{ $t("General.validTil") }}</th>
+              <td><SpanDate :date="mcs.validTil" /></td>
+            </tr>
+            <tr>
+              <th>{{ $t("Capitalsource.groupUse") }}</th>
+              <td><SpanBoolean :value="mcs.groupUse" /></td>
+            </tr>
+            <tr>
+              <th>{{ $t("Capitalsource.importAllowed") }}</th>
+              <td>
+                <b :style="'color:' + importAllowedColor">{{
+                  importAllowedString
+                }}</b>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </template>
     <template #footer>
