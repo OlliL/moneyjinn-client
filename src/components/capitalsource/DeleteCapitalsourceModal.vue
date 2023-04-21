@@ -98,7 +98,7 @@ const typeString = computed(() => {
 });
 
 const stateString = computed(() => {
-  return capitalsourceStateNames[mcs.value.type];
+  return capitalsourceStateNames[mcs.value.state];
 });
 
 const _show = (_mcs: Capitalsource) => {
