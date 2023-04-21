@@ -229,7 +229,7 @@ import { useField, useForm } from "vee-validate";
 import { computed, onMounted, ref } from "vue";
 import { Bar } from "vue-chartjs";
 import { useI18n } from "vue-i18n";
-import { any, date, number } from "zod";
+import { any, date, number, object } from "zod";
 
 import ButtonSubmit from "@/components/ButtonSubmit.vue";
 import DivError from "@/components/DivError.vue";
@@ -346,7 +346,9 @@ const postingAccountIdsYesSchema = computed(() =>
   singlePostingAccounts.value
     ? toFieldValidator(optionalSchema)
     : toFieldValidator(
-        number().array().min(1, t("Moneyflow.validation.postingAccountId"))
+        object({ id: number() })
+          .array()
+          .min(1, t("Moneyflow.validation.postingAccountId"))
       )
 );
 
