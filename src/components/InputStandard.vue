@@ -9,6 +9,7 @@
         :class="'form-control ' + alignmentClass + ' ' + errorData.inputClass"
         :disabled="disabled"
         :step="step"
+        :name="name"
         @input="onInput($event)"
       />
       <label :for="id" :style="'color: ' + errorData.fieldColor">{{
@@ -60,6 +61,10 @@ const props = defineProps({
   id: {
     type: String,
     required: true,
+  },
+  name: {
+    type: String,
+    required: false,
   },
   fieldLabel: {
     type: String,

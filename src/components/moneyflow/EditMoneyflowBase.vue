@@ -5,7 +5,7 @@
       <InputDate
         v-model="mmf.bookingDate"
         :validation-schema="schema.bookingDate"
-        id="bookingDate"
+        :id="'bookingDate' + idSuffix"
         :field-label="$t('Moneyflow.bookingdate')"
       />
     </div>
@@ -13,7 +13,7 @@
       <InputDate
         v-model="mmf.invoiceDate"
         :validation-schema="schema.invoiceDate"
-        id="invoiceDate"
+        :id="'invoiceDate' + idSuffix"
         :field-label="$t('Moneyflow.invoicedate')"
       />
     </div>
@@ -62,6 +62,7 @@
         :validation-schema-ref="schema.comment"
         :id="'comment' + idSuffix"
         :field-label="$t('General.comment')"
+        name="comment"
       />
     </div>
     <div class="col-md-3 col-xs-12 mb-2" v-show="showMoneyflowFields">
