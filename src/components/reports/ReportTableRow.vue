@@ -78,7 +78,11 @@
         $t("General.delete")
       }}</span>
     </td>
-    <td colspan="2" v-if="index == 0 && !isOwnMoneyflow"></td>
+    <td
+      :rowspan="rowspan"
+      colspan="2"
+      v-if="index == 0 && !isOwnMoneyflow"
+    ></td>
   </tr>
 </template>
 <script lang="ts" setup>
