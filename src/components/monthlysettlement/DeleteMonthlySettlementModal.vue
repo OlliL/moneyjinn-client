@@ -49,6 +49,7 @@ const _show = (_year: number, _month: number) => {
   year.value = _year;
   month.value = _month;
   monthName.value = getMonthName(month.value);
+  serverErrors.value = new Array<string>();
   modalComponent.value._show();
 };
 

@@ -120,6 +120,7 @@ const emit = defineEmits(["preDefMoneyflowDeleted"]);
 
 const _show = (_mpm: PreDefMoneyflow) => {
   mpm.value = _mpm;
+  serverErrors.value = new Array<string>();
   modalComponent.value._show();
 };
 

@@ -121,6 +121,7 @@ const emit = defineEmits(["contractpartnerDeleted"]);
 
 const _show = (_mcp: Contractpartner) => {
   mcp.value = _mcp;
+  serverErrors.value = new Array<string>();
   modalComponent.value._show();
 };
 
