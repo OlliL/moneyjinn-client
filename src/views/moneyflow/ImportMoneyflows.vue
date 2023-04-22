@@ -9,6 +9,12 @@
     <DivError :server-errors="serverErrors" />
 
     <div
+      class="text-center text-success"
+      v-if="dataLoaded && importMoneyflows.length == 0"
+    >
+      {{ $t("AppHome.allDone") }} <i class="bi bi-emoji-smile"></i>
+    </div>
+    <div
       class="row justify-content-md-center mb-5"
       v-for="importedMoneyflow in importMoneyflows"
       :key="importedMoneyflow.externalid"
@@ -100,11 +106,14 @@ const serverErrors = ref(new Array<string>());
 
 const importMoneyflows = ref({} as Array<ImportedMoneyflow>);
 const editMoneyflowRefs = new Map<number, any>();
+const dataLoaded = ref(false);
 
 onMounted(() => {
+  dataLoaded.value = false;
   ImportedMoneyflowControllerHandler.showAddImportedMoneyflows()
     .then((imf) => {
       importMoneyflows.value = imf;
+      dataLoaded.value = true;
     })
     .catch((backendError) => {
       handleBackendError(backendError, serverErrors);
