@@ -205,7 +205,7 @@
       class="row justify-content-md-center"
       style="position: relative; height: 55vh"
     >
-      <div class="col-xxl-8 col-md-11 col-sm-12 col-xs-12">
+      <div class="col-xxl-8 col-xs-12">
         <Bar
           :data="chartData"
           :options="chartOptions"

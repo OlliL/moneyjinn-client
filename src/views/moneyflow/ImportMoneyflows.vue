@@ -19,7 +19,7 @@
       v-for="importedMoneyflow in importMoneyflows"
       :key="importedMoneyflow.externalid"
     >
-      <div class="col-md-9 col-xs-12">
+      <div class="col-xxl-9 col-xs-12">
         <div class="card w-100 bg-light">
           <div class="card-body">
             <form @submit.prevent="importImportedMoneyflow(importedMoneyflow)">

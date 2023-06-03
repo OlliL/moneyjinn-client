@@ -208,7 +208,7 @@
             {{ error }}
           </div>
         </div>
-        <div class="collapse navbar-collapse dropstart">
+        <div class="navbar dropstart">
           <ul class="navbar-nav ms-auto">
             <li class="nav-item dropdown">
               <a
