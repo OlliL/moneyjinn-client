@@ -14,7 +14,7 @@
       </div>
     </div>
     <div class="row justify-content-md-center mb-4">
-      <div class="col-md-9 col-xs-12">
+      <div class="col-xxl-9 col-xs-12">
         <form action="#">
           <table style="margin: 0 auto">
             <tr>
@@ -65,7 +65,7 @@
     <DivError :server-errors="serverErrors" />
 
     <div class="row justify-content-md-center mb-4" v-if="selectedMonth">
-      <div class="col-md-4 col-xs-12">
+      <div class="col-xl-4 col-md-6 col-xs-12">
         <div class="card">
           <div class="card-header text-center p-3">
             <h5>

@@ -118,7 +118,7 @@
         assetsTurnoverCapitalsources && assetsTurnoverCapitalsources.length > 0
       "
     >
-      <div class="col col-lg-8">
+      <div class="col col-xxl-8">
         <div class="card">
           <div class="card-header text-center p-3">
             <h4>{{ $t("Reports.ownCapital") }}</h4>
@@ -186,7 +186,7 @@
         liabilitiesTurnoverCapitalsources.length > 0
       "
     >
-      <div class="col col-lg-8">
+      <div class="col col-xxl-8">
         <div class="card">
           <div class="card-header text-center p-3">
             <h4>{{ $t("Reports.debtCapital") }}</h4>
@@ -207,7 +207,7 @@
         creditTurnoverCapitalsources && creditTurnoverCapitalsources.length > 0
       "
     >
-      <div class="col col-lg-8">
+      <div class="col col-xxl-8">
         <div class="card">
           <div class="card-header text-center p-3">
             <h4>{{ $t("Reports.loans") }}</h4>

@@ -6,7 +6,7 @@
       </div>
     </div>
     <div class="row justify-content-md-center mb-2">
-      <div class="col-xxl-3 col-lg-4 col-md-5 col-sm-6 col-xs-12">
+      <div class="col-xxl-3 col-xl-5 col-md-6 col-xs-12">
         <div class="card w-100 bg-light">
           <div class="card-body">
             <form @submit.prevent="changePassword">

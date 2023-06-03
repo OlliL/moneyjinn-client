@@ -4,7 +4,7 @@
     class="row justify-content-md-center py-4"
     v-if="dataLoaded && etfSummaryReceived"
   >
-    <div class="col col-lg-8">
+    <div class="col col-xxl-8">
       <div class="card">
         <div class="card-header text-center p-3">
           <h4>{{ $t("ETF.etf") }}</h4>

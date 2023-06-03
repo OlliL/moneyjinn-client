@@ -15,7 +15,7 @@
       </div>
     </div>
     <div class="row justify-content-md-center mb-4">
-      <div class="col-md-9 col-xs-12">
+      <div class="col-xxl-9 col-xs-12">
         <div class="card w-100 bg-light">
           <div class="card-body">
             <form @submit.prevent="searchMoneyflows" id="searchMoneyflowsForm">
@@ -65,7 +65,7 @@
                     />
                   </div>
                   <div
-                    class="col-md-1 col-xs-12 justify-content-end d-flex align-items-center"
+                    class="col-md-1 col-xs-12 justify-content-start d-flex align-items-center"
                   >
                     <div class="form-check form-check-inline form-switch">
                       <input
@@ -81,7 +81,7 @@
                     </div>
                   </div>
                   <div
-                    class="col-md-3 col-xs-12 justify-content-end d-flex align-items-center"
+                    class="col-md-3 col-xs-12 justify-content-start d-flex align-items-center"
                   >
                     <div class="form-check form-check-inline form-switch">
                       <input
@@ -100,7 +100,7 @@
                     </div>
                   </div>
                   <div
-                    class="col-md-2 col-xs-12 justify-content-end d-flex align-items-center"
+                    class="col-md-2 col-xs-12 justify-content-start d-flex align-items-center"
                   >
                     <div class="form-check form-check-inline form-switch">
                       <input
@@ -116,7 +116,7 @@
                     </div>
                   </div>
                   <div
-                    class="col-md-2 col-xs-12 justify-content-end d-flex align-items-center"
+                    class="col-md-2 col-xs-12 justify-content-start d-flex align-items-center"
                   >
                     <div class="form-check form-check-inline form-switch">
                       <input
@@ -137,7 +137,7 @@
                 </div>
                 <div class="row no-gutters mb-4">
                   <div
-                    class="col-md-3 col-xs-12 mx-auto d-flex align-items-center justify-content-center"
+                    class="col-md-3 col-xs-12 mx-auto d-flex align-items-center justify-content-center mb-4 mb-md-0"
                   >
                     <ButtonSubmit
                       :button-label="$t('Moneyflow.search')"
@@ -183,7 +183,7 @@
       </div>
     </div>
     <div class="row justify-content-md-center" v-if="dataLoaded">
-      <div class="col-md-9 col-xs-12">
+      <div class="col-xxl-9 col-xs-12">
         <table class="table table-striped table-bordered">
           <thead>
             <tr>

@@ -24,7 +24,7 @@
     </div>
     <DivError :server-errors="serverErrors" />
     <div class="row justify-content-md-center mb-4" v-if="dataLoaded">
-      <div class="col-md-8 col-xs-12">
+      <div class="col-xxl-8 col-xs-12">
         <ul class="nav nav-tabs">
           <li class="nav-item">
             <button
@@ -163,7 +163,7 @@
       id="calculateEtfSaleForm"
     >
       <div class="row justify-content-md-center">
-        <div class="col-md-8 col-xs-12 mb-4">
+        <div class="col-xxl-8 col-xs-12 mb-4">
           <div class="card w-100 bg-light">
             <div class="card-body">
               <div class="container-fluid">
@@ -249,7 +249,7 @@
       </div>
     </form>
     <div class="row justify-content-md-center" v-if="calcResults.isin">
-      <div class="col-md-3 col-xs-12 mb-4">
+      <div class="col-xxl-3 col-md-6 col-xs-12 mb-4">
         <table class="table table-striped table-bordered table-hover">
           <col style="width: 70%" />
           <col style="width: 30%" />

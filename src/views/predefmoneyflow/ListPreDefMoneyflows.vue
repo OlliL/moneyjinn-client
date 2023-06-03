@@ -18,7 +18,7 @@
       </div>
     </div>
     <div class="row justify-content-md-center mb-4">
-      <div class="col-md-9 col-xs-12">
+      <div class="col-xxl-9 col-xs-12">
         <table style="margin: 0 auto">
           <tr>
             <td class="text-right pe-2">
@@ -54,7 +54,7 @@
     </div>
     <DivError :server-errors="serverErrors" />
     <div class="row justify-content-md-center">
-      <div class="col-md-9 col-xs-12">
+      <div class="col-xxl-9 col-xs-12">
         <table class="table table-striped table-bordered table-hover">
           <thead>
             <tr>

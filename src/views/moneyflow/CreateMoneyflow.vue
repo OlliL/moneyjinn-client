@@ -25,7 +25,7 @@
     <DivError :server-errors="serverErrors" />
 
     <div class="row justify-content-md-center">
-      <div class="col-md-9 col-xs-12">
+      <div class="col-sm-12 col-xxl-10 col-xs-12">
         <div class="card w-100 bg-light">
           <div class="card-body">
             <form @submit.prevent="createMoneyflow" id="createMoneyflowForm">

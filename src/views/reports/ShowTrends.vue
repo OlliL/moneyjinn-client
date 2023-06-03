@@ -8,7 +8,7 @@
     <DivError :server-errors="serverErrors" />
 
     <div class="row justify-content-md-center mb-2">
-      <div class="col-xxl-4 col-md-6 col-sm-10 col-xs-12">
+      <div class="col-xxl-4 col-md-7 col-xs-12">
         <div class="card w-100 bg-light">
           <div class="card-body">
             <form @submit.prevent="showTrends">
@@ -85,7 +85,7 @@
       class="row justify-content-md-center"
       style="position: relative; height: 55vh"
     >
-      <div class="col-xxl-7 col-md-10 col-sm-12 col-xs-12">
+      <div class="col-xxl-7 col-xl-10 col-xs-12">
         <Line
           :data="chartData"
           :options="chartOptions"
