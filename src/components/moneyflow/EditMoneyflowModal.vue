@@ -89,6 +89,11 @@ const modalWidth = computed(() => {
 });
 const _show = (_mmf: Moneyflow, receipt?: ImportedMoneyflowReceipt) => {
   mmf.value = _mmf;
+
+  receiptBase64.value = "";
+  isJpeg.value = false;
+  isPdf.value = false;
+
   if (mmf.value.hasReceipt) loadReceipt(mmf.value.id);
   else if (receipt) processImportedReceipt(receipt);
 
