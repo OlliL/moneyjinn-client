@@ -224,12 +224,12 @@ const amountChanged = () => {
   // when amount is empty, we must send 0, otherwise force it to be a number
   amount = amount ? +amount : 0;
   emit("amountChanged", props.index, amount);
-  if (props.isLastRow) addMoneyflowSplitEntryRow();
+  if (props.isLastRow && mseAmount.value) addMoneyflowSplitEntryRow();
 };
 
 const commentChanged = () => {
   emit("commentChanged", props.index, mseComment.value);
-  if (props.isLastRow) addMoneyflowSplitEntryRow();
+  if (props.isLastRow && mseComment.value) addMoneyflowSplitEntryRow();
 };
 
 const postingaccountChanged = () => {
@@ -239,7 +239,7 @@ const postingaccountChanged = () => {
     msePostingAccountId.value,
     msePostingAccountName.value
   );
-  if (props.isLastRow) addMoneyflowSplitEntryRow();
+  if (props.isLastRow && msePostingAccountId.value) addMoneyflowSplitEntryRow();
 };
 
 const useRemainder = () => {
