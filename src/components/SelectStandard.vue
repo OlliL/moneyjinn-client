@@ -114,7 +114,8 @@ onMounted(() => {
 watch(
   () => props.selectBoxValues,
   (newVal, oldVal) => {
-    if (newVal != oldVal) {
+    // reset the fieldValue in case its not part of the select-box. But only do that if the fieldValue is set at all.
+    if (newVal != oldVal && fieldValue.value) {
       const foundElement = newVal.filter((sbv) => sbv.id == fieldValue.value);
       if (foundElement.length === 0) {
         fieldValue.value = undefined;
