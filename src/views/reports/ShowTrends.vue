@@ -269,7 +269,7 @@ const {
 } = useField<Array<number>>(
   "postingAccountIdsYes",
   toFieldValidator(schema.capitalsourceIds),
-  { initialValue: new Array<number>() }
+  { initialValue: new Array<number>(), syncVModel: true }
 );
 
 const errorCapitalsourceIds = computed((): ErrorData => {
