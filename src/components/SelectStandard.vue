@@ -87,6 +87,7 @@ const {
   handleChange,
 } = useField(props.id, schema, {
   initialValue: props.modelValue,
+  syncVModel: true,
 });
 
 const onInput = (event: Event) => {

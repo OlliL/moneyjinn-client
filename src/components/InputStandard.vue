@@ -109,7 +109,9 @@ const {
   errorMessage,
   setState,
   handleChange,
-} = useField(props.id, schema);
+} = useField(props.id, schema, {
+  syncVModel: true,
+});
 
 const onInput = (event: Event) => {
   setState({ touched: true });

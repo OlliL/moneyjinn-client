@@ -382,7 +382,7 @@ const {
 } = useField<Array<PostingAccount>>(
   "postingAccountIdsYes",
   postingAccountIdsYesSchema,
-  { initialValue: new Array<PostingAccount>() }
+  { initialValue: new Array<PostingAccount>(), syncVModel: true }
 );
 
 const errorDatasPostingAccountsYes = computed((): ErrorData => {
