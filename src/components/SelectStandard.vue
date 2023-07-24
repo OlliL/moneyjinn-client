@@ -124,11 +124,4 @@ watch(
     }
   }
 );
-
-watch(
-  () => props.modelValue,
-  (newVal, oldVal) => {
-    fieldValue.value = newVal;
-  }
-);
 </script>
