@@ -158,23 +158,22 @@ router.beforeEach(
   ) => {
     const loginNeeded = !to.matched.some((record) => record.meta.hideForAuth);
 
-//    isLoggedIn().then((loggedIn: boolean) => {
-
-    const loggedIn = isLoggedIn();
-    if (loggedIn || !loginNeeded) {
+    isLoggedIn().then((loggedIn: boolean) => {
+      if (loggedIn || !loginNeeded) {
         if (to.name === Routes.ChangePassword || to.name === Routes.Login) {
+          next();
+          return;
+        }
+        const userSessionStore = useUserSessionStore();
+        if (userSessionStore.userIsNew) {
+          next({ name: Routes.ChangePassword });
+          return;
+        }
         next();
+      } else {
+        next({ name: Routes.Login });
       }
-      const userSessionStore = useUserSessionStore();
-      if (userSessionStore.userIsNew) {
-        next({ name: Routes.ChangePassword });
-      }
-      next();
-    } else {
-      next({ name: Routes.Login });
-    }
-
-    //    })
+    });
 
   }
 );

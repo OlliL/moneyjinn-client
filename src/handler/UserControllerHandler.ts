@@ -50,7 +50,7 @@ class UserControllerHandler extends AbstractControllerHandler {
 
     const userSessionStore = useUserSessionStore();
     userSessionStore.logout();
-    clearAuthTokens();
+    await clearAuthTokens();
 
     const response = await this.api.login(loginRequest);
     const loginResponse = response.data;
@@ -67,7 +67,7 @@ class UserControllerHandler extends AbstractControllerHandler {
 
     userSessionStore.setUserSession(userSession);
 
-    setAuthTokens({
+    await setAuthTokens({
       accessToken: loginResponse.token,
       refreshToken: loginResponse.refreshToken,
     });
