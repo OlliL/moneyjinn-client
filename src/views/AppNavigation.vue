@@ -349,17 +349,17 @@ const logout = async () => {
   const userSessionStore = useUserSessionStore();
   userSessionStore.logout();
 
-  new LogoutApi(
+  await new LogoutApi(
     undefined,
     "",
     AxiosInstanceHolder.getInstance().getAxiosInstance()
   )
     .logout()
-    .then(() => {
-      clearAuthTokens();
+    .then(async () => {
+      await clearAuthTokens();
     })
-    .catch(() => {
-      clearAuthTokens();
+    .catch(async () => {
+      await clearAuthTokens();
     });
 
   router.push({

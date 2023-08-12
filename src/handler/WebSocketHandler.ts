@@ -29,9 +29,9 @@ export class WebSocketHandler {
       heartbeatOutgoing: 1000,
     });
 
-    this.stompClient.beforeConnect = () => {
+    this.stompClient.beforeConnect = async () =>  {
       const headers = {} as Record<string, string>;
-      HeaderUtil.getInstance().addAuthorizationHeader(headers);
+      await HeaderUtil.getInstance().addAuthorizationHeader(headers);
       HeaderUtil.getInstance().addXsrfHeader(headers);
       this.stompClient.connectHeaders = headers;
     };

@@ -12,8 +12,8 @@ export class HeaderUtil {
     return HeaderUtil.instance;
   }
 
-  public addAuthorizationHeader(headers: Record<string, string>) {
-    const accessToken = getAccessToken();
+  public async addAuthorizationHeader(headers: Record<string, string>) {
+    const accessToken = await getAccessToken();
     headers["Authorization"] = "Bearer " + accessToken;
   }
 
