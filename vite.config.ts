@@ -26,5 +26,8 @@ export default defineConfig({
   base: "/",
   server: {
     host: true,
+    watch: {
+      usePolling: true
+    }
   },
 });
