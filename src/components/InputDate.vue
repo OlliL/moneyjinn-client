@@ -119,9 +119,9 @@ onMounted(() => {
     datepicker = new Datepicker(fieldRef.value as HTMLInputElement, {
       buttonClass: "btn",
       pickLevel: pickLevel,
-      clearBtn: true,
-      todayBtn: true,
-      todayBtnMode: 1,
+      clearButton: true,
+      todayButton: true,
+      todayButtonMode: 1,
       autohide: true,
       language: navigator.language,
       format: format,
