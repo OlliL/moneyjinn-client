@@ -2,89 +2,51 @@
   <ModalVue :title="$t('Contractpartner.title.delete')" ref="modalComponent">
     <template #body>
       <DivError :server-errors="serverErrors" />
-      <div class="row">
-        <div
-          class="text-start d-flex align-items-center col-sm-3 col-xs-5"
-          style="font-weight: 700; font-size: 10.5px"
-        >
-          {{ $t("General.name") }}
-        </div>
-        <div class="text-start col-sm-9">{{ mcp.name }}&nbsp;</div>
-      </div>
-      <div class="row">
-        <div
-          class="text-start d-flex align-items-center col-sm-3 col-xs-5"
-          style="font-weight: 700; font-size: 10.5px"
-        >
-          {{ $t("Contractpartner.street") }}
-        </div>
-        <div class="text-start col-sm-9">{{ mcp.street }}&nbsp;</div>
-      </div>
-      <div class="row">
-        <div
-          class="text-start d-flex align-items-center col-sm-3 col-xs-5"
-          style="font-weight: 700; font-size: 10.5px"
-        >
-          {{ $t("Contractpartner.postcode") }}
-        </div>
-        <div class="text-start col-sm-9">{{ mcp.postcode }}&nbsp;</div>
-      </div>
-      <div class="row">
-        <div
-          class="text-start d-flex align-items-center col-sm-3 col-xs-5"
-          style="font-weight: 700; font-size: 10.5px"
-        >
-          {{ $t("Contractpartner.town") }}
-        </div>
-        <div class="text-start col-sm-9">{{ mcp.town }}&nbsp;</div>
-      </div>
-      <div class="row">
-        <div
-          class="text-start d-flex align-items-center col-sm-3 col-xs-5"
-          style="font-weight: 700; font-size: 10.5px"
-        >
-          {{ $t("Contractpartner.country") }}
-        </div>
-        <div class="text-start col-sm-9">{{ mcp.country }}&nbsp;</div>
-      </div>
-      <div class="row">
-        <div
-          class="text-start d-flex align-items-center col-sm-3 col-xs-5"
-          style="font-weight: 700; font-size: 10.5px"
-        >
-          {{ $t("General.validFrom") }}
-        </div>
-        <div class="text-start col-sm-9">
-          <SpanDate :date="mcp.validFrom" />
-        </div>
-      </div>
-      <div class="row">
-        <div
-          class="text-start d-flex align-items-center col-sm-3 col-xs-5"
-          style="font-weight: 700; font-size: 10.5px"
-        >
-          {{ $t("General.validTil") }}
-        </div>
-        <div class="text-start col-sm-9"><SpanDate :date="mcp.validTil" /></div>
-      </div>
-      <div class="row">
-        <div
-          class="text-start d-flex align-items-center col-sm-3 col-xs-5"
-          style="font-weight: 700; font-size: 10.5px"
-        >
-          {{ $t("Contractpartner.moneyflowComment") }}
-        </div>
-        <div class="text-start col-sm-9">{{ mcp.moneyflowComment }}&nbsp;</div>
-      </div>
-      <div class="row">
-        <div
-          class="text-start d-flex align-items-center col-sm-3 col-xs-5"
-          style="font-weight: 700; font-size: 10.5px"
-        >
-          {{ $t("General.postingAccount") }}
-        </div>
-        <div class="text-start col-sm-9">
-          {{ mcp.postingAccountName }}&nbsp;
+      <div class="row d-flex justify-content-center mt-3">
+        <div class="col-11">
+          <table class="table table-bordered table-hover">
+            <colgroup>
+              <col span="1" style="background-color: #f2f2f2" width="35%" />
+            </colgroup>
+            <tbody>
+              <tr>
+                <th>{{ $t("General.name") }}</th>
+                <td>{{ mcp.name }}</td>
+              </tr>
+              <tr>
+                <th>{{ $t("Contractpartner.street") }}</th>
+                <td>{{ mcp.street }}</td>
+              </tr>
+              <tr>
+                <th>{{ $t("Contractpartner.postcode") }}</th>
+                <td>{{ mcp.postcode }}</td>
+              </tr>
+              <tr>
+                <th>{{ $t("Contractpartner.town") }}</th>
+                <td>{{ mcp.town }}</td>
+              </tr>
+              <tr>
+                <th>{{ $t("Contractpartner.country") }}</th>
+                <td>{{ mcp.country }}</td>
+              </tr>
+              <tr>
+                <th>{{ $t("General.validFrom") }}</th>
+                <td><SpanDate :date="mcp.validFrom" /></td>
+              </tr>
+              <tr>
+                <th>{{ $t("General.validTil") }}</th>
+                <td><SpanDate :date="mcp.validTil" /></td>
+              </tr>
+              <tr>
+                <th>{{ $t("Contractpartner.moneyflowComment") }}</th>
+                <td>{{ mcp.moneyflowComment }}</td>
+              </tr>
+              <tr>
+                <th>{{ $t("General.postingAccount") }}</th>
+                <td>{{ mcp.postingAccountName }}</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
     </template>
