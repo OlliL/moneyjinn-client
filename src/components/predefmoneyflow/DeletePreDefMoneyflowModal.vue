@@ -2,87 +2,48 @@
   <ModalVue :title="$t('PreDefMoneyflow.title.delete')" ref="modalComponent">
     <template #body>
       <DivError :server-errors="serverErrors" />
-      <div class="row">
-        <div
-          class="text-start d-flex align-items-center col-sm-3 col-xs-5"
-          style="font-weight: 700; font-size: 10.5px"
-        >
-          {{ $t("General.amount") }}
+      <div class="row d-flex justify-content-center mt-3">
+        <div class="col-11">
+          <table class="table table-bordered table-hover">
+            <colgroup>
+              <col span="1" style="background-color: #f2f2f2" width="35%" />
+            </colgroup>
+            <tbody>
+              <tr>
+                <th>{{ $t("General.amount") }}</th>
+                <td><SpanAmount :amount="mpm.amount" /></td>
+              </tr>
+              <tr>
+                <th>{{ $t("General.contractpartner") }}</th>
+                <td>{{ mpm.contractpartnerName }}</td>
+              </tr>
+              <tr>
+                <th>{{ $t("General.comment") }}</th>
+                <td>{{ mpm.comment }}</td>
+              </tr>
+              <tr>
+                <th>{{ $t("General.postingAccount") }}</th>
+                <td>{{ mpm.postingAccountName }}</td>
+              </tr>
+              <tr>
+                <th>{{ $t("General.capitalsource") }}</th>
+                <td>{{ mpm.capitalsourceComment }}</td>
+              </tr>
+              <tr>
+                <th>{{ $t("PreDefMoneyflow.onceAMonth") }}</th>
+                <td><SpanBoolean :value="mpm.onceAMonth" /></td>
+              </tr>
+              <tr>
+                <th>{{ $t("PreDefMoneyflow.createDate") }}</th>
+                <td><SpanDate :date="mpm.createDate" /></td>
+              </tr>
+              <tr>
+                <th>{{ $t("PreDefMoneyflow.lastUsed") }}</th>
+                <td><SpanDate :date="mpm.lastUsed" /></td>
+              </tr>
+            </tbody>
+          </table>
         </div>
-        <div class="text-start col-sm-9">
-          <SpanAmount :amount="mpm.amount" />
-        </div>
-      </div>
-      <div class="row">
-        <div
-          class="text-start d-flex align-items-center col-sm-3 col-xs-5"
-          style="font-weight: 700; font-size: 10.5px"
-        >
-          {{ $t("General.contractpartner") }}
-        </div>
-        <div class="text-start col-sm-9">{{ mpm.contractpartnerName }}</div>
-      </div>
-      <div class="row">
-        <div
-          class="text-start d-flex align-items-center col-sm-3 col-xs-5"
-          style="font-weight: 700; font-size: 10.5px"
-        >
-          {{ $t("General.comment") }}
-        </div>
-        <div class="text-start col-sm-9">{{ mpm.comment }}</div>
-      </div>
-      <div class="row">
-        <div
-          class="text-start d-flex align-items-center col-sm-3 col-xs-5"
-          style="font-weight: 700; font-size: 10.5px"
-        >
-          {{ $t("General.postingAccount") }}
-        </div>
-        <div class="text-start col-sm-9">
-          {{ mpm.postingAccountName }}&nbsp;
-        </div>
-      </div>
-      <div class="row">
-        <div
-          class="text-start d-flex align-items-center col-sm-3 col-xs-5"
-          style="font-weight: 700; font-size: 10.5px"
-        >
-          {{ $t("General.capitalsource") }}
-        </div>
-        <div class="text-start col-sm-9">
-          {{ mpm.capitalsourceComment }}&nbsp;
-        </div>
-      </div>
-      <div class="row">
-        <div
-          class="text-start d-flex align-items-center col-sm-3 col-xs-5"
-          style="font-weight: 700; font-size: 10.5px"
-        >
-          {{ $t("PreDefMoneyflow.onceAMonth") }}
-        </div>
-        <div class="text-start col-sm-9">
-          <SpanBoolean :value="mpm.onceAMonth" />
-        </div>
-      </div>
-      <div class="row">
-        <div
-          class="text-start d-flex align-items-center col-sm-3 col-xs-5"
-          style="font-weight: 700; font-size: 10.5px"
-        >
-          {{ $t("PreDefMoneyflow.createDate") }}
-        </div>
-        <div class="text-start col-sm-9">
-          <SpanDate :date="mpm.createDate" />
-        </div>
-      </div>
-      <div class="row">
-        <div
-          class="text-start d-flex align-items-center col-sm-3 col-xs-5"
-          style="font-weight: 700; font-size: 10.5px"
-        >
-          {{ $t("PreDefMoneyflow.lastUsed") }}
-        </div>
-        <div class="text-start col-sm-9"><SpanDate :date="mpm.lastUsed" /></div>
       </div>
     </template>
     <template #footer>

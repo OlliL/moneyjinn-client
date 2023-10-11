@@ -1,7 +1,7 @@
 <template>
-  <div class="container-fluid text-center">
+  <div class="container-fluid">
     <div class="row justify-content-md-center">
-      <div class="col-xs-12 mb-4">
+      <div class="col-xs-12 mb-4 text-center">
         <h4>{{ $t("Reports.title.reports") }}</h4>
       </div>
     </div>
