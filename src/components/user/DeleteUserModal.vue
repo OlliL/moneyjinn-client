@@ -2,55 +2,35 @@
   <ModalVue :title="$t('User.title.delete')" ref="modalComponent">
     <template #body>
       <DivError :server-errors="serverErrors" />
-      <div class="row">
-        <div
-          class="text-start d-flex align-items-center col-sm-3 col-xs-5"
-          style="font-weight: 700; font-size: 10.5px"
-        >
-          {{ $t("General.name") }}
-        </div>
-        <div class="text-start col-sm-9">{{ user.userName }}</div>
-      </div>
-      <div class="row">
-        <div
-          class="text-start d-flex align-items-center col-sm-3 col-xs-5"
-          style="font-weight: 700; font-size: 10.5px"
-        >
-          {{ $t("General.group") }}
-        </div>
-        <div class="text-start col-sm-9">{{ user.groupName }}</div>
-      </div>
-      <div class="row">
-        <div
-          class="text-start d-flex align-items-center col-sm-3 col-xs-5"
-          style="font-weight: 700; font-size: 10.5px"
-        >
-          {{ $t("User.canLogin") }}
-        </div>
-        <div class="text-start col-sm-9">
-          <SpanBoolean :value="user.userCanLogin" />
-        </div>
-      </div>
-      <div class="row">
-        <div
-          class="text-start d-flex align-items-center col-sm-3 col-xs-5"
-          style="font-weight: 700; font-size: 10.5px"
-        >
-          {{ $t("User.admin") }}
-        </div>
-        <div class="text-start col-sm-9">
-          <SpanBoolean :value="user.userIsAdmin" />
-        </div>
-      </div>
-      <div class="row">
-        <div
-          class="text-start d-flex align-items-center col-sm-3 col-xs-5"
-          style="font-weight: 700; font-size: 10.5px"
-        >
-          {{ $t("User.new") }}
-        </div>
-        <div class="text-start col-sm-9">
-          <SpanBoolean :value="user.userIsNew" />
+      <div class="row d-flex justify-content-center mt-3">
+        <div class="col-11">
+          <table class="table table-bordered table-hover">
+            <colgroup>
+              <col span="1" style="background-color: #f2f2f2" width="35%" />
+            </colgroup>
+            <tbody>
+              <tr>
+                <th>{{ $t("General.name") }}</th>
+                <td>{{ user.userName }}</td>
+              </tr>
+              <tr>
+                <th>{{ $t("General.group") }}</th>
+                <td>{{ user.groupName }}</td>
+              </tr>
+              <tr>
+                <th>{{ $t("User.canLogin") }}</th>
+                <td><SpanBoolean :value="user.userCanLogin" /></td>
+              </tr>
+              <tr>
+                <th>{{ $t("User.admin") }}</th>
+                <td><SpanBoolean :value="user.userIsAdmin" /></td>
+              </tr>
+              <tr>
+                <th>{{ $t("User.new") }}</th>
+                <td><SpanBoolean :value="user.userIsNew" /></td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
     </template>

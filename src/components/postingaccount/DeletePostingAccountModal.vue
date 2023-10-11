@@ -2,14 +2,20 @@
   <ModalVue :title="$t('PostingAccount.title.delete')" ref="modalComponent">
     <template #body>
       <DivError :server-errors="serverErrors" />
-      <div class="row">
-        <div
-          class="text-start d-flex align-items-center col-sm-3 col-xs-5"
-          style="font-weight: 700; font-size: 10.5px"
-        >
-          {{ $t("General.name") }}
+      <div class="row d-flex justify-content-center mt-3">
+        <div class="col-11">
+          <table class="table table-bordered table-hover">
+            <colgroup>
+              <col span="1" style="background-color: #f2f2f2" width="35%" />
+            </colgroup>
+            <tbody>
+              <tr>
+                <th>{{ $t("General.name") }}</th>
+                <td>{{ mpa.name }}</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
-        <div class="text-start col-sm-9">{{ mpa.name }}</div>
       </div>
     </template>
     <template #footer>
