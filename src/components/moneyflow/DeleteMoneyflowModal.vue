@@ -2,74 +2,44 @@
   <ModalVue :title="$t('Moneyflow.title.delete')" ref="modalComponent">
     <template #body>
       <DivError :server-errors="serverErrors" />
-      <div class="row">
-        <div
-          class="text-start d-flex align-items-center col-sm-3 col-xs-5"
-          style="font-weight: 700; font-size: 10.5px"
-        >
-          {{ $t("Moneyflow.bookingdate") }}
+      <div class="row d-flex justify-content-center mt-3">
+        <div class="col-11">
+          <table class="table table-bordered table-hover">
+            <colgroup>
+              <col span="1" style="background-color: #f2f2f2" width="35%" />
+            </colgroup>
+            <tbody>
+              <tr>
+                <th>{{ $t("Moneyflow.bookingdate") }}</th>
+                <td><SpanDate :date="mmf.bookingDate" /></td>
+              </tr>
+              <tr>
+                <th>{{ $t("Moneyflow.invoicedate") }}</th>
+                <td><SpanDate :date="mmf.invoiceDate" /></td>
+              </tr>
+              <tr>
+                <th>{{ $t("General.contractpartner") }}</th>
+                <td>{{ mmf.contractpartnerName }}</td>
+              </tr>
+              <tr>
+                <th>{{ $t("General.capitalsource") }}</th>
+                <td>{{ mmf.capitalsourceComment }}</td>
+              </tr>
+              <tr>
+                <th>{{ $t("General.amount") }}</th>
+                <td><SpanAmount :amount="mmf.amount" /></td>
+              </tr>
+              <tr>
+                <th>{{ $t("General.comment") }}</th>
+                <td>{{ mmf.comment }}</td>
+              </tr>
+              <tr>
+                <th>{{ $t("General.postingAccount") }}</th>
+                <td>{{ mmf.postingAccountName }}</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
-        <div class="text-start col-sm-9">
-          <SpanDate :date="mmf.bookingDate" />
-        </div>
-      </div>
-      <div class="row">
-        <div
-          class="text-start d-flex align-items-center col-sm-3 col-xs-5"
-          style="font-weight: 700; font-size: 10.5px"
-        >
-          {{ $t("Moneyflow.invoicedate") }}
-        </div>
-        <div class="text-start col-sm-9">
-          <SpanDate :date="mmf.invoiceDate" />
-        </div>
-      </div>
-      <div class="row">
-        <div
-          class="text-start d-flex align-items-center col-sm-3 col-xs-5"
-          style="font-weight: 700; font-size: 10.5px"
-        >
-          {{ $t("General.contractpartner") }}
-        </div>
-        <div class="text-start col-sm-9">{{ mmf.contractpartnerName }}</div>
-      </div>
-      <div class="row">
-        <div
-          class="text-start d-flex align-items-center col-sm-3 col-xs-5"
-          style="font-weight: 700; font-size: 10.5px"
-        >
-          {{ $t("General.capitalsource") }}
-        </div>
-        <div class="text-start col-sm-9">{{ mmf.capitalsourceComment }}</div>
-      </div>
-      <div class="row">
-        <div
-          class="text-start d-flex align-items-center col-sm-3 col-xs-5"
-          style="font-weight: 700; font-size: 10.5px"
-        >
-          {{ $t("General.amount") }}
-        </div>
-        <div class="text-start col-sm-9">
-          <SpanAmount :amount="mmf.amount" />
-        </div>
-      </div>
-      <div class="row">
-        <div
-          class="text-start d-flex align-items-center col-sm-3 col-xs-5"
-          style="font-weight: 700; font-size: 10.5px"
-        >
-          {{ $t("General.comment") }}
-        </div>
-        <div class="text-start col-sm-9">{{ mmf.comment }}</div>
-      </div>
-      <div class="row">
-        <div
-          class="text-start d-flex align-items-center col-sm-3 col-xs-5"
-          style="font-weight: 700; font-size: 10.5px"
-        >
-          {{ $t("General.postingAccount") }}
-        </div>
-        <div class="text-start col-sm-9">{{ mmf.postingAccountName }}</div>
       </div>
     </template>
     <template #footer>

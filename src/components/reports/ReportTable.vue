@@ -20,7 +20,10 @@
         @moneyflow-receipt-deleted="moneyflowReceiptDeleted"
       />
 
-      <div class="card-body table-responsive" v-if="report.moneyflows">
+      <div
+        class="card-body table-responsive text-center"
+        v-if="report.moneyflows"
+      >
         <table class="table table-striped table-bordered table-hover">
           <thead>
             <tr>
@@ -276,7 +279,7 @@ const assetsTurnoverCapitalsources = computed(() => {
     return report.value.reportTurnoverCapitalsources?.filter(
       (data) =>
         data.capitalsourceType === CapitalsourceType.CURRENT_ASSET ||
-        data.capitalsourceType === CapitalsourceType.LONG_TERM_ASSET
+        data.capitalsourceType === CapitalsourceType.LONG_TERM_ASSET,
     );
   }
   return new Array<ReportTurnoverCapitalsource>();
@@ -286,7 +289,7 @@ const liabilitiesTurnoverCapitalsources = computed(() => {
     return report.value.reportTurnoverCapitalsources?.filter(
       (data) =>
         data.capitalsourceType === CapitalsourceType.RESERVE_ASSET ||
-        data.capitalsourceType === CapitalsourceType.PROVISION_ASSET
+        data.capitalsourceType === CapitalsourceType.PROVISION_ASSET,
     );
   }
   return new Array<ReportTurnoverCapitalsource>();
@@ -294,7 +297,7 @@ const liabilitiesTurnoverCapitalsources = computed(() => {
 const creditTurnoverCapitalsources = computed(() => {
   if (dataLoaded.value) {
     return report.value.reportTurnoverCapitalsources?.filter(
-      (data) => data.capitalsourceType === CapitalsourceType.CREDIT
+      (data) => data.capitalsourceType === CapitalsourceType.CREDIT,
     );
   }
   return new Array<ReportTurnoverCapitalsource>();
@@ -429,13 +432,13 @@ const moneyflowDeleted = (mmf: Moneyflow) => {
 };
 const moneyflowReceiptDeleted = (mmfId: number) => {
   const oldMmf = report.value.moneyflows.find(
-    (originalMmf) => mmfId === originalMmf.id
+    (originalMmf) => mmfId === originalMmf.id,
   );
   if (oldMmf) oldMmf.hasReceipt = false;
 };
 const moneyflowUpdated = (mmf: Moneyflow) => {
   const oldMmf = report.value.moneyflows.find(
-    (originalMmf) => mmf.id === originalMmf.id
+    (originalMmf) => mmf.id === originalMmf.id,
   );
   if (oldMmf) {
     bookCapitalsourceAmounts(oldMmf, true);
@@ -460,7 +463,7 @@ const sortIcon = (sortedField: string) => {
 const compareColumns = (
   a: Moneyflow,
   b: Moneyflow,
-  field: keyof Moneyflow
+  field: keyof Moneyflow,
 ): number => {
   let aField = a[field];
   let bField = b[field];
@@ -491,7 +494,7 @@ watch(
   }),
   (data) => {
     if (data.year && data.month) loadData(+data.year, +data.month);
-  }
+  },
 );
 
 onMounted(() => {
