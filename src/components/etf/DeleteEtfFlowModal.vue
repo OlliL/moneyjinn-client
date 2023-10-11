@@ -2,44 +2,31 @@
   <ModalVue :title="$t('ETF.title.delete')" ref="modalComponent">
     <template #body>
       <DivError :server-errors="serverErrors" />
-      <div class="row">
-        <div
-          class="text-start d-flex align-items-center col-sm-3 col-xs-5"
-          style="font-weight: 700; font-size: 10.5px"
-        >
-          {{ $t("ETF.etf") }}
-        </div>
-        <div class="text-start col-sm-9">{{ etfName }}</div>
-      </div>
-      <div class="row">
-        <div
-          class="text-start d-flex align-items-center col-sm-3 col-xs-5"
-          style="font-weight: 700; font-size: 10.5px"
-        >
-          {{ $t("ETF.bookingdate") }}
-        </div>
-        <div class="text-start col-sm-9">{{ timestampString }}</div>
-      </div>
-      <div class="row">
-        <div
-          class="text-start d-flex align-items-center col-sm-3 col-xs-5"
-          style="font-weight: 700; font-size: 10.5px"
-        >
-          {{ $t("ETF.amount") }}
-        </div>
-        <div class="col-sm-9 text-start">
-          <span :class="amountClass">{{ amountString }}</span>
-        </div>
-      </div>
-      <div class="row">
-        <div
-          class="text-start d-flex align-items-center col-sm-3 col-xs-5"
-          style="font-weight: 700; font-size: 10.5px"
-        >
-          {{ $t("ETF.price") }}
-        </div>
-        <div class="col-sm-9 text-start">
-          <SpanAmount :amount="etfFlow.price" />
+      <div class="row d-flex justify-content-center mt-3">
+        <div class="col-11">
+          <table class="table table-bordered table-hover">
+            <colgroup>
+              <col span="1" style="background-color: #f2f2f2" width="35%" />
+            </colgroup>
+            <tbody>
+              <tr>
+                <th>{{ $t("ETF.etf") }}</th>
+                <td>{{ etfName }}</td>
+              </tr>
+              <tr>
+                <th>{{ $t("ETF.bookingdate") }}</th>
+                <td>{{ timestampString }}</td>
+              </tr>
+              <tr>
+                <th>{{ $t("ETF.amount") }}</th>
+                <td>{{ amountString }}</td>
+              </tr>
+              <tr>
+                <th>{{ $t("ETF.price") }}</th>
+                <td><SpanAmount :amount="etfFlow.price" /></td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
     </template>

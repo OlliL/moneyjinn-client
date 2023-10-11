@@ -6,23 +6,24 @@
   >
     <template #body>
       <DivError :server-errors="serverErrors" />
-      <div class="row">
-        <div
-          class="text-start d-flex align-items-center col-sm-3 col-xs-5"
-          style="font-weight: 700; font-size: 10.5px"
-        >
-          {{ $t("General.iban") }}
+      <div class="row d-flex justify-content-center mt-3">
+        <div class="col-11">
+          <table class="table table-bordered table-hover">
+            <colgroup>
+              <col span="1" style="background-color: #f2f2f2" width="35%" />
+            </colgroup>
+            <tbody>
+              <tr>
+                <th>{{ $t("General.iban") }}</th>
+                <td>{{ mca.accountNumber }}</td>
+              </tr>
+              <tr>
+                <th>{{ $t("General.bic") }}</th>
+                <td>{{ mca.bankCode }}</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
-        <div class="text-start col-sm-9">{{ mca.accountNumber }}</div>
-      </div>
-      <div class="row">
-        <div
-          class="text-start d-flex align-items-center col-sm-3 col-xs-5"
-          style="font-weight: 700; font-size: 10.5px"
-        >
-          {{ $t("General.bic") }}
-        </div>
-        <div class="text-start col-sm-9">{{ mca.bankCode }}</div>
       </div>
     </template>
     <template #footer>
@@ -65,7 +66,7 @@ const deleteContractpartnerAccount = () => {
   serverErrors.value = new Array<string>();
 
   ContractpartnerAccountControllerHandler.deleteContractpartnerAccount(
-    mca.value.id
+    mca.value.id,
   )
     .then(() => {
       modalComponent.value._hide();
