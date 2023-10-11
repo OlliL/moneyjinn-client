@@ -110,7 +110,7 @@
                 <router-link
                   class="dropdown-item"
                   :to="{ name: Routes.CreateMoneyflow }"
-                  >{{ $t("General.moneyflows") }}</router-link
+                  >{{ $t("General.moneyflow") }}</router-link
                 >
               </li>
               <li>
@@ -131,7 +131,7 @@
                   class="dropdown-item"
                   role="button"
                   @click="showCreateCapitalsourceModal"
-                  >{{ $t("General.capitalsources") }}</span
+                  >{{ $t("General.capitalsource") }}</span
                 >
               </li>
               <li>
@@ -139,7 +139,7 @@
                   class="dropdown-item"
                   role="button"
                   @click="showCreateContractpartnerModal"
-                  >{{ $t("General.contractpartners") }}</span
+                  >{{ $t("General.contractpartner") }}</span
                 >
               </li>
               <li>
@@ -147,7 +147,7 @@
                   class="dropdown-item"
                   role="button"
                   @click="showPreDefMoneyflowModal"
-                  >{{ $t("General.preDefMoneyflows") }}</span
+                  >{{ $t("General.preDefMoneyflow") }}</span
                 >
               </li>
             </ul>
@@ -352,7 +352,7 @@ const logout = async () => {
   await new LogoutApi(
     undefined,
     "",
-    AxiosInstanceHolder.getInstance().getAxiosInstance()
+    AxiosInstanceHolder.getInstance().getAxiosInstance(),
   )
     .logout()
     .then(async () => {
@@ -386,7 +386,7 @@ watch(
   () => route.name,
   (newVal) => {
     markDropdownActive(newVal);
-  }
+  },
 );
 </script>
 <style scoped>
