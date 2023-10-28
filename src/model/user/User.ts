@@ -5,6 +5,7 @@ export type User = {
   userIsAdmin: boolean;
   userIsNew: boolean;
   userCanLogin: boolean;
+  userCanImport: boolean;
   groupId?: number;
   groupName?: string;
 };

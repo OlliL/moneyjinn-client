@@ -38,27 +38,14 @@
                   />
                 </div>
               </div>
-              <div class="row pt-2">
-                <div class="col-xs-12">
-                  <SelectStandard
-                    v-model="user.userCanLogin"
-                    :validation-schema="schema.userCanLogin"
-                    :id="'userCanLogin' + idSuffix"
-                    :field-label="$t('User.canLogin')"
-                    :select-box-values="yesNoValues"
-                  />
-                </div>
-              </div>
-              <div class="row pt-2">
-                <div class="col-xs-12">
-                  <SelectStandard
-                    v-model="user.userIsAdmin"
-                    :validation-schema="schema.userIsAdmin"
-                    :id="'userIsAdmin' + idSuffix"
-                    :field-label="$t('User.admin')"
-                    :select-box-values="yesNoValues"
-                  />
-                </div>
+              <div class="col-xs-12">
+                <SelectStandard
+                  v-model="selectedUserRole"
+                  :validation-schema="schema.userRole"
+                  :id="'groupUse' + idSuffix"
+                  :field-label="$t('User.role')"
+                  :select-box-values="userRoles"
+                />
               </div>
               <div class="row pt-2" v-if="editMode">
                 <div class="col-xs-12">
@@ -181,9 +168,8 @@ const schema = {
   userName: string(globErr(t("User.validation.name"))).min(1),
   groupId: number(globErr(t("User.validation.groupId"))).gt(0),
   validFrom: date(globErr(t("General.validation.validFrom"))),
-  userIsAdmin: boolean(globErr(t("User.validation.userIsAdmin"))),
   userIsNew: boolean(globErr(t("User.validation.userIsNew"))),
-  userCanLogin: boolean(globErr(t("User.validation.userCanLogin"))),
+  userRole: string(globErr(t("User.validation.userRole"))).min(1),
   password: computed(() => {
     password1.value;
     password2.value;
@@ -192,7 +178,7 @@ const schema = {
     return string()
       .refine(
         () => password1.value == password2.value,
-        t("User.validation.passwordNotEqual")
+        t("User.validation.passwordNotEqual"),
       )
       .refine((data) => editMode.value || data, t("User.validation.password"));
   }),
@@ -207,6 +193,7 @@ const user = ref({} as User);
 const groupValues = ref(new Array<SelectBoxValue>());
 const password1 = ref("");
 const password2 = ref("");
+const selectedUserRole = ref("standard");
 const userGroups = ref(new Array<UserGroup>());
 const validFrom = ref(new Date());
 const yesNoValues = [
@@ -217,6 +204,13 @@ const modalComponent = ref();
 const emit = defineEmits(["userCreated", "userUpdated"]);
 
 const { handleSubmit, values, setFieldTouched } = useForm();
+
+const userRoles = [
+  { id: "inactive", value: t("User.inactive") },
+  { id: "standard", value: t("User.standard") },
+  { id: "import", value: t("User.import") },
+  { id: "admin", value: t("User.admin") },
+] as Array<SelectBoxValue>;
 
 const editMode = computed(() => {
   return origUser.value !== undefined;
@@ -247,6 +241,16 @@ const resetForm = () => {
     if (origUser.value) {
       Object.assign(user.value, origUser.value);
       if (user.value.id) {
+        if (user.value.userIsAdmin) {
+          selectedUserRole.value = "admin";
+        } else if (user.value.userCanLogin) {
+          selectedUserRole.value = "standard";
+        } else if (user.value.userCanImport) {
+          selectedUserRole.value = "import";
+        } else {
+          selectedUserRole.value = "inactive";
+        }
+
         const groupsById = new Map<number, Group>();
         for (const group of _groups) {
           groupsById.set(group.id, group);
@@ -260,7 +264,7 @@ const resetForm = () => {
                 group: groupsById.get(mar.refId),
               });
             });
-          }
+          },
         );
       }
     } else {
@@ -268,7 +272,9 @@ const resetForm = () => {
         userCanLogin: true,
         userIsAdmin: false,
         userIsNew: true,
+        userCanImport: false,
       } as User;
+      selectedUserRole.value = "standard";
     }
   });
   serverErrors.value = new Array<string>();
@@ -282,6 +288,18 @@ const _show = async (_user?: User) => {
 };
 
 const createUser = handleSubmit(() => {
+  user.value.userIsAdmin = false;
+  user.value.userCanImport = false;
+  user.value.userCanLogin = false;
+
+  if (selectedUserRole.value == "admin") {
+    user.value.userIsAdmin = true;
+  } else if (selectedUserRole.value == "standard") {
+    user.value.userCanLogin = true;
+  } else if (selectedUserRole.value == "import") {
+    user.value.userCanImport = true;
+  }
+
   if (user.value.id > 0) {
     //update
     if (password1.value) {

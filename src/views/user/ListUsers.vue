@@ -60,8 +60,7 @@
             <tr>
               <th>{{ $t("General.name") }}</th>
               <th>{{ $t("General.group") }}</th>
-              <th>{{ $t("User.canLogin") }}</th>
-              <th>{{ $t("User.admin") }}</th>
+              <th>{{ $t("User.role") }}</th>
               <th>{{ $t("User.new") }}</th>
               <th colspan="2"></th>
             </tr>
@@ -128,7 +127,7 @@ const searchContent = () => {
 
   const commentUpper = searchString.value.toUpperCase();
   users.value = allUsers.value.filter((entry) =>
-    entry.userName.toUpperCase().includes(commentUpper)
+    entry.userName.toUpperCase().includes(commentUpper),
   );
 };
 

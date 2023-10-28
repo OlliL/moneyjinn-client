@@ -326,7 +326,11 @@
         },
         "groupHistory": "group history",
         "new": "new",
+        "role": "userrole",
         "admin": "administrator",
+        "inactive": "locked user",
+        "standard": "standard user",
+        "import": "HBCI interface",
         "canLogin": "login allowed",
         "oldPassword": "current password",
         "newPassword": "new password",
@@ -335,9 +339,8 @@
         "validation": {
             "name": "Please specify a name!",
             "groupId": "Please select a group!",
-            "userIsAdmin": "Please select if admin!",
             "userIsNew": "Please select if new!",
-            "userCanLogin": "Please select if login possible!",
+            "userRole": "Please select a userrole!",
             "passwordNotEqual": "Both passwords do not match!",
             "password": "Please specify a passowrd!",
             "passwordOld": "Please specify the old password!"
