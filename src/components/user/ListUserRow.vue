@@ -2,10 +2,7 @@
   <tr>
     <td class="text-start">{{ user.userName }}</td>
     <td class="text-start">{{ user.groupName }}</td>
-    <td class="text-center"><SpanBoolean :value="user.userCanLogin" /></td>
-    <td class="text-center">
-      <SpanBoolean :value="user.userIsAdmin" />
-    </td>
+    <td class="text-center">{{ role }}</td>
     <td class="text-center">
       <SpanBoolean :value="user.userIsNew" />
     </td>
@@ -22,17 +19,31 @@
   </tr>
 </template>
 <script lang="ts" setup>
-import type { PropType } from "vue";
+import { computed, type PropType } from "vue";
+import { useI18n } from "vue-i18n";
 
 import SpanBoolean from "../SpanBoolean.vue";
 
 import type { User } from "@/model/user/User";
+
+const { t } = useI18n();
 
 const props = defineProps({
   user: {
     type: Object as PropType<User>,
     required: true,
   },
+});
+
+const role = computed(() => {
+  if (props.user.userIsAdmin) {
+    return t("User.admin");
+  } else if (props.user.userCanImport) {
+    return t("User.import");
+  } else if (props.user.userCanLogin) {
+    return t("User.standard");
+  }
+  return t("User.inactive");
 });
 
 const emit = defineEmits(["deleteUser", "editUser"]);

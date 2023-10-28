@@ -18,12 +18,8 @@
                 <td>{{ user.groupName }}</td>
               </tr>
               <tr>
-                <th>{{ $t("User.canLogin") }}</th>
-                <td><SpanBoolean :value="user.userCanLogin" /></td>
-              </tr>
-              <tr>
-                <th>{{ $t("User.admin") }}</th>
-                <td><SpanBoolean :value="user.userIsAdmin" /></td>
+                <th>{{ $t("User.role") }}</th>
+                <td>{{ role }}</td>
               </tr>
               <tr>
                 <th>{{ $t("User.new") }}</th>
@@ -43,7 +39,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
+import { computed, ref } from "vue";
 
 import DivError from "../DivError.vue";
 import ModalVue from "../Modal.vue";
@@ -54,6 +50,9 @@ import { handleBackendError } from "@/tools/views/HandleBackendError";
 import type { User } from "@/model/user/User";
 
 import UserControllerHandler from "@/handler/UserControllerHandler";
+import { useI18n } from "vue-i18n";
+
+const { t } = useI18n();
 
 const user = ref({} as User);
 const serverErrors = ref(new Array<string>());
@@ -66,6 +65,16 @@ const _show = (_user: User) => {
   modalComponent.value._show();
 };
 
+const role = computed(() => {
+  if (user.value.userIsAdmin) {
+    return t("User.admin");
+  } else if (user.value.userCanImport) {
+    return t("User.import");
+  } else if (user.value.userCanLogin) {
+    return t("User.standard");
+  }
+  return t("User.inactive");
+});
 const deleteUser = () => {
   serverErrors.value = new Array<string>();
 
