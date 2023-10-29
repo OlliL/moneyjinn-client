@@ -51,6 +51,7 @@ import type { User } from "@/model/user/User";
 
 import UserControllerHandler from "@/handler/UserControllerHandler";
 import { useI18n } from "vue-i18n";
+import { userRoleNames } from "@/model/user/UserRole";
 
 const { t } = useI18n();
 
@@ -66,15 +67,9 @@ const _show = (_user: User) => {
 };
 
 const role = computed(() => {
-  if (user.value.userIsAdmin) {
-    return t("User.admin");
-  } else if (user.value.userCanImport) {
-    return t("User.import");
-  } else if (user.value.userCanLogin) {
-    return t("User.standard");
-  }
-  return t("User.inactive");
+  return userRoleNames[user.value.role];
 });
+
 const deleteUser = () => {
   serverErrors.value = new Array<string>();
 

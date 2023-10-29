@@ -6,6 +6,7 @@ import {
   type CreateUserRequest,
   type LoginRequest,
   type UpdateUserRequest,
+  UserTransportRoleEnum,
 } from "@/api";
 
 import {
@@ -60,9 +61,9 @@ class UserControllerHandler extends AbstractControllerHandler {
     const userSession: UserSession = {
       userId: userTransport.id,
       userName: userTransport.userName,
-      userCanLogin: userTransport.userCanLogin === 1 ? true : false,
+      userCanLogin: userTransport.role == UserTransportRoleEnum.Standard ? true : false,
       userIsNew: userTransport.userIsNew === 1 ? true : false,
-      userIsAdmin: userTransport.userIsAdmin === 1 ? true : false,
+      userIsAdmin: userTransport.role == UserTransportRoleEnum.Admin ? true : false,
     };
 
     userSessionStore.setUserSession(userSession);

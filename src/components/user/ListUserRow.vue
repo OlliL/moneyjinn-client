@@ -25,6 +25,7 @@ import { useI18n } from "vue-i18n";
 import SpanBoolean from "../SpanBoolean.vue";
 
 import type { User } from "@/model/user/User";
+import { userRoleNames } from "@/model/user/UserRole";
 
 const { t } = useI18n();
 
@@ -36,14 +37,7 @@ const props = defineProps({
 });
 
 const role = computed(() => {
-  if (props.user.userIsAdmin) {
-    return t("User.admin");
-  } else if (props.user.userCanImport) {
-    return t("User.import");
-  } else if (props.user.userCanLogin) {
-    return t("User.standard");
-  }
-  return t("User.inactive");
+  return userRoleNames[props.user.role];
 });
 
 const emit = defineEmits(["deleteUser", "editUser"]);
