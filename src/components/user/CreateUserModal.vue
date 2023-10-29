@@ -40,11 +40,11 @@
               </div>
               <div class="col-xs-12">
                 <SelectStandard
-                  v-model="selectedUserRole"
+                  v-model="user.role"
                   :validation-schema="schema.userRole"
                   :id="'groupUse' + idSuffix"
                   :field-label="$t('User.role')"
-                  :select-box-values="userRoles"
+                  :select-box-values="userRoleValues"
                 />
               </div>
               <div class="row pt-2" v-if="editMode">
@@ -148,6 +148,7 @@ import type { SelectBoxValue } from "@/model/SelectBoxValue";
 
 import GroupControllerHandler from "@/handler/GroupControllerHandler";
 import UserControllerHandler from "@/handler/UserControllerHandler";
+import { UserRole, userRoleNames, userRoleValues } from "@/model/user/UserRole";
 
 const { t } = useI18n();
 
@@ -169,7 +170,7 @@ const schema = {
   groupId: number(globErr(t("User.validation.groupId"))).gt(0),
   validFrom: date(globErr(t("General.validation.validFrom"))),
   userIsNew: boolean(globErr(t("User.validation.userIsNew"))),
-  userRole: string(globErr(t("User.validation.userRole"))).min(1),
+  userRole: number(globErr(t("User.validation.userRole"))),
   password: computed(() => {
     password1.value;
     password2.value;
@@ -193,7 +194,6 @@ const user = ref({} as User);
 const groupValues = ref(new Array<SelectBoxValue>());
 const password1 = ref("");
 const password2 = ref("");
-const selectedUserRole = ref("standard");
 const userGroups = ref(new Array<UserGroup>());
 const validFrom = ref(new Date());
 const yesNoValues = [
@@ -204,13 +204,6 @@ const modalComponent = ref();
 const emit = defineEmits(["userCreated", "userUpdated"]);
 
 const { handleSubmit, values, setFieldTouched } = useForm();
-
-const userRoles = [
-  { id: "inactive", value: t("User.inactive") },
-  { id: "standard", value: t("User.standard") },
-  { id: "import", value: t("User.import") },
-  { id: "admin", value: t("User.admin") },
-] as Array<SelectBoxValue>;
 
 const editMode = computed(() => {
   return origUser.value !== undefined;
@@ -241,16 +234,6 @@ const resetForm = () => {
     if (origUser.value) {
       Object.assign(user.value, origUser.value);
       if (user.value.id) {
-        if (user.value.userIsAdmin) {
-          selectedUserRole.value = "admin";
-        } else if (user.value.userCanLogin) {
-          selectedUserRole.value = "standard";
-        } else if (user.value.userCanImport) {
-          selectedUserRole.value = "import";
-        } else {
-          selectedUserRole.value = "inactive";
-        }
-
         const groupsById = new Map<number, Group>();
         for (const group of _groups) {
           groupsById.set(group.id, group);
@@ -269,12 +252,9 @@ const resetForm = () => {
       }
     } else {
       user.value = {
-        userCanLogin: true,
-        userIsAdmin: false,
+        role: UserRole.STANDARD,
         userIsNew: true,
-        userCanImport: false,
       } as User;
-      selectedUserRole.value = "standard";
     }
   });
   serverErrors.value = new Array<string>();
@@ -288,18 +268,6 @@ const _show = async (_user?: User) => {
 };
 
 const createUser = handleSubmit(() => {
-  user.value.userIsAdmin = false;
-  user.value.userCanImport = false;
-  user.value.userCanLogin = false;
-
-  if (selectedUserRole.value == "admin") {
-    user.value.userIsAdmin = true;
-  } else if (selectedUserRole.value == "standard") {
-    user.value.userCanLogin = true;
-  } else if (selectedUserRole.value == "import") {
-    user.value.userCanImport = true;
-  }
-
   if (user.value.id > 0) {
     //update
     if (password1.value) {
