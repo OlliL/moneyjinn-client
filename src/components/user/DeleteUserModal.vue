@@ -48,12 +48,9 @@ import SpanBoolean from "../SpanBoolean.vue";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 
 import type { User } from "@/model/user/User";
-
-import UserControllerHandler from "@/handler/UserControllerHandler";
-import { useI18n } from "vue-i18n";
 import { userRoleNames } from "@/model/user/UserRole";
 
-const { t } = useI18n();
+import UserControllerHandler from "@/handler/UserControllerHandler";
 
 const user = ref({} as User);
 const serverErrors = ref(new Array<string>());
