@@ -20,14 +20,11 @@
 </template>
 <script lang="ts" setup>
 import { computed, type PropType } from "vue";
-import { useI18n } from "vue-i18n";
 
 import SpanBoolean from "../SpanBoolean.vue";
 
 import type { User } from "@/model/user/User";
 import { userRoleNames } from "@/model/user/UserRole";
-
-const { t } = useI18n();
 
 const props = defineProps({
   user: {
