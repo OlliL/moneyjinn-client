@@ -127,7 +127,7 @@ const deleteImportedMoneyflow = (mim: ImportedMoneyflow) => {
     .then((res: boolean) => {
       if (res) {
         importMoneyflows.value = importMoneyflows.value.filter(
-          (entry) => entry.id !== mim.id
+          (entry) => entry.id !== mim.id,
         );
       }
     });
@@ -139,7 +139,7 @@ const importImportedMoneyflow = (mim: ImportedMoneyflow) => {
     .then((res: boolean) => {
       if (res) {
         importMoneyflows.value = importMoneyflows.value.filter(
-          (entry) => entry.id !== mim.id
+          (entry) => entry.id !== mim.id,
         );
       }
     });

@@ -2,7 +2,7 @@ import type { EtfSummaryTransport } from "@/api";
 import type { EtfSummary } from "@/model/etf/EtfSummary";
 
 export function mapEtfSummaryTransportToEtfSummary(
-  transport: EtfSummaryTransport
+  transport: EtfSummaryTransport,
 ): EtfSummary {
   const etfData: EtfSummary = {
     isin: transport.isin,

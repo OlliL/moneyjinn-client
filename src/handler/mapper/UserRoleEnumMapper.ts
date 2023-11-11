@@ -2,7 +2,7 @@ import { UserTransportRoleEnum } from "@/api";
 import { UserRole } from "@/model/user/UserRole";
 
 export function mapUserTransportRoleEnumToEnum(
-  source?: UserTransportRoleEnum
+  source?: UserTransportRoleEnum,
 ): UserRole {
   switch (source) {
     case UserTransportRoleEnum.Admin: {
@@ -21,7 +21,7 @@ export function mapUserTransportRoleEnumToEnum(
 }
 
 export function mapUserRoleEnumToTransport(
-  source?: UserRole
+  source?: UserRole,
 ): UserTransportRoleEnum {
   switch (source) {
     case UserRole.ADMIN: {

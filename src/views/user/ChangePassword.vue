@@ -93,7 +93,7 @@ const schema = {
       .min(1)
       .refine(
         () => password1.value == password2.value,
-        t("User.validation.passwordNotEqual")
+        t("User.validation.passwordNotEqual"),
       );
   }),
 };
@@ -117,7 +117,7 @@ onMounted(() => {
   }
   if (userIsNew.value) {
     serverErrors.value.push(
-      getErrorMessage(ErrorCode.PASSWORD_MUST_BE_CHANGED)
+      getErrorMessage(ErrorCode.PASSWORD_MUST_BE_CHANGED),
     );
   }
   Object.keys(values).forEach((field) => setFieldTouched(field, false));

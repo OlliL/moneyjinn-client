@@ -147,7 +147,7 @@ const searchContent = () => {
   searchCapitalsources(searchString.value, validNow.value).then(
     (_capitalsources) => {
       capitalsources.value = _capitalsources;
-    }
+    },
   );
 };
 

@@ -3,7 +3,7 @@ import type { MoneyflowSearchParams } from "@/model/moneyflow/MoneyflowSearchPar
 import { getISOStringDate } from "@/tools/views/FormatDate";
 
 export function mapMoneyflowSearchParamsToTransport(
-  model: MoneyflowSearchParams
+  model: MoneyflowSearchParams,
 ): MoneyflowSearchParamsTransport {
   const transport: MoneyflowSearchParamsTransport = {
     startDate: getISOStringDate(model.startDate),

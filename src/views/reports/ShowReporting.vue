@@ -326,21 +326,21 @@ const endDateSchema = date(globErr(t("General.validation.endDate")));
 const optionalSchema = any().optional();
 const schema = {
   startDateMonth: computed(() =>
-    !groupByYear.value ? startDateSchema : optionalSchema
+    !groupByYear.value ? startDateSchema : optionalSchema,
   ),
   endDateMonth: computed(() =>
-    !groupByYear.value ? endDateSchema : optionalSchema
+    !groupByYear.value ? endDateSchema : optionalSchema,
   ),
   startDateYear: computed(() =>
-    groupByYear.value ? startDateSchema : optionalSchema
+    groupByYear.value ? startDateSchema : optionalSchema,
   ),
   endDateYear: computed(() =>
-    groupByYear.value ? endDateSchema : optionalSchema
+    groupByYear.value ? endDateSchema : optionalSchema,
   ),
   selectedPostingAccount: computed(() =>
     singlePostingAccounts.value
       ? number(globErr(t("Moneyflow.validation.postingAccountId"))).gt(0)
-      : optionalSchema
+      : optionalSchema,
   ),
 };
 
@@ -350,8 +350,8 @@ const postingAccountIdsYesSchema = computed(() =>
     : toFieldValidator(
         object({ id: number() })
           .array()
-          .min(1, t("Moneyflow.validation.postingAccountId"))
-      )
+          .min(1, t("Moneyflow.validation.postingAccountId")),
+      ),
 );
 
 ChartJS.register(
@@ -360,7 +360,7 @@ ChartJS.register(
   BarElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
 );
 
 type ChartDataDataset = {
@@ -382,14 +382,14 @@ const {
 } = useField<Array<PostingAccount>>(
   "postingAccountIdsYes",
   postingAccountIdsYesSchema,
-  { initialValue: new Array<PostingAccount>(), syncVModel: true }
+  { initialValue: new Array<PostingAccount>(), syncVModel: true },
 );
 
 const errorDatasPostingAccountsYes = computed((): ErrorData => {
   return generateErrorDataVeeValidate(
     postingAccountsYesMeta.touched,
     t("Reports.included"),
-    errorMessage.value
+    errorMessage.value,
   );
 });
 
@@ -431,7 +431,7 @@ const loadData = () => {
         ? reportingParameter.unselectedPostingAccounts
         : new Array();
       postingAccounts.value = postingAccountsYes.value.concat(
-        postingAccountsNo.value
+        postingAccountsNo.value,
       );
       dataLoaded.value = true;
       Object.keys(values).forEach((field) => setFieldTouched(field, false));
@@ -444,13 +444,13 @@ const loadData = () => {
 const movePostingAccounts = (
   from: Array<PostingAccount>,
   to: Array<PostingAccount>,
-  toBeMovedIds: Array<number>
+  toBeMovedIds: Array<number>,
 ): Array<PostingAccount> => {
   const toBeMoved = from.filter((mpa) =>
-    toBeMovedIds.find((id) => id == mpa.id)
+    toBeMovedIds.find((id) => id == mpa.id),
   );
   const newFrom = from.filter(
-    (mpa) => !toBeMovedIds.find((id) => id == mpa.id)
+    (mpa) => !toBeMovedIds.find((id) => id == mpa.id),
   );
   for (let mpa of toBeMoved) {
     to.push(mpa);
@@ -468,7 +468,7 @@ const removeSelectedPostingAccounts = () => {
   postingAccountsYes.value = movePostingAccounts(
     postingAccountsYes.value,
     postingAccountsNo.value,
-    selectedPostingAccountsYes.value
+    selectedPostingAccountsYes.value,
   );
   selectedPostingAccountsYes.value = new Array();
 };
@@ -481,7 +481,7 @@ const addSelectedPostingAccounts = () => {
   postingAccountsNo.value = movePostingAccounts(
     postingAccountsNo.value,
     postingAccountsYes.value,
-    selectedPostingAccountsNo.value
+    selectedPostingAccountsNo.value,
   );
   selectedPostingAccountsNo.value = new Array();
 };
@@ -495,7 +495,7 @@ const randomColor = () => {
   return color;
 };
 const retrieveGraphData = (
-  reportingParameter: ReportingParameter
+  reportingParameter: ReportingParameter,
 ): Promise<Array<ReportingMonthAmount>> => {
   if (groupByYear.value) {
     return ReportControllerHandler.showYearlyReportGraph(reportingParameter);
@@ -559,7 +559,7 @@ const showReportingGraph = handleSubmit(() => {
       reportingParameter.startDate = new Date(startDateMonth.value);
       reportingParameter.endDate = new Date(endDateMonth.value);
       reportingParameter.endDate.setMonth(
-        reportingParameter.endDate.getMonth() + 1
+        reportingParameter.endDate.getMonth() + 1,
       );
       reportingParameter.endDate.setDate(0);
     }
@@ -567,7 +567,7 @@ const showReportingGraph = handleSubmit(() => {
   if (singlePostingAccounts.value) {
     const selectedPostingAccounts = new Array<PostingAccount>();
     const _selectedPostingAccount = postingAccounts.value.filter(
-      (mpa) => mpa.id == selectedPostingAccount.value
+      (mpa) => mpa.id == selectedPostingAccount.value,
     )[0];
     selectedPostingAccounts.push(_selectedPostingAccount);
     reportingParameter.selectedPostingAccounts = selectedPostingAccounts;

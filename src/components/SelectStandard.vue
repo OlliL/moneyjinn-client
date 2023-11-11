@@ -100,7 +100,7 @@ const errorData = computed((): ErrorData => {
   return generateErrorDataVeeValidate(
     fieldMeta.touched,
     props.fieldLabel,
-    errorMessage.value
+    errorMessage.value,
   );
 });
 
@@ -122,6 +122,6 @@ watch(
         fieldValue.value = undefined;
       }
     }
-  }
+  },
 );
 </script>

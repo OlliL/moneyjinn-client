@@ -2,7 +2,7 @@ import type { PostingAccountTransport } from "@/api";
 import type { PostingAccount } from "@/model/postingaccount/PostingAccount";
 
 export function mapPostingAccountTransportToModel(
-  transport: PostingAccountTransport
+  transport: PostingAccountTransport,
 ): PostingAccount {
   const model = {} as PostingAccount;
   model.id = transport.id;
@@ -11,7 +11,7 @@ export function mapPostingAccountTransportToModel(
 }
 
 export function mapPostingAccountToTransport(
-  model: PostingAccount
+  model: PostingAccount,
 ): PostingAccountTransport {
   const transport = {} as PostingAccountTransport;
   transport.id = model.id;

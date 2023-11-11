@@ -24,13 +24,13 @@ class MonthlySettlementControllerHandler extends AbstractControllerHandler {
     this.api = new MonthlySettlementControllerApi(
       undefined,
       "",
-      AxiosInstanceHolder.getInstance().getAxiosInstance()
+      AxiosInstanceHolder.getInstance().getAxiosInstance(),
     );
   }
 
   async getAvailableMonth(
     year?: number,
-    month?: number
+    month?: number,
   ): Promise<AvailableMonth> {
     let response: AxiosResponse<GetAvailableMonthlySettlementMonthResponse>;
     if (year) response = await this.api.getAvailableMonthYear(year);
@@ -48,7 +48,7 @@ class MonthlySettlementControllerHandler extends AbstractControllerHandler {
 
   async getMonthlySettlementList(
     year: number,
-    month: number
+    month: number,
   ): Promise<Array<MonthlySettlement>> {
     const response = await this.api.showMonthlySettlementListV2(year, month);
 
@@ -58,7 +58,7 @@ class MonthlySettlementControllerHandler extends AbstractControllerHandler {
       showMonthlySettlementListResponse.monthlySettlementTransports?.map(
         (mms) => {
           return mapMonthlySettlementTransportToModel(mms);
-        }
+        },
       );
 
     return monthlySettlements;
@@ -66,14 +66,14 @@ class MonthlySettlementControllerHandler extends AbstractControllerHandler {
 
   async getMonthlySettlementForEdit(
     year?: number,
-    month?: number
+    month?: number,
   ): Promise<MonthlySettlementEditTransporter> {
     let response: AxiosResponse<ShowMonthlySettlementCreateResponse>;
     if (year) response = await this.api.showMonthlySettlementCreateYear(year);
     if (year && month)
       response = await this.api.showMonthlySettlementCreateYearMonth(
         year,
-        month
+        month,
       );
     else response = await this.api.showMonthlySettlementCreate();
 
@@ -85,7 +85,7 @@ class MonthlySettlementControllerHandler extends AbstractControllerHandler {
       showMonthlySettlementCreateResponse.monthlySettlementTransports.map(
         (mms) => {
           return mapMonthlySettlementTransportToModel(mms);
-        }
+        },
       );
     if (
       showMonthlySettlementCreateResponse.importedMonthlySettlementTransports
@@ -94,7 +94,7 @@ class MonthlySettlementControllerHandler extends AbstractControllerHandler {
         showMonthlySettlementCreateResponse.importedMonthlySettlementTransports?.map(
           (mms) => {
             return mapMonthlySettlementTransportToModel(mms);
-          }
+          },
         );
       result.importedMonthlySettlements = importedMonthlySettlements;
     }
@@ -111,7 +111,7 @@ class MonthlySettlementControllerHandler extends AbstractControllerHandler {
   async upsertMonthlySettlement(monthlySettlements: Array<MonthlySettlement>) {
     const request = {} as UpsertMonthlySettlementRequest;
     request.monthlySettlementTransports = monthlySettlements?.map((mms) =>
-      mapMonthlySettlementToTransport(mms)
+      mapMonthlySettlementToTransport(mms),
     );
 
     await this.api.upsertMonthlySettlement(request);

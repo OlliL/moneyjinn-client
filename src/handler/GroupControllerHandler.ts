@@ -20,7 +20,7 @@ class GroupControllerHandler extends AbstractControllerHandler {
     this.api = new GroupControllerApi(
       undefined,
       "",
-      AxiosInstanceHolder.getInstance().getAxiosInstance()
+      AxiosInstanceHolder.getInstance().getAxiosInstance(),
     );
   }
 

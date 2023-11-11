@@ -17,7 +17,7 @@ class CompareDataControllerHandler extends AbstractControllerHandler {
     this.api = new CompareDataControllerApi(
       undefined,
       "",
-      AxiosInstanceHolder.getInstance().getAxiosInstance()
+      AxiosInstanceHolder.getInstance().getAxiosInstance(),
     );
   }
 
@@ -40,7 +40,7 @@ class CompareDataControllerHandler extends AbstractControllerHandler {
   }
 
   async compareData(
-    compareDataParameter: CompareDataParameter
+    compareDataParameter: CompareDataParameter,
   ): Promise<CompareDataResult> {
     const request = {} as CompareDataRequest;
 
@@ -65,10 +65,10 @@ class CompareDataControllerHandler extends AbstractControllerHandler {
         compareData.push({
           moneyflow: mapMoneyflowTransportToModel(
             transport.moneyflowTransport,
-            false
+            false,
           ),
           compareDataDataset: mapCCompareDataDatasetTransportToModel(
-            transport.compareDataDatasetTransport
+            transport.compareDataDatasetTransport,
           ),
         });
       }
@@ -80,7 +80,7 @@ class CompareDataControllerHandler extends AbstractControllerHandler {
       for (const transport of compareDataResponse.compareDataNotInDatabaseTransports) {
         compareData.push({
           compareDataDataset: mapCCompareDataDatasetTransportToModel(
-            transport.compareDataDatasetTransport
+            transport.compareDataDatasetTransport,
           ),
         });
       }
@@ -93,7 +93,7 @@ class CompareDataControllerHandler extends AbstractControllerHandler {
         compareData.push({
           moneyflow: mapMoneyflowTransportToModel(
             transport.moneyflowTransport,
-            false
+            false,
           ),
         });
       }
@@ -106,10 +106,10 @@ class CompareDataControllerHandler extends AbstractControllerHandler {
         compareData.push({
           moneyflow: mapMoneyflowTransportToModel(
             transport.moneyflowTransport,
-            false
+            false,
           ),
           compareDataDataset: mapCCompareDataDatasetTransportToModel(
-            transport.compareDataDatasetTransport
+            transport.compareDataDatasetTransport,
           ),
         });
       }

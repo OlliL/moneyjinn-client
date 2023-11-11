@@ -12,7 +12,7 @@ export function formatNumber(num: number, decimalPlaces: number): string {
 
     const decimalPlace = fixedNumStr.indexOf(",");
     const fillUpZeroes = Math.abs(
-      fixedNumStr.length - 1 - decimalPlaces - decimalPlace
+      fixedNumStr.length - 1 - decimalPlaces - decimalPlace,
     );
 
     if (decimalPlace === -1) {

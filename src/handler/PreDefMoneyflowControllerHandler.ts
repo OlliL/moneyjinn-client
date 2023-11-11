@@ -20,7 +20,7 @@ class PreDefMoneyflowControllerHandler extends AbstractControllerHandler {
     this.api = new PreDefMoneyflowControllerApi(
       undefined,
       "",
-      AxiosInstanceHolder.getInstance().getAxiosInstance()
+      AxiosInstanceHolder.getInstance().getAxiosInstance(),
     );
   }
 

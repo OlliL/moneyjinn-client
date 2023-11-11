@@ -39,7 +39,7 @@ class UserControllerHandler extends AbstractControllerHandler {
     this.api = new UserControllerApi(
       undefined,
       "",
-      AxiosInstanceHolder.getInstance().getAxiosInstance()
+      AxiosInstanceHolder.getInstance().getAxiosInstance(),
     );
   }
 
@@ -61,9 +61,11 @@ class UserControllerHandler extends AbstractControllerHandler {
     const userSession: UserSession = {
       userId: userTransport.id,
       userName: userTransport.userName,
-      userCanLogin: userTransport.role == UserTransportRoleEnum.Standard ? true : false,
+      userCanLogin:
+        userTransport.role == UserTransportRoleEnum.Standard ? true : false,
       userIsNew: userTransport.userIsNew === 1 ? true : false,
-      userIsAdmin: userTransport.role == UserTransportRoleEnum.Admin ? true : false,
+      userIsAdmin:
+        userTransport.role == UserTransportRoleEnum.Admin ? true : false,
     };
 
     userSessionStore.setUserSession(userSession);
@@ -89,12 +91,12 @@ class UserControllerHandler extends AbstractControllerHandler {
     const groups: Array<Group> = showUserListResponse.groupTransports.map(
       (value) => {
         return mapGroupTransportToModel(value);
-      }
+      },
     );
     const users: Array<User> = showUserListResponse.userTransports.map(
       (value_1) => {
         return mapUserTransportToModel(value_1);
-      }
+      },
     );
     const accessRelations: Array<AccessRelation> =
       showUserListResponse.accessRelationTransports.map((value_2) => {

@@ -222,7 +222,7 @@ const monthlySettlementUpserted = (year: number, month: number) => {
 const showDeleteMonthlySettlementModal = () => {
   (deleteModal.value as typeof DeleteMonthlySettlementModalVue)._show(
     selectedYear.value,
-    selectedMonth.value
+    selectedMonth.value,
   );
 };
 

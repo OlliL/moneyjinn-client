@@ -26,13 +26,13 @@ class EtfControllerHandler extends AbstractControllerHandler {
     this.api = new EtfControllerApi(
       undefined,
       "",
-      AxiosInstanceHolder.getInstance().getAxiosInstance()
+      AxiosInstanceHolder.getInstance().getAxiosInstance(),
     );
   }
 
   async listEtfOverview(
     year: number,
-    month: number
+    month: number,
   ): Promise<Array<EtfSummary>> {
     const response = await this.api.listEtfOverview(year, month);
 
@@ -62,7 +62,7 @@ class EtfControllerHandler extends AbstractControllerHandler {
     etfListViewData.etfFlows = listEtfFlowsResponse.etfFlowTransports?.map(
       (flow) => {
         return mapEtfFlowTransportToModel(flow);
-      }
+      },
     );
     etfListViewData.etfEffectiveFlows =
       listEtfFlowsResponse.etfEffectiveFlowTransports?.map((flow) => {
@@ -77,7 +77,7 @@ class EtfControllerHandler extends AbstractControllerHandler {
     pieces: number,
     bidPrice: number,
     askPrice: number,
-    transactionCosts: number
+    transactionCosts: number,
   ): Promise<EtfSalesCalculation> {
     const request = {} as CalcEtfSaleRequest;
     request.isin = isin;

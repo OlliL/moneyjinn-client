@@ -2,7 +2,7 @@ import type { PostingAccountAmountTransport } from "@/api";
 import type { ReportingMonthAmount } from "@/model/report/ReportingMonthAmount";
 
 export function mapPostingAccountAmountTransportToModel(
-  transport: PostingAccountAmountTransport
+  transport: PostingAccountAmountTransport,
 ): ReportingMonthAmount {
   const date = new Date(transport.date);
   const model: ReportingMonthAmount = {

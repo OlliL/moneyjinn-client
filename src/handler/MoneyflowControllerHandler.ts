@@ -27,14 +27,14 @@ class MoneyflowControllerHandler extends AbstractControllerHandler {
     this.api = new MoneyflowControllerApi(
       undefined,
       "",
-      AxiosInstanceHolder.getInstance().getAxiosInstance()
+      AxiosInstanceHolder.getInstance().getAxiosInstance(),
     );
   }
 
   async createMoneyflow(
     moneyflow: Moneyflow,
     usedPreDefMoneyflowId: number,
-    saveAsPreDefMoneyflow: boolean
+    saveAsPreDefMoneyflow: boolean,
   ) {
     const request = {} as CreateMoneyflowRequest;
     request.moneyflowTransport = mapMoneyflowToTransport(moneyflow);
@@ -59,7 +59,7 @@ class MoneyflowControllerHandler extends AbstractControllerHandler {
     moneyflow: Moneyflow,
     createMoneyflowSplitEntries: Array<MoneyflowSplitEntry>,
     updateMoneyflowSplitEntries: Array<MoneyflowSplitEntry>,
-    deleteMoneyflowSplitEntryIds: Array<number>
+    deleteMoneyflowSplitEntryIds: Array<number>,
   ): Promise<Moneyflow> {
     const request = {} as UpdateMoneyflowRequest;
     request.moneyflowTransport = mapMoneyflowToTransport(moneyflow);
@@ -79,7 +79,7 @@ class MoneyflowControllerHandler extends AbstractControllerHandler {
     const mmf: Moneyflow = mapMoneyflowTransportToModel(
       updateMoneyflowResponse.moneyflowTransport,
       updateMoneyflowResponse.hasReceipt,
-      updateMoneyflowResponse.moneyflowSplitEntryTransports
+      updateMoneyflowResponse.moneyflowSplitEntryTransports,
     );
 
     return mmf;
@@ -90,7 +90,7 @@ class MoneyflowControllerHandler extends AbstractControllerHandler {
   }
 
   async searchMoneyflows(
-    searchParams: MoneyflowSearchParams
+    searchParams: MoneyflowSearchParams,
   ): Promise<Array<Moneyflow>> {
     const request = {} as SearchMoneyflowsRequest;
     request.moneyflowSearchParamsTransport =
@@ -119,7 +119,7 @@ class MoneyflowControllerHandler extends AbstractControllerHandler {
     const moneyflow = mapMoneyflowTransportToModel(
       showEditMoneyflowResponse.moneyflowTransport,
       showEditMoneyflowResponse.hasReceipt,
-      showEditMoneyflowResponse.moneyflowSplitEntryTransports
+      showEditMoneyflowResponse.moneyflowSplitEntryTransports,
     );
 
     return moneyflow;
@@ -128,12 +128,12 @@ class MoneyflowControllerHandler extends AbstractControllerHandler {
   async searchMoneyflowsByAmount(
     amount: number,
     startDate: Date,
-    endDate: Date
+    endDate: Date,
   ): Promise<Array<Moneyflow>> {
     const response = await this.api.searchMoneyflowsByAmount(
       amount,
       getISOStringDate(startDate).replace(/[-]/gi, ""),
-      getISOStringDate(endDate).replace(/[-]/gi, "")
+      getISOStringDate(endDate).replace(/[-]/gi, ""),
     );
 
     if (response.status === 204) return new Array<Moneyflow>();

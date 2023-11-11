@@ -4,7 +4,7 @@ import type { Ref } from "vue";
 
 export function handleBackendError(
   backendError: BackendError,
-  serverErrors: Ref<Array<string>>
+  serverErrors: Ref<Array<string>>,
 ) {
   const validationResult = backendError.getValidationResult();
   serverErrors.value = new Array<string>();

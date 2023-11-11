@@ -69,11 +69,11 @@ const schema = computed(() => {
   if (viewMounted.value) {
     if (props.validationSchemaRef) {
       return toFieldValidator(
-        preprocess(() => datepicker.getDate(), props.validationSchemaRef.value)
+        preprocess(() => datepicker.getDate(), props.validationSchemaRef.value),
       );
     }
     return toFieldValidator(
-      preprocess(() => datepicker.getDate(), props.validationSchema)
+      preprocess(() => datepicker.getDate(), props.validationSchema),
     );
   }
   return undefined;
@@ -175,7 +175,7 @@ const errorData = computed((): ErrorData => {
   return generateErrorDataVeeValidate(
     fieldMeta.touched,
     props.fieldLabel,
-    errorMessage.value
+    errorMessage.value,
   );
 });
 
@@ -186,7 +186,7 @@ watch(
       setDate(newVal);
     }
   },
-  { immediate: true }
+  { immediate: true },
 );
 </script>
 

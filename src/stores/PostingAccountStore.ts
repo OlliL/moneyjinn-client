@@ -25,20 +25,20 @@ export const usePostingAccountStore = defineStore("postingAccount", {
       return PostingAccountControllerHandler.fetchAllPostingAccount().then(
         (postingAccountArray) => {
           this.postingAccount = postingAccountArray;
-        }
+        },
       );
     },
     subscribeToWebsocket() {
       WebSocketHandler.getInstance().subscribe(
         "/topic/postingAccountChanged",
-        this.subscribeCallback
+        this.subscribeCallback,
       );
     },
     subscribeCallback(body: string) {
       if (body) {
         const event: PostingAccountChangedEventTransport = JSON.parse(body);
         const mpa = mapPostingAccountTransportToModel(
-          event.postingAccountTransport
+          event.postingAccountTransport,
         );
 
         switch (event.eventType) {
@@ -48,14 +48,14 @@ export const usePostingAccountStore = defineStore("postingAccount", {
           }
           case "UPDATE": {
             const pos = this.postingAccount.findIndex(
-              (entry) => entry.id === mpa.id
+              (entry) => entry.id === mpa.id,
             );
             if (pos !== undefined) this.postingAccount.splice(pos, 1, mpa);
             break;
           }
           case "DELETE": {
             this.postingAccount = this.postingAccount.filter(
-              (originalMpa) => mpa.id !== originalMpa.id
+              (originalMpa) => mpa.id !== originalMpa.id,
             );
             break;
           }
@@ -65,7 +65,7 @@ export const usePostingAccountStore = defineStore("postingAccount", {
       }
     },
     async searchPostingAccounts(
-      comment: String
+      comment: String,
     ): Promise<Array<PostingAccount>> {
       const mpa = this.postingAccount;
 
@@ -75,7 +75,7 @@ export const usePostingAccountStore = defineStore("postingAccount", {
 
       const commentUpper = comment.toUpperCase();
       return mpa.filter((entry) =>
-        entry.name.toUpperCase().includes(commentUpper)
+        entry.name.toUpperCase().includes(commentUpper),
       );
     },
   },

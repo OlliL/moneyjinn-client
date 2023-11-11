@@ -1,7 +1,7 @@
 import { CapitalsourceImport } from "@/model/capitalsource/CapitalsourceImport";
 
 export function mapCapitalsourceImportTransportToEnum(
-  source: number
+  source: number,
 ): CapitalsourceImport {
   switch (source) {
     case 2: {
@@ -18,7 +18,7 @@ export function mapCapitalsourceImportTransportToEnum(
 }
 
 export function mapCapitalsourceImportEnumToTransport(
-  source: CapitalsourceImport
+  source: CapitalsourceImport,
 ): number {
   switch (source) {
     case CapitalsourceImport.BALANCE_ALLOWED: {

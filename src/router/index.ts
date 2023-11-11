@@ -154,7 +154,7 @@ router.beforeEach(
   (
     to: RouteLocationNormalized,
     from: RouteLocationNormalized,
-    next: NavigationGuardNext
+    next: NavigationGuardNext,
   ) => {
     const loginNeeded = !to.matched.some((record) => record.meta.hideForAuth);
 
@@ -174,8 +174,7 @@ router.beforeEach(
         next({ name: Routes.Login });
       }
     });
-
-  }
+  },
 );
 
 export default router;

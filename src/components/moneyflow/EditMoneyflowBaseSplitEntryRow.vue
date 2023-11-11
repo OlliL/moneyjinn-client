@@ -90,17 +90,17 @@ const schema = {
   amount: computed(() =>
     !rowEmpty.value
       ? amountSchema(t("Moneyflow.validation.amount"))
-      : any().optional()
+      : any().optional(),
   ),
   comment: computed(() =>
     !rowEmpty.value
       ? string(globErr(t("Moneyflow.validation.comment"))).min(1)
-      : string().optional()
+      : string().optional(),
   ),
   postingAccountId: computed(() =>
     !rowEmpty.value
       ? number(globErr(t("Moneyflow.validation.postingAccountId"))).gt(0)
-      : number().optional()
+      : number().optional(),
   ),
 };
 
@@ -172,7 +172,7 @@ const remainderErrorData = computed(() => {
   return generateErrorData(
     props.remainderIsValid,
     t("Moneyflow.remainder"),
-    t("Moneyflow.validation.remainder")
+    t("Moneyflow.validation.remainder"),
   );
 });
 
@@ -183,7 +183,7 @@ watch(
     if (newVal === 0) mseAmount.value = undefined;
     else if (newVal !== oldVal) mseAmount.value = newVal;
   },
-  { immediate: true }
+  { immediate: true },
 );
 
 watch(
@@ -191,14 +191,14 @@ watch(
   (newVal, oldVal) => {
     if (newVal != oldVal) mseComment.value = newVal;
   },
-  { immediate: true }
+  { immediate: true },
 );
 watch(
   () => props.postingAccountId,
   (newVal, oldVal) => {
     if (newVal != oldVal) msePostingAccountId.value = newVal ? newVal : 0;
   },
-  { immediate: true }
+  { immediate: true },
 );
 
 watch(mseAmount, (newVal, oldVal) => {
@@ -237,7 +237,7 @@ const postingaccountChanged = () => {
     "postingAccountIdChanged",
     props.index,
     msePostingAccountId.value,
-    msePostingAccountName.value
+    msePostingAccountName.value,
   );
   if (props.isLastRow && msePostingAccountId.value) addMoneyflowSplitEntryRow();
 };

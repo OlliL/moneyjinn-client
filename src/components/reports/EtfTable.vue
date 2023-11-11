@@ -113,7 +113,7 @@ watch(
   }),
   (data) => {
     if (data.year && data.month) loadData(+data.year, +data.month);
-  }
+  },
 );
 
 const etfSummaryReceived = computed(() => {

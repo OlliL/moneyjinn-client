@@ -18,7 +18,7 @@ export class BackendError {
     _errorType: BackendErrorType,
     _errorCode?: number,
     _errorMessage?: string,
-    _validationResult?: ValidationResult
+    _validationResult?: ValidationResult,
   ) {
     this.errorType = _errorType;
     this.errorCode = _errorCode;

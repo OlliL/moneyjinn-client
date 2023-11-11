@@ -6,7 +6,7 @@ import type { ImportedMoneyflow } from "@/model/moneyflow/ImportedMoneyflow";
 import type { ImportedMoneyflowTransport } from "@/api";
 
 export function mapImportedMoneyflowTransportToModel(
-  transport: ImportedMoneyflowTransport
+  transport: ImportedMoneyflowTransport,
 ): ImportedMoneyflow {
   const model: ImportedMoneyflow = {
     ...mapMoneyflowTransportToModel(transport, false),
@@ -22,7 +22,7 @@ export function mapImportedMoneyflowTransportToModel(
 }
 
 export function mapImportedMoneyflowToTransport(
-  model: ImportedMoneyflow
+  model: ImportedMoneyflow,
 ): ImportedMoneyflowTransport {
   const transport: ImportedMoneyflowTransport = {
     ...mapMoneyflowToTransport(model),

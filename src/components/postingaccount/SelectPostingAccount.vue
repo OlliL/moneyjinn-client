@@ -96,7 +96,7 @@ watch(
       postingAccountId.value = newVal ? newVal : 0;
     }
   },
-  { immediate: true }
+  { immediate: true },
 );
 
 watch(postingAccountId, (newVal, oldVal) => {

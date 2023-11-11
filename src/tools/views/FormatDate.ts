@@ -40,6 +40,6 @@ export function getISOStringDate(date: Date): string {
 
 function leftpad(num: number, resultLength = 2, leftpadChar = "0"): string {
   return (String(leftpadChar).repeat(resultLength) + String(num)).slice(
-    String(num).length
+    String(num).length,
   );
 }

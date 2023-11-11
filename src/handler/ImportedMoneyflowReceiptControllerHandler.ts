@@ -15,7 +15,7 @@ class ImportedMoneyflowReceiptControllerHandler extends AbstractControllerHandle
     this.api = new ImportedMoneyflowReceiptControllerApi(
       undefined,
       "",
-      AxiosInstanceHolder.getInstance().getAxiosInstance()
+      AxiosInstanceHolder.getInstance().getAxiosInstance(),
     );
   }
 
@@ -47,7 +47,7 @@ class ImportedMoneyflowReceiptControllerHandler extends AbstractControllerHandle
   }
 
   async createImportedMoneyflowReceipts(
-    receipts: Array<ImportedMoneyflowReceipt>
+    receipts: Array<ImportedMoneyflowReceipt>,
   ) {
     const request = {} as CreateImportedMoneyflowReceiptsRequest;
     request.importedMoneyflowReceiptTransports = receipts;

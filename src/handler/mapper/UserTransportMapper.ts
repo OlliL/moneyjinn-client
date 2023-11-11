@@ -1,6 +1,9 @@
 import type { UserTransport } from "@/api";
 import type { User } from "@/model/user/User";
-import { mapUserRoleEnumToTransport, mapUserTransportRoleEnumToEnum } from "./UserRoleEnumMapper";
+import {
+  mapUserRoleEnumToTransport,
+  mapUserTransportRoleEnumToEnum,
+} from "./UserRoleEnumMapper";
 
 export function mapUserTransportToModel(transport: UserTransport): User {
   const model: User = {

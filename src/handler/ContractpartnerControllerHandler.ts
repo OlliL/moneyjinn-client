@@ -16,7 +16,7 @@ class ContractpartnerControllerHandler extends AbstractControllerHandler {
     this.api = new CrudContractpartnerControllerApi(
       undefined,
       "",
-      AxiosInstanceHolder.getInstance().getAxiosInstance()
+      AxiosInstanceHolder.getInstance().getAxiosInstance(),
     );
   }
 

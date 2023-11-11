@@ -29,7 +29,7 @@ export class WebSocketHandler {
       heartbeatOutgoing: 1000,
     });
 
-    this.stompClient.beforeConnect = async () =>  {
+    this.stompClient.beforeConnect = async () => {
       const headers = {} as Record<string, string>;
       await HeaderUtil.getInstance().addAuthorizationHeader(headers);
       HeaderUtil.getInstance().addXsrfHeader(headers);
@@ -49,7 +49,7 @@ export class WebSocketHandler {
 
   public subscribe(
     destination: string,
-    callback: (body: string) => any
+    callback: (body: string) => any,
   ): StompSubscription {
     return this.stompClient.subscribe(destination, (message) => {
       callback(message.body);

@@ -4,15 +4,15 @@ import { mapCapitalsourceStateTransportToEnum } from "./CapitalsourceStateMapper
 import { mapCapitalsourceTypeTransportToEnum } from "./CapitalsourceTypeMapper";
 
 export function mapReportTurnoverCapitalsourceTransportToModel(
-  transport: ReportTurnoverCapitalsourceTransport
+  transport: ReportTurnoverCapitalsourceTransport,
 ): ReportTurnoverCapitalsource {
   const model: ReportTurnoverCapitalsource = {
     capitalsourceComment: transport.capitalsourceComment,
     capitalsourceState: mapCapitalsourceStateTransportToEnum(
-      transport.capitalsourceState
+      transport.capitalsourceState,
     ),
     capitalsourceType: mapCapitalsourceTypeTransportToEnum(
-      transport.capitalsourceType
+      transport.capitalsourceType,
     ),
     amountBeginOfMonthFixed: transport.amountBeginOfMonthFixed,
     amountEndOfMonthCalculated: transport.amountEndOfMonthCalculated,

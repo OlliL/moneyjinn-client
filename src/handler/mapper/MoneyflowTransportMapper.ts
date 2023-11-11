@@ -6,7 +6,7 @@ import { mapMoneyflowSplitEntryTransportToModel } from "./MoneyflowSplitEntryTra
 export function mapMoneyflowTransportToModel(
   transport: MoneyflowTransport,
   hasReceipt: boolean,
-  splitEntries?: Array<MoneyflowSplitEntryTransport>
+  splitEntries?: Array<MoneyflowSplitEntryTransport>,
 ): Moneyflow {
   const model: Moneyflow = {
     id: transport.id,

@@ -2,7 +2,7 @@ import type { CompareDataDatasetTransport } from "@/api";
 import type { CompareDataDataset } from "@/model/comparedata/CompareDataDataset";
 
 export function mapCCompareDataDatasetTransportToModel(
-  transport: CompareDataDatasetTransport
+  transport: CompareDataDatasetTransport,
 ): CompareDataDataset {
   const model: CompareDataDataset = {
     amount: transport.amount,

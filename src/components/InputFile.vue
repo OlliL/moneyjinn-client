@@ -82,7 +82,7 @@ const errorData = computed((): ErrorData => {
   return generateErrorDataVeeValidate(
     fieldMeta.touched,
     props.fieldLabel ? props.fieldLabel : "",
-    errorMessage.value
+    errorMessage.value,
   );
 });
 

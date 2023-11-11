@@ -124,6 +124,6 @@ watch(
       loadMonthlySettlements(props.year, newVal);
     }
   },
-  { immediate: true }
+  { immediate: true },
 );
 </script>

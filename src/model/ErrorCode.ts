@@ -58,144 +58,144 @@ export const enum ErrorCode {
 
 export const errorMessages = {
   [ErrorCode.CONTRACTPARTNER_DOES_NOT_EXIST]: I18nHolder.t()(
-    "ErrorMessage.CONTRACTPARTNER_DOES_NOT_EXIST"
+    "ErrorMessage.CONTRACTPARTNER_DOES_NOT_EXIST",
   ),
   [ErrorCode.CAPITALSOURCE_DOES_NOT_EXIST]: I18nHolder.t()(
-    "ErrorMessage.CAPITALSOURCE_DOES_NOT_EXIST"
+    "ErrorMessage.CAPITALSOURCE_DOES_NOT_EXIST",
   ),
   [ErrorCode.CAPITALSOURCE_STILL_REFERENCED]: I18nHolder.t()(
-    "ErrorMessage.CAPITALSOURCE_STILL_REFERENCED"
+    "ErrorMessage.CAPITALSOURCE_STILL_REFERENCED",
   ),
   [ErrorCode.CAPITALSOURCE_IN_USE_PERIOD]: I18nHolder.t()(
-    "ErrorMessage.CAPITALSOURCE_IN_USE_PERIOD"
+    "ErrorMessage.CAPITALSOURCE_IN_USE_PERIOD",
   ),
   [ErrorCode.CAPITALSOURCE_USE_OUT_OF_VALIDITY]: I18nHolder.t()(
-    "ErrorMessage.CAPITALSOURCE_USE_OUT_OF_VALIDITY"
+    "ErrorMessage.CAPITALSOURCE_USE_OUT_OF_VALIDITY",
   ),
   [ErrorCode.CAPITALSOURCE_IS_NOT_SET]: I18nHolder.t()(
-    "ErrorMessage.CAPITALSOURCE_IS_NOT_SET"
+    "ErrorMessage.CAPITALSOURCE_IS_NOT_SET",
   ),
   [ErrorCode.CONTRACTPARTNER_IS_NOT_SET]: I18nHolder.t()(
-    "ErrorMessage.CONTRACTPARTNER_IS_NOT_SET"
+    "ErrorMessage.CONTRACTPARTNER_IS_NOT_SET",
   ),
   [ErrorCode.BOOKINGDATE_IN_WRONG_FORMAT]: I18nHolder.t()(
-    "ErrorMessage.BOOKINGDATE_IN_WRONG_FORMAT"
+    "ErrorMessage.BOOKINGDATE_IN_WRONG_FORMAT",
   ),
   [ErrorCode.COMMENT_IS_NOT_SET]: I18nHolder.t()(
-    "ErrorMessage.COMMENT_IS_NOT_SET"
+    "ErrorMessage.COMMENT_IS_NOT_SET",
   ),
   [ErrorCode.USERNAME_PASSWORD_WRONG]: I18nHolder.t()(
-    "ErrorMessage.USERNAME_PASSWORD_WRONG"
+    "ErrorMessage.USERNAME_PASSWORD_WRONG",
   ),
   [ErrorCode.PASSWORD_NOT_MATCHING]: I18nHolder.t()(
-    "ErrorMessage.PASSWORD_NOT_MATCHING"
+    "ErrorMessage.PASSWORD_NOT_MATCHING",
   ),
   [ErrorCode.ACCOUNT_IS_LOCKED]: I18nHolder.t()(
-    "ErrorMessage.ACCOUNT_IS_LOCKED"
+    "ErrorMessage.ACCOUNT_IS_LOCKED",
   ),
   [ErrorCode.PASSWORD_MUST_BE_CHANGED]: I18nHolder.t()(
-    "ErrorMessage.PASSWORD_MUST_BE_CHANGED"
+    "ErrorMessage.PASSWORD_MUST_BE_CHANGED",
   ),
   [ErrorCode.NO_SEARCH_CRITERIA_ENTERED]: I18nHolder.t()(
-    "ErrorMessage.NO_SEARCH_CRITERIA_ENTERED"
+    "ErrorMessage.NO_SEARCH_CRITERIA_ENTERED",
   ),
   [ErrorCode.USER_HAS_DATA]: I18nHolder.t()("ErrorMessage.USER_HAS_DATA"),
   [ErrorCode.WRONG_FILE_FORMAT]: I18nHolder.t()(
-    "ErrorMessage.WRONG_FILE_FORMAT"
+    "ErrorMessage.WRONG_FILE_FORMAT",
   ),
   [ErrorCode.AMOUNT_ZERO]: I18nHolder.t()("ErrorMessage.AMOUNT_ZERO"),
   [ErrorCode.NAME_ALREADY_EXISTS]: I18nHolder.t()(
-    "ErrorMessage.NAME_ALREADY_EXISTS"
+    "ErrorMessage.NAME_ALREADY_EXISTS",
   ),
   [ErrorCode.GROUP_IN_USE]: I18nHolder.t()("ErrorMessage.GROUP_IN_USE"),
   [ErrorCode.NAME_MUST_NOT_BE_EMPTY]: I18nHolder.t()(
-    "ErrorMessage.NAME_MUST_NOT_BE_EMPTY"
+    "ErrorMessage.NAME_MUST_NOT_BE_EMPTY",
   ),
   [ErrorCode.ACCOUNT_NUMBER_TO_LONG]: I18nHolder.t()(
-    "ErrorMessage.ACCOUNT_NUMBER_TO_LONG"
+    "ErrorMessage.ACCOUNT_NUMBER_TO_LONG",
   ),
   [ErrorCode.BANK_CODE_TO_LONG]: I18nHolder.t()(
-    "ErrorMessage.BANK_CODE_TO_LONG"
+    "ErrorMessage.BANK_CODE_TO_LONG",
   ),
   [ErrorCode.VALIDFROM_AFTER_VALIDTIL]: I18nHolder.t()(
-    "ErrorMessage.VALIDFROM_AFTER_VALIDTIL"
+    "ErrorMessage.VALIDFROM_AFTER_VALIDTIL",
   ),
   [ErrorCode.LOGGED_OUT]: I18nHolder.t()("ErrorMessage.LOGGED_OUT"),
   [ErrorCode.POSTING_ACCOUNT_NOT_SPECIFIED]: I18nHolder.t()(
-    "ErrorMessage.POSTING_ACCOUNT_NOT_SPECIFIED"
+    "ErrorMessage.POSTING_ACCOUNT_NOT_SPECIFIED",
   ),
   [ErrorCode.CONTRACTPARTNER_NO_LONGER_VALID]: I18nHolder.t()(
-    "ErrorMessage.CONTRACTPARTNER_NO_LONGER_VALID"
+    "ErrorMessage.CONTRACTPARTNER_NO_LONGER_VALID",
   ),
   [ErrorCode.MONEYFLOWS_OUTSIDE_VALIDITY_PERIOD]: I18nHolder.t()(
-    "ErrorMessage.MONEYFLOWS_OUTSIDE_VALIDITY_PERIOD"
+    "ErrorMessage.MONEYFLOWS_OUTSIDE_VALIDITY_PERIOD",
   ),
   [ErrorCode.GROUP_WITH_SAME_NAME_ALREADY_EXISTS]: I18nHolder.t()(
-    "ErrorMessage.GROUP_WITH_SAME_NAME_ALREADY_EXISTS"
+    "ErrorMessage.GROUP_WITH_SAME_NAME_ALREADY_EXISTS",
   ),
   [ErrorCode.VALIDFROM_NOT_DEFINED]: I18nHolder.t()(
-    "ErrorMessage.VALIDFROM_NOT_DEFINED"
+    "ErrorMessage.VALIDFROM_NOT_DEFINED",
   ),
   [ErrorCode.USER_WITH_SAME_NAME_ALREADY_EXISTS]: I18nHolder.t()(
-    "ErrorMessage.USER_WITH_SAME_NAME_ALREADY_EXISTS"
+    "ErrorMessage.USER_WITH_SAME_NAME_ALREADY_EXISTS",
   ),
   [ErrorCode.GROUP_MUST_BE_SPECIFIED]: I18nHolder.t()(
-    "ErrorMessage.GROUP_MUST_BE_SPECIFIED"
+    "ErrorMessage.GROUP_MUST_BE_SPECIFIED",
   ),
   [ErrorCode.VALIDFROM_EARLIER_THAN_TOMORROW]: I18nHolder.t()(
-    "ErrorMessage.VALIDFROM_EARLIER_THAN_TOMORROW"
+    "ErrorMessage.VALIDFROM_EARLIER_THAN_TOMORROW",
   ),
   [ErrorCode.BOOKINGDATE_OUTSIDE_GROUP_ASSIGNMENT]: I18nHolder.t()(
-    "ErrorMessage.BOOKINGDATE_OUTSIDE_GROUP_ASSIGNMENT"
+    "ErrorMessage.BOOKINGDATE_OUTSIDE_GROUP_ASSIGNMENT",
   ),
   [ErrorCode.POSTINGACCOUNT_STILL_REFERENCED]: I18nHolder.t()(
-    "ErrorMessage.POSTINGACCOUNT_STILL_REFERENCED"
+    "ErrorMessage.POSTINGACCOUNT_STILL_REFERENCED",
   ),
   [ErrorCode.POSTINGACCOUNT_WITH_SAME_NAME_ALREADY_EXISTS]: I18nHolder.t()(
-    "ErrorMessage.POSTINGACCOUNT_WITH_SAME_NAME_ALREADY_EXISTS"
+    "ErrorMessage.POSTINGACCOUNT_WITH_SAME_NAME_ALREADY_EXISTS",
   ),
   [ErrorCode.ACCOUNT_NUMBER_CONTAINS_ILLEGAL_CHARS_OR_IS_EMPTY]: I18nHolder.t()(
-    "ErrorMessage.ACCOUNT_NUMBER_CONTAINS_ILLEGAL_CHARS_OR_IS_EMPTY"
+    "ErrorMessage.ACCOUNT_NUMBER_CONTAINS_ILLEGAL_CHARS_OR_IS_EMPTY",
   ),
   [ErrorCode.BANK_CODE_CONTAINS_ILLEGAL_CHARS_OR_IS_EMPTY]: I18nHolder.t()(
-    "ErrorMessage.BANK_CODE_CONTAINS_ILLEGAL_CHARS_OR_IS_EMPTY"
+    "ErrorMessage.BANK_CODE_CONTAINS_ILLEGAL_CHARS_OR_IS_EMPTY",
   ),
   [ErrorCode.ACCOUNT_NUMBER_CONTAINS_ILLEGAL_CHARS]: I18nHolder.t()(
-    "ErrorMessage.ACCOUNT_NUMBER_CONTAINS_ILLEGAL_CHARS"
+    "ErrorMessage.ACCOUNT_NUMBER_CONTAINS_ILLEGAL_CHARS",
   ),
   [ErrorCode.BANK_CODE_CONTAINS_ILLEGAL_CHARS]: I18nHolder.t()(
-    "ErrorMessage.BANK_CODE_CONTAINS_ILLEGAL_CHARS"
+    "ErrorMessage.BANK_CODE_CONTAINS_ILLEGAL_CHARS",
   ),
   // FIXME: variable content!
   [ErrorCode.ACCOUNT_ALREADY_ASSIGNED_TO_OTHER_PARTNER]: I18nHolder.t()(
-    "ErrorMessage.ACCOUNT_ALREADY_ASSIGNED_TO_OTHER_PARTNER"
+    "ErrorMessage.ACCOUNT_ALREADY_ASSIGNED_TO_OTHER_PARTNER",
   ),
   [ErrorCode.CAPITALSOURCE_INVALID]: I18nHolder.t()(
-    "ErrorMessage.CAPITALSOURCE_INVALID"
+    "ErrorMessage.CAPITALSOURCE_INVALID",
   ),
   [ErrorCode.SPLIT_ENTRIES_AMOUNT_IS_NOT_EQUALS_MONEYFLOW_AMOUNT]:
     I18nHolder.t()(
-      "ErrorMessage.SPLIT_ENTRIES_AMOUNT_IS_NOT_EQUALS_MONEYFLOW_AMOUNT"
+      "ErrorMessage.SPLIT_ENTRIES_AMOUNT_IS_NOT_EQUALS_MONEYFLOW_AMOUNT",
     ),
   [ErrorCode.PIECES_NOT_SET]: I18nHolder.t()("ErrorMessage.PIECES_NOT_SET"),
   [ErrorCode.NO_ETF_SPECIFIED]: I18nHolder.t()("ErrorMessage.NO_ETF_SPECIFIED"),
   [ErrorCode.AMOUNT_TO_HIGH]: I18nHolder.t()("ErrorMessage.AMOUNT_TO_HIGH"),
   [ErrorCode.PRICE_NOT_SET]: I18nHolder.t()("ErrorMessage.PRICE_NOT_SET"),
   [ErrorCode.UNSUPPORTED_MEDIA_TYPE]: I18nHolder.t()(
-    "ErrorMessage.UNSUPPORTED_MEDIA_TYPE"
+    "ErrorMessage.UNSUPPORTED_MEDIA_TYPE",
   ),
   [ErrorCode.RECEIPT_ALREADY_EXISTS]: I18nHolder.t()(
-    "ErrorMessage.RECEIPT_ALREADY_EXISTS"
+    "ErrorMessage.RECEIPT_ALREADY_EXISTS",
   ),
   [ErrorCode.AMOUNT_TO_BIG]: I18nHolder.t()("ErrorMessage.AMOUNT_TO_BIG"),
   [ErrorCode.MEDIA_TYPE_UNKNOWN]: I18nHolder.t()(
-    "ErrorMessage.MEDIA_TYPE_UNKNOWN"
+    "ErrorMessage.MEDIA_TYPE_UNKNOWN",
   ),
   [ErrorCode.AMOUNT_HAS_TO_BE_SPECIFIED]: I18nHolder.t()(
-    "ErrorMessage.AMOUNT_HAS_TO_BE_SPECIFIED"
+    "ErrorMessage.AMOUNT_HAS_TO_BE_SPECIFIED",
   ),
   [ErrorCode.MONEYFLOW_DOES_NOT_EXISTS]: I18nHolder.t()(
-    "ErrorMessage.MONEYFLOW_DOES_NOT_EXISTS"
+    "ErrorMessage.MONEYFLOW_DOES_NOT_EXISTS",
   ),
 };
 

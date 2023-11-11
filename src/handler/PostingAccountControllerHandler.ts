@@ -20,7 +20,7 @@ class PostingAccountControllerHandler extends AbstractControllerHandler {
     this.api = new PostingAccountControllerApi(
       undefined,
       "",
-      AxiosInstanceHolder.getInstance().getAxiosInstance()
+      AxiosInstanceHolder.getInstance().getAxiosInstance(),
     );
   }
 

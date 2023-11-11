@@ -412,7 +412,7 @@ const etfEffectiveFlowAmountSum = computed(() => {
 const etfEffectiveFlowAmountPriceSum = computed(() => {
   return etfEffectiveFlows.value.reduce(
     (a, b) => a + (b["amount"] * b["price"] || 0),
-    0
+    0,
   );
 });
 
@@ -431,7 +431,7 @@ const etfFlowAmountSum = computed(() => {
 const etfFlowAmountPriceSum = computed(() => {
   return etfFlows.value.reduce(
     (a, b) => a + (b["amount"] * b["price"] || 0),
-    0
+    0,
   );
 });
 
@@ -552,7 +552,7 @@ const calculateEtfSale = handleSubmit(() => {
     calcEtfSalePieces.value,
     calcEtfBidPrice.value,
     calcEtfAskPrice.value,
-    calcEtfTransactionCosts.value
+    calcEtfTransactionCosts.value,
   )
     .then((_calcResults) => {
       calcResults.value = _calcResults;

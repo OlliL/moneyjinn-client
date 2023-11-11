@@ -14,7 +14,7 @@ class MoneyflowReceiptControllerHandler extends AbstractControllerHandler {
     this.api = new MoneyflowReceiptControllerApi(
       undefined,
       "",
-      AxiosInstanceHolder.getInstance().getAxiosInstance()
+      AxiosInstanceHolder.getInstance().getAxiosInstance(),
     );
   }
 
