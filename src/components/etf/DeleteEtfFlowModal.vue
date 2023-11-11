@@ -19,7 +19,7 @@
               </tr>
               <tr>
                 <th>{{ $t("ETF.amount") }}</th>
-                <td>{{ amountString }}</td>
+                <td :class="amountClass">{{ amountString }}</td>
               </tr>
               <tr>
                 <th>{{ $t("ETF.price") }}</th>
