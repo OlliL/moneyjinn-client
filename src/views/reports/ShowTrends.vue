@@ -109,7 +109,7 @@ import {
   Filler,
 } from "chart.js";
 import { useField, useForm } from "vee-validate";
-import { toFieldValidator } from "@vee-validate/zod";
+import { toTypedSchema } from "@vee-validate/zod";
 import { computed, onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { Line } from "vue-chartjs";
@@ -268,7 +268,7 @@ const {
   errorMessage,
 } = useField<Array<number>>(
   "postingAccountIdsYes",
-  toFieldValidator(schema.capitalsourceIds),
+  toTypedSchema(schema.capitalsourceIds),
   { initialValue: new Array<number>(), syncVModel: true },
 );
 

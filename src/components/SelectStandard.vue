@@ -27,7 +27,7 @@
 
 <script lang="ts" setup>
 import { useField } from "vee-validate";
-import { toFieldValidator } from "@vee-validate/zod";
+import { toTypedSchema } from "@vee-validate/zod";
 import { computed, onMounted, ref, watch, type PropType, type Ref } from "vue";
 import { any, type ZodType } from "zod";
 
@@ -74,9 +74,9 @@ const emit = defineEmits(["update:modelValue"]);
 
 const schema = computed(() => {
   if (props.validationSchemaRef) {
-    return toFieldValidator(props.validationSchemaRef.value);
+    return toTypedSchema(props.validationSchemaRef.value);
   }
-  return toFieldValidator(props.validationSchema);
+  return toTypedSchema(props.validationSchema);
 });
 
 const {

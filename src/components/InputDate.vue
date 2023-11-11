@@ -19,7 +19,7 @@
 <script lang="ts" setup>
 import { Datepicker } from "vanillajs-datepicker";
 import { useField } from "vee-validate";
-import { toFieldValidator } from "@vee-validate/zod";
+import { toTypedSchema } from "@vee-validate/zod";
 import { computed, onMounted, ref, watch, type PropType, type Ref } from "vue";
 import { date, preprocess, type ZodType } from "zod";
 
@@ -68,11 +68,11 @@ const viewMounted = ref(false);
 const schema = computed(() => {
   if (viewMounted.value) {
     if (props.validationSchemaRef) {
-      return toFieldValidator(
+      return toTypedSchema(
         preprocess(() => datepicker.getDate(), props.validationSchemaRef.value),
       );
     }
-    return toFieldValidator(
+    return toTypedSchema(
       preprocess(() => datepicker.getDate(), props.validationSchema),
     );
   }
