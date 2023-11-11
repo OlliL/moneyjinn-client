@@ -38,14 +38,16 @@
                   />
                 </div>
               </div>
-              <div class="col-xs-12">
-                <SelectStandard
-                  v-model="user.role"
-                  :validation-schema="schema.userRole"
-                  :id="'groupUse' + idSuffix"
-                  :field-label="$t('User.role')"
-                  :select-box-values="userRoleValues"
-                />
+              <div class="row pt-2">
+                <div class="col-xs-12">
+                  <SelectStandard
+                    v-model="user.role"
+                    :validation-schema="schema.userRole"
+                    :id="'groupUse' + idSuffix"
+                    :field-label="$t('User.role')"
+                    :select-box-values="userRoleValues"
+                  />
+                </div>
               </div>
               <div class="row pt-2" v-if="editMode">
                 <div class="col-xs-12">
@@ -58,7 +60,6 @@
                   />
                 </div>
               </div>
-
               <div class="row pt-5">
                 <div class="col-xs-12">
                   <SelectStandard
@@ -144,11 +145,11 @@ import { globErr } from "@/tools/views/ZodUtil";
 import type { AccessRelation } from "@/model/user/AccessRelation";
 import type { Group } from "@/model/group/Group";
 import type { User } from "@/model/user/User";
+import { UserRole, userRoleValues } from "@/model/user/UserRole";
 import type { SelectBoxValue } from "@/model/SelectBoxValue";
 
 import GroupControllerHandler from "@/handler/GroupControllerHandler";
 import UserControllerHandler from "@/handler/UserControllerHandler";
-import { UserRole, userRoleNames, userRoleValues } from "@/model/user/UserRole";
 
 const { t } = useI18n();
 
