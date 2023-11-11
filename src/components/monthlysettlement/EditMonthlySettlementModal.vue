@@ -173,7 +173,7 @@ const loadMonthlySettlements = async (_year?: number, _month?: number) => {
 
   return MonthlySettlementControllerHandler.getMonthlySettlementForEdit(
     _year,
-    _month
+    _month,
   )
     .then((transporter: MonthlySettlementEditTransporter) => {
       const monthlySettlements = new Array<MonthlySettlementFormData>();
@@ -228,7 +228,7 @@ const upsertMonthlySettlement = handleSubmit(() => {
 
   let monthlySettlements = new Array<MonthlySettlementFormData>();
   monthlySettlements = monthlySettlementsCredit.value.concat(
-    monthlySettlementsNoCredit.value
+    monthlySettlementsNoCredit.value,
   );
 
   MonthlySettlementControllerHandler.upsertMonthlySettlement(monthlySettlements)
@@ -254,7 +254,7 @@ watch(
       loadMonthlySettlements(_year, _month);
     }
   },
-  { immediate: true }
+  { immediate: true },
 );
 
 defineExpose({ _show });

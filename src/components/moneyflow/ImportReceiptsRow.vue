@@ -204,7 +204,7 @@ const searchMoneyflows = handleSubmit(() => {
   MoneyflowControllerHandler.searchMoneyflowsByAmount(
     amount.value,
     startDate.value,
-    endDate.value
+    endDate.value,
   )
     .then((_moneyflows) => {
       moneyflows.value = _moneyflows;
@@ -257,7 +257,7 @@ const importReceipt = () => {
 
   ImportedMoneyflowReceiptControllerHandler.importImportedMoneyflowReceipt(
     props.receipt.id,
-    selectedMoneyflowId.value
+    selectedMoneyflowId.value,
   )
     .then(() => {
       emit("removeReceiptFromView", props.receipt.id);
@@ -271,7 +271,7 @@ const deleteReceipt = () => {
   serverErrors.value = new Array<string>();
 
   ImportedMoneyflowReceiptControllerHandler.deleteImportedMoneyflowReceiptById(
-    props.receipt.id
+    props.receipt.id,
   )
     .then(() => {
       emit("removeReceiptFromView", props.receipt.id);

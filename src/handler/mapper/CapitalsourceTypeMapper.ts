@@ -1,7 +1,7 @@
 import { CapitalsourceType } from "@/model/capitalsource/CapitalsourceType";
 
 export function mapCapitalsourceTypeTransportToEnum(
-  source: number
+  source: number,
 ): CapitalsourceType {
   switch (source) {
     case 1: {
@@ -24,7 +24,7 @@ export function mapCapitalsourceTypeTransportToEnum(
 }
 
 export function mapCapitalsourceTypeEnumToTransport(
-  source: CapitalsourceType
+  source: CapitalsourceType,
 ): number {
   switch (source) {
     case CapitalsourceType.CURRENT_ASSET: {

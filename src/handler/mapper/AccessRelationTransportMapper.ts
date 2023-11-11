@@ -3,7 +3,7 @@ import type { AccessRelation } from "@/model/user/AccessRelation";
 import { getISOStringDate } from "@/tools/views/FormatDate";
 
 export function mapAccessRelationTransportToModel(
-  transport: AccessRelationTransport
+  transport: AccessRelationTransport,
 ): AccessRelation {
   const model: AccessRelation = {
     id: transport.id,
@@ -17,7 +17,7 @@ export function mapAccessRelationTransportToModel(
 }
 
 export function mapAccessRelationToTransport(
-  model: AccessRelation
+  model: AccessRelation,
 ): AccessRelationTransport {
   const transport: AccessRelationTransport = {
     id: model.id,

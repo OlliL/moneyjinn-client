@@ -21,20 +21,20 @@ export const useCapitalsourceStore = defineStore("capitalsource", {
         (capitalsourceArray) => {
           this.capitalsource = capitalsourceArray;
           this.capitalsource.sort(this.compareCapitalsource);
-        }
+        },
       );
     },
     subscribeToWebsocket() {
       WebSocketHandler.getInstance().subscribe(
         "/topic/capitalsourceChanged",
-        this.subscribeCallback
+        this.subscribeCallback,
       );
     },
     subscribeCallback(body: string) {
       if (body) {
         const event: CapitalsourceChangedEventTransport = JSON.parse(body);
         const mcs = mapCapitalsourceTransportToModel(
-          event.capitalsourceTransport
+          event.capitalsourceTransport,
         );
 
         switch (event.eventType) {
@@ -44,14 +44,14 @@ export const useCapitalsourceStore = defineStore("capitalsource", {
           }
           case "UPDATE": {
             const pos = this.capitalsource.findIndex(
-              (entry) => entry.id === mcs.id
+              (entry) => entry.id === mcs.id,
             );
             if (pos !== undefined) this.capitalsource.splice(pos, 1, mcs);
             break;
           }
           case "DELETE": {
             this.capitalsource = this.capitalsource.filter(
-              (originalMcs) => mcs.id !== originalMcs.id
+              (originalMcs) => mcs.id !== originalMcs.id,
             );
             break;
           }
@@ -101,7 +101,7 @@ export const useCapitalsourceStore = defineStore("capitalsource", {
     },
     async searchCapitalsources(
       comment: String,
-      validNow?: boolean
+      validNow?: boolean,
     ): Promise<Array<Capitalsource>> {
       let mcs = this.capitalsource;
       if (validNow) {
@@ -116,7 +116,7 @@ export const useCapitalsourceStore = defineStore("capitalsource", {
 
       const commentUpper = comment.toUpperCase();
       return mcs.filter((entry) =>
-        entry.comment.toUpperCase().includes(commentUpper)
+        entry.comment.toUpperCase().includes(commentUpper),
       );
     },
     compareCapitalsource(a: Capitalsource, b: Capitalsource): number {

@@ -2,7 +2,7 @@ import type { EtfFlowTransport } from "@/api";
 import type { EtfFlow } from "@/model/etf/EtfFlow";
 
 export function mapEtfFlowTransportToModel(
-  transport: EtfFlowTransport
+  transport: EtfFlowTransport,
 ): EtfFlow {
   const model: EtfFlow = {
     amount: transport.amount,

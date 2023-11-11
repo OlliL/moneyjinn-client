@@ -77,7 +77,7 @@ const serverErrors = ref(new Array<string>());
 
 const schema: Partial<{ [key in keyof ContractpartnerAccount]: ZodType }> = {
   accountNumber: string(
-    globErr(t("ContractpartnerAccount.validation.accountNumber"))
+    globErr(t("ContractpartnerAccount.validation.accountNumber")),
   )
     .min(1)
     .max(22, t("ContractpartnerAccount.validation.accountNumberMax")),
@@ -126,7 +126,7 @@ const createContractpartnerAccount = handleSubmit(() => {
   if (mca.value.id > 0) {
     //update
     ContractpartnerAccountControllerHandler.updateContractpartnerAccount(
-      mca.value
+      mca.value,
     )
       .then(() => {
         modalComponent.value._hide();
@@ -138,7 +138,7 @@ const createContractpartnerAccount = handleSubmit(() => {
   } else {
     //create
     ContractpartnerAccountControllerHandler.createContractpartnerAccount(
-      mca.value
+      mca.value,
     )
       .then((_mca) => {
         mca.value = _mca;

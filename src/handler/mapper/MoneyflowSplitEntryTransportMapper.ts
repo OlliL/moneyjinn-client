@@ -2,7 +2,7 @@ import type { MoneyflowSplitEntryTransport } from "@/api";
 import type { MoneyflowSplitEntry } from "@/model/moneyflow/MoneyflowSplitEntry";
 
 export function mapMoneyflowSplitEntryTransportToModel(
-  transport: MoneyflowSplitEntryTransport
+  transport: MoneyflowSplitEntryTransport,
 ): MoneyflowSplitEntry {
   const model: MoneyflowSplitEntry = {
     id: transport.id,
@@ -16,7 +16,7 @@ export function mapMoneyflowSplitEntryTransportToModel(
 }
 
 export function mapMoneyflowSplitEntryToTransport(
-  model: MoneyflowSplitEntry
+  model: MoneyflowSplitEntry,
 ): MoneyflowSplitEntryTransport {
   const transport: MoneyflowSplitEntryTransport = {
     id: model.id,

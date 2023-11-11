@@ -16,7 +16,7 @@ export type PreDefMoneyflow = {
 
 export function preDefMoneyflowAlreadyUsedThisMonth(
   today: Date,
-  preDefMoeyflow: PreDefMoneyflow
+  preDefMoeyflow: PreDefMoneyflow,
 ) {
   const lastUsedDate = preDefMoeyflow.lastUsed;
   return (

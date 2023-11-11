@@ -3,7 +3,7 @@ import type { Contractpartner } from "@/model/contractpartner/Contractpartner";
 import { getISOStringDate } from "@/tools/views/FormatDate";
 
 export function mapContractpartnerTransportToModel(
-  transport: ContractpartnerTransport
+  transport: ContractpartnerTransport,
 ): Contractpartner {
   const model: Contractpartner = {
     id: transport.id,
@@ -25,7 +25,7 @@ export function mapContractpartnerTransportToModel(
 }
 
 export function mapContractpartnerToTransport(
-  model: Contractpartner
+  model: Contractpartner,
 ): ContractpartnerTransport {
   const transport: ContractpartnerTransport = {
     id: model.id,

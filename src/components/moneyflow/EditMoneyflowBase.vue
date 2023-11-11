@@ -212,17 +212,17 @@ const schema = {
   bookingDate: date(globErr(t("Moneyflow.validation.bookingDate"))),
   invoiceDate: date().optional(),
   contractpartnerId: number(
-    globErr(t("Moneyflow.validation.contractpartnerId"))
+    globErr(t("Moneyflow.validation.contractpartnerId")),
   ).gt(0),
   comment: computed(() =>
     showMoneyflowFields.value
       ? string(globErr(t("Moneyflow.validation.comment"))).min(1)
-      : string().optional()
+      : string().optional(),
   ),
   postingAccountId: computed(() =>
     showMoneyflowFields.value
       ? number(globErr(t("Moneyflow.validation.postingAccountId"))).gt(0)
-      : number().optional()
+      : number().optional(),
   ),
   capitalsourceId: number(globErr(t("General.validation.capitalsource"))).gt(0),
 };
@@ -273,21 +273,21 @@ watch(
   () => props.selectedPreDefMoneyflow,
   (newVal, oldVal) => {
     if (newVal !== oldVal) selectPreDefMoneyflow(newVal);
-  }
+  },
 );
 
 watch(
   () => props.mmfToEdit,
   (newVal, oldVal) => {
     if (newVal !== oldVal) resetForm();
-  }
+  },
 );
 
 watch(
   () => mmf.value.contractpartnerId,
   (newVal, oldVal) => {
     if (newVal !== oldVal) onContractpartnerSelected(newVal);
-  }
+  },
 );
 
 const formIsValid = computed(() => {
@@ -443,7 +443,7 @@ const onAddMoneyflowSplitEntryRow = () => {
 };
 const onMoneyflowSplitEntryRowAmountChanged = (
   index: number,
-  amount: number
+  amount: number,
 ) => {
   const mse = mmf.value.moneyflowSplitEntries;
   if (mse !== undefined) {
@@ -454,7 +454,7 @@ const onMoneyflowSplitEntryRowAmountChanged = (
 };
 const onMoneyflowSplitEntryRowCommentChanged = (
   index: number,
-  comment: string
+  comment: string,
 ) => {
   const mse = mmf.value.moneyflowSplitEntries;
   if (mse !== undefined) {
@@ -466,7 +466,7 @@ const onMoneyflowSplitEntryRowCommentChanged = (
 const onMoneyflowSplitEntryRowPostingAccountIdChanged = (
   index: number,
   postingAccountId: number,
-  postingAccountName: string
+  postingAccountName: string,
 ) => {
   const mse = mmf.value.moneyflowSplitEntries;
   if (mse !== undefined) {
@@ -553,7 +553,7 @@ const onContractpartnerSelected = (contractpartnerId: number) => {
 };
 
 const selectPreDefMoneyflow = (
-  preDefMoneyflow: PreDefMoneyflow | undefined
+  preDefMoneyflow: PreDefMoneyflow | undefined,
 ) => {
   if (preDefMoneyflow === undefined) {
     resetForm();
@@ -595,7 +595,7 @@ const prepareServerCall = (): boolean => {
     // remove empty rows
     if (mmf.value.moneyflowSplitEntries) {
       mmf.value.moneyflowSplitEntries = mmf.value.moneyflowSplitEntries.filter(
-        (mse) => mse.amount && mse.comment && mse.postingAccountId
+        (mse) => mse.amount && mse.comment && mse.postingAccountId,
       );
     }
     return true;
@@ -612,7 +612,7 @@ const followUpServerCall = () => {
 };
 
 const importImportedMoneyflow = async (
-  mim: ImportedMoneyflow
+  mim: ImportedMoneyflow,
 ): Promise<Boolean> => {
   if (prepareServerCall()) {
     const importedMoneyflow: ImportedMoneyflow = {
@@ -627,7 +627,7 @@ const importImportedMoneyflow = async (
     };
 
     return ImportedMoneyflowControllerHandler.importImportedMoneyflow(
-      importedMoneyflow
+      importedMoneyflow,
     )
       .then(() => {
         followUpServerCall();
@@ -655,7 +655,7 @@ const createMoneyflow = async (): Promise<boolean> => {
     return MoneyflowControllerHandler.createMoneyflow(
       mmf.value,
       preDefMoneyflowId.value,
-      saveAsPreDefMoneyflow.value
+      saveAsPreDefMoneyflow.value,
     )
       .then(() => {
         followUpServerCall();
@@ -684,14 +684,14 @@ const updateMoneyflow = async (): Promise<Moneyflow | undefined> => {
       }
     }
     const deleteMseIds = originalMoneyflowSplitEntryIds.value.filter(
-      (mseId) => !updateMseIds.includes(mseId)
+      (mseId) => !updateMseIds.includes(mseId),
     );
 
     return MoneyflowControllerHandler.updateMoneyflow(
       mmf.value,
       createMses,
       updateMses,
-      deleteMseIds
+      deleteMseIds,
     )
       .then((mmf) => {
         followUpServerCall();

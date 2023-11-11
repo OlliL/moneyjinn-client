@@ -12,7 +12,7 @@ class EventControllerHandler extends AbstractControllerHandler {
     this.api = new EventControllerApi(
       undefined,
       "",
-      AxiosInstanceHolder.getInstance().getAxiosInstance()
+      AxiosInstanceHolder.getInstance().getAxiosInstance(),
     );
   }
 

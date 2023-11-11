@@ -2,7 +2,7 @@ import type { ContractpartnerAccountTransport } from "@/api";
 import type { ContractpartnerAccount } from "@/model/contractpartneraccount/ContractpartnerAccount";
 
 export function mapContractpartnerAccountTransportToModel(
-  transport: ContractpartnerAccountTransport
+  transport: ContractpartnerAccountTransport,
 ): ContractpartnerAccount {
   const model: ContractpartnerAccount = {
     id: transport.id,
@@ -14,7 +14,7 @@ export function mapContractpartnerAccountTransportToModel(
 }
 
 export function mapContractpartnerAccountToTransport(
-  model: ContractpartnerAccount
+  model: ContractpartnerAccount,
 ): ContractpartnerAccountTransport {
   const transport: ContractpartnerAccountTransport = {
     id: model.id,

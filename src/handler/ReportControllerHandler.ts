@@ -31,7 +31,7 @@ class ReportControllerHandler extends AbstractControllerHandler {
     this.api = new ReportControllerApi(
       undefined,
       "",
-      AxiosInstanceHolder.getInstance().getAxiosInstance()
+      AxiosInstanceHolder.getInstance().getAxiosInstance(),
     );
   }
 
@@ -39,7 +39,7 @@ class ReportControllerHandler extends AbstractControllerHandler {
 
   async getAvailableMonth(
     year?: number,
-    month?: number
+    month?: number,
   ): Promise<AvailableMonth> {
     let response: AxiosResponse<GetAvailableReportMonthResponse>;
     if (year) {
@@ -87,7 +87,7 @@ class ReportControllerHandler extends AbstractControllerHandler {
         listReportsResponse.reportTurnoverCapitalsourceTransports?.map(
           (rtcp) => {
             return mapReportTurnoverCapitalsourceTransportToModel(rtcp);
-          }
+          },
         ),
       moneyflows: listReportsResponse.moneyflowTransports?.map((mmf) => {
         return mapMoneyflowTransportToModel(
@@ -95,7 +95,7 @@ class ReportControllerHandler extends AbstractControllerHandler {
           listReportsResponse.moneyflowsWithReceipt
             ? listReportsResponse.moneyflowsWithReceipt.includes(mmf.id)
             : false,
-          mseMap.get(mmf.id)
+          mseMap.get(mmf.id),
         );
       }),
     };
@@ -170,7 +170,7 @@ class ReportControllerHandler extends AbstractControllerHandler {
   }
 
   async showMonthlyReportGraph(
-    reportingParameter: ReportingParameter
+    reportingParameter: ReportingParameter,
   ): Promise<Array<ReportingMonthAmount>> {
     const request = {} as ShowMonthlyReportGraphRequest;
 
@@ -189,7 +189,7 @@ class ReportControllerHandler extends AbstractControllerHandler {
     if (showMonthlyReportGraphResponse.postingAccountAmountTransports) {
       const result: Array<ReportingMonthAmount> =
         showMonthlyReportGraphResponse.postingAccountAmountTransports.map(
-          (paat) => mapPostingAccountAmountTransportToModel(paat)
+          (paat) => mapPostingAccountAmountTransportToModel(paat),
         );
 
       return result;
@@ -198,7 +198,7 @@ class ReportControllerHandler extends AbstractControllerHandler {
   }
 
   async showYearlyReportGraph(
-    reportingParameter: ReportingParameter
+    reportingParameter: ReportingParameter,
   ): Promise<Array<ReportingMonthAmount>> {
     const request = {} as ShowYearlyReportGraphRequest;
 
@@ -217,7 +217,7 @@ class ReportControllerHandler extends AbstractControllerHandler {
     if (showYearlyReportGraphResponse.postingAccountAmountTransports) {
       const result: Array<ReportingMonthAmount> =
         showYearlyReportGraphResponse.postingAccountAmountTransports.map(
-          (paat) => mapPostingAccountAmountTransportToModel(paat)
+          (paat) => mapPostingAccountAmountTransportToModel(paat),
         );
 
       return result;

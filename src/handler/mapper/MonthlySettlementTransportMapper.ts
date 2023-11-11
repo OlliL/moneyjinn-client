@@ -6,7 +6,7 @@ import {
 } from "./CapitalsourceTypeMapper";
 
 export function mapMonthlySettlementTransportToModel(
-  transport: MonthlySettlementTransport
+  transport: MonthlySettlementTransport,
 ): MonthlySettlement {
   const model: MonthlySettlement = {
     id: transport.id,
@@ -25,7 +25,7 @@ export function mapMonthlySettlementTransportToModel(
 }
 
 export function mapMonthlySettlementToTransport(
-  model: MonthlySettlement
+  model: MonthlySettlement,
 ): MonthlySettlementTransport {
   const transport: MonthlySettlementTransport = {
     id: model.id,

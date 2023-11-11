@@ -16,7 +16,7 @@ export const useUserSessionStore = defineStore("userSession", {
       userIsAdmin: false,
       userCanLogin: false,
       userIsNew: true,
-    } as UserSession),
+    }) as UserSession,
   getters: {
     getUserId(): number {
       return this.userId;

@@ -240,7 +240,7 @@ ChartJS.register(
   Title,
   Tooltip,
   Legend,
-  Filler
+  Filler,
 );
 
 type ChartDataDataset = {
@@ -269,14 +269,14 @@ const {
 } = useField<Array<number>>(
   "postingAccountIdsYes",
   toFieldValidator(schema.capitalsourceIds),
-  { initialValue: new Array<number>(), syncVModel: true }
+  { initialValue: new Array<number>(), syncVModel: true },
 );
 
 const errorCapitalsourceIds = computed((): ErrorData => {
   return generateErrorDataVeeValidate(
     capitalsourceIdsMeta.touched,
     t("General.capitalsources"),
-    errorMessage.value
+    errorMessage.value,
   );
 });
 
@@ -330,17 +330,17 @@ const showTrends = handleSubmit(() => {
   ReportControllerHandler.showTrendsGraph(trendsParameter)
     .then((trends) => {
       if (trends && trends.trendsSettled && trends.trendsSettled.length > 0) {
-        const labelsSettled: Array<string> = trends.trendsSettled.map(function (
-          e
-        ) {
-          return getXLabel(e.month, e.year);
-        });
+        const labelsSettled: Array<string> = trends.trendsSettled.map(
+          function (e) {
+            return getXLabel(e.month, e.year);
+          },
+        );
 
-        const dataSettled: Array<number> = trends.trendsSettled.map(function (
-          e
-        ) {
-          return e.amount;
-        });
+        const dataSettled: Array<number> = trends.trendsSettled.map(
+          function (e) {
+            return e.amount;
+          },
+        );
 
         chartData.value.labels = labelsSettled;
         chartData.value.datasets[0].data = dataSettled;
@@ -349,7 +349,7 @@ const showTrends = handleSubmit(() => {
           const labelsCalculated: Array<string> = trends.trendsCalculated.map(
             function (e) {
               return getXLabel(e.month, e.year);
-            }
+            },
           );
 
           const dataCalculated = new Array<number | null>();

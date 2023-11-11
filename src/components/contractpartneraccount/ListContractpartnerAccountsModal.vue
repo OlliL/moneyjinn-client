@@ -79,7 +79,7 @@ const deleteModal = ref();
 const loadData = () => {
   dataLoaded.value = false;
   ContractpartnerAccountControllerHandler.fetchAllContractpartnerAccount(
-    mcp.value.id
+    mcp.value.id,
   )
     .then((mcaArray: Array<ContractpartnerAccount>) => {
       contractpartnerAccount.value = mcaArray;

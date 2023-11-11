@@ -7,7 +7,7 @@ export type ErrorData = {
 export function generateErrorData(
   isValid: boolean | null,
   validLabel: string,
-  errorLabel: string
+  errorLabel: string,
 ): ErrorData {
   const errorData = {} as ErrorData;
   if (isValid == null || isValid) {
@@ -25,11 +25,11 @@ export function generateErrorData(
 export function generateErrorDataVeeValidate(
   validatedFlag: boolean,
   validLabel: string,
-  errorLabel: string | undefined
+  errorLabel: string | undefined,
 ): ErrorData {
   return generateErrorData(
     validatedFlag === false ? null : errorLabel === undefined,
     validLabel,
-    errorLabel || ""
+    errorLabel || "",
   );
 }

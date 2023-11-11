@@ -90,7 +90,7 @@ watch(
       capitalsourceId.value = newVal ? newVal : 0;
     }
   },
-  { immediate: true }
+  { immediate: true },
 );
 
 watch(capitalsourceId, (newVal, oldVal) => {

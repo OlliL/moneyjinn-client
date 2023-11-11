@@ -95,7 +95,7 @@ watch(
       contractpartnerId.value = newVal ? newVal : 0;
     }
   },
-  { immediate: true }
+  { immediate: true },
 );
 
 watch(contractpartnerId, (newVal, oldVal) => {

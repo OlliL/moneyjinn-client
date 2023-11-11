@@ -16,7 +16,7 @@ class CapitalsourceControllerHandler extends AbstractControllerHandler {
     this.api = new CrudCapitalsourceControllerApi(
       undefined,
       "",
-      AxiosInstanceHolder.getInstance().getAxiosInstance()
+      AxiosInstanceHolder.getInstance().getAxiosInstance(),
     );
   }
 

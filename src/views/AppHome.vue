@@ -99,7 +99,7 @@ const loadData = () => {
 const showEditMonthlySettlementModal = () => {
   editModal.value._show(
     monthlySettlementYear.value,
-    monthlySettlementMonth.value
+    monthlySettlementMonth.value,
   );
 };
 const monthlySettlementUpserted = () => {

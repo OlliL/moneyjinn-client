@@ -125,7 +125,7 @@ const searchContent = () => {
 
   const commentUpper = searchString.value.toUpperCase();
   groups.value = allGroups.value.filter((entry) =>
-    entry.name.toUpperCase().includes(commentUpper)
+    entry.name.toUpperCase().includes(commentUpper),
   );
 };
 

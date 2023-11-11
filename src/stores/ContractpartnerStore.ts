@@ -17,20 +17,20 @@ export const useContractpartnerStore = defineStore("contractpartner", {
         (contractpartnerArray) => {
           this.contractpartner = contractpartnerArray;
           this.contractpartner.sort(this.compareContractpartnerByName);
-        }
+        },
       );
     },
     subscribeToWebsocket() {
       WebSocketHandler.getInstance().subscribe(
         "/topic/contractpartnerChanged",
-        this.subscribeCallback
+        this.subscribeCallback,
       );
     },
     subscribeCallback(body: string) {
       if (body) {
         const event: ContractpartnerChangedEventTransport = JSON.parse(body);
         const mcp = mapContractpartnerTransportToModel(
-          event.contractpartnerTransport
+          event.contractpartnerTransport,
         );
 
         switch (event.eventType) {
@@ -40,14 +40,14 @@ export const useContractpartnerStore = defineStore("contractpartner", {
           }
           case "UPDATE": {
             const pos = this.contractpartner.findIndex(
-              (entry) => entry.id === mcp.id
+              (entry) => entry.id === mcp.id,
             );
             if (pos !== undefined) this.contractpartner.splice(pos, 1, mcp);
             break;
           }
           case "DELETE": {
             this.contractpartner = this.contractpartner.filter(
-              (originalMcp) => mcp.id !== originalMcp.id
+              (originalMcp) => mcp.id !== originalMcp.id,
             );
             break;
           }
@@ -74,7 +74,7 @@ export const useContractpartnerStore = defineStore("contractpartner", {
     },
     async searchContractpartners(
       comment: String,
-      validNow?: boolean
+      validNow?: boolean,
     ): Promise<Array<Contractpartner>> {
       let mcp = this.contractpartner;
       if (validNow) {
@@ -89,7 +89,7 @@ export const useContractpartnerStore = defineStore("contractpartner", {
 
       const commentUpper = comment.toUpperCase();
       return mcp.filter((entry) =>
-        entry.name.toUpperCase().includes(commentUpper)
+        entry.name.toUpperCase().includes(commentUpper),
       );
     },
     getContractpartner(id: number): Contractpartner | undefined {
@@ -97,7 +97,7 @@ export const useContractpartnerStore = defineStore("contractpartner", {
     },
     compareContractpartnerByName(
       a: Contractpartner,
-      b: Contractpartner
+      b: Contractpartner,
     ): number {
       const al = a.name.toLowerCase();
       const bl = b.name.toLowerCase();

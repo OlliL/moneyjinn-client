@@ -175,7 +175,7 @@ const schema = {
   compareDataFormat: computed(() => {
     if (!sourceIsImport.value) {
       return number(globErr(t("CompareData.validation.compareDataFormat"))).gt(
-        0
+        0,
       );
     } else {
       return any().optional();
@@ -201,7 +201,7 @@ const compareDataFormat = ref(0);
 const compareDataFormats = ref(new Array<SelectBoxValue>());
 const compareDatasMatching = ref({} as Array<CompareData> | undefined);
 const compareDatasWrongCapitalsource = ref(
-  {} as Array<CompareData> | undefined
+  {} as Array<CompareData> | undefined,
 );
 const compareDatasNotInFile = ref({} as Array<CompareData> | undefined);
 const compareDatasNotInDatabase = ref({} as Array<CompareData> | undefined);
@@ -277,7 +277,7 @@ const loadData = () => {
       if (capitalsourceId.value) {
         const capitalsourceStore = useCapitalsourceStore();
         const capitalsource = capitalsourceStore.getCapitalsource(
-          capitalsourceId.value
+          capitalsourceId.value,
         );
         if (capitalsource) {
           capitalsourceComment.value = capitalsource.comment;

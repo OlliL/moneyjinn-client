@@ -132,11 +132,11 @@ const serverErrors = ref(new Array<string>());
 const schema: Partial<{ [key in keyof PreDefMoneyflow]: ZodType }> = {
   amount: amountSchema(t("Moneyflow.validation.amount")),
   contractpartnerId: number(
-    globErr(t("Moneyflow.validation.contractpartnerId"))
+    globErr(t("Moneyflow.validation.contractpartnerId")),
   ).gt(0),
   comment: string(globErr(t("Moneyflow.validation.comment"))).min(1),
   postingAccountId: number(
-    globErr(t("Moneyflow.validation.postingAccountId"))
+    globErr(t("Moneyflow.validation.postingAccountId")),
   ).gt(0),
   capitalsourceId: number(globErr(t("General.validation.capitalsource"))).gt(0),
   onceAMonth: boolean(globErr(t("PreDefMoneyflow.validation.onceAMonth"))),

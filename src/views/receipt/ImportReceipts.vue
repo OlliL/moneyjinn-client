@@ -100,7 +100,7 @@ const removeReceiptFromView = (id: number) => {
   importedMoneyflowReceipts.value = importedMoneyflowReceipts.value.filter(
     (receipt) => {
       return receipt.id !== id;
-    }
+    },
   );
 };
 
@@ -127,7 +127,7 @@ const uploadReceipts = handleSubmit(async () => {
   }
   if (receipts.length > 0) {
     ImportedMoneyflowReceiptControllerHandler.createImportedMoneyflowReceipts(
-      receipts
+      receipts,
     )
       .then(() => {
         loadData();

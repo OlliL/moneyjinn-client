@@ -301,7 +301,7 @@ const schema = {
 
     return any().refine(
       () => contractpartnerId.value || postingAccountId.value || comment.value,
-      t("Moneyflow.validation.oneSearchCriteria")
+      t("Moneyflow.validation.oneSearchCriteria"),
     );
   }),
 };
@@ -385,24 +385,24 @@ const searchMoneyflows = handleSubmit(() => {
             case ORDER_GROUP: {
               moneyflowGroups.value = new Map(
                 [...moneyflowGroups.value.entries()].sort((a, b) =>
-                  a[1].sortString.localeCompare(b[1].sortString)
-                )
+                  a[1].sortString.localeCompare(b[1].sortString),
+                ),
               );
               break;
             }
             case ORDER_COMMENT: {
               moneyflowGroups.value = new Map(
                 [...moneyflowGroups.value.entries()].sort((a, b) =>
-                  a[1].commentString.localeCompare(b[1].commentString)
-                )
+                  a[1].commentString.localeCompare(b[1].commentString),
+                ),
               );
               break;
             }
             case ORDER_AMOUNT: {
               moneyflowGroups.value = new Map(
                 [...moneyflowGroups.value.entries()].sort(
-                  (a, b) => a[1].amount - b[1].amount
-                )
+                  (a, b) => a[1].amount - b[1].amount,
+                ),
               );
               break;
             }
@@ -419,7 +419,7 @@ const searchMoneyflows = handleSubmit(() => {
 
 const makeCommentString = () => {
   moneyflowGroups.value.forEach(
-    (value) => (value.commentString = Array.from(value.comment).join(", "))
+    (value) => (value.commentString = Array.from(value.comment).join(", ")),
   );
 };
 
@@ -433,7 +433,7 @@ const groupBy = (moneyflows: Array<Moneyflow>) => {
     }
     moneyflowGroup.amount = toFixed(
       moneyflowGroup.amount + moneyflow.amount,
-      2
+      2,
     );
     moneyflowGroup.comment.add(moneyflow.comment);
     moneyflowGroup.moneyflows.push(moneyflow);
@@ -442,7 +442,7 @@ const groupBy = (moneyflows: Array<Moneyflow>) => {
 
 const initializeMoneyflowGroup = (
   groupByKey: string,
-  moneyflow: Moneyflow
+  moneyflow: Moneyflow,
 ): MoneyflowGroup => {
   const moneyflowGroup = {
     sortString: getSortString(moneyflow),
@@ -455,14 +455,14 @@ const initializeMoneyflowGroup = (
     switch (groupBy) {
       case GROUP_CONTRACTPARTNER: {
         moneyflowGroup.contractpartnerName = String(
-          moneyflow["contractpartnerName"]
+          moneyflow["contractpartnerName"],
         );
         break;
       }
       case GROUP_MONTH: {
         moneyflowGroup.month = moneyflow["bookingDate"].getMonth() + 1;
         moneyflowGroup.monthString = getMonthName(
-          moneyflow["bookingDate"].getMonth() + 1
+          moneyflow["bookingDate"].getMonth() + 1,
         );
         break;
       }

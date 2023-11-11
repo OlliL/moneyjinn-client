@@ -29,7 +29,7 @@ export class AxiosInstanceHolder {
       });
 
       const requestRefresh: TokenRefreshRequest = async (
-        refreshToken: Token
+        refreshToken: Token,
       ) => {
         return AxiosInstanceHolder.instance
           .refreshAuthToken(refreshToken)
@@ -52,8 +52,8 @@ export class AxiosInstanceHolder {
               new BackendError(
                 BackendErrorType.ERROR,
                 undefined,
-                "Technischer Fehler"
-              )
+                "Technischer Fehler",
+              ),
             );
           }
 
@@ -62,15 +62,15 @@ export class AxiosInstanceHolder {
             return Promise.reject(
               new BackendError(
                 BackendErrorType.CLIENT_ERROR,
-                errorResponse.code
-              )
+                errorResponse.code,
+              ),
             );
           } else if (error.response.status === 403) {
             return Promise.reject(
               new BackendError(
                 BackendErrorType.AUTH_ERROR,
-                ErrorCode.USERNAME_PASSWORD_WRONG.valueOf()
-              )
+                ErrorCode.USERNAME_PASSWORD_WRONG.valueOf(),
+              ),
             );
           } else if (error.response.status === 422) {
             const validationResponse: ValidationResponse = error.response.data;
@@ -87,8 +87,8 @@ export class AxiosInstanceHolder {
                 BackendErrorType.VALIDATION_ERROR,
                 undefined,
                 undefined,
-                validationResult
-              )
+                validationResult,
+              ),
             );
           }
           return Promise.reject(
@@ -98,10 +98,10 @@ export class AxiosInstanceHolder {
               "Technischer Fehler: (" +
                 error.response.status +
                 ") " +
-                error.response.statusText
-            )
+                error.response.statusText,
+            ),
           );
-        }
+        },
       );
     }
     return AxiosInstanceHolder.instance;
@@ -121,7 +121,7 @@ export class AxiosInstanceHolder {
         method: "get",
         headers: headers,
         credentials: "include",
-      }
+      },
     );
 
     const response = await fetch(requestInfo);

@@ -3,7 +3,7 @@ import type { PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
 import { getISOStringDate } from "@/tools/views/FormatDate";
 
 export function mapPreDefMoneyflowTransportToModel(
-  transport: PreDefMoneyflowTransport
+  transport: PreDefMoneyflowTransport,
 ): PreDefMoneyflow {
   const model: PreDefMoneyflow = {
     id: transport.id,
@@ -28,7 +28,7 @@ export function mapPreDefMoneyflowTransportToModel(
 }
 
 export function mapPreDefMoneyflowToTransport(
-  model: PreDefMoneyflow
+  model: PreDefMoneyflow,
 ): PreDefMoneyflowTransport {
   const transport: PreDefMoneyflowTransport = {
     id: model.id,

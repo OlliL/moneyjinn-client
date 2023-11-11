@@ -134,7 +134,7 @@ const searchContent = () => {
   preDefMoneyflows.value = allPreDefMoneyflows.value.filter((entry) =>
     entry.contractpartnerName
       ? entry.contractpartnerName.toUpperCase().includes(commentUpper)
-      : true
+      : true,
   );
 };
 

@@ -114,15 +114,15 @@ const schema: Partial<{ [key in keyof EtfFlow]: ZodType }> = {
   isin: string(globErr(t("ETF.validation.isin"))),
   timestamp: date(globErr(t("ETF.validation.timestamp"))),
   nanoseconds: string(globErr(t("ETF.validation.nanoseconds"))).regex(
-    new RegExp("^[0-9][0-9]:[0-9][0-9]:[0-9][0-9]:[0-9]{3}$")
+    new RegExp("^[0-9][0-9]:[0-9][0-9]:[0-9][0-9]:[0-9]{3}$"),
   ),
   amount: union(
     [coerce.number(amountErrMsg).gt(0), coerce.number(amountErrMsg).lt(0)],
-    amountErrMsg
+    amountErrMsg,
   ),
   price: union(
     [coerce.number(priceErrMsg).gt(0), coerce.number(priceErrMsg).lt(0)],
-    priceErrMsg
+    priceErrMsg,
   ),
 };
 

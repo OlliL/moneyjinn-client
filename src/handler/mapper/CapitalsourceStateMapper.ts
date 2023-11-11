@@ -1,7 +1,7 @@
 import { CapitalsourceState } from "@/model/capitalsource/CapitalsourceState";
 
 export function mapCapitalsourceStateTransportToEnum(
-  source: number
+  source: number,
 ): CapitalsourceState {
   switch (source) {
     case 1: {
@@ -15,7 +15,7 @@ export function mapCapitalsourceStateTransportToEnum(
 }
 
 export function mapCapitalsourceStateEnumToTransport(
-  source: CapitalsourceState
+  source: CapitalsourceState,
 ): number {
   switch (source) {
     case CapitalsourceState.NON_CACHE: {

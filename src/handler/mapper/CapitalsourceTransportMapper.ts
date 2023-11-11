@@ -15,7 +15,7 @@ import {
 } from "./CapitalsourceTypeMapper";
 
 export function mapCapitalsourceTransportToModel(
-  transport: CapitalsourceTransport
+  transport: CapitalsourceTransport,
 ): Capitalsource {
   const model: Capitalsource = {
     id: transport.id,
@@ -29,7 +29,7 @@ export function mapCapitalsourceTransportToModel(
     validTil: new Date(transport.validTil),
     groupUse: transport.groupUse === 1 ? true : false,
     importAllowed: mapCapitalsourceImportTransportToEnum(
-      transport.importAllowed
+      transport.importAllowed,
     ),
   };
   model.validFrom.setHours(0, 0, 0, 0);
@@ -39,7 +39,7 @@ export function mapCapitalsourceTransportToModel(
 }
 
 export function mapCapitalsourceToTransport(
-  model: Capitalsource
+  model: Capitalsource,
 ): CapitalsourceTransport {
   const transport: CapitalsourceTransport = {
     id: model.id,

@@ -16,12 +16,12 @@ class ContractpartnerAccountControllerHandler extends AbstractControllerHandler 
     this.api = new CrudContractpartnerAccountControllerApi(
       undefined,
       "",
-      AxiosInstanceHolder.getInstance().getAxiosInstance()
+      AxiosInstanceHolder.getInstance().getAxiosInstance(),
     );
   }
 
   async fetchAllContractpartnerAccount(
-    contractpartnerId: number
+    contractpartnerId: number,
   ): Promise<Array<ContractpartnerAccount>> {
     const response = await this.api.readAll(contractpartnerId);
 
@@ -29,7 +29,7 @@ class ContractpartnerAccountControllerHandler extends AbstractControllerHandler 
 
     response.data?.forEach((value) => {
       contractpartnerAccountArray.push(
-        mapContractpartnerAccountTransportToModel(value)
+        mapContractpartnerAccountTransportToModel(value),
       );
     });
 
@@ -37,11 +37,11 @@ class ContractpartnerAccountControllerHandler extends AbstractControllerHandler 
   }
 
   async createContractpartnerAccount(
-    mca: ContractpartnerAccount
+    mca: ContractpartnerAccount,
   ): Promise<ContractpartnerAccount> {
     const response = await this.api.create(
       mapContractpartnerAccountToTransport(mca),
-      [this.RET_REPRESENTATION]
+      [this.RET_REPRESENTATION],
     );
 
     return mapContractpartnerAccountTransportToModel(response.data);

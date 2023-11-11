@@ -144,7 +144,7 @@ const searchContent = () => {
   searchContractpartners(searchString.value, validNow.value).then(
     (_contractpartners) => {
       contractpartners.value = _contractpartners;
-    }
+    },
   );
 };
 

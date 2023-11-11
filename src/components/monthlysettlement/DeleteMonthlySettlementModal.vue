@@ -58,7 +58,7 @@ const deleteMonthlySettlement = () => {
 
   MonthlySettlementControllerHandler.deleteMonthlySettlement(
     year.value,
-    month.value
+    month.value,
   )
     .then(() => {
       modalComponent.value._hide();

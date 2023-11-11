@@ -20,7 +20,7 @@ class ImportedMoneyflowControllerHandler extends AbstractControllerHandler {
     this.api = new ImportedMoneyflowControllerApi(
       undefined,
       "",
-      AxiosInstanceHolder.getInstance().getAxiosInstance()
+      AxiosInstanceHolder.getInstance().getAxiosInstance(),
     );
   }
 
