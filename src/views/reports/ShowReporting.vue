@@ -226,7 +226,7 @@ import {
   CategoryScale,
   LinearScale,
 } from "chart.js";
-import { toFieldValidator } from "@vee-validate/zod";
+import { toTypedSchema } from "@vee-validate/zod";
 import { useField, useForm } from "vee-validate";
 import { computed, onMounted, ref } from "vue";
 import { Bar } from "vue-chartjs";
@@ -346,8 +346,8 @@ const schema = {
 
 const postingAccountIdsYesSchema = computed(() =>
   singlePostingAccounts.value
-    ? toFieldValidator(optionalSchema)
-    : toFieldValidator(
+    ? toTypedSchema(optionalSchema)
+    : toTypedSchema(
         object({ id: number() })
           .array()
           .min(1, t("Moneyflow.validation.postingAccountId")),
