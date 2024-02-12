@@ -313,8 +313,8 @@ const chartOptions = ref({
   scales: {
     y: {
       ticks: {
-        callback: function (value: number) {
-          return formatNumber(value, 0) + "€";
+        callback: function (value: any) {
+          return formatNumber(+value, 0) + "€";
         },
       },
     },

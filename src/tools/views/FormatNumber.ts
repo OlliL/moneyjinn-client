@@ -16,8 +16,10 @@ export function formatNumber(num: number, decimalPlaces: number): string {
     );
 
     if (decimalPlace === -1) {
-      // 7   --> 7,00
-      fixedNumStr += "," + "0".repeat(decimalPlaces);
+      if (decimalPlaces > 0) {
+        // 7   --> 7,00
+        fixedNumStr += "," + "0".repeat(decimalPlaces);
+      }
     } else if (fillUpZeroes > 0) {
       // 7,5 --> 7,50
       fixedNumStr += "0".repeat(fillUpZeroes);
