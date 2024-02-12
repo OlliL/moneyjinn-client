@@ -224,8 +224,9 @@ const chartOptions = ref({
         display: true,
       },
       ticks: {
-        callback: function (value: number) {
-          return formatNumber(value, 0) + "€";
+        callback: function (value: any) {
+          console.log("----->" + value);
+          return formatNumber(+value, 0) + "€";
         },
       },
     },
