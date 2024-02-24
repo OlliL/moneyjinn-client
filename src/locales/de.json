@@ -79,7 +79,12 @@
             "type": "Bitte Typ angeben!",
             "state": "Bitte Status angeben!",
             "groupUse": "Bitte Gruppennutzung auswählen!",
-            "importAllowed": "Bitte Importart auswählen!"
+            "importAllowed": "Bitte Importart auswählen!",
+            "length": {
+                "comment": "Der Name ist zu lang!",
+                "accountNumber": "Die IBAN ist zu lang!",
+                "bankCode": "Die BIC ist zu lang!"
+            }
         }
     },
     "Contractpartner": {
@@ -97,7 +102,14 @@
         },
         "validation": {
             "name": "Bitte Name angeben!",
-            "postcode": "Postleitzahl muss nummerisch sein"
+            "postcode": "Postleitzahl muss nummerisch sein",
+            "length": {
+                "name": "Der Name ist zu lang!",
+                "street": "Die Straße ist zu lang!",
+                "moneyflowComment": "Der Kommentar ist zu lang!",
+                "town": "Die Stadt ist zu lang!",
+                "country": "Das Land ist zu lang!"
+            }
         }
     },
     "ContractpartnerAccount": {
@@ -236,7 +248,10 @@
             "comment": "Bitte Kommentar angeben!",
             "postingAccountId": "Bitte Buchungskonto angeben!",
             "remainder": "Rest muss 0 sein!",
-            "oneSearchCriteria": "Bitte mindestens 1 Suchkriterium angeben!"
+            "oneSearchCriteria": "Bitte mindestens 1 Suchkriterium angeben!",
+            "length": {
+                "comment": "Der Kommentar ist zu lang!"
+            }
         }
     },
     "MonthlySettlement": {
@@ -259,7 +274,10 @@
             "delete": "Buchungskonto löschen"
         },
         "validation": {
-            "name": "Bitte Name angeben!"
+            "name": "Bitte Name angeben!",
+            "length": {
+                "name": "Der Name ist zu lang!"
+            }
         }
     },
     "PreDefMoneyflow": {
@@ -336,13 +354,16 @@
         "passwordVerify": "Passwort wiederholen",
         "searchBy": "Suchen nach Name...",
         "validation": {
-            "name": "Bitte Name angeben!",
+            "userName": "Bitte Name angeben!",
             "groupId": "Bitte Benutzergruppe auswählen!",
             "userIsNew": "Bitte auswählen ob neu",
             "userRole": "Bitte Benutzerrolle auswählen!",
             "passwordNotEqual": "Die Passwörter stimmen nicht überein!",
             "password": "Bitte Passwort angeben!",
-            "passwordOld": "Bitte altes Passwort angeben!"
+            "passwordOld": "Bitte altes Passwort angeben!",
+            "length": {
+                "userName": "Name ist zu lang!"
+            }
         }
     },
     "ErrorMessage": {

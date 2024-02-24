@@ -79,7 +79,12 @@
             "type": "Please specify a type!",
             "state": "Please specify a state!",
             "groupUse": "Please select a value for group usage!",
-            "importAllowed": "Please select what kind of data import is allowed!"
+            "importAllowed": "Please select what kind of data import is allowed!",
+            "length": {
+                "comment": "Name is too long!",
+                "accountNumber": "IBAN is too long!",
+                "bankCode": "BIC is too long!"
+            }
         }
     },
     "Contractpartner": {
@@ -97,7 +102,14 @@
         },
         "validation": {
             "name": "Please specify a name!",
-            "postcode": "Postcode must be a number!"
+            "postcode": "Postcode must be a number!",
+            "length": {
+                "name": "Name is too long!",
+                "street": "Street is too long!",
+                "moneyflowComment": "Comment is too long!",
+                "town": "Town is too long!",
+                "country": "Country is too long!"
+            }
         }
     },
     "ContractpartnerAccount": {
@@ -236,7 +248,10 @@
             "comment": "Please specify a comment!",
             "postingAccountId": "Please specify a posting account!",
             "remainder": "remainder must be 0!",
-            "oneSearchCriteria": "At least 1 search criteria must be specified!"
+            "oneSearchCriteria": "At least 1 search criteria must be specified!",
+            "length": {
+                "comment": "Comment is too long!"
+            }
         }
     },
     "MonthlySettlement": {
@@ -259,7 +274,10 @@
             "delete": "delete postingaccount"
         },
         "validation": {
-            "name": "Please specify a name!"
+            "name": "Please specify a name!",
+            "length": {
+                "name": "Name is too long!"
+            }
         }
     },
     "PreDefMoneyflow": {
@@ -331,19 +349,21 @@
         "inactive": "locked user",
         "standard": "standard user",
         "import": "HBCI interface",
-        "canLogin": "login allowed",
         "oldPassword": "current password",
         "newPassword": "new password",
         "passwordVerify": "repeat password",
         "searchBy": "search by name...",
         "validation": {
-            "name": "Please specify a name!",
+            "userName": "Please specify a name!",
             "groupId": "Please select a group!",
             "userIsNew": "Please select if new!",
             "userRole": "Please select a userrole!",
             "passwordNotEqual": "Both passwords do not match!",
             "password": "Please specify a passowrd!",
-            "passwordOld": "Please specify the old password!"
+            "passwordOld": "Please specify the old password!",
+            "length": {
+                "userName": "Name is too long!"
+            }
         }
     },
     "ErrorMessage": {

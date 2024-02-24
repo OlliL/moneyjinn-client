@@ -136,7 +136,7 @@ const schema: Partial<{ [key in keyof PreDefMoneyflow]: ZodType }> = {
   ).gt(0),
   comment: string(globErr(t("Moneyflow.validation.comment")))
     .min(1)
-    .max(100),
+    .max(100, t("Moneyflow.validation.length.comment")),
   postingAccountId: number(
     globErr(t("Moneyflow.validation.postingAccountId")),
   ).gt(0),
