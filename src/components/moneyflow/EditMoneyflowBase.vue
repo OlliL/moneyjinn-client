@@ -216,7 +216,9 @@ const schema = {
   ).gt(0),
   comment: computed(() =>
     showMoneyflowFields.value
-      ? string(globErr(t("Moneyflow.validation.comment"))).min(1)
+      ? string(globErr(t("Moneyflow.validation.comment")))
+          .min(1)
+          .max(100)
       : string().optional(),
   ),
   postingAccountId: computed(() =>

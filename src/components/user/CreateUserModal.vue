@@ -167,7 +167,9 @@ type UserGroup = AccessRelation & {
 const serverErrors = ref(new Array<string>());
 
 const schema = {
-  userName: string(globErr(t("User.validation.name"))).min(1),
+  userName: string(globErr(t("User.validation.name")))
+    .min(1)
+    .max(20),
   groupId: number(globErr(t("User.validation.groupId"))).gt(0),
   validFrom: date(globErr(t("General.validation.validFrom"))),
   userIsNew: boolean(globErr(t("User.validation.userIsNew"))),

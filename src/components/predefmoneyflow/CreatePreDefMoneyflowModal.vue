@@ -134,7 +134,9 @@ const schema: Partial<{ [key in keyof PreDefMoneyflow]: ZodType }> = {
   contractpartnerId: number(
     globErr(t("Moneyflow.validation.contractpartnerId")),
   ).gt(0),
-  comment: string(globErr(t("Moneyflow.validation.comment"))).min(1),
+  comment: string(globErr(t("Moneyflow.validation.comment")))
+    .min(1)
+    .max(100),
   postingAccountId: number(
     globErr(t("Moneyflow.validation.postingAccountId")),
   ).gt(0),

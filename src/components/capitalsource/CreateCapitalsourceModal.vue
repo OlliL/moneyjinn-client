@@ -154,13 +154,15 @@ defineProps({
 const serverErrors = ref(new Array<string>());
 
 const schema: Partial<{ [key in keyof Capitalsource]: ZodType }> = {
-  comment: string(globErr(t("Capitalsource.validation.comment"))).min(1),
+  comment: string(globErr(t("Capitalsource.validation.comment")))
+    .min(1)
+    .max(255),
   type: number(globErr(t("Capitalsource.validation.type"))).min(1),
   state: number(globErr(t("Capitalsource.validation.state")))
     .min(1)
     .max(2),
-  accountNumber: string().optional(),
-  bankCode: string().optional(),
+  accountNumber: string().max(34).optional(),
+  bankCode: string().max(11).optional(),
   validFrom: date(globErr(t("General.validation.validFrom"))),
   validTil: date(globErr(t("General.validation.validTil"))),
   groupUse: boolean(globErr(t("Capitalsource.validation.groupUse"))),
