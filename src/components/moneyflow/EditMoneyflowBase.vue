@@ -326,7 +326,7 @@ const mseRemainder = computed(() => {
 });
 
 const resetForm = () => {
-  if (props.mmfToEdit && props.mmfToEdit.bookingDate) {
+  if (props.mmfToEdit?.bookingDate) {
     Object.assign(mmf.value, props.mmfToEdit);
 
     amount.value = mmf.value.amount;
@@ -559,18 +559,16 @@ const selectPreDefMoneyflow = (
 ) => {
   if (preDefMoneyflow === undefined) {
     resetForm();
-  } else {
-    if (preDefMoneyflow) {
-      amount.value = preDefMoneyflow.amount;
-      mmf.value.contractpartnerId = preDefMoneyflow.contractpartnerId;
-      mmf.value.comment = preDefMoneyflow.comment;
-      mmf.value.postingAccountId = preDefMoneyflow.postingAccountId;
-      mmf.value.capitalsourceId = preDefMoneyflow.capitalsourceId;
+  } else if (preDefMoneyflow) {
+    amount.value = preDefMoneyflow.amount;
+    mmf.value.contractpartnerId = preDefMoneyflow.contractpartnerId;
+    mmf.value.comment = preDefMoneyflow.comment;
+    mmf.value.postingAccountId = preDefMoneyflow.postingAccountId;
+    mmf.value.capitalsourceId = preDefMoneyflow.capitalsourceId;
 
-      toggleTextOff.value = toggleTextOffPreDefMoneyflow.value;
-      toggleTextOn.value = toggleTextOnPreDefMoneyflow.value;
-      preDefMoneyflowId.value = preDefMoneyflow.id;
-    }
+    toggleTextOff.value = toggleTextOffPreDefMoneyflow.value;
+    toggleTextOn.value = toggleTextOnPreDefMoneyflow.value;
+    preDefMoneyflowId.value = preDefMoneyflow.id;
   }
 };
 
@@ -615,7 +613,7 @@ const followUpServerCall = () => {
 
 const importImportedMoneyflow = async (
   mim: ImportedMoneyflow,
-): Promise<Boolean> => {
+): Promise<boolean> => {
   if (prepareServerCall()) {
     const importedMoneyflow: ImportedMoneyflow = {
       ...mmf.value,
@@ -642,7 +640,7 @@ const importImportedMoneyflow = async (
   }
   return Promise.resolve(false);
 };
-const deleteImportedMoneyflow = async (id: number): Promise<Boolean> => {
+const deleteImportedMoneyflow = async (id: number): Promise<boolean> => {
   return ImportedMoneyflowControllerHandler.deleteImportedMoneyflow(id)
     .then(() => {
       return true;

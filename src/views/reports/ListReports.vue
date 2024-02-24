@@ -184,6 +184,7 @@ onBeforeRouteUpdate((to, from, next) => {
         nextMonthLink.value = true;
       }
       if (months.value.indexOf(month) > 0) {
+        // Check if the list of month has a month before the currently selected month
         previousMonthLink.value = true;
       }
     }

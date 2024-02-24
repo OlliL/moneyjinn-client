@@ -19,6 +19,7 @@
                 v-if="isJpeg"
                 :src="`data:image/png;base64,${receiptBase64}`"
                 style="max-width: 100%"
+                alt="receipt"
               />
               <object
                 style="height: 75vh; width: 100%"
@@ -26,7 +27,9 @@
                 id="pdf"
                 :data="`data:application/pdf;base64,${receiptBase64}`"
                 type="application/pdf"
-              ></object>
+              >
+                receipt
+              </object>
             </div>
             <div class="col">
               <EditMoneyflowBase :mmf-to-edit="mmf" ref="editMoneyflowVue" />

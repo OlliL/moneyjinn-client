@@ -91,7 +91,7 @@ const resetForm = () => {
 };
 
 const _show = async (_mpa?: PostingAccount) => {
-  origMpa.value = _mpa ? _mpa : undefined;
+  origMpa.value = _mpa ?? undefined;
   resetForm();
   modalComponent.value._show();
 };
