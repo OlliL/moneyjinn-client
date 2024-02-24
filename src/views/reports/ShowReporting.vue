@@ -306,7 +306,7 @@ const chartOptions = ref({
     },
   },
   interaction: {
-    mode: "index" as "index",
+    mode: "index" as const,
     intersect: false,
   },
 
@@ -526,20 +526,18 @@ const makeChartTitle = (reportingParameter: ReportingParameter): string => {
         yearTil: reportingParameter.endDate.getFullYear(),
       });
     }
+  } else if (sameMonth) {
+    chartTitle = t("Reports.title.costReportMonthYear", {
+      month: getMonthName(reportingParameter.startDate.getMonth() + 1),
+      year: reportingParameter.startDate.getFullYear(),
+    });
   } else {
-    if (sameMonth) {
-      chartTitle = t("Reports.title.costReportMonthYear", {
-        month: getMonthName(reportingParameter.startDate.getMonth() + 1),
-        year: reportingParameter.startDate.getFullYear(),
-      });
-    } else {
-      chartTitle = t("Reports.title.costReportMonthYearTilMonthYear", {
-        monthFrom: getMonthName(reportingParameter.startDate.getMonth() + 1),
-        yearFrom: reportingParameter.startDate.getFullYear(),
-        monthTil: getMonthName(reportingParameter.endDate.getMonth() + 1),
-        yearTil: reportingParameter.endDate.getFullYear(),
-      });
-    }
+    chartTitle = t("Reports.title.costReportMonthYearTilMonthYear", {
+      monthFrom: getMonthName(reportingParameter.startDate.getMonth() + 1),
+      yearFrom: reportingParameter.startDate.getFullYear(),
+      monthTil: getMonthName(reportingParameter.endDate.getMonth() + 1),
+      yearTil: reportingParameter.endDate.getFullYear(),
+    });
   }
   return chartTitle;
 };
@@ -554,16 +552,15 @@ const showReportingGraph = handleSubmit(() => {
       reportingParameter.endDate.setMonth(11);
       reportingParameter.endDate.setDate(31);
     }
-  } else {
-    if (startDateMonth.value && endDateMonth.value) {
-      reportingParameter.startDate = new Date(startDateMonth.value);
-      reportingParameter.endDate = new Date(endDateMonth.value);
-      reportingParameter.endDate.setMonth(
-        reportingParameter.endDate.getMonth() + 1,
-      );
-      reportingParameter.endDate.setDate(0);
-    }
+  } else if (startDateMonth.value && endDateMonth.value) {
+    reportingParameter.startDate = new Date(startDateMonth.value);
+    reportingParameter.endDate = new Date(endDateMonth.value);
+    reportingParameter.endDate.setMonth(
+      reportingParameter.endDate.getMonth() + 1,
+    );
+    reportingParameter.endDate.setDate(0);
   }
+
   if (singlePostingAccounts.value) {
     const selectedPostingAccounts = new Array<PostingAccount>();
     const _selectedPostingAccount = postingAccounts.value.filter(

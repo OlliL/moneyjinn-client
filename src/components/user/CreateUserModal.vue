@@ -265,7 +265,7 @@ const resetForm = () => {
 };
 
 const _show = async (_user?: User) => {
-  origUser.value = _user ? _user : undefined;
+  origUser.value = _user ?? undefined;
   resetForm();
   modalComponent.value._show();
 };

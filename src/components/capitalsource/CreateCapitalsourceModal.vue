@@ -208,7 +208,7 @@ const resetForm = () => {
 };
 
 const _show = async (_mcs?: Capitalsource) => {
-  origMcs.value = _mcs ? _mcs : undefined;
+  origMcs.value = _mcs ?? undefined;
   resetForm();
   modalComponent.value._show();
 };

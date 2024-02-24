@@ -176,7 +176,7 @@ const resetForm = () => {
 };
 
 const _show = async (_mpm?: PreDefMoneyflow) => {
-  origMpm.value = _mpm ? _mpm : undefined;
+  origMpm.value = _mpm ?? undefined;
   resetForm();
   modalComponent.value._show();
 };

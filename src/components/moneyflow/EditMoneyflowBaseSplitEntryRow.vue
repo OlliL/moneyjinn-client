@@ -198,7 +198,7 @@ watch(
 watch(
   () => props.postingAccountId,
   (newVal, oldVal) => {
-    if (newVal != oldVal) msePostingAccountId.value = newVal ? newVal : 0;
+    if (newVal != oldVal) msePostingAccountId.value = newVal ?? 0;
   },
   { immediate: true },
 );

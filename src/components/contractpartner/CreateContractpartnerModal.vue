@@ -195,7 +195,7 @@ const resetForm = () => {
 };
 
 const _show = async (_mcp?: Contractpartner) => {
-  origMcp.value = _mcp ? _mcp : undefined;
+  origMcp.value = _mcp ?? undefined;
   resetForm();
   modalComponent.value._show();
 };
