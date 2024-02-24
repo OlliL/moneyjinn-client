@@ -156,13 +156,17 @@ const serverErrors = ref(new Array<string>());
 const schema: Partial<{ [key in keyof Capitalsource]: ZodType }> = {
   comment: string(globErr(t("Capitalsource.validation.comment")))
     .min(1)
-    .max(255),
+    .max(255, t("Capitalsource.validation.length.comment")),
   type: number(globErr(t("Capitalsource.validation.type"))).min(1),
   state: number(globErr(t("Capitalsource.validation.state")))
     .min(1)
     .max(2),
-  accountNumber: string().max(34).optional(),
-  bankCode: string().max(11).optional(),
+  accountNumber: string()
+    .max(34, t("Capitalsource.validation.length.accountNumber"))
+    .optional(),
+  bankCode: string()
+    .max(11, t("Capitalsource.validation.length.bankCode"))
+    .optional(),
   validFrom: date(globErr(t("General.validation.validFrom"))),
   validTil: date(globErr(t("General.validation.validTil"))),
   groupUse: boolean(globErr(t("Capitalsource.validation.groupUse"))),

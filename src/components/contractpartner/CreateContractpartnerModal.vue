@@ -147,15 +147,23 @@ const serverErrors = ref(new Array<string>());
 const schema: Partial<{ [key in keyof Contractpartner]: ZodType }> = {
   name: string(globErr(t("Contractpartner.validation.name")))
     .min(1)
-    .max(100),
-  moneyflowComment: string().max(100).optional(),
+    .max(100, t("Contractpartner.validation.length.name")),
+  moneyflowComment: string()
+    .max(100, t("Contractpartner.validation.length.moneyflowComment"))
+    .optional(),
   postingAccountId: number().optional(),
-  street: string().max(100).optional(),
+  street: string()
+    .max(100, t("Contractpartner.validation.length.street"))
+    .optional(),
   postcode: coerce
     .number(globErr(t("Contractpartner.validation.postcode")))
     .optional(),
-  town: string().max(100).optional(),
-  country: string().max(100).optional(),
+  town: string()
+    .max(100, t("Contractpartner.validation.length.town"))
+    .optional(),
+  country: string()
+    .max(100, t("Contractpartner.validation.length.country"))
+    .optional(),
   validFrom: date(globErr(t("General.validation.validFrom"))),
   validTil: date(globErr(t("General.validation.validTil"))),
 };
