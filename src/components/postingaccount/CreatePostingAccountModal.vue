@@ -62,7 +62,9 @@ defineProps({
 const serverErrors = ref(new Array<string>());
 
 const schema: Partial<{ [key in keyof PostingAccount]: ZodType }> = {
-  name: string(globErr(t("PostingAccount.validation.name"))).min(1),
+  name: string(globErr(t("PostingAccount.validation.name")))
+    .min(1)
+    .max(60),
 };
 
 const mpa = ref({} as PostingAccount);

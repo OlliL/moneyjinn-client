@@ -145,15 +145,17 @@ defineProps({
 const serverErrors = ref(new Array<string>());
 
 const schema: Partial<{ [key in keyof Contractpartner]: ZodType }> = {
-  name: string(globErr(t("Contractpartner.validation.name"))).min(1),
-  moneyflowComment: string().optional(),
+  name: string(globErr(t("Contractpartner.validation.name")))
+    .min(1)
+    .max(100),
+  moneyflowComment: string().max(100).optional(),
   postingAccountId: number().optional(),
-  street: string().optional(),
+  street: string().max(100).optional(),
   postcode: coerce
     .number(globErr(t("Contractpartner.validation.postcode")))
     .optional(),
-  town: string().optional(),
-  country: string().optional(),
+  town: string().max(100).optional(),
+  country: string().max(100).optional(),
   validFrom: date(globErr(t("General.validation.validFrom"))),
   validTil: date(globErr(t("General.validation.validTil"))),
 };
