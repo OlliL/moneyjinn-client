@@ -170,7 +170,11 @@ router.beforeEach(
           next({ name: Routes.ChangePassword });
           return;
         }
-        next();
+        if (to.name === from.name) {
+          router.go(0);
+        } else {
+          next();
+        }
       } else {
         next({ name: Routes.Login });
       }
