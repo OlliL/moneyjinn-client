@@ -32,12 +32,13 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      path: "/login",
+      path: "/login/:error?",
       name: Routes.Login,
       component: () => import("@/views/LoginView.vue"),
       meta: {
         hideForAuth: true,
       },
+      props: true,
     },
     {
       path: "/app",

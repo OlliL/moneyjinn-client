@@ -64,7 +64,7 @@
 
 <script lang="ts" setup>
 import { useForm } from "vee-validate";
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import { string } from "zod";
 
 import router, { Routes } from "@/router";
@@ -83,6 +83,19 @@ const schema = {
   username: string().min(1, "Bitte Benutzernamen angeben!"),
   password: string().min(1, "Bitte Passwort angeben!"),
 };
+
+const props = defineProps({
+  error: {
+    type: String,
+    default: "",
+  },
+});
+
+onMounted(() => {
+  if (props.error) {
+    serverErrors.value.push(props.error);
+  }
+});
 
 const username = ref("");
 const password = ref("");

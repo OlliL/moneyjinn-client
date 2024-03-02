@@ -47,7 +47,7 @@
         }
     },
     "Errors": {
-        "noMasterData": "Technical error while loading master data!"
+        "noMasterData": "Session expired. Please log in again!"
     },
     "AppHome": {
         "taskList": "task list",

@@ -378,7 +378,10 @@ onMounted(() => {
   StoreService.getInstance()
     .initAllStores()
     .catch(() => {
-      serverErrors.value.push(t("Errors.noMasterData"));
+      router.push({
+        name: Routes.Login,
+        params: { error: t("Errors.noMasterData") },
+      });
     });
 });
 
