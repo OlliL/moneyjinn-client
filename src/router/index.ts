@@ -157,27 +157,34 @@ router.beforeEach(
     from: RouteLocationNormalized,
     next: NavigationGuardNext,
   ) => {
+    if (to.name === undefined) {
+      to.name = Routes.Home;
+    }
     const loginNeeded = !to.matched.some((record) => record.meta.hideForAuth);
 
     isLoggedIn().then((loggedIn: boolean) => {
-      if (loggedIn || !loginNeeded) {
-        if (to.name === Routes.ChangePassword || to.name === Routes.Login) {
-          next();
-          return;
-        }
-        const userSessionStore = useUserSessionStore();
-        if (userSessionStore.userIsNew) {
-          next({ name: Routes.ChangePassword });
-          return;
-        }
-        if (to.name === from.name) {
-          router.go(0);
-        } else {
-          next();
-        }
-      } else {
+      if (!loggedIn && loginNeeded) {
         next({ name: Routes.Login });
+        return;
       }
+
+      if (to.name === Routes.ChangePassword || to.name === Routes.Login) {
+        next();
+        return;
+      }
+
+      const userSessionStore = useUserSessionStore();
+      if (userSessionStore.userIsNew) {
+        next({ name: Routes.ChangePassword });
+        return;
+      }
+
+      if (to.name === from.name) {
+        router.go(0);
+        return;
+      }
+
+      next();
     });
   },
 );
