@@ -47,7 +47,7 @@
         }
     },
     "Errors": {
-        "noMasterData": "Technischer Fehler beim Laden der Stammdaten"
+        "noMasterData": "Session abgelaufen. Bitte erneut anmelden!"
     },
     "AppHome": {
         "taskList": "Aufgabenliste",
