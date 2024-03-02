@@ -14,7 +14,9 @@
 
   <nav class="navbar navbar-expand-lg navbar-light fixed-top bg-light">
     <div class="container-fluid">
-      <router-link class="navbar-brand bg-light" :to="{ name: Routes.Home }"
+      <router-link
+        class="navbar-brand bg-light"
+        :to="{ name: Routes.Home, force: true }"
         ><small>moneyjin {{ version }}</small></router-link
       >
       <button
@@ -31,7 +33,9 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
-            <router-link class="nav-link" :to="{ name: Routes.CreateMoneyflow }"
+            <router-link
+              class="nav-link"
+              :to="{ name: Routes.CreateMoneyflow, force: true }"
               ><i class="bi bi-currency-euro"></i
             ></router-link>
           </li>
@@ -45,6 +49,7 @@
               :to="{
                 name: Routes.ListReports,
                 params: { year: year, month: month },
+                force: true,
               }"
               ><i class="bi bi-card-list"></i
             ></router-link>
@@ -52,7 +57,7 @@
           <li class="nav-item">
             <router-link
               class="nav-link"
-              :to="{ name: Routes.SearchMoneyflows }"
+              :to="{ name: Routes.SearchMoneyflows, force: true }"
               ><i class="bi bi-search"></i
             ></router-link>
           </li>
@@ -60,12 +65,14 @@
           <li class="nav-item">
             <router-link
               class="nav-link"
-              :to="{ name: Routes.ImportMoneyflows }"
+              :to="{ name: Routes.ImportMoneyflows, force: true }"
               ><i class="bi bi-box-arrow-in-down-right"></i
             ></router-link>
           </li>
           <li class="nav-item">
-            <router-link class="nav-link" :to="{ name: Routes.CompareData }"
+            <router-link
+              class="nav-link"
+              :to="{ name: Routes.CompareData, force: true }"
               ><i class="bi bi-ui-checks"></i
             ></router-link>
           </li>
@@ -82,14 +89,14 @@
               <li>
                 <router-link
                   class="dropdown-item"
-                  :to="{ name: Routes.ShowTrends }"
+                  :to="{ name: Routes.ShowTrends, force: true }"
                   >{{ $t("Reports.title.trends") }}</router-link
                 >
               </li>
               <li>
                 <router-link
                   class="dropdown-item"
-                  :to="{ name: Routes.ShowReporting }"
+                  :to="{ name: Routes.ShowReporting, force: true }"
                   >{{ $t("Reports.title.costReporting") }}</router-link
                 >
               </li>
@@ -109,7 +116,7 @@
               <li>
                 <router-link
                   class="dropdown-item"
-                  :to="{ name: Routes.CreateMoneyflow }"
+                  :to="{ name: Routes.CreateMoneyflow, force: true }"
                   >{{ $t("General.moneyflow") }}</router-link
                 >
               </li>
@@ -119,7 +126,7 @@
               <li>
                 <router-link
                   class="dropdown-item"
-                  :to="{ name: Routes.ImportReceipts }"
+                  :to="{ name: Routes.ImportReceipts, force: true }"
                   >{{ $t("Receipt.importReceipts") }}</router-link
                 >
               </li>
@@ -166,35 +173,37 @@
               <li>
                 <router-link
                   class="dropdown-item"
-                  :to="{ name: Routes.ListCapitalsources }"
+                  :to="{ name: Routes.ListCapitalsources, force: true }"
                   >{{ $t("General.capitalsources") }}</router-link
                 >
               </li>
               <li>
                 <router-link
                   class="dropdown-item"
-                  :to="{ name: Routes.ListContractpartners }"
+                  :to="{ name: Routes.ListContractpartners, force: true }"
                   >{{ $t("General.contractpartners") }}</router-link
                 >
               </li>
               <li>
                 <router-link
                   class="dropdown-item"
-                  :to="{ name: Routes.ListPreDefMoneyflows }"
+                  :to="{ name: Routes.ListPreDefMoneyflows, force: true }"
                   >{{ $t("General.preDefMoneyflows") }}</router-link
                 >
               </li>
               <li>
                 <router-link
                   class="dropdown-item"
-                  :to="{ name: Routes.ListMonthlySettlements }"
+                  :to="{ name: Routes.ListMonthlySettlements, force: true }"
                   >{{ $t("General.monthlysettlements") }}</router-link
                 >
               </li>
             </ul>
           </li>
           <li class="nav-item">
-            <router-link class="nav-link" :to="{ name: Routes.ListEtfDepot }"
+            <router-link
+              class="nav-link"
+              :to="{ name: Routes.ListEtfDepot, force: true }"
               ><i class="bi bi-asterisk"></i
             ></router-link>
           </li>
@@ -223,7 +232,7 @@
                 <li>
                   <router-link
                     class="dropdown-item"
-                    :to="{ name: Routes.ChangePassword }"
+                    :to="{ name: Routes.ChangePassword, force: true }"
                     >{{ $t("User.title.changePassword") }}</router-link
                   >
                 </li>
@@ -233,7 +242,7 @@
                 <li v-if="userIsAdmin">
                   <router-link
                     class="dropdown-item"
-                    :to="{ name: Routes.ListPostingAccounts }"
+                    :to="{ name: Routes.ListPostingAccounts, force: true }"
                     >{{ $t("General.postingAccounts") }}</router-link
                   >
                 </li>
@@ -243,14 +252,14 @@
                 <li v-if="userIsAdmin">
                   <router-link
                     class="dropdown-item"
-                    :to="{ name: Routes.ListUsers }"
+                    :to="{ name: Routes.ListUsers, force: true }"
                     >{{ $t("General.users") }}</router-link
                   >
                 </li>
                 <li v-if="userIsAdmin">
                   <router-link
                     class="dropdown-item"
-                    :to="{ name: Routes.ListGroups }"
+                    :to="{ name: Routes.ListGroups, force: true }"
                     >{{ $t("General.groups") }}</router-link
                   >
                 </li>
