@@ -33,9 +33,9 @@ class MonthlySettlementControllerHandler extends AbstractControllerHandler {
     month?: number,
   ): Promise<AvailableMonth> {
     let response: AxiosResponse<GetAvailableMonthlySettlementMonthResponse>;
-    if (year) response = await this.api.getAvailableMonthYear(year);
     if (year && month)
       response = await this.api.getAvailableMonthYearMonth(year, month);
+    else if (year) response = await this.api.getAvailableMonthYear(year);
     else response = await this.api.getAvailableMonth();
 
     const getAvailableMonthResponse = response.data;
