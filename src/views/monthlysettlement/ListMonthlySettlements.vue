@@ -34,7 +34,7 @@
                   v-model="selectedYear"
                   @change="selectMonth(selectedYear + '')"
                 >
-                  <option v-for="year in years" :key="year" :value="year">
+                  <option v-for="year in years" :key="year">
                     {{ year }}
                   </option>
                 </select>
@@ -43,15 +43,18 @@
                 <nav aria-label="Month navigation" v-if="dataLoaded">
                   <ul class="pagination month-selection">
                     <li class="page-item" v-for="month in months" :key="month">
-                      <a
+                      <router-link
                         :class="
-                          $props.month === month + ''
+                          $props.month == month + ''
                             ? 'page-link active'
                             : 'page-link'
                         "
-                        href="#"
-                        @click="selectMonth(selectedYear + '', month + '')"
-                        >{{ getMonthName(month) }}</a
+                        :to="{
+                          name: Routes.ListMonthlySettlements,
+                          params: { year: selectedYear, month: month },
+                          force: true,
+                        }"
+                        >{{ getMonthName(month) }}</router-link
                       >
                     </li>
                   </ul>
@@ -165,8 +168,8 @@ const loadMonth = (year?: number, month?: number) => {
       months.value = response.allMonth;
       years.value = response.allYears;
 
-      selectedYear.value = response.year;
-      selectedMonth.value = response.month;
+      selectedYear.value = +response.year;
+      selectedMonth.value = +response.month;
 
       if (selectedYear.value != currentlyShownYear.value)
         currentlyShownYear.value = selectedYear.value;
