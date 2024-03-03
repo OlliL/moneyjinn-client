@@ -25,15 +25,18 @@
                 <nav aria-label="Month navigation" v-if="dataLoaded">
                   <ul class="pagination month-selection">
                     <li class="page-item" v-for="month in months" :key="month">
-                      <a
+                      <router-link
                         :class="
                           $props.month == month + ''
                             ? 'page-link active'
                             : 'page-link'
                         "
-                        href="#"
-                        @click="selectMonth(selectedYear + '', month + '')"
-                        >{{ getMonthName(month) }}</a
+                        :to="{
+                          name: Routes.ListReports,
+                          params: { year: selectedYear, month: month },
+                          force: true,
+                        }"
+                        >{{ getMonthName(month) }}</router-link
                       >
                     </li>
                   </ul>

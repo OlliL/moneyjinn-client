@@ -157,9 +157,6 @@ router.beforeEach(
     from: RouteLocationNormalized,
     next: NavigationGuardNext,
   ) => {
-    if (to.name === undefined) {
-      to.name = Routes.Home;
-    }
     const loginNeeded = !to.matched.some((record) => record.meta.hideForAuth);
 
     isLoggedIn().then((loggedIn: boolean) => {
@@ -179,11 +176,14 @@ router.beforeEach(
         return;
       }
 
-      if (to.name === from.name) {
+      if (
+        to.name !== undefined &&
+        to.fullPath !== undefined &&
+        to.fullPath === from.fullPath
+      ) {
         router.go(0);
         return;
       }
-
       next();
     });
   },
