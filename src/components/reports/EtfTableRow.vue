@@ -3,7 +3,7 @@
     <td class="text-start">
       <a :href="chartUrl">{{ name }}</a>
     </td>
-    <td class="text-end">{{ amount }}</td>
+    <td class="text-end">{{ etfFlowAmountSumString }}</td>
     <td class="text-end">
       <SpanAmount :amount="avgSpentPrice" :decimal-places="4" />
     </td>
@@ -28,6 +28,7 @@ import { computed } from "vue";
 import SpanAmount from "../SpanAmount.vue";
 
 import { formatDateWithTime } from "@/tools/views/FormatDate";
+import { formatNumber } from "@/tools/views/FormatNumber";
 
 const props = defineProps({
   name: {
@@ -71,5 +72,8 @@ const profit = computed(() => {
 });
 const pricesTimestampString = computed(() => {
   return props.pricesTimestamp ? formatDateWithTime(props.pricesTimestamp) : "";
+});
+const etfFlowAmountSumString = computed(() => {
+  return formatNumber(props.amount, 3);
 });
 </script>
