@@ -9,6 +9,16 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+
+      - name: Install Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: 17
+
+      - name: Build API
+        run: mvn compile
+        
       - name: Use Node.js
         uses: actions/setup-node@v4
         with:
