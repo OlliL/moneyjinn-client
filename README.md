@@ -1,5 +1,11 @@
 # moneyjinn
 
+## Client
+<a href="https://github.com/OlliL/moneyjinn-client/actions/workflows/main.yml"><img src="https://github.com/OlliL/moneyjinn-client/workflows/CodeQL/badge.svg" alt="build status"></a>
+
+## Server
+<a href="https://github.com/OlliL/moneyjinn-server/actions/workflows/codeql.yml"><img src="https://github.com/OlliL/moneyjinn-server/workflows/CodeQL/badge.svg" alt="build status"></a>
+
 ## Requirements
 
 - NGINX
