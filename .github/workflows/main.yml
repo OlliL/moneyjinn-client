@@ -10,6 +10,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Checkout Server repo
+        uses: actions/checkout@v4
+        with:
+          repository: OlliL/moneyjinn-server
+          path: ../moneyjinn-server
+
       - name: Install Java
         uses: actions/setup-java@v4
         with:
