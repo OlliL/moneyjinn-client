@@ -9,8 +9,12 @@
 
 	<scm>
 		<developerConnection>scm:git:https://github.com/OlliL/moneyjinn-client.git</developerConnection>
-	  <tag>HEAD</tag>
-  </scm>
+		<tag>HEAD</tag>
+        </scm>
+	
+	<properties>
+		<openapi.inputSpec>../moneyjinn-server/moneyjinn-server/src/main/resources/openapi.json</openapi.inputSpec>
+	</properties>
 
 	<build>
 		<plugins>
@@ -24,7 +28,7 @@
 							<goal>generate</goal>
 						</goals>
 						<configuration>
-							<inputSpec>../moneyjinn-server/moneyjinn-server/src/main/resources/openapi.json</inputSpec>
+							<inputSpec>${{openapi.inputSpec}}</inputSpec>
 							<generatorName>typescript-axios</generatorName>
 							<output>src/api</output>
 							<skipOperationExample>true</skipOperationExample>
