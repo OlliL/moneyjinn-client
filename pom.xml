@@ -28,7 +28,7 @@
 							<goal>generate</goal>
 						</goals>
 						<configuration>
-							<inputSpec>${{openapi.inputSpec}}</inputSpec>
+							<inputSpec>${openapi.inputSpec}</inputSpec>
 							<generatorName>typescript-axios</generatorName>
 							<output>src/api</output>
 							<skipOperationExample>true</skipOperationExample>
