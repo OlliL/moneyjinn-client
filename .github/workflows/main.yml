@@ -14,7 +14,6 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: OlliL/moneyjinn-server
-          path: ../moneyjinn-server
 
       - name: Install Java
         uses: actions/setup-java@v4
@@ -23,7 +22,7 @@ jobs:
           java-version: 17
 
       - name: Build API
-        run: mvn compile
+        run: ls -l ; mvn -Dopenapi.inputSpec=moneyjinn-server/moneyjinn-server/src/main/resources/openapi.json compile
         
       - name: Use Node.js
         uses: actions/setup-node@v4
