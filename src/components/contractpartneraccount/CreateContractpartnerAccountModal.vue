@@ -115,7 +115,7 @@ const resetForm = () => {
 };
 
 const _show = async (_mca?: ContractpartnerAccount) => {
-  origMca.value = _mca ? _mca : undefined;
+  origMca.value = _mca ?? undefined;
   resetForm();
   modalComponent.value._show();
 };
