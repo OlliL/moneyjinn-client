@@ -165,10 +165,11 @@
             "pieces": "pieces to be sold",
             "originalBuyPrice": "original buy price",
             "sellPrice": "sales price",
-            "chargeable": "tax relevant part",
+            "chargeable": "after partial tax exemption",
             "newBuyPrice": "new buy price",
             "rebuyLosses": "resale loss",
-            "overallCosts": "final costs"
+            "overallCosts": "final costs",
+            "accumulatedPreliminaryLumpSum": "reduced by preliminary lump sum"
         },
         "title": {
             "create": "create ETF booking",

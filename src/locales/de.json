@@ -165,10 +165,11 @@
             "pieces": "zu verkaufende Stück",
             "originalBuyPrice": "ursprünglicher Kaufpreis",
             "sellPrice": "Verkaufspreis",
-            "chargeable": "davon steuerlich relevant",
+            "chargeable": "Kapitalertrag nach Teilfreistellung",
             "newBuyPrice": "neuer Kaufpreis",
             "rebuyLosses": "Wiederverkaufsverlust",
-            "overallCosts": "Gesamtkosten"
+            "overallCosts": "Gesamtkosten",
+            "accumulatedPreliminaryLumpSum": "abzüglich Vorabpauschalen"
         },
         "title": {
             "create": "ETF Buchung hinzufügen",

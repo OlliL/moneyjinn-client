@@ -292,6 +292,16 @@
             </tr>
             <tr>
               <th class="text-start">
+                {{ $t("ETF.calculateResults.accumulatedPreliminaryLumpSum") }}
+              </th>
+              <td class="text-end">
+                <SpanAmount
+                  :amount="calcResults.accumulatedPreliminaryLumpSum"
+                />
+              </td>
+            </tr>
+            <tr>
+              <th class="text-start">
                 {{ $t("ETF.calculateResults.chargeable") }}
               </th>
               <td class="text-end">

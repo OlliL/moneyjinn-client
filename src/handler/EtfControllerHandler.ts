@@ -97,6 +97,8 @@ class EtfControllerHandler extends AbstractControllerHandler {
     etfSalesCalculation.originalBuyPrice = calcEtfSaleResponse.originalBuyPrice;
     etfSalesCalculation.overallCosts = calcEtfSaleResponse.overallCosts;
     etfSalesCalculation.pieces = calcEtfSaleResponse.pieces;
+    etfSalesCalculation.accumulatedPreliminaryLumpSum =
+      calcEtfSaleResponse.accumulatedPreliminaryLumpSum;
     etfSalesCalculation.profit = calcEtfSaleResponse.profit;
     etfSalesCalculation.rebuyLosses = calcEtfSaleResponse.rebuyLosses;
     etfSalesCalculation.sellPrice = calcEtfSaleResponse.sellPrice;
