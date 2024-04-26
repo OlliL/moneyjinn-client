@@ -4,6 +4,7 @@ export type EtfSalesCalculation = {
   sellPrice: number;
   newBuyPrice: number;
   profit: number;
+  accumulatedPreliminaryLumpSum: number;
   chargeable: number;
   transactionCosts: number;
   rebuyLosses: number;
