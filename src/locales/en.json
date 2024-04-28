@@ -179,7 +179,7 @@
         "validation": {
             "amount": "Please specify an amount!",
             "price": "Please specify a price per piece!",
-            "isin": "Please select an ETF!",
+            "etfId": "Please select an ETF!",
             "timestamp": "Please specify a bookingtime!",
             "nanoseconds": "Bookingtime must be in the format 00:00:00:000!",
             "askPrice": "Please specify the ask price!",

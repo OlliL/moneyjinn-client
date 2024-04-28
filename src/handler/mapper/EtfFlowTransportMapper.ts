@@ -7,7 +7,7 @@ export function mapEtfFlowTransportToModel(
   const model: EtfFlow = {
     amount: transport.amount,
     etfflowid: transport.etfflowid,
-    isin: transport.isin,
+    etfId: transport.etfId,
     nanoseconds: transport.nanoseconds,
     timestamp: new Date(transport.timestamp),
     price: transport.price,
@@ -19,7 +19,7 @@ export function mapEtfFlowModelToTransport(model: EtfFlow): EtfFlowTransport {
   const transport: EtfFlowTransport = {
     amount: model.amount,
     etfflowid: model.etfflowid,
-    isin: model.isin,
+    etfId: model.etfId,
     nanoseconds: model.nanoseconds,
     timestamp: model.timestamp.toISOString(),
     price: model.price,

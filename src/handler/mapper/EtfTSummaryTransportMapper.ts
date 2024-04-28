@@ -5,7 +5,7 @@ export function mapEtfSummaryTransportToEtfSummary(
   transport: EtfSummaryTransport,
 ): EtfSummary {
   const etfData: EtfSummary = {
-    isin: transport.isin,
+    etfId: transport.etfId,
     name: transport.name,
     chartUrl: transport.chartUrl,
     amount: transport.amount,

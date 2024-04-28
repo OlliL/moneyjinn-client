@@ -1,5 +1,5 @@
 export type EtfSummary = {
-  isin: string;
+  etfId: number;
   name: string;
   chartUrl: string;
   amount: number;

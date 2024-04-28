@@ -1,5 +1,5 @@
 export type EtfSalesCalculation = {
-  isin: string;
+  etfId: number;
   originalBuyPrice: number;
   sellPrice: number;
   newBuyPrice: number;

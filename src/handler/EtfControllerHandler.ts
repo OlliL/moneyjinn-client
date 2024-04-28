@@ -16,6 +16,7 @@ import {
   mapEtfFlowTransportToModel,
 } from "./mapper/EtfFlowTransportMapper";
 import { mapEtfSummaryTransportToEtfSummary } from "./mapper/EtfTSummaryTransportMapper";
+import { mapEtfTransportToModel } from "./mapper/EtfTransportMapper";
 
 class EtfControllerHandler extends AbstractControllerHandler {
   private api: EtfControllerApi;
@@ -55,7 +56,7 @@ class EtfControllerHandler extends AbstractControllerHandler {
     const etfListViewData = {} as EtfDepot;
     etfListViewData.calcEtfAskPrice = listEtfFlowsResponse.calcEtfAskPrice;
     etfListViewData.calcEtfBidPrice = listEtfFlowsResponse.calcEtfBidPrice;
-    etfListViewData.calcEtfSaleIsin = listEtfFlowsResponse.calcEtfSaleIsin;
+    etfListViewData.calcEtfSaleEtfId = listEtfFlowsResponse.calcEtfSaleEtfId;
     etfListViewData.calcEtfSalePieces = listEtfFlowsResponse.calcEtfSalePieces;
     etfListViewData.calcEtfTransactionCosts =
       listEtfFlowsResponse.calcEtfTransactionCosts;
@@ -68,19 +69,21 @@ class EtfControllerHandler extends AbstractControllerHandler {
       listEtfFlowsResponse.etfEffectiveFlowTransports?.map((flow) => {
         return mapEtfEffectiveFlowTransportToModel(flow);
       });
-    etfListViewData.etfs = listEtfFlowsResponse.etfTransports;
+    etfListViewData.etfs = listEtfFlowsResponse.etfTransports?.map((etf) => {
+      return mapEtfTransportToModel(etf);
+    });
 
     return etfListViewData;
   }
   async calcEtfSale(
-    isin: string,
+    etfId: number,
     pieces: number,
     bidPrice: number,
     askPrice: number,
     transactionCosts: number,
   ): Promise<EtfSalesCalculation> {
     const request = {} as CalcEtfSaleRequest;
-    request.isin = isin;
+    request.etfId = etfId;
     request.pieces = pieces;
     request.bidPrice = bidPrice;
     request.askPrice = askPrice;
@@ -92,7 +95,7 @@ class EtfControllerHandler extends AbstractControllerHandler {
 
     const etfSalesCalculation = {} as EtfSalesCalculation;
     etfSalesCalculation.chargeable = calcEtfSaleResponse.chargeable;
-    etfSalesCalculation.isin = calcEtfSaleResponse.isin;
+    etfSalesCalculation.etfId = calcEtfSaleResponse.etfId;
     etfSalesCalculation.newBuyPrice = calcEtfSaleResponse.newBuyPrice;
     etfSalesCalculation.originalBuyPrice = calcEtfSaleResponse.originalBuyPrice;
     etfSalesCalculation.overallCosts = calcEtfSaleResponse.overallCosts;

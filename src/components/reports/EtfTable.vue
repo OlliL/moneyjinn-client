@@ -51,7 +51,7 @@
                 <tbody v-if="dataLoaded">
                   <EtfTableRowVue
                     v-for="etfData in etfSummaryArray"
-                    :key="etfData.isin"
+                    :key="etfData.etfId"
                     v-bind="etfData"
                   />
                 </tbody>
