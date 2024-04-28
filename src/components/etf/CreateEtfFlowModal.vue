@@ -7,8 +7,8 @@
           <div class="row">
             <div class="col-xs-12">
               <SelectStandard
-                v-model="etfFlow.isin"
-                :validation-schema="schema.isin"
+                v-model="etfFlow.etfId"
+                :validation-schema="schema.etfId"
                 id="etf"
                 :field-label="$t('ETF.etf')"
                 :select-box-values="etfs"
@@ -84,7 +84,7 @@
 import { useForm } from "vee-validate";
 import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
-import { coerce, date, string, type ZodType, union } from "zod";
+import { coerce, date, string, type ZodType, union, number } from "zod";
 
 import ButtonSubmit from "../ButtonSubmit.vue";
 import DivError from "../DivError.vue";
@@ -111,7 +111,7 @@ const amountErrMsg = globErr(t("ETF.validation.amount"));
 const priceErrMsg = globErr(t("ETF.validation.price"));
 
 const schema: Partial<{ [key in keyof EtfFlow]: ZodType }> = {
-  isin: string(globErr(t("ETF.validation.isin"))),
+  etfId: number(globErr(t("ETF.validation.etfId"))).gt(0),
   timestamp: date(globErr(t("ETF.validation.timestamp"))),
   nanoseconds: string(globErr(t("ETF.validation.nanoseconds"))).regex(
     new RegExp("^[0-9][0-9]:[0-9][0-9]:[0-9][0-9]:[0-9]{3}$"),
@@ -154,7 +154,7 @@ const resetForm = () => {
       String(origEtfFlow.value.nanoseconds + 1000000000).substring(1, 4); //80000000 -> 1080000000 -> 080
   } else {
     etfFlow.value = {
-      isin: etfs.value[0].id,
+      etfId: etfs.value[0].id,
     } as EtfFlow;
 
     const today = new Date();
@@ -169,9 +169,9 @@ const resetForm = () => {
 const _show = (_etfs: Array<Etf>, _etfFlow?: EtfFlow) => {
   etfs.value = new Array<SelectBoxValue>();
   for (let etf of _etfs) {
-    etfs.value.push({ id: etf.isin, value: etf.name });
+    etfs.value.push({ id: etf.id, value: etf.name });
   }
-  origEtfFlow.value = _etfFlow ? _etfFlow : undefined;
+  origEtfFlow.value = _etfFlow ?? undefined;
   resetForm();
   modalComponent.value._show();
 };

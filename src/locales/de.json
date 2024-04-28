@@ -179,7 +179,7 @@
         "validation": {
             "amount": "Bitte Stück angeben!",
             "price": "Bitte Stückpreis angeben!",
-            "isin": "Bitte ETF auswählen!",
+            "etfId": "Bitte ETF auswählen!",
             "timestamp": "Bitte Buchungsdatum angeben!",
             "nanoseconds": "Bitte Buchungszeit im Format 00:00:00:000 angeben!",
             "askPrice": "Bitte Einkauf angeben!",

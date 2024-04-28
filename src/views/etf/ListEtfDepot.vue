@@ -171,8 +171,8 @@
                 <div class="row no-gutters flex-lg-nowrap mb-4">
                   <div class="col-md-4 col-xs-12">
                     <SelectStandard
-                      v-model="calcEtfSaleIsin"
-                      :validation-schema="schema.isin"
+                      v-model="calcEtfSaleEtfId"
+                      :validation-schema="schema.etfId"
                       id="etf"
                       :field-label="$t('ETF.etf')"
                       :select-box-values="etfsSelectValues"
@@ -248,7 +248,7 @@
         </div>
       </div>
     </form>
-    <div class="row justify-content-md-center" v-if="calcResults.isin">
+    <div class="row justify-content-md-center" v-if="calcResults.etfId">
       <div class="col-xxl-3 col-md-6 col-xs-12 mb-4">
         <table class="table table-striped table-bordered table-hover">
           <col style="width: 70%" />
@@ -355,7 +355,7 @@
 import { useForm } from "vee-validate";
 import { computed, onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
-import { string } from "zod";
+import { number } from "zod";
 
 import ButtonSubmit from "@/components/ButtonSubmit.vue";
 import CreateEtfFlowModalVue from "@/components/etf/CreateEtfFlowModal.vue";
@@ -383,7 +383,7 @@ const { t } = useI18n();
 const serverErrors = ref(new Array<string>());
 
 const schema = {
-  isin: string(globErr(t("ETF.validation.isin"))),
+  etfId: number(globErr(t("ETF.validation.etfId"))).gt(0),
   pieces: amountSchema(t("ETF.validation.amount")),
   askPrice: amountSchema(t("ETF.validation.askPrice")),
   bidPrice: amountSchema(t("ETF.validation.bidPrice")),
@@ -397,7 +397,7 @@ const etfsSelectValues = ref({} as Array<SelectBoxValue>);
 
 const calcEtfAskPrice = ref(0);
 const calcEtfBidPrice = ref(0);
-const calcEtfSaleIsin = ref("");
+const calcEtfSaleEtfId = ref(0);
 const calcEtfSalePieces = ref(0);
 const calcEtfTransactionCosts = ref(0);
 const calcResults = ref({} as EtfSalesCalculation);
@@ -465,7 +465,7 @@ const loadData = () => {
     .then((etfDepot) => {
       if (etfDepot.etfs) {
         for (let etf of etfDepot.etfs) {
-          etfsSelectValues.value.push({ id: etf.isin, value: etf.name });
+          etfsSelectValues.value.push({ id: etf.id, value: etf.name });
         }
         etfs.value = etfDepot.etfs;
         calcEtfAskPrice.value = etfDepot.calcEtfAskPrice
@@ -474,22 +474,22 @@ const loadData = () => {
         calcEtfBidPrice.value = etfDepot.calcEtfBidPrice
           ? etfDepot.calcEtfBidPrice
           : 0;
-        calcEtfSaleIsin.value = etfDepot.calcEtfSaleIsin
-          ? etfDepot.calcEtfSaleIsin
-          : "";
+        calcEtfSaleEtfId.value = etfDepot.calcEtfSaleEtfId
+          ? etfDepot.calcEtfSaleEtfId
+          : 0;
         calcEtfSalePieces.value = etfDepot.calcEtfSalePieces
           ? etfDepot.calcEtfSalePieces
           : 0;
         calcEtfTransactionCosts.value = etfDepot.calcEtfTransactionCosts
           ? etfDepot.calcEtfTransactionCosts
           : 0;
-        const etfMap = new Map<String, Etf>();
+        const etfMap = new Map<Number, Etf>();
         for (let etf of etfDepot.etfs) {
-          etfMap.set(etf.isin, etf);
+          etfMap.set(etf.id, etf);
         }
         if (etfDepot.etfFlows) {
           for (let etfFlow of etfDepot.etfFlows) {
-            const etf = etfMap.get(etfFlow.isin);
+            const etf = etfMap.get(etfFlow.etfId);
             if (etf)
               etfFlows.value.push({
                 ...etfFlow,
@@ -500,7 +500,7 @@ const loadData = () => {
         }
         if (etfDepot.etfEffectiveFlows) {
           for (let etfFlow of etfDepot.etfEffectiveFlows) {
-            const etf = etfMap.get(etfFlow.isin);
+            const etf = etfMap.get(etfFlow.etfId);
             if (etf)
               etfEffectiveFlows.value.push({
                 ...etfFlow,
@@ -558,7 +558,7 @@ const showAll = () => {
 
 const calculateEtfSale = handleSubmit(() => {
   EtfControllerHandler.calcEtfSale(
-    calcEtfSaleIsin.value,
+    calcEtfSaleEtfId.value,
     calcEtfSalePieces.value,
     calcEtfBidPrice.value,
     calcEtfAskPrice.value,
