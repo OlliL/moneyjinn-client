@@ -483,7 +483,7 @@ const loadData = () => {
         calcEtfTransactionCosts.value = etfDepot.calcEtfTransactionCosts
           ? etfDepot.calcEtfTransactionCosts
           : 0;
-        const etfMap = new Map<Number, Etf>();
+        const etfMap = new Map<number, Etf>();
         for (let etf of etfDepot.etfs) {
           etfMap.set(etf.id, etf);
         }
