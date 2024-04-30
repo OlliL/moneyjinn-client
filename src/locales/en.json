@@ -1,5 +1,9 @@
 {
     "General": {
+        "etf": "ETF",
+        "etfs": "ETFs",
+        "etfDepot": "ETF depot",
+        "preliminaryLumpSums": "preliminary lump sums",
         "username": "username",
         "password": "password",
         "moneyflow": "flow of money",
@@ -143,8 +147,31 @@
         }
     },
     "ETF": {
-        "etf": "ETF",
-        "etfDepot": "ETF depot",
+        "isin": "ISIN",
+        "wkn": "WKN",
+        "ticker": "Ticker",
+        "chartUrl": "Chart URL",
+        "searchBy": "search by name...",
+        "title": {
+            "create": "create ETF",
+            "update": "update ETF",
+            "delete": "delete ETF"
+        },
+        "validation": {
+            "isin": "Please specifiy a ISIN!",
+            "name": "Please specifiy a Name!",
+            "wkn": "Please specifiy a WKN!",
+            "ticker": "Please specifiy a Ticker!",
+            "length": {
+                "isin": "ISIN is too long!",
+                "name": "Name is too long!",
+                "wkn": "WKN is too long!",
+                "ticker": "Ticker is too long!",
+                "chartUrl": "Chart URL is too long!"
+            }
+        }
+    },
+    "ETFFlow": {
         "bookingdate": "bookingdate",
         "bookingtime": "bookingtime",
         "amount": "amount",

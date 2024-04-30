@@ -1,5 +1,9 @@
 {
     "General": {
+        "etf": "ETF",
+        "etfs": "ETFs",
+        "etfDepot": "ETF Depot",
+        "preliminaryLumpSums": "Vorabpauschalen",
         "username": "Benutzername",
         "password": "Passwort",
         "moneyflow": "Geldbewegung",
@@ -143,8 +147,31 @@
         }
     },
     "ETF": {
-        "etf": "ETF",
-        "etfDepot": "ETF Depot",
+        "isin": "ISIN",
+        "wkn": "WKN",
+        "ticker": "Ticker",
+        "chartUrl": "Chart URL",
+        "searchBy": "Suchen nach Name...",
+        "title": {
+            "create": "ETF hinzufügen",
+            "update": "ETF bearbeiten",
+            "delete": "ETF löschen"
+        },
+        "validation": {
+            "isin": "Bitte ISIN angeben!",
+            "name": "Bitte Name angeben!",
+            "wkn": "Bitte WKN angeben!",
+            "ticker": "Bitte Ticker angeben!",
+            "length": {
+                "isin": "Die ISIN ist zu lang!",
+                "name": "Der Name ist zu lang!",
+                "wkn": "Die WKN ist zu lang!",
+                "ticker": "Der Ticker ist zu lang!",
+                "chartUrl": "Die Chart URL ist zu lang!"
+            }
+        }
+    },
+    "ETFFlow": {
         "bookingdate": "Buchungsdatum",
         "bookingtime": "Buchungszeit",
         "amount": "Stück",
@@ -173,8 +200,8 @@
         },
         "title": {
             "create": "ETF Buchung hinzufügen",
-            "update": "ETF Buchung  bearbeiten",
-            "delete": "ETF Buchung  löschen"
+            "update": "ETF Buchung bearbeiten",
+            "delete": "ETF Buchung löschen"
         },
         "validation": {
             "amount": "Bitte Stück angeben!",

@@ -1,5 +1,5 @@
 <template>
-  <ModalVue :title="$t('ETF.title.delete')" ref="modalComponent">
+  <ModalVue :title="$t('ETFFlow.title.delete')" ref="modalComponent">
     <template #body>
       <DivError :server-errors="serverErrors" />
       <div class="row d-flex justify-content-center mt-3">
@@ -10,19 +10,19 @@
             </colgroup>
             <tbody>
               <tr>
-                <th>{{ $t("ETF.etf") }}</th>
+                <th>{{ $t("General.etf") }}</th>
                 <td>{{ etfName }}</td>
               </tr>
               <tr>
-                <th>{{ $t("ETF.bookingdate") }}</th>
+                <th>{{ $t("ETFFlow.bookingdate") }}</th>
                 <td>{{ timestampString }}</td>
               </tr>
               <tr>
-                <th>{{ $t("ETF.amount") }}</th>
+                <th>{{ $t("ETFFlow.amount") }}</th>
                 <td :class="amountClass">{{ amountString }}</td>
               </tr>
               <tr>
-                <th>{{ $t("ETF.price") }}</th>
+                <th>{{ $t("ETFFlow.price") }}</th>
                 <td><SpanAmount :amount="etfFlow.price" /></td>
               </tr>
             </tbody>
