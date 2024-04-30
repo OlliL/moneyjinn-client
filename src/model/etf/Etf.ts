@@ -1,5 +1,6 @@
 export type Etf = {
   id: number;
+  userId: number;
   isin: string;
   name: string;
   wkn: string;

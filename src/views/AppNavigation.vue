@@ -200,12 +200,39 @@
               </li>
             </ul>
           </li>
-          <li class="nav-item">
-            <router-link
-              class="nav-link"
-              :to="{ name: Routes.ListEtfDepot, force: true }"
-              ><i class="bi bi-asterisk"></i
-            ></router-link>
+          <li class="nav-item dropdown">
+            <a
+              class="nav-link dropdown-toggle"
+              href="#"
+              role="button"
+              data-bs-toggle="dropdown"
+              ref="dropdownAsterisk"
+            >
+              <i class="bi bi-asterisk"></i>
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <li>
+                <router-link
+                  class="dropdown-item"
+                  :to="{ name: Routes.ListEtfDepot, force: true }"
+                  >{{ $t("General.etfDepot") }}</router-link
+                >
+              </li>
+              <li>
+                <router-link
+                  class="dropdown-item"
+                  :to="{ name: Routes.ListEtfs, force: true }"
+                  >{{ $t("General.etfs") }}</router-link
+                >
+              </li>
+              <li>
+                <router-link
+                  class="dropdown-item"
+                  :to="{ name: Routes.ListEtfDepot, force: true }"
+                  >{{ $t("General.preliminaryLumpSums") }}</router-link
+                >
+              </li>
+            </ul>
           </li>
         </ul>
         <div v-if="serverErrors">

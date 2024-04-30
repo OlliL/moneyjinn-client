@@ -8,7 +8,7 @@
   <div class="container-fluid text-center">
     <div class="row justify-content-md-center">
       <div class="col-xs-12 mb-4">
-        <h4>{{ $t("ETF.etfDepot") }}</h4>
+        <h4>{{ $t("General.etfDepot") }}</h4>
       </div>
     </div>
     <div class="row justify-content-md-center mb-4">
@@ -18,7 +18,7 @@
           class="btn btn-primary mx-2"
           @click="createEtfFlow"
         >
-          {{ $t("ETF.newBooking") }}
+          {{ $t("ETFFlow.newBooking") }}
         </button>
       </div>
     </div>
@@ -32,7 +32,7 @@
               @click="showEffective"
               ref="effectiveTabButton"
             >
-              {{ $t("ETF.effective") }}
+              {{ $t("ETFFlow.effective") }}
             </button>
           </li>
           <li class="nav-item">
@@ -58,11 +58,11 @@
               <col style="width: 10%" />
               <thead>
                 <tr>
-                  <th class="text-center">{{ $t("ETF.etf") }}</th>
-                  <th class="text-center">{{ $t("ETF.bookingtime") }}</th>
-                  <th class="text-center">{{ $t("ETF.amount") }}</th>
-                  <th class="text-center">{{ $t("ETF.price") }}</th>
-                  <th class="text-center">{{ $t("ETF.sumprice") }}</th>
+                  <th class="text-center">{{ $t("General.etf") }}</th>
+                  <th class="text-center">{{ $t("ETFFlow.bookingtime") }}</th>
+                  <th class="text-center">{{ $t("ETFFlow.amount") }}</th>
+                  <th class="text-center">{{ $t("ETFFlow.price") }}</th>
+                  <th class="text-center">{{ $t("ETFFlow.sumprice") }}</th>
                   <th class="text-center" colspan="2"></th>
                 </tr>
               </thead>
@@ -112,11 +112,11 @@
               <col style="width: 10%" />
               <thead>
                 <tr>
-                  <th class="text-center">{{ $t("ETF.etf") }}</th>
-                  <th class="text-center">{{ $t("ETF.bookingtime") }}</th>
-                  <th class="text-center">{{ $t("ETF.amount") }}</th>
-                  <th class="text-center">{{ $t("ETF.price") }}</th>
-                  <th class="text-center">{{ $t("ETF.sumprice") }}</th>
+                  <th class="text-center">{{ $t("General.etf") }}</th>
+                  <th class="text-center">{{ $t("ETFFlow.bookingtime") }}</th>
+                  <th class="text-center">{{ $t("ETFFlow.amount") }}</th>
+                  <th class="text-center">{{ $t("ETFFlow.price") }}</th>
+                  <th class="text-center">{{ $t("ETFFlow.sumprice") }}</th>
                   <th class="text-center" colspan="2"></th>
                 </tr>
               </thead>
@@ -153,7 +153,7 @@
     </div>
     <div class="row justify-content-md-center" v-if="dataLoaded">
       <div class="col-xs-12 mb-4">
-        <h4>{{ $t("ETF.calculateSale") }}</h4>
+        <h4>{{ $t("ETFFlow.calculateSale") }}</h4>
       </div>
     </div>
 
@@ -174,7 +174,7 @@
                       v-model="calcEtfSaleEtfId"
                       :validation-schema="schema.etfId"
                       id="etf"
-                      :field-label="$t('ETF.etf')"
+                      :field-label="$t('General.etf')"
                       :select-box-values="etfsSelectValues"
                     />
                   </div>
@@ -185,7 +185,7 @@
                       id="calcEtfSalePieces"
                       field-type="number"
                       step="0.01"
-                      :field-label="$t('ETF.amount')"
+                      :field-label="$t('ETFFlow.amount')"
                     />
                   </div>
                   <div class="col-md-2 col-xs-12">
@@ -195,7 +195,7 @@
                       id="calcEtfBidPrice"
                       field-type="number"
                       step="0.01"
-                      :field-label="$t('ETF.bid')"
+                      :field-label="$t('ETFFlow.bid')"
                     >
                       <template #icon
                         ><span class="input-group-text"
@@ -210,7 +210,7 @@
                       id="calcEtfAskPrice"
                       field-type="number"
                       step="0.01"
-                      :field-label="$t('ETF.ask')"
+                      :field-label="$t('ETFFlow.ask')"
                     >
                       <template #icon
                         ><span class="input-group-text"
@@ -225,7 +225,7 @@
                       id="calcEtfTransactionCosts"
                       field-type="number"
                       step="0.01"
-                      :field-label="$t('ETF.transactionCosts')"
+                      :field-label="$t('ETFFlow.transactionCosts')"
                     >
                       <template #icon
                         ><span class="input-group-text"
@@ -237,7 +237,7 @@
                 <div class="row no-gutters flex-lg-nowrap">
                   <div class="col-12">
                     <ButtonSubmit
-                      :button-label="$t('ETF.calculate')"
+                      :button-label="$t('ETFFlow.calculate')"
                       form-id="calculateEtfSaleForm"
                     />
                   </div>
@@ -256,13 +256,13 @@
           <tbody>
             <tr>
               <th class="text-start">
-                {{ $t("ETF.calculateResults.pieces") }}
+                {{ $t("ETFFlow.calculateResults.pieces") }}
               </th>
               <td class="text-end">{{ calcResults.pieces }}</td>
             </tr>
             <tr>
               <th class="text-start">
-                {{ $t("ETF.calculateResults.originalBuyPrice") }}
+                {{ $t("ETFFlow.calculateResults.originalBuyPrice") }}
               </th>
               <td class="text-end">
                 <SpanAmount :amount="calcResults.originalBuyPrice" />
@@ -270,7 +270,7 @@
             </tr>
             <tr>
               <th class="text-start">
-                {{ $t("ETF.calculateResults.sellPrice") }}
+                {{ $t("ETFFlow.calculateResults.sellPrice") }}
               </th>
               <td class="text-end">
                 <SpanAmount :amount="calcResults.sellPrice" />
@@ -284,7 +284,7 @@
           <tbody>
             <tr>
               <th class="text-start">
-                {{ $t("ETF.profit") }}
+                {{ $t("ETFFlow.profit") }}
               </th>
               <td class="text-end">
                 <SpanAmount :amount="calcResults.profit" />
@@ -292,7 +292,9 @@
             </tr>
             <tr>
               <th class="text-start">
-                {{ $t("ETF.calculateResults.accumulatedPreliminaryLumpSum") }}
+                {{
+                  $t("ETFFlow.calculateResults.accumulatedPreliminaryLumpSum")
+                }}
               </th>
               <td class="text-end">
                 <SpanAmount
@@ -302,7 +304,7 @@
             </tr>
             <tr>
               <th class="text-start">
-                {{ $t("ETF.calculateResults.chargeable") }}
+                {{ $t("ETFFlow.calculateResults.chargeable") }}
               </th>
               <td class="text-end">
                 <b><SpanAmount :amount="calcResults.chargeable" /></b>
@@ -316,7 +318,7 @@
           <tbody>
             <tr>
               <th class="text-start">
-                {{ $t("ETF.calculateResults.newBuyPrice") }}
+                {{ $t("ETFFlow.calculateResults.newBuyPrice") }}
               </th>
               <td class="text-end">
                 <SpanAmount :amount="calcResults.newBuyPrice" />
@@ -324,21 +326,21 @@
             </tr>
             <tr>
               <th class="text-start">
-                {{ $t("ETF.calculateResults.rebuyLosses") }}
+                {{ $t("ETFFlow.calculateResults.rebuyLosses") }}
               </th>
               <td class="text-end">
                 <SpanAmount :amount="calcResults.rebuyLosses" />
               </td>
             </tr>
             <tr>
-              <th class="text-start">{{ $t("ETF.transactionCosts") }}</th>
+              <th class="text-start">{{ $t("ETFFlow.transactionCosts") }}</th>
               <td class="text-end">
                 <SpanAmount :amount="calcResults.transactionCosts" />
               </td>
             </tr>
             <tr>
               <th class="text-start">
-                {{ $t("ETF.calculateResults.overallCosts") }}
+                {{ $t("ETFFlow.calculateResults.overallCosts") }}
               </th>
               <td class="text-end">
                 <b><SpanAmount :amount="calcResults.overallCosts" /></b>
@@ -383,11 +385,11 @@ const { t } = useI18n();
 const serverErrors = ref(new Array<string>());
 
 const schema = {
-  etfId: number(globErr(t("ETF.validation.etfId"))).gt(0),
-  pieces: amountSchema(t("ETF.validation.amount")),
-  askPrice: amountSchema(t("ETF.validation.askPrice")),
-  bidPrice: amountSchema(t("ETF.validation.bidPrice")),
-  transactionCosts: amountSchema(t("ETF.validation.transactionCosts")),
+  etfId: number(globErr(t("ETFFlow.validation.etfId"))).gt(0),
+  pieces: amountSchema(t("ETFFlow.validation.amount")),
+  askPrice: amountSchema(t("ETFFlow.validation.askPrice")),
+  bidPrice: amountSchema(t("ETFFlow.validation.bidPrice")),
+  transactionCosts: amountSchema(t("ETFFlow.validation.transactionCosts")),
 };
 const dataLoaded = ref(false);
 const etfFlows = ref({} as Array<ListDepotRowData>);

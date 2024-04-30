@@ -15,6 +15,7 @@ export enum Routes {
   ListCapitalsources = "listCapitalsources",
   ListContractpartners = "listContractpartners",
   ListEtfDepot = "listEtfDepot",
+  ListEtfs = "listEtfs",
   ListGroups = "listGroups",
   ListMonthlySettlements = "listMonthlySettlements",
   ListPostingAccounts = "listPostingAccounts",
@@ -121,6 +122,11 @@ const router = createRouter({
           path: "listEtfDepot",
           name: Routes.ListEtfDepot,
           component: () => import("@/views/etf/ListEtfDepot.vue"),
+        },
+        {
+          path: "listEtfs",
+          name: Routes.ListEtfs,
+          component: () => import("@/views/etf/ListEtfs.vue"),
         },
         {
           path: "showTrends",

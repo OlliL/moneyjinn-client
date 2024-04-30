@@ -10,7 +10,7 @@
                 v-model="etfFlow.etfId"
                 :validation-schema="schema.etfId"
                 id="etf"
-                :field-label="$t('ETF.etf')"
+                :field-label="$t('General.etf')"
                 :select-box-values="etfs"
               />
             </div>
@@ -21,7 +21,7 @@
                 v-model="bookingdate"
                 :validation-schema="schema.timestamp"
                 id="bookingdate"
-                :field-label="$t('ETF.bookingdate')"
+                :field-label="$t('ETFFlow.bookingdate')"
               />
             </div>
           </div>
@@ -31,7 +31,7 @@
                 v-model="bookingtime"
                 :validation-schema="schema.nanoseconds"
                 id="bookingtime"
-                :field-label="$t('ETF.bookingtime')"
+                :field-label="$t('ETFFlow.bookingtime')"
               />
             </div>
           </div>
@@ -43,7 +43,7 @@
                 id="amount"
                 field-type="number"
                 step="0.001"
-                :field-label="$t('ETF.amount')"
+                :field-label="$t('ETFFlow.amount')"
               />
             </div>
           </div>
@@ -56,7 +56,7 @@
                 id="price"
                 step="0.01"
                 field-type="number"
-                :field-label="$t('ETF.price')"
+                :field-label="$t('ETFFlow.price')"
               >
                 <template #icon
                   ><span class="input-group-text"
@@ -107,13 +107,13 @@ const { t } = useI18n();
 
 const serverErrors = ref(new Array<string>());
 
-const amountErrMsg = globErr(t("ETF.validation.amount"));
-const priceErrMsg = globErr(t("ETF.validation.price"));
+const amountErrMsg = globErr(t("ETFFlow.validation.amount"));
+const priceErrMsg = globErr(t("ETFFlow.validation.price"));
 
 const schema: Partial<{ [key in keyof EtfFlow]: ZodType }> = {
-  etfId: number(globErr(t("ETF.validation.etfId"))).gt(0),
-  timestamp: date(globErr(t("ETF.validation.timestamp"))),
-  nanoseconds: string(globErr(t("ETF.validation.nanoseconds"))).regex(
+  etfId: number(globErr(t("ETFFlow.validation.etfId"))).gt(0),
+  timestamp: date(globErr(t("ETFFlow.validation.timestamp"))),
+  nanoseconds: string(globErr(t("ETFFlow.validation.nanoseconds"))).regex(
     new RegExp("^[0-9][0-9]:[0-9][0-9]:[0-9][0-9]:[0-9]{3}$"),
   ),
   amount: union(
@@ -138,8 +138,8 @@ const { handleSubmit, values, setFieldTouched } = useForm();
 
 const title = computed(() => {
   return etfFlow.value === undefined
-    ? t("ETF.title.create")
-    : t("ETF.title.update");
+    ? t("ETFFlow.title.create")
+    : t("ETFFlow.title.update");
 });
 
 const resetForm = () => {
