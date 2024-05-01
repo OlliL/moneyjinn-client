@@ -8,7 +8,9 @@ export function redIfNegative(check?: number): string {
 export function formatNumber(num: number, decimalPlaces: number): string {
   if (num !== undefined) {
     const fixedNum = toFixed(num, decimalPlaces);
-    let fixedNumStr = fixedNum.toLocaleString("de");
+    let fixedNumStr = fixedNum.toLocaleString("de", {
+      minimumFractionDigits: decimalPlaces,
+    });
 
     const decimalPlace = fixedNumStr.indexOf(",");
     const fillUpZeroes = Math.abs(

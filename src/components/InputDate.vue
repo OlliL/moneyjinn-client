@@ -7,6 +7,8 @@
         @changeDate="onInput($event)"
         :class="'form-control ' + errorData.inputClass"
         ref="fieldRef"
+        @keyup="onKeyboardInput($event)"
+        @focus="(($event as FocusEvent)?.target as HTMLInputElement)?.select()"
       />
       <label :for="id" :style="'color: ' + errorData.fieldColor">{{
         errorData.fieldLabel
@@ -153,6 +155,29 @@ const setDate = (newVal?: Date) => {
     }
   }
 };
+const onKeyboardInput = (event: KeyboardEvent) => {
+  if (["Backspace", "Delete"].includes(event.key)) {
+    return;
+  }
+  switch (props.pickMode) {
+    case "day": {
+      if (
+        datepicker.inputField.value.length == 2 ||
+        datepicker.inputField.value.length == 5
+      ) {
+        datepicker.inputField.value = datepicker.inputField.value + ".";
+      }
+      break;
+    }
+    case "month": {
+      if (datepicker.inputField.value.length == 2) {
+        datepicker.inputField.value = datepicker.inputField.value + ".";
+      }
+      break;
+    }
+  }
+};
+
 const onInput = (event: Event) => {
   handleChange(event, true);
   if (datepicker.dates.length === 0) {

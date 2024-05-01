@@ -7,7 +7,7 @@
           <div class="row">
             <div class="col-xs-12">
               <SelectStandard
-                v-model="etfFlow.etfId"
+                v-model="defaultEtfId"
                 :validation-schema="schema.etfId"
                 id="etf"
                 :field-label="$t('General.etf')"
@@ -42,7 +42,7 @@
                 :validation-schema="schema.amount"
                 id="amount"
                 field-type="number"
-                step="0.001"
+                step="0.00001"
                 :field-label="$t('ETFFlow.amount')"
               />
             </div>
@@ -54,7 +54,7 @@
                 v-model="etfFlow.price"
                 :validation-schema="schema.price"
                 id="price"
-                step="0.01"
+                step="0.001"
                 field-type="number"
                 :field-label="$t('ETFFlow.price')"
               >
@@ -102,10 +102,13 @@ import type { EtfFlow } from "@/model/etf/EtfFlow";
 import type { SelectBoxValue } from "@/model/SelectBoxValue";
 
 import EtfFlowControllerHandler from "@/handler/EtfControllerHandler";
+import { watch } from "vue";
+import CrudEtfFlowControllerHandler from "@/handler/CrudEtfFlowControllerHandler";
 
 const { t } = useI18n();
 
 const serverErrors = ref(new Array<string>());
+const defaultEtfId = ref(0);
 
 const amountErrMsg = globErr(t("ETFFlow.validation.amount"));
 const priceErrMsg = globErr(t("ETFFlow.validation.price"));
@@ -154,7 +157,7 @@ const resetForm = () => {
       String(origEtfFlow.value.nanoseconds + 1000000000).substring(1, 4); //80000000 -> 1080000000 -> 080
   } else {
     etfFlow.value = {
-      etfId: etfs.value[0].id,
+      etfId: defaultEtfId.value,
     } as EtfFlow;
 
     const today = new Date();
@@ -166,12 +169,18 @@ const resetForm = () => {
   Object.keys(values).forEach((field) => setFieldTouched(field, false));
 };
 
-const _show = (_etfs: Array<Etf>, _etfFlow?: EtfFlow) => {
+const _show = (_etfs: Array<Etf>, _etfFlow?: EtfFlow, _etfId?: number) => {
   etfs.value = new Array<SelectBoxValue>();
   for (let etf of _etfs) {
     etfs.value.push({ id: etf.id, value: etf.name });
   }
-  origEtfFlow.value = _etfFlow ?? undefined;
+  if (_etfFlow) {
+    origEtfFlow.value = _etfFlow;
+    defaultEtfId.value = _etfFlow.etfId;
+  } else {
+    origEtfFlow.value = undefined;
+    defaultEtfId.value = _etfId ?? 0;
+  }
   resetForm();
   modalComponent.value._show();
 };
@@ -188,7 +197,7 @@ const createEtfFlow = handleSubmit(() => {
 
     if (etfFlow.value.etfflowid > 0) {
       //update
-      EtfFlowControllerHandler.updateEtfFlow(etfFlow.value)
+      CrudEtfFlowControllerHandler.updateEtfFlow(etfFlow.value)
         .then(() => {
           modalComponent.value._hide();
           emit("etfFlowUpdated", etfFlow.value);
@@ -198,7 +207,7 @@ const createEtfFlow = handleSubmit(() => {
         });
     } else {
       //create
-      EtfFlowControllerHandler.createEtfFlow(etfFlow.value)
+      CrudEtfFlowControllerHandler.createEtfFlow(etfFlow.value)
         .then((_etfFlow) => {
           etfFlow.value = _etfFlow;
           modalComponent.value._hide();
@@ -210,5 +219,18 @@ const createEtfFlow = handleSubmit(() => {
     }
   }
 });
+
+watch(bookingtime, (newVal, oldVal) => {
+  if (newVal != oldVal && !newVal.endsWith(":")) {
+    if (
+      bookingtime.value.length == 2 ||
+      bookingtime.value.length == 5 ||
+      bookingtime.value.length == 8
+    ) {
+      bookingtime.value = bookingtime.value + ":";
+    }
+  }
+});
+
 defineExpose({ _show });
 </script>

@@ -103,14 +103,14 @@ const schema: Partial<{ [key in keyof Etf]: ZodType }> = {
     .max(30, t("ETF.validation.length.isin")),
   name: string(globErr(t("ETF.validation.name")))
     .min(1)
-    .max(30, t("ETF.validation.length.name")),
+    .max(60, t("ETF.validation.length.name")),
   wkn: string(globErr(t("ETF.validation.wkn")))
     .min(1)
-    .max(30, t("ETF.validation.length.wkn")),
+    .max(10, t("ETF.validation.length.wkn")),
   ticker: string(globErr(t("ETF.validation.ticker")))
     .min(1)
-    .max(30, t("ETF.validation.length.ticker")),
-  chartUrl: string().max(100, t("ETF.validation.length.chartUrl")).optional(),
+    .max(10, t("ETF.validation.length.ticker")),
+  chartUrl: string().max(255, t("ETF.validation.length.chartUrl")).optional(),
 };
 
 const met = ref({} as Etf);

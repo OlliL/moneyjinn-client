@@ -52,6 +52,7 @@ import { handleBackendError } from "@/tools/views/HandleBackendError";
 import type { EtfFlow } from "@/model/etf/EtfFlow";
 
 import EtfFlowControllerHandler from "@/handler/EtfControllerHandler";
+import CrudEtfFlowControllerHandler from "@/handler/CrudEtfFlowControllerHandler";
 
 const serverErrors = ref(new Array<string>());
 
@@ -84,7 +85,7 @@ const _show = (_etfFlow: EtfFlow, _etfName: string) => {
 const deleteEtfFlow = () => {
   serverErrors.value = new Array<string>();
 
-  EtfFlowControllerHandler.deleteEtfFlow(etfFlow.value.etfflowid)
+  CrudEtfFlowControllerHandler.deleteEtfFlow(etfFlow.value.etfflowid)
     .then(() => {
       modalComponent.value._hide();
       emit("etfFlowDeleted", etfFlow.value);
