@@ -1,6 +1,7 @@
 {
     "General": {
         "etf": "ETF",
+        "selectEtf": "ETF auswählen...",
         "etfs": "ETFs",
         "etfDepot": "ETF Depot",
         "preliminaryLumpSums": "Vorabpauschalen",

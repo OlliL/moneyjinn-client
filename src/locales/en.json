@@ -1,6 +1,7 @@
 {
     "General": {
         "etf": "ETF",
+        "selectEtf": "select ETF...",
         "etfs": "ETFs",
         "etfDepot": "ETF depot",
         "preliminaryLumpSums": "preliminary lump sums",

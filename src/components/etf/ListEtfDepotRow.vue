@@ -9,7 +9,9 @@
     <td class="text-end">
       <span :class="amountClass">{{ amountString }}</span>
     </td>
-    <td class="text-end"><SpanAmount :amount="flow.price" /></td>
+    <td class="text-end">
+      <SpanAmount :amount="flow.price" :decimalPlaces="3" />
+    </td>
     <td class="text-end"><SpanAmount :amount="flow.amount * flow.price" /></td>
     <td class="text-center">
       <span role="button" class="link-primary" @click="editEtfFlow">
@@ -46,7 +48,7 @@ const amountClass = computed(() => {
   return redIfNegative(props.flow.amount);
 });
 const amountString = computed(() => {
-  return formatNumber(props.flow.amount, 3);
+  return formatNumber(props.flow.amount, 5);
 });
 
 const timestampString = computed(() => {

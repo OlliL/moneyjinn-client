@@ -11,19 +11,36 @@
         <h4>{{ $t("General.etfDepot") }}</h4>
       </div>
     </div>
-    <div class="row justify-content-md-center mb-4">
-      <div class="col-12">
-        <button
-          type="button"
-          class="btn btn-primary mx-2"
-          @click="createEtfFlow"
+    <div class="row justify-content-md-center mb-12">
+      <div class="col-xxl-4 col-xs-12" v-if="dataLoaded">
+        <div
+          class="row no-gutters flex-lg-nowrap d-flex justify-content align-items-center mb-2"
         >
-          {{ $t("ETFFlow.newBooking") }}
-        </button>
+          <div class="col-xxl-8 col-xs-12 justify-content-end">
+            <SelectStandard
+              v-model="defaultEtfId"
+              :validation-schema="schema.etfId"
+              id="etf"
+              :field-label="$t('General.selectEtf')"
+              :select-box-values="etfsSelectValues"
+            />
+          </div>
+          <div class="col-xxl-4 col-xs-12 justify-content-start">
+            <button
+              type="button"
+              class="btn btn-primary mx-2"
+              @click="createEtfFlow"
+            >
+              {{ $t("ETFFlow.newBooking") }}
+            </button>
+          </div>
+        </div>
       </div>
     </div>
-    <DivError :server-errors="serverErrors" />
-    <div class="row justify-content-md-center mb-4" v-if="dataLoaded">
+    <div
+      class="row justify-content-md-center mb-4"
+      v-if="dataLoaded && etfFlows.length"
+    >
       <div class="col-xxl-8 col-xs-12">
         <ul class="nav nav-tabs">
           <li class="nav-item">
@@ -151,7 +168,10 @@
         </div>
       </div>
     </div>
-    <div class="row justify-content-md-center" v-if="dataLoaded">
+    <div
+      class="row justify-content-md-center"
+      v-if="dataLoaded && etfFlows.length"
+    >
       <div class="col-xs-12 mb-4">
         <h4>{{ $t("ETFFlow.calculateSale") }}</h4>
       </div>
@@ -159,26 +179,17 @@
 
     <form
       @submit.prevent="calculateEtfSale"
-      v-if="dataLoaded"
+      v-if="dataLoaded && etfFlows.length"
       id="calculateEtfSaleForm"
     >
       <div class="row justify-content-md-center">
-        <div class="col-xxl-8 col-xs-12 mb-4">
+        <div class="col-xxl-6 col-xs-12 mb-4">
           <div class="card w-100 bg-light">
             <div class="card-body">
               <div class="container-fluid">
                 <DivError :server-errors="serverErrors" />
                 <div class="row no-gutters flex-lg-nowrap mb-4">
-                  <div class="col-md-4 col-xs-12">
-                    <SelectStandard
-                      v-model="calcEtfSaleEtfId"
-                      :validation-schema="schema.etfId"
-                      id="etf"
-                      :field-label="$t('General.etf')"
-                      :select-box-values="etfsSelectValues"
-                    />
-                  </div>
-                  <div class="col-md-2 col-xs-12">
+                  <div class="col-md-3 col-xs-12">
                     <InputStandard
                       v-model="calcEtfSalePieces"
                       :validation-schema="schema.pieces"
@@ -188,7 +199,7 @@
                       :field-label="$t('ETFFlow.amount')"
                     />
                   </div>
-                  <div class="col-md-2 col-xs-12">
+                  <div class="col-md-3 col-xs-12">
                     <InputStandard
                       v-model="calcEtfBidPrice"
                       :validation-schema="schema.bidPrice"
@@ -203,7 +214,7 @@
                       ></template>
                     </InputStandard>
                   </div>
-                  <div class="col-md-2 col-xs-12">
+                  <div class="col-md-3 col-xs-12">
                     <InputStandard
                       v-model="calcEtfAskPrice"
                       :validation-schema="schema.askPrice"
@@ -218,7 +229,7 @@
                       ></template>
                     </InputStandard>
                   </div>
-                  <div class="col-md-2 col-xs-12">
+                  <div class="col-md-3 col-xs-12">
                     <InputStandard
                       v-model="calcEtfTransactionCosts"
                       :validation-schema="schema.transactionCosts"
@@ -355,7 +366,7 @@
 
 <script lang="ts" setup>
 import { useForm } from "vee-validate";
-import { computed, onMounted, ref } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { number } from "zod";
 
@@ -379,6 +390,7 @@ import type { SelectBoxValue } from "@/model/SelectBoxValue";
 
 import EtfControllerHandler from "@/handler/EtfControllerHandler";
 import DivError from "@/components/DivError.vue";
+import type { EtfDepot } from "@/model/etf/EtfDepot";
 
 const { t } = useI18n();
 
@@ -399,7 +411,7 @@ const etfsSelectValues = ref({} as Array<SelectBoxValue>);
 
 const calcEtfAskPrice = ref(0);
 const calcEtfBidPrice = ref(0);
-const calcEtfSaleEtfId = ref(0);
+const defaultEtfId = ref(0);
 const calcEtfSalePieces = ref(0);
 const calcEtfTransactionCosts = ref(0);
 const calcResults = ref({} as EtfSalesCalculation);
@@ -410,6 +422,7 @@ const effectiveTab = ref();
 const allTab = ref();
 const deleteModal = ref();
 const createModal = ref();
+const loadedEtf = ref(-1);
 
 const { handleSubmit, values, setFieldTouched } = useForm();
 
@@ -429,7 +442,7 @@ const etfEffectiveFlowAmountPriceSum = computed(() => {
 });
 
 const etfEffectiveFlowAmountSumString = computed(() => {
-  return formatNumber(etfEffectiveFlowAmountSum.value, 3);
+  return formatNumber(etfEffectiveFlowAmountSum.value, 5);
 });
 
 const etfEffectiveFlowPriceAvg = computed(() => {
@@ -448,76 +461,104 @@ const etfFlowAmountPriceSum = computed(() => {
 });
 
 const etfFlowAmountSumString = computed(() => {
-  return formatNumber(etfFlowAmountSum.value, 3);
+  return formatNumber(etfFlowAmountSum.value, 5);
 });
 
 const etfFlowPriceAvg = computed(() => {
   return etfFlowAmountPriceSum.value / etfFlowAmountSum.value;
 });
 
-const loadData = () => {
+const initView = () => {
   serverErrors.value = new Array<string>();
   dataLoaded.value = false;
   etfFlows.value = new Array<ListDepotRowData>();
   etfEffectiveFlows.value = new Array<ListDepotRowData>();
   etfs.value = new Array<Etf>();
   etfsSelectValues.value = new Array<SelectBoxValue>();
+};
+
+const loadData = () => {
+  initView();
 
   EtfControllerHandler.listEtfFlows()
     .then((etfDepot) => {
-      if (etfDepot.etfs) {
-        for (let etf of etfDepot.etfs) {
-          etfsSelectValues.value.push({ id: etf.id, value: etf.name });
-        }
-        etfs.value = etfDepot.etfs;
-        calcEtfAskPrice.value = etfDepot.calcEtfAskPrice
-          ? etfDepot.calcEtfAskPrice
-          : 0;
-        calcEtfBidPrice.value = etfDepot.calcEtfBidPrice
-          ? etfDepot.calcEtfBidPrice
-          : 0;
-        calcEtfSaleEtfId.value = etfDepot.calcEtfSaleEtfId
-          ? etfDepot.calcEtfSaleEtfId
-          : 0;
-        calcEtfSalePieces.value = etfDepot.calcEtfSalePieces
-          ? etfDepot.calcEtfSalePieces
-          : 0;
-        calcEtfTransactionCosts.value = etfDepot.calcEtfTransactionCosts
-          ? etfDepot.calcEtfTransactionCosts
-          : 0;
-        const etfMap = new Map<number, Etf>();
-        for (let etf of etfDepot.etfs) {
-          etfMap.set(etf.id, etf);
-        }
-        if (etfDepot.etfFlows) {
-          for (let etfFlow of etfDepot.etfFlows) {
-            const etf = etfMap.get(etfFlow.etfId);
-            if (etf)
-              etfFlows.value.push({
-                ...etfFlow,
-                name: etf.name,
-                chartUrl: etf.chartUrl,
-              });
-          }
-        }
-        if (etfDepot.etfEffectiveFlows) {
-          for (let etfFlow of etfDepot.etfEffectiveFlows) {
-            const etf = etfMap.get(etfFlow.etfId);
-            if (etf)
-              etfEffectiveFlows.value.push({
-                ...etfFlow,
-                name: etf.name,
-                chartUrl: etf.chartUrl,
-              });
-          }
-        }
-        dataLoaded.value = true;
-      }
+      handleServerResponse(etfDepot);
     })
     .catch((backendError) => {
       handleBackendError(backendError, serverErrors);
     });
+
   Object.keys(values).forEach((field) => setFieldTouched(field, false));
+};
+
+const loadDataWithId = (etfId: number) => {
+  loadedEtf.value = etfId;
+  calcResults.value = {} as EtfSalesCalculation;
+  initView();
+
+  EtfControllerHandler.listEtfFlowsById(etfId)
+    .then((etfDepot) => {
+      handleServerResponse(etfDepot);
+    })
+    .catch((backendError) => {
+      handleBackendError(backendError, serverErrors);
+    });
+
+  Object.keys(values).forEach((field) => setFieldTouched(field, false));
+};
+
+const handleServerResponse = (etfDepot: EtfDepot) => {
+  if (etfDepot.etfs) {
+    for (let etf of etfDepot.etfs) {
+      etfsSelectValues.value.push({ id: etf.id, value: etf.name });
+    }
+
+    if (etfDepot.defaultEtfId != defaultEtfId.value) {
+      defaultEtfId.value = etfDepot.defaultEtfId ? etfDepot.defaultEtfId : 0;
+      loadedEtf.value = defaultEtfId.value;
+    }
+
+    etfs.value = etfDepot.etfs;
+    calcEtfAskPrice.value = etfDepot.calcEtfAskPrice
+      ? etfDepot.calcEtfAskPrice
+      : 0;
+    calcEtfBidPrice.value = etfDepot.calcEtfBidPrice
+      ? etfDepot.calcEtfBidPrice
+      : 0;
+    calcEtfSalePieces.value = etfDepot.calcEtfSalePieces
+      ? etfDepot.calcEtfSalePieces
+      : 0;
+    calcEtfTransactionCosts.value = etfDepot.calcEtfTransactionCosts
+      ? etfDepot.calcEtfTransactionCosts
+      : 0;
+    const etfMap = new Map<number, Etf>();
+    for (let etf of etfDepot.etfs) {
+      etfMap.set(etf.id, etf);
+    }
+    if (etfDepot.etfFlows) {
+      for (let etfFlow of etfDepot.etfFlows) {
+        const etf = etfMap.get(etfFlow.etfId);
+        if (etf)
+          etfFlows.value.push({
+            ...etfFlow,
+            name: etf.name,
+            chartUrl: etf.chartUrl,
+          });
+      }
+    }
+    if (etfDepot.etfEffectiveFlows) {
+      for (let etfFlow of etfDepot.etfEffectiveFlows) {
+        const etf = etfMap.get(etfFlow.etfId);
+        if (etf)
+          etfEffectiveFlows.value.push({
+            ...etfFlow,
+            name: etf.name,
+            chartUrl: etf.chartUrl,
+          });
+      }
+    }
+    dataLoaded.value = true;
+  }
 };
 
 const showEffective = () => {
@@ -559,8 +600,10 @@ const showAll = () => {
 };
 
 const calculateEtfSale = handleSubmit(() => {
+  serverErrors.value = new Array<string>();
+
   EtfControllerHandler.calcEtfSale(
-    calcEtfSaleEtfId.value,
+    defaultEtfId.value,
     calcEtfSalePieces.value,
     calcEtfBidPrice.value,
     calcEtfAskPrice.value,
@@ -583,7 +626,7 @@ const etfFlowDeleted = () => {
 };
 
 const createEtfFlow = () => {
-  createModal.value._show(etfs.value);
+  createModal.value._show(etfs.value, null, loadedEtf.value);
 };
 const etfFlowCreated = () => {
   // reload because effective/all logic happens on server
@@ -597,4 +640,10 @@ const etfFlowUpdated = () => {
   // reload because effective/all logic happens on server
   loadData();
 };
+
+watch(defaultEtfId, (newVal, oldVal) => {
+  if (newVal != loadedEtf.value) {
+    loadDataWithId(newVal);
+  }
+});
 </script>
