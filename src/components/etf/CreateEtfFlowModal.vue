@@ -101,7 +101,6 @@ import type { Etf } from "@/model/etf/Etf";
 import type { EtfFlow } from "@/model/etf/EtfFlow";
 import type { SelectBoxValue } from "@/model/SelectBoxValue";
 
-import EtfFlowControllerHandler from "@/handler/EtfControllerHandler";
 import { watch } from "vue";
 import CrudEtfFlowControllerHandler from "@/handler/CrudEtfFlowControllerHandler";
 
@@ -194,6 +193,7 @@ const createEtfFlow = handleSubmit(() => {
     etfFlow.value.timestamp = bookingDate;
     etfFlow.value.timestamp.setHours(+times[0], +times[1], +times[2], 0);
     etfFlow.value.nanoseconds = +times[3] * 1000000;
+    etfFlow.value.etfId = defaultEtfId.value;
 
     if (etfFlow.value.etfflowid > 0) {
       //update
