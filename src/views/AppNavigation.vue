@@ -206,9 +206,9 @@
               href="#"
               role="button"
               data-bs-toggle="dropdown"
-              ref="dropdownAsterisk"
+              ref="dropdownGraphUpArrow"
             >
-              <i class="bi bi-asterisk"></i>
+              <i class="bi bi-graph-up-arrow"></i>
             </a>
             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
               <li>
