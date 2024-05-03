@@ -215,6 +215,14 @@
             "transactionCosts": "Please specify the transaction costs!"
         }
     },
+    "ETFPreliminaryLumpSum": {
+        "title": {
+            "create": "create ETF preliminary lump sums",
+            "update": "update ETF preliminary lump sums",
+            "delete": "delete ETF preliminary lump sums"
+        },
+        "monthlyAmount": "amount {month}"
+    },
     "Group": {
         "searchBy": "search by name...",
         "title": {

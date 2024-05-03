@@ -215,6 +215,14 @@
             "transactionCosts": "Bitte Transaktionskosten angeben!"
         }
     },
+    "ETFPreliminaryLumpSum": {
+        "title": {
+            "create": "ETF Vorabpauschale hinzufügen",
+            "update": "ETF Vorabpauschale bearbeiten",
+            "delete": "ETF Vorabpauschale löschen"
+        },
+        "monthlyAmount": "Betrag {month}"
+    },
     "Group": {
         "searchBy": "Suchen nach Name...",
         "title": {
