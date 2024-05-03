@@ -228,7 +228,7 @@
               <li>
                 <router-link
                   class="dropdown-item"
-                  :to="{ name: Routes.ListEtfDepot, force: true }"
+                  :to="{ name: Routes.ListEtfPreliminaryLumpSums, force: true }"
                   >{{ $t("General.preliminaryLumpSums") }}</router-link
                 >
               </li>

@@ -16,6 +16,7 @@ export enum Routes {
   ListContractpartners = "listContractpartners",
   ListEtfDepot = "listEtfDepot",
   ListEtfs = "listEtfs",
+  ListEtfPreliminaryLumpSums = "listEtfPreliminaryLumpSums",
   ListGroups = "listGroups",
   ListMonthlySettlements = "listMonthlySettlements",
   ListPostingAccounts = "listPostingAccounts",
@@ -127,6 +128,12 @@ const router = createRouter({
           path: "listEtfs",
           name: Routes.ListEtfs,
           component: () => import("@/views/etf/ListEtfs.vue"),
+        },
+        {
+          path: "listEtfPreliminaryLumpSums/:etfId?/:year?",
+          name: Routes.ListEtfPreliminaryLumpSums,
+          component: () => import("@/views/etf/ListPreliminaryLumpSums.vue"),
+          props: true,
         },
         {
           path: "showTrends",
