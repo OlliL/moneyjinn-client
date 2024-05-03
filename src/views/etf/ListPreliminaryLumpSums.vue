@@ -64,7 +64,10 @@
 
     <DivError :server-errors="serverErrors" />
 
-    <div class="row justify-content-md-center mb-4" v-if="selectedYear">
+    <div
+      class="row justify-content-md-center mb-4"
+      v-if="selectedYear && selectedEtf"
+    >
       <div class="col-xl-3 col-lg-6 col-xs-12">
         <ShowEtfPreliminaryLumpSum :etfId="selectedEtf" :year="selectedYear" />
       </div>
@@ -106,17 +109,18 @@ import type { SelectBoxValue } from "@/model/SelectBoxValue";
 import CrudEtfControllerHandler from "@/handler/CrudEtfControllerHandler";
 import SelectStandard from "@/components/SelectStandard.vue";
 import type { Etf } from "@/model/etf/Etf";
-import { ref } from "vue";
-import { onMounted } from "vue";
-import { watch } from "vue";
+import { ref, onMounted, watch, nextTick } from "vue";
 import type { EtfPreliminaryLumpSum } from "@/model/etf/EtfPreliminaryLumpSum";
+import router, { Routes } from "@/router";
 
 const serverErrors = ref(new Array<string>());
 
 const etfsLoaded = ref(false);
 const yearsLoaded = ref(false);
-const selectedYear = ref(0);
-const selectedEtf = ref(0);
+const selectedYear = ref(undefined as number | undefined);
+const displayedYear = ref(undefined as number | undefined);
+const displayedEtf = ref(undefined as number | undefined);
+const selectedEtf = ref(undefined as number | undefined);
 const etfsSelectValues = ref({} as Array<SelectBoxValue>);
 const yearSelectValues = ref({} as Array<SelectBoxValue>);
 const etfs = ref({} as Array<Etf>);
@@ -138,10 +142,13 @@ const props = defineProps({
 onMounted(() => {
   const etfId: number | undefined = props.etfId ? +props.etfId : undefined;
   const year: number | undefined = props.year ? +props.year : undefined;
-  loadEtfs();
+  displayedEtf.value = etfId;
+  displayedYear.value = year;
+
+  loadEtfs(etfId, year);
 });
 
-const loadEtfs = () => {
+const loadEtfs = (etfId?: number, year?: number) => {
   serverErrors.value = new Array<string>();
   etfsLoaded.value = false;
   etfsSelectValues.value = new Array<SelectBoxValue>();
@@ -149,15 +156,19 @@ const loadEtfs = () => {
   CrudEtfControllerHandler.fetchAllEtf()
     .then((response) => {
       etfs.value = response;
+      let favoriteEtfId;
       for (let etf of response) {
         etfsSelectValues.value.push({ id: etf.id, value: etf.name });
-        if (etf.isFavorite) selectedEtf.value = etf.id;
+        if (etf.isFavorite && etfId === undefined) favoriteEtfId = etf.id;
+      }
+      if (etfId !== undefined) {
+        displayedEtf.value = etfId;
+        loadYear(etfId, year);
+      } else if (favoriteEtfId !== undefined) {
+        displayedEtf.value = favoriteEtfId;
+        loadYear(favoriteEtfId, year);
       }
       etfsLoaded.value = true;
-
-      if (selectedEtf.value !== 0) {
-        loadYear(selectedEtf.value, undefined);
-      }
     })
     .catch((backendError) => {
       handleBackendError(backendError, serverErrors);
@@ -168,25 +179,31 @@ const loadYear = (etfId: number, year?: number) => {
   serverErrors.value = new Array<string>();
 
   yearSelectValues.value = new Array<SelectBoxValue>();
-  selectedYear.value = 0;
+  selectedYear.value = undefined;
   yearsLoaded.value = false;
+  selectedEtf.value = etfId;
 
   CrudEtfPreliminaryLumpSumControllerHandler.fetchEtfPreliminaryLumpSumYears(
     etfId,
-  ).then((response) => {
-    for (let year of response) {
-      yearSelectValues.value.push({ id: year, value: year + "" });
-    }
+  )
+    .then((response) => {
+      for (let _year of response) {
+        yearSelectValues.value.push({ id: _year, value: _year + "" });
+      }
 
-    selectedEtf.value = etfId;
-    if (year === undefined) {
-      selectedYear.value = response.slice(-1)[0];
-    } else {
-      selectedYear.value = year;
-    }
-
-    yearsLoaded.value = true;
-  });
+      if (year === undefined || !response.includes(year)) {
+        displayedYear.value = response.slice(-1)[0];
+        router.push({
+          name: Routes.ListEtfPreliminaryLumpSums,
+          params: { etfId: etfId, year: displayedYear.value },
+        });
+      } else {
+        displayedYear.value = year;
+      }
+      selectedYear.value = displayedYear.value;
+      yearsLoaded.value = true;
+    })
+    .catch(() => {});
 };
 
 const showCreateEtfPreliminaryLumpSumModal = (
@@ -209,15 +226,38 @@ const showDeleteEtfPreliminaryLumpSumModal = () => {
 };
 
 watch(selectedEtf, (newVal, oldVal) => {
-  if (newVal != oldVal) {
+  if (
+    newVal != oldVal &&
+    newVal !== undefined &&
+    newVal != displayedEtf.value
+  ) {
+    displayedEtf.value = newVal;
+    router.push({
+      name: Routes.ListEtfPreliminaryLumpSums,
+      params: { etfId: newVal },
+    });
     loadYear(newVal);
   }
 });
 
+watch(selectedYear, (newVal, oldVal) => {
+  if (
+    newVal != oldVal &&
+    newVal !== undefined &&
+    newVal !== displayedYear.value
+  ) {
+    displayedYear.value = newVal;
+
+    router.push({
+      name: Routes.ListEtfPreliminaryLumpSums,
+      params: { etfId: selectedEtf.value, year: newVal },
+    });
+  }
+});
+
 const reloadView = (etfPreliminaryLumpSum: EtfPreliminaryLumpSum) => {
-  console.log(etfPreliminaryLumpSum, selectedEtf.value, selectedYear.value);
   if (etfPreliminaryLumpSum.etfId == selectedEtf.value) {
-    if (selectedYear.value == 0) {
+    if (selectedYear.value === undefined) {
       loadYear(selectedEtf.value, etfPreliminaryLumpSum.year);
     } else {
       loadYear(selectedEtf.value, selectedYear.value);

@@ -153,7 +153,6 @@ const reloadView = () => {
         return a.name.toUpperCase().localeCompare(b.name.toUpperCase());
       });
       allEtfs.value = _etfs;
-      console.log(allEtfs.value);
       searchContent();
     })
     .catch((backendError) => {
