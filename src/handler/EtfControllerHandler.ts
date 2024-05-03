@@ -48,10 +48,6 @@ class EtfControllerHandler extends AbstractControllerHandler {
     const response = await this.api.listEtfFlowsById(etfId);
     return this.handleListEtfFlowsResponse(response);
   }
-  async listEtfFlows(): Promise<EtfDepot> {
-    const response = await this.api.listEtfFlows();
-    return this.handleListEtfFlowsResponse(response);
-  }
 
   async handleListEtfFlowsResponse(
     response: AxiosResponse<ListEtfFlowsResponse, any>,
@@ -61,7 +57,6 @@ class EtfControllerHandler extends AbstractControllerHandler {
     const etfListViewData = {} as EtfDepot;
     etfListViewData.calcEtfAskPrice = listEtfFlowsResponse.calcEtfAskPrice;
     etfListViewData.calcEtfBidPrice = listEtfFlowsResponse.calcEtfBidPrice;
-    etfListViewData.defaultEtfId = listEtfFlowsResponse.defaultEtfId;
     etfListViewData.calcEtfSalePieces = listEtfFlowsResponse.calcEtfSalePieces;
     etfListViewData.calcEtfTransactionCosts =
       listEtfFlowsResponse.calcEtfTransactionCosts;
@@ -74,9 +69,6 @@ class EtfControllerHandler extends AbstractControllerHandler {
       listEtfFlowsResponse.etfEffectiveFlowTransports?.map((flow) => {
         return mapEtfEffectiveFlowTransportToModel(flow);
       });
-    etfListViewData.etfs = listEtfFlowsResponse.etfTransports?.map((etf) => {
-      return mapEtfTransportToModel(etf);
-    });
 
     return etfListViewData;
   }
