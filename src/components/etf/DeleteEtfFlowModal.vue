@@ -23,7 +23,9 @@
               </tr>
               <tr>
                 <th>{{ $t("ETFFlow.price") }}</th>
-                <td><SpanAmount :amount="etfFlow.price" /></td>
+                <td>
+                  <SpanAmount :amount="etfFlow.price" :decimal-places="3" />
+                </td>
               </tr>
             </tbody>
           </table>
@@ -51,7 +53,6 @@ import { handleBackendError } from "@/tools/views/HandleBackendError";
 
 import type { EtfFlow } from "@/model/etf/EtfFlow";
 
-import EtfFlowControllerHandler from "@/handler/EtfControllerHandler";
 import CrudEtfFlowControllerHandler from "@/handler/CrudEtfFlowControllerHandler";
 
 const serverErrors = ref(new Array<string>());
@@ -65,7 +66,7 @@ const amountClass = computed(() => {
   return redIfNegative(etfFlow.value.amount);
 });
 const amountString = computed(() => {
-  return formatNumber(etfFlow.value.amount, 3);
+  return formatNumber(etfFlow.value.amount, 5);
 });
 
 const timestampString = computed(() => {
