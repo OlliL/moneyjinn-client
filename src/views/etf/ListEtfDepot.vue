@@ -12,13 +12,13 @@
       </div>
     </div>
     <div class="row justify-content-md-center mb-12">
-      <div class="col-xxl-4 col-md-7 col-xs-12" v-if="dataLoaded">
+      <div class="col-xxl-4 col-md-7 col-xs-12" v-if="etfsLoaded">
         <div
           class="row no-gutters flex-lg-nowrap d-flex justify-content align-items-center"
         >
           <div class="col-xxl-8 col-md-8 col-xs-12 justify-content-end mb-2">
             <SelectStandard
-              v-model="defaultEtfId"
+              v-model="selectedEtf"
               :validation-schema="schema.etfId"
               id="etf"
               :field-label="$t('General.selectEtf')"
@@ -391,6 +391,7 @@ import type { SelectBoxValue } from "@/model/SelectBoxValue";
 import EtfControllerHandler from "@/handler/EtfControllerHandler";
 import DivError from "@/components/DivError.vue";
 import type { EtfDepot } from "@/model/etf/EtfDepot";
+import CrudEtfControllerHandler from "@/handler/CrudEtfControllerHandler";
 
 const { t } = useI18n();
 
@@ -403,6 +404,7 @@ const schema = {
   bidPrice: amountSchema(t("ETFFlow.validation.bidPrice")),
   transactionCosts: amountSchema(t("ETFFlow.validation.transactionCosts")),
 };
+const etfsLoaded = ref(false);
 const dataLoaded = ref(false);
 const etfFlows = ref({} as Array<ListDepotRowData>);
 const etfEffectiveFlows = ref({} as Array<ListDepotRowData>);
@@ -411,7 +413,7 @@ const etfsSelectValues = ref({} as Array<SelectBoxValue>);
 
 const calcEtfAskPrice = ref(0);
 const calcEtfBidPrice = ref(0);
-const defaultEtfId = ref(0);
+const selectedEtf = ref(0);
 const calcEtfSalePieces = ref(0);
 const calcEtfTransactionCosts = ref(0);
 const calcResults = ref({} as EtfSalesCalculation);
@@ -422,12 +424,11 @@ const effectiveTab = ref();
 const allTab = ref();
 const deleteModal = ref();
 const createModal = ref();
-const loadedEtf = ref(-1);
 
 const { handleSubmit, values, setFieldTouched } = useForm();
 
 onMounted(() => {
-  loadData();
+  loadEtfs();
 });
 
 const etfEffectiveFlowAmountSum = computed(() => {
@@ -468,37 +469,39 @@ const etfFlowPriceAvg = computed(() => {
   return etfFlowAmountPriceSum.value / etfFlowAmountSum.value;
 });
 
-const initView = () => {
+const loadEtfs = () => {
   serverErrors.value = new Array<string>();
-  dataLoaded.value = false;
-  etfFlows.value = new Array<ListDepotRowData>();
-  etfEffectiveFlows.value = new Array<ListDepotRowData>();
-  etfs.value = new Array<Etf>();
+  etfsLoaded.value = false;
   etfsSelectValues.value = new Array<SelectBoxValue>();
-};
 
-const loadData = () => {
-  initView();
+  CrudEtfControllerHandler.fetchAllEtf()
+    .then((response) => {
+      etfs.value = response;
+      for (let etf of response) {
+        etfsSelectValues.value.push({ id: etf.id, value: etf.name });
+        if (etf.isFavorite) selectedEtf.value = etf.id;
+      }
+      etfsLoaded.value = true;
 
-  EtfControllerHandler.listEtfFlows()
-    .then((etfDepot) => {
-      handleServerResponse(etfDepot);
+      if (selectedEtf.value !== 0) {
+        loadData(selectedEtf.value);
+      }
     })
     .catch((backendError) => {
       handleBackendError(backendError, serverErrors);
     });
-
-  Object.keys(values).forEach((field) => setFieldTouched(field, false));
 };
 
-const loadDataWithId = (etfId: number) => {
-  loadedEtf.value = etfId;
+const loadData = (etfId: number) => {
+  serverErrors.value = new Array<string>();
+  dataLoaded.value = false;
   calcResults.value = {} as EtfSalesCalculation;
-  initView();
+  etfFlows.value = new Array<ListDepotRowData>();
+  etfEffectiveFlows.value = new Array<ListDepotRowData>();
 
   EtfControllerHandler.listEtfFlowsById(etfId)
     .then((etfDepot) => {
-      handleServerResponse(etfDepot);
+      handleServerResponse(etfDepot, etfId);
     })
     .catch((backendError) => {
       handleBackendError(backendError, serverErrors);
@@ -507,58 +510,45 @@ const loadDataWithId = (etfId: number) => {
   Object.keys(values).forEach((field) => setFieldTouched(field, false));
 };
 
-const handleServerResponse = (etfDepot: EtfDepot) => {
-  if (etfDepot.etfs) {
-    for (let etf of etfDepot.etfs) {
-      etfsSelectValues.value.push({ id: etf.id, value: etf.name });
+const handleServerResponse = (etfDepot: EtfDepot, etfId: number) => {
+  calcEtfAskPrice.value = etfDepot.calcEtfAskPrice
+    ? etfDepot.calcEtfAskPrice
+    : 0;
+  calcEtfBidPrice.value = etfDepot.calcEtfBidPrice
+    ? etfDepot.calcEtfBidPrice
+    : 0;
+  calcEtfSalePieces.value = etfDepot.calcEtfSalePieces
+    ? etfDepot.calcEtfSalePieces
+    : 0;
+  calcEtfTransactionCosts.value = etfDepot.calcEtfTransactionCosts
+    ? etfDepot.calcEtfTransactionCosts
+    : 0;
+  let etf = {} as Etf;
+  for (let _etf of etfs.value) {
+    if (_etf.id == etfId) {
+      etf = _etf;
+      break;
     }
-
-    if (etfDepot.defaultEtfId != defaultEtfId.value) {
-      defaultEtfId.value = etfDepot.defaultEtfId ? etfDepot.defaultEtfId : 0;
-      loadedEtf.value = defaultEtfId.value;
-    }
-
-    etfs.value = etfDepot.etfs;
-    calcEtfAskPrice.value = etfDepot.calcEtfAskPrice
-      ? etfDepot.calcEtfAskPrice
-      : 0;
-    calcEtfBidPrice.value = etfDepot.calcEtfBidPrice
-      ? etfDepot.calcEtfBidPrice
-      : 0;
-    calcEtfSalePieces.value = etfDepot.calcEtfSalePieces
-      ? etfDepot.calcEtfSalePieces
-      : 0;
-    calcEtfTransactionCosts.value = etfDepot.calcEtfTransactionCosts
-      ? etfDepot.calcEtfTransactionCosts
-      : 0;
-    const etfMap = new Map<number, Etf>();
-    for (let etf of etfDepot.etfs) {
-      etfMap.set(etf.id, etf);
-    }
-    if (etfDepot.etfFlows) {
-      for (let etfFlow of etfDepot.etfFlows) {
-        const etf = etfMap.get(etfFlow.etfId);
-        if (etf)
-          etfFlows.value.push({
-            ...etfFlow,
-            name: etf.name,
-            chartUrl: etf.chartUrl,
-          });
-      }
-    }
-    if (etfDepot.etfEffectiveFlows) {
-      for (let etfFlow of etfDepot.etfEffectiveFlows) {
-        const etf = etfMap.get(etfFlow.etfId);
-        if (etf)
-          etfEffectiveFlows.value.push({
-            ...etfFlow,
-            name: etf.name,
-            chartUrl: etf.chartUrl,
-          });
-      }
-    }
-    dataLoaded.value = true;
   }
+  if (etfDepot.etfFlows) {
+    for (let etfFlow of etfDepot.etfFlows) {
+      etfFlows.value.push({
+        ...etfFlow,
+        name: etf.name,
+        chartUrl: etf.chartUrl,
+      });
+    }
+  }
+  if (etfDepot.etfEffectiveFlows) {
+    for (let etfFlow of etfDepot.etfEffectiveFlows) {
+      etfEffectiveFlows.value.push({
+        ...etfFlow,
+        name: etf.name,
+        chartUrl: etf.chartUrl,
+      });
+    }
+  }
+  dataLoaded.value = true;
 };
 
 const showEffective = () => {
@@ -603,7 +593,7 @@ const calculateEtfSale = handleSubmit(() => {
   serverErrors.value = new Array<string>();
 
   EtfControllerHandler.calcEtfSale(
-    defaultEtfId.value,
+    selectedEtf.value,
     calcEtfSalePieces.value,
     calcEtfBidPrice.value,
     calcEtfAskPrice.value,
@@ -620,30 +610,30 @@ const calculateEtfSale = handleSubmit(() => {
 const deleteEtfFlow = (etfFlow: EtfFlow, etfName: string) => {
   (deleteModal.value as typeof DeleteEtfFlowModalVue)._show(etfFlow, etfName);
 };
-const etfFlowDeleted = () => {
+const etfFlowDeleted = (etfFlow: EtfFlow) => {
   // reload because effective/all logic happens on server
-  loadData();
+  loadData(etfFlow.etfId);
 };
 
 const createEtfFlow = () => {
-  createModal.value._show(etfs.value, null, loadedEtf.value);
+  createModal.value._show(etfs.value, null, selectedEtf.value);
 };
-const etfFlowCreated = () => {
+const etfFlowCreated = (etfFlow: EtfFlow) => {
   // reload because effective/all logic happens on server
-  loadData();
+  loadData(etfFlow.etfId);
 };
 
 const editEtfFlow = (etfFlow: EtfFlow) => {
   createModal.value._show(etfs.value, etfFlow);
 };
-const etfFlowUpdated = () => {
+const etfFlowUpdated = (etfFlow: EtfFlow) => {
   // reload because effective/all logic happens on server
-  loadData();
+  loadData(etfFlow.etfId);
 };
 
-watch(defaultEtfId, (newVal, oldVal) => {
-  if (newVal != loadedEtf.value) {
-    loadDataWithId(newVal);
+watch(selectedEtf, (newVal, oldVal) => {
+  if (newVal != selectedEtf.value) {
+    loadData(newVal);
   }
 });
 </script>

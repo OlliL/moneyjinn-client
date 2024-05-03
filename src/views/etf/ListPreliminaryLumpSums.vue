@@ -139,9 +139,6 @@ onMounted(() => {
   const etfId: number | undefined = props.etfId ? +props.etfId : undefined;
   const year: number | undefined = props.year ? +props.year : undefined;
   loadEtfs();
-  if (selectedEtf.value !== 0) {
-    loadYear(selectedEtf.value, year);
-  }
 });
 
 const loadEtfs = () => {
@@ -157,11 +154,16 @@ const loadEtfs = () => {
         if (etf.isFavorite) selectedEtf.value = etf.id;
       }
       etfsLoaded.value = true;
+
+      if (selectedEtf.value !== 0) {
+        loadYear(selectedEtf.value, undefined);
+      }
     })
     .catch((backendError) => {
       handleBackendError(backendError, serverErrors);
     });
 };
+
 const loadYear = (etfId: number, year?: number) => {
   serverErrors.value = new Array<string>();
 
