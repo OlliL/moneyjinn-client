@@ -5,7 +5,7 @@
     @etf-preliminary-lump-sum-updated="reloadView"
   />
   <DeleteEtfPreliminaryLumpSumModalVue
-    @etf-flow-deleted="reloadView"
+    @etf-preliminary-lump-sum-deleted="reloadView"
     ref="deleteModal"
   />
   <div class="container-fluid text-center">
@@ -14,61 +14,59 @@
         <h4>{{ $t("General.preliminaryLumpSums") }}</h4>
       </div>
     </div>
-    <div class="row justify-content-md-center mb-4">
-      <div class="col-xxl-9 col-xs-12">
-        <form action="#">
-          <table style="margin: 0 auto">
-            <tr>
-              <td v-if="etfsLoaded">
-                <SelectStandard
-                  v-model="selectedEtf"
-                  id="etf"
-                  :field-label="$t('General.selectEtf')"
-                  :select-box-values="etfsSelectValues"
-                />
-              </td>
-              <td class="text-right pe-2" v-if="selectedEtf">
-                <select class="form-select" v-model="selectedYear">
-                  <option v-for="year in years" :key="year">
-                    {{ year }}
-                  </option>
-                </select>
-              </td>
-              <td class="text-right pe-2" v-if="selectedEtf">
-                <button
-                  type="button"
-                  class="btn btn-primary"
-                  @click="showCreateEtfPreliminaryLumpSumModal(selectedEtf)"
-                >
-                  {{ $t("General.new") }}
-                </button>
-              </td>
-            </tr>
-          </table>
-        </form>
-      </div>
-    </div>
-    <DivError :server-errors="serverErrors" />
-
-    <div class="row justify-content-md-center mb-4" v-if="selectedYear">
-      <div class="col-xl-4 col-md-6 col-xs-12">
-        <div class="card">
-          <div class="card-header text-center p-3">
-            <h5>
-              {{
-                $t("EtfPreliminaryLumpSum.headline", {
-                  year: year,
-                })
-              }}
-            </h5>
+    <div class="row justify-content-md-center mb-12">
+      <div class="col-xxl-3 col-xl-4 col-md-7 col-xs-12">
+        <div
+          class="row no-gutters flex-lg-nowrap d-flex justify-content align-items-center"
+        >
+          <div
+            class="col-xxl-10 col-md-9 col-xs-12 justify-content-end mb-3"
+            v-if="etfsLoaded"
+          >
+            <SelectStandard
+              v-model="selectedEtf"
+              id="etf"
+              :field-label="$t('General.selectEtf')"
+              :select-box-values="etfsSelectValues"
+            />
           </div>
-          <div class="card-body">
-            <ShowEtfPreliminaryLumpSum
-              :etfId="selectedEtf"
-              :year="selectedYear"
+          <div
+            class="col-xxl-2 col-md-3 col-xs-12 justify-content-start mb-3"
+            v-if="selectedEtf"
+          >
+            <button
+              type="button"
+              class="btn btn-primary"
+              @click="showCreateEtfPreliminaryLumpSumModal(selectedEtf)"
+            >
+              {{ $t("General.new") }}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="row justify-content-md-center mb-12 pb-3">
+        <div class="col-xxl-1 col-xl-2 col-md-3 col-xs-12">
+          <div
+            class="col-xxl-12 col-xs-12 justify-content-start"
+            v-if="yearsLoaded"
+          >
+            <SelectStandard
+              v-model="selectedYear"
+              id="etf"
+              :field-label="$t('General.year')"
+              :select-box-values="yearSelectValues"
             />
           </div>
         </div>
+      </div>
+    </div>
+
+    <DivError :server-errors="serverErrors" />
+
+    <div class="row justify-content-md-center mb-4" v-if="selectedYear">
+      <div class="col-xl-3 col-lg-6 col-xs-12">
+        <ShowEtfPreliminaryLumpSum :etfId="selectedEtf" :year="selectedYear" />
       </div>
     </div>
     <div class="row justify-content-md-center mb-4" v-if="selectedYear">
@@ -111,15 +109,16 @@ import type { Etf } from "@/model/etf/Etf";
 import { ref } from "vue";
 import { onMounted } from "vue";
 import { watch } from "vue";
+import type { EtfPreliminaryLumpSum } from "@/model/etf/EtfPreliminaryLumpSum";
 
 const serverErrors = ref(new Array<string>());
 
 const etfsLoaded = ref(false);
-const dataLoaded = ref(false);
-const years = ref([] as number[]);
+const yearsLoaded = ref(false);
 const selectedYear = ref(0);
 const selectedEtf = ref(0);
 const etfsSelectValues = ref({} as Array<SelectBoxValue>);
+const yearSelectValues = ref({} as Array<SelectBoxValue>);
 const etfs = ref({} as Array<Etf>);
 
 const createModal = ref();
@@ -140,12 +139,13 @@ onMounted(() => {
   const etfId: number | undefined = props.etfId ? +props.etfId : undefined;
   const year: number | undefined = props.year ? +props.year : undefined;
   loadEtfs();
-  if (etfId !== undefined) {
-    loadYear(etfId, year);
+  if (selectedEtf.value !== 0) {
+    loadYear(selectedEtf.value, year);
   }
 });
 
 const loadEtfs = () => {
+  serverErrors.value = new Array<string>();
   etfsLoaded.value = false;
   etfsSelectValues.value = new Array<SelectBoxValue>();
 
@@ -154,6 +154,7 @@ const loadEtfs = () => {
       etfs.value = response;
       for (let etf of response) {
         etfsSelectValues.value.push({ id: etf.id, value: etf.name });
+        if (etf.isFavorite) selectedEtf.value = etf.id;
       }
       etfsLoaded.value = true;
     })
@@ -162,27 +163,28 @@ const loadEtfs = () => {
     });
 };
 const loadYear = (etfId: number, year?: number) => {
-  console.log("load Year" + etfId + "-" + year);
   serverErrors.value = new Array<string>();
+
+  yearSelectValues.value = new Array<SelectBoxValue>();
+  selectedYear.value = 0;
+  yearsLoaded.value = false;
 
   CrudEtfPreliminaryLumpSumControllerHandler.fetchEtfPreliminaryLumpSumYears(
     etfId,
-  )
-    .then((response) => {
-      years.value = response;
+  ).then((response) => {
+    for (let year of response) {
+      yearSelectValues.value.push({ id: year, value: year + "" });
+    }
 
-      selectedEtf.value = etfId;
-      if (year === undefined) {
-        selectedYear.value = response.slice(-1)[0];
-      } else {
-        selectedYear.value = year;
-      }
+    selectedEtf.value = etfId;
+    if (year === undefined) {
+      selectedYear.value = response.slice(-1)[0];
+    } else {
+      selectedYear.value = year;
+    }
 
-      dataLoaded.value = true;
-    })
-    .catch((backendError) => {
-      handleBackendError(backendError, serverErrors);
-    });
+    yearsLoaded.value = true;
+  });
 };
 
 const showCreateEtfPreliminaryLumpSumModal = (
@@ -210,5 +212,14 @@ watch(selectedEtf, (newVal, oldVal) => {
   }
 });
 
-const reloadView = () => {};
+const reloadView = (etfPreliminaryLumpSum: EtfPreliminaryLumpSum) => {
+  console.log(etfPreliminaryLumpSum, selectedEtf.value, selectedYear.value);
+  if (etfPreliminaryLumpSum.etfId == selectedEtf.value) {
+    if (selectedYear.value == 0) {
+      loadYear(selectedEtf.value, etfPreliminaryLumpSum.year);
+    } else {
+      loadYear(selectedEtf.value, selectedYear.value);
+    }
+  }
+};
 </script>

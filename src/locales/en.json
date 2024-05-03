@@ -153,6 +153,7 @@
         "ticker": "Ticker",
         "chartUrl": "Chart URL",
         "searchBy": "search by name...",
+        "markAsFav": "mark as favorite",
         "title": {
             "create": "create ETF",
             "update": "update ETF",

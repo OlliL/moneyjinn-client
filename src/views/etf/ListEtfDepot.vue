@@ -12,11 +12,11 @@
       </div>
     </div>
     <div class="row justify-content-md-center mb-12">
-      <div class="col-xxl-4 col-xs-12" v-if="dataLoaded">
+      <div class="col-xxl-4 col-md-7 col-xs-12" v-if="dataLoaded">
         <div
-          class="row no-gutters flex-lg-nowrap d-flex justify-content align-items-center mb-2"
+          class="row no-gutters flex-lg-nowrap d-flex justify-content align-items-center"
         >
-          <div class="col-xxl-8 col-xs-12 justify-content-end">
+          <div class="col-xxl-8 col-md-8 col-xs-12 justify-content-end mb-2">
             <SelectStandard
               v-model="defaultEtfId"
               :validation-schema="schema.etfId"
@@ -25,7 +25,7 @@
               :select-box-values="etfsSelectValues"
             />
           </div>
-          <div class="col-xxl-4 col-xs-12 justify-content-start">
+          <div class="col-xxl-4 col-md-4 col-xs-12 justify-content-start mb-2">
             <button
               type="button"
               class="btn btn-primary mx-2"
