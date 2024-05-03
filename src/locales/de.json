@@ -4,7 +4,7 @@
         "selectEtf": "ETF auswählen...",
         "etfs": "ETFs",
         "etfDepot": "ETF Depot",
-        "preliminaryLumpSums": "Vorabpauschalen",
+        "preliminaryLumpSums": "ETF Vorabpauschalen",
         "username": "Benutzername",
         "password": "Passwort",
         "moneyflow": "Geldbewegung",
@@ -153,6 +153,7 @@
         "ticker": "Ticker",
         "chartUrl": "Chart URL",
         "searchBy": "Suchen nach Name...",
+        "markAsFav": "Als Favorit markieren",
         "title": {
             "create": "ETF hinzufügen",
             "update": "ETF bearbeiten",

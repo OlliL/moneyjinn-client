@@ -54,6 +54,22 @@
               />
             </div>
           </div>
+          <div class="row pt-3">
+            <div class="col-xs-12">
+              <div class="form-check form-check-inline form-switch">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  v-model="markAsFavorite"
+                  id="markAsFavorite"
+                  role="switch"
+                />
+                <label class="form-check-label" for="markAsFavorite">
+                  {{ $t("ETF.markAsFav") }}
+                </label>
+              </div>
+            </div>
+          </div>
         </div>
       </form>
     </template>
@@ -117,6 +133,7 @@ const met = ref({} as Etf);
 const origMcp = ref({} as Etf | undefined);
 const modalComponent = ref();
 const emit = defineEmits(["etfCreated", "etfUpdated"]);
+const markAsFavorite = ref(false);
 
 const { handleSubmit, values, setFieldTouched } = useForm();
 
@@ -132,6 +149,11 @@ const resetForm = () => {
   } else {
     met.value = {} as Etf;
   }
+  if (met.value.isFavorite) {
+    markAsFavorite.value = true;
+  } else {
+    markAsFavorite.value = false;
+  }
   serverErrors.value = new Array<string>();
   Object.keys(values).forEach((field) => setFieldTouched(field, false));
 };
@@ -144,6 +166,7 @@ const _show = async (_met?: Etf) => {
 
 const createEtf = handleSubmit(() => {
   serverErrors.value = new Array<string>();
+  met.value.isFavorite = markAsFavorite.value;
 
   if (met.value.id > 0) {
     //update

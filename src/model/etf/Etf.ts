@@ -6,4 +6,5 @@ export type Etf = {
   wkn: string;
   ticker: string;
   chartUrl: string;
+  isFavorite: boolean;
 };

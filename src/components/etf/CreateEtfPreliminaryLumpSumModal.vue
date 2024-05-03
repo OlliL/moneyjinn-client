@@ -1,5 +1,5 @@
 <template>
-  <ModalVue :title="title" ref="modalComponent">
+  <ModalVue :title="title" ref="modalComponent" max-width="800px">
     <template #body
       ><form
         @submit.prevent="createEtfPreliminaryLumpSum"
@@ -7,37 +7,39 @@
       >
         <div class="container-fluid">
           <DivError :server-errors="serverErrors" />
-          <div class="row">
-            <div class="col-xs-12">
+          <div class="row pt-2">
+            <div class="col-xl-9 col-xs-12">
               <SelectStandard
-                v-model="defaultEtfId"
+                v-model="etfPreliminaryLumpSum.etfId"
                 :validation-schema="schema.etfId"
                 id="etf"
                 :field-label="$t('General.etf')"
                 :select-box-values="etfs"
               />
             </div>
-          </div>
-          <div class="row pt-2">
-            <div class="col-xs-12">
+            <div class="col-xl-3 col-xs-12">
               <InputDate
                 v-model="year"
                 :validation-schema="schema.year"
                 id="bookingdate"
-                :field-label="$t('ETFFlow.bookingdate')"
+                :field-label="$t('General.year')"
                 pick-mode="year"
               />
             </div>
           </div>
           <div class="row pt-2">
-            <div class="col-xs-12">
+            <div class="col-md-6 col-xs-12">
               <InputStandard
                 v-model="etfPreliminaryLumpSum.amountJanuary"
                 :validation-schema="schema.amountJanuary"
                 id="amountJanuary"
                 step="0.01"
                 field-type="number"
-                :field-label="$t('ETFFlow.amountJanuary')"
+                :field-label="
+                  $t('ETFPreliminaryLumpSum.monthlyAmount', {
+                    month: getMonthName(1),
+                  })
+                "
               >
                 <template #icon
                   ><span class="input-group-text"
@@ -45,16 +47,18 @@
                 ></template>
               </InputStandard>
             </div>
-          </div>
-          <div class="row pt-2">
-            <div class="col-xs-12">
+            <div class="col-md-6 col-xs-12">
               <InputStandard
                 v-model="etfPreliminaryLumpSum.amountFebruary"
                 :validation-schema="schema.amountFebruary"
                 id="amountFebruary"
                 step="0.01"
                 field-type="number"
-                :field-label="$t('ETFFlow.amount')"
+                :field-label="
+                  $t('ETFPreliminaryLumpSum.monthlyAmount', {
+                    month: getMonthName(2),
+                  })
+                "
               >
                 <template #icon
                   ><span class="input-group-text"
@@ -64,14 +68,18 @@
             </div>
           </div>
           <div class="row pt-2">
-            <div class="col-xs-12">
+            <div class="col-md-6 col-xs-12">
               <InputStandard
                 v-model="etfPreliminaryLumpSum.amountMarch"
                 :validation-schema="schema.amountMarch"
                 id="amountMarch"
                 step="0.01"
                 field-type="number"
-                :field-label="$t('ETFFlow.amount')"
+                :field-label="
+                  $t('ETFPreliminaryLumpSum.monthlyAmount', {
+                    month: getMonthName(3),
+                  })
+                "
               >
                 <template #icon
                   ><span class="input-group-text"
@@ -79,16 +87,18 @@
                 ></template>
               </InputStandard>
             </div>
-          </div>
-          <div class="row pt-2">
-            <div class="col-xs-12">
+            <div class="col-md-6 col-xs-12">
               <InputStandard
                 v-model="etfPreliminaryLumpSum.amountApril"
                 :validation-schema="schema.amountApril"
                 id="amountApril"
                 step="0.01"
                 field-type="number"
-                :field-label="$t('ETFFlow.amount')"
+                :field-label="
+                  $t('ETFPreliminaryLumpSum.monthlyAmount', {
+                    month: getMonthName(4),
+                  })
+                "
               >
                 <template #icon
                   ><span class="input-group-text"
@@ -98,14 +108,18 @@
             </div>
           </div>
           <div class="row pt-2">
-            <div class="col-xs-12">
+            <div class="col-md-6 col-xs-12">
               <InputStandard
                 v-model="etfPreliminaryLumpSum.amountMay"
                 :validation-schema="schema.amountMay"
                 id="amountMay"
                 step="0.01"
                 field-type="number"
-                :field-label="$t('ETFFlow.amount')"
+                :field-label="
+                  $t('ETFPreliminaryLumpSum.monthlyAmount', {
+                    month: getMonthName(5),
+                  })
+                "
               >
                 <template #icon
                   ><span class="input-group-text"
@@ -113,16 +127,18 @@
                 ></template>
               </InputStandard>
             </div>
-          </div>
-          <div class="row pt-2">
-            <div class="col-xs-12">
+            <div class="col-md-6 col-xs-12">
               <InputStandard
                 v-model="etfPreliminaryLumpSum.amountJune"
                 :validation-schema="schema.amountJune"
                 id="amountJune"
                 step="0.01"
                 field-type="number"
-                :field-label="$t('ETFFlow.amount')"
+                :field-label="
+                  $t('ETFPreliminaryLumpSum.monthlyAmount', {
+                    month: getMonthName(6),
+                  })
+                "
               >
                 <template #icon
                   ><span class="input-group-text"
@@ -132,14 +148,18 @@
             </div>
           </div>
           <div class="row pt-2">
-            <div class="col-xs-12">
+            <div class="col-md-6 col-xs-12">
               <InputStandard
                 v-model="etfPreliminaryLumpSum.amountJuly"
                 :validation-schema="schema.amountJuly"
                 id="amountJuly"
                 step="0.01"
                 field-type="number"
-                :field-label="$t('ETFFlow.amount')"
+                :field-label="
+                  $t('ETFPreliminaryLumpSum.monthlyAmount', {
+                    month: getMonthName(7),
+                  })
+                "
               >
                 <template #icon
                   ><span class="input-group-text"
@@ -147,16 +167,18 @@
                 ></template>
               </InputStandard>
             </div>
-          </div>
-          <div class="row pt-2">
-            <div class="col-xs-12">
+            <div class="col-md-6 col-xs-12">
               <InputStandard
                 v-model="etfPreliminaryLumpSum.amountAugust"
                 :validation-schema="schema.amountAugust"
-                id="amountJune"
+                id="amountAugust"
                 step="0.01"
                 field-type="number"
-                :field-label="$t('ETFFlow.amount')"
+                :field-label="
+                  $t('ETFPreliminaryLumpSum.monthlyAmount', {
+                    month: getMonthName(8),
+                  })
+                "
               >
                 <template #icon
                   ><span class="input-group-text"
@@ -166,14 +188,18 @@
             </div>
           </div>
           <div class="row pt-2">
-            <div class="col-xs-12">
+            <div class="col-md-6 col-xs-12">
               <InputStandard
                 v-model="etfPreliminaryLumpSum.amountSeptember"
                 :validation-schema="schema.amountSeptember"
                 id="amountSeptember"
                 step="0.01"
                 field-type="number"
-                :field-label="$t('ETFFlow.amount')"
+                :field-label="
+                  $t('ETFPreliminaryLumpSum.monthlyAmount', {
+                    month: getMonthName(9),
+                  })
+                "
               >
                 <template #icon
                   ><span class="input-group-text"
@@ -181,16 +207,18 @@
                 ></template>
               </InputStandard>
             </div>
-          </div>
-          <div class="row pt-2">
-            <div class="col-xs-12">
+            <div class="col-md-6 col-xs-12">
               <InputStandard
                 v-model="etfPreliminaryLumpSum.amountOctober"
                 :validation-schema="schema.amountOctober"
                 id="amountOctober"
                 step="0.01"
                 field-type="number"
-                :field-label="$t('ETFFlow.amount')"
+                :field-label="
+                  $t('ETFPreliminaryLumpSum.monthlyAmount', {
+                    month: getMonthName(10),
+                  })
+                "
               >
                 <template #icon
                   ><span class="input-group-text"
@@ -200,14 +228,18 @@
             </div>
           </div>
           <div class="row pt-2">
-            <div class="col-xs-12">
+            <div class="col-md-6 col-xs-12">
               <InputStandard
                 v-model="etfPreliminaryLumpSum.amountNovember"
                 :validation-schema="schema.amountNovember"
                 id="amountNovember"
                 step="0.01"
                 field-type="number"
-                :field-label="$t('ETFFlow.amount')"
+                :field-label="
+                  $t('ETFPreliminaryLumpSum.monthlyAmount', {
+                    month: getMonthName(11),
+                  })
+                "
               >
                 <template #icon
                   ><span class="input-group-text"
@@ -215,16 +247,18 @@
                 ></template>
               </InputStandard>
             </div>
-          </div>
-          <div class="row pt-2">
-            <div class="col-xs-12">
+            <div class="col-md-6 col-xs-12">
               <InputStandard
                 v-model="etfPreliminaryLumpSum.amountDecember"
                 :validation-schema="schema.amountDecember"
                 id="amountDecember"
                 step="0.01"
                 field-type="number"
-                :field-label="$t('ETFFlow.amount')"
+                :field-label="
+                  $t('ETFPreliminaryLumpSum.monthlyAmount', {
+                    month: getMonthName(12),
+                  })
+                "
               >
                 <template #icon
                   ><span class="input-group-text"
@@ -269,6 +303,7 @@ import type { EtfPreliminaryLumpSum } from "@/model/etf/EtfPreliminaryLumpSum";
 import type { SelectBoxValue } from "@/model/SelectBoxValue";
 
 import CrudEtfPreliminaryLumpSumControllerHandler from "@/handler/CrudEtfPreliminaryLumpSumControllerHandler";
+import { getMonthName } from "@/tools/views/MonthName";
 
 const { t } = useI18n();
 
@@ -306,14 +341,17 @@ const year = ref(new Date());
 const { handleSubmit, values, setFieldTouched } = useForm();
 
 const title = computed(() => {
-  return etfPreliminaryLumpSum.value === undefined
-    ? t("ETFFlow.title.create")
-    : t("ETFFlow.title.update");
+  return origEtfPreliminaryLumpSum.value === undefined
+    ? t("ETFPreliminaryLumpSum.title.create")
+    : t("ETFPreliminaryLumpSum.title.update");
 });
 
 const resetForm = () => {
+  etfPreliminaryLumpSum.value = {} as EtfPreliminaryLumpSum;
   if (origEtfPreliminaryLumpSum.value) {
     Object.assign(etfPreliminaryLumpSum.value, origEtfPreliminaryLumpSum.value);
+  } else {
+    etfPreliminaryLumpSum.value.etfId = defaultEtfId.value;
   }
 
   const localYearDate = new Date();
@@ -360,6 +398,7 @@ const createEtfPreliminaryLumpSum = handleSubmit(() => {
   serverErrors.value = new Array<string>();
 
   etfPreliminaryLumpSum.value.etfId = defaultEtfId.value;
+  etfPreliminaryLumpSum.value.year = year.value.getFullYear();
 
   if (origEtfPreliminaryLumpSum.value) {
     //update

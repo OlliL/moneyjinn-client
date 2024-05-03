@@ -56,10 +56,11 @@
     <div class="row justify-content-md-center">
       <div class="col-xxl-7 col-xs-12">
         <table class="table table-striped table-bordered table-hover">
-          <col style="width: 44%" />
-          <col style="width: 16%" />
+          <col style="width: 40%" />
+          <col style="width: 15%" />
           <col style="width: 10%" />
           <col style="width: 10%" />
+          <col style="width: 5%" />
           <col style="width: 10%" />
           <col style="width: 10%" />
           <thead>
@@ -68,6 +69,7 @@
               <th>{{ $t("ETF.isin") }}</th>
               <th>{{ $t("ETF.wkn") }}</th>
               <th>{{ $t("ETF.ticker") }}</th>
+              <th><i class="bi bi-star-fill text-warning"></i></th>
               <th colspan="2"></th>
             </tr>
           </thead>
@@ -151,6 +153,7 @@ const reloadView = () => {
         return a.name.toUpperCase().localeCompare(b.name.toUpperCase());
       });
       allEtfs.value = _etfs;
+      console.log(allEtfs.value);
       searchContent();
     })
     .catch((backendError) => {
