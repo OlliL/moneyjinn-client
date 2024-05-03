@@ -54,6 +54,13 @@ export const enum ErrorCode {
   MEDIA_TYPE_UNKNOWN = 379,
   AMOUNT_HAS_TO_BE_SPECIFIED = 380,
   MONEYFLOW_DOES_NOT_EXISTS = 381,
+  YEAR_NOT_SET = 382,
+  ETF_PRELIMINARY_LUMP_SUM_ALREADY_EXISTS = 383,
+  ETF_PRELIMINARY_LUMP_SUM_DOES_NOT_EXIST = 384,
+  ISIN_MUST_NOT_BE_EMPTY = 385,
+  WKN_MUST_NOT_BE_EMPTY = 386,
+  TICKER_MUST_NOT_BE_EMPTY = 387,
+  ETF_STILL_REFERENCED = 388,
 }
 
 export const errorMessages = {
@@ -196,6 +203,26 @@ export const errorMessages = {
   ),
   [ErrorCode.MONEYFLOW_DOES_NOT_EXISTS]: I18nHolder.t()(
     "ErrorMessage.MONEYFLOW_DOES_NOT_EXISTS",
+  ),
+
+  [ErrorCode.YEAR_NOT_SET]: I18nHolder.t()("ErrorMessage.YEAR_NOT_SET"),
+  [ErrorCode.ETF_PRELIMINARY_LUMP_SUM_ALREADY_EXISTS]: I18nHolder.t()(
+    "ErrorMessage.ETF_PRELIMINARY_LUMP_SUM_ALREADY_EXISTS",
+  ),
+  [ErrorCode.ETF_PRELIMINARY_LUMP_SUM_DOES_NOT_EXIST]: I18nHolder.t()(
+    "ErrorMessage.ETF_PRELIMINARY_LUMP_SUM_DOES_NOT_EXIST",
+  ),
+  [ErrorCode.ISIN_MUST_NOT_BE_EMPTY]: I18nHolder.t()(
+    "ErrorMessage.ISIN_MUST_NOT_BE_EMPTY",
+  ),
+  [ErrorCode.WKN_MUST_NOT_BE_EMPTY]: I18nHolder.t()(
+    "ErrorMessage.WKN_MUST_NOT_BE_EMPTY",
+  ),
+  [ErrorCode.TICKER_MUST_NOT_BE_EMPTY]: I18nHolder.t()(
+    "ErrorMessage.TICKER_MUST_NOT_BE_EMPTY",
+  ),
+  [ErrorCode.ETF_STILL_REFERENCED]: I18nHolder.t()(
+    "ErrorMessage.ETF_STILL_REFERENCED",
   ),
 };
 
