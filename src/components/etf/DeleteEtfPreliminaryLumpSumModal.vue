@@ -1,12 +1,15 @@
 <template>
-  <ModalVue :title="$t('ETFFlow.title.delete')" ref="modalComponent">
+  <ModalVue
+    :title="$t('ETFPreliminaryLumpSum.title.delete')"
+    ref="modalComponent"
+  >
     <template #body>
       <DivError :server-errors="serverErrors" />
       <div class="row d-flex justify-content-center mt-3">
         <div class="col-11">
           <table class="table table-bordered table-hover">
             <colgroup>
-              <col span="1" style="background-color: #f2f2f2" width="35%" />
+              <col span="1" style="background-color: #f2f2f2" width="40%" />
             </colgroup>
             <tbody>
               <tr>
@@ -14,73 +17,19 @@
                 <td>{{ etfName }}</td>
               </tr>
               <tr>
-                <th>{{ $t("ETFFlow.bookingdate") }}</th>
+                <th>{{ $t("General.year") }}</th>
                 <td>{{ etfPreliminaryLumpSum.year }}</td>
               </tr>
-              <tr>
-                <th>{{ $t("ETFFlow.price") }}</th>
+              <tr v-for="month in dataArray" :key="month.month">
+                <th>
+                  {{
+                    $t("ETFPreliminaryLumpSum.monthlyAmount", {
+                      month: month.month,
+                    })
+                  }}
+                </th>
                 <td>
-                  <SpanAmount :amount="etfPreliminaryLumpSum.amountJanuary" />
-                </td>
-              </tr>
-              <tr>
-                <th>{{ $t("ETFFlow.price") }}</th>
-                <td>
-                  <SpanAmount :amount="etfPreliminaryLumpSum.amountMarch" />
-                </td>
-              </tr>
-              <tr>
-                <th>{{ $t("ETFFlow.price") }}</th>
-                <td>
-                  <SpanAmount :amount="etfPreliminaryLumpSum.amountApril" />
-                </td>
-              </tr>
-              <tr>
-                <th>{{ $t("ETFFlow.price") }}</th>
-                <td>
-                  <SpanAmount :amount="etfPreliminaryLumpSum.amountMay" />
-                </td>
-              </tr>
-              <tr>
-                <th>{{ $t("ETFFlow.price") }}</th>
-                <td>
-                  <SpanAmount :amount="etfPreliminaryLumpSum.amountJune" />
-                </td>
-              </tr>
-              <tr>
-                <th>{{ $t("ETFFlow.price") }}</th>
-                <td>
-                  <SpanAmount :amount="etfPreliminaryLumpSum.amountJuly" />
-                </td>
-              </tr>
-              <tr>
-                <th>{{ $t("ETFFlow.price") }}</th>
-                <td>
-                  <SpanAmount :amount="etfPreliminaryLumpSum.amountAugust" />
-                </td>
-              </tr>
-              <tr>
-                <th>{{ $t("ETFFlow.price") }}</th>
-                <td>
-                  <SpanAmount :amount="etfPreliminaryLumpSum.amountSeptember" />
-                </td>
-              </tr>
-              <tr>
-                <th>{{ $t("ETFFlow.price") }}</th>
-                <td>
-                  <SpanAmount :amount="etfPreliminaryLumpSum.amountOctober" />
-                </td>
-              </tr>
-              <tr>
-                <th>{{ $t("ETFFlow.price") }}</th>
-                <td>
-                  <SpanAmount :amount="etfPreliminaryLumpSum.amountNovember" />
-                </td>
-              </tr>
-              <tr>
-                <th>{{ $t("ETFFlow.price") }}</th>
-                <td>
-                  <SpanAmount :amount="etfPreliminaryLumpSum.amountDecember" />
+                  <SpanAmount :amount="month.amount" />
                 </td>
               </tr>
             </tbody>
@@ -108,11 +57,17 @@ import ModalVue from "../Modal.vue";
 import SpanAmount from "../SpanAmount.vue";
 
 import { handleBackendError } from "@/tools/views/HandleBackendError";
+import { getMonthName } from "@/tools/views/MonthName";
 
+import type { Etf } from "@/model/etf/Etf";
 import type { EtfPreliminaryLumpSum } from "@/model/etf/EtfPreliminaryLumpSum";
 
 import CrudEtfPreliminaryLumpSumControllerHandler from "@/handler/CrudEtfPreliminaryLumpSumControllerHandler";
-import type { Etf } from "@/model/etf/Etf";
+
+type RowData = {
+  month: string;
+  amount: number;
+};
 
 const serverErrors = ref(new Array<string>());
 
@@ -120,6 +75,7 @@ const etfPreliminaryLumpSum = ref({} as EtfPreliminaryLumpSum);
 const etfName = ref("");
 const modalComponent = ref();
 const emit = defineEmits(["etfPreliminaryLumpSumDeleted"]);
+const dataArray = ref({} as Array<RowData>);
 
 const _show = (_etfs: Array<Etf>, _etfId: number, _year: number) => {
   serverErrors.value = new Array<string>();
@@ -134,9 +90,52 @@ const _show = (_etfs: Array<Etf>, _etfId: number, _year: number) => {
     _etfId,
     _year,
   )
-    .then((response) => {
-      etfPreliminaryLumpSum.value = response;
-      modalComponent.value._show();
+    .then((_etfPreliminaryLumpSum: EtfPreliminaryLumpSum) => {
+      etfPreliminaryLumpSum.value = _etfPreliminaryLumpSum;
+      dataArray.value = new Array<RowData>();
+      for (let i: number = 1; i <= 12; i++) {
+        let amount = 0;
+        switch (i) {
+          case 1:
+            amount = etfPreliminaryLumpSum.value.amountJanuary;
+            break;
+          case 2:
+            amount = etfPreliminaryLumpSum.value.amountFebruary;
+            break;
+          case 3:
+            amount = etfPreliminaryLumpSum.value.amountMarch;
+            break;
+          case 4:
+            amount = etfPreliminaryLumpSum.value.amountApril;
+            break;
+          case 5:
+            amount = etfPreliminaryLumpSum.value.amountMay;
+            break;
+          case 6:
+            amount = etfPreliminaryLumpSum.value.amountJune;
+            break;
+          case 7:
+            amount = etfPreliminaryLumpSum.value.amountJuly;
+            break;
+          case 8:
+            amount = etfPreliminaryLumpSum.value.amountAugust;
+            break;
+          case 9:
+            amount = etfPreliminaryLumpSum.value.amountSeptember;
+            break;
+          case 10:
+            amount = etfPreliminaryLumpSum.value.amountOctober;
+            break;
+          case 11:
+            amount = etfPreliminaryLumpSum.value.amountNovember;
+            break;
+          case 12:
+            amount = etfPreliminaryLumpSum.value.amountDecember;
+            break;
+        }
+        dataArray.value.push({ month: getMonthName(i), amount: amount });
+        modalComponent.value._show();
+      }
     })
     .catch((backendError) => {
       handleBackendError(backendError, serverErrors);

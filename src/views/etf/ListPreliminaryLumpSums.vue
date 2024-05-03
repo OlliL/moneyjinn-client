@@ -11,7 +11,7 @@
   <div class="container-fluid text-center">
     <div class="row justify-content-md-center">
       <div class="col-xs-12 mb-4">
-        <h4>{{ $t("General.monthlysettlements") }}</h4>
+        <h4>{{ $t("General.preliminaryLumpSums") }}</h4>
       </div>
     </div>
     <div class="row justify-content-md-center mb-4">
