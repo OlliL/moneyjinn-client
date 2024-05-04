@@ -120,9 +120,10 @@ const router = createRouter({
           props: true,
         },
         {
-          path: "listEtfDepot",
+          path: "listEtfDepot/:etfId?",
           name: Routes.ListEtfDepot,
           component: () => import("@/views/etf/ListEtfDepot.vue"),
+          props: true,
         },
         {
           path: "listEtfs",
