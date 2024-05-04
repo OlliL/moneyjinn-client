@@ -392,6 +392,7 @@ import EtfControllerHandler from "@/handler/EtfControllerHandler";
 import DivError from "@/components/DivError.vue";
 import type { EtfDepot } from "@/model/etf/EtfDepot";
 import CrudEtfControllerHandler from "@/handler/CrudEtfControllerHandler";
+import router, { Routes } from "@/router";
 
 const { t } = useI18n();
 
@@ -413,7 +414,7 @@ const etfsSelectValues = ref({} as Array<SelectBoxValue>);
 
 const calcEtfAskPrice = ref(0);
 const calcEtfBidPrice = ref(0);
-const selectedEtf = ref(0);
+const selectedEtf = ref(undefined as number | undefined);
 const calcEtfSalePieces = ref(0);
 const calcEtfTransactionCosts = ref(0);
 const calcResults = ref({} as EtfSalesCalculation);
@@ -425,10 +426,18 @@ const allTab = ref();
 const deleteModal = ref();
 const createModal = ref();
 
+const props = defineProps({
+  etfId: {
+    type: String,
+    default: undefined,
+  },
+});
+
 const { handleSubmit, values, setFieldTouched } = useForm();
 
 onMounted(() => {
-  loadEtfs();
+  const etfId: number | undefined = props.etfId ? +props.etfId : undefined;
+  loadEtfs(etfId);
 });
 
 const etfEffectiveFlowAmountSum = computed(() => {
@@ -469,21 +478,28 @@ const etfFlowPriceAvg = computed(() => {
   return etfFlowAmountPriceSum.value / etfFlowAmountSum.value;
 });
 
-const loadEtfs = () => {
+const loadEtfs = (etfId?: number) => {
   serverErrors.value = new Array<string>();
   etfsLoaded.value = false;
   etfsSelectValues.value = new Array<SelectBoxValue>();
-
   CrudEtfControllerHandler.fetchAllEtf()
     .then((response) => {
       etfs.value = response;
+      let favoriteEtfId;
       for (let etf of response) {
         etfsSelectValues.value.push({ id: etf.id, value: etf.name });
-        if (etf.isFavorite) selectedEtf.value = etf.id;
+        if (etf.isFavorite) favoriteEtfId = etf.id;
       }
+
+      if (etfId !== undefined) {
+        selectedEtf.value = etfId;
+      } else if (favoriteEtfId !== undefined) {
+        selectedEtf.value = favoriteEtfId;
+      }
+
       etfsLoaded.value = true;
 
-      if (selectedEtf.value !== 0) {
+      if (selectedEtf.value !== undefined) {
         loadData(selectedEtf.value);
       }
     })
@@ -502,9 +518,11 @@ const loadData = (etfId: number) => {
   EtfControllerHandler.listEtfFlowsById(etfId)
     .then((etfDepot) => {
       handleServerResponse(etfDepot, etfId);
+      routerPush();
     })
     .catch((backendError) => {
       handleBackendError(backendError, serverErrors);
+      routerPush();
     });
 
   Object.keys(values).forEach((field) => setFieldTouched(field, false));
@@ -592,19 +610,20 @@ const showAll = () => {
 const calculateEtfSale = handleSubmit(() => {
   serverErrors.value = new Array<string>();
 
-  EtfControllerHandler.calcEtfSale(
-    selectedEtf.value,
-    calcEtfSalePieces.value,
-    calcEtfBidPrice.value,
-    calcEtfAskPrice.value,
-    calcEtfTransactionCosts.value,
-  )
-    .then((_calcResults) => {
-      calcResults.value = _calcResults;
-    })
-    .catch((backendError) => {
-      handleBackendError(backendError, serverErrors);
-    });
+  if (selectedEtf.value !== undefined)
+    EtfControllerHandler.calcEtfSale(
+      selectedEtf.value,
+      calcEtfSalePieces.value,
+      calcEtfBidPrice.value,
+      calcEtfAskPrice.value,
+      calcEtfTransactionCosts.value,
+    )
+      .then((_calcResults) => {
+        calcResults.value = _calcResults;
+      })
+      .catch((backendError) => {
+        handleBackendError(backendError, serverErrors);
+      });
 });
 
 const deleteEtfFlow = (etfFlow: EtfFlow, etfName: string) => {
@@ -632,8 +651,17 @@ const etfFlowUpdated = (etfFlow: EtfFlow) => {
 };
 
 watch(selectedEtf, (newVal, oldVal) => {
-  if (newVal != selectedEtf.value) {
+  if (oldVal != selectedEtf.value && newVal !== undefined) {
     loadData(newVal);
   }
 });
+
+const routerPush = () => {
+  if ((selectedEtf.value || "") != (props.etfId || "")) {
+    router.push({
+      name: Routes.ListEtfDepot,
+      params: { etfId: selectedEtf.value },
+    });
+  }
+};
 </script>
