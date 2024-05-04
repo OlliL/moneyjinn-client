@@ -163,10 +163,10 @@ const loadEtfs = (etfId?: number, year?: number) => {
       }
       if (etfId !== undefined) {
         displayedEtf.value = etfId;
-        loadYear(etfId, year);
+        loadYears(etfId, year);
       } else if (favoriteEtfId !== undefined) {
         displayedEtf.value = favoriteEtfId;
-        loadYear(favoriteEtfId, year);
+        loadYears(favoriteEtfId);
       }
       etfsLoaded.value = true;
     })
@@ -175,14 +175,13 @@ const loadEtfs = (etfId?: number, year?: number) => {
     });
 };
 
-const loadYear = (etfId: number, year?: number) => {
+const loadYears = (etfId: number, year?: number) => {
   serverErrors.value = new Array<string>();
+  yearsLoaded.value = false;
 
   yearSelectValues.value = new Array<SelectBoxValue>();
-  selectedYear.value = undefined;
-  yearsLoaded.value = false;
   selectedEtf.value = etfId;
-
+  selectedYear.value = undefined;
   CrudEtfPreliminaryLumpSumControllerHandler.fetchEtfPreliminaryLumpSumYears(
     etfId,
   )
@@ -193,17 +192,17 @@ const loadYear = (etfId: number, year?: number) => {
 
       if (year === undefined || !response.includes(year)) {
         displayedYear.value = response.slice(-1)[0];
-        router.push({
-          name: Routes.ListEtfPreliminaryLumpSums,
-          params: { etfId: etfId, year: displayedYear.value },
-        });
       } else {
         displayedYear.value = year;
       }
       selectedYear.value = displayedYear.value;
+      routerPush();
+
       yearsLoaded.value = true;
     })
-    .catch(() => {});
+    .catch(() => {
+      routerPush();
+    });
 };
 
 const showCreateEtfPreliminaryLumpSumModal = (
@@ -232,11 +231,7 @@ watch(selectedEtf, (newVal, oldVal) => {
     newVal != displayedEtf.value
   ) {
     displayedEtf.value = newVal;
-    router.push({
-      name: Routes.ListEtfPreliminaryLumpSums,
-      params: { etfId: newVal },
-    });
-    loadYear(newVal);
+    loadYears(newVal);
   }
 });
 
@@ -247,20 +242,28 @@ watch(selectedYear, (newVal, oldVal) => {
     newVal !== displayedYear.value
   ) {
     displayedYear.value = newVal;
-
-    router.push({
-      name: Routes.ListEtfPreliminaryLumpSums,
-      params: { etfId: selectedEtf.value, year: newVal },
-    });
+    routerPush();
   }
 });
+
+const routerPush = () => {
+  if (
+    (selectedEtf.value || "") != (props.etfId || "") ||
+    (selectedYear.value || "") != (props.year || "")
+  ) {
+    router.push({
+      name: Routes.ListEtfPreliminaryLumpSums,
+      params: { etfId: selectedEtf.value, year: selectedYear.value },
+    });
+  }
+};
 
 const reloadView = (etfPreliminaryLumpSum: EtfPreliminaryLumpSum) => {
   if (etfPreliminaryLumpSum.etfId == selectedEtf.value) {
     if (selectedYear.value === undefined) {
-      loadYear(selectedEtf.value, etfPreliminaryLumpSum.year);
+      loadYears(selectedEtf.value, etfPreliminaryLumpSum.year);
     } else {
-      loadYear(selectedEtf.value, selectedYear.value);
+      loadYears(selectedEtf.value, selectedYear.value);
     }
   }
 };
