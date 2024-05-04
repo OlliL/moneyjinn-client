@@ -28,7 +28,7 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref, watch } from "vue";
+import { ref, watch } from "vue";
 
 import DivError from "../DivError.vue";
 import SpanAmount from "../SpanAmount.vue";
@@ -65,7 +65,6 @@ const dataArray = ref({} as Array<RowData>);
 
 const loadEtfPreliminaryLumpSums = (etfId: number, year: number) => {
   serverErrors.value = new Array<string>();
-
   dataLoaded.value = false;
   CrudEtfPreliminaryLumpSumControllerHandler.fetchEtfPreliminaryLumpSum(
     etfId,
@@ -124,11 +123,6 @@ const loadEtfPreliminaryLumpSums = (etfId: number, year: number) => {
     });
 };
 
-onMounted(() => {
-  loadEtfPreliminaryLumpSums(props.etfId, props.year);
-});
-
-// TODO watch etfId too
 watch(
   () => props.year,
   (newVal, oldVal) => {
