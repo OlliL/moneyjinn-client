@@ -238,7 +238,7 @@ export const errorMessages = {
 export function getErrorMessage(errorCode: number) {
   const message = errorMessages[errorCode as keyof typeof errorMessages];
 
-  return message
-    ? message
-    : "Fehlertext zu Fehler-ID '" + errorCode + "' ist unbekannt!";
+  return (
+    message ?? "Fehlertext zu Fehler-ID '" + errorCode + "' ist unbekannt!"
+  );
 }
