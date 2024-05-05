@@ -61,6 +61,8 @@ export const enum ErrorCode {
   WKN_MUST_NOT_BE_EMPTY = 386,
   TICKER_MUST_NOT_BE_EMPTY = 387,
   ETF_STILL_REFERENCED = 388,
+  ETF_PRELIMINARY_LUMP_SUM_PIECE_PRICE_MUST_BE_NULL = 389,
+  ETF_PRELIMINARY_LUMP_SUM_MONTHLY_PRICES_MUST_BE_NULL = 390,
 }
 
 export const errorMessages = {
@@ -224,6 +226,13 @@ export const errorMessages = {
   [ErrorCode.ETF_STILL_REFERENCED]: I18nHolder.t()(
     "ErrorMessage.ETF_STILL_REFERENCED",
   ),
+  [ErrorCode.ETF_PRELIMINARY_LUMP_SUM_PIECE_PRICE_MUST_BE_NULL]: I18nHolder.t()(
+    "ErrorMessage.ETF_PRELIMINARY_LUMP_SUM_PIECE_PRICE_MUST_BE_NULL",
+  ),
+  [ErrorCode.ETF_PRELIMINARY_LUMP_SUM_MONTHLY_PRICES_MUST_BE_NULL]:
+    I18nHolder.t()(
+      "ErrorMessage.ETF_PRELIMINARY_LUMP_SUM_MONTHLY_PRICES_MUST_BE_NULL",
+    ),
 };
 
 export function getErrorMessage(errorCode: number) {

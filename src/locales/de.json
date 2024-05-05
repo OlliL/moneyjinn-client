@@ -463,6 +463,8 @@
         "ISIN_MUST_NOT_BE_EMPTY": "Bitte die ISIN angeben!",
         "WKN_MUST_NOT_BE_EMPTY": "Bitte die WKN Angeben!",
         "TICKER_MUST_NOT_BE_EMPTY": "Bitte den Ticker angeben!",
-        "ETF_STILL_REFERENCED": "Der ETF kann nicht gelöscht werden, da er noch in einem Depot verwendet wird oder Vorabpauschalen erfasst sind!"
+        "ETF_STILL_REFERENCED": "Der ETF kann nicht gelöscht werden, da er noch in einem Depot verwendet wird oder Vorabpauschalen erfasst sind!",
+        "ETF_PRELIMINARY_LUMP_SUM_PIECE_PRICE_MUST_BE_NULL": "Beim Monatsmodus darf kein Einzelpreis erfasst sein!",
+        "ETF_PRELIMINARY_LUMP_SUM_MONTHLY_PRICES_MUST_BE_NULL": "Beim Einzelpreismodus dürfen keine Monatspreise erfasst sein!"
     }
 }

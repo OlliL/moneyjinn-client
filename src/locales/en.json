@@ -463,6 +463,8 @@
         "ISIN_MUST_NOT_BE_EMPTY": "ISIN must be set!",
         "WKN_MUST_NOT_BE_EMPTY": "WKN must be set!",
         "TICKER_MUST_NOT_BE_EMPTY": "Ticker must be set!",
-        "ETF_STILL_REFERENCED": "The posting account cannot be deleted because it is still referenced inside a depot or has preliminary lump sums recorded!"
+        "ETF_STILL_REFERENCED": "The posting account cannot be deleted because it is still referenced inside a depot or has preliminary lump sums recorded!",
+        "ETF_PRELIMINARY_LUMP_SUM_PIECE_PRICE_MUST_BE_NULL": "No piece price must be entered in montly mode!",
+        "ETF_PRELIMINARY_LUMP_SUM_MONTHLY_PRICES_MUST_BE_NULL": "No monthly prices must be entered in single price mode!"
     }
 }
