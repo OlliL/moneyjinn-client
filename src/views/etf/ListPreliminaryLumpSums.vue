@@ -112,7 +112,7 @@ import type { SelectBoxValue } from "@/model/SelectBoxValue";
 import CrudEtfControllerHandler from "@/handler/CrudEtfControllerHandler";
 import SelectStandard from "@/components/SelectStandard.vue";
 import type { Etf } from "@/model/etf/Etf";
-import { ref, onMounted, watch, nextTick } from "vue";
+import { ref, onMounted, watch } from "vue";
 import type { EtfPreliminaryLumpSum } from "@/model/etf/EtfPreliminaryLumpSum";
 import router, { Routes } from "@/router";
 
