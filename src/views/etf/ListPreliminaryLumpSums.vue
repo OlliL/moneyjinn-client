@@ -69,7 +69,7 @@
       v-if="selectedYear && selectedEtf"
     >
       <div class="col-xl-3 col-lg-6 col-xs-12">
-        <ShowEtfPreliminaryLumpSum :etfId="selectedEtf" :year="selectedYear" />
+        <ShowEtfPreliminaryLumpSum :mep="etfPreliminaryLumpSum" />
       </div>
     </div>
     <div class="row justify-content-md-center mb-4" v-if="selectedYear">
@@ -124,6 +124,8 @@ const selectedEtf = ref(undefined as number | undefined);
 const etfsSelectValues = ref({} as Array<SelectBoxValue>);
 const yearSelectValues = ref({} as Array<SelectBoxValue>);
 const etfs = ref({} as Array<Etf>);
+const etfPreliminaryLumpSums = ref({} as Map<number, EtfPreliminaryLumpSum>);
+const etfPreliminaryLumpSum = ref({} as EtfPreliminaryLumpSum | undefined);
 
 const createModal = ref();
 const deleteModal = ref();
@@ -180,20 +182,27 @@ const loadYears = (etfId: number, year?: number) => {
   yearsLoaded.value = false;
 
   yearSelectValues.value = new Array<SelectBoxValue>();
+  etfPreliminaryLumpSums.value = new Map<number, EtfPreliminaryLumpSum>();
   selectedEtf.value = etfId;
   selectedYear.value = undefined;
-  CrudEtfPreliminaryLumpSumControllerHandler.fetchEtfPreliminaryLumpSumYears(
+  CrudEtfPreliminaryLumpSumControllerHandler.fetchAllEtfPreliminaryLumpSum(
     etfId,
   )
     .then((response) => {
-      for (let _year of response) {
+      for (let _etfPreliminaryLumpSum of response) {
+        let _year = _etfPreliminaryLumpSum.year;
         yearSelectValues.value.push({ id: _year, value: _year + "" });
+        etfPreliminaryLumpSums.value.set(_year, _etfPreliminaryLumpSum);
       }
 
-      if (year === undefined || !response.includes(year)) {
-        displayedYear.value = response.slice(-1)[0];
+      if (year === undefined || !etfPreliminaryLumpSums.value.has(year)) {
+        const _year = Array.from(etfPreliminaryLumpSums.value.keys()).pop();
+        displayedYear.value = _year;
+        if (_year !== undefined)
+          etfPreliminaryLumpSum.value = etfPreliminaryLumpSums.value.get(_year);
       } else {
         displayedYear.value = year;
+        etfPreliminaryLumpSum.value = etfPreliminaryLumpSums.value.get(year);
       }
       selectedYear.value = displayedYear.value;
       routerPush();
@@ -242,6 +251,7 @@ watch(selectedYear, (newVal, oldVal) => {
     newVal !== displayedYear.value
   ) {
     displayedYear.value = newVal;
+    etfPreliminaryLumpSum.value = etfPreliminaryLumpSums.value.get(newVal);
     routerPush();
   }
 });

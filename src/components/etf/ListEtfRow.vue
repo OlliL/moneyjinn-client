@@ -23,7 +23,7 @@
   </tr>
 </template>
 <script lang="ts" setup>
-import { computed, type PropType } from "vue";
+import { type PropType } from "vue";
 
 import type { Etf } from "@/model/etf/Etf";
 

@@ -5,6 +5,7 @@ export function mapEtfPreliminaryLumpSumTransportToModel(
   transport: EtfPreliminaryLumpSumTransport,
 ): EtfPreliminaryLumpSum {
   const model: EtfPreliminaryLumpSum = {
+    id: transport.id,
     etfId: transport.etfId,
     year: transport.year,
     amountJanuary: transport.amountJanuary,
@@ -27,8 +28,11 @@ export function mapEtfPreliminaryLumpSumModelToTransport(
   model: EtfPreliminaryLumpSum,
 ): EtfPreliminaryLumpSumTransport {
   const transport: EtfPreliminaryLumpSumTransport = {
+    id: model.id,
     etfId: model.etfId,
     year: model.year,
+    type: 1, // TODO OlliL/moneyjinn-server#56
+    amountPerPiece: undefined, // TODO OlliL/moneyjinn-server#56
     amountJanuary: model.amountJanuary,
     amountFebruary: model.amountFebruary,
     amountMarch: model.amountMarch,
