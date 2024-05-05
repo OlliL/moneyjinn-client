@@ -78,7 +78,10 @@
           type="button"
           class="btn btn-primary mx-2"
           @click="
-            showCreateEtfPreliminaryLumpSumModal(selectedEtf, selectedYear)
+            showCreateEtfPreliminaryLumpSumModal(
+              selectedEtf,
+              etfPreliminaryLumpSum,
+            )
           "
         >
           {{ $t("General.edit") }}
@@ -216,20 +219,19 @@ const loadYears = (etfId: number, year?: number) => {
 
 const showCreateEtfPreliminaryLumpSumModal = (
   etfId?: number,
-  year?: number,
+  mep?: EtfPreliminaryLumpSum,
 ) => {
   (createModal.value as typeof CreateEtfPreliminaryLumpSumModalVue)._show(
     etfs.value,
     etfId,
-    year,
+    mep,
   );
 };
 
 const showDeleteEtfPreliminaryLumpSumModal = () => {
   (deleteModal.value as typeof DeleteEtfPreliminaryLumpSumModalVue)._show(
     etfs.value,
-    selectedEtf.value,
-    selectedYear.value,
+    etfPreliminaryLumpSum.value,
   );
 };
 
