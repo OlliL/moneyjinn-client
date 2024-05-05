@@ -10,7 +10,7 @@
           <div class="row pt-2">
             <div class="col-xl-9 col-xs-12">
               <SelectStandard
-                v-model="etfPreliminaryLumpSum.etfId"
+                v-model="mep.etfId"
                 :validation-schema="schema.etfId"
                 id="etf"
                 :field-label="$t('General.etf')"
@@ -30,7 +30,7 @@
           <div class="row pt-2">
             <div class="col-md-6 col-xs-12">
               <InputStandard
-                v-model="etfPreliminaryLumpSum.amountJanuary"
+                v-model="mep.amountJanuary"
                 :validation-schema="schema.amountJanuary"
                 id="amountJanuary"
                 step="0.01"
@@ -49,7 +49,7 @@
             </div>
             <div class="col-md-6 col-xs-12">
               <InputStandard
-                v-model="etfPreliminaryLumpSum.amountFebruary"
+                v-model="mep.amountFebruary"
                 :validation-schema="schema.amountFebruary"
                 id="amountFebruary"
                 step="0.01"
@@ -70,7 +70,7 @@
           <div class="row pt-2">
             <div class="col-md-6 col-xs-12">
               <InputStandard
-                v-model="etfPreliminaryLumpSum.amountMarch"
+                v-model="mep.amountMarch"
                 :validation-schema="schema.amountMarch"
                 id="amountMarch"
                 step="0.01"
@@ -89,7 +89,7 @@
             </div>
             <div class="col-md-6 col-xs-12">
               <InputStandard
-                v-model="etfPreliminaryLumpSum.amountApril"
+                v-model="mep.amountApril"
                 :validation-schema="schema.amountApril"
                 id="amountApril"
                 step="0.01"
@@ -110,7 +110,7 @@
           <div class="row pt-2">
             <div class="col-md-6 col-xs-12">
               <InputStandard
-                v-model="etfPreliminaryLumpSum.amountMay"
+                v-model="mep.amountMay"
                 :validation-schema="schema.amountMay"
                 id="amountMay"
                 step="0.01"
@@ -129,7 +129,7 @@
             </div>
             <div class="col-md-6 col-xs-12">
               <InputStandard
-                v-model="etfPreliminaryLumpSum.amountJune"
+                v-model="mep.amountJune"
                 :validation-schema="schema.amountJune"
                 id="amountJune"
                 step="0.01"
@@ -150,7 +150,7 @@
           <div class="row pt-2">
             <div class="col-md-6 col-xs-12">
               <InputStandard
-                v-model="etfPreliminaryLumpSum.amountJuly"
+                v-model="mep.amountJuly"
                 :validation-schema="schema.amountJuly"
                 id="amountJuly"
                 step="0.01"
@@ -169,7 +169,7 @@
             </div>
             <div class="col-md-6 col-xs-12">
               <InputStandard
-                v-model="etfPreliminaryLumpSum.amountAugust"
+                v-model="mep.amountAugust"
                 :validation-schema="schema.amountAugust"
                 id="amountAugust"
                 step="0.01"
@@ -190,7 +190,7 @@
           <div class="row pt-2">
             <div class="col-md-6 col-xs-12">
               <InputStandard
-                v-model="etfPreliminaryLumpSum.amountSeptember"
+                v-model="mep.amountSeptember"
                 :validation-schema="schema.amountSeptember"
                 id="amountSeptember"
                 step="0.01"
@@ -209,7 +209,7 @@
             </div>
             <div class="col-md-6 col-xs-12">
               <InputStandard
-                v-model="etfPreliminaryLumpSum.amountOctober"
+                v-model="mep.amountOctober"
                 :validation-schema="schema.amountOctober"
                 id="amountOctober"
                 step="0.01"
@@ -230,7 +230,7 @@
           <div class="row pt-2">
             <div class="col-md-6 col-xs-12">
               <InputStandard
-                v-model="etfPreliminaryLumpSum.amountNovember"
+                v-model="mep.amountNovember"
                 :validation-schema="schema.amountNovember"
                 id="amountNovember"
                 step="0.01"
@@ -249,7 +249,7 @@
             </div>
             <div class="col-md-6 col-xs-12">
               <InputStandard
-                v-model="etfPreliminaryLumpSum.amountDecember"
+                v-model="mep.amountDecember"
                 :validation-schema="schema.amountDecember"
                 id="amountDecember"
                 step="0.01"
@@ -327,10 +327,9 @@ const schema: Partial<{ [key in keyof EtfPreliminaryLumpSum]: ZodType }> = {
 };
 
 const etfs = ref(new Array<SelectBoxValue>());
-const etfPreliminaryLumpSum = ref({} as EtfPreliminaryLumpSum);
-const origEtfPreliminaryLumpSum = ref({} as EtfPreliminaryLumpSum | undefined);
-const defaultEtfId = ref(0);
-const defaultYear = ref(0);
+const mep = ref({} as EtfPreliminaryLumpSum);
+const origMep = ref({} as EtfPreliminaryLumpSum | undefined);
+const defaultEtfId = ref(0 as number | undefined);
 const modalComponent = ref();
 const emit = defineEmits([
   "etfPreliminaryLumpSumCreated",
@@ -341,21 +340,22 @@ const year = ref(new Date());
 const { handleSubmit, values, setFieldTouched } = useForm();
 
 const title = computed(() => {
-  return origEtfPreliminaryLumpSum.value === undefined
+  return origMep.value === undefined
     ? t("ETFPreliminaryLumpSum.title.create")
     : t("ETFPreliminaryLumpSum.title.update");
 });
 
 const resetForm = () => {
-  etfPreliminaryLumpSum.value = {} as EtfPreliminaryLumpSum;
-  if (origEtfPreliminaryLumpSum.value) {
-    Object.assign(etfPreliminaryLumpSum.value, origEtfPreliminaryLumpSum.value);
+  mep.value = {} as EtfPreliminaryLumpSum;
+  if (origMep.value) {
+    Object.assign(mep.value, origMep.value);
   } else {
-    etfPreliminaryLumpSum.value.etfId = defaultEtfId.value;
+    if (defaultEtfId.value !== undefined) mep.value.etfId = defaultEtfId.value;
+    mep.value.year = new Date().getFullYear();
   }
 
   const localYearDate = new Date();
-  localYearDate.setFullYear(defaultYear.value);
+  localYearDate.setFullYear(mep.value.year);
   localYearDate.setDate(1);
   localYearDate.setMonth(1);
   localYearDate.setHours(0, 0, 0, 0);
@@ -365,49 +365,34 @@ const resetForm = () => {
   Object.keys(values).forEach((field) => setFieldTouched(field, false));
 };
 
-const _show = (_etfs: Array<Etf>, _etfId?: number, _year?: number) => {
+const _show = (
+  _etfs: Array<Etf>,
+  _etfId?: number,
+  _mep?: EtfPreliminaryLumpSum,
+) => {
   etfs.value = new Array<SelectBoxValue>();
   for (let etf of _etfs) {
     etfs.value.push({ id: etf.id, value: etf.name });
   }
-  if (_etfId && _year) {
-    CrudEtfPreliminaryLumpSumControllerHandler.fetchEtfPreliminaryLumpSum(
-      _etfId,
-      _year,
-    )
-      .then((response) => {
-        origEtfPreliminaryLumpSum.value = response;
-        defaultEtfId.value = response.etfId;
-        defaultYear.value = response.year;
-        resetForm();
-        modalComponent.value._show();
-      })
-      .catch((backendError) => {
-        handleBackendError(backendError, serverErrors);
-      });
-  } else {
-    origEtfPreliminaryLumpSum.value = undefined;
-    defaultEtfId.value = _etfId ?? 0;
-    defaultYear.value = _year ?? new Date().getFullYear();
-    resetForm();
-    modalComponent.value._show();
-  }
+  defaultEtfId.value = _etfId;
+  origMep.value = _mep ?? undefined;
+  resetForm();
+  modalComponent.value._show();
 };
 
 const createEtfPreliminaryLumpSum = handleSubmit(() => {
   serverErrors.value = new Array<string>();
 
-  etfPreliminaryLumpSum.value.etfId = defaultEtfId.value;
-  etfPreliminaryLumpSum.value.year = year.value.getFullYear();
+  mep.value.year = year.value.getFullYear();
 
-  if (origEtfPreliminaryLumpSum.value) {
+  if (mep.value.id > 0) {
     //update
     CrudEtfPreliminaryLumpSumControllerHandler.updateEtfPreliminaryLumpSum(
-      etfPreliminaryLumpSum.value,
+      mep.value,
     )
       .then(() => {
         modalComponent.value._hide();
-        emit("etfPreliminaryLumpSumUpdated", etfPreliminaryLumpSum.value);
+        emit("etfPreliminaryLumpSumUpdated", mep.value);
       })
       .catch((backendError) => {
         handleBackendError(backendError, serverErrors);
@@ -415,12 +400,12 @@ const createEtfPreliminaryLumpSum = handleSubmit(() => {
   } else {
     //create
     CrudEtfPreliminaryLumpSumControllerHandler.createEtfPreliminaryLumpSum(
-      etfPreliminaryLumpSum.value,
+      mep.value,
     )
       .then((_etfPreliminaryLumpSum) => {
-        etfPreliminaryLumpSum.value = _etfPreliminaryLumpSum;
+        mep.value = _etfPreliminaryLumpSum;
         modalComponent.value._hide();
-        emit("etfPreliminaryLumpSumCreated", etfPreliminaryLumpSum.value);
+        emit("etfPreliminaryLumpSumCreated", mep.value);
       })
       .catch((backendError) => {
         handleBackendError(backendError, serverErrors);

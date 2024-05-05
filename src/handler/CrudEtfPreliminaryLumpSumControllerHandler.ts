@@ -20,23 +20,18 @@ class EtfPreliminaryLumpSumControllerHandler extends AbstractControllerHandler {
     );
   }
 
-  async fetchEtfPreliminaryLumpSumYears(etfId: number): Promise<Array<number>> {
-    const response = await this.api.readAllYears(etfId);
+  async fetchAllEtfPreliminaryLumpSum(
+    etfId: number,
+  ): Promise<Array<EtfPreliminaryLumpSum>> {
+    const response = await this.api.getAllForEtf(etfId);
 
-    const allYears = new Array<number>();
+    const dataArray = new Array<EtfPreliminaryLumpSum>();
+
     response.data?.forEach((value) => {
-      allYears.push(value);
+      dataArray.push(mapEtfPreliminaryLumpSumTransportToModel(value));
     });
 
-    return allYears;
-  }
-
-  async fetchEtfPreliminaryLumpSum(
-    etfId: number,
-    year: number,
-  ): Promise<EtfPreliminaryLumpSum> {
-    const response = await this.api.readOne(etfId, year);
-    return mapEtfPreliminaryLumpSumTransportToModel(response.data);
+    return dataArray;
   }
 
   async createEtfPreliminaryLumpSum(
@@ -56,8 +51,8 @@ class EtfPreliminaryLumpSumControllerHandler extends AbstractControllerHandler {
     ]);
   }
 
-  async deleteEtfPreliminaryLumpSum(etfId: number, year: number) {
-    await this.api._delete(etfId, year);
+  async deleteEtfPreliminaryLumpSum(id: number) {
+    await this.api._delete(id);
   }
 }
 

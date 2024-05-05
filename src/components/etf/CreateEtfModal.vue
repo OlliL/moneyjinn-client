@@ -130,7 +130,7 @@ const schema: Partial<{ [key in keyof Etf]: ZodType }> = {
 };
 
 const met = ref({} as Etf);
-const origMcp = ref({} as Etf | undefined);
+const origMet = ref({} as Etf | undefined);
 const modalComponent = ref();
 const emit = defineEmits(["etfCreated", "etfUpdated"]);
 const markAsFavorite = ref(false);
@@ -138,14 +138,14 @@ const markAsFavorite = ref(false);
 const { handleSubmit, values, setFieldTouched } = useForm();
 
 const title = computed(() => {
-  return origMcp.value === undefined
+  return origMet.value === undefined
     ? t("ETF.title.create")
     : t("ETF.title.update");
 });
 
 const resetForm = () => {
-  if (origMcp.value) {
-    Object.assign(met.value, origMcp.value);
+  if (origMet.value) {
+    Object.assign(met.value, origMet.value);
   } else {
     met.value = {} as Etf;
   }
@@ -159,7 +159,7 @@ const resetForm = () => {
 };
 
 const _show = async (_met?: Etf) => {
-  origMcp.value = _met ?? undefined;
+  origMet.value = _met ?? undefined;
   resetForm();
   modalComponent.value._show();
 };
