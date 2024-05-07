@@ -82,7 +82,7 @@
 
 <script lang="ts" setup>
 import { useForm } from "vee-validate";
-import { computed, ref } from "vue";
+import { computed, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { coerce, date, string, type ZodType, union, number } from "zod";
 
@@ -101,7 +101,6 @@ import type { Etf } from "@/model/etf/Etf";
 import type { EtfFlow } from "@/model/etf/EtfFlow";
 import type { SelectBoxValue } from "@/model/SelectBoxValue";
 
-import { watch } from "vue";
 import CrudEtfFlowControllerHandler from "@/handler/CrudEtfFlowControllerHandler";
 
 const { t } = useI18n();

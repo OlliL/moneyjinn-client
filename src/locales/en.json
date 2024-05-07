@@ -217,6 +217,9 @@
         }
     },
     "ETFPreliminaryLumpSum": {
+        "newMonthly": "new (monthly)",
+        "newPiece": "new (piece price)",
+        "price": "price per piece",
         "title": {
             "create": "create ETF preliminary lump sums",
             "update": "update ETF preliminary lump sums",
