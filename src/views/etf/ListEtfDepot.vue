@@ -505,7 +505,6 @@ const loadEtfs = (etfId?: number) => {
 };
 
 const loadData = (etfId: number) => {
-  console.log("loadData");
   serverErrors.value = new Array<string>();
   dataLoaded.value = false;
   calcResults.value = {} as EtfSalesCalculation;
@@ -651,7 +650,6 @@ watch(
   selectedEtf,
   (newVal, oldVal) => {
     if (oldVal != selectedEtf.value && newVal !== undefined) {
-      console.log("watch", oldVal, selectedEtf.value, newVal);
       loadData(newVal);
     }
   },

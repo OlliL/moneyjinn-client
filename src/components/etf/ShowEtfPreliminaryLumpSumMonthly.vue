@@ -105,7 +105,6 @@ const loadEtfPreliminaryLumpSums = (mep?: EtfPreliminaryLumpSum) => {
 watch(
   () => props.mep,
   (newVal, oldVal) => {
-    console.log("triggered");
     if (newVal != oldVal) {
       loadEtfPreliminaryLumpSums(newVal);
     }
