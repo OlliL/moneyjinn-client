@@ -310,20 +310,20 @@ const { t } = useI18n();
 const serverErrors = ref(new Array<string>());
 
 const schema: Partial<{ [key in keyof EtfPreliminaryLumpSum]: ZodType }> = {
-  etfId: number(globErr(t("ETFFlow.validation.etfId"))).gt(0),
-  year: date(globErr(t("ETFFlow.validation.timestamp"))),
-  amountJanuary: amountSchema(t("Moneyflow.validation.amount")),
-  amountFebruary: amountSchema(t("Moneyflow.validation.amount")),
-  amountMarch: amountSchema(t("Moneyflow.validation.amount")),
-  amountApril: amountSchema(t("Moneyflow.validation.amount")),
-  amountMay: amountSchema(t("Moneyflow.validation.amount")),
-  amountJune: amountSchema(t("Moneyflow.validation.amount")),
-  amountJuly: amountSchema(t("Moneyflow.validation.amount")),
-  amountAugust: amountSchema(t("Moneyflow.validation.amount")),
-  amountSeptember: amountSchema(t("Moneyflow.validation.amount")),
-  amountOctober: amountSchema(t("Moneyflow.validation.amount")),
-  amountNovember: amountSchema(t("Moneyflow.validation.amount")),
-  amountDecember: amountSchema(t("Moneyflow.validation.amount")),
+  etfId: number(globErr(t("ETFPreliminaryLumpSum.validation.etfId"))).gt(0),
+  year: date(globErr(t("ETFPreliminaryLumpSum.validation.year"))),
+  amountJanuary: amountSchema(t("ETFPreliminaryLumpSum.validation.amount")),
+  amountFebruary: amountSchema(t("ETFPreliminaryLumpSum.validation.amount")),
+  amountMarch: amountSchema(t("ETFPreliminaryLumpSum.validation.amount")),
+  amountApril: amountSchema(t("ETFPreliminaryLumpSum.validation.amount")),
+  amountMay: amountSchema(t("ETFPreliminaryLumpSum.validation.amount")),
+  amountJune: amountSchema(t("ETFPreliminaryLumpSum.validation.amount")),
+  amountJuly: amountSchema(t("ETFPreliminaryLumpSum.validation.amount")),
+  amountAugust: amountSchema(t("ETFPreliminaryLumpSum.validation.amount")),
+  amountSeptember: amountSchema(t("ETFPreliminaryLumpSum.validation.amount")),
+  amountOctober: amountSchema(t("ETFPreliminaryLumpSum.validation.amount")),
+  amountNovember: amountSchema(t("ETFPreliminaryLumpSum.validation.amount")),
+  amountDecember: amountSchema(t("ETFPreliminaryLumpSum.validation.amount")),
 };
 
 const etfs = ref(new Array<SelectBoxValue>());

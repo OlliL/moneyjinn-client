@@ -225,7 +225,13 @@
             "update": "update ETF preliminary lump sums",
             "delete": "delete ETF preliminary lump sums"
         },
-        "monthlyAmount": "amount {month}"
+        "monthlyAmount": "amount {month}",
+        "validation": {
+            "etfId": "Please select an ETF!",
+            "year": "Please specify a year!",
+            "price": "Please specify a price per piece!",
+            "amount": "Please specify an amount!"
+        }
     },
     "Group": {
         "searchBy": "search by name...",
