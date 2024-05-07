@@ -37,7 +37,7 @@
                 id="amountJanuary"
                 step="0.00000001"
                 field-type="number"
-                :field-label="$t('General.amount')"
+                :field-label="$t('ETFPreliminaryLumpSum.price')"
               >
                 <template #icon
                   ><span class="input-group-text"
@@ -82,16 +82,15 @@ import type { EtfPreliminaryLumpSum } from "@/model/etf/EtfPreliminaryLumpSum";
 import type { SelectBoxValue } from "@/model/SelectBoxValue";
 
 import CrudEtfPreliminaryLumpSumControllerHandler from "@/handler/CrudEtfPreliminaryLumpSumControllerHandler";
-import { getMonthName } from "@/tools/views/MonthName";
 
 const { t } = useI18n();
 
 const serverErrors = ref(new Array<string>());
 
-const priceErrMsg = globErr(t("Moneyflow.validation.amount"));
+const priceErrMsg = globErr(t("ETFPreliminaryLumpSum.validation.amount"));
 const schema: Partial<{ [key in keyof EtfPreliminaryLumpSum]: ZodType }> = {
-  etfId: number(globErr(t("ETFFlow.validation.etfId"))).gt(0),
-  year: date(globErr(t("ETFFlow.validation.timestamp"))),
+  etfId: number(globErr(t("ETFPreliminaryLumpSum.validation.etfId"))).gt(0),
+  year: date(globErr(t("ETFPreliminaryLumpSum.validation.year"))),
   amountPerPiece: union(
     [coerce.number(priceErrMsg).gt(0), coerce.number(priceErrMsg).lt(0)],
     priceErrMsg,
