@@ -217,6 +217,9 @@
         }
     },
     "ETFPreliminaryLumpSum": {
+        "newMonthly": "Neu (monatlich)",
+        "newPiece": "Neu (Stückpreis)",
+        "price": "Stückpreis",
         "title": {
             "create": "ETF Vorabpauschale hinzufügen",
             "update": "ETF Vorabpauschale bearbeiten",

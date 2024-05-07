@@ -1,7 +1,11 @@
+import type { EtfPreliminaryLumpSumType } from "./EtfPreliminaryLumpSumType";
+
 export type EtfPreliminaryLumpSum = {
   id: number;
   etfId: number;
   year: number;
+  type: EtfPreliminaryLumpSumType;
+  amountPerPiece: number | undefined;
   amountJanuary: number | undefined;
   amountFebruary: number | undefined;
   amountMarch: number | undefined;

@@ -1,5 +1,9 @@
 import type { EtfPreliminaryLumpSumTransport } from "@/api";
 import type { EtfPreliminaryLumpSum } from "@/model/etf/EtfPreliminaryLumpSum";
+import {
+  mapEtfPreliminaryLumpSumTypeEnumToTransport,
+  mapEtfPreliminaryLumpSumTypeTransportToEnum,
+} from "./EtfPreliminaryLumpSumTypeMapper";
 
 export function mapEtfPreliminaryLumpSumTransportToModel(
   transport: EtfPreliminaryLumpSumTransport,
@@ -8,6 +12,8 @@ export function mapEtfPreliminaryLumpSumTransportToModel(
     id: transport.id,
     etfId: transport.etfId,
     year: transport.year,
+    type: mapEtfPreliminaryLumpSumTypeTransportToEnum(transport.type),
+    amountPerPiece: transport.amountPerPiece,
     amountJanuary: transport.amountJanuary,
     amountFebruary: transport.amountFebruary,
     amountMarch: transport.amountMarch,
@@ -31,8 +37,8 @@ export function mapEtfPreliminaryLumpSumModelToTransport(
     id: model.id,
     etfId: model.etfId,
     year: model.year,
-    type: 1, // TODO OlliL/moneyjinn-server#56
-    amountPerPiece: undefined, // TODO OlliL/moneyjinn-server#56
+    type: mapEtfPreliminaryLumpSumTypeEnumToTransport(model.type),
+    amountPerPiece: model.amountPerPiece,
     amountJanuary: model.amountJanuary,
     amountFebruary: model.amountFebruary,
     amountMarch: model.amountMarch,

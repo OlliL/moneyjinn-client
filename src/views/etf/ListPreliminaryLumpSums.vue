@@ -1,12 +1,21 @@
 <template>
-  <CreateEtfPreliminaryLumpSumModalVue
-    ref="createModal"
+  <CreateEtfPreliminaryLumpSumModalMonthlyVue
+    ref="createModalMonthly"
     @etf-preliminary-lump-sum-created="reloadView"
     @etf-preliminary-lump-sum-updated="reloadView"
   />
-  <DeleteEtfPreliminaryLumpSumModalVue
+  <CreateEtfPreliminaryLumpSumModalPieceVue
+    ref="createModalPiece"
+    @etf-preliminary-lump-sum-created="reloadView"
+    @etf-preliminary-lump-sum-updated="reloadView"
+  />
+  <DeleteEtfPreliminaryLumpSumModalMonthlyVue
     @etf-preliminary-lump-sum-deleted="reloadView"
-    ref="deleteModal"
+    ref="deleteModalMonthly"
+  />
+  <DeleteEtfPreliminaryLumpSumModalPieceVue
+    @etf-preliminary-lump-sum-deleted="reloadView"
+    ref="deleteModalPiece"
   />
   <div class="container-fluid text-center">
     <div class="row justify-content-md-center">
@@ -15,12 +24,12 @@
       </div>
     </div>
     <div class="row justify-content-md-center mb-12">
-      <div class="col-xxl-3 col-xl-4 col-md-7 col-xs-12">
+      <div class="col-xxl-5 col-xl-6 col-md-8 col-xs-12">
         <div
           class="row no-gutters flex-lg-nowrap d-flex justify-content align-items-center"
         >
           <div
-            class="col-xxl-10 col-md-9 col-xs-12 justify-content-end mb-3"
+            class="col-xxl-6 col-md-8 col-xs-12 justify-content-end mb-3"
             v-if="etfsLoaded"
           >
             <SelectStandard
@@ -31,15 +40,27 @@
             />
           </div>
           <div
-            class="col-xxl-2 col-md-3 col-xs-12 justify-content-start mb-3"
+            class="col-xxl-3 col-md-2 col-xs-12 justify-content-start mb-3"
             v-if="selectedEtf"
           >
             <button
               type="button"
               class="btn btn-primary"
-              @click="showCreateEtfPreliminaryLumpSumModal(selectedEtf)"
+              @click="showCreateEtfPreliminaryLumpSumMonthlyModal(selectedEtf)"
             >
-              {{ $t("General.new") }}
+              {{ $t("ETFPreliminaryLumpSum.newMonthly") }}
+            </button>
+          </div>
+          <div
+            class="col-xxl-3 col-md-2 col-xs-12 justify-content-start mb-3"
+            v-if="selectedEtf"
+          >
+            <button
+              type="button"
+              class="btn btn-primary"
+              @click="showCreateEtfPreliminaryLumpSumPieceModal(selectedEtf)"
+            >
+              {{ $t("ETFPreliminaryLumpSum.newPiece") }}
             </button>
           </div>
         </div>
@@ -63,36 +84,78 @@
     </div>
 
     <DivError :server-errors="serverErrors" />
-
     <div
-      class="row justify-content-md-center mb-4"
-      v-if="selectedYear && selectedEtf"
+      v-if="
+        selectedYear &&
+        selectedEtf &&
+        etfPreliminaryLumpSum?.type ==
+          EtfPreliminaryLumpSumType.AMOUNT_PER_MONTH
+      "
     >
-      <div class="col-xl-3 col-lg-6 col-xs-12">
-        <ShowEtfPreliminaryLumpSum :mep="etfPreliminaryLumpSum" />
+      <div class="row justify-content-md-center mb-4">
+        <div class="col-xl-3 col-lg-6 col-xs-12">
+          <ShowEtfPreliminaryLumpSumMonthlyVue :mep="etfPreliminaryLumpSum" />
+        </div>
+      </div>
+      <div class="row justify-content-md-center mb-4">
+        <div class="col-md-4 col-xs-12">
+          <button
+            type="button"
+            class="btn btn-primary mx-2"
+            @click="
+              showCreateEtfPreliminaryLumpSumMonthlyModal(
+                selectedEtf,
+                etfPreliminaryLumpSum,
+              )
+            "
+          >
+            {{ $t("General.edit") }}
+          </button>
+          <button
+            type="button"
+            class="btn btn-danger mx-2"
+            @click="showDeleteEtfPreliminaryLumpSumModal"
+          >
+            {{ $t("General.delete") }}
+          </button>
+        </div>
       </div>
     </div>
-    <div class="row justify-content-md-center mb-4" v-if="selectedYear">
-      <div class="col-md-4 col-xs-12">
-        <button
-          type="button"
-          class="btn btn-primary mx-2"
-          @click="
-            showCreateEtfPreliminaryLumpSumModal(
-              selectedEtf,
-              etfPreliminaryLumpSum,
-            )
-          "
-        >
-          {{ $t("General.edit") }}
-        </button>
-        <button
-          type="button"
-          class="btn btn-danger mx-2"
-          @click="showDeleteEtfPreliminaryLumpSumModal"
-        >
-          {{ $t("General.delete") }}
-        </button>
+    <div
+      v-if="
+        selectedYear &&
+        selectedEtf &&
+        etfPreliminaryLumpSum?.type ==
+          EtfPreliminaryLumpSumType.AMOUNT_PER_PIECE
+      "
+    >
+      <div class="row justify-content-md-center mb-4">
+        <div class="col-xl-3 col-lg-6 col-xs-12">
+          <ShowEtfPreliminaryLumpSumPieceVue :mep="etfPreliminaryLumpSum" />
+        </div>
+      </div>
+      <div class="row justify-content-md-center mb-4">
+        <div class="col-md-4 col-xs-12">
+          <button
+            type="button"
+            class="btn btn-primary mx-2"
+            @click="
+              showCreateEtfPreliminaryLumpSumPieceModal(
+                selectedEtf,
+                etfPreliminaryLumpSum,
+              )
+            "
+          >
+            {{ $t("General.edit") }}
+          </button>
+          <button
+            type="button"
+            class="btn btn-danger mx-2"
+            @click="showDeleteEtfPreliminaryLumpSumModal"
+          >
+            {{ $t("General.delete") }}
+          </button>
+        </div>
       </div>
     </div>
     <!---->
@@ -100,21 +163,26 @@
 </template>
 
 <script lang="ts" setup>
-import DeleteEtfPreliminaryLumpSumModalVue from "@/components/etf/DeleteEtfPreliminaryLumpSumModal.vue";
+import { ref, onMounted, watch } from "vue";
+import router, { Routes } from "@/router";
+
+import DeleteEtfPreliminaryLumpSumModalMonthlyVue from "@/components/etf/DeleteEtfPreliminaryLumpSumModalMonthly.vue";
+import CreateEtfPreliminaryLumpSumModalMonthlyVue from "@/components/etf/CreateEtfPreliminaryLumpSumModalMonthly.vue";
+import ShowEtfPreliminaryLumpSumMonthlyVue from "@/components/etf/ShowEtfPreliminaryLumpSumMonthly.vue";
+import DeleteEtfPreliminaryLumpSumModalPieceVue from "@/components/etf/DeleteEtfPreliminaryLumpSumModalPiece.vue";
+import CreateEtfPreliminaryLumpSumModalPieceVue from "@/components/etf/CreateEtfPreliminaryLumpSumModalPiece.vue";
+import ShowEtfPreliminaryLumpSumPieceVue from "@/components/etf/ShowEtfPreliminaryLumpSumPiece.vue";
 import DivError from "@/components/DivError.vue";
-import CreateEtfPreliminaryLumpSumModalVue from "@/components/etf/CreateEtfPreliminaryLumpSumModal.vue";
+import SelectStandard from "@/components/SelectStandard.vue";
 
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 
 import CrudEtfPreliminaryLumpSumControllerHandler from "@/handler/CrudEtfPreliminaryLumpSumControllerHandler";
-import ShowEtfPreliminaryLumpSum from "@/components/etf/ShowEtfPreliminaryLumpSum.vue";
-import type { SelectBoxValue } from "@/model/SelectBoxValue";
 import CrudEtfControllerHandler from "@/handler/CrudEtfControllerHandler";
-import SelectStandard from "@/components/SelectStandard.vue";
+import type { SelectBoxValue } from "@/model/SelectBoxValue";
 import type { Etf } from "@/model/etf/Etf";
-import { ref, onMounted, watch } from "vue";
 import type { EtfPreliminaryLumpSum } from "@/model/etf/EtfPreliminaryLumpSum";
-import router, { Routes } from "@/router";
+import { EtfPreliminaryLumpSumType } from "@/model/etf/EtfPreliminaryLumpSumType";
 
 const serverErrors = ref(new Array<string>());
 
@@ -130,8 +198,10 @@ const etfs = ref({} as Array<Etf>);
 const etfPreliminaryLumpSums = ref({} as Map<number, EtfPreliminaryLumpSum>);
 const etfPreliminaryLumpSum = ref({} as EtfPreliminaryLumpSum | undefined);
 
-const createModal = ref();
-const deleteModal = ref();
+const createModalMonthly = ref();
+const createModalPiece = ref();
+const deleteModalMonthly = ref();
+const deleteModalPiece = ref();
 
 const props = defineProps({
   etfId: {
@@ -217,22 +287,37 @@ const loadYears = (etfId: number, year?: number) => {
     });
 };
 
-const showCreateEtfPreliminaryLumpSumModal = (
+const showCreateEtfPreliminaryLumpSumMonthlyModal = (
   etfId?: number,
   mep?: EtfPreliminaryLumpSum,
 ) => {
-  (createModal.value as typeof CreateEtfPreliminaryLumpSumModalVue)._show(
-    etfs.value,
-    etfId,
-    mep,
-  );
+  (
+    createModalMonthly.value as typeof CreateEtfPreliminaryLumpSumModalMonthlyVue
+  )._show(etfs.value, etfId, mep);
+};
+
+const showCreateEtfPreliminaryLumpSumPieceModal = (
+  etfId?: number,
+  mep?: EtfPreliminaryLumpSum,
+) => {
+  (
+    createModalPiece.value as typeof CreateEtfPreliminaryLumpSumModalPieceVue
+  )._show(etfs.value, etfId, mep);
 };
 
 const showDeleteEtfPreliminaryLumpSumModal = () => {
-  (deleteModal.value as typeof DeleteEtfPreliminaryLumpSumModalVue)._show(
-    etfs.value,
-    etfPreliminaryLumpSum.value,
-  );
+  if (
+    etfPreliminaryLumpSum.value?.type ==
+    EtfPreliminaryLumpSumType.AMOUNT_PER_MONTH
+  ) {
+    (
+      deleteModalMonthly.value as typeof DeleteEtfPreliminaryLumpSumModalMonthlyVue
+    )._show(etfs.value, etfPreliminaryLumpSum.value);
+  } else {
+    (
+      deleteModalPiece.value as typeof DeleteEtfPreliminaryLumpSumModalPieceVue
+    )._show(etfs.value, etfPreliminaryLumpSum.value);
+  }
 };
 
 watch(selectedEtf, (newVal, oldVal) => {
