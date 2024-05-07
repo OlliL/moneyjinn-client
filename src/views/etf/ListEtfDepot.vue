@@ -498,10 +498,6 @@ const loadEtfs = (etfId?: number) => {
       }
 
       etfsLoaded.value = true;
-
-      if (selectedEtf.value !== undefined) {
-        loadData(selectedEtf.value);
-      }
     })
     .catch((backendError) => {
       handleBackendError(backendError, serverErrors);
@@ -509,6 +505,7 @@ const loadEtfs = (etfId?: number) => {
 };
 
 const loadData = (etfId: number) => {
+  console.log("loadData");
   serverErrors.value = new Array<string>();
   dataLoaded.value = false;
   calcResults.value = {} as EtfSalesCalculation;
@@ -650,11 +647,16 @@ const etfFlowUpdated = (etfFlow: EtfFlow) => {
   loadData(etfFlow.etfId);
 };
 
-watch(selectedEtf, (newVal, oldVal) => {
-  if (oldVal != selectedEtf.value && newVal !== undefined) {
-    loadData(newVal);
-  }
-});
+watch(
+  selectedEtf,
+  (newVal, oldVal) => {
+    if (oldVal != selectedEtf.value && newVal !== undefined) {
+      console.log("watch", oldVal, selectedEtf.value, newVal);
+      loadData(newVal);
+    }
+  },
+  { immediate: true },
+);
 
 const routerPush = () => {
   if ((selectedEtf.value || "") != (props.etfId || "")) {
