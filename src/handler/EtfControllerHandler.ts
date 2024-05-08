@@ -54,23 +54,26 @@ class EtfControllerHandler extends AbstractControllerHandler {
   ): Promise<EtfDepot> {
     const listEtfFlowsResponse = response.data;
 
-    const etfListViewData = {} as EtfDepot;
-    etfListViewData.calcEtfAskPrice = listEtfFlowsResponse.calcEtfAskPrice;
-    etfListViewData.calcEtfBidPrice = listEtfFlowsResponse.calcEtfBidPrice;
-    etfListViewData.calcEtfSalePieces = listEtfFlowsResponse.calcEtfSalePieces;
-    etfListViewData.calcEtfTransactionCosts =
+    const etfDepot = {} as EtfDepot;
+    etfDepot.calcEtfAskPrice = listEtfFlowsResponse.calcEtfAskPrice;
+    etfDepot.calcEtfBidPrice = listEtfFlowsResponse.calcEtfBidPrice;
+    etfDepot.calcEtfSalePieces = listEtfFlowsResponse.calcEtfSalePieces;
+    etfDepot.calcEtfTransactionCosts =
       listEtfFlowsResponse.calcEtfTransactionCosts;
-    etfListViewData.etfFlows = listEtfFlowsResponse.etfFlowTransports?.map(
-      (flow) => {
-        return mapEtfFlowTransportToModel(flow);
-      },
-    );
-    etfListViewData.etfEffectiveFlows =
+    etfDepot.etfFlows = listEtfFlowsResponse.etfFlowTransports?.map((flow) => {
+      return mapEtfFlowTransportToModel(flow);
+    });
+    etfDepot.etfEffectiveFlows =
       listEtfFlowsResponse.etfEffectiveFlowTransports?.map((flow) => {
         return mapEtfEffectiveFlowTransportToModel(flow);
       });
 
-    return etfListViewData;
+    if (listEtfFlowsResponse.etfSummaryTransport)
+      etfDepot.etfSummary = mapEtfSummaryTransportToEtfSummary(
+        listEtfFlowsResponse.etfSummaryTransport,
+      );
+
+    return etfDepot;
   }
 
   async calcEtfSale(

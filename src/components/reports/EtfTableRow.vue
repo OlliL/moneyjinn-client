@@ -1,6 +1,6 @@
 <template>
   <tr>
-    <td class="text-start">
+    <td class="text-start" v-if="name">
       <a :href="chartUrl">{{ name }}</a>
     </td>
     <td class="text-end">{{ etfFlowAmountSumString }}</td>
@@ -33,11 +33,11 @@ import { formatNumber } from "@/tools/views/FormatNumber";
 const props = defineProps({
   name: {
     type: String,
-    required: true,
+    required: false,
   },
   chartUrl: {
     type: String,
-    required: true,
+    required: false,
   },
   amount: {
     type: Number,
