@@ -1,9 +1,6 @@
 <template>
   <tr>
     <td class="text-start">
-      <a :href="flow.chartUrl">{{ flow.name }}</a>
-    </td>
-    <td class="text-start">
       {{ timestampString }}
     </td>
     <td class="text-end">

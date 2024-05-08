@@ -41,7 +41,7 @@
       class="row justify-content-md-center mb-4"
       v-if="dataLoaded && etfFlows.length"
     >
-      <div class="col-xxl-8 col-xs-12">
+      <div class="col-xxl-6 col-xl-8 col-md-11 col-xs-12">
         <ul class="nav nav-tabs">
           <li class="nav-item">
             <button
@@ -66,16 +66,14 @@
             ref="effectiveTab"
           >
             <table class="table table-striped table-bordered table-hover">
-              <col style="width: 33%" />
-              <col style="width: 17%" />
-              <col style="width: 10%" />
-              <col style="width: 10%" />
-              <col style="width: 10%" />
-              <col style="width: 10%" />
-              <col style="width: 10%" />
+              <!--              <col style="width: 29%" />
+              <col style="width: 13%" />
+              <col style="width: 13%" />
+              <col style="width: 13%" />
+              <col style="width: 16%" />
+              <col style="width: 16%" />-->
               <thead>
                 <tr>
-                  <th class="text-center">{{ $t("General.etf") }}</th>
                   <th class="text-center">{{ $t("ETFFlow.bookingtime") }}</th>
                   <th class="text-center">{{ $t("ETFFlow.amount") }}</th>
                   <th class="text-center">{{ $t("ETFFlow.price") }}</th>
@@ -92,7 +90,7 @@
                   @edit-etf-flow="editEtfFlow"
                 />
                 <tr>
-                  <td colspan="2" class="text-end">&sum;</td>
+                  <td class="text-end">&sum;</td>
                   <td class="text-end">
                     <u>{{ etfEffectiveFlowAmountSumString }}</u>
                   </td>
@@ -120,16 +118,14 @@
             ref="allTab"
           >
             <table class="table table-striped table-bordered table-hover">
-              <col style="width: 33%" />
-              <col style="width: 17%" />
-              <col style="width: 10%" />
-              <col style="width: 10%" />
-              <col style="width: 10%" />
-              <col style="width: 10%" />
-              <col style="width: 10%" />
+              <col style="width: 26%" />
+              <col style="width: 14%" />
+              <col style="width: 14%" />
+              <col style="width: 14%" />
+              <col style="width: 16%" />
+              <col style="width: 16%" />
               <thead>
                 <tr>
-                  <th class="text-center">{{ $t("General.etf") }}</th>
                   <th class="text-center">{{ $t("ETFFlow.bookingtime") }}</th>
                   <th class="text-center">{{ $t("ETFFlow.amount") }}</th>
                   <th class="text-center">{{ $t("ETFFlow.price") }}</th>
@@ -146,7 +142,7 @@
                   @edit-etf-flow="editEtfFlow"
                 />
                 <tr>
-                  <td colspan="2" class="text-end">&sum;</td>
+                  <td class="text-end">&sum;</td>
                   <td class="text-end">
                     <u>{{ etfFlowAmountSumString }}</u>
                   </td>
@@ -168,6 +164,50 @@
         </div>
       </div>
     </div>
+
+    <div class="row justify-content-md-center" v-if="dataLoaded">
+      <div class="col-xxl-6 col-xs-12 mb-4">
+        <table class="table table-striped table-bordered table-hover">
+          <col style="width: 10%" />
+          <col style="width: 12%" />
+          <col style="width: 12%" />
+          <col style="width: 12%" />
+          <col style="width: 12%" />
+          <col style="width: 12%" />
+          <col style="width: 12%" />
+          <col style="width: 18%" />
+          <thead>
+            <tr>
+              <th class="text-center" rowspan="2">
+                {{ $t("ETFFlow.shares") }}
+              </th>
+              <th class="text-center" colspan="3">
+                {{ $t("ETFFlow.amount") }}
+              </th>
+              <th class="text-center" colspan="3">
+                {{ $t("ETFFlow.overall") }}
+              </th>
+              <th class="text-center" rowspan="2">
+                {{ $t("Reports.state") }}
+              </th>
+            </tr>
+            <tr>
+              <th class="text-center">{{ $t("ETFFlow.payed") }} &#8709;</th>
+              <th class="text-center">{{ $t("ETFFlow.bid") }}</th>
+              <th class="text-center">{{ $t("ETFFlow.ask") }}</th>
+              <th class="text-center">{{ $t("ETFFlow.payed") }}</th>
+              <th class="text-center">{{ $t("ETFFlow.bid") }}</th>
+              <th class="text-center">{{ $t("ETFFlow.profit") }}</th>
+            </tr>
+          </thead>
+
+          <tbody v-if="dataLoaded">
+            <EtfTableRow v-bind="etfSummary" />
+          </tbody>
+        </table>
+      </div>
+    </div>
+
     <div
       class="row justify-content-md-center"
       v-if="dataLoaded && etfFlows.length"
@@ -259,6 +299,7 @@
         </div>
       </div>
     </form>
+
     <div class="row justify-content-md-center" v-if="calcResults.etfId">
       <div class="col-xxl-3 col-md-6 col-xs-12 mb-4">
         <table class="table table-striped table-bordered table-hover">
@@ -367,12 +408,14 @@
 <script lang="ts" setup>
 import { useForm } from "vee-validate";
 import { computed, onMounted, ref, watch } from "vue";
+import router, { Routes } from "@/router";
 import { useI18n } from "vue-i18n";
 import { number } from "zod";
 
 import ButtonSubmit from "@/components/ButtonSubmit.vue";
 import CreateEtfFlowModalVue from "@/components/etf/CreateEtfFlowModal.vue";
 import DeleteEtfFlowModalVue from "@/components/etf/DeleteEtfFlowModal.vue";
+import DivError from "@/components/DivError.vue";
 import InputStandard from "@/components/InputStandard.vue";
 import ListEtfDepotRowVue from "@/components/etf/ListEtfDepotRow.vue";
 import SelectStandard from "@/components/SelectStandard.vue";
@@ -384,15 +427,15 @@ import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { amountSchema, globErr } from "@/tools/views/ZodUtil";
 
 import type { Etf } from "@/model/etf/Etf";
+import type { EtfDepot } from "@/model/etf/EtfDepot";
 import type { EtfFlow } from "@/model/etf/EtfFlow";
 import type { EtfSalesCalculation } from "@/model/etf/EtfSalesCalculation";
 import type { SelectBoxValue } from "@/model/SelectBoxValue";
 
 import EtfControllerHandler from "@/handler/EtfControllerHandler";
-import DivError from "@/components/DivError.vue";
-import type { EtfDepot } from "@/model/etf/EtfDepot";
 import CrudEtfControllerHandler from "@/handler/CrudEtfControllerHandler";
-import router, { Routes } from "@/router";
+import EtfTableRow from "@/components/reports/EtfTableRow.vue";
+import type { EtfSummary } from "@/model/etf/EtfSummary";
 
 const { t } = useI18n();
 
@@ -410,6 +453,7 @@ const dataLoaded = ref(false);
 const etfFlows = ref({} as Array<ListDepotRowData>);
 const etfEffectiveFlows = ref({} as Array<ListDepotRowData>);
 const etfs = ref({} as Array<Etf>);
+const etfSummary = ref({} as EtfSummary);
 const etfsSelectValues = ref({} as Array<SelectBoxValue>);
 
 const calcEtfAskPrice = ref(0);
@@ -562,6 +606,8 @@ const handleServerResponse = (etfDepot: EtfDepot, etfId: number) => {
       });
     }
   }
+  etfSummary.value = etfDepot.etfSummary ?? ({} as EtfSummary);
+  etfSummary.value.name = undefined;
   dataLoaded.value = true;
 };
 
