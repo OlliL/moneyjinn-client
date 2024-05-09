@@ -73,7 +73,6 @@
                         type="checkbox"
                         v-model="featureEqual"
                         id="featureEqual"
-                        role="switch"
                       />
                       <label class="form-check-label" for="featureEqual">
                         {{ $t("Moneyflow.equal") }}
@@ -89,7 +88,6 @@
                         type="checkbox"
                         v-model="featureCaseSensitive"
                         id="featureCaseSensitive"
-                        role="switch"
                       />
                       <label
                         class="form-check-label"
@@ -108,7 +106,6 @@
                         type="checkbox"
                         v-model="featureRegexp"
                         id="featureRegexp"
-                        role="switch"
                       />
                       <label class="form-check-label" for="featureRegexp">
                         {{ $t("Moneyflow.regexp") }}
@@ -124,7 +121,6 @@
                         type="checkbox"
                         v-model="featureOnlyMinusAmounts"
                         id="featureOnlyMinusAmounts"
-                        role="switch"
                       />
                       <label
                         class="form-check-label"

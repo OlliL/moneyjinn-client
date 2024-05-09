@@ -32,7 +32,6 @@
                 {{ $t("Moneyflow.bookingdate") }}
                 <i
                   :class="`bi ${sortIcon('bookingDate')} link-primary`"
-                  role="button"
                   @click="sortByColumn('bookingDate')"
                 ></i>
               </th>
@@ -40,7 +39,6 @@
                 {{ $t("Moneyflow.invoicedate") }}
                 <i
                   :class="`bi ${sortIcon('invoiceDate')} link-primary`"
-                  role="button"
                   @click="sortByColumn('invoiceDate')"
                 ></i>
               </th>
@@ -48,7 +46,6 @@
                 {{ $t("General.amount") }}
                 <i
                   :class="`bi ${sortIcon('amount')} link-primary`"
-                  role="button"
                   @click="sortByColumn('amount')"
                 ></i>
               </th>
@@ -56,7 +53,6 @@
                 {{ $t("General.contractpartner") }}
                 <i
                   :class="`bi ${sortIcon('contractpartnerName')} link-primary`"
-                  role="button"
                   @click="sortByColumn('contractpartnerName')"
                 ></i>
               </th>
@@ -64,7 +60,6 @@
                 {{ $t("General.comment") }}
                 <i
                   :class="`bi ${sortIcon('comment')} link-primary`"
-                  role="button"
                   @click="sortByColumn('comment')"
                 ></i>
               </th>
@@ -72,7 +67,6 @@
                 {{ $t("General.postingAccount") }}
                 <i
                   :class="`bi ${sortIcon('postingAccountName')} link-primary`"
-                  role="button"
                   @click="sortByColumn('postingAccountName')"
                 ></i>
               </th>
@@ -80,7 +74,6 @@
                 {{ $t("General.capitalsource") }}
                 <i
                   :class="`bi ${sortIcon('capitalsourceComment')} link-primary`"
-                  role="button"
                   @click="sortByColumn('capitalsourceComment')"
                 ></i>
               </th>

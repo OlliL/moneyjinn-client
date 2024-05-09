@@ -62,7 +62,6 @@
                   type="checkbox"
                   v-model="markAsFavorite"
                   id="markAsFavorite"
-                  role="switch"
                 />
                 <label class="form-check-label" for="markAsFavorite">
                   {{ $t("ETF.markAsFav") }}

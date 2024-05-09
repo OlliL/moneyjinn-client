@@ -1,7 +1,7 @@
 <template>
   <div class="row p-1">
     <div class="col-md-1 d-flex align-items-center justify-content-start">
-      <div class="btn-group" role="group">
+      <div class="btn-group">
         <button
           type="button"
           class="btn btn-primary"
@@ -52,7 +52,7 @@
     </div>
     <div class="col-md-2 col-xs-12" v-if="showRemainder">
       <div class="input-group">
-        <span class="input-group-text" role="button" @click="useRemainder"
+        <span class="input-group-text" @click="useRemainder"
           ><i class="bi bi-arrow-left"></i
         ></span>
         <div class="form-floating">

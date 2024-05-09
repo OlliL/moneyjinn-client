@@ -4,7 +4,6 @@
       <i
         class="bi bi-card-image link-primary"
         v-if="mmf.hasReceipt"
-        role="button"
         @click="showReceipt"
       ></i>
     </td>
@@ -20,12 +19,12 @@
       {{ mmf.capitalsourceComment }}
     </td>
     <td class="text-center" v-if="isOwnMoneyflow">
-      <span role="button" class="link-primary" @click="editMoneyflow">{{
+      <span class="link-primary" @click="editMoneyflow">{{
         $t("General.edit")
       }}</span>
     </td>
     <td class="text-center" v-if="isOwnMoneyflow">
-      <span role="button" class="link-primary" @click="deleteMoneyflow">{{
+      <span class="link-primary" @click="deleteMoneyflow">{{
         $t("General.delete")
       }}</span>
     </td>
@@ -36,7 +35,6 @@
       <i
         class="bi bi-card-image link-primary"
         v-if="mmf.hasReceipt"
-        role="button"
         @click="showReceipt"
       ></i>
     </td>
@@ -65,7 +63,7 @@
       v-if="index == 0 && isOwnMoneyflow"
       class="text-center"
     >
-      <span role="button" class="link-primary" @click="editMoneyflow">{{
+      <span class="link-primary" @click="editMoneyflow">{{
         $t("General.edit")
       }}</span>
     </td>
@@ -74,7 +72,7 @@
       v-if="index == 0 && isOwnMoneyflow"
       class="text-center"
     >
-      <span role="button" class="link-primary" @click="deleteMoneyflow">{{
+      <span class="link-primary" @click="deleteMoneyflow">{{
         $t("General.delete")
       }}</span>
     </td>

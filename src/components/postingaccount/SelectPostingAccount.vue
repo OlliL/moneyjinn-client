@@ -18,7 +18,6 @@
         <template #icon
           ><span
             class="input-group-text"
-            role="button"
             @click="showCreatePostingAccountModal"
             v-if="userIsAdmin"
             ><i class="bi bi-plus"></i></span
