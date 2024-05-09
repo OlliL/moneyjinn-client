@@ -129,14 +129,16 @@
                 <table class="table table-striped table-bordered table-hover">
                   <thead>
                     <tr>
-                      <th></th>
-                      <th>{{ $t("General.month") }}</th>
-                      <th>{{ $t("General.year") }}</th>
+                      <th id="thEmpty"></th>
+                      <th id="thMonth">{{ $t("General.month") }}</th>
+                      <th id="thYear">{{ $t("General.year") }}</th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr v-if="currentMonthIsSettled">
-                      <th class="text-end">{{ $t("Reports.fixedProfit") }}</th>
+                      <th class="text-end" id="thFixedProfit">
+                        {{ $t("Reports.fixedProfit") }}
+                      </th>
                       <td class="text-end">
                         <SpanAmount :amount="assetsMonthlyFixedTurnover" />
                       </td>
@@ -145,7 +147,7 @@
                       </td>
                     </tr>
                     <tr>
-                      <th class="text-end">
+                      <th class="text-end" id="thCalculatedProfit">
                         {{ $t("Reports.calculatedProfit") }}
                       </th>
                       <td class="text-end">
@@ -158,7 +160,9 @@
                       </td>
                     </tr>
                     <tr v-if="currentMonthIsSettled">
-                      <th class="text-end">{{ $t("Reports.difference") }}</th>
+                      <th class="text-end" id="thDifference">
+                        {{ $t("Reports.difference") }}
+                      </th>
                       <td class="text-end">
                         <SpanAmount :amount="assetsMonthlyDifference" />
                       </td>
@@ -248,7 +252,7 @@ const dataLoaded = ref(false);
 const assetsMonthlyFixedTurnover = ref(0);
 const assetsYearlyFixedTurnover = ref(0);
 const assetsMonthlyCalculatedTurnover = ref(0);
-const sortBy = ref(new Map<String, Boolean>());
+const sortBy = ref(new Map<string, boolean>());
 const receiptModal = ref();
 const deleteModal = ref();
 const editModal = ref();
@@ -338,8 +342,8 @@ const loadData = (year: number, month: number) => {
 
       assetsMonthlyCalculatedTurnover.value = 0;
 
-      var assetsLastAmount = 0;
-      var assetsFixAmount = 0;
+      let assetsLastAmount = 0;
+      let assetsFixAmount = 0;
       if (report.value.reportTurnoverCapitalsources) {
         for (const data of report.value.reportTurnoverCapitalsources) {
           if (
@@ -437,7 +441,7 @@ const moneyflowUpdated = (mmf: Moneyflow) => {
     bookCapitalsourceAmounts(oldMmf, true);
   }
 
-  for (var i = 0; i < report.value.moneyflows.length; i++) {
+  for (let i = 0; i < report.value.moneyflows.length; i++) {
     if (mmf.id === report.value.moneyflows[i].id) {
       report.value.moneyflows[i] = mmf;
       break;

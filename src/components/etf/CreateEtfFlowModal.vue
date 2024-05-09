@@ -115,14 +115,20 @@ const schema: Partial<{ [key in keyof EtfFlow]: ZodType }> = {
   etfId: number(globErr(t("ETFFlow.validation.etfId"))).gt(0),
   timestamp: date(globErr(t("ETFFlow.validation.timestamp"))),
   nanoseconds: string(globErr(t("ETFFlow.validation.nanoseconds"))).regex(
-    new RegExp("^[0-9][0-9]:[0-9][0-9]:[0-9][0-9]:[0-9]{3}$"),
+    /^\d\d:\d\d:\d\d:\d{3}$/,
   ),
   amount: union(
-    [coerce.number(amountErrMsg).gt(0), coerce.number(amountErrMsg).lt(0)],
+    [
+      coerce.number(amountErrMsg).gt(0).multipleOf(0.00001),
+      coerce.number(amountErrMsg).lt(0).multipleOf(0.00001),
+    ],
     amountErrMsg,
   ),
   price: union(
-    [coerce.number(priceErrMsg).gt(0), coerce.number(priceErrMsg).lt(0)],
+    [
+      coerce.number(priceErrMsg).gt(0).multipleOf(0.001),
+      coerce.number(priceErrMsg).lt(0).multipleOf(0.001),
+    ],
     priceErrMsg,
   ),
 };

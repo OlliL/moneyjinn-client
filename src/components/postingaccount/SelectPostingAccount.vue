@@ -92,7 +92,7 @@ watch(
   () => props.modelValue,
   (newVal, oldVal) => {
     if (newVal != oldVal) {
-      postingAccountId.value = newVal ? newVal : 0;
+      postingAccountId.value = newVal ?? 0;
     }
   },
   { immediate: true },
@@ -100,7 +100,7 @@ watch(
 
 watch(postingAccountId, (newVal, oldVal) => {
   if (newVal != oldVal) {
-    postingAccountId.value = newVal ? newVal : 0;
+    postingAccountId.value = newVal ?? 0;
     emit("update:modelValue", postingAccountId.value);
   }
 });
