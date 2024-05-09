@@ -21,7 +21,9 @@
                 id="pdf"
                 :data="`data:application/pdf;base64,${receipt.receipt}`"
                 type="application/pdf"
-              ></object>
+              >
+                receipt
+              </object>
             </div>
             <div class="col-md-9 col-xs-12">
               <form

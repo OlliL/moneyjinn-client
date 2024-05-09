@@ -14,7 +14,9 @@
         id="pdf"
         :data="`data:application/pdf;base64,${receiptBase64}`"
         type="application/pdf"
-      ></object>
+      >
+        receipt
+      </object>
     </template>
   </ModalVue>
 </template>
