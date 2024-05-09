@@ -415,6 +415,8 @@
         }
     },
     "ErrorMessage": {
+        "technicalError": "Technischer Fehler",
+        "technicalErrorWithStatus": "Technischer Fehler: ({status}) {statusText}",
         "CONTRACTPARTNER_DOES_NOT_EXIST": "Der gewählte Vertragspartner existiert nicht!",
         "CAPITALSOURCE_DOES_NOT_EXIST": "Die gewählte Kapitalquelle existiert nicht!",
         "CAPITALSOURCE_STILL_REFERENCED": "Die Kapitalquelle kann nicht gelöscht werden, da sie noch verwendet wird!",
