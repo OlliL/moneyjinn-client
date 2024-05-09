@@ -13,6 +13,7 @@
                 v-if="isJpeg"
                 :src="`data:image/png;base64,${receipt.receipt}`"
                 style="max-width: 100%"
+                alt="receipt"
               />
               <object
                 style="height: 75vh; width: 100%"

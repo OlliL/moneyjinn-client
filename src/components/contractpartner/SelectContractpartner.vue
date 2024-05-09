@@ -91,7 +91,7 @@ watch(
   () => props.modelValue,
   (newVal, oldVal) => {
     if (newVal != oldVal) {
-      contractpartnerId.value = newVal ? newVal : 0;
+      contractpartnerId.value = newVal ?? 0;
     }
   },
   { immediate: true },
@@ -99,7 +99,7 @@ watch(
 
 watch(contractpartnerId, (newVal, oldVal) => {
   if (newVal != oldVal) {
-    contractpartnerId.value = newVal ? newVal : 0;
+    contractpartnerId.value = newVal ?? 0;
     emit("update:modelValue", contractpartnerId.value);
   }
 });

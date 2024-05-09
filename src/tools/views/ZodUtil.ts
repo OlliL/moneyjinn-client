@@ -12,10 +12,8 @@ export function amountSchema(message: string): ZodType {
   const zodMessage = globErr(message);
   return union(
     [
-      string(zodMessage).regex(
-        new RegExp("^-{0,1}[0-9][0-9]*(.[0-9]{1,2}){0,1}$"),
-      ),
-      number(zodMessage),
+      string(zodMessage).regex(/^-?\d\d*([,.]\d{1,2})?$/),
+      number(zodMessage).multipleOf(0.01),
     ],
     zodMessage,
   );

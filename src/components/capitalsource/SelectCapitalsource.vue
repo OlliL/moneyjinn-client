@@ -84,7 +84,7 @@ watch(
   () => props.modelValue,
   (newVal, oldVal) => {
     if (newVal != oldVal) {
-      capitalsourceId.value = newVal ? newVal : 0;
+      capitalsourceId.value = newVal ?? 0;
     }
   },
   { immediate: true },
@@ -92,7 +92,7 @@ watch(
 
 watch(capitalsourceId, (newVal, oldVal) => {
   if (newVal != oldVal) {
-    capitalsourceId.value = newVal ? newVal : 0;
+    capitalsourceId.value = newVal ?? 0;
     emit("update:modelValue", capitalsourceId.value);
   }
 });
