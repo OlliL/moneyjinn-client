@@ -9,11 +9,10 @@
         aria-expanded="false"
         aria-controls="collapseExample"
         v-if="compareDatasCount > 0"
-        ><span role="button" class="link-primary"
-          ><i :class="collapseIconClass"></i></span
+        ><span class="link-primary"><i :class="collapseIconClass"></i></span
       ></a>
     </td>
-    <th style="vertical-align: middle" :class="amountClass">
+    <th style="vertical-align: middle" :class="amountClass" id="amount">
       {{ compareDatasCount }}
     </th>
     <td class="text-start" style="vertical-align: middle">
