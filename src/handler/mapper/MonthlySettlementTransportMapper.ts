@@ -16,7 +16,7 @@ export function mapMonthlySettlementTransportToModel(
     amount: transport.amount,
     capitalsourceId: transport.capitalsourceid,
     capitalsourceComment: transport.capitalsourcecomment,
-    capitalsourceGroupUse: transport.capitalsourcegroupuse === 1 ? true : false,
+    capitalsourceGroupUse: transport.capitalsourcegroupuse === 1,
     capitalsourceType: transport.capitalsourcetype
       ? mapCapitalsourceTypeTransportToEnum(transport.capitalsourcetype)
       : undefined,

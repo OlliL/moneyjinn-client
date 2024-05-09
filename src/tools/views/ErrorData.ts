@@ -30,6 +30,6 @@ export function generateErrorDataVeeValidate(
   return generateErrorData(
     validatedFlag === false ? null : errorLabel === undefined,
     validLabel,
-    errorLabel || "",
+    errorLabel ?? "",
   );
 }

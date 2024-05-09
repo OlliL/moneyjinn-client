@@ -1,6 +1,6 @@
 export class WebServer {
   private static instance: WebServer;
-  private webServer: String = "";
+  private webServer: string = "";
 
   private constructor() {}
 
@@ -12,11 +12,11 @@ export class WebServer {
     return WebServer.instance;
   }
 
-  public setWebServer(url: String) {
+  public setWebServer(url: string) {
     this.webServer = url;
   }
 
-  public getWebServer(): String {
+  public getWebServer(): string {
     return this.webServer;
   }
 }

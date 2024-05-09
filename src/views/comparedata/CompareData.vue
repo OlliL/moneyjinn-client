@@ -88,12 +88,15 @@
         </div>
       </div>
     </div>
-    <div class="row justify-content-md-center mt-4" v-if="dataCompared">
+    <div class="row justify-content-md-center mt-5" v-if="dataCompared">
       <div class="col-xxl-10 col-md-12 col-sm-12 col-xs-12">
-        <table class="table table-striped table-bordered">
+        <table class="table table-hover">
           <col style="width: 5%" />
           <col style="width: 5%" />
           <col style="width: 90%" />
+          <thead>
+            <th colspan="3">{{ $t("CompareData.result") }}</th>
+          </thead>
           <tbody>
             <CompareDataResultGroupVue
               :comment="$t('CompareData.dataInSourceNotInDb')"
@@ -310,7 +313,7 @@ const compareData = handleSubmit(async () => {
         const file = files.value[0];
         const arrayBuffer = new Uint8Array(await file.arrayBuffer());
         let fileContents: string = "";
-        for (var i = 0; i < arrayBuffer.byteLength; i++) {
+        for (let i = 0; i < arrayBuffer.byteLength; i++) {
           fileContents += String.fromCharCode(arrayBuffer[i]);
         }
         compareDataParameter.fileContents = btoa(fileContents);

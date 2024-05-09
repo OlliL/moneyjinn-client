@@ -16,53 +16,53 @@
         <h4>{{ $t("General.capitalsources") }}</h4>
       </div>
     </div>
-    <div class="row justify-content-md-center mb-4">
-      <div class="col-xxl-9 col-xs-12">
-        <table style="margin: 0 auto">
-          <tr>
-            <td class="text-right pe-2">
+
+    <div class="row justify-content-md-center">
+      <div class="col-md-auto mb-3">
+        <div class="row">
+          <div class="col-md-auto mb-3">
+            <button
+              type="button"
+              class="btn btn-primary"
+              @click="showCreateCapitalsourceModal"
+            >
+              {{ $t("General.new") }}
+            </button>
+          </div>
+          <div class="col">
+            <div class="input-group">
               <button
                 type="button"
                 class="btn btn-primary"
-                @click="showCreateCapitalsourceModal"
+                @click="searchAllContent"
               >
-                {{ $t("General.new") }}
+                {{ $t("General.all") }}
               </button>
-            </td>
-            <td>
-              <div class="input-group">
-                <button
-                  type="button"
-                  class="btn btn-primary"
-                  @click="searchAllContent"
-                >
-                  {{ $t("General.all") }}
-                </button>
+              <input
+                class="form-control"
+                type="text"
+                :placeholder="$t('Capitalsource.searchBy')"
+                v-model="searchString"
+                @input="searchContent"
+              />
+              <div class="form-check form-switch align-self-center ms-2">
                 <input
-                  class="form-control"
-                  type="text"
-                  :placeholder="$t('Capitalsource.searchBy')"
-                  v-model="searchString"
-                  @input="searchContent"
+                  class="form-check-input"
+                  type="checkbox"
+                  id="capitalsourcesValid"
+                  v-model="validNow"
+                  @change="searchContent"
                 />
-                <div class="form-check form-switch align-self-center ms-2">
-                  <input
-                    class="form-check-input"
-                    type="checkbox"
-                    id="capitalsourcesValid"
-                    v-model="validNow"
-                    @change="searchContent"
-                  />
-                  <label class="form-check-label" for="capitalsourcesValid">{{
-                    $t("General.validNow")
-                  }}</label>
-                </div>
+                <label class="form-check-label" for="capitalsourcesValid">{{
+                  $t("General.validNow")
+                }}</label>
               </div>
-            </td>
-          </tr>
-        </table>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
+
     <div class="row justify-content-md-center">
       <div class="col-xxl-9 col-xs-12">
         <table class="table table-striped table-bordered table-hover">

@@ -27,7 +27,7 @@ export function mapCapitalsourceTransportToModel(
     comment: transport.comment,
     validFrom: new Date(transport.validFrom),
     validTil: new Date(transport.validTil),
-    groupUse: transport.groupUse === 1 ? true : false,
+    groupUse: transport.groupUse === 1,
     importAllowed: mapCapitalsourceImportTransportToEnum(
       transport.importAllowed,
     ),

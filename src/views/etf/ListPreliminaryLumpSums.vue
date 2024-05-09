@@ -23,15 +23,10 @@
         <h4>{{ $t("General.preliminaryLumpSums") }}</h4>
       </div>
     </div>
-    <div class="row justify-content-md-center mb-12">
+    <div class="row justify-content-md-center">
       <div class="col-xxl-5 col-xl-6 col-md-8 col-xs-12">
-        <div
-          class="row no-gutters flex-lg-nowrap d-flex justify-content align-items-center"
-        >
-          <div
-            class="col-xxl-6 col-md-8 col-xs-12 justify-content-end mb-3"
-            v-if="etfsLoaded"
-          >
+        <div class="row flex-lg-nowrap d-flex align-items-center">
+          <div class="col-xxl-6 col-md-8 col-xs-12 mb-3" v-if="etfsLoaded">
             <SelectStandard
               v-model="selectedEtf"
               id="etf"
@@ -39,10 +34,7 @@
               :select-box-values="etfsSelectValues"
             />
           </div>
-          <div
-            class="col-xxl-3 col-md-2 col-xs-12 justify-content-start mb-3"
-            v-if="selectedEtf"
-          >
+          <div class="col-md-auto mb-3" v-if="selectedEtf">
             <button
               type="button"
               class="btn btn-primary"
@@ -51,10 +43,7 @@
               {{ $t("ETFPreliminaryLumpSum.newMonthly") }}
             </button>
           </div>
-          <div
-            class="col-xxl-3 col-md-2 col-xs-12 justify-content-start mb-3"
-            v-if="selectedEtf"
-          >
+          <div class="col-md-auto mb-3" v-if="selectedEtf">
             <button
               type="button"
               class="btn btn-primary"

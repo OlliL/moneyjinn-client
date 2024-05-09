@@ -34,7 +34,6 @@ class MoneyflowReceiptControllerHandler extends AbstractControllerHandler {
         break;
       }
       default: {
-        receiptType = MoneyflowReceiptType.UNKNOWN;
         throw new Error(getErrorMessage(ErrorCode.MEDIA_TYPE_UNKNOWN));
       }
     }

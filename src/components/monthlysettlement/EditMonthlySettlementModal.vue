@@ -226,8 +226,7 @@ const loadMonthlySettlements = async (_year?: number, _month?: number) => {
 const upsertMonthlySettlement = handleSubmit(() => {
   serverErrors.value = new Array<string>();
 
-  let monthlySettlements = new Array<MonthlySettlementFormData>();
-  monthlySettlements = monthlySettlementsCredit.value.concat(
+  let monthlySettlements = monthlySettlementsCredit.value.concat(
     monthlySettlementsNoCredit.value,
   );
 

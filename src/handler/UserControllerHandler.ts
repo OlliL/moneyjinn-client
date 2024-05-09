@@ -61,11 +61,9 @@ class UserControllerHandler extends AbstractControllerHandler {
     const userSession: UserSession = {
       userId: userTransport.id,
       userName: userTransport.userName,
-      userCanLogin:
-        userTransport.role == UserTransportRoleEnum.Standard ? true : false,
-      userIsNew: userTransport.userIsNew === 1 ? true : false,
-      userIsAdmin:
-        userTransport.role == UserTransportRoleEnum.Admin ? true : false,
+      userCanLogin: userTransport.role == UserTransportRoleEnum.Standard,
+      userIsNew: userTransport.userIsNew === 1,
+      userIsAdmin: userTransport.role == UserTransportRoleEnum.Admin,
     };
 
     userSessionStore.setUserSession(userSession);

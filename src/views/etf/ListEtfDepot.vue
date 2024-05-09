@@ -62,16 +62,15 @@
           <div
             class="tab-pane fade show active"
             id="home-tab-pane"
-            tabindex="0"
             ref="effectiveTab"
           >
             <table class="table table-striped table-bordered table-hover">
-              <!--              <col style="width: 29%" />
-              <col style="width: 13%" />
-              <col style="width: 13%" />
-              <col style="width: 13%" />
+              <col style="width: 25%" />
+              <col style="width: 15%" />
+              <col style="width: 15%" />
+              <col style="width: 15%" />
               <col style="width: 16%" />
-              <col style="width: 16%" />-->
+              <col style="width: 14%" />
               <thead>
                 <tr>
                   <th class="text-center">{{ $t("ETFFlow.bookingtime") }}</th>
@@ -111,19 +110,14 @@
               </tbody>
             </table>
           </div>
-          <div
-            class="tab-pane fade"
-            id="profile-tab-pane"
-            tabindex="0"
-            ref="allTab"
-          >
+          <div class="tab-pane fade" id="profile-tab-pane" ref="allTab">
             <table class="table table-striped table-bordered table-hover">
-              <col style="width: 26%" />
-              <col style="width: 14%" />
-              <col style="width: 14%" />
-              <col style="width: 14%" />
+              <col style="width: 25%" />
+              <col style="width: 15%" />
+              <col style="width: 15%" />
+              <col style="width: 15%" />
               <col style="width: 16%" />
-              <col style="width: 16%" />
+              <col style="width: 14%" />
               <thead>
                 <tr>
                   <th class="text-center">{{ $t("ETFFlow.bookingtime") }}</th>
@@ -178,26 +172,38 @@
           <col style="width: 18%" />
           <thead>
             <tr>
-              <th class="text-center" rowspan="2">
+              <th class="text-center" rowspan="2" id="thShares">
                 {{ $t("ETFFlow.shares") }}
               </th>
-              <th class="text-center" colspan="3">
+              <th class="text-center" colspan="3" id="thAmount">
                 {{ $t("ETFFlow.amount") }}
               </th>
-              <th class="text-center" colspan="3">
+              <th class="text-center" colspan="3" id="thOverall">
                 {{ $t("ETFFlow.overall") }}
               </th>
-              <th class="text-center" rowspan="2">
+              <th class="text-center" rowspan="2" id="thState">
                 {{ $t("Reports.state") }}
               </th>
             </tr>
             <tr>
-              <th class="text-center">{{ $t("ETFFlow.payed") }} &#8709;</th>
-              <th class="text-center">{{ $t("ETFFlow.bid") }}</th>
-              <th class="text-center">{{ $t("ETFFlow.ask") }}</th>
-              <th class="text-center">{{ $t("ETFFlow.payed") }}</th>
-              <th class="text-center">{{ $t("ETFFlow.bid") }}</th>
-              <th class="text-center">{{ $t("ETFFlow.profit") }}</th>
+              <th class="text-center" id="thAmountPayed">
+                {{ $t("ETFFlow.payed") }} &#8709;
+              </th>
+              <th class="text-center" id="thAmountBid">
+                {{ $t("ETFFlow.bid") }}
+              </th>
+              <th class="text-center" id="thAmountAsk">
+                {{ $t("ETFFlow.ask") }}
+              </th>
+              <th class="text-center" id="thOverallPayed">
+                {{ $t("ETFFlow.payed") }}
+              </th>
+              <th class="text-center" id="thOverallBid">
+                {{ $t("ETFFlow.bid") }}
+              </th>
+              <th class="text-center" id="thOverallProfit">
+                {{ $t("ETFFlow.profit") }}
+              </th>
             </tr>
           </thead>
 

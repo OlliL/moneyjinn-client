@@ -208,7 +208,7 @@ const chartOptions = ref({
     },
   },
   interaction: {
-    mode: "index" as "index",
+    mode: "index" as const,
     intersect: false,
   },
   scales: {
@@ -248,7 +248,7 @@ type ChartDataDataset = {
   data: Array<number | null>;
   fill: boolean;
   borderColor: string;
-  backgroundColor: any; // string | CanvasGradient;
+  backgroundColor: any;
   hidden?: boolean;
 };
 type ChartData = {

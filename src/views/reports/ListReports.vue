@@ -5,46 +5,42 @@
         <h4>{{ $t("Reports.title.reports") }}</h4>
       </div>
     </div>
-    <div class="row justify-content-md-center mb-4">
-      <div class="col">
-        <form action="#">
-          <table style="margin: 0 auto">
-            <tr>
-              <td class="text-right pe-2">
-                <select
-                  class="form-select"
-                  v-model="selectedYear"
-                  @change="selectMonth(selectedYear + '')"
-                >
-                  <option v-for="year in years" :key="year">
-                    {{ year }}
-                  </option>
-                </select>
-              </td>
-              <td>
-                <nav aria-label="Month navigation" v-if="dataLoaded">
-                  <ul class="pagination month-selection">
-                    <li class="page-item" v-for="month in months" :key="month">
-                      <router-link
-                        :class="
-                          $props.month == month + ''
-                            ? 'page-link active'
-                            : 'page-link'
-                        "
-                        :to="{
-                          name: Routes.ListReports,
-                          params: { year: selectedYear, month: month },
-                          force: true,
-                        }"
-                        >{{ getMonthName(month) }}</router-link
-                      >
-                    </li>
-                  </ul>
-                </nav>
-              </td>
-            </tr>
-          </table>
-        </form>
+    <div class="row justify-content-md-center">
+      <div class="col-md-auto mb-3">
+        <div class="row">
+          <div class="col-md-auto">
+            <select
+              class="form-select"
+              v-model="selectedYear"
+              @change="selectMonth(selectedYear + '')"
+            >
+              <option v-for="year in years" :key="year">
+                {{ year }}
+              </option>
+            </select>
+          </div>
+          <div class="col">
+            <nav aria-label="Month navigation" v-if="dataLoaded">
+              <ul class="pagination month-selection flex-wrap">
+                <li class="page-item" v-for="month in months" :key="month">
+                  <router-link
+                    :class="
+                      $props.month == month + ''
+                        ? 'page-link active'
+                        : 'page-link'
+                    "
+                    :to="{
+                      name: Routes.ListReports,
+                      params: { year: selectedYear, month: month },
+                      force: true,
+                    }"
+                    >{{ getMonthName(month) }}</router-link
+                  >
+                </li>
+              </ul>
+            </nav>
+          </div>
+        </div>
       </div>
     </div>
     <DivError :server-errors="serverErrors" />

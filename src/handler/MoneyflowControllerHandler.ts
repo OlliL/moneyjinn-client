@@ -132,8 +132,8 @@ class MoneyflowControllerHandler extends AbstractControllerHandler {
   ): Promise<Array<Moneyflow>> {
     const response = await this.api.searchMoneyflowsByAmount(
       amount,
-      getISOStringDate(startDate).replace(/[-]/gi, ""),
-      getISOStringDate(endDate).replace(/[-]/gi, ""),
+      getISOStringDate(startDate).replace(/-/gi, ""),
+      getISOStringDate(endDate).replace(/-/gi, ""),
     );
 
     if (response.status === 204) return new Array<Moneyflow>();

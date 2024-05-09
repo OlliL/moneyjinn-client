@@ -35,11 +35,9 @@ export class BackendError {
   }
 
   getErrorMessage(): string {
-    return this.errorMessage
-      ? this.errorMessage
-      : this.errorCode
-      ? getErrorMessage(this.errorCode)
-      : "";
+    if (this.errorMessage) return this.errorMessage;
+    else if (this.errorCode) return getErrorMessage(this.errorCode);
+    return "";
   }
 
   getValidationResult(): ValidationResult | undefined {

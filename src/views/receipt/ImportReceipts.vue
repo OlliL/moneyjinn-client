@@ -111,7 +111,7 @@ const uploadReceipts = handleSubmit(async () => {
     for (let file of files.value) {
       const arrayBuffer = new Uint8Array(await file.arrayBuffer());
       let fileContents: string = "";
-      for (var i = 0; i < arrayBuffer.byteLength; i++) {
+      for (let i = 0; i < arrayBuffer.byteLength; i++) {
         fileContents += String.fromCharCode(arrayBuffer[i]);
       }
       const base64Encoded = btoa(fileContents);
