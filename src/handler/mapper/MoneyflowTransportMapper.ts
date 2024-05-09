@@ -19,7 +19,7 @@ export function mapMoneyflowTransportToModel(
     contractpartnerId: transport.contractpartnerid,
     contractpartnerName: transport.contractpartnername,
     comment: transport.comment,
-    private: transport.privat == 1 ? true : false,
+    private: transport.privat == 1,
     postingAccountId: transport.postingaccountid,
     postingAccountName: transport.postingaccountname,
     hasReceipt: hasReceipt,

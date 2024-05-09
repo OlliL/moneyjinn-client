@@ -100,7 +100,7 @@ export const useCapitalsourceStore = defineStore("capitalsource", {
       });
     },
     async searchCapitalsources(
-      comment: String,
+      comment: string,
       validNow?: boolean,
     ): Promise<Array<Capitalsource>> {
       let mcs = this.capitalsource;

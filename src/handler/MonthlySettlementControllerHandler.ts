@@ -69,7 +69,6 @@ class MonthlySettlementControllerHandler extends AbstractControllerHandler {
     month?: number,
   ): Promise<MonthlySettlementEditTransporter> {
     let response: AxiosResponse<ShowMonthlySettlementCreateResponse>;
-    if (year) response = await this.api.showMonthlySettlementCreateYear(year);
     if (year && month)
       response = await this.api.showMonthlySettlementCreateYearMonth(
         year,
@@ -102,8 +101,7 @@ class MonthlySettlementControllerHandler extends AbstractControllerHandler {
     result.monthlySettlements = monthlySettlements;
     result.year = showMonthlySettlementCreateResponse.year;
     result.month = showMonthlySettlementCreateResponse.month;
-    result.editMode =
-      showMonthlySettlementCreateResponse.editMode == 1 ? true : false;
+    result.editMode = showMonthlySettlementCreateResponse.editMode == 1;
 
     return result;
   }

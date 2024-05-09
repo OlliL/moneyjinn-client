@@ -10,7 +10,7 @@ export function mapUserTransportToModel(transport: UserTransport): User {
     id: transport.id,
     userName: transport.userName,
     role: mapUserTransportRoleEnumToEnum(transport.role),
-    userIsNew: transport.userIsNew === 1 ? true : false,
+    userIsNew: transport.userIsNew === 1,
     userPassword: transport.userPassword,
   };
   return model;

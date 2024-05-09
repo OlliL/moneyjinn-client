@@ -73,7 +73,7 @@ export const useContractpartnerStore = defineStore("contractpartner", {
       });
     },
     async searchContractpartners(
-      comment: String,
+      comment: string,
       validNow?: boolean,
     ): Promise<Array<Contractpartner>> {
       let mcp = this.contractpartner;
@@ -101,7 +101,10 @@ export const useContractpartnerStore = defineStore("contractpartner", {
     ): number {
       const al = a.name.toLowerCase();
       const bl = b.name.toLowerCase();
-      return al === bl ? 0 : al > bl ? 1 : -1;
+
+      if (al === bl) return 0;
+      else if (al > bl) return 1;
+      return -1;
     },
   },
 });

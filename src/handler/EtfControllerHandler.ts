@@ -11,7 +11,6 @@ import { AxiosInstanceHolder } from "./AxiosInstanceHolder";
 import { mapEtfEffectiveFlowTransportToModel } from "./mapper/EtfEffectiveFlowTransportMapper";
 import { mapEtfFlowTransportToModel } from "./mapper/EtfFlowTransportMapper";
 import { mapEtfSummaryTransportToEtfSummary } from "./mapper/EtfTSummaryTransportMapper";
-import { mapEtfTransportToModel } from "./mapper/EtfTransportMapper";
 import type { AxiosResponse } from "axios";
 
 class EtfControllerHandler extends AbstractControllerHandler {

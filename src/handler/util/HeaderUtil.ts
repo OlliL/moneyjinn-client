@@ -18,8 +18,8 @@ export class HeaderUtil {
   }
 
   private getCookie(name: string) {
-    const match = document.cookie.match(
-      new RegExp("(^|;\\s*)(" + name + ")=([^;]*)"),
+    const match = new RegExp("(^|;\\s*)(" + name + ")=([^;]*)").exec(
+      document.cookie,
     );
     return match ? decodeURIComponent(match[3]) : null;
   }

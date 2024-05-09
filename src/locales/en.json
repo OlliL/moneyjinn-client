@@ -138,6 +138,7 @@
         "importfile": "import file",
         "format": "format",
         "database": "database",
+        "result": "result",
         "dataInSourceNotInDb": "Data the source contains, but not the database",
         "dataNotInSourceInDb": "Data the database contains, but not the source",
         "dataMatchingButWrongCapitalsource": "matching data but with wrong capitalsource",

@@ -17,7 +17,7 @@ export function mapPreDefMoneyflowTransportToModel(
     createDate: transport.createdate
       ? new Date(transport.createdate)
       : undefined,
-    onceAMonth: transport.onceAMonth == 1 ? true : false,
+    onceAMonth: transport.onceAMonth == 1,
     lastUsed: transport.lastUsed ? new Date(transport.lastUsed) : undefined,
     postingAccountId: transport.postingaccountid,
     postingAccountName: transport.postingaccountname,

@@ -180,7 +180,7 @@
     </div>
     <div class="row justify-content-md-center" v-if="dataLoaded">
       <div class="col-xxl-9 col-xs-12">
-        <table class="table table-striped table-bordered">
+        <table class="table table-striped table-bordered table-hover">
           <thead>
             <tr>
               <th></th>

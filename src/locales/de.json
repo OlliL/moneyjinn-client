@@ -138,6 +138,7 @@
         "importfile": "Importdatei",
         "format": "Format",
         "database": "Datenbank",
+        "result": "Ergebnis",
         "dataInSourceNotInDb": "Datensätze die in der Quelle, aber nicht in der Datenbank, enthalten sind",
         "dataNotInSourceInDb": "Datensätze die in der Datenbank, aber nicht in der Quelle, enthalten sind",
         "dataMatchingButWrongCapitalsource": "passende Datensätze jedoch mit falscher Kapitalquelle",

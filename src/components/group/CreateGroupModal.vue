@@ -79,7 +79,7 @@ const resetForm = () => {
 };
 
 const _show = async (_group?: Group) => {
-  origGroup.value = _group ? _group : undefined;
+  origGroup.value = _group ?? undefined;
   resetForm();
   modalComponent.value._show();
 };

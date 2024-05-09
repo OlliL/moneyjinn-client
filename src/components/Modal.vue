@@ -2,7 +2,6 @@
   <div
     class="modal fade"
     tabindex="-1"
-    aria-labelledby=""
     aria-hidden="true"
     ref="modalEle"
     :style="'z-index: ' + zIndex"

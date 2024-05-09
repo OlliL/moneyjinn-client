@@ -17,41 +17,41 @@
         <h4>{{ $t("General.users") }}</h4>
       </div>
     </div>
-    <div class="row justify-content-md-center mb-4">
-      <div class="col-xxl-9 col-xs-12">
-        <table style="margin: 0 auto">
-          <tr>
-            <td class="text-right pe-2">
+
+    <div class="row justify-content-md-center">
+      <div class="col-md-auto mb-3">
+        <div class="row">
+          <div class="col-md-auto mb-3">
+            <button
+              type="button"
+              class="btn btn-primary"
+              @click="showCreateUserModal"
+            >
+              {{ $t("General.new") }}
+            </button>
+          </div>
+          <div class="col">
+            <div class="input-group">
               <button
                 type="button"
                 class="btn btn-primary"
-                @click="showCreateUserModal"
+                @click="searchAllContent"
               >
-                {{ $t("General.new") }}
+                {{ $t("General.all") }}
               </button>
-            </td>
-            <td>
-              <div class="input-group">
-                <button
-                  type="button"
-                  class="btn btn-primary"
-                  @click="searchAllContent"
-                >
-                  {{ $t("General.all") }}
-                </button>
-                <input
-                  class="form-control"
-                  type="text"
-                  :placeholder="$t('User.searchBy')"
-                  v-model="searchString"
-                  @input="searchContent"
-                />
-              </div>
-            </td>
-          </tr>
-        </table>
+              <input
+                class="form-control"
+                type="text"
+                :placeholder="$t('User.searchBy')"
+                v-model="searchString"
+                @input="searchContent"
+              />
+            </div>
+          </div>
+        </div>
       </div>
     </div>
+
     <DivError :server-errors="serverErrors" />
     <div class="row justify-content-md-center">
       <div class="col-xxl-5 col-xs-12">

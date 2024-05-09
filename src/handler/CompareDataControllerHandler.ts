@@ -32,7 +32,7 @@ class CompareDataControllerHandler extends AbstractControllerHandler {
       selectedCapitalSourceId:
         showCompareDataFormResponse.selectedCapitalsourceId,
       selectedSourceIsImport:
-        showCompareDataFormResponse.selectedSourceIsFile === 1 ? true : false,
+        showCompareDataFormResponse.selectedSourceIsFile === 1,
       selectedCompareDataFormat: showCompareDataFormResponse.selectedDataFormat,
     } as CompareDataParameter;
 
