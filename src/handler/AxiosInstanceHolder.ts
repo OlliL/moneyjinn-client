@@ -12,6 +12,7 @@ import {
 import type { Token } from "axios-jwt/dist/src/Token";
 import { mapValidationItemTransportToModel } from "./mapper/ValidationItemTransportMapper";
 import { WebServer } from "./WebServer";
+import { useI18n } from "vue-i18n";
 
 export class AxiosInstanceHolder {
   private static instance: AxiosInstanceHolder;
@@ -20,6 +21,8 @@ export class AxiosInstanceHolder {
   private constructor() {}
 
   public static getInstance(): AxiosInstanceHolder {
+    const { t } = useI18n();
+
     if (!AxiosInstanceHolder.instance) {
       AxiosInstanceHolder.instance = new AxiosInstanceHolder();
 
@@ -51,7 +54,7 @@ export class AxiosInstanceHolder {
             throw new BackendError(
               BackendErrorType.ERROR,
               undefined,
-              "Technischer Fehler",
+              t("ErrorMessage.technicalError"),
             );
           }
 
@@ -86,10 +89,10 @@ export class AxiosInstanceHolder {
           throw new BackendError(
             BackendErrorType.ERROR,
             undefined,
-            "Technischer Fehler: (" +
-              error.response.status +
-              ") " +
-              error.response.statusText,
+            t("ErrorMessage.technicalError", {
+              status: error.response.status,
+              statusText: error.response.statusText,
+            }),
           );
         },
       );

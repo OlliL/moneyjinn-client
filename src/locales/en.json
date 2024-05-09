@@ -415,6 +415,8 @@
         }
     },
     "ErrorMessage": {
+        "technicalError": "technical error",
+        "technicalErrorWithStatus": "technical error: ({status}) {statusText}",
         "CONTRACTPARTNER_DOES_NOT_EXIST": "Contractpartner does not exist!",
         "CAPITALSOURCE_DOES_NOT_EXIST": "Capitalsource does not exist!",
         "CAPITALSOURCE_STILL_REFERENCED": "The source of capital cannot be deleted because it is still referenced by a flow of money or a predefined flow of money!",
