@@ -13,7 +13,7 @@
 <script lang="ts" setup>
 defineProps({
   serverErrors: {
-    type: Array<String>,
+    type: Array<string>,
     required: false,
   },
 });

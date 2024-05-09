@@ -398,26 +398,25 @@ const bookCapitalsourceAmounts = (mmf: Moneyflow, bookOut: boolean) => {
   let direction = bookOut ? -1 : 1;
   const amount = mmf.amount * direction;
 
-  if (report.value.reportTurnoverCapitalsources) {
-    for (const mcs of report.value.reportTurnoverCapitalsources) {
-      if (mcs.capitalsourceComment === capitalsourceComment) {
-        mcs.amountEndOfMonthCalculated += amount;
-        if (
-          !mcs.amountCurrentState &&
-          mcs.amountCurrent &&
-          bookingDate <= today
-        ) {
-          mcs.amountCurrent += amount;
-        }
-        if (
-          mcs.capitalsourceType === CapitalsourceType.CURRENT_ASSET ||
-          mcs.capitalsourceType === CapitalsourceType.LONG_TERM_ASSET
-        ) {
-          assetsMonthlyCalculatedTurnover.value += amount;
-        }
+  report.value.reportTurnoverCapitalsources
+    ?.filter((mcs) => mcs.capitalsourceComment === capitalsourceComment)
+    .forEach((mcs) => {
+      mcs.amountEndOfMonthCalculated += amount;
+      if (
+        !mcs.amountCurrentState &&
+        mcs.amountCurrent &&
+        bookingDate <= today
+      ) {
+        mcs.amountCurrent += amount;
       }
-    }
-  }
+      if (
+        mcs.capitalsourceType === CapitalsourceType.CURRENT_ASSET ||
+        mcs.capitalsourceType === CapitalsourceType.LONG_TERM_ASSET
+      ) {
+        assetsMonthlyCalculatedTurnover.value += amount;
+      }
+    });
+
   if (report.value.turnoverEndOfYearCalculated)
     report.value.turnoverEndOfYearCalculated += amount;
 };
@@ -469,7 +468,9 @@ const compareColumns = (
     aField = aField.toLowerCase();
     bField = bField.toLowerCase();
   }
-  return aField > bField ? 1 : bField > aField ? -1 : 0;
+  if (aField > bField) return 1;
+  else if (bField > aField) return -1;
+  return 0;
 };
 const sortByColumn = (field: keyof Moneyflow) => {
   let sortByField = sortBy.value.get(field);
