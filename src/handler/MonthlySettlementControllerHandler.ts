@@ -12,7 +12,6 @@ import {
   type ShowMonthlySettlementCreateResponse,
   type UpsertMonthlySettlementRequest,
 } from "@/api";
-import { AxiosInstanceHolder } from "./AxiosInstanceHolder";
 import type { AxiosResponse } from "axios";
 
 class MonthlySettlementControllerHandler extends AbstractControllerHandler {
@@ -21,11 +20,7 @@ class MonthlySettlementControllerHandler extends AbstractControllerHandler {
   public constructor() {
     super();
 
-    this.api = new MonthlySettlementControllerApi(
-      undefined,
-      "",
-      AxiosInstanceHolder.getInstance().getAxiosInstance(),
-    );
+    this.api = super.createApi(MonthlySettlementControllerApi);
   }
 
   async getAvailableMonth(

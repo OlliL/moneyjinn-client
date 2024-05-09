@@ -7,7 +7,6 @@ import AbstractControllerHandler from "@/handler/AbstractControllerHandler";
 import type { EtfDepot } from "@/model/etf/EtfDepot";
 import type { EtfSalesCalculation } from "@/model/etf/EtfSalesCalculation";
 import type { EtfSummary } from "@/model/etf/EtfSummary";
-import { AxiosInstanceHolder } from "./AxiosInstanceHolder";
 import { mapEtfEffectiveFlowTransportToModel } from "./mapper/EtfEffectiveFlowTransportMapper";
 import { mapEtfFlowTransportToModel } from "./mapper/EtfFlowTransportMapper";
 import { mapEtfSummaryTransportToEtfSummary } from "./mapper/EtfTSummaryTransportMapper";
@@ -19,11 +18,7 @@ class EtfControllerHandler extends AbstractControllerHandler {
   public constructor() {
     super();
 
-    this.api = new EtfControllerApi(
-      undefined,
-      "",
-      AxiosInstanceHolder.getInstance().getAxiosInstance(),
-    );
+    this.api = super.createApi(EtfControllerApi);
   }
 
   async listEtfOverview(

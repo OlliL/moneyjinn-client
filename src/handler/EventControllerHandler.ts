@@ -1,7 +1,6 @@
 import { EventControllerApi } from "@/api";
 import AbstractControllerHandler from "@/handler/AbstractControllerHandler";
 import type { Events } from "@/model/event/Events";
-import { AxiosInstanceHolder } from "./AxiosInstanceHolder";
 
 class EventControllerHandler extends AbstractControllerHandler {
   private api: EventControllerApi;
@@ -9,11 +8,7 @@ class EventControllerHandler extends AbstractControllerHandler {
   public constructor() {
     super();
 
-    this.api = new EventControllerApi(
-      undefined,
-      "",
-      AxiosInstanceHolder.getInstance().getAxiosInstance(),
-    );
+    this.api = super.createApi(EventControllerApi);
   }
 
   async showEventList(): Promise<Events> {

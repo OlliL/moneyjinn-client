@@ -5,7 +5,6 @@ import {
   mapEtfFlowTransportToModel,
 } from "./mapper/EtfFlowTransportMapper";
 import { CrudEtfFlowControllerApi } from "@/api";
-import { AxiosInstanceHolder } from "./AxiosInstanceHolder";
 
 class EtfFlowControllerHandler extends AbstractControllerHandler {
   private api: CrudEtfFlowControllerApi;
@@ -13,11 +12,7 @@ class EtfFlowControllerHandler extends AbstractControllerHandler {
   public constructor() {
     super();
 
-    this.api = new CrudEtfFlowControllerApi(
-      undefined,
-      "",
-      AxiosInstanceHolder.getInstance().getAxiosInstance(),
-    );
+    this.api = super.createApi(CrudEtfFlowControllerApi);
   }
 
   async createEtfFlow(met: EtfFlow): Promise<EtfFlow> {

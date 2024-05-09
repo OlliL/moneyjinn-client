@@ -5,7 +5,6 @@ import {
   mapEtfPreliminaryLumpSumTransportToModel,
 } from "./mapper/EtfPreliminaryLumpSumTransportMapper";
 import { CrudEtfPreliminaryLumpSumControllerApi } from "@/api";
-import { AxiosInstanceHolder } from "./AxiosInstanceHolder";
 
 class EtfPreliminaryLumpSumControllerHandler extends AbstractControllerHandler {
   private api: CrudEtfPreliminaryLumpSumControllerApi;
@@ -13,11 +12,7 @@ class EtfPreliminaryLumpSumControllerHandler extends AbstractControllerHandler {
   public constructor() {
     super();
 
-    this.api = new CrudEtfPreliminaryLumpSumControllerApi(
-      undefined,
-      "",
-      AxiosInstanceHolder.getInstance().getAxiosInstance(),
-    );
+    this.api = super.createApi(CrudEtfPreliminaryLumpSumControllerApi);
   }
 
   async fetchAllEtfPreliminaryLumpSum(

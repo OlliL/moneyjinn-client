@@ -5,7 +5,6 @@ import {
 } from "@/api";
 import AbstractControllerHandler from "@/handler/AbstractControllerHandler";
 import type { PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
-import { AxiosInstanceHolder } from "./AxiosInstanceHolder";
 import {
   mapPreDefMoneyflowToTransport,
   mapPreDefMoneyflowTransportToModel,
@@ -17,11 +16,7 @@ class PreDefMoneyflowControllerHandler extends AbstractControllerHandler {
   public constructor() {
     super();
 
-    this.api = new PreDefMoneyflowControllerApi(
-      undefined,
-      "",
-      AxiosInstanceHolder.getInstance().getAxiosInstance(),
-    );
+    this.api = super.createApi(PreDefMoneyflowControllerApi);
   }
 
   async fetchAllPreDefMoneyflow(): Promise<Array<PreDefMoneyflow>> {

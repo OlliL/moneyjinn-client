@@ -3,7 +3,6 @@ import type { CompareDataParameter } from "@/model/comparedata/CompareDataParame
 import type { CompareDataResult } from "@/model/comparedata/CompareDataResult";
 import { getISOStringDate } from "@/tools/views/FormatDate";
 import { CompareDataControllerApi, type CompareDataRequest } from "@/api";
-import { AxiosInstanceHolder } from "./AxiosInstanceHolder";
 import type { CompareData } from "@/model/comparedata/CompareData";
 import { mapMoneyflowTransportToModel } from "./mapper/MoneyflowTransportMapper";
 import { mapCCompareDataDatasetTransportToModel } from "./mapper/CompareCompareDataDataset";
@@ -14,11 +13,7 @@ class CompareDataControllerHandler extends AbstractControllerHandler {
   public constructor() {
     super();
 
-    this.api = new CompareDataControllerApi(
-      undefined,
-      "",
-      AxiosInstanceHolder.getInstance().getAxiosInstance(),
-    );
+    this.api = super.createApi(CompareDataControllerApi);
   }
 
   async showCompareDataForm(): Promise<CompareDataParameter> {

@@ -1,19 +1,16 @@
 export class WebServer {
   private static instance: WebServer;
-  private webServer: string = "";
+  private webServer: string;
 
-  private constructor() {}
+  private constructor(host: string) {
+    this.webServer = host;
+  }
 
   public static getInstance(): WebServer {
     if (!WebServer.instance) {
-      WebServer.instance = new WebServer();
-      WebServer.instance.webServer = location.host;
+      WebServer.instance = new WebServer(location.host);
     }
     return WebServer.instance;
-  }
-
-  public setWebServer(url: string) {
-    this.webServer = url;
   }
 
   public getWebServer(): string {
