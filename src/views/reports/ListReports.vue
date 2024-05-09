@@ -54,25 +54,21 @@
         class="col-md-3 text-start g-0"
         style="position: fixed; z-index: 1030; margin-top: 35vh"
       >
-        <h1>
-          <i
-            @click="navigateToPreviousMonth"
-            v-if="previousMonthLink"
-            class="bi bi-caret-left-fill link-primary"
-          ></i>
-        </h1>
+        <span
+          @click="navigateToPreviousMonth"
+          v-if="previousMonthLink"
+          class="bi bi-caret-left-fill link-primary"
+        ></span>
       </div>
       <div
         class="col-md-3 text-end g-0 offset-md-9"
         style="position: fixed; z-index: 1030; margin-top: 35vh"
       >
-        <h1>
-          <i
-            @click="navigateToNextMonth"
-            v-if="nextMonthLink"
-            class="bi bi-caret-right-fill link-primary"
-          ></i>
-        </h1>
+        <span
+          @click="navigateToNextMonth"
+          v-if="nextMonthLink"
+          class="bi bi-caret-right-fill link-primary"
+        ></span>
       </div>
     </div>
     <ReportTableVue :year="year" :month="month" v-if="year && month" />
@@ -200,3 +196,9 @@ const selectMonth = (year: string, month?: string) => {
   });
 };
 </script>
+
+<style scoped>
+span.bi {
+  font-size: 2.5rem;
+}
+</style>
