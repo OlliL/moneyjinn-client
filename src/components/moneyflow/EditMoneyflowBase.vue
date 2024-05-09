@@ -76,7 +76,7 @@
     <div
       class="col-md-3 col-xs-12 mb-2 d-flex align-items-center justify-content-center"
     >
-      <div class="btn-group mx-2" role="group">
+      <div class="btn-group mx-2">
         <input
           type="radio"
           class="btn-check"
@@ -103,7 +103,7 @@
           ><small>{{ $t("Moneyflow.private") }}</small></label
         >
       </div>
-      <div class="btn-group mx-2" role="group">
+      <div class="btn-group mx-2">
         <input
           type="radio"
           class="btn-check"
@@ -204,6 +204,7 @@ import type { PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
 
 import MoneyflowControllerHandler from "@/handler/MoneyflowControllerHandler";
 import ImportedMoneyflowControllerHandler from "@/handler/ImportedMoneyflowControllerHandler";
+import type { Contractpartner } from "@/model/contractpartner/Contractpartner";
 
 const { t } = useI18n();
 
@@ -327,75 +328,9 @@ const mseRemainder = computed(() => {
 
 const resetForm = () => {
   if (props.mmfToEdit?.bookingDate) {
-    Object.assign(mmf.value, props.mmfToEdit);
-
-    amount.value = mmf.value.amount;
-
-    // set correct defaults for imported moneyflows
-    if (mmf.value.comment === undefined) mmf.value.comment = "";
-    if (mmf.value.postingAccountId === undefined)
-      mmf.value.postingAccountId = 0;
-
-    originalMoneyflowSplitEntryIds.value = new Array<number>();
-    if (props.fillContractpartnerDefaults && mmf.value.contractpartnerId > 0) {
-      previousCommentSetByContractpartnerDefaults.value = mmf.value.comment;
-      previousPostingAccountSetByContractpartnerDefaults.value =
-        mmf.value.postingAccountId;
-
-      onContractpartnerSelected(mmf.value.contractpartnerId);
-    } else {
-      previousCommentSetByContractpartnerDefaults.value = "";
-      previousPostingAccountSetByContractpartnerDefaults.value = 0;
-    }
-
-    if (mmf.value.moneyflowSplitEntries == undefined) {
-      mmf.value.moneyflowSplitEntries = new Array<MoneyflowSplitEntry>();
-      addNewMoneyflowSplitEntryRow();
-      addNewMoneyflowSplitEntryRow();
-      document.getElementById("collapseSplitEntries")?.classList.remove("show");
-    } else {
-      for (let mse of mmf.value.moneyflowSplitEntries) {
-        originalMoneyflowSplitEntryIds.value.push(mse.id);
-      }
-      addNewMoneyflowSplitEntryRow();
-      document.getElementById("collapseSplitEntries")?.classList.add("show");
-    }
-    toggleMoneyflowFieldsForMse();
+    resetEditForm();
   } else {
-    amount.value = undefined;
-
-    const bookingDate = new Date();
-    bookingDate.setHours(0, 0, 0, 0);
-    mmf.value.bookingDate = bookingDate;
-    mmf.value.invoiceDate = undefined;
-    mmf.value.contractpartnerId = 0;
-    mmf.value.contractpartnerName = "";
-
-    const capitalsources = capitalsourceStore
-      .getBookableValidCapitalsources(bookingDate)
-      .filter((mcs) => (mcs.state = CapitalsourceState.CACHE));
-
-    if (capitalsources && capitalsources.length > 0) {
-      const mcs = capitalsources[0];
-      mmf.value.capitalsourceId = mcs.id;
-      mmf.value.capitalsourceComment = mcs.comment;
-    } else {
-      mmf.value.capitalsourceId = 0;
-      mmf.value.capitalsourceComment = "";
-    }
-
-    mmf.value.postingAccountId = 0;
-    mmf.value.postingAccountName = "";
-    mmf.value.comment = "";
-    mmf.value.private = false;
-
-    mmf.value.moneyflowSplitEntries = new Array<MoneyflowSplitEntry>();
-    addNewMoneyflowSplitEntryRow();
-    addNewMoneyflowSplitEntryRow();
-    showMoneyflowFields.value = true;
-
-    previousCommentSetByContractpartnerDefaults.value = "";
-    previousPostingAccountSetByContractpartnerDefaults.value = 0;
+    resetCreateForm();
   }
   serverErrors.value = new Array<string>();
   mseRemainderIsValid.value = undefined;
@@ -406,6 +341,80 @@ const resetForm = () => {
   toggleTextOff.value = toggleTextOffNoPreDefMoneyflow.value;
   toggleTextOn.value = toggleTextOnNoPreDefMoneyflow.value;
 };
+
+const resetEditForm = () => {
+  Object.assign(mmf.value, props.mmfToEdit);
+
+  amount.value = mmf.value.amount;
+
+  // set correct defaults for imported moneyflows
+  if (mmf.value.comment === undefined) mmf.value.comment = "";
+  if (mmf.value.postingAccountId === undefined) mmf.value.postingAccountId = 0;
+
+  originalMoneyflowSplitEntryIds.value = new Array<number>();
+  if (props.fillContractpartnerDefaults && mmf.value.contractpartnerId > 0) {
+    previousCommentSetByContractpartnerDefaults.value = mmf.value.comment;
+    previousPostingAccountSetByContractpartnerDefaults.value =
+      mmf.value.postingAccountId;
+
+    onContractpartnerSelected(mmf.value.contractpartnerId);
+  } else {
+    previousCommentSetByContractpartnerDefaults.value = "";
+    previousPostingAccountSetByContractpartnerDefaults.value = 0;
+  }
+
+  if (mmf.value.moneyflowSplitEntries == undefined) {
+    mmf.value.moneyflowSplitEntries = new Array<MoneyflowSplitEntry>();
+    addNewMoneyflowSplitEntryRow();
+    addNewMoneyflowSplitEntryRow();
+    document.getElementById("collapseSplitEntries")?.classList.remove("show");
+  } else {
+    for (let mse of mmf.value.moneyflowSplitEntries) {
+      originalMoneyflowSplitEntryIds.value.push(mse.id);
+    }
+    addNewMoneyflowSplitEntryRow();
+    document.getElementById("collapseSplitEntries")?.classList.add("show");
+  }
+  toggleMoneyflowFieldsForMse();
+};
+
+const resetCreateForm = () => {
+  amount.value = undefined;
+
+  const bookingDate = new Date();
+  bookingDate.setHours(0, 0, 0, 0);
+  mmf.value.bookingDate = bookingDate;
+  mmf.value.invoiceDate = undefined;
+  mmf.value.contractpartnerId = 0;
+  mmf.value.contractpartnerName = "";
+
+  const capitalsources = capitalsourceStore
+    .getBookableValidCapitalsources(bookingDate)
+    .filter((mcs) => (mcs.state = CapitalsourceState.CACHE));
+
+  if (capitalsources && capitalsources.length > 0) {
+    const mcs = capitalsources[0];
+    mmf.value.capitalsourceId = mcs.id;
+    mmf.value.capitalsourceComment = mcs.comment;
+  } else {
+    mmf.value.capitalsourceId = 0;
+    mmf.value.capitalsourceComment = "";
+  }
+
+  mmf.value.postingAccountId = 0;
+  mmf.value.postingAccountName = "";
+  mmf.value.comment = "";
+  mmf.value.private = false;
+
+  mmf.value.moneyflowSplitEntries = new Array<MoneyflowSplitEntry>();
+  addNewMoneyflowSplitEntryRow();
+  addNewMoneyflowSplitEntryRow();
+  showMoneyflowFields.value = true;
+
+  previousCommentSetByContractpartnerDefaults.value = "";
+  previousPostingAccountSetByContractpartnerDefaults.value = 0;
+};
+
 /*
  * Moneyflow Split Entry handling
  */
@@ -513,44 +522,48 @@ const onContractpartnerSelected = (contractpartnerId: number) => {
   const contractpartner =
     contractpartnerStore.getContractpartner(contractpartnerId);
   if (contractpartner) {
-    mmf.value.contractpartnerId = contractpartner.id;
-    mmf.value.contractpartnerName = contractpartner.name;
-    if (
-      mmf.value.comment === previousCommentSetByContractpartnerDefaults.value
-    ) {
-      const mcpComment = contractpartner.moneyflowComment;
-      if (mcpComment) {
-        mmf.value.comment = mcpComment;
-        previousCommentSetByContractpartnerDefaults.value = mcpComment;
-      }
-    }
-    if (
-      mmf.value.postingAccountId ===
-      previousPostingAccountSetByContractpartnerDefaults.value
-    ) {
-      const mpaId = contractpartner.postingAccountId
-        ? contractpartner.postingAccountId
-        : 0;
-
-      mmf.value.postingAccountId = mpaId;
-      previousPostingAccountSetByContractpartnerDefaults.value = mpaId;
-    }
+    contractpartnerSelected(contractpartner);
   } else {
-    mmf.value.contractpartnerId = 0;
-    mmf.value.contractpartnerName = "";
-    if (
-      mmf.value.comment === previousCommentSetByContractpartnerDefaults.value
-    ) {
-      mmf.value.comment = "";
-      previousCommentSetByContractpartnerDefaults.value = "";
+    noContractpartnerSelected();
+  }
+};
+
+const contractpartnerSelected = (contractpartner: Contractpartner) => {
+  mmf.value.contractpartnerId = contractpartner.id;
+  mmf.value.contractpartnerName = contractpartner.name;
+  if (mmf.value.comment === previousCommentSetByContractpartnerDefaults.value) {
+    const mcpComment = contractpartner.moneyflowComment;
+    if (mcpComment) {
+      mmf.value.comment = mcpComment;
+      previousCommentSetByContractpartnerDefaults.value = mcpComment;
     }
-    if (
-      mmf.value.postingAccountId ===
-      previousPostingAccountSetByContractpartnerDefaults.value
-    ) {
-      mmf.value.postingAccountId = 0;
-      previousPostingAccountSetByContractpartnerDefaults.value = 0;
-    }
+  }
+  if (
+    mmf.value.postingAccountId ===
+    previousPostingAccountSetByContractpartnerDefaults.value
+  ) {
+    const mpaId = contractpartner.postingAccountId
+      ? contractpartner.postingAccountId
+      : 0;
+
+    mmf.value.postingAccountId = mpaId;
+    previousPostingAccountSetByContractpartnerDefaults.value = mpaId;
+  }
+};
+
+const noContractpartnerSelected = () => {
+  mmf.value.contractpartnerId = 0;
+  mmf.value.contractpartnerName = "";
+  if (mmf.value.comment === previousCommentSetByContractpartnerDefaults.value) {
+    mmf.value.comment = "";
+    previousCommentSetByContractpartnerDefaults.value = "";
+  }
+  if (
+    mmf.value.postingAccountId ===
+    previousPostingAccountSetByContractpartnerDefaults.value
+  ) {
+    mmf.value.postingAccountId = 0;
+    previousPostingAccountSetByContractpartnerDefaults.value = 0;
   }
 };
 
@@ -573,6 +586,22 @@ const selectPreDefMoneyflow = (
 };
 
 const prepareServerCall = (): boolean => {
+  prepareServerCallSplitEntries();
+
+  if (formIsValid.value) {
+    if (amount.value) mmf.value.amount = amount.value;
+    // remove empty rows
+    if (mmf.value.moneyflowSplitEntries) {
+      mmf.value.moneyflowSplitEntries = mmf.value.moneyflowSplitEntries.filter(
+        (mse) => mse.amount && mse.comment && mse.postingAccountId,
+      );
+    }
+    return true;
+  }
+  return false;
+};
+
+const prepareServerCallSplitEntries = () => {
   validateMseRemainder();
   if (!allMseRowsAreEmpty() && mmf.value.moneyflowSplitEntries) {
     let mse = {} as MoneyflowSplitEntry;
@@ -589,18 +618,6 @@ const prepareServerCall = (): boolean => {
       mmf.value.postingAccountId = mse.postingAccountId;
     }
   }
-
-  if (formIsValid.value) {
-    if (amount.value) mmf.value.amount = amount.value;
-    // remove empty rows
-    if (mmf.value.moneyflowSplitEntries) {
-      mmf.value.moneyflowSplitEntries = mmf.value.moneyflowSplitEntries.filter(
-        (mse) => mse.amount && mse.comment && mse.postingAccountId,
-      );
-    }
-    return true;
-  }
-  return false;
 };
 
 const followUpServerCall = () => {
