@@ -56,7 +56,6 @@
       >
         <h1>
           <i
-            role="button"
             @click="navigateToPreviousMonth"
             v-if="previousMonthLink"
             class="bi bi-caret-left-fill link-primary"
@@ -69,7 +68,6 @@
       >
         <h1>
           <i
-            role="button"
             @click="navigateToNextMonth"
             v-if="nextMonthLink"
             class="bi bi-caret-right-fill link-primary"

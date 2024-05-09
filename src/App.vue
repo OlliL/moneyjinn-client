@@ -10,4 +10,7 @@ import { RouterView } from "vue-router";
 ul.month-selection {
   margin: 0 !important;
 }
+span.link-primary:hover {
+  cursor: pointer;
+}
 </style>

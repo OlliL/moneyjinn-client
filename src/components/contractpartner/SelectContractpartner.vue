@@ -18,7 +18,6 @@
         <template #icon
           ><span
             class="input-group-text"
-            role="button"
             @click="showCreateContractpartnerModal"
             ><i class="bi bi-plus"></i></span
         ></template>

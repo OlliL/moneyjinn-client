@@ -3,20 +3,14 @@
     <td class="text-start">{{ mca.accountNumber }}</td>
     <td class="text-start">{{ mca.bankCode }}</td>
     <td class="text-center">
-      <span
-        role="button"
-        class="link-primary"
-        @click="editContractpartnerAccount"
-        >{{ $t("General.edit") }}</span
-      >
+      <span class="link-primary" @click="editContractpartnerAccount">{{
+        $t("General.edit")
+      }}</span>
     </td>
     <td class="text-center">
-      <span
-        role="button"
-        class="link-primary"
-        @click="deleteContractpartnerAccount"
-        >{{ $t("General.delete") }}</span
-      >
+      <span class="link-primary" @click="deleteContractpartnerAccount">{{
+        $t("General.delete")
+      }}</span>
     </td>
   </tr>
 </template>

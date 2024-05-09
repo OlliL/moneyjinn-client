@@ -15,10 +15,7 @@
         :select-box-values="selectBoxValues"
       >
         <template #icon
-          ><span
-            class="input-group-text"
-            role="button"
-            @click="showCreateCapitalsourceModal"
+          ><span class="input-group-text" @click="showCreateCapitalsourceModal"
             ><i class="bi bi-plus"></i></span
         ></template>
       </SelectStandard>

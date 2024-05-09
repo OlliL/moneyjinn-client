@@ -80,7 +80,6 @@
             <a
               class="nav-link dropdown-toggle"
               href="#"
-              role="button"
               data-bs-toggle="dropdown"
             >
               <i class="bi bi-bar-chart-fill"></i>
@@ -106,7 +105,6 @@
             <a
               class="nav-link dropdown-toggle"
               href="#"
-              role="button"
               data-bs-toggle="dropdown"
               ref="dropdownPlus"
             >
@@ -136,7 +134,6 @@
               <li>
                 <span
                   class="dropdown-item"
-                  role="button"
                   @click="showCreateCapitalsourceModal"
                   >{{ $t("General.capitalsource") }}</span
                 >
@@ -144,18 +141,14 @@
               <li>
                 <span
                   class="dropdown-item"
-                  role="button"
                   @click="showCreateContractpartnerModal"
                   >{{ $t("General.contractpartner") }}</span
                 >
               </li>
               <li>
-                <span
-                  class="dropdown-item"
-                  role="button"
-                  @click="showPreDefMoneyflowModal"
-                  >{{ $t("General.preDefMoneyflow") }}</span
-                >
+                <span class="dropdown-item" @click="showPreDefMoneyflowModal">{{
+                  $t("General.preDefMoneyflow")
+                }}</span>
               </li>
             </ul>
           </li>
@@ -163,7 +156,6 @@
             <a
               class="nav-link dropdown-toggle"
               href="#"
-              role="button"
               data-bs-toggle="dropdown"
               ref="dropdownWrench"
             >
@@ -204,7 +196,6 @@
             <a
               class="nav-link dropdown-toggle"
               href="#"
-              role="button"
               data-bs-toggle="dropdown"
               ref="dropdownGraphUpArrow"
             >
@@ -250,7 +241,6 @@
               <a
                 class="nav-link dropdown-toggle"
                 href="#"
-                role="button"
                 data-bs-toggle="dropdown"
               >
                 <i class="bi bi-incognito"></i>
@@ -293,7 +283,7 @@
               </ul>
             </li>
             <li class="nav-item">
-              <span class="nav-link" role="button" @click="logout"
+              <span class="nav-link" @click="logout"
                 ><i class="bi bi-box-arrow-right"></i
               ></span>
             </li>

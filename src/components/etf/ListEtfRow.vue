@@ -11,12 +11,12 @@
     </td>
     <td class="text-start" v-if="!etf.isFavorite">&nbsp;</td>
     <td class="text-center">
-      <span role="button" class="link-primary" @click="editEtf">{{
+      <span class="link-primary" @click="editEtf">{{
         $t("General.edit")
       }}</span>
     </td>
     <td class="text-center">
-      <span role="button" class="link-primary" @click="deleteEtf">{{
+      <span class="link-primary" @click="deleteEtf">{{
         $t("General.delete")
       }}</span>
     </td>

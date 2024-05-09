@@ -7,12 +7,12 @@
       <SpanBoolean :value="user.userIsNew" />
     </td>
     <td class="text-center">
-      <span role="button" class="link-primary" @click="editUser">{{
+      <span class="link-primary" @click="editUser">{{
         $t("General.edit")
       }}</span>
     </td>
     <td class="text-center">
-      <span role="button" class="link-primary" @click="deleteUser">{{
+      <span class="link-primary" @click="deleteUser">{{
         $t("General.delete")
       }}</span>
     </td>

@@ -5,15 +5,13 @@
         class="btn btn-outline-primary"
         data-bs-toggle="collapse"
         :href="'#collapseResults' + moneyflowGroupKey"
-        role="button"
         aria-expanded="false"
         aria-controls="collapseExample"
-        ><span role="button" class="link-primary"
-          ><i :class="collapseIconClass"></i></span
+        ><span class="link-primary"><i :class="collapseIconClass"></i></span
       ></a>
     </td>
     <td style="vertical-align: middle" v-if="colBookingMonth">
-      <span role="button" class="link-primary"
+      <span class="link-primary"
         ><router-link
           class="nav-link button"
           :to="{
@@ -26,7 +24,7 @@
       >
     </td>
     <td style="vertical-align: middle" v-if="colBookingYear">
-      <span role="button" class="link-primary"
+      <span class="link-primary"
         ><router-link
           class="nav-link button"
           :to="{

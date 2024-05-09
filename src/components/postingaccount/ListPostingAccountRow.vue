@@ -2,12 +2,12 @@
   <tr>
     <td class="text-start">{{ mpa.name }}</td>
     <td class="text-center">
-      <span role="button" class="link-primary" @click="editPostingAccount">{{
+      <span class="link-primary" @click="editPostingAccount">{{
         $t("General.edit")
       }}</span>
     </td>
     <td class="text-center">
-      <span role="button" class="link-primary" @click="deletePostingAccount">{{
+      <span class="link-primary" @click="deletePostingAccount">{{
         $t("General.delete")
       }}</span>
     </td>

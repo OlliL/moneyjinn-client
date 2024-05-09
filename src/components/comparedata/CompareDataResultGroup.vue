@@ -5,7 +5,6 @@
         class="btn btn-outline-primary"
         data-bs-toggle="collapse"
         :href="'#collapseResults' + compareDataKey"
-        role="button"
         aria-expanded="false"
         aria-controls="collapseExample"
         v-if="compareDatasCount > 0"
