@@ -48,29 +48,23 @@ export class AxiosInstanceHolder {
         },
         (error) => {
           if (error instanceof Error && !("response" in error)) {
-            return Promise.reject(
-              new BackendError(
-                BackendErrorType.ERROR,
-                undefined,
-                "Technischer Fehler",
-              ),
+            throw new BackendError(
+              BackendErrorType.ERROR,
+              undefined,
+              "Technischer Fehler",
             );
           }
 
           if (error.response.status === 400) {
             const errorResponse: ErrorResponse = error.response.data;
-            return Promise.reject(
-              new BackendError(
-                BackendErrorType.CLIENT_ERROR,
-                errorResponse.code,
-              ),
+            throw new BackendError(
+              BackendErrorType.CLIENT_ERROR,
+              errorResponse.code,
             );
           } else if (error.response.status === 403) {
-            return Promise.reject(
-              new BackendError(
-                BackendErrorType.AUTH_ERROR,
-                ErrorCode.USERNAME_PASSWORD_WRONG.valueOf(),
-              ),
+            throw new BackendError(
+              BackendErrorType.AUTH_ERROR,
+              ErrorCode.USERNAME_PASSWORD_WRONG.valueOf(),
             );
           } else if (error.response.status === 422) {
             const validationResponse: ValidationResponse = error.response.data;
@@ -82,24 +76,20 @@ export class AxiosInstanceHolder {
                 }),
             };
 
-            return Promise.reject(
-              new BackendError(
-                BackendErrorType.VALIDATION_ERROR,
-                undefined,
-                undefined,
-                validationResult,
-              ),
+            throw new BackendError(
+              BackendErrorType.VALIDATION_ERROR,
+              undefined,
+              undefined,
+              validationResult,
             );
           }
-          return Promise.reject(
-            new BackendError(
-              BackendErrorType.ERROR,
-              undefined,
-              "Technischer Fehler: (" +
-                error.response.status +
-                ") " +
-                error.response.statusText,
-            ),
+          throw new BackendError(
+            BackendErrorType.ERROR,
+            undefined,
+            "Technischer Fehler: (" +
+              error.response.status +
+              ") " +
+              error.response.statusText,
           );
         },
       );
