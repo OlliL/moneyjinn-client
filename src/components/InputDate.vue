@@ -139,15 +139,16 @@ const setDate = (newVal?: Date) => {
         datepicker.setDate(undefined);
       }
     } else {
-      if (props.pickMode === "month" || props.pickMode === "year") {
+      if (props.pickMode === "month") {
         newVal.setDate(1);
+      } else if (props.pickMode === "year") {
+        newVal.setDate(1);
+        newVal.setMonth(0);
       }
-      if (props.pickMode === "year") newVal.setMonth(0);
       newVal.setHours(0, 0, 0, 0);
 
-      if (datepicker.dates.length === 0) {
-        datepicker.setDate(newVal);
-      } else if (
+      if (
+        datepicker.dates.length === 0 ||
         (datepicker.getDate() as Date).toISOString() != newVal?.toISOString()
       ) {
         datepicker.setDate(newVal);
@@ -193,8 +194,6 @@ const onInput = (event: Event) => {
     emit("update:modelValue", datepicker.getDate());
   }
 };
-
-//if (props.modelValue) setDate(props.modelValue);
 
 const errorData = computed((): ErrorData => {
   return generateErrorDataVeeValidate(
