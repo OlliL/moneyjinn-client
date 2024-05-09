@@ -5,7 +5,6 @@ import {
 } from "@/api";
 import AbstractControllerHandler from "@/handler/AbstractControllerHandler";
 import type { Group } from "@/model/group/Group";
-import { AxiosInstanceHolder } from "./AxiosInstanceHolder";
 import {
   mapGroupToTransport,
   mapGroupTransportToModel,
@@ -17,11 +16,7 @@ class GroupControllerHandler extends AbstractControllerHandler {
   public constructor() {
     super();
 
-    this.api = new GroupControllerApi(
-      undefined,
-      "",
-      AxiosInstanceHolder.getInstance().getAxiosInstance(),
-    );
+    this.api = super.createApi(GroupControllerApi);
   }
 
   async fetchAllGroup(): Promise<Array<Group>> {

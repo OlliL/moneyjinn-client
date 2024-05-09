@@ -16,7 +16,6 @@ import {
   type SearchMoneyflowsRequest,
   type UpdateMoneyflowRequest,
 } from "@/api";
-import { AxiosInstanceHolder } from "./AxiosInstanceHolder";
 
 class MoneyflowControllerHandler extends AbstractControllerHandler {
   private api: MoneyflowControllerApi;
@@ -24,11 +23,7 @@ class MoneyflowControllerHandler extends AbstractControllerHandler {
   public constructor() {
     super();
 
-    this.api = new MoneyflowControllerApi(
-      undefined,
-      "",
-      AxiosInstanceHolder.getInstance().getAxiosInstance(),
-    );
+    this.api = super.createApi(MoneyflowControllerApi);
   }
 
   async createMoneyflow(

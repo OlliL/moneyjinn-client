@@ -19,7 +19,6 @@ import {
   type ShowTrendsGraphRequest,
   type ShowYearlyReportGraphRequest,
 } from "@/api";
-import { AxiosInstanceHolder } from "./AxiosInstanceHolder";
 import type { AxiosResponse } from "axios";
 
 class ReportControllerHandler extends AbstractControllerHandler {
@@ -28,11 +27,7 @@ class ReportControllerHandler extends AbstractControllerHandler {
   public constructor() {
     super();
 
-    this.api = new ReportControllerApi(
-      undefined,
-      "",
-      AxiosInstanceHolder.getInstance().getAxiosInstance(),
-    );
+    this.api = super.createApi(ReportControllerApi);
   }
 
   private static CONTROLLER = "report";

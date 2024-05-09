@@ -5,7 +5,6 @@ import {
   mapContractpartnerAccountToTransport,
 } from "./mapper/ContractpartnerAccountTransportMapper";
 import { CrudContractpartnerAccountControllerApi } from "@/api";
-import { AxiosInstanceHolder } from "./AxiosInstanceHolder";
 
 class ContractpartnerAccountControllerHandler extends AbstractControllerHandler {
   private api: CrudContractpartnerAccountControllerApi;
@@ -13,11 +12,7 @@ class ContractpartnerAccountControllerHandler extends AbstractControllerHandler 
   public constructor() {
     super();
 
-    this.api = new CrudContractpartnerAccountControllerApi(
-      undefined,
-      "",
-      AxiosInstanceHolder.getInstance().getAxiosInstance(),
-    );
+    this.api = super.createApi(CrudContractpartnerAccountControllerApi);
   }
 
   async fetchAllContractpartnerAccount(

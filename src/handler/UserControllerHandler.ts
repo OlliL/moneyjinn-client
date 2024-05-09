@@ -1,5 +1,4 @@
 import { clearAuthTokens, setAuthTokens } from "axios-jwt";
-import { AxiosInstanceHolder } from "./AxiosInstanceHolder";
 import {
   UserControllerApi,
   type ChangePasswordRequest,
@@ -36,11 +35,7 @@ class UserControllerHandler extends AbstractControllerHandler {
   public constructor() {
     super();
 
-    this.api = new UserControllerApi(
-      undefined,
-      "",
-      AxiosInstanceHolder.getInstance().getAxiosInstance(),
-    );
+    this.api = super.createApi(UserControllerApi);
   }
 
   async login(username: string, password: string): Promise<void> {

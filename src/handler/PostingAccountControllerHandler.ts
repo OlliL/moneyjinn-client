@@ -5,7 +5,6 @@ import {
 } from "@/api";
 import AbstractControllerHandler from "@/handler/AbstractControllerHandler";
 import type { PostingAccount } from "@/model/postingaccount/PostingAccount";
-import { AxiosInstanceHolder } from "./AxiosInstanceHolder";
 import {
   mapPostingAccountToTransport,
   mapPostingAccountTransportToModel,
@@ -17,11 +16,7 @@ class PostingAccountControllerHandler extends AbstractControllerHandler {
   public constructor() {
     super();
 
-    this.api = new PostingAccountControllerApi(
-      undefined,
-      "",
-      AxiosInstanceHolder.getInstance().getAxiosInstance(),
-    );
+    this.api = super.createApi(PostingAccountControllerApi);
   }
 
   private static CONTROLLER = "postingaccount";

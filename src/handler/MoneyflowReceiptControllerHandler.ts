@@ -3,7 +3,6 @@ import AbstractControllerHandler from "@/handler/AbstractControllerHandler";
 import { ErrorCode, getErrorMessage } from "@/model/ErrorCode";
 import type { MoneyflowReceipt } from "@/model/moneyflow/MoneyflowReceipt";
 import { MoneyflowReceiptType } from "@/model/moneyflow/MoneyflowReceiptType";
-import { AxiosInstanceHolder } from "./AxiosInstanceHolder";
 
 class MoneyflowReceiptControllerHandler extends AbstractControllerHandler {
   private api: MoneyflowReceiptControllerApi;
@@ -11,11 +10,7 @@ class MoneyflowReceiptControllerHandler extends AbstractControllerHandler {
   public constructor() {
     super();
 
-    this.api = new MoneyflowReceiptControllerApi(
-      undefined,
-      "",
-      AxiosInstanceHolder.getInstance().getAxiosInstance(),
-    );
+    this.api = super.createApi(MoneyflowReceiptControllerApi);
   }
 
   async fetchReceipt(moneyflowId: number): Promise<MoneyflowReceipt> {

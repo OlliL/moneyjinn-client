@@ -5,7 +5,6 @@ import {
   mapCapitalsourceTransportToModel,
 } from "./mapper/CapitalsourceTransportMapper";
 import { CrudCapitalsourceControllerApi } from "@/api";
-import { AxiosInstanceHolder } from "./AxiosInstanceHolder";
 
 class CapitalsourceControllerHandler extends AbstractControllerHandler {
   private api: CrudCapitalsourceControllerApi;
@@ -13,11 +12,7 @@ class CapitalsourceControllerHandler extends AbstractControllerHandler {
   public constructor() {
     super();
 
-    this.api = new CrudCapitalsourceControllerApi(
-      undefined,
-      "",
-      AxiosInstanceHolder.getInstance().getAxiosInstance(),
-    );
+    this.api = super.createApi(CrudCapitalsourceControllerApi);
   }
 
   async fetchAllCapitalsource(): Promise<Array<Capitalsource>> {
