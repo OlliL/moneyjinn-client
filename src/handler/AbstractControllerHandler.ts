@@ -1,3 +1,4 @@
+import type { BaseAPI } from "@/api/base";
 import { AxiosInstanceHolder } from "./AxiosInstanceHolder";
 
 abstract class AbstractControllerHandler {
@@ -5,7 +6,7 @@ abstract class AbstractControllerHandler {
   protected RET_MINIMAL: string = this.RETURN + "minimal";
   protected RET_REPRESENTATION: string = this.RETURN + "representation";
 
-  protected createApi<T>(clazz: new (...data: any) => T): T {
+  protected createApi<T extends BaseAPI>(clazz: new (...data: any) => T): T {
     return new clazz(
       undefined,
       "",
