@@ -1,5 +1,9 @@
 <template>
-  <tr v-if="mmf.moneyflowSplitEntries == null">
+  <tr
+    v-if="
+      mmf.moneyflowSplitEntries == null || mmf.moneyflowSplitEntries.length == 0
+    "
+  >
     <td>
       <i
         class="bi bi-card-image link-primary"
