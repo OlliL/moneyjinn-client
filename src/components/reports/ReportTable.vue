@@ -440,9 +440,9 @@ const moneyflowUpdated = (mmf: Moneyflow) => {
     bookCapitalsourceAmounts(oldMmf, true);
   }
 
-  for (let i = 0; i < report.value.moneyflows.length; i++) {
-    if (mmf.id === report.value.moneyflows[i].id) {
-      report.value.moneyflows[i] = mmf;
+  for (const reportMmf of report.value.moneyflows) {
+    if (mmf.id === reportMmf.id) {
+      Object.assign(reportMmf, mmf);
       break;
     }
   }
