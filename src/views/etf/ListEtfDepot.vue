@@ -241,7 +241,7 @@
                       :validation-schema="schema.pieces"
                       id="calcEtfSalePieces"
                       field-type="number"
-                      step="0.01"
+                      step="1"
                       :field-label="$t('ETFFlow.amount')"
                     />
                   </div>
@@ -251,7 +251,7 @@
                       :validation-schema="schema.bidPrice"
                       id="calcEtfBidPrice"
                       field-type="number"
-                      step="0.01"
+                      step="0.001"
                       :field-label="$t('ETFFlow.bid')"
                     >
                       <template #icon
@@ -266,7 +266,7 @@
                       :validation-schema="schema.askPrice"
                       id="calcEtfAskPrice"
                       field-type="number"
-                      step="0.01"
+                      step="0.001"
                       :field-label="$t('ETFFlow.ask')"
                     >
                       <template #icon
