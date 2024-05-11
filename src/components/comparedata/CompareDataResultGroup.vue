@@ -21,10 +21,7 @@
   <tr v-if="compareData">
     <td colspan="5" style="padding: 0">
       <div class="collapse" :id="'collapseResults' + compareDataKey">
-        <table
-          class="table table-striped table-bordered table-hover"
-          v-if="showDetails"
-        >
+        <table class="table table-bordered table-hover" v-if="showDetails">
           <col style="width: 10%" />
           <col style="width: 10%" />
           <col style="width: 10%" />

@@ -1,25 +1,37 @@
 <template>
   <tr v-if="mmf">
-    <th id="thDatabase">{{ $t("CompareData.database") }}</th>
-    <td><SpanDate :date="mmf.bookingDate" /></td>
-    <td><SpanDate :date="mmf.invoiceDate" /></td>
-    <td class="text-end"><SpanAmount :amount="mmf.amount" /></td>
-    <td class="text-start">{{ mmf.contractpartnerName }}</td>
-    <td class="text-start">{{ mmf.comment }}</td>
-    <td class="text-start">
+    <th class="db" id="thDatabase">
+      {{ $t("CompareData.database") }}
+    </th>
+    <td class="db">
+      <SpanDate :date="mmf.bookingDate" />
+    </td>
+    <td class="db">
+      <SpanDate :date="mmf.invoiceDate" />
+    </td>
+    <td class="db text-end">
+      <SpanAmount :amount="mmf.amount" />
+    </td>
+    <td class="db text-start">
+      {{ mmf.contractpartnerName }}
+    </td>
+    <td class="db text-start">
+      {{ mmf.comment }}
+    </td>
+    <td class="db text-start">
       {{ mmf.capitalsourceComment }}
     </td>
-    <td class="text-center" v-if="isOwnMoneyflow">
+    <td class="db text-center" v-if="isOwnMoneyflow">
       <span class="link-primary" @click="editMoneyflow">{{
         $t("General.edit")
       }}</span>
     </td>
-    <td class="text-center" v-if="isOwnMoneyflow">
+    <td class="db text-center" v-if="isOwnMoneyflow">
       <span class="link-primary" @click="deleteMoneyflow">{{
         $t("General.delete")
       }}</span>
     </td>
-    <td colspan="2" v-if="!isOwnMoneyflow"></td>
+    <td class="db" colspan="2" v-if="!isOwnMoneyflow"></td>
   </tr>
   <tr v-if="importData">
     <th id="thSource">{{ $t("CompareData.source") }}</th>
@@ -81,3 +93,10 @@ const editMoneyflow = () => {
   if (props.mmf) emit("editMoneyflow", props.mmf.id);
 };
 </script>
+
+<style scoped>
+th.db,
+td.db {
+  background-color: #f2f2f2;
+}
+</style>
