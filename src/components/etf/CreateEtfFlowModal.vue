@@ -84,7 +84,7 @@
 import { useForm } from "vee-validate";
 import { computed, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
-import { coerce, date, string, type ZodType, union, number } from "zod";
+import { date, string, type ZodType, number } from "zod";
 
 import ButtonSubmit from "../ButtonSubmit.vue";
 import DivError from "../DivError.vue";
@@ -94,7 +94,7 @@ import ModalVue from "../Modal.vue";
 import SelectStandard from "../SelectStandard.vue";
 
 import { formatTime } from "@/tools/views/FormatDate";
-import { globErr } from "@/tools/views/ZodUtil";
+import { amountSchema, globErr } from "@/tools/views/ZodUtil";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 
 import type { Etf } from "@/model/etf/Etf";
@@ -108,29 +108,14 @@ const { t } = useI18n();
 const serverErrors = ref(new Array<string>());
 const defaultEtfId = ref(0);
 
-const amountErrMsg = globErr(t("ETFFlow.validation.amount"));
-const priceErrMsg = globErr(t("ETFFlow.validation.price"));
-
 const schema: Partial<{ [key in keyof EtfFlow]: ZodType }> = {
   etfId: number(globErr(t("ETFFlow.validation.etfId"))).gt(0),
   timestamp: date(globErr(t("ETFFlow.validation.timestamp"))),
   nanoseconds: string(globErr(t("ETFFlow.validation.nanoseconds"))).regex(
     /^\d\d:\d\d:\d\d:\d{3}$/,
   ),
-  amount: union(
-    [
-      coerce.number(amountErrMsg).gt(0).multipleOf(0.00001),
-      coerce.number(amountErrMsg).lt(0).multipleOf(0.00001),
-    ],
-    amountErrMsg,
-  ),
-  price: union(
-    [
-      coerce.number(priceErrMsg).gt(0).multipleOf(0.001),
-      coerce.number(priceErrMsg).lt(0).multipleOf(0.001),
-    ],
-    priceErrMsg,
-  ),
+  amount: amountSchema(t("ETFFlow.validation.amount"), 5),
+  price: amountSchema(t("ETFFlow.validation.price"), 3),
 };
 
 const etfs = ref(new Array<SelectBoxValue>());

@@ -450,8 +450,8 @@ const serverErrors = ref(new Array<string>());
 const schema = {
   etfId: number(globErr(t("ETFFlow.validation.etfId"))).gt(0),
   pieces: amountSchema(t("ETFFlow.validation.amount")),
-  askPrice: amountSchema(t("ETFFlow.validation.askPrice")),
-  bidPrice: amountSchema(t("ETFFlow.validation.bidPrice")),
+  askPrice: amountSchema(t("ETFFlow.validation.askPrice"), 3),
+  bidPrice: amountSchema(t("ETFFlow.validation.bidPrice"), 3),
   transactionCosts: amountSchema(t("ETFFlow.validation.transactionCosts")),
 };
 const etfsLoaded = ref(false);

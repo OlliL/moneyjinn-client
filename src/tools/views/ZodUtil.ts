@@ -1,4 +1,4 @@
-import { number, string, union, ZodType } from "zod";
+import { number, ZodType } from "zod";
 
 export function globErr(message: string) {
   return {
@@ -8,13 +8,10 @@ export function globErr(message: string) {
   };
 }
 
-export function amountSchema(message: string): ZodType {
+export function amountSchema(
+  message: string,
+  decimalPlaces: number = 2,
+): ZodType {
   const zodMessage = globErr(message);
-  return union(
-    [
-      string(zodMessage).regex(/^-?\d\d*([,.]\d{1,2})?$/),
-      number(zodMessage).multipleOf(0.01),
-    ],
-    zodMessage,
-  );
+  return number(zodMessage).multipleOf(Math.pow(10, decimalPlaces * -1));
 }
