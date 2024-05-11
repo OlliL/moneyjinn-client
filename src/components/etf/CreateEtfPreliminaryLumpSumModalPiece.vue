@@ -33,8 +33,8 @@
             <div class="col-xs-12">
               <InputStandard
                 v-model="mep.amountPerPiece"
-                :validation-schema="schema.amountJanuary"
-                id="amountJanuary"
+                :validation-schema="schema.amountPerPiece"
+                id="amountPerPiece"
                 step="0.00000001"
                 field-type="number"
                 :field-label="$t('ETFPreliminaryLumpSum.price')"
@@ -65,7 +65,7 @@
 import { useForm } from "vee-validate";
 import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
-import { date, type ZodType, number, coerce, union } from "zod";
+import { date, type ZodType, number } from "zod";
 
 import ButtonSubmit from "../ButtonSubmit.vue";
 import DivError from "../DivError.vue";
@@ -74,7 +74,7 @@ import InputStandard from "../InputStandard.vue";
 import ModalVue from "../Modal.vue";
 import SelectStandard from "../SelectStandard.vue";
 
-import { globErr } from "@/tools/views/ZodUtil";
+import { amountSchema, globErr } from "@/tools/views/ZodUtil";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 
 import type { Etf } from "@/model/etf/Etf";
@@ -87,14 +87,10 @@ const { t } = useI18n();
 
 const serverErrors = ref(new Array<string>());
 
-const priceErrMsg = globErr(t("ETFPreliminaryLumpSum.validation.amount"));
 const schema: Partial<{ [key in keyof EtfPreliminaryLumpSum]: ZodType }> = {
   etfId: number(globErr(t("ETFPreliminaryLumpSum.validation.etfId"))).gt(0),
   year: date(globErr(t("ETFPreliminaryLumpSum.validation.year"))),
-  amountPerPiece: union(
-    [coerce.number(priceErrMsg).gt(0), coerce.number(priceErrMsg).lt(0)],
-    priceErrMsg,
-  ),
+  amountPerPiece: amountSchema(t("ETFPreliminaryLumpSum.validation.amount"), 8),
 };
 
 const etfs = ref(new Array<SelectBoxValue>());
