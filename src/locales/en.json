@@ -186,6 +186,10 @@
         "bid": "bid",
         "ask": "ask",
         "transactionCosts": "transaction costs",
+        "transactionCostsBuy": "Buy",
+        "transactionCostsSell": "Sale",
+        "transactionCostsAbsolute": "absolute",
+        "transactionCostsRelative": "relative",
         "calculate": "calculate",
         "shares": "shares",
         "overall": "overall",
@@ -214,7 +218,8 @@
             "nanoseconds": "Bookingtime must be in the format 00:00:00:000!",
             "askPrice": "Please specify the ask price!",
             "bidPrice": "Please specify the bid price!",
-            "transactionCosts": "Please specify the transaction costs!"
+            "transactionCostsAbsolute": "Please specify the absolute transaction costs!",
+            "transactionCostsRelative": "Please specify the relative transaction costs!"
         }
     },
     "ETFPreliminaryLumpSum": {

@@ -52,8 +52,10 @@ class EtfControllerHandler extends AbstractControllerHandler {
     etfDepot.calcEtfAskPrice = listEtfFlowsResponse.calcEtfAskPrice;
     etfDepot.calcEtfBidPrice = listEtfFlowsResponse.calcEtfBidPrice;
     etfDepot.calcEtfSalePieces = listEtfFlowsResponse.calcEtfSalePieces;
-    etfDepot.calcEtfTransactionCosts =
-      listEtfFlowsResponse.calcEtfTransactionCosts;
+    etfDepot.calcEtfTransactionCostsAbsolute =
+      listEtfFlowsResponse.calcEtfTransactionCostsAbsolute;
+    etfDepot.calcEtfTransactionCostsRelative =
+      listEtfFlowsResponse.calcEtfTransactionCostsRelative;
     etfDepot.etfFlows = listEtfFlowsResponse.etfFlowTransports?.map((flow) => {
       return mapEtfFlowTransportToModel(flow);
     });
@@ -75,14 +77,16 @@ class EtfControllerHandler extends AbstractControllerHandler {
     pieces: number,
     bidPrice: number,
     askPrice: number,
-    transactionCosts: number,
+    transactionCostsAbsolute: number,
+    transactionCostsRelative: number,
   ): Promise<EtfSalesCalculation> {
     const request = {} as CalcEtfSaleRequest;
     request.etfId = etfId;
     request.pieces = pieces;
     request.bidPrice = bidPrice;
     request.askPrice = askPrice;
-    request.transactionCosts = transactionCosts;
+    request.transactionCostsAbsolute = transactionCostsAbsolute;
+    request.transactionCostsRelative = transactionCostsRelative;
 
     const response = await this.api.calcEtfSale(request);
 
@@ -100,7 +104,14 @@ class EtfControllerHandler extends AbstractControllerHandler {
     etfSalesCalculation.profit = calcEtfSaleResponse.profit;
     etfSalesCalculation.rebuyLosses = calcEtfSaleResponse.rebuyLosses;
     etfSalesCalculation.sellPrice = calcEtfSaleResponse.sellPrice;
-    etfSalesCalculation.transactionCosts = calcEtfSaleResponse.transactionCosts;
+    etfSalesCalculation.transactionCostsRelativeSell =
+      calcEtfSaleResponse.transactionCostsRelativeSell;
+    etfSalesCalculation.transactionCostsRelativeBuy =
+      calcEtfSaleResponse.transactionCostsRelativeBuy;
+    etfSalesCalculation.transactionCostsAbsoluteSell =
+      calcEtfSaleResponse.transactionCostsAbsoluteSell;
+    etfSalesCalculation.transactionCostsAbsoluteBuy =
+      calcEtfSaleResponse.transactionCostsAbsoluteBuy;
 
     return etfSalesCalculation;
   }

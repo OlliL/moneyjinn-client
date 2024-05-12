@@ -229,13 +229,13 @@
       id="calculateEtfSaleForm"
     >
       <div class="row justify-content-md-center">
-        <div class="col-xxl-6 col-xs-12 mb-4">
+        <div class="col-xxl-4 col-xs-12 mb-4">
           <div class="card w-100 bg-light">
             <div class="card-body">
               <div class="container-fluid">
                 <DivError :server-errors="serverErrors" />
                 <div class="row no-gutters flex-lg-nowrap mb-4">
-                  <div class="col-md-3 col-xs-12">
+                  <div class="col">
                     <InputStandard
                       v-model="calcEtfSalePieces"
                       :validation-schema="schema.pieces"
@@ -245,7 +245,7 @@
                       :field-label="$t('ETFFlow.amount')"
                     />
                   </div>
-                  <div class="col-md-3 col-xs-12">
+                  <div class="col">
                     <InputStandard
                       v-model="calcEtfBidPrice"
                       :validation-schema="schema.bidPrice"
@@ -260,7 +260,7 @@
                       ></template>
                     </InputStandard>
                   </div>
-                  <div class="col-md-3 col-xs-12">
+                  <div class="col">
                     <InputStandard
                       v-model="calcEtfAskPrice"
                       :validation-schema="schema.askPrice"
@@ -275,18 +275,39 @@
                       ></template>
                     </InputStandard>
                   </div>
-                  <div class="col-md-3 col-xs-12">
+                </div>
+                <div class="row no-gutters flex-lg-nowrap mb-4">
+                  <div class="col">{{ $t("ETFFlow.transactionCosts") }}</div>
+                </div>
+
+                <div class="row no-gutters flex-lg-nowrap mb-4">
+                  <div class="col">
                     <InputStandard
-                      v-model="calcEtfTransactionCosts"
-                      :validation-schema="schema.transactionCosts"
-                      id="calcEtfTransactionCosts"
+                      v-model="calcEtfTransactionCostsAbsolute"
+                      :validation-schema="schema.transactionCostsAbsolute"
+                      id="calcEtfTransactionCostsAbsolute"
                       field-type="number"
                       step="0.01"
-                      :field-label="$t('ETFFlow.transactionCosts')"
+                      :field-label="$t('ETFFlow.transactionCostsAbsolute')"
                     >
                       <template #icon
                         ><span class="input-group-text"
                           ><i class="bi bi-currency-euro"></i></span
+                      ></template>
+                    </InputStandard>
+                  </div>
+                  <div class="col">
+                    <InputStandard
+                      v-model="calcEtfTransactionCostsRelative"
+                      :validation-schema="schema.transactionCostsRelative"
+                      id="calcEtfTransactionCostsRelative"
+                      field-type="number"
+                      step="0.01"
+                      :field-label="$t('ETFFlow.transactionCostsRelative')"
+                    >
+                      <template #icon
+                        ><span class="input-group-text"
+                          ><i class="bi bi-percent"></i></span
                       ></template>
                     </InputStandard>
                   </div>
@@ -309,8 +330,8 @@
     <div class="row justify-content-md-center" v-if="calcResults.etfId">
       <div class="col-xxl-3 col-md-6 col-xs-12 mb-4">
         <table class="table table-striped table-bordered table-hover">
-          <col style="width: 70%" />
-          <col style="width: 30%" />
+          <col style="width: 75%" />
+          <col style="width: 25%" />
           <tbody>
             <tr>
               <th class="text-start">
@@ -337,8 +358,8 @@
           </tbody>
         </table>
         <table class="table table-striped table-bordered table-hover">
-          <col style="width: 70%" />
-          <col style="width: 30%" />
+          <col style="width: 75%" />
+          <col style="width: 25%" />
           <tbody>
             <tr>
               <th class="text-start">
@@ -371,11 +392,13 @@
           </tbody>
         </table>
         <table class="table table-striped table-bordered table-hover">
-          <col style="width: 70%" />
-          <col style="width: 30%" />
+          <col style="width: 38%" />
+          <col style="width: 19%" />
+          <col style="width: 18%" />
+          <col style="width: 25%" />
           <tbody>
             <tr>
-              <th class="text-start">
+              <th class="text-start" colspan="3" id="newBuyProce">
                 {{ $t("ETFFlow.calculateResults.newBuyPrice") }}
               </th>
               <td class="text-end">
@@ -383,7 +406,7 @@
               </td>
             </tr>
             <tr>
-              <th class="text-start">
+              <th class="text-start" colspan="3" id="rebuyLosses">
                 {{ $t("ETFFlow.calculateResults.rebuyLosses") }}
               </th>
               <td class="text-end">
@@ -391,13 +414,52 @@
               </td>
             </tr>
             <tr>
-              <th class="text-start">{{ $t("ETFFlow.transactionCosts") }}</th>
+              <th class="text-start" rowspan="4" id="transactionCosts">
+                {{ $t("ETFFlow.transactionCosts") }}
+              </th>
+              <th class="text-start" rowspan="2" id="transactionCostsSell">
+                {{ $t("ETFFlow.transactionCostsSell") }}
+              </th>
+              <th class="text-start" id="transactionCostsSellAbsolute">
+                {{ $t("ETFFlow.transactionCostsAbsolute") }}
+              </th>
               <td class="text-end">
-                <SpanAmount :amount="calcResults.transactionCosts" />
+                <SpanAmount
+                  :amount="calcResults.transactionCostsAbsoluteSell"
+                />
               </td>
             </tr>
             <tr>
-              <th class="text-start">
+              <th class="text-start" id="transactionCostsSellRelative">
+                {{ $t("ETFFlow.transactionCostsRelative") }}
+              </th>
+              <td class="text-end">
+                <SpanAmount
+                  :amount="calcResults.transactionCostsRelativeSell"
+                />
+              </td>
+            </tr>
+            <tr>
+              <th class="text-start" rowspan="2" id="transactionCostsBuy">
+                {{ $t("ETFFlow.transactionCostsBuy") }}
+              </th>
+              <th class="text-start" id="transactionCostsBuyAbsolute">
+                {{ $t("ETFFlow.transactionCostsAbsolute") }}
+              </th>
+              <td class="text-end">
+                <SpanAmount :amount="calcResults.transactionCostsAbsoluteBuy" />
+              </td>
+            </tr>
+            <tr>
+              <th class="text-start" id="transactionCostsBuyRelative">
+                {{ $t("ETFFlow.transactionCostsRelative") }}
+              </th>
+              <td class="text-end">
+                <SpanAmount :amount="calcResults.transactionCostsRelativeBuy" />
+              </td>
+            </tr>
+            <tr>
+              <th class="text-start" colspan="3" id="overallCosts">
                 {{ $t("ETFFlow.calculateResults.overallCosts") }}
               </th>
               <td class="text-end">
@@ -452,7 +514,12 @@ const schema = {
   pieces: amountSchema(t("ETFFlow.validation.amount")),
   askPrice: amountSchema(t("ETFFlow.validation.askPrice"), 3),
   bidPrice: amountSchema(t("ETFFlow.validation.bidPrice"), 3),
-  transactionCosts: amountSchema(t("ETFFlow.validation.transactionCosts")),
+  transactionCostsAbsolute: amountSchema(
+    t("ETFFlow.validation.transactionCostsAbsolute"),
+  ),
+  transactionCostsRelative: amountSchema(
+    t("ETFFlow.validation.transactionCostsRelative"),
+  ),
 };
 const etfsLoaded = ref(false);
 const dataLoaded = ref(false);
@@ -466,7 +533,8 @@ const calcEtfAskPrice = ref(0);
 const calcEtfBidPrice = ref(0);
 const selectedEtf = ref(undefined as number | undefined);
 const calcEtfSalePieces = ref(0);
-const calcEtfTransactionCosts = ref(0);
+const calcEtfTransactionCostsAbsolute = ref(0);
+const calcEtfTransactionCostsRelative = ref(0);
 const calcResults = ref({} as EtfSalesCalculation);
 
 const effectiveTabButton = ref();
@@ -584,9 +652,14 @@ const handleServerResponse = (etfDepot: EtfDepot, etfId: number) => {
   calcEtfSalePieces.value = etfDepot.calcEtfSalePieces
     ? etfDepot.calcEtfSalePieces
     : 0;
-  calcEtfTransactionCosts.value = etfDepot.calcEtfTransactionCosts
-    ? etfDepot.calcEtfTransactionCosts
-    : 0;
+  calcEtfTransactionCostsAbsolute.value =
+    etfDepot.calcEtfTransactionCostsAbsolute
+      ? etfDepot.calcEtfTransactionCostsAbsolute
+      : 0;
+  calcEtfTransactionCostsRelative.value =
+    etfDepot.calcEtfTransactionCostsRelative
+      ? etfDepot.calcEtfTransactionCostsRelative
+      : 0;
   let etf = {} as Etf;
   for (let _etf of etfs.value) {
     if (_etf.id == etfId) {
@@ -664,7 +737,8 @@ const calculateEtfSale = handleSubmit(() => {
       calcEtfSalePieces.value,
       calcEtfBidPrice.value,
       calcEtfAskPrice.value,
-      calcEtfTransactionCosts.value,
+      calcEtfTransactionCostsAbsolute.value,
+      calcEtfTransactionCostsRelative.value,
     )
       .then((_calcResults) => {
         calcResults.value = _calcResults;

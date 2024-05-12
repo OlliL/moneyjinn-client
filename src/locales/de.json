@@ -186,6 +186,10 @@
         "bid": "Verkauf",
         "ask": "Einkauf",
         "transactionCosts": "Transaktionskosten",
+        "transactionCostsBuy": "Kauf",
+        "transactionCostsSell": "Verkauf",
+        "transactionCostsAbsolute": "absolut",
+        "transactionCostsRelative": "relativ",
         "calculate": "Berechnen",
         "shares": "Anteile",
         "overall": "Gesamt",
@@ -197,7 +201,7 @@
             "sellPrice": "Verkaufspreis",
             "chargeable": "Kapitalertrag nach Teilfreistellung",
             "newBuyPrice": "neuer Kaufpreis",
-            "rebuyLosses": "Wiederverkaufsverlust",
+            "rebuyLosses": "Wiederkaufverlust",
             "overallCosts": "Gesamtkosten",
             "accumulatedPreliminaryLumpSum": "abzüglich Vorabpauschalen"
         },
@@ -214,7 +218,8 @@
             "nanoseconds": "Bitte Buchungszeit im Format 00:00:00:000 angeben!",
             "askPrice": "Bitte Einkauf angeben!",
             "bidPrice": "Bitte Verkauf angeben!",
-            "transactionCosts": "Bitte Transaktionskosten angeben!"
+            "transactionCostsAbsolute": "Bitte absolute Transaktionskosten angeben!",
+            "transactionCostsRelative": "Bitte relative Transaktionskosten angeben!"
         }
     },
     "ETFPreliminaryLumpSum": {
