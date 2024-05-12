@@ -8,5 +8,6 @@ export type EtfDepot = {
   calcEtfSalePieces?: number;
   calcEtfBidPrice?: number;
   calcEtfAskPrice?: number;
-  calcEtfTransactionCosts?: number;
+  calcEtfTransactionCostsAbsolute?: number;
+  calcEtfTransactionCostsRelative?: number;
 };
