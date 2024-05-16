@@ -4,21 +4,29 @@
       <a :href="chartUrl">{{ name }}</a>
     </td>
     <td class="text-end">{{ etfFlowAmountSumString }}</td>
-    <td class="text-end">
-      <SpanAmount :amount="avgSpentPrice" :decimal-places="4" />
+    <td class="text-end d-none d-md-table-cell">
+      <SpanAmount
+        :amount="avgSpentPrice"
+        :decimal-places="4"
+        v-if="avgSpentPrice"
+      />
+    </td>
+    <td class="text-end d-none d-md-table-cell">
+      <SpanAmount :amount="sellPrice" :decimal-places="3" v-if="sellPrice" />
+    </td>
+    <td class="text-end d-none d-md-table-cell">
+      <SpanAmount :amount="buyPrice" :decimal-places="3" v-if="buyPrice" />
     </td>
     <td class="text-end">
-      <SpanAmount :amount="sellPrice" :decimal-places="3" />
+      <SpanAmount :amount="spentValue" v-if="spentValue" />
     </td>
     <td class="text-end">
-      <SpanAmount :amount="buyPrice" :decimal-places="3" />
+      <SpanAmount :amount="sumSellPrice" v-if="sumSellPrice" />
     </td>
-    <td class="text-end"><SpanAmount :amount="spentValue" /></td>
-    <td class="text-end"><SpanAmount :amount="sumSellPrice" /></td>
     <td class="text-end">
-      <u><SpanAmount :amount="profit" /></u>
+      <u><SpanAmount :amount="profit" v-if="profit" /></u>
     </td>
-    <td class="text-end">{{ pricesTimestampString }}</td>
+    <td class="text-end d-none d-md-table-cell">{{ pricesTimestampString }}</td>
   </tr>
 </template>
 
@@ -65,7 +73,7 @@ const sumSellPrice = computed(() => {
   return props.sellPrice ? props.amount * props.sellPrice : undefined;
 });
 const avgSpentPrice = computed(() => {
-  return props.spentValue / props.amount;
+  return props.amount ? props.spentValue / props.amount : undefined;
 });
 const profit = computed(() => {
   return sumSellPrice.value ? sumSellPrice.value - props.spentValue : undefined;

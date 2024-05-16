@@ -1,22 +1,26 @@
 <template>
   <tr>
-    <td class="text-start">{{ capitalsourceTypeString }}</td>
-    <td class="text-start">{{ capitalsourceStateString }}</td>
+    <td class="text-start d-none d-md-table-cell">
+      {{ capitalsourceTypeString }}
+    </td>
+    <td class="text-start d-none d-md-table-cell">
+      {{ capitalsourceStateString }}
+    </td>
     <td class="text-start">{{ capitalsourceComment }}</td>
     <td class="text-end"><SpanAmount :amount="amountBeginOfMonthFixed" /></td>
     <td class="text-end" v-if="currentMonthIsSettled">
       <SpanAmount :amount="amountEndOfMonthFixed" />
     </td>
-    <td class="text-end">
+    <td class="text-end d-none d-md-table-cell">
       <SpanAmount :amount="amountEndOfMonthCalculated" />
     </td>
-    <td class="text-end" v-if="currentMonthIsSettled">
+    <td class="text-end d-none d-md-table-cell" v-if="currentMonthIsSettled">
       <SpanAmount :amount="differenceFixedCalculated" />
     </td>
     <td class="text-end" v-if="!currentMonthIsSettled">
       <SpanAmount :amount="amountCurrent" />
     </td>
-    <td class="text-end" v-if="!currentMonthIsSettled">
+    <td class="text-end d-none d-md-table-cell" v-if="!currentMonthIsSettled">
       {{ amountCurrentStateString }}
     </td>
   </tr>

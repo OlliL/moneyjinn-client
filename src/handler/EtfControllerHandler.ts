@@ -49,13 +49,7 @@ class EtfControllerHandler extends AbstractControllerHandler {
     const listEtfFlowsResponse = response.data;
 
     const etfDepot = {} as EtfDepot;
-    etfDepot.calcEtfAskPrice = listEtfFlowsResponse.calcEtfAskPrice;
-    etfDepot.calcEtfBidPrice = listEtfFlowsResponse.calcEtfBidPrice;
     etfDepot.calcEtfSalePieces = listEtfFlowsResponse.calcEtfSalePieces;
-    etfDepot.calcEtfTransactionCostsAbsolute =
-      listEtfFlowsResponse.calcEtfTransactionCostsAbsolute;
-    etfDepot.calcEtfTransactionCostsRelative =
-      listEtfFlowsResponse.calcEtfTransactionCostsRelative;
     etfDepot.etfFlows = listEtfFlowsResponse.etfFlowTransports?.map((flow) => {
       return mapEtfFlowTransportToModel(flow);
     });
@@ -77,8 +71,9 @@ class EtfControllerHandler extends AbstractControllerHandler {
     pieces: number,
     bidPrice: number,
     askPrice: number,
-    transactionCostsAbsolute: number,
-    transactionCostsRelative: number,
+    transactionCostsAbsolute?: number,
+    transactionCostsRelative?: number,
+    transactionCostsMaximum?: number,
   ): Promise<EtfSalesCalculation> {
     const request = {} as CalcEtfSaleRequest;
     request.etfId = etfId;
@@ -87,6 +82,7 @@ class EtfControllerHandler extends AbstractControllerHandler {
     request.askPrice = askPrice;
     request.transactionCostsAbsolute = transactionCostsAbsolute;
     request.transactionCostsRelative = transactionCostsRelative;
+    request.transactionCostsMaximum = transactionCostsMaximum;
 
     const response = await this.api.calcEtfSale(request);
 

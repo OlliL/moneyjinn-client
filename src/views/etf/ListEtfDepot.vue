@@ -11,6 +11,8 @@
         <h4>{{ $t("General.etfDepot") }}</h4>
       </div>
     </div>
+    <DivError :server-errors="serverErrors" />
+
     <div class="row justify-content-md-center mb-12">
       <div class="col-xxl-4 col-md-7 col-xs-12" v-if="etfsLoaded">
         <div
@@ -85,6 +87,7 @@
                   v-for="etfFlow in etfEffectiveFlows"
                   :key="etfFlow.etfflowid"
                   :flow="etfFlow"
+                  :etfName="etf.name"
                   @delete-etf-flow="deleteEtfFlow"
                   @edit-etf-flow="editEtfFlow"
                 />
@@ -132,6 +135,7 @@
                   v-for="etfFlow in etfFlows"
                   :key="etfFlow.etfflowid"
                   :flow="etfFlow"
+                  :etfName="etf.name"
                   @delete-etf-flow="deleteEtfFlow"
                   @edit-etf-flow="editEtfFlow"
                 />
@@ -159,351 +163,44 @@
       </div>
     </div>
 
-    <div class="row justify-content-md-center" v-if="dataLoaded">
-      <div class="col-xxl-6 col-xs-12 mb-4">
-        <table class="table table-striped table-bordered table-hover">
-          <col style="width: 10%" />
-          <col style="width: 12%" />
-          <col style="width: 12%" />
-          <col style="width: 12%" />
-          <col style="width: 12%" />
-          <col style="width: 12%" />
-          <col style="width: 12%" />
-          <col style="width: 18%" />
-          <thead>
-            <tr>
-              <th class="text-center" rowspan="2" id="thShares">
-                {{ $t("ETFFlow.shares") }}
-              </th>
-              <th class="text-center" colspan="3" id="thAmount">
-                {{ $t("ETFFlow.amount") }}
-              </th>
-              <th class="text-center" colspan="3" id="thOverall">
-                {{ $t("ETFFlow.overall") }}
-              </th>
-              <th class="text-center" rowspan="2" id="thState">
-                {{ $t("Reports.state") }}
-              </th>
-            </tr>
-            <tr>
-              <th class="text-center" id="thAmountPayed">
-                {{ $t("ETFFlow.payed") }} &#8709;
-              </th>
-              <th class="text-center" id="thAmountBid">
-                {{ $t("ETFFlow.bid") }}
-              </th>
-              <th class="text-center" id="thAmountAsk">
-                {{ $t("ETFFlow.ask") }}
-              </th>
-              <th class="text-center" id="thOverallPayed">
-                {{ $t("ETFFlow.payed") }}
-              </th>
-              <th class="text-center" id="thOverallBid">
-                {{ $t("ETFFlow.bid") }}
-              </th>
-              <th class="text-center" id="thOverallProfit">
-                {{ $t("ETFFlow.profit") }}
-              </th>
-            </tr>
-          </thead>
+    <ListEtfDepotSummary :etfSummary="etfSummary" v-if="etfFlows.length > 0" />
 
-          <tbody v-if="dataLoaded">
-            <EtfTableRow v-bind="etfSummary" />
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <div
-      class="row justify-content-md-center"
-      v-if="dataLoaded && etfFlows.length"
-    >
-      <div class="col-xs-12 mb-4">
-        <h4>{{ $t("ETFFlow.calculateSale") }}</h4>
-      </div>
-    </div>
-
-    <form
-      @submit.prevent="calculateEtfSale"
-      v-if="dataLoaded && etfFlows.length"
-      id="calculateEtfSaleForm"
-    >
-      <div class="row justify-content-md-center">
-        <div class="col-xxl-4 col-xs-12 mb-4">
-          <div class="card w-100 bg-light">
-            <div class="card-body">
-              <div class="container-fluid">
-                <DivError :server-errors="serverErrors" />
-                <div class="row no-gutters flex-lg-nowrap mb-4">
-                  <div class="col">
-                    <InputStandard
-                      v-model="calcEtfSalePieces"
-                      :validation-schema="schema.pieces"
-                      id="calcEtfSalePieces"
-                      field-type="number"
-                      step="1"
-                      :field-label="$t('ETFFlow.amount')"
-                    />
-                  </div>
-                  <div class="col">
-                    <InputStandard
-                      v-model="calcEtfBidPrice"
-                      :validation-schema="schema.bidPrice"
-                      id="calcEtfBidPrice"
-                      field-type="number"
-                      step="0.001"
-                      :field-label="$t('ETFFlow.bid')"
-                    >
-                      <template #icon
-                        ><span class="input-group-text"
-                          ><i class="bi bi-currency-euro"></i></span
-                      ></template>
-                    </InputStandard>
-                  </div>
-                  <div class="col">
-                    <InputStandard
-                      v-model="calcEtfAskPrice"
-                      :validation-schema="schema.askPrice"
-                      id="calcEtfAskPrice"
-                      field-type="number"
-                      step="0.001"
-                      :field-label="$t('ETFFlow.ask')"
-                    >
-                      <template #icon
-                        ><span class="input-group-text"
-                          ><i class="bi bi-currency-euro"></i></span
-                      ></template>
-                    </InputStandard>
-                  </div>
-                </div>
-                <div class="row no-gutters flex-lg-nowrap mb-4">
-                  <div class="col">{{ $t("ETFFlow.transactionCosts") }}</div>
-                </div>
-
-                <div class="row no-gutters flex-lg-nowrap mb-4">
-                  <div class="col">
-                    <InputStandard
-                      v-model="calcEtfTransactionCostsAbsolute"
-                      :validation-schema="schema.transactionCostsAbsolute"
-                      id="calcEtfTransactionCostsAbsolute"
-                      field-type="number"
-                      step="0.01"
-                      :field-label="$t('ETFFlow.transactionCostsAbsolute')"
-                    >
-                      <template #icon
-                        ><span class="input-group-text"
-                          ><i class="bi bi-currency-euro"></i></span
-                      ></template>
-                    </InputStandard>
-                  </div>
-                  <div class="col">
-                    <InputStandard
-                      v-model="calcEtfTransactionCostsRelative"
-                      :validation-schema="schema.transactionCostsRelative"
-                      id="calcEtfTransactionCostsRelative"
-                      field-type="number"
-                      step="0.01"
-                      :field-label="$t('ETFFlow.transactionCostsRelative')"
-                    >
-                      <template #icon
-                        ><span class="input-group-text"
-                          ><i class="bi bi-percent"></i></span
-                      ></template>
-                    </InputStandard>
-                  </div>
-                </div>
-                <div class="row no-gutters flex-lg-nowrap">
-                  <div class="col-12">
-                    <ButtonSubmit
-                      :button-label="$t('ETFFlow.calculate')"
-                      form-id="calculateEtfSaleForm"
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </form>
-
-    <div class="row justify-content-md-center" v-if="calcResults.etfId">
-      <div class="col-xxl-3 col-md-6 col-xs-12 mb-4">
-        <table class="table table-striped table-bordered table-hover">
-          <col style="width: 75%" />
-          <col style="width: 25%" />
-          <tbody>
-            <tr>
-              <th class="text-start">
-                {{ $t("ETFFlow.calculateResults.pieces") }}
-              </th>
-              <td class="text-end">{{ calcResults.pieces }}</td>
-            </tr>
-            <tr>
-              <th class="text-start">
-                {{ $t("ETFFlow.calculateResults.originalBuyPrice") }}
-              </th>
-              <td class="text-end">
-                <SpanAmount :amount="calcResults.originalBuyPrice" />
-              </td>
-            </tr>
-            <tr>
-              <th class="text-start">
-                {{ $t("ETFFlow.calculateResults.sellPrice") }}
-              </th>
-              <td class="text-end">
-                <SpanAmount :amount="calcResults.sellPrice" />
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        <table class="table table-striped table-bordered table-hover">
-          <col style="width: 75%" />
-          <col style="width: 25%" />
-          <tbody>
-            <tr>
-              <th class="text-start">
-                {{ $t("ETFFlow.profit") }}
-              </th>
-              <td class="text-end">
-                <SpanAmount :amount="calcResults.profit" />
-              </td>
-            </tr>
-            <tr>
-              <th class="text-start">
-                {{
-                  $t("ETFFlow.calculateResults.accumulatedPreliminaryLumpSum")
-                }}
-              </th>
-              <td class="text-end">
-                <SpanAmount
-                  :amount="calcResults.accumulatedPreliminaryLumpSum"
-                />
-              </td>
-            </tr>
-            <tr>
-              <th class="text-start">
-                {{ $t("ETFFlow.calculateResults.chargeable") }}
-              </th>
-              <td class="text-end">
-                <b><SpanAmount :amount="calcResults.chargeable" /></b>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        <table class="table table-striped table-bordered table-hover">
-          <col style="width: 38%" />
-          <col style="width: 19%" />
-          <col style="width: 18%" />
-          <col style="width: 25%" />
-          <tbody>
-            <tr>
-              <th class="text-start" colspan="3" id="newBuyProce">
-                {{ $t("ETFFlow.calculateResults.newBuyPrice") }}
-              </th>
-              <td class="text-end">
-                <SpanAmount :amount="calcResults.newBuyPrice" />
-              </td>
-            </tr>
-            <tr>
-              <th class="text-start" colspan="3" id="rebuyLosses">
-                {{ $t("ETFFlow.calculateResults.rebuyLosses") }}
-              </th>
-              <td class="text-end">
-                <SpanAmount :amount="calcResults.rebuyLosses" />
-              </td>
-            </tr>
-            <tr>
-              <th class="text-start" rowspan="4" id="transactionCosts">
-                {{ $t("ETFFlow.transactionCosts") }}
-              </th>
-              <th class="text-start" rowspan="2" id="transactionCostsSell">
-                {{ $t("ETFFlow.transactionCostsSell") }}
-              </th>
-              <th class="text-start" id="transactionCostsSellAbsolute">
-                {{ $t("ETFFlow.transactionCostsAbsolute") }}
-              </th>
-              <td class="text-end">
-                <SpanAmount
-                  :amount="calcResults.transactionCostsAbsoluteSell"
-                />
-              </td>
-            </tr>
-            <tr>
-              <th class="text-start" id="transactionCostsSellRelative">
-                {{ $t("ETFFlow.transactionCostsRelative") }}
-              </th>
-              <td class="text-end">
-                <SpanAmount
-                  :amount="calcResults.transactionCostsRelativeSell"
-                />
-              </td>
-            </tr>
-            <tr>
-              <th class="text-start" rowspan="2" id="transactionCostsBuy">
-                {{ $t("ETFFlow.transactionCostsBuy") }}
-              </th>
-              <th class="text-start" id="transactionCostsBuyAbsolute">
-                {{ $t("ETFFlow.transactionCostsAbsolute") }}
-              </th>
-              <td class="text-end">
-                <SpanAmount :amount="calcResults.transactionCostsAbsoluteBuy" />
-              </td>
-            </tr>
-            <tr>
-              <th class="text-start" id="transactionCostsBuyRelative">
-                {{ $t("ETFFlow.transactionCostsRelative") }}
-              </th>
-              <td class="text-end">
-                <SpanAmount :amount="calcResults.transactionCostsRelativeBuy" />
-              </td>
-            </tr>
-            <tr>
-              <th class="text-start" colspan="3" id="overallCosts">
-                {{ $t("ETFFlow.calculateResults.overallCosts") }}
-              </th>
-              <td class="text-end">
-                <b><SpanAmount :amount="calcResults.overallCosts" /></b>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
+    <CalcEtfSaleForm
+      :etf="etf"
+      :etfSummary="etfSummary"
+      :pieces="calcEtfSalePieces"
+      v-if="etfFlows.length > 0"
+    />
   </div>
 </template>
 
 <script lang="ts" setup>
-import { useForm } from "vee-validate";
 import { computed, onMounted, ref, watch } from "vue";
 import router, { Routes } from "@/router";
 import { useI18n } from "vue-i18n";
 import { number } from "zod";
 
-import ButtonSubmit from "@/components/ButtonSubmit.vue";
+import CalcEtfSaleForm from "@/components/etf/CalcEtfSaleForm.vue";
 import CreateEtfFlowModalVue from "@/components/etf/CreateEtfFlowModal.vue";
 import DeleteEtfFlowModalVue from "@/components/etf/DeleteEtfFlowModal.vue";
-import DivError from "@/components/DivError.vue";
-import InputStandard from "@/components/InputStandard.vue";
 import ListEtfDepotRowVue from "@/components/etf/ListEtfDepotRow.vue";
 import SelectStandard from "@/components/SelectStandard.vue";
 import SpanAmount from "@/components/SpanAmount.vue";
-import type { ListDepotRowData } from "@/components/etf/ListDepotRowData";
 
 import { formatNumber } from "@/tools/views/FormatNumber";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
-import { amountSchema, globErr } from "@/tools/views/ZodUtil";
+import { globErr } from "@/tools/views/ZodUtil";
 
 import type { Etf } from "@/model/etf/Etf";
 import type { EtfDepot } from "@/model/etf/EtfDepot";
 import type { EtfFlow } from "@/model/etf/EtfFlow";
-import type { EtfSalesCalculation } from "@/model/etf/EtfSalesCalculation";
+import type { EtfSummary } from "@/model/etf/EtfSummary";
 import type { SelectBoxValue } from "@/model/SelectBoxValue";
 
 import EtfControllerHandler from "@/handler/EtfControllerHandler";
 import CrudEtfControllerHandler from "@/handler/CrudEtfControllerHandler";
-import EtfTableRow from "@/components/reports/EtfTableRow.vue";
-import type { EtfSummary } from "@/model/etf/EtfSummary";
+import DivError from "@/components/DivError.vue";
+import ListEtfDepotSummary from "@/components/etf/ListEtfDepotSummary.vue";
 
 const { t } = useI18n();
 
@@ -511,31 +208,18 @@ const serverErrors = ref(new Array<string>());
 
 const schema = {
   etfId: number(globErr(t("ETFFlow.validation.etfId"))).gt(0),
-  pieces: amountSchema(t("ETFFlow.validation.amount")),
-  askPrice: amountSchema(t("ETFFlow.validation.askPrice"), 3),
-  bidPrice: amountSchema(t("ETFFlow.validation.bidPrice"), 3),
-  transactionCostsAbsolute: amountSchema(
-    t("ETFFlow.validation.transactionCostsAbsolute"),
-  ),
-  transactionCostsRelative: amountSchema(
-    t("ETFFlow.validation.transactionCostsRelative"),
-  ),
 };
 const etfsLoaded = ref(false);
 const dataLoaded = ref(false);
-const etfFlows = ref({} as Array<ListDepotRowData>);
-const etfEffectiveFlows = ref({} as Array<ListDepotRowData>);
+const etfFlows = ref({} as Array<EtfFlow>);
+const etfEffectiveFlows = ref({} as Array<EtfFlow>);
 const etfs = ref({} as Array<Etf>);
 const etfSummary = ref({} as EtfSummary);
 const etfsSelectValues = ref({} as Array<SelectBoxValue>);
+const etf = ref({} as Etf);
 
-const calcEtfAskPrice = ref(0);
-const calcEtfBidPrice = ref(0);
 const selectedEtf = ref(undefined as number | undefined);
-const calcEtfSalePieces = ref(0);
-const calcEtfTransactionCostsAbsolute = ref(0);
-const calcEtfTransactionCostsRelative = ref(0);
-const calcResults = ref({} as EtfSalesCalculation);
+const calcEtfSalePieces = ref(0 as number | undefined);
 
 const effectiveTabButton = ref();
 const allTabButton = ref();
@@ -550,8 +234,6 @@ const props = defineProps({
     default: undefined,
   },
 });
-
-const { handleSubmit, values, setFieldTouched } = useForm();
 
 onMounted(() => {
   const etfId: number | undefined = props.etfId ? +props.etfId : undefined;
@@ -625,9 +307,8 @@ const loadEtfs = (etfId?: number) => {
 const loadData = (etfId: number) => {
   serverErrors.value = new Array<string>();
   dataLoaded.value = false;
-  calcResults.value = {} as EtfSalesCalculation;
-  etfFlows.value = new Array<ListDepotRowData>();
-  etfEffectiveFlows.value = new Array<ListDepotRowData>();
+  etfFlows.value = new Array<EtfFlow>();
+  etfEffectiveFlows.value = new Array<EtfFlow>();
 
   EtfControllerHandler.listEtfFlowsById(etfId)
     .then((etfDepot) => {
@@ -638,55 +319,29 @@ const loadData = (etfId: number) => {
       handleBackendError(backendError, serverErrors);
       routerPush();
     });
-
-  Object.keys(values).forEach((field) => setFieldTouched(field, false));
 };
 
 const handleServerResponse = (etfDepot: EtfDepot, etfId: number) => {
-  calcEtfAskPrice.value = etfDepot.calcEtfAskPrice
-    ? etfDepot.calcEtfAskPrice
-    : 0;
-  calcEtfBidPrice.value = etfDepot.calcEtfBidPrice
-    ? etfDepot.calcEtfBidPrice
-    : 0;
-  calcEtfSalePieces.value = etfDepot.calcEtfSalePieces
-    ? etfDepot.calcEtfSalePieces
-    : 0;
-  calcEtfTransactionCostsAbsolute.value =
-    etfDepot.calcEtfTransactionCostsAbsolute
-      ? etfDepot.calcEtfTransactionCostsAbsolute
-      : 0;
-  calcEtfTransactionCostsRelative.value =
-    etfDepot.calcEtfTransactionCostsRelative
-      ? etfDepot.calcEtfTransactionCostsRelative
-      : 0;
-  let etf = {} as Etf;
+  etf.value = {} as Etf;
   for (let _etf of etfs.value) {
     if (_etf.id == etfId) {
-      etf = _etf;
+      etf.value = _etf;
       break;
     }
   }
-  if (etfDepot.etfFlows) {
-    for (let etfFlow of etfDepot.etfFlows) {
-      etfFlows.value.push({
-        ...etfFlow,
-        name: etf.name,
-        chartUrl: etf.chartUrl,
-      });
-    }
-  }
-  if (etfDepot.etfEffectiveFlows) {
-    for (let etfFlow of etfDepot.etfEffectiveFlows) {
-      etfEffectiveFlows.value.push({
-        ...etfFlow,
-        name: etf.name,
-        chartUrl: etf.chartUrl,
-      });
-    }
-  }
+
   etfSummary.value = etfDepot.etfSummary ?? ({} as EtfSummary);
   etfSummary.value.name = undefined;
+
+  calcEtfSalePieces.value = etfDepot.calcEtfSalePieces;
+
+  if (etfDepot.etfFlows) {
+    etfFlows.value = etfDepot.etfFlows;
+  }
+  if (etfDepot.etfEffectiveFlows) {
+    etfEffectiveFlows.value = etfDepot.etfEffectiveFlows;
+  }
+
   dataLoaded.value = true;
 };
 
@@ -727,26 +382,6 @@ const showAll = () => {
   allTabClassList.remove(fade);
   allTabClassList.add(show, active);
 };
-
-const calculateEtfSale = handleSubmit(() => {
-  serverErrors.value = new Array<string>();
-
-  if (selectedEtf.value !== undefined)
-    EtfControllerHandler.calcEtfSale(
-      selectedEtf.value,
-      calcEtfSalePieces.value,
-      calcEtfBidPrice.value,
-      calcEtfAskPrice.value,
-      calcEtfTransactionCostsAbsolute.value,
-      calcEtfTransactionCostsRelative.value,
-    )
-      .then((_calcResults) => {
-        calcResults.value = _calcResults;
-      })
-      .catch((backendError) => {
-        handleBackendError(backendError, serverErrors);
-      });
-});
 
 const deleteEtfFlow = (etfFlow: EtfFlow, etfName: string) => {
   (deleteModal.value as typeof DeleteEtfFlowModalVue)._show(etfFlow, etfName);

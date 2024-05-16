@@ -155,6 +155,8 @@
         "chartUrl": "Chart URL",
         "searchBy": "Suchen nach Name...",
         "markAsFav": "Als Favorit markieren",
+        "partialTaxExemption": "Teilfreistellung",
+        "partialTaxExemptionSmall": "Teilfrei-stellung",
         "title": {
             "create": "ETF hinzufügen",
             "update": "ETF bearbeiten",
@@ -165,6 +167,7 @@
             "name": "Bitte Name angeben!",
             "wkn": "Bitte WKN angeben!",
             "ticker": "Bitte Ticker angeben!",
+            "partialTaxExemption": "Bitte Teilfreistellung angeben!",
             "length": {
                 "isin": "Die ISIN ist zu lang!",
                 "name": "Der Name ist zu lang!",
@@ -190,6 +193,7 @@
         "transactionCostsSell": "Verkauf",
         "transactionCostsAbsolute": "absolut",
         "transactionCostsRelative": "relativ",
+        "transactionCostsMaximum": "maximal",
         "calculate": "Berechnen",
         "shares": "Anteile",
         "overall": "Gesamt",
@@ -219,7 +223,8 @@
             "askPrice": "Bitte Einkauf angeben!",
             "bidPrice": "Bitte Verkauf angeben!",
             "transactionCostsAbsolute": "Bitte absolute Transaktionskosten angeben!",
-            "transactionCostsRelative": "Bitte relative Transaktionskosten angeben!"
+            "transactionCostsRelative": "Bitte relative Transaktionskosten angeben!",
+            "transactionCostsMaximum": "Bitte Maximale Transaktionskosten als Dezimalzahl angeben!"
         }
     },
     "ETFPreliminaryLumpSum": {

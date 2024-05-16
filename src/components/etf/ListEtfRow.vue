@@ -6,6 +6,14 @@
     <td class="text-start">{{ etf.isin }}</td>
     <td class="text-start">{{ etf.wkn }}</td>
     <td class="text-start">{{ etf.ticker }}</td>
+    <td class="db text-end">
+      <SpanAmount :amount="etf.transactionCostsAbsolute" />
+    </td>
+    <td class="db text-end">{{ relativeString }}</td>
+    <td class="db text-end">
+      <SpanAmount :amount="etf.transactionCostsMaximum" />
+    </td>
+    <td class="db text-end">{{ taxExemptionString }}</td>
     <td class="text-center" v-if="etf.isFavorite">
       <i class="bi bi-star-fill text-warning"></i>
     </td>
@@ -23,9 +31,11 @@
   </tr>
 </template>
 <script lang="ts" setup>
-import { type PropType } from "vue";
+import { computed, type PropType } from "vue";
 
 import type { Etf } from "@/model/etf/Etf";
+import SpanAmount from "../SpanAmount.vue";
+import { formatNumber } from "@/tools/views/FormatNumber";
 
 const props = defineProps({
   etf: {
@@ -34,6 +44,18 @@ const props = defineProps({
   },
 });
 const emit = defineEmits(["deleteEtf", "editEtf"]);
+
+const relativeString = computed(() => {
+  return props.etf.transactionCostsRelative !== undefined
+    ? formatNumber(props.etf.transactionCostsRelative, 2) + " %"
+    : "";
+});
+
+const taxExemptionString = computed(() => {
+  return props.etf.partialTaxExemption !== undefined
+    ? formatNumber(props.etf.partialTaxExemption, 2) + " %"
+    : "";
+});
 
 const deleteEtf = () => {
   emit("deleteEtf", props.etf);

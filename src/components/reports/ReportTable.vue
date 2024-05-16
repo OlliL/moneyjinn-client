@@ -27,15 +27,23 @@
         <table class="table table-striped table-bordered table-hover">
           <thead>
             <tr>
-              <th></th>
+              <th class="d-none d-md-block"></th>
               <th>
-                {{ $t("Moneyflow.bookingdate") }}
-                <i
-                  :class="`bi ${sortIcon('bookingDate')} link-primary`"
-                  @click="sortByColumn('bookingDate')"
-                ></i>
+                <span class="d-none d-md-block"
+                  >{{ $t("Moneyflow.bookingdate") }}
+                  <i
+                    :class="`bi ${sortIcon('bookingDate')} link-primary`"
+                    @click="sortByColumn('bookingDate')"
+                  ></i
+                ></span>
+                <span class="d-block d-md-none">
+                  <i
+                    :class="`bi ${sortIcon('bookingDate')} link-primary`"
+                    @click="sortByColumn('bookingDate')"
+                  ></i
+                ></span>
               </th>
-              <th>
+              <th class="d-none d-md-table-cell">
                 {{ $t("Moneyflow.invoicedate") }}
                 <i
                   :class="`bi ${sortIcon('invoiceDate')} link-primary`"
@@ -43,13 +51,21 @@
                 ></i>
               </th>
               <th colspan="2">
-                {{ $t("General.amount") }}
-                <i
-                  :class="`bi ${sortIcon('amount')} link-primary`"
-                  @click="sortByColumn('amount')"
-                ></i>
+                <span class="d-none d-md-block">
+                  {{ $t("General.amount") }}
+                  <i
+                    :class="`bi ${sortIcon('amount')} link-primary`"
+                    @click="sortByColumn('amount')"
+                  ></i
+                ></span>
+                <span class="d-block d-md-none">
+                  <i
+                    :class="`bi ${sortIcon('amount')} link-primary`"
+                    @click="sortByColumn('amount')"
+                  ></i
+                ></span>
               </th>
-              <th>
+              <th class="d-none d-md-table-cell">
                 {{ $t("General.contractpartner") }}
                 <i
                   :class="`bi ${sortIcon('contractpartnerName')} link-primary`"
@@ -57,20 +73,27 @@
                 ></i>
               </th>
               <th>
-                {{ $t("General.comment") }}
-                <i
-                  :class="`bi ${sortIcon('comment')} link-primary`"
-                  @click="sortByColumn('comment')"
-                ></i>
+                <span class="d-none d-md-block">
+                  {{ $t("General.comment") }}
+                  <i
+                    :class="`bi ${sortIcon('comment')} link-primary`"
+                    @click="sortByColumn('comment')"
+                  ></i></span
+                ><span class="d-block d-md-none"
+                  ><i
+                    :class="`bi ${sortIcon('comment')} link-primary`"
+                    @click="sortByColumn('comment')"
+                  ></i
+                ></span>
               </th>
-              <th>
+              <th class="d-none d-md-table-cell">
                 {{ $t("General.postingAccount") }}
                 <i
                   :class="`bi ${sortIcon('postingAccountName')} link-primary`"
                   @click="sortByColumn('postingAccountName')"
                 ></i>
               </th>
-              <th>
+              <th class="d-none d-md-table-cell">
                 {{ $t("General.capitalsource") }}
                 <i
                   :class="`bi ${sortIcon('capitalsourceComment')} link-primary`"
@@ -90,11 +113,13 @@
               @edit-moneyflow="editMoneyflow"
             />
             <tr>
-              <td class="text-end" colspan="3">&sum;</td>
+              <td colspan="3" class="text-end d-block d-md-table-cell">
+                &sum;
+              </td>
               <td colspan="2" class="text-end">
                 <u><SpanAmount :amount="amountSum" /></u>
               </td>
-              <td colspan="6"></td>
+              <td colspan="6" class="d-block d-md-table-cell"></td>
             </tr>
           </tbody>
         </table>

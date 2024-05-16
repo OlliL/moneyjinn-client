@@ -54,6 +54,86 @@
               />
             </div>
           </div>
+          <div class="row pt-2">
+            <div class="col-xs-12">
+              <InputStandard
+                v-model="met.transactionCostsAbsolute"
+                :validation-schema="schema.transactionCostsAbsolute"
+                :id="'transactionCostsAbsolute' + idSuffix"
+                field-type="number"
+                step="0.01"
+                :field-label="
+                  $t('ETFFlow.transactionCosts') +
+                  ' ' +
+                  $t('ETFFlow.transactionCostsAbsolute')
+                "
+              >
+                <template #icon
+                  ><span class="input-group-text"
+                    ><i class="bi bi-currency-euro"></i></span
+                ></template>
+              </InputStandard>
+            </div>
+          </div>
+          <div class="row pt-2">
+            <div class="col-xs-12">
+              <InputStandard
+                v-model="met.transactionCostsRelative"
+                :validation-schema="schema.transactionCostsRelative"
+                :id="'transactionCostsRelative' + idSuffix"
+                field-type="number"
+                step="0.01"
+                :field-label="
+                  $t('ETFFlow.transactionCosts') +
+                  ' ' +
+                  $t('ETFFlow.transactionCostsRelative')
+                "
+              >
+                <template #icon
+                  ><span class="input-group-text"
+                    ><i class="bi bi-percent"></i></span
+                ></template>
+              </InputStandard>
+            </div>
+          </div>
+          <div class="row pt-2">
+            <div class="col-xs-12">
+              <InputStandard
+                v-model="met.transactionCostsMaximum"
+                :validation-schema="schema.transactionCostsMaximum"
+                :id="'transactionCostsMaximum' + idSuffix"
+                field-type="number"
+                step="0.01"
+                :field-label="
+                  $t('ETFFlow.transactionCosts') +
+                  ' ' +
+                  $t('ETFFlow.transactionCostsMaximum')
+                "
+              >
+                <template #icon
+                  ><span class="input-group-text"
+                    ><i class="bi bi-currency-euro"></i></span
+                ></template>
+              </InputStandard>
+            </div>
+          </div>
+          <div class="row pt-2">
+            <div class="col-xs-12">
+              <InputStandard
+                v-model="met.partialTaxExemption"
+                :validation-schema="schema.partialTaxExemption"
+                :id="'partialTaxExemption' + idSuffix"
+                field-type="number"
+                step="0.01"
+                :field-label="$t('ETF.partialTaxExemption')"
+              >
+                <template #icon
+                  ><span class="input-group-text"
+                    ><i class="bi bi-percent"></i></span
+                ></template>
+              </InputStandard>
+            </div>
+          </div>
           <div class="row pt-3">
             <div class="col-xs-12">
               <div class="form-check form-check-inline form-switch">
@@ -88,7 +168,7 @@
 import { useForm } from "vee-validate";
 import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
-import { string, ZodType } from "zod";
+import { string, union, ZodType, coerce } from "zod";
 
 import ButtonSubmit from "../ButtonSubmit.vue";
 import DivError from "../DivError.vue";
@@ -96,7 +176,7 @@ import InputStandard from "../InputStandard.vue";
 import ModalVue from "../Modal.vue";
 
 import { handleBackendError } from "@/tools/views/HandleBackendError";
-import { globErr } from "@/tools/views/ZodUtil";
+import { amountSchema, globErr } from "@/tools/views/ZodUtil";
 
 import type { Etf } from "@/model/etf/Etf";
 import CrudEtfControllerHandler from "@/handler/CrudEtfControllerHandler";
@@ -126,6 +206,22 @@ const schema: Partial<{ [key in keyof Etf]: ZodType }> = {
     .min(1)
     .max(10, t("ETF.validation.length.ticker")),
   chartUrl: string().max(255, t("ETF.validation.length.chartUrl")).optional(),
+  transactionCostsAbsolute: union([
+    amountSchema(t("ETFFlow.validation.transactionCostsAbsolute")).optional(),
+    coerce.string().length(0),
+  ]),
+  transactionCostsRelative: union([
+    amountSchema(t("ETFFlow.validation.transactionCostsRelative")).optional(),
+    coerce.string().length(0),
+  ]),
+  transactionCostsMaximum: union([
+    amountSchema(t("ETFFlow.validation.transactionCostsMaximum")).optional(),
+    coerce.string().length(0),
+  ]),
+  partialTaxExemption: union([
+    amountSchema(t("ETF.validation.partialTaxExemption")).optional(),
+    coerce.string().length(0),
+  ]),
 };
 
 const met = ref({} as Etf);
