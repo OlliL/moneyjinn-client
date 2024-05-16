@@ -45,7 +45,7 @@
     </div>
     <DivError :server-errors="serverErrors" />
 
-    <div class="row">
+    <div class="row d-none d-md-block">
       <div
         class="col-md-3 text-start g-0"
         style="position: fixed; z-index: 1030; margin-top: 35vh"

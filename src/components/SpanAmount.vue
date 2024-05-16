@@ -1,5 +1,7 @@
 <template>
-  <span :class="amountClass">{{ amountString }} &euro;</span>
+  <span :class="amountClass" style="white-space: nowrap">{{
+    amountString
+  }}</span>
 </template>
 
 <script lang="ts" setup>
@@ -23,7 +25,7 @@ const amountClass = computed(() => {
 
 const amountString = computed(() => {
   return props.amount !== undefined
-    ? formatNumber(props.amount, props.decimalPlaces)
+    ? formatNumber(props.amount, props.decimalPlaces) + " €"
     : "";
 });
 </script>

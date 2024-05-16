@@ -5,9 +5,6 @@
       <div class="row d-flex justify-content-center mt-3">
         <div class="col-11">
           <table class="table table-bordered table-hover">
-            <colgroup>
-              <col span="1" style="background-color: #f2f2f2" width="35%" />
-            </colgroup>
             <tbody>
               <tr>
                 <th>{{ $t("General.name") }}</th>
@@ -69,3 +66,9 @@ const deletePostingAccount = () => {
 
 defineExpose({ _show });
 </script>
+
+<style scoped>
+th {
+  background-color: #f2f2f2;
+}
+</style>

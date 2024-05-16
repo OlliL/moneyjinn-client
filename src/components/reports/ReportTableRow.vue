@@ -4,7 +4,7 @@
       mmf.moneyflowSplitEntries == null || mmf.moneyflowSplitEntries.length == 0
     "
   >
-    <td>
+    <td :class="redIfPrivate">
       <i
         class="bi bi-card-image link-primary"
         v-if="mmf.hasReceipt"
@@ -12,30 +12,34 @@
       ></i>
     </td>
     <td><SpanDate :date="mmf.bookingDate" /></td>
-    <td><SpanDate :date="mmf.invoiceDate" /></td>
+    <td class="d-none d-md-table-cell"><SpanDate :date="mmf.invoiceDate" /></td>
     <td colspan="2" class="text-end">
       <SpanAmount :amount="mmf.amount" />
     </td>
-    <td class="text-start">{{ mmf.contractpartnerName }}</td>
+    <td class="text-start d-none d-md-table-cell">
+      {{ mmf.contractpartnerName }}
+    </td>
     <td class="text-start">{{ mmf.comment }}</td>
-    <td class="text-start">{{ mmf.postingAccountName }}</td>
-    <td class="text-start">
+    <td class="text-start d-none d-md-table-cell">
+      {{ mmf.postingAccountName }}
+    </td>
+    <td class="text-start d-none d-md-table-cell">
       {{ mmf.capitalsourceComment }}
     </td>
     <td class="text-center" v-if="isOwnMoneyflow">
-      <span class="link-primary" @click="editMoneyflow">{{
-        $t("General.edit")
-      }}</span>
+      <span class="link-primary" @click="editMoneyflow"
+        ><i class="bi bi-pencil-square"></i
+      ></span>
     </td>
     <td class="text-center" v-if="isOwnMoneyflow">
-      <span class="link-primary" @click="deleteMoneyflow">{{
-        $t("General.delete")
-      }}</span>
+      <span class="link-primary" @click="deleteMoneyflow"
+        ><i class="bi bi-trash"></i
+      ></span>
     </td>
     <td colspan="2" v-if="!isOwnMoneyflow"></td>
   </tr>
   <tr v-for="(mse, index) in mmf.moneyflowSplitEntries" :key="mse.id">
-    <td :rowspan="rowspan" v-if="index == 0">
+    <td :rowspan="rowspan" v-if="index == 0" :class="redIfPrivate">
       <i
         class="bi bi-card-image link-primary"
         v-if="mmf.hasReceipt"
@@ -45,7 +49,7 @@
     <td :rowspan="rowspan" v-if="index == 0">
       <SpanDate :date="mmf.bookingDate" />
     </td>
-    <td :rowspan="rowspan" v-if="index == 0">
+    <td :rowspan="rowspan" v-if="index == 0" class="d-none d-md-table-cell">
       <SpanDate :date="mmf.invoiceDate" />
     </td>
     <td :rowspan="rowspan" v-if="index == 0" class="text-end">
@@ -54,12 +58,22 @@
     <td class="text-end">
       <SpanAmount :amount="mse.amount" />
     </td>
-    <td :rowspan="rowspan" v-if="index == 0" class="text-start">
+    <td
+      :rowspan="rowspan"
+      v-if="index == 0"
+      class="text-start d-none d-md-table-cell"
+    >
       {{ mmf.contractpartnerName }}
     </td>
     <td class="text-start">{{ mse.comment }}</td>
-    <td class="text-start">{{ mse.postingAccountName }}</td>
-    <td :rowspan="rowspan" v-if="index == 0" class="text-start">
+    <td class="text-start d-none d-md-table-cell">
+      {{ mse.postingAccountName }}
+    </td>
+    <td
+      :rowspan="rowspan"
+      v-if="index == 0"
+      class="text-start d-none d-md-table-cell"
+    >
       {{ mmf.capitalsourceComment }}
     </td>
     <td
@@ -67,18 +81,18 @@
       v-if="index == 0 && isOwnMoneyflow"
       class="text-center"
     >
-      <span class="link-primary" @click="editMoneyflow">{{
-        $t("General.edit")
-      }}</span>
+      <span class="link-primary" @click="editMoneyflow"
+        ><i class="bi bi-pencil-square"></i
+      ></span>
     </td>
     <td
       :rowspan="rowspan"
       v-if="index == 0 && isOwnMoneyflow"
       class="text-center"
     >
-      <span class="link-primary" @click="deleteMoneyflow">{{
-        $t("General.delete")
-      }}</span>
+      <span class="link-primary" @click="deleteMoneyflow"
+        ><i class="bi bi-trash"></i
+      ></span>
     </td>
     <td
       :rowspan="rowspan"
@@ -117,6 +131,11 @@ const isOwnMoneyflow = computed(() => {
   return props.mmf.userId === userSessionStore.getUserId;
 });
 
+const redIfPrivate = computed(() => {
+  return props.mmf.private
+    ? "table-danger d-none d-md-table-cell"
+    : "d-none d-md-table-cell";
+});
 const showReceipt = () => {
   emit("showReceipt", props.mmf.id);
 };
@@ -127,3 +146,11 @@ const editMoneyflow = () => {
   emit("editMoneyflow", props.mmf);
 };
 </script>
+
+<style scoped>
+@media (max-width: 768px) {
+  td {
+    padding: 0.25em !important;
+  }
+}
+</style>

@@ -54,23 +54,40 @@
 
     <DivError :server-errors="serverErrors" />
     <div class="row justify-content-md-center">
-      <div class="col-xxl-7 col-xs-12">
+      <div class="col-xxl-8 col-xs-12">
         <table class="table table-striped table-bordered table-hover">
-          <col style="width: 40%" />
-          <col style="width: 15%" />
-          <col style="width: 10%" />
-          <col style="width: 10%" />
-          <col style="width: 5%" />
+          <col style="width: 24%" />
+          <col style="width: 9%" />
+          <col style="width: 7%" />
+          <col style="width: 7%" />
+          <col style="width: 7%" />
+          <col style="width: 7%" />
+          <col style="width: 7%" />
+          <col style="width: 8%" />
+          <col style="width: 4%" />
           <col style="width: 10%" />
           <col style="width: 10%" />
           <thead>
             <tr>
-              <th>{{ $t("General.name") }}</th>
-              <th>{{ $t("ETF.isin") }}</th>
-              <th>{{ $t("ETF.wkn") }}</th>
-              <th>{{ $t("ETF.ticker") }}</th>
-              <th><i class="bi bi-star-fill text-warning"></i></th>
-              <th colspan="2"></th>
+              <th rowspan="2" id="name">{{ $t("General.name") }}</th>
+              <th rowspan="2" id="isin">{{ $t("ETF.isin") }}</th>
+              <th rowspan="2" id="wkn">{{ $t("ETF.wkn") }}</th>
+              <th rowspan="2" id="ticker">{{ $t("ETF.ticker") }}</th>
+              <th colspan="3" id="transactionCosts">
+                {{ $t("ETFFlow.transactionCosts") }}
+              </th>
+              <th rowspan="2" id="partialTaxExemption">
+                {{ $t("ETF.partialTaxExemptionSmall") }}
+              </th>
+              <th rowspan="2" id="favorite">
+                <i class="bi bi-star-fill text-warning"></i>
+              </th>
+              <th rowspan="2" colspan="2" id="editDelete"></th>
+            </tr>
+            <tr>
+              <th id="abs">{{ $t("ETFFlow.transactionCostsAbsolute") }}</th>
+              <th id="rel">{{ $t("ETFFlow.transactionCostsRelative") }}</th>
+              <th id="max">{{ $t("ETFFlow.transactionCostsMaximum") }}</th>
             </tr>
           </thead>
 

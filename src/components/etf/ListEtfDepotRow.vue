@@ -29,12 +29,15 @@ import SpanAmount from "../SpanAmount.vue";
 
 import { formatDateWithTime } from "@/tools/views/FormatDate";
 import { formatNumber, redIfNegative } from "@/tools/views/FormatNumber";
-
-import type { ListDepotRowData } from "./ListDepotRowData";
+import type { EtfFlow } from "@/model/etf/EtfFlow";
 
 const props = defineProps({
+  etfName: {
+    type: String,
+    required: true,
+  },
   flow: {
-    type: Object as PropType<ListDepotRowData>,
+    type: Object as PropType<EtfFlow>,
     required: true,
   },
 });
@@ -57,7 +60,7 @@ const timestampString = computed(() => {
 });
 
 const deleteEtfFlow = () => {
-  emit("deleteEtfFlow", props.flow, props.flow.name);
+  emit("deleteEtfFlow", props.flow, props.etfName);
 };
 const editEtfFlow = () => {
   emit("editEtfFlow", props.flow);

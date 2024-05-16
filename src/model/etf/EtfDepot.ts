@@ -6,8 +6,4 @@ export type EtfDepot = {
   etfEffectiveFlows?: Array<EtfFlow>;
   etfSummary?: EtfSummary;
   calcEtfSalePieces?: number;
-  calcEtfBidPrice?: number;
-  calcEtfAskPrice?: number;
-  calcEtfTransactionCostsAbsolute?: number;
-  calcEtfTransactionCostsRelative?: number;
 };
