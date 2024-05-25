@@ -6,14 +6,14 @@
     <td class="text-start">{{ mcp.moneyflowComment }}</td>
     <td class="text-start">{{ mcp.postingAccountName }}</td>
     <td class="text-center">
-      <span class="link-primary" @click="editContractpartner">{{
-        $t("General.edit")
-      }}</span>
+      <span class="link-primary" @click="editContractpartner"
+        ><i class="bi bi-pencil-square"></i
+      ></span>
     </td>
     <td class="text-center">
-      <span class="link-primary" @click="deleteContractpartner">{{
-        $t("General.delete")
-      }}</span>
+      <span class="link-primary" @click="deleteContractpartner"
+        ><i class="bi bi-trash"></i
+      ></span>
     </td>
     <td class="text-center">
       <span class="link-primary" @click="listAccounts">{{

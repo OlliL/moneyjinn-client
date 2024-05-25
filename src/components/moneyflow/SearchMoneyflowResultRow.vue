@@ -9,14 +9,10 @@
       {{ mmf.capitalsourceComment }}
     </td>
     <td class="text-center" v-if="isOwnMoneyflow">
-      <span class="link-primary" @click="editMoneyflow">{{
-        $t("General.edit")
-      }}</span>
+      <span class="link-primary" @click="editMoneyflow"><i class="bi bi-pencil-square"></i></span>
     </td>
     <td class="text-center" v-if="isOwnMoneyflow">
-      <span class="link-primary" @click="deleteMoneyflow">{{
-        $t("General.delete")
-      }}</span>
+      <span class="link-primary" @click="deleteMoneyflow"><i class="bi bi-trash"></i></span>
     </td>
     <td colspan="2" v-if="!isOwnMoneyflow"></td>
   </tr>

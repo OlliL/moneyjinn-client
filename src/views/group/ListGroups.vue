@@ -54,7 +54,7 @@
 
     <DivError :server-errors="serverErrors" />
     <div class="row justify-content-md-center">
-      <div class="col-md-3 col-xs-12">
+      <div class="col-md-2 col-xs-12">
         <table class="table table-striped table-bordered table-hover">
           <thead>
             <tr>

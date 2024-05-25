@@ -19,14 +19,14 @@
     </td>
     <td class="text-start" v-if="!etf.isFavorite">&nbsp;</td>
     <td class="text-center">
-      <span class="link-primary" @click="editEtf">{{
-        $t("General.edit")
-      }}</span>
+      <span class="link-primary" @click="editEtf"
+        ><i class="bi bi-pencil-square"></i
+      ></span>
     </td>
     <td class="text-center">
-      <span class="link-primary" @click="deleteEtf">{{
-        $t("General.delete")
-      }}</span>
+      <span class="link-primary" @click="deleteEtf"
+        ><i class="bi bi-trash"></i
+      ></span>
     </td>
   </tr>
 </template>

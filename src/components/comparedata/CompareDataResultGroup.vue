@@ -26,11 +26,11 @@
           <col style="width: 10%" />
           <col style="width: 10%" />
           <col style="width: 7%" />
-          <col style="width: 13%" />
+          <col style="width: 17%" />
           <col style="width: 25%" />
           <col style="width: 13%" />
-          <col style="width: 7%" />
-          <col style="width: 5%" />
+          <col style="width: 4%" />
+          <col style="width: 4%" />
           <thead>
             <tr>
               <th></th>
