@@ -5,11 +5,9 @@
     "
   >
     <td :class="redIfPrivate">
-      <i
-        class="bi bi-card-image link-primary"
-        v-if="mmf.hasReceipt"
-        @click="showReceipt"
-      ></i>
+      <span class="link-primary" @click="showReceipt" v-if="mmf.hasReceipt"
+        ><i class="bi bi-card-image"></i
+      ></span>
     </td>
     <td><SpanDate :date="mmf.bookingDate" /></td>
     <td class="d-none d-md-table-cell"><SpanDate :date="mmf.invoiceDate" /></td>
