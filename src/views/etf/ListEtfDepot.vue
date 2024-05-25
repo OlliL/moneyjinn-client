@@ -43,7 +43,7 @@
       class="row justify-content-md-center mb-4"
       v-if="dataLoaded && etfFlows.length"
     >
-      <div class="col-xxl-6 col-xl-8 col-md-11 col-xs-12">
+      <div class="col-xxl-5 col-xl-8 col-md-11 col-xs-12">
         <ul class="nav nav-tabs">
           <li class="nav-item">
             <button
@@ -67,12 +67,12 @@
             ref="effectiveTab"
           >
             <table class="table table-striped table-bordered table-hover">
-              <col style="width: 25%" />
-              <col style="width: 15%" />
-              <col style="width: 15%" />
-              <col style="width: 15%" />
-              <col style="width: 16%" />
-              <col style="width: 14%" />
+              <col style="width: 30%" />
+              <col style="width: 20%" />
+              <col style="width: 20%" />
+              <col style="width: 20%" />
+              <col style="width: 5%" />
+              <col style="width: 5%" />
               <thead>
                 <tr>
                   <th class="text-center">{{ $t("ETFFlow.bookingtime") }}</th>
@@ -115,12 +115,12 @@
           </div>
           <div class="tab-pane fade" id="profile-tab-pane" ref="allTab">
             <table class="table table-striped table-bordered table-hover">
-              <col style="width: 25%" />
-              <col style="width: 15%" />
-              <col style="width: 15%" />
-              <col style="width: 15%" />
-              <col style="width: 16%" />
-              <col style="width: 14%" />
+              <col style="width: 30%" />
+              <col style="width: 20%" />
+              <col style="width: 20%" />
+              <col style="width: 20%" />
+              <col style="width: 5%" />
+              <col style="width: 5%" />
               <thead>
                 <tr>
                   <th class="text-center">{{ $t("ETFFlow.bookingtime") }}</th>

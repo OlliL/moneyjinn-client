@@ -11,14 +11,14 @@
     </td>
     <td class="text-end"><SpanAmount :amount="flow.amount * flow.price" /></td>
     <td class="text-center">
-      <span class="link-primary" @click="editEtfFlow">
-        {{ $t("General.edit") }}</span
-      >
+      <span class="link-primary" @click="editEtfFlow"
+        ><i class="bi bi-pencil-square"></i
+      ></span>
     </td>
     <td class="text-center">
-      <span class="link-primary" @click="deleteEtfFlow">
-        {{ $t("General.delete") }}</span
-      >
+      <span class="link-primary" @click="deleteEtfFlow"
+        ><i class="bi bi-trash"></i
+      ></span>
     </td>
   </tr>
 </template>

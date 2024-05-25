@@ -2,14 +2,14 @@
   <tr>
     <td class="text-start">{{ mpa.name }}</td>
     <td class="text-center">
-      <span class="link-primary" @click="editPostingAccount">{{
-        $t("General.edit")
-      }}</span>
+      <span class="link-primary" @click="editPostingAccount"
+        ><i class="bi bi-pencil-square"></i
+      ></span>
     </td>
     <td class="text-center">
-      <span class="link-primary" @click="deletePostingAccount">{{
-        $t("General.delete")
-      }}</span>
+      <span class="link-primary" @click="deletePostingAccount"
+        ><i class="bi bi-trash"></i
+      ></span>
     </td>
   </tr>
 </template>

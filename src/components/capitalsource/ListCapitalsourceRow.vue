@@ -12,14 +12,14 @@
       <b :style="'color:' + importAllowedColor">{{ importAllowedString }}</b>
     </td>
     <td class="text-center" v-if="owner">
-      <span class="link-primary" @click="editCapitalsource">{{
-        $t("General.edit")
-      }}</span>
+      <span class="link-primary" @click="editCapitalsource"
+        ><i class="bi bi-pencil-square"></i
+      ></span>
     </td>
     <td class="text-center" v-if="owner">
-      <span class="link-primary" @click="deleteCapitalsource">{{
-        $t("General.delete")
-      }}</span>
+      <span class="link-primary" @click="deleteCapitalsource"
+        ><i class="bi bi-trash"></i
+      ></span>
     </td>
   </tr>
 </template>

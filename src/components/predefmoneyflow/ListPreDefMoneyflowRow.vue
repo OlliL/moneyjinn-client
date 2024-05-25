@@ -10,14 +10,14 @@
     <td class="text-center"><SpanDate :date="mpm.createDate" /></td>
     <td class="text-center"><SpanDate :date="mpm.lastUsed" /></td>
     <td class="text-center">
-      <span class="link-primary" @click="editPreDefMoneyflow">{{
-        $t("General.edit")
-      }}</span>
+      <span class="link-primary" @click="editPreDefMoneyflow"
+        ><i class="bi bi-pencil-square"></i
+      ></span>
     </td>
     <td class="text-center">
-      <span class="link-primary" @click="deletePreDefMoneyflow">{{
-        $t("General.delete")
-      }}</span>
+      <span class="link-primary" @click="deletePreDefMoneyflow"
+        ><i class="bi bi-trash"></i
+      ></span>
     </td>
   </tr>
 </template>
