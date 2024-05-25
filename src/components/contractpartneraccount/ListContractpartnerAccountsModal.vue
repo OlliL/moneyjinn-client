@@ -24,9 +24,9 @@
         <table class="table table-striped table-bordered table-hover">
           <thead>
             <tr>
-              <th width="40%" class="text-center">{{ $t("General.iban") }}</th>
-              <th width="30%" class="text-center">{{ $t("General.bic") }}</th>
-              <th width="30%" class="text-center" colspan="2"></th>
+              <th class="text-center">{{ $t("General.iban") }}</th>
+              <th class="text-center">{{ $t("General.bic") }}</th>
+              <th class="text-center" colspan="2"></th>
             </tr>
           </thead>
           <tbody>
@@ -60,11 +60,13 @@ import CreateContractpartnerAccountModalVue from "./CreateContractpartnerAccount
 import DeleteContractpartnerAccountModalVue from "./DeleteContractpartnerAccountModal.vue";
 import ListContractpartnerAccountRowVue from "./ListContractpartnerAccountRow.vue";
 import ModalVue from "../Modal.vue";
+import DivError from "../DivError.vue";
 
 import type { Contractpartner } from "@/model/contractpartner/Contractpartner";
 import type { ContractpartnerAccount } from "@/model/contractpartneraccount/ContractpartnerAccount";
+
 import ContractpartnerAccountControllerHandler from "@/handler/ContractpartnerAccountControllerHandler";
-import DivError from "../DivError.vue";
+
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 
 const serverErrors = ref(new Array<string>());

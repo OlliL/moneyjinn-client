@@ -16,9 +16,9 @@
       ></span>
     </td>
     <td class="text-center">
-      <span class="link-primary" @click="listAccounts">{{
-        $t("Contractpartner.accounts")
-      }}</span>
+      <span class="link-primary" @click="listAccounts"
+        ><i class="bi bi-bank"></i
+      ></span>
     </td>
   </tr>
 </template>
