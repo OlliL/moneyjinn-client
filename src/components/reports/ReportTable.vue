@@ -296,12 +296,23 @@ const props = defineProps({
 const monthName = computed(() => {
   return getMonthName(report.value.month);
 });
+const capitalsourceHasMovement = (
+  data: ReportTurnoverCapitalsource,
+): boolean => {
+  return (
+    data.amountBeginOfMonthFixed != 0 ||
+    data.amountEndOfMonthCalculated != 0 ||
+    (data.amountCurrent != undefined && data.amountCurrent != 0) ||
+    (data.amountEndOfMonthFixed != undefined && data.amountEndOfMonthFixed != 0)
+  );
+};
 const assetsTurnoverCapitalsources = computed(() => {
   if (dataLoaded.value) {
     return report.value.reportTurnoverCapitalsources?.filter(
       (data) =>
-        data.capitalsourceType === CapitalsourceType.CURRENT_ASSET ||
-        data.capitalsourceType === CapitalsourceType.LONG_TERM_ASSET,
+        (data.capitalsourceType === CapitalsourceType.CURRENT_ASSET ||
+          data.capitalsourceType === CapitalsourceType.LONG_TERM_ASSET) &&
+        capitalsourceHasMovement(data),
     );
   }
   return new Array<ReportTurnoverCapitalsource>();
@@ -310,8 +321,9 @@ const liabilitiesTurnoverCapitalsources = computed(() => {
   if (dataLoaded.value) {
     return report.value.reportTurnoverCapitalsources?.filter(
       (data) =>
-        data.capitalsourceType === CapitalsourceType.RESERVE_ASSET ||
-        data.capitalsourceType === CapitalsourceType.PROVISION_ASSET,
+        (data.capitalsourceType === CapitalsourceType.RESERVE_ASSET ||
+          data.capitalsourceType === CapitalsourceType.PROVISION_ASSET) &&
+        capitalsourceHasMovement(data),
     );
   }
   return new Array<ReportTurnoverCapitalsource>();
@@ -319,7 +331,9 @@ const liabilitiesTurnoverCapitalsources = computed(() => {
 const creditTurnoverCapitalsources = computed(() => {
   if (dataLoaded.value) {
     return report.value.reportTurnoverCapitalsources?.filter(
-      (data) => data.capitalsourceType === CapitalsourceType.CREDIT,
+      (data) =>
+        data.capitalsourceType === CapitalsourceType.CREDIT &&
+        capitalsourceHasMovement(data),
     );
   }
   return new Array<ReportTurnoverCapitalsource>();
