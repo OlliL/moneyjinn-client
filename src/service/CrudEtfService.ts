@@ -1,4 +1,4 @@
-import AbstractControllerHandler from "@/handler/AbstractControllerHandler";
+import AbstractService from "@/service/AbstractService";
 import type { Etf } from "@/model/etf/Etf";
 import {
   mapEtfModelToTransport,
@@ -6,7 +6,7 @@ import {
 } from "./mapper/EtfTransportMapper";
 import { CrudEtfControllerApi } from "@/api";
 
-class EtfControllerHandler extends AbstractControllerHandler {
+class EtfService extends AbstractService {
   private api: CrudEtfControllerApi;
 
   public constructor() {
@@ -49,4 +49,4 @@ class EtfControllerHandler extends AbstractControllerHandler {
   }
 }
 
-export default new EtfControllerHandler();
+export default new EtfService();

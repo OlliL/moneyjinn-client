@@ -87,7 +87,7 @@
 </template>
 
 <script lang="ts" setup>
-import EtfControllerHandler from "@/handler/EtfControllerHandler";
+import EtfService from "@/service/EtfService";
 import type { EtfSummary } from "@/model/etf/EtfSummary";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { computed, onMounted, ref, watch } from "vue";
@@ -114,7 +114,7 @@ const loadData = (year: number, month: number) => {
   serverErrors.value = new Array<string>();
 
   dataLoaded.value = false;
-  EtfControllerHandler.listEtfOverview(year, month)
+  EtfService.listEtfOverview(year, month)
     .then((_etfSummeryArray) => {
       etfSummaryArray.value = _etfSummeryArray;
       dataLoaded.value = true;

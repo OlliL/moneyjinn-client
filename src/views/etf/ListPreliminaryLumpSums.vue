@@ -166,8 +166,8 @@ import SelectStandard from "@/components/SelectStandard.vue";
 
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 
-import CrudEtfPreliminaryLumpSumControllerHandler from "@/handler/CrudEtfPreliminaryLumpSumControllerHandler";
-import CrudEtfControllerHandler from "@/handler/CrudEtfControllerHandler";
+import CrudEtfPreliminaryLumpSumService from "@/service/CrudEtfPreliminaryLumpSumService";
+import CrudEtfService from "@/service/CrudEtfService";
 import type { SelectBoxValue } from "@/model/SelectBoxValue";
 import type { Etf } from "@/model/etf/Etf";
 import type { EtfPreliminaryLumpSum } from "@/model/etf/EtfPreliminaryLumpSum";
@@ -217,7 +217,7 @@ const loadEtfs = (etfId?: number, year?: number) => {
   etfsLoaded.value = false;
   etfsSelectValues.value = new Array<SelectBoxValue>();
 
-  CrudEtfControllerHandler.fetchAllEtf()
+  CrudEtfService.fetchAllEtf()
     .then((response) => {
       etfs.value = response;
       let favoriteEtfId;
@@ -247,7 +247,7 @@ const loadYears = (etfId: number, year?: number) => {
   etfPreliminaryLumpSums.value = new Map<number, EtfPreliminaryLumpSum>();
   selectedEtf.value = etfId;
   selectedYear.value = undefined;
-  CrudEtfPreliminaryLumpSumControllerHandler.fetchAllEtfPreliminaryLumpSum(
+  CrudEtfPreliminaryLumpSumService.fetchAllEtfPreliminaryLumpSum(
     etfId,
   )
     .then((response) => {

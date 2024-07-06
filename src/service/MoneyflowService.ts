@@ -1,4 +1,4 @@
-import AbstractControllerHandler from "@/handler/AbstractControllerHandler";
+import AbstractService from "@/service/AbstractService";
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 import type { MoneyflowSearchParams } from "@/model/moneyflow/MoneyflowSearchParams";
 import type { MoneyflowSplitEntry } from "@/model/moneyflow/MoneyflowSplitEntry";
@@ -17,7 +17,7 @@ import {
   type UpdateMoneyflowRequest,
 } from "@/api";
 
-class MoneyflowControllerHandler extends AbstractControllerHandler {
+class MoneyflowService extends AbstractService {
   private api: MoneyflowControllerApi;
 
   public constructor() {
@@ -163,4 +163,4 @@ class MoneyflowControllerHandler extends AbstractControllerHandler {
   }
 }
 
-export default new MoneyflowControllerHandler();
+export default new MoneyflowService();

@@ -179,7 +179,7 @@ import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { amountSchema, globErr } from "@/tools/views/ZodUtil";
 
 import type { Etf } from "@/model/etf/Etf";
-import CrudEtfControllerHandler from "@/handler/CrudEtfControllerHandler";
+import CrudEtfService from "@/service/CrudEtfService";
 
 const { t } = useI18n();
 
@@ -265,7 +265,7 @@ const createEtf = handleSubmit(() => {
 
   if (met.value.id > 0) {
     //update
-    CrudEtfControllerHandler.updateEtf(met.value)
+    CrudEtfService.updateEtf(met.value)
       .then(() => {
         modalComponent.value._hide();
         emit("etfUpdated", met.value);
@@ -275,7 +275,7 @@ const createEtf = handleSubmit(() => {
       });
   } else {
     //create
-    CrudEtfControllerHandler.createEtf(met.value)
+    CrudEtfService.createEtf(met.value)
       .then((etf) => {
         met.value = etf;
         modalComponent.value._hide();

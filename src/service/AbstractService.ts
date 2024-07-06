@@ -1,7 +1,7 @@
 import type { BaseAPI } from "@/api/base";
 import { http } from "../config/AxiosSingleton";
 
-abstract class AbstractControllerHandler {
+abstract class AbstractService {
   protected RETURN: string = "return=";
   protected RET_MINIMAL: string = this.RETURN + "minimal";
   protected RET_REPRESENTATION: string = this.RETURN + "representation";
@@ -11,4 +11,4 @@ abstract class AbstractControllerHandler {
   }
 }
 
-export default AbstractControllerHandler;
+export default AbstractService;

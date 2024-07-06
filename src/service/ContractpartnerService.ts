@@ -1,4 +1,4 @@
-import AbstractControllerHandler from "@/handler/AbstractControllerHandler";
+import AbstractService from "@/service/AbstractService";
 import type { Contractpartner } from "@/model/contractpartner/Contractpartner";
 import {
   mapContractpartnerToTransport,
@@ -6,7 +6,7 @@ import {
 } from "./mapper/ContractpartnerTransportMapper";
 import { CrudContractpartnerControllerApi } from "@/api";
 
-class ContractpartnerControllerHandler extends AbstractControllerHandler {
+class ContractpartnerService extends AbstractService {
   private api: CrudContractpartnerControllerApi;
 
   public constructor() {
@@ -46,4 +46,4 @@ class ContractpartnerControllerHandler extends AbstractControllerHandler {
   }
 }
 
-export default new ContractpartnerControllerHandler();
+export default new ContractpartnerService();

@@ -89,7 +89,7 @@ import ListUserRowVue from "@/components/user/ListUserRow.vue";
 
 import type { User } from "@/model/user/User";
 
-import UserControllerHandler from "@/handler/UserControllerHandler";
+import UserService from "@/service/UserService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import DivError from "@/components/DivError.vue";
 
@@ -134,7 +134,7 @@ const searchContent = () => {
 const reloadView = () => {
   serverErrors.value = new Array<string>();
 
-  UserControllerHandler.fetchAllUser()
+  UserService.fetchAllUser()
     .then((_users) => {
       _users.sort((a, b) => {
         return a.userName.toUpperCase().localeCompare(b.userName.toUpperCase());

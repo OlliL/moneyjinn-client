@@ -116,7 +116,7 @@ import { amountSchema, globErr } from "@/tools/views/ZodUtil";
 import type { PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
 import type { SelectBoxValue } from "@/model/SelectBoxValue";
 
-import PreDefMoneyflowControllerHandler from "@/handler/PreDefMoneyflowControllerHandler";
+import PreDefMoneyflowService from "@/service/PreDefMoneyflowService";
 
 const { t } = useI18n();
 
@@ -186,7 +186,7 @@ const createPreDefMoneyflow = handleSubmit(() => {
 
   if (mpm.value.id > 0) {
     //update
-    PreDefMoneyflowControllerHandler.updatePreDefMoneyflow(mpm.value)
+    PreDefMoneyflowService.updatePreDefMoneyflow(mpm.value)
       .then(() => {
         modalComponent.value._hide();
         emit("preDefMoneyflowUpdated", mpm.value);
@@ -196,7 +196,7 @@ const createPreDefMoneyflow = handleSubmit(() => {
       });
   } else {
     //create
-    PreDefMoneyflowControllerHandler.createPreDefMoneyflow(mpm.value)
+    PreDefMoneyflowService.createPreDefMoneyflow(mpm.value)
       .then((_mpm) => {
         mpm.value = _mpm;
         modalComponent.value._hide();

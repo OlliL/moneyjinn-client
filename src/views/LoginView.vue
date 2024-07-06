@@ -74,7 +74,7 @@ import ButtonSubmit from "@/components/ButtonSubmit.vue";
 import DivError from "@/components/DivError.vue";
 import InputStandard from "@/components/InputStandard.vue";
 
-import UserControllerHandler from "@/handler/UserControllerHandler";
+import UserService from "@/service/UserService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 
 const serverErrors = ref(new Array<string>());
@@ -105,7 +105,7 @@ const { handleSubmit } = useForm();
 const handleLogin = handleSubmit((values) => {
   serverErrors.value = new Array<string>();
 
-  UserControllerHandler.login(values.username, values.password)
+  UserService.login(values.username, values.password)
     .then(() => {
       router.push({ name: Routes.Home });
     })

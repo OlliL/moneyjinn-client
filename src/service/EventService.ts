@@ -1,8 +1,8 @@
 import { EventControllerApi } from "@/api";
-import AbstractControllerHandler from "@/handler/AbstractControllerHandler";
+import AbstractService from "@/service/AbstractService";
 import type { Events } from "@/model/event/Events";
 
-class EventControllerHandler extends AbstractControllerHandler {
+class EventService extends AbstractService {
   private api: EventControllerApi;
 
   public constructor() {
@@ -20,4 +20,4 @@ class EventControllerHandler extends AbstractControllerHandler {
   }
 }
 
-export default new EventControllerHandler();
+export default new EventService();

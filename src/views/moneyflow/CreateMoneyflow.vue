@@ -66,7 +66,7 @@ import ButtonSubmit from "@/components/ButtonSubmit.vue";
 import { preDefMoneyflowAlreadyUsedThisMonth } from "@/model/moneyflow/PreDefMoneyflow";
 import type { PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
 
-import PreDefMoneyflowControllerHandler from "@/handler/PreDefMoneyflowControllerHandler";
+import PreDefMoneyflowService from "@/service/PreDefMoneyflowService";
 import { useForm } from "vee-validate";
 import DivError from "@/components/DivError.vue";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
@@ -81,7 +81,7 @@ const editMoneyflowVue = ref();
 const { handleSubmit, values, setFieldTouched } = useForm();
 
 onMounted(() => {
-  PreDefMoneyflowControllerHandler.fetchAllPreDefMoneyflow()
+  PreDefMoneyflowService.fetchAllPreDefMoneyflow()
     .then((allPreDefMoneyflows) => {
       // remove those PreDefMoneyflows which where used this month already and have onceMonth set
       const today = new Date();

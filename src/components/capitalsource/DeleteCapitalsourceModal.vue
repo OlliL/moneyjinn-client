@@ -74,7 +74,7 @@ import { capitalsourceImportNames } from "@/model/capitalsource/CapitalsourceImp
 import { capitalsourceStateNames } from "@/model/capitalsource/CapitalsourceState";
 import { capitalsourceTypeNames } from "@/model/capitalsource/CapitalsourceType";
 
-import CapitalsourceControllerHandler from "@/handler/CapitalsourceControllerHandler";
+import CapitalsourceService from "@/service/CapitalsourceService";
 
 const serverErrors = ref(new Array<string>());
 
@@ -107,7 +107,7 @@ const _show = (_mcs: Capitalsource) => {
 const deleteCapitalsource = () => {
   serverErrors.value = new Array<string>();
 
-  CapitalsourceControllerHandler.deleteCapitalsource(mcs.value.id)
+  CapitalsourceService.deleteCapitalsource(mcs.value.id)
     .then(() => {
       modalComponent.value._hide();
       emit("capitalsourceDeleted", mcs.value);

@@ -3,14 +3,14 @@ import {
   type CreateGroupRequest,
   type UpdateGroupRequest,
 } from "@/api";
-import AbstractControllerHandler from "@/handler/AbstractControllerHandler";
+import AbstractService from "@/service/AbstractService";
 import type { Group } from "@/model/group/Group";
 import {
   mapGroupToTransport,
   mapGroupTransportToModel,
 } from "./mapper/GroupTransportMapper";
 
-class GroupControllerHandler extends AbstractControllerHandler {
+class GroupService extends AbstractService {
   private api: GroupControllerApi;
 
   public constructor() {
@@ -58,4 +58,4 @@ class GroupControllerHandler extends AbstractControllerHandler {
   }
 }
 
-export default new GroupControllerHandler();
+export default new GroupService();

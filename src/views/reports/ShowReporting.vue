@@ -252,7 +252,7 @@ import type { PostingAccount } from "@/model/postingaccount/PostingAccount";
 import type { ReportingParameter } from "@/model/report/ReportingParameter";
 import type { ReportingMonthAmount } from "@/model/report/ReportingMonthAmount";
 
-import ReportControllerHandler from "@/handler/ReportControllerHandler";
+import ReportService from "@/service/ReportService";
 
 const { t } = useI18n();
 
@@ -412,7 +412,7 @@ const loadData = () => {
   serverErrors.value = new Array<string>();
 
   dataLoaded.value = false;
-  ReportControllerHandler.showReportingForm()
+  ReportService.showReportingForm()
     .then((reportingParameter) => {
       const minDate = reportingParameter.startDate;
       const maxDate = reportingParameter.endDate;
@@ -498,9 +498,9 @@ const retrieveGraphData = (
   reportingParameter: ReportingParameter,
 ): Promise<Array<ReportingMonthAmount>> => {
   if (groupByYear.value) {
-    return ReportControllerHandler.showYearlyReportGraph(reportingParameter);
+    return ReportService.showYearlyReportGraph(reportingParameter);
   }
-  return ReportControllerHandler.showMonthlyReportGraph(reportingParameter);
+  return ReportService.showMonthlyReportGraph(reportingParameter);
 };
 const makeChartTitle = (reportingParameter: ReportingParameter): string => {
   const sameYear: boolean =

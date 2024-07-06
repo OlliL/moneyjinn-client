@@ -1,6 +1,6 @@
-import { mapPostingAccountTransportToModel } from "@/handler/mapper/PostingAccountTransportMapper";
-import PostingAccountControllerHandler from "@/handler/PostingAccountControllerHandler";
-import { WebSocketHandler } from "@/handler/WebSocketHandler";
+import { mapPostingAccountTransportToModel } from "@/service/mapper/PostingAccountTransportMapper";
+import PostingAccountService from "@/service/PostingAccountService";
+import { WebSocketSingleton } from "@/config/WebSocketSingleton";
 import type { PostingAccount } from "@/model/postingaccount/PostingAccount";
 import type { PostingAccountChangedEventTransport } from "@/model/wsevent/PostingAccountChangedEventTransport";
 import type { SelectBoxValue } from "@/model/SelectBoxValue";
@@ -22,14 +22,14 @@ export const usePostingAccountStore = defineStore("postingAccount", {
   },
   actions: {
     initPostingAccountStore() {
-      return PostingAccountControllerHandler.fetchAllPostingAccount().then(
+      return PostingAccountService.fetchAllPostingAccount().then(
         (postingAccountArray) => {
           this.postingAccount = postingAccountArray;
         },
       );
     },
     subscribeToWebsocket() {
-      WebSocketHandler.getInstance().subscribe(
+      WebSocketSingleton.getInstance().subscribe(
         "/topic/postingAccountChanged",
         this.subscribeCallback,
       );

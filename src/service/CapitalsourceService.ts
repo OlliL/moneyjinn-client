@@ -1,4 +1,4 @@
-import AbstractControllerHandler from "@/handler/AbstractControllerHandler";
+import AbstractService from "@/service/AbstractService";
 import type { Capitalsource } from "@/model/capitalsource/Capitalsource";
 import {
   mapCapitalsourceToTransport,
@@ -6,7 +6,7 @@ import {
 } from "./mapper/CapitalsourceTransportMapper";
 import { CrudCapitalsourceControllerApi } from "@/api";
 
-class CapitalsourceControllerHandler extends AbstractControllerHandler {
+class CapitalsourceService extends AbstractService {
   private api: CrudCapitalsourceControllerApi;
 
   public constructor() {
@@ -44,4 +44,4 @@ class CapitalsourceControllerHandler extends AbstractControllerHandler {
   }
 }
 
-export default new CapitalsourceControllerHandler();
+export default new CapitalsourceService();

@@ -104,7 +104,7 @@ import ListEtfRowVue from "@/components/etf/ListEtfRow.vue";
 
 import type { Etf } from "@/model/etf/Etf";
 
-import CrudEtfControllerHandler from "@/handler/CrudEtfControllerHandler";
+import CrudEtfService from "@/service/CrudEtfService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import DivError from "@/components/DivError.vue";
 
@@ -149,7 +149,7 @@ const searchContent = () => {
 const reloadView = () => {
   serverErrors.value = new Array<string>();
 
-  CrudEtfControllerHandler.fetchAllEtf()
+  CrudEtfService.fetchAllEtf()
     .then((_etfs) => {
       _etfs.sort((a, b) => {
         if (!a.name && !b.name) return 0;

@@ -302,7 +302,7 @@ import type { Etf } from "@/model/etf/Etf";
 import type { EtfPreliminaryLumpSum } from "@/model/etf/EtfPreliminaryLumpSum";
 import type { SelectBoxValue } from "@/model/SelectBoxValue";
 
-import CrudEtfPreliminaryLumpSumControllerHandler from "@/handler/CrudEtfPreliminaryLumpSumControllerHandler";
+import CrudEtfPreliminaryLumpSumService from "@/service/CrudEtfPreliminaryLumpSumService";
 import { getMonthName } from "@/tools/views/MonthName";
 
 const { t } = useI18n();
@@ -387,7 +387,7 @@ const createEtfPreliminaryLumpSum = handleSubmit(() => {
 
   if (mep.value.id > 0) {
     //update
-    CrudEtfPreliminaryLumpSumControllerHandler.updateEtfPreliminaryLumpSum(
+    CrudEtfPreliminaryLumpSumService.updateEtfPreliminaryLumpSum(
       mep.value,
     )
       .then(() => {
@@ -399,7 +399,7 @@ const createEtfPreliminaryLumpSum = handleSubmit(() => {
       });
   } else {
     //create
-    CrudEtfPreliminaryLumpSumControllerHandler.createEtfPreliminaryLumpSum(
+    CrudEtfPreliminaryLumpSumService.createEtfPreliminaryLumpSum(
       mep.value,
     )
       .then((_etfPreliminaryLumpSum) => {

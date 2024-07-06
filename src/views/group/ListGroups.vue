@@ -89,7 +89,7 @@ import ListGroupRowVue from "@/components/group/ListGroupRow.vue";
 
 import type { Group } from "@/model/group/Group";
 
-import GroupControllerHandler from "@/handler/GroupControllerHandler";
+import GroupService from "@/service/GroupService";
 
 const serverErrors = ref(new Array<string>());
 
@@ -132,7 +132,7 @@ const searchContent = () => {
 const reloadView = () => {
   serverErrors.value = new Array<string>();
 
-  GroupControllerHandler.fetchAllGroup()
+  GroupService.fetchAllGroup()
     .then((_groups) => {
       _groups.sort((a, b) => {
         return a.name.toUpperCase().localeCompare(b.name.toUpperCase());

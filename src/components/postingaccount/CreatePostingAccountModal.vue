@@ -48,7 +48,7 @@ import { globErr } from "@/tools/views/ZodUtil";
 
 import type { PostingAccount } from "@/model/postingaccount/PostingAccount";
 
-import PostingAccountControllerHandler from "@/handler/PostingAccountControllerHandler";
+import PostingAccountService from "@/service/PostingAccountService";
 
 const { t } = useI18n();
 
@@ -101,7 +101,7 @@ const createPostingAccount = handleSubmit(() => {
 
   if (mpa.value.id > 0) {
     //update
-    PostingAccountControllerHandler.updatePostingAccount(mpa.value)
+    PostingAccountService.updatePostingAccount(mpa.value)
       .then(() => {
         modalComponent.value._hide();
         emit("postingAccountUpdated", mpa.value);
@@ -111,7 +111,7 @@ const createPostingAccount = handleSubmit(() => {
       });
   } else {
     //create
-    PostingAccountControllerHandler.createPostingAccount(mpa.value)
+    PostingAccountService.createPostingAccount(mpa.value)
       .then((_mpa) => {
         mpa.value = _mpa;
         modalComponent.value._hide();

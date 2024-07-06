@@ -163,8 +163,8 @@ import type { CompareData } from "@/model/comparedata/CompareData";
 import type { CompareDataParameter } from "@/model/comparedata/CompareDataParameter";
 import type { SelectBoxValue } from "@/model/SelectBoxValue";
 
-import CompareDataControllerHandler from "@/handler/CompareDataControllerHandler";
-import MoneyflowControllerHandler from "@/handler/MoneyflowControllerHandler";
+import CompareDataService from "@/service/CompareDataService";
+import MoneyflowService from "@/service/MoneyflowService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 
 const { t } = useI18n();
@@ -266,7 +266,7 @@ const loadData = () => {
   startDate.value = _startDate;
   endDate.value = _endDate;
 
-  CompareDataControllerHandler.showCompareDataForm()
+  CompareDataService.showCompareDataForm()
     .then((compareDataParameter) => {
       sourceIsImport.value = compareDataParameter.selectedSourceIsImport;
       compareDataFormat.value = compareDataParameter.selectedCompareDataFormat;
@@ -322,7 +322,7 @@ const compareData = handleSubmit(async () => {
       }
     }
 
-    CompareDataControllerHandler.compareData(compareDataParameter)
+    CompareDataService.compareData(compareDataParameter)
       .then((compareDataResult) => {
         compareDatasMatching.value = compareDataResult.compareDatasMatching;
         compareDatasNotInDatabase.value =
@@ -340,12 +340,12 @@ const compareData = handleSubmit(async () => {
 });
 
 const deleteMoneyflow = (id: number) => {
-  MoneyflowControllerHandler.fetchMoneyflow(id).then((mmf) => {
+  MoneyflowService.fetchMoneyflow(id).then((mmf) => {
     deleteModal.value._show(mmf);
   });
 };
 const editMoneyflow = (id: number) => {
-  MoneyflowControllerHandler.fetchMoneyflow(id).then((mmf) => {
+  MoneyflowService.fetchMoneyflow(id).then((mmf) => {
     editModal.value._show(mmf);
   });
 };

@@ -3,7 +3,7 @@ import {
   type CalcEtfSaleRequest,
   type ListEtfFlowsResponse,
 } from "@/api";
-import AbstractControllerHandler from "@/handler/AbstractControllerHandler";
+import AbstractService from "@/service/AbstractService";
 import type { EtfDepot } from "@/model/etf/EtfDepot";
 import type { EtfSalesCalculation } from "@/model/etf/EtfSalesCalculation";
 import type { EtfSummary } from "@/model/etf/EtfSummary";
@@ -12,7 +12,7 @@ import { mapEtfFlowTransportToModel } from "./mapper/EtfFlowTransportMapper";
 import { mapEtfSummaryTransportToEtfSummary } from "./mapper/EtfTSummaryTransportMapper";
 import type { AxiosResponse } from "axios";
 
-class EtfControllerHandler extends AbstractControllerHandler {
+class EtfService extends AbstractService {
   private api: EtfControllerApi;
 
   public constructor() {
@@ -113,4 +113,4 @@ class EtfControllerHandler extends AbstractControllerHandler {
   }
 }
 
-export default new EtfControllerHandler();
+export default new EtfService();

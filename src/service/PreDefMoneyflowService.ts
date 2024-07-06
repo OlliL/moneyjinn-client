@@ -3,14 +3,14 @@ import {
   type CreatePreDefMoneyflowRequest,
   type UpdatePreDefMoneyflowRequest,
 } from "@/api";
-import AbstractControllerHandler from "@/handler/AbstractControllerHandler";
+import AbstractService from "@/service/AbstractService";
 import type { PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
 import {
   mapPreDefMoneyflowToTransport,
   mapPreDefMoneyflowTransportToModel,
 } from "./mapper/PreDefMoneyflowTransportMapper";
 
-class PreDefMoneyflowControllerHandler extends AbstractControllerHandler {
+class PreDefMoneyflowService extends AbstractService {
   private api: PreDefMoneyflowControllerApi;
 
   public constructor() {
@@ -59,4 +59,4 @@ class PreDefMoneyflowControllerHandler extends AbstractControllerHandler {
   }
 }
 
-export default new PreDefMoneyflowControllerHandler();
+export default new PreDefMoneyflowService();

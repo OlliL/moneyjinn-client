@@ -84,7 +84,7 @@ import ReportTableVue from "@/components/reports/ReportTable.vue";
 
 import { getMonthName } from "@/tools/views/MonthName";
 
-import ReportControllerHandler from "@/handler/ReportControllerHandler";
+import ReportService from "@/service/ReportService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 
 const serverErrors = ref(new Array<string>());
@@ -122,7 +122,7 @@ const loadData = (year?: number, month?: number) => {
   serverErrors.value = new Array<string>();
 
   dataLoaded.value = false;
-  ReportControllerHandler.getAvailableMonth(year, month)
+  ReportService.getAvailableMonth(year, month)
     .then((response) => {
       months.value = response.allMonth;
       years.value = response.allYears;

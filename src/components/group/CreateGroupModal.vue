@@ -44,7 +44,7 @@ import { handleBackendError } from "@/tools/views/HandleBackendError";
 
 import type { Group } from "@/model/group/Group";
 
-import GroupControllerHandler from "@/handler/GroupControllerHandler";
+import GroupService from "@/service/GroupService";
 import InputStandard from "../InputStandard.vue";
 
 const { t } = useI18n();
@@ -89,7 +89,7 @@ const createGroup = handleSubmit(() => {
 
   if (group.value.id > 0) {
     //update
-    GroupControllerHandler.updateGroup(group.value)
+    GroupService.updateGroup(group.value)
       .then(() => {
         modalComponent.value._hide();
         emit("groupUpdated", group.value);
@@ -99,7 +99,7 @@ const createGroup = handleSubmit(() => {
       });
   } else {
     //create
-    GroupControllerHandler.createGroup(group.value)
+    GroupService.createGroup(group.value)
       .then((_group) => {
         group.value = _group;
         modalComponent.value._hide();

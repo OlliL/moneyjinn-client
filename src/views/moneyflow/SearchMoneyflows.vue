@@ -237,7 +237,7 @@ import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 import type { MoneyflowSearchParams } from "@/model/moneyflow/MoneyflowSearchParams";
 import type { SelectBoxValue } from "@/model/SelectBoxValue";
 
-import MoneyflowControllerHandler from "@/handler/MoneyflowControllerHandler";
+import MoneyflowService from "@/service/MoneyflowService";
 
 const { t } = useI18n();
 
@@ -372,7 +372,7 @@ const searchMoneyflows = handleSubmit(() => {
     colContractpartner.value =
       groupByFirst.value == GROUP_CONTRACTPARTNER ||
       groupBySecond.value == GROUP_CONTRACTPARTNER;
-    MoneyflowControllerHandler.searchMoneyflows(searchParams)
+    MoneyflowService.searchMoneyflows(searchParams)
       .then((moneyflows) => {
         if (moneyflows) {
           groupBy(moneyflows);
@@ -529,13 +529,13 @@ const getGroupByKey = (moneyflow: Moneyflow): string => {
 };
 
 const deleteMoneyflow = (id: number) => {
-  MoneyflowControllerHandler.fetchMoneyflow(id).then((mmf) => {
+  MoneyflowService.fetchMoneyflow(id).then((mmf) => {
     deleteModal.value._show(mmf);
   });
 };
 
 const editMoneyflow = (id: number) => {
-  MoneyflowControllerHandler.fetchMoneyflow(id).then((mmf) => {
+  MoneyflowService.fetchMoneyflow(id).then((mmf) => {
     editModal.value._show(mmf);
   });
 };

@@ -268,7 +268,7 @@ import type { Report } from "@/model/report/Report";
 import { CapitalsourceType } from "@/model/capitalsource/CapitalsourceType";
 import type { ReportTurnoverCapitalsource } from "@/model/report/ReportTurnoverCapitalsource";
 
-import ReportControllerHandler from "@/handler/ReportControllerHandler";
+import ReportService from "@/service/ReportService";
 
 const serverErrors = ref(new Array<string>());
 
@@ -375,7 +375,7 @@ const loadData = (year: number, month: number) => {
   serverErrors.value = new Array<string>();
 
   dataLoaded.value = false;
-  ReportControllerHandler.listReports(year, month)
+  ReportService.listReports(year, month)
     .then((_report) => {
       report.value = _report;
 

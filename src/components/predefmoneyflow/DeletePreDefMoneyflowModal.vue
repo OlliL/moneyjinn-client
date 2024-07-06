@@ -68,7 +68,7 @@ import { handleBackendError } from "@/tools/views/HandleBackendError";
 
 import type { PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
 
-import PreDefMoneyflowControllerHandler from "@/handler/PreDefMoneyflowControllerHandler";
+import PreDefMoneyflowService from "@/service/PreDefMoneyflowService";
 
 const serverErrors = ref(new Array<string>());
 
@@ -85,7 +85,7 @@ const _show = (_mpm: PreDefMoneyflow) => {
 const deletePreDefMoneyflow = () => {
   serverErrors.value = new Array<string>();
 
-  PreDefMoneyflowControllerHandler.deletePreDefMoneyflow(mpm.value.id)
+  PreDefMoneyflowService.deletePreDefMoneyflow(mpm.value.id)
     .then(() => {
       modalComponent.value._hide();
       emit("preDefMoneyflowDeleted", mpm.value);

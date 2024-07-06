@@ -122,7 +122,7 @@ import router, { Routes } from "@/router";
 import { getMonthName } from "@/tools/views/MonthName";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 
-import MonthlySettlementControllerHandler from "@/handler/MonthlySettlementControllerHandler";
+import MonthlySettlementService from "@/service/MonthlySettlementService";
 
 const serverErrors = ref(new Array<string>());
 
@@ -160,7 +160,7 @@ const monthName = computed(() => {
 const loadMonth = (year?: number, month?: number) => {
   serverErrors.value = new Array<string>();
 
-  MonthlySettlementControllerHandler.getAvailableMonth(year, month)
+  MonthlySettlementService.getAvailableMonth(year, month)
     .then((response) => {
       months.value = response.allMonth;
       years.value = response.allYears;

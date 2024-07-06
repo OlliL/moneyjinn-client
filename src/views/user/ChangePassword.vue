@@ -78,7 +78,7 @@ import { globErr } from "@/tools/views/ZodUtil";
 
 import { ErrorCode, getErrorMessage } from "@/model/ErrorCode";
 
-import UserControllerHandler from "@/handler/UserControllerHandler";
+import UserService from "@/service/UserService";
 import { useForm } from "vee-validate";
 
 const { t } = useI18n();
@@ -126,7 +126,7 @@ onMounted(() => {
 const changePassword = handleSubmit(() => {
   serverErrors.value = new Array<string>();
 
-  UserControllerHandler.changePassword(passwordOld.value, password1.value)
+  UserService.changePassword(passwordOld.value, password1.value)
     .then(() => {
       const userSessionStore = useUserSessionStore();
       if (userSessionStore.userIsNew) {

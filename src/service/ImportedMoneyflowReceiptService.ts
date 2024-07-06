@@ -3,9 +3,9 @@ import {
   type CreateImportedMoneyflowReceiptsRequest,
 } from "@/api";
 import type { ImportedMoneyflowReceipt } from "@/model/moneyflow/ImportedMoneyflowReceipt";
-import AbstractControllerHandler from "./AbstractControllerHandler";
+import AbstractService from "./AbstractService";
 
-class ImportedMoneyflowReceiptControllerHandler extends AbstractControllerHandler {
+class ImportedMoneyflowReceiptService extends AbstractService {
   private api: ImportedMoneyflowReceiptControllerApi;
 
   public constructor() {
@@ -50,4 +50,4 @@ class ImportedMoneyflowReceiptControllerHandler extends AbstractControllerHandle
     await this.api.createImportedMoneyflowReceipts(request);
   }
 }
-export default new ImportedMoneyflowReceiptControllerHandler();
+export default new ImportedMoneyflowReceiptService();

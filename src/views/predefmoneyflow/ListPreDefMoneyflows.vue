@@ -94,7 +94,7 @@ import ListPreDefMoneyflowRowVue from "@/components/predefmoneyflow/ListPreDefMo
 
 import type { PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
 
-import PreDefMoneyflowControllerHandler from "@/handler/PreDefMoneyflowControllerHandler";
+import PreDefMoneyflowService from "@/service/PreDefMoneyflowService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import DivError from "@/components/DivError.vue";
 
@@ -141,7 +141,7 @@ const searchContent = () => {
 const reloadView = () => {
   serverErrors.value = new Array<string>();
 
-  PreDefMoneyflowControllerHandler.fetchAllPreDefMoneyflow()
+  PreDefMoneyflowService.fetchAllPreDefMoneyflow()
     .then((_preDefMoneyflows) => {
       _preDefMoneyflows.sort((a, b) => {
         if (!a.contractpartnerName && !b.contractpartnerName) return 0;

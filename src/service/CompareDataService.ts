@@ -1,4 +1,4 @@
-import AbstractControllerHandler from "@/handler/AbstractControllerHandler";
+import AbstractService from "@/service/AbstractService";
 import type { CompareDataParameter } from "@/model/comparedata/CompareDataParameter";
 import type { CompareDataResult } from "@/model/comparedata/CompareDataResult";
 import { getISOStringDate } from "@/tools/views/FormatDate";
@@ -7,7 +7,7 @@ import type { CompareData } from "@/model/comparedata/CompareData";
 import { mapMoneyflowTransportToModel } from "./mapper/MoneyflowTransportMapper";
 import { mapCCompareDataDatasetTransportToModel } from "./mapper/CompareCompareDataDataset";
 
-class CompareDataControllerHandler extends AbstractControllerHandler {
+class CompareDataService extends AbstractService {
   private api: CompareDataControllerApi;
 
   public constructor() {
@@ -114,4 +114,4 @@ class CompareDataControllerHandler extends AbstractControllerHandler {
   }
 }
 
-export default new CompareDataControllerHandler();
+export default new CompareDataService();

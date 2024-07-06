@@ -130,7 +130,7 @@ import { CapitalsourceType } from "@/model/capitalsource/CapitalsourceType";
 import type { MonthlySettlement } from "@/model/monthlysettlement/MonthlySettlement";
 import type { MonthlySettlementEditTransporter } from "@/model/monthlysettlement/MonthlySettlementEditTransporter";
 
-import MonthlySettlementControllerHandler from "@/handler/MonthlySettlementControllerHandler";
+import MonthlySettlementService from "@/service/MonthlySettlementService";
 
 const { t } = useI18n();
 
@@ -171,10 +171,7 @@ const loadMonthlySettlements = async (_year?: number, _month?: number) => {
 
   serverErrors.value = new Array<string>();
 
-  return MonthlySettlementControllerHandler.getMonthlySettlementForEdit(
-    _year,
-    _month,
-  )
+  return MonthlySettlementService.getMonthlySettlementForEdit(_year, _month)
     .then((transporter: MonthlySettlementEditTransporter) => {
       const monthlySettlements = new Array<MonthlySettlementFormData>();
 
@@ -230,7 +227,7 @@ const upsertMonthlySettlement = handleSubmit(() => {
     monthlySettlementsNoCredit.value,
   );
 
-  MonthlySettlementControllerHandler.upsertMonthlySettlement(monthlySettlements)
+  MonthlySettlementService.upsertMonthlySettlement(monthlySettlements)
     .then(() => {
       modalComponent.value._hide();
       emit("monthlySettlementUpserted", year.value, month.value);

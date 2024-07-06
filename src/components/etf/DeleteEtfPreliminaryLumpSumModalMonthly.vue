@@ -59,7 +59,7 @@ import { getMonthName } from "@/tools/views/MonthName";
 import type { Etf } from "@/model/etf/Etf";
 import type { EtfPreliminaryLumpSum } from "@/model/etf/EtfPreliminaryLumpSum";
 
-import CrudEtfPreliminaryLumpSumControllerHandler from "@/handler/CrudEtfPreliminaryLumpSumControllerHandler";
+import CrudEtfPreliminaryLumpSumService from "@/service/CrudEtfPreliminaryLumpSumService";
 
 type RowData = {
   month: string;
@@ -132,7 +132,7 @@ const _show = (_etfs: Array<Etf>, _mep: EtfPreliminaryLumpSum) => {
 const deleteEtfPreliminaryLumpSum = () => {
   serverErrors.value = new Array<string>();
 
-  CrudEtfPreliminaryLumpSumControllerHandler.deleteEtfPreliminaryLumpSum(
+  CrudEtfPreliminaryLumpSumService.deleteEtfPreliminaryLumpSum(
     etfPreliminaryLumpSum.value.id,
   )
     .then(() => {

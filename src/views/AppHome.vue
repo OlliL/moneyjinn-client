@@ -58,7 +58,7 @@ import EditMonthlySettlementModalVue from "@/components/monthlysettlement/EditMo
 
 import router, { Routes } from "@/router";
 
-import EventControllerHandler from "@/handler/EventControllerHandler";
+import EventService from "@/service/EventService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import DivError from "@/components/DivError.vue";
 
@@ -73,7 +73,7 @@ const dataLoaded = ref(false);
 
 const loadData = () => {
   dataLoaded.value = false;
-  EventControllerHandler.showEventList()
+  EventService.showEventList()
     .then((events) => {
       if (
         events.numberOfImportedMoneyflows &&
