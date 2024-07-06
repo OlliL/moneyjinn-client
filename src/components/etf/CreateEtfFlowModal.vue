@@ -101,7 +101,7 @@ import type { Etf } from "@/model/etf/Etf";
 import type { EtfFlow } from "@/model/etf/EtfFlow";
 import type { SelectBoxValue } from "@/model/SelectBoxValue";
 
-import CrudEtfFlowControllerHandler from "@/handler/CrudEtfFlowControllerHandler";
+import CrudEtfFlowService from "@/service/CrudEtfFlowService";
 
 const { t } = useI18n();
 
@@ -187,7 +187,7 @@ const createEtfFlow = handleSubmit(() => {
 
     if (etfFlow.value.etfflowid > 0) {
       //update
-      CrudEtfFlowControllerHandler.updateEtfFlow(etfFlow.value)
+      CrudEtfFlowService.updateEtfFlow(etfFlow.value)
         .then(() => {
           modalComponent.value._hide();
           emit("etfFlowUpdated", etfFlow.value);
@@ -197,7 +197,7 @@ const createEtfFlow = handleSubmit(() => {
         });
     } else {
       //create
-      CrudEtfFlowControllerHandler.createEtfFlow(etfFlow.value)
+      CrudEtfFlowService.createEtfFlow(etfFlow.value)
         .then((_etfFlow) => {
           etfFlow.value = _etfFlow;
           modalComponent.value._hide();

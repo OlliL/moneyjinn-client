@@ -65,7 +65,7 @@ import DivError from "../DivError.vue";
 import type { Contractpartner } from "@/model/contractpartner/Contractpartner";
 import type { ContractpartnerAccount } from "@/model/contractpartneraccount/ContractpartnerAccount";
 
-import ContractpartnerAccountControllerHandler from "@/handler/ContractpartnerAccountControllerHandler";
+import ContractpartnerAccountService from "@/service/ContractpartnerAccountService";
 
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 
@@ -80,9 +80,7 @@ const deleteModal = ref();
 
 const loadData = () => {
   dataLoaded.value = false;
-  ContractpartnerAccountControllerHandler.fetchAllContractpartnerAccount(
-    mcp.value.id,
-  )
+  ContractpartnerAccountService.fetchAllContractpartnerAccount(mcp.value.id)
     .then((mcaArray: Array<ContractpartnerAccount>) => {
       contractpartnerAccount.value = mcaArray;
       dataLoaded.value = true;

@@ -1,4 +1,4 @@
-import AbstractControllerHandler from "@/handler/AbstractControllerHandler";
+import AbstractService from "@/service/AbstractService";
 import {
   mapImportedMoneyflowToTransport,
   mapImportedMoneyflowTransportToModel,
@@ -10,7 +10,7 @@ import {
   type ImportImportedMoneyflowRequest,
 } from "@/api";
 
-class ImportedMoneyflowControllerHandler extends AbstractControllerHandler {
+class ImportedMoneyflowService extends AbstractService {
   private api: ImportedMoneyflowControllerApi;
 
   public constructor() {
@@ -53,4 +53,4 @@ class ImportedMoneyflowControllerHandler extends AbstractControllerHandler {
   }
 }
 
-export default new ImportedMoneyflowControllerHandler();
+export default new ImportedMoneyflowService();

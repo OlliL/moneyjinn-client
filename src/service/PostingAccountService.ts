@@ -3,14 +3,14 @@ import {
   type CreatePostingAccountRequest,
   type UpdatePostingAccountRequest,
 } from "@/api";
-import AbstractControllerHandler from "@/handler/AbstractControllerHandler";
+import AbstractService from "@/service/AbstractService";
 import type { PostingAccount } from "@/model/postingaccount/PostingAccount";
 import {
   mapPostingAccountToTransport,
   mapPostingAccountTransportToModel,
 } from "./mapper/PostingAccountTransportMapper";
 
-class PostingAccountControllerHandler extends AbstractControllerHandler {
+class PostingAccountService extends AbstractService {
   private api: PostingAccountControllerApi;
 
   public constructor() {
@@ -64,4 +64,4 @@ class PostingAccountControllerHandler extends AbstractControllerHandler {
   }
 }
 
-export default new PostingAccountControllerHandler();
+export default new PostingAccountService();

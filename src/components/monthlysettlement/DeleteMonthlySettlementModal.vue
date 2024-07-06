@@ -35,7 +35,7 @@ import ShowMonthlySettlementVue from "./ShowMonthlySettlement.vue";
 import { getMonthName } from "@/tools/views/MonthName";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 
-import MonthlySettlementControllerHandler from "@/handler/MonthlySettlementControllerHandler";
+import MonthlySettlementService from "@/service/MonthlySettlementService";
 
 const serverErrors = ref(new Array<string>());
 
@@ -56,7 +56,7 @@ const _show = (_year: number, _month: number) => {
 const deleteMonthlySettlement = () => {
   serverErrors.value = new Array<string>();
 
-  MonthlySettlementControllerHandler.deleteMonthlySettlement(
+  MonthlySettlementService.deleteMonthlySettlement(
     year.value,
     month.value,
   )

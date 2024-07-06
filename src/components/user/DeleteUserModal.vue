@@ -47,7 +47,7 @@ import { handleBackendError } from "@/tools/views/HandleBackendError";
 import type { User } from "@/model/user/User";
 import { userRoleNames } from "@/model/user/UserRole";
 
-import UserControllerHandler from "@/handler/UserControllerHandler";
+import UserService from "@/service/UserService";
 
 const user = ref({} as User);
 const serverErrors = ref(new Array<string>());
@@ -67,7 +67,7 @@ const role = computed(() => {
 const deleteUser = () => {
   serverErrors.value = new Array<string>();
 
-  UserControllerHandler.deleteUser(user.value.id)
+  UserService.deleteUser(user.value.id)
     .then(() => {
       modalComponent.value._hide();
       emit("userDeleted", user.value);

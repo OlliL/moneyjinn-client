@@ -1,4 +1,4 @@
-import AbstractControllerHandler from "@/handler/AbstractControllerHandler";
+import AbstractService from "@/service/AbstractService";
 import type { MonthlySettlement } from "@/model/monthlysettlement/MonthlySettlement";
 import type { AvailableMonth } from "@/model/monthlysettlement/AvailableMonth";
 import type { MonthlySettlementEditTransporter } from "@/model/monthlysettlement/MonthlySettlementEditTransporter";
@@ -14,7 +14,7 @@ import {
 } from "@/api";
 import type { AxiosResponse } from "axios";
 
-class MonthlySettlementControllerHandler extends AbstractControllerHandler {
+class MonthlySettlementService extends AbstractService {
   private api: MonthlySettlementControllerApi;
 
   public constructor() {
@@ -115,4 +115,4 @@ class MonthlySettlementControllerHandler extends AbstractControllerHandler {
   }
 }
 
-export default new MonthlySettlementControllerHandler();
+export default new MonthlySettlementService();

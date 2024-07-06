@@ -129,7 +129,7 @@ import { globErr } from "@/tools/views/ZodUtil";
 import type { SelectBoxValue } from "@/model/SelectBoxValue";
 import type { TrendsParameter } from "@/model/report/TrendsParameter";
 
-import ReportControllerHandler from "@/handler/ReportControllerHandler";
+import ReportService from "@/service/ReportService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 
 const { t } = useI18n();
@@ -296,7 +296,7 @@ const loadData = () => {
   serverErrors.value = new Array<string>();
 
   dataLoaded.value = false;
-  ReportControllerHandler.showTrendsForm()
+  ReportService.showTrendsForm()
     .then((trendsTransporter) => {
       const minDate = trendsTransporter.startDate;
       const maxDate = trendsTransporter.endDate;
@@ -327,7 +327,7 @@ const showTrends = handleSubmit(() => {
     endDate: _endDate,
     selectedCapitalsourceIds: capitalsourceIds.value,
   };
-  ReportControllerHandler.showTrendsGraph(trendsParameter)
+  ReportService.showTrendsGraph(trendsParameter)
     .then((trends) => {
       if (trends && trends.trendsSettled && trends.trendsSettled.length > 0) {
         const labelsSettled: Array<string> = trends.trendsSettled.map(

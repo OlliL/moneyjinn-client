@@ -148,8 +148,8 @@ import type { User } from "@/model/user/User";
 import { UserRole, userRoleValues } from "@/model/user/UserRole";
 import type { SelectBoxValue } from "@/model/SelectBoxValue";
 
-import GroupControllerHandler from "@/handler/GroupControllerHandler";
-import UserControllerHandler from "@/handler/UserControllerHandler";
+import GroupService from "@/service/GroupService";
+import UserService from "@/service/UserService";
 
 const { t } = useI18n();
 
@@ -223,7 +223,7 @@ const maxWidth = computed(() => {
 });
 
 const resetForm = () => {
-  GroupControllerHandler.fetchAllGroup().then((_groups) => {
+  GroupService.fetchAllGroup().then((_groups) => {
     userGroups.value = new Array<UserGroup>();
     password1.value = "";
     password2.value = "";
@@ -242,7 +242,7 @@ const resetForm = () => {
           groupsById.set(group.id, group);
         }
 
-        UserControllerHandler.getAllAccessRelations(user.value.id).then(
+        UserService.getAllAccessRelations(user.value.id).then(
           (accessRelations) => {
             accessRelations.forEach((mar) => {
               userGroups.value.push({
@@ -283,7 +283,7 @@ const createUser = handleSubmit(() => {
         refId: user.value.groupId,
         validFrom: validFrom.value,
       };
-      UserControllerHandler.updateUser(user.value, mar)
+      UserService.updateUser(user.value, mar)
         .then(() => {
           modalComponent.value._hide();
           emit("userUpdated", user.value);
@@ -296,7 +296,7 @@ const createUser = handleSubmit(() => {
     //create
     user.value.userPassword = password1.value;
 
-    UserControllerHandler.createUser(user.value)
+    UserService.createUser(user.value)
       .then((_user) => {
         user.value = _user;
         modalComponent.value._hide();

@@ -1,19 +1,19 @@
 import { StoreService } from "@/stores/StoreService";
 import { Client, type StompSubscription } from "@stomp/stompjs";
-import { HeaderUtil } from "./util/HeaderUtil";
-import { webServerHost } from "../config/WebServerConfiguration";
+import { HeaderUtil } from "../service/util/HeaderUtil";
+import { webServerHost } from "./WebServerConfiguration";
 
-export class WebSocketHandler {
-  private static instance: WebSocketHandler;
+export class WebSocketSingleton {
+  private static instance: WebSocketSingleton;
   private stompClient: Client = {} as Client;
 
   private constructor() {}
 
-  public static getInstance(): WebSocketHandler {
-    if (!WebSocketHandler.instance) {
-      WebSocketHandler.instance = new WebSocketHandler();
+  public static getInstance(): WebSocketSingleton {
+    if (!WebSocketSingleton.instance) {
+      WebSocketSingleton.instance = new WebSocketSingleton();
     }
-    return WebSocketHandler.instance;
+    return WebSocketSingleton.instance;
   }
 
   public async connectStompClient() {

@@ -140,7 +140,7 @@ import { capitalsourceImportValues } from "@/model/capitalsource/CapitalsourceIm
 import { capitalsourceStateValues } from "@/model/capitalsource/CapitalsourceState";
 import { capitalsourceTypeValues } from "@/model/capitalsource/CapitalsourceType";
 
-import CapitalsourceControllerHandler from "@/handler/CapitalsourceControllerHandler";
+import CapitalsourceService from "@/service/CapitalsourceService";
 
 const { t } = useI18n();
 
@@ -218,7 +218,7 @@ const createCapitalsource = handleSubmit(() => {
 
   if (mcs.value.id > 0) {
     //update
-    CapitalsourceControllerHandler.updateCapitalsource(mcs.value)
+    CapitalsourceService.updateCapitalsource(mcs.value)
       .then(() => {
         modalComponent.value._hide();
         emit("capitalsourceUpdated", mcs.value);
@@ -228,7 +228,7 @@ const createCapitalsource = handleSubmit(() => {
       });
   } else {
     //create
-    CapitalsourceControllerHandler.createCapitalsource(mcs.value)
+    CapitalsourceService.createCapitalsource(mcs.value)
       .then((_mcs) => {
         mcs.value = _mcs;
         modalComponent.value._hide();

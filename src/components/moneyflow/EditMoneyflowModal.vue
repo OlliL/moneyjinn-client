@@ -71,7 +71,7 @@ import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 import { MoneyflowReceiptType } from "@/model/moneyflow/MoneyflowReceiptType";
 import type { ImportedMoneyflowReceipt } from "@/model/moneyflow/ImportedMoneyflowReceipt";
 
-import MoneyflowReceiptControllerHandler from "@/handler/MoneyflowReceiptControllerHandler";
+import MoneyflowReceiptService from "@/service/MoneyflowReceiptService";
 
 const serverErrors = ref(new Array<string>());
 
@@ -114,7 +114,7 @@ const updateMoneyflow = handleSubmit(() => {
 });
 
 const loadReceipt = (id: number) => {
-  MoneyflowReceiptControllerHandler.fetchReceipt(id).then((response) => {
+  MoneyflowReceiptService.fetchReceipt(id).then((response) => {
     processReceipt(response.receiptType, response.receipt);
   });
 };
@@ -144,7 +144,7 @@ const processReceipt = (receiptType: MoneyflowReceiptType, receipt: string) => {
 };
 
 const deleteMoneyflowReceipt = () => {
-  MoneyflowReceiptControllerHandler.deleteMoneyflowReceipt(mmf.value.id)
+  MoneyflowReceiptService.deleteMoneyflowReceipt(mmf.value.id)
     .then(() => {
       emit("moneyflowReceiptDeleted", mmf.value.id);
       modalComponent.value._hide();

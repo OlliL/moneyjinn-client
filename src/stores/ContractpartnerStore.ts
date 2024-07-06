@@ -1,6 +1,6 @@
-import ContractpartnerControllerHandler from "@/handler/ContractpartnerControllerHandler";
-import { mapContractpartnerTransportToModel } from "@/handler/mapper/ContractpartnerTransportMapper";
-import { WebSocketHandler } from "@/handler/WebSocketHandler";
+import ContractpartnerService from "@/service/ContractpartnerService";
+import { mapContractpartnerTransportToModel } from "@/service/mapper/ContractpartnerTransportMapper";
+import { WebSocketSingleton } from "@/config/WebSocketSingleton";
 import type { Contractpartner } from "@/model/contractpartner/Contractpartner";
 import type { ContractpartnerChangedEventTransport } from "@/model/wsevent/ContractpartnerChangedEventTransport";
 import type { SelectBoxValue } from "@/model/SelectBoxValue";
@@ -13,7 +13,7 @@ export const useContractpartnerStore = defineStore("contractpartner", {
   getters: {},
   actions: {
     initContractpartnerStore() {
-      return ContractpartnerControllerHandler.fetchAllContractpartner().then(
+      return ContractpartnerService.fetchAllContractpartner().then(
         (contractpartnerArray) => {
           this.contractpartner = contractpartnerArray;
           this.contractpartner.sort(this.compareContractpartnerByName);
@@ -21,7 +21,7 @@ export const useContractpartnerStore = defineStore("contractpartner", {
       );
     },
     subscribeToWebsocket() {
-      WebSocketHandler.getInstance().subscribe(
+      WebSocketSingleton.getInstance().subscribe(
         "/topic/contractpartnerChanged",
         this.subscribeCallback,
       );

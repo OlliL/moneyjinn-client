@@ -52,7 +52,7 @@ import { handleBackendError } from "@/tools/views/HandleBackendError";
 import type { Etf } from "@/model/etf/Etf";
 import type { EtfPreliminaryLumpSum } from "@/model/etf/EtfPreliminaryLumpSum";
 
-import CrudEtfPreliminaryLumpSumControllerHandler from "@/handler/CrudEtfPreliminaryLumpSumControllerHandler";
+import CrudEtfPreliminaryLumpSumService from "@/service/CrudEtfPreliminaryLumpSumService";
 
 const serverErrors = ref(new Array<string>());
 
@@ -76,7 +76,7 @@ const _show = (_etfs: Array<Etf>, _mep: EtfPreliminaryLumpSum) => {
 const deleteEtfPreliminaryLumpSum = () => {
   serverErrors.value = new Array<string>();
 
-  CrudEtfPreliminaryLumpSumControllerHandler.deleteEtfPreliminaryLumpSum(
+  CrudEtfPreliminaryLumpSumService.deleteEtfPreliminaryLumpSum(
     etfPreliminaryLumpSum.value.id,
   )
     .then(() => {

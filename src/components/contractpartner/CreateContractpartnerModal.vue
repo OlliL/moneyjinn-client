@@ -130,7 +130,7 @@ import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { globErr } from "@/tools/views/ZodUtil";
 
 import type { Contractpartner } from "@/model/contractpartner/Contractpartner";
-import ContractpartnerControllerHandler from "@/handler/ContractpartnerControllerHandler";
+import ContractpartnerService from "@/service/ContractpartnerService";
 import SelectPostingAccount from "../postingaccount/SelectPostingAccount.vue";
 
 const { t } = useI18n();
@@ -205,7 +205,7 @@ const createContractpartner = handleSubmit(() => {
 
   if (mcp.value.id > 0) {
     //update
-    ContractpartnerControllerHandler.updateContractpartner(mcp.value)
+    ContractpartnerService.updateContractpartner(mcp.value)
       .then(() => {
         modalComponent.value._hide();
         emit("contractpartnerUpdated", mcp.value);
@@ -215,7 +215,7 @@ const createContractpartner = handleSubmit(() => {
       });
   } else {
     //create
-    ContractpartnerControllerHandler.createContractpartner(mcp.value)
+    ContractpartnerService.createContractpartner(mcp.value)
       .then((contractpartner) => {
         mcp.value = contractpartner;
         modalComponent.value._hide();

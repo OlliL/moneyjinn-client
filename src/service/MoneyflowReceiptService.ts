@@ -1,10 +1,10 @@
 import { MoneyflowReceiptControllerApi } from "@/api";
-import AbstractControllerHandler from "@/handler/AbstractControllerHandler";
+import AbstractService from "@/service/AbstractService";
 import { ErrorCode, getErrorMessage } from "@/model/ErrorCode";
 import type { MoneyflowReceipt } from "@/model/moneyflow/MoneyflowReceipt";
 import { MoneyflowReceiptType } from "@/model/moneyflow/MoneyflowReceiptType";
 
-class MoneyflowReceiptControllerHandler extends AbstractControllerHandler {
+class MoneyflowReceiptService extends AbstractService {
   private api: MoneyflowReceiptControllerApi;
 
   public constructor() {
@@ -47,4 +47,4 @@ class MoneyflowReceiptControllerHandler extends AbstractControllerHandler {
   }
 }
 
-export default new MoneyflowReceiptControllerHandler();
+export default new MoneyflowReceiptService();

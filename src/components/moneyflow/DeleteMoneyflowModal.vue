@@ -56,7 +56,7 @@ import SpanDate from "../SpanDate.vue";
 
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 
-import MoneyflowControllerHandler from "@/handler/MoneyflowControllerHandler";
+import MoneyflowService from "@/service/MoneyflowService";
 import DivError from "../DivError.vue";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 
@@ -75,7 +75,7 @@ const _show = (_mmf: Moneyflow) => {
 const deleteMoneyflow = () => {
   serverErrors.value = new Array<string>();
 
-  MoneyflowControllerHandler.deleteMoneyflow(mmf.value.id)
+  MoneyflowService.deleteMoneyflow(mmf.value.id)
     .then(() => {
       modalComponent.value._hide();
       emit("moneyflowDeleted", mmf.value);

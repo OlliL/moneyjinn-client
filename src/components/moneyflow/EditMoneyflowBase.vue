@@ -202,8 +202,8 @@ import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 import type { MoneyflowSplitEntry } from "@/model/moneyflow/MoneyflowSplitEntry";
 import type { PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
 
-import MoneyflowControllerHandler from "@/handler/MoneyflowControllerHandler";
-import ImportedMoneyflowControllerHandler from "@/handler/ImportedMoneyflowControllerHandler";
+import MoneyflowService from "@/service/MoneyflowService";
+import ImportedMoneyflowService from "@/service/ImportedMoneyflowService";
 import type { Contractpartner } from "@/model/contractpartner/Contractpartner";
 
 const { t } = useI18n();
@@ -643,7 +643,7 @@ const importImportedMoneyflow = async (
       bankCodeCapitalsource: mim.bankCodeCapitalsource,
     };
 
-    return ImportedMoneyflowControllerHandler.importImportedMoneyflow(
+    return ImportedMoneyflowService.importImportedMoneyflow(
       importedMoneyflow,
     )
       .then(() => {
@@ -658,7 +658,7 @@ const importImportedMoneyflow = async (
   return Promise.resolve(false);
 };
 const deleteImportedMoneyflow = async (id: number): Promise<boolean> => {
-  return ImportedMoneyflowControllerHandler.deleteImportedMoneyflow(id)
+  return ImportedMoneyflowService.deleteImportedMoneyflow(id)
     .then(() => {
       return true;
     })
@@ -669,7 +669,7 @@ const deleteImportedMoneyflow = async (id: number): Promise<boolean> => {
 };
 const createMoneyflow = async (): Promise<boolean> => {
   if (prepareServerCall()) {
-    return MoneyflowControllerHandler.createMoneyflow(
+    return MoneyflowService.createMoneyflow(
       mmf.value,
       preDefMoneyflowId.value,
       saveAsPreDefMoneyflow.value,
@@ -704,7 +704,7 @@ const updateMoneyflow = async (): Promise<Moneyflow | undefined> => {
       (mseId) => !updateMseIds.includes(mseId),
     );
 
-    return MoneyflowControllerHandler.updateMoneyflow(
+    return MoneyflowService.updateMoneyflow(
       mmf.value,
       createMses,
       updateMses,

@@ -74,7 +74,7 @@ import { handleBackendError } from "@/tools/views/HandleBackendError";
 
 import type { Etf } from "@/model/etf/Etf";
 
-import CrudEtfControllerHandler from "@/handler/CrudEtfControllerHandler";
+import CrudEtfService from "@/service/CrudEtfService";
 import SpanAmount from "../SpanAmount.vue";
 import { formatNumber } from "@/tools/views/FormatNumber";
 
@@ -105,7 +105,7 @@ const _show = (_etf: Etf) => {
 const deleteEtf = () => {
   serverErrors.value = new Array<string>();
 
-  CrudEtfControllerHandler.deleteEtf(etf.value.id)
+  CrudEtfService.deleteEtf(etf.value.id)
     .then(() => {
       modalComponent.value._hide();
       emit("etfDeleted", etf.value);

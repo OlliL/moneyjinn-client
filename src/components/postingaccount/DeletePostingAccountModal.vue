@@ -37,7 +37,7 @@ import { handleBackendError } from "@/tools/views/HandleBackendError";
 
 import type { PostingAccount } from "@/model/postingaccount/PostingAccount";
 
-import PostingAccountControllerHandler from "@/handler/PostingAccountControllerHandler";
+import PostingAccountService from "@/service/PostingAccountService";
 
 const serverErrors = ref(new Array<string>());
 
@@ -54,7 +54,7 @@ const _show = (_mpa: PostingAccount) => {
 const deletePostingAccount = () => {
   serverErrors.value = new Array<string>();
 
-  PostingAccountControllerHandler.deletePostingAccount(mpa.value.id)
+  PostingAccountService.deletePostingAccount(mpa.value.id)
     .then(() => {
       modalComponent.value._hide();
       emit("postingAccountDeleted", mpa.value);

@@ -33,7 +33,7 @@ import { handleBackendError } from "@/tools/views/HandleBackendError";
 
 import type { Group } from "@/model/group/Group";
 
-import GroupControllerHandler from "@/handler/GroupControllerHandler";
+import GroupService from "@/service/GroupService";
 
 const serverErrors = ref(new Array<string>());
 
@@ -50,7 +50,7 @@ const _show = (_group: Group) => {
 const deleteGroup = () => {
   serverErrors.value = new Array<string>();
 
-  GroupControllerHandler.deleteGroup(group.value.id)
+  GroupService.deleteGroup(group.value.id)
     .then(() => {
       modalComponent.value._hide();
       emit("groupDeleted", group.value);

@@ -158,8 +158,8 @@ import { toFixed } from "@/tools/math";
 import type { ImportedMoneyflowReceipt } from "@/model/moneyflow/ImportedMoneyflowReceipt";
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 
-import ImportedMoneyflowReceiptControllerHandler from "@/handler/ImportedMoneyflowReceiptControllerHandler";
-import MoneyflowControllerHandler from "@/handler/MoneyflowControllerHandler";
+import ImportedMoneyflowReceiptService from "@/service/ImportedMoneyflowReceiptService";
+import MoneyflowService from "@/service/MoneyflowService";
 
 const { t } = useI18n();
 
@@ -204,7 +204,7 @@ const emitEditMoneyflow = (id: number) => {
 const searchMoneyflows = handleSubmit(() => {
   serverErrors.value = new Array<string>();
   searchExecuted.value = false;
-  MoneyflowControllerHandler.searchMoneyflowsByAmount(
+  MoneyflowService.searchMoneyflowsByAmount(
     amount.value,
     startDate.value,
     endDate.value,
@@ -258,7 +258,7 @@ const moneyflowSelected = computed(() => {
 const importReceipt = () => {
   serverErrors.value = new Array<string>();
 
-  ImportedMoneyflowReceiptControllerHandler.importImportedMoneyflowReceipt(
+  ImportedMoneyflowReceiptService.importImportedMoneyflowReceipt(
     props.receipt.id,
     selectedMoneyflowId.value,
   )
@@ -273,7 +273,7 @@ const importReceipt = () => {
 const deleteReceipt = () => {
   serverErrors.value = new Array<string>();
 
-  ImportedMoneyflowReceiptControllerHandler.deleteImportedMoneyflowReceiptById(
+  ImportedMoneyflowReceiptService.deleteImportedMoneyflowReceiptById(
     props.receipt.id,
   )
     .then(() => {

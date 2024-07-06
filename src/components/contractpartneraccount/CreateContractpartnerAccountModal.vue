@@ -58,7 +58,7 @@ import { globErr } from "@/tools/views/ZodUtil";
 
 import type { ContractpartnerAccount } from "@/model/contractpartneraccount/ContractpartnerAccount";
 
-import ContractpartnerAccountControllerHandler from "@/handler/ContractpartnerAccountControllerHandler";
+import ContractpartnerAccountService from "@/service/ContractpartnerAccountService";
 
 const { t } = useI18n();
 
@@ -125,7 +125,7 @@ const createContractpartnerAccount = handleSubmit(() => {
 
   if (mca.value.id > 0) {
     //update
-    ContractpartnerAccountControllerHandler.updateContractpartnerAccount(
+    ContractpartnerAccountService.updateContractpartnerAccount(
       mca.value,
     )
       .then(() => {
@@ -137,7 +137,7 @@ const createContractpartnerAccount = handleSubmit(() => {
       });
   } else {
     //create
-    ContractpartnerAccountControllerHandler.createContractpartnerAccount(
+    ContractpartnerAccountService.createContractpartnerAccount(
       mca.value,
     )
       .then((_mca) => {

@@ -1,4 +1,4 @@
-import AbstractControllerHandler from "@/handler/AbstractControllerHandler";
+import AbstractService from "@/service/AbstractService";
 import type { EtfPreliminaryLumpSum } from "@/model/etf/EtfPreliminaryLumpSum";
 import {
   mapEtfPreliminaryLumpSumModelToTransport,
@@ -6,7 +6,7 @@ import {
 } from "./mapper/EtfPreliminaryLumpSumTransportMapper";
 import { CrudEtfPreliminaryLumpSumControllerApi } from "@/api";
 
-class EtfPreliminaryLumpSumControllerHandler extends AbstractControllerHandler {
+class EtfPreliminaryLumpSumService extends AbstractService {
   private api: CrudEtfPreliminaryLumpSumControllerApi;
 
   public constructor() {
@@ -51,4 +51,4 @@ class EtfPreliminaryLumpSumControllerHandler extends AbstractControllerHandler {
   }
 }
 
-export default new EtfPreliminaryLumpSumControllerHandler();
+export default new EtfPreliminaryLumpSumService();

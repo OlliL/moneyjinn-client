@@ -197,8 +197,8 @@ import type { EtfFlow } from "@/model/etf/EtfFlow";
 import type { EtfSummary } from "@/model/etf/EtfSummary";
 import type { SelectBoxValue } from "@/model/SelectBoxValue";
 
-import EtfControllerHandler from "@/handler/EtfControllerHandler";
-import CrudEtfControllerHandler from "@/handler/CrudEtfControllerHandler";
+import EtfService from "@/service/EtfService";
+import CrudEtfService from "@/service/CrudEtfService";
 import DivError from "@/components/DivError.vue";
 import ListEtfDepotSummary from "@/components/etf/ListEtfDepotSummary.vue";
 
@@ -282,7 +282,7 @@ const loadEtfs = (etfId?: number) => {
   serverErrors.value = new Array<string>();
   etfsLoaded.value = false;
   etfsSelectValues.value = new Array<SelectBoxValue>();
-  CrudEtfControllerHandler.fetchAllEtf()
+  CrudEtfService.fetchAllEtf()
     .then((response) => {
       etfs.value = response;
       let favoriteEtfId;
@@ -310,7 +310,7 @@ const loadData = (etfId: number) => {
   etfFlows.value = new Array<EtfFlow>();
   etfEffectiveFlows.value = new Array<EtfFlow>();
 
-  EtfControllerHandler.listEtfFlowsById(etfId)
+  EtfService.listEtfFlowsById(etfId)
     .then((etfDepot) => {
       handleServerResponse(etfDepot, etfId);
       routerPush();

@@ -27,9 +27,9 @@ import type { Group } from "@/model/group/Group";
 import type { AccessRelation } from "@/model/user/AccessRelation";
 import type { User } from "@/model/user/User";
 
-import AbstractControllerHandler from "@/handler/AbstractControllerHandler";
+import AbstractService from "@/service/AbstractService";
 
-class UserControllerHandler extends AbstractControllerHandler {
+class UserService extends AbstractService {
   private api: UserControllerApi;
 
   public constructor() {
@@ -161,4 +161,4 @@ class UserControllerHandler extends AbstractControllerHandler {
   }
 }
 
-export default new UserControllerHandler();
+export default new UserService();

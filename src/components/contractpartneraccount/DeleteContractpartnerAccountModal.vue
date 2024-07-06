@@ -45,7 +45,7 @@ import { handleBackendError } from "@/tools/views/HandleBackendError";
 
 import type { ContractpartnerAccount } from "@/model/contractpartneraccount/ContractpartnerAccount";
 
-import ContractpartnerAccountControllerHandler from "@/handler/ContractpartnerAccountControllerHandler";
+import ContractpartnerAccountService from "@/service/ContractpartnerAccountService";
 
 const serverErrors = ref(new Array<string>());
 
@@ -62,7 +62,7 @@ const _show = (_mca: ContractpartnerAccount) => {
 const deleteContractpartnerAccount = () => {
   serverErrors.value = new Array<string>();
 
-  ContractpartnerAccountControllerHandler.deleteContractpartnerAccount(
+  ContractpartnerAccountService.deleteContractpartnerAccount(
     mca.value.id,
   )
     .then(() => {

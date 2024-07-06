@@ -70,7 +70,7 @@ import { handleBackendError } from "@/tools/views/HandleBackendError";
 
 import type { Contractpartner } from "@/model/contractpartner/Contractpartner";
 
-import ContractpartnerControllerHandler from "@/handler/ContractpartnerControllerHandler";
+import ContractpartnerService from "@/service/ContractpartnerService";
 
 const serverErrors = ref(new Array<string>());
 
@@ -87,7 +87,7 @@ const _show = (_mcp: Contractpartner) => {
 const deleteContractpartner = () => {
   serverErrors.value = new Array<string>();
 
-  ContractpartnerControllerHandler.deleteContractpartner(mcp.value.id)
+  ContractpartnerService.deleteContractpartner(mcp.value.id)
     .then(() => {
       modalComponent.value._hide();
       emit("contractpartnerDeleted", mcp.value);

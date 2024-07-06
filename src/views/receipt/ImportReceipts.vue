@@ -54,8 +54,8 @@ import { handleBackendError } from "@/tools/views/HandleBackendError";
 
 import type { ImportedMoneyflowReceipt } from "@/model/moneyflow/ImportedMoneyflowReceipt";
 
-import ImportedMoneyflowReceiptControllerHandler from "@/handler/ImportedMoneyflowReceiptControllerHandler";
-import MoneyflowControllerHandler from "@/handler/MoneyflowControllerHandler";
+import ImportedMoneyflowReceiptService from "@/service/ImportedMoneyflowReceiptService";
+import MoneyflowService from "@/service/MoneyflowService";
 
 const serverErrors = ref(new Array<string>());
 
@@ -73,7 +73,7 @@ onMounted(() => {
 });
 
 const loadData = () => {
-  ImportedMoneyflowReceiptControllerHandler.showImportImportedMoneyflowReceipts()
+  ImportedMoneyflowReceiptService.showImportImportedMoneyflowReceipts()
     .then((imr) => {
       importedMoneyflowReceipts.value = imr;
     })
@@ -85,13 +85,13 @@ const loadData = () => {
 };
 
 const deleteMoneyflow = (id: number) => {
-  MoneyflowControllerHandler.fetchMoneyflow(id).then((mmf) => {
+  MoneyflowService.fetchMoneyflow(id).then((mmf) => {
     (deleteModal.value as typeof DeleteMoneyflowModalVue)._show(mmf);
   });
 };
 
 const editMoneyflow = (id: number, receipt: ImportedMoneyflowReceipt) => {
-  MoneyflowControllerHandler.fetchMoneyflow(id).then((mmf) => {
+  MoneyflowService.fetchMoneyflow(id).then((mmf) => {
     (editModal.value as typeof EditMoneyflowModalVue)._show(mmf, receipt);
   });
 };
@@ -126,7 +126,7 @@ const uploadReceipts = handleSubmit(async () => {
     }
   }
   if (receipts.length > 0) {
-    ImportedMoneyflowReceiptControllerHandler.createImportedMoneyflowReceipts(
+    ImportedMoneyflowReceiptService.createImportedMoneyflowReceipts(
       receipts,
     )
       .then(() => {

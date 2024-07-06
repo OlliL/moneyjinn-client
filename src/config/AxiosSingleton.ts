@@ -10,7 +10,7 @@ import {
   type TokenRefreshRequest,
 } from "axios-jwt";
 import type { Token } from "axios-jwt/dist/src/Token";
-import { mapValidationItemTransportToModel } from "../handler/mapper/ValidationItemTransportMapper";
+import { mapValidationItemTransportToModel } from "../service/mapper/ValidationItemTransportMapper";
 import { webServerHost } from "./WebServerConfiguration";
 import I18nSingleton from "./I18nSingleton";
 

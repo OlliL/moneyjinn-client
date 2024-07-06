@@ -65,7 +65,7 @@ import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { CapitalsourceType } from "@/model/capitalsource/CapitalsourceType";
 import type { MonthlySettlement } from "@/model/monthlysettlement/MonthlySettlement";
 
-import MonthlySettlementControllerHandler from "@/handler/MonthlySettlementControllerHandler";
+import MonthlySettlementService from "@/service/MonthlySettlementService";
 
 const serverErrors = ref(new Array<string>());
 
@@ -90,7 +90,7 @@ const loadMonthlySettlements = (year: number, month: number) => {
   serverErrors.value = new Array<string>();
 
   dataLoaded.value = false;
-  MonthlySettlementControllerHandler.getMonthlySettlementList(year, month)
+  MonthlySettlementService.getMonthlySettlementList(year, month)
     .then((monthlySettlements: Array<MonthlySettlement>) => {
       monthlySettlementsCredit.value = new Array<MonthlySettlement>();
       monthlySettlementsNoCredit.value = new Array<MonthlySettlement>();

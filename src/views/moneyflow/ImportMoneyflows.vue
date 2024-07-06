@@ -98,7 +98,7 @@ import EditMoneyflowBase from "@/components/moneyflow/EditMoneyflowBase.vue";
 
 import type { ImportedMoneyflow } from "@/model/moneyflow/ImportedMoneyflow";
 
-import ImportedMoneyflowControllerHandler from "@/handler/ImportedMoneyflowControllerHandler";
+import ImportedMoneyflowService from "@/service/ImportedMoneyflowService";
 import DivError from "@/components/DivError.vue";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 
@@ -110,7 +110,7 @@ const dataLoaded = ref(false);
 
 onMounted(() => {
   dataLoaded.value = false;
-  ImportedMoneyflowControllerHandler.showAddImportedMoneyflows()
+  ImportedMoneyflowService.showAddImportedMoneyflows()
     .then((imf) => {
       importMoneyflows.value = imf;
       dataLoaded.value = true;

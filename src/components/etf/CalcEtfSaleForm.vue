@@ -136,7 +136,7 @@ import { ref, watch, type PropType } from "vue";
 import { useForm } from "vee-validate";
 import { amountSchema } from "@/tools/views/ZodUtil";
 import { useI18n } from "vue-i18n";
-import EtfControllerHandler from "@/handler/EtfControllerHandler";
+import EtfService from "@/service/EtfService";
 import type { EtfSalesCalculation } from "@/model/etf/EtfSalesCalculation";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import CalcEtfSaleResult from "./CalcEtfSaleResult.vue";
@@ -189,7 +189,7 @@ const { handleSubmit } = useForm();
 const calculateEtfSale = handleSubmit(() => {
   serverErrors.value = new Array<string>();
 
-  EtfControllerHandler.calcEtfSale(
+  EtfService.calcEtfSale(
     props.etf.id,
     calcEtfSalePieces.value,
     calcEtfBidPrice.value,

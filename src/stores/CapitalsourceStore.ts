@@ -1,6 +1,6 @@
-import CapitalsourceControllerHandler from "@/handler/CapitalsourceControllerHandler";
-import { mapCapitalsourceTransportToModel } from "@/handler/mapper/CapitalsourceTransportMapper";
-import { WebSocketHandler } from "@/handler/WebSocketHandler";
+import CapitalsourceService from "@/service/CapitalsourceService";
+import { mapCapitalsourceTransportToModel } from "@/service/mapper/CapitalsourceTransportMapper";
+import { WebSocketSingleton } from "@/config/WebSocketSingleton";
 import type { Capitalsource } from "@/model/capitalsource/Capitalsource";
 import { CapitalsourceType } from "@/model/capitalsource/CapitalsourceType";
 import type { SelectBoxValue } from "@/model/SelectBoxValue";
@@ -17,7 +17,7 @@ export const useCapitalsourceStore = defineStore("capitalsource", {
   },
   actions: {
     initCapitalsourceStore() {
-      return CapitalsourceControllerHandler.fetchAllCapitalsource().then(
+      return CapitalsourceService.fetchAllCapitalsource().then(
         (capitalsourceArray) => {
           this.capitalsource = capitalsourceArray;
           this.capitalsource.sort(this.compareCapitalsource);
@@ -25,7 +25,7 @@ export const useCapitalsourceStore = defineStore("capitalsource", {
       );
     },
     subscribeToWebsocket() {
-      WebSocketHandler.getInstance().subscribe(
+      WebSocketSingleton.getInstance().subscribe(
         "/topic/capitalsourceChanged",
         this.subscribeCallback,
       );

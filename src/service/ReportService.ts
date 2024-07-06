@@ -1,4 +1,4 @@
-import AbstractControllerHandler from "@/handler/AbstractControllerHandler";
+import AbstractService from "@/service/AbstractService";
 import type { AvailableMonth } from "@/model/report/AvailableMonth";
 import type { Report } from "@/model/report/Report";
 import { mapReportTurnoverCapitalsourceTransportToModel } from "./mapper/ReportTurnoverCapitalsourceTransportMapper";
@@ -21,7 +21,7 @@ import {
 } from "@/api";
 import type { AxiosResponse } from "axios";
 
-class ReportControllerHandler extends AbstractControllerHandler {
+class ReportService extends AbstractService {
   private api: ReportControllerApi;
 
   public constructor() {
@@ -221,4 +221,4 @@ class ReportControllerHandler extends AbstractControllerHandler {
   }
 }
 
-export default new ReportControllerHandler();
+export default new ReportService();

@@ -318,7 +318,7 @@ import CreatePreDefMoneyflowModalVue from "@/components/predefmoneyflow/CreatePr
 import { useUserSessionStore } from "@/stores/UserSessionStore";
 import { StoreService } from "@/stores/StoreService";
 
-import { WebSocketHandler } from "@/handler/WebSocketHandler";
+import { WebSocketSingleton } from "@/config/WebSocketSingleton";
 import { clearAuthTokens } from "axios-jwt";
 import { LogoutApi } from "@/api";
 import { http } from "@/config/AxiosSingleton";
@@ -371,7 +371,7 @@ const showPreDefMoneyflowModal = () => {
   createPreDedMoneyflowModalNav.value._show();
 };
 const logout = async () => {
-  WebSocketHandler.getInstance().disconnectStompClient();
+  WebSocketSingleton.getInstance().disconnectStompClient();
   const userSessionStore = useUserSessionStore();
   userSessionStore.logout();
 
@@ -395,7 +395,7 @@ onMounted(() => {
   markDropdownActive(route.name);
 
   // make WebSocket connection
-  WebSocketHandler.getInstance().connectStompClient();
+  WebSocketSingleton.getInstance().connectStompClient();
   // initialize Stores
   StoreService.getInstance()
     .initAllStores()

@@ -30,7 +30,7 @@ import { handleBackendError } from "@/tools/views/HandleBackendError";
 
 import { MoneyflowReceiptType } from "@/model/moneyflow/MoneyflowReceiptType";
 
-import MoneyflowReceiptControllerHandler from "@/handler/MoneyflowReceiptControllerHandler";
+import MoneyflowReceiptService from "@/service/MoneyflowReceiptService";
 import DivError from "../DivError.vue";
 
 const serverErrors = ref(new Array<string>());
@@ -43,7 +43,7 @@ const modalComponent = ref();
 const _show = (moneyflowId: number) => {
   serverErrors.value = new Array<string>();
 
-  MoneyflowReceiptControllerHandler.fetchReceipt(moneyflowId)
+  MoneyflowReceiptService.fetchReceipt(moneyflowId)
     .then((response) => {
       receiptBase64.value = response.receipt;
 
