@@ -1,4 +1,4 @@
-import I18nHolder from "@/handler/I18nHolder";
+import I18nSingleton from "@/config/I18nSingleton";
 import type { SelectBoxValue } from "../SelectBoxValue";
 
 export enum CapitalsourceType {
@@ -12,11 +12,11 @@ export enum CapitalsourceType {
 
 export const capitalsourceTypeNames = [
   "",
-  I18nHolder.t()("Capitalsource.currentAsset"),
-  I18nHolder.t()("Capitalsource.longTermAsset"),
-  I18nHolder.t()("Capitalsource.reserveAsset"),
-  I18nHolder.t()("Capitalsource.provisionAsset"),
-  I18nHolder.t()("Capitalsource.credit"),
+  I18nSingleton.t()("Capitalsource.currentAsset"),
+  I18nSingleton.t()("Capitalsource.longTermAsset"),
+  I18nSingleton.t()("Capitalsource.reserveAsset"),
+  I18nSingleton.t()("Capitalsource.provisionAsset"),
+  I18nSingleton.t()("Capitalsource.credit"),
 ];
 
 export const capitalsourceTypeValues = new Array<SelectBoxValue>();

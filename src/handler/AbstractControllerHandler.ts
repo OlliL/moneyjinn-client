@@ -1,5 +1,5 @@
 import type { BaseAPI } from "@/api/base";
-import { AxiosInstanceHolder } from "./AxiosInstanceHolder";
+import { http } from "../config/AxiosSingleton";
 
 abstract class AbstractControllerHandler {
   protected RETURN: string = "return=";
@@ -7,11 +7,7 @@ abstract class AbstractControllerHandler {
   protected RET_REPRESENTATION: string = this.RETURN + "representation";
 
   protected createApi<T extends BaseAPI>(clazz: new (...data: any) => T): T {
-    return new clazz(
-      undefined,
-      "",
-      AxiosInstanceHolder.getInstance().getAxiosInstance(),
-    );
+    return new clazz(undefined, "", http);
   }
 }
 
