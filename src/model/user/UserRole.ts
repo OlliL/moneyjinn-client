@@ -1,4 +1,4 @@
-import I18nHolder from "@/handler/I18nHolder";
+import I18nSingleton from "@/config/I18nSingleton";
 import type { SelectBoxValue } from "../SelectBoxValue";
 
 export enum UserRole {
@@ -9,10 +9,10 @@ export enum UserRole {
 }
 
 export const userRoleNames = [
-  I18nHolder.t()("User.standard"),
-  I18nHolder.t()("User.admin"),
-  I18nHolder.t()("User.import"),
-  I18nHolder.t()("User.inactive"),
+  I18nSingleton.t()("User.standard"),
+  I18nSingleton.t()("User.admin"),
+  I18nSingleton.t()("User.import"),
+  I18nSingleton.t()("User.inactive"),
 ];
 
 export const userRoleValues = [

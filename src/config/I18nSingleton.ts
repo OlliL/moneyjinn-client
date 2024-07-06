@@ -2,7 +2,7 @@ import { createI18n } from "vue-i18n";
 import de from "../locales/de.json";
 import en from "../locales/en.json";
 
-export class I18nHolder {
+export class I18nSingleton {
   // @ts-ignore
   private i18n;
 
@@ -29,4 +29,4 @@ export class I18nHolder {
     return this.i18n;
   }
 }
-export default new I18nHolder();
+export default new I18nSingleton();

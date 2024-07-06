@@ -11,8 +11,7 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 import "bootstrap";
 import "../node_modules/vanillajs-datepicker/dist/css/datepicker-bs5.min.css";
 
-import { AxiosInstanceHolder } from "./handler/AxiosInstanceHolder";
-import I18nHolder from "./handler/I18nHolder";
+import I18nSingleton from "./config/I18nSingleton";
 import { jsonParseWithDate } from "./tools/PiniaUtil";
 
 const app = createApp(App);
@@ -29,9 +28,7 @@ pinia.use(
 );
 
 app.use(router);
-app.use(I18nHolder.getI18n());
+app.use(I18nSingleton.getI18n());
 app.use(pinia);
-
-AxiosInstanceHolder.getInstance();
 
 app.mount("#app");

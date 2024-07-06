@@ -1,4 +1,4 @@
-import I18nHolder from "@/handler/I18nHolder";
+import I18nSingleton from "@/config/I18nSingleton";
 
 export const enum ErrorCode {
   CONTRACTPARTNER_DOES_NOT_EXIST = 2,
@@ -66,171 +66,171 @@ export const enum ErrorCode {
 }
 
 export const errorMessages = {
-  [ErrorCode.CONTRACTPARTNER_DOES_NOT_EXIST]: I18nHolder.t()(
+  [ErrorCode.CONTRACTPARTNER_DOES_NOT_EXIST]: I18nSingleton.t()(
     "ErrorMessage.CONTRACTPARTNER_DOES_NOT_EXIST",
   ),
-  [ErrorCode.CAPITALSOURCE_DOES_NOT_EXIST]: I18nHolder.t()(
+  [ErrorCode.CAPITALSOURCE_DOES_NOT_EXIST]: I18nSingleton.t()(
     "ErrorMessage.CAPITALSOURCE_DOES_NOT_EXIST",
   ),
-  [ErrorCode.CAPITALSOURCE_STILL_REFERENCED]: I18nHolder.t()(
+  [ErrorCode.CAPITALSOURCE_STILL_REFERENCED]: I18nSingleton.t()(
     "ErrorMessage.CAPITALSOURCE_STILL_REFERENCED",
   ),
-  [ErrorCode.CAPITALSOURCE_IN_USE_PERIOD]: I18nHolder.t()(
+  [ErrorCode.CAPITALSOURCE_IN_USE_PERIOD]: I18nSingleton.t()(
     "ErrorMessage.CAPITALSOURCE_IN_USE_PERIOD",
   ),
-  [ErrorCode.CAPITALSOURCE_USE_OUT_OF_VALIDITY]: I18nHolder.t()(
+  [ErrorCode.CAPITALSOURCE_USE_OUT_OF_VALIDITY]: I18nSingleton.t()(
     "ErrorMessage.CAPITALSOURCE_USE_OUT_OF_VALIDITY",
   ),
-  [ErrorCode.CAPITALSOURCE_IS_NOT_SET]: I18nHolder.t()(
+  [ErrorCode.CAPITALSOURCE_IS_NOT_SET]: I18nSingleton.t()(
     "ErrorMessage.CAPITALSOURCE_IS_NOT_SET",
   ),
-  [ErrorCode.CONTRACTPARTNER_IS_NOT_SET]: I18nHolder.t()(
+  [ErrorCode.CONTRACTPARTNER_IS_NOT_SET]: I18nSingleton.t()(
     "ErrorMessage.CONTRACTPARTNER_IS_NOT_SET",
   ),
-  [ErrorCode.BOOKINGDATE_IN_WRONG_FORMAT]: I18nHolder.t()(
+  [ErrorCode.BOOKINGDATE_IN_WRONG_FORMAT]: I18nSingleton.t()(
     "ErrorMessage.BOOKINGDATE_IN_WRONG_FORMAT",
   ),
-  [ErrorCode.COMMENT_IS_NOT_SET]: I18nHolder.t()(
+  [ErrorCode.COMMENT_IS_NOT_SET]: I18nSingleton.t()(
     "ErrorMessage.COMMENT_IS_NOT_SET",
   ),
-  [ErrorCode.USERNAME_PASSWORD_WRONG]: I18nHolder.t()(
+  [ErrorCode.USERNAME_PASSWORD_WRONG]: I18nSingleton.t()(
     "ErrorMessage.USERNAME_PASSWORD_WRONG",
   ),
-  [ErrorCode.PASSWORD_NOT_MATCHING]: I18nHolder.t()(
+  [ErrorCode.PASSWORD_NOT_MATCHING]: I18nSingleton.t()(
     "ErrorMessage.PASSWORD_NOT_MATCHING",
   ),
-  [ErrorCode.ACCOUNT_IS_LOCKED]: I18nHolder.t()(
+  [ErrorCode.ACCOUNT_IS_LOCKED]: I18nSingleton.t()(
     "ErrorMessage.ACCOUNT_IS_LOCKED",
   ),
-  [ErrorCode.PASSWORD_MUST_BE_CHANGED]: I18nHolder.t()(
+  [ErrorCode.PASSWORD_MUST_BE_CHANGED]: I18nSingleton.t()(
     "ErrorMessage.PASSWORD_MUST_BE_CHANGED",
   ),
-  [ErrorCode.NO_SEARCH_CRITERIA_ENTERED]: I18nHolder.t()(
+  [ErrorCode.NO_SEARCH_CRITERIA_ENTERED]: I18nSingleton.t()(
     "ErrorMessage.NO_SEARCH_CRITERIA_ENTERED",
   ),
-  [ErrorCode.USER_HAS_DATA]: I18nHolder.t()("ErrorMessage.USER_HAS_DATA"),
-  [ErrorCode.WRONG_FILE_FORMAT]: I18nHolder.t()(
+  [ErrorCode.USER_HAS_DATA]: I18nSingleton.t()("ErrorMessage.USER_HAS_DATA"),
+  [ErrorCode.WRONG_FILE_FORMAT]: I18nSingleton.t()(
     "ErrorMessage.WRONG_FILE_FORMAT",
   ),
-  [ErrorCode.AMOUNT_ZERO]: I18nHolder.t()("ErrorMessage.AMOUNT_ZERO"),
-  [ErrorCode.NAME_ALREADY_EXISTS]: I18nHolder.t()(
+  [ErrorCode.AMOUNT_ZERO]: I18nSingleton.t()("ErrorMessage.AMOUNT_ZERO"),
+  [ErrorCode.NAME_ALREADY_EXISTS]: I18nSingleton.t()(
     "ErrorMessage.NAME_ALREADY_EXISTS",
   ),
-  [ErrorCode.GROUP_IN_USE]: I18nHolder.t()("ErrorMessage.GROUP_IN_USE"),
-  [ErrorCode.NAME_MUST_NOT_BE_EMPTY]: I18nHolder.t()(
+  [ErrorCode.GROUP_IN_USE]: I18nSingleton.t()("ErrorMessage.GROUP_IN_USE"),
+  [ErrorCode.NAME_MUST_NOT_BE_EMPTY]: I18nSingleton.t()(
     "ErrorMessage.NAME_MUST_NOT_BE_EMPTY",
   ),
-  [ErrorCode.ACCOUNT_NUMBER_TO_LONG]: I18nHolder.t()(
+  [ErrorCode.ACCOUNT_NUMBER_TO_LONG]: I18nSingleton.t()(
     "ErrorMessage.ACCOUNT_NUMBER_TO_LONG",
   ),
-  [ErrorCode.BANK_CODE_TO_LONG]: I18nHolder.t()(
+  [ErrorCode.BANK_CODE_TO_LONG]: I18nSingleton.t()(
     "ErrorMessage.BANK_CODE_TO_LONG",
   ),
-  [ErrorCode.VALIDFROM_AFTER_VALIDTIL]: I18nHolder.t()(
+  [ErrorCode.VALIDFROM_AFTER_VALIDTIL]: I18nSingleton.t()(
     "ErrorMessage.VALIDFROM_AFTER_VALIDTIL",
   ),
-  [ErrorCode.LOGGED_OUT]: I18nHolder.t()("ErrorMessage.LOGGED_OUT"),
-  [ErrorCode.POSTING_ACCOUNT_NOT_SPECIFIED]: I18nHolder.t()(
+  [ErrorCode.LOGGED_OUT]: I18nSingleton.t()("ErrorMessage.LOGGED_OUT"),
+  [ErrorCode.POSTING_ACCOUNT_NOT_SPECIFIED]: I18nSingleton.t()(
     "ErrorMessage.POSTING_ACCOUNT_NOT_SPECIFIED",
   ),
-  [ErrorCode.CONTRACTPARTNER_NO_LONGER_VALID]: I18nHolder.t()(
+  [ErrorCode.CONTRACTPARTNER_NO_LONGER_VALID]: I18nSingleton.t()(
     "ErrorMessage.CONTRACTPARTNER_NO_LONGER_VALID",
   ),
-  [ErrorCode.MONEYFLOWS_OUTSIDE_VALIDITY_PERIOD]: I18nHolder.t()(
+  [ErrorCode.MONEYFLOWS_OUTSIDE_VALIDITY_PERIOD]: I18nSingleton.t()(
     "ErrorMessage.MONEYFLOWS_OUTSIDE_VALIDITY_PERIOD",
   ),
-  [ErrorCode.GROUP_WITH_SAME_NAME_ALREADY_EXISTS]: I18nHolder.t()(
+  [ErrorCode.GROUP_WITH_SAME_NAME_ALREADY_EXISTS]: I18nSingleton.t()(
     "ErrorMessage.GROUP_WITH_SAME_NAME_ALREADY_EXISTS",
   ),
-  [ErrorCode.VALIDFROM_NOT_DEFINED]: I18nHolder.t()(
+  [ErrorCode.VALIDFROM_NOT_DEFINED]: I18nSingleton.t()(
     "ErrorMessage.VALIDFROM_NOT_DEFINED",
   ),
-  [ErrorCode.USER_WITH_SAME_NAME_ALREADY_EXISTS]: I18nHolder.t()(
+  [ErrorCode.USER_WITH_SAME_NAME_ALREADY_EXISTS]: I18nSingleton.t()(
     "ErrorMessage.USER_WITH_SAME_NAME_ALREADY_EXISTS",
   ),
-  [ErrorCode.GROUP_MUST_BE_SPECIFIED]: I18nHolder.t()(
+  [ErrorCode.GROUP_MUST_BE_SPECIFIED]: I18nSingleton.t()(
     "ErrorMessage.GROUP_MUST_BE_SPECIFIED",
   ),
-  [ErrorCode.VALIDFROM_EARLIER_THAN_TOMORROW]: I18nHolder.t()(
+  [ErrorCode.VALIDFROM_EARLIER_THAN_TOMORROW]: I18nSingleton.t()(
     "ErrorMessage.VALIDFROM_EARLIER_THAN_TOMORROW",
   ),
-  [ErrorCode.BOOKINGDATE_OUTSIDE_GROUP_ASSIGNMENT]: I18nHolder.t()(
+  [ErrorCode.BOOKINGDATE_OUTSIDE_GROUP_ASSIGNMENT]: I18nSingleton.t()(
     "ErrorMessage.BOOKINGDATE_OUTSIDE_GROUP_ASSIGNMENT",
   ),
-  [ErrorCode.POSTINGACCOUNT_STILL_REFERENCED]: I18nHolder.t()(
+  [ErrorCode.POSTINGACCOUNT_STILL_REFERENCED]: I18nSingleton.t()(
     "ErrorMessage.POSTINGACCOUNT_STILL_REFERENCED",
   ),
-  [ErrorCode.POSTINGACCOUNT_WITH_SAME_NAME_ALREADY_EXISTS]: I18nHolder.t()(
+  [ErrorCode.POSTINGACCOUNT_WITH_SAME_NAME_ALREADY_EXISTS]: I18nSingleton.t()(
     "ErrorMessage.POSTINGACCOUNT_WITH_SAME_NAME_ALREADY_EXISTS",
   ),
-  [ErrorCode.ACCOUNT_NUMBER_CONTAINS_ILLEGAL_CHARS_OR_IS_EMPTY]: I18nHolder.t()(
+  [ErrorCode.ACCOUNT_NUMBER_CONTAINS_ILLEGAL_CHARS_OR_IS_EMPTY]: I18nSingleton.t()(
     "ErrorMessage.ACCOUNT_NUMBER_CONTAINS_ILLEGAL_CHARS_OR_IS_EMPTY",
   ),
-  [ErrorCode.BANK_CODE_CONTAINS_ILLEGAL_CHARS_OR_IS_EMPTY]: I18nHolder.t()(
+  [ErrorCode.BANK_CODE_CONTAINS_ILLEGAL_CHARS_OR_IS_EMPTY]: I18nSingleton.t()(
     "ErrorMessage.BANK_CODE_CONTAINS_ILLEGAL_CHARS_OR_IS_EMPTY",
   ),
-  [ErrorCode.ACCOUNT_NUMBER_CONTAINS_ILLEGAL_CHARS]: I18nHolder.t()(
+  [ErrorCode.ACCOUNT_NUMBER_CONTAINS_ILLEGAL_CHARS]: I18nSingleton.t()(
     "ErrorMessage.ACCOUNT_NUMBER_CONTAINS_ILLEGAL_CHARS",
   ),
-  [ErrorCode.BANK_CODE_CONTAINS_ILLEGAL_CHARS]: I18nHolder.t()(
+  [ErrorCode.BANK_CODE_CONTAINS_ILLEGAL_CHARS]: I18nSingleton.t()(
     "ErrorMessage.BANK_CODE_CONTAINS_ILLEGAL_CHARS",
   ),
   // FIXME: variable content!
-  [ErrorCode.ACCOUNT_ALREADY_ASSIGNED_TO_OTHER_PARTNER]: I18nHolder.t()(
+  [ErrorCode.ACCOUNT_ALREADY_ASSIGNED_TO_OTHER_PARTNER]: I18nSingleton.t()(
     "ErrorMessage.ACCOUNT_ALREADY_ASSIGNED_TO_OTHER_PARTNER",
   ),
-  [ErrorCode.CAPITALSOURCE_INVALID]: I18nHolder.t()(
+  [ErrorCode.CAPITALSOURCE_INVALID]: I18nSingleton.t()(
     "ErrorMessage.CAPITALSOURCE_INVALID",
   ),
   [ErrorCode.SPLIT_ENTRIES_AMOUNT_IS_NOT_EQUALS_MONEYFLOW_AMOUNT]:
-    I18nHolder.t()(
+    I18nSingleton.t()(
       "ErrorMessage.SPLIT_ENTRIES_AMOUNT_IS_NOT_EQUALS_MONEYFLOW_AMOUNT",
     ),
-  [ErrorCode.PIECES_NOT_SET]: I18nHolder.t()("ErrorMessage.PIECES_NOT_SET"),
-  [ErrorCode.NO_ETF_SPECIFIED]: I18nHolder.t()("ErrorMessage.NO_ETF_SPECIFIED"),
-  [ErrorCode.AMOUNT_TO_HIGH]: I18nHolder.t()("ErrorMessage.AMOUNT_TO_HIGH"),
-  [ErrorCode.PRICE_NOT_SET]: I18nHolder.t()("ErrorMessage.PRICE_NOT_SET"),
-  [ErrorCode.UNSUPPORTED_MEDIA_TYPE]: I18nHolder.t()(
+  [ErrorCode.PIECES_NOT_SET]: I18nSingleton.t()("ErrorMessage.PIECES_NOT_SET"),
+  [ErrorCode.NO_ETF_SPECIFIED]: I18nSingleton.t()("ErrorMessage.NO_ETF_SPECIFIED"),
+  [ErrorCode.AMOUNT_TO_HIGH]: I18nSingleton.t()("ErrorMessage.AMOUNT_TO_HIGH"),
+  [ErrorCode.PRICE_NOT_SET]: I18nSingleton.t()("ErrorMessage.PRICE_NOT_SET"),
+  [ErrorCode.UNSUPPORTED_MEDIA_TYPE]: I18nSingleton.t()(
     "ErrorMessage.UNSUPPORTED_MEDIA_TYPE",
   ),
-  [ErrorCode.RECEIPT_ALREADY_EXISTS]: I18nHolder.t()(
+  [ErrorCode.RECEIPT_ALREADY_EXISTS]: I18nSingleton.t()(
     "ErrorMessage.RECEIPT_ALREADY_EXISTS",
   ),
-  [ErrorCode.AMOUNT_TO_BIG]: I18nHolder.t()("ErrorMessage.AMOUNT_TO_BIG"),
-  [ErrorCode.MEDIA_TYPE_UNKNOWN]: I18nHolder.t()(
+  [ErrorCode.AMOUNT_TO_BIG]: I18nSingleton.t()("ErrorMessage.AMOUNT_TO_BIG"),
+  [ErrorCode.MEDIA_TYPE_UNKNOWN]: I18nSingleton.t()(
     "ErrorMessage.MEDIA_TYPE_UNKNOWN",
   ),
-  [ErrorCode.AMOUNT_HAS_TO_BE_SPECIFIED]: I18nHolder.t()(
+  [ErrorCode.AMOUNT_HAS_TO_BE_SPECIFIED]: I18nSingleton.t()(
     "ErrorMessage.AMOUNT_HAS_TO_BE_SPECIFIED",
   ),
-  [ErrorCode.MONEYFLOW_DOES_NOT_EXISTS]: I18nHolder.t()(
+  [ErrorCode.MONEYFLOW_DOES_NOT_EXISTS]: I18nSingleton.t()(
     "ErrorMessage.MONEYFLOW_DOES_NOT_EXISTS",
   ),
 
-  [ErrorCode.YEAR_NOT_SET]: I18nHolder.t()("ErrorMessage.YEAR_NOT_SET"),
-  [ErrorCode.ETF_PRELIMINARY_LUMP_SUM_ALREADY_EXISTS]: I18nHolder.t()(
+  [ErrorCode.YEAR_NOT_SET]: I18nSingleton.t()("ErrorMessage.YEAR_NOT_SET"),
+  [ErrorCode.ETF_PRELIMINARY_LUMP_SUM_ALREADY_EXISTS]: I18nSingleton.t()(
     "ErrorMessage.ETF_PRELIMINARY_LUMP_SUM_ALREADY_EXISTS",
   ),
-  [ErrorCode.ETF_PRELIMINARY_LUMP_SUM_DOES_NOT_EXIST]: I18nHolder.t()(
+  [ErrorCode.ETF_PRELIMINARY_LUMP_SUM_DOES_NOT_EXIST]: I18nSingleton.t()(
     "ErrorMessage.ETF_PRELIMINARY_LUMP_SUM_DOES_NOT_EXIST",
   ),
-  [ErrorCode.ISIN_MUST_NOT_BE_EMPTY]: I18nHolder.t()(
+  [ErrorCode.ISIN_MUST_NOT_BE_EMPTY]: I18nSingleton.t()(
     "ErrorMessage.ISIN_MUST_NOT_BE_EMPTY",
   ),
-  [ErrorCode.WKN_MUST_NOT_BE_EMPTY]: I18nHolder.t()(
+  [ErrorCode.WKN_MUST_NOT_BE_EMPTY]: I18nSingleton.t()(
     "ErrorMessage.WKN_MUST_NOT_BE_EMPTY",
   ),
-  [ErrorCode.TICKER_MUST_NOT_BE_EMPTY]: I18nHolder.t()(
+  [ErrorCode.TICKER_MUST_NOT_BE_EMPTY]: I18nSingleton.t()(
     "ErrorMessage.TICKER_MUST_NOT_BE_EMPTY",
   ),
-  [ErrorCode.ETF_STILL_REFERENCED]: I18nHolder.t()(
+  [ErrorCode.ETF_STILL_REFERENCED]: I18nSingleton.t()(
     "ErrorMessage.ETF_STILL_REFERENCED",
   ),
-  [ErrorCode.ETF_PRELIMINARY_LUMP_SUM_PIECE_PRICE_MUST_BE_NULL]: I18nHolder.t()(
+  [ErrorCode.ETF_PRELIMINARY_LUMP_SUM_PIECE_PRICE_MUST_BE_NULL]: I18nSingleton.t()(
     "ErrorMessage.ETF_PRELIMINARY_LUMP_SUM_PIECE_PRICE_MUST_BE_NULL",
   ),
   [ErrorCode.ETF_PRELIMINARY_LUMP_SUM_MONTHLY_PRICES_MUST_BE_NULL]:
-    I18nHolder.t()(
+    I18nSingleton.t()(
       "ErrorMessage.ETF_PRELIMINARY_LUMP_SUM_MONTHLY_PRICES_MUST_BE_NULL",
     ),
 };
