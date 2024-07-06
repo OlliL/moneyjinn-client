@@ -163,9 +163,10 @@ export const errorMessages = {
   [ErrorCode.POSTINGACCOUNT_WITH_SAME_NAME_ALREADY_EXISTS]: I18nSingleton.t()(
     "ErrorMessage.POSTINGACCOUNT_WITH_SAME_NAME_ALREADY_EXISTS",
   ),
-  [ErrorCode.ACCOUNT_NUMBER_CONTAINS_ILLEGAL_CHARS_OR_IS_EMPTY]: I18nSingleton.t()(
-    "ErrorMessage.ACCOUNT_NUMBER_CONTAINS_ILLEGAL_CHARS_OR_IS_EMPTY",
-  ),
+  [ErrorCode.ACCOUNT_NUMBER_CONTAINS_ILLEGAL_CHARS_OR_IS_EMPTY]:
+    I18nSingleton.t()(
+      "ErrorMessage.ACCOUNT_NUMBER_CONTAINS_ILLEGAL_CHARS_OR_IS_EMPTY",
+    ),
   [ErrorCode.BANK_CODE_CONTAINS_ILLEGAL_CHARS_OR_IS_EMPTY]: I18nSingleton.t()(
     "ErrorMessage.BANK_CODE_CONTAINS_ILLEGAL_CHARS_OR_IS_EMPTY",
   ),
@@ -187,7 +188,9 @@ export const errorMessages = {
       "ErrorMessage.SPLIT_ENTRIES_AMOUNT_IS_NOT_EQUALS_MONEYFLOW_AMOUNT",
     ),
   [ErrorCode.PIECES_NOT_SET]: I18nSingleton.t()("ErrorMessage.PIECES_NOT_SET"),
-  [ErrorCode.NO_ETF_SPECIFIED]: I18nSingleton.t()("ErrorMessage.NO_ETF_SPECIFIED"),
+  [ErrorCode.NO_ETF_SPECIFIED]: I18nSingleton.t()(
+    "ErrorMessage.NO_ETF_SPECIFIED",
+  ),
   [ErrorCode.AMOUNT_TO_HIGH]: I18nSingleton.t()("ErrorMessage.AMOUNT_TO_HIGH"),
   [ErrorCode.PRICE_NOT_SET]: I18nSingleton.t()("ErrorMessage.PRICE_NOT_SET"),
   [ErrorCode.UNSUPPORTED_MEDIA_TYPE]: I18nSingleton.t()(
@@ -226,9 +229,10 @@ export const errorMessages = {
   [ErrorCode.ETF_STILL_REFERENCED]: I18nSingleton.t()(
     "ErrorMessage.ETF_STILL_REFERENCED",
   ),
-  [ErrorCode.ETF_PRELIMINARY_LUMP_SUM_PIECE_PRICE_MUST_BE_NULL]: I18nSingleton.t()(
-    "ErrorMessage.ETF_PRELIMINARY_LUMP_SUM_PIECE_PRICE_MUST_BE_NULL",
-  ),
+  [ErrorCode.ETF_PRELIMINARY_LUMP_SUM_PIECE_PRICE_MUST_BE_NULL]:
+    I18nSingleton.t()(
+      "ErrorMessage.ETF_PRELIMINARY_LUMP_SUM_PIECE_PRICE_MUST_BE_NULL",
+    ),
   [ErrorCode.ETF_PRELIMINARY_LUMP_SUM_MONTHLY_PRICES_MUST_BE_NULL]:
     I18nSingleton.t()(
       "ErrorMessage.ETF_PRELIMINARY_LUMP_SUM_MONTHLY_PRICES_MUST_BE_NULL",
