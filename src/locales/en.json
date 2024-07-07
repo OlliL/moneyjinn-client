@@ -432,6 +432,7 @@
         "CAPITALSOURCE_STILL_REFERENCED": "The source of capital cannot be deleted because it is still referenced by a flow of money or a predefined flow of money!",
         "CAPITALSOURCE_IN_USE_PERIOD": "There are flows of money for this source of capital outside the period of validitiy you've chosen!",
         "CAPITALSOURCE_USE_OUT_OF_VALIDITY": "The source of capital you've chosen is not valid on the booking date you've specified!",
+        "CONTRACTPARTNER_IN_USE": "The contractpartner cannot be deleted because it is still in use!",
         "CAPITALSOURCE_IS_NOT_SET": "The capitalsource must be specified!",
         "CONTRACTPARTNER_IS_NOT_SET": "The contractpartner must be specified!",
         "BOOKINGDATE_IN_WRONG_FORMAT": "The bookingdate must be a valid date",
