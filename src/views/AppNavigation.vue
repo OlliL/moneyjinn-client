@@ -321,7 +321,7 @@ import { StoreService } from "@/stores/StoreService";
 import { WebSocketSingleton } from "@/config/WebSocketSingleton";
 import { clearAuthTokens } from "axios-jwt";
 import { LogoutApi } from "@/api";
-import { http } from "@/config/AxiosSingleton";
+import { AxiosSingleton } from "@/config/AxiosSingleton";
 
 const { t } = useI18n();
 
@@ -375,7 +375,11 @@ const logout = async () => {
   const userSessionStore = useUserSessionStore();
   userSessionStore.logout();
 
-  await new LogoutApi(undefined, "", http)
+  await new LogoutApi(
+    undefined,
+    "",
+    AxiosSingleton.getInstance().getAxiosInstance(),
+  )
     .logout()
     .then(async () => {
       await clearAuthTokens();
