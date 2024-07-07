@@ -13,6 +13,7 @@ import "../node_modules/vanillajs-datepicker/dist/css/datepicker-bs5.min.css";
 
 import I18nSingleton from "./config/I18nSingleton";
 import { jsonParseWithDate } from "./tools/PiniaUtil";
+import { AxiosSingleton } from "./config/AxiosSingleton";
 
 const app = createApp(App);
 const pinia = createPinia();
@@ -30,5 +31,7 @@ pinia.use(
 app.use(router);
 app.use(I18nSingleton.getI18n());
 app.use(pinia);
+
+AxiosSingleton.getInstance();
 
 app.mount("#app");

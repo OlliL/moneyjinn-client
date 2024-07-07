@@ -1,5 +1,5 @@
 import type { BaseAPI } from "@/api/base";
-import { http } from "../config/AxiosSingleton";
+import { AxiosSingleton } from "../config/AxiosSingleton";
 
 abstract class AbstractService {
   protected RETURN: string = "return=";
@@ -7,7 +7,11 @@ abstract class AbstractService {
   protected RET_REPRESENTATION: string = this.RETURN + "representation";
 
   protected createApi<T extends BaseAPI>(clazz: new (...data: any) => T): T {
-    return new clazz(undefined, "", http);
+    return new clazz(
+      undefined,
+      "",
+      AxiosSingleton.getInstance().getAxiosInstance(),
+    );
   }
 }
 
