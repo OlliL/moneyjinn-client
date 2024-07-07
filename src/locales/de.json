@@ -432,6 +432,7 @@
         "CAPITALSOURCE_STILL_REFERENCED": "Die Kapitalquelle kann nicht gelöscht werden, da sie noch verwendet wird!",
         "CAPITALSOURCE_IN_USE_PERIOD": "Es existieren Geldbewegungen für diese Kapitalquelle ausserhalb des gwählten Gültigkeitszeitraums",
         "CAPITALSOURCE_USE_OUT_OF_VALIDITY": "Das Buchungsdatum liegt nicht im Gültigkeitszeitraum der gewählten Kapitalquelle!",
+        "CONTRACTPARTNER_IN_USE": "Der Vertragspartner kann nicht gelöscht werden, da er noch verwendet wird!",
         "CAPITALSOURCE_IS_NOT_SET": "Eine Kapitalquelle muss angegeben werden!",
         "CONTRACTPARTNER_IS_NOT_SET": "Ein Vertragspartner muss angegeben werden!",
         "BOOKINGDATE_IN_WRONG_FORMAT": "Das Buchungsdatum muss ein gültiges Datum sein",
