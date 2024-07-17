@@ -30,12 +30,17 @@
       >
         <span class="navbar-toggler-icon"></span>
       </button>
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <div
+        class="collapse navbar-collapse"
+        id="navbarSupportedContent"
+        ref="navbarSupportedContent"
+      >
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
             <router-link
               class="nav-link"
               :to="{ name: Routes.CreateMoneyflow, force: true }"
+              @click="collapseNavbar"
               ><i class="bi bi-currency-euro"></i
             ></router-link>
           </li>
@@ -51,6 +56,7 @@
                 params: { year: year, month: month },
                 force: true,
               }"
+              @click="collapseNavbar"
               ><i class="bi bi-card-list"></i
             ></router-link>
           </li>
@@ -58,6 +64,7 @@
             <router-link
               class="nav-link"
               :to="{ name: Routes.SearchMoneyflows, force: true }"
+              @click="collapseNavbar"
               ><i class="bi bi-search"></i
             ></router-link>
           </li>
@@ -66,6 +73,7 @@
             <router-link
               class="nav-link"
               :to="{ name: Routes.ImportMoneyflows, force: true }"
+              @click="collapseNavbar"
               ><i class="bi bi-box-arrow-in-down-right"></i
             ></router-link>
           </li>
@@ -73,6 +81,7 @@
             <router-link
               class="nav-link"
               :to="{ name: Routes.CompareData, force: true }"
+              @click="collapseNavbar"
               ><i class="bi bi-ui-checks"></i
             ></router-link>
           </li>
@@ -89,6 +98,7 @@
                 <router-link
                   class="dropdown-item"
                   :to="{ name: Routes.ShowTrends, force: true }"
+                  @click="collapseNavbar"
                   >{{ $t("Reports.title.trends") }}</router-link
                 >
               </li>
@@ -96,6 +106,7 @@
                 <router-link
                   class="dropdown-item"
                   :to="{ name: Routes.ShowReporting, force: true }"
+                  @click="collapseNavbar"
                   >{{ $t("Reports.title.costReporting") }}</router-link
                 >
               </li>
@@ -115,6 +126,7 @@
                 <router-link
                   class="dropdown-item"
                   :to="{ name: Routes.CreateMoneyflow, force: true }"
+                  @click="collapseNavbar"
                   >{{ $t("General.moneyflow") }}</router-link
                 >
               </li>
@@ -125,6 +137,7 @@
                 <router-link
                   class="dropdown-item"
                   :to="{ name: Routes.ImportReceipts, force: true }"
+                  @click="collapseNavbar"
                   >{{ $t("Receipt.importReceipts") }}</router-link
                 >
               </li>
@@ -166,6 +179,7 @@
                 <router-link
                   class="dropdown-item"
                   :to="{ name: Routes.ListCapitalsources, force: true }"
+                  @click="collapseNavbar"
                   >{{ $t("General.capitalsources") }}</router-link
                 >
               </li>
@@ -173,6 +187,7 @@
                 <router-link
                   class="dropdown-item"
                   :to="{ name: Routes.ListContractpartners, force: true }"
+                  @click="collapseNavbar"
                   >{{ $t("General.contractpartners") }}</router-link
                 >
               </li>
@@ -180,6 +195,7 @@
                 <router-link
                   class="dropdown-item"
                   :to="{ name: Routes.ListPreDefMoneyflows, force: true }"
+                  @click="collapseNavbar"
                   >{{ $t("General.preDefMoneyflows") }}</router-link
                 >
               </li>
@@ -187,6 +203,7 @@
                 <router-link
                   class="dropdown-item"
                   :to="{ name: Routes.ListMonthlySettlements, force: true }"
+                  @click="collapseNavbar"
                   >{{ $t("General.monthlysettlements") }}</router-link
                 >
               </li>
@@ -206,6 +223,7 @@
                 <router-link
                   class="dropdown-item"
                   :to="{ name: Routes.ListEtfDepot, force: true }"
+                  @click="collapseNavbar"
                   >{{ $t("General.etfDepot") }}</router-link
                 >
               </li>
@@ -213,6 +231,7 @@
                 <router-link
                   class="dropdown-item"
                   :to="{ name: Routes.ListEtfs, force: true }"
+                  @click="collapseNavbar"
                   >{{ $t("General.etfs") }}</router-link
                 >
               </li>
@@ -220,6 +239,7 @@
                 <router-link
                   class="dropdown-item"
                   :to="{ name: Routes.ListEtfPreliminaryLumpSums, force: true }"
+                  @click="collapseNavbar"
                   >{{ $t("General.preliminaryLumpSums") }}</router-link
                 >
               </li>
@@ -250,6 +270,7 @@
                   <router-link
                     class="dropdown-item"
                     :to="{ name: Routes.ChangePassword, force: true }"
+                    @click="collapseNavbar"
                     >{{ $t("User.title.changePassword") }}</router-link
                   >
                 </li>
@@ -260,6 +281,7 @@
                   <router-link
                     class="dropdown-item"
                     :to="{ name: Routes.ListPostingAccounts, force: true }"
+                    @click="collapseNavbar"
                     >{{ $t("General.postingAccounts") }}</router-link
                   >
                 </li>
@@ -270,6 +292,7 @@
                   <router-link
                     class="dropdown-item"
                     :to="{ name: Routes.ListUsers, force: true }"
+                    @click="collapseNavbar"
                     >{{ $t("General.users") }}</router-link
                   >
                 </li>
@@ -277,6 +300,7 @@
                   <router-link
                     class="dropdown-item"
                     :to="{ name: Routes.ListGroups, force: true }"
+                    @click="collapseNavbar"
                     >{{ $t("General.groups") }}</router-link
                   >
                 </li>
@@ -337,6 +361,7 @@ const dropdownPlus = ref();
 const createContractpartnerModalNav = ref();
 const createCapitalsourceModalNav = ref();
 const createPreDedMoneyflowModalNav = ref();
+const navbarSupportedContent = ref();
 
 const markDropdownActive = (routeName: RouteRecordName | null | undefined) => {
   const wrenchClassList = dropdownWrench.value.classList;
@@ -358,6 +383,11 @@ const markDropdownActive = (routeName: RouteRecordName | null | undefined) => {
       break;
     }
   }
+};
+
+const collapseNavbar = () => {
+  (navbarSupportedContent.value as HTMLDivElement).classList.add("collapsed");
+  (navbarSupportedContent.value as HTMLDivElement).classList.remove("show");
 };
 
 const showCreateContractpartnerModal = () => {
