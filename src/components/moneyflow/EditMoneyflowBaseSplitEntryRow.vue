@@ -6,6 +6,7 @@
           type="button"
           class="btn btn-primary"
           @click="deleteMoneyflowSplitEntryRow"
+          data-testid="splitEntryRowDeleteButton"
         >
           <i class="bi bi-dash"></i></button
         ><button
@@ -13,6 +14,7 @@
           class="btn btn-primary"
           @click="addMoneyflowSplitEntryRow"
           v-if="isLastRow"
+          data-testid="splitEntryRowAddButton"
         >
           <i class="bi bi-plus"></i>
         </button>

@@ -1,3 +1,4 @@
+/// <reference types="vitest" />
 import { fileURLToPath, URL } from "node:url";
 
 import { defineConfig } from "vite";
@@ -14,7 +15,7 @@ export default defineConfig({
       // locale messages resource pre-compile option
       include: resolve(
         dirname(fileURLToPath(import.meta.url)),
-        "./src/locales/**"
+        "./src/locales/**",
       ),
     }),
   ],
@@ -27,7 +28,12 @@ export default defineConfig({
   server: {
     host: true,
     watch: {
-      usePolling: true
-    }
+      usePolling: true,
+    },
+  },
+  test: {
+    globals: true,
+    environment: "jsdom",
+    setupFiles: ["./vitest.setup.ts"],
   },
 });
