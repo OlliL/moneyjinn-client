@@ -5,6 +5,7 @@
         v-model="fieldValue"
         ref="fieldRef"
         :id="id"
+        :data-testid="id"
         :class="'form-select form-control ' + errorData.inputClass"
         @input="onInput($event)"
       >
