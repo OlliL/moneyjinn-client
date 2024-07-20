@@ -1,6 +1,6 @@
 import type { PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
 import { fireEvent, render, screen, waitFor } from "@testing-library/vue";
-import { expect, test, vi } from "vitest";
+import { beforeAll, expect, test, vi } from "vitest";
 import PreDefMoneyflowService from "@/service/PreDefMoneyflowService";
 import CreateMoneyflow from "@/views/moneyflow/CreateMoneyflow.vue";
 import type { Contractpartner } from "@/model/contractpartner/Contractpartner";
@@ -18,39 +18,19 @@ import {
   type UserSession,
 } from "@/stores/UserSessionStore";
 
-test("component renders", async () => {
-  const preDefMoneyflows: PreDefMoneyflow[] = [];
+vi.mock("@/service/PreDefMoneyflowService");
+vi.mock("@/service/PostingAccountService");
+vi.mock("@/service/ContractpartnerService");
+vi.mock("@/service/StoreService");
 
-  const fetchAllPreDefMoneyflowSpy = vi
-    .spyOn(PreDefMoneyflowService, "fetchAllPreDefMoneyflow")
-    .mockReturnValue(Promise.resolve(preDefMoneyflows));
-
-  render(CreateMoneyflow);
-
-  expect(fetchAllPreDefMoneyflowSpy).toHaveBeenCalledOnce();
-
-  expect(screen.queryByText("create moneyflow")).toBeTruthy();
-
-  const subbookingLink = screen.getByText("subbooking");
-
-  expect(screen.queryAllByTestId("splitEntryRowDeleteButton")).toHaveLength(0);
-  subbookingLink.click();
-  expect(
-    await screen.findAllByTestId("splitEntryRowDeleteButton"),
-  ).toHaveLength(2);
-
-  const splitEntryRowAddButton = screen.getByTestId("splitEntryRowAddButton");
-  splitEntryRowAddButton.click();
-
-  await waitFor(() =>
-    expect(screen.getAllByTestId("splitEntryRowDeleteButton")).toHaveLength(3),
-  );
-});
-
-test("PreDefMoneyflow Handling", async () => {
-  const postingAccount: PostingAccount = {
+beforeAll(async () => {
+  const postingAccount1: PostingAccount = {
     id: 1,
     name: "Posting Account 1",
+  } as PostingAccount;
+  const postingAccount2: PostingAccount = {
+    id: 2,
+    name: "Posting Account 2",
   } as PostingAccount;
 
   const contractpartner: Contractpartner = {
@@ -90,24 +70,6 @@ test("PreDefMoneyflow Handling", async () => {
     groupUse: false,
     importAllowed: CapitalsourceImport.NOT_ALLOWED,
   } as Capitalsource;
-
-  const initPostingAccountStoreSpy = vi
-    .spyOn(PostingAccountService, "fetchAllPostingAccount")
-    .mockReturnValue(Promise.resolve([postingAccount]));
-  const initContractpartnerStoreSpy = vi
-    .spyOn(ContractpartnerService, "fetchAllContractpartner")
-    .mockReturnValue(Promise.resolve([contractpartner]));
-  const initCapitalsourceStoreSpy = vi
-    .spyOn(CapitalsourceService, "fetchAllCapitalsource")
-    .mockReturnValue(Promise.resolve([capitalsource1, capitalsource2]));
-
-  await StoreService.getInstance().initAllStores();
-  useUserSessionStore().setUserSession({ userId: 1 } as UserSession);
-
-  expect(initPostingAccountStoreSpy).toHaveBeenCalledOnce();
-  expect(initContractpartnerStoreSpy).toHaveBeenCalledOnce();
-  expect(initCapitalsourceStoreSpy).toHaveBeenCalledOnce();
-
   const preDefMoneyflow: PreDefMoneyflow = {
     id: 1,
     userId: 1,
@@ -121,64 +83,227 @@ test("PreDefMoneyflow Handling", async () => {
     postingAccountId: 1,
   } as PreDefMoneyflow;
 
-  const fetchAllPreDefMoneyflowSpy = vi
-    .spyOn(PreDefMoneyflowService, "fetchAllPreDefMoneyflow")
-    .mockReturnValue(Promise.resolve([preDefMoneyflow]));
+  PostingAccountService.fetchAllPostingAccount = vi
+    .fn()
+    .mockResolvedValue(Promise.resolve([postingAccount1, postingAccount2]));
+  ContractpartnerService.fetchAllContractpartner = vi
+    .fn()
+    .mockResolvedValue(Promise.resolve([contractpartner]));
+  CapitalsourceService.fetchAllCapitalsource = vi
+    .fn()
+    .mockResolvedValue(Promise.resolve([capitalsource1, capitalsource2]));
+  PreDefMoneyflowService.fetchAllPreDefMoneyflow = vi
+    .fn()
+    .mockResolvedValue(Promise.resolve([preDefMoneyflow]));
+});
+
+test("playground", async () => {
+  render(CreateMoneyflow);
+  expect(screen.queryByText("create moneyflow")).toBeTruthy();
+
+  const subbookingLink = screen.getByText("subbooking");
+
+  expect(screen.queryAllByTestId("splitEntryRowDeleteButton")).toHaveLength(0);
+  subbookingLink.click();
+  expect(
+    await screen.findAllByTestId("splitEntryRowDeleteButton"),
+  ).toHaveLength(2);
+
+  const splitEntryRowAddButton = screen.getByTestId("splitEntryRowAddButton");
+  splitEntryRowAddButton.click();
+
+  await waitFor(() =>
+    expect(screen.getAllByTestId("splitEntryRowDeleteButton")).toHaveLength(3),
+  );
+});
+
+test("render - form initialized", async () => {
+  await StoreService.getInstance().initAllStores();
+  useUserSessionStore().setUserSession({ userId: 1 } as UserSession);
 
   render(CreateMoneyflow);
 
-  expect(fetchAllPreDefMoneyflowSpy).toHaveBeenCalledOnce();
+  const today = new Date();
+  const yyyy = today.getFullYear();
+  const mmNum = today.getMonth() + 1; // month is zero-based
+  let mmStr = mmNum + "";
 
-  assertCheckboxChecked("once");
-  assertCheckboxUnchecked("favorite");
+  const ddNum = today.getDate();
+  let ddStr = ddNum + "";
 
-  await assertInputValueToBe("amount", "");
-  await assertInputValueToBe("comment", "");
-  await assertInputValueToBe("contractpartnerCreateMoneyflow", "0");
-  await assertInputValueToBe(
-    "capitalsourceCreateMoneyflow",
-    "1",
-    "First capitalsource has to be selected by default!",
-  );
-  await assertInputValueToBe("postingAccountCreateMoneyflow", "0");
+  if (ddNum < 10) ddStr = "0" + ddStr;
+  if (mmNum < 10) mmStr = "0" + mmStr;
 
-  const optionPreDef1: HTMLOptionElement = await screen.findByText(
-    "Contractpartner 1 | 20.40 € | PreDefMoneyflow Comment 1",
-  );
-  optionPreDef1.click();
+  const formatted = ddStr + "." + mmStr + "." + yyyy;
 
-  fireEvent.update(optionPreDef1.parentElement as HTMLSelectElement, "1");
+  const selectMoneyflow: HTMLSelectElement =
+    screen.getByTestId("selectmoneyflow");
 
-  await waitFor(() => {
-    expect(optionPreDef1.selected).toBeTruthy();
-  });
+  await waitForOptionSelected(selectMoneyflow, "0");
 
-  assertCheckboxChecked("keep");
-  assertCheckboxUnchecked("renew");
+  await Promise.all([
+    // 1st row
+    assertInputValueToBe("bookingDate", formatted),
+    assertInputValueToBe("invoiceDate", ""),
+    assertInputValueToBe("contractpartnerCreateMoneyflow", "0"),
+    assertInputValueToBe(
+      "capitalsourceCreateMoneyflow",
+      "1",
+      "First capitalsource has to be selected by default!",
+    ),
+    // 2nd row
+    assertInputValueToBe("amount", ""),
+    assertInputValueToBe("comment", ""),
+    assertInputValueToBe("postingAccountCreateMoneyflow", "0"),
+    assertCheckboxChecked("public"),
+    assertCheckboxUnchecked("private"),
+    assertCheckboxChecked("once"),
+    assertCheckboxUnchecked("favorite"),
+  ]);
+});
 
-  await assertInputValueToBe("amount", "20.4");
-  await assertInputValueToBe("comment", "PreDefMoneyflow Comment 1");
-  await assertInputValueToBe("contractpartnerCreateMoneyflow", "1");
-  await assertInputValueToBe("capitalsourceCreateMoneyflow", "2");
-  await assertInputValueToBe("postingAccountCreateMoneyflow", "1");
+test("select a PreDefMoneyflow - fill input fields", async () => {
+  await StoreService.getInstance().initAllStores();
+  useUserSessionStore().setUserSession({ userId: 1 } as UserSession);
+
+  render(CreateMoneyflow);
+  const selectMoneyflow: HTMLSelectElement =
+    screen.getByTestId("selectmoneyflow");
+
+  await waitForOptionSelected(selectMoneyflow, "0");
+
+  await selectOptionAndWait(selectMoneyflow, "1");
+
+  await Promise.all([
+    assertCheckboxChecked("keep"),
+    assertCheckboxUnchecked("renew"),
+    assertInputValueToBe("amount", "20.4"),
+    assertInputValueToBe("comment", "PreDefMoneyflow Comment 1"),
+    assertInputValueToBe("contractpartnerCreateMoneyflow", "1"),
+    assertInputValueToBe("capitalsourceCreateMoneyflow", "2"),
+    assertInputValueToBe("postingAccountCreateMoneyflow", "1"),
+  ]);
 }, 10000);
+
+test("select a Contractpartner - set and reset input fields", async () => {
+  await StoreService.getInstance().initAllStores();
+  useUserSessionStore().setUserSession({ userId: 1 } as UserSession);
+
+  render(CreateMoneyflow);
+
+  const selectContractpartner: HTMLSelectElement = screen.getByTestId(
+    "contractpartnerCreateMoneyflow",
+  );
+
+  await waitForOptionSelected(selectContractpartner, "0");
+  await selectOptionAndWait(selectContractpartner, "1");
+
+  await Promise.all([
+    assertInputValueToBe(
+      "comment",
+      "Contractpartner Comment 1",
+      "Choosing Contractpartner must set its preset comment",
+    ),
+    assertInputValueToBe(
+      "postingAccountCreateMoneyflow",
+      "1",
+      "Choosing Contractpartner must set its preset PostingAccount",
+    ),
+    assertInputValueToBe("contractpartnerCreateMoneyflow", "1"),
+  ]);
+
+  await selectOptionAndWait(selectContractpartner, "0");
+
+  await Promise.all([
+    assertInputValueToBe(
+      "comment",
+      "",
+      "Resetting Contractpartner must reset comment too if it wasn't modified in the meantime",
+    ),
+    assertInputValueToBe(
+      "postingAccountCreateMoneyflow",
+      "0",
+      "Resetting Contractpartner must reset PostingAccount too if it wasn't modified in the meantime",
+    ),
+    assertInputValueToBe("contractpartnerCreateMoneyflow", "0"),
+  ]);
+});
+
+test("select a Contractpartner - previously set input fields not overwritten", async () => {
+  await StoreService.getInstance().initAllStores();
+  useUserSessionStore().setUserSession({ userId: 1 } as UserSession);
+
+  render(CreateMoneyflow);
+
+  const selectContractpartner: HTMLSelectElement = screen.getByTestId(
+    "contractpartnerCreateMoneyflow",
+  );
+  const selectPostingAccount: HTMLSelectElement = screen.getByTestId(
+    "postingAccountCreateMoneyflow",
+  );
+
+  await waitForOptionSelected(selectContractpartner, "0");
+
+  fireEvent.update(
+    screen.getByTestId<HTMLInputElement>("comment"),
+    "Testcomment",
+  );
+  await Promise.all([
+    assertInputValueToBe("comment", "Testcomment", "Value expected to be set"),
+    selectOptionAndWait(selectPostingAccount, "2"),
+  ]);
+
+  await selectOptionAndWait(selectContractpartner, "1");
+
+  await Promise.all([
+    assertInputValueToBe(
+      "comment",
+      "Testcomment",
+      "Previously set comment gets not overwritten by Contractpartner preset",
+    ),
+    assertInputValueToBe(
+      "postingAccountCreateMoneyflow",
+      "2",
+      "Previously set PostingAccount gets not overwritten by Contractpartner preset",
+    ),
+    assertInputValueToBe("contractpartnerCreateMoneyflow", "1"),
+  ]);
+});
 
 const assertInputValueToBe = async (
   testId: string,
   value: string,
   message?: string,
-) => {
+): Promise<void> => {
   const field: HTMLInputElement = screen.getByTestId(testId);
   const errorMessage = message ?? "Checking field " + testId;
-  await waitFor(() => expect(field.value, errorMessage).toBe(value));
+  return waitFor(() => {
+    expect(field.value, errorMessage).toBe(value);
+  });
 };
 
-const assertCheckboxChecked = async (label: string) => {
-  const field: HTMLInputElement = await screen.findByLabelText(label);
-  expect(field.checked).toBeTruthy();
+const assertCheckboxChecked = async (label: string): Promise<void> => {
+  return screen.findByLabelText<HTMLInputElement>(label).then((field) => {
+    expect(field.checked).toBeTruthy();
+  });
 };
 
 const assertCheckboxUnchecked = async (label: string) => {
-  const field: HTMLInputElement = await screen.findByLabelText(label);
-  expect(field.checked).toBeFalsy();
+  return screen.findByLabelText<HTMLInputElement>(label).then((field) => {
+    expect(field.checked).toBeFalsy();
+  });
+};
+
+const waitForOptionSelected = async (
+  item: HTMLSelectElement,
+  value: string,
+) => {
+  await waitFor(() => {
+    expect(item.selectedOptions.item(0)?.value).toBe(value);
+  });
+};
+
+const selectOptionAndWait = async (item: HTMLSelectElement, value: string) => {
+  fireEvent.update(item, value);
+  await waitForOptionSelected(item, value);
 };

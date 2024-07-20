@@ -3,6 +3,7 @@
     <div class="form-floating">
       <input
         :id="id"
+        :data-testid="id"
         type="text"
         @changeDate="onInput($event)"
         :class="'form-control ' + errorData.inputClass"
