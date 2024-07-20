@@ -75,7 +75,7 @@ const serverErrors = ref(new Array<string>());
 
 const preDefMoneyflows = ref(new Array<PreDefMoneyflow>());
 const preDefMoneyflowId = ref(0);
-const selectedPreDefMoneyflow = ref({} as PreDefMoneyflow | undefined);
+const selectedPreDefMoneyflow = ref(undefined as PreDefMoneyflow | undefined);
 const editMoneyflowVue = ref();
 
 const { handleSubmit, values, setFieldTouched } = useForm();
