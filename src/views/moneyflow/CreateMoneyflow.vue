@@ -10,6 +10,7 @@
         <select
           class="form-select"
           id="selectmoneyflow"
+          data-testid="selectmoneyflow"
           v-model="preDefMoneyflowId"
           @change="selectPreDefMoneyflow"
         >
