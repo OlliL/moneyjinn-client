@@ -643,9 +643,7 @@ const importImportedMoneyflow = async (
       bankCodeCapitalsource: mim.bankCodeCapitalsource,
     };
 
-    return ImportedMoneyflowService.importImportedMoneyflow(
-      importedMoneyflow,
-    )
+    return ImportedMoneyflowService.importImportedMoneyflow(importedMoneyflow)
       .then(() => {
         followUpServerCall();
         return true;
