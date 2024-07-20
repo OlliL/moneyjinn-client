@@ -13,7 +13,10 @@ import { CapitalsourceImport } from "@/model/capitalsource/CapitalsourceImport";
 import ContractpartnerService from "@/service/ContractpartnerService";
 import CapitalsourceService from "@/service/CapitalsourceService";
 import { StoreService } from "@/stores/StoreService";
-import { nextTick } from "vue";
+import {
+  useUserSessionStore,
+  type UserSession,
+} from "@/stores/UserSessionStore";
 
 test("component renders", async () => {
   const preDefMoneyflows: PreDefMoneyflow[] = [];
@@ -65,12 +68,23 @@ test("PreDefMoneyflow Handling", async () => {
     postingAccountName: "Posting Account 1",
   } as Contractpartner;
 
-  const capitalsource: Capitalsource = {
+  const capitalsource1: Capitalsource = {
     id: 1,
     userId: 1,
     type: CapitalsourceType.CURRENT_ASSET,
     state: CapitalsourceState.CACHE,
     comment: "cash",
+    validTil: new Date("2999-12-01"),
+    validFrom: new Date("2000-01-01"),
+    groupUse: false,
+    importAllowed: CapitalsourceImport.NOT_ALLOWED,
+  } as Capitalsource;
+  const capitalsource2: Capitalsource = {
+    id: 2,
+    userId: 1,
+    type: CapitalsourceType.CURRENT_ASSET,
+    state: CapitalsourceState.NON_CACHE,
+    comment: "non-cash",
     validTil: new Date("2999-12-01"),
     validFrom: new Date("2000-01-01"),
     groupUse: false,
@@ -85,9 +99,10 @@ test("PreDefMoneyflow Handling", async () => {
     .mockReturnValue(Promise.resolve([contractpartner]));
   const initCapitalsourceStoreSpy = vi
     .spyOn(CapitalsourceService, "fetchAllCapitalsource")
-    .mockReturnValue(Promise.resolve([capitalsource]));
+    .mockReturnValue(Promise.resolve([capitalsource1, capitalsource2]));
 
   await StoreService.getInstance().initAllStores();
+  useUserSessionStore().setUserSession({ userId: 1 } as UserSession);
 
   expect(initPostingAccountStoreSpy).toHaveBeenCalledOnce();
   expect(initContractpartnerStoreSpy).toHaveBeenCalledOnce();
@@ -97,7 +112,7 @@ test("PreDefMoneyflow Handling", async () => {
     id: 1,
     userId: 1,
     amount: 20.4,
-    capitalsourceId: 1,
+    capitalsourceId: 2,
     contractpartnerId: 1,
     contractpartnerName: "Contractpartner 1",
     comment: "PreDefMoneyflow Comment 1",
@@ -114,19 +129,56 @@ test("PreDefMoneyflow Handling", async () => {
 
   expect(fetchAllPreDefMoneyflowSpy).toHaveBeenCalledOnce();
 
+  assertCheckboxChecked("once");
+  assertCheckboxUnchecked("favorite");
+
+  await assertInputValueToBe("amount", "");
+  await assertInputValueToBe("comment", "");
+  await assertInputValueToBe("contractpartnerCreateMoneyflow", "0");
+  await assertInputValueToBe(
+    "capitalsourceCreateMoneyflow",
+    "1",
+    "First capitalsource has to be selected by default!",
+  );
+  await assertInputValueToBe("postingAccountCreateMoneyflow", "0");
+
   const optionPreDef1: HTMLOptionElement = await screen.findByText(
     "Contractpartner 1 | 20.40 € | PreDefMoneyflow Comment 1",
   );
   optionPreDef1.click();
 
-  fireEvent.change(optionPreDef1.parentElement as HTMLSelectElement, {
-    target: { value: 1 },
-  });
+  fireEvent.update(optionPreDef1.parentElement as HTMLSelectElement, "1");
 
   await waitFor(() => {
     expect(optionPreDef1.selected).toBeTruthy();
   });
 
-  const amountInput: HTMLInputElement = screen.getByTestId("amount");
-  expect(amountInput.value === "20.4").toBeTruthy();
-});
+  assertCheckboxChecked("keep");
+  assertCheckboxUnchecked("renew");
+
+  await assertInputValueToBe("amount", "20.4");
+  await assertInputValueToBe("comment", "PreDefMoneyflow Comment 1");
+  await assertInputValueToBe("contractpartnerCreateMoneyflow", "1");
+  await assertInputValueToBe("capitalsourceCreateMoneyflow", "2");
+  await assertInputValueToBe("postingAccountCreateMoneyflow", "1");
+}, 10000);
+
+const assertInputValueToBe = async (
+  testId: string,
+  value: string,
+  message?: string,
+) => {
+  const field: HTMLInputElement = screen.getByTestId(testId);
+  const errorMessage = message ?? "Checking field " + testId;
+  await waitFor(() => expect(field.value, errorMessage).toBe(value));
+};
+
+const assertCheckboxChecked = async (label: string) => {
+  const field: HTMLInputElement = await screen.findByLabelText(label);
+  expect(field.checked).toBeTruthy();
+};
+
+const assertCheckboxUnchecked = async (label: string) => {
+  const field: HTMLInputElement = await screen.findByLabelText(label);
+  expect(field.checked).toBeFalsy();
+};
