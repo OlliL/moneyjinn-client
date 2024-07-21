@@ -1,12 +1,12 @@
 <template>
-  <div class="row p-1">
+  <div class="row p-1" data-testid="splitEntryRow">
     <div class="col-md-1 d-flex align-items-center justify-content-start">
       <div class="btn-group">
         <button
           type="button"
           class="btn btn-primary"
           @click="deleteMoneyflowSplitEntryRow"
-          data-testid="splitEntryRowDeleteButton"
+          :data-testid="'splitEntryRowDeleteButton' + idSuffix"
         >
           <i class="bi bi-dash"></i></button
         ><button
@@ -14,7 +14,7 @@
           class="btn btn-primary"
           @click="addMoneyflowSplitEntryRow"
           v-if="isLastRow"
-          data-testid="splitEntryRowAddButton"
+          :data-testid="'splitEntryRowAddButton' + idSuffix"
         >
           <i class="bi bi-plus"></i>
         </button>
@@ -54,7 +54,10 @@
     </div>
     <div class="col-md-2 col-xs-12" v-if="showRemainder">
       <div class="input-group">
-        <span class="input-group-text" @click="useRemainder"
+        <span
+          class="input-group-text"
+          @click="useRemainder"
+          data-testid="remainderButton"
           ><i class="bi bi-arrow-left"></i
         ></span>
         <div class="form-floating">
@@ -66,7 +69,7 @@
             :value="remainder.toFixed(2)"
           />
           <label
-            for="comment"
+            for="remainder"
             :style="'color: ' + remainderErrorData.fieldColor"
             >{{ remainderErrorData.fieldLabel }}</label
           >

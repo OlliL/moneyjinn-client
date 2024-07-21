@@ -1,9 +1,7 @@
 import { config } from "@vue/test-utils";
 import I18nSingleton from "./src/config/I18nSingleton";
-import { createPinia } from "pinia";
 
 config.global.plugins.push(I18nSingleton.getI18n());
-config.global.plugins.push(createPinia());
 
 /**
  * jest's jsdom impl fails to call listeners when an event is dispatched.

@@ -145,7 +145,11 @@
             >{{ $t("Moneyflow.subbooking") }}</a
           >
         </div>
-        <div class="collapse" :id="'collapseSplitEntries' + idSuffix">
+        <div
+          class="collapse"
+          :id="'collapseSplitEntries' + idSuffix"
+          :data-testid="'collapseSplitEntries' + idSuffix"
+        >
           <div class="card-body">
             <EditMoneyflowBaseSplitEntryRowVue
               v-for="(mse, index) in mmf.moneyflowSplitEntries"
