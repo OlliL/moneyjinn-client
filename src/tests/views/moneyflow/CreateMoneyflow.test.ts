@@ -182,6 +182,7 @@ test("split entries handling", async () => {
   );
   const subbookingLink = screen.getByText("subbooking");
   waitFor(() => expect(subbookingDiv).toHaveClass("collapse"));
+  waitFor(() => expect(subbookingDiv).not.toHaveClass("show"));
 
   //
   // 03. show subbookings div and make sure it has 2 rows
@@ -331,7 +332,7 @@ test("select a PreDefMoneyflow - fill input fields", async () => {
     assertInputValueToBe("capitalsourceCreateMoneyflow", "2"),
     assertInputValueToBe("postingAccountCreateMoneyflow", "1"),
   ]);
-}, 10000);
+});
 
 test("select a Contractpartner - set and reset input fields", async () => {
   await StoreService.getInstance().initAllStores();
@@ -453,7 +454,10 @@ const waitForOptionSelected = async (
   message?: string,
 ) => {
   await waitFor(() => {
-    expect(item.selectedOptions.item(0)?.value, message).toBe(value);
+    expect(
+      Array.from(item.selectedOptions).filter((opt) => opt.value == value),
+      message,
+    ).toHaveLength(1);
   });
 };
 
