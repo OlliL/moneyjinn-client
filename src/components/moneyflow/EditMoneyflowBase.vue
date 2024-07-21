@@ -394,7 +394,7 @@ const resetCreateForm = () => {
 
   const capitalsources = capitalsourceStore
     .getBookableValidCapitalsources(bookingDate)
-    .filter((mcs) => (mcs.state = CapitalsourceState.CACHE));
+    .filter((mcs) => (mcs.state = CapitalsourceState.CASH));
 
   if (capitalsources && capitalsources.length > 0) {
     const mcs = capitalsources[0];

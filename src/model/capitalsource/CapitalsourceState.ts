@@ -3,8 +3,8 @@ import type { SelectBoxValue } from "../SelectBoxValue";
 
 export enum CapitalsourceState {
   __PLACEHOLDER,
-  NON_CACHE,
-  CACHE,
+  NON_CASH,
+  CASH,
 }
 
 export const capitalsourceStateNames = [
