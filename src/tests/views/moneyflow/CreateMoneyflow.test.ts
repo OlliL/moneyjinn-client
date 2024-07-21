@@ -132,7 +132,7 @@ test("render - form initialized", async () => {
     assertInputValueToBe(
       "capitalsourceCreateMoneyflow",
       "1",
-      "First capitalsource has to be selected by default!",
+      "First cash capitalsource has to be selected by default!",
     ),
     // 2nd row
     assertInputValueToBe("amount", ""),
