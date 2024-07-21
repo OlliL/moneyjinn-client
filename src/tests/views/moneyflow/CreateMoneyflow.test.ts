@@ -146,7 +146,7 @@ test("split entries handling", async () => {
     expect(screen.getAllByTestId("splitEntryRow")).toHaveLength(3),
   );
 
-  const inputRemainder: HTMLInputElement = screen.getByLabelText("remainder");
+  let inputRemainder: HTMLInputElement = screen.getByTestId("remainder");
   const buttonRemainder: HTMLSpanElement =
     screen.getByTestId("remainderButton");
 
@@ -172,7 +172,18 @@ test("split entries handling", async () => {
   await waitFor(() =>
     expect(screen.getAllByTestId("splitEntryRow")).toHaveLength(4),
   );
-});
+
+  const splitEntryRowDelButton1 = screen.getByTestId(
+    "splitEntryRowDeleteButton#-1",
+  );
+  splitEntryRowDelButton1.click();
+  inputRemainder = await screen.findByTestId("remainder");
+  await waitForInputHasValue(
+    inputRemainder,
+    "-50.00",
+    "Remainder is back again",
+  );
+}, 10000);
 
 test("render - form initialized", async () => {
   await StoreService.getInstance().initAllStores();

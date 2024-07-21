@@ -63,6 +63,7 @@
         <div class="form-floating">
           <input
             id="remainder"
+            data-testid="remainder"
             disabled
             type="text"
             :class="'form-control ' + remainderErrorData.inputClass"
