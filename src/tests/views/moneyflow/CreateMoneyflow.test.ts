@@ -100,91 +100,6 @@ beforeAll(async () => {
     .mockResolvedValue(Promise.resolve([preDefMoneyflow]));
 });
 
-test("split entries handling", async () => {
-  await StoreService.getInstance().initAllStores();
-  useUserSessionStore().setUserSession({ userId: 1 } as UserSession);
-
-  render(CreateMoneyflow);
-
-  const selectPostingAccount: HTMLSelectElement = screen.getByTestId(
-    "postingAccountCreateMoneyflow",
-  );
-  const inputComment: HTMLInputElement = screen.getByTestId("comment");
-  const inputAmount: HTMLInputElement = screen.getByTestId("amount");
-
-  await waitForOptionSelected(selectPostingAccount, "0");
-
-  await Promise.all([
-    setInputValueAndWait(inputAmount, "-100.15", "Amount expected to be set"),
-    setInputValueAndWait(
-      inputComment,
-      "Testcomment",
-      "Comment expected to be set",
-    ),
-    selectOptionAndWait(selectPostingAccount, "2"),
-  ]);
-
-  const subbookingDiv: HTMLDivElement = screen.getByTestId(
-    "collapseSplitEntries",
-  );
-  const subbookingLink = screen.getByText("subbooking");
-  waitFor(() => expect(subbookingDiv).toHaveClass("collapse"));
-  subbookingLink.click();
-  waitFor(() => expect(subbookingDiv).toHaveClass("show"));
-
-  const splitEntryRows: HTMLDivElement[] =
-    await screen.findAllByTestId("splitEntryRow");
-
-  expect(splitEntryRows).toHaveLength(2);
-
-  const splitEntryRowAddButton = screen.getByTestId(
-    "splitEntryRowAddButton#-2",
-  );
-  splitEntryRowAddButton.click();
-
-  await waitFor(() =>
-    expect(screen.getAllByTestId("splitEntryRow")).toHaveLength(3),
-  );
-
-  let inputRemainder: HTMLInputElement = screen.getByTestId("remainder");
-  const buttonRemainder: HTMLSpanElement =
-    screen.getByTestId("remainderButton");
-
-  await waitForInputHasValue(inputRemainder, "-100.15");
-
-  const inputAmountMse1: HTMLInputElement = screen.getByTestId(
-    "amountSplitEntry#-1",
-  );
-  await setInputValueAndWait(
-    inputAmountMse1,
-    "-50",
-    "Amount expected to be set",
-  );
-
-  expect(inputComment).not.toBeVisible();
-  expect(selectPostingAccount).not.toBeVisible();
-  expect(inputAmount).toBeVisible();
-
-  await waitForInputHasValue(inputRemainder, "-50.15");
-  buttonRemainder.click();
-  await assertInputValueToBe("amountSplitEntry#-3", "-50.15");
-  expect(inputRemainder).not.toBeInTheDocument();
-  await waitFor(() =>
-    expect(screen.getAllByTestId("splitEntryRow")).toHaveLength(4),
-  );
-
-  const splitEntryRowDelButton1 = screen.getByTestId(
-    "splitEntryRowDeleteButton#-1",
-  );
-  splitEntryRowDelButton1.click();
-  inputRemainder = await screen.findByTestId("remainder");
-  await waitForInputHasValue(
-    inputRemainder,
-    "-50.00",
-    "Remainder is back again",
-  );
-}, 10000);
-
 test("render - form initialized", async () => {
   await StoreService.getInstance().initAllStores();
   useUserSessionStore().setUserSession({ userId: 1 } as UserSession);
@@ -229,6 +144,171 @@ test("render - form initialized", async () => {
     assertCheckboxUnchecked("favorite"),
   ]);
 });
+
+test("split entries handling", async () => {
+  await StoreService.getInstance().initAllStores();
+  useUserSessionStore().setUserSession({ userId: 1 } as UserSession);
+
+  render(CreateMoneyflow);
+
+  let selectPostingAccount: HTMLSelectElement = screen.getByTestId(
+    "postingAccountCreateMoneyflow",
+  );
+  let inputComment: HTMLInputElement = screen.getByTestId("comment");
+  const inputAmount: HTMLInputElement = screen.getByTestId("amount");
+
+  await waitForOptionSelected(selectPostingAccount, "0");
+
+  //
+  // 01. input moneyflow data
+  //
+
+  await Promise.all([
+    setInputValueAndWait(inputAmount, "-100.15", "Amount expected to be set"),
+    setInputValueAndWait(
+      inputComment,
+      "Testcomment",
+      "Comment expected to be set",
+    ),
+    selectOptionAndWait(selectPostingAccount, "2"),
+  ]);
+
+  //
+  // 02. check that subbookings div is collapsed
+  //
+
+  const subbookingDiv: HTMLDivElement = screen.getByTestId(
+    "collapseSplitEntries",
+  );
+  const subbookingLink = screen.getByText("subbooking");
+  waitFor(() => expect(subbookingDiv).toHaveClass("collapse"));
+
+  //
+  // 03. show subbookings div and make sure it has 2 rows
+  //
+
+  subbookingLink.click();
+  waitFor(() => expect(subbookingDiv).toHaveClass("show"));
+
+  const splitEntryRows: HTMLDivElement[] =
+    await screen.findAllByTestId("splitEntryRow");
+
+  expect(splitEntryRows).toHaveLength(2);
+
+  //
+  // 04. add one more subbookings row
+  //
+
+  const splitEntryRowAddButton = screen.getByTestId(
+    "splitEntryRowAddButton#-2",
+  );
+  splitEntryRowAddButton.click();
+
+  await waitFor(() =>
+    expect(screen.getAllByTestId("splitEntryRow")).toHaveLength(3),
+  );
+
+  //
+  // 05. check remainder is filled correctly
+  //
+
+  let inputRemainder: HTMLInputElement = screen.getByTestId("remainder");
+  const buttonRemainder: HTMLSpanElement =
+    screen.getByTestId("remainderButton");
+
+  await waitForInputHasValue(inputRemainder, "-100.15");
+
+  //
+  // 06. check that moneyflow comment/postingAccount inputs are removed on 1st entering of a subbooking
+  //
+
+  const inputAmountMse1: HTMLInputElement = screen.getByTestId(
+    "amountSplitEntry#-1",
+  );
+  await setInputValueAndWait(
+    inputAmountMse1,
+    "-50",
+    "Amount expected to be set",
+  );
+
+  expect(inputComment).not.toBeVisible();
+  expect(selectPostingAccount).not.toBeVisible();
+  expect(inputAmount).toBeVisible();
+
+  //
+  // 07. check that remainder is now reduced
+  //
+
+  await waitForInputHasValue(inputRemainder, "-50.15");
+
+  //
+  // 08. move remainder and original moneyflow comment+PostingAccount to last subbokings row
+  //     a new row must be created as well
+  //
+  buttonRemainder.click();
+  const selectPostingAccountMse3: HTMLSelectElement = screen.getByTestId(
+    "postingAccountSplitEntry#-3",
+  );
+  await Promise.all([
+    assertInputValueToBe("amountSplitEntry#-3", "-50.15"),
+    assertInputValueToBe("commentSplitEntry#-3", "Testcomment"),
+    waitForOptionSelected(selectPostingAccountMse3, "2"),
+    waitFor(() =>
+      expect(screen.getAllByTestId("splitEntryRow")).toHaveLength(4),
+    ),
+  ]);
+
+  //
+  // 09. remainder removed because no amount remains to be distributed
+  //
+
+  expect(inputRemainder).not.toBeInTheDocument();
+
+  //
+  // 10. on deletion of the 1st subbooking row, the remainder must reappear
+  //
+
+  const splitEntryRowDelButton1 = screen.getByTestId(
+    "splitEntryRowDeleteButton#-1",
+  );
+  splitEntryRowDelButton1.click();
+  inputRemainder = await screen.findByTestId("remainder");
+  await waitForInputHasValue(
+    inputRemainder,
+    "-50.00",
+    "Remainder is back again",
+  );
+
+  //
+  // 11. on deleting the last row with content, the remainder must be updated
+  //     and the main comment + PostingAccount fields have to appear back
+  //
+
+  const splitEntryRowDelButton3 = screen.getByTestId(
+    "splitEntryRowDeleteButton#-3",
+  );
+  splitEntryRowDelButton3.click();
+  await waitForInputHasValue(
+    inputRemainder,
+    "-100.15",
+    "Remainder is full again",
+  );
+
+  inputComment = screen.getByTestId("comment");
+  selectPostingAccount = screen.getByTestId("postingAccountCreateMoneyflow");
+
+  await Promise.all([
+    waitForInputHasValue(inputComment, "Testcomment"),
+    waitForOptionSelected(selectPostingAccount, "2"),
+  ]);
+
+  //
+  // 12. collapse subbokings div
+  //
+
+  subbookingLink.click();
+  waitFor(() => expect(subbookingDiv).not.toHaveClass("show"));
+}, 10000);
 
 test("select a PreDefMoneyflow - fill input fields", async () => {
   await StoreService.getInstance().initAllStores();
