@@ -17,6 +17,8 @@ import {
   useUserSessionStore,
   type UserSession,
 } from "@/stores/UserSessionStore";
+import { createPinia, setActivePinia } from "pinia";
+import "@testing-library/jest-dom/vitest";
 
 vi.mock("@/service/PreDefMoneyflowService");
 vi.mock("@/service/PostingAccountService");
@@ -24,6 +26,7 @@ vi.mock("@/service/ContractpartnerService");
 vi.mock("@/service/StoreService");
 
 beforeAll(async () => {
+  setActivePinia(createPinia());
   const postingAccount1: PostingAccount = {
     id: 1,
     name: "Posting Account 1",
@@ -97,23 +100,77 @@ beforeAll(async () => {
     .mockResolvedValue(Promise.resolve([preDefMoneyflow]));
 });
 
-test("playground", async () => {
+test("split entries handling", async () => {
+  await StoreService.getInstance().initAllStores();
+  useUserSessionStore().setUserSession({ userId: 1 } as UserSession);
+
   render(CreateMoneyflow);
-  expect(screen.queryByText("create moneyflow")).toBeTruthy();
 
+  const selectPostingAccount: HTMLSelectElement = screen.getByTestId(
+    "postingAccountCreateMoneyflow",
+  );
+  const inputComment: HTMLInputElement = screen.getByTestId("comment");
+  const inputAmount: HTMLInputElement = screen.getByTestId("amount");
+
+  await waitForOptionSelected(selectPostingAccount, "0");
+
+  await Promise.all([
+    setInputValueAndWait(inputAmount, "-100.15", "Amount expected to be set"),
+    setInputValueAndWait(
+      inputComment,
+      "Testcomment",
+      "Comment expected to be set",
+    ),
+    selectOptionAndWait(selectPostingAccount, "2"),
+  ]);
+
+  const subbookingDiv: HTMLDivElement = screen.getByTestId(
+    "collapseSplitEntries",
+  );
   const subbookingLink = screen.getByText("subbooking");
-
-  expect(screen.queryAllByTestId("splitEntryRowDeleteButton")).toHaveLength(0);
+  waitFor(() => expect(subbookingDiv).toHaveClass("collapse"));
   subbookingLink.click();
-  expect(
-    await screen.findAllByTestId("splitEntryRowDeleteButton"),
-  ).toHaveLength(2);
+  waitFor(() => expect(subbookingDiv).toHaveClass("show"));
 
-  const splitEntryRowAddButton = screen.getByTestId("splitEntryRowAddButton");
+  const splitEntryRows: HTMLDivElement[] =
+    await screen.findAllByTestId("splitEntryRow");
+
+  expect(splitEntryRows).toHaveLength(2);
+
+  const splitEntryRowAddButton = screen.getByTestId(
+    "splitEntryRowAddButton#-2",
+  );
   splitEntryRowAddButton.click();
 
   await waitFor(() =>
-    expect(screen.getAllByTestId("splitEntryRowDeleteButton")).toHaveLength(3),
+    expect(screen.getAllByTestId("splitEntryRow")).toHaveLength(3),
+  );
+
+  const inputRemainder: HTMLInputElement = screen.getByLabelText("remainder");
+  const buttonRemainder: HTMLSpanElement =
+    screen.getByTestId("remainderButton");
+
+  await waitForInputHasValue(inputRemainder, "-100.15");
+
+  const inputAmountMse1: HTMLInputElement = screen.getByTestId(
+    "amountSplitEntry#-1",
+  );
+  await setInputValueAndWait(
+    inputAmountMse1,
+    "-50",
+    "Amount expected to be set",
+  );
+
+  expect(inputComment).not.toBeVisible();
+  expect(selectPostingAccount).not.toBeVisible();
+  expect(inputAmount).toBeVisible();
+
+  await waitForInputHasValue(inputRemainder, "-50.15");
+  buttonRemainder.click();
+  await assertInputValueToBe("amountSplitEntry#-3", "-50.15");
+  expect(inputRemainder).not.toBeInTheDocument();
+  await waitFor(() =>
+    expect(screen.getAllByTestId("splitEntryRow")).toHaveLength(4),
   );
 });
 
@@ -209,7 +266,6 @@ test("select a Contractpartner - set and reset input fields", async () => {
       "1",
       "Choosing Contractpartner must set its preset PostingAccount",
     ),
-    assertInputValueToBe("contractpartnerCreateMoneyflow", "1"),
   ]);
 
   await selectOptionAndWait(selectContractpartner, "0");
@@ -242,14 +298,16 @@ test("select a Contractpartner - previously set input fields not overwritten", a
     "postingAccountCreateMoneyflow",
   );
 
+  const inputComment: HTMLInputElement = screen.getByTestId("comment");
+
   await waitForOptionSelected(selectContractpartner, "0");
 
-  fireEvent.update(
-    screen.getByTestId<HTMLInputElement>("comment"),
-    "Testcomment",
-  );
   await Promise.all([
-    assertInputValueToBe("comment", "Testcomment", "Value expected to be set"),
+    setInputValueAndWait(
+      inputComment,
+      "Testcomment",
+      "Comment expected to be set",
+    ),
     selectOptionAndWait(selectPostingAccount, "2"),
   ]);
 
@@ -266,7 +324,6 @@ test("select a Contractpartner - previously set input fields not overwritten", a
       "2",
       "Previously set PostingAccount gets not overwritten by Contractpartner preset",
     ),
-    assertInputValueToBe("contractpartnerCreateMoneyflow", "1"),
   ]);
 });
 
@@ -277,33 +334,62 @@ const assertInputValueToBe = async (
 ): Promise<void> => {
   const field: HTMLInputElement = screen.getByTestId(testId);
   const errorMessage = message ?? "Checking field " + testId;
-  return waitFor(() => {
-    expect(field.value, errorMessage).toBe(value);
+  waitForInputHasValue(field, value, errorMessage);
+};
+
+const assertCheckboxChecked = async (
+  label: string,
+  message?: string,
+): Promise<void> => {
+  const errorMessage =
+    message ?? "Checking checkbox for being checked: " + label;
+  return screen.findByLabelText<HTMLInputElement>(label).then((field) => {
+    expect(field.checked, errorMessage).toBeTruthy();
   });
 };
 
-const assertCheckboxChecked = async (label: string): Promise<void> => {
+const assertCheckboxUnchecked = async (label: string, message?: string) => {
+  const errorMessage =
+    message ?? "Checking checkbox for being unchecked: " + label;
   return screen.findByLabelText<HTMLInputElement>(label).then((field) => {
-    expect(field.checked).toBeTruthy();
-  });
-};
-
-const assertCheckboxUnchecked = async (label: string) => {
-  return screen.findByLabelText<HTMLInputElement>(label).then((field) => {
-    expect(field.checked).toBeFalsy();
+    expect(field.checked, errorMessage).toBeFalsy();
   });
 };
 
 const waitForOptionSelected = async (
   item: HTMLSelectElement,
   value: string,
+  message?: string,
 ) => {
   await waitFor(() => {
-    expect(item.selectedOptions.item(0)?.value).toBe(value);
+    expect(item.selectedOptions.item(0)?.value, message).toBe(value);
   });
 };
 
-const selectOptionAndWait = async (item: HTMLSelectElement, value: string) => {
+const waitForInputHasValue = async (
+  item: HTMLInputElement,
+  value: string,
+  message?: string,
+) => {
+  await waitFor(() => {
+    expect(item.value, message).toBe(value);
+  });
+};
+
+const selectOptionAndWait = async (
+  item: HTMLSelectElement,
+  value: string,
+  message?: string,
+) => {
   fireEvent.update(item, value);
-  await waitForOptionSelected(item, value);
+  await waitForOptionSelected(item, value, message);
+};
+
+const setInputValueAndWait = async (
+  item: HTMLInputElement,
+  value: string,
+  message?: string,
+) => {
+  fireEvent.update(item, value);
+  await waitForInputHasValue(item, value, message);
 };
