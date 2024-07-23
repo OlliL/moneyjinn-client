@@ -188,10 +188,6 @@ const schema = {
   }),
 };
 
-computed(() => {
-  return password1.value;
-});
-
 const origUser = ref({} as User | undefined);
 const user = ref({} as User);
 const groupValues = ref(new Array<SelectBoxValue>());
