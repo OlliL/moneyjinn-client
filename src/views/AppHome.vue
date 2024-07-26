@@ -10,6 +10,13 @@
       </div>
     </div>
     <DivError :server-errors="serverErrors" />
+    <!--
+    <form @submit.prevent="doSubmit" id="myForm">
+      <InputTestOuter :validation-schema="schema1" />
+      <InputTestOuter :validation-schema="schema2" />
+      <button type="submit" form="myForm">aaa</button>
+    </form>
+-->
     <div class="row justify-content-md-center" v-if="importedMoneyflows">
       <div class="col-4 col-sm-2 col-lg-2 col-xl-1 col-xxl-1 mb-4 text-end">
         <button
@@ -61,6 +68,13 @@ import router, { Routes } from "@/router";
 import EventService from "@/service/EventService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import DivError from "@/components/DivError.vue";
+/*
+import { useForm } from "vee-validate";
+import { string, ZodType } from "zod";
+import { globErr } from "@/tools/views/ZodUtil";
+import { onBeforeRouteLeave } from "vue-router";
+import InputTestOuter from "@/components/InputTestOuter.vue";
+*/
 
 const serverErrors = ref(new Array<string>());
 
@@ -70,6 +84,29 @@ const monthlySettlementMonth = ref(0);
 const monthlySettlementYear = ref(0);
 const editModal = ref();
 const dataLoaded = ref(false);
+
+/*
+const { handleSubmit, meta: formMeta, submitCount } = useForm();
+
+const schema1: ZodType = string(globErr("fehler")).min(1);
+const schema2: ZodType = string(globErr("fehler!!!!")).min(10);
+
+const doSubmit = handleSubmit(async () => {
+  console.log("submitPrevent");
+  await new Promise((resolve) => setTimeout(resolve, 3000));
+  throw new Error("hugo");
+});
+
+onBeforeRouteLeave(async () => {
+  console.log("----", formMeta.value, submitCount.value);
+  await new Promise((resolve) => setTimeout(resolve, 3000));
+
+  await doSubmit();
+  console.log("----", formMeta.value, submitCount.value);
+  console.log("----", formMeta.value.valid);
+  return false;
+});
+*/
 
 const loadData = () => {
   dataLoaded.value = false;

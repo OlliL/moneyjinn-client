@@ -1,7 +1,10 @@
 <template>
-  <span :class="amountClass" style="white-space: nowrap">{{
-    amountString
-  }}</span>
+  <span
+    :class="amountClass"
+    style="white-space: nowrap"
+    data-testid="amountSpan"
+    >{{ amountString }}</span
+  >
 </template>
 
 <script lang="ts" setup>
