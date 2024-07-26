@@ -29,7 +29,15 @@
 <script lang="ts" setup>
 import { useField } from "vee-validate";
 import { toTypedSchema } from "@vee-validate/zod";
-import { computed, onMounted, ref, watch, type PropType, type Ref } from "vue";
+import {
+  computed,
+  nextTick,
+  onMounted,
+  ref,
+  watch,
+  type PropType,
+  type Ref,
+} from "vue";
 import { any, type ZodType } from "zod";
 
 import type { SelectBoxValue } from "@/model/SelectBoxValue";
@@ -105,11 +113,13 @@ const errorData = computed((): ErrorData => {
   );
 });
 
-const fieldRef = ref(null);
+const fieldRef = ref<HTMLSelectElement | null>(null);
 
 onMounted(() => {
   if (props.focus) {
-    (fieldRef.value as any).focus();
+    nextTick(() => {
+      if (fieldRef.value) fieldRef.value.focus();
+    });
   }
 });
 
