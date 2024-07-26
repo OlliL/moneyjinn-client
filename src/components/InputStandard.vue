@@ -39,7 +39,14 @@
 <script lang="ts" setup>
 import { useField } from "vee-validate";
 import { toTypedSchema } from "@vee-validate/zod";
-import { computed, onMounted, ref, type PropType, type Ref } from "vue";
+import {
+  computed,
+  nextTick,
+  onMounted,
+  ref,
+  type PropType,
+  type Ref,
+} from "vue";
 import { any, type ZodType } from "zod";
 
 import {
@@ -131,13 +138,15 @@ const errorData = computed((): ErrorData => {
 
 const alignmentClass = props.align ? "text-" + props.align : "";
 
-const fieldRef = ref(null);
+const fieldRef = ref<HTMLInputElement | null>(null);
 
 onMounted(() => {
   fieldValue.value = props.modelValue;
 
   if (props.focus) {
-    (fieldRef.value as any).focus();
+    nextTick(() => {
+      if (fieldRef.value) fieldRef.value.focus();
+    });
   }
 });
 </script>

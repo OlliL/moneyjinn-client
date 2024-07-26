@@ -19,6 +19,7 @@ import {
 } from "@/stores/UserSessionStore";
 import { createPinia, setActivePinia } from "pinia";
 import "@testing-library/jest-dom/vitest";
+import { setInputValueAndWait, waitForInputHasValue } from "@/tests/TestUtil";
 
 vi.mock("@/service/PreDefMoneyflowService");
 vi.mock("@/service/PostingAccountService");
@@ -461,16 +462,6 @@ const waitForOptionSelected = async (
   });
 };
 
-const waitForInputHasValue = async (
-  item: HTMLInputElement,
-  value: string,
-  message?: string,
-) => {
-  await waitFor(() => {
-    expect(item.value, message).toBe(value);
-  });
-};
-
 const selectOptionAndWait = async (
   item: HTMLSelectElement,
   value: string,
@@ -478,13 +469,4 @@ const selectOptionAndWait = async (
 ) => {
   fireEvent.update(item, value);
   await waitForOptionSelected(item, value, message);
-};
-
-const setInputValueAndWait = async (
-  item: HTMLInputElement,
-  value: string,
-  message?: string,
-) => {
-  fireEvent.update(item, value);
-  await waitForInputHasValue(item, value, message);
 };
