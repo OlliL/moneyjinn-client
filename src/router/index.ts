@@ -203,8 +203,4 @@ router.beforeEach(
   },
 );
 
-router.onError((err) => {
-  console.log("Error!", err);
-});
-
 export default router;
