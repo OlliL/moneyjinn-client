@@ -230,7 +230,7 @@ import { toTypedSchema } from "@vee-validate/zod";
 import { useField, useForm } from "vee-validate";
 import { computed, onMounted, ref } from "vue";
 import { Bar } from "vue-chartjs";
-import { I18nN, useI18n } from "vue-i18n";
+import { useI18n } from "vue-i18n";
 import { any, date, number, object } from "zod";
 
 import ButtonSubmit from "@/components/ButtonSubmit.vue";
@@ -541,6 +541,11 @@ const makeChartTitle = (reportingParameter: ReportingParameter): string => {
       yearTil: reportingParameter.endDate.getFullYear(),
     });
   }
+
+  if (singlePostingAccounts.value) {
+    chartTitle =
+      reportingParameter.selectedPostingAccounts[0].name + " - " + chartTitle;
+  }
   return chartTitle;
 };
 const showReportingGraph = handleSubmit(() => {
@@ -579,42 +584,8 @@ const showReportingGraph = handleSubmit(() => {
   retrieveGraphData(reportingParameter)
     .then((reportingMonthAmounts) => {
       if (reportingMonthAmounts) {
-        let chartTitle = makeChartTitle(reportingParameter);
-
-        const resultMap = new Map<string, number>();
-
-        if (singlePostingAccounts.value) {
-          chartTitle =
-            reportingParameter.selectedPostingAccounts[0].name +
-            " - " +
-            chartTitle;
-          for (let reportingMonthAmount of reportingMonthAmounts) {
-            let key: string = "";
-            if (groupByYear.value) {
-              key = reportingMonthAmount.year + "";
-            } else {
-              key =
-                getMonthName(reportingMonthAmount.month) +
-                " '" +
-                reportingMonthAmount.year.toString().substring(2, 4);
-            }
-            resultMap.set(key, reportingMonthAmount.amount * -1);
-          }
-        } else {
-          for (let reportingMonthAmount of reportingMonthAmounts) {
-            const key = reportingMonthAmount.postingAccountName;
-            let amount = resultMap.get(key);
-            if (amount === undefined) {
-              amount = 0;
-            }
-            amount = toFixed(amount + reportingMonthAmount.amount * -1, 2);
-            resultMap.set(key, amount);
-          }
-
-          resultMap[Symbol.iterator] = function* () {
-            yield* [...this.entries()].sort((a, b) => b[1] - a[1]);
-          };
-        }
+        const chartTitle = makeChartTitle(reportingParameter);
+        const resultMap = makeResultMap(reportingMonthAmounts);
 
         chartData.value.labels = new Array();
         chartData.value.datasets[0].data = new Array();
@@ -632,4 +603,41 @@ const showReportingGraph = handleSubmit(() => {
       handleBackendError(backendError, serverErrors);
     });
 });
+
+const makeResultMap = (
+  reportingMonthAmounts: ReportingMonthAmount[],
+): Map<string, number> => {
+  const resultMap = new Map<string, number>();
+
+  if (singlePostingAccounts.value) {
+    for (let reportingMonthAmount of reportingMonthAmounts) {
+      let key: string = "";
+      if (groupByYear.value) {
+        key = reportingMonthAmount.year + "";
+      } else {
+        key =
+          getMonthName(reportingMonthAmount.month) +
+          " '" +
+          reportingMonthAmount.year.toString().substring(2, 4);
+      }
+      resultMap.set(key, reportingMonthAmount.amount * -1);
+    }
+  } else {
+    for (let reportingMonthAmount of reportingMonthAmounts) {
+      const key = reportingMonthAmount.postingAccountName;
+      let amount = resultMap.get(key);
+      if (amount === undefined) {
+        amount = 0;
+      }
+      amount = toFixed(amount + reportingMonthAmount.amount * -1, 2);
+      resultMap.set(key, amount);
+    }
+
+    resultMap[Symbol.iterator] = function* () {
+      yield* [...this.entries()].sort((a, b) => b[1] - a[1]);
+    };
+  }
+
+  return resultMap;
+};
 </script>
