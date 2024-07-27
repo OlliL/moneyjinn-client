@@ -11,6 +11,7 @@
 import { computed } from "vue";
 
 import { formatNumber, redIfNegative } from "@/tools/views/FormatNumber";
+import I18nSingleton from "@/config/I18nSingleton";
 
 const props = defineProps({
   amount: {
@@ -28,7 +29,9 @@ const amountClass = computed(() => {
 
 const amountString = computed(() => {
   return props.amount !== undefined
-    ? formatNumber(props.amount, props.decimalPlaces) + " €"
+    ? formatNumber(props.amount, props.decimalPlaces) +
+        " " +
+        I18nSingleton.t()("General.currency")
     : "";
 });
 </script>

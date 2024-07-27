@@ -131,6 +131,7 @@ import type { TrendsParameter } from "@/model/report/TrendsParameter";
 
 import ReportService from "@/service/ReportService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
+import I18nSingleton from "@/config/I18nSingleton";
 
 const { t } = useI18n();
 
@@ -200,7 +201,7 @@ const chartOptions = ref({
           if (label) label += ": ";
 
           if (context.parsed.y !== null) {
-            label += formatNumber(+context.parsed.y, 2) + "€";
+            label += formatNumber(+context.parsed.y, 2) + currency;
           }
           return label;
         },
@@ -225,7 +226,7 @@ const chartOptions = ref({
       },
       ticks: {
         callback: function (value: any) {
-          return formatNumber(+value, 0) + "€";
+          return formatNumber(+value, 0) + currency;
         },
       },
     },
@@ -256,6 +257,7 @@ type ChartData = {
   datasets: Array<ChartDataDataset>;
 };
 
+const currency = I18nSingleton.t()("General.currency");
 const capitalsourceStore = useCapitalsourceStore();
 const selectBoxValues = computed((): Array<SelectBoxValue> => {
   return capitalsourceStore.getAllAsSelectBoxValues();

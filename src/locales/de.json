@@ -1,5 +1,6 @@
 {
     "General": {
+        "currency": "€",
         "etf": "ETF",
         "selectEtf": "ETF auswählen...",
         "etfs": "ETFs",
