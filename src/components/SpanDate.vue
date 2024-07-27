@@ -1,5 +1,5 @@
 <template>
-  <span>{{ dateString }}</span>
+  <span data-testid="dateSpan">{{ dateString }}</span>
 </template>
 
 <script lang="ts" setup>
