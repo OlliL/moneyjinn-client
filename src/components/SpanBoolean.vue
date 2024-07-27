@@ -1,6 +1,6 @@
 <template>
   <span
-    ><b :style="'color:' + color">{{ text }}</b></span
+    ><b :style="'color:' + color" data-testid="booleanSpan">{{ text }}</b></span
   >
 </template>
 
