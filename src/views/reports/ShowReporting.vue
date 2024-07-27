@@ -230,7 +230,7 @@ import { toTypedSchema } from "@vee-validate/zod";
 import { useField, useForm } from "vee-validate";
 import { computed, onMounted, ref } from "vue";
 import { Bar } from "vue-chartjs";
-import { useI18n } from "vue-i18n";
+import { I18nN, useI18n } from "vue-i18n";
 import { any, date, number, object } from "zod";
 
 import ButtonSubmit from "@/components/ButtonSubmit.vue";
@@ -253,6 +253,7 @@ import type { ReportingParameter } from "@/model/report/ReportingParameter";
 import type { ReportingMonthAmount } from "@/model/report/ReportingMonthAmount";
 
 import ReportService from "@/service/ReportService";
+import I18nSingleton from "@/config/I18nSingleton";
 
 const { t } = useI18n();
 
@@ -298,7 +299,7 @@ const chartOptions = ref({
           let label = context.dataset.label || "";
 
           if (context.parsed.y !== null) {
-            label += formatNumber(+context.parsed.y, 2) + "€";
+            label += formatNumber(+context.parsed.y, 2) + currency;
           }
           return label;
         },
@@ -314,13 +315,14 @@ const chartOptions = ref({
     y: {
       ticks: {
         callback: function (value: any) {
-          return formatNumber(+value, 0) + "€";
+          return formatNumber(+value, 0) + currency;
         },
       },
     },
   },
 });
 
+const currency = I18nSingleton.t()("General.currency");
 const startDateSchema = date(globErr(t("General.validation.startDate")));
 const endDateSchema = date(globErr(t("General.validation.endDate")));
 const optionalSchema = any().optional();
