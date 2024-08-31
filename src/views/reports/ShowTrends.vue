@@ -131,7 +131,6 @@ import type { TrendsParameter } from "@/model/report/TrendsParameter";
 
 import ReportService from "@/service/ReportService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
-import I18nSingleton from "@/config/I18nSingleton";
 
 const { t } = useI18n();
 
@@ -257,7 +256,7 @@ type ChartData = {
   datasets: Array<ChartDataDataset>;
 };
 
-const currency = I18nSingleton.t()("General.currency");
+const currency = t("General.currency");
 const capitalsourceStore = useCapitalsourceStore();
 const selectBoxValues = computed((): Array<SelectBoxValue> => {
   return capitalsourceStore.getAllAsSelectBoxValues();

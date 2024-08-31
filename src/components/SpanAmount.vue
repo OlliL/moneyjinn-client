@@ -9,9 +9,11 @@
 
 <script lang="ts" setup>
 import { computed } from "vue";
+import { useI18n } from "vue-i18n";
 
 import { formatNumber, redIfNegative } from "@/tools/views/FormatNumber";
-import I18nSingleton from "@/config/I18nSingleton";
+
+const { t } = useI18n();
 
 const props = defineProps({
   amount: {
@@ -31,7 +33,7 @@ const amountString = computed(() => {
   return props.amount !== undefined
     ? formatNumber(props.amount, props.decimalPlaces) +
         " " +
-        I18nSingleton.t()("General.currency")
+        t("General.currency")
     : "";
 });
 </script>
