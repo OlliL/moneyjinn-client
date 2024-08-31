@@ -253,7 +253,6 @@ import type { ReportingParameter } from "@/model/report/ReportingParameter";
 import type { ReportingMonthAmount } from "@/model/report/ReportingMonthAmount";
 
 import ReportService from "@/service/ReportService";
-import I18nSingleton from "@/config/I18nSingleton";
 
 const { t } = useI18n();
 
@@ -322,7 +321,7 @@ const chartOptions = ref({
   },
 });
 
-const currency = I18nSingleton.t()("General.currency");
+const currency = t("General.currency");
 const startDateSchema = date(globErr(t("General.validation.startDate")));
 const endDateSchema = date(globErr(t("General.validation.endDate")));
 const optionalSchema = any().optional();
