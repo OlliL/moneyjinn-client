@@ -1,7 +1,9 @@
 /**
- * Pinia uses per default JSON.parse as deserializer.
- * Unfortunally Date gets serialized as UTC timezoned string.
- * JSON.parse just restores it as string which renders it useless because the code working with the affected properties treats them as Date objects.
+ * pinia-plugin-persistedstate uses JSON.stringify as serializer and JSON.parse as deserializer per default.
+ *
+ * Because of that, a Date object gets serialized as an UTC timezoned string.
+ *
+ * During deserialization, JSON.parse just restores it as string which renders it useless because the code working with the affected properties treats them as Date objects.
  *
  * JSON.parse can also receive a reviver which can be used to parse those UTC timezoned date strings and finally dezerializes them as propper Date objects.
  *
