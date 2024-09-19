@@ -634,6 +634,7 @@ const makeResultMap = (
 
     resultMap[Symbol.iterator] = function* () {
       yield* [...this.entries()].sort((a, b) => b[1] - a[1]);
+      return undefined;
     };
   }
 
