@@ -388,8 +388,8 @@ const markDropdownActive = (routeName: RouteRecordName | null | undefined) => {
 };
 
 const collapseNavbar = () => {
-  (navbarSupportedContent.value as HTMLDivElement).classList.add("collapsed");
-  (navbarSupportedContent.value as HTMLDivElement).classList.remove("show");
+  navbarSupportedContent.value?.classList.add("collapsed");
+  navbarSupportedContent.value?.classList.remove("show");
 };
 
 const showCreateContractpartnerModal = () => {
