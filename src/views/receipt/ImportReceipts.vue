@@ -41,7 +41,7 @@
 
 <script lang="ts" setup>
 import { useForm } from "vee-validate";
-import { onMounted, ref } from "vue";
+import { onMounted, ref, useTemplateRef } from "vue";
 
 import ButtonSubmit from "@/components/ButtonSubmit.vue";
 import DeleteMoneyflowModalVue from "@/components/moneyflow/DeleteMoneyflowModal.vue";
@@ -62,9 +62,9 @@ const serverErrors = ref(new Array<string>());
 const importedMoneyflowReceipts = ref(new Array<ImportedMoneyflowReceipt>());
 const files = ref({} as FileList);
 
-const deleteModal = ref();
-const editModal = ref();
-const uploadReceiptsForm = ref();
+const deleteModal = useTemplateRef<typeof DeleteMoneyflowModalVue>("deleteModal");
+const editModal = useTemplateRef<typeof EditMoneyflowModalVue>("editModal");
+const uploadReceiptsForm = useTemplateRef<HTMLFormElement>("uploadReceiptsForm");
 
 const { handleSubmit, values, setFieldTouched } = useForm();
 
@@ -135,7 +135,7 @@ const uploadReceipts = handleSubmit(async () => {
       .catch((backendError) => {
         handleBackendError(backendError, serverErrors);
       });
-    uploadReceiptsForm.value.reset();
+    uploadReceiptsForm.value?.reset();
     files.value = {} as FileList;
   }
 });

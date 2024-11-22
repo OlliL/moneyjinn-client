@@ -116,7 +116,7 @@
 
 <script lang="ts" setup>
 import { useForm } from "vee-validate";
-import { computed, ref } from "vue";
+import { computed, ref, useTemplateRef } from "vue";
 import { useI18n } from "vue-i18n";
 import { coerce, date, number, string, ZodType } from "zod";
 
@@ -170,7 +170,7 @@ const schema: Partial<{ [key in keyof Contractpartner]: ZodType }> = {
 
 const mcp = ref({} as Contractpartner);
 const origMcp = ref({} as Contractpartner | undefined);
-const modalComponent = ref();
+const modalComponent = useTemplateRef<typeof ModalVue>('modalComponent');
 const emit = defineEmits(["contractpartnerCreated", "contractpartnerUpdated"]);
 
 const { handleSubmit, values, setFieldTouched } = useForm();
@@ -197,7 +197,7 @@ const resetForm = () => {
 const _show = async (_mcp?: Contractpartner) => {
   origMcp.value = _mcp ?? undefined;
   resetForm();
-  modalComponent.value._show();
+  modalComponent.value?._show();
 };
 
 const createContractpartner = handleSubmit(() => {
@@ -207,7 +207,7 @@ const createContractpartner = handleSubmit(() => {
     //update
     ContractpartnerService.updateContractpartner(mcp.value)
       .then(() => {
-        modalComponent.value._hide();
+        modalComponent.value?._hide();
         emit("contractpartnerUpdated", mcp.value);
       })
       .catch((backendError) => {
@@ -218,7 +218,7 @@ const createContractpartner = handleSubmit(() => {
     ContractpartnerService.createContractpartner(mcp.value)
       .then((contractpartner) => {
         mcp.value = contractpartner;
-        modalComponent.value._hide();
+        modalComponent.value?._hide();
         emit("contractpartnerCreated", mcp.value);
       })
       .catch((backendError) => {

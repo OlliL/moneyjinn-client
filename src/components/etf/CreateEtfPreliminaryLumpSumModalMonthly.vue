@@ -284,7 +284,7 @@
 
 <script lang="ts" setup>
 import { useForm } from "vee-validate";
-import { computed, ref } from "vue";
+import { computed, ref, useTemplateRef } from "vue";
 import { useI18n } from "vue-i18n";
 import { date, type ZodType, number } from "zod";
 
@@ -330,7 +330,7 @@ const etfs = ref(new Array<SelectBoxValue>());
 const mep = ref({} as EtfPreliminaryLumpSum);
 const origMep = ref({} as EtfPreliminaryLumpSum | undefined);
 const defaultEtfId = ref(0 as number | undefined);
-const modalComponent = ref();
+const modalComponent = useTemplateRef<typeof ModalVue>('modalComponent');
 const emit = defineEmits([
   "etfPreliminaryLumpSumCreated",
   "etfPreliminaryLumpSumUpdated",
@@ -377,7 +377,7 @@ const _show = (
   defaultEtfId.value = _etfId;
   origMep.value = _mep ?? undefined;
   resetForm();
-  modalComponent.value._show();
+  modalComponent.value?._show();
 };
 
 const createEtfPreliminaryLumpSum = handleSubmit(() => {
@@ -391,7 +391,7 @@ const createEtfPreliminaryLumpSum = handleSubmit(() => {
       mep.value,
     )
       .then(() => {
-        modalComponent.value._hide();
+        modalComponent.value?._hide();
         emit("etfPreliminaryLumpSumUpdated", mep.value);
       })
       .catch((backendError) => {
@@ -404,7 +404,7 @@ const createEtfPreliminaryLumpSum = handleSubmit(() => {
     )
       .then((_etfPreliminaryLumpSum) => {
         mep.value = _etfPreliminaryLumpSum;
-        modalComponent.value._hide();
+        modalComponent.value?._hide();
         emit("etfPreliminaryLumpSumCreated", mep.value);
       })
       .catch((backendError) => {

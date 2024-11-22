@@ -131,6 +131,7 @@ import type { MonthlySettlement } from "@/model/monthlysettlement/MonthlySettlem
 import type { MonthlySettlementEditTransporter } from "@/model/monthlysettlement/MonthlySettlementEditTransporter";
 
 import MonthlySettlementService from "@/service/MonthlySettlementService";
+import { useTemplateRef } from "vue";
 
 const { t } = useI18n();
 
@@ -146,7 +147,7 @@ const selectedMonth = ref(undefined as Date | undefined);
 const loadedMonth = ref(undefined as Date | undefined);
 const monthlySettlementsNoCredit = ref(new Array<MonthlySettlementFormData>());
 const monthlySettlementsCredit = ref(new Array<MonthlySettlementFormData>());
-const modalComponent = ref();
+const modalComponent = useTemplateRef<typeof ModalVue>('modalComponent');
 const emit = defineEmits(["monthlySettlementUpserted"]);
 
 const { handleSubmit, values, setFieldTouched } = useForm();
@@ -160,7 +161,7 @@ const _show = (_year?: number, _month?: number) => {
   loadMonthlySettlements(_year, _month).then((_selectedMonth) => {
     selectedMonth.value = _selectedMonth;
   });
-  modalComponent.value._show();
+  modalComponent.value?._show();
 };
 
 const loadMonthlySettlements = async (_year?: number, _month?: number) => {
@@ -229,7 +230,7 @@ const upsertMonthlySettlement = handleSubmit(() => {
 
   MonthlySettlementService.upsertMonthlySettlement(monthlySettlements)
     .then(() => {
-      modalComponent.value._hide();
+      modalComponent.value?._hide();
       emit("monthlySettlementUpserted", year.value, month.value);
     })
     .catch((backendError) => {

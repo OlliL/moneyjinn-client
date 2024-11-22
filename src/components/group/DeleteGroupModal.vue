@@ -24,7 +24,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
+import { ref, useTemplateRef } from "vue";
 
 import DivError from "../DivError.vue";
 import ModalVue from "../Modal.vue";
@@ -38,13 +38,13 @@ import GroupService from "@/service/GroupService";
 const serverErrors = ref(new Array<string>());
 
 const group = ref({} as Group);
-const modalComponent = ref();
+const modalComponent = useTemplateRef<typeof ModalVue>('modalComponent');
 const emit = defineEmits(["groupDeleted"]);
 
 const _show = (_group: Group) => {
   group.value = _group;
   serverErrors.value = new Array<string>();
-  modalComponent.value._show();
+  modalComponent.value?._show();
 };
 
 const deleteGroup = () => {
@@ -52,7 +52,7 @@ const deleteGroup = () => {
 
   GroupService.deleteGroup(group.value.id)
     .then(() => {
-      modalComponent.value._hide();
+      modalComponent.value?._hide();
       emit("groupDeleted", group.value);
     })
     .catch((backendError) => {

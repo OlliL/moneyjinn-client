@@ -226,7 +226,7 @@ const schema: Partial<{ [key in keyof Etf]: ZodType }> = {
 
 const met = ref({} as Etf);
 const origMet = ref({} as Etf | undefined);
-const modalComponent = ref();
+const modalComponent = useTemplateRef<typeof ModalVue>('modalComponent');
 const emit = defineEmits(["etfCreated", "etfUpdated"]);
 const markAsFavorite = ref(false);
 
@@ -256,7 +256,7 @@ const resetForm = () => {
 const _show = async (_met?: Etf) => {
   origMet.value = _met ?? undefined;
   resetForm();
-  modalComponent.value._show();
+  modalComponent.value?._show();
 };
 
 const createEtf = handleSubmit(() => {
@@ -267,7 +267,7 @@ const createEtf = handleSubmit(() => {
     //update
     CrudEtfService.updateEtf(met.value)
       .then(() => {
-        modalComponent.value._hide();
+        modalComponent.value?._hide();
         emit("etfUpdated", met.value);
       })
       .catch((backendError) => {
@@ -278,7 +278,7 @@ const createEtf = handleSubmit(() => {
     CrudEtfService.createEtf(met.value)
       .then((etf) => {
         met.value = etf;
-        modalComponent.value._hide();
+        modalComponent.value?._hide();
         emit("etfCreated", met.value);
       })
       .catch((backendError) => {

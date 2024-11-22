@@ -328,7 +328,7 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref, watch } from "vue";
+import { onMounted, ref, useTemplateRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute, type RouteRecordName } from "vue-router";
 
@@ -356,31 +356,33 @@ const month = new Date().getMonth() + 1;
 const userIsAdmin = ref(false);
 const route = useRoute();
 
-const dropdownWrench = ref();
-const dropdownPlus = ref();
-const createContractpartnerModalNav = ref();
-const createCapitalsourceModalNav = ref();
-const createPreDedMoneyflowModalNav = ref();
-const navbarSupportedContent = ref();
+const dropdownWrench = useTemplateRef<HTMLLinkElement>('dropdownWrench');
+const dropdownPlus = useTemplateRef<HTMLLinkElement>('dropdownPlus');
+const createContractpartnerModalNav = useTemplateRef<typeof CreateContractpartnerModalVue>('createContractpartnerModalNav');
+const createCapitalsourceModalNav = useTemplateRef<typeof CreateCapitalsourceModalVue>('createCapitalsourceModalNav');
+const createPreDedMoneyflowModalNav = useTemplateRef<typeof CreatePreDefMoneyflowModalVue>('createPreDedMoneyflowModalNav');
+const navbarSupportedContent = useTemplateRef<HTMLDivElement>('navbarSupportedContent');
 
 const markDropdownActive = (routeName: RouteRecordName | null | undefined) => {
-  const wrenchClassList = dropdownWrench.value.classList;
-  const plusClassList = dropdownPlus.value.classList;
-  const routerLinkActive = "router-link-active";
+  if (dropdownWrench.value && dropdownPlus.value) {
+    const wrenchClassList = dropdownWrench.value.classList;
+    const plusClassList = dropdownPlus.value.classList;
+    const routerLinkActive = "router-link-active";
 
-  wrenchClassList.remove(routerLinkActive);
-  plusClassList.remove(routerLinkActive);
-  switch (routeName) {
-    case Routes.ListPreDefMoneyflows:
-    case Routes.ListCapitalsources:
-    case Routes.ListContractpartners:
-    case Routes.ListMonthlySettlements: {
-      wrenchClassList.add(routerLinkActive);
-      break;
-    }
-    case Routes.ImportReceipts: {
-      plusClassList.add(routerLinkActive);
-      break;
+    wrenchClassList.remove(routerLinkActive);
+    plusClassList.remove(routerLinkActive);
+    switch (routeName) {
+      case Routes.ListPreDefMoneyflows:
+      case Routes.ListCapitalsources:
+      case Routes.ListContractpartners:
+      case Routes.ListMonthlySettlements: {
+        wrenchClassList.add(routerLinkActive);
+        break;
+      }
+      case Routes.ImportReceipts: {
+        plusClassList.add(routerLinkActive);
+        break;
+      }
     }
   }
 };
@@ -391,14 +393,14 @@ const collapseNavbar = () => {
 };
 
 const showCreateContractpartnerModal = () => {
-  createContractpartnerModalNav.value._show();
+  createContractpartnerModalNav.value?._show();
 };
 
 const showCreateCapitalsourceModal = () => {
-  createCapitalsourceModalNav.value._show();
+  createCapitalsourceModalNav.value?._show();
 };
 const showPreDefMoneyflowModal = () => {
-  createPreDedMoneyflowModalNav.value._show();
+  createPreDedMoneyflowModalNav.value?._show();
 };
 const logout = async () => {
   WebSocketSingleton.getInstance().disconnectStompClient();

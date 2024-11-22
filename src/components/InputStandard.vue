@@ -44,6 +44,7 @@ import {
   nextTick,
   onMounted,
   ref,
+  useTemplateRef,
   type PropType,
   type Ref,
 } from "vue";
@@ -138,14 +139,13 @@ const errorData = computed((): ErrorData => {
 
 const alignmentClass = props.align ? "text-" + props.align : "";
 
-const fieldRef = ref<HTMLInputElement | null>(null);
-
+const fieldRef = useTemplateRef<HTMLInputElement>('fieldRef');
 onMounted(() => {
   fieldValue.value = props.modelValue;
 
   if (props.focus) {
     nextTick(() => {
-      if (fieldRef.value) fieldRef.value.focus();
+      fieldRef.value?.focus();
     });
   }
 });

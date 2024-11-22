@@ -97,7 +97,7 @@
 
 <script lang="ts" setup>
 import { useForm } from "vee-validate";
-import { computed, ref } from "vue";
+import { computed, ref, useTemplateRef } from "vue";
 import { useI18n } from "vue-i18n";
 import { boolean, number, string, ZodType } from "zod";
 
@@ -146,7 +146,7 @@ const schema: Partial<{ [key in keyof PreDefMoneyflow]: ZodType }> = {
 
 const mpm = ref({} as PreDefMoneyflow);
 const origMpm = ref({} as PreDefMoneyflow | undefined);
-const modalComponent = ref();
+const modalComponent = useTemplateRef<typeof ModalVue>('modalComponent');
 const validityDate = new Date();
 validityDate.setHours(0, 0, 0, 0);
 const emit = defineEmits(["preDefMoneyflowCreated", "preDefMoneyflowUpdated"]);
@@ -178,7 +178,7 @@ const resetForm = () => {
 const _show = async (_mpm?: PreDefMoneyflow) => {
   origMpm.value = _mpm ?? undefined;
   resetForm();
-  modalComponent.value._show();
+  modalComponent.value?._show();
 };
 
 const createPreDefMoneyflow = handleSubmit(() => {
@@ -188,7 +188,7 @@ const createPreDefMoneyflow = handleSubmit(() => {
     //update
     PreDefMoneyflowService.updatePreDefMoneyflow(mpm.value)
       .then(() => {
-        modalComponent.value._hide();
+        modalComponent.value?._hide();
         emit("preDefMoneyflowUpdated", mpm.value);
       })
       .catch((backendError) => {
@@ -199,7 +199,7 @@ const createPreDefMoneyflow = handleSubmit(() => {
     PreDefMoneyflowService.createPreDefMoneyflow(mpm.value)
       .then((_mpm) => {
         mpm.value = _mpm;
-        modalComponent.value._hide();
+        modalComponent.value?._hide();
         emit("preDefMoneyflowCreated", mpm.value);
       })
       .catch((backendError) => {

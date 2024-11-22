@@ -152,7 +152,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted, watch } from "vue";
+import { ref, onMounted, watch, useTemplateRef } from "vue";
 import router, { Routes } from "@/router";
 
 import DeleteEtfPreliminaryLumpSumModalMonthlyVue from "@/components/etf/DeleteEtfPreliminaryLumpSumModalMonthly.vue";
@@ -187,10 +187,10 @@ const etfs = ref({} as Array<Etf>);
 const etfPreliminaryLumpSums = ref({} as Map<number, EtfPreliminaryLumpSum>);
 const etfPreliminaryLumpSum = ref({} as EtfPreliminaryLumpSum | undefined);
 
-const createModalMonthly = ref();
-const createModalPiece = ref();
-const deleteModalMonthly = ref();
-const deleteModalPiece = ref();
+const createModalMonthly = useTemplateRef<typeof CreateEtfPreliminaryLumpSumModalMonthlyVue>("createModalMonthly");
+const createModalPiece = useTemplateRef<typeof CreateEtfPreliminaryLumpSumModalMonthlyVue>("createModalPiece");
+const deleteModalMonthly = useTemplateRef<typeof CreateEtfPreliminaryLumpSumModalMonthlyVue>("deleteModalMonthly");
+const deleteModalPiece = useTemplateRef<typeof CreateEtfPreliminaryLumpSumModalMonthlyVue>("deleteModalPiece");
 
 const props = defineProps({
   etfId: {
@@ -299,13 +299,9 @@ const showDeleteEtfPreliminaryLumpSumModal = () => {
     etfPreliminaryLumpSum.value?.type ==
     EtfPreliminaryLumpSumType.AMOUNT_PER_MONTH
   ) {
-    (
-      deleteModalMonthly.value as typeof DeleteEtfPreliminaryLumpSumModalMonthlyVue
-    )._show(etfs.value, etfPreliminaryLumpSum.value);
+      deleteModalMonthly.value?._show(etfs.value, etfPreliminaryLumpSum.value);
   } else {
-    (
-      deleteModalPiece.value as typeof DeleteEtfPreliminaryLumpSumModalPieceVue
-    )._show(etfs.value, etfPreliminaryLumpSum.value);
+      deleteModalPiece.value?._show(etfs.value, etfPreliminaryLumpSum.value);
   }
 };
 

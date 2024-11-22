@@ -109,7 +109,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, onMounted, ref } from "vue";
+import { computed, onMounted, ref, useTemplateRef } from "vue";
 import { onBeforeRouteUpdate } from "vue-router";
 
 import DeleteMonthlySettlementModalVue from "@/components/monthlysettlement/DeleteMonthlySettlementModal.vue";
@@ -133,8 +133,8 @@ const selectedYear = ref(0);
 const selectedMonth = ref(0);
 const currentlyShownYear = ref(0);
 
-const editModal = ref();
-const deleteModal = ref();
+const deleteModal = useTemplateRef<typeof DeleteMonthlySettlementModalVue>("deleteModal");
+const editModal = useTemplateRef<typeof EditMonthlySettlementModalVue>("editModal");
 
 const props = defineProps({
   year: {

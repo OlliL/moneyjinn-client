@@ -26,7 +26,7 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { computed, ref, watch, type PropType, type Ref } from "vue";
+import { computed, ref, useTemplateRef, watch, type PropType, type Ref } from "vue";
 import { any, type ZodType } from "zod";
 
 import CreateContractpartnerModalVue from "./CreateContractpartnerModal.vue";
@@ -68,7 +68,7 @@ const props = defineProps({
 const firstSelectBoxValue = { id: 0, value: "" } as SelectBoxValue;
 
 const contractpartnerId = ref(0);
-const createContractpartnerModal = ref();
+const createContractpartnerModal = useTemplateRef<typeof CreateContractpartnerModalVue>('createContractpartnerModal');
 const contractpartnerStore = useContractpartnerStore();
 const emit = defineEmits(["update:modelValue"]);
 
@@ -80,7 +80,7 @@ const selectBoxValues = computed((): Array<SelectBoxValue> => {
 });
 
 const showCreateContractpartnerModal = () => {
-  createContractpartnerModal.value._show();
+  createContractpartnerModal.value?._show();
 };
 
 const contractpartnerCreated = (mcp: Contractpartner) => {

@@ -34,6 +34,7 @@ import {
   nextTick,
   onMounted,
   ref,
+  useTemplateRef,
   watch,
   type PropType,
   type Ref,
@@ -113,12 +114,12 @@ const errorData = computed((): ErrorData => {
   );
 });
 
-const fieldRef = ref<HTMLSelectElement | null>(null);
+const fieldRef = useTemplateRef<HTMLInputElement>('fieldRef');
 
 onMounted(() => {
   if (props.focus) {
     nextTick(() => {
-      if (fieldRef.value) fieldRef.value.focus();
+      fieldRef.value?.focus();
     });
   }
 });

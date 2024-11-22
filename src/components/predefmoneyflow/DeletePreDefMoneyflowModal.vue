@@ -56,7 +56,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
+import { ref, useTemplateRef } from "vue";
 
 import DivError from "../DivError.vue";
 import ModalVue from "../Modal.vue";
@@ -73,13 +73,13 @@ import PreDefMoneyflowService from "@/service/PreDefMoneyflowService";
 const serverErrors = ref(new Array<string>());
 
 const mpm = ref({} as PreDefMoneyflow);
-const modalComponent = ref();
+const modalComponent = useTemplateRef<typeof ModalVue>('modalComponent');
 const emit = defineEmits(["preDefMoneyflowDeleted"]);
 
 const _show = (_mpm: PreDefMoneyflow) => {
   mpm.value = _mpm;
   serverErrors.value = new Array<string>();
-  modalComponent.value._show();
+  modalComponent.value?._show();
 };
 
 const deletePreDefMoneyflow = () => {
@@ -87,7 +87,7 @@ const deletePreDefMoneyflow = () => {
 
   PreDefMoneyflowService.deletePreDefMoneyflow(mpm.value.id)
     .then(() => {
-      modalComponent.value._hide();
+      modalComponent.value?._hide();
       emit("preDefMoneyflowDeleted", mpm.value);
     })
     .catch((backendError) => {

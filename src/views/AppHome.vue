@@ -52,7 +52,7 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref } from "vue";
+import { onMounted, ref, useTemplateRef } from "vue";
 
 import EditMonthlySettlementModalVue from "@/components/monthlysettlement/EditMonthlySettlementModal.vue";
 
@@ -68,7 +68,7 @@ const importedMoneyflows = ref(false);
 const monthlySettlementMissing = ref(false);
 const monthlySettlementMonth = ref(0);
 const monthlySettlementYear = ref(0);
-const editModal = ref();
+const editModal = useTemplateRef<typeof EditMonthlySettlementModalVue>('editModal');
 const dataLoaded = ref(false);
 
 const loadData = () => {
@@ -97,7 +97,7 @@ const loadData = () => {
     });
 };
 const showEditMonthlySettlementModal = () => {
-  editModal.value._show(
+  editModal.value?._show(
     monthlySettlementYear.value,
     monthlySettlementMonth.value,
   );

@@ -28,7 +28,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
+import { ref, useTemplateRef } from "vue";
 
 import DivError from "../DivError.vue";
 import ModalVue from "../Modal.vue";
@@ -42,13 +42,13 @@ import PostingAccountService from "@/service/PostingAccountService";
 const serverErrors = ref(new Array<string>());
 
 const mpa = ref({} as PostingAccount);
-const modalComponent = ref();
+const modalComponent = useTemplateRef<typeof ModalVue>('modalComponent');
 const emit = defineEmits(["postingAccountDeleted"]);
 
 const _show = (_mpa: PostingAccount) => {
   mpa.value = _mpa;
   serverErrors.value = new Array<string>();
-  modalComponent.value._show();
+  modalComponent.value?._show();
 };
 
 const deletePostingAccount = () => {
@@ -56,7 +56,7 @@ const deletePostingAccount = () => {
 
   PostingAccountService.deletePostingAccount(mpa.value.id)
     .then(() => {
-      modalComponent.value._hide();
+      modalComponent.value?._hide();
       emit("postingAccountDeleted", mpa.value);
     })
     .catch((backendError) => {

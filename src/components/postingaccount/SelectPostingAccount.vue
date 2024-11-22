@@ -27,7 +27,7 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { computed, onMounted, ref, watch, type PropType, type Ref } from "vue";
+import { computed, onMounted, ref, useTemplateRef, watch, type PropType, type Ref } from "vue";
 import { any, type ZodType } from "zod";
 
 import CreatePostingAccountModalVue from "./CreatePostingAccountModal.vue";
@@ -66,7 +66,7 @@ const props = defineProps({
 const firstSelectBoxValue = { id: 0, value: "" } as SelectBoxValue;
 
 const postingAccountId = ref(0);
-const createPostingAccountModal = ref();
+const createPostingAccountModal = useTemplateRef<typeof CreatePostingAccountModalVue>('createPostingAccountModal');
 const userIsAdmin = ref(false);
 const postingAccountStore = usePostingAccountStore();
 const emit = defineEmits(["update:modelValue"]);
@@ -81,7 +81,7 @@ onMounted(() => {
 });
 
 const showCreatePostingAccountModal = () => {
-  createPostingAccountModal.value._show();
+  createPostingAccountModal.value?._show();
 };
 
 const postingAccountCreated = (mcs: PostingAccount) => {

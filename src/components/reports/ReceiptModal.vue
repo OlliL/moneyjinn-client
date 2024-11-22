@@ -22,7 +22,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
+import { ref, useTemplateRef } from "vue";
 
 import ModalVue from "../Modal.vue";
 
@@ -38,7 +38,7 @@ const serverErrors = ref(new Array<string>());
 const receiptBase64 = ref("");
 const isJpeg = ref(false);
 const isPdf = ref(false);
-const modalComponent = ref();
+const modalComponent = useTemplateRef<typeof ModalVue>('modalComponent');
 
 const _show = (moneyflowId: number) => {
   serverErrors.value = new Array<string>();
@@ -54,11 +54,11 @@ const _show = (moneyflowId: number) => {
       }
       isPdf.value = !isJpeg.value;
 
-      modalComponent.value._show();
+      modalComponent.value?._show();
     })
     .catch((backendError) => {
       handleBackendError(backendError, serverErrors);
-      modalComponent.value._show();
+      modalComponent.value?._show();
     });
 };
 defineExpose({ _show });

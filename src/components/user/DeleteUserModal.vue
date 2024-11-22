@@ -36,7 +36,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref } from "vue";
+import { computed, ref, useTemplateRef } from "vue";
 
 import DivError from "../DivError.vue";
 import ModalVue from "../Modal.vue";
@@ -51,13 +51,13 @@ import UserService from "@/service/UserService";
 
 const user = ref({} as User);
 const serverErrors = ref(new Array<string>());
-const modalComponent = ref();
+const modalComponent = useTemplateRef<typeof ModalVue>('modalComponent');
 const emit = defineEmits(["userDeleted"]);
 
 const _show = (_user: User) => {
   user.value = _user;
   serverErrors.value = new Array<string>();
-  modalComponent.value._show();
+  modalComponent.value?._show();
 };
 
 const role = computed(() => {
@@ -69,7 +69,7 @@ const deleteUser = () => {
 
   UserService.deleteUser(user.value.id)
     .then(() => {
-      modalComponent.value._hide();
+      modalComponent.value?._hide();
       emit("userDeleted", user.value);
     })
     .catch((backendError) => {

@@ -44,7 +44,7 @@
 
 <script lang="ts" setup>
 import { useForm } from "vee-validate";
-import { computed, ref } from "vue";
+import { computed, ref, useTemplateRef } from "vue";
 import { useI18n } from "vue-i18n";
 import { string, ZodType } from "zod";
 
@@ -88,7 +88,7 @@ const schema: Partial<{ [key in keyof ContractpartnerAccount]: ZodType }> = {
 
 const mca = ref({} as ContractpartnerAccount);
 const origMca = ref({} as ContractpartnerAccount | undefined);
-const modalComponent = ref();
+const modalComponent = useTemplateRef<typeof ModalVue>('modalComponent');
 const emit = defineEmits([
   "contractpartnerAccountCreated",
   "contractpartnerAccountUpdated",
@@ -117,7 +117,7 @@ const resetForm = () => {
 const _show = async (_mca?: ContractpartnerAccount) => {
   origMca.value = _mca ?? undefined;
   resetForm();
-  modalComponent.value._show();
+  modalComponent.value?._show();
 };
 
 const createContractpartnerAccount = handleSubmit(() => {
@@ -129,7 +129,7 @@ const createContractpartnerAccount = handleSubmit(() => {
       mca.value,
     )
       .then(() => {
-        modalComponent.value._hide();
+        modalComponent.value?._hide();
         emit("contractpartnerAccountUpdated", mca.value);
       })
       .catch((backendError) => {
@@ -142,7 +142,7 @@ const createContractpartnerAccount = handleSubmit(() => {
     )
       .then((_mca) => {
         mca.value = _mca;
-        modalComponent.value._hide();
+        modalComponent.value?._hide();
         emit("contractpartnerAccountCreated", mca.value);
       })
       .catch((backendError) => {

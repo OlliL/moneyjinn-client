@@ -78,7 +78,7 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref } from "vue";
+import { onMounted, ref, useTemplateRef } from "vue";
 
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 
@@ -97,19 +97,19 @@ const groups = ref(new Array<Group>());
 const allGroups = ref(new Array<Group>());
 const searchString = ref("");
 
-const createGroupModalList = ref();
-const deleteModal = ref();
+const createGroupModalList = useTemplateRef<typeof CreateGroupModalVue>("createGroupModalList");
+const deleteModal = useTemplateRef<typeof DeleteGroupModalVue>("deleteModal");
 
 const showCreateGroupModal = () => {
-  createGroupModalList.value._show();
+  createGroupModalList.value?._show();
 };
 
 const deleteGroup = (mcs: Group) => {
-  deleteModal.value._show(mcs);
+  deleteModal.value?._show(mcs);
 };
 
 const editGroup = (mcs: Group) => {
-  createGroupModalList.value._show(mcs);
+  createGroupModalList.value?._show(mcs);
 };
 
 const searchAllContent = () => {

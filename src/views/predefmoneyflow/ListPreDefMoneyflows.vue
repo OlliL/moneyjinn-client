@@ -97,6 +97,7 @@ import type { PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
 import PreDefMoneyflowService from "@/service/PreDefMoneyflowService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import DivError from "@/components/DivError.vue";
+import { useTemplateRef } from "vue";
 
 const serverErrors = ref(new Array<string>());
 
@@ -104,19 +105,19 @@ const preDefMoneyflows = ref(new Array<PreDefMoneyflow>());
 const allPreDefMoneyflows = ref(new Array<PreDefMoneyflow>());
 const searchString = ref("");
 
-const createPreDefMoneyflowModalList = ref();
-const deleteModal = ref();
+const createPreDefMoneyflowModalList = useTemplateRef<typeof CreatePreDefMoneyflowModalVue>("createPreDefMoneyflowModalList");
+const deleteModal = useTemplateRef<typeof DeletePreDefMoneyflowModalVue>("deleteModal");
 
 const showCreatePreDefMoneyflowModal = () => {
-  createPreDefMoneyflowModalList.value._show();
+  createPreDefMoneyflowModalList.value?._show();
 };
 
 const deletePreDefMoneyflow = (mcs: PreDefMoneyflow) => {
-  deleteModal.value._show(mcs);
+  deleteModal.value?._show(mcs);
 };
 
 const editPreDefMoneyflow = (mcs: PreDefMoneyflow) => {
-  createPreDefMoneyflowModalList.value._show(mcs);
+  createPreDefMoneyflowModalList.value?._show(mcs);
 };
 
 const searchAllContent = () => {

@@ -250,7 +250,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, onMounted, ref, watch } from "vue";
+import { computed, onMounted, ref, useTemplateRef, watch } from "vue";
 
 import CapitalsourceTableVue from "./CapitalsourceTable.vue";
 import DeleteMoneyflowModalVue from "../moneyflow/DeleteMoneyflowModal.vue";
@@ -278,9 +278,9 @@ const assetsMonthlyFixedTurnover = ref(0);
 const assetsYearlyFixedTurnover = ref(0);
 const assetsMonthlyCalculatedTurnover = ref(0);
 const sortBy = ref(new Map<string, boolean>());
-const receiptModal = ref();
-const deleteModal = ref();
-const editModal = ref();
+const receiptModal = useTemplateRef<typeof ReceiptModalVue>('receiptModal');
+const deleteModal = useTemplateRef<typeof DeleteMoneyflowModalVue>('deleteModal');
+const editModal = useTemplateRef<typeof EditMoneyflowModalVue>('editModal');
 
 const props = defineProps({
   year: {
@@ -413,13 +413,13 @@ const loadData = (year: number, month: number) => {
     });
 };
 const showReceipt = (moneyflowId: number) => {
-  receiptModal.value._show(moneyflowId);
+  receiptModal.value?._show(moneyflowId);
 };
 const deleteMoneyflow = (mmf: Moneyflow) => {
-  deleteModal.value._show(mmf);
+  deleteModal.value?._show(mmf);
 };
 const editMoneyflow = (mmf: Moneyflow) => {
-  editModal.value._show(mmf);
+  editModal.value?._show(mmf);
 };
 /**
  * recalculate End of Month amount (for matching Capitalsource),

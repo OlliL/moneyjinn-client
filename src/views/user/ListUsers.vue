@@ -81,7 +81,7 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref } from "vue";
+import { onMounted, ref, useTemplateRef } from "vue";
 
 import CreateUserModalVue from "@/components/user/CreateUserModal.vue";
 import DeleteUserModalVue from "@/components/user/DeleteUserModal.vue";
@@ -99,19 +99,19 @@ const users = ref(new Array<User>());
 const allUsers = ref(new Array<User>());
 const searchString = ref("");
 
-const createUserModalList = ref();
-const deleteModal = ref();
+const createUserModalList = useTemplateRef<typeof CreateUserModalVue>("createUserModalList");
+const deleteModal = useTemplateRef<typeof DeleteUserModalVue>("deleteModal");
 
 const showCreateUserModal = () => {
-  createUserModalList.value._show();
+  createUserModalList.value?._show();
 };
 
 const deleteUser = (mcs: User) => {
-  deleteModal.value._show(mcs);
+  deleteModal.value?._show(mcs);
 };
 
 const editUser = (mcs: User) => {
-  createUserModalList.value._show(mcs);
+  createUserModalList.value?._show(mcs);
 };
 
 const searchAllContent = () => {

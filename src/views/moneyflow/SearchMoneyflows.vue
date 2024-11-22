@@ -213,7 +213,7 @@
 </template>
 <script lang="ts" setup>
 import { useForm } from "vee-validate";
-import { computed, onMounted, ref } from "vue";
+import { computed, onMounted, ref, useTemplateRef } from "vue";
 import { useI18n } from "vue-i18n";
 import { any, date } from "zod";
 
@@ -284,8 +284,8 @@ const colBookingYear = ref(false);
 const colContractpartner = ref(false);
 const dataLoaded = ref(false);
 
-const deleteModal = ref();
-const editModal = ref();
+const deleteModal = useTemplateRef<typeof DeleteMoneyflowModalVue>("deleteModal");
+const editModal = useTemplateRef<typeof EditMoneyflowModalVue>("editModal");
 
 const schema = {
   startDate: date(globErr(t("General.validation.startDate"))),
@@ -530,13 +530,13 @@ const getGroupByKey = (moneyflow: Moneyflow): string => {
 
 const deleteMoneyflow = (id: number) => {
   MoneyflowService.fetchMoneyflow(id).then((mmf) => {
-    deleteModal.value._show(mmf);
+    deleteModal.value?._show(mmf);
   });
 };
 
 const editMoneyflow = (id: number) => {
   MoneyflowService.fetchMoneyflow(id).then((mmf) => {
-    editModal.value._show(mmf);
+    editModal.value?._show(mmf);
   });
 };
 </script>

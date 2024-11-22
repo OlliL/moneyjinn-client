@@ -106,14 +106,15 @@ import ListContractpartnerRowVue from "@/components/contractpartner/ListContract
 
 import type { Contractpartner } from "@/model/contractpartner/Contractpartner";
 import { storeToRefs } from "pinia";
+import { useTemplateRef } from "vue";
 
 const validNow = ref(true);
 const contractpartners = ref(new Array<Contractpartner>());
 const searchString = ref("");
 
-const createContractpartnerModalList = ref();
-const deleteModal = ref();
-const accountsModal = ref();
+const createContractpartnerModalList = useTemplateRef<typeof CreateContractpartnerModalVue>('createContractpartnerModalList');
+const deleteModal = useTemplateRef<typeof DeleteContractpartnerModalVue>('deleteModal');
+const accountsModal = useTemplateRef<typeof ListContractpartnerAccountsModal>('accountsModal');
 
 const contractpartnerStore = useContractpartnerStore();
 const searchContractpartners = contractpartnerStore.searchContractpartners;
@@ -124,15 +125,15 @@ watch(contractpartner, () => {
 });
 
 const showCreateContractpartnerModal = () => {
-  createContractpartnerModalList.value._show();
+  createContractpartnerModalList.value?._show();
 };
 
 const deleteContractpartner = (mcs: Contractpartner) => {
-  deleteModal.value._show(mcs);
+  deleteModal.value?._show(mcs);
 };
 
 const editContractpartner = (mcs: Contractpartner) => {
-  createContractpartnerModalList.value._show(mcs);
+  createContractpartnerModalList.value?._show(mcs);
 };
 
 const searchAllContent = () => {
@@ -153,6 +154,6 @@ onMounted(() => {
 });
 
 const listContractpartnerAccounts = (mcp: Contractpartner) => {
-  accountsModal.value._show(mcp);
+  accountsModal.value?._show(mcp);
 };
 </script>
