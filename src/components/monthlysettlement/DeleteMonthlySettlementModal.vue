@@ -26,7 +26,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
+import { ref, useTemplateRef } from "vue";
 
 import DivError from "../DivError.vue";
 import ModalVue from "../Modal.vue";
@@ -42,7 +42,7 @@ const serverErrors = ref(new Array<string>());
 const month = ref(0);
 const monthName = ref("");
 const year = ref(0);
-const modalComponent = ref();
+const modalComponent = useTemplateRef<typeof ModalVue>('modalComponent');
 const emit = defineEmits(["monthlySettlementDeleted"]);
 
 const _show = (_year: number, _month: number) => {
@@ -50,7 +50,7 @@ const _show = (_year: number, _month: number) => {
   month.value = _month;
   monthName.value = getMonthName(month.value);
   serverErrors.value = new Array<string>();
-  modalComponent.value._show();
+  modalComponent.value?._show();
 };
 
 const deleteMonthlySettlement = () => {
@@ -61,7 +61,7 @@ const deleteMonthlySettlement = () => {
     month.value,
   )
     .then(() => {
-      modalComponent.value._hide();
+      modalComponent.value?._hide();
       emit("monthlySettlementDeleted", year.value, month.value);
     })
     .catch((backendError) => {

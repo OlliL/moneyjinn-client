@@ -175,7 +175,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, onMounted, ref, watch } from "vue";
+import { computed, onMounted, ref, useTemplateRef, watch } from "vue";
 import router, { Routes } from "@/router";
 import { useI18n } from "vue-i18n";
 import { number } from "zod";
@@ -221,12 +221,12 @@ const etf = ref({} as Etf);
 const selectedEtf = ref(undefined as number | undefined);
 const calcEtfSalePieces = ref(0 as number | undefined);
 
-const effectiveTabButton = ref();
-const allTabButton = ref();
-const effectiveTab = ref();
-const allTab = ref();
-const deleteModal = ref();
-const createModal = ref();
+const effectiveTabButton = useTemplateRef<HTMLButtonElement>('effectiveTabButton');
+const allTabButton = useTemplateRef<HTMLButtonElement>('allTabButton');
+const effectiveTab = useTemplateRef<HTMLDivElement>('effectiveTab');
+const allTab = useTemplateRef<HTMLDivElement>('allTab');
+const deleteModal = useTemplateRef<typeof DeleteEtfFlowModalVue>('deleteModal');
+const createModal = useTemplateRef<typeof CreateEtfFlowModalVue>('createModal');
 
 const props = defineProps({
   etfId: {
@@ -346,45 +346,43 @@ const handleServerResponse = (etfDepot: EtfDepot, etfId: number) => {
 };
 
 const showEffective = () => {
-  const effectiveTabButtonClassList = (effectiveTabButton.value as HTMLElement)
-    .classList;
-  const allTabButtonClassList = (allTabButton.value as HTMLElement).classList;
-  const effectiveTabClassList = (effectiveTab.value as HTMLElement).classList;
-  const allTabClassList = (allTab.value as HTMLElement).classList;
+  const effectiveTabButtonClassList = effectiveTabButton.value?.classList;
+  const allTabButtonClassList = allTabButton.value?.classList;
+  const effectiveTabClassList = effectiveTab.value?.classList;
+  const allTabClassList = allTab.value?.classList;
   const active = "active";
   const show = "show";
   const fade = "fade";
 
-  allTabButtonClassList.remove(active);
-  allTabClassList.add(fade);
-  allTabClassList.remove(show, active);
+  allTabButtonClassList?.remove(active);
+  allTabClassList?.add(fade);
+  allTabClassList?.remove(show, active);
 
-  effectiveTabButtonClassList.add(active);
-  effectiveTabClassList.remove(fade);
-  effectiveTabClassList.add(show, active);
+  effectiveTabButtonClassList?.add(active);
+  effectiveTabClassList?.remove(fade);
+  effectiveTabClassList?.add(show, active);
 };
 
 const showAll = () => {
-  const effectiveTabButtonClassList = (effectiveTabButton.value as HTMLElement)
-    .classList;
-  const allTabButtonClassList = (allTabButton.value as HTMLElement).classList;
-  const effectiveTabClassList = (effectiveTab.value as HTMLElement).classList;
-  const allTabClassList = (allTab.value as HTMLElement).classList;
+  const effectiveTabButtonClassList = effectiveTabButton.value?.classList;
+  const allTabButtonClassList = allTabButton.value?.classList;
+  const effectiveTabClassList = effectiveTab.value?.classList;
+  const allTabClassList = allTab.value?.classList;
   const active = "active";
   const show = "show";
   const fade = "fade";
 
-  effectiveTabButtonClassList.remove(active);
-  effectiveTabClassList.add(fade);
-  effectiveTabClassList.remove(show, active);
+  effectiveTabButtonClassList?.remove(active);
+  effectiveTabClassList?.add(fade);
+  effectiveTabClassList?.remove(show, active);
 
-  allTabButtonClassList.add(active);
-  allTabClassList.remove(fade);
-  allTabClassList.add(show, active);
+  allTabButtonClassList?.add(active);
+  allTabClassList?.remove(fade);
+  allTabClassList?.add(show, active);
 };
 
 const deleteEtfFlow = (etfFlow: EtfFlow, etfName: string) => {
-  (deleteModal.value as typeof DeleteEtfFlowModalVue)._show(etfFlow, etfName);
+  deleteModal.value?._show(etfFlow, etfName);
 };
 const etfFlowDeleted = (etfFlow: EtfFlow) => {
   // reload because effective/all logic happens on server
@@ -392,7 +390,7 @@ const etfFlowDeleted = (etfFlow: EtfFlow) => {
 };
 
 const createEtfFlow = () => {
-  createModal.value._show(etfs.value, null, selectedEtf.value);
+  createModal.value?._show(etfs.value, null, selectedEtf.value);
 };
 const etfFlowCreated = (etfFlow: EtfFlow) => {
   // reload because effective/all logic happens on server
@@ -400,7 +398,7 @@ const etfFlowCreated = (etfFlow: EtfFlow) => {
 };
 
 const editEtfFlow = (etfFlow: EtfFlow) => {
-  createModal.value._show(etfs.value, etfFlow);
+  createModal.value?._show(etfs.value, etfFlow);
 };
 const etfFlowUpdated = (etfFlow: EtfFlow) => {
   // reload because effective/all logic happens on server

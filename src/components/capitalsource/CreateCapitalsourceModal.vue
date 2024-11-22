@@ -120,7 +120,7 @@
 
 <script lang="ts" setup>
 import { useForm } from "vee-validate";
-import { computed, ref } from "vue";
+import { computed, ref, useTemplateRef } from "vue";
 import { useI18n } from "vue-i18n";
 import { boolean, date, number, string, ZodType } from "zod";
 
@@ -177,7 +177,8 @@ const schema: Partial<{ [key in keyof Capitalsource]: ZodType }> = {
 
 const mcs = ref({} as Capitalsource);
 const origMcs = ref({} as Capitalsource | undefined);
-const modalComponent = ref();
+const modalComponent = useTemplateRef<typeof ModalVue>('modalComponent');
+
 const emit = defineEmits(["capitalsourceUpdated", "capitalsourceCreated"]);
 
 const groupUseValues = [
@@ -210,7 +211,7 @@ const resetForm = () => {
 const _show = async (_mcs?: Capitalsource) => {
   origMcs.value = _mcs ?? undefined;
   resetForm();
-  modalComponent.value._show();
+  modalComponent.value?._show();
 };
 
 const createCapitalsource = handleSubmit(() => {
@@ -220,7 +221,7 @@ const createCapitalsource = handleSubmit(() => {
     //update
     CapitalsourceService.updateCapitalsource(mcs.value)
       .then(() => {
-        modalComponent.value._hide();
+        modalComponent.value?._hide();
         emit("capitalsourceUpdated", mcs.value);
       })
       .catch((backendError) => {
@@ -231,7 +232,7 @@ const createCapitalsource = handleSubmit(() => {
     CapitalsourceService.createCapitalsource(mcs.value)
       .then((_mcs) => {
         mcs.value = _mcs;
-        modalComponent.value._hide();
+        modalComponent.value?._hide();
         emit("capitalsourceCreated", mcs.value);
       })
       .catch((backendError) => {

@@ -97,7 +97,7 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref, watch } from "vue";
+import { onMounted, ref, useTemplateRef, watch } from "vue";
 
 import { useCapitalsourceStore } from "@/stores/CapitalsourceStore";
 import { useUserSessionStore } from "@/stores/UserSessionStore";
@@ -113,8 +113,8 @@ const validNow = ref(true);
 const capitalsources = ref(new Array<Capitalsource>());
 const searchString = ref("");
 
-const createCapitalsourceModalList = ref();
-const deleteModal = ref();
+const createCapitalsourceModalList = useTemplateRef<typeof CreateCapitalsourceModalVue>('createCapitalsourceModalList');
+const deleteModal = useTemplateRef<typeof DeleteCapitalsourceModalVue>('deleteModal');
 
 const userId = useUserSessionStore().getUserId;
 
@@ -127,15 +127,15 @@ watch(capitalsource, () => {
 });
 
 const showCreateCapitalsourceModal = () => {
-  createCapitalsourceModalList.value._show();
+  createCapitalsourceModalList.value?._show();
 };
 
 const deleteCapitalsource = (mcs: Capitalsource) => {
-  deleteModal.value._show(mcs);
+  deleteModal.value?._show(mcs);
 };
 
 const editCapitalsource = (mcs: Capitalsource) => {
-  createCapitalsourceModalList.value._show(mcs);
+  createCapitalsourceModalList.value?._show(mcs);
 };
 
 const searchAllContent = () => {

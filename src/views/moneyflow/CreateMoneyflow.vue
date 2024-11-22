@@ -59,7 +59,7 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { onMounted, ref } from "vue";
+import { onMounted, ref, useTemplateRef } from "vue";
 
 import EditMoneyflowBase from "@/components/moneyflow/EditMoneyflowBase.vue";
 
@@ -77,7 +77,7 @@ const serverErrors = ref(new Array<string>());
 const preDefMoneyflows = ref(new Array<PreDefMoneyflow>());
 const preDefMoneyflowId = ref(0);
 const selectedPreDefMoneyflow = ref(undefined as PreDefMoneyflow | undefined);
-const editMoneyflowVue = ref();
+const editMoneyflowVue = useTemplateRef<typeof EditMoneyflowBase>("editMoneyflowVue");
 
 const { handleSubmit, values, setFieldTouched } = useForm();
 
@@ -112,7 +112,7 @@ const selectPreDefMoneyflow = () => {
 };
 
 const createMoneyflow = handleSubmit(() => {
-  editMoneyflowVue.value.createMoneyflow().then((ret: boolean) => {
+  editMoneyflowVue.value?.createMoneyflow().then((ret: boolean) => {
     if (ret) resetForm();
   });
 });
@@ -120,7 +120,7 @@ const createMoneyflow = handleSubmit(() => {
 const resetForm = () => {
   preDefMoneyflowId.value = 0;
   selectPreDefMoneyflow();
-  editMoneyflowVue.value.resetForm();
+  editMoneyflowVue.value?.resetForm();
   Object.keys(values).forEach((field) => setFieldTouched(field, false));
 };
 </script>

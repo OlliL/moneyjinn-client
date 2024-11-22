@@ -23,7 +23,7 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { computed, ref, watch, type PropType } from "vue";
+import { computed, ref, useTemplateRef, watch, type PropType } from "vue";
 import { any, type ZodType } from "zod";
 
 import CreateCapitalsourceModalVue from "./CreateCapitalsourceModal.vue";
@@ -61,7 +61,7 @@ const props = defineProps({
 const firstSelectBoxValue = { id: 0, value: "" } as SelectBoxValue;
 
 const capitalsourceId = ref(0);
-const createCapitalsourceModal = ref();
+const createCapitalsourceModal = useTemplateRef<typeof CreateCapitalsourceModalVue>('createCapitalsourceModal');
 const capitalsourceStore = useCapitalsourceStore();
 const emit = defineEmits(["update:modelValue"]);
 
@@ -73,7 +73,7 @@ const selectBoxValues = computed((): Array<SelectBoxValue> => {
 });
 
 const showCreateCapitalsourceModal = () => {
-  createCapitalsourceModal.value._show();
+  createCapitalsourceModal.value?._show();
 };
 
 const capitalsourceCreated = (mcs: Capitalsource) => {

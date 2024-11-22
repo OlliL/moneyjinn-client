@@ -40,11 +40,11 @@ export default { name: "MyModal" };
 </script>
 
 <script lang="ts" setup>
-import { computed, onMounted, ref } from "vue";
+import { computed, onMounted, ref, useTemplateRef } from "vue";
 import { Modal } from "bootstrap";
 
 const thisModalObj = ref({} as Modal);
-const modalEle = ref();
+const modalEle = useTemplateRef<HTMLDivElement>('modalEle');
 
 const props = defineProps({
   title: {
@@ -78,6 +78,7 @@ const _hide = async () => {
 defineExpose({ _show, _hide });
 
 onMounted(() => {
-  thisModalObj.value = new Modal(modalEle.value as HTMLDivElement);
+  if(modalEle.value)
+    thisModalObj.value = new Modal(modalEle.value);
 });
 </script>

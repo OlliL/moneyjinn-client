@@ -127,7 +127,7 @@
 
 <script lang="ts" setup>
 import { useForm } from "vee-validate";
-import { computed, ref } from "vue";
+import { computed, ref, useTemplateRef } from "vue";
 import { useI18n } from "vue-i18n";
 import { boolean, date, number, string } from "zod";
 
@@ -199,7 +199,7 @@ const yesNoValues = [
   { id: false, value: t("General.no") },
   { id: true, value: t("General.yes") },
 ] as Array<SelectBoxValue>;
-const modalComponent = ref();
+const modalComponent = useTemplateRef<typeof ModalVue>('modalComponent');
 const emit = defineEmits(["userCreated", "userUpdated"]);
 
 const { handleSubmit, values, setFieldTouched } = useForm();
@@ -263,7 +263,7 @@ const resetForm = () => {
 const _show = async (_user?: User) => {
   origUser.value = _user ?? undefined;
   resetForm();
-  modalComponent.value._show();
+  modalComponent.value?._show();
 };
 
 const createUser = handleSubmit(() => {
@@ -281,7 +281,7 @@ const createUser = handleSubmit(() => {
       };
       UserService.updateUser(user.value, mar)
         .then(() => {
-          modalComponent.value._hide();
+          modalComponent.value?._hide();
           emit("userUpdated", user.value);
         })
         .catch((backendError) => {
@@ -295,7 +295,7 @@ const createUser = handleSubmit(() => {
     UserService.createUser(user.value)
       .then((_user) => {
         user.value = _user;
-        modalComponent.value._hide();
+        modalComponent.value?._hide();
         emit("userCreated", user.value);
       })
       .catch((backendError) => {

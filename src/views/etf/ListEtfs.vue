@@ -96,7 +96,7 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref } from "vue";
+import { onMounted, ref, useTemplateRef } from "vue";
 
 import CreateEtfModalVue from "@/components/etf/CreateEtfModal.vue";
 import DeleteEtfModalVue from "@/components/etf/DeleteEtfModal.vue";
@@ -114,19 +114,19 @@ const etfs = ref(new Array<Etf>());
 const allEtfs = ref(new Array<Etf>());
 const searchString = ref("");
 
-const createEtfModalList = ref();
-const deleteModal = ref();
+const createEtfModalList = useTemplateRef<typeof CreateEtfModalVue>("createEtfModalList");
+const deleteModal = useTemplateRef<typeof DeleteEtfModalVue>("deleteModal");
 
 const showCreateEtfModal = () => {
-  createEtfModalList.value._show();
+  createEtfModalList.value?._show();
 };
 
 const deleteEtf = (mcs: Etf) => {
-  deleteModal.value._show(mcs);
+  deleteModal.value?._show(mcs);
 };
 
 const editEtf = (mcs: Etf) => {
-  createEtfModalList.value._show(mcs);
+  createEtfModalList.value?._show(mcs);
 };
 
 const searchAllContent = () => {

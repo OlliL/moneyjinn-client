@@ -34,7 +34,7 @@
 
 <script lang="ts" setup>
 import { useForm } from "vee-validate";
-import { computed, ref } from "vue";
+import { computed, ref, useTemplateRef } from "vue";
 import { useI18n } from "vue-i18n";
 import { string, ZodType } from "zod";
 
@@ -69,7 +69,7 @@ const schema: Partial<{ [key in keyof PostingAccount]: ZodType }> = {
 
 const mpa = ref({} as PostingAccount);
 const origMpa = ref({} as PostingAccount | undefined);
-const modalComponent = ref();
+const modalComponent = useTemplateRef<typeof ModalVue>('modalComponent');
 const emit = defineEmits(["postingAccountCreated", "postingAccountUpdated"]);
 
 const { handleSubmit, values, setFieldTouched } = useForm();
@@ -93,7 +93,7 @@ const resetForm = () => {
 const _show = async (_mpa?: PostingAccount) => {
   origMpa.value = _mpa ?? undefined;
   resetForm();
-  modalComponent.value._show();
+  modalComponent.value?._show();
 };
 
 const createPostingAccount = handleSubmit(() => {
@@ -103,7 +103,7 @@ const createPostingAccount = handleSubmit(() => {
     //update
     PostingAccountService.updatePostingAccount(mpa.value)
       .then(() => {
-        modalComponent.value._hide();
+        modalComponent.value?._hide();
         emit("postingAccountUpdated", mpa.value);
       })
       .catch((backendError) => {
@@ -114,7 +114,7 @@ const createPostingAccount = handleSubmit(() => {
     PostingAccountService.createPostingAccount(mpa.value)
       .then((_mpa) => {
         mpa.value = _mpa;
-        modalComponent.value._hide();
+        modalComponent.value?._hide();
         emit("postingAccountCreated", mpa.value);
       })
       .catch((backendError) => {

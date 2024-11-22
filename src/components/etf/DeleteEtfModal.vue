@@ -65,7 +65,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref } from "vue";
+import { computed, ref, useTemplateRef } from "vue";
 
 import DivError from "../DivError.vue";
 import ModalVue from "../Modal.vue";
@@ -81,7 +81,7 @@ import { formatNumber } from "@/tools/views/FormatNumber";
 const serverErrors = ref(new Array<string>());
 
 const etf = ref({} as Etf);
-const modalComponent = ref();
+const modalComponent = useTemplateRef<typeof ModalVue>('modalComponent');
 const emit = defineEmits(["etfDeleted"]);
 
 const trabsactionCostsRelativeString = computed(() => {
@@ -99,7 +99,7 @@ const partialTaxExemptionString = computed(() => {
 const _show = (_etf: Etf) => {
   etf.value = _etf;
   serverErrors.value = new Array<string>();
-  modalComponent.value._show();
+  modalComponent.value?._show();
 };
 
 const deleteEtf = () => {
@@ -107,7 +107,7 @@ const deleteEtf = () => {
 
   CrudEtfService.deleteEtf(etf.value.id)
     .then(() => {
-      modalComponent.value._hide();
+      modalComponent.value?._hide();
       emit("etfDeleted", etf.value);
     })
     .catch((backendError) => {

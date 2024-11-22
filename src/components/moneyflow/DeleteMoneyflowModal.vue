@@ -48,7 +48,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
+import { ref, useTemplateRef } from "vue";
 
 import ModalVue from "../Modal.vue";
 import SpanAmount from "../SpanAmount.vue";
@@ -63,13 +63,13 @@ import { handleBackendError } from "@/tools/views/HandleBackendError";
 const serverErrors = ref(new Array<string>());
 
 const mmf = ref({} as Moneyflow);
-const modalComponent = ref();
+const modalComponent = useTemplateRef<typeof ModalVue>('modalComponent');
 const emit = defineEmits(["moneyflowDeleted"]);
 
 const _show = (_mmf: Moneyflow) => {
   mmf.value = _mmf;
   serverErrors.value = new Array<string>();
-  modalComponent.value._show();
+  modalComponent.value?._show();
 };
 
 const deleteMoneyflow = () => {
@@ -77,7 +77,7 @@ const deleteMoneyflow = () => {
 
   MoneyflowService.deleteMoneyflow(mmf.value.id)
     .then(() => {
-      modalComponent.value._hide();
+      modalComponent.value?._hide();
       emit("moneyflowDeleted", mmf.value);
     })
     .catch((backendError) => {

@@ -82,7 +82,7 @@
 
 <script lang="ts" setup>
 import { useForm } from "vee-validate";
-import { computed, ref, watch } from "vue";
+import { computed, ref, useTemplateRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { date, string, type ZodType, number } from "zod";
 
@@ -123,7 +123,7 @@ const etfFlow = ref({} as EtfFlow);
 const origEtfFlow = ref({} as EtfFlow | undefined);
 const bookingdate = ref(new Date());
 const bookingtime = ref("");
-const modalComponent = ref();
+const modalComponent = useTemplateRef<typeof ModalVue>('modalComponent');
 const emit = defineEmits(["etfFlowCreated", "etfFlowUpdated"]);
 
 const { handleSubmit, values, setFieldTouched } = useForm();
@@ -171,7 +171,7 @@ const _show = (_etfs: Array<Etf>, _etfFlow?: EtfFlow, _etfId?: number) => {
     defaultEtfId.value = _etfId ?? 0;
   }
   resetForm();
-  modalComponent.value._show();
+  modalComponent.value?._show();
 };
 
 const createEtfFlow = handleSubmit(() => {
@@ -189,7 +189,7 @@ const createEtfFlow = handleSubmit(() => {
       //update
       CrudEtfFlowService.updateEtfFlow(etfFlow.value)
         .then(() => {
-          modalComponent.value._hide();
+          modalComponent.value?._hide();
           emit("etfFlowUpdated", etfFlow.value);
         })
         .catch((backendError) => {
@@ -200,7 +200,7 @@ const createEtfFlow = handleSubmit(() => {
       CrudEtfFlowService.createEtfFlow(etfFlow.value)
         .then((_etfFlow) => {
           etfFlow.value = _etfFlow;
-          modalComponent.value._hide();
+          modalComponent.value?._hide();
           emit("etfFlowCreated", etfFlow.value);
         })
         .catch((backendError) => {

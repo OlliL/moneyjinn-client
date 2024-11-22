@@ -54,7 +54,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
+import { ref, useTemplateRef } from "vue";
 
 import CreateContractpartnerAccountModalVue from "./CreateContractpartnerAccountModal.vue";
 import DeleteContractpartnerAccountModalVue from "./DeleteContractpartnerAccountModal.vue";
@@ -74,9 +74,9 @@ const serverErrors = ref(new Array<string>());
 const mcp = ref({} as Contractpartner);
 const contractpartnerAccount = ref({} as Array<ContractpartnerAccount>);
 const dataLoaded = ref(false);
-const modalComponent = ref();
-const createContractpartnerAccountModal = ref();
-const deleteModal = ref();
+const modalComponent = useTemplateRef<typeof ModalVue>('modalComponent');
+const createContractpartnerAccountModal = useTemplateRef<typeof CreateContractpartnerAccountModalVue>('createContractpartnerAccountModal');
+const deleteModal = useTemplateRef<typeof DeleteContractpartnerAccountModalVue>('deleteModal');
 
 const loadData = () => {
   dataLoaded.value = false;
@@ -93,19 +93,19 @@ const loadData = () => {
 const _show = (_mcp: Contractpartner) => {
   mcp.value = _mcp;
   loadData();
-  modalComponent.value._show();
+  modalComponent.value?._show();
 };
 
 const showCreateContractpartnerAccountModal = () => {
-  createContractpartnerAccountModal.value._show();
+  createContractpartnerAccountModal.value?._show();
 };
 
 const editContractpartnerAccount = (_mca: ContractpartnerAccount) => {
-  createContractpartnerAccountModal.value._show(_mca);
+  createContractpartnerAccountModal.value?._show(_mca);
 };
 
 const deleteContractpartnerAccount = (_mca: ContractpartnerAccount) => {
-  deleteModal.value._show(_mca);
+  deleteModal.value?._show(_mca);
 };
 
 defineExpose({ _show });

@@ -38,7 +38,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref } from "vue";
+import { computed, ref, useTemplateRef } from "vue";
 
 import DivError from "../DivError.vue";
 import ModalVue from "../Modal.vue";
@@ -56,7 +56,7 @@ const serverErrors = ref(new Array<string>());
 
 const etfFlow = ref({} as EtfFlow);
 const etfName = ref("");
-const modalComponent = ref();
+const modalComponent = useTemplateRef<typeof ModalVue>('modalComponent');
 const emit = defineEmits(["etfFlowDeleted"]);
 
 const amountClass = computed(() => {
@@ -78,14 +78,14 @@ const _show = (_etfFlow: EtfFlow, _etfName: string) => {
   etfFlow.value = _etfFlow;
   etfName.value = _etfName;
   serverErrors.value = new Array<string>();
-  modalComponent.value._show();
+  modalComponent.value?._show();
 };
 const deleteEtfFlow = () => {
   serverErrors.value = new Array<string>();
 
   CrudEtfFlowService.deleteEtfFlow(etfFlow.value.etfflowid)
     .then(() => {
-      modalComponent.value._hide();
+      modalComponent.value?._hide();
       emit("etfFlowDeleted", etfFlow.value);
     })
     .catch((backendError) => {

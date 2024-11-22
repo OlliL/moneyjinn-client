@@ -18,7 +18,7 @@
 <script lang="ts" setup>
 import { useField } from "vee-validate";
 import { toTypedSchema } from "@vee-validate/zod";
-import { computed, onMounted, ref, type PropType, type Ref } from "vue";
+import { computed, onMounted, ref, useTemplateRef, type PropType, type Ref } from "vue";
 import { any, type ZodType } from "zod";
 
 import {
@@ -49,7 +49,7 @@ const props = defineProps({
     required: false,
   },
 });
-const fileUpload = ref();
+const fileUpload = useTemplateRef<HTMLInputElement>('fileUpload');
 const emit = defineEmits(["update:modelValue"]);
 
 const schema = computed(() => {
@@ -70,8 +70,7 @@ const {
 });
 
 const onInput = (event: Event) => {
-  const filesElement = fileUpload.value as HTMLInputElement;
-  const files = filesElement.files;
+  const files = fileUpload.value?.files;
 
   setState({ touched: true });
   handleChange(event, true);

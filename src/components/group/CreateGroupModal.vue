@@ -31,7 +31,7 @@
 
 <script lang="ts" setup>
 import { useForm } from "vee-validate";
-import { computed, ref } from "vue";
+import { computed, ref, useTemplateRef } from "vue";
 import { useI18n } from "vue-i18n";
 import { string, ZodType } from "zod";
 
@@ -57,7 +57,7 @@ const schema: Partial<{ [key in keyof Group]: ZodType }> = {
 
 const group = ref({} as Group);
 const origGroup = ref({} as Group | undefined);
-const modalComponent = ref();
+const modalComponent = useTemplateRef<typeof ModalVue>('modalComponent');
 const emit = defineEmits(["groupUpdated", "groupCreated"]);
 
 const { handleSubmit, values, setFieldTouched } = useForm();
@@ -81,7 +81,7 @@ const resetForm = () => {
 const _show = async (_group?: Group) => {
   origGroup.value = _group ?? undefined;
   resetForm();
-  modalComponent.value._show();
+  modalComponent.value?._show();
 };
 
 const createGroup = handleSubmit(() => {
@@ -91,7 +91,7 @@ const createGroup = handleSubmit(() => {
     //update
     GroupService.updateGroup(group.value)
       .then(() => {
-        modalComponent.value._hide();
+        modalComponent.value?._hide();
         emit("groupUpdated", group.value);
       })
       .catch((backendError) => {
@@ -102,7 +102,7 @@ const createGroup = handleSubmit(() => {
     GroupService.createGroup(group.value)
       .then((_group) => {
         group.value = _group;
-        modalComponent.value._hide();
+        modalComponent.value?._hide();
         emit("groupCreated", group.value);
       })
       .catch((backendError) => {

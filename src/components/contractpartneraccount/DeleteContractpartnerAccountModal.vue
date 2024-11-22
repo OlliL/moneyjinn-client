@@ -36,7 +36,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
+import { ref, useTemplateRef } from "vue";
 
 import DivError from "../DivError.vue";
 import ModalVue from "../Modal.vue";
@@ -50,13 +50,13 @@ import ContractpartnerAccountService from "@/service/ContractpartnerAccountServi
 const serverErrors = ref(new Array<string>());
 
 const mca = ref({} as ContractpartnerAccount);
-const modalComponent = ref();
+const modalComponent = useTemplateRef<typeof ModalVue>('modalComponent');
 const emit = defineEmits(["contractpartnerAccountDeleted"]);
 
 const _show = (_mca: ContractpartnerAccount) => {
   mca.value = _mca;
   serverErrors.value = new Array<string>();
-  modalComponent.value._show();
+  modalComponent.value?._show();
 };
 
 const deleteContractpartnerAccount = () => {
@@ -66,7 +66,7 @@ const deleteContractpartnerAccount = () => {
     mca.value.id,
   )
     .then(() => {
-      modalComponent.value._hide();
+      modalComponent.value?._hide();
       emit("contractpartnerAccountDeleted", mca.value);
     })
     .catch((backendError) => {

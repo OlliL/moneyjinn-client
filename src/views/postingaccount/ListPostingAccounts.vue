@@ -76,7 +76,7 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref, watch } from "vue";
+import { onMounted, ref, useTemplateRef, watch } from "vue";
 
 import { usePostingAccountStore } from "@/stores/PostingAccountStore";
 
@@ -90,8 +90,8 @@ import { storeToRefs } from "pinia";
 const postingAccounts = ref(new Array<PostingAccount>());
 const searchString = ref("");
 
-const createPostingAccountModalList = ref();
-const deleteModal = ref();
+const createPostingAccountModalList = useTemplateRef<typeof CreatePostingAccountModalVue>("createPostingAccountModalList");
+const deleteModal = useTemplateRef<typeof DeletePostingAccountModalVue>("deleteModal");
 
 const postinAccountStore = usePostingAccountStore();
 const searchPostingAccounts = postinAccountStore.searchPostingAccounts;
@@ -102,15 +102,15 @@ watch(postingAccount, () => {
 });
 
 const showCreatePostingAccountModal = () => {
-  createPostingAccountModalList.value._show();
+  createPostingAccountModalList.value?._show();
 };
 
 const deletePostingAccount = (mcs: PostingAccount) => {
-  deleteModal.value._show(mcs);
+  deleteModal.value?._show(mcs);
 };
 
 const editPostingAccount = (mcs: PostingAccount) => {
-  createPostingAccountModalList.value._show(mcs);
+  createPostingAccountModalList.value?._show(mcs);
 };
 
 const searchAllContent = () => {

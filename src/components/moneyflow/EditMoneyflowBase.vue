@@ -153,7 +153,6 @@
           <div class="card-body">
             <EditMoneyflowBaseSplitEntryRowVue
               v-for="(mse, index) in mmf.moneyflowSplitEntries"
-              ref="mseRow"
               :key="mse.id"
               :amount="mse.amount"
               :comment="mse.comment"
@@ -250,7 +249,6 @@ const toggleTextOn = ref("");
 const mseRemainderIsValid = ref(undefined as boolean | undefined);
 const showMoneyflowFields = ref(true);
 const originalMoneyflowSplitEntryIds = ref(new Array<number>());
-const mseRow = ref();
 const contractpartnerStore = useContractpartnerStore();
 const capitalsourceStore = useCapitalsourceStore();
 
@@ -593,7 +591,7 @@ const prepareServerCall = (): boolean => {
   prepareServerCallSplitEntries();
 
   if (formIsValid.value) {
-    if (amount.value) mmf.value.amount = amount.value;
+    mmf.value?.amount = amount.value;
     // remove empty rows
     if (mmf.value.moneyflowSplitEntries) {
       mmf.value.moneyflowSplitEntries = mmf.value.moneyflowSplitEntries.filter(

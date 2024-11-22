@@ -58,7 +58,7 @@
 
 <script lang="ts" setup>
 import { useForm } from "vee-validate";
-import { computed, ref } from "vue";
+import { computed, ref, useTemplateRef } from "vue";
 
 import ButtonSubmit from "@/components/ButtonSubmit.vue";
 import DivError from "../DivError.vue";
@@ -76,8 +76,8 @@ import MoneyflowReceiptService from "@/service/MoneyflowReceiptService";
 const serverErrors = ref(new Array<string>());
 
 const mmf = ref({} as Moneyflow);
-const modalComponent = ref();
-const editMoneyflowVue = ref();
+const modalComponent = useTemplateRef<typeof ModalVue>('modalComponent');
+const editMoneyflowVue = useTemplateRef<typeof EditMoneyflowBase>('editMoneyflowVue');
 
 const receiptBase64 = ref("");
 const isJpeg = ref(false);
@@ -100,15 +100,15 @@ const _show = (_mmf: Moneyflow, receipt?: ImportedMoneyflowReceipt) => {
   if (mmf.value.hasReceipt) loadReceipt(mmf.value.id);
   else if (receipt) processImportedReceipt(receipt);
 
-  modalComponent.value._show();
+  modalComponent.value?._show();
   Object.keys(values).forEach((field) => setFieldTouched(field, false));
 };
 
 const updateMoneyflow = handleSubmit(() => {
-  editMoneyflowVue.value.updateMoneyflow().then((mmf: Moneyflow) => {
+  editMoneyflowVue.value?.updateMoneyflow().then((mmf: Moneyflow) => {
     if (mmf !== undefined) {
       emit("moneyflowUpdated", mmf);
-      modalComponent.value._hide();
+      modalComponent.value?._hide();
     }
   });
 });
@@ -147,7 +147,7 @@ const deleteMoneyflowReceipt = () => {
   MoneyflowReceiptService.deleteMoneyflowReceipt(mmf.value.id)
     .then(() => {
       emit("moneyflowReceiptDeleted", mmf.value.id);
-      modalComponent.value._hide();
+      modalComponent.value?._hide();
     })
     .catch((backendError) => {
       handleBackendError(backendError, serverErrors);

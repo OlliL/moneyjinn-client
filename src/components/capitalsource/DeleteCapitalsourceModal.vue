@@ -60,7 +60,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref } from "vue";
+import { computed, ref, useTemplateRef } from "vue";
 
 import DivError from "../DivError.vue";
 import ModalVue from "../Modal.vue";
@@ -79,7 +79,7 @@ import CapitalsourceService from "@/service/CapitalsourceService";
 const serverErrors = ref(new Array<string>());
 
 const mcs = ref({} as Capitalsource);
-const modalComponent = ref();
+const modalComponent = useTemplateRef<typeof ModalVue>('modalComponent');
 const emit = defineEmits(["capitalsourceDeleted"]);
 
 const importAllowedColor = computed(() => {
@@ -101,7 +101,7 @@ const stateString = computed(() => {
 const _show = (_mcs: Capitalsource) => {
   mcs.value = _mcs;
   serverErrors.value = new Array<string>();
-  modalComponent.value._show();
+  modalComponent.value?._show();
 };
 
 const deleteCapitalsource = () => {
@@ -109,7 +109,7 @@ const deleteCapitalsource = () => {
 
   CapitalsourceService.deleteCapitalsource(mcs.value.id)
     .then(() => {
-      modalComponent.value._hide();
+      modalComponent.value?._hide();
       emit("capitalsourceDeleted", mcs.value);
     })
     .catch((backendError) => {

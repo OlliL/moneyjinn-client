@@ -41,7 +41,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
+import { ref, useTemplateRef } from "vue";
 
 import DivError from "../DivError.vue";
 import ModalVue from "../Modal.vue";
@@ -58,7 +58,7 @@ const serverErrors = ref(new Array<string>());
 
 const etfPreliminaryLumpSum = ref({} as EtfPreliminaryLumpSum);
 const etfName = ref("");
-const modalComponent = ref();
+const modalComponent = useTemplateRef<typeof ModalVue>('modalComponent');
 const emit = defineEmits(["etfPreliminaryLumpSumDeleted"]);
 
 const _show = (_etfs: Array<Etf>, _mep: EtfPreliminaryLumpSum) => {
@@ -71,7 +71,7 @@ const _show = (_etfs: Array<Etf>, _mep: EtfPreliminaryLumpSum) => {
   }
 
   etfPreliminaryLumpSum.value = _mep;
-  modalComponent.value._show();
+  modalComponent.value?._show();
 };
 const deleteEtfPreliminaryLumpSum = () => {
   serverErrors.value = new Array<string>();
@@ -80,7 +80,7 @@ const deleteEtfPreliminaryLumpSum = () => {
     etfPreliminaryLumpSum.value.id,
   )
     .then(() => {
-      modalComponent.value._hide();
+      modalComponent.value?._hide();
       emit("etfPreliminaryLumpSumDeleted", etfPreliminaryLumpSum.value);
     })
     .catch((backendError) => {
