@@ -5,28 +5,29 @@
     @contractpartner-created="contractpartnerCreated"
   />
 
-  <div class="input-group">
-    <div class="form-floating">
-      <SelectStandard
-        v-model="contractpartnerId"
-        :validation-schema="validationSchema"
-        :validation-schema-ref="validationSchemaRef"
-        :id="'contractpartner' + idSuffix"
-        :field-label="fieldLabel"
-        :select-box-values="selectBoxValues"
-      >
-        <template #icon
-          ><span
-            class="input-group-text"
-            @click="showCreateContractpartnerModal"
-            ><i class="bi bi-plus"></i></span
-        ></template>
-      </SelectStandard>
-    </div>
-  </div>
+  <SelectStandard
+    v-model="contractpartnerId"
+    :validation-schema="validationSchema"
+    :validation-schema-ref="validationSchemaRef"
+    :id="'contractpartner' + idSuffix"
+    :field-label="fieldLabel"
+    :select-box-values="selectBoxValues"
+  >
+    <template #icon
+      ><span class="input-group-text" @click="showCreateContractpartnerModal"
+        ><i class="bi bi-plus"></i></span
+    ></template>
+  </SelectStandard>
 </template>
 <script lang="ts" setup>
-import { computed, ref, useTemplateRef, watch, type PropType, type Ref } from "vue";
+import {
+  computed,
+  ref,
+  useTemplateRef,
+  watch,
+  type PropType,
+  type Ref,
+} from "vue";
 import { any, type ZodType } from "zod";
 
 import CreateContractpartnerModalVue from "./CreateContractpartnerModal.vue";
@@ -68,7 +69,9 @@ const props = defineProps({
 const firstSelectBoxValue = { id: 0, value: "" } as SelectBoxValue;
 
 const contractpartnerId = ref(0);
-const createContractpartnerModal = useTemplateRef<typeof CreateContractpartnerModalVue>('createContractpartnerModal');
+const createContractpartnerModal = useTemplateRef<
+  typeof CreateContractpartnerModalVue
+>("createContractpartnerModal");
 const contractpartnerStore = useContractpartnerStore();
 const emit = defineEmits(["update:modelValue"]);
 

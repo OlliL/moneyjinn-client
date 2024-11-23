@@ -91,9 +91,11 @@
     <div class="row justify-content-md-center mt-5" v-if="dataCompared">
       <div class="col-xxl-10 col-md-12 col-sm-12 col-xs-12">
         <table class="table table-hover">
-          <col style="width: 5%" />
-          <col style="width: 5%" />
-          <col style="width: 90%" />
+          <colgroup>
+            <col style="width: 5%" />
+            <col style="width: 5%" />
+            <col style="width: 90%" />
+          </colgroup>
           <thead>
             <th colspan="3">{{ $t("CompareData.result") }}</th>
           </thead>
@@ -210,8 +212,9 @@ const compareDatasNotInFile = ref({} as Array<CompareData> | undefined);
 const compareDatasNotInDatabase = ref({} as Array<CompareData> | undefined);
 const files = ref({} as FileList);
 
-const deleteModal = useTemplateRef<typeof DeleteMoneyflowModalVue>('deleteModal');
-const editModal = useTemplateRef<typeof EditMoneyflowModalVue>('editModal');
+const deleteModal =
+  useTemplateRef<typeof DeleteMoneyflowModalVue>("deleteModal");
+const editModal = useTemplateRef<typeof EditMoneyflowModalVue>("editModal");
 
 const { handleSubmit, values, setFieldTouched } = useForm();
 

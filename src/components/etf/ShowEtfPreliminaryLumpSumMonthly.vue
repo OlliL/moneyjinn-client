@@ -3,8 +3,10 @@
     class="table table-striped table-bordered table-hover"
     v-if="dataLoaded"
   >
-    <col style="width: 60%" />
-    <col style="width: 40%" />
+    <colgroup>
+      <col style="width: 60%" />
+      <col style="width: 40%" />
+    </colgroup>
     <thead>
       <tr>
         <th>{{ $t("General.month") }}</th>

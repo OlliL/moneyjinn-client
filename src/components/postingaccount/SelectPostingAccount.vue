@@ -5,29 +5,33 @@
     @posting-account-created="postingAccountCreated"
   />
 
-  <div class="input-group">
-    <div class="form-floating">
-      <SelectStandard
-        v-model="postingAccountId"
-        :validation-schema="validationSchema"
-        :validation-schema-ref="validationSchemaRef"
-        :id="'postingAccount' + idSuffix"
-        :field-label="fieldLabel"
-        :select-box-values="selectBoxValues"
-      >
-        <template #icon
-          ><span
-            class="input-group-text"
-            @click="showCreatePostingAccountModal"
-            v-if="userIsAdmin"
-            ><i class="bi bi-plus"></i></span
-        ></template>
-      </SelectStandard>
-    </div>
-  </div>
+  <SelectStandard
+    v-model="postingAccountId"
+    :validation-schema="validationSchema"
+    :validation-schema-ref="validationSchemaRef"
+    :id="'postingAccount' + idSuffix"
+    :field-label="fieldLabel"
+    :select-box-values="selectBoxValues"
+  >
+    <template #icon
+      ><span
+        class="input-group-text"
+        @click="showCreatePostingAccountModal"
+        v-if="userIsAdmin"
+        ><i class="bi bi-plus"></i></span
+    ></template>
+  </SelectStandard>
 </template>
 <script lang="ts" setup>
-import { computed, onMounted, ref, useTemplateRef, watch, type PropType, type Ref } from "vue";
+import {
+  computed,
+  onMounted,
+  ref,
+  useTemplateRef,
+  watch,
+  type PropType,
+  type Ref,
+} from "vue";
 import { any, type ZodType } from "zod";
 
 import CreatePostingAccountModalVue from "./CreatePostingAccountModal.vue";
@@ -66,7 +70,9 @@ const props = defineProps({
 const firstSelectBoxValue = { id: 0, value: "" } as SelectBoxValue;
 
 const postingAccountId = ref(0);
-const createPostingAccountModal = useTemplateRef<typeof CreatePostingAccountModalVue>('createPostingAccountModal');
+const createPostingAccountModal = useTemplateRef<
+  typeof CreatePostingAccountModalVue
+>("createPostingAccountModal");
 const userIsAdmin = ref(false);
 const postingAccountStore = usePostingAccountStore();
 const emit = defineEmits(["update:modelValue"]);

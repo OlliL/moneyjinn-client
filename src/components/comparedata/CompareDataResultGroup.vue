@@ -22,15 +22,17 @@
     <td colspan="5" style="padding: 0">
       <div class="collapse" :id="'collapseResults' + compareDataKey">
         <table class="table table-bordered table-hover" v-if="showDetails">
-          <col style="width: 10%" />
-          <col style="width: 10%" />
-          <col style="width: 10%" />
-          <col style="width: 7%" />
-          <col style="width: 17%" />
-          <col style="width: 25%" />
-          <col style="width: 13%" />
-          <col style="width: 4%" />
-          <col style="width: 4%" />
+          <colgroup>
+            <col style="width: 10%" />
+            <col style="width: 10%" />
+            <col style="width: 10%" />
+            <col style="width: 7%" />
+            <col style="width: 17%" />
+            <col style="width: 25%" />
+            <col style="width: 13%" />
+            <col style="width: 4%" />
+            <col style="width: 4%" />
+          </colgroup>
           <thead>
             <tr>
               <th></th>

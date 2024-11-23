@@ -1,7 +1,9 @@
 <template>
   <table class="table table-bordered table-hover" v-if="dataLoaded">
-    <col style="width: 60%" />
-    <col style="width: 40%" />
+    <colgroup>
+      <col style="width: 60%" />
+      <col style="width: 40%" />
+    </colgroup>
     <tbody>
       <tr>
         <th>{{ $t("ETFPreliminaryLumpSum.price") }}</th>
