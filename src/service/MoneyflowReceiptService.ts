@@ -5,7 +5,7 @@ import type { MoneyflowReceipt } from "@/model/moneyflow/MoneyflowReceipt";
 import { MoneyflowReceiptType } from "@/model/moneyflow/MoneyflowReceiptType";
 
 class MoneyflowReceiptService extends AbstractService {
-  private api: MoneyflowReceiptControllerApi;
+  private readonly api: MoneyflowReceiptControllerApi;
 
   public constructor() {
     super();

@@ -15,7 +15,7 @@ import {
 import type { AxiosResponse } from "axios";
 
 class MonthlySettlementService extends AbstractService {
-  private api: MonthlySettlementControllerApi;
+  private readonly api: MonthlySettlementControllerApi;
 
   public constructor() {
     super();

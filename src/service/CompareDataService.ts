@@ -8,7 +8,7 @@ import { mapMoneyflowTransportToModel } from "./mapper/MoneyflowTransportMapper"
 import { mapCCompareDataDatasetTransportToModel } from "./mapper/CompareCompareDataDataset";
 
 class CompareDataService extends AbstractService {
-  private api: CompareDataControllerApi;
+  private readonly api: CompareDataControllerApi;
 
   public constructor() {
     super();

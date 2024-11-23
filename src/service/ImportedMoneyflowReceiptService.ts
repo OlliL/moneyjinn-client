@@ -6,7 +6,7 @@ import type { ImportedMoneyflowReceipt } from "@/model/moneyflow/ImportedMoneyfl
 import AbstractService from "./AbstractService";
 
 class ImportedMoneyflowReceiptService extends AbstractService {
-  private api: ImportedMoneyflowReceiptControllerApi;
+  private readonly api: ImportedMoneyflowReceiptControllerApi;
 
   public constructor() {
     super();

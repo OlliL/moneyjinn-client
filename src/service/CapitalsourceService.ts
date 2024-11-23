@@ -7,7 +7,7 @@ import {
 import { CrudCapitalsourceControllerApi } from "@/api";
 
 class CapitalsourceService extends AbstractService {
-  private api: CrudCapitalsourceControllerApi;
+  private readonly api: CrudCapitalsourceControllerApi;
 
   public constructor() {
     super();

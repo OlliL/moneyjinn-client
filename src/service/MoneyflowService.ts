@@ -18,7 +18,7 @@ import {
 } from "@/api";
 
 class MoneyflowService extends AbstractService {
-  private api: MoneyflowControllerApi;
+  private readonly api: MoneyflowControllerApi;
 
   public constructor() {
     super();

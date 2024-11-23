@@ -7,7 +7,7 @@ import {
 import { CrudEtfFlowControllerApi } from "@/api";
 
 class EtfFlowService extends AbstractService {
-  private api: CrudEtfFlowControllerApi;
+  private readonly api: CrudEtfFlowControllerApi;
 
   public constructor() {
     super();

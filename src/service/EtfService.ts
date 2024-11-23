@@ -13,7 +13,7 @@ import { mapEtfSummaryTransportToEtfSummary } from "./mapper/EtfTSummaryTranspor
 import type { AxiosResponse } from "axios";
 
 class EtfService extends AbstractService {
-  private api: EtfControllerApi;
+  private readonly api: EtfControllerApi;
 
   public constructor() {
     super();

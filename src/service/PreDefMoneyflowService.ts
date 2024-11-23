@@ -11,7 +11,7 @@ import {
 } from "./mapper/PreDefMoneyflowTransportMapper";
 
 class PreDefMoneyflowService extends AbstractService {
-  private api: PreDefMoneyflowControllerApi;
+  private readonly api: PreDefMoneyflowControllerApi;
 
   public constructor() {
     super();

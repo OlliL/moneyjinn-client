@@ -11,15 +11,13 @@ import {
 } from "./mapper/PostingAccountTransportMapper";
 
 class PostingAccountService extends AbstractService {
-  private api: PostingAccountControllerApi;
+  private readonly api: PostingAccountControllerApi;
 
   public constructor() {
     super();
 
     this.api = super.createApi(PostingAccountControllerApi);
   }
-
-  private static CONTROLLER = "postingaccount";
 
   async fetchAllPostingAccount(): Promise<Array<PostingAccount>> {
     const response = await this.api.showPostingAccountList();
