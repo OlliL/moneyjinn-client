@@ -591,7 +591,7 @@ const prepareServerCall = (): boolean => {
   prepareServerCallSplitEntries();
 
   if (formIsValid.value) {
-    mmf.value?.amount = amount.value;
+    if (amount.value) mmf.value.amount = amount.value;
     // remove empty rows
     if (mmf.value.moneyflowSplitEntries) {
       mmf.value.moneyflowSplitEntries = mmf.value.moneyflowSplitEntries.filter(
