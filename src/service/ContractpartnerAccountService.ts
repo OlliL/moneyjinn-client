@@ -7,7 +7,7 @@ import {
 import { CrudContractpartnerAccountControllerApi } from "@/api";
 
 class ContractpartnerAccountService extends AbstractService {
-  private api: CrudContractpartnerAccountControllerApi;
+  private readonly api: CrudContractpartnerAccountControllerApi;
 
   public constructor() {
     super();

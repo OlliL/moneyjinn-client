@@ -11,7 +11,7 @@ import {
 } from "./mapper/GroupTransportMapper";
 
 class GroupService extends AbstractService {
-  private api: GroupControllerApi;
+  private readonly api: GroupControllerApi;
 
   public constructor() {
     super();

@@ -7,7 +7,7 @@ import {
 import { CrudEtfPreliminaryLumpSumControllerApi } from "@/api";
 
 class EtfPreliminaryLumpSumService extends AbstractService {
-  private api: CrudEtfPreliminaryLumpSumControllerApi;
+  private readonly api: CrudEtfPreliminaryLumpSumControllerApi;
 
   public constructor() {
     super();

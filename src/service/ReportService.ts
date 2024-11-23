@@ -22,15 +22,13 @@ import {
 import type { AxiosResponse } from "axios";
 
 class ReportService extends AbstractService {
-  private api: ReportControllerApi;
+  private readonly api: ReportControllerApi;
 
   public constructor() {
     super();
 
     this.api = super.createApi(ReportControllerApi);
   }
-
-  private static CONTROLLER = "report";
 
   async getAvailableMonth(
     year?: number,

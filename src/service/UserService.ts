@@ -30,7 +30,7 @@ import type { User } from "@/model/user/User";
 import AbstractService from "@/service/AbstractService";
 
 class UserService extends AbstractService {
-  private api: UserControllerApi;
+  private readonly api: UserControllerApi;
 
   public constructor() {
     super();

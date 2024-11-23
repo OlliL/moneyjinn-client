@@ -3,7 +3,7 @@ import AbstractService from "@/service/AbstractService";
 import type { Events } from "@/model/event/Events";
 
 class EventService extends AbstractService {
-  private api: EventControllerApi;
+  private readonly api: EventControllerApi;
 
   public constructor() {
     super();
