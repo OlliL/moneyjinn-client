@@ -2,8 +2,10 @@
   <div class="row justify-content-md-center" v-if="calcResults.etfId">
     <div class="col-xxl-3 col-md-6 col-xs-12 mb-4">
       <table class="table table-bordered table-hover">
-        <col style="width: 75%" />
-        <col style="width: 25%" />
+        <colgroup>
+          <col style="width: 75%" />
+          <col style="width: 25%" />
+        </colgroup>
         <tbody>
           <tr>
             <th class="text-start">
@@ -30,8 +32,10 @@
         </tbody>
       </table>
       <table class="table table-bordered table-hover">
-        <col style="width: 75%" />
-        <col style="width: 25%" />
+        <colgroup>
+          <col style="width: 75%" />
+          <col style="width: 25%" />
+        </colgroup>
         <tbody>
           <tr>
             <th class="text-start">
@@ -60,10 +64,12 @@
         </tbody>
       </table>
       <table class="table table-bordered table-hover">
-        <col style="width: 38%" />
-        <col style="width: 19%" />
-        <col style="width: 18%" />
-        <col style="width: 25%" />
+        <colgroup>
+          <col style="width: 38%" />
+          <col style="width: 19%" />
+          <col style="width: 18%" />
+          <col style="width: 25%" />
+        </colgroup>
         <tbody>
           <tr>
             <th class="text-start" colspan="3" id="newBuyProce">

@@ -5,22 +5,18 @@
     @capitalsource-created="capitalsourceCreated"
   />
 
-  <div class="input-group">
-    <div class="form-floating">
-      <SelectStandard
-        v-model="capitalsourceId"
-        :validation-schema="validationSchema"
-        :id="'capitalsource' + idSuffix"
-        :field-label="fieldLabel"
-        :select-box-values="selectBoxValues"
-      >
-        <template #icon
-          ><span class="input-group-text" @click="showCreateCapitalsourceModal"
-            ><i class="bi bi-plus"></i></span
-        ></template>
-      </SelectStandard>
-    </div>
-  </div>
+  <SelectStandard
+    v-model="capitalsourceId"
+    :validation-schema="validationSchema"
+    :id="'capitalsource' + idSuffix"
+    :field-label="fieldLabel"
+    :select-box-values="selectBoxValues"
+  >
+    <template #icon
+      ><span class="input-group-text" @click="showCreateCapitalsourceModal"
+        ><i class="bi bi-plus"></i></span
+    ></template>
+  </SelectStandard>
 </template>
 <script lang="ts" setup>
 import { computed, ref, useTemplateRef, watch, type PropType } from "vue";
@@ -61,7 +57,9 @@ const props = defineProps({
 const firstSelectBoxValue = { id: 0, value: "" } as SelectBoxValue;
 
 const capitalsourceId = ref(0);
-const createCapitalsourceModal = useTemplateRef<typeof CreateCapitalsourceModalVue>('createCapitalsourceModal');
+const createCapitalsourceModal = useTemplateRef<
+  typeof CreateCapitalsourceModalVue
+>("createCapitalsourceModal");
 const capitalsourceStore = useCapitalsourceStore();
 const emit = defineEmits(["update:modelValue"]);
 

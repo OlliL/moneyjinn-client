@@ -4,8 +4,10 @@
     class="table table-striped table-bordered table-hover"
     v-if="monthlySettlementsNoCredit.length"
   >
-    <col style="width: 70%" />
-    <col style="width: 30%" />
+    <colgroup>
+      <col style="width: 70%" />
+      <col style="width: 30%" />
+    </colgroup>
     <thead>
       <tr>
         <th>{{ $t("General.capitalsource") }}</th>
@@ -29,8 +31,10 @@
     class="table table-striped table-bordered table-hover"
     v-if="monthlySettlementsCredit.length"
   >
-    <col style="width: 70%" />
-    <col style="width: 30%" />
+    <colgroup>
+      <col style="width: 70%" />
+      <col style="width: 30%" />
+    </colgroup>
     <thead v-if="!monthlySettlementsNoCredit.length">
       <tr>
         <th>{{ $t("General.capitalsource") }}</th>

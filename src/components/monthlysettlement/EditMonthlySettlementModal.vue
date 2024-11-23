@@ -30,8 +30,10 @@
               class="table table-striped table-bordered table-hover"
               v-if="monthlySettlementsNoCredit"
             >
-              <col style="width: 60%" />
-              <col style="width: 40%" />
+              <colgroup>
+                <col style="width: 60%" />
+                <col style="width: 40%" />
+              </colgroup>
               <thead>
                 <tr>
                   <th>{{ $t("General.capitalsource") }}</th>
@@ -66,8 +68,10 @@
               class="table table-striped table-bordered table-hover"
               v-if="monthlySettlementsCredit"
             >
-              <col style="width: 60%" />
-              <col style="width: 40%" />
+              <colgroup>
+                <col style="width: 60%" />
+                <col style="width: 40%" />
+              </colgroup>
               <thead v-if="!monthlySettlementsNoCredit">
                 <tr>
                   <th>{{ $t("General.capitalsource") }}</th>
@@ -146,7 +150,7 @@ const selectedMonth = ref(undefined as Date | undefined);
 const loadedMonth = ref(undefined as Date | undefined);
 const monthlySettlementsNoCredit = ref(new Array<MonthlySettlementFormData>());
 const monthlySettlementsCredit = ref(new Array<MonthlySettlementFormData>());
-const modalComponent = useTemplateRef<typeof ModalVue>('modalComponent');
+const modalComponent = useTemplateRef<typeof ModalVue>("modalComponent");
 const emit = defineEmits(["monthlySettlementUpserted"]);
 
 const { handleSubmit, values, setFieldTouched } = useForm();

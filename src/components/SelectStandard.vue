@@ -36,7 +36,7 @@ import {
   useTemplateRef,
   watch,
   type PropType,
-  type Ref
+  type Ref,
 } from "vue";
 import { any, type ZodType } from "zod";
 
@@ -113,7 +113,7 @@ const errorData = computed((): ErrorData => {
   );
 });
 
-const fieldRef = useTemplateRef<HTMLInputElement>('fieldRef');
+const fieldRef = useTemplateRef<HTMLSelectElement>("fieldRef");
 
 onMounted(() => {
   if (props.focus) {

@@ -67,12 +67,14 @@
             ref="effectiveTab"
           >
             <table class="table table-striped table-bordered table-hover">
-              <col style="width: 30%" />
-              <col style="width: 20%" />
-              <col style="width: 20%" />
-              <col style="width: 20%" />
-              <col style="width: 5%" />
-              <col style="width: 5%" />
+              <colgroup>
+                <col style="width: 30%" />
+                <col style="width: 20%" />
+                <col style="width: 20%" />
+                <col style="width: 20%" />
+                <col style="width: 5%" />
+                <col style="width: 5%" />
+              </colgroup>
               <thead>
                 <tr>
                   <th class="text-center">{{ $t("ETFFlow.bookingtime") }}</th>
@@ -115,12 +117,14 @@
           </div>
           <div class="tab-pane fade" id="profile-tab-pane" ref="allTab">
             <table class="table table-striped table-bordered table-hover">
-              <col style="width: 30%" />
-              <col style="width: 20%" />
-              <col style="width: 20%" />
-              <col style="width: 20%" />
-              <col style="width: 5%" />
-              <col style="width: 5%" />
+              <colgroup>
+                <col style="width: 30%" />
+                <col style="width: 20%" />
+                <col style="width: 20%" />
+                <col style="width: 20%" />
+                <col style="width: 5%" />
+                <col style="width: 5%" />
+              </colgroup>
               <thead>
                 <tr>
                   <th class="text-center">{{ $t("ETFFlow.bookingtime") }}</th>
@@ -221,12 +225,13 @@ const etf = ref({} as Etf);
 const selectedEtf = ref(undefined as number | undefined);
 const calcEtfSalePieces = ref(0 as number | undefined);
 
-const effectiveTabButton = useTemplateRef<HTMLButtonElement>('effectiveTabButton');
-const allTabButton = useTemplateRef<HTMLButtonElement>('allTabButton');
-const effectiveTab = useTemplateRef<HTMLDivElement>('effectiveTab');
-const allTab = useTemplateRef<HTMLDivElement>('allTab');
-const deleteModal = useTemplateRef<typeof DeleteEtfFlowModalVue>('deleteModal');
-const createModal = useTemplateRef<typeof CreateEtfFlowModalVue>('createModal');
+const effectiveTabButton =
+  useTemplateRef<HTMLButtonElement>("effectiveTabButton");
+const allTabButton = useTemplateRef<HTMLButtonElement>("allTabButton");
+const effectiveTab = useTemplateRef<HTMLDivElement>("effectiveTab");
+const allTab = useTemplateRef<HTMLDivElement>("allTab");
+const deleteModal = useTemplateRef<typeof DeleteEtfFlowModalVue>("deleteModal");
+const createModal = useTemplateRef<typeof CreateEtfFlowModalVue>("createModal");
 
 const props = defineProps({
   etfId: {
