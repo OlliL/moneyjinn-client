@@ -25,7 +25,12 @@
               type="text"
               :placeholder="placeholder"
               :value="props.modelValue"
-              @input="emit('update:modelValue', $event.target.value)"
+              @input="
+                emit(
+                  'update:modelValue',
+                  (($event as InputEvent)?.target as HTMLInputElement)?.value,
+                )
+              "
             />
             <div
               class="form-check form-switch align-self-center ms-2"
