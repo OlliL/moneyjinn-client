@@ -16,6 +16,7 @@
         :data-testid="id"
         @input="onInput"
         @keydown="onKeydownInput"
+        @keyup="onKeyupInput"
         @focus="onFocus"
         @blur="onBlur"
       />
@@ -110,6 +111,7 @@ const schema = computed(() => {
 
 const items: Ref<Array<SelectBoxValue>> = ref([]);
 const fieldValue = ref(undefined as string | undefined);
+const preventOnFocus = ref(false);
 const {
   value: hiddenValue,
   meta: fieldMeta,
@@ -182,7 +184,11 @@ const onFocus = (event: Event) => {
   // select whole text on focus to easily overtype it, show Dropdown-Menu - needed if source was not a click but a <tab> navigation
   fieldRef.value?.select();
   setTimeout(() => {
-    showDropdown();
+    // If onFocus is triggered from ESC inside Dropdown-Menu don't reopen it again.
+    if (!preventOnFocus.value) {
+      preventOnFocus.value = false;
+      showDropdown();
+    }
   }, 200);
 };
 
@@ -192,6 +198,11 @@ const onKeydownAnchor = async (event: KeyboardEvent) => {
     event.preventDefault();
     (event.target as HTMLAnchorElement).click();
   }
+};
+
+const onKeyupInput = (event: KeyboardEvent) => {
+  // prevent onFocus Event which will occur when ESC is pressed inside Dropdown-Menu
+  if (event.key == "Escape") preventOnFocus.value = true;
 };
 
 const onKeydownInput = async (event: KeyboardEvent) => {
