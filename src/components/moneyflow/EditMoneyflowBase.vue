@@ -380,6 +380,26 @@ const resetEditForm = () => {
   toggleMoneyflowFieldsForMse();
 };
 
+watch(
+  () => capitalsourceStore.capitalsource,
+  () => {
+    console.log("capitalsource changed", mmf.value.capitalsourceId);
+    if (!mmf.value.capitalsourceId) {
+      const bookingDate = new Date();
+      bookingDate.setHours(0, 0, 0, 0);
+      const mcs = capitalsourceStore
+        .getBookableValidCapitalsources(bookingDate)
+        .find((mcs) => (mcs.state = CapitalsourceState.CASH));
+      console.log(mcs);
+      if (mcs) {
+        mmf.value.capitalsourceId = mcs.id;
+        mmf.value.capitalsourceComment = mcs.comment;
+      }
+    }
+    console.log("capitalsource changed", mmf.value.capitalsourceId);
+  },
+);
+
 const resetCreateForm = () => {
   amount.value = undefined;
 
