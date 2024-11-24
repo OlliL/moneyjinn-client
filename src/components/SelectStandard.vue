@@ -31,7 +31,7 @@
           v-for="selectBoxValue in items"
           :key="selectBoxValue.id"
           ref="dropdownItemRef"
-          @click.prevent="selectValue(selectBoxValue)"
+          @click.prevent="onClickAnchor(selectBoxValue)"
           @keydown="onKeydownAnchor"
         >
           {{ selectBoxValue.value }}
@@ -154,15 +154,6 @@ const focusNextInputElement = () => {
   });
 };
 
-const selectValue = (selectBoxValue: SelectBoxValue) => {
-  fieldValue.value = selectBoxValue.value;
-  setState({ touched: true });
-  setValue(selectBoxValue.id);
-
-  hideDropdown();
-  filterItemList();
-};
-
 const getFirstDropdownAnchor = () => {
   return dropdownRef.value?.children
     ? [...dropdownRef.value.children].find(
@@ -171,13 +162,22 @@ const getFirstDropdownAnchor = () => {
     : undefined;
 };
 
+const setFieldValue = () => {
+  fieldValue.value = props.selectBoxValues.find(
+    (sbv) => sbv.id == hiddenValue.value,
+  )?.value;
+  filterItemList();
+};
+
 const onBlur = (event: FocusEvent) => {
   // hide dropdown if the input was left except if the target is the Dropdown-Menu itself
   if (
     dropdownItemRef.value &&
     dropdownItemRef.value?.indexOf(event.relatedTarget as HTMLAnchorElement) < 0
-  )
+  ) {
     hideDropdown();
+    setFieldValue();
+  }
 };
 
 const onFocus = (event: Event) => {
@@ -190,6 +190,12 @@ const onFocus = (event: Event) => {
       showDropdown();
     }
   }, 200);
+};
+
+const onClickAnchor = (selectBoxValue: SelectBoxValue) => {
+  setState({ touched: true });
+  setValue(selectBoxValue.id);
+  hideDropdown();
 };
 
 const onKeydownAnchor = async (event: KeyboardEvent) => {
@@ -252,11 +258,8 @@ const dropdownItemRef =
 
 watch(
   () => props.modelValue,
-  (newVal) => {
-    fieldValue.value = items.value
-      .filter((sbv) => sbv.id == newVal)
-      .shift()?.value;
-    filterItemList();
+  () => {
+    setFieldValue();
   },
 );
 
@@ -271,10 +274,10 @@ onMounted(() => {
 watch(
   () => props.selectBoxValues,
   (newVal) => {
-    // reset the fieldValue in case its not part of the select-box. But only do that if the fieldValue is set at all.
+    // reset the fieldValue in case its not part of the select-box. But only do that if the hiddenValue is set at all.
     if (hiddenValue.value != undefined) {
-      const foundElement = newVal.filter((sbv) => sbv.id == hiddenValue.value);
-      if (foundElement.length === 0) {
+      const foundElement = newVal.find((sbv) => sbv.id == hiddenValue.value);
+      if (!foundElement) {
         hiddenValue.value = undefined;
         fieldValue.value = undefined;
       }
