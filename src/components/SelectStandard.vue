@@ -157,7 +157,6 @@ const selectValue = (selectBoxValue: SelectBoxValue) => {
   setState({ touched: true });
   setValue(selectBoxValue.id);
 
-  focusNextInputElement();
   hideDropdown();
   filterItemList();
 };
