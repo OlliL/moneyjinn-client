@@ -97,7 +97,8 @@ const editCapitalsource = (mcs: Capitalsource) => {
 };
 
 watch(capitalsource, () => {
-  searchAllContent();
+  searchContent();
+  if (capitalsource.value.length == 0) searchAllContent();
 });
 
 watch(searchString, () => {

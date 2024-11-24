@@ -41,7 +41,6 @@ import { usePostingAccountStore } from "@/stores/PostingAccountStore";
 import { useUserSessionStore } from "@/stores/UserSessionStore";
 
 import type { PostingAccount } from "@/model/postingaccount/PostingAccount";
-import type { SelectBoxValue } from "@/model/SelectBoxValue";
 
 const props = defineProps({
   modelValue: {
@@ -67,8 +66,6 @@ const props = defineProps({
   },
 });
 
-const firstSelectBoxValue = { id: 0, value: "" } as SelectBoxValue;
-
 const postingAccountId = ref(0);
 const createPostingAccountModal = useTemplateRef<
   typeof CreatePostingAccountModalVue
@@ -77,9 +74,9 @@ const userIsAdmin = ref(false);
 const postingAccountStore = usePostingAccountStore();
 const emit = defineEmits(["update:modelValue"]);
 
-const selectBoxValues = computed((): Array<SelectBoxValue> => {
-  return [firstSelectBoxValue, ...postingAccountStore.getAsSelectBoxValues];
-});
+const selectBoxValues = computed(
+  () => postingAccountStore.getAsSelectBoxValues,
+);
 
 onMounted(() => {
   const userSessionStore = useUserSessionStore();
