@@ -96,7 +96,8 @@ const editContractpartner = (mcs: Contractpartner) => {
 };
 
 watch(contractpartner, () => {
-  searchAllContent();
+  searchContent();
+  if (contractpartners.value.length == 0) searchAllContent();
 });
 
 watch(searchString, () => {

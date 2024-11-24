@@ -36,7 +36,6 @@ import SelectStandard from "../SelectStandard.vue";
 import { useContractpartnerStore } from "@/stores/ContractpartnerStore";
 
 import type { Contractpartner } from "@/model/contractpartner/Contractpartner";
-import type { SelectBoxValue } from "@/model/SelectBoxValue";
 
 const props = defineProps({
   validityDate: {
@@ -66,21 +65,16 @@ const props = defineProps({
   },
 });
 
-const firstSelectBoxValue = { id: 0, value: "" } as SelectBoxValue;
-
-const contractpartnerId = ref(0);
+const contractpartnerId = ref(undefined as number | undefined);
 const createContractpartnerModal = useTemplateRef<
   typeof CreateContractpartnerModalVue
 >("createContractpartnerModal");
 const contractpartnerStore = useContractpartnerStore();
 const emit = defineEmits(["update:modelValue"]);
 
-const selectBoxValues = computed((): Array<SelectBoxValue> => {
-  return [
-    firstSelectBoxValue,
-    ...contractpartnerStore.getAsSelectBoxValues(props.validityDate),
-  ];
-});
+const selectBoxValues = computed(() =>
+  contractpartnerStore.getAsSelectBoxValues(props.validityDate),
+);
 
 const showCreateContractpartnerModal = () => {
   createContractpartnerModal.value?._show();
@@ -94,7 +88,7 @@ watch(
   () => props.modelValue,
   (newVal, oldVal) => {
     if (newVal != oldVal) {
-      contractpartnerId.value = newVal ?? 0;
+      contractpartnerId.value = newVal;
     }
   },
   { immediate: true },
@@ -102,7 +96,7 @@ watch(
 
 watch(contractpartnerId, (newVal, oldVal) => {
   if (newVal != oldVal) {
-    contractpartnerId.value = newVal ?? 0;
+    contractpartnerId.value = newVal;
     emit("update:modelValue", contractpartnerId.value);
   }
 });

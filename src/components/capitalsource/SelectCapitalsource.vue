@@ -28,7 +28,6 @@ import SelectStandard from "../SelectStandard.vue";
 import { useCapitalsourceStore } from "@/stores/CapitalsourceStore";
 
 import type { Capitalsource } from "@/model/capitalsource/Capitalsource";
-import type { SelectBoxValue } from "@/model/SelectBoxValue";
 
 const props = defineProps({
   validityDate: {
@@ -54,8 +53,6 @@ const props = defineProps({
   },
 });
 
-const firstSelectBoxValue = { id: 0, value: "" } as SelectBoxValue;
-
 const capitalsourceId = ref(0);
 const createCapitalsourceModal = useTemplateRef<
   typeof CreateCapitalsourceModalVue
@@ -63,12 +60,9 @@ const createCapitalsourceModal = useTemplateRef<
 const capitalsourceStore = useCapitalsourceStore();
 const emit = defineEmits(["update:modelValue"]);
 
-const selectBoxValues = computed((): Array<SelectBoxValue> => {
-  return [
-    firstSelectBoxValue,
-    ...capitalsourceStore.getAsSelectBoxValues(props.validityDate),
-  ];
-});
+const selectBoxValues = computed(() =>
+  capitalsourceStore.getAsSelectBoxValues(props.validityDate),
+);
 
 const showCreateCapitalsourceModal = () => {
   createCapitalsourceModal.value?._show();

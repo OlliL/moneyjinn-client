@@ -1,22 +1,41 @@
 <template>
   <div class="input-group">
     <div class="form-floating">
-      <select
+      <input
+        type="hidden"
+        :id="id"
+        :name="id"
+        ref="hiddenRef"
+        v-model="hiddenValue"
+      />
+      <input
+        :class="'form-control dropdown-toggle ' + errorData.inputClass"
+        data-bs-toggle="dropdown"
         v-model="fieldValue"
         ref="fieldRef"
-        :id="id"
         :data-testid="id"
-        :class="'form-select form-control ' + errorData.inputClass"
-        @input="onInput($event)"
+        @input="onInput"
+        @keydown="onKeydownInput"
+        @focus="onFocus"
+        @blur="onBlur"
+      />
+      <div
+        class="dropdown-menu"
+        style="max-height: 400px; overflow: scroll"
+        ref="dropdownRef"
       >
-        <option
-          v-for="selectBoxValue in selectBoxValues"
+        <a
+          class="dropdown-item"
+          :href="'#' + selectBoxValue.value"
+          v-for="selectBoxValue in items"
           :key="selectBoxValue.id"
-          :value="selectBoxValue.id"
+          ref="dropdownItemRef"
+          @click.prevent="selectValue(selectBoxValue)"
+          @keydown="onKeydownAnchor"
         >
           {{ selectBoxValue.value }}
-        </option>
-      </select>
+        </a>
+      </div>
 
       <label :for="id" :style="'color: ' + errorData.fieldColor">{{
         errorData.fieldLabel
@@ -33,6 +52,7 @@ import {
   computed,
   nextTick,
   onMounted,
+  ref,
   useTemplateRef,
   watch,
   type PropType,
@@ -88,21 +108,122 @@ const schema = computed(() => {
   return toTypedSchema(props.validationSchema);
 });
 
+const items: Ref<Array<SelectBoxValue>> = ref([]);
+const fieldValue = ref(undefined as string | undefined);
 const {
-  value: fieldValue,
+  value: hiddenValue,
   meta: fieldMeta,
   errorMessage,
   setState,
-  handleChange,
+  setValue,
 } = useField(props.id, schema, {
   initialValue: props.modelValue,
   syncVModel: true,
 });
 
-const onInput = (event: Event) => {
+const filterItemList = () => {
+  const searchString = fieldValue.value;
+  if (searchString)
+    items.value = props.selectBoxValues.filter((sbv) =>
+      sbv.value.toLocaleLowerCase().includes(searchString.toLocaleLowerCase()),
+    );
+  else items.value = props.selectBoxValues;
+};
+
+const showDropdown = () => {
+  if (!dropdownRef.value?.classList.contains("show"))
+    dropdownRef.value?.classList.add("show");
+};
+
+const hideDropdown = () => {
+  if (dropdownRef.value?.classList.contains("show"))
+    dropdownRef.value?.classList.remove("show");
+};
+
+const focusNextInputElement = () => {
+  const form = fieldRef.value?.closest("form");
+  const inputElements = Array.prototype.filter.call(
+    form,
+    (i) => i instanceof HTMLInputElement && i.type != "hidden",
+  );
+  const index = inputElements.indexOf(fieldRef.value);
+  nextTick(() => {
+    inputElements[index + 1].focus();
+  });
+};
+
+const selectValue = (selectBoxValue: SelectBoxValue) => {
+  fieldValue.value = selectBoxValue.value;
   setState({ touched: true });
-  handleChange(event, true);
-  emit("update:modelValue", fieldValue.value);
+  setValue(selectBoxValue.id);
+
+  focusNextInputElement();
+  hideDropdown();
+  filterItemList();
+};
+
+const getFirstDropdownAnchor = () => {
+  return dropdownRef.value?.children
+    ? [...dropdownRef.value.children].find(
+        (c) => c instanceof HTMLAnchorElement,
+      )
+    : undefined;
+};
+
+const onBlur = (event: FocusEvent) => {
+  // hide dropdown if the input was left except if the target is the Dropdown-Menu itself
+  if (
+    dropdownItemRef.value &&
+    dropdownItemRef.value?.indexOf(event.relatedTarget as HTMLAnchorElement) < 0
+  )
+    hideDropdown();
+};
+
+const onFocus = (event: Event) => {
+  // select whole text on focus to easily overtype it, show Dropdown-Menu - needed if source was not a click but a <tab> navigation
+  fieldRef.value?.select();
+  setTimeout(() => {
+    showDropdown();
+  }, 200);
+};
+
+const onKeydownAnchor = async (event: KeyboardEvent) => {
+  // select currently focused Dropdown-Menu element
+  if (event.key == "Tab") {
+    event.preventDefault();
+    (event.target as HTMLAnchorElement).click();
+  }
+};
+
+const onKeydownInput = async (event: KeyboardEvent) => {
+  if (event.key == "ArrowDown") {
+    // Enter Dropdown-Menu to navigate if the user presses ArrowDown in the input element
+    event.preventDefault();
+    nextTick(() => {
+      showDropdown();
+      getFirstDropdownAnchor()?.focus();
+    });
+  } else if (event.key == "Enter") {
+    // Select first shown element from the Dropdown-Menu if the user presses ArrowDown in the input element
+    event.preventDefault();
+    getFirstDropdownAnchor()?.click();
+  } else if (event.key == "Tab") {
+    // Select first shown element from the Dropdown-Menu if the user presses ArrowDown in the input element
+    // For shift+tab just continue with regular event handler (focus previous element)
+    setTimeout(() => {
+      hideDropdown();
+    }, 200);
+    if (!event.shiftKey) {
+      event.preventDefault();
+      getFirstDropdownAnchor()?.click();
+      focusNextInputElement();
+    }
+  }
+};
+
+const onInput = (event: Event) => {
+  showDropdown();
+  filterItemList();
 };
 
 const errorData = computed((): ErrorData => {
@@ -113,7 +234,21 @@ const errorData = computed((): ErrorData => {
   );
 });
 
-const fieldRef = useTemplateRef<HTMLSelectElement>("fieldRef");
+const fieldRef = useTemplateRef<HTMLInputElement>("fieldRef");
+const hiddenRef = useTemplateRef<HTMLInputElement>("hiddenRef");
+const dropdownRef = useTemplateRef<HTMLDivElement>("dropdownRef");
+const dropdownItemRef =
+  useTemplateRef<Array<HTMLAnchorElement>>("dropdownItemRef");
+
+watch(
+  () => props.modelValue,
+  (newVal) => {
+    fieldValue.value = items.value
+      .filter((sbv) => sbv.id == newVal)
+      .shift()?.value;
+    filterItemList();
+  },
+);
 
 onMounted(() => {
   if (props.focus) {
@@ -125,14 +260,17 @@ onMounted(() => {
 
 watch(
   () => props.selectBoxValues,
-  (newVal, oldVal) => {
+  (newVal) => {
     // reset the fieldValue in case its not part of the select-box. But only do that if the fieldValue is set at all.
-    if (newVal != oldVal && fieldValue.value) {
-      const foundElement = newVal.filter((sbv) => sbv.id == fieldValue.value);
+    if (hiddenValue.value != undefined) {
+      const foundElement = newVal.filter((sbv) => sbv.id == hiddenValue.value);
       if (foundElement.length === 0) {
+        hiddenValue.value = undefined;
         fieldValue.value = undefined;
       }
     }
+    filterItemList();
   },
+  { immediate: true },
 );
 </script>

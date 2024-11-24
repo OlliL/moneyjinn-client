@@ -67,9 +67,9 @@ const createPostingAccountModalList = useTemplateRef<
 const deleteModal =
   useTemplateRef<typeof DeletePostingAccountModalVue>("deleteModal");
 
-const postinAccountStore = usePostingAccountStore();
-const searchPostingAccounts = postinAccountStore.searchPostingAccounts;
-const { postingAccount } = storeToRefs(postinAccountStore);
+const postingAccountStore = usePostingAccountStore();
+const searchPostingAccounts = postingAccountStore.searchPostingAccounts;
+const { postingAccount } = storeToRefs(postingAccountStore);
 
 const showCreatePostingAccountModal = () => {
   createPostingAccountModalList.value?._show();
@@ -84,7 +84,8 @@ const editPostingAccount = (mcs: PostingAccount) => {
 };
 
 watch(postingAccount, () => {
-  searchAllContent();
+  searchContent();
+  if (postingAccounts.value.length == 0) searchAllContent();
 });
 
 watch(searchString, () => {
