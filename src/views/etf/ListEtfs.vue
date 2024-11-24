@@ -18,86 +18,58 @@
       </div>
     </div>
 
-    <div class="row justify-content-md-center">
-      <div class="col-md-auto mb-3">
-        <div class="row">
-          <div class="col-md-auto mb-3">
-            <button
-              type="button"
-              class="btn btn-primary"
-              @click="showCreateEtfModal"
-            >
-              {{ $t("General.new") }}
-            </button>
-          </div>
-          <div class="col">
-            <div class="input-group">
-              <button
-                type="button"
-                class="btn btn-primary"
-                @click="searchAllContent"
-              >
-                {{ $t("General.all") }}
-              </button>
-              <input
-                class="form-control"
-                type="text"
-                :placeholder="$t('ETF.searchBy')"
-                v-model="searchString"
-                @input="searchContent"
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    <DivFilter
+      v-model="searchString"
+      :showValidToggle="false"
+      :placeholder="$t('ETF.searchBy')"
+      @createClicked="showCreateEtfModal"
+    />
 
     <DivError :server-errors="serverErrors" />
-    <div class="row justify-content-md-center">
-      <div class="col-xxl-8 col-xs-12">
-        <table class="table table-striped table-bordered table-hover">
-          <thead>
-            <tr>
-              <th rowspan="2" id="name">{{ $t("General.name") }}</th>
-              <th rowspan="2" id="isin">{{ $t("ETF.isin") }}</th>
-              <th rowspan="2" id="wkn">{{ $t("ETF.wkn") }}</th>
-              <th rowspan="2" id="ticker">{{ $t("ETF.ticker") }}</th>
-              <th colspan="3" id="transactionCosts">
-                {{ $t("ETFFlow.transactionCosts") }}
-              </th>
-              <th rowspan="2" id="partialTaxExemption">
-                {{ $t("ETF.partialTaxExemptionSmall") }}
-              </th>
-              <th rowspan="2" id="favorite">
-                <i class="bi bi-star-fill text-warning"></i>
-              </th>
-              <th rowspan="2" colspan="2" id="editDelete"></th>
-            </tr>
-            <tr>
-              <th id="abs">{{ $t("ETFFlow.transactionCostsAbsolute") }}</th>
-              <th id="rel">{{ $t("ETFFlow.transactionCostsRelative") }}</th>
-              <th id="max">{{ $t("ETFFlow.transactionCostsMaximum") }}</th>
-            </tr>
-          </thead>
 
-          <tbody>
-            <ListEtfRowVue
-              v-for="met in etfs"
-              :key="met.id"
-              :etf="met"
-              @edit-etf="editEtf"
-              @delete-etf="deleteEtf"
-            />
-          </tbody>
-        </table>
-      </div>
-    </div>
+    <DivContentTable class="col-xxl-8 col-xs-12">
+      <thead>
+        <tr>
+          <th rowspan="2" id="name">{{ $t("General.name") }}</th>
+          <th rowspan="2" id="isin">{{ $t("ETF.isin") }}</th>
+          <th rowspan="2" id="wkn">{{ $t("ETF.wkn") }}</th>
+          <th rowspan="2" id="ticker">{{ $t("ETF.ticker") }}</th>
+          <th colspan="3" id="transactionCosts">
+            {{ $t("ETFFlow.transactionCosts") }}
+          </th>
+          <th rowspan="2" id="partialTaxExemption">
+            {{ $t("ETF.partialTaxExemptionSmall") }}
+          </th>
+          <th rowspan="2" id="favorite">
+            <i class="bi bi-star-fill text-warning"></i>
+          </th>
+          <th rowspan="2" colspan="2" id="editDelete"></th>
+        </tr>
+        <tr>
+          <th id="abs">{{ $t("ETFFlow.transactionCostsAbsolute") }}</th>
+          <th id="rel">{{ $t("ETFFlow.transactionCostsRelative") }}</th>
+          <th id="max">{{ $t("ETFFlow.transactionCostsMaximum") }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <ListEtfRowVue
+          v-for="met in etfs"
+          :key="met.id"
+          :etf="met"
+          @edit-etf="editEtf"
+          @delete-etf="deleteEtf"
+        />
+      </tbody>
+    </DivContentTable>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref, useTemplateRef } from "vue";
+import { onMounted, ref, watch, useTemplateRef } from "vue";
 
+import DivContentTable from "@/components/DivContentTable.vue";
+import DivError from "@/components/DivError.vue";
+import DivFilter from "@/components/DivFilter.vue";
 import CreateEtfModalVue from "@/components/etf/CreateEtfModal.vue";
 import DeleteEtfModalVue from "@/components/etf/DeleteEtfModal.vue";
 import ListEtfRowVue from "@/components/etf/ListEtfRow.vue";
@@ -106,7 +78,6 @@ import type { Etf } from "@/model/etf/Etf";
 
 import CrudEtfService from "@/service/CrudEtfService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
-import DivError from "@/components/DivError.vue";
 
 const serverErrors = ref(new Array<string>());
 
@@ -114,7 +85,8 @@ const etfs = ref(new Array<Etf>());
 const allEtfs = ref(new Array<Etf>());
 const searchString = ref("");
 
-const createEtfModalList = useTemplateRef<typeof CreateEtfModalVue>("createEtfModalList");
+const createEtfModalList =
+  useTemplateRef<typeof CreateEtfModalVue>("createEtfModalList");
 const deleteModal = useTemplateRef<typeof DeleteEtfModalVue>("deleteModal");
 
 const showCreateEtfModal = () => {
@@ -129,10 +101,9 @@ const editEtf = (mcs: Etf) => {
   createEtfModalList.value?._show(mcs);
 };
 
-const searchAllContent = () => {
-  searchString.value = "";
+watch(searchString, () => {
   searchContent();
-};
+});
 
 const searchContent = () => {
   if (searchString.value === "") {

@@ -17,61 +17,30 @@
       </div>
     </div>
 
-    <div class="row justify-content-md-center">
-      <div class="col-md-auto mb-3">
-        <div class="row">
-          <div class="col-md-auto mb-3">
-            <button
-              type="button"
-              class="btn btn-primary"
-              @click="showCreatePostingAccountModal"
-            >
-              {{ $t("General.new") }}
-            </button>
-          </div>
-          <div class="col">
-            <div class="input-group">
-              <button
-                type="button"
-                class="btn btn-primary"
-                @click="searchAllContent"
-              >
-                {{ $t("General.all") }}
-              </button>
-              <input
-                class="form-control"
-                type="text"
-                :placeholder="$t('PostingAccount.searchBy')"
-                v-model="searchString"
-                @input="searchContent"
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    <DivFilter
+      v-model="searchString"
+      :showValidToggle="false"
+      :placeholder="$t('PostingAccount.searchBy')"
+      @createClicked="showCreatePostingAccountModal"
+    />
 
-    <div class="row justify-content-md-center">
-      <div class="col-md-3 col-xs-12">
-        <table class="table table-striped table-bordered table-hover">
-          <thead>
-            <tr>
-              <th>{{ $t("General.name") }}</th>
-              <th colspan="2"></th>
-            </tr>
-          </thead>
-          <tbody>
-            <ListPostingAccountRowVue
-              v-for="mpa in postingAccounts"
-              :key="mpa.id"
-              :mpa="mpa"
-              @delete-postingAccount="deletePostingAccount"
-              @edit-postingAccount="editPostingAccount"
-            />
-          </tbody>
-        </table>
-      </div>
-    </div>
+    <DivContentTable class="col-md-3 col-xs-12">
+      <thead>
+        <tr>
+          <th>{{ $t("General.name") }}</th>
+          <th colspan="2"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <ListPostingAccountRowVue
+          v-for="mpa in postingAccounts"
+          :key="mpa.id"
+          :mpa="mpa"
+          @delete-postingAccount="deletePostingAccount"
+          @edit-postingAccount="editPostingAccount"
+        />
+      </tbody>
+    </DivContentTable>
   </div>
 </template>
 
@@ -80,6 +49,8 @@ import { onMounted, ref, useTemplateRef, watch } from "vue";
 
 import { usePostingAccountStore } from "@/stores/PostingAccountStore";
 
+import DivContentTable from "@/components/DivContentTable.vue";
+import DivFilter from "@/components/DivFilter.vue";
 import CreatePostingAccountModalVue from "@/components/postingaccount/CreatePostingAccountModal.vue";
 import DeletePostingAccountModalVue from "@/components/postingaccount/DeletePostingAccountModal.vue";
 import ListPostingAccountRowVue from "@/components/postingaccount/ListPostingAccountRow.vue";
@@ -90,16 +61,15 @@ import { storeToRefs } from "pinia";
 const postingAccounts = ref(new Array<PostingAccount>());
 const searchString = ref("");
 
-const createPostingAccountModalList = useTemplateRef<typeof CreatePostingAccountModalVue>("createPostingAccountModalList");
-const deleteModal = useTemplateRef<typeof DeletePostingAccountModalVue>("deleteModal");
+const createPostingAccountModalList = useTemplateRef<
+  typeof CreatePostingAccountModalVue
+>("createPostingAccountModalList");
+const deleteModal =
+  useTemplateRef<typeof DeletePostingAccountModalVue>("deleteModal");
 
 const postinAccountStore = usePostingAccountStore();
 const searchPostingAccounts = postinAccountStore.searchPostingAccounts;
 const { postingAccount } = storeToRefs(postinAccountStore);
-
-watch(postingAccount, () => {
-  searchAllContent();
-});
 
 const showCreatePostingAccountModal = () => {
   createPostingAccountModalList.value?._show();
@@ -112,6 +82,14 @@ const deletePostingAccount = (mcs: PostingAccount) => {
 const editPostingAccount = (mcs: PostingAccount) => {
   createPostingAccountModalList.value?._show(mcs);
 };
+
+watch(postingAccount, () => {
+  searchAllContent();
+});
+
+watch(searchString, () => {
+  searchContent();
+});
 
 const searchAllContent = () => {
   searchString.value = "";

@@ -1,5 +1,5 @@
 <template>
-  <div v-if="serverErrors">
+  <div v-if="serverErrors && serverErrors.length > 0">
     <div
       class="alert alert-danger text-center"
       v-for="(error, index) in serverErrors"
