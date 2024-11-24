@@ -30,25 +30,23 @@
         <div class="card w-100 bg-light">
           <div class="card-body">
             <form @submit.prevent="createMoneyflow" id="createMoneyflowForm">
-              <div class="container-fluid">
-                <EditMoneyflowBase
-                  :selected-pre-def-moneyflow="selectedPreDefMoneyflow"
-                  ref="editMoneyflowVue"
-                />
-                <div class="row no-gutters flex-lg-nowrap">
-                  <div class="col-12">
-                    <button
-                      type="button"
-                      class="btn btn-secondary mx-2"
-                      @click="resetForm"
-                    >
-                      {{ $t("General.reset") }}
-                    </button>
-                    <ButtonSubmit
-                      :button-label="$t('General.save')"
-                      form-id="createMoneyflowForm"
-                    />
-                  </div>
+              <EditMoneyflowBase
+                :selected-pre-def-moneyflow="selectedPreDefMoneyflow"
+                ref="editMoneyflowVue"
+              />
+              <div class="row no-gutters flex-lg-nowrap">
+                <div class="col-12">
+                  <button
+                    type="button"
+                    class="btn btn-secondary mx-2"
+                    @click="resetForm"
+                  >
+                    {{ $t("General.reset") }}
+                  </button>
+                  <ButtonSubmit
+                    :button-label="$t('General.save')"
+                    form-id="createMoneyflowForm"
+                  />
                 </div>
               </div>
             </form>
@@ -77,7 +75,8 @@ const serverErrors = ref(new Array<string>());
 const preDefMoneyflows = ref(new Array<PreDefMoneyflow>());
 const preDefMoneyflowId = ref(0);
 const selectedPreDefMoneyflow = ref(undefined as PreDefMoneyflow | undefined);
-const editMoneyflowVue = useTemplateRef<typeof EditMoneyflowBase>("editMoneyflowVue");
+const editMoneyflowVue =
+  useTemplateRef<typeof EditMoneyflowBase>("editMoneyflowVue");
 
 const { handleSubmit, values, setFieldTouched } = useForm();
 

@@ -18,76 +18,48 @@
       </div>
     </div>
 
-    <div class="row justify-content-md-center">
-      <div class="col-md-auto mb-3">
-        <div class="row">
-          <div class="col-md-auto mb-3">
-            <button
-              type="button"
-              class="btn btn-primary"
-              @click="showCreatePreDefMoneyflowModal"
-            >
-              {{ $t("General.new") }}
-            </button>
-          </div>
-          <div class="col">
-            <div class="input-group">
-              <button
-                type="button"
-                class="btn btn-primary"
-                @click="searchAllContent"
-              >
-                {{ $t("General.all") }}
-              </button>
-              <input
-                class="form-control"
-                type="text"
-                :placeholder="$t('PreDefMoneyflow.searchBy')"
-                v-model="searchString"
-                @input="searchContent"
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    <DivFilter
+      v-model="searchString"
+      :showValidToggle="false"
+      :placeholder="$t('PreDefMoneyflow.searchBy')"
+      @createClicked="showCreatePreDefMoneyflowModal"
+    />
 
     <DivError :server-errors="serverErrors" />
-    <div class="row justify-content-md-center">
-      <div class="col-xxl-9 col-xs-12">
-        <table class="table table-striped table-bordered table-hover">
-          <thead>
-            <tr>
-              <th>{{ $t("General.amount") }}</th>
-              <th>{{ $t("General.contractpartner") }}</th>
-              <th>{{ $t("General.comment") }}</th>
-              <th>{{ $t("General.postingAccount") }}</th>
-              <th>{{ $t("General.capitalsource") }}</th>
-              <th>{{ $t("PreDefMoneyflow.onceAMonthShort") }}</th>
-              <th>{{ $t("PreDefMoneyflow.createDate") }}</th>
-              <th>{{ $t("PreDefMoneyflow.lastUsed") }}</th>
-              <th colspan="2"></th>
-            </tr>
-          </thead>
 
-          <tbody>
-            <ListPreDefMoneyflowRowVue
-              v-for="mpm in preDefMoneyflows"
-              :key="mpm.id"
-              :mpm="mpm"
-              @edit-pre-def-moneyflow="editPreDefMoneyflow"
-              @delete-pre-def-moneyflow="deletePreDefMoneyflow"
-            />
-          </tbody>
-        </table>
-      </div>
-    </div>
+    <DivContentTable>
+      <thead>
+        <tr>
+          <th>{{ $t("General.amount") }}</th>
+          <th>{{ $t("General.contractpartner") }}</th>
+          <th>{{ $t("General.comment") }}</th>
+          <th>{{ $t("General.postingAccount") }}</th>
+          <th>{{ $t("General.capitalsource") }}</th>
+          <th>{{ $t("PreDefMoneyflow.onceAMonthShort") }}</th>
+          <th>{{ $t("PreDefMoneyflow.createDate") }}</th>
+          <th>{{ $t("PreDefMoneyflow.lastUsed") }}</th>
+          <th colspan="2"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <ListPreDefMoneyflowRowVue
+          v-for="mpm in preDefMoneyflows"
+          :key="mpm.id"
+          :mpm="mpm"
+          @edit-pre-def-moneyflow="editPreDefMoneyflow"
+          @delete-pre-def-moneyflow="deletePreDefMoneyflow"
+        />
+      </tbody>
+    </DivContentTable>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref } from "vue";
+import { onMounted, ref, watch, useTemplateRef } from "vue";
 
+import DivContentTable from "@/components/DivContentTable.vue";
+import DivError from "@/components/DivError.vue";
+import DivFilter from "@/components/DivFilter.vue";
 import CreatePreDefMoneyflowModalVue from "@/components/predefmoneyflow/CreatePreDefMoneyflowModal.vue";
 import DeletePreDefMoneyflowModalVue from "@/components/predefmoneyflow/DeletePreDefMoneyflowModal.vue";
 import ListPreDefMoneyflowRowVue from "@/components/predefmoneyflow/ListPreDefMoneyflowRow.vue";
@@ -96,8 +68,6 @@ import type { PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
 
 import PreDefMoneyflowService from "@/service/PreDefMoneyflowService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
-import DivError from "@/components/DivError.vue";
-import { useTemplateRef } from "vue";
 
 const serverErrors = ref(new Array<string>());
 
@@ -105,8 +75,11 @@ const preDefMoneyflows = ref(new Array<PreDefMoneyflow>());
 const allPreDefMoneyflows = ref(new Array<PreDefMoneyflow>());
 const searchString = ref("");
 
-const createPreDefMoneyflowModalList = useTemplateRef<typeof CreatePreDefMoneyflowModalVue>("createPreDefMoneyflowModalList");
-const deleteModal = useTemplateRef<typeof DeletePreDefMoneyflowModalVue>("deleteModal");
+const createPreDefMoneyflowModalList = useTemplateRef<
+  typeof CreatePreDefMoneyflowModalVue
+>("createPreDefMoneyflowModalList");
+const deleteModal =
+  useTemplateRef<typeof DeletePreDefMoneyflowModalVue>("deleteModal");
 
 const showCreatePreDefMoneyflowModal = () => {
   createPreDefMoneyflowModalList.value?._show();
@@ -120,10 +93,9 @@ const editPreDefMoneyflow = (mcs: PreDefMoneyflow) => {
   createPreDefMoneyflowModalList.value?._show(mcs);
 };
 
-const searchAllContent = () => {
-  searchString.value = "";
+watch(searchString, () => {
   searchContent();
-};
+});
 
 const searchContent = () => {
   if (searchString.value === "") {

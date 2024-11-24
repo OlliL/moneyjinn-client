@@ -19,78 +19,35 @@
       </div>
     </div>
 
-    <div class="row justify-content-md-center">
-      <div class="col-md-auto mb-3">
-        <div class="row">
-          <div class="col-md-auto mb-3">
-            <button
-              type="button"
-              class="btn btn-primary"
-              @click="showCreateContractpartnerModal"
-            >
-              {{ $t("General.new") }}
-            </button>
-          </div>
-          <div class="col">
-            <div class="input-group">
-              <button
-                type="button"
-                class="btn btn-primary"
-                @click="searchAllContent"
-              >
-                {{ $t("General.all") }}
-              </button>
-              <input
-                class="form-control"
-                type="text"
-                :placeholder="$t('Contractpartner.searchBy')"
-                v-model="searchString"
-                @input="searchContent"
-              />
-              <div class="form-check form-switch align-self-center ms-2">
-                <input
-                  class="form-check-input"
-                  type="checkbox"
-                  id="contractpartnersValid"
-                  v-model="validNow"
-                  @change="searchContent"
-                />
-                <label class="form-check-label" for="contractpartnersValid">{{
-                  $t("General.validNow")
-                }}</label>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    <DivFilter
+      v-model="searchString"
+      :placeholder="$t('Contractpartner.searchBy')"
+      @validNowToggled="validNowToggled"
+      @createClicked="showCreateContractpartnerModal"
+    />
 
-    <div class="row justify-content-md-center">
-      <div class="col-xxl-9 col-xs-12">
-        <table class="table table-striped table-bordered table-hover">
-          <thead>
-            <tr>
-              <th>{{ $t("General.name") }}</th>
-              <th>{{ $t("General.validFrom") }}</th>
-              <th>{{ $t("General.validTil") }}</th>
-              <th>{{ $t("Contractpartner.moneyflowComment") }}</th>
-              <th>{{ $t("General.postingAccount") }}</th>
-              <th colspan="3"></th>
-            </tr>
-          </thead>
-          <tbody>
-            <ListContractpartnerRowVue
-              v-for="mcp in contractpartners"
-              :key="mcp.id"
-              :mcp="mcp"
-              @delete-contractpartner="deleteContractpartner"
-              @edit-contractpartner="editContractpartner"
-              @list-contractpartner-accounts="listContractpartnerAccounts"
-            />
-          </tbody>
-        </table>
-      </div>
-    </div>
+    <DivContentTable>
+      <thead>
+        <tr>
+          <th>{{ $t("General.name") }}</th>
+          <th>{{ $t("General.validFrom") }}</th>
+          <th>{{ $t("General.validTil") }}</th>
+          <th>{{ $t("Contractpartner.moneyflowComment") }}</th>
+          <th>{{ $t("General.postingAccount") }}</th>
+          <th colspan="3"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <ListContractpartnerRowVue
+          v-for="mcp in contractpartners"
+          :key="mcp.id"
+          :mcp="mcp"
+          @delete-contractpartner="deleteContractpartner"
+          @edit-contractpartner="editContractpartner"
+          @list-contractpartner-accounts="listContractpartnerAccounts"
+        />
+      </tbody>
+    </DivContentTable>
   </div>
 </template>
 
@@ -99,6 +56,8 @@ import { onMounted, ref, watch } from "vue";
 
 import { useContractpartnerStore } from "@/stores/ContractpartnerStore";
 
+import DivContentTable from "@/components/DivContentTable.vue";
+import DivFilter from "@/components/DivFilter.vue";
 import CreateContractpartnerModalVue from "@/components/contractpartner/CreateContractpartnerModal.vue";
 import DeleteContractpartnerModalVue from "@/components/contractpartner/DeleteContractpartnerModal.vue";
 import ListContractpartnerAccountsModal from "@/components/contractpartneraccount/ListContractpartnerAccountsModal.vue";
@@ -112,17 +71,17 @@ const validNow = ref(true);
 const contractpartners = ref(new Array<Contractpartner>());
 const searchString = ref("");
 
-const createContractpartnerModalList = useTemplateRef<typeof CreateContractpartnerModalVue>('createContractpartnerModalList');
-const deleteModal = useTemplateRef<typeof DeleteContractpartnerModalVue>('deleteModal');
-const accountsModal = useTemplateRef<typeof ListContractpartnerAccountsModal>('accountsModal');
+const createContractpartnerModalList = useTemplateRef<
+  typeof CreateContractpartnerModalVue
+>("createContractpartnerModalList");
+const deleteModal =
+  useTemplateRef<typeof DeleteContractpartnerModalVue>("deleteModal");
+const accountsModal =
+  useTemplateRef<typeof ListContractpartnerAccountsModal>("accountsModal");
 
 const contractpartnerStore = useContractpartnerStore();
 const searchContractpartners = contractpartnerStore.searchContractpartners;
 const { contractpartner } = storeToRefs(contractpartnerStore);
-
-watch(contractpartner, () => {
-  searchAllContent();
-});
 
 const showCreateContractpartnerModal = () => {
   createContractpartnerModalList.value?._show();
@@ -134,6 +93,19 @@ const deleteContractpartner = (mcs: Contractpartner) => {
 
 const editContractpartner = (mcs: Contractpartner) => {
   createContractpartnerModalList.value?._show(mcs);
+};
+
+watch(contractpartner, () => {
+  searchAllContent();
+});
+
+watch(searchString, () => {
+  searchContent();
+});
+
+const validNowToggled = (myValidNow: boolean) => {
+  validNow.value = myValidNow;
+  searchContent();
 };
 
 const searchAllContent = () => {

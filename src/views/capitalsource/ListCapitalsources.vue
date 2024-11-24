@@ -17,82 +17,39 @@
       </div>
     </div>
 
-    <div class="row justify-content-md-center">
-      <div class="col-md-auto mb-3">
-        <div class="row">
-          <div class="col-md-auto mb-3">
-            <button
-              type="button"
-              class="btn btn-primary"
-              @click="showCreateCapitalsourceModal"
-            >
-              {{ $t("General.new") }}
-            </button>
-          </div>
-          <div class="col">
-            <div class="input-group">
-              <button
-                type="button"
-                class="btn btn-primary"
-                @click="searchAllContent"
-              >
-                {{ $t("General.all") }}
-              </button>
-              <input
-                class="form-control"
-                type="text"
-                :placeholder="$t('Capitalsource.searchBy')"
-                v-model="searchString"
-                @input="searchContent"
-              />
-              <div class="form-check form-switch align-self-center ms-2">
-                <input
-                  class="form-check-input"
-                  type="checkbox"
-                  id="capitalsourcesValid"
-                  v-model="validNow"
-                  @change="searchContent"
-                />
-                <label class="form-check-label" for="capitalsourcesValid">{{
-                  $t("General.validNow")
-                }}</label>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    <DivFilter
+      v-model="searchString"
+      :placeholder="$t('Capitalsource.searchBy')"
+      @validNowToggled="validNowToggled"
+      @createClicked="showCreateCapitalsourceModal"
+    />
 
-    <div class="row justify-content-md-center">
-      <div class="col-xxl-9 col-xs-12">
-        <table class="table table-striped table-bordered table-hover">
-          <thead>
-            <tr>
-              <th>{{ $t("General.name") }}</th>
-              <th>{{ $t("Capitalsource.type") }}</th>
-              <th>{{ $t("Capitalsource.state") }}</th>
-              <th>{{ $t("General.iban") }}</th>
-              <th>{{ $t("General.bic") }}</th>
-              <th>{{ $t("General.validFrom") }}</th>
-              <th>{{ $t("General.validTil") }}</th>
-              <th>{{ $t("Capitalsource.groupUse") }}</th>
-              <th>{{ $t("Capitalsource.importAllowed") }}</th>
-              <th colspan="2"></th>
-            </tr>
-          </thead>
-          <tbody>
-            <ListCapitalsourceRowVue
-              v-for="mcs in capitalsources"
-              :key="mcs.id"
-              :mcs="mcs"
-              :owner="mcs.userId === userId"
-              @delete-capitalsource="deleteCapitalsource"
-              @edit-capitalsource="editCapitalsource"
-            />
-          </tbody>
-        </table>
-      </div>
-    </div>
+    <DivContentTable>
+      <thead>
+        <tr>
+          <th>{{ $t("General.name") }}</th>
+          <th>{{ $t("Capitalsource.type") }}</th>
+          <th>{{ $t("Capitalsource.state") }}</th>
+          <th>{{ $t("General.iban") }}</th>
+          <th>{{ $t("General.bic") }}</th>
+          <th>{{ $t("General.validFrom") }}</th>
+          <th>{{ $t("General.validTil") }}</th>
+          <th>{{ $t("Capitalsource.groupUse") }}</th>
+          <th>{{ $t("Capitalsource.importAllowed") }}</th>
+          <th colspan="2"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <ListCapitalsourceRowVue
+          v-for="mcs in capitalsources"
+          :key="mcs.id"
+          :mcs="mcs"
+          :owner="mcs.userId === userId"
+          @delete-capitalsource="deleteCapitalsource"
+          @edit-capitalsource="editCapitalsource"
+        />
+      </tbody>
+    </DivContentTable>
   </div>
 </template>
 
@@ -102,6 +59,8 @@ import { onMounted, ref, useTemplateRef, watch } from "vue";
 import { useCapitalsourceStore } from "@/stores/CapitalsourceStore";
 import { useUserSessionStore } from "@/stores/UserSessionStore";
 
+import DivContentTable from "@/components/DivContentTable.vue";
+import DivFilter from "@/components/DivFilter.vue";
 import CreateCapitalsourceModalVue from "@/components/capitalsource/CreateCapitalsourceModal.vue";
 import DeleteCapitalsourceModalVue from "@/components/capitalsource/DeleteCapitalsourceModal.vue";
 import ListCapitalsourceRowVue from "@/components/capitalsource/ListCapitalsourceRow.vue";
@@ -113,18 +72,17 @@ const validNow = ref(true);
 const capitalsources = ref(new Array<Capitalsource>());
 const searchString = ref("");
 
-const createCapitalsourceModalList = useTemplateRef<typeof CreateCapitalsourceModalVue>('createCapitalsourceModalList');
-const deleteModal = useTemplateRef<typeof DeleteCapitalsourceModalVue>('deleteModal');
+const createCapitalsourceModalList = useTemplateRef<
+  typeof CreateCapitalsourceModalVue
+>("createCapitalsourceModalList");
+const deleteModal =
+  useTemplateRef<typeof DeleteCapitalsourceModalVue>("deleteModal");
 
 const userId = useUserSessionStore().getUserId;
 
 const capitalsourceStore = useCapitalsourceStore();
 const searchCapitalsources = capitalsourceStore.searchCapitalsources;
 const { capitalsource } = storeToRefs(capitalsourceStore);
-
-watch(capitalsource, () => {
-  searchAllContent();
-});
 
 const showCreateCapitalsourceModal = () => {
   createCapitalsourceModalList.value?._show();
@@ -136,6 +94,19 @@ const deleteCapitalsource = (mcs: Capitalsource) => {
 
 const editCapitalsource = (mcs: Capitalsource) => {
   createCapitalsourceModalList.value?._show(mcs);
+};
+
+watch(capitalsource, () => {
+  searchAllContent();
+});
+
+watch(searchString, () => {
+  searchContent();
+});
+
+const validNowToggled = (myValidNow: boolean) => {
+  validNow.value = myValidNow;
+  searchContent();
 };
 
 const searchAllContent = () => {

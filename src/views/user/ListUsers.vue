@@ -18,71 +18,44 @@
       </div>
     </div>
 
-    <div class="row justify-content-md-center">
-      <div class="col-md-auto mb-3">
-        <div class="row">
-          <div class="col-md-auto mb-3">
-            <button
-              type="button"
-              class="btn btn-primary"
-              @click="showCreateUserModal"
-            >
-              {{ $t("General.new") }}
-            </button>
-          </div>
-          <div class="col">
-            <div class="input-group">
-              <button
-                type="button"
-                class="btn btn-primary"
-                @click="searchAllContent"
-              >
-                {{ $t("General.all") }}
-              </button>
-              <input
-                class="form-control"
-                type="text"
-                :placeholder="$t('User.searchBy')"
-                v-model="searchString"
-                @input="searchContent"
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    <DivFilter
+      v-model="searchString"
+      :showValidToggle="false"
+      :placeholder="$t('User.searchBy')"
+      @createClicked="showCreateUserModal"
+    />
 
     <DivError :server-errors="serverErrors" />
-    <div class="row justify-content-md-center">
-      <div class="col-xxl-5 col-xs-12">
-        <table class="table table-striped table-bordered table-hover">
-          <thead>
-            <tr>
-              <th>{{ $t("General.name") }}</th>
-              <th>{{ $t("General.group") }}</th>
-              <th>{{ $t("User.role") }}</th>
-              <th>{{ $t("User.new") }}</th>
-              <th colspan="2"></th>
-            </tr>
-          </thead>
-          <tbody>
-            <ListUserRowVue
-              v-for="user in users"
-              :key="user.id"
-              :user="user"
-              @edit-user="editUser"
-              @delete-user="deleteUser"
-            />
-          </tbody>
-        </table>
-      </div>
-    </div>
+
+    <DivContentTable class="col-xxl-5 col-xs-12">
+      <thead>
+        <tr>
+          <th>{{ $t("General.name") }}</th>
+          <th>{{ $t("General.group") }}</th>
+          <th>{{ $t("User.role") }}</th>
+          <th>{{ $t("User.new") }}</th>
+          <th colspan="2"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <ListUserRowVue
+          v-for="user in users"
+          :key="user.id"
+          :user="user"
+          @edit-user="editUser"
+          @delete-user="deleteUser"
+        />
+      </tbody>
+    </DivContentTable>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref, useTemplateRef } from "vue";
+import { onMounted, ref, watch, useTemplateRef } from "vue";
 
+import DivContentTable from "@/components/DivContentTable.vue";
+import DivError from "@/components/DivError.vue";
+import DivFilter from "@/components/DivFilter.vue";
 import CreateUserModalVue from "@/components/user/CreateUserModal.vue";
 import DeleteUserModalVue from "@/components/user/DeleteUserModal.vue";
 import ListUserRowVue from "@/components/user/ListUserRow.vue";
@@ -91,7 +64,6 @@ import type { User } from "@/model/user/User";
 
 import UserService from "@/service/UserService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
-import DivError from "@/components/DivError.vue";
 
 const serverErrors = ref(new Array<string>());
 
@@ -99,7 +71,9 @@ const users = ref(new Array<User>());
 const allUsers = ref(new Array<User>());
 const searchString = ref("");
 
-const createUserModalList = useTemplateRef<typeof CreateUserModalVue>("createUserModalList");
+const createUserModalList = useTemplateRef<typeof CreateUserModalVue>(
+  "createUserModalList",
+);
 const deleteModal = useTemplateRef<typeof DeleteUserModalVue>("deleteModal");
 
 const showCreateUserModal = () => {
@@ -114,10 +88,9 @@ const editUser = (mcs: User) => {
   createUserModalList.value?._show(mcs);
 };
 
-const searchAllContent = () => {
-  searchString.value = "";
+watch(searchString, () => {
   searchContent();
-};
+});
 
 const searchContent = () => {
   if (searchString.value === "") {
