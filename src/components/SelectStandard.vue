@@ -10,6 +10,7 @@
       />
       <input
         :class="'form-control dropdown-toggle ' + errorData.inputClass"
+        style="scroll-margin-top: 56px"
         data-bs-toggle="dropdown"
         v-model="fieldValue"
         ref="fieldRef"
@@ -135,6 +136,7 @@ const filterItemList = () => {
 const showDropdown = () => {
   if (!dropdownRef.value?.classList.contains("show"))
     dropdownRef.value?.classList.add("show");
+  fieldRef.value?.scrollIntoView();
 };
 
 const hideDropdown = () => {
