@@ -263,6 +263,7 @@ watch(
   () => {
     setFieldValue();
   },
+  { immediate: true },
 );
 
 onMounted(() => {
