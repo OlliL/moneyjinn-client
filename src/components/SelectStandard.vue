@@ -8,6 +8,17 @@
         ref="hiddenRef"
         v-model="hiddenValue"
       />
+      <i
+        class="bi bi-x-lg position-absolute"
+        style="
+          right: 32px;
+          top: 18px;
+          cursor: pointer;
+          -webkit-text-stroke: 2px;
+        "
+        @click="clearInput"
+      >
+      </i>
       <input
         :class="'form-control dropdown-toggle ' + errorData.inputClass"
         style="scroll-margin-top: 56px"
@@ -21,6 +32,7 @@
         @focus="onFocus"
         @blur="onBlur"
       />
+
       <div
         class="dropdown-menu"
         style="max-height: 400px; overflow: scroll"
@@ -164,6 +176,11 @@ const getFirstDropdownAnchor = () => {
     : undefined;
 };
 
+const clearInput = () => {
+  if (fieldValue.value) setState({ touched: true });
+  hiddenValue.value = undefined;
+  fieldValue.value = undefined;
+};
 const setFieldValue = () => {
   fieldValue.value = props.selectBoxValues.find(
     (sbv) => sbv.id == hiddenValue.value,
