@@ -11,7 +11,7 @@ import {
 } from "axios-jwt";
 import type { Token } from "axios-jwt/dist/src/Token";
 import { mapValidationItemTransportToModel } from "@/service/mapper/ValidationItemTransportMapper";
-import { webServerHost } from "./WebServerConfiguration";
+import { webServerHost, webServerProtocol } from "./WebServerConfiguration";
 import I18nSingleton from "./I18nSingleton";
 
 export class AxiosSingleton {
@@ -51,7 +51,7 @@ export class AxiosSingleton {
   }
 
   private getWebRoot(): string {
-    return "http://" + webServerHost;
+    return webServerProtocol + "//" + webServerHost;
   }
 
   private async refreshAuthToken(refreshToken: Token): Promise<IAuthTokens> {
