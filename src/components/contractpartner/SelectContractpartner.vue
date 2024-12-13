@@ -65,7 +65,7 @@ const props = defineProps({
   },
 });
 
-const contractpartnerId = ref(undefined as number | undefined);
+const contractpartnerId: Ref<number | undefined> = ref(undefined);
 const createContractpartnerModal = useTemplateRef<
   typeof CreateContractpartnerModalVue
 >("createContractpartnerModal");

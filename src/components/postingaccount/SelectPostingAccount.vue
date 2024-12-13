@@ -66,7 +66,7 @@ const props = defineProps({
   },
 });
 
-const postingAccountId = ref(0);
+const postingAccountId: Ref<number | undefined> = ref(undefined);
 const createPostingAccountModal = useTemplateRef<
   typeof CreatePostingAccountModalVue
 >("createPostingAccountModal");
@@ -95,7 +95,7 @@ watch(
   () => props.modelValue,
   (newVal, oldVal) => {
     if (newVal != oldVal) {
-      postingAccountId.value = newVal ?? 0;
+      postingAccountId.value = newVal;
     }
   },
   { immediate: true },
@@ -103,7 +103,7 @@ watch(
 
 watch(postingAccountId, (newVal, oldVal) => {
   if (newVal != oldVal) {
-    postingAccountId.value = newVal ?? 0;
+    postingAccountId.value = newVal;
     emit("update:modelValue", postingAccountId.value);
   }
 });
