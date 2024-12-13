@@ -19,7 +19,14 @@
   </SelectStandard>
 </template>
 <script lang="ts" setup>
-import { computed, ref, useTemplateRef, watch, type PropType } from "vue";
+import {
+  computed,
+  ref,
+  useTemplateRef,
+  watch,
+  type PropType,
+  type Ref,
+} from "vue";
 import { any, type ZodType } from "zod";
 
 import CreateCapitalsourceModalVue from "./CreateCapitalsourceModal.vue";
@@ -53,7 +60,7 @@ const props = defineProps({
   },
 });
 
-const capitalsourceId = ref(0);
+const capitalsourceId: Ref<number | undefined> = ref(undefined);
 const createCapitalsourceModal = useTemplateRef<
   typeof CreateCapitalsourceModalVue
 >("createCapitalsourceModal");
@@ -76,7 +83,7 @@ watch(
   () => props.modelValue,
   (newVal, oldVal) => {
     if (newVal != oldVal) {
-      capitalsourceId.value = newVal ?? 0;
+      capitalsourceId.value = newVal;
     }
   },
   { immediate: true },
@@ -84,7 +91,7 @@ watch(
 
 watch(capitalsourceId, (newVal, oldVal) => {
   if (newVal != oldVal) {
-    capitalsourceId.value = newVal ?? 0;
+    capitalsourceId.value = newVal;
     emit("update:modelValue", capitalsourceId.value);
   }
 });
