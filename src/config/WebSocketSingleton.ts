@@ -1,7 +1,7 @@
 import { StoreService } from "@/stores/StoreService";
 import { Client, type StompSubscription } from "@stomp/stompjs";
 import { HeaderUtil } from "../service/util/HeaderUtil";
-import { webServerHost } from "./WebServerConfiguration";
+import { webServerHost, webServerProtocol } from "./WebServerConfiguration";
 
 export class WebSocketSingleton {
   private static instance: WebSocketSingleton;
@@ -17,7 +17,8 @@ export class WebSocketSingleton {
   }
 
   public async connectStompClient() {
-    const url = "ws://" + webServerHost + "/websocket";
+    const webSocketProtocol = webServerProtocol.replace("http", "ws");
+    const url = webSocketProtocol + "//" + webServerHost + "/websocket";
 
     this.stompClient = new Client({
       brokerURL: url,
