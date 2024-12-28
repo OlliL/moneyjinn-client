@@ -2,6 +2,7 @@ import { config } from "@vue/test-utils";
 import I18nSingleton from "./src/config/I18nSingleton";
 
 config.global.plugins.push(I18nSingleton.getI18n());
+window.HTMLElement.prototype.scrollIntoView = function () {};
 
 /**
  * jest's jsdom impl fails to call listeners when an event is dispatched.

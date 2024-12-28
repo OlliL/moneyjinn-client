@@ -129,16 +129,16 @@ test("render - form initialized", async () => {
     // 1st row
     assertInputValueToBe("bookingDate", formatted),
     assertInputValueToBe("invoiceDate", ""),
-    assertInputValueToBe("contractpartnerCreateMoneyflow", "0"),
+    assertInputValueToBe("contractpartnerCreateMoneyflow", ""),
     assertInputValueToBe(
-      "capitalsourceCreateMoneyflow",
+      "capitalsourceCreateMoneyflow-id",
       "1",
       "First cash capitalsource has to be selected by default!",
     ),
     // 2nd row
     assertInputValueToBe("amount", ""),
     assertInputValueToBe("comment", ""),
-    assertInputValueToBe("postingAccountCreateMoneyflow", "0"),
+    assertInputValueToBe("postingAccountCreateMoneyflow", ""),
     assertCheckboxChecked("public"),
     assertCheckboxUnchecked("private"),
     assertCheckboxChecked("once"),
@@ -152,13 +152,11 @@ test("split entries handling", async () => {
 
   render(CreateMoneyflow);
 
-  let selectPostingAccount: HTMLSelectElement = screen.getByTestId(
+  let selectPostingAccount: HTMLSelectElement = await screen.findByTestId(
     "postingAccountCreateMoneyflow",
   );
-  let inputComment: HTMLInputElement = screen.getByTestId("comment");
-  const inputAmount: HTMLInputElement = screen.getByTestId("amount");
-
-  await waitForOptionSelected(selectPostingAccount, "0");
+  let inputComment: HTMLInputElement = await screen.findByTestId("comment");
+  const inputAmount: HTMLInputElement = await screen.findByTestId("amount");
 
   //
   // 01. input moneyflow data
@@ -171,7 +169,11 @@ test("split entries handling", async () => {
       "Testcomment",
       "Comment expected to be set",
     ),
-    selectOptionAndWait(selectPostingAccount, "2"),
+    selectComboboxItemAndWait(
+      "postingAccountCreateMoneyflow",
+      "Posting Account 2",
+      "2",
+    ),
   ]);
 
   //
@@ -214,7 +216,7 @@ test("split entries handling", async () => {
   // 05. check remainder is filled correctly
   //
 
-  let inputRemainder: HTMLInputElement = screen.getByTestId("remainder");
+  let inputRemainder: HTMLInputElement = await screen.findByTestId("remainder");
   const buttonRemainder: HTMLSpanElement =
     screen.getByTestId("remainderButton");
 
@@ -248,13 +250,10 @@ test("split entries handling", async () => {
   //     a new row must be created as well
   //
   buttonRemainder.click();
-  const selectPostingAccountMse3: HTMLSelectElement = screen.getByTestId(
-    "postingAccountSplitEntry#-3",
-  );
   await Promise.all([
     assertInputValueToBe("amountSplitEntry#-3", "-50.15"),
     assertInputValueToBe("commentSplitEntry#-3", "Testcomment"),
-    waitForOptionSelected(selectPostingAccountMse3, "2"),
+    assertInputValueToBe("postingAccountSplitEntry#-3-id", "2"),
     waitFor(() =>
       expect(screen.getAllByTestId("splitEntryRow")).toHaveLength(4),
     ),
@@ -297,11 +296,10 @@ test("split entries handling", async () => {
   );
 
   inputComment = screen.getByTestId("comment");
-  selectPostingAccount = screen.getByTestId("postingAccountCreateMoneyflow");
 
   await Promise.all([
     waitForInputHasValue(inputComment, "Testcomment"),
-    waitForOptionSelected(selectPostingAccount, "2"),
+    assertInputValueToBe("postingAccountCreateMoneyflow-id", "2"),
   ]);
 
   //
@@ -329,9 +327,9 @@ test("select a PreDefMoneyflow - fill input fields", async () => {
     assertCheckboxUnchecked("renew"),
     assertInputValueToBe("amount", "20.4"),
     assertInputValueToBe("comment", "PreDefMoneyflow Comment 1"),
-    assertInputValueToBe("contractpartnerCreateMoneyflow", "1"),
-    assertInputValueToBe("capitalsourceCreateMoneyflow", "2"),
-    assertInputValueToBe("postingAccountCreateMoneyflow", "1"),
+    assertInputValueToBe("contractpartnerCreateMoneyflow-id", "1"),
+    assertInputValueToBe("capitalsourceCreateMoneyflow-id", "2"),
+    assertInputValueToBe("postingAccountCreateMoneyflow-id", "1"),
   ]);
 });
 
@@ -341,12 +339,11 @@ test("select a Contractpartner - set and reset input fields", async () => {
 
   render(CreateMoneyflow);
 
-  const selectContractpartner: HTMLSelectElement = screen.getByTestId(
+  await selectComboboxItemAndWait(
     "contractpartnerCreateMoneyflow",
+    "Contractpartner 1",
+    "1",
   );
-
-  await waitForOptionSelected(selectContractpartner, "0");
-  await selectOptionAndWait(selectContractpartner, "1");
 
   await Promise.all([
     assertInputValueToBe(
@@ -355,13 +352,13 @@ test("select a Contractpartner - set and reset input fields", async () => {
       "Choosing Contractpartner must set its preset comment",
     ),
     assertInputValueToBe(
-      "postingAccountCreateMoneyflow",
+      "postingAccountCreateMoneyflow-id",
       "1",
       "Choosing Contractpartner must set its preset PostingAccount",
     ),
   ]);
 
-  await selectOptionAndWait(selectContractpartner, "0");
+  await clearComboboxAndWait("contractpartnerCreateMoneyflow");
 
   await Promise.all([
     assertInputValueToBe(
@@ -370,11 +367,11 @@ test("select a Contractpartner - set and reset input fields", async () => {
       "Resetting Contractpartner must reset comment too if it wasn't modified in the meantime",
     ),
     assertInputValueToBe(
-      "postingAccountCreateMoneyflow",
+      "postingAccountCreateMoneyflow-id",
       "0",
       "Resetting Contractpartner must reset PostingAccount too if it wasn't modified in the meantime",
     ),
-    assertInputValueToBe("contractpartnerCreateMoneyflow", "0"),
+    assertInputValueToBe("contractpartnerCreateMoneyflow-id", "0"),
   ]);
 });
 
@@ -384,27 +381,25 @@ test("select a Contractpartner - previously set input fields not overwritten", a
 
   render(CreateMoneyflow);
 
-  const selectContractpartner: HTMLSelectElement = screen.getByTestId(
-    "contractpartnerCreateMoneyflow",
-  );
-  const selectPostingAccount: HTMLSelectElement = screen.getByTestId(
-    "postingAccountCreateMoneyflow",
-  );
-
-  const inputComment: HTMLInputElement = screen.getByTestId("comment");
-
-  await waitForOptionSelected(selectContractpartner, "0");
-
+  const inputComment: HTMLInputElement = await screen.findByTestId("comment");
   await Promise.all([
     setInputValueAndWait(
       inputComment,
       "Testcomment",
       "Comment expected to be set",
     ),
-    selectOptionAndWait(selectPostingAccount, "2"),
+    selectComboboxItemAndWait(
+      "postingAccountCreateMoneyflow",
+      "Posting Account 2",
+      "2",
+    ),
   ]);
 
-  await selectOptionAndWait(selectContractpartner, "1");
+  await selectComboboxItemAndWait(
+    "contractpartnerCreateMoneyflow",
+    "Contractpartner 1",
+    "1",
+  );
 
   await Promise.all([
     assertInputValueToBe(
@@ -413,7 +408,7 @@ test("select a Contractpartner - previously set input fields not overwritten", a
       "Previously set comment gets not overwritten by Contractpartner preset",
     ),
     assertInputValueToBe(
-      "postingAccountCreateMoneyflow",
+      "postingAccountCreateMoneyflow-id",
       "2",
       "Previously set PostingAccount gets not overwritten by Contractpartner preset",
     ),
@@ -427,7 +422,7 @@ const assertInputValueToBe = async (
 ): Promise<void> => {
   const field: HTMLInputElement = screen.getByTestId(testId);
   const errorMessage = message ?? "Checking field " + testId;
-  waitForInputHasValue(field, value, errorMessage);
+  await waitForInputHasValue(field, value, errorMessage);
 };
 
 const assertCheckboxChecked = async (
@@ -447,6 +442,44 @@ const assertCheckboxUnchecked = async (label: string, message?: string) => {
   return screen.findByLabelText<HTMLInputElement>(label).then((field) => {
     expect(field.checked, errorMessage).toBeFalsy();
   });
+};
+
+const selectComboboxItemAndWait = async (
+  itemBaseTestId: string,
+  valueInput: string,
+  valueHidden: string,
+  message?: string,
+) => {
+  const inputItem: HTMLInputElement = await screen.findByTestId(itemBaseTestId);
+  const idItem: HTMLInputElement = await screen.findByTestId(
+    itemBaseTestId + "-id",
+  );
+
+  const optionItems: HTMLAnchorElement[] = await screen.findAllByTestId(
+    itemBaseTestId + "-option",
+  );
+
+  expect(optionItems.length).greaterThan(0);
+
+  fireEvent.click(inputItem);
+  let found = false;
+  for (let optionItem of optionItems) {
+    if (optionItem.text == valueInput) {
+      fireEvent.click(optionItem);
+      found = true;
+      break;
+    }
+  }
+  expect(found).true;
+  await waitForInputHasValue(idItem, valueHidden, message);
+};
+
+const clearComboboxAndWait = async (itemBaseTestId: string) => {
+  const clearItem: HTMLElement = screen.getByTestId(itemBaseTestId + "-clear");
+  const idItem: HTMLInputElement = screen.getByTestId(itemBaseTestId + "-id");
+
+  fireEvent.click(clearItem);
+  await waitForInputHasValue(idItem, "0");
 };
 
 const waitForOptionSelected = async (
