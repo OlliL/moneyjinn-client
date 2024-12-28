@@ -22,8 +22,6 @@ export function amountSchema(
     regExpCache.set(decimalPlaces, pattern);
   }
 
-  console.log(message, decimalPlaces, pattern);
-
   return number(zodMessage)
     .refine((num) => pattern.test("" + num), { message: message })
     .transform((num) => Number(num));
