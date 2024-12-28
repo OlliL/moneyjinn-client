@@ -7,6 +7,7 @@
         :name="id"
         ref="hiddenRef"
         v-model="hiddenValue"
+        :data-testid="id + '-id'"
       />
       <i
         class="bi bi-x-lg position-absolute"
@@ -16,6 +17,7 @@
           cursor: pointer;
           -webkit-text-stroke: 2px;
         "
+        :data-testid="id + '-clear'"
         @click="clearInput"
       >
       </i>
@@ -46,6 +48,7 @@
           ref="dropdownItemRef"
           @click.prevent="onClickAnchor(selectBoxValue)"
           @keydown="onKeydownAnchor"
+          :data-testid="id + '-option'"
         >
           {{ selectBoxValue.value }}
         </a>
