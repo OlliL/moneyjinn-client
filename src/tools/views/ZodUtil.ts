@@ -18,11 +18,15 @@ export function amountSchema(
 
   let pattern = regExpCache.get(decimalPlaces);
   if (pattern === undefined) {
-    pattern = new RegExp("^\\d*\\.\\d{0," + decimalPlaces + "}$");
+    pattern = new RegExp("^\\d*\\.{0,1}\\d{0," + decimalPlaces + "}$");
     regExpCache.set(decimalPlaces, pattern);
   }
 
-  return number(zodMessage).refine((num) => pattern.test("" + num));
+  console.log(message, decimalPlaces, pattern);
+
+  return number(zodMessage)
+    .refine((num) => pattern.test("" + num), { message: message })
+    .transform((num) => Number(num));
 
   // broken: https://github.com/colinhacks/zod/issues/3486
   //multipleOf(Math.pow(10, decimalPlaces * -1));
