@@ -18,7 +18,7 @@ export function amountSchema(
 
   let pattern = regExpCache.get(decimalPlaces);
   if (pattern === undefined) {
-    pattern = new RegExp("^\\d*\\.{0,1}\\d{0," + decimalPlaces + "}$");
+    pattern = new RegExp("^-{0,1}\\d*\\.{0,1}\\d{0," + decimalPlaces + "}$");
     regExpCache.set(decimalPlaces, pattern);
   }
 
