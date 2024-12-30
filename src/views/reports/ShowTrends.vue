@@ -69,6 +69,30 @@
                 </div>
 
                 <div class="row no-gutters flex-lg-nowrap">
+                  <div class="col-12 mb-3 text-start">
+                    <label for="etfs" style="opacity: 0.65"
+                      ><small>{{ $t("General.etfs") }}</small></label
+                    >
+                    <select
+                      v-model="selectedEtfIds"
+                      id="etfIds"
+                      name="etfIds"
+                      class="form-select form-control"
+                      multiple
+                      size="4"
+                    >
+                      <option
+                        v-for="value of etfSelectBoxValues"
+                        :key="value.id"
+                        :value="value.id"
+                      >
+                        {{ value.value }}
+                      </option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="row no-gutters flex-lg-nowrap">
                   <div class="col-12">
                     <button type="submit" class="btn btn-primary">
                       {{ $t("General.show") }}
@@ -131,6 +155,8 @@ import type { TrendsParameter } from "@/model/report/TrendsParameter";
 
 import ReportService from "@/service/ReportService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
+import CrudEtfService from "@/service/CrudEtfService";
+import type { Etf } from "@/model/etf/Etf";
 
 const { t } = useI18n();
 
@@ -146,6 +172,7 @@ const schema = {
 
 const dataLoaded = ref(false);
 const trendsGraphLoaded = ref(false);
+const allEtfs = ref(new Array<Etf>());
 const startDate = ref(new Date());
 const endDate = ref(new Date());
 const chartData = ref({
@@ -177,6 +204,21 @@ const chartData = ref({
 
         gradient.addColorStop(0, "rgba(104, 155, 222, 1)");
         gradient.addColorStop(1, "rgba(174, 174, 250, 1)");
+
+        return gradient;
+      },
+    },
+    {
+      label: t("General.etfs"),
+      data: new Array<number | null>(),
+      fill: true,
+      borderColor: "#be2200",
+      backgroundColor: (ctx: any) => {
+        const canvas = ctx.chart.ctx;
+        const gradient = canvas.createLinearGradient(0, 500, 0, 0);
+
+        gradient.addColorStop(0, "rgba( 253, 112, 81, 1)");
+        gradient.addColorStop(1, "rgba( 242, 47, 6 , 1)");
 
         return gradient;
       },
@@ -219,6 +261,7 @@ const chartOptions = ref({
       },
     },
     y: {
+      stacked: true,
       title: {
         text: t("Reports.title.trendAmount"),
         display: true,
@@ -258,10 +301,17 @@ type ChartData = {
 
 const currency = t("General.currency");
 const capitalsourceStore = useCapitalsourceStore();
-const selectBoxValues = computed((): Array<SelectBoxValue> => {
-  return capitalsourceStore.getAllAsSelectBoxValues();
-});
+const selectBoxValues = computed(
+  (): Array<SelectBoxValue> => capitalsourceStore.getAllAsSelectBoxValues(),
+);
+const etfSelectBoxValues = computed(
+  (): Array<SelectBoxValue> =>
+    allEtfs.value.map((etf) => {
+      return { id: etf.id, value: etf.name } as SelectBoxValue;
+    }),
+);
 
+const selectedEtfIds = ref(new Array<number>());
 const { handleSubmit, values, setFieldTouched } = useForm();
 const {
   value: capitalsourceIds,
@@ -297,8 +347,8 @@ const loadData = () => {
   serverErrors.value = new Array<string>();
 
   dataLoaded.value = false;
-  ReportService.showTrendsForm()
-    .then((trendsTransporter) => {
+  Promise.all([ReportService.showTrendsForm(), CrudEtfService.fetchAllEtf()])
+    .then(([trendsTransporter, etfTransporters]) => {
       const minDate = trendsTransporter.startDate;
       const maxDate = trendsTransporter.endDate;
 
@@ -307,6 +357,11 @@ const loadData = () => {
 
       if (trendsTransporter.selectedCapitalsourceIds)
         capitalsourceIds.value = trendsTransporter.selectedCapitalsourceIds;
+
+      if (trendsTransporter.selectedEtfIds)
+        selectedEtfIds.value = trendsTransporter.selectedEtfIds;
+
+      allEtfs.value = etfTransporters;
 
       dataLoaded.value = true;
       Object.keys(values).forEach((field) => setFieldTouched(field, false));
@@ -327,6 +382,7 @@ const showTrends = handleSubmit(() => {
     startDate: startDate.value,
     endDate: _endDate,
     selectedCapitalsourceIds: capitalsourceIds.value,
+    selectedEtfIds: selectedEtfIds.value,
   };
   ReportService.showTrendsGraph(trendsParameter)
     .then((trends) => {
@@ -357,7 +413,7 @@ const showTrends = handleSubmit(() => {
 
           for (let i = 0; i < dataSettled.length; i++) {
             if (i + 1 == dataSettled.length) {
-              dataCalculated.push(dataSettled[i]);
+              dataCalculated.push(0.0);
             } else {
               dataCalculated.push(null);
             }
@@ -375,6 +431,19 @@ const showTrends = handleSubmit(() => {
           chartData.value.datasets[1].hidden = false;
         } else {
           chartData.value.datasets[1].hidden = true;
+        }
+
+        const dataEtf: Array<number> | undefined = trends.trendsEtfs?.map(
+          function (e) {
+            return e.amount;
+          },
+        );
+
+        if (dataEtf) {
+          chartData.value.datasets[2].data = dataEtf;
+          chartData.value.datasets[2].hidden = false;
+        } else {
+          chartData.value.datasets[2].hidden = true;
         }
 
         const startLabel = chartData.value.labels[0];
