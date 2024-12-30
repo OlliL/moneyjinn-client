@@ -122,13 +122,6 @@ const reloadView = () => {
 
   CrudEtfService.fetchAllEtf()
     .then((_etfs) => {
-      _etfs.sort((a, b) => {
-        if (!a.name && !b.name) return 0;
-        else if (!a.name) return -1;
-        else if (!b.name) return 1;
-
-        return a.name.toUpperCase().localeCompare(b.name.toUpperCase());
-      });
       allEtfs.value = _etfs;
       searchContent();
     })
