@@ -107,6 +107,9 @@ class ReportService extends AbstractService {
       selectedCapitalsourceIds:
         showTrendsFormResponse.settingTrendCapitalsourceIds,
       selectedEtfIds: showTrendsFormResponse.settingTrendEtfIds,
+      capitalsourcesActive:
+        showTrendsFormResponse.settingTrendCapitalsourcesActive ?? true,
+      etfsActive: showTrendsFormResponse.settingTrendEtfsActive ?? true,
     };
 
     return trendsTransporter;
@@ -119,6 +122,9 @@ class ReportService extends AbstractService {
     request.endDate = getISOStringDate(trendsParameter.endDate);
     request.capitalSourceIds = trendsParameter.selectedCapitalsourceIds;
     request.etfIds = trendsParameter.selectedEtfIds;
+    request.settingTrendCapitalsourcesActive =
+      trendsParameter.capitalsourcesActive;
+    request.settingTrendEtfsActive = trendsParameter.etfsActive;
 
     const response = await this.api.showTrendsGraph(request);
 

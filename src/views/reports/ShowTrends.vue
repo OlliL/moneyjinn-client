@@ -35,17 +35,31 @@
                 </div>
 
                 <div class="row no-gutters flex-lg-nowrap">
+                  <div class="col-md-2 col-xs-12 d-flex align-items-center">
+                    <div class="form-check form-switch text-start">
+                      <input
+                        class="form-check-input"
+                        type="checkbox"
+                        id="capitalsourcesActive"
+                        v-model="capitalsourcesActive"
+                      />
+                      <label
+                        class="form-check-label"
+                        for="capitalsourcesActive"
+                        :style="
+                          'opacity: .65; color: ' +
+                          errorCapitalsourceIds.fieldColor
+                        "
+                        >{{ errorCapitalsourceIds.fieldLabel }}</label
+                      >
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="row no-gutters flex-lg-nowrap"
+                  v-if="capitalsourcesActive"
+                >
                   <div class="col-12 mb-3 text-start">
-                    <label
-                      for="capitalsourceIds"
-                      :style="
-                        'opacity: .65; color: ' +
-                        errorCapitalsourceIds.fieldColor
-                      "
-                      ><small>{{
-                        errorCapitalsourceIds.fieldLabel
-                      }}</small></label
-                    >
                     <select
                       v-model="capitalsourceIds"
                       id="capitalsourceIds"
@@ -69,10 +83,22 @@
                 </div>
 
                 <div class="row no-gutters flex-lg-nowrap">
+                  <div class="col-md-2 col-xs-12 d-flex align-items-center">
+                    <div class="form-check form-switch text-start">
+                      <input
+                        class="form-check-input"
+                        type="checkbox"
+                        id="etfsActive"
+                        v-model="etfsActive"
+                      />
+                      <label for="etfs" style="opacity: 0.65">{{
+                        $t("General.etfs")
+                      }}</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="row no-gutters flex-lg-nowrap" v-if="etfsActive">
                   <div class="col-12 mb-3 text-start">
-                    <label for="etfs" style="opacity: 0.65"
-                      ><small>{{ $t("General.etfs") }}</small></label
-                    >
                     <select
                       v-model="selectedEtfIds"
                       id="etfIds"
@@ -175,6 +201,8 @@ const trendsGraphLoaded = ref(false);
 const allEtfs = ref(new Array<Etf>());
 const startDate = ref(new Date());
 const endDate = ref(new Date());
+const capitalsourcesActive = ref(true);
+const etfsActive = ref(true);
 const chartData = ref({
   labels: new Array<string>(),
   datasets: [
@@ -354,6 +382,8 @@ const loadData = () => {
 
       startDate.value = minDate;
       endDate.value = maxDate;
+      etfsActive.value = trendsTransporter.etfsActive;
+      capitalsourcesActive.value = trendsTransporter.capitalsourcesActive;
 
       if (trendsTransporter.selectedCapitalsourceIds)
         capitalsourceIds.value = trendsTransporter.selectedCapitalsourceIds;
@@ -383,80 +413,110 @@ const showTrends = handleSubmit(() => {
     endDate: _endDate,
     selectedCapitalsourceIds: capitalsourceIds.value,
     selectedEtfIds: selectedEtfIds.value,
+    capitalsourcesActive: capitalsourcesActive.value,
+    etfsActive: etfsActive.value,
   };
   ReportService.showTrendsGraph(trendsParameter)
     .then((trends) => {
-      if (trends && trends.trendsSettled && trends.trendsSettled.length > 0) {
-        const labelsSettled: Array<string> = trends.trendsSettled.map(
-          function (e) {
-            return getXLabel(e.month, e.year);
-          },
-        );
+      chartData.value.datasets[0].hidden = true;
+      chartData.value.datasets[1].hidden = true;
+      chartData.value.datasets[2].hidden = true;
 
-        const dataSettled: Array<number> = trends.trendsSettled.map(
-          function (e) {
-            return e.amount;
-          },
-        );
-
-        chartData.value.labels = labelsSettled;
-        chartData.value.datasets[0].data = dataSettled;
-
-        if (trends.trendsCalculated && trends.trendsCalculated.length > 0) {
-          const labelsCalculated: Array<string> = trends.trendsCalculated.map(
+      if (trends) {
+        // X-Labels
+        if (trends.trendsSettled && trends.trendsSettled.length > 0) {
+          // Settled Capitalsources
+          const labelsSettled: Array<string> = trends.trendsSettled.map(
             function (e) {
               return getXLabel(e.month, e.year);
             },
           );
+          chartData.value.labels = labelsSettled;
 
-          const dataCalculated = new Array<number | null>();
+          // Calculated Capitalsources
+          if (trends.trendsCalculated && trends.trendsCalculated.length > 0) {
+            const labelsCalculated: Array<string> = trends.trendsCalculated.map(
+              function (e) {
+                return getXLabel(e.month, e.year);
+              },
+            );
+            labelsCalculated.forEach((label) => {
+              chartData.value.labels.push(label);
+            });
+          }
+        } else if (trends.trendsEtfs && trends.trendsEtfs.length > 0) {
+          // ETFs
+          const labelsSettled: Array<string> = trends.trendsEtfs.map(
+            function (e) {
+              return getXLabel(e.month, e.year);
+            },
+          );
+          chartData.value.labels = labelsSettled;
+        }
 
-          for (let i = 0; i < dataSettled.length; i++) {
-            if (i + 1 == dataSettled.length) {
-              dataCalculated.push(0.0);
-            } else {
-              dataCalculated.push(null);
+        // Chart Datasets
+        if (trends.trendsSettled && trends.trendsSettled.length > 0) {
+          // Settled Capitalsources
+          const dataSettled: Array<number> = trends.trendsSettled.map(
+            function (e) {
+              return e.amount;
+            },
+          );
+
+          chartData.value.datasets[0].data = dataSettled;
+          chartData.value.datasets[0].hidden = false;
+
+          // Calculated Capitalsources
+          if (trends.trendsCalculated && trends.trendsCalculated.length > 0) {
+            const dataCalculated = new Array<number | null>();
+
+            for (let i = 0; i < dataSettled.length; i++) {
+              if (i + 1 == dataSettled.length) {
+                dataCalculated.push(0.0);
+              } else {
+                dataCalculated.push(null);
+              }
             }
+
+            trends.trendsCalculated.forEach((data) => {
+              dataCalculated.push(data.amount);
+            });
+
+            chartData.value.datasets[1].data = dataCalculated;
+            chartData.value.datasets[1].hidden = false;
+          }
+        }
+
+        if (trends.trendsEtfs && trends.trendsEtfs.length > 0) {
+          // ETFs
+          const dataEtf: Array<number> | undefined = trends.trendsEtfs.map(
+            function (e) {
+              return e.amount;
+            },
+          );
+
+          if (dataEtf) {
+            chartData.value.datasets[2].data = dataEtf;
+            chartData.value.datasets[2].hidden = false;
           }
 
-          trends.trendsCalculated.forEach((data) => {
-            dataCalculated.push(data.amount);
-          });
-
-          labelsCalculated.forEach((label) => {
-            chartData.value.labels.push(label);
-          });
-
-          chartData.value.datasets[1].data = dataCalculated;
-          chartData.value.datasets[1].hidden = false;
-        } else {
-          chartData.value.datasets[1].hidden = true;
+          const startLabel = chartData.value.labels[0];
+          const endLabel =
+            chartData.value.labels[chartData.value.labels.length - 1];
+          chartOptions.value.plugins.title.text = t(
+            "Reports.title.trendGraph",
+            {
+              startLabel: startLabel,
+              endLabel: endLabel,
+            },
+          );
         }
-
-        const dataEtf: Array<number> | undefined = trends.trendsEtfs?.map(
-          function (e) {
-            return e.amount;
-          },
-        );
-
-        if (dataEtf) {
-          chartData.value.datasets[2].data = dataEtf;
-          chartData.value.datasets[2].hidden = false;
-        } else {
-          chartData.value.datasets[2].hidden = true;
-        }
-
-        const startLabel = chartData.value.labels[0];
-        const endLabel =
-          chartData.value.labels[chartData.value.labels.length - 1];
-        chartOptions.value.plugins.title.text = t("Reports.title.trendGraph", {
-          startLabel: startLabel,
-          endLabel: endLabel,
-        });
         trendsGraphLoaded.value = true;
       }
+      console.log(chartData.value);
     })
     .catch((backendError) => {
+      console.log(backendError);
       handleBackendError(backendError, serverErrors);
     });
 });
