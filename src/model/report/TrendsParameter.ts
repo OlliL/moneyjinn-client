@@ -3,4 +3,6 @@ export type TrendsParameter = {
   endDate: Date;
   selectedCapitalsourceIds?: Array<number>;
   selectedEtfIds?: Array<number>;
+  capitalsourcesActive: boolean;
+  etfsActive: boolean;
 };
