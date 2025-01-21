@@ -304,6 +304,7 @@ import type { SelectBoxValue } from "@/model/SelectBoxValue";
 
 import CrudEtfPreliminaryLumpSumService from "@/service/CrudEtfPreliminaryLumpSumService";
 import { getMonthName } from "@/tools/views/MonthName";
+import { EtfPreliminaryLumpSumType } from "@/model/etf/EtfPreliminaryLumpSumType";
 
 const { t } = useI18n();
 
@@ -330,7 +331,7 @@ const etfs = ref(new Array<SelectBoxValue>());
 const mep = ref({} as EtfPreliminaryLumpSum);
 const origMep = ref({} as EtfPreliminaryLumpSum | undefined);
 const defaultEtfId = ref(0 as number | undefined);
-const modalComponent = useTemplateRef<typeof ModalVue>('modalComponent');
+const modalComponent = useTemplateRef<typeof ModalVue>("modalComponent");
 const emit = defineEmits([
   "etfPreliminaryLumpSumCreated",
   "etfPreliminaryLumpSumUpdated",
@@ -352,6 +353,7 @@ const resetForm = () => {
   } else {
     if (defaultEtfId.value !== undefined) mep.value.etfId = defaultEtfId.value;
     mep.value.year = new Date().getFullYear();
+    mep.value.type = EtfPreliminaryLumpSumType.AMOUNT_PER_MONTH;
   }
 
   const localYearDate = new Date();
@@ -387,9 +389,7 @@ const createEtfPreliminaryLumpSum = handleSubmit(() => {
 
   if (mep.value.id > 0) {
     //update
-    CrudEtfPreliminaryLumpSumService.updateEtfPreliminaryLumpSum(
-      mep.value,
-    )
+    CrudEtfPreliminaryLumpSumService.updateEtfPreliminaryLumpSum(mep.value)
       .then(() => {
         modalComponent.value?._hide();
         emit("etfPreliminaryLumpSumUpdated", mep.value);
@@ -399,9 +399,7 @@ const createEtfPreliminaryLumpSum = handleSubmit(() => {
       });
   } else {
     //create
-    CrudEtfPreliminaryLumpSumService.createEtfPreliminaryLumpSum(
-      mep.value,
-    )
+    CrudEtfPreliminaryLumpSumService.createEtfPreliminaryLumpSum(mep.value)
       .then((_etfPreliminaryLumpSum) => {
         mep.value = _etfPreliminaryLumpSum;
         modalComponent.value?._hide();
