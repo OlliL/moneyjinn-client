@@ -21,7 +21,12 @@ export function formatDateWithTime(date: Date): string {
 export function formatDate(date: Date): string {
   let dateStr = dateCache.get(date);
   if (dateStr === undefined) {
-    dateStr = dateFormatter.format(date);
+    dateStr = dateFormatter
+      .formatToParts(date)
+      .map((obj) => {
+        return obj.type === "year" ? obj.value.padStart(4, "0") : obj.value;
+      })
+      .join("");
     dateCache.set(date, dateStr);
   }
   return dateStr;
@@ -32,14 +37,8 @@ export function formatTime(date: Date): string {
 }
 
 export function getISOStringDate(date: Date): string {
-  let dateStr = date.getFullYear() + "-";
-  dateStr += leftpad(date.getMonth() + 1) + "-";
-  dateStr += leftpad(date.getDate());
+  let dateStr = date.getFullYear().toString().padStart(4, "0") + "-";
+  dateStr += (date.getMonth() + 1).toString().padStart(2, "0") + "-";
+  dateStr += date.getDate().toString().padStart(2, "0");
   return dateStr;
-}
-
-function leftpad(num: number, resultLength = 2, leftpadChar = "0"): string {
-  return (String(leftpadChar).repeat(resultLength) + String(num)).slice(
-    String(num).length,
-  );
 }
