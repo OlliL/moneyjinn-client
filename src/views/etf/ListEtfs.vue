@@ -27,7 +27,7 @@
 
     <DivError :server-errors="serverErrors" />
 
-    <DivContentTable class="col-xxl-8 col-xs-12">
+    <DivContentTable clazz="col-xxl-8 col-xs-12">
       <thead>
         <tr>
           <th rowspan="2" id="name">{{ $t("General.name") }}</th>

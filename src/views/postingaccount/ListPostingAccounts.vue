@@ -24,7 +24,7 @@
       @createClicked="showCreatePostingAccountModal"
     />
 
-    <DivContentTable class="col-md-3 col-xs-12">
+    <DivContentTable clazz="col-md-3 col-xs-12">
       <thead>
         <tr>
           <th>{{ $t("General.name") }}</th>
