@@ -1,10 +1,6 @@
 # moneyjinn
 
-## Client
 <a href="https://github.com/OlliL/moneyjinn-client/actions/workflows/main.yml"><img src="https://github.com/OlliL/moneyjinn-client/workflows/CodeQL/badge.svg" alt="build status"></a>
-
-## Server
-<a href="https://github.com/OlliL/moneyjinn-server/actions/workflows/codeql.yml"><img src="https://github.com/OlliL/moneyjinn-server/workflows/CodeQL/badge.svg" alt="build status"></a>
 
 ## Requirements
 
@@ -13,7 +9,7 @@
   - forwards Backend requests to the server.
   - example configuration: https://github.com/OlliL/moneyjinn-server/blob/master/prod-nginx.conf
 - MySQL 5.1 or higher (Backend)
-- Java 17 (Backend)
+- Java 21 (Backend)
 
 ## Installation
 
@@ -24,8 +20,9 @@
 - build server
   - clone moneyjinn-server repository
   - make sure Java and Maven are installed
-  - check https://github.com/OlliL/moneyjinn-server/blob/master/README on how to set up the database
+  - check on how to set up the database
   - run maven clean install
+- configure server (see <a href="https://github.com/OlliL/moneyjinn-server/blob/master/README.md">Server README</a>)
 
 ## Start Application
 
