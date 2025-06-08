@@ -116,8 +116,6 @@ const props = defineProps({
     default: false,
   },
 });
-const emit = defineEmits(["update:modelValue"]);
-
 const schema = computed(() => {
   if (props.validationSchemaRef) {
     return toTypedSchema(props.validationSchemaRef.value);
@@ -259,7 +257,7 @@ const onKeydownInput = async (event: KeyboardEvent) => {
   }
 };
 
-const onInput = (event: Event) => {
+const onInput = () => {
   showDropdown();
   filterItemList();
 };
