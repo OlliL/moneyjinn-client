@@ -57,7 +57,6 @@
 <script setup lang="ts">
 import { ref } from "vue";
 
-const searchString = ref("");
 const validNow = ref(true);
 
 const emit = defineEmits([
