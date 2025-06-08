@@ -28,7 +28,6 @@ import {
   onMounted,
   ref,
   useTemplateRef,
-  watch,
   type PropType,
   type Ref,
 } from "vue";
@@ -42,11 +41,9 @@ import { useUserSessionStore } from "@/stores/UserSessionStore";
 
 import type { PostingAccount } from "@/model/postingaccount/PostingAccount";
 
+const postingAccountId = defineModel({ type: Number });
+
 const props = defineProps({
-  modelValue: {
-    type: Number,
-    required: false,
-  },
   validationSchema: {
     type: Object as PropType<ZodType>,
     required: false,
@@ -66,13 +63,11 @@ const props = defineProps({
   },
 });
 
-const postingAccountId: Ref<number | undefined> = ref(undefined);
 const createPostingAccountModal = useTemplateRef<
   typeof CreatePostingAccountModalVue
 >("createPostingAccountModal");
 const userIsAdmin = ref(false);
 const postingAccountStore = usePostingAccountStore();
-const emit = defineEmits(["update:modelValue"]);
 
 const selectBoxValues = computed(
   () => postingAccountStore.getAsSelectBoxValues,
@@ -87,24 +82,7 @@ const showCreatePostingAccountModal = () => {
   createPostingAccountModal.value?._show();
 };
 
-const postingAccountCreated = (mcs: PostingAccount) => {
-  postingAccountId.value = mcs.id;
+const postingAccountCreated = (mpa: PostingAccount) => {
+  postingAccountId.value = mpa.id;
 };
-
-watch(
-  () => props.modelValue,
-  (newVal, oldVal) => {
-    if (newVal != oldVal) {
-      postingAccountId.value = newVal;
-    }
-  },
-  { immediate: true },
-);
-
-watch(postingAccountId, (newVal, oldVal) => {
-  if (newVal != oldVal) {
-    postingAccountId.value = newVal;
-    emit("update:modelValue", postingAccountId.value);
-  }
-});
 </script>
