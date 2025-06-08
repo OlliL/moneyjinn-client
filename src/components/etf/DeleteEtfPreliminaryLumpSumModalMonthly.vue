@@ -70,7 +70,7 @@ const serverErrors = ref(new Array<string>());
 
 const etfPreliminaryLumpSum = ref({} as EtfPreliminaryLumpSum);
 const etfName = ref("");
-const modalComponent = useTemplateRef<typeof ModalVue>('modalComponent');
+const modalComponent = useTemplateRef<typeof ModalVue>("modalComponent");
 const emit = defineEmits(["etfPreliminaryLumpSumDeleted"]);
 const dataArray = ref({} as Array<RowData>);
 
@@ -84,51 +84,27 @@ const _show = (_etfs: Array<Etf>, _mep: EtfPreliminaryLumpSum) => {
   }
 
   etfPreliminaryLumpSum.value = _mep;
-  dataArray.value = new Array<RowData>();
-  for (let i: number = 1; i <= 12; i++) {
-    let amount: number | undefined = 0;
-    switch (i) {
-      case 1:
-        amount = etfPreliminaryLumpSum.value.amountJanuary;
-        break;
-      case 2:
-        amount = etfPreliminaryLumpSum.value.amountFebruary;
-        break;
-      case 3:
-        amount = etfPreliminaryLumpSum.value.amountMarch;
-        break;
-      case 4:
-        amount = etfPreliminaryLumpSum.value.amountApril;
-        break;
-      case 5:
-        amount = etfPreliminaryLumpSum.value.amountMay;
-        break;
-      case 6:
-        amount = etfPreliminaryLumpSum.value.amountJune;
-        break;
-      case 7:
-        amount = etfPreliminaryLumpSum.value.amountJuly;
-        break;
-      case 8:
-        amount = etfPreliminaryLumpSum.value.amountAugust;
-        break;
-      case 9:
-        amount = etfPreliminaryLumpSum.value.amountSeptember;
-        break;
-      case 10:
-        amount = etfPreliminaryLumpSum.value.amountOctober;
-        break;
-      case 11:
-        amount = etfPreliminaryLumpSum.value.amountNovember;
-        break;
-      case 12:
-        amount = etfPreliminaryLumpSum.value.amountDecember;
-        break;
-    }
-    dataArray.value.push({ month: getMonthName(i), amount: amount });
-    modalComponent.value?._show();
-  }
+  const amounts = [
+    etfPreliminaryLumpSum.value.amountJanuary,
+    etfPreliminaryLumpSum.value.amountFebruary,
+    etfPreliminaryLumpSum.value.amountMarch,
+    etfPreliminaryLumpSum.value.amountApril,
+    etfPreliminaryLumpSum.value.amountMay,
+    etfPreliminaryLumpSum.value.amountJune,
+    etfPreliminaryLumpSum.value.amountJuly,
+    etfPreliminaryLumpSum.value.amountAugust,
+    etfPreliminaryLumpSum.value.amountSeptember,
+    etfPreliminaryLumpSum.value.amountOctober,
+    etfPreliminaryLumpSum.value.amountNovember,
+    etfPreliminaryLumpSum.value.amountDecember,
+  ];
+  dataArray.value = amounts.map((amount, i) => {
+    return { month: getMonthName(i + 1), amount: amount } as RowData;
+  });
+
+  modalComponent.value?._show();
 };
+
 const deleteEtfPreliminaryLumpSum = () => {
   serverErrors.value = new Array<string>();
 
@@ -150,5 +126,6 @@ defineExpose({ _show });
 <style scoped>
 th {
   background-color: #f2f2f2;
+  white-space: nowrap;
 }
 </style>
