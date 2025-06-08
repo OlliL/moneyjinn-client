@@ -18,15 +18,9 @@
     ></template>
   </SelectStandard>
 </template>
+
 <script lang="ts" setup>
-import {
-  computed,
-  ref,
-  useTemplateRef,
-  watch,
-  type PropType,
-  type Ref,
-} from "vue";
+import { computed, useTemplateRef, type PropType } from "vue";
 import { any, type ZodType } from "zod";
 
 import CreateCapitalsourceModalVue from "./CreateCapitalsourceModal.vue";
@@ -36,14 +30,12 @@ import { useCapitalsourceStore } from "@/stores/CapitalsourceStore";
 
 import type { Capitalsource } from "@/model/capitalsource/Capitalsource";
 
+const capitalsourceId = defineModel({ type: Number });
+
 const props = defineProps({
   validityDate: {
     type: Date,
     required: true,
-  },
-  modelValue: {
-    type: Number,
-    required: false,
   },
   validationSchema: {
     type: Object as PropType<ZodType>,
@@ -60,12 +52,10 @@ const props = defineProps({
   },
 });
 
-const capitalsourceId: Ref<number | undefined> = ref(undefined);
 const createCapitalsourceModal = useTemplateRef<
   typeof CreateCapitalsourceModalVue
 >("createCapitalsourceModal");
 const capitalsourceStore = useCapitalsourceStore();
-const emit = defineEmits(["update:modelValue"]);
 
 const selectBoxValues = computed(() =>
   capitalsourceStore.getAsSelectBoxValues(props.validityDate),
@@ -78,21 +68,4 @@ const showCreateCapitalsourceModal = () => {
 const capitalsourceCreated = (mcs: Capitalsource) => {
   capitalsourceId.value = mcs.id;
 };
-
-watch(
-  () => props.modelValue,
-  (newVal, oldVal) => {
-    if (newVal != oldVal) {
-      capitalsourceId.value = newVal;
-    }
-  },
-  { immediate: true },
-);
-
-watch(capitalsourceId, (newVal, oldVal) => {
-  if (newVal != oldVal) {
-    capitalsourceId.value = newVal;
-    emit("update:modelValue", capitalsourceId.value);
-  }
-});
 </script>

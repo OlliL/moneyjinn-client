@@ -20,14 +20,7 @@
   </SelectStandard>
 </template>
 <script lang="ts" setup>
-import {
-  computed,
-  ref,
-  useTemplateRef,
-  watch,
-  type PropType,
-  type Ref,
-} from "vue";
+import { computed, useTemplateRef, type PropType, type Ref } from "vue";
 import { any, type ZodType } from "zod";
 
 import CreateContractpartnerModalVue from "./CreateContractpartnerModal.vue";
@@ -37,13 +30,11 @@ import { useContractpartnerStore } from "@/stores/ContractpartnerStore";
 
 import type { Contractpartner } from "@/model/contractpartner/Contractpartner";
 
+const contractpartnerId = defineModel({ type: Number });
+
 const props = defineProps({
   validityDate: {
     type: Date,
-    required: false,
-  },
-  modelValue: {
-    type: Number,
     required: false,
   },
   validationSchema: {
@@ -65,12 +56,10 @@ const props = defineProps({
   },
 });
 
-const contractpartnerId: Ref<number | undefined> = ref(undefined);
 const createContractpartnerModal = useTemplateRef<
   typeof CreateContractpartnerModalVue
 >("createContractpartnerModal");
 const contractpartnerStore = useContractpartnerStore();
-const emit = defineEmits(["update:modelValue"]);
 
 const selectBoxValues = computed(() =>
   contractpartnerStore.getAsSelectBoxValues(props.validityDate),
@@ -83,21 +72,4 @@ const showCreateContractpartnerModal = () => {
 const contractpartnerCreated = (mcp: Contractpartner) => {
   contractpartnerId.value = mcp.id;
 };
-
-watch(
-  () => props.modelValue,
-  (newVal, oldVal) => {
-    if (newVal != oldVal) {
-      contractpartnerId.value = newVal;
-    }
-  },
-  { immediate: true },
-);
-
-watch(contractpartnerId, (newVal, oldVal) => {
-  if (newVal != oldVal) {
-    contractpartnerId.value = newVal;
-    emit("update:modelValue", contractpartnerId.value);
-  }
-});
 </script>
