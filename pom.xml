@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>org.laladev.moneyjinn</groupId>
@@ -10,8 +11,8 @@
 	<scm>
 		<developerConnection>scm:git:https://github.com/OlliL/moneyjinn-client.git</developerConnection>
 		<tag>HEAD</tag>
-        </scm>
-	
+	</scm>
+
 	<properties>
 		<openapi.inputSpec>../moneyjinn-server/moneyjinn-server/src/main/resources/openapi.json</openapi.inputSpec>
 	</properties>
@@ -21,7 +22,7 @@
 			<plugin>
 				<groupId>org.openapitools</groupId>
 				<artifactId>openapi-generator-maven-plugin</artifactId>
-				<version>6.4.0</version>
+				<version>7.13.0</version>
 				<executions>
 					<execution>
 						<goals>
@@ -32,6 +33,10 @@
 							<generatorName>typescript-axios</generatorName>
 							<output>src/api</output>
 							<skipOperationExample>true</skipOperationExample>
+							<globalProperties>
+								<modelDocs>false</modelDocs>
+								<apiDocs>false</apiDocs>
+							</globalProperties>
 							<configOptions>
 								<useTags>true</useTags>
 							</configOptions>
