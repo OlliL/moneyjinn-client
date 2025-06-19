@@ -7,31 +7,31 @@
           <table class="table table-bordered table-hover">
             <tbody>
               <tr>
-                <th>{{ $t("Moneyflow.bookingdate") }}</th>
+                <th scope="row">{{ $t("Moneyflow.bookingdate") }}</th>
                 <td><SpanDate :date="mmf.bookingDate" /></td>
               </tr>
               <tr>
-                <th>{{ $t("Moneyflow.invoicedate") }}</th>
+                <th scope="row">{{ $t("Moneyflow.invoicedate") }}</th>
                 <td><SpanDate :date="mmf.invoiceDate" /></td>
               </tr>
               <tr>
-                <th>{{ $t("General.contractpartner") }}</th>
+                <th scope="row">{{ $t("General.contractpartner") }}</th>
                 <td>{{ mmf.contractpartnerName }}</td>
               </tr>
               <tr>
-                <th>{{ $t("General.capitalsource") }}</th>
+                <th scope="row">{{ $t("General.capitalsource") }}</th>
                 <td>{{ mmf.capitalsourceComment }}</td>
               </tr>
               <tr>
-                <th>{{ $t("General.amount") }}</th>
+                <th scope="row">{{ $t("General.amount") }}</th>
                 <td><SpanAmount :amount="mmf.amount" /></td>
               </tr>
               <tr>
-                <th>{{ $t("General.comment") }}</th>
+                <th scope="row">{{ $t("General.comment") }}</th>
                 <td>{{ mmf.comment }}</td>
               </tr>
               <tr>
-                <th>{{ $t("General.postingAccount") }}</th>
+                <th scope="row">{{ $t("General.postingAccount") }}</th>
                 <td>{{ mmf.postingAccountName }}</td>
               </tr>
             </tbody>
@@ -63,7 +63,7 @@ import { handleBackendError } from "@/tools/views/HandleBackendError";
 const serverErrors = ref(new Array<string>());
 
 const mmf = ref({} as Moneyflow);
-const modalComponent = useTemplateRef<typeof ModalVue>('modalComponent');
+const modalComponent = useTemplateRef<typeof ModalVue>("modalComponent");
 const emit = defineEmits(["moneyflowDeleted"]);
 
 const _show = (_mmf: Moneyflow) => {

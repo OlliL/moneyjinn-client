@@ -10,15 +10,15 @@
           <table class="table table-bordered table-hover">
             <tbody>
               <tr>
-                <th>{{ $t("General.etf") }}</th>
+                <th scope="row">{{ $t("General.etf") }}</th>
                 <td>{{ etfName }}</td>
               </tr>
               <tr>
-                <th>{{ $t("General.year") }}</th>
+                <th scope="row">{{ $t("General.year") }}</th>
                 <td>{{ etfPreliminaryLumpSum.year }}</td>
               </tr>
               <tr>
-                <th>{{ $t("ETFPreliminaryLumpSum.price") }}</th>
+                <th scope="row">{{ $t("ETFPreliminaryLumpSum.price") }}</th>
                 <td>
                   <SpanAmount :amount="etfPreliminaryLumpSum.amountPerPiece" />
                 </td>
@@ -58,7 +58,7 @@ const serverErrors = ref(new Array<string>());
 
 const etfPreliminaryLumpSum = ref({} as EtfPreliminaryLumpSum);
 const etfName = ref("");
-const modalComponent = useTemplateRef<typeof ModalVue>('modalComponent');
+const modalComponent = useTemplateRef<typeof ModalVue>("modalComponent");
 const emit = defineEmits(["etfPreliminaryLumpSumDeleted"]);
 
 const _show = (_etfs: Array<Etf>, _mep: EtfPreliminaryLumpSum) => {

@@ -10,15 +10,15 @@
           <table class="table table-bordered table-hover">
             <tbody>
               <tr>
-                <th>{{ $t("General.etf") }}</th>
+                <th scope="row">{{ $t("General.etf") }}</th>
                 <td>{{ etfName }}</td>
               </tr>
               <tr>
-                <th>{{ $t("General.year") }}</th>
+                <th scope="row">{{ $t("General.year") }}</th>
                 <td>{{ etfPreliminaryLumpSum.year }}</td>
               </tr>
               <tr v-for="month in dataArray" :key="month.month">
-                <th>
+                <th scope="row">
                   {{
                     $t("ETFPreliminaryLumpSum.monthlyAmount", {
                       month: month.month,

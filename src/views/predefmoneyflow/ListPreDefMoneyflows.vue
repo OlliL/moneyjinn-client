@@ -30,15 +30,15 @@
     <DivContentTable>
       <thead>
         <tr>
-          <th>{{ $t("General.amount") }}</th>
-          <th>{{ $t("General.contractpartner") }}</th>
-          <th>{{ $t("General.comment") }}</th>
-          <th>{{ $t("General.postingAccount") }}</th>
-          <th>{{ $t("General.capitalsource") }}</th>
-          <th>{{ $t("PreDefMoneyflow.onceAMonthShort") }}</th>
-          <th>{{ $t("PreDefMoneyflow.createDate") }}</th>
-          <th>{{ $t("PreDefMoneyflow.lastUsed") }}</th>
-          <th colspan="2"></th>
+          <th scope="col">{{ $t("General.amount") }}</th>
+          <th scope="col">{{ $t("General.contractpartner") }}</th>
+          <th scope="col">{{ $t("General.comment") }}</th>
+          <th scope="col">{{ $t("General.postingAccount") }}</th>
+          <th scope="col">{{ $t("General.capitalsource") }}</th>
+          <th scope="col">{{ $t("PreDefMoneyflow.onceAMonthShort") }}</th>
+          <th scope="col">{{ $t("PreDefMoneyflow.createDate") }}</th>
+          <th scope="col">{{ $t("PreDefMoneyflow.lastUsed") }}</th>
+          <th scope="colgroup" colspan="2"></th>
         </tr>
       </thead>
       <tbody>

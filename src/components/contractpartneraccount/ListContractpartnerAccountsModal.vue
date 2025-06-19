@@ -24,9 +24,9 @@
         <table class="table table-striped table-bordered table-hover">
           <thead>
             <tr>
-              <th class="text-center">{{ $t("General.iban") }}</th>
-              <th class="text-center">{{ $t("General.bic") }}</th>
-              <th class="text-center" colspan="2"></th>
+              <th scope="col" class="text-center">{{ $t("General.iban") }}</th>
+              <th scope="col" class="text-center">{{ $t("General.bic") }}</th>
+              <th scope="col" class="text-center" colspan="2"></th>
             </tr>
           </thead>
           <tbody>
@@ -74,9 +74,12 @@ const serverErrors = ref(new Array<string>());
 const mcp = ref({} as Contractpartner);
 const contractpartnerAccount = ref({} as Array<ContractpartnerAccount>);
 const dataLoaded = ref(false);
-const modalComponent = useTemplateRef<typeof ModalVue>('modalComponent');
-const createContractpartnerAccountModal = useTemplateRef<typeof CreateContractpartnerAccountModalVue>('createContractpartnerAccountModal');
-const deleteModal = useTemplateRef<typeof DeleteContractpartnerAccountModalVue>('deleteModal');
+const modalComponent = useTemplateRef<typeof ModalVue>("modalComponent");
+const createContractpartnerAccountModal = useTemplateRef<
+  typeof CreateContractpartnerAccountModalVue
+>("createContractpartnerAccountModal");
+const deleteModal =
+  useTemplateRef<typeof DeleteContractpartnerAccountModalVue>("deleteModal");
 
 const loadData = () => {
   dataLoaded.value = false;

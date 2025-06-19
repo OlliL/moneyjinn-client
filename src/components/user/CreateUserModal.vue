@@ -93,9 +93,9 @@
                   <table class="table table-striped table-bordered table-hover">
                     <thead>
                       <tr>
-                        <th>{{ $t("General.group") }}</th>
-                        <th>{{ $t("General.validFrom") }}</th>
-                        <th>{{ $t("General.validTil") }}</th>
+                        <th scope="col">{{ $t("General.group") }}</th>
+                        <th scope="col">{{ $t("General.validFrom") }}</th>
+                        <th scope="col">{{ $t("General.validTil") }}</th>
                       </tr>
                     </thead>
                     <tbody>

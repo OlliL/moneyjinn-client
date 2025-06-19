@@ -7,46 +7,54 @@
           <table class="table table-bordered table-hover">
             <tbody>
               <tr>
-                <th colspan="2" id="name">{{ $t("General.name") }}</th>
+                <th scope="row" colspan="2" id="name">
+                  {{ $t("General.name") }}
+                </th>
                 <td>{{ etf.name }}</td>
               </tr>
               <tr>
-                <th colspan="2" id="isin">{{ $t("ETF.isin") }}</th>
+                <th scope="row" colspan="2" id="isin">{{ $t("ETF.isin") }}</th>
                 <td>{{ etf.isin }}</td>
               </tr>
               <tr>
-                <th colspan="2" id="wkn">{{ $t("ETF.wkn") }}</th>
+                <th scope="row" colspan="2" id="wkn">{{ $t("ETF.wkn") }}</th>
                 <td>{{ etf.wkn }}</td>
               </tr>
               <tr>
-                <th colspan="2" id="ticker">{{ $t("ETF.ticker") }}</th>
+                <th scope="row" colspan="2" id="ticker">
+                  {{ $t("ETF.ticker") }}
+                </th>
                 <td>{{ etf.ticker }}</td>
               </tr>
               <tr>
-                <th colspan="2" id="chartUrl">{{ $t("ETF.chartUrl") }}</th>
+                <th scope="row" colspan="2" id="chartUrl">
+                  {{ $t("ETF.chartUrl") }}
+                </th>
                 <td><a :href="etf.chartUrl">Link</a></td>
               </tr>
               <tr>
-                <th rowspan="3" id="transactionCosts">
+                <th scope="rowgroup" rowspan="3" id="transactionCosts">
                   {{ $t("ETFFlow.transactionCosts") }}
                 </th>
-                <th id="abs">{{ $t("ETFFlow.transactionCostsAbsolute") }}</th>
+                <th scope="row" id="abs">
+                  {{ $t("ETFFlow.transactionCostsAbsolute") }}
+                </th>
                 <td><SpanAmount :amount="etf.transactionCostsAbsolute" /></td>
               </tr>
               <tr>
-                <th id="rel">
+                <th scope="row" id="rel">
                   {{ $t("ETFFlow.transactionCostsRelative") }}
                 </th>
                 <td>{{ trabsactionCostsRelativeString }}</td>
               </tr>
               <tr>
-                <th id="max">
+                <th scope="row" id="max">
                   {{ $t("ETFFlow.transactionCostsMaximum") }}
                 </th>
                 <td><SpanAmount :amount="etf.transactionCostsMaximum" /></td>
               </tr>
               <tr>
-                <th colspan="2" id="ticker">
+                <th scope="row" colspan="2" id="ticker">
                   {{ $t("ETF.partialTaxExemption") }}
                 </th>
                 <td>{{ partialTaxExemptionString }}</td>
@@ -81,7 +89,7 @@ import { formatNumber } from "@/tools/views/FormatNumber";
 const serverErrors = ref(new Array<string>());
 
 const etf = ref({} as Etf);
-const modalComponent = useTemplateRef<typeof ModalVue>('modalComponent');
+const modalComponent = useTemplateRef<typeof ModalVue>("modalComponent");
 const emit = defineEmits(["etfDeleted"]);
 
 const trabsactionCostsRelativeString = computed(() => {

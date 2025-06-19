@@ -85,12 +85,12 @@
                   >
                     <thead>
                       <tr>
-                        <th></th>
-                        <th>{{ $t("Moneyflow.invoicedate") }}</th>
-                        <th>{{ $t("General.amount") }}</th>
-                        <th>{{ $t("General.contractpartner") }}</th>
-                        <th>{{ $t("General.comment") }}</th>
-                        <th colspan="2"></th>
+                        <th scope="col"></th>
+                        <th scope="col">{{ $t("Moneyflow.invoicedate") }}</th>
+                        <th scope="col">{{ $t("General.amount") }}</th>
+                        <th scope="col">{{ $t("General.contractpartner") }}</th>
+                        <th scope="col">{{ $t("General.comment") }}</th>
+                        <th scope="colgroup" colspan="2"></th>
                       </tr>
                     </thead>
                     <tbody>

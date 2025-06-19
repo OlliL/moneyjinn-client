@@ -15,10 +15,15 @@
               <table class="table table-striped table-bordered table-hover">
                 <thead>
                   <tr>
-                    <th class="text-center" rowspan="2" id="thEtf">
+                    <th scope="col" class="text-center" rowspan="2" id="thEtf">
                       {{ $t("General.etf") }}
                     </th>
-                    <th class="text-center" rowspan="2" id="thShares">
+                    <th
+                      scope="col"
+                      class="text-center"
+                      rowspan="2"
+                      id="thShares"
+                    >
                       {{ $t("ETFFlow.shares") }}
                     </th>
                     <th
@@ -28,7 +33,12 @@
                     >
                       {{ $t("ETFFlow.amount") }}
                     </th>
-                    <th class="text-center" colspan="3" id="thOverall">
+                    <th
+                      scope="col"
+                      class="text-center"
+                      colspan="3"
+                      id="thOverall"
+                    >
                       {{ $t("ETFFlow.overall") }}
                     </th>
                     <th
@@ -58,13 +68,13 @@
                     >
                       {{ $t("ETFFlow.ask") }}
                     </th>
-                    <th class="text-center" id="thOverallPayed">
+                    <th scope="col" class="text-center" id="thOverallPayed">
                       {{ $t("ETFFlow.payed") }}
                     </th>
-                    <th class="text-center" id="thOverallBid">
+                    <th scope="col" class="text-center" id="thOverallBid">
                       {{ $t("ETFFlow.bid") }}
                     </th>
-                    <th class="text-center" id="thOverallProfit">
+                    <th scope="col" class="text-center" id="thOverallProfit">
                       {{ $t("ETFFlow.profit") }}
                     </th>
                   </tr>

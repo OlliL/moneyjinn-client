@@ -56,13 +56,13 @@
         >
           <thead>
             <tr>
-              <th>{{ $t("Moneyflow.bookingdate") }}</th>
-              <th>{{ $t("General.amount") }}</th>
-              <th>{{ $t("General.contractpartner") }}</th>
-              <th>{{ $t("General.comment") }}</th>
-              <th>{{ $t("General.postingAccount") }}</th>
-              <th>{{ $t("General.capitalsource") }}</th>
-              <th colspan="2"></th>
+              <th scope="col">{{ $t("Moneyflow.bookingdate") }}</th>
+              <th scope="col">{{ $t("General.amount") }}</th>
+              <th scope="col">{{ $t("General.contractpartner") }}</th>
+              <th scope="col">{{ $t("General.comment") }}</th>
+              <th scope="col">{{ $t("General.postingAccount") }}</th>
+              <th scope="col">{{ $t("General.capitalsource") }}</th>
+              <th scope="colgroup" colspan="2"></th>
             </tr>
           </thead>
           <tbody>

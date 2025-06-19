@@ -9,8 +9,8 @@
     </colgroup>
     <thead>
       <tr>
-        <th>{{ $t("General.month") }}</th>
-        <th>{{ $t("General.amount") }}</th>
+        <th scope="col">{{ $t("General.month") }}</th>
+        <th scope="col">{{ $t("General.amount") }}</th>
       </tr>
     </thead>
     <tbody>

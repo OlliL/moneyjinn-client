@@ -8,13 +8,13 @@
         </colgroup>
         <tbody>
           <tr>
-            <th class="text-start">
+            <th scope="col" class="text-start">
               {{ $t("ETFFlow.calculateResults.pieces") }}
             </th>
             <td class="text-end">{{ calcResults.pieces }}</td>
           </tr>
           <tr>
-            <th class="text-start">
+            <th scope="col" class="text-start">
               {{ $t("ETFFlow.calculateResults.originalBuyPrice") }}
             </th>
             <td class="text-end">
@@ -22,7 +22,7 @@
             </td>
           </tr>
           <tr>
-            <th class="text-start">
+            <th scope="col" class="text-start">
               {{ $t("ETFFlow.calculateResults.sellPrice") }}
             </th>
             <td class="text-end">
@@ -38,7 +38,7 @@
         </colgroup>
         <tbody>
           <tr>
-            <th class="text-start">
+            <th scope="col" class="text-start">
               {{ $t("ETFFlow.profit") }}
             </th>
             <td class="text-end">
@@ -46,7 +46,7 @@
             </td>
           </tr>
           <tr>
-            <th class="text-start">
+            <th scope="col" class="text-start">
               {{ $t("ETFFlow.calculateResults.accumulatedPreliminaryLumpSum") }}
             </th>
             <td class="text-end">
@@ -54,7 +54,7 @@
             </td>
           </tr>
           <tr>
-            <th class="text-start">
+            <th scope="col" class="text-start">
               {{ $t("ETFFlow.calculateResults.chargeable") }}
             </th>
             <td class="text-end">
@@ -72,7 +72,7 @@
         </colgroup>
         <tbody>
           <tr>
-            <th class="text-start" colspan="3" id="newBuyProce">
+            <th scope="col" class="text-start" colspan="3" id="newBuyProce">
               {{ $t("ETFFlow.calculateResults.newBuyPrice") }}
             </th>
             <td class="text-end">
@@ -80,7 +80,7 @@
             </td>
           </tr>
           <tr>
-            <th class="text-start" colspan="3" id="rebuyLosses">
+            <th scope="col" class="text-start" colspan="3" id="rebuyLosses">
               {{ $t("ETFFlow.calculateResults.rebuyLosses") }}
             </th>
             <td class="text-end">
@@ -88,13 +88,27 @@
             </td>
           </tr>
           <tr>
-            <th class="text-start" rowspan="4" id="transactionCosts">
+            <th
+              scope="col"
+              class="text-start"
+              rowspan="4"
+              id="transactionCosts"
+            >
               {{ $t("ETFFlow.transactionCosts") }}
             </th>
-            <th class="text-start" rowspan="2" id="transactionCostsSell">
+            <th
+              scope="col"
+              class="text-start"
+              rowspan="2"
+              id="transactionCostsSell"
+            >
               {{ $t("ETFFlow.transactionCostsSell") }}
             </th>
-            <th class="text-start" id="transactionCostsSellAbsolute">
+            <th
+              scope="col"
+              class="text-start"
+              id="transactionCostsSellAbsolute"
+            >
               {{ $t("ETFFlow.transactionCostsAbsolute") }}
             </th>
             <td class="text-end">
@@ -102,7 +116,11 @@
             </td>
           </tr>
           <tr>
-            <th class="text-start" id="transactionCostsSellRelative">
+            <th
+              scope="col"
+              class="text-start"
+              id="transactionCostsSellRelative"
+            >
               {{ $t("ETFFlow.transactionCostsRelative") }}
             </th>
             <td class="text-end">
@@ -110,10 +128,15 @@
             </td>
           </tr>
           <tr>
-            <th class="text-start" rowspan="2" id="transactionCostsBuy">
+            <th
+              scope="col"
+              class="text-start"
+              rowspan="2"
+              id="transactionCostsBuy"
+            >
               {{ $t("ETFFlow.transactionCostsBuy") }}
             </th>
-            <th class="text-start" id="transactionCostsBuyAbsolute">
+            <th scope="col" class="text-start" id="transactionCostsBuyAbsolute">
               {{ $t("ETFFlow.transactionCostsAbsolute") }}
             </th>
             <td class="text-end">
@@ -121,7 +144,7 @@
             </td>
           </tr>
           <tr>
-            <th class="text-start" id="transactionCostsBuyRelative">
+            <th scope="col" class="text-start" id="transactionCostsBuyRelative">
               {{ $t("ETFFlow.transactionCostsRelative") }}
             </th>
             <td class="text-end">
@@ -129,7 +152,7 @@
             </td>
           </tr>
           <tr>
-            <th class="text-start" colspan="3" id="overallCosts">
+            <th scope="col" class="text-start" colspan="3" id="overallCosts">
               {{ $t("ETFFlow.calculateResults.overallCosts") }}
             </th>
             <td class="text-end">

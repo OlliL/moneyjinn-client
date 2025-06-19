@@ -11,11 +11,11 @@
           <table class="table table-bordered table-hover">
             <tbody>
               <tr>
-                <th>{{ $t("General.iban") }}</th>
+                <th scope="row">{{ $t("General.iban") }}</th>
                 <td>{{ mca.accountNumber }}</td>
               </tr>
               <tr>
-                <th>{{ $t("General.bic") }}</th>
+                <th scope="row">{{ $t("General.bic") }}</th>
                 <td>{{ mca.bankCode }}</td>
               </tr>
             </tbody>
@@ -50,7 +50,7 @@ import ContractpartnerAccountService from "@/service/ContractpartnerAccountServi
 const serverErrors = ref(new Array<string>());
 
 const mca = ref({} as ContractpartnerAccount);
-const modalComponent = useTemplateRef<typeof ModalVue>('modalComponent');
+const modalComponent = useTemplateRef<typeof ModalVue>("modalComponent");
 const emit = defineEmits(["contractpartnerAccountDeleted"]);
 
 const _show = (_mca: ContractpartnerAccount) => {
@@ -62,9 +62,7 @@ const _show = (_mca: ContractpartnerAccount) => {
 const deleteContractpartnerAccount = () => {
   serverErrors.value = new Array<string>();
 
-  ContractpartnerAccountService.deleteContractpartnerAccount(
-    mca.value.id,
-  )
+  ContractpartnerAccountService.deleteContractpartnerAccount(mca.value.id)
     .then(() => {
       modalComponent.value?._hide();
       emit("contractpartnerAccountDeleted", mca.value);

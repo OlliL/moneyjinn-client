@@ -4,21 +4,23 @@
       <table class="table table-striped table-bordered table-hover">
         <thead>
           <tr>
-            <th class="text-center d-none d-md-table-cell">
+            <th scope="col" class="text-center d-none d-md-table-cell">
               {{ $t("Capitalsource.type") }}
             </th>
-            <th class="text-center d-none d-md-table-cell">
+            <th scope="col" class="text-center d-none d-md-table-cell">
               {{ $t("Capitalsource.state") }}
             </th>
-            <th class="text-center">{{ $t("General.comment") }}</th>
-            <th class="text-center">{{ $t("Reports.beginOfMonth") }}</th>
-            <th class="text-center" v-if="currentMonthIsSettled">
+            <th scope="col" class="text-center">{{ $t("General.comment") }}</th>
+            <th scope="col" class="text-center">
+              {{ $t("Reports.beginOfMonth") }}
+            </th>
+            <th scope="col" class="text-center" v-if="currentMonthIsSettled">
               {{ $t("Reports.endOfMonthFixed") }}
             </th>
-            <th class="text-center d-none d-md-table-cell">
+            <th scope="col" class="text-center d-none d-md-table-cell">
               {{ $t("Reports.endOfMonthCalculated") }}
             </th>
-            <th class="text-center" v-if="!currentMonthIsSettled">
+            <th scope="col" class="text-center" v-if="!currentMonthIsSettled">
               {{ $t("Reports.currentAmount") }}
             </th>
             <th

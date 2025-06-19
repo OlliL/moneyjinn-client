@@ -30,11 +30,11 @@
     <DivContentTable clazz="col-xxl-5 col-xs-12">
       <thead>
         <tr>
-          <th>{{ $t("General.name") }}</th>
-          <th>{{ $t("General.group") }}</th>
-          <th>{{ $t("User.role") }}</th>
-          <th>{{ $t("User.new") }}</th>
-          <th colspan="2"></th>
+          <th scope="col">{{ $t("General.name") }}</th>
+          <th scope="col">{{ $t("General.group") }}</th>
+          <th scope="col">{{ $t("User.role") }}</th>
+          <th scope="col">{{ $t("User.new") }}</th>
+          <th scope="col" colspan="2"></th>
         </tr>
       </thead>
       <tbody>

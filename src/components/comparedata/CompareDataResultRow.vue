@@ -1,6 +1,6 @@
 <template>
   <tr v-if="mmf">
-    <th class="db" id="thDatabase">
+    <th scope="row" class="db" id="thDatabase">
       {{ $t("CompareData.database") }}
     </th>
     <td class="db">
@@ -34,7 +34,7 @@
     <td class="db" colspan="2" v-if="!isOwnMoneyflow"></td>
   </tr>
   <tr v-if="importData">
-    <th id="thSource">{{ $t("CompareData.source") }}</th>
+    <th scope="row" id="thSource">{{ $t("CompareData.source") }}</th>
     <td>
       <SpanDate :date="importData.bookingDate" />
     </td>
