@@ -183,6 +183,7 @@ import ReportService from "@/service/ReportService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import CrudEtfService from "@/service/CrudEtfService";
 import type { Etf } from "@/model/etf/Etf";
+import type { Trends } from "@/model/report/Trends";
 
 const { t } = useI18n();
 
@@ -359,14 +360,6 @@ const errorCapitalsourceIds = computed((): ErrorData => {
   );
 });
 
-const getXLabel = (month: number, year: number) => {
-  if (month < 10) {
-    return "0" + month + "/" + year;
-  } else {
-    return month + "/" + year;
-  }
-};
-
 onMounted(() => {
   loadData();
 });
@@ -401,6 +394,97 @@ const loadData = () => {
     });
 };
 
+const getXLabel = (month: number, year: number) => {
+  if (month < 10) {
+    return "0" + month + "/" + year;
+  } else {
+    return month + "/" + year;
+  }
+};
+
+const addXAxisLabels = (trends: Trends) => {
+  if (trends.trendsSettled && trends.trendsSettled.length > 0) {
+    // Settled Capitalsources
+    const labelsSettled: Array<string> = trends.trendsSettled.map(function (e) {
+      return getXLabel(e.month, e.year);
+    });
+    chartData.value.labels = labelsSettled;
+
+    // Calculated Capitalsources
+    if (trends.trendsCalculated && trends.trendsCalculated.length > 0) {
+      const labelsCalculated: Array<string> = trends.trendsCalculated.map(
+        function (e) {
+          return getXLabel(e.month, e.year);
+        },
+      );
+      labelsCalculated.forEach((label) => {
+        chartData.value.labels.push(label);
+      });
+    }
+  } else if (trends.trendsEtfs && trends.trendsEtfs.length > 0) {
+    // ETFs
+    const labelsSettled: Array<string> = trends.trendsEtfs.map(function (e) {
+      return getXLabel(e.month, e.year);
+    });
+    chartData.value.labels = labelsSettled;
+  }
+};
+
+const addCapitalsourceData = (trends: Trends) => {
+  if (trends.trendsSettled && trends.trendsSettled.length > 0) {
+    // Settled Capitalsources
+    const dataSettled: Array<number> = trends.trendsSettled.map(function (e) {
+      return e.amount;
+    });
+
+    chartData.value.datasets[0].data = dataSettled;
+    chartData.value.datasets[0].hidden = false;
+
+    // Calculated Capitalsources
+    if (trends.trendsCalculated && trends.trendsCalculated.length > 0) {
+      const dataCalculated = new Array<number | null>();
+
+      for (let i = 0; i < dataSettled.length; i++) {
+        if (i + 1 == dataSettled.length) {
+          dataCalculated.push(0.0);
+        } else {
+          dataCalculated.push(null);
+        }
+      }
+
+      trends.trendsCalculated.forEach((data) => {
+        dataCalculated.push(data.amount);
+      });
+
+      chartData.value.datasets[1].data = dataCalculated;
+      chartData.value.datasets[1].hidden = false;
+    }
+  }
+};
+
+const addEtfData = (trends: Trends) => {
+  if (trends.trendsEtfs && trends.trendsEtfs.length > 0) {
+    // ETFs
+    const dataEtf: Array<number> | undefined = trends.trendsEtfs.map(
+      function (e) {
+        return e.amount;
+      },
+    );
+
+    if (dataEtf) {
+      chartData.value.datasets[2].data = dataEtf;
+      chartData.value.datasets[2].hidden = false;
+    }
+
+    const startLabel = chartData.value.labels[0];
+    const endLabel = chartData.value.labels[chartData.value.labels.length - 1];
+    chartOptions.value.plugins.title.text = t("Reports.title.trendGraph", {
+      startLabel: startLabel,
+      endLabel: endLabel,
+    });
+  }
+};
+
 const showTrends = handleSubmit(() => {
   serverErrors.value = new Array<string>();
   trendsGraphLoaded.value = false;
@@ -423,94 +507,9 @@ const showTrends = handleSubmit(() => {
       chartData.value.datasets[2].hidden = true;
 
       if (trends) {
-        // X-Labels
-        if (trends.trendsSettled && trends.trendsSettled.length > 0) {
-          // Settled Capitalsources
-          const labelsSettled: Array<string> = trends.trendsSettled.map(
-            function (e) {
-              return getXLabel(e.month, e.year);
-            },
-          );
-          chartData.value.labels = labelsSettled;
-
-          // Calculated Capitalsources
-          if (trends.trendsCalculated && trends.trendsCalculated.length > 0) {
-            const labelsCalculated: Array<string> = trends.trendsCalculated.map(
-              function (e) {
-                return getXLabel(e.month, e.year);
-              },
-            );
-            labelsCalculated.forEach((label) => {
-              chartData.value.labels.push(label);
-            });
-          }
-        } else if (trends.trendsEtfs && trends.trendsEtfs.length > 0) {
-          // ETFs
-          const labelsSettled: Array<string> = trends.trendsEtfs.map(
-            function (e) {
-              return getXLabel(e.month, e.year);
-            },
-          );
-          chartData.value.labels = labelsSettled;
-        }
-
-        // Chart Datasets
-        if (trends.trendsSettled && trends.trendsSettled.length > 0) {
-          // Settled Capitalsources
-          const dataSettled: Array<number> = trends.trendsSettled.map(
-            function (e) {
-              return e.amount;
-            },
-          );
-
-          chartData.value.datasets[0].data = dataSettled;
-          chartData.value.datasets[0].hidden = false;
-
-          // Calculated Capitalsources
-          if (trends.trendsCalculated && trends.trendsCalculated.length > 0) {
-            const dataCalculated = new Array<number | null>();
-
-            for (let i = 0; i < dataSettled.length; i++) {
-              if (i + 1 == dataSettled.length) {
-                dataCalculated.push(0.0);
-              } else {
-                dataCalculated.push(null);
-              }
-            }
-
-            trends.trendsCalculated.forEach((data) => {
-              dataCalculated.push(data.amount);
-            });
-
-            chartData.value.datasets[1].data = dataCalculated;
-            chartData.value.datasets[1].hidden = false;
-          }
-        }
-
-        if (trends.trendsEtfs && trends.trendsEtfs.length > 0) {
-          // ETFs
-          const dataEtf: Array<number> | undefined = trends.trendsEtfs.map(
-            function (e) {
-              return e.amount;
-            },
-          );
-
-          if (dataEtf) {
-            chartData.value.datasets[2].data = dataEtf;
-            chartData.value.datasets[2].hidden = false;
-          }
-
-          const startLabel = chartData.value.labels[0];
-          const endLabel =
-            chartData.value.labels[chartData.value.labels.length - 1];
-          chartOptions.value.plugins.title.text = t(
-            "Reports.title.trendGraph",
-            {
-              startLabel: startLabel,
-              endLabel: endLabel,
-            },
-          );
-        }
+        addXAxisLabels(trends);
+        addCapitalsourceData(trends);
+        addEtfData(trends);
         trendsGraphLoaded.value = true;
       }
     })
