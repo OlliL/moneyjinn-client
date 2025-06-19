@@ -52,7 +52,7 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref, watch } from "vue";
+import { onMounted, ref, watch, useTemplateRef } from "vue";
 
 import { useContractpartnerStore } from "@/stores/ContractpartnerStore";
 
@@ -65,7 +65,6 @@ import ListContractpartnerRowVue from "@/components/contractpartner/ListContract
 
 import type { Contractpartner } from "@/model/contractpartner/Contractpartner";
 import { storeToRefs } from "pinia";
-import { useTemplateRef } from "vue";
 
 const validNow = ref(true);
 const contractpartners = ref(new Array<Contractpartner>());

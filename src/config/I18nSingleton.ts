@@ -4,7 +4,7 @@ import en from "../locales/en.json";
 
 export class I18nSingleton {
   // @ts-ignore
-  private i18n;
+  private readonly i18n;
 
   public constructor() {
     const messages = {

@@ -217,9 +217,9 @@
 </template>
 <script lang="ts" setup>
 import { useForm } from "vee-validate";
-import { computed, onMounted, ref, useTemplateRef } from "vue";
+import { onMounted, ref, useTemplateRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
-import { any, date } from "zod";
+import { any, date, type ZodTypeAny } from "zod";
 
 import ButtonSubmit from "@/components/ButtonSubmit.vue";
 import DeleteMoneyflowModalVue from "@/components/moneyflow/DeleteMoneyflowModal.vue";
@@ -295,17 +295,18 @@ const editModal = useTemplateRef<typeof EditMoneyflowModalVue>("editModal");
 const schema = {
   startDate: date(globErr(t("General.validation.startDate"))),
   endDate: date(globErr(t("General.validation.endDate"))),
-  searchCriteria: computed(() => {
-    contractpartnerId.value;
-    postingAccountId.value;
-    comment.value;
+  searchCriteria: ref(any() as ZodTypeAny),
+};
 
-    return any().refine(
+watch(
+  () => [contractpartnerId.value, postingAccountId.value, comment.value],
+  () => {
+    schema.searchCriteria.value = any().refine(
       () => contractpartnerId.value || postingAccountId.value || comment.value,
       t("Moneyflow.validation.oneSearchCriteria"),
     );
-  }),
-};
+  },
+);
 
 type MoneyflowGroup = {
   sortString: string;

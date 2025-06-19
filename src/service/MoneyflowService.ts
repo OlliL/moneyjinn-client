@@ -143,9 +143,7 @@ class MoneyflowService extends AbstractService {
     ) {
       for (const mse of searchMoneyflowsByAmountResponse.moneyflowSplitEntryTransports) {
         let mseMapArray = mseMap.get(mse.moneyflowid);
-        if (mseMapArray == null) {
-          mseMapArray = new Array<MoneyflowSplitEntryTransport>();
-        }
+        mseMapArray ??= new Array<MoneyflowSplitEntryTransport>();
         mseMapArray.push(mse);
         mseMap.set(mse.moneyflowid, mseMapArray);
       }
