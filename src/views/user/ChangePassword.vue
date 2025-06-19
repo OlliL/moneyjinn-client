@@ -62,9 +62,9 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, onMounted, ref } from "vue";
+import { onMounted, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
-import { string } from "zod";
+import { string, type ZodTypeAny } from "zod";
 
 import router, { Routes } from "@/router";
 
@@ -85,17 +85,7 @@ const { t } = useI18n();
 
 const schema = {
   passwordOld: string(globErr(t("User.validation.passwordOld"))).min(1),
-  password: computed(() => {
-    password1.value;
-    password2.value;
-
-    return string(globErr(t("User.validation.password")))
-      .min(1)
-      .refine(
-        () => password1.value == password2.value,
-        t("User.validation.passwordNotEqual"),
-      );
-  }),
+  password: ref(string() as ZodTypeAny),
 };
 
 const serverErrors = ref(new Array<string>());
@@ -105,6 +95,18 @@ const password2 = ref("");
 const userIsNew = ref(false);
 
 const { handleSubmit, values, setFieldTouched } = useForm();
+
+watch(
+  () => [password1.value, password2.value],
+  () => {
+    schema.password.value = string(globErr(t("User.validation.password")))
+      .min(1)
+      .refine(
+        () => password1.value == password2.value,
+        t("User.validation.passwordNotEqual"),
+      );
+  },
+);
 
 onMounted(() => {
   serverErrors.value = new Array<string>();
