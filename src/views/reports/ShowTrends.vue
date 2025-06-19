@@ -513,10 +513,8 @@ const showTrends = handleSubmit(() => {
         }
         trendsGraphLoaded.value = true;
       }
-      console.log(chartData.value);
     })
     .catch((backendError) => {
-      console.log(backendError);
       handleBackendError(backendError, serverErrors);
     });
 });
