@@ -127,9 +127,9 @@
 
 <script lang="ts" setup>
 import { useForm } from "vee-validate";
-import { computed, ref, useTemplateRef } from "vue";
+import { computed, ref, useTemplateRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
-import { boolean, date, number, string } from "zod";
+import { boolean, date, number, string, type ZodTypeAny } from "zod";
 
 import ButtonSubmit from "../ButtonSubmit.vue";
 import DivError from "../DivError.vue";
@@ -174,18 +174,7 @@ const schema = {
   validFrom: date(globErr(t("General.validation.validFrom"))),
   userIsNew: boolean(globErr(t("User.validation.userIsNew"))),
   userRole: number(globErr(t("User.validation.userRole"))),
-  password: computed(() => {
-    password1.value;
-    password2.value;
-    editMode.value;
-
-    return string()
-      .refine(
-        () => password1.value == password2.value,
-        t("User.validation.passwordNotEqual"),
-      )
-      .refine((data) => editMode.value || data, t("User.validation.password"));
-  }),
+  password: ref(string() as ZodTypeAny),
 };
 
 const origUser = ref({} as User | undefined);
@@ -199,7 +188,7 @@ const yesNoValues = [
   { id: false, value: t("General.no") },
   { id: true, value: t("General.yes") },
 ] as Array<SelectBoxValue>;
-const modalComponent = useTemplateRef<typeof ModalVue>('modalComponent');
+const modalComponent = useTemplateRef<typeof ModalVue>("modalComponent");
 const emit = defineEmits(["userCreated", "userUpdated"]);
 
 const { handleSubmit, values, setFieldTouched } = useForm();
@@ -207,6 +196,18 @@ const { handleSubmit, values, setFieldTouched } = useForm();
 const editMode = computed(() => {
   return origUser.value !== undefined;
 });
+
+watch(
+  () => [password1.value, password2.value, editMode.value],
+  () => {
+    schema.password.value = string()
+      .refine(
+        () => password1.value == password2.value,
+        t("User.validation.passwordNotEqual"),
+      )
+      .refine((data) => editMode.value || data, t("User.validation.password"));
+  },
+);
 
 const title = computed(() => {
   return origUser.value === undefined
