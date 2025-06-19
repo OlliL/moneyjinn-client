@@ -11,7 +11,12 @@
         ><span class="link-primary"><i :class="collapseIconClass"></i></span
       ></a>
     </td>
-    <th style="vertical-align: middle" :class="amountClass" id="amount">
+    <th
+      scope="row"
+      style="vertical-align: middle"
+      :class="amountClass"
+      id="amount"
+    >
       {{ compareDatasCount }}
     </th>
     <td class="text-start" style="vertical-align: middle">
@@ -35,14 +40,14 @@
           </colgroup>
           <thead>
             <tr>
-              <th></th>
-              <th>{{ $t("Moneyflow.bookingdate") }}</th>
-              <th>{{ $t("Moneyflow.invoicedate") }}</th>
-              <th>{{ $t("General.amount") }}</th>
-              <th>{{ $t("General.contractpartner") }}</th>
-              <th>{{ $t("General.comment") }}</th>
-              <th>{{ $t("General.capitalsource") }}</th>
-              <th colspan="2"></th>
+              <th scope="col"></th>
+              <th scope="col">{{ $t("Moneyflow.bookingdate") }}</th>
+              <th scope="col">{{ $t("Moneyflow.invoicedate") }}</th>
+              <th scope="col">{{ $t("General.amount") }}</th>
+              <th scope="col">{{ $t("General.contractpartner") }}</th>
+              <th scope="col">{{ $t("General.comment") }}</th>
+              <th scope="col">{{ $t("General.capitalsource") }}</th>
+              <th scope="colgroup" colspan="2"></th>
             </tr>
           </thead>
           <tbody>

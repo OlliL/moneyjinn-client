@@ -7,19 +7,19 @@
           <table class="table table-bordered table-hover">
             <tbody>
               <tr>
-                <th>{{ $t("General.name") }}</th>
+                <th scope="row">{{ $t("General.name") }}</th>
                 <td>{{ user.userName }}</td>
               </tr>
               <tr>
-                <th>{{ $t("General.group") }}</th>
+                <th scope="row">{{ $t("General.group") }}</th>
                 <td>{{ user.groupName }}</td>
               </tr>
               <tr>
-                <th>{{ $t("User.role") }}</th>
+                <th scope="row">{{ $t("User.role") }}</th>
                 <td>{{ role }}</td>
               </tr>
               <tr>
-                <th>{{ $t("User.new") }}</th>
+                <th scope="row">{{ $t("User.new") }}</th>
                 <td><SpanBoolean :value="user.userIsNew" /></td>
               </tr>
             </tbody>
@@ -51,7 +51,7 @@ import UserService from "@/service/UserService";
 
 const user = ref({} as User);
 const serverErrors = ref(new Array<string>());
-const modalComponent = useTemplateRef<typeof ModalVue>('modalComponent');
+const modalComponent = useTemplateRef<typeof ModalVue>("modalComponent");
 const emit = defineEmits(["userDeleted"]);
 
 const _show = (_user: User) => {

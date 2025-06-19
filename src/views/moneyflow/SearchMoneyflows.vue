@@ -183,14 +183,18 @@
         <table class="table table-striped table-bordered table-hover">
           <thead>
             <tr>
-              <th></th>
-              <th v-if="colBookingMonth">{{ $t("Moneyflow.bookingMonth") }}</th>
-              <th v-if="colBookingYear">{{ $t("Moneyflow.bookingYear") }}</th>
-              <th v-if="colContractpartner">
+              <th scope="col"></th>
+              <th scope="col" v-if="colBookingMonth">
+                {{ $t("Moneyflow.bookingMonth") }}
+              </th>
+              <th scope="col" v-if="colBookingYear">
+                {{ $t("Moneyflow.bookingYear") }}
+              </th>
+              <th scope="col" v-if="colContractpartner">
                 {{ $t("General.contractpartner") }}
               </th>
-              <th>{{ $t("General.amount") }}</th>
-              <th>{{ $t("General.comment") }}</th>
+              <th scope="col">{{ $t("General.amount") }}</th>
+              <th scope="col">{{ $t("General.comment") }}</th>
             </tr>
           </thead>
           <tbody>
@@ -284,7 +288,8 @@ const colBookingYear = ref(false);
 const colContractpartner = ref(false);
 const dataLoaded = ref(false);
 
-const deleteModal = useTemplateRef<typeof DeleteMoneyflowModalVue>("deleteModal");
+const deleteModal =
+  useTemplateRef<typeof DeleteMoneyflowModalVue>("deleteModal");
 const editModal = useTemplateRef<typeof EditMoneyflowModalVue>("editModal");
 
 const schema = {

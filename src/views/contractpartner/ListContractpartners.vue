@@ -29,12 +29,12 @@
     <DivContentTable>
       <thead>
         <tr>
-          <th>{{ $t("General.name") }}</th>
-          <th>{{ $t("General.validFrom") }}</th>
-          <th>{{ $t("General.validTil") }}</th>
-          <th>{{ $t("Contractpartner.moneyflowComment") }}</th>
-          <th>{{ $t("General.postingAccount") }}</th>
-          <th colspan="3"></th>
+          <th scope="col">{{ $t("General.name") }}</th>
+          <th scope="col">{{ $t("General.validFrom") }}</th>
+          <th scope="col">{{ $t("General.validTil") }}</th>
+          <th scope="col">{{ $t("Contractpartner.moneyflowComment") }}</th>
+          <th scope="col">{{ $t("General.postingAccount") }}</th>
+          <th scope="colgroup" colspan="3"></th>
         </tr>
       </thead>
       <tbody>

@@ -4,20 +4,22 @@
       <table class="table table-striped table-bordered table-hover">
         <thead>
           <tr>
-            <th class="text-center" rowspan="2" id="thShares">
+            <th scope="col" class="text-center" rowspan="2" id="thShares">
               {{ $t("ETFFlow.shares") }}
             </th>
             <th
+              scope="colgroup"
               class="text-center d-none d-md-table-cell"
               colspan="3"
               id="thAmount"
             >
               {{ $t("ETFFlow.amount") }}
             </th>
-            <th class="text-center" colspan="3" id="thOverall">
+            <th scope="colgroup" class="text-center" colspan="3" id="thOverall">
               {{ $t("ETFFlow.overall") }}
             </th>
             <th
+              scope="col"
               class="text-center d-none d-md-table-cell"
               rowspan="2"
               id="thState"
@@ -26,22 +28,34 @@
             </th>
           </tr>
           <tr>
-            <th class="text-center d-none d-md-table-cell" id="thAmountPayed">
+            <th
+              scope="col"
+              class="text-center d-none d-md-table-cell"
+              id="thAmountPayed"
+            >
               {{ $t("ETFFlow.payed") }} &#8709;
             </th>
-            <th class="text-center d-none d-md-table-cell" id="thAmountBid">
+            <th
+              scope="col"
+              class="text-center d-none d-md-table-cell"
+              id="thAmountBid"
+            >
               {{ $t("ETFFlow.bid") }}
             </th>
-            <th class="text-center d-none d-md-table-cell" id="thAmountAsk">
+            <th
+              scope="col"
+              class="text-center d-none d-md-table-cell"
+              id="thAmountAsk"
+            >
               {{ $t("ETFFlow.ask") }}
             </th>
-            <th class="text-center" id="thOverallPayed">
+            <th scope="col" class="text-center" id="thOverallPayed">
               {{ $t("ETFFlow.payed") }}
             </th>
-            <th class="text-center" id="thOverallBid">
+            <th scope="col" class="text-center" id="thOverallBid">
               {{ $t("ETFFlow.bid") }}
             </th>
-            <th class="text-center" id="thOverallProfit">
+            <th scope="col" class="text-center" id="thOverallProfit">
               {{ $t("ETFFlow.profit") }}
             </th>
           </tr>

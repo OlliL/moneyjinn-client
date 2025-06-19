@@ -27,16 +27,16 @@
     <DivContentTable>
       <thead>
         <tr>
-          <th>{{ $t("General.name") }}</th>
-          <th>{{ $t("Capitalsource.type") }}</th>
-          <th>{{ $t("Capitalsource.state") }}</th>
-          <th>{{ $t("General.iban") }}</th>
-          <th>{{ $t("General.bic") }}</th>
-          <th>{{ $t("General.validFrom") }}</th>
-          <th>{{ $t("General.validTil") }}</th>
-          <th>{{ $t("Capitalsource.groupUse") }}</th>
-          <th>{{ $t("Capitalsource.importAllowed") }}</th>
-          <th colspan="2"></th>
+          <th scope="col">{{ $t("General.name") }}</th>
+          <th scope="col">{{ $t("Capitalsource.type") }}</th>
+          <th scope="col">{{ $t("Capitalsource.state") }}</th>
+          <th scope="col">{{ $t("General.iban") }}</th>
+          <th scope="col">{{ $t("General.bic") }}</th>
+          <th scope="col">{{ $t("General.validFrom") }}</th>
+          <th scope="col">{{ $t("General.validTil") }}</th>
+          <th scope="col">{{ $t("Capitalsource.groupUse") }}</th>
+          <th scope="col">{{ $t("Capitalsource.importAllowed") }}</th>
+          <th scope="colgroup" colspan="2"></th>
         </tr>
       </thead>
       <tbody>

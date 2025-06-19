@@ -30,25 +30,31 @@
     <DivContentTable clazz="col-xxl-8 col-xs-12">
       <thead>
         <tr>
-          <th rowspan="2" id="name">{{ $t("General.name") }}</th>
-          <th rowspan="2" id="isin">{{ $t("ETF.isin") }}</th>
-          <th rowspan="2" id="wkn">{{ $t("ETF.wkn") }}</th>
-          <th rowspan="2" id="ticker">{{ $t("ETF.ticker") }}</th>
-          <th colspan="3" id="transactionCosts">
+          <th scope="col" rowspan="2" id="name">{{ $t("General.name") }}</th>
+          <th scope="col" rowspan="2" id="isin">{{ $t("ETF.isin") }}</th>
+          <th scope="col" rowspan="2" id="wkn">{{ $t("ETF.wkn") }}</th>
+          <th scope="col" rowspan="2" id="ticker">{{ $t("ETF.ticker") }}</th>
+          <th scope="colgroup" colspan="3" id="transactionCosts">
             {{ $t("ETFFlow.transactionCosts") }}
           </th>
-          <th rowspan="2" id="partialTaxExemption">
+          <th scope="col" rowspan="2" id="partialTaxExemption">
             {{ $t("ETF.partialTaxExemptionSmall") }}
           </th>
-          <th rowspan="2" id="favorite">
+          <th scope="col" rowspan="2" id="favorite">
             <i class="bi bi-star-fill text-warning"></i>
           </th>
-          <th rowspan="2" colspan="2" id="editDelete"></th>
+          <th scope="col" rowspan="2" colspan="2" id="editDelete"></th>
         </tr>
         <tr>
-          <th id="abs">{{ $t("ETFFlow.transactionCostsAbsolute") }}</th>
-          <th id="rel">{{ $t("ETFFlow.transactionCostsRelative") }}</th>
-          <th id="max">{{ $t("ETFFlow.transactionCostsMaximum") }}</th>
+          <th scope="col" id="abs">
+            {{ $t("ETFFlow.transactionCostsAbsolute") }}
+          </th>
+          <th scope="col" id="rel">
+            {{ $t("ETFFlow.transactionCostsRelative") }}
+          </th>
+          <th scope="col" id="max">
+            {{ $t("ETFFlow.transactionCostsMaximum") }}
+          </th>
         </tr>
       </thead>
       <tbody>

@@ -97,7 +97,7 @@
             <col style="width: 90%" />
           </colgroup>
           <thead>
-            <th colspan="3">{{ $t("CompareData.result") }}</th>
+            <th scope="colgroup" colspan="3">{{ $t("CompareData.result") }}</th>
           </thead>
           <tbody>
             <CompareDataResultGroupVue

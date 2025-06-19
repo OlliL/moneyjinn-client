@@ -36,8 +36,8 @@
               </colgroup>
               <thead>
                 <tr>
-                  <th>{{ $t("General.capitalsource") }}</th>
-                  <th>{{ $t("General.amount") }}</th>
+                  <th scope="col">{{ $t("General.capitalsource") }}</th>
+                  <th scope="col">{{ $t("General.amount") }}</th>
                 </tr>
               </thead>
               <tbody>
@@ -74,8 +74,8 @@
               </colgroup>
               <thead v-if="!monthlySettlementsNoCredit">
                 <tr>
-                  <th>{{ $t("General.capitalsource") }}</th>
-                  <th>{{ $t("General.amount") }}</th>
+                  <th scope="col">{{ $t("General.capitalsource") }}</th>
+                  <th scope="col">{{ $t("General.amount") }}</th>
                 </tr>
               </thead>
               <tbody>

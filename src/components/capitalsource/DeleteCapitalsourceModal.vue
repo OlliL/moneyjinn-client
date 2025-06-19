@@ -7,39 +7,39 @@
           <table class="table table-bordered table-hover">
             <tbody>
               <tr>
-                <th>{{ $t("General.name") }}</th>
+                <th scope="row">{{ $t("General.name") }}</th>
                 <td>{{ mcs.comment }}</td>
               </tr>
               <tr>
-                <th>{{ $t("Capitalsource.type") }}</th>
+                <th scope="row">{{ $t("Capitalsource.type") }}</th>
                 <td>{{ typeString }}</td>
               </tr>
               <tr>
-                <th>{{ $t("Capitalsource.state") }}</th>
+                <th scope="row">{{ $t("Capitalsource.state") }}</th>
                 <td>{{ stateString }}</td>
               </tr>
               <tr>
-                <th>{{ $t("General.iban") }}</th>
+                <th scope="row">{{ $t("General.iban") }}</th>
                 <td>{{ mcs.accountNumber }}</td>
               </tr>
               <tr>
-                <th>{{ $t("General.bic") }}</th>
+                <th scope="row">{{ $t("General.bic") }}</th>
                 <td>{{ mcs.bankCode }}</td>
               </tr>
               <tr>
-                <th>{{ $t("General.validFrom") }}</th>
+                <th scope="row">{{ $t("General.validFrom") }}</th>
                 <td><SpanDate :date="mcs.validFrom" /></td>
               </tr>
               <tr>
-                <th>{{ $t("General.validTil") }}</th>
+                <th scope="row">{{ $t("General.validTil") }}</th>
                 <td><SpanDate :date="mcs.validTil" /></td>
               </tr>
               <tr>
-                <th>{{ $t("Capitalsource.groupUse") }}</th>
+                <th scope="row">{{ $t("Capitalsource.groupUse") }}</th>
                 <td><SpanBoolean :value="mcs.groupUse" /></td>
               </tr>
               <tr>
-                <th>{{ $t("Capitalsource.importAllowed") }}</th>
+                <th scope="row">{{ $t("Capitalsource.importAllowed") }}</th>
                 <td>
                   <b :style="'color:' + importAllowedColor">{{
                     importAllowedString
@@ -79,7 +79,7 @@ import CapitalsourceService from "@/service/CapitalsourceService";
 const serverErrors = ref(new Array<string>());
 
 const mcs = ref({} as Capitalsource);
-const modalComponent = useTemplateRef<typeof ModalVue>('modalComponent');
+const modalComponent = useTemplateRef<typeof ModalVue>("modalComponent");
 const emit = defineEmits(["capitalsourceDeleted"]);
 
 const importAllowedColor = computed(() => {

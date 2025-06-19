@@ -7,35 +7,35 @@
           <table class="table table-bordered table-hover">
             <tbody>
               <tr>
-                <th>{{ $t("General.amount") }}</th>
+                <th scope="row">{{ $t("General.amount") }}</th>
                 <td><SpanAmount :amount="mpm.amount" /></td>
               </tr>
               <tr>
-                <th>{{ $t("General.contractpartner") }}</th>
+                <th scope="row">{{ $t("General.contractpartner") }}</th>
                 <td>{{ mpm.contractpartnerName }}</td>
               </tr>
               <tr>
-                <th>{{ $t("General.comment") }}</th>
+                <th scope="row">{{ $t("General.comment") }}</th>
                 <td>{{ mpm.comment }}</td>
               </tr>
               <tr>
-                <th>{{ $t("General.postingAccount") }}</th>
+                <th scope="row">{{ $t("General.postingAccount") }}</th>
                 <td>{{ mpm.postingAccountName }}</td>
               </tr>
               <tr>
-                <th>{{ $t("General.capitalsource") }}</th>
+                <th scope="row">{{ $t("General.capitalsource") }}</th>
                 <td>{{ mpm.capitalsourceComment }}</td>
               </tr>
               <tr>
-                <th>{{ $t("PreDefMoneyflow.onceAMonth") }}</th>
+                <th scope="row">{{ $t("PreDefMoneyflow.onceAMonth") }}</th>
                 <td><SpanBoolean :value="mpm.onceAMonth" /></td>
               </tr>
               <tr>
-                <th>{{ $t("PreDefMoneyflow.createDate") }}</th>
+                <th scope="row">{{ $t("PreDefMoneyflow.createDate") }}</th>
                 <td><SpanDate :date="mpm.createDate" /></td>
               </tr>
               <tr>
-                <th>{{ $t("PreDefMoneyflow.lastUsed") }}</th>
+                <th scope="row">{{ $t("PreDefMoneyflow.lastUsed") }}</th>
                 <td><SpanDate :date="mpm.lastUsed" /></td>
               </tr>
             </tbody>
@@ -73,7 +73,7 @@ import PreDefMoneyflowService from "@/service/PreDefMoneyflowService";
 const serverErrors = ref(new Array<string>());
 
 const mpm = ref({} as PreDefMoneyflow);
-const modalComponent = useTemplateRef<typeof ModalVue>('modalComponent');
+const modalComponent = useTemplateRef<typeof ModalVue>("modalComponent");
 const emit = defineEmits(["preDefMoneyflowDeleted"]);
 
 const _show = (_mpm: PreDefMoneyflow) => {

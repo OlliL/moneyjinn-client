@@ -7,19 +7,19 @@
           <table class="table table-bordered table-hover">
             <tbody>
               <tr>
-                <th>{{ $t("General.etf") }}</th>
+                <th scope="row">{{ $t("General.etf") }}</th>
                 <td>{{ etfName }}</td>
               </tr>
               <tr>
-                <th>{{ $t("ETFFlow.bookingdate") }}</th>
+                <th scope="row">{{ $t("ETFFlow.bookingdate") }}</th>
                 <td>{{ timestampString }}</td>
               </tr>
               <tr>
-                <th>{{ $t("ETFFlow.amount") }}</th>
+                <th scope="row">{{ $t("ETFFlow.amount") }}</th>
                 <td :class="amountClass">{{ amountString }}</td>
               </tr>
               <tr>
-                <th>{{ $t("ETFFlow.price") }}</th>
+                <th scope="row">{{ $t("ETFFlow.price") }}</th>
                 <td>
                   <SpanAmount :amount="etfFlow.price" :decimal-places="3" />
                 </td>
@@ -56,7 +56,7 @@ const serverErrors = ref(new Array<string>());
 
 const etfFlow = ref({} as EtfFlow);
 const etfName = ref("");
-const modalComponent = useTemplateRef<typeof ModalVue>('modalComponent');
+const modalComponent = useTemplateRef<typeof ModalVue>("modalComponent");
 const emit = defineEmits(["etfFlowDeleted"]);
 
 const amountClass = computed(() => {

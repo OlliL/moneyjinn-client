@@ -7,7 +7,7 @@
           <table class="table table-bordered table-hover">
             <tbody>
               <tr>
-                <th>{{ $t("General.name") }}</th>
+                <th scope="row">{{ $t("General.name") }}</th>
                 <td>{{ mpa.name }}</td>
               </tr>
             </tbody>
@@ -42,7 +42,7 @@ import PostingAccountService from "@/service/PostingAccountService";
 const serverErrors = ref(new Array<string>());
 
 const mpa = ref({} as PostingAccount);
-const modalComponent = useTemplateRef<typeof ModalVue>('modalComponent');
+const modalComponent = useTemplateRef<typeof ModalVue>("modalComponent");
 const emit = defineEmits(["postingAccountDeleted"]);
 
 const _show = (_mpa: PostingAccount) => {

@@ -27,8 +27,8 @@
     <DivContentTable clazz="col-md-3 col-xs-12">
       <thead>
         <tr>
-          <th>{{ $t("General.name") }}</th>
-          <th colspan="2"></th>
+          <th scope="col">{{ $t("General.name") }}</th>
+          <th scope="colgroup" colspan="2"></th>
         </tr>
       </thead>
       <tbody>

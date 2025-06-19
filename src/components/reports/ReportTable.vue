@@ -27,8 +27,8 @@
         <table class="table table-striped table-bordered table-hover">
           <thead>
             <tr>
-              <th class="d-none d-md-block"></th>
-              <th>
+              <th scope="col" class="d-none d-md-block"></th>
+              <th scope="col">
                 <span class="d-none d-md-block"
                   >{{ $t("Moneyflow.bookingdate") }}
                   <i
@@ -43,14 +43,14 @@
                   ></i
                 ></span>
               </th>
-              <th class="d-none d-md-table-cell">
+              <th scope="col" class="d-none d-md-table-cell">
                 {{ $t("Moneyflow.invoicedate") }}
                 <i
                   :class="`bi ${sortIcon('invoiceDate')} link-primary`"
                   @click="sortByColumn('invoiceDate')"
                 ></i>
               </th>
-              <th colspan="2">
+              <th scope="colgroup" colspan="2">
                 <span class="d-none d-md-block">
                   {{ $t("General.amount") }}
                   <i
@@ -65,14 +65,14 @@
                   ></i
                 ></span>
               </th>
-              <th class="d-none d-md-table-cell">
+              <th scope="col" class="d-none d-md-table-cell">
                 {{ $t("General.contractpartner") }}
                 <i
                   :class="`bi ${sortIcon('contractpartnerName')} link-primary`"
                   @click="sortByColumn('contractpartnerName')"
                 ></i>
               </th>
-              <th>
+              <th scope="col">
                 <span class="d-none d-md-block">
                   {{ $t("General.comment") }}
                   <i
@@ -86,21 +86,21 @@
                   ></i
                 ></span>
               </th>
-              <th class="d-none d-md-table-cell">
+              <th scope="col" class="d-none d-md-table-cell">
                 {{ $t("General.postingAccount") }}
                 <i
                   :class="`bi ${sortIcon('postingAccountName')} link-primary`"
                   @click="sortByColumn('postingAccountName')"
                 ></i>
               </th>
-              <th class="d-none d-md-table-cell">
+              <th scope="col" class="d-none d-md-table-cell">
                 {{ $t("General.capitalsource") }}
                 <i
                   :class="`bi ${sortIcon('capitalsourceComment')} link-primary`"
                   @click="sortByColumn('capitalsourceComment')"
                 ></i>
               </th>
-              <th colspan="2"></th>
+              <th scope="colgroup" colspan="2"></th>
             </tr>
           </thead>
           <tbody>
@@ -154,14 +154,16 @@
                 <table class="table table-striped table-bordered table-hover">
                   <thead>
                     <tr>
-                      <th id="thEmpty"></th>
-                      <th id="thMonth">{{ $t("General.month") }}</th>
-                      <th id="thYear">{{ $t("General.year") }}</th>
+                      <th scope="col" id="thEmpty"></th>
+                      <th scope="col" id="thMonth">
+                        {{ $t("General.month") }}
+                      </th>
+                      <th scope="col" id="thYear">{{ $t("General.year") }}</th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr v-if="currentMonthIsSettled">
-                      <th class="text-end" id="thFixedProfit">
+                      <th scope="col" class="text-end" id="thFixedProfit">
                         {{ $t("Reports.fixedProfit") }}
                       </th>
                       <td class="text-end">
@@ -172,7 +174,7 @@
                       </td>
                     </tr>
                     <tr>
-                      <th class="text-end" id="thCalculatedProfit">
+                      <th scope="col" class="text-end" id="thCalculatedProfit">
                         {{ $t("Reports.calculatedProfit") }}
                       </th>
                       <td class="text-end">
@@ -185,7 +187,7 @@
                       </td>
                     </tr>
                     <tr v-if="currentMonthIsSettled">
-                      <th class="text-end" id="thDifference">
+                      <th scope="col" class="text-end" id="thDifference">
                         {{ $t("Reports.difference") }}
                       </th>
                       <td class="text-end">
@@ -278,9 +280,10 @@ const assetsMonthlyFixedTurnover = ref(0);
 const assetsYearlyFixedTurnover = ref(0);
 const assetsMonthlyCalculatedTurnover = ref(0);
 const sortBy = ref(new Map<string, boolean>());
-const receiptModal = useTemplateRef<typeof ReceiptModalVue>('receiptModal');
-const deleteModal = useTemplateRef<typeof DeleteMoneyflowModalVue>('deleteModal');
-const editModal = useTemplateRef<typeof EditMoneyflowModalVue>('editModal');
+const receiptModal = useTemplateRef<typeof ReceiptModalVue>("receiptModal");
+const deleteModal =
+  useTemplateRef<typeof DeleteMoneyflowModalVue>("deleteModal");
+const editModal = useTemplateRef<typeof EditMoneyflowModalVue>("editModal");
 
 const props = defineProps({
   year: {

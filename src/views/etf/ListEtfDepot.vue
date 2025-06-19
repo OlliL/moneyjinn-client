@@ -77,11 +77,19 @@
               </colgroup>
               <thead>
                 <tr>
-                  <th class="text-center">{{ $t("ETFFlow.bookingtime") }}</th>
-                  <th class="text-center">{{ $t("ETFFlow.amount") }}</th>
-                  <th class="text-center">{{ $t("ETFFlow.price") }}</th>
-                  <th class="text-center">{{ $t("ETFFlow.sumprice") }}</th>
-                  <th class="text-center" colspan="2"></th>
+                  <th scope="col" class="text-center">
+                    {{ $t("ETFFlow.bookingtime") }}
+                  </th>
+                  <th scope="col" class="text-center">
+                    {{ $t("ETFFlow.amount") }}
+                  </th>
+                  <th scope="col" class="text-center">
+                    {{ $t("ETFFlow.price") }}
+                  </th>
+                  <th scope="col" class="text-center">
+                    {{ $t("ETFFlow.sumprice") }}
+                  </th>
+                  <th scope="col" class="text-center" colspan="2"></th>
                 </tr>
               </thead>
               <tbody>
@@ -127,11 +135,19 @@
               </colgroup>
               <thead>
                 <tr>
-                  <th class="text-center">{{ $t("ETFFlow.bookingtime") }}</th>
-                  <th class="text-center">{{ $t("ETFFlow.amount") }}</th>
-                  <th class="text-center">{{ $t("ETFFlow.price") }}</th>
-                  <th class="text-center">{{ $t("ETFFlow.sumprice") }}</th>
-                  <th class="text-center" colspan="2"></th>
+                  <th scope="col" class="text-center">
+                    {{ $t("ETFFlow.bookingtime") }}
+                  </th>
+                  <th scope="col" class="text-center">
+                    {{ $t("ETFFlow.amount") }}
+                  </th>
+                  <th scope="col" class="text-center">
+                    {{ $t("ETFFlow.price") }}
+                  </th>
+                  <th scope="col" class="text-center">
+                    {{ $t("ETFFlow.sumprice") }}
+                  </th>
+                  <th scope="col" class="text-center" colspan="2"></th>
                 </tr>
               </thead>
               <tbody>

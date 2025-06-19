@@ -7,7 +7,7 @@
           <table class="table table-bordered table-hover">
             <tbody>
               <tr>
-                <th>{{ $t("General.name") }}</th>
+                <th scope="row">{{ $t("General.name") }}</th>
                 <td>{{ group.name }}</td>
               </tr>
             </tbody>
@@ -38,7 +38,7 @@ import GroupService from "@/service/GroupService";
 const serverErrors = ref(new Array<string>());
 
 const group = ref({} as Group);
-const modalComponent = useTemplateRef<typeof ModalVue>('modalComponent');
+const modalComponent = useTemplateRef<typeof ModalVue>("modalComponent");
 const emit = defineEmits(["groupDeleted"]);
 
 const _show = (_group: Group) => {

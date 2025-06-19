@@ -7,39 +7,41 @@
           <table class="table table-bordered table-hover">
             <tbody>
               <tr>
-                <th>{{ $t("General.name") }}</th>
+                <th scope="row">{{ $t("General.name") }}</th>
                 <td>{{ mcp.name }}</td>
               </tr>
               <tr>
-                <th>{{ $t("Contractpartner.street") }}</th>
+                <th scope="row">{{ $t("Contractpartner.street") }}</th>
                 <td>{{ mcp.street }}</td>
               </tr>
               <tr>
-                <th>{{ $t("Contractpartner.postcode") }}</th>
+                <th scope="row">{{ $t("Contractpartner.postcode") }}</th>
                 <td>{{ mcp.postcode }}</td>
               </tr>
               <tr>
-                <th>{{ $t("Contractpartner.town") }}</th>
+                <th scope="row">{{ $t("Contractpartner.town") }}</th>
                 <td>{{ mcp.town }}</td>
               </tr>
               <tr>
-                <th>{{ $t("Contractpartner.country") }}</th>
+                <th scope="row">{{ $t("Contractpartner.country") }}</th>
                 <td>{{ mcp.country }}</td>
               </tr>
               <tr>
-                <th>{{ $t("General.validFrom") }}</th>
+                <th scope="row">{{ $t("General.validFrom") }}</th>
                 <td><SpanDate :date="mcp.validFrom" /></td>
               </tr>
               <tr>
-                <th>{{ $t("General.validTil") }}</th>
+                <th scope="row">{{ $t("General.validTil") }}</th>
                 <td><SpanDate :date="mcp.validTil" /></td>
               </tr>
               <tr>
-                <th>{{ $t("Contractpartner.moneyflowComment") }}</th>
+                <th scope="row">
+                  {{ $t("Contractpartner.moneyflowComment") }}
+                </th>
                 <td>{{ mcp.moneyflowComment }}</td>
               </tr>
               <tr>
-                <th>{{ $t("General.postingAccount") }}</th>
+                <th scope="row">{{ $t("General.postingAccount") }}</th>
                 <td>{{ mcp.postingAccountName }}</td>
               </tr>
             </tbody>
@@ -75,7 +77,7 @@ import ContractpartnerService from "@/service/ContractpartnerService";
 const serverErrors = ref(new Array<string>());
 
 const mcp = ref({} as Contractpartner);
-const modalComponent = useTemplateRef<typeof ModalVue>('modalComponent');
+const modalComponent = useTemplateRef<typeof ModalVue>("modalComponent");
 const emit = defineEmits(["contractpartnerDeleted"]);
 
 const _show = (_mcp: Contractpartner) => {
