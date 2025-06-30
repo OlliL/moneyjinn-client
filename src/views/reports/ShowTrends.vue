@@ -291,6 +291,7 @@ const chartOptions = ref({
     },
     y: {
       stacked: true,
+      beginAtZero: true,
       title: {
         text: t("Reports.title.trendAmount"),
         display: true,
