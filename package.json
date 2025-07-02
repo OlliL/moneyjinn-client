@@ -19,9 +19,6 @@
     "@types/bootstrap": "^5.2.6",
     "@types/vanillajs-datepicker": "^1.2.1",
     "@vee-validate/zod": "^4.10.8",
-    "@volar/language-core": "2.4.15",
-    "@volar/source-map": "2.4.15",
-    "@volar/typescript": "2.4.15",
     "axios": "^1.3.2",
     "axios-jwt": "^4.0.0",
     "bootstrap": "^5.2.2",
@@ -55,7 +52,7 @@
     "typescript": "^5.7.2",
     "vite": "^7.0.0",
     "vitest": "^3.1.3",
-    "vue-tsc": "^2.0.13"
+    "vue-tsc": "^3.0.1"
   },
   "resolutions": {
     "rollup": "npm:@rollup/wasm-node"
