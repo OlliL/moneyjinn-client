@@ -380,20 +380,28 @@ const resetEditForm = () => {
   toggleMoneyflowFieldsForMse();
 };
 
+const setCapitalsourceForCreateMode = (date: Date) => {
+  const mcs = capitalsourceStore
+    .getBookableValidCapitalsources(date)
+    .find((mcs) => mcs.state === CapitalsourceState.CASH);
+  if (mcs) {
+    mmf.value.capitalsourceId = mcs.id;
+    mmf.value.capitalsourceComment = mcs.comment;
+  } else {
+    mmf.value.capitalsourceId = 0;
+    mmf.value.capitalsourceComment = "";
+  }
+};
+
 watch(
   () => capitalsourceStore.capitalsource,
   () => {
     // watch because websocket driven stores might get initialized too late
+    // in this case, capitalsourceId is not set
     if (!mmf.value.capitalsourceId) {
       const bookingDate = new Date();
       bookingDate.setHours(0, 0, 0, 0);
-      const mcs = capitalsourceStore
-        .getBookableValidCapitalsources(bookingDate)
-        .find((mcs) => mcs.state === CapitalsourceState.CASH);
-      if (mcs) {
-        mmf.value.capitalsourceId = mcs.id;
-        mmf.value.capitalsourceComment = mcs.comment;
-      }
+      setCapitalsourceForCreateMode(bookingDate);
     }
   },
 );
@@ -408,18 +416,7 @@ const resetCreateForm = () => {
   mmf.value.contractpartnerId = 0;
   mmf.value.contractpartnerName = "";
 
-  const capitalsources = capitalsourceStore
-    .getBookableValidCapitalsources(bookingDate)
-    .filter((mcs) => mcs.state === CapitalsourceState.CASH);
-
-  if (capitalsources && capitalsources.length > 0) {
-    const mcs = capitalsources[0];
-    mmf.value.capitalsourceId = mcs.id;
-    mmf.value.capitalsourceComment = mcs.comment;
-  } else {
-    mmf.value.capitalsourceId = 0;
-    mmf.value.capitalsourceComment = "";
-  }
+  setCapitalsourceForCreateMode(bookingDate);
 
   mmf.value.postingAccountId = 0;
   mmf.value.postingAccountName = "";
