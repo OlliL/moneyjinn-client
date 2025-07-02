@@ -389,7 +389,7 @@ watch(
       bookingDate.setHours(0, 0, 0, 0);
       const mcs = capitalsourceStore
         .getBookableValidCapitalsources(bookingDate)
-        .find((mcs) => (mcs.state = CapitalsourceState.CASH));
+        .find((mcs) => mcs.state === CapitalsourceState.CASH);
       if (mcs) {
         mmf.value.capitalsourceId = mcs.id;
         mmf.value.capitalsourceComment = mcs.comment;
@@ -410,7 +410,7 @@ const resetCreateForm = () => {
 
   const capitalsources = capitalsourceStore
     .getBookableValidCapitalsources(bookingDate)
-    .filter((mcs) => (mcs.state = CapitalsourceState.CASH));
+    .filter((mcs) => mcs.state === CapitalsourceState.CASH);
 
   if (capitalsources && capitalsources.length > 0) {
     const mcs = capitalsources[0];
