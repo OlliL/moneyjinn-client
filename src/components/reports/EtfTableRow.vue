@@ -82,6 +82,6 @@ const pricesTimestampString = computed(() => {
   return props.pricesTimestamp ? formatDateWithTime(props.pricesTimestamp) : "";
 });
 const etfFlowAmountSumString = computed(() => {
-  return formatNumber(props.amount, 5);
+  return formatNumber(props.amount, 6);
 });
 </script>

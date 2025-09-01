@@ -48,7 +48,7 @@ const amountClass = computed(() => {
   return redIfNegative(props.flow.amount);
 });
 const amountString = computed(() => {
-  return formatNumber(props.flow.amount, 5);
+  return formatNumber(props.flow.amount, 6);
 });
 
 const timestampString = computed(() => {

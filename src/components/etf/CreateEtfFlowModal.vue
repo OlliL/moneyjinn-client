@@ -42,7 +42,7 @@
                 :validation-schema="schema.amount"
                 id="amount"
                 field-type="number"
-                step="0.00001"
+                step="0.000001"
                 :field-label="$t('ETFFlow.amount')"
               />
             </div>
@@ -114,7 +114,7 @@ const schema: Partial<{ [key in keyof EtfFlow]: ZodType }> = {
   nanoseconds: string(globErr(t("ETFFlow.validation.nanoseconds"))).regex(
     /^\d\d:\d\d:\d\d:\d{3}$/,
   ),
-  amount: amountSchema(t("ETFFlow.validation.amount"), 5),
+  amount: amountSchema(t("ETFFlow.validation.amount"), 6),
   price: amountSchema(t("ETFFlow.validation.price"), 3),
 };
 
@@ -123,7 +123,7 @@ const etfFlow = ref({} as EtfFlow);
 const origEtfFlow = ref({} as EtfFlow | undefined);
 const bookingdate = ref(new Date());
 const bookingtime = ref("");
-const modalComponent = useTemplateRef<typeof ModalVue>('modalComponent');
+const modalComponent = useTemplateRef<typeof ModalVue>("modalComponent");
 const emit = defineEmits(["etfFlowCreated", "etfFlowUpdated"]);
 
 const { handleSubmit, values, setFieldTouched } = useForm();
