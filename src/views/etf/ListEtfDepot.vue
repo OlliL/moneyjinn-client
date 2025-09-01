@@ -273,7 +273,7 @@ const etfEffectiveFlowAmountPriceSum = computed(() => {
 });
 
 const etfEffectiveFlowAmountSumString = computed(() => {
-  return formatNumber(etfEffectiveFlowAmountSum.value, 5);
+  return formatNumber(etfEffectiveFlowAmountSum.value, 6);
 });
 
 const etfEffectiveFlowPriceAvg = computed(() => {
@@ -292,7 +292,7 @@ const etfFlowAmountPriceSum = computed(() => {
 });
 
 const etfFlowAmountSumString = computed(() => {
-  return formatNumber(etfFlowAmountSum.value, 5);
+  return formatNumber(etfFlowAmountSum.value, 6);
 });
 
 const etfFlowPriceAvg = computed(() => {

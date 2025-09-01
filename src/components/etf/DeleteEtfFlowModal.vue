@@ -63,7 +63,7 @@ const amountClass = computed(() => {
   return redIfNegative(etfFlow.value.amount);
 });
 const amountString = computed(() => {
-  return formatNumber(etfFlow.value.amount, 5);
+  return formatNumber(etfFlow.value.amount, 6);
 });
 
 const timestampString = computed(() => {
