@@ -438,12 +438,11 @@ const resetCreateForm = () => {
 const addNewMoneyflowSplitEntryRow = () => {
   if (mmf.value.moneyflowSplitEntries !== undefined) {
     const mse = mmf.value.moneyflowSplitEntries;
-    const mseLength = mse.length;
+    const lastMse = mse[mse.length - 1];
     let newMseId = -1;
-    if (mseLength > 0) {
+    if (lastMse) {
       // existing MoneyflowSplitEntries have positive IDs, new created rows must always have negative IDs
-      newMseId =
-        Math.abs(mmf.value.moneyflowSplitEntries[mseLength - 1].id) * -1 - 1;
+      newMseId = Math.abs(lastMse.id) * -1 - 1;
     }
     const newMse = {
       id: newMseId,
@@ -474,7 +473,7 @@ const onMoneyflowSplitEntryRowAmountChanged = (
   amount: number,
 ) => {
   const mse = mmf.value.moneyflowSplitEntries;
-  if (mse !== undefined) {
+  if (mse !== undefined && mse[index]) {
     mse[index]["amount"] = amount;
   }
   validateMseRemainder();
@@ -485,7 +484,7 @@ const onMoneyflowSplitEntryRowCommentChanged = (
   comment: string,
 ) => {
   const mse = mmf.value.moneyflowSplitEntries;
-  if (mse !== undefined) {
+  if (mse !== undefined && mse[index]) {
     mse[index]["comment"] = comment;
   }
   validateMseRemainder();
@@ -497,7 +496,7 @@ const onMoneyflowSplitEntryRowPostingAccountIdChanged = (
   postingAccountName: string,
 ) => {
   const mse = mmf.value.moneyflowSplitEntries;
-  if (mse !== undefined) {
+  if (mse !== undefined && mse[index]) {
     mse[index]["postingAccountId"] = postingAccountId;
     mse[index]["postingAccountName"] = postingAccountName;
   }

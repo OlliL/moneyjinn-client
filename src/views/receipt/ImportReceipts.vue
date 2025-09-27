@@ -62,9 +62,11 @@ const serverErrors = ref(new Array<string>());
 const importedMoneyflowReceipts = ref(new Array<ImportedMoneyflowReceipt>());
 const files = ref({} as FileList);
 
-const deleteModal = useTemplateRef<typeof DeleteMoneyflowModalVue>("deleteModal");
+const deleteModal =
+  useTemplateRef<typeof DeleteMoneyflowModalVue>("deleteModal");
 const editModal = useTemplateRef<typeof EditMoneyflowModalVue>("editModal");
-const uploadReceiptsForm = useTemplateRef<HTMLFormElement>("uploadReceiptsForm");
+const uploadReceiptsForm =
+  useTemplateRef<HTMLFormElement>("uploadReceiptsForm");
 
 const { handleSubmit, values, setFieldTouched } = useForm();
 
@@ -112,7 +114,7 @@ const uploadReceipts = handleSubmit(async () => {
       const arrayBuffer = new Uint8Array(await file.arrayBuffer());
       let fileContents: string = "";
       for (let i = 0; i < arrayBuffer.byteLength; i++) {
-        fileContents += String.fromCharCode(arrayBuffer[i]);
+        fileContents += String.fromCharCode(arrayBuffer[i]!);
       }
       const base64Encoded = btoa(fileContents);
 
@@ -126,9 +128,7 @@ const uploadReceipts = handleSubmit(async () => {
     }
   }
   if (receipts.length > 0) {
-    ImportedMoneyflowReceiptService.createImportedMoneyflowReceipts(
-      receipts,
-    )
+    ImportedMoneyflowReceiptService.createImportedMoneyflowReceipts(receipts)
       .then(() => {
         loadData();
       })

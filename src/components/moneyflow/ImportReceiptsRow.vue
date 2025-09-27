@@ -213,7 +213,7 @@ const searchMoneyflows = handleSubmit(() => {
       moneyflows.value = _moneyflows;
       searchExecuted.value = true;
       searchSuccessful.value = moneyflows.value.length > 0;
-      if (moneyflows.value.length === 1) {
+      if (moneyflows.value.length === 1 && moneyflows.value[0]) {
         preselected.value = true;
         selectedMoneyflowId.value = moneyflows.value[0].id;
       } else {

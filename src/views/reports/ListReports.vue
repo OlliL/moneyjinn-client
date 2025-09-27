@@ -156,8 +156,8 @@ const navigateToNextMonth = () => {
 };
 
 onBeforeRouteUpdate((to, from, next) => {
-  const year = +to.params.year;
-  const month = +to.params.month;
+  const year = to.params.year ? +to.params.year : undefined;
+  const month = to.params.month ? +to.params.month : 0;
   const isFirstMonth = months.value ? months.value.indexOf(month) == 0 : true;
   const isLastMonth = months.value
     ? months.value.indexOf(month) == months.value.length - 1

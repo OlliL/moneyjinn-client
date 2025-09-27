@@ -25,7 +25,7 @@ for (const type in CapitalsourceType) {
   if (!isNaN(typeNum)) {
     capitalsourceTypeValues.push({
       id: typeNum,
-      value: capitalsourceTypeNames[typeNum],
+      value: capitalsourceTypeNames[typeNum] ?? "",
     });
   }
 }

@@ -23,7 +23,7 @@ for (const role in UserRole) {
   if (!isNaN(roleNum)) {
     userRoleValues.push({
       id: roleNum,
-      value: userRoleNames[roleNum],
+      value: userRoleNames[roleNum] ?? "",
     });
   }
 }

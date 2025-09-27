@@ -65,7 +65,9 @@ test("check that update:modelValue gets emitted", async () => {
   const inputStandard = screen.getByTestId<HTMLInputElement>("inputStandard");
   waitForInputHasValue(inputStandard, "abcd");
   setInputValueAndWait(inputStandard, "1234");
-  expect((emitted()["update:modelValue"][0] as Array<string>)[0]).toBe("1234");
+  expect((emitted()["update:modelValue"]![0]! as Array<string>)[0]).toBe(
+    "1234",
+  );
 });
 
 test("check focus", async () => {

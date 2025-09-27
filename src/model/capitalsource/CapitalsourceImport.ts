@@ -21,7 +21,7 @@ for (const importAllowed in CapitalsourceImport) {
   if (!isNaN(importNum)) {
     capitalsourceImportValues.push({
       id: importNum,
-      value: capitalsourceImportNames[importNum],
+      value: capitalsourceImportNames[importNum] ?? "",
     });
   }
 }

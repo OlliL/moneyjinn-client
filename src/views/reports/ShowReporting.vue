@@ -543,7 +543,7 @@ const makeChartTitle = (reportingParameter: ReportingParameter): string => {
 
   if (singlePostingAccounts.value) {
     chartTitle =
-      reportingParameter.selectedPostingAccounts[0].name + " - " + chartTitle;
+      reportingParameter.selectedPostingAccounts[0]!.name + " - " + chartTitle;
   }
   return chartTitle;
 };
@@ -571,7 +571,7 @@ const showReportingGraph = handleSubmit(() => {
     const selectedPostingAccounts = new Array<PostingAccount>();
     const _selectedPostingAccount = postingAccounts.value.filter(
       (mpa) => mpa.id == selectedPostingAccount.value,
-    )[0];
+    )[0] as PostingAccount;
     selectedPostingAccounts.push(_selectedPostingAccount);
     reportingParameter.selectedPostingAccounts = selectedPostingAccounts;
   } else {
@@ -587,13 +587,13 @@ const showReportingGraph = handleSubmit(() => {
         const resultMap = makeResultMap(reportingMonthAmounts);
 
         chartData.value.labels = new Array();
-        chartData.value.datasets[0].data = new Array();
+        chartData.value.datasets[0]!.data = new Array();
         chartOptions.value.plugins.title.text = chartTitle;
 
         for (let [key, value] of resultMap) {
           chartData.value.labels.push(key);
-          chartData.value.datasets[0].data.push(value);
-          chartData.value.datasets[0].backgroundColor.push(randomColor());
+          chartData.value.datasets[0]!.data.push(value);
+          chartData.value.datasets[0]!.backgroundColor.push(randomColor());
         }
       }
       reportingGraphLoaded.value = true;

@@ -179,7 +179,7 @@ const createEtfFlow = handleSubmit(() => {
 
   const times: Array<string> = bookingtime.value.split(":");
   const bookingDate = bookingdate.value;
-  if (times && times.length == 4 && bookingDate) {
+  if (times[0] && times[1] && times[2] && times[3] && bookingDate) {
     etfFlow.value.timestamp = bookingDate;
     etfFlow.value.timestamp.setHours(+times[0], +times[1], +times[2], 0);
     etfFlow.value.nanoseconds = +times[3] * 1000000;
