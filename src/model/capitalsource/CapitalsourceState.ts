@@ -19,7 +19,7 @@ for (const state in CapitalsourceState) {
   if (!isNaN(stateNum)) {
     capitalsourceStateValues.push({
       id: stateNum,
-      value: capitalsourceStateNames[stateNum],
+      value: capitalsourceStateNames[stateNum] ?? "",
     });
   }
 }

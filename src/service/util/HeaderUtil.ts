@@ -21,7 +21,7 @@ export class HeaderUtil {
     const match = new RegExp("(^|;\\s*)(" + name + ")=([^;]*)").exec(
       document.cookie,
     );
-    return match ? decodeURIComponent(match[3]) : null;
+    return match ? decodeURIComponent(match[3] ?? "") : null;
   }
 
   public addXsrfHeader(headers: Record<string, string>) {

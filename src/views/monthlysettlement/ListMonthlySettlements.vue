@@ -133,8 +133,10 @@ const selectedYear = ref(0);
 const selectedMonth = ref(0);
 const currentlyShownYear = ref(0);
 
-const deleteModal = useTemplateRef<typeof DeleteMonthlySettlementModalVue>("deleteModal");
-const editModal = useTemplateRef<typeof EditMonthlySettlementModalVue>("editModal");
+const deleteModal =
+  useTemplateRef<typeof DeleteMonthlySettlementModalVue>("deleteModal");
+const editModal =
+  useTemplateRef<typeof EditMonthlySettlementModalVue>("editModal");
 
 const props = defineProps({
   year: {
@@ -179,8 +181,8 @@ const loadMonth = (year?: number, month?: number) => {
 };
 
 onBeforeRouteUpdate((to, from, next) => {
-  const year = +to.params.year;
-  const month = +to.params.month;
+  const year = to.params.year ? +to.params.year : undefined;
+  const month = to.params.month ? +to.params.month : 0;
   if (
     // only reload month when switching years, deleting a settlement or creating a new settlement
     currentlyShownYear.value != year ||

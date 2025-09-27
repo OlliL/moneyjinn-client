@@ -314,10 +314,10 @@ const compareData = handleSubmit(async () => {
     if (!sourceIsImport.value) {
       if (files.value != null && files.value.length === 1) {
         const file = files.value[0];
-        const arrayBuffer = new Uint8Array(await file.arrayBuffer());
+        const arrayBuffer = new Uint8Array(await file!.arrayBuffer());
         let fileContents: string = "";
         for (let i = 0; i < arrayBuffer.byteLength; i++) {
-          fileContents += String.fromCharCode(arrayBuffer[i]);
+          fileContents += String.fromCharCode(arrayBuffer[i]!);
         }
         compareDataParameter.fileContents = btoa(fileContents);
         compareDataParameter.selectedCompareDataFormat =

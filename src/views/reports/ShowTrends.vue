@@ -438,8 +438,8 @@ const addCapitalsourceData = (trends: Trends) => {
       return e.amount;
     });
 
-    chartData.value.datasets[0].data = dataSettled;
-    chartData.value.datasets[0].hidden = false;
+    chartData.value.datasets[0]!.data = dataSettled;
+    chartData.value.datasets[0]!.hidden = false;
 
     // Calculated Capitalsources
     if (trends.trendsCalculated && trends.trendsCalculated.length > 0) {
@@ -457,8 +457,8 @@ const addCapitalsourceData = (trends: Trends) => {
         dataCalculated.push(data.amount);
       });
 
-      chartData.value.datasets[1].data = dataCalculated;
-      chartData.value.datasets[1].hidden = false;
+      chartData.value.datasets[1]!.data = dataCalculated;
+      chartData.value.datasets[1]!.hidden = false;
     }
   }
 };
@@ -473,8 +473,8 @@ const addEtfData = (trends: Trends) => {
     );
 
     if (dataEtf) {
-      chartData.value.datasets[2].data = dataEtf;
-      chartData.value.datasets[2].hidden = false;
+      chartData.value.datasets[2]!.data = dataEtf;
+      chartData.value.datasets[2]!.hidden = false;
     }
 
     const startLabel = chartData.value.labels[0];
@@ -503,9 +503,9 @@ const showTrends = handleSubmit(() => {
   };
   ReportService.showTrendsGraph(trendsParameter)
     .then((trends) => {
-      chartData.value.datasets[0].hidden = true;
-      chartData.value.datasets[1].hidden = true;
-      chartData.value.datasets[2].hidden = true;
+      chartData.value.datasets[0]!.hidden = true;
+      chartData.value.datasets[1]!.hidden = true;
+      chartData.value.datasets[2]!.hidden = true;
 
       if (trends) {
         addXAxisLabels(trends);
