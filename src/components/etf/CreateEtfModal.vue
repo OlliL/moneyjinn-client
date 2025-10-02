@@ -168,7 +168,7 @@
 import { useForm } from "vee-validate";
 import { computed, ref, useTemplateRef } from "vue";
 import { useI18n } from "vue-i18n";
-import { string, union, ZodType, coerce } from "zod";
+import { string, ZodType } from "zod";
 
 import ButtonSubmit from "../ButtonSubmit.vue";
 import DivError from "../DivError.vue";
@@ -206,27 +206,23 @@ const schema: Partial<{ [key in keyof Etf]: ZodType }> = {
     .min(1)
     .max(10, t("ETF.validation.length.ticker")),
   chartUrl: string().max(255, t("ETF.validation.length.chartUrl")).optional(),
-  transactionCostsAbsolute: union([
-    amountSchema(t("ETFFlow.validation.transactionCostsAbsolute")).optional(),
-    coerce.string().length(0),
-  ]),
-  transactionCostsRelative: union([
-    amountSchema(t("ETFFlow.validation.transactionCostsRelative")).optional(),
-    coerce.string().length(0),
-  ]),
-  transactionCostsMaximum: union([
-    amountSchema(t("ETFFlow.validation.transactionCostsMaximum")).optional(),
-    coerce.string().length(0),
-  ]),
-  partialTaxExemption: union([
-    amountSchema(t("ETF.validation.partialTaxExemption")).optional(),
-    coerce.string().length(0),
-  ]),
+  transactionCostsAbsolute: amountSchema(
+    t("ETFFlow.validation.transactionCostsAbsolute"),
+  ).optional(),
+  transactionCostsRelative: amountSchema(
+    t("ETFFlow.validation.transactionCostsRelative"),
+  ).optional(),
+  transactionCostsMaximum: amountSchema(
+    t("ETFFlow.validation.transactionCostsMaximum"),
+  ).optional(),
+  partialTaxExemption: amountSchema(
+    t("ETF.validation.partialTaxExemption"),
+  ).optional(),
 };
 
 const met = ref({} as Etf);
 const origMet = ref({} as Etf | undefined);
-const modalComponent = useTemplateRef<typeof ModalVue>('modalComponent');
+const modalComponent = useTemplateRef<typeof ModalVue>("modalComponent");
 const emit = defineEmits(["etfCreated", "etfUpdated"]);
 const markAsFavorite = ref(false);
 
