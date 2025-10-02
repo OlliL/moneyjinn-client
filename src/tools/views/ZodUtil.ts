@@ -24,6 +24,7 @@ export function amountSchema(
 
   return number(zodMessage)
     .refine((num) => pattern.test("" + num), { message: message })
+    .nullable()
     .transform((num) => Number(num));
 
   // broken: https://github.com/colinhacks/zod/issues/3486
