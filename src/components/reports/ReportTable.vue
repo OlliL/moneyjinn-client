@@ -28,7 +28,7 @@
         <table class="table table-striped table-bordered table-hover">
           <thead>
             <tr>
-              <th scope="col" class="d-none d-md-block"></th>
+              <th scope="col" class="d-none d-md-table-cell align-top"></th>
               <th scope="col" class="align-top">
                 <span class="d-none d-md-block"
                   >{{ $t("Moneyflow.bookingdate") }}
