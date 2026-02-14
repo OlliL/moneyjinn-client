@@ -23,13 +23,13 @@
 
       <div
         class="card-body table-responsive text-center"
-        v-if="report.moneyflows"
+        v-if="filteredMoneyflows"
       >
         <table class="table table-striped table-bordered table-hover">
           <thead>
             <tr>
               <th scope="col" class="d-none d-md-block"></th>
-              <th scope="col">
+              <th scope="col" class="align-top">
                 <span class="d-none d-md-block"
                   >{{ $t("Moneyflow.bookingdate") }}
                   <i
@@ -44,14 +44,14 @@
                   ></i
                 ></span>
               </th>
-              <th scope="col" class="d-none d-md-table-cell">
+              <th scope="col" class="d-none d-md-table-cell align-top">
                 {{ $t("Moneyflow.invoicedate") }}
                 <i
                   :class="`bi ${sortIcon('invoiceDate')} link-primary`"
                   @click="sortByColumn('invoiceDate')"
                 ></i>
               </th>
-              <th scope="colgroup" colspan="2">
+              <th scope="colgroup" colspan="2" class="align-top">
                 <span class="d-none d-md-block">
                   {{ $t("General.amount") }}
                   <i
@@ -59,27 +59,59 @@
                     @click="sortByColumn('amount')"
                   ></i
                 ></span>
-                <span class="d-block d-md-none">
+                <span class="d-block d-md-none align-top">
                   <i
                     :class="`bi ${sortIcon('amount')} link-primary`"
                     @click="sortByColumn('amount')"
                   ></i
                 ></span>
               </th>
-              <th scope="col" class="d-none d-md-table-cell">
+              <th scope="col" class="d-none d-md-table-cell align-top">
                 {{ $t("General.contractpartner") }}
                 <i
                   :class="`bi ${sortIcon('contractpartnerName')} link-primary`"
                   @click="sortByColumn('contractpartnerName')"
                 ></i>
+                <div class="input-group" style="width: auto">
+                  <input
+                    class="form-control form-control-sm"
+                    type="text"
+                    :placeholder="$t('General.enterFilter')"
+                    v-model="filterContractpartner"
+                    style="min-width: 20px"
+                  />
+                  <button
+                    class="btn btn-outline-secondary btn-sm"
+                    type="button"
+                    @click="filterContractpartner = ''"
+                  >
+                    <i class="bi bi-x"></i>
+                  </button>
+                </div>
               </th>
-              <th scope="col">
+              <th scope="col" class="align-top">
                 <span class="d-none d-md-block">
                   {{ $t("General.comment") }}
                   <i
                     :class="`bi ${sortIcon('comment')} link-primary`"
                     @click="sortByColumn('comment')"
-                  ></i></span
+                  ></i>
+                  <div class="input-group" style="width: auto">
+                    <input
+                      class="form-control form-control-sm"
+                      type="text"
+                      :placeholder="$t('General.enterFilter')"
+                      v-model="filterComment"
+                      style="min-width: 20px"
+                    />
+                    <button
+                      class="btn btn-outline-secondary btn-sm"
+                      type="button"
+                      @click="filterComment = ''"
+                    >
+                      <i class="bi bi-x"></i>
+                    </button>
+                  </div> </span
                 ><span class="d-block d-md-none"
                   ><i
                     :class="`bi ${sortIcon('comment')} link-primary`"
@@ -87,26 +119,58 @@
                   ></i
                 ></span>
               </th>
-              <th scope="col" class="d-none d-md-table-cell">
+              <th scope="col" class="d-none d-md-table-cell align-top">
                 {{ $t("General.postingAccount") }}
                 <i
                   :class="`bi ${sortIcon('postingAccountName')} link-primary`"
                   @click="sortByColumn('postingAccountName')"
                 ></i>
+                <div class="input-group" style="width: auto">
+                  <input
+                    class="form-control form-control-sm"
+                    type="text"
+                    :placeholder="$t('General.enterFilter')"
+                    v-model="filterPostingAccount"
+                    style="min-width: 20px"
+                  />
+                  <button
+                    class="btn btn-outline-secondary btn-sm"
+                    type="button"
+                    @click="filterPostingAccount = ''"
+                  >
+                    <i class="bi bi-x"></i>
+                  </button>
+                </div>
               </th>
-              <th scope="col" class="d-none d-md-table-cell">
+              <th scope="col" class="d-none d-md-table-cell align-top">
                 {{ $t("General.capitalsource") }}
                 <i
                   :class="`bi ${sortIcon('capitalsourceComment')} link-primary`"
                   @click="sortByColumn('capitalsourceComment')"
                 ></i>
+                <div class="input-group" style="width: auto">
+                  <input
+                    class="form-control form-control-sm"
+                    type="text"
+                    :placeholder="$t('General.enterFilter')"
+                    v-model="filterCapitalsource"
+                    style="min-width: 20px"
+                  />
+                  <button
+                    class="btn btn-outline-secondary btn-sm"
+                    type="button"
+                    @click="filterCapitalsource = ''"
+                  >
+                    <i class="bi bi-x"></i>
+                  </button>
+                </div>
               </th>
               <th scope="colgroup" colspan="2"></th>
             </tr>
           </thead>
           <tbody>
             <ReportTableRowVue
-              v-for="mmf in report.moneyflows"
+              v-for="mmf in filteredMoneyflows"
               :key="mmf.id"
               :mmf="mmf"
               @show-receipt="showReceipt"
@@ -299,6 +363,50 @@ const deleteModal =
 const editModal = useTemplateRef<typeof EditMoneyflowModalVue>("editModal");
 const listModal = useTemplateRef<typeof ListMoneyflowModal>("listModal");
 
+const filteredMoneyflows = ref([] as Moneyflow[]);
+
+watch(
+  () => report.value.moneyflows,
+  () => {
+    filter();
+  },
+  { deep: true },
+);
+
+const filterContractpartner = ref("");
+const filterComment = ref("");
+const filterPostingAccount = ref("");
+const filterCapitalsource = ref("");
+const filter = () => {
+  filteredMoneyflows.value = report.value.moneyflows.filter((mmf) => {
+    return (
+      mmf.contractpartnerName
+        ?.toLowerCase()
+        .includes(filterContractpartner.value.toLowerCase()) &&
+      mmf.comment?.toLowerCase().includes(filterComment.value.toLowerCase()) &&
+      mmf.postingAccountName
+        ?.toLowerCase()
+        .includes(filterPostingAccount.value.toLowerCase()) &&
+      mmf.capitalsourceComment
+        ?.toLowerCase()
+        .includes(filterCapitalsource.value.toLowerCase())
+    );
+  });
+  console.log(filteredMoneyflows.value);
+};
+
+watch(
+  [
+    filterContractpartner,
+    filterComment,
+    filterPostingAccount,
+    filterCapitalsource,
+  ],
+  () => {
+    filter();
+  },
+);
+
 const props = defineProps({
   year: {
     type: String,
@@ -367,8 +475,8 @@ const currentMonthIsSettled = computed(() => {
 });
 const amountSum = computed(() => {
   let sum = 0;
-  if (dataLoaded.value && report.value.moneyflows) {
-    for (const mmf of report.value.moneyflows) {
+  if (dataLoaded.value && filteredMoneyflows.value) {
+    for (const mmf of filteredMoneyflows.value) {
       sum += mmf.amount;
     }
   }
