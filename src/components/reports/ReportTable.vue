@@ -392,7 +392,6 @@ const filter = () => {
         .includes(filterCapitalsource.value.toLowerCase())
     );
   });
-  console.log(filteredMoneyflows.value);
 };
 
 watch(

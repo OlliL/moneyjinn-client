@@ -139,11 +139,11 @@ onMounted(() => {
   const year: number | undefined = props.year ? +props.year : undefined;
   const month: number | undefined = props.month ? +props.month : undefined;
   loadData(year, month);
+  updateSortByParams(props);
 });
 
 const loadData = (year?: number, month?: number) => {
   serverErrors.value = new Array<string>();
-  updateSortByParams(props);
 
   dataLoaded.value = false;
   ReportService.getAvailableMonth(year, month)
