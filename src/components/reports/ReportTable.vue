@@ -254,7 +254,14 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, onMounted, ref, useTemplateRef, watch } from "vue";
+import {
+  computed,
+  onMounted,
+  ref,
+  useTemplateRef,
+  watch,
+  type PropType,
+} from "vue";
 
 import CapitalsourceTableVue from "./CapitalsourceTable.vue";
 import DeleteMoneyflowModalVue from "../moneyflow/DeleteMoneyflowModal.vue";
@@ -282,7 +289,10 @@ const dataLoaded = ref(false);
 const assetsMonthlyFixedTurnover = ref(0);
 const assetsYearlyFixedTurnover = ref(0);
 const assetsMonthlyCalculatedTurnover = ref(0);
-const sortBy = ref(new Map<string, boolean>());
+const sortBy = defineModel<Map<keyof Moneyflow, boolean>>({
+  type: Object as PropType<Map<keyof Moneyflow, boolean>>,
+  required: true,
+});
 const receiptModal = useTemplateRef<typeof ReceiptModalVue>("receiptModal");
 const deleteModal =
   useTemplateRef<typeof DeleteMoneyflowModalVue>("deleteModal");
@@ -380,7 +390,6 @@ const assetsYearlyDifference = computed(() => {
 
 const loadData = (year: number, month: number) => {
   serverErrors.value = new Array<string>();
-
   dataLoaded.value = false;
   ReportService.listReports(year, month)
     .then((_report) => {
@@ -411,8 +420,12 @@ const loadData = (year: number, month: number) => {
         (report.value.amountBeginOfYear ? report.value.amountBeginOfYear : 0)
       );
 
-      sortBy.value.clear();
-      sortBy.value.set("bookingDate", true);
+      if (sortBy.value.size > 0) {
+        const entry = sortBy.value.entries().next().value;
+        if (entry) {
+          sortByColumn(entry[0]);
+        }
+      }
       dataLoaded.value = true;
     })
     .catch((backendError) => {
@@ -497,13 +510,13 @@ const moneyflowUpdated = (mmf: Moneyflow) => {
   }
   bookCapitalsourceAmounts(mmf, false);
 };
-const sortIcon = (sortedField: string) => {
+const sortIcon = (sortedField: keyof Moneyflow) => {
   if (sortBy.value.get(sortedField) === undefined) {
-    return "bi-caret-down-square";
+    return "bi-caret-up-square";
   } else if (sortBy.value.get(sortedField)) {
-    return "bi-caret-down-square-fill";
+    return "bi-caret-up-square-fill";
   }
-  return "bi-caret-up-square-fill";
+  return "bi-caret-down-square-fill";
 };
 const compareColumns = (
   a: Moneyflow,
