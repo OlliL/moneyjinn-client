@@ -19,6 +19,7 @@
         @moneyflow-updated="moneyflowUpdated"
         @moneyflow-receipt-deleted="moneyflowReceiptDeleted"
       />
+      <ListMoneyflowModal ref="listModal" />
 
       <div
         class="card-body table-responsive text-center"
@@ -111,6 +112,7 @@
               @show-receipt="showReceipt"
               @delete-moneyflow="deleteMoneyflow"
               @edit-moneyflow="editMoneyflow"
+              @list-moneyflow="listMoneyflow"
             />
             <tr>
               <td colspan="3" class="text-end d-block d-md-table-cell">
@@ -271,6 +273,7 @@ import { CapitalsourceType } from "@/model/capitalsource/CapitalsourceType";
 import type { ReportTurnoverCapitalsource } from "@/model/report/ReportTurnoverCapitalsource";
 
 import ReportService from "@/service/ReportService";
+import ListMoneyflowModal from "../moneyflow/ListMoneyflowModal.vue";
 
 const serverErrors = ref(new Array<string>());
 
@@ -284,6 +287,7 @@ const receiptModal = useTemplateRef<typeof ReceiptModalVue>("receiptModal");
 const deleteModal =
   useTemplateRef<typeof DeleteMoneyflowModalVue>("deleteModal");
 const editModal = useTemplateRef<typeof EditMoneyflowModalVue>("editModal");
+const listModal = useTemplateRef<typeof ListMoneyflowModal>("listModal");
 
 const props = defineProps({
   year: {
@@ -423,6 +427,9 @@ const deleteMoneyflow = (mmf: Moneyflow) => {
 };
 const editMoneyflow = (mmf: Moneyflow) => {
   editModal.value?._show(mmf);
+};
+const listMoneyflow = (mmf: Moneyflow) => {
+  listModal.value?._show(mmf);
 };
 /**
  * recalculate End of Month amount (for matching Capitalsource),

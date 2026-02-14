@@ -56,6 +56,7 @@
         >
           <thead>
             <tr>
+              <th scope="col" class="d-none d-md-block"></th>
               <th scope="col">{{ $t("Moneyflow.bookingdate") }}</th>
               <th scope="col">{{ $t("General.amount") }}</th>
               <th scope="col">{{ $t("General.contractpartner") }}</th>
@@ -67,11 +68,17 @@
           </thead>
           <tbody>
             <SearchMoneyflowResultRowVue
-              v-for="moneyflow of moneyflowGroup.moneyflows"
+              v-for="(moneyflow, index) of moneyflowGroup.moneyflows"
               :key="moneyflow.id"
               :mmf="moneyflow"
+              :rowspan="rowsPerMoneyflow.get(moneyflow.id) ?? 1"
+              :isFirstOfMultipleRowsForSameMoneyflow="
+                firstIndexForMoneyflow.get(moneyflow.id) === index
+              "
               @delete-moneyflow="emitDeleteMoneyflow"
               @edit-moneyflow="emitEditMoneyflow"
+              @list-moneyflow="emitListMoneyflow"
+              @show-receipt="emitShowReceipt"
             />
           </tbody>
         </table>
@@ -80,7 +87,7 @@
   </tr>
 </template>
 <script lang="ts" setup>
-import { onMounted, ref, type PropType } from "vue";
+import { onMounted, ref, watch, type PropType } from "vue";
 
 import { Routes } from "@/router";
 
@@ -125,7 +132,33 @@ const props = defineProps({
 
 const collapseIconClass = ref("bi bi-caret-right-fill");
 const showDetails = ref(false);
-const emit = defineEmits(["deleteMoneyflow", "editMoneyflow"]);
+const emit = defineEmits([
+  "showReceipt",
+  "deleteMoneyflow",
+  "editMoneyflow",
+  "listMoneyflow",
+]);
+const rowsPerMoneyflow = ref(new Map<number, number>());
+const firstIndexForMoneyflow = ref(new Map<number, number>());
+
+watch(
+  () => props.moneyflowGroup.moneyflows,
+  (moneyflows) => {
+    moneyflows.forEach((mmf) => {
+      console.log(mmf);
+      const curVal = rowsPerMoneyflow.value.get(mmf.id);
+      if (curVal === undefined) {
+        rowsPerMoneyflow.value.set(mmf.id, 1);
+      } else {
+        rowsPerMoneyflow.value.set(mmf.id, curVal + 1);
+      }
+      if (!firstIndexForMoneyflow.value.has(mmf.id)) {
+        firstIndexForMoneyflow.value.set(mmf.id, moneyflows.indexOf(mmf));
+      }
+    });
+  },
+  { immediate: true },
+);
 
 const toggleButtonShow = () => {
   collapseIconClass.value = "bi bi-caret-down-fill";
@@ -134,11 +167,17 @@ const toggleButtonShow = () => {
 const toggleButtonHide = () => {
   collapseIconClass.value = "bi bi-caret-right-fill";
 };
+const emitShowReceipt = (id: number) => {
+  emit("showReceipt", id);
+};
 const emitDeleteMoneyflow = (id: number) => {
   emit("deleteMoneyflow", id);
 };
 const emitEditMoneyflow = (id: number) => {
   emit("editMoneyflow", id);
+};
+const emitListMoneyflow = (id: number) => {
+  emit("listMoneyflow", id);
 };
 
 onMounted(() => {

@@ -98,7 +98,12 @@ class MoneyflowService extends AbstractService {
     if (searchMoneyflowsResponse.moneyflowTransports) {
       const moneyflows: Array<Moneyflow> =
         searchMoneyflowsResponse.moneyflowTransports?.map((mmf) => {
-          return mapMoneyflowTransportToModel(mmf, false);
+          return mapMoneyflowTransportToModel(
+            mmf,
+            searchMoneyflowsResponse.moneyflowsWithReceipt
+              ? searchMoneyflowsResponse.moneyflowsWithReceipt.includes(mmf.id)
+              : false,
+          );
         });
       return moneyflows;
     }

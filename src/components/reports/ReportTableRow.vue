@@ -34,6 +34,11 @@
         ><i class="bi bi-trash"></i
       ></span>
     </td>
+    <td class="text-center" v-if="!isOwnMoneyflow">
+      <span class="link-primary" @click="listMoneyflow"
+        ><i class="bi bi-eye"></i
+      ></span>
+    </td>
     <td colspan="2" v-if="!isOwnMoneyflow"></td>
   </tr>
   <tr v-for="(mse, index) in mmf.moneyflowSplitEntries" :key="mse.id">
@@ -92,9 +97,14 @@
     </td>
     <td
       :rowspan="rowspan"
-      colspan="2"
       v-if="index == 0 && !isOwnMoneyflow"
-    ></td>
+      class="text-center"
+    >
+      <span class="link-primary" @click="listMoneyflow"
+        ><i class="bi bi-eye"></i
+      ></span>
+    </td>
+    <td :rowspan="rowspan" v-if="index == 0 && !isOwnMoneyflow"></td>
   </tr>
 </template>
 <script lang="ts" setup>
@@ -114,7 +124,12 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(["showReceipt", "deleteMoneyflow", "editMoneyflow"]);
+const emit = defineEmits([
+  "showReceipt",
+  "deleteMoneyflow",
+  "editMoneyflow",
+  "listMoneyflow",
+]);
 
 const rowspan = computed(() => {
   if (props.mmf.moneyflowSplitEntries != null) {
@@ -140,6 +155,9 @@ const deleteMoneyflow = () => {
 };
 const editMoneyflow = () => {
   emit("editMoneyflow", props.mmf);
+};
+const listMoneyflow = () => {
+  emit("listMoneyflow", props.mmf);
 };
 </script>
 
