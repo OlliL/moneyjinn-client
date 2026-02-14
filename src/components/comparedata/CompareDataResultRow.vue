@@ -49,7 +49,12 @@
     <td class="text-start">
       {{ capitalsourceComment }}
     </td>
-    <td colspan="2"></td>
+    <td class="db text-center">
+      <span class="link-primary" @click="createMoneyflow"
+        ><i class="bi bi-plus-circle"></i
+      ></span>
+    </td>
+    <td></td>
   </tr>
   <tr style="border-bottom: 2px solid #000"></tr>
 </template>
@@ -73,6 +78,10 @@ const props = defineProps({
     type: Object as PropType<CompareDataDataset>,
     required: false,
   },
+  capitalsourceId: {
+    type: Number,
+    required: true,
+  },
   capitalsourceComment: {
     type: String,
     required: true,
@@ -80,7 +89,11 @@ const props = defineProps({
 });
 
 const userSessionStore = useUserSessionStore();
-const emit = defineEmits(["deleteMoneyflow", "editMoneyflow"]);
+const emit = defineEmits([
+  "deleteMoneyflow",
+  "editMoneyflow",
+  "createMoneyflow",
+]);
 
 const isOwnMoneyflow = computed(() => {
   return props.mmf ? props.mmf.userId === userSessionStore.getUserId : false;
@@ -91,6 +104,18 @@ const deleteMoneyflow = () => {
 };
 const editMoneyflow = () => {
   if (props.mmf) emit("editMoneyflow", props.mmf.id);
+};
+const createMoneyflow = () => {
+  const moneyflowToCreate: Moneyflow = {
+    id: 0,
+    bookingDate: props.importData?.bookingDate,
+    invoiceDate: props.importData?.invoiceDate,
+    amount: props.importData?.amount,
+    comment: props.importData?.comment,
+    capitalsourceId: props.capitalsourceId,
+  } as Moneyflow;
+  console.log(moneyflowToCreate);
+  emit("createMoneyflow", moneyflowToCreate);
 };
 </script>
 

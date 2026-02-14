@@ -62,9 +62,7 @@ class ReportService extends AbstractService {
     if (listReportsResponse.moneyflowSplitEntryTransports !== undefined) {
       for (const mse of listReportsResponse.moneyflowSplitEntryTransports) {
         let mseMapArray = mseMap.get(mse.moneyflowid);
-        if (mseMapArray == null) {
-          mseMapArray = new Array<MoneyflowSplitEntryTransport>();
-        }
+        mseMapArray ??= new Array<MoneyflowSplitEntryTransport>();
         mseMapArray.push(mse);
         mseMap.set(mse.moneyflowid, mseMapArray);
       }
