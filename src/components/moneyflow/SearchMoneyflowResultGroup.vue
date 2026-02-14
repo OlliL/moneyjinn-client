@@ -145,7 +145,6 @@ watch(
   () => props.moneyflowGroup.moneyflows,
   (moneyflows) => {
     moneyflows.forEach((mmf) => {
-      console.log(mmf);
       const curVal = rowsPerMoneyflow.value.get(mmf.id);
       if (curVal === undefined) {
         rowsPerMoneyflow.value.set(mmf.id, 1);

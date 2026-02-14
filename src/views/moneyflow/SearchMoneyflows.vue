@@ -556,7 +556,6 @@ const editMoneyflow = (id: number) => {
   });
 };
 const listMoneyflow = (id: number) => {
-  console.log("listMoneyflow", id);
   MoneyflowService.fetchMoneyflow(id).then((mmf) => {
     listModal.value?._show(mmf);
   });
