@@ -1,13 +1,18 @@
 <template>
   <ModalVue
-    :title="$t('Moneyflow.title.update')"
+    :title="
+      mmf.id == 0 ? $t('Moneyflow.title.create') : $t('Moneyflow.title.update')
+    "
     ref="modalComponent"
     :max-width="modalWidth"
     v-if="mmf"
   >
     <template #body>
       <DivError :server-errors="serverErrors" />
-      <form @submit.prevent="updateMoneyflow" id="updateMoneyflowForm">
+      <form
+        @submit.prevent="mmf.id == 0 ? createMoneyflow() : updateMoneyflow()"
+        id="updateMoneyflowForm"
+      >
         <div class="container-fluid">
           <div class="row">
             <div
@@ -76,14 +81,19 @@ import MoneyflowReceiptService from "@/service/MoneyflowReceiptService";
 const serverErrors = ref(new Array<string>());
 
 const mmf = ref({} as Moneyflow);
-const modalComponent = useTemplateRef<typeof ModalVue>('modalComponent');
-const editMoneyflowVue = useTemplateRef<typeof EditMoneyflowBase>('editMoneyflowVue');
+const modalComponent = useTemplateRef<typeof ModalVue>("modalComponent");
+const editMoneyflowVue =
+  useTemplateRef<typeof EditMoneyflowBase>("editMoneyflowVue");
 
 const receiptBase64 = ref("");
 const isJpeg = ref(false);
 const isPdf = ref(false);
 
-const emit = defineEmits(["moneyflowUpdated", "moneyflowReceiptDeleted"]);
+const emit = defineEmits([
+  "moneyflowCreated",
+  "moneyflowUpdated",
+  "moneyflowReceiptDeleted",
+]);
 
 const { handleSubmit, values, setFieldTouched } = useForm();
 
@@ -108,6 +118,15 @@ const updateMoneyflow = handleSubmit(() => {
   editMoneyflowVue.value?.updateMoneyflow().then((mmf: Moneyflow) => {
     if (mmf !== undefined) {
       emit("moneyflowUpdated", mmf);
+      modalComponent.value?._hide();
+    }
+  });
+});
+
+const createMoneyflow = handleSubmit(() => {
+  editMoneyflowVue.value?.createMoneyflow().then((result: boolean) => {
+    if (result) {
+      emit("moneyflowCreated", mmf);
       modalComponent.value?._hide();
     }
   });

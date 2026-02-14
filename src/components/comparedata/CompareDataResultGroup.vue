@@ -56,9 +56,11 @@
               :key="idx"
               :mmf="data.moneyflow"
               :import-data="data.compareDataDataset"
+              :capitalsource-id="capitalsourceId"
               :capitalsource-comment="capitalsourceComment"
               @delete-moneyflow="emitDeleteMoneyflow"
               @edit-moneyflow="emitEditMoneyflow"
+              @create-moneyflow="emitCreateMoneyflow"
             />
           </tbody>
         </table>
@@ -72,6 +74,7 @@ import { computed, onMounted, ref, type PropType } from "vue";
 import CompareDataResultRowVue from "./CompareDataResultRow.vue";
 
 import type { CompareData } from "@/model/comparedata/CompareData";
+import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 
 const props = defineProps({
   compareDataKey: {
@@ -90,6 +93,10 @@ const props = defineProps({
     type: String,
     required: true,
   },
+  capitalsourceId: {
+    type: Number,
+    required: true,
+  },
   capitalsourceComment: {
     type: String,
     required: true,
@@ -98,7 +105,11 @@ const props = defineProps({
 
 const collapseIconClass = ref("bi bi-caret-right-fill");
 const showDetails = ref(false);
-const emit = defineEmits(["deleteMoneyflow", "editMoneyflow"]);
+const emit = defineEmits([
+  "deleteMoneyflow",
+  "editMoneyflow",
+  "createMoneyflow",
+]);
 
 const toggleButtonShow = () => {
   collapseIconClass.value = "bi bi-caret-down-fill";
@@ -113,6 +124,9 @@ const emitDeleteMoneyflow = (id: number) => {
 };
 const emitEditMoneyflow = (id: number) => {
   emit("editMoneyflow", id);
+};
+const emitCreateMoneyflow = (moneyflow: Moneyflow) => {
+  emit("createMoneyflow", moneyflow);
 };
 const compareDatasCount = computed(() => {
   return props.compareData ? props.compareData.length : 0;

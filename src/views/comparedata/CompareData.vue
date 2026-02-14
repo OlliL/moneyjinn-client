@@ -1,6 +1,10 @@
 <template>
   <DeleteMoneyflowModalVue ref="deleteModal" @moneyflow-deleted="compareData" />
-  <EditMoneyflowModalVue ref="editModal" @moneyflow-updated="compareData" />
+  <EditMoneyflowModalVue
+    ref="editModal"
+    @moneyflow-updated="compareData"
+    @moneyflow-created="compareData"
+  />
 
   <div class="container-fluid text-center">
     <div class="row justify-content-md-center">
@@ -105,13 +109,16 @@
               :compare-data="compareDatasNotInDatabase"
               compare-data-key="notInDatabase"
               :amount-class="compareDatasNotInDatabaseCountClass"
+              :capitalsource-id="capitalsourceId"
               :capitalsource-comment="capitalsourceComment"
+              @create-moneyflow="createMoneyflow"
             />
             <CompareDataResultGroupVue
               :comment="$t('CompareData.dataNotInSourceInDb')"
               :compare-data="compareDatasNotInFile"
               compare-data-key="notInFile"
               :amount-class="compareDatasNotInFileCountClass"
+              :capitalsource-id="capitalsourceId"
               :capitalsource-comment="capitalsourceComment"
               @delete-moneyflow="deleteMoneyflow"
               @edit-moneyflow="editMoneyflow"
@@ -121,6 +128,7 @@
               :compare-data="compareDatasWrongCapitalsource"
               compare-data-key="wrongCapitalsource"
               :amount-class="compareDatasWrongCapitalsourceCountClass"
+              :capitalsource-id="capitalsourceId"
               :capitalsource-comment="capitalsourceComment"
               @delete-moneyflow="deleteMoneyflow"
               @edit-moneyflow="editMoneyflow"
@@ -130,6 +138,7 @@
               :compare-data="compareDatasMatching"
               compare-data-key="matching"
               :amount-class="compareDatasMatchingCountClass"
+              :capitalsource-id="capitalsourceId"
               :capitalsource-comment="capitalsourceComment"
               @delete-moneyflow="deleteMoneyflow"
               @edit-moneyflow="editMoneyflow"
@@ -168,6 +177,7 @@ import type { SelectBoxValue } from "@/model/SelectBoxValue";
 import CompareDataService from "@/service/CompareDataService";
 import MoneyflowService from "@/service/MoneyflowService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
+import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 
 const { t } = useI18n();
 
@@ -177,22 +187,16 @@ const schema = {
   startDate: date(globErr(t("General.validation.startDate"))),
   endDate: date(globErr(t("General.validation.endDate"))),
   capitalsourceId: number(globErr(t("General.validation.capitalsource"))).gt(0),
-  compareDataFormat: computed(() => {
-    if (!sourceIsImport.value) {
-      return number(globErr(t("CompareData.validation.compareDataFormat"))).gt(
-        0,
-      );
-    } else {
-      return any().optional();
-    }
-  }),
-  importfile: computed(() => {
-    if (!sourceIsImport.value) {
-      return arr(instof(File), globErr(t("CompareData.validation.importfile")));
-    } else {
-      return any().optional();
-    }
-  }),
+  compareDataFormat: computed(() =>
+    sourceIsImport.value
+      ? any().optional()
+      : number(globErr(t("CompareData.validation.compareDataFormat"))).gt(0),
+  ),
+  importfile: computed(() =>
+    sourceIsImport.value
+      ? any().optional()
+      : arr(instof(File), globErr(t("CompareData.validation.importfile"))),
+  ),
 };
 
 const dataLoaded = ref(false);
@@ -317,7 +321,7 @@ const compareData = handleSubmit(async () => {
         const arrayBuffer = new Uint8Array(await file!.arrayBuffer());
         let fileContents: string = "";
         for (let i = 0; i < arrayBuffer.byteLength; i++) {
-          fileContents += String.fromCharCode(arrayBuffer[i]!);
+          fileContents += String.fromCodePoint(arrayBuffer[i]!);
         }
         compareDataParameter.fileContents = btoa(fileContents);
         compareDataParameter.selectedCompareDataFormat =
@@ -351,5 +355,8 @@ const editMoneyflow = (id: number) => {
   MoneyflowService.fetchMoneyflow(id).then((mmf) => {
     editModal.value?._show(mmf);
   });
+};
+const createMoneyflow = (moneyflow: Moneyflow) => {
+  editModal.value?._show(moneyflow);
 };
 </script>
