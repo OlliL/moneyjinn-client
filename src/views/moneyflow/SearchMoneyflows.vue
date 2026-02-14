@@ -1,4 +1,5 @@
 <template>
+  <ReceiptModal ref="receiptModal" />
   <DeleteMoneyflowModalVue
     ref="deleteModal"
     @moneyflow-deleted="searchMoneyflows"
@@ -7,6 +8,7 @@
     ref="editModal"
     @moneyflow-updated="searchMoneyflows"
   />
+  <ListMoneyflowModal ref="listModal" />
 
   <div class="container-fluid text-center">
     <div class="row justify-content-md-center">
@@ -208,6 +210,8 @@
               :col-contractpartner="colContractpartner"
               @delete-moneyflow="deleteMoneyflow"
               @edit-moneyflow="editMoneyflow"
+              @list-moneyflow="listMoneyflow"
+              @show-receipt="showReceipt"
             />
           </tbody>
         </table>
@@ -242,6 +246,8 @@ import type { MoneyflowSearchParams } from "@/model/moneyflow/MoneyflowSearchPar
 import type { SelectBoxValue } from "@/model/SelectBoxValue";
 
 import MoneyflowService from "@/service/MoneyflowService";
+import ListMoneyflowModal from "@/components/moneyflow/ListMoneyflowModal.vue";
+import ReceiptModal from "@/components/reports/ReceiptModal.vue";
 
 const { t } = useI18n();
 
@@ -288,9 +294,11 @@ const colBookingYear = ref(false);
 const colContractpartner = ref(false);
 const dataLoaded = ref(false);
 
+const receiptModal = useTemplateRef<typeof ReceiptModal>("receiptModal");
 const deleteModal =
   useTemplateRef<typeof DeleteMoneyflowModalVue>("deleteModal");
 const editModal = useTemplateRef<typeof EditMoneyflowModalVue>("editModal");
+const listModal = useTemplateRef<typeof ListMoneyflowModal>("listModal");
 
 const schema = {
   startDate: date(globErr(t("General.validation.startDate"))),
@@ -533,7 +541,9 @@ const getGroupByKey = (moneyflow: Moneyflow): string => {
   }
   return groupByKey;
 };
-
+const showReceipt = (moneyflowId: number) => {
+  receiptModal.value?._show(moneyflowId);
+};
 const deleteMoneyflow = (id: number) => {
   MoneyflowService.fetchMoneyflow(id).then((mmf) => {
     deleteModal.value?._show(mmf);
@@ -543,6 +553,12 @@ const deleteMoneyflow = (id: number) => {
 const editMoneyflow = (id: number) => {
   MoneyflowService.fetchMoneyflow(id).then((mmf) => {
     editModal.value?._show(mmf);
+  });
+};
+const listMoneyflow = (id: number) => {
+  console.log("listMoneyflow", id);
+  MoneyflowService.fetchMoneyflow(id).then((mmf) => {
+    listModal.value?._show(mmf);
   });
 };
 </script>
