@@ -31,7 +31,14 @@
                     "
                     :to="{
                       name: Routes.ListReports,
-                      params: { year: selectedYear, month: month },
+                      params: {
+                        year: selectedYear,
+                        month: month,
+                        sortBy: [...sortByMap.keys()][0],
+                        sortDirection: [...sortByMap.values()][0]
+                          ? 'asc'
+                          : 'decs',
+                      },
                       force: true,
                     }"
                     >{{ getMonthName(month) }}</router-link
@@ -67,14 +74,19 @@
         ></span>
       </div>
     </div>
-    <ReportTableVue :year="year" :month="month" v-if="year && month" />
+    <ReportTableVue
+      :year="year"
+      :month="month"
+      v-model="sortByMap"
+      v-if="year && month"
+    />
     <EtfTableVue :year="year" :month="month" v-if="year && month" />
   </div>
 </template>
 
 <script lang="ts" setup>
 import { onMounted, ref } from "vue";
-import { onBeforeRouteUpdate } from "vue-router";
+import { onBeforeRouteUpdate, type RouteParamsGeneric } from "vue-router";
 
 import router, { Routes } from "@/router";
 
@@ -86,6 +98,7 @@ import { getMonthName } from "@/tools/views/MonthName";
 
 import ReportService from "@/service/ReportService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
+import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 
 const serverErrors = ref(new Array<string>());
 
@@ -110,7 +123,17 @@ const props = defineProps({
     type: String,
     default: "",
   },
+  sortBy: {
+    type: String,
+    default: "",
+  },
+  sortDirection: {
+    type: String,
+    default: "",
+  },
 });
+
+const sortByMap = ref(new Map<keyof Moneyflow, boolean>());
 
 onMounted(() => {
   const year: number | undefined = props.year ? +props.year : undefined;
@@ -120,6 +143,7 @@ onMounted(() => {
 
 const loadData = (year?: number, month?: number) => {
   serverErrors.value = new Array<string>();
+  updateSortByParams(props);
 
   dataLoaded.value = false;
   ReportService.getAvailableMonth(year, month)
@@ -155,6 +179,18 @@ const navigateToNextMonth = () => {
   selectMonth(nextYear.value + "", nextMonth.value + "");
 };
 
+const updateSortByParams = (params: RouteParamsGeneric) => {
+  sortByMap.value.clear();
+  if (params.sortBy) {
+    sortByMap.value.set(
+      params.sortBy as keyof Moneyflow,
+      params.sortDirection === "desc",
+    );
+  } else {
+    sortByMap.value.set("bookingDate", false);
+  }
+};
+
 onBeforeRouteUpdate((to, from, next) => {
   const year = to.params.year ? +to.params.year : undefined;
   const month = to.params.month ? +to.params.month : 0;
@@ -162,6 +198,8 @@ onBeforeRouteUpdate((to, from, next) => {
   const isLastMonth = months.value
     ? months.value.indexOf(month) == months.value.length - 1
     : true;
+
+  updateSortByParams(to.params);
 
   if (year != currentlyShownYear.value || isFirstMonth || isLastMonth) {
     loadData(year, month);
@@ -188,7 +226,12 @@ onBeforeRouteUpdate((to, from, next) => {
 const selectMonth = (year: string, month?: string) => {
   router.push({
     name: Routes.ListReports,
-    params: { year: year, month: month },
+    params: {
+      year: year,
+      month: month,
+      sortBy: [...sortByMap.value.keys()][0],
+      sortDirection: [...sortByMap.value.values()][0] ? "asc" : "decs",
+    },
   });
 };
 </script>

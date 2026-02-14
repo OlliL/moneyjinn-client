@@ -114,7 +114,6 @@ const createMoneyflow = () => {
     comment: props.importData?.comment,
     capitalsourceId: props.capitalsourceId,
   } as Moneyflow;
-  console.log(moneyflowToCreate);
   emit("createMoneyflow", moneyflowToCreate);
 };
 </script>

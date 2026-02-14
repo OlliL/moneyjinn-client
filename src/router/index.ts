@@ -52,7 +52,7 @@ const router = createRouter({
           component: () => import("@/views/AppHome.vue"),
         },
         {
-          path: "listReports/:year?/:month?",
+          path: "listReports/:year?/:month?/:sortBy?/:sortDirection?",
           name: Routes.ListReports,
           component: () => import("@/views/reports/ListReports.vue"),
           props: true,
