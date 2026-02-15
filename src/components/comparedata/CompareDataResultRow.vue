@@ -116,10 +116,14 @@ const createMoneyflow = () => {
     bookingDate: props.importData?.bookingDate,
     invoiceDate: props.importData?.invoiceDate,
     amount: props.importData?.amount,
-    comment: props.importData?.comment,
+    comment: props.importData?.moneyflowComment
+      ? props.importData?.moneyflowComment
+      : props.importData?.comment,
     capitalsourceId: props.capitalsourceId,
     contractpartnerId: props.importData?.contractpartnerId,
     contractpartnerName: props.importData?.contractpartnerName,
+    postingAccountId: props.importData?.postingAccountId,
+    postingAccountName: props.importData?.postingAccountName,
   } as Moneyflow;
   emit("createMoneyflow", moneyflowToCreate);
 };

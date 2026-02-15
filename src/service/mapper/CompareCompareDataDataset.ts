@@ -14,6 +14,9 @@ export function mapCCompareDataDatasetTransportToModel(
       : undefined,
     contractpartnerId: transport.contractpartnerid,
     contractpartnerName: transport.contractpartnername,
+    postingAccountId: transport.postingAccountId,
+    postingAccountName: transport.postingAccountName,
+    moneyflowComment: transport.moneyflowComment,
   };
   model.bookingDate.setHours(0, 0, 0, 0);
   model.invoiceDate?.setHours(0, 0, 0, 0);

@@ -7,7 +7,11 @@ export function mapContractpartnerMatchingTransportToModel(
   const model: ContractpartnerMatching = {
     id: transport.id,
     contractpartnerId: transport.contractpartnerid,
+    contractpartnerName: transport.contractpartnername,
     matchingText: transport.matchingText,
+    postingAccountId: transport.postingAccountId,
+    postingAccountName: transport.postingAccountName,
+    moneyflowComment: transport.moneyflowComment,
   };
   return model;
 }
@@ -19,6 +23,9 @@ export function mapContractpartnerMatchingToTransport(
     id: model.id,
     contractpartnerid: model.contractpartnerId,
     matchingText: model.matchingText,
+    postingAccountId: model.postingAccountId,
+    postingAccountName: model.postingAccountName,
+    moneyflowComment: model.moneyflowComment,
   };
   return transport;
 }

@@ -6,4 +6,7 @@ export type CompareDataDataset = {
   contractpartnerId?: number;
   contractpartnerName?: string;
   comment: string;
+  moneyflowComment?: string;
+  postingAccountName?: string;
+  postingAccountId?: number;
 };
