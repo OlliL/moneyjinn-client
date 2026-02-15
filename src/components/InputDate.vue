@@ -23,7 +23,15 @@
 import { Datepicker } from "vanillajs-datepicker";
 import { useField } from "vee-validate";
 import { toTypedSchema } from "@vee-validate/zod";
-import { computed, onMounted, ref, useTemplateRef, watch, type PropType, type Ref } from "vue";
+import {
+  computed,
+  onMounted,
+  ref,
+  useTemplateRef,
+  watch,
+  type PropType,
+  type Ref,
+} from "vue";
 import { date, preprocess, type ZodType } from "zod";
 
 // @ts-ignore
@@ -114,11 +122,11 @@ switch (props.pickMode) {
   }
 }
 
-const fieldRef = useTemplateRef<HTMLInputElement>('fieldRef');
+const fieldRef = useTemplateRef<HTMLInputElement>("fieldRef");
 let datepicker = {} as Datepicker;
 
 onMounted(() => {
-  if (!(datepicker instanceof Datepicker)  && fieldRef.value ) {
+  if (!(datepicker instanceof Datepicker) && fieldRef.value) {
     datepicker = new Datepicker(fieldRef.value, {
       buttonClass: "btn",
       pickLevel: pickLevel,
@@ -137,7 +145,7 @@ const setDate = (newVal?: Date) => {
   if (datepicker instanceof Datepicker) {
     if (newVal === undefined) {
       if (datepicker.dates.length > 0) {
-        datepicker.setDate(undefined);
+        datepicker.setDate({ clear: true, forceRefresh: true });
       }
     } else {
       if (props.pickMode === "month") {

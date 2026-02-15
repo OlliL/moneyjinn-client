@@ -56,7 +56,7 @@
         >
           <thead>
             <tr>
-              <th scope="col" class="d-none d-md-block"></th>
+              <th scope="col" class="d-none d-md-table-cell align-top"></th>
               <th scope="col">{{ $t("Moneyflow.bookingdate") }}</th>
               <th scope="col">{{ $t("General.amount") }}</th>
               <th scope="col">{{ $t("General.contractpartner") }}</th>
