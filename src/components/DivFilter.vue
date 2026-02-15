@@ -1,8 +1,8 @@
 <template>
   <div class="row justify-content-md-center">
-    <div class="col-md-auto mb-3">
+    <div :class="$slots.right ? 'col-md-5 mb-3' : 'col-md-auto mb-3'">
       <div class="row">
-        <div class="col-md-auto mb-3">
+        <div class="col-md-auto align-self-center">
           <button
             type="button"
             class="btn btn-primary"
@@ -11,8 +11,8 @@
             {{ $t("General.new") }}
           </button>
         </div>
-        <div class="col">
-          <div class="input-group">
+        <div class="col-md flex-grow-1">
+          <div class="input-group align-items-center">
             <button
               type="button"
               class="btn btn-primary"
@@ -47,6 +47,7 @@
                 $t("General.validNow")
               }}</label>
             </div>
+            <slot name="right"></slot>
           </div>
         </div>
       </div>

@@ -64,6 +64,7 @@ export const enum ErrorCode {
   ETF_STILL_REFERENCED = 388,
   ETF_PRELIMINARY_LUMP_SUM_PIECE_PRICE_MUST_BE_NULL = 389,
   ETF_PRELIMINARY_LUMP_SUM_MONTHLY_PRICES_MUST_BE_NULL = 390,
+  CONTRACTPARTNER_MAPPING_DUPLICATE = 391,
 }
 
 export const errorMessages = {
@@ -241,6 +242,9 @@ export const errorMessages = {
     I18nSingleton.t()(
       "ErrorMessage.ETF_PRELIMINARY_LUMP_SUM_MONTHLY_PRICES_MUST_BE_NULL",
     ),
+  [ErrorCode.CONTRACTPARTNER_MAPPING_DUPLICATE]: I18nSingleton.t()(
+    "ErrorMessage.CONTRACTPARTNER_MAPPING_DUPLICATE",
+  ),
 };
 
 export function getErrorMessage(errorCode: number) {

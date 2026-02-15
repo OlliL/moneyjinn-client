@@ -15,6 +15,7 @@
         "contractpartner": "contractpartner",
         "contractpartners": "contractpartners",
         "contractpartnerAccounts": "contractpartner accounts",
+        "contractpartnerMatchings": "contractpartner matchings",
         "preDefMoneyflow": "predefined flow of money",
         "preDefMoneyflows": "predefined flows of money",
         "monthlysettlements": "monthly balances",
@@ -130,6 +131,19 @@
             "accountNumberMax": "The IBAN must not exceed 22 characters!",
             "bankCode": "Please specify the BIC!",
             "bankCodeMax": "The BIC must not exceed 11 characters!"
+        }
+    },
+    "ContractpartnerMatching": {
+        "matchingText": "partial text",
+        "searchBy": "search by partial text...",
+        "title": {
+            "create": "create contractpartner matching",
+            "update": "update contractpartner matching",
+            "delete": "delete contractpartner matching"
+        },
+        "validation": {
+            "matchingText": "Please specify a partial text!",
+            "matchingTextMax": "The partial text must not exceed 50 characters!"
         }
     },
     "CompareData": {
@@ -490,6 +504,7 @@
         "TICKER_MUST_NOT_BE_EMPTY": "Ticker must be set!",
         "ETF_STILL_REFERENCED": "The posting account cannot be deleted because it is still referenced inside a depot or has preliminary lump sums recorded!",
         "ETF_PRELIMINARY_LUMP_SUM_PIECE_PRICE_MUST_BE_NULL": "No piece price must be entered in montly mode!",
-        "ETF_PRELIMINARY_LUMP_SUM_MONTHLY_PRICES_MUST_BE_NULL": "No monthly prices must be entered in single price mode!"
+        "ETF_PRELIMINARY_LUMP_SUM_MONTHLY_PRICES_MUST_BE_NULL": "No monthly prices must be entered in single price mode!",
+        "CONTRACTPARTNER_MAPPING_DUPLICATE": "A contractpartner mapping with this partial text and the same contractpartner already exists!"
     }
 }

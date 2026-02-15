@@ -26,13 +26,13 @@
               {{ $t("General.new") }}
             </button>
           </div>
-          <div class="col">
+          <div class="col-md-auto">
             <select
               class="form-select"
               v-model="selectedYear"
-              @change="selectMonth(selectedYear + '')"
+              @change="selectMonth(selectedYear + '', selectedMonth + '')"
             >
-              <option v-for="year in years" :key="year">
+              <option v-for="year in years" :key="year" :value="year">
                 {{ year }}
               </option>
             </select>
@@ -167,8 +167,8 @@ const loadMonth = (year?: number, month?: number) => {
       months.value = response.allMonth;
       years.value = response.allYears;
 
-      selectedYear.value = +response.year;
-      selectedMonth.value = +response.month;
+      selectedYear.value = Number(response.year);
+      selectedMonth.value = Number(response.month);
 
       if (selectedYear.value != currentlyShownYear.value)
         currentlyShownYear.value = selectedYear.value;
@@ -181,21 +181,18 @@ const loadMonth = (year?: number, month?: number) => {
 };
 
 onBeforeRouteUpdate((to, from, next) => {
-  const year = to.params.year ? +to.params.year : undefined;
-  const month = to.params.month ? +to.params.month : 0;
+  const year = to.params.year ? Number(to.params.year) : undefined;
+  const fallbackMonth = from.params.month ? Number(from.params.month) : 0;
+  const month = to.params.month ? Number(to.params.month) : fallbackMonth;
   if (
     // only reload month when switching years, deleting a settlement or creating a new settlement
     currentlyShownYear.value != year ||
-    (selectedMonth.value > 0 && isNaN(month)) ||
+    (selectedMonth.value > 0 && Number.isNaN(month)) ||
     !months.value.includes(month)
   ) {
     loadMonth(year, month);
-  }
-
-  if (month) {
-    selectedMonth.value = month;
   } else {
-    selectedMonth.value = 0;
+    selectedMonth.value = month;
   }
 
   next();

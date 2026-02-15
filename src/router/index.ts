@@ -14,6 +14,7 @@ export enum Routes {
   CreateMoneyflow = "createMoneyflow",
   ListCapitalsources = "listCapitalsources",
   ListContractpartners = "listContractpartners",
+  ListContractpartnerMatchings = "ListContractpartnerMatchings",
   ListEtfDepot = "listEtfDepot",
   ListEtfs = "listEtfs",
   ListEtfPreliminaryLumpSums = "listEtfPreliminaryLumpSums",
@@ -95,6 +96,12 @@ const router = createRouter({
           name: Routes.ListContractpartners,
           component: () =>
             import("@/views/contractpartner/ListContractpartners.vue"),
+        },
+        {
+          path: "listContractpartnerMatchings",
+          name: Routes.ListContractpartnerMatchings,
+          component: () =>
+            import("@/views/contractpartnermatching/ListContractpartnerMatchings.vue"),
         },
         {
           path: "listGroups",
