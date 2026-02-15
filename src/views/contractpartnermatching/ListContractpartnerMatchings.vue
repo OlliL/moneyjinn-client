@@ -23,7 +23,15 @@
       :showValidToggle="false"
       :placeholder="$t('ContractpartnerMatching.searchBy')"
       @createClicked="showCreateContractpartnerMatchingModal"
-    />
+      ><template #right>
+        <div class="col-md-6 ms-2">
+          <SelectContractpartner
+            v-model="searchContractpartnerId"
+            id-suffix="ContractpartnerMatching-searchContractpartner"
+            :field-label="$t('General.contractpartner')"
+          />
+        </div> </template
+    ></DivFilter>
 
     <DivError :server-errors="serverErrors" />
 
@@ -62,12 +70,14 @@ import type { ContractpartnerMatching } from "@/model/contractpartnermatching/Co
 
 import ContractpartnerMatchingService from "@/service/ContractpartnerMatchingService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
+import SelectContractpartner from "@/components/contractpartner/SelectContractpartner.vue";
 
 const serverErrors = ref(new Array<string>());
 
 const contractpartnerMatchings = ref(new Array<ContractpartnerMatching>());
 const allContractpartnerMatchings = ref(new Array<ContractpartnerMatching>());
 const searchString = ref("");
+const searchContractpartnerId = ref<number | undefined>(undefined);
 
 const createContractpartnerMatchingModalList = useTemplateRef<
   typeof CreateContractpartnerMatchingModalVue
@@ -91,19 +101,23 @@ watch(searchString, () => {
   searchContent();
 });
 
-const searchContent = () => {
-  if (searchString.value === "") {
-    contractpartnerMatchings.value = allContractpartnerMatchings.value;
-    return;
-  }
+watch(searchContractpartnerId, () => {
+  searchContent();
+});
 
+const searchContent = () => {
   const commentUpper = searchString.value.toUpperCase();
-  contractpartnerMatchings.value = allContractpartnerMatchings.value.filter(
-    (entry) =>
+  contractpartnerMatchings.value = allContractpartnerMatchings.value
+    .filter((entry) =>
       entry.matchingText
         ? entry.matchingText.toUpperCase().includes(commentUpper)
         : true,
-  );
+    )
+    .filter((entry) =>
+      searchContractpartnerId.value
+        ? entry.contractpartnerId === searchContractpartnerId.value
+        : true,
+    );
 };
 
 const reloadView = () => {
