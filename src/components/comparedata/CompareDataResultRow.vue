@@ -44,7 +44,12 @@
     <td class="text-end">
       <SpanAmount :amount="importData.amount" />
     </td>
-    <td class="text-start">{{ importData.partner }}</td>
+    <td class="text-start" v-if="importData.partner">
+      {{ importData.partner }}
+    </td>
+    <td class="text-start" v-else>
+      <i>{{ importData.contractpartnerName }}</i>
+    </td>
     <td class="text-start">{{ importData.comment }}</td>
     <td class="text-start">
       {{ capitalsourceComment }}
@@ -113,6 +118,8 @@ const createMoneyflow = () => {
     amount: props.importData?.amount,
     comment: props.importData?.comment,
     capitalsourceId: props.capitalsourceId,
+    contractpartnerId: props.importData?.contractpartnerId,
+    contractpartnerName: props.importData?.contractpartnerName,
   } as Moneyflow;
   emit("createMoneyflow", moneyflowToCreate);
 };

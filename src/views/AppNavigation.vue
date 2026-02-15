@@ -194,6 +194,17 @@
               <li>
                 <router-link
                   class="dropdown-item"
+                  :to="{
+                    name: Routes.ListContractpartnerMatchings,
+                    force: true,
+                  }"
+                  @click="collapseNavbar"
+                  >{{ $t("General.contractpartnerMatchings") }}</router-link
+                >
+              </li>
+              <li>
+                <router-link
+                  class="dropdown-item"
                   :to="{ name: Routes.ListPreDefMoneyflows, force: true }"
                   @click="collapseNavbar"
                   >{{ $t("General.preDefMoneyflows") }}</router-link
@@ -356,12 +367,20 @@ const month = new Date().getMonth() + 1;
 const userIsAdmin = ref(false);
 const route = useRoute();
 
-const dropdownWrench = useTemplateRef<HTMLLinkElement>('dropdownWrench');
-const dropdownPlus = useTemplateRef<HTMLLinkElement>('dropdownPlus');
-const createContractpartnerModalNav = useTemplateRef<typeof CreateContractpartnerModalVue>('createContractpartnerModalNav');
-const createCapitalsourceModalNav = useTemplateRef<typeof CreateCapitalsourceModalVue>('createCapitalsourceModalNav');
-const createPreDedMoneyflowModalNav = useTemplateRef<typeof CreatePreDefMoneyflowModalVue>('createPreDedMoneyflowModalNav');
-const navbarSupportedContent = useTemplateRef<HTMLDivElement>('navbarSupportedContent');
+const dropdownWrench = useTemplateRef<HTMLLinkElement>("dropdownWrench");
+const dropdownPlus = useTemplateRef<HTMLLinkElement>("dropdownPlus");
+const createContractpartnerModalNav = useTemplateRef<
+  typeof CreateContractpartnerModalVue
+>("createContractpartnerModalNav");
+const createCapitalsourceModalNav = useTemplateRef<
+  typeof CreateCapitalsourceModalVue
+>("createCapitalsourceModalNav");
+const createPreDedMoneyflowModalNav = useTemplateRef<
+  typeof CreatePreDefMoneyflowModalVue
+>("createPreDedMoneyflowModalNav");
+const navbarSupportedContent = useTemplateRef<HTMLDivElement>(
+  "navbarSupportedContent",
+);
 
 const markDropdownActive = (routeName: RouteRecordName | null | undefined) => {
   if (dropdownWrench.value && dropdownPlus.value) {

@@ -15,6 +15,7 @@
         "contractpartner": "Vertragspartner",
         "contractpartners": "Vertragspartner",
         "contractpartnerAccounts": "Vertragspartnerkonten",
+        "contractpartnerMatchings": "Vertragspartner-Mappings",
         "preDefMoneyflow": "vordefinierte Geldbewegung",
         "preDefMoneyflows": "vordefinierte Geldbewegungen",
         "monthlysettlements": "Monatsabschlüsse",
@@ -130,6 +131,19 @@
             "accountNumberMax": "Die IBAN darf maximal 22 Stellen haben!",
             "bankCode": "Bitte BIC angeben!",
             "bankCodeMax": "Die BIC darf maximal 11 Stellen haben!"
+        }
+    },
+    "ContractpartnerMatching": {
+        "matchingText": "Textteil",
+        "searchBy": "Suchen nach Textteil...",
+        "title": {
+            "create": "Vertragspartner-Mapping hinzufügen",
+            "update": "Vertragspartner-Mapping bearbeiten",
+            "delete": "Vertragspartner-Mapping löschen"
+        },
+        "validation": {
+            "matchingText": "Bitte Textteil angeben!",
+            "matchingTextMax": "Der Textteil darf maximal 50 Zeichen lang sein!"
         }
     },
     "CompareData": {
@@ -490,6 +504,7 @@
         "TICKER_MUST_NOT_BE_EMPTY": "Bitte den Ticker angeben!",
         "ETF_STILL_REFERENCED": "Der ETF kann nicht gelöscht werden, da er noch in einem Depot verwendet wird oder Vorabpauschalen erfasst sind!",
         "ETF_PRELIMINARY_LUMP_SUM_PIECE_PRICE_MUST_BE_NULL": "Beim Monatsmodus darf kein Einzelpreis erfasst sein!",
-        "ETF_PRELIMINARY_LUMP_SUM_MONTHLY_PRICES_MUST_BE_NULL": "Beim Einzelpreismodus dürfen keine Monatspreise erfasst sein!"
+        "ETF_PRELIMINARY_LUMP_SUM_MONTHLY_PRICES_MUST_BE_NULL": "Beim Einzelpreismodus dürfen keine Monatspreise erfasst sein!",
+        "CONTRACTPARTNER_MAPPING_DUPLICATE": "Es existiert bereits ein Vertragspartner-Mapping mit diesem Textteil und dem gleichen Vertragspartner!"
     }
 }

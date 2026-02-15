@@ -12,6 +12,8 @@ export function mapCCompareDataDatasetTransportToModel(
     invoiceDate: transport.invoiceDate
       ? new Date(transport.invoiceDate)
       : undefined,
+    contractpartnerId: transport.contractpartnerid,
+    contractpartnerName: transport.contractpartnername,
   };
   model.bookingDate.setHours(0, 0, 0, 0);
   model.invoiceDate?.setHours(0, 0, 0, 0);

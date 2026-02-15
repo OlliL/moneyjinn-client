@@ -121,13 +121,7 @@ onMounted(() => {
   loadMonthlySettlements(props.year, props.month);
 });
 
-watch(
-  () => props.month,
-  (newVal, oldVal) => {
-    if (newVal != oldVal) {
-      loadMonthlySettlements(props.year, newVal);
-    }
-  },
-  { immediate: true },
-);
+watch([() => props.year, () => props.month], () => {
+  loadMonthlySettlements(props.year, props.month);
+});
 </script>
