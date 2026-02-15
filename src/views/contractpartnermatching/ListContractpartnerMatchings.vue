@@ -35,11 +35,13 @@
 
     <DivError :server-errors="serverErrors" />
 
-    <DivContentTable clazz="col-md-5 col-xs-12">
+    <DivContentTable clazz="col-md-7 col-xs-12">
       <thead>
         <tr>
           <th scope="col">{{ $t("ContractpartnerMatching.matchingText") }}</th>
           <th scope="col">{{ $t("General.contractpartner") }}</th>
+          <th scope="col">{{ $t("Contractpartner.moneyflowComment") }}</th>
+          <th scope="col">{{ $t("General.postingAccount") }}</th>
           <th scope="colgroup" colspan="2"></th>
         </tr>
       </thead>

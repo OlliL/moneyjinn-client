@@ -355,9 +355,11 @@ const resetEditForm = () => {
 
   originalMoneyflowSplitEntryIds.value = new Array<number>();
   if (props.fillContractpartnerDefaults && mmf.value.contractpartnerId > 0) {
-    previousCommentSetByContractpartnerDefaults.value = mmf.value.comment;
-    previousPostingAccountSetByContractpartnerDefaults.value =
-      mmf.value.postingAccountId;
+    if (mmf.value.comment === "")
+      previousCommentSetByContractpartnerDefaults.value = mmf.value.comment;
+    if (mmf.value.postingAccountId === 0)
+      previousPostingAccountSetByContractpartnerDefaults.value =
+        mmf.value.postingAccountId;
 
     onContractpartnerSelected(mmf.value.contractpartnerId);
   } else {

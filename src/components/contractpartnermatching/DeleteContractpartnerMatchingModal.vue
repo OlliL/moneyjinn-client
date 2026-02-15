@@ -17,13 +17,17 @@
               </tr>
               <tr>
                 <th scope="row">{{ $t("General.contractpartner") }}</th>
-                <td>
-                  {{
-                    contractpartnerStore.getContractpartner(
-                      mcm.contractpartnerId,
-                    )?.name
-                  }}
-                </td>
+                <td>{{ mcm.contractpartnerName }}</td>
+              </tr>
+              <tr>
+                <th scope="row">
+                  {{ $t("Contractpartner.moneyflowComment") }}
+                </th>
+                <td>{{ mcm.moneyflowComment }}</td>
+              </tr>
+              <tr>
+                <th scope="row">{{ $t("General.postingAccount") }}</th>
+                <td>{{ mcm.postingAccountName }}</td>
               </tr>
             </tbody>
           </table>
@@ -53,14 +57,12 @@ import { handleBackendError } from "@/tools/views/HandleBackendError";
 import type { ContractpartnerMatching } from "@/model/contractpartnermatching/ContractpartnerMatching";
 
 import ContractpartnerMatchingService from "@/service/ContractpartnerMatchingService";
-import { useContractpartnerStore } from "@/stores/ContractpartnerStore";
 
 const serverErrors = ref(new Array<string>());
 
 const mcm = ref({} as ContractpartnerMatching);
 const modalComponent = useTemplateRef<typeof ModalVue>("modalComponent");
 const emit = defineEmits(["contractpartnerMatchingDeleted"]);
-const contractpartnerStore = useContractpartnerStore();
 
 const _show = (_mcm: ContractpartnerMatching) => {
   mcm.value = _mcm;

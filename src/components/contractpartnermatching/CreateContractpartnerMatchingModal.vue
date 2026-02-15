@@ -27,6 +27,27 @@
               />
             </div>
           </div>
+          <div class="row pt-2">
+            <div class="col-xs-12">
+              <InputStandard
+                v-model="mcm.moneyflowComment"
+                :validation-schema="schema.moneyflowComment"
+                :id="'moneyflowComment' + idSuffix"
+                :field-label="$t('Contractpartner.moneyflowComment')"
+              />
+            </div>
+          </div>
+
+          <div class="row pt-2">
+            <div class="col-xs-12">
+              <SelectPostingAccount
+                v-model="mcm.postingAccountId"
+                :validation-schema="schema.postingAccountId"
+                :id-suffix="idSuffix + 'CreateContractpartner'"
+                :field-label="$t('General.postingAccount')"
+              />
+            </div>
+          </div>
         </div>
       </form>
     </template>
@@ -60,6 +81,7 @@ import type { ContractpartnerMatching } from "@/model/contractpartnermatching/Co
 
 import ContractpartnerMatchingService from "@/service/ContractpartnerMatchingService";
 import SelectContractpartner from "../contractpartner/SelectContractpartner.vue";
+import SelectPostingAccount from "../postingaccount/SelectPostingAccount.vue";
 
 const { t } = useI18n();
 
@@ -81,6 +103,10 @@ const schema: Partial<{ [key in keyof ContractpartnerMatching]: ZodType }> = {
   contractpartnerId: number(
     globErr(t("Moneyflow.validation.contractpartnerId")),
   ).gt(0),
+  moneyflowComment: string()
+    .max(100, t("Contractpartner.validation.length.moneyflowComment"))
+    .optional(),
+  postingAccountId: number().optional(),
 };
 
 const mcm = ref({} as ContractpartnerMatching);
