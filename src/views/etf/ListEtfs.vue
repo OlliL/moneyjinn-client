@@ -2,13 +2,13 @@
   <CreateEtfModalVue
     ref="createEtfModalList"
     id-suffix="List"
-    @etf-created="reloadView"
-    @etf-updated="reloadView"
+    @etf-created="searchContent"
+    @etf-updated="searchContent"
   />
   <DeleteEtfModalVue
     ref="deleteModal"
     id-suffix="List"
-    @etf-deleted="reloadView"
+    @etf-deleted="searchContent"
   />
 
   <div class="container-fluid text-center">
@@ -82,14 +82,14 @@ import ListEtfRowVue from "@/components/etf/ListEtfRow.vue";
 
 import type { Etf } from "@/model/etf/Etf";
 
-import CrudEtfService from "@/service/CrudEtfService";
-import { handleBackendError } from "@/tools/views/HandleBackendError";
+import { useEtfStore } from "@/stores/EtfStore";
 
 const serverErrors = ref(new Array<string>());
-
 const etfs = ref(new Array<Etf>());
-const allEtfs = ref(new Array<Etf>());
 const searchString = ref("");
+
+const etfStore = useEtfStore();
+const searchEtfs = etfStore.searchEtfs;
 
 const createEtfModalList =
   useTemplateRef<typeof CreateEtfModalVue>("createEtfModalList");
@@ -111,33 +111,18 @@ watch(searchString, () => {
   searchContent();
 });
 
-const searchContent = () => {
-  if (searchString.value === "") {
-    etfs.value = allEtfs.value;
-    return;
-  }
-
-  const commentUpper = searchString.value.toUpperCase();
-  etfs.value = allEtfs.value.filter((entry) =>
-    entry.name ? entry.name.toUpperCase().includes(commentUpper) : true,
-  );
+const searchAllContent = () => {
+  searchString.value = "";
+  searchContent();
 };
 
-const reloadView = () => {
-  serverErrors.value = new Array<string>();
-
-  CrudEtfService.fetchAllEtf()
-    .then((_etfs) => {
-      allEtfs.value = _etfs;
-      searchContent();
-    })
-    .catch((backendError) => {
-      handleBackendError(backendError, serverErrors);
-    });
+const searchContent = () => {
+  searchEtfs(searchString.value).then((_etfs) => {
+    etfs.value = _etfs;
+  });
 };
 
 onMounted(() => {
-  searchString.value = "";
-  reloadView();
+  searchAllContent();
 });
 </script>

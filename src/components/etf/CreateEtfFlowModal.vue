@@ -97,11 +97,11 @@ import { formatTime } from "@/tools/views/FormatDate";
 import { amountSchema, globErr } from "@/tools/views/ZodUtil";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 
-import type { Etf } from "@/model/etf/Etf";
 import type { EtfFlow } from "@/model/etf/EtfFlow";
 import type { SelectBoxValue } from "@/model/SelectBoxValue";
 
 import CrudEtfFlowService from "@/service/CrudEtfFlowService";
+import { useEtfStore } from "@/stores/EtfStore";
 
 const { t } = useI18n();
 
@@ -125,6 +125,8 @@ const bookingdate = ref(new Date());
 const bookingtime = ref("");
 const modalComponent = useTemplateRef<typeof ModalVue>("modalComponent");
 const emit = defineEmits(["etfFlowCreated", "etfFlowUpdated"]);
+
+const etfStore = useEtfStore();
 
 const { handleSubmit, values, setFieldTouched } = useForm();
 
@@ -158,11 +160,8 @@ const resetForm = () => {
   Object.keys(values).forEach((field) => setFieldTouched(field, false));
 };
 
-const _show = (_etfs: Array<Etf>, _etfFlow?: EtfFlow, _etfId?: number) => {
-  etfs.value = new Array<SelectBoxValue>();
-  for (let etf of _etfs) {
-    etfs.value.push({ id: etf.id, value: etf.name });
-  }
+const _show = (_etfFlow?: EtfFlow, _etfId?: number) => {
+  etfs.value = etfStore.getAsSelectBoxValues();
   if (_etfFlow) {
     origEtfFlow.value = _etfFlow;
     defaultEtfId.value = _etfFlow.etfId;

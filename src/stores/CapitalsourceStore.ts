@@ -39,7 +39,15 @@ export const useCapitalsourceStore = defineStore("capitalsource", {
 
         switch (event.eventType) {
           case "CREATE": {
-            this.capitalsource.push(mcs);
+            // idempotency
+            const pos = this.capitalsource.findIndex(
+              (entry) => entry.id === mcs.id,
+            );
+            if (pos === undefined) {
+              this.capitalsource.push(mcs);
+            } else {
+              this.capitalsource.splice(pos, 1, mcs);
+            }
             break;
           }
           case "UPDATE": {
@@ -120,22 +128,21 @@ export const useCapitalsourceStore = defineStore("capitalsource", {
       );
     },
     compareCapitalsource(a: Capitalsource, b: Capitalsource): number {
-      const aComment = a.comment.toLowerCase();
-      const bComment = b.comment.toLowerCase();
       const aOwner = a.userId == this.getUserId;
       const bOwner = b.userId == this.getUserId;
-      const aValidFrom = a.validFrom;
-      const bValidFrom = b.validFrom;
 
-      const ownerCompare = aOwner === bOwner ? 0 : aOwner < bOwner ? 1 : -1;
-      const commentCompare =
-        aComment === bComment ? 0 : aComment > bComment ? 1 : -1;
-      const validFromCompare =
-        aValidFrom === bValidFrom ? 0 : aValidFrom > bValidFrom ? 1 : -1;
+      if (aOwner !== bOwner) return aOwner ? -1 : 1;
 
-      if (ownerCompare != 0) return ownerCompare;
-      if (commentCompare != 0) return commentCompare;
-      return validFromCompare;
+      const commentCompare = a.comment.localeCompare(b.comment, undefined, {
+        sensitivity: "base",
+      });
+      if (commentCompare !== 0) return commentCompare;
+
+      if (a.validFrom !== b.validFrom) {
+        return a.validFrom > b.validFrom ? 1 : -1;
+      }
+
+      return 0;
     },
   },
 });

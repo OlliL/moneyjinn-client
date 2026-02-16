@@ -54,7 +54,7 @@
                 <td><SpanAmount :amount="etf.transactionCostsMaximum" /></td>
               </tr>
               <tr>
-                <th scope="row" colspan="2" id="ticker">
+                <th scope="row" colspan="2" id="taxExemption">
                   {{ $t("ETF.partialTaxExemption") }}
                 </th>
                 <td>{{ partialTaxExemptionString }}</td>
@@ -93,15 +93,15 @@ const modalComponent = useTemplateRef<typeof ModalVue>("modalComponent");
 const emit = defineEmits(["etfDeleted"]);
 
 const trabsactionCostsRelativeString = computed(() => {
-  return etf.value.transactionCostsRelative !== undefined
-    ? formatNumber(etf.value.transactionCostsRelative, 2) + " %"
-    : "";
+  return etf.value.transactionCostsRelative === undefined
+    ? ""
+    : formatNumber(etf.value.transactionCostsRelative, 2) + " %";
 });
 
 const partialTaxExemptionString = computed(() => {
-  return etf.value.partialTaxExemption !== undefined
-    ? formatNumber(etf.value.partialTaxExemption, 2) + " %"
-    : "";
+  return etf.value.partialTaxExemption === undefined
+    ? ""
+    : formatNumber(etf.value.partialTaxExemption, 2) + " %";
 });
 
 const _show = (_etf: Etf) => {
