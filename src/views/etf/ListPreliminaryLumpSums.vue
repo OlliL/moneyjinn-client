@@ -28,7 +28,7 @@
         <div class="row flex-lg-nowrap d-flex align-items-center">
           <div class="col-xxl-6 col-md-8 col-xs-12 mb-3" v-if="etfsLoaded">
             <SelectStandard
-              v-model="selectedEtf"
+              v-model="selectedEtfId"
               id="etf"
               :field-label="$t('General.selectEtf')"
               :select-box-values="etfsSelectValues"
@@ -38,7 +38,9 @@
             <button
               type="button"
               class="btn btn-primary"
-              @click="showCreateEtfPreliminaryLumpSumMonthlyModal(selectedEtf)"
+              @click="
+                showCreateEtfPreliminaryLumpSumMonthlyModal(selectedEtfId)
+              "
             >
               {{ $t("ETFPreliminaryLumpSum.newMonthly") }}
             </button>
@@ -47,7 +49,7 @@
             <button
               type="button"
               class="btn btn-primary"
-              @click="showCreateEtfPreliminaryLumpSumPieceModal(selectedEtf)"
+              @click="showCreateEtfPreliminaryLumpSumPieceModal(selectedEtfId)"
             >
               {{ $t("ETFPreliminaryLumpSum.newPiece") }}
             </button>
@@ -93,7 +95,7 @@
             class="btn btn-primary mx-2"
             @click="
               showCreateEtfPreliminaryLumpSumMonthlyModal(
-                selectedEtf,
+                selectedEtfId,
                 etfPreliminaryLumpSum,
               )
             "
@@ -130,7 +132,7 @@
             class="btn btn-primary mx-2"
             @click="
               showCreateEtfPreliminaryLumpSumPieceModal(
-                selectedEtf,
+                selectedEtfId,
                 etfPreliminaryLumpSum,
               )
             "
@@ -164,14 +166,12 @@ import ShowEtfPreliminaryLumpSumPieceVue from "@/components/etf/ShowEtfPrelimina
 import DivError from "@/components/DivError.vue";
 import SelectStandard from "@/components/SelectStandard.vue";
 
-import { handleBackendError } from "@/tools/views/HandleBackendError";
-
 import CrudEtfPreliminaryLumpSumService from "@/service/CrudEtfPreliminaryLumpSumService";
-import CrudEtfService from "@/service/CrudEtfService";
 import type { SelectBoxValue } from "@/model/SelectBoxValue";
 import type { Etf } from "@/model/etf/Etf";
 import type { EtfPreliminaryLumpSum } from "@/model/etf/EtfPreliminaryLumpSum";
 import { EtfPreliminaryLumpSumType } from "@/model/etf/EtfPreliminaryLumpSumType";
+import { useEtfStore } from "@/stores/EtfStore";
 
 const serverErrors = ref(new Array<string>());
 
@@ -180,17 +180,33 @@ const yearsLoaded = ref(false);
 const selectedYear = ref(undefined as number | undefined);
 const displayedYear = ref(undefined as number | undefined);
 const displayedEtf = ref(undefined as number | undefined);
-const selectedEtf = ref(undefined as number | undefined);
 const etfsSelectValues = ref({} as Array<SelectBoxValue>);
 const yearSelectValues = ref({} as Array<SelectBoxValue>);
-const etfs = ref({} as Array<Etf>);
+
+const selectedEtf = ref({} as Etf);
+const selectedEtfId = ref(undefined as number | undefined);
+
 const etfPreliminaryLumpSums = ref({} as Map<number, EtfPreliminaryLumpSum>);
 const etfPreliminaryLumpSum = ref({} as EtfPreliminaryLumpSum | undefined);
 
-const createModalMonthly = useTemplateRef<typeof CreateEtfPreliminaryLumpSumModalMonthlyVue>("createModalMonthly");
-const createModalPiece = useTemplateRef<typeof CreateEtfPreliminaryLumpSumModalMonthlyVue>("createModalPiece");
-const deleteModalMonthly = useTemplateRef<typeof CreateEtfPreliminaryLumpSumModalMonthlyVue>("deleteModalMonthly");
-const deleteModalPiece = useTemplateRef<typeof CreateEtfPreliminaryLumpSumModalMonthlyVue>("deleteModalPiece");
+const createModalMonthly =
+  useTemplateRef<typeof CreateEtfPreliminaryLumpSumModalMonthlyVue>(
+    "createModalMonthly",
+  );
+const createModalPiece =
+  useTemplateRef<typeof CreateEtfPreliminaryLumpSumModalMonthlyVue>(
+    "createModalPiece",
+  );
+const deleteModalMonthly =
+  useTemplateRef<typeof CreateEtfPreliminaryLumpSumModalMonthlyVue>(
+    "deleteModalMonthly",
+  );
+const deleteModalPiece =
+  useTemplateRef<typeof CreateEtfPreliminaryLumpSumModalMonthlyVue>(
+    "deleteModalPiece",
+  );
+
+const etfStore = useEtfStore();
 
 const props = defineProps({
   etfId: {
@@ -215,28 +231,16 @@ onMounted(() => {
 const loadEtfs = (etfId?: number, year?: number) => {
   serverErrors.value = new Array<string>();
   etfsLoaded.value = false;
-  etfsSelectValues.value = new Array<SelectBoxValue>();
-
-  CrudEtfService.fetchAllEtf()
-    .then((response) => {
-      etfs.value = response;
-      let favoriteEtfId;
-      for (let etf of response) {
-        etfsSelectValues.value.push({ id: etf.id, value: etf.name });
-        if (etf.isFavorite && etfId === undefined) favoriteEtfId = etf.id;
-      }
-      if (etfId !== undefined) {
-        displayedEtf.value = etfId;
-        loadYears(etfId, year);
-      } else if (favoriteEtfId !== undefined) {
-        displayedEtf.value = favoriteEtfId;
-        loadYears(favoriteEtfId);
-      }
-      etfsLoaded.value = true;
-    })
-    .catch((backendError) => {
-      handleBackendError(backendError, serverErrors);
-    });
+  etfsSelectValues.value = etfStore.getAsSelectBoxValues();
+  const favoriteEtf = etfStore.getFavoriteEtf();
+  if (etfId !== undefined) {
+    selectedEtfId.value = etfId;
+    loadYears(etfId, year);
+  } else if (favoriteEtf !== undefined) {
+    selectedEtfId.value = favoriteEtf.id;
+    loadYears(favoriteEtf.id);
+  }
+  etfsLoaded.value = true;
 };
 
 const loadYears = (etfId: number, year?: number) => {
@@ -245,11 +249,9 @@ const loadYears = (etfId: number, year?: number) => {
 
   yearSelectValues.value = new Array<SelectBoxValue>();
   etfPreliminaryLumpSums.value = new Map<number, EtfPreliminaryLumpSum>();
-  selectedEtf.value = etfId;
+  selectedEtfId.value = etfId;
   selectedYear.value = undefined;
-  CrudEtfPreliminaryLumpSumService.fetchAllEtfPreliminaryLumpSum(
-    etfId,
-  )
+  CrudEtfPreliminaryLumpSumService.fetchAllEtfPreliminaryLumpSum(etfId)
     .then((response) => {
       for (let _etfPreliminaryLumpSum of response) {
         let _year = _etfPreliminaryLumpSum.year;
@@ -282,7 +284,7 @@ const showCreateEtfPreliminaryLumpSumMonthlyModal = (
 ) => {
   (
     createModalMonthly.value as typeof CreateEtfPreliminaryLumpSumModalMonthlyVue
-  )._show(etfs.value, etfId, mep);
+  )._show(etfId, mep);
 };
 
 const showCreateEtfPreliminaryLumpSumPieceModal = (
@@ -291,7 +293,7 @@ const showCreateEtfPreliminaryLumpSumPieceModal = (
 ) => {
   (
     createModalPiece.value as typeof CreateEtfPreliminaryLumpSumModalPieceVue
-  )._show(etfs.value, etfId, mep);
+  )._show(etfId, mep);
 };
 
 const showDeleteEtfPreliminaryLumpSumModal = () => {
@@ -299,13 +301,13 @@ const showDeleteEtfPreliminaryLumpSumModal = () => {
     etfPreliminaryLumpSum.value?.type ==
     EtfPreliminaryLumpSumType.AMOUNT_PER_MONTH
   ) {
-      deleteModalMonthly.value?._show(etfs.value, etfPreliminaryLumpSum.value);
+    deleteModalMonthly.value?._show(etfPreliminaryLumpSum.value);
   } else {
-      deleteModalPiece.value?._show(etfs.value, etfPreliminaryLumpSum.value);
+    deleteModalPiece.value?._show(etfPreliminaryLumpSum.value);
   }
 };
 
-watch(selectedEtf, (newVal, oldVal) => {
+watch(selectedEtfId, (newVal, oldVal) => {
   if (
     newVal != oldVal &&
     newVal !== undefined &&
@@ -330,22 +332,22 @@ watch(selectedYear, (newVal, oldVal) => {
 
 const routerPush = () => {
   if (
-    (selectedEtf.value || "") != (props.etfId || "") ||
+    (selectedEtfId.value || "") != (props.etfId || "") ||
     (selectedYear.value || "") != (props.year || "")
   ) {
     router.push({
       name: Routes.ListEtfPreliminaryLumpSums,
-      params: { etfId: selectedEtf.value, year: selectedYear.value },
+      params: { etfId: selectedEtfId.value, year: selectedYear.value },
     });
   }
 };
 
 const reloadView = (etfPreliminaryLumpSum: EtfPreliminaryLumpSum) => {
-  if (etfPreliminaryLumpSum.etfId == selectedEtf.value) {
+  if (etfPreliminaryLumpSum.etfId == selectedEtfId.value) {
     if (selectedYear.value === undefined) {
-      loadYears(selectedEtf.value, etfPreliminaryLumpSum.year);
+      loadYears(selectedEtfId.value, etfPreliminaryLumpSum.year);
     } else {
-      loadYears(selectedEtf.value, selectedYear.value);
+      loadYears(selectedEtfId.value, selectedYear.value);
     }
   }
 };

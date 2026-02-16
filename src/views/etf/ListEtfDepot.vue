@@ -20,7 +20,7 @@
         >
           <div class="col-xxl-8 col-md-8 col-xs-12 justify-content-end mb-2">
             <SelectStandard
-              v-model="selectedEtf"
+              v-model="selectedEtfId"
               :validation-schema="schema.etfId"
               id="etf"
               :field-label="$t('General.selectEtf')"
@@ -97,7 +97,7 @@
                   v-for="etfFlow in etfEffectiveFlows"
                   :key="etfFlow.etfflowid"
                   :flow="etfFlow"
-                  :etfName="etf.name"
+                  :etfName="selectedEtf.name"
                   @delete-etf-flow="deleteEtfFlow"
                   @edit-etf-flow="editEtfFlow"
                 />
@@ -155,7 +155,7 @@
                   v-for="etfFlow in etfFlows"
                   :key="etfFlow.etfflowid"
                   :flow="etfFlow"
-                  :etfName="etf.name"
+                  :etfName="selectedEtf.name"
                   @delete-etf-flow="deleteEtfFlow"
                   @edit-etf-flow="editEtfFlow"
                 />
@@ -186,7 +186,7 @@
     <ListEtfDepotSummary :etfSummary="etfSummary" v-if="etfFlows.length > 0" />
 
     <CalcEtfSaleForm
-      :etf="etf"
+      :etf="selectedEtf"
       :etfSummary="etfSummary"
       :pieces="calcEtfSalePieces"
       v-if="etfFlows.length > 0"
@@ -218,9 +218,9 @@ import type { EtfSummary } from "@/model/etf/EtfSummary";
 import type { SelectBoxValue } from "@/model/SelectBoxValue";
 
 import EtfService from "@/service/EtfService";
-import CrudEtfService from "@/service/CrudEtfService";
 import DivError from "@/components/DivError.vue";
 import ListEtfDepotSummary from "@/components/etf/ListEtfDepotSummary.vue";
+import { useEtfStore } from "@/stores/EtfStore";
 
 const { t } = useI18n();
 
@@ -233,12 +233,11 @@ const etfsLoaded = ref(false);
 const dataLoaded = ref(false);
 const etfFlows = ref({} as Array<EtfFlow>);
 const etfEffectiveFlows = ref({} as Array<EtfFlow>);
-const etfs = ref({} as Array<Etf>);
 const etfSummary = ref({} as EtfSummary);
 const etfsSelectValues = ref({} as Array<SelectBoxValue>);
-const etf = ref({} as Etf);
+const selectedEtf = ref({} as Etf);
+const selectedEtfId = ref(undefined as number | undefined);
 
-const selectedEtf = ref(undefined as number | undefined);
 const calcEtfSalePieces = ref(0 as number | undefined);
 
 const effectiveTabButton =
@@ -248,6 +247,8 @@ const effectiveTab = useTemplateRef<HTMLDivElement>("effectiveTab");
 const allTab = useTemplateRef<HTMLDivElement>("allTab");
 const deleteModal = useTemplateRef<typeof DeleteEtfFlowModalVue>("deleteModal");
 const createModal = useTemplateRef<typeof CreateEtfFlowModalVue>("createModal");
+
+const etfStore = useEtfStore();
 
 const props = defineProps({
   etfId: {
@@ -302,27 +303,14 @@ const etfFlowPriceAvg = computed(() => {
 const loadEtfs = (etfId?: number) => {
   serverErrors.value = new Array<string>();
   etfsLoaded.value = false;
-  etfsSelectValues.value = new Array<SelectBoxValue>();
-  CrudEtfService.fetchAllEtf()
-    .then((response) => {
-      etfs.value = response;
-      let favoriteEtfId;
-      for (let etf of response) {
-        etfsSelectValues.value.push({ id: etf.id, value: etf.name });
-        if (etf.isFavorite) favoriteEtfId = etf.id;
-      }
-
-      if (etfId !== undefined) {
-        selectedEtf.value = etfId;
-      } else if (favoriteEtfId !== undefined) {
-        selectedEtf.value = favoriteEtfId;
-      }
-
-      etfsLoaded.value = true;
-    })
-    .catch((backendError) => {
-      handleBackendError(backendError, serverErrors);
-    });
+  etfsSelectValues.value = etfStore.getAsSelectBoxValues();
+  const favoriteEtf = etfStore.getFavoriteEtf();
+  if (etfId !== undefined) {
+    selectedEtfId.value = etfId;
+  } else if (favoriteEtf !== undefined) {
+    selectedEtfId.value = favoriteEtf.id;
+  }
+  etfsLoaded.value = true;
 };
 
 const loadData = (etfId: number) => {
@@ -343,13 +331,7 @@ const loadData = (etfId: number) => {
 };
 
 const handleServerResponse = (etfDepot: EtfDepot, etfId: number) => {
-  etf.value = {} as Etf;
-  for (let _etf of etfs.value) {
-    if (_etf.id == etfId) {
-      etf.value = _etf;
-      break;
-    }
-  }
+  selectedEtf.value = etfStore.getEtf(etfId) ?? ({} as Etf);
 
   etfSummary.value = etfDepot.etfSummary ?? ({} as EtfSummary);
   etfSummary.value.name = undefined;
@@ -411,7 +393,7 @@ const etfFlowDeleted = (etfFlow: EtfFlow) => {
 };
 
 const createEtfFlow = () => {
-  createModal.value?._show(etfs.value, null, selectedEtf.value);
+  createModal.value?._show(null, selectedEtfId.value);
 };
 const etfFlowCreated = (etfFlow: EtfFlow) => {
   // reload because effective/all logic happens on server
@@ -419,7 +401,7 @@ const etfFlowCreated = (etfFlow: EtfFlow) => {
 };
 
 const editEtfFlow = (etfFlow: EtfFlow) => {
-  createModal.value?._show(etfs.value, etfFlow);
+  createModal.value?._show(etfFlow);
 };
 const etfFlowUpdated = (etfFlow: EtfFlow) => {
   // reload because effective/all logic happens on server
@@ -427,9 +409,10 @@ const etfFlowUpdated = (etfFlow: EtfFlow) => {
 };
 
 watch(
-  selectedEtf,
+  selectedEtfId,
   (newVal, oldVal) => {
-    if (oldVal != selectedEtf.value && newVal !== undefined) {
+    console.log("selectedEtf changed from " + oldVal + " to " + newVal);
+    if (oldVal != selectedEtfId.value && newVal !== undefined) {
       loadData(newVal);
     }
   },
@@ -437,10 +420,10 @@ watch(
 );
 
 const routerPush = () => {
-  if ((selectedEtf.value || "") != (props.etfId || "")) {
+  if ((selectedEtfId.value || "") != (props.etfId || "")) {
     router.push({
       name: Routes.ListEtfDepot,
-      params: { etfId: selectedEtf.value },
+      params: { etfId: selectedEtfId.value },
     });
   }
 };

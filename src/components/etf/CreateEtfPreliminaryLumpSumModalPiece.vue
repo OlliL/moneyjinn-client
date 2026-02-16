@@ -77,12 +77,12 @@ import SelectStandard from "../SelectStandard.vue";
 import { amountSchema, globErr } from "@/tools/views/ZodUtil";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 
-import type { Etf } from "@/model/etf/Etf";
 import type { EtfPreliminaryLumpSum } from "@/model/etf/EtfPreliminaryLumpSum";
 import type { SelectBoxValue } from "@/model/SelectBoxValue";
 
 import CrudEtfPreliminaryLumpSumService from "@/service/CrudEtfPreliminaryLumpSumService";
 import { EtfPreliminaryLumpSumType } from "@/model/etf/EtfPreliminaryLumpSumType";
+import { useEtfStore } from "@/stores/EtfStore";
 
 const { t } = useI18n();
 
@@ -104,6 +104,7 @@ const emit = defineEmits([
   "etfPreliminaryLumpSumUpdated",
 ]);
 const year = ref(new Date());
+const etfStore = useEtfStore();
 
 const { handleSubmit, values, setFieldTouched } = useForm();
 
@@ -134,15 +135,8 @@ const resetForm = () => {
   Object.keys(values).forEach((field) => setFieldTouched(field, false));
 };
 
-const _show = (
-  _etfs: Array<Etf>,
-  _etfId?: number,
-  _mep?: EtfPreliminaryLumpSum,
-) => {
-  etfs.value = new Array<SelectBoxValue>();
-  for (let etf of _etfs) {
-    etfs.value.push({ id: etf.id, value: etf.name });
-  }
+const _show = (_etfId?: number, _mep?: EtfPreliminaryLumpSum) => {
+  etfs.value = etfStore.getAsSelectBoxValues();
   defaultEtfId.value = _etfId;
   origMep.value = _mep ?? undefined;
   resetForm();

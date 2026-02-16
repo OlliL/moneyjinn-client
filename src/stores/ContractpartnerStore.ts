@@ -39,8 +39,11 @@ export const useContractpartnerStore = defineStore("contractpartner", () => {
           const pos = contractpartner.value.findIndex(
             (entry) => entry.id === mcp.id,
           );
-          if (pos !== undefined) contractpartner.value.splice(pos, 1, mcp);
-          else contractpartner.value.push(mcp);
+          if (pos === undefined) {
+            contractpartner.value.push(mcp);
+          } else {
+            contractpartner.value.splice(pos, 1, mcp);
+          }
           break;
         }
         case "UPDATE": {
@@ -109,12 +112,9 @@ export const useContractpartnerStore = defineStore("contractpartner", () => {
     a: Contractpartner,
     b: Contractpartner,
   ): number {
-    const al = a.name.toLowerCase();
-    const bl = b.name.toLowerCase();
-
-    if (al === bl) return 0;
-    else if (al > bl) return 1;
-    return -1;
+    return a.name.localeCompare(b.name, undefined, {
+      sensitivity: "base",
+    });
   }
 
   return {

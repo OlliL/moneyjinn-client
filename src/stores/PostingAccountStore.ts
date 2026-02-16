@@ -43,7 +43,15 @@ export const usePostingAccountStore = defineStore("postingAccount", {
 
         switch (event.eventType) {
           case "CREATE": {
-            this.postingAccount.push(mpa);
+            // idempotency
+            const pos = this.postingAccount.findIndex(
+              (entry) => entry.id === mpa.id,
+            );
+            if (pos === undefined) {
+              this.postingAccount.push(mpa);
+            } else {
+              this.postingAccount.splice(pos, 1, mpa);
+            }
             break;
           }
           case "UPDATE": {

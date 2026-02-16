@@ -181,9 +181,8 @@ import type { TrendsParameter } from "@/model/report/TrendsParameter";
 
 import ReportService from "@/service/ReportService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
-import CrudEtfService from "@/service/CrudEtfService";
-import type { Etf } from "@/model/etf/Etf";
 import type { Trends } from "@/model/report/Trends";
+import { useEtfStore } from "@/stores/EtfStore";
 
 const { t } = useI18n();
 
@@ -199,7 +198,6 @@ const schema = {
 
 const dataLoaded = ref(false);
 const trendsGraphLoaded = ref(false);
-const allEtfs = ref(new Array<Etf>());
 const startDate = ref(new Date());
 const endDate = ref(new Date());
 const capitalsourcesActive = ref(true);
@@ -331,14 +329,13 @@ type ChartData = {
 
 const currency = t("General.currency");
 const capitalsourceStore = useCapitalsourceStore();
+const etfStore = useEtfStore();
+
 const selectBoxValues = computed(
   (): Array<SelectBoxValue> => capitalsourceStore.getAllAsSelectBoxValues(),
 );
 const etfSelectBoxValues = computed(
-  (): Array<SelectBoxValue> =>
-    allEtfs.value.map((etf) => {
-      return { id: etf.id, value: etf.name } as SelectBoxValue;
-    }),
+  (): Array<SelectBoxValue> => etfStore.getAsSelectBoxValues(),
 );
 
 const selectedEtfIds = ref(new Array<number>());
@@ -369,8 +366,8 @@ const loadData = () => {
   serverErrors.value = new Array<string>();
 
   dataLoaded.value = false;
-  Promise.all([ReportService.showTrendsForm(), CrudEtfService.fetchAllEtf()])
-    .then(([trendsTransporter, etfTransporters]) => {
+  ReportService.showTrendsForm()
+    .then((trendsTransporter) => {
       const minDate = trendsTransporter.startDate;
       const maxDate = trendsTransporter.endDate;
 
@@ -384,8 +381,6 @@ const loadData = () => {
 
       if (trendsTransporter.selectedEtfIds)
         selectedEtfIds.value = trendsTransporter.selectedEtfIds;
-
-      allEtfs.value = etfTransporters;
 
       dataLoaded.value = true;
       Object.keys(values).forEach((field) => setFieldTouched(field, false));

@@ -1,12 +1,14 @@
 import { useCapitalsourceStore } from "./CapitalsourceStore";
 import { useContractpartnerStore } from "./ContractpartnerStore";
+import { useEtfStore } from "./EtfStore";
 import { usePostingAccountStore } from "./PostingAccountStore";
 
 export class StoreService {
   private static instance: StoreService;
-  private contractpartnerStore = useContractpartnerStore();
-  private postingAccountStore = usePostingAccountStore();
-  private capitalsourceStore = useCapitalsourceStore();
+  private readonly contractpartnerStore = useContractpartnerStore();
+  private readonly postingAccountStore = usePostingAccountStore();
+  private readonly capitalsourceStore = useCapitalsourceStore();
+  private readonly etfStore = useEtfStore();
 
   private constructor() {}
 
@@ -21,11 +23,13 @@ export class StoreService {
     const promiseContractpartner = this.initContractpartner();
     const promisePostingAccount = this.initPostingAccount();
     const promiseCapitalsource = this.initCapitalsource();
+    const promiseEtf = this.initEtf();
 
     return Promise.all([
       promiseContractpartner,
       promisePostingAccount,
       promiseCapitalsource,
+      promiseEtf,
     ]);
   }
 
@@ -33,6 +37,7 @@ export class StoreService {
     this.subscribeContractpartner();
     this.subscribePostingAccount();
     this.subscribeCapitalsource();
+    this.subscribeEtf();
   }
 
   private initContractpartner() {
@@ -47,6 +52,10 @@ export class StoreService {
     return this.capitalsourceStore.initCapitalsourceStore();
   }
 
+  private initEtf() {
+    return this.etfStore.initEtfStore();
+  }
+
   private subscribeContractpartner() {
     this.contractpartnerStore.subscribeToWebsocket();
   }
@@ -57,5 +66,9 @@ export class StoreService {
 
   private subscribeCapitalsource() {
     this.capitalsourceStore.subscribeToWebsocket();
+  }
+
+  private subscribeEtf() {
+    this.etfStore.subscribeToWebsocket();
   }
 }
