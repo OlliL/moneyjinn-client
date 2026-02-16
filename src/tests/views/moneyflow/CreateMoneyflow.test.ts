@@ -20,6 +20,7 @@ import {
 import { createPinia, setActivePinia } from "pinia";
 import "@testing-library/jest-dom/vitest";
 import { setInputValueAndWait, waitForInputHasValue } from "@/tests/TestUtil";
+import CrudEtfService from "@/service/CrudEtfService";
 
 vi.mock("@/service/PreDefMoneyflowService");
 vi.mock("@/service/PostingAccountService");
@@ -99,6 +100,7 @@ beforeAll(async () => {
   PreDefMoneyflowService.fetchAllPreDefMoneyflow = vi
     .fn()
     .mockResolvedValue(Promise.resolve([preDefMoneyflow]));
+  CrudEtfService.fetchAllEtf = vi.fn().mockResolvedValue(Promise.resolve([]));
 });
 
 test("render - form initialized", async () => {
