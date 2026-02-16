@@ -43,15 +43,9 @@
                         id="capitalsourcesActive"
                         v-model="capitalsourcesActive"
                       />
-                      <label
-                        class="form-check-label"
-                        for="capitalsourcesActive"
-                        :style="
-                          'opacity: .65; color: ' +
-                          errorCapitalsourceIds.fieldColor
-                        "
-                        >{{ errorCapitalsourceIds.fieldLabel }}</label
-                      >
+                      <label for="capitalsourcesActive" style="opacity: 0.65">{{
+                        $t("General.capitalsources")
+                      }}</label>
                     </div>
                   </div>
                 </div>
@@ -64,10 +58,7 @@
                       v-model="capitalsourceIds"
                       id="capitalsourceIds"
                       name="capitalsourceIds"
-                      :class="
-                        'form-select form-control ' +
-                        errorCapitalsourceIds.inputClass
-                      "
+                      class="form-select form-control"
                       multiple
                       size="4"
                     >
@@ -158,22 +149,17 @@ import {
   Legend,
   Filler,
 } from "chart.js";
-import { useField, useForm } from "vee-validate";
-import { toTypedSchema } from "@vee-validate/zod";
+import { useForm } from "vee-validate";
 import { computed, onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { Line } from "vue-chartjs";
-import { date, number } from "zod";
+import { date } from "zod";
 
 import DivError from "@/components/DivError.vue";
 import InputDate from "@/components/InputDate.vue";
 
 import { formatNumber } from "@/tools/views/FormatNumber";
 import { useCapitalsourceStore } from "@/stores/CapitalsourceStore";
-import {
-  generateErrorDataVeeValidate,
-  type ErrorData,
-} from "@/tools/views/ErrorData";
 import { globErr } from "@/tools/views/ZodUtil";
 
 import type { SelectBoxValue } from "@/model/SelectBoxValue";
@@ -191,9 +177,6 @@ const serverErrors = ref(new Array<string>());
 const schema = {
   startDate: date(globErr(t("General.validation.startDate"))),
   endDate: date(globErr(t("General.validation.endDate"))),
-  capitalsourceIds: number()
-    .array()
-    .min(1, t("Moneyflow.validation.postingAccountId")),
 };
 
 const dataLoaded = ref(false);
@@ -338,25 +321,9 @@ const etfSelectBoxValues = computed(
   (): Array<SelectBoxValue> => etfStore.getAsSelectBoxValues(),
 );
 
+const capitalsourceIds = ref(new Array<number>());
 const selectedEtfIds = ref(new Array<number>());
 const { handleSubmit, values, setFieldTouched } = useForm();
-const {
-  value: capitalsourceIds,
-  meta: capitalsourceIdsMeta,
-  errorMessage,
-} = useField<Array<number>>(
-  "postingAccountIdsYes",
-  toTypedSchema(schema.capitalsourceIds),
-  { initialValue: new Array<number>(), syncVModel: true },
-);
-
-const errorCapitalsourceIds = computed((): ErrorData => {
-  return generateErrorDataVeeValidate(
-    capitalsourceIdsMeta.touched,
-    t("General.capitalsources"),
-    errorMessage.value,
-  );
-});
 
 onMounted(() => {
   loadData();
