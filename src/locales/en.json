@@ -246,6 +246,7 @@
     "ETFPreliminaryLumpSum": {
         "newMonthly": "new (monthly)",
         "newPiece": "new (piece price)",
+        "newYearly": "new (yearly)",
         "price": "price per piece",
         "title": {
             "create": "create ETF preliminary lump sums",
@@ -505,6 +506,7 @@
         "ETF_STILL_REFERENCED": "The posting account cannot be deleted because it is still referenced inside a depot or has preliminary lump sums recorded!",
         "ETF_PRELIMINARY_LUMP_SUM_PIECE_PRICE_MUST_BE_NULL": "No piece price must be entered in montly mode!",
         "ETF_PRELIMINARY_LUMP_SUM_MONTHLY_PRICES_MUST_BE_NULL": "No monthly prices must be entered in single price mode!",
-        "CONTRACTPARTNER_MAPPING_DUPLICATE": "A contractpartner mapping with this partial text and the same contractpartner already exists!"
+        "CONTRACTPARTNER_MAPPING_DUPLICATE": "A contractpartner mapping with this partial text and the same contractpartner already exists!",
+        "ETF_PRELIMINARY_LUMP_SUM_ONLY_YEARLY_PRICE_MUST_BE_SET": "Only a yearly price may be entered when entering a lump sum for the year!"
     }
 }

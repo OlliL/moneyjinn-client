@@ -9,6 +9,11 @@
     @etf-preliminary-lump-sum-created="reloadView"
     @etf-preliminary-lump-sum-updated="reloadView"
   />
+  <CreateEtfPreliminaryLumpSumModalYearly
+    ref="createModalYearly"
+    @etf-preliminary-lump-sum-created="reloadView"
+    @etf-preliminary-lump-sum-updated="reloadView"
+  />
   <DeleteEtfPreliminaryLumpSumModalMonthlyVue
     @etf-preliminary-lump-sum-deleted="reloadView"
     ref="deleteModalMonthly"
@@ -16,6 +21,10 @@
   <DeleteEtfPreliminaryLumpSumModalPieceVue
     @etf-preliminary-lump-sum-deleted="reloadView"
     ref="deleteModalPiece"
+  />
+  <DeleteEtfPreliminaryLumpSumModalYearly
+    @etf-preliminary-lump-sum-deleted="reloadView"
+    ref="deleteModalYearly"
   />
   <div class="container-fluid text-center">
     <div class="row justify-content-md-center">
@@ -39,7 +48,10 @@
               type="button"
               class="btn btn-primary"
               @click="
-                showCreateEtfPreliminaryLumpSumMonthlyModal(selectedEtfId)
+                showCreateEtfPreliminaryLumpSumModal(
+                  selectedEtfId,
+                  EtfPreliminaryLumpSumType.AMOUNT_PER_MONTH,
+                )
               "
             >
               {{ $t("ETFPreliminaryLumpSum.newMonthly") }}
@@ -49,9 +61,28 @@
             <button
               type="button"
               class="btn btn-primary"
-              @click="showCreateEtfPreliminaryLumpSumPieceModal(selectedEtfId)"
+              @click="
+                showCreateEtfPreliminaryLumpSumModal(
+                  selectedEtfId,
+                  EtfPreliminaryLumpSumType.AMOUNT_PER_PIECE,
+                )
+              "
             >
               {{ $t("ETFPreliminaryLumpSum.newPiece") }}
+            </button>
+          </div>
+          <div class="col-md-auto mb-3" v-if="selectedEtf">
+            <button
+              type="button"
+              class="btn btn-primary"
+              @click="
+                showCreateEtfPreliminaryLumpSumModal(
+                  selectedEtfId,
+                  EtfPreliminaryLumpSumType.AMOUNT_PER_YEAR,
+                )
+              "
+            >
+              {{ $t("ETFPreliminaryLumpSum.newYearly") }}
             </button>
           </div>
         </div>
@@ -94,8 +125,9 @@
             type="button"
             class="btn btn-primary mx-2"
             @click="
-              showCreateEtfPreliminaryLumpSumMonthlyModal(
+              showCreateEtfPreliminaryLumpSumModal(
                 selectedEtfId,
+                etfPreliminaryLumpSum.type,
                 etfPreliminaryLumpSum,
               )
             "
@@ -131,8 +163,46 @@
             type="button"
             class="btn btn-primary mx-2"
             @click="
-              showCreateEtfPreliminaryLumpSumPieceModal(
+              showCreateEtfPreliminaryLumpSumModal(
                 selectedEtfId,
+                etfPreliminaryLumpSum.type,
+                etfPreliminaryLumpSum,
+              )
+            "
+          >
+            {{ $t("General.edit") }}
+          </button>
+          <button
+            type="button"
+            class="btn btn-danger mx-2"
+            @click="showDeleteEtfPreliminaryLumpSumModal"
+          >
+            {{ $t("General.delete") }}
+          </button>
+        </div>
+      </div>
+    </div>
+    <div
+      v-if="
+        selectedYear &&
+        selectedEtf &&
+        etfPreliminaryLumpSum?.type == EtfPreliminaryLumpSumType.AMOUNT_PER_YEAR
+      "
+    >
+      <div class="row justify-content-md-center mb-4">
+        <div class="col-xl-3 col-lg-6 col-xs-12">
+          <ShowEtfPreliminaryLumpSumYearly :mep="etfPreliminaryLumpSum" />
+        </div>
+      </div>
+      <div class="row justify-content-md-center mb-4">
+        <div class="col-md-4 col-xs-12">
+          <button
+            type="button"
+            class="btn btn-primary mx-2"
+            @click="
+              showCreateEtfPreliminaryLumpSumModal(
+                selectedEtfId,
+                etfPreliminaryLumpSum.type,
                 etfPreliminaryLumpSum,
               )
             "
@@ -172,6 +242,9 @@ import type { Etf } from "@/model/etf/Etf";
 import type { EtfPreliminaryLumpSum } from "@/model/etf/EtfPreliminaryLumpSum";
 import { EtfPreliminaryLumpSumType } from "@/model/etf/EtfPreliminaryLumpSumType";
 import { useEtfStore } from "@/stores/EtfStore";
+import CreateEtfPreliminaryLumpSumModalYearly from "@/components/etf/CreateEtfPreliminaryLumpSumModalYearly.vue";
+import DeleteEtfPreliminaryLumpSumModalYearly from "@/components/etf/DeleteEtfPreliminaryLumpSumModalYearly.vue";
+import ShowEtfPreliminaryLumpSumYearly from "@/components/etf/ShowEtfPreliminaryLumpSumYearly.vue";
 
 const serverErrors = ref(new Array<string>());
 
@@ -197,6 +270,10 @@ const createModalPiece =
   useTemplateRef<typeof CreateEtfPreliminaryLumpSumModalMonthlyVue>(
     "createModalPiece",
   );
+const createModalYearly =
+  useTemplateRef<typeof CreateEtfPreliminaryLumpSumModalYearly>(
+    "createModalYearly",
+  );
 const deleteModalMonthly =
   useTemplateRef<typeof CreateEtfPreliminaryLumpSumModalMonthlyVue>(
     "deleteModalMonthly",
@@ -204,6 +281,10 @@ const deleteModalMonthly =
 const deleteModalPiece =
   useTemplateRef<typeof CreateEtfPreliminaryLumpSumModalMonthlyVue>(
     "deleteModalPiece",
+  );
+const deleteModalYearly =
+  useTemplateRef<typeof CreateEtfPreliminaryLumpSumModalYearly>(
+    "deleteModalYearly",
   );
 
 const etfStore = useEtfStore();
@@ -276,22 +357,24 @@ const loadYears = (etfId: number, year?: number) => {
     });
 };
 
-const showCreateEtfPreliminaryLumpSumMonthlyModal = (
-  etfId?: number,
+const showCreateEtfPreliminaryLumpSumModal = (
+  etfId: number | undefined,
+  type: EtfPreliminaryLumpSumType,
   mep?: EtfPreliminaryLumpSum,
 ) => {
-  (
-    createModalMonthly.value as typeof CreateEtfPreliminaryLumpSumModalMonthlyVue
-  )._show(etfId, mep);
-};
-
-const showCreateEtfPreliminaryLumpSumPieceModal = (
-  etfId?: number,
-  mep?: EtfPreliminaryLumpSum,
-) => {
-  (
-    createModalPiece.value as typeof CreateEtfPreliminaryLumpSumModalPieceVue
-  )._show(etfId, mep);
+  if (type == EtfPreliminaryLumpSumType.AMOUNT_PER_MONTH) {
+    (
+      createModalMonthly.value as typeof CreateEtfPreliminaryLumpSumModalMonthlyVue
+    )._show(etfId, mep);
+  } else if (type == EtfPreliminaryLumpSumType.AMOUNT_PER_PIECE) {
+    (
+      createModalPiece.value as typeof CreateEtfPreliminaryLumpSumModalPieceVue
+    )._show(etfId, mep);
+  } else if (type == EtfPreliminaryLumpSumType.AMOUNT_PER_YEAR) {
+    (
+      createModalYearly.value as typeof CreateEtfPreliminaryLumpSumModalYearly
+    )._show(etfId, mep);
+  }
 };
 
 const showDeleteEtfPreliminaryLumpSumModal = () => {
@@ -300,8 +383,17 @@ const showDeleteEtfPreliminaryLumpSumModal = () => {
     EtfPreliminaryLumpSumType.AMOUNT_PER_MONTH
   ) {
     deleteModalMonthly.value?._show(etfPreliminaryLumpSum.value);
-  } else {
+  }
+  if (
+    etfPreliminaryLumpSum.value?.type ==
+    EtfPreliminaryLumpSumType.AMOUNT_PER_PIECE
+  ) {
     deleteModalPiece.value?._show(etfPreliminaryLumpSum.value);
+  } else if (
+    etfPreliminaryLumpSum.value?.type ==
+    EtfPreliminaryLumpSumType.AMOUNT_PER_YEAR
+  ) {
+    deleteModalYearly.value?._show(etfPreliminaryLumpSum.value);
   }
 };
 

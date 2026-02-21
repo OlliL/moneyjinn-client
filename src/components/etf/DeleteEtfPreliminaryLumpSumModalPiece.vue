@@ -41,7 +41,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, useTemplateRef } from "vue";
+import { computed, ref, useTemplateRef } from "vue";
 
 import DivError from "../DivError.vue";
 import ModalVue from "../Modal.vue";
@@ -49,27 +49,23 @@ import SpanAmount from "../SpanAmount.vue";
 
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 
-import type { Etf } from "@/model/etf/Etf";
 import type { EtfPreliminaryLumpSum } from "@/model/etf/EtfPreliminaryLumpSum";
 
 import CrudEtfPreliminaryLumpSumService from "@/service/CrudEtfPreliminaryLumpSumService";
+import { useEtfStore } from "@/stores/EtfStore";
 
 const serverErrors = ref(new Array<string>());
 
 const etfPreliminaryLumpSum = ref({} as EtfPreliminaryLumpSum);
-const etfName = ref("");
+const etfName = computed(() => {
+  return etfStore.getEtf(etfPreliminaryLumpSum.value.etfId)?.name ?? "";
+});
 const modalComponent = useTemplateRef<typeof ModalVue>("modalComponent");
 const emit = defineEmits(["etfPreliminaryLumpSumDeleted"]);
+const etfStore = useEtfStore();
 
-const _show = (_etfs: Array<Etf>, _mep: EtfPreliminaryLumpSum) => {
+const _show = (_mep: EtfPreliminaryLumpSum) => {
   serverErrors.value = new Array<string>();
-  for (let etf of _etfs) {
-    if (etf.id == _mep.etfId) {
-      etfName.value = etf.name;
-      break;
-    }
-  }
-
   etfPreliminaryLumpSum.value = _mep;
   modalComponent.value?._show();
 };

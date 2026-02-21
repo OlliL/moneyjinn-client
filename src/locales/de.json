@@ -246,6 +246,7 @@
     "ETFPreliminaryLumpSum": {
         "newMonthly": "Neu (monatlich)",
         "newPiece": "Neu (Stückpreis)",
+        "newYearly": "Neu (jährlich)",
         "price": "Stückpreis",
         "title": {
             "create": "ETF Vorabpauschale hinzufügen",
@@ -505,6 +506,7 @@
         "ETF_STILL_REFERENCED": "Der ETF kann nicht gelöscht werden, da er noch in einem Depot verwendet wird oder Vorabpauschalen erfasst sind!",
         "ETF_PRELIMINARY_LUMP_SUM_PIECE_PRICE_MUST_BE_NULL": "Beim Monatsmodus darf kein Einzelpreis erfasst sein!",
         "ETF_PRELIMINARY_LUMP_SUM_MONTHLY_PRICES_MUST_BE_NULL": "Beim Einzelpreismodus dürfen keine Monatspreise erfasst sein!",
-        "CONTRACTPARTNER_MAPPING_DUPLICATE": "Es existiert bereits ein Vertragspartner-Mapping mit diesem Textteil und dem gleichen Vertragspartner!"
+        "CONTRACTPARTNER_MAPPING_DUPLICATE": "Es existiert bereits ein Vertragspartner-Mapping mit diesem Textteil und dem gleichen Vertragspartner!",
+        "ETF_PRELIMINARY_LUMP_SUM_ONLY_YEARLY_PRICE_MUST_BE_SET": "Bei der Angabe einer Summe für das Jahr dürfen keine Monatspreise oder ein Einzelpreis angegeben werden!"
     }
 }
