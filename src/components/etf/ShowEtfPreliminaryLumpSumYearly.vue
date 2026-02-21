@@ -8,7 +8,7 @@
       <tr>
         <th scope="row">{{ $t("ETFPreliminaryLumpSum.price") }}</th>
         <td class="text-end">
-          <SpanAmount :amount="mep.amountPerPiece" :decimal-places="8" />
+          <SpanAmount :amount="mep.amountDecember" :decimal-places="2" />
         </td>
       </tr>
     </tbody>
