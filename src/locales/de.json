@@ -172,7 +172,6 @@
         "searchBy": "Suchen nach Name...",
         "markAsFav": "Als Favorit markieren",
         "partialTaxExemption": "Teilfreistellung",
-        "partialTaxExemptionSmall": "Teilfrei-stellung",
         "title": {
             "create": "ETF hinzufügen",
             "update": "ETF bearbeiten",
@@ -199,6 +198,7 @@
         "amount": "Stück",
         "price": "Stückpreis",
         "sumprice": "Gesamtpreis",
+        "preliminaryLumpSum": "Vorabpauschale",
         "newBooking": "Neue Buchung",
         "effective": "Wirksam",
         "calculateSale": "Verkauf berechnen",
