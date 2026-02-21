@@ -172,7 +172,6 @@
         "searchBy": "search by name...",
         "markAsFav": "mark as favorite",
         "partialTaxExemption": "partial tax exemption",
-        "partialTaxExemptionSmall": "partial tax exemption",
         "title": {
             "create": "create ETF",
             "update": "update ETF",
@@ -199,6 +198,7 @@
         "amount": "amount",
         "price": "price per piece",
         "sumprice": "sum price",
+        "preliminaryLumpSum": "lump sum",
         "newBooking": "new booking",
         "effective": "effective",
         "calculateSale": "calculate sale",

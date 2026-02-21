@@ -65,7 +65,7 @@
           >
             <SelectStandard
               v-model="selectedYear"
-              id="etf"
+              id="etfYear"
               :field-label="$t('General.year')"
               :select-box-values="yearSelectValues"
             />
@@ -235,10 +235,8 @@ const loadEtfs = (etfId?: number, year?: number) => {
   const favoriteEtf = etfStore.getFavoriteEtf();
   if (etfId !== undefined) {
     selectedEtfId.value = etfId;
-    loadYears(etfId, year);
   } else if (favoriteEtf !== undefined) {
     selectedEtfId.value = favoriteEtf.id;
-    loadYears(favoriteEtf.id);
   }
   etfsLoaded.value = true;
 };

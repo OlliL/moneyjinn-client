@@ -11,6 +11,8 @@ export function mapEtfFlowTransportToModel(
     nanoseconds: transport.nanoseconds,
     timestamp: new Date(transport.timestamp),
     price: transport.price,
+    accumulatedPreliminaryLumpSum: 0,
+    preliminaryLumpSumPerYear: new Map<string, number>(),
   };
   return model;
 }

@@ -69,9 +69,10 @@
             <table class="table table-striped table-bordered table-hover">
               <colgroup>
                 <col style="width: 30%" />
-                <col style="width: 20%" />
-                <col style="width: 20%" />
-                <col style="width: 20%" />
+                <col style="width: 16%" />
+                <col style="width: 16%" />
+                <col style="width: 16%" />
+                <col style="width: 12%" />
                 <col style="width: 5%" />
                 <col style="width: 5%" />
               </colgroup>
@@ -89,6 +90,9 @@
                   <th scope="col" class="text-center">
                     {{ $t("ETFFlow.sumprice") }}
                   </th>
+                  <th scope="col" class="text-center">
+                    {{ $t("ETFFlow.preliminaryLumpSum") }}
+                  </th>
                   <th scope="col" class="text-center" colspan="2"></th>
                 </tr>
               </thead>
@@ -98,6 +102,7 @@
                   :key="etfFlow.etfflowid"
                   :flow="etfFlow"
                   :etfName="selectedEtf.name"
+                  :show-lump-sum="true"
                   @delete-etf-flow="deleteEtfFlow"
                   @edit-etf-flow="editEtfFlow"
                 />
@@ -116,6 +121,13 @@
                   <td class="text-end">
                     <u
                       ><SpanAmount :amount="etfEffectiveFlowAmountPriceSum"
+                    /></u>
+                  </td>
+                  <td class="text-end">
+                    <u
+                      ><SpanAmount
+                        :amount="etfEffectiveFlowAccumulatedPreliminaryLumpSum"
+                        :decimal-places="3"
                     /></u>
                   </td>
                   <td colspan="2"></td>
@@ -156,6 +168,7 @@
                   :key="etfFlow.etfflowid"
                   :flow="etfFlow"
                   :etfName="selectedEtf.name"
+                  :show-lump-sum="false"
                   @delete-etf-flow="deleteEtfFlow"
                   @edit-etf-flow="editEtfFlow"
                 />
@@ -264,6 +277,22 @@ onMounted(() => {
 
 const etfEffectiveFlowAmountSum = computed(() => {
   return etfEffectiveFlows.value.reduce((a, b) => a + (b["amount"] || 0), 0);
+});
+
+const partial = computed(() => {
+  return (
+    100 -
+    (selectedEtfId.value
+      ? (etfStore.getEtf(Number(selectedEtfId.value))?.partialTaxExemption ?? 0)
+      : 0)
+  );
+});
+const etfEffectiveFlowAccumulatedPreliminaryLumpSum = computed(() => {
+  return etfEffectiveFlows.value.reduce(
+    (a, b) =>
+      a + ((b["accumulatedPreliminaryLumpSum"] * partial.value) / 100 || 0),
+    0,
+  );
 });
 
 const etfEffectiveFlowAmountPriceSum = computed(() => {
@@ -411,7 +440,6 @@ const etfFlowUpdated = (etfFlow: EtfFlow) => {
 watch(
   selectedEtfId,
   (newVal, oldVal) => {
-    console.log("selectedEtf changed from " + oldVal + " to " + newVal);
     if (oldVal != selectedEtfId.value && newVal !== undefined) {
       loadData(newVal);
     }

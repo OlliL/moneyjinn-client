@@ -38,7 +38,7 @@
             {{ $t("ETFFlow.transactionCosts") }}
           </th>
           <th scope="col" rowspan="2" id="partialTaxExemption">
-            {{ $t("ETF.partialTaxExemptionSmall") }}
+            {{ $t("ETF.partialTaxExemption") }}
           </th>
           <th scope="col" rowspan="2" id="favorite">
             <i class="bi bi-star-fill text-warning"></i>
