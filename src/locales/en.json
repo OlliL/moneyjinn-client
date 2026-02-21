@@ -248,6 +248,7 @@
         "newPiece": "new (piece price)",
         "newYearly": "new (yearly)",
         "price": "price per piece",
+        "yearlySum": "yearly sum",
         "title": {
             "create": "create ETF preliminary lump sums",
             "update": "update ETF preliminary lump sums",

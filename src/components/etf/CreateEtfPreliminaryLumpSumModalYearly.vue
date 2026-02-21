@@ -37,7 +37,7 @@
                 id="amountPerYear"
                 step="0.01"
                 field-type="number"
-                :field-label="$t('ETFPreliminaryLumpSum.price')"
+                :field-label="$t('ETFPreliminaryLumpSum.yearlySum')"
               >
                 <template #icon
                   ><span class="input-group-text"

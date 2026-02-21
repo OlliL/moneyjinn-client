@@ -18,7 +18,7 @@
                 <td>{{ etfPreliminaryLumpSum.year }}</td>
               </tr>
               <tr>
-                <th scope="row">{{ $t("ETFPreliminaryLumpSum.price") }}</th>
+                <th scope="row">{{ $t("ETFPreliminaryLumpSum.yearlySum") }}</th>
                 <td>
                   <SpanAmount :amount="etfPreliminaryLumpSum.amountDecember" />
                 </td>

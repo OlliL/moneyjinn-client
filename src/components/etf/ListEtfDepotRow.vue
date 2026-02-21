@@ -19,8 +19,8 @@
         <table class="table table-striped table-bordered table-hover">
           <tr>
             <th scope="col"></th>
-            <th scope="col">100%</th>
-            <th scope="col" v-if="partial < 100">
+            <th scope="col" class="text-center">100%</th>
+            <th scope="col" class="text-center" v-if="partial < 100">
               {{ formatNumber(partial, 0) }}%
             </th>
           </tr>
