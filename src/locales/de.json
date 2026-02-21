@@ -248,6 +248,7 @@
         "newPiece": "Neu (Stückpreis)",
         "newYearly": "Neu (jährlich)",
         "price": "Stückpreis",
+        "yearlySum": "Jahressumme",
         "title": {
             "create": "ETF Vorabpauschale hinzufügen",
             "update": "ETF Vorabpauschale bearbeiten",

@@ -6,7 +6,7 @@
     </colgroup>
     <tbody>
       <tr>
-        <th scope="row">{{ $t("ETFPreliminaryLumpSum.price") }}</th>
+        <th scope="row">{{ $t("ETFPreliminaryLumpSum.yearlySum") }}</th>
         <td class="text-end">
           <SpanAmount :amount="mep.amountDecember" :decimal-places="2" />
         </td>
