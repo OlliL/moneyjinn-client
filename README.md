@@ -8,7 +8,7 @@
   - statically serves the Vue client from /mnt/www/nginx
   - forwards Backend requests to the server.
   - example configuration: https://github.com/OlliL/moneyjinn-server/blob/master/prod-nginx.conf
-- MySQL 5.1 or higher (Backend)
+- PostgreSQL 18 (Backend)
 - Java 21 (Backend)
 
 ## Installation
