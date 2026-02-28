@@ -44,7 +44,13 @@ class MonthlySettlementService extends AbstractService {
   async getMonthlySettlementList(
     year: number,
     month: number,
-  ): Promise<Array<MonthlySettlement>> {
+  ): Promise<{
+    monthlySettlements: Array<MonthlySettlement>;
+    prevYear: number;
+    prevMonth: number;
+    nextYear: number;
+    nextMonth: number;
+  }> {
     const response = await this.api.showMonthlySettlementListV2(year, month);
 
     const showMonthlySettlementListResponse = response.data;
@@ -56,7 +62,13 @@ class MonthlySettlementService extends AbstractService {
         },
       );
 
-    return monthlySettlements;
+    return {
+      monthlySettlements: monthlySettlements,
+      prevYear: showMonthlySettlementListResponse.prevYear,
+      prevMonth: showMonthlySettlementListResponse.prevMonth,
+      nextYear: showMonthlySettlementListResponse.nextYear,
+      nextMonth: showMonthlySettlementListResponse.nextMonth,
+    };
   }
 
   async getMonthlySettlementForEdit(

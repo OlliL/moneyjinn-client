@@ -43,9 +43,7 @@
                 <li class="page-item" v-for="month in months" :key="month">
                   <router-link
                     :class="
-                      $props.month == month + ''
-                        ? 'page-link active'
-                        : 'page-link'
+                      selectedMonth == month ? 'page-link active' : 'page-link'
                     "
                     :to="{
                       name: Routes.ListMonthlySettlements,
@@ -64,28 +62,8 @@
 
     <DivError :server-errors="serverErrors" />
 
-    <div class="row justify-content-md-center mb-4" v-if="selectedMonth">
-      <div class="col-xl-4 col-md-6 col-xs-12">
-        <div class="card">
-          <div class="card-header text-center p-3">
-            <h5>
-              {{
-                $t("MonthlySettlement.headline", {
-                  month: monthName,
-                  year: year,
-                })
-              }}
-            </h5>
-          </div>
-          <div class="card-body">
-            <ShowMontlySettlementVue
-              :year="selectedYear"
-              :month="selectedMonth"
-            />
-          </div>
-        </div>
-      </div>
-    </div>
+    <ShowMontlySettlementVue :year="selectedYear" :month="selectedMonth" />
+
     <div class="row justify-content-md-center mb-4" v-if="selectedMonth">
       <div class="col-md-4 col-xs-12">
         <button
@@ -109,7 +87,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, onMounted, ref, useTemplateRef } from "vue";
+import { onMounted, ref, useTemplateRef } from "vue";
 import { onBeforeRouteUpdate } from "vue-router";
 
 import DeleteMonthlySettlementModalVue from "@/components/monthlysettlement/DeleteMonthlySettlementModal.vue";
@@ -155,10 +133,6 @@ onMounted(() => {
   loadMonth(year, month);
 });
 
-const monthName = computed(() => {
-  return getMonthName(selectedMonth.value);
-});
-
 const loadMonth = (year?: number, month?: number) => {
   serverErrors.value = new Array<string>();
 
@@ -173,6 +147,10 @@ const loadMonth = (year?: number, month?: number) => {
       if (selectedYear.value != currentlyShownYear.value)
         currentlyShownYear.value = selectedYear.value;
 
+      router.push({
+        name: Routes.ListMonthlySettlements,
+        params: { year: selectedYear.value, month: selectedMonth.value },
+      });
       dataLoaded.value = true;
     })
     .catch((backendError) => {
