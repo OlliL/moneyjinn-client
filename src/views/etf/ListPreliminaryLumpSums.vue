@@ -91,15 +91,33 @@
       <div class="row justify-content-md-center mb-12 pb-3">
         <div class="col-xxl-1 col-xl-2 col-md-3 col-xs-12">
           <div
-            class="col-xxl-12 col-xs-12 justify-content-start"
+            class="col-xxl-12 col-xs-12 d-flex align-items-center justify-content-start"
             v-if="yearsLoaded"
           >
+            <span
+              @click="navigateToPreviousYear"
+              :class="[
+                'bi bi-caret-left-fill link-primary me-2 fs-3',
+                { invisible: !showPreviousYearLink },
+              ]"
+              style="width: 1.5rem; display: inline-block"
+            ></span>
             <SelectStandard
               v-model="selectedYear"
               id="etfYear"
               :field-label="$t('General.year')"
               :select-box-values="yearSelectValues"
+              class="flex-grow-1 flex-shrink-0"
+              style="min-width: 8rem"
             />
+            <span
+              @click="navigateToNextYear"
+              :class="[
+                'bi bi-caret-right-fill link-primary ms-2 fs-3',
+                { invisible: !showNextYearLink },
+              ]"
+              style="width: 1.5rem; display: inline-block"
+            ></span>
           </div>
         </div>
       </div>
@@ -224,7 +242,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted, watch, useTemplateRef } from "vue";
+import { ref, onMounted, watch, useTemplateRef, computed } from "vue";
 import router, { Routes } from "@/router";
 
 import DeleteEtfPreliminaryLumpSumModalMonthlyVue from "@/components/etf/DeleteEtfPreliminaryLumpSumModalMonthly.vue";
@@ -440,5 +458,29 @@ const reloadView = (etfPreliminaryLumpSum: EtfPreliminaryLumpSum) => {
       loadYears(selectedEtfId.value, selectedYear.value);
     }
   }
+};
+
+const showPreviousYearLink = computed(() => {
+  return yearSelectValues.value.some((ysv) => ysv.id < selectedYear.value!);
+});
+const showNextYearLink = computed(() => {
+  return yearSelectValues.value.some((ysv) => ysv.id > selectedYear.value!);
+});
+
+const navigateToPreviousYear = () => {
+  selectedYear.value =
+    Math.max(
+      ...yearSelectValues.value
+        .filter((ysv) => ysv.id < selectedYear.value!)
+        .map((ysv) => ysv.id),
+    ) || selectedYear.value;
+};
+const navigateToNextYear = () => {
+  selectedYear.value =
+    Math.min(
+      ...yearSelectValues.value
+        .filter((ysv) => ysv.id > selectedYear.value!)
+        .map((ysv) => ysv.id),
+    ) || selectedYear.value;
 };
 </script>
