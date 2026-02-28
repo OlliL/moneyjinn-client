@@ -83,13 +83,15 @@ import ListEtfRowVue from "@/components/etf/ListEtfRow.vue";
 import type { Etf } from "@/model/etf/Etf";
 
 import { useEtfStore } from "@/stores/EtfStore";
+import { storeToRefs } from "pinia";
 
 const serverErrors = ref(new Array<string>());
 const etfs = ref(new Array<Etf>());
 const searchString = ref("");
 
-const etfStore = useEtfStore();
-const searchEtfs = etfStore.searchEtfs;
+const { searchEtfs } = useEtfStore();
+
+const { etf } = storeToRefs(useEtfStore());
 
 const createEtfModalList =
   useTemplateRef<typeof CreateEtfModalVue>("createEtfModalList");
@@ -108,6 +110,9 @@ const editEtf = (mcs: Etf) => {
 };
 
 watch(searchString, () => {
+  searchContent();
+});
+watch(etf, () => {
   searchContent();
 });
 

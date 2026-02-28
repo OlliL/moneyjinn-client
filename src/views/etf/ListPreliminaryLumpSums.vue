@@ -35,12 +35,12 @@
     <div class="row justify-content-md-center">
       <div class="col-xxl-5 col-xl-6 col-md-8 col-xs-12">
         <div class="row flex-lg-nowrap d-flex align-items-center">
-          <div class="col-xxl-6 col-md-8 col-xs-12 mb-3" v-if="etfsLoaded">
+          <div class="col-xxl-6 col-md-8 col-xs-12 mb-3">
             <SelectStandard
               v-model="selectedEtfId"
               id="etf"
               :field-label="$t('General.selectEtf')"
-              :select-box-values="etfsSelectValues"
+              :select-box-values="getAsSelectBoxValues()"
             />
           </div>
           <div class="col-md-auto mb-3" v-if="selectedEtf">
@@ -102,14 +102,16 @@
               ]"
               style="width: 1.5rem; display: inline-block"
             ></span>
-            <SelectStandard
+            <select
+              class="form-select flex-grow-1"
               v-model="selectedYear"
-              id="etfYear"
-              :field-label="$t('General.year')"
-              :select-box-values="yearSelectValues"
-              class="flex-grow-1 flex-shrink-0"
-              style="min-width: 8rem"
-            />
+              style="min-width: 6rem"
+            >
+              <option v-for="year in years" :key="year" :value="year">
+                {{ year }}
+              </option>
+            </select>
+
             <span
               @click="navigateToNextYear"
               :class="[
@@ -255,7 +257,6 @@ import DivError from "@/components/DivError.vue";
 import SelectStandard from "@/components/SelectStandard.vue";
 
 import CrudEtfPreliminaryLumpSumService from "@/service/CrudEtfPreliminaryLumpSumService";
-import type { SelectBoxValue } from "@/model/SelectBoxValue";
 import type { Etf } from "@/model/etf/Etf";
 import type { EtfPreliminaryLumpSum } from "@/model/etf/EtfPreliminaryLumpSum";
 import { EtfPreliminaryLumpSumType } from "@/model/etf/EtfPreliminaryLumpSumType";
@@ -266,13 +267,11 @@ import ShowEtfPreliminaryLumpSumYearly from "@/components/etf/ShowEtfPreliminary
 
 const serverErrors = ref(new Array<string>());
 
-const etfsLoaded = ref(false);
 const yearsLoaded = ref(false);
 const selectedYear = ref(undefined as number | undefined);
 const displayedYear = ref(undefined as number | undefined);
 const displayedEtf = ref(undefined as number | undefined);
-const etfsSelectValues = ref({} as Array<SelectBoxValue>);
-const yearSelectValues = ref({} as Array<SelectBoxValue>);
+const years = ref({} as Array<number>);
 
 const selectedEtf = ref({} as Etf);
 const selectedEtfId = ref(undefined as number | undefined);
@@ -305,7 +304,7 @@ const deleteModalYearly =
     "deleteModalYearly",
   );
 
-const etfStore = useEtfStore();
+const { getAsSelectBoxValues, getFavoriteEtf } = useEtfStore();
 
 const props = defineProps({
   etfId: {
@@ -324,27 +323,20 @@ onMounted(() => {
   displayedEtf.value = etfId;
   displayedYear.value = year;
 
-  loadEtfs(etfId, year);
-});
-
-const loadEtfs = (etfId?: number, year?: number) => {
   serverErrors.value = new Array<string>();
-  etfsLoaded.value = false;
-  etfsSelectValues.value = etfStore.getAsSelectBoxValues();
-  const favoriteEtf = etfStore.getFavoriteEtf();
+  const favoriteEtf = getFavoriteEtf();
   if (etfId !== undefined) {
     selectedEtfId.value = etfId;
   } else if (favoriteEtf !== undefined) {
     selectedEtfId.value = favoriteEtf.id;
   }
-  etfsLoaded.value = true;
-};
+});
 
 const loadYears = (etfId: number, year?: number) => {
   serverErrors.value = new Array<string>();
   yearsLoaded.value = false;
 
-  yearSelectValues.value = new Array<SelectBoxValue>();
+  years.value = [];
   etfPreliminaryLumpSums.value = new Map<number, EtfPreliminaryLumpSum>();
   selectedEtfId.value = etfId;
   selectedYear.value = undefined;
@@ -352,7 +344,7 @@ const loadYears = (etfId: number, year?: number) => {
     .then((response) => {
       for (let _etfPreliminaryLumpSum of response) {
         let _year = _etfPreliminaryLumpSum.year;
-        yearSelectValues.value.push({ id: _year, value: _year + "" });
+        years.value.push(_year);
         etfPreliminaryLumpSums.value.set(_year, _etfPreliminaryLumpSum);
       }
 
@@ -461,26 +453,26 @@ const reloadView = (etfPreliminaryLumpSum: EtfPreliminaryLumpSum) => {
 };
 
 const showPreviousYearLink = computed(() => {
-  return yearSelectValues.value.some((ysv) => ysv.id < selectedYear.value!);
+  return years.value.some((year) => year < selectedYear.value!);
 });
 const showNextYearLink = computed(() => {
-  return yearSelectValues.value.some((ysv) => ysv.id > selectedYear.value!);
+  return years.value.some((year) => year > selectedYear.value!);
 });
 
 const navigateToPreviousYear = () => {
   selectedYear.value =
     Math.max(
-      ...yearSelectValues.value
-        .filter((ysv) => ysv.id < selectedYear.value!)
-        .map((ysv) => ysv.id),
+      ...years.value
+        .filter((year) => year < selectedYear.value!)
+        .map((year) => year),
     ) || selectedYear.value;
 };
 const navigateToNextYear = () => {
   selectedYear.value =
     Math.min(
-      ...yearSelectValues.value
-        .filter((ysv) => ysv.id > selectedYear.value!)
-        .map((ysv) => ysv.id),
+      ...years.value
+        .filter((year) => year > selectedYear.value!)
+        .map((year) => year),
     ) || selectedYear.value;
 };
 </script>
