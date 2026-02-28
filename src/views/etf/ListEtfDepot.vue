@@ -14,7 +14,7 @@
     <DivError :server-errors="serverErrors" />
 
     <div class="row justify-content-md-center mb-12">
-      <div class="col-xxl-4 col-md-7 col-xs-12" v-if="etfsLoaded">
+      <div class="col-xxl-4 col-md-7 col-xs-12">
         <div
           class="row no-gutters flex-lg-nowrap d-flex justify-content align-items-center"
         >
@@ -24,7 +24,7 @@
               :validation-schema="schema.etfId"
               id="etf"
               :field-label="$t('General.selectEtf')"
-              :select-box-values="etfsSelectValues"
+              :select-box-values="getAsSelectBoxValues()"
             />
           </div>
           <div class="col-xxl-4 col-md-4 col-xs-12 justify-content-start mb-2">
@@ -242,7 +242,6 @@ const serverErrors = ref(new Array<string>());
 const schema = {
   etfId: number(globErr(t("ETFFlow.validation.etfId"))).gt(0),
 };
-const etfsLoaded = ref(false);
 const dataLoaded = ref(false);
 const etfFlows = ref({} as Array<EtfFlow>);
 const etfEffectiveFlows = ref({} as Array<EtfFlow>);
@@ -261,7 +260,7 @@ const allTab = useTemplateRef<HTMLDivElement>("allTab");
 const deleteModal = useTemplateRef<typeof DeleteEtfFlowModalVue>("deleteModal");
 const createModal = useTemplateRef<typeof CreateEtfFlowModalVue>("createModal");
 
-const etfStore = useEtfStore();
+const { getAsSelectBoxValues, getFavoriteEtf, getEtf } = useEtfStore();
 
 const props = defineProps({
   etfId: {
@@ -272,7 +271,12 @@ const props = defineProps({
 
 onMounted(() => {
   const etfId: number | undefined = props.etfId ? +props.etfId : undefined;
-  loadEtfs(etfId);
+  const favoriteEtf = getFavoriteEtf();
+  if (etfId !== undefined) {
+    selectedEtfId.value = etfId;
+  } else if (favoriteEtf !== undefined) {
+    selectedEtfId.value = favoriteEtf.id;
+  }
 });
 
 const etfEffectiveFlowAmountSum = computed(() => {
@@ -283,7 +287,7 @@ const partial = computed(() => {
   return (
     100 -
     (selectedEtfId.value
-      ? (etfStore.getEtf(Number(selectedEtfId.value))?.partialTaxExemption ?? 0)
+      ? (getEtf(Number(selectedEtfId.value))?.partialTaxExemption ?? 0)
       : 0)
   );
 });
@@ -329,19 +333,6 @@ const etfFlowPriceAvg = computed(() => {
   return etfFlowAmountPriceSum.value / etfFlowAmountSum.value;
 });
 
-const loadEtfs = (etfId?: number) => {
-  serverErrors.value = new Array<string>();
-  etfsLoaded.value = false;
-  etfsSelectValues.value = etfStore.getAsSelectBoxValues();
-  const favoriteEtf = etfStore.getFavoriteEtf();
-  if (etfId !== undefined) {
-    selectedEtfId.value = etfId;
-  } else if (favoriteEtf !== undefined) {
-    selectedEtfId.value = favoriteEtf.id;
-  }
-  etfsLoaded.value = true;
-};
-
 const loadData = (etfId: number) => {
   serverErrors.value = new Array<string>();
   dataLoaded.value = false;
@@ -360,7 +351,7 @@ const loadData = (etfId: number) => {
 };
 
 const handleServerResponse = (etfDepot: EtfDepot, etfId: number) => {
-  selectedEtf.value = etfStore.getEtf(etfId) ?? ({} as Etf);
+  selectedEtf.value = getEtf(etfId) ?? ({} as Etf);
 
   etfSummary.value = etfDepot.etfSummary ?? ({} as EtfSummary);
   etfSummary.value.name = undefined;
