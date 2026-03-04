@@ -54,8 +54,8 @@
     <td class="text-start">
       {{ capitalsourceComment }}
     </td>
-    <td class="db text-center">
-      <span class="link-primary" @click="createMoneyflow" v-if="!mmf"
+    <td class="text-center">
+      <span class="link-primary" @click="createMoneyflow"
         ><i class="bi bi-plus-circle"></i
       ></span>
     </td>
