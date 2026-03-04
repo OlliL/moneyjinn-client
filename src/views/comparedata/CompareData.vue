@@ -122,6 +122,7 @@
               :capitalsource-comment="capitalsourceComment"
               @delete-moneyflow="deleteMoneyflow"
               @edit-moneyflow="editMoneyflow"
+              @create-moneyflow="createMoneyflow"
             />
             <CompareDataResultGroupVue
               :comment="$t('CompareData.dataMatchingButWrongCapitalsource')"
@@ -132,6 +133,7 @@
               :capitalsource-comment="capitalsourceComment"
               @delete-moneyflow="deleteMoneyflow"
               @edit-moneyflow="editMoneyflow"
+              @create-moneyflow="createMoneyflow"
             />
             <CompareDataResultGroupVue
               :comment="$t('CompareData.dataMatching')"
@@ -142,6 +144,7 @@
               :capitalsource-comment="capitalsourceComment"
               @delete-moneyflow="deleteMoneyflow"
               @edit-moneyflow="editMoneyflow"
+              @create-moneyflow="createMoneyflow"
             />
           </tbody>
         </table>
