@@ -45,9 +45,9 @@
     >
       <div class="col-xxl-5 col-xl-8 col-md-11 col-xs-12">
         <ul class="nav nav-tabs">
-          <li class="nav-item">
+          <li class="nav-item" v-if="etfEffectiveFlows.length > 0">
             <button
-              class="nav-link active"
+              :class="`nav-link ${effectiveActive}`"
               @click="showEffective"
               ref="effectiveTabButton"
             >
@@ -55,16 +55,21 @@
             </button>
           </li>
           <li class="nav-item">
-            <button class="nav-link" @click="showAll" ref="allTabButton">
+            <button
+              :class="`nav-link ${allActive}`"
+              @click="showAll"
+              ref="allTabButton"
+            >
               {{ $t("General.all") }}
             </button>
           </li>
         </ul>
         <div class="tab-content" id="myTabContent">
           <div
-            class="tab-pane fade show active"
+            :class="`tab-pane fade ${effectiveActive}`"
             id="home-tab-pane"
             ref="effectiveTab"
+            v-if="etfEffectiveFlows.length > 1"
           >
             <table class="table table-striped table-bordered table-hover">
               <colgroup>
@@ -135,7 +140,11 @@
               </tbody>
             </table>
           </div>
-          <div class="tab-pane fade" id="profile-tab-pane" ref="allTab">
+          <div
+            :class="`tab-pane fade ${allActive}`"
+            id="profile-tab-pane"
+            ref="allTab"
+          >
             <table class="table table-striped table-bordered table-hover">
               <colgroup>
                 <col style="width: 30%" />
@@ -196,13 +205,16 @@
       </div>
     </div>
 
-    <ListEtfDepotSummary :etfSummary="etfSummary" v-if="etfFlows.length > 0" />
+    <ListEtfDepotSummary
+      :etfSummary="etfSummary"
+      v-if="etfEffectiveFlows.length > 0"
+    />
 
     <CalcEtfSaleForm
       :etf="selectedEtf"
       :etfSummary="etfSummary"
       :pieces="calcEtfSalePieces"
-      v-if="etfFlows.length > 0"
+      v-if="etfEffectiveFlows.length > 0"
     />
   </div>
 </template>
@@ -318,9 +330,23 @@ const etfFlowAmountSum = computed(() => {
   return etfFlows.value.reduce((a, b) => a + (b["amount"] || 0), 0);
 });
 
+const etfFlowBuyAmountSum = computed(() => {
+  return etfFlows.value.reduce(
+    (a, b) => a + (b["amount"] > 0 ? b["amount"] || 0 : 0),
+    0,
+  );
+});
+
 const etfFlowAmountPriceSum = computed(() => {
   return etfFlows.value.reduce(
     (a, b) => a + (b["amount"] * b["price"] || 0),
+    0,
+  );
+});
+
+const etfFlowBuyAmountPriceSum = computed(() => {
+  return etfFlows.value.reduce(
+    (a, b) => a + (b["amount"] > 0 ? b["amount"] * b["price"] || 0 : 0),
     0,
   );
 });
@@ -330,7 +356,15 @@ const etfFlowAmountSumString = computed(() => {
 });
 
 const etfFlowPriceAvg = computed(() => {
-  return etfFlowAmountPriceSum.value / etfFlowAmountSum.value;
+  return etfFlowBuyAmountPriceSum.value / etfFlowBuyAmountSum.value;
+});
+
+const effectiveActive = computed(() => {
+  if (etfEffectiveFlows.value.length > 0) return "show active";
+});
+
+const allActive = computed(() => {
+  if (etfEffectiveFlows.value.length === 0) return "show active";
 });
 
 const loadData = (etfId: number) => {
