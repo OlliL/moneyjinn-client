@@ -158,7 +158,7 @@ const loadMonth = (year?: number, month?: number) => {
     });
 };
 
-onBeforeRouteUpdate((to, from, next) => {
+onBeforeRouteUpdate((to, from) => {
   const year = to.params.year ? Number(to.params.year) : undefined;
   const fallbackMonth = from.params.month ? Number(from.params.month) : 0;
   const month = to.params.month ? Number(to.params.month) : fallbackMonth;
@@ -172,8 +172,6 @@ onBeforeRouteUpdate((to, from, next) => {
   } else {
     selectedMonth.value = month;
   }
-
-  next();
 });
 
 const selectMonth = (year: string, month?: string) => {

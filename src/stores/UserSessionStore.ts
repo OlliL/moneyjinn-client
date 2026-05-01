@@ -1,4 +1,5 @@
 import { defineStore } from "pinia";
+import { computed, ref } from "vue";
 
 export type UserSession = {
   userId: number;
@@ -8,38 +9,46 @@ export type UserSession = {
   userIsNew: boolean;
 };
 
-export const useUserSessionStore = defineStore("userSession", {
-  state: () =>
-    ({
+export const useUserSessionStore = defineStore(
+  "userSession",
+  () => {
+    const userSession = ref<UserSession>({
       userId: 0,
       userName: "",
       userIsAdmin: false,
       userCanLogin: false,
       userIsNew: true,
-    }) as UserSession,
-  getters: {
-    getUserId(): number {
-      return this.userId;
-    },
-    isAdmin(): boolean {
-      return this.userIsAdmin;
-    },
+    });
+
+    const getUserId = computed((): number => {
+      return userSession.value.userId;
+    });
+
+    const isAdmin = computed((): boolean => {
+      return userSession.value.userIsAdmin;
+    });
+
+    function setUserSession(userSess: UserSession) {
+      Object.assign(userSession.value, userSess);
+    }
+
+    function logout() {
+      userSession.value.userId = 0;
+      userSession.value.userName = "";
+      userSession.value.userIsAdmin = false;
+      userSession.value.userCanLogin = false;
+      userSession.value.userIsNew = true;
+    }
+
+    return {
+      userSession,
+      getUserId,
+      isAdmin,
+      setUserSession,
+      logout,
+    };
   },
-  actions: {
-    setUserSession(userSess: UserSession) {
-      this.userId = userSess.userId;
-      this.userName = userSess.userName;
-      this.userIsAdmin = userSess.userIsAdmin;
-      this.userCanLogin = userSess.userCanLogin;
-      this.userIsNew = userSess.userIsNew;
-    },
-    logout() {
-      this.userId = 0;
-      this.userName = "";
-      this.userIsAdmin = false;
-      this.userCanLogin = false;
-      this.userIsNew = true;
-    },
+  {
+    persist: true,
   },
-  persist: true,
-});
+);

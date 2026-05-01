@@ -191,7 +191,7 @@ const updateSortByParams = (params: RouteParamsGeneric) => {
   }
 };
 
-onBeforeRouteUpdate((to, from, next) => {
+onBeforeRouteUpdate((to, from) => {
   const year = to.params.year ? +to.params.year : undefined;
   const month = to.params.month ? +to.params.month : 0;
   const isFirstMonth = months.value ? months.value.indexOf(month) == 0 : true;
@@ -220,7 +220,6 @@ onBeforeRouteUpdate((to, from, next) => {
       }
     }
   }
-  next();
 });
 
 const selectMonth = (year: string, month?: string) => {

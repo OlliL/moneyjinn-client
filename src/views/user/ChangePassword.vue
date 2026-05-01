@@ -112,7 +112,7 @@ onMounted(() => {
   serverErrors.value = new Array<string>();
 
   const userSessionStore = useUserSessionStore();
-  if (userSessionStore.userIsNew) {
+  if (userSessionStore.userSession.userIsNew) {
     userIsNew.value = true;
   } else {
     userIsNew.value = false;
@@ -131,7 +131,7 @@ const changePassword = handleSubmit(() => {
   UserService.changePassword(passwordOld.value, password1.value)
     .then(() => {
       const userSessionStore = useUserSessionStore();
-      if (userSessionStore.userIsNew) {
+      if (userSessionStore.userSession.userIsNew) {
         userSessionStore.logout();
         router.push({
           name: Routes.Login,

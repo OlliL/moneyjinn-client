@@ -1,7 +1,6 @@
 import {
   createRouter,
   createWebHistory,
-  type NavigationGuardNext,
   type RouteLocationNormalized,
 } from "vue-router";
 import { useUserSessionStore } from "@/stores/UserSessionStore";
@@ -173,40 +172,32 @@ const router = createRouter({
 });
 
 router.beforeEach(
-  (
-    to: RouteLocationNormalized,
-    from: RouteLocationNormalized,
-    next: NavigationGuardNext,
-  ) => {
+  async (to: RouteLocationNormalized, from: RouteLocationNormalized) => {
     const loginNeeded = !to.matched.some((record) => record.meta.hideForAuth);
 
-    isLoggedIn().then((loggedIn: boolean) => {
-      if (!loggedIn && loginNeeded) {
-        next({ name: Routes.Login });
-        return;
-      }
+    const loggedIn = await isLoggedIn();
+    if (!loggedIn && loginNeeded) {
+      return { name: Routes.Login };
+    }
 
-      if (to.name === Routes.ChangePassword || to.name === Routes.Login) {
-        next();
-        return;
-      }
+    if (to.name === Routes.ChangePassword || to.name === Routes.Login) {
+      return true;
+    }
 
-      const userSessionStore = useUserSessionStore();
-      if (userSessionStore.userIsNew) {
-        next({ name: Routes.ChangePassword });
-        return;
-      }
+    const userSessionStore = useUserSessionStore();
+    if (userSessionStore.userSession.userIsNew) {
+      return { name: Routes.ChangePassword };
+    }
 
-      if (
-        to.name !== undefined &&
-        to.fullPath !== undefined &&
-        to.fullPath === from.fullPath
-      ) {
-        router.go(0);
-        return;
-      }
-      next();
-    });
+    if (
+      to.name !== undefined &&
+      to.fullPath !== undefined &&
+      to.fullPath === from.fullPath
+    ) {
+      router.go(0);
+      return false;
+    }
+    return true;
   },
 );
 
