@@ -1,3 +1,5 @@
+import { ref, computed } from "vue";
+import { defineStore } from "pinia";
 import CapitalsourceService from "@/service/CapitalsourceService";
 import { mapCapitalsourceTransportToModel } from "@/service/mapper/CapitalsourceTransportMapper";
 import { WebSocketSingleton } from "@/config/WebSocketSingleton";
@@ -5,144 +7,162 @@ import type { Capitalsource } from "@/model/capitalsource/Capitalsource";
 import { CapitalsourceType } from "@/model/capitalsource/CapitalsourceType";
 import type { SelectBoxValue } from "@/model/SelectBoxValue";
 import type { CapitalsourceChangedEventTransport } from "@/model/wsevent/CapitalsourceChangedEventTransport";
-import { defineStore, mapState } from "pinia";
 import { useUserSessionStore } from "./UserSessionStore";
 
-export const useCapitalsourceStore = defineStore("capitalsource", {
-  state: () => ({
-    capitalsource: [] as Array<Capitalsource>,
-  }),
-  getters: {
-    ...mapState(useUserSessionStore, ["getUserId"]),
-  },
-  actions: {
-    initCapitalsourceStore() {
-      return CapitalsourceService.fetchAllCapitalsource().then(
-        (capitalsourceArray) => {
-          this.capitalsource = capitalsourceArray;
-          this.capitalsource.sort(this.compareCapitalsource);
-        },
-      );
-    },
-    subscribeToWebsocket() {
-      WebSocketSingleton.getInstance().subscribe(
-        "/topic/capitalsourceChanged",
-        this.subscribeCallback,
-      );
-    },
-    subscribeCallback(body: string) {
-      if (body) {
-        const event: CapitalsourceChangedEventTransport = JSON.parse(body);
-        const mcs = mapCapitalsourceTransportToModel(
-          event.capitalsourceTransport,
-        );
+export const useCapitalsourceStore = defineStore("capitalsource", () => {
+  const capitalsource = ref<Array<Capitalsource>>([]);
 
-        switch (event.eventType) {
-          case "CREATE": {
-            // idempotency
-            const pos = this.capitalsource.findIndex(
-              (entry) => entry.id === mcs.id,
-            );
-            if (pos === undefined) {
-              this.capitalsource.push(mcs);
-            } else {
-              this.capitalsource.splice(pos, 1, mcs);
-            }
-            break;
-          }
-          case "UPDATE": {
-            const pos = this.capitalsource.findIndex(
-              (entry) => entry.id === mcs.id,
-            );
-            if (pos !== undefined) this.capitalsource.splice(pos, 1, mcs);
-            break;
-          }
-          case "DELETE": {
-            this.capitalsource = this.capitalsource.filter(
-              (originalMcs) => mcs.id !== originalMcs.id,
-            );
-            break;
-          }
-        }
+  const userSessionStore = useUserSessionStore();
+  const getUserId = computed(() => userSessionStore.getUserId);
 
-        this.capitalsource.sort(this.compareCapitalsource);
-      }
-    },
-    getAsSelectBoxValues(validityDate: Date): Array<SelectBoxValue> {
-      return this.capitalsource
-        .filter((mcs) => {
-          return (
-            validityDate >= mcs.validFrom &&
-            validityDate <= mcs.validTil &&
-            mcs.type != CapitalsourceType.CREDIT &&
-            (mcs.userId === this.getUserId || mcs.groupUse)
+  const initCapitalsourceStore = async () => {
+    const capitalsourceArray =
+      await CapitalsourceService.fetchAllCapitalsource();
+    capitalsource.value = capitalsourceArray;
+    capitalsource.value.sort(compareCapitalsource);
+  };
+
+  const subscribeToWebsocket = () => {
+    WebSocketSingleton.getInstance().subscribe(
+      "/topic/capitalsourceChanged",
+      subscribeCallback,
+    );
+  };
+
+  const subscribeCallback = (body: string) => {
+    if (body) {
+      const event: CapitalsourceChangedEventTransport = JSON.parse(body);
+      const mcs = mapCapitalsourceTransportToModel(
+        event.capitalsourceTransport,
+      );
+
+      switch (event.eventType) {
+        case "CREATE": {
+          // idempotency
+          const pos = capitalsource.value.findIndex(
+            (entry) => entry.id === mcs.id,
           );
-        })
-        .map((mcs) => {
-          return { id: mcs.id, value: mcs.comment } as SelectBoxValue;
-        });
-    },
-    getAllAsSelectBoxValues(): Array<SelectBoxValue> {
-      return this.capitalsource.map((mcs) => {
+          if (pos === -1) {
+            capitalsource.value.push(mcs);
+          } else {
+            capitalsource.value.splice(pos, 1, mcs);
+          }
+          break;
+        }
+        case "UPDATE": {
+          const pos = capitalsource.value.findIndex(
+            (entry) => entry.id === mcs.id,
+          );
+          if (pos !== -1) capitalsource.value.splice(pos, 1, mcs);
+          break;
+        }
+        case "DELETE": {
+          capitalsource.value = capitalsource.value.filter(
+            (originalMcs) => mcs.id !== originalMcs.id,
+          );
+          break;
+        }
+      }
+
+      capitalsource.value.sort(compareCapitalsource);
+    }
+  };
+
+  const getAsSelectBoxValues = (validityDate: Date): Array<SelectBoxValue> => {
+    return capitalsource.value
+      .filter((mcs) => {
+        return (
+          validityDate >= mcs.validFrom &&
+          validityDate <= mcs.validTil &&
+          mcs.type != CapitalsourceType.CREDIT &&
+          (mcs.userId === getUserId.value || mcs.groupUse)
+        );
+      })
+      .map((mcs) => {
         return { id: mcs.id, value: mcs.comment } as SelectBoxValue;
       });
-    },
-    getCapitalsource(id: number): Capitalsource | undefined {
-      return this.capitalsource.find((mcp) => {
-        return mcp.id === id;
-      });
-    },
-    getValidCapitalsource(validityDate: Date) {
-      return this.capitalsource.filter((mcp) => {
-        return validityDate >= mcp.validFrom && validityDate <= mcp.validTil;
-      });
-    },
-    getBookableValidCapitalsources(validityDate: Date) {
-      return this.capitalsource.filter((mcp) => {
-        return (
-          validityDate >= mcp.validFrom &&
-          validityDate <= mcp.validTil &&
-          mcp.type != CapitalsourceType.CREDIT &&
-          (mcp.userId === this.getUserId || mcp.groupUse)
-        );
-      });
-    },
-    async searchCapitalsources(
-      comment: string,
-      validNow?: boolean,
-    ): Promise<Array<Capitalsource>> {
-      let mcs = this.capitalsource;
-      if (validNow) {
-        const date = new Date();
-        date.setHours(0, 0, 0, 0);
-        mcs = this.getValidCapitalsource(date);
-      }
+  };
 
-      if (comment === "") {
-        return mcs;
-      }
+  const getAllAsSelectBoxValues = (): Array<SelectBoxValue> => {
+    return capitalsource.value.map((mcs) => {
+      return { id: mcs.id, value: mcs.comment } as SelectBoxValue;
+    });
+  };
 
-      const commentUpper = comment.toUpperCase();
-      return mcs.filter((entry) =>
-        entry.comment.toUpperCase().includes(commentUpper),
+  const getCapitalsource = (id: number): Capitalsource | undefined => {
+    return capitalsource.value.find((mcp) => {
+      return mcp.id === id;
+    });
+  };
+
+  const getValidCapitalsource = (validityDate: Date) => {
+    return capitalsource.value.filter((mcp) => {
+      return validityDate >= mcp.validFrom && validityDate <= mcp.validTil;
+    });
+  };
+
+  const getBookableValidCapitalsources = (validityDate: Date) => {
+    return capitalsource.value.filter((mcp) => {
+      return (
+        validityDate >= mcp.validFrom &&
+        validityDate <= mcp.validTil &&
+        mcp.type != CapitalsourceType.CREDIT &&
+        (mcp.userId === getUserId.value || mcp.groupUse)
       );
-    },
-    compareCapitalsource(a: Capitalsource, b: Capitalsource): number {
-      const aOwner = a.userId == this.getUserId;
-      const bOwner = b.userId == this.getUserId;
+    });
+  };
 
-      if (aOwner !== bOwner) return aOwner ? -1 : 1;
+  const searchCapitalsources = async (
+    comment: string,
+    validNow?: boolean,
+  ): Promise<Array<Capitalsource>> => {
+    let mcs = capitalsource.value;
+    if (validNow) {
+      const date = new Date();
+      date.setHours(0, 0, 0, 0);
+      mcs = getValidCapitalsource(date);
+    }
 
-      const commentCompare = a.comment.localeCompare(b.comment, undefined, {
-        sensitivity: "base",
-      });
-      if (commentCompare !== 0) return commentCompare;
+    if (comment === "") {
+      return mcs;
+    }
 
-      if (a.validFrom !== b.validFrom) {
-        return a.validFrom > b.validFrom ? 1 : -1;
-      }
+    const commentUpper = comment.toUpperCase();
+    return mcs.filter((entry) =>
+      entry.comment.toUpperCase().includes(commentUpper),
+    );
+  };
 
-      return 0;
-    },
-  },
+  const compareCapitalsource = (a: Capitalsource, b: Capitalsource): number => {
+    const aOwner = a.userId == getUserId.value;
+    const bOwner = b.userId == getUserId.value;
+
+    if (aOwner !== bOwner) return aOwner ? -1 : 1;
+
+    const commentCompare = a.comment.localeCompare(b.comment, undefined, {
+      sensitivity: "base",
+    });
+    if (commentCompare !== 0) return commentCompare;
+
+    if (a.validFrom !== b.validFrom) {
+      return a.validFrom > b.validFrom ? 1 : -1;
+    }
+
+    return 0;
+  };
+
+  return {
+    capitalsource,
+    getUserId,
+    initCapitalsourceStore,
+    subscribeToWebsocket,
+    subscribeCallback,
+    getAsSelectBoxValues,
+    getAllAsSelectBoxValues,
+    getCapitalsource,
+    getValidCapitalsource,
+    getBookableValidCapitalsources,
+    searchCapitalsources,
+    compareCapitalsource,
+  };
 });
