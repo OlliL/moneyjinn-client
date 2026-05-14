@@ -5,6 +5,7 @@
     <div class="md:col-span-2">
       <InputDate
         v-model="mmf.bookingDate"
+        :validation-schema="schema.bookingDate"
         :id="'bookingDate' + idSuffix"
         :field-label="$t('Moneyflow.bookingdate')"
       />
@@ -12,6 +13,7 @@
     <div class="md:col-span-2">
       <InputDate
         v-model="mmf.invoiceDate"
+        :validation-schema="schema.invoiceDate"
         :id="'invoiceDate' + idSuffix"
         :field-label="$t('Moneyflow.invoicedate')"
       />
@@ -19,6 +21,7 @@
     <div class="md:col-span-4">
       <SelectContractpartner
         v-model="mmf.contractpartnerId"
+        :validation-schema="schema.contractpartnerId"
         :id-suffix="'CreateMoneyflow' + idSuffix"
         :field-label="$t('General.contractpartner')"
         :validity-date="validityDate"
@@ -27,6 +30,7 @@
     <div class="md:col-span-4">
       <SelectCapitalsource
         v-model="mmf.capitalsourceId"
+        :validation-schema="schema.capitalsourceId"
         :id-suffix="'CreateMoneyflow' + idSuffix"
         :field-label="$t('General.capitalsource')"
         :validity-date="validityDate"
@@ -38,6 +42,7 @@
     <div class="md:col-span-2">
       <InputStandard
         v-model="amount"
+        :validation-schema="schema.amount"
         :id="'amount' + idSuffix"
         field-type="number"
         step="0.01"
@@ -52,6 +57,7 @@
       <div class="md:col-span-3">
         <InputStandard
           v-model="mmf.comment"
+          :validation-schema-ref="schema.comment"
           :id="'comment' + idSuffix"
           :field-label="$t('General.comment')"
           name="comment"
@@ -60,6 +66,7 @@
       <div class="md:col-span-3">
         <SelectPostingAccount
           v-model="mmf.postingAccountId"
+          :validation-schema-ref="schema.postingAccountId"
           :id-suffix="'CreateMoneyflow' + idSuffix"
           :field-label="$t('General.postingAccount')"
         />
@@ -67,52 +74,56 @@
     </template>
     <div v-else class="md:col-span-6"></div>
 
-    <div class="md:col-span-4 flex flex-col gap-2">
-      <div class="flex items-center gap-4">
-        <ToggleGroup
-          type="single"
-          class="bg-transparent p-1 rounded-lg inline-flex border border-input h-10"
-          :model-value="mmf.private ? 'private' : 'public'"
-          @update:model-value="
-            (val: any) => val && (mmf.private = val === 'private')
-          "
+    <div
+      class="md:col-span-2 flex items-center justify-center h-9 gap-4 mb-[1px]"
+    >
+      <ToggleGroup
+        type="single"
+        class="bg-transparent p-1 rounded-lg inline-flex border border-input h-10"
+        :model-value="mmf.private ? 'private' : 'public'"
+        @update:model-value="
+          (val: any) => val && (mmf.private = val === 'private')
+        "
+      >
+        <ToggleGroupItem
+          value="public"
+          class="text-xs h-8 px-3 transition-all rounded-md bg-transparent data-[state=on]:!bg-slate-300 data-[state=on]:text-blue-700 border-none"
         >
-          <ToggleGroupItem
-            value="public"
-            class="text-xs h-8 px-3 transition-all rounded-md bg-transparent data-[state=on]:!bg-slate-300 data-[state=on]:text-blue-700 border-none"
-          >
-            {{ $t("Moneyflow.public") }}
-          </ToggleGroupItem>
-          <ToggleGroupItem
-            value="private"
-            class="text-xs h-8 px-3 transition-all rounded-md bg-transparent data-[state=on]:!bg-slate-300 data-[state=on]:text-blue-700 border-none"
-          >
-            {{ $t("Moneyflow.private") }}
-          </ToggleGroupItem>
-        </ToggleGroup>
+          {{ $t("Moneyflow.public") }}
+        </ToggleGroupItem>
+        <ToggleGroupItem
+          value="private"
+          class="text-xs h-8 px-3 transition-all rounded-md bg-transparent data-[state=on]:!bg-slate-300 data-[state=on]:text-blue-700 border-none"
+        >
+          {{ $t("Moneyflow.private") }}
+        </ToggleGroupItem>
+      </ToggleGroup>
+    </div>
 
-        <ToggleGroup
-          type="single"
-          class="bg-transparent p-1 rounded-lg inline-flex border border-input h-10"
-          :model-value="saveAsPreDefMoneyflow ? 'favorite' : 'once'"
-          @update:model-value="
-            (val: any) => val && (saveAsPreDefMoneyflow = val === 'favorite')
-          "
+    <div
+      class="md:col-span-2 flex items-center justify-center h-9 gap-4 mb-[1px]"
+    >
+      <ToggleGroup
+        type="single"
+        class="bg-transparent p-1 rounded-lg inline-flex border border-input h-10"
+        :model-value="saveAsPreDefMoneyflow ? 'favorite' : 'once'"
+        @update:model-value="
+          (val: any) => val && (saveAsPreDefMoneyflow = val === 'favorite')
+        "
+      >
+        <ToggleGroupItem
+          value="once"
+          class="text-xs h-8 px-3 transition-all rounded-md bg-transparent data-[state=on]:!bg-slate-300 data-[state=on]:text-blue-700 border-none"
         >
-          <ToggleGroupItem
-            value="once"
-            class="text-xs h-8 px-3 transition-all rounded-md bg-transparent data-[state=on]:!bg-slate-300 data-[state=on]:text-blue-700 border-none"
-          >
-            {{ toggleTextOff }}
-          </ToggleGroupItem>
-          <ToggleGroupItem
-            value="favorite"
-            class="text-xs h-8 px-3 transition-all rounded-md bg-transparent data-[state=on]:!bg-slate-300 data-[state=on]:text-blue-700 border-none"
-          >
-            {{ toggleTextOn }}
-          </ToggleGroupItem>
-        </ToggleGroup>
-      </div>
+          {{ toggleTextOff }}
+        </ToggleGroupItem>
+        <ToggleGroupItem
+          value="favorite"
+          class="text-xs h-8 px-3 transition-all rounded-md bg-transparent data-[state=on]:!bg-slate-300 data-[state=on]:text-blue-700 border-none"
+        >
+          {{ toggleTextOn }}
+        </ToggleGroupItem>
+      </ToggleGroup>
     </div>
   </div>
 
