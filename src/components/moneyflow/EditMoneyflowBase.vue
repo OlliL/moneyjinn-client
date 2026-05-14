@@ -49,10 +49,7 @@
         :field-label="$t('General.amount')"
         :focus="true"
       >
-        <template #icon
-          ><span class="input-group-text"
-            ><i class="bi bi-currency-euro"></i></span
-        ></template>
+        <template #icon><Euro /></template>
       </InputStandard>
     </div>
     <div class="col-md-7" v-show="!showMoneyflowFields"></div>
@@ -208,7 +205,7 @@ import type { PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
 import MoneyflowService from "@/service/MoneyflowService";
 import ImportedMoneyflowService from "@/service/ImportedMoneyflowService";
 import type { Contractpartner } from "@/model/contractpartner/Contractpartner";
-
+import { Euro } from "lucide-vue-next";
 const { t } = useI18n();
 
 const schema = {

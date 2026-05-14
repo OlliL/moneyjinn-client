@@ -13,13 +13,13 @@
     :select-box-values="selectBoxValues"
   >
     <template #icon
-      ><span class="input-group-text" @click="showCreateCapitalsourceModal"
-        ><i class="bi bi-plus"></i></span
-    ></template>
+      ><SquarePlus @click="showCreateCapitalsourceModal" class="cursor-pointer"
+    /></template>
   </SelectStandard>
 </template>
 
 <script lang="ts" setup>
+import { SquarePlus } from "lucide-vue-next";
 import { computed, useTemplateRef, type PropType } from "vue";
 import { any, type ZodType } from "zod";
 

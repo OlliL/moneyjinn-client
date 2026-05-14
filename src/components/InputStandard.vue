@@ -1,42 +1,46 @@
 <template>
-  <div class="input-group" v-if="fieldLabel">
-    <div class="form-floating">
-      <input
+  <div class="grid w-full gap-1.5">
+    <Label v-if="fieldLabel" :for="id" class="text-left ml-1">
+      {{ fieldLabel }}
+    </Label>
+
+    <div class="flex -space-x-px">
+      <Input
         v-model="fieldValue"
-        ref="fieldRef"
         :id="id"
-        :data-testid="id"
         :type="fieldType"
-        :class="'form-control ' + alignmentClass + ' ' + errorData.inputClass"
-        :disabled="disabled"
-        :step="step"
-        :name="name"
+        :class="[
+          alignmentClass,
+          $slots.icon ? 'rounded-r-none' : '',
+          'relative focus:z-[1] transition-colors',
+          errorData.inputClass == 'is-invalid'
+            ? '!border-destructive bg-destructive/[0.03] focus-visible:ring-destructive/15'
+            : 'border-input focus-visible:ring-ring',
+        ]"
         @input="onInput($event)"
       />
-      <label :for="id" :style="'color: ' + errorData.fieldColor">{{
-        errorData.fieldLabel
-      }}</label>
+
+      <div
+        v-if="$slots.icon"
+        class="flex items-center justify-center px-2 border border-input rounded-r-md text-foreground transition-colors relative"
+      >
+        <slot name="icon"></slot>
+      </div>
     </div>
-    <slot name="icon"></slot>
-  </div>
-  <div class="input-group" v-else>
-    <input
-      v-model="fieldValue"
-      ref="fieldRef"
-      :id="id"
-      :data-testid="id"
-      :type="fieldType"
-      :class="'form-control ' + alignmentClass + ' ' + errorData.inputClass"
-      :disabled="disabled"
-      :step="step"
-      :name="name"
-      @input="onInput($event)"
-    />
-    <slot name="icon"></slot>
+
+    <p
+      v-if="errorData.inputClass == 'is-invalid'"
+      class="text-[0.8rem] font-medium text-destructive mt-0.5 text-left ml-1"
+    >
+      {{ errorMessage }}
+    </p>
   </div>
 </template>
 
 <script lang="ts" setup>
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+
 import { useField } from "vee-validate";
 import { toTypedSchema } from "@vee-validate/zod";
 import {
@@ -45,7 +49,7 @@ import {
   onMounted,
   useTemplateRef,
   type PropType,
-  type Ref
+  type Ref,
 } from "vue";
 import { any, type ZodType } from "zod";
 
@@ -138,7 +142,7 @@ const errorData = computed((): ErrorData => {
 
 const alignmentClass = props.align ? "text-" + props.align : "";
 
-const fieldRef = useTemplateRef<HTMLInputElement>('fieldRef');
+const fieldRef = useTemplateRef<HTMLInputElement>("fieldRef");
 onMounted(() => {
   fieldValue.value = props.modelValue;
 
