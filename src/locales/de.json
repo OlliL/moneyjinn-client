@@ -130,6 +130,7 @@
             "update": "Vertragspartnerkonto bearbeiten",
             "delete": "Vertragspartnerkonto löschen"
         },
+        "nothingFound": "Keine Kontoverbindungen gefunden.",
         "validation": {
             "accountNumber": "Bitte IBAN angeben!",
             "accountNumberMax": "Die IBAN darf maximal 22 Stellen haben!",

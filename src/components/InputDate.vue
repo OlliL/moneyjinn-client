@@ -6,6 +6,7 @@
 
     <div class="flex -space-x-px relative">
       <Input
+        autocomplete="off"
         :id="id"
         :data-testid="id"
         type="text"

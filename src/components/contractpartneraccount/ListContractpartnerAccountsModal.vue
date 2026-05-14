@@ -16,20 +16,35 @@
   <ModalVue
     :title="mcp.name + ': ' + $t('General.contractpartnerAccounts')"
     ref="modalComponent"
-    max-width="600px"
   >
     <template #body>
       <DivError :server-errors="serverErrors" />
-      <div class="col">
-        <table class="table table-striped table-bordered table-hover">
-          <thead>
-            <tr>
-              <th scope="col" class="text-center">{{ $t("General.iban") }}</th>
-              <th scope="col" class="text-center">{{ $t("General.bic") }}</th>
-              <th scope="col" class="text-center" colspan="2"></th>
-            </tr>
-          </thead>
-          <tbody>
+
+      <div class="flex flex-col rounded-md border">
+        <Table
+          class="[&_tr:nth-child(even)]:bg-primary/[0.10] [&_td]:!py-1 [&_th]:!py-1"
+        >
+          <TableHeader>
+            <TableRow>
+              <TableHead class="text-center font-bold border">{{
+                $t("General.iban")
+              }}</TableHead>
+              <TableHead class="text-center font-bold border">{{
+                $t("General.bic")
+              }}</TableHead>
+              <TableHead></TableHead>
+              <TableHead></TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            <TableRow v-if="contractpartnerAccount.length === 0">
+              <TableCell
+                colspan="3"
+                class="text-center text-muted-foreground py-8"
+              >
+                {{ $t("ContractpartnerAccount.nothingFound") }}
+              </TableCell>
+            </TableRow>
             <ListContractpartnerAccountRowVue
               v-for="mca in contractpartnerAccount"
               :key="mca.accountNumber"
@@ -37,34 +52,46 @@
               @delete-contractpartner-account="deleteContractpartnerAccount"
               @edit-contractpartner-account="editContractpartnerAccount"
             />
-          </tbody>
-        </table>
+          </TableBody>
+        </Table>
       </div>
     </template>
+
     <template #footer>
-      <button
-        type="button"
-        class="btn btn-primary"
+      <Button
         @click="showCreateContractpartnerAccountModal"
+        class="flex items-center gap-2 !rounded-md px-6"
       >
+        <Plus />
         {{ $t("General.new") }}
-      </button>
+      </Button>
     </template>
   </ModalVue>
 </template>
 
 <script lang="ts" setup>
 import { ref, useTemplateRef } from "vue";
+import { Plus } from "lucide-vue-next";
+
+// Shadcn UI Komponenten
+import { Button } from "@/components/ui/button";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 import CreateContractpartnerAccountModalVue from "./CreateContractpartnerAccountModal.vue";
 import DeleteContractpartnerAccountModalVue from "./DeleteContractpartnerAccountModal.vue";
 import ListContractpartnerAccountRowVue from "./ListContractpartnerAccountRow.vue";
-import ModalVue from "../Modal.vue";
 import DivError from "../DivError.vue";
+import ModalVue from "../Modal.vue";
 
 import type { Contractpartner } from "@/model/contractpartner/Contractpartner";
 import type { ContractpartnerAccount } from "@/model/contractpartneraccount/ContractpartnerAccount";
-
 import ContractpartnerAccountService from "@/service/ContractpartnerAccountService";
 
 import { handleBackendError } from "@/tools/views/HandleBackendError";
@@ -74,6 +101,7 @@ const serverErrors = ref(new Array<string>());
 const mcp = ref({} as Contractpartner);
 const contractpartnerAccount = ref({} as Array<ContractpartnerAccount>);
 const dataLoaded = ref(false);
+
 const modalComponent = useTemplateRef<typeof ModalVue>("modalComponent");
 const createContractpartnerAccountModal = useTemplateRef<
   typeof CreateContractpartnerAccountModalVue

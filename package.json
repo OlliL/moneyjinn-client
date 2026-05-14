@@ -17,6 +17,7 @@
     "@popperjs/core": "^2.11.6",
     "@stomp/stompjs": "^7.0.0",
     "@tailwindcss/vite": "^4.3.0",
+    "@tanstack/vue-table": "^8.21.3",
     "@types/bootstrap": "^5.2.6",
     "@types/vanillajs-datepicker": "^1.2.1",
     "@vee-validate/zod": "^4.10.8",

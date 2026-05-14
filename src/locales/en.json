@@ -130,6 +130,7 @@
             "update": "update contractpartner account",
             "delete": "delete contractpartner account"
         },
+        "nothingFound": "No bank accounts found.",
         "validation": {
             "accountNumber": "Please specify the IBAN!",
             "accountNumberMax": "The IBAN must not exceed 22 characters!",
