@@ -672,7 +672,7 @@ const importImportedMoneyflow = async (
         return false;
       });
   }
-  return Promise.resolve(false);
+  return false;
 };
 const deleteImportedMoneyflow = async (id: number): Promise<boolean> => {
   return ImportedMoneyflowService.deleteImportedMoneyflow(id)
@@ -700,7 +700,7 @@ const createMoneyflow = async (): Promise<boolean> => {
         return false;
       });
   }
-  return Promise.resolve(false);
+  return false;
 };
 const updateMoneyflow = async (): Promise<Moneyflow | undefined> => {
   if (prepareServerCall()) {

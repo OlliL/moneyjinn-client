@@ -131,21 +131,21 @@ const { t } = useI18n();
 // ... (Logik bleibt identisch zum Original)
 const schema = {
   amount: computed(() =>
-    !rowEmpty.value
-      ? amountSchema(t("Moneyflow.validation.amount"))
-      : any().optional(),
+    rowEmpty.value
+      ? any().optional()
+      : amountSchema(t("Moneyflow.validation.amount")),
   ),
   comment: computed(() =>
-    !rowEmpty.value
-      ? string(globErr(t("Moneyflow.validation.comment")))
+    rowEmpty.value
+      ? string().optional()
+      : string(globErr(t("Moneyflow.validation.comment")))
           .min(1)
-          .max(100, t("Moneyflow.validation.length.comment"))
-      : string().optional(),
+          .max(100, t("Moneyflow.validation.length.comment")),
   ),
   postingAccountId: computed(() =>
-    !rowEmpty.value
-      ? number(globErr(t("Moneyflow.validation.postingAccountId"))).gt(0)
-      : number().optional(),
+    rowEmpty.value
+      ? number().optional()
+      : number(globErr(t("Moneyflow.validation.postingAccountId"))).gt(0),
   ),
 };
 
