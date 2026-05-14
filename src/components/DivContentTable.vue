@@ -1,18 +1,22 @@
 <template>
-  <div class="row justify-content-md-center">
-    <div :class="clazz">
-      <table class="table table-striped table-bordered table-hover">
+  <div class="flex justify-center w-full my-4">
+    <div :class="[clazz, 'rounded-md border overflow-hidden']">
+      <Table
+        class="[&_tr:nth-child(even)]:bg-primary/[0.10] [&_td]:!py-1 [&_th]:!py-1"
+      >
         <slot name="default"></slot>
-      </table>
+      </Table>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
+import { Table } from "@/components/ui/table";
+
 defineProps({
   clazz: {
     type: String,
-    default: "col-xxl-9 col-xs-12",
+    default: "w-full lg:w-3/4",
   },
 });
 </script>

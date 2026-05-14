@@ -2,7 +2,7 @@
   <ModalVue
     :title="$t('ContractpartnerAccount.title.delete')"
     ref="modalComponent"
-    :z-index="zIndex"
+    z-index="2001"
   >
     <template #body>
       <DivError :server-errors="serverErrors" />
@@ -12,7 +12,7 @@
           <TableBody>
             <TableRow>
               <TableCell
-                class="font-bold bg-primary/[0.10] w-1/3 text-foreground border-r"
+                class="font-bold bg-primary/[0.10] w-40 whitespace-normal text-foreground border-r"
               >
                 {{ $t("General.iban") }}
               </TableCell>
@@ -22,7 +22,7 @@
             </TableRow>
             <TableRow>
               <TableCell
-                class="font-bold bg-primary/[0.10] w-1/3 text-foreground border-r"
+                class="font-bold bg-primary/[0.10] w-40 whitespace-normal text-foreground border-r"
               >
                 {{ $t("General.bic") }}
               </TableCell>
@@ -37,9 +37,9 @@
 
     <template #footer>
       <Button
-        @click="deleteContractpartnerAccount"
-        class="flex items-center gap-2 !rounded-md px-6"
         variant="destructive"
+        class="flex items-center gap-2 !rounded-md px-6"
+        @click="deleteContractpartnerAccount"
       >
         <Trash2 />
         {{ $t("General.delete") }}
@@ -51,7 +51,6 @@
 <script lang="ts" setup>
 import { ref, useTemplateRef } from "vue";
 
-// Shadcn UI Komponenten
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import { Trash2 } from "lucide-vue-next";
@@ -60,21 +59,12 @@ import DivError from "../DivError.vue";
 import ModalVue from "../Modal.vue";
 
 import { handleBackendError } from "@/tools/views/HandleBackendError";
-
 import type { ContractpartnerAccount } from "@/model/contractpartneraccount/ContractpartnerAccount";
 import ContractpartnerAccountService from "@/service/ContractpartnerAccountService";
-
-const props = defineProps({
-  zIndex: {
-    type: String,
-    default: "2001",
-  },
-});
 
 const serverErrors = ref(new Array<string>());
 const mca = ref({} as ContractpartnerAccount);
 const modalComponent = useTemplateRef<typeof ModalVue>("modalComponent");
-
 const emit = defineEmits(["contractpartnerAccountDeleted"]);
 
 const _show = (_mca: ContractpartnerAccount) => {

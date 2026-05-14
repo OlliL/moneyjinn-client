@@ -2,61 +2,104 @@
   <ModalVue :title="$t('Contractpartner.title.delete')" ref="modalComponent">
     <template #body>
       <DivError :server-errors="serverErrors" />
-      <div class="row d-flex justify-content-center mt-3">
-        <div class="col-11">
-          <table class="table table-bordered table-hover">
-            <tbody>
-              <tr>
-                <th scope="row">{{ $t("General.name") }}</th>
-                <td>{{ mcp.name }}</td>
-              </tr>
-              <tr>
-                <th scope="row">{{ $t("Contractpartner.street") }}</th>
-                <td>{{ mcp.street }}</td>
-              </tr>
-              <tr>
-                <th scope="row">{{ $t("Contractpartner.postcode") }}</th>
-                <td>{{ mcp.postcode }}</td>
-              </tr>
-              <tr>
-                <th scope="row">{{ $t("Contractpartner.town") }}</th>
-                <td>{{ mcp.town }}</td>
-              </tr>
-              <tr>
-                <th scope="row">{{ $t("Contractpartner.country") }}</th>
-                <td>{{ mcp.country }}</td>
-              </tr>
-              <tr>
-                <th scope="row">{{ $t("General.validFrom") }}</th>
-                <td><SpanDate :date="mcp.validFrom" /></td>
-              </tr>
-              <tr>
-                <th scope="row">{{ $t("General.validTil") }}</th>
-                <td><SpanDate :date="mcp.validTil" /></td>
-              </tr>
-              <tr>
-                <th scope="row">
-                  {{ $t("Contractpartner.moneyflowComment") }}
-                </th>
-                <td>{{ mcp.moneyflowComment }}</td>
-              </tr>
-              <tr>
-                <th scope="row">{{ $t("General.postingAccount") }}</th>
-                <td>{{ mcp.postingAccountName }}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+
+      <div class="flex flex-col rounded-md border">
+        <Table>
+          <TableBody>
+            <TableRow>
+              <TableCell
+                class="font-bold bg-primary/[0.10] w-40 whitespace-normal text-foreground border-r"
+              >
+                {{ $t("General.name") }}
+              </TableCell>
+              <TableCell>{{ mcp.name }}</TableCell>
+            </TableRow>
+
+            <TableRow>
+              <TableCell
+                class="font-bold bg-primary/[0.10] w-40 whitespace-normal text-foreground border-r"
+              >
+                {{ $t("Contractpartner.street") }}
+              </TableCell>
+              <TableCell>{{ mcp.street }}</TableCell>
+            </TableRow>
+
+            <TableRow>
+              <TableCell
+                class="font-bold bg-primary/[0.10] w-40 whitespace-normal text-foreground border-r"
+              >
+                {{ $t("Contractpartner.postcode") }}
+              </TableCell>
+              <TableCell>{{ mcp.postcode }}</TableCell>
+            </TableRow>
+
+            <TableRow>
+              <TableCell
+                class="font-bold bg-primary/[0.10] w-40 whitespace-normal text-foreground border-r"
+              >
+                {{ $t("Contractpartner.town") }}
+              </TableCell>
+              <TableCell>{{ mcp.town }}</TableCell>
+            </TableRow>
+
+            <TableRow>
+              <TableCell
+                class="font-bold bg-primary/[0.10] w-40 whitespace-normal text-foreground border-r"
+              >
+                {{ $t("Contractpartner.country") }}
+              </TableCell>
+              <TableCell>{{ mcp.country }}</TableCell>
+            </TableRow>
+
+            <TableRow>
+              <TableCell
+                class="font-bold bg-primary/[0.10] w-40 whitespace-normal text-foreground border-r"
+              >
+                {{ $t("General.validFrom") }}
+              </TableCell>
+              <TableCell><SpanDate :date="mcp.validFrom" /></TableCell>
+            </TableRow>
+
+            <TableRow>
+              <TableCell
+                class="font-bold bg-primary/[0.10] w-40 whitespace-normal text-foreground border-r"
+              >
+                {{ $t("General.validTil") }}
+              </TableCell>
+              <TableCell><SpanDate :date="mcp.validTil" /></TableCell>
+            </TableRow>
+
+            <TableRow>
+              <TableCell
+                class="font-bold bg-primary/[0.10] w-40 whitespace-normal text-foreground border-r"
+              >
+                {{ $t("Contractpartner.moneyflowComment") }}
+              </TableCell>
+              <TableCell>{{ mcp.moneyflowComment }}</TableCell>
+            </TableRow>
+
+            <TableRow>
+              <TableCell
+                class="font-bold bg-primary/[0.10] w-40 whitespace-normal text-foreground border-r"
+              >
+                {{ $t("General.postingAccount") }}
+              </TableCell>
+              <TableCell>{{ mcp.postingAccountName }}</TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
       </div>
     </template>
+
     <template #footer>
-      <button
-        type="button"
-        class="btn btn-danger"
+      <Button
+        variant="destructive"
+        class="flex items-center gap-2 !rounded-md px-6"
         @click="deleteContractpartner"
       >
+        <Trash2 />
         {{ $t("General.delete") }}
-      </button>
+      </Button>
     </template>
   </ModalVue>
 </template>
@@ -64,18 +107,19 @@
 <script lang="ts" setup>
 import { ref, useTemplateRef } from "vue";
 
+import { Button } from "@/components/ui/button";
+import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
+import { Trash2 } from "lucide-vue-next";
+
 import DivError from "../DivError.vue";
 import ModalVue from "../Modal.vue";
 import SpanDate from "../SpanDate.vue";
 
 import { handleBackendError } from "@/tools/views/HandleBackendError";
-
 import type { Contractpartner } from "@/model/contractpartner/Contractpartner";
-
 import ContractpartnerService from "@/service/ContractpartnerService";
 
 const serverErrors = ref(new Array<string>());
-
 const mcp = ref({} as Contractpartner);
 const modalComponent = useTemplateRef<typeof ModalVue>("modalComponent");
 const emit = defineEmits(["contractpartnerDeleted"]);
@@ -101,9 +145,3 @@ const deleteContractpartner = () => {
 
 defineExpose({ _show });
 </script>
-
-<style scoped>
-th {
-  background-color: #f2f2f2;
-}
-</style>
