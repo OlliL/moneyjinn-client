@@ -11,6 +11,8 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 import "bootstrap";
 import "../node_modules/vanillajs-datepicker/dist/css/datepicker-bs5.min.css";
 
+import "./style.css";
+
 import I18nSingleton from "./config/I18nSingleton";
 import { jsonParseWithDate } from "./tools/PiniaUtil";
 import { AxiosSingleton } from "./config/AxiosSingleton";
