@@ -1,22 +1,22 @@
 <template>
-  <div class="container-fluid text-center">
-    <div class="row justify-content-md-center">
-      <div class="col-xs-12 mb-4">
-        <h4>{{ $t("Moneyflow.title.create") }}</h4>
-      </div>
+  <div class="container mx-auto py-6 space-y-8">
+    <div class="text-center">
+      <h4 class="text-2xl font-semibold tracking-tight">
+        {{ $t("Moneyflow.title.create") }}
+      </h4>
     </div>
-    <div class="row justify-content-md-center mb-4">
-      <div class="col-md-4 col-xs-12">
+
+    <div class="flex justify-center">
+      <div class="w-full max-w-md">
         <select
-          class="form-select"
+          class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
           id="selectmoneyflow"
-          data-testid="selectmoneyflow"
           v-model="preDefMoneyflowId"
           @change="selectPreDefMoneyflow"
         >
           <option value="0">{{ $t("Moneyflow.newBooking") }}</option>
           <option v-for="mcp of preDefMoneyflows" :key="mcp.id" :value="mcp.id">
-            {{ mcp.contractpartnerName }} | {{ mcp.amount.toFixed(2) }} &euro; |
+            {{ mcp.contractpartnerName }} | {{ mcp.amount.toFixed(2) }} € |
             {{ mcp.comment }}
           </option>
         </select>
@@ -25,29 +25,33 @@
 
     <DivError :server-errors="serverErrors" />
 
-    <div class="row justify-content-md-center">
-      <div class="col-sm-12 col-xxl-10 col-xs-12">
-        <div class="card w-100 bg-light">
-          <div class="card-body">
-            <form @submit.prevent="createMoneyflow" id="createMoneyflowForm">
+    <div class="flex justify-center">
+      <div class="w-full">
+        <div class="rounded-xl border bg-card text-card-foreground shadow">
+          <div class="p-6">
+            <form
+              @submit.prevent="createMoneyflow"
+              id="createMoneyflowForm"
+              class="space-y-6"
+            >
               <EditMoneyflowBase
                 :selected-pre-def-moneyflow="selectedPreDefMoneyflow"
                 ref="editMoneyflowVue"
               />
-              <div class="row no-gutters flex-lg-nowrap">
-                <div class="col-12">
-                  <button
-                    type="button"
-                    class="btn btn-secondary mx-2"
-                    @click="resetForm"
-                  >
-                    {{ $t("General.reset") }}
-                  </button>
-                  <ButtonSubmit
-                    :button-label="$t('General.save')"
-                    form-id="createMoneyflowForm"
-                  />
-                </div>
+
+              <div class="flex justify-center gap-4 pt-4 border-t">
+                <Button
+                  type="button"
+                  variant="secondary"
+                  @click="resetForm"
+                  class="!rounded-md"
+                >
+                  {{ $t("General.reset") }}
+                </Button>
+                <ButtonSubmit
+                  :button-label="$t('General.save')"
+                  form-id="createMoneyflowForm"
+                />
               </div>
             </form>
           </div>
@@ -56,7 +60,9 @@
     </div>
   </div>
 </template>
+
 <script lang="ts" setup>
+import { Button } from "@/components/ui/button";
 import { onMounted, ref, useTemplateRef } from "vue";
 
 import EditMoneyflowBase from "@/components/moneyflow/EditMoneyflowBase.vue";
