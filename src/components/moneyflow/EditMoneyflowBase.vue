@@ -1,36 +1,32 @@
 <template>
   <DivError :server-errors="serverErrors" />
-  <div class="row no-gutters flex-lg-nowrap mb-2">
-    <div class="col-md-2 col-xs-12 mb-2">
+
+  <div class="grid grid-cols-1 md:grid-cols-12 gap-4 mb-4">
+    <div class="md:col-span-2">
       <InputDate
         v-model="mmf.bookingDate"
-        :validation-schema="schema.bookingDate"
         :id="'bookingDate' + idSuffix"
         :field-label="$t('Moneyflow.bookingdate')"
       />
     </div>
-    <div class="col-md-2 col-xs-12 mb-2">
+    <div class="md:col-span-2">
       <InputDate
         v-model="mmf.invoiceDate"
-        :validation-schema="schema.invoiceDate"
         :id="'invoiceDate' + idSuffix"
         :field-label="$t('Moneyflow.invoicedate')"
       />
     </div>
-    <div class="col-md-4 col-xs-12 mb-2">
+    <div class="md:col-span-4">
       <SelectContractpartner
         v-model="mmf.contractpartnerId"
-        :validation-schema="schema.contractpartnerId"
         :id-suffix="'CreateMoneyflow' + idSuffix"
         :field-label="$t('General.contractpartner')"
         :validity-date="validityDate"
       />
     </div>
-
-    <div class="col-md-4 col-xs-12 mb-2">
+    <div class="md:col-span-4">
       <SelectCapitalsource
         v-model="mmf.capitalsourceId"
-        :validation-schema="schema.capitalsourceId"
         :id-suffix="'CreateMoneyflow' + idSuffix"
         :field-label="$t('General.capitalsource')"
         :validity-date="validityDate"
@@ -38,94 +34,84 @@
     </div>
   </div>
 
-  <div class="row no-gutters flex-lg-nowrap mb-2">
-    <div class="col-md-2 col-xs-12 mb-2">
+  <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-end mb-6">
+    <div class="md:col-span-2">
       <InputStandard
         v-model="amount"
-        :validation-schema="schema.amount"
         :id="'amount' + idSuffix"
         field-type="number"
         step="0.01"
         :field-label="$t('General.amount')"
         :focus="true"
       >
-        <template #icon><Euro /></template>
+        <template #icon><Euro class="h-4 w-4" /></template>
       </InputStandard>
     </div>
-    <div class="col-md-7" v-show="!showMoneyflowFields"></div>
-    <div class="col-md-4 col-xs-12 mb-2" v-show="showMoneyflowFields">
-      <InputStandard
-        v-model="mmf.comment"
-        :validation-schema-ref="schema.comment"
-        :id="'comment' + idSuffix"
-        :field-label="$t('General.comment')"
-        name="comment"
-      />
-    </div>
-    <div class="col-md-3 col-xs-12 mb-2" v-show="showMoneyflowFields">
-      <SelectPostingAccount
-        v-model="mmf.postingAccountId"
-        :validation-schema-ref="schema.postingAccountId"
-        :id-suffix="'CreateMoneyflow' + idSuffix"
-        :field-label="$t('General.postingAccount')"
-      />
-    </div>
-    <div
-      class="col-md-3 col-xs-12 mb-2 d-flex align-items-center justify-content-center"
-    >
-      <div class="btn-group mx-2">
-        <input
-          type="radio"
-          class="btn-check"
-          name="public-private"
-          :id="'public' + idSuffix"
-          autocomplete="off"
-          v-model="mmf.private"
-          :value="false"
-        />
-        <label class="btn btn-outline-success" :for="'public' + idSuffix"
-          ><small> {{ $t("Moneyflow.public") }}</small></label
-        >
 
-        <input
-          type="radio"
-          class="btn-check"
-          name="public-private"
-          :id="'private' + idSuffix"
-          autocomplete="off"
-          v-model="mmf.private"
-          :value="true"
+    <template v-if="showMoneyflowFields">
+      <div class="md:col-span-3">
+        <InputStandard
+          v-model="mmf.comment"
+          :id="'comment' + idSuffix"
+          :field-label="$t('General.comment')"
+          name="comment"
         />
-        <label class="btn btn-outline-danger" :for="'private' + idSuffix"
-          ><small>{{ $t("Moneyflow.private") }}</small></label
-        >
       </div>
-      <div class="btn-group mx-2">
-        <input
-          type="radio"
-          class="btn-check"
-          name="once-favorite"
-          :id="'once' + idSuffix"
-          autocomplete="off"
-          v-model="saveAsPreDefMoneyflow"
-          :value="false"
+      <div class="md:col-span-3">
+        <SelectPostingAccount
+          v-model="mmf.postingAccountId"
+          :id-suffix="'CreateMoneyflow' + idSuffix"
+          :field-label="$t('General.postingAccount')"
         />
-        <label class="btn btn-outline-secondary" :for="'once' + idSuffix"
-          ><small>{{ toggleTextOff }}</small></label
-        >
+      </div>
+    </template>
+    <div v-else class="md:col-span-7"></div>
 
-        <input
-          type="radio"
-          class="btn-check"
-          name="once-favorite"
-          :id="'favorite' + idSuffix"
-          autocomplete="off"
-          v-model="saveAsPreDefMoneyflow"
-          :value="true"
-        />
-        <label class="btn btn-outline-primary" :for="'favorite' + idSuffix"
-          ><small>{{ toggleTextOn }}</small></label
+    <div class="md:col-span-4 flex flex-col gap-2">
+      <div class="flex items-center gap-4">
+        <ToggleGroup
+          type="single"
+          variant="outline"
+          class="bg-muted p-1 rounded-lg"
+          :model-value="mmf.private ? 'private' : 'public'"
+          @update:model-value="(val: any) => (mmf.private = val === 'private')"
         >
+          <ToggleGroupItem
+            value="public"
+            class="text-xs h-8 px-3 transition-all data-[state=on]:bg-white data-[state=on]:text-blue-700 data-[state=on]:ring-1 data-[state=on]:ring-black/5"
+          >
+            {{ $t("Moneyflow.public") }}
+          </ToggleGroupItem>
+          <ToggleGroupItem
+            value="private"
+            class="text-xs h-8 px-3 transition-all data-[state=on]:bg-white data-[state=on]:text-blue-700 data-[state=on]:ring-1 data-[state=on]:ring-black/5"
+          >
+            {{ $t("Moneyflow.private") }}
+          </ToggleGroupItem>
+        </ToggleGroup>
+
+        <ToggleGroup
+          type="single"
+          variant="outline"
+          class="bg-muted p-1 rounded-lg"
+          :model-value="saveAsPreDefMoneyflow ? 'favorite' : 'once'"
+          @update:model-value="
+            (val: any) => (saveAsPreDefMoneyflow = val === 'favorite')
+          "
+        >
+          <ToggleGroupItem
+            value="once"
+            class="text-xs h-8 px-3 transition-all data-[state=on]:bg-white data-[state=on]:text-blue-700 data-[state=on]:ring-1 data-[state=on]:ring-black/5"
+          >
+            {{ toggleTextOff }}
+          </ToggleGroupItem>
+          <ToggleGroupItem
+            value="favorite"
+            class="text-xs h-8 px-3 transition-all data-[state=on]:bg-white data-[state=on]:text-blue-700 data-[state=on]:ring-1 data-[state=on]:ring-black/5"
+          >
+            {{ toggleTextOn }}
+          </ToggleGroupItem>
+        </ToggleGroup>
       </div>
     </div>
   </div>
@@ -177,6 +163,8 @@
 </template>
 
 <script lang="ts" setup>
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+
 import { computed, onMounted, ref, watch, type PropType } from "vue";
 import { useI18n } from "vue-i18n";
 import { date, number, string } from "zod";
