@@ -170,7 +170,7 @@ const title = computed(() => {
 
 const resetForm = () => {
   if (origMcp.value) {
-    Object.assign(mcp.value, JSON.parse(JSON.stringify(origMcp.value)));
+    Object.assign(mcp.value, origMcp.value);
   } else {
     mcp.value = {
       validFrom: new Date(),

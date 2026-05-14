@@ -112,7 +112,7 @@ const title = computed(() => {
 
 const resetForm = () => {
   if (origMca.value) {
-    Object.assign(mca.value, JSON.parse(JSON.stringify(origMca.value)));
+    Object.assign(mca.value, origMca.value);
   } else {
     mca.value = {
       contractpartnerid: props.contractpartnerId,

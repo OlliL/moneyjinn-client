@@ -166,10 +166,14 @@ onMounted(() => {
       format: format,
     });
     viewMounted.value = true;
+
+    // NEU: Initialen Wert setzen, nachdem die Instanz erstellt wurde
+    if (props.modelValue) {
+      setDate(props.modelValue);
+    }
   }
 
   if (getInputElement()) {
-    // Manuellen Listener für den Custom Event der Bibliothek hinzufügen
     getInputElement().addEventListener("changeDate", onInput);
   }
 });

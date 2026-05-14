@@ -83,7 +83,7 @@ const title = computed(() => {
 
 const resetForm = () => {
   if (origMpa.value) {
-    Object.assign(mpa.value, JSON.parse(JSON.stringify(origMpa.value)));
+    Object.assign(mpa.value, origMpa.value);
   } else {
     mpa.value = {} as PostingAccount;
   }

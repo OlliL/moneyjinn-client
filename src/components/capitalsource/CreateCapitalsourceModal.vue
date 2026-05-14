@@ -189,7 +189,7 @@ const title = computed(() => {
 
 const resetForm = () => {
   if (origMcs.value) {
-    Object.assign(mcs.value, JSON.parse(JSON.stringify(origMcs.value)));
+    Object.assign(mcs.value, origMcs.value);
   } else {
     mcs.value = {
       validFrom: new Date(),
