@@ -5,6 +5,7 @@
     <div class="md:col-span-2">
       <InputDate
         v-model="mmf.bookingDate"
+        :validation-schema="schema.bookingDate"
         :id="'bookingDate' + idSuffix"
         :field-label="$t('Moneyflow.bookingdate')"
       />
@@ -12,6 +13,7 @@
     <div class="md:col-span-2">
       <InputDate
         v-model="mmf.invoiceDate"
+        :validation-schema="schema.invoiceDate"
         :id="'invoiceDate' + idSuffix"
         :field-label="$t('Moneyflow.invoicedate')"
       />
@@ -19,6 +21,7 @@
     <div class="md:col-span-4">
       <SelectContractpartner
         v-model="mmf.contractpartnerId"
+        :validation-schema="schema.contractpartnerId"
         :id-suffix="'CreateMoneyflow' + idSuffix"
         :field-label="$t('General.contractpartner')"
         :validity-date="validityDate"
@@ -27,6 +30,7 @@
     <div class="md:col-span-4">
       <SelectCapitalsource
         v-model="mmf.capitalsourceId"
+        :validation-schema="schema.capitalsourceId"
         :id-suffix="'CreateMoneyflow' + idSuffix"
         :field-label="$t('General.capitalsource')"
         :validity-date="validityDate"
@@ -38,6 +42,7 @@
     <div class="md:col-span-2">
       <InputStandard
         v-model="amount"
+        :validation-schema="schema.amount"
         :id="'amount' + idSuffix"
         field-type="number"
         step="0.01"
@@ -52,6 +57,7 @@
       <div class="md:col-span-3">
         <InputStandard
           v-model="mmf.comment"
+          :validation-schema-ref="schema.comment"
           :id="'comment' + idSuffix"
           :field-label="$t('General.comment')"
           name="comment"
@@ -60,102 +66,108 @@
       <div class="md:col-span-3">
         <SelectPostingAccount
           v-model="mmf.postingAccountId"
+          :validation-schema-ref="schema.postingAccountId"
           :id-suffix="'CreateMoneyflow' + idSuffix"
           :field-label="$t('General.postingAccount')"
         />
       </div>
     </template>
-    <div v-else class="md:col-span-7"></div>
+    <div v-else class="md:col-span-6"></div>
 
-    <div class="md:col-span-4 flex flex-col gap-2">
-      <div class="flex items-center gap-4">
-        <ToggleGroup
-          type="single"
-          variant="outline"
-          class="bg-muted p-1 rounded-lg"
-          :model-value="mmf.private ? 'private' : 'public'"
-          @update:model-value="(val: any) => (mmf.private = val === 'private')"
+    <div
+      class="md:col-span-2 flex items-center justify-center h-9 gap-4 mb-[1px]"
+    >
+      <ToggleGroup
+        type="single"
+        class="bg-transparent p-1 rounded-lg inline-flex border border-input h-10"
+        :model-value="mmf.private ? 'private' : 'public'"
+        @update:model-value="
+          (val: any) => val && (mmf.private = val === 'private')
+        "
+      >
+        <ToggleGroupItem
+          value="public"
+          class="text-xs h-8 px-3 transition-all rounded-md bg-transparent data-[state=on]:!bg-slate-300 data-[state=on]:text-blue-700 border-none"
         >
-          <ToggleGroupItem
-            value="public"
-            class="text-xs h-8 px-3 transition-all data-[state=on]:bg-white data-[state=on]:text-blue-700 data-[state=on]:ring-1 data-[state=on]:ring-black/5"
-          >
-            {{ $t("Moneyflow.public") }}
-          </ToggleGroupItem>
-          <ToggleGroupItem
-            value="private"
-            class="text-xs h-8 px-3 transition-all data-[state=on]:bg-white data-[state=on]:text-blue-700 data-[state=on]:ring-1 data-[state=on]:ring-black/5"
-          >
-            {{ $t("Moneyflow.private") }}
-          </ToggleGroupItem>
-        </ToggleGroup>
+          {{ $t("Moneyflow.public") }}
+        </ToggleGroupItem>
+        <ToggleGroupItem
+          value="private"
+          class="text-xs h-8 px-3 transition-all rounded-md bg-transparent data-[state=on]:!bg-slate-300 data-[state=on]:text-blue-700 border-none"
+        >
+          {{ $t("Moneyflow.private") }}
+        </ToggleGroupItem>
+      </ToggleGroup>
+    </div>
 
-        <ToggleGroup
-          type="single"
-          variant="outline"
-          class="bg-muted p-1 rounded-lg"
-          :model-value="saveAsPreDefMoneyflow ? 'favorite' : 'once'"
-          @update:model-value="
-            (val: any) => (saveAsPreDefMoneyflow = val === 'favorite')
-          "
+    <div
+      class="md:col-span-2 flex items-center justify-center h-9 gap-4 mb-[1px]"
+    >
+      <ToggleGroup
+        type="single"
+        class="bg-transparent p-1 rounded-lg inline-flex border border-input h-10"
+        :model-value="saveAsPreDefMoneyflow ? 'favorite' : 'once'"
+        @update:model-value="
+          (val: any) => val && (saveAsPreDefMoneyflow = val === 'favorite')
+        "
+      >
+        <ToggleGroupItem
+          value="once"
+          class="text-xs h-8 px-3 transition-all rounded-md bg-transparent data-[state=on]:!bg-slate-300 data-[state=on]:text-blue-700 border-none"
         >
-          <ToggleGroupItem
-            value="once"
-            class="text-xs h-8 px-3 transition-all data-[state=on]:bg-white data-[state=on]:text-blue-700 data-[state=on]:ring-1 data-[state=on]:ring-black/5"
-          >
-            {{ toggleTextOff }}
-          </ToggleGroupItem>
-          <ToggleGroupItem
-            value="favorite"
-            class="text-xs h-8 px-3 transition-all data-[state=on]:bg-white data-[state=on]:text-blue-700 data-[state=on]:ring-1 data-[state=on]:ring-black/5"
-          >
-            {{ toggleTextOn }}
-          </ToggleGroupItem>
-        </ToggleGroup>
-      </div>
+          {{ toggleTextOff }}
+        </ToggleGroupItem>
+        <ToggleGroupItem
+          value="favorite"
+          class="text-xs h-8 px-3 transition-all rounded-md bg-transparent data-[state=on]:!bg-slate-300 data-[state=on]:text-blue-700 border-none"
+        >
+          {{ toggleTextOn }}
+        </ToggleGroupItem>
+      </ToggleGroup>
     </div>
   </div>
 
-  <div class="row no-gutters flex-lg-nowrap mb-4">
-    <div class="col-12">
-      <div class="card w-100 bg-light d-none d-lg-block">
-        <div class="card-header text-start">
-          <a
-            data-bs-toggle="collapse"
-            :href="'#collapseSplitEntries' + idSuffix"
-            :id="'mseContainer' + idSuffix"
-            ref="mseContainer"
-            >{{ $t("Moneyflow.subbooking") }}</a
-          >
-        </div>
-        <div
-          class="collapse"
-          :id="'collapseSplitEntries' + idSuffix"
-          :data-testid="'collapseSplitEntries' + idSuffix"
+  <div class="w-full mb-4">
+    <div class="rounded-lg border bg-muted/30 overflow-hidden">
+      <div class="px-4 py-3 border-b text-left">
+        <button
+          type="button"
+          class="text-sm font-medium text-primary hover:underline bg-transparent border-none p-0"
+          :id="'mseContainer' + idSuffix"
+          @click="isExpanded = !isExpanded"
         >
-          <div class="card-body">
-            <EditMoneyflowBaseSplitEntryRowVue
-              v-for="(mse, index) in mmf.moneyflowSplitEntries"
-              :key="mse.id"
-              :amount="mse.amount"
-              :comment="mse.comment"
-              :moneyflowComment="mmf.comment"
-              :moneyflowPostingAccountId="mmf.postingAccountId"
-              :posting-account-id="mse.postingAccountId"
-              :is-last-row="index + 1 === mmf.moneyflowSplitEntries?.length"
-              :index="index"
-              :remainder="mseRemainder"
-              :remainder-is-valid="mseRemainderIsValid"
-              :id-suffix="idSuffix + '#' + mse.id"
-              @delete-moneyflow-split-entry-row="onDeleteMoneyflowSplitEntryRow"
-              @add-moneyflow-split-entry-row="onAddMoneyflowSplitEntryRow"
-              @amount-changed="onMoneyflowSplitEntryRowAmountChanged"
-              @comment-changed="onMoneyflowSplitEntryRowCommentChanged"
-              @posting-account-id-changed="
-                onMoneyflowSplitEntryRowPostingAccountIdChanged
-              "
-            />
-          </div>
+          {{ $t("Moneyflow.subbooking") }}
+        </button>
+      </div>
+
+      <div
+        v-show="isExpanded"
+        :id="'collapseSplitEntries' + idSuffix"
+        :data-testid="'collapseSplitEntries' + idSuffix"
+        class="transition-all animate-in fade-in duration-200"
+      >
+        <div class="p-4 bg-background">
+          <EditMoneyflowBaseSplitEntryRowVue
+            v-for="(mse, index) in mmf.moneyflowSplitEntries"
+            :key="mse.id"
+            :amount="mse.amount"
+            :comment="mse.comment"
+            :moneyflowComment="mmf.comment"
+            :moneyflowPostingAccountId="mmf.postingAccountId"
+            :posting-account-id="mse.postingAccountId"
+            :is-last-row="index + 1 === mmf.moneyflowSplitEntries?.length"
+            :index="index"
+            :remainder="mseRemainder"
+            :remainder-is-valid="mseRemainderIsValid"
+            :id-suffix="idSuffix + '#' + mse.id"
+            @delete-moneyflow-split-entry-row="onDeleteMoneyflowSplitEntryRow"
+            @add-moneyflow-split-entry-row="onAddMoneyflowSplitEntryRow"
+            @amount-changed="onMoneyflowSplitEntryRowAmountChanged"
+            @comment-changed="onMoneyflowSplitEntryRowCommentChanged"
+            @posting-account-id-changed="
+              onMoneyflowSplitEntryRowPostingAccountIdChanged
+            "
+          />
         </div>
       </div>
     </div>
@@ -193,7 +205,11 @@ import type { PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
 import MoneyflowService from "@/service/MoneyflowService";
 import ImportedMoneyflowService from "@/service/ImportedMoneyflowService";
 import type { Contractpartner } from "@/model/contractpartner/Contractpartner";
-import { Euro } from "lucide-vue-next";
+import { Euro } from "lucide-vue-next"; // Icons für besseres Feedback
+
+const isExpanded = ref(false);
+const toggleCollapse = () => (isExpanded.value = !isExpanded.value);
+
 const { t } = useI18n();
 
 const schema = {
