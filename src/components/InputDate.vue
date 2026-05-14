@@ -1,31 +1,53 @@
 <template>
-  <div class="input-group">
-    <div class="form-floating">
-      <input
+  <div class="grid w-full gap-1.5 relative">
+    <Label v-if="fieldLabel" :for="id" class="text-left ml-1">
+      {{ fieldLabel }}
+    </Label>
+
+    <div class="flex -space-x-px relative">
+      <Input
         :id="id"
         :data-testid="id"
         type="text"
         @changeDate="onInput($event)"
-        :class="'form-control ' + errorData.inputClass"
+        :class="[
+          'rounded-r-none',
+          errorData.inputClass == 'is-invalid'
+            ? '!border-destructive bg-destructive/[0.03] focus-visible:ring-destructive/15'
+            : 'border-input focus-visible:ring-ring',
+        ]"
         ref="fieldRef"
         @keyup="onKeyboardInput($event)"
         @focus="(($event as FocusEvent)?.target as HTMLInputElement)?.select()"
       />
-      <label :for="id" :style="'color: ' + errorData.fieldColor">{{
-        errorData.fieldLabel
-      }}</label>
+
+      <div
+        class="flex items-center justify-center px-2 border border-input rounded-r-md text-foreground transition-colors relative"
+      >
+        <CalendarDays />
+      </div>
     </div>
-    <span class="input-group-text"><i class="bi bi-calendar-date"></i></span>
+
+    <p
+      v-if="errorData.inputClass == 'is-invalid'"
+      class="text-[0.8rem] font-medium text-destructive mt-0.5 text-left ml-1"
+    >
+      {{ errorMessage }}
+    </p>
   </div>
 </template>
 
 <script lang="ts" setup>
+import { CalendarDays } from "lucide-vue-next";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { Datepicker } from "vanillajs-datepicker";
 import { useField } from "vee-validate";
 import { toTypedSchema } from "@vee-validate/zod";
 import {
   computed,
   onMounted,
+  onUnmounted,
   ref,
   useTemplateRef,
   watch,
@@ -122,12 +144,17 @@ switch (props.pickMode) {
   }
 }
 
-const fieldRef = useTemplateRef<HTMLInputElement>("fieldRef");
+const fieldRef = useTemplateRef<typeof Input>("fieldRef");
 let datepicker = {} as Datepicker;
+
+const getInputElement = () => {
+  // Shadcn Komponenten-Instanz -> HTML Element
+  return fieldRef.value?.$el as HTMLInputElement;
+};
 
 onMounted(() => {
   if (!(datepicker instanceof Datepicker) && fieldRef.value) {
-    datepicker = new Datepicker(fieldRef.value, {
+    datepicker = new Datepicker(getInputElement(), {
       buttonClass: "btn",
       pickLevel: pickLevel,
       clearButton: true,
@@ -138,6 +165,17 @@ onMounted(() => {
       format: format,
     });
     viewMounted.value = true;
+  }
+
+  if (getInputElement()) {
+    // Manuellen Listener für den Custom Event der Bibliothek hinzufügen
+    getInputElement().addEventListener("changeDate", onInput);
+  }
+});
+
+onUnmounted(() => {
+  if (getInputElement()) {
+    getInputElement().removeEventListener("changeDate", onInput);
   }
 });
 
@@ -222,10 +260,3 @@ watch(
   { immediate: true },
 );
 </script>
-
-<style>
-.form-floating > .bi-calendar-date + .datepicker_input + label {
-  padding-left: 3.5rem;
-  z-index: 3;
-}
-</style>
