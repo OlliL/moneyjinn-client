@@ -1,6 +1,5 @@
 <template>
   <div class="grid w-full gap-1.5 relative">
-    <!-- Label (Shadcn Style) -->
     <Label v-if="fieldLabel" :for="id" class="text-left ml-1">
       {{ fieldLabel }}
     </Label>
@@ -34,7 +33,6 @@
           @blur="onBlur"
         />
 
-        <!-- Clear Button (Das X-Icon) -->
         <button
           v-if="fieldValue"
           type="button"
@@ -46,7 +44,6 @@
         </button>
       </div>
 
-      <!-- Optionales Icon-Addon (wie beim Input-Feld) -->
       <div
         v-if="$slots.icon"
         class="flex items-center justify-center px-2 border border-input rounded-r-md text-foreground transition-colors relative"
@@ -54,7 +51,6 @@
         <slot name="icon"></slot>
       </div>
 
-      <!-- Dropdown Menü (Shadcn Select/Popover Style) -->
       <div
         v-if="isOpen && items.length > 0"
         ref="dropdownRef"
@@ -78,7 +74,6 @@
       </div>
     </div>
 
-    <!-- Fehlermeldung -->
     <p
       v-if="errorData.inputClass === 'is-invalid'"
       class="text-[0.8rem] font-medium text-destructive mt-0.5 text-left ml-1"
@@ -269,7 +264,6 @@ const onKeydownAnchor = (event: KeyboardEvent) => {
     anchors[nextIndex]?.focus();
   } else if (event.key === "ArrowUp") {
     event.preventDefault();
-    console.log(currentIndex);
     if (currentIndex === 0) {
       // Zurück ins Input Feld springen
       getInputElement().focus();
@@ -356,7 +350,7 @@ watch(
   () => props.selectBoxValues,
   (newVal) => {
     // reset the fieldValue in case its not part of the select-box. But only do that if the hiddenValue is set at all.
-    if (hiddenValue.value != undefined) {
+    if (hiddenValue.value != undefined && hiddenValue.value !== 0) {
       const foundElement = newVal.find((sbv) => sbv.id == hiddenValue.value);
       if (!foundElement) {
         hiddenValue.value = undefined;

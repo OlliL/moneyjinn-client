@@ -13,7 +13,7 @@
     :field-label="fieldLabel"
     :select-box-values="selectBoxValues"
   >
-    <template #icon
+    <template #icon v-if="userIsAdmin"
       ><SquarePlus
         @click="showCreatePostingAccountModal"
         class="cursor-pointer"

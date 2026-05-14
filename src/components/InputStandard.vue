@@ -1,10 +1,10 @@
 <template>
-  <div class="grid w-full gap-1.5">
+  <div class="grid w-full gap-1.5 relative">
     <Label v-if="fieldLabel" :for="id" class="text-left ml-1">
       {{ fieldLabel }}
     </Label>
 
-    <div class="flex -space-x-px">
+    <div class="flex -space-x-px relative">
       <Input
         v-model="fieldValue"
         :id="id"
@@ -12,7 +12,6 @@
         :class="[
           alignmentClass,
           $slots.icon ? 'rounded-r-none' : '',
-          'relative focus:z-[1] transition-colors',
           errorData.inputClass == 'is-invalid'
             ? '!border-destructive bg-destructive/[0.03] focus-visible:ring-destructive/15'
             : 'border-input focus-visible:ring-ring',
