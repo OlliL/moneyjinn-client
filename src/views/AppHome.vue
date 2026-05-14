@@ -117,7 +117,6 @@ const loadData = () => {
         ? events.monthlySettlementYear
         : 0;
       dataLoaded.value = true;
-      monthlySettlementMissing.value = true;
     })
     .catch((backendError) => {
       handleBackendError(backendError, serverErrors);
