@@ -1,5 +1,5 @@
 <template>
-  <div class="container mx-auto py-6 space-y-8">
+  <div class="custom-container space-y-6">
     <div class="text-center">
       <h4 class="text-2xl font-semibold tracking-tight">
         {{ $t("Moneyflow.title.create") }}
@@ -8,61 +8,74 @@
 
     <div class="flex justify-center">
       <div class="w-full max-w-md">
-        <select
-          class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
-          id="selectmoneyflow"
-          v-model="preDefMoneyflowId"
-          @change="selectPreDefMoneyflow"
+        <Select
+          :model-value="String(preDefMoneyflowId)"
+          @update:model-value="handleSelectChange"
         >
-          <option value="0">{{ $t("Moneyflow.newBooking") }}</option>
-          <option v-for="mcp of preDefMoneyflows" :key="mcp.id" :value="mcp.id">
-            {{ mcp.contractpartnerName }} | {{ mcp.amount.toFixed(2) }} € |
-            {{ mcp.comment }}
-          </option>
-        </select>
+          <SelectTrigger id="selectmoneyflow" class="w-full h-10">
+            <SelectValue :placeholder="$t('Moneyflow.newBooking')" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="0">
+              {{ $t("Moneyflow.newBooking") }}
+            </SelectItem>
+            <SelectItem
+              v-for="mcp of preDefMoneyflows"
+              :key="mcp.id"
+              :value="String(mcp.id)"
+            >
+              <div class="flex flex-row gap-2">
+                <span class="font-medium">{{ mcp.contractpartnerName }}</span>
+                <span class="text-muted-foreground"> | </span>
+                <span>{{ mcp.amount.toFixed(2) }} €</span>
+                <span class="text-muted-foreground"> | </span>
+                <span class="truncate italic opacity-80">{{
+                  mcp.comment
+                }}</span>
+              </div>
+            </SelectItem>
+          </SelectContent>
+        </Select>
       </div>
     </div>
 
     <DivError :server-errors="serverErrors" />
 
-    <div class="flex justify-center">
-      <div class="w-full">
-        <div class="rounded-xl border bg-card text-card-foreground shadow">
-          <div class="p-6">
-            <form
-              @submit.prevent="createMoneyflow"
-              id="createMoneyflowForm"
-              class="space-y-6"
-            >
-              <EditMoneyflowBase
-                :selected-pre-def-moneyflow="selectedPreDefMoneyflow"
-                ref="editMoneyflowVue"
-              />
+    <div class="flex border bg-card text-card-foreground shadow p-4">
+      <form @submit.prevent="createMoneyflow" id="createMoneyflowForm">
+        <EditMoneyflowBase
+          :selected-pre-def-moneyflow="selectedPreDefMoneyflow"
+          ref="editMoneyflowVue"
+        />
 
-              <div class="flex justify-center gap-4 pt-4 border-t">
-                <Button
-                  type="button"
-                  variant="secondary"
-                  @click="resetForm"
-                  class="!rounded-md"
-                >
-                  {{ $t("General.reset") }}
-                </Button>
-                <ButtonSubmit
-                  :button-label="$t('General.save')"
-                  form-id="createMoneyflowForm"
-                />
-              </div>
-            </form>
-          </div>
+        <div class="flex justify-center gap-4">
+          <Button
+            type="button"
+            variant="secondary"
+            @click="resetForm"
+            class="!rounded-md"
+          >
+            {{ $t("General.reset") }}
+          </Button>
+          <ButtonSubmit
+            :button-label="$t('General.save')"
+            form-id="createMoneyflowForm"
+          />
         </div>
-      </div>
+      </form>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
 import { Button } from "@/components/ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { onMounted, ref, useTemplateRef } from "vue";
 
 import EditMoneyflowBase from "@/components/moneyflow/EditMoneyflowBase.vue";
@@ -102,6 +115,14 @@ onMounted(() => {
       handleBackendError(backendError, serverErrors);
     });
 });
+
+const handleSelectChange = (val: any) => {
+  // 1. Den Wert wieder in eine Zahl umwandeln, damit dein State (preDefMoneyflowId) korrekt bleibt
+  preDefMoneyflowId.value = Number(val);
+
+  // 2. Deine ursprüngliche Logik-Funktion aufrufen
+  selectPreDefMoneyflow();
+};
 
 const selectPreDefMoneyflow = () => {
   if (preDefMoneyflowId.value <= 0) {

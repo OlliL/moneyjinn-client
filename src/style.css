@@ -6,6 +6,13 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* Optional: Eine eigene Container-Klasse, die immer zentriert ist */
+@utility custom-container {
+  margin-inline: auto;
+  max-width: 1500px;
+  padding-inline: 1rem;
+}
+
 @theme inline {
   --font-heading: var(--font-sans);
   --color-sidebar-ring: var(--sidebar-ring);

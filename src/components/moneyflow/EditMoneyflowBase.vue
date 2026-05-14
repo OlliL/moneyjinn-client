@@ -38,7 +38,7 @@
     </div>
   </div>
 
-  <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-end mb-6">
+  <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-start mb-6">
     <div class="md:col-span-2">
       <InputStandard
         v-model="amount"
@@ -75,7 +75,7 @@
     <div v-else class="md:col-span-6"></div>
 
     <div
-      class="md:col-span-2 flex items-center justify-center h-9 gap-4 mb-[1px]"
+      class="md:col-span-2 flex items-center justify-center h-9 gap-4 mt-[20px]"
     >
       <ToggleGroup
         type="single"
@@ -101,7 +101,7 @@
     </div>
 
     <div
-      class="md:col-span-2 flex items-center justify-center h-9 gap-4 mb-[1px]"
+      class="md:col-span-2 flex items-center justify-center h-9 gap-4 mt-[20px]"
     >
       <ToggleGroup
         type="single"
