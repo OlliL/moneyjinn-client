@@ -15,6 +15,7 @@
 
       <div class="relative flex-1">
         <Input
+          autocomplete="off"
           v-model="fieldValue"
           ref="fieldRef"
           :id="id"
@@ -54,16 +55,16 @@
       <div
         v-if="isOpen && items.length > 0"
         ref="dropdownRef"
-        class="absolute z-50 top-[calc(100%+4px)] left-0 min-w-[8rem] w-full overflow-hidden rounded-md border bg-popover text-popover-foreground shadow-md animate-in fade-in-0 zoom-in-95"
-        style="max-height: 400px; overflow-y: auto"
+        class="absolute z-50 top-[calc(100%+4px)] left-0 min-w-[8rem] w-full rounded-md border bg-popover text-popover-foreground shadow-md animate-in fade-in-0 zoom-in-95 flex flex-col"
+        style="max-height: 300px"
       >
-        <div class="p-1">
+        <div class="p-1 overflow-y-auto overscroll-contain custom-scrollbar">
           <a
             v-for="selectBoxValue in items"
             :key="selectBoxValue.id"
             ref="dropdownItemRef"
             href="#"
-            class="relative flex w-full cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 !text-foreground !no-underline"
+            class="relative flex w-full cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground !text-foreground !no-underline"
             @click.prevent="onClickAnchor(selectBoxValue)"
             @keydown="onKeydownAnchor"
             :data-testid="id + '-option'"

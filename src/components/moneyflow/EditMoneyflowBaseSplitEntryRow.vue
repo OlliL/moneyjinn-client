@@ -47,7 +47,7 @@
         :field-label="$t('General.amount')"
       >
         <template #icon>
-          <Euro class="h-4 w-4 text-muted-foreground" />
+          <Euro />
         </template>
       </InputStandard>
     </div>
