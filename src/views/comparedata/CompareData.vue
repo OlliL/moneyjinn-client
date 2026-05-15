@@ -6,21 +6,17 @@
     @moneyflow-created="compareData"
   />
 
-  <div class="container-fluid text-center">
-    <div class="row justify-content-md-center">
-      <div class="col-xs-12 mb-4">
-        <h4>{{ $t("CompareData.title") }}</h4>
-      </div>
+  <div class="container mx-auto py-6 space-y-6 text-center">
+    <div>
+      <h4 class="text-xl font-bold">{{ $t("CompareData.title") }}</h4>
     </div>
-    <div class="row justify-content-md-center mb-2">
-      <div class="col-xxl-7 col-xs-12">
-        <div class="card w-100 bg-light">
-          <div class="card-body">
+    <div class="flex justify-center">
+      <div class="w-full max-w-6xl rounded-lg border bg-card text-card-foreground shadow-sm p-4">
             <form @submit.prevent="compareData" id="compareDataForm">
-              <div class="container-fluid">
+              <div class="space-y-4">
                 <DivError :server-errors="serverErrors" />
-                <div class="row">
-                  <div class="col-md-3 col-xs-12 mb-2">
+                <div class="grid gap-3 md:grid-cols-12">
+                  <div class="md:col-span-3">
                     <InputDate
                       v-model="startDate"
                       :validation-schema="schema.startDate"
@@ -28,7 +24,7 @@
                       :field-label="$t('General.startDate')"
                     />
                   </div>
-                  <div class="col-md-3 col-xs-12">
+                  <div class="md:col-span-3">
                     <InputDate
                       v-model="endDate"
                       :validation-schema="schema.endDate"
@@ -36,7 +32,7 @@
                       :field-label="$t('General.endDate')"
                     />
                   </div>
-                  <div class="col-md-4 col-xs-12">
+                  <div class="md:col-span-4">
                     <SelectCapitalsource
                       v-model="capitalsourceId"
                       :validation-schema="schema.capitalsourceId"
@@ -45,22 +41,22 @@
                       :validity-date="new Date()"
                     />
                   </div>
-                  <div class="col-md-2 col-xs-12 d-flex align-items-center">
-                    <div class="form-check form-switch text-start">
+                  <div class="md:col-span-2 flex items-center justify-start">
+                    <div class="flex items-center gap-3 text-left">
                       <input
-                        class="form-check-input"
+                        class="h-4 w-4"
                         type="checkbox"
                         id="sourceIsImport"
                         v-model="sourceIsImport"
                       />
-                      <label class="form-check-label" for="sourceIsImport">{{
+                      <label for="sourceIsImport">{{
                         sourceIsImportLabel
                       }}</label>
                     </div>
                   </div>
                 </div>
-                <div class="row align-items-center" v-show="!sourceIsImport">
-                  <div class="col-md-6 col-xs-12 mb-2 text-start">
+                <div class="grid items-center gap-3 md:grid-cols-12" v-show="!sourceIsImport">
+                  <div class="md:col-span-6 text-left">
                     <InputFile
                       v-model="files"
                       :validation-schema-ref="schema.importfile"
@@ -68,7 +64,7 @@
                       :field-label="$t('CompareData.importfile')"
                     />
                   </div>
-                  <div class="col-md-4 col-xs-12 mb-2">
+                  <div class="md:col-span-4">
                     <SelectStandard
                       v-model="compareDataFormat"
                       :validation-schema-ref="schema.compareDataFormat"
@@ -78,32 +74,29 @@
                     />
                   </div>
                 </div>
-                <div class="row mt-2">
-                  <div class="col-12">
+                <div class="pt-2">
                     <ButtonSubmit
                       :button-label="$t('General.show')"
                       form-id="compareDataForm"
                     />
-                  </div>
                 </div>
               </div>
             </form>
-          </div>
-        </div>
       </div>
     </div>
-    <div class="row justify-content-md-center mt-5" v-if="dataCompared">
-      <div class="col-xxl-10 col-md-12 col-sm-12 col-xs-12">
-        <table class="table table-hover">
+    <div class="flex justify-center pt-5" v-if="dataCompared">
+      <DivContentTable clazz="w-full lg:w-11/12">
           <colgroup>
             <col style="width: 5%" />
             <col style="width: 5%" />
             <col style="width: 90%" />
           </colgroup>
-          <thead>
-            <th scope="colgroup" colspan="3">{{ $t("CompareData.result") }}</th>
-          </thead>
-          <tbody>
+          <TableHeader>
+            <TableRow>
+              <TableHead class="font-bold border text-foreground" colspan="3">{{ $t("CompareData.result") }}</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
             <CompareDataResultGroupVue
               :comment="$t('CompareData.dataInSourceNotInDb')"
               :compare-data="compareDatasNotInDatabase"
@@ -146,9 +139,8 @@
               @edit-moneyflow="editMoneyflow"
               @create-moneyflow="createMoneyflow"
             />
-          </tbody>
-        </table>
-      </div>
+          </TableBody>
+      </DivContentTable>
     </div>
   </div>
 </template>
@@ -162,6 +154,7 @@ import { any, date, number, array as arr, instanceof as instof } from "zod";
 import ButtonSubmit from "@/components/ButtonSubmit.vue";
 import CompareDataResultGroupVue from "@/components/comparedata/CompareDataResultGroup.vue";
 import DeleteMoneyflowModalVue from "@/components/moneyflow/DeleteMoneyflowModal.vue";
+import DivContentTable from "@/components/DivContentTable.vue";
 import DivError from "@/components/DivError.vue";
 import EditMoneyflowModalVue from "@/components/moneyflow/EditMoneyflowModal.vue";
 import InputDate from "@/components/InputDate.vue";
@@ -181,6 +174,12 @@ import CompareDataService from "@/service/CompareDataService";
 import MoneyflowService from "@/service/MoneyflowService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
+import {
+  TableBody,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 const { t } = useI18n();
 
@@ -236,7 +235,7 @@ const compareDatasMatchingCount = computed(() => {
   return compareDatasMatching.value ? compareDatasMatching.value.length : 0;
 });
 const compareDatasMatchingCountClass = computed(() => {
-  return compareDatasMatchingCount.value > 0 ? "text-success" : "text-danger";
+  return compareDatasMatchingCount.value > 0 ? "text-green-600" : "text-red-600";
 });
 const compareDatasWrongCapitalsourceCount = computed(() => {
   return compareDatasWrongCapitalsource.value
@@ -245,14 +244,16 @@ const compareDatasWrongCapitalsourceCount = computed(() => {
 });
 const compareDatasWrongCapitalsourceCountClass = computed(() => {
   return compareDatasWrongCapitalsourceCount.value > 0
-    ? "text-danger"
-    : "text-success";
+    ? "text-red-600"
+    : "text-green-600";
 });
 const compareDatasNotInFileCount = computed(() => {
   return compareDatasNotInFile.value ? compareDatasNotInFile.value.length : 0;
 });
 const compareDatasNotInFileCountClass = computed(() => {
-  return compareDatasNotInFileCount.value > 0 ? "text-danger" : "text-success";
+  return compareDatasNotInFileCount.value > 0
+    ? "text-red-600"
+    : "text-green-600";
 });
 const compareDatasNotInDatabaseCount = computed(() => {
   return compareDatasNotInDatabase.value
@@ -261,8 +262,8 @@ const compareDatasNotInDatabaseCount = computed(() => {
 });
 const compareDatasNotInDatabaseCountClass = computed(() => {
   return compareDatasNotInDatabaseCount.value > 0
-    ? "text-danger"
-    : "text-success";
+    ? "text-red-600"
+    : "text-green-600";
 });
 
 const loadData = () => {

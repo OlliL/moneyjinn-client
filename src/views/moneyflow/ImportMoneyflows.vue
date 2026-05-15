@@ -1,66 +1,62 @@
 <template>
-  <div class="container-fluid text-center">
-    <div class="row justify-content-md-center">
-      <div class="col-xs-12 mb-4">
-        <h4>{{ $t("Moneyflow.title.import") }}</h4>
-      </div>
+  <div class="container mx-auto py-6 space-y-6 text-center">
+    <div>
+      <h4 class="text-xl font-bold">{{ $t("Moneyflow.title.import") }}</h4>
     </div>
 
     <DivError :server-errors="serverErrors" />
 
     <div
-      class="text-center text-success"
+      class="text-center text-green-600"
       v-if="dataLoaded && importMoneyflows.length == 0"
     >
-      {{ $t("AppHome.allDone") }} <i class="bi bi-emoji-smile"></i>
+      {{ $t("AppHome.allDone") }} <Smile class="inline h-4 w-4" />
     </div>
     <div
-      class="row justify-content-md-center mb-5"
+      class="flex justify-center pb-5"
       v-for="importedMoneyflow in importMoneyflows"
       :key="importedMoneyflow.externalid"
     >
-      <div class="col-xxl-9 col-xs-12">
-        <div class="card w-100 bg-light">
-          <div class="card-body">
+      <div class="w-full max-w-6xl rounded-lg border bg-card text-card-foreground shadow-sm p-4">
             <form @submit.prevent="importImportedMoneyflow(importedMoneyflow)">
-              <div class="container-fluid">
-                <div class="row mb-2">
+              <div class="space-y-3">
+                <div class="grid gap-2 md:grid-cols-12">
                   <div
-                    class="col-md-1 col-xs-6 d-flex justify-content-end align-items-center"
+                    class="md:col-span-1 col-span-6 flex justify-end items-center"
                     style="font-weight: 700; font-size: 10.5px"
                   >
                     {{ $t("General.iban") }}:
                   </div>
-                  <div class="col-md-2 col-xs-6 text-start">
+                  <div class="md:col-span-2 col-span-6 text-left">
                     {{ importedMoneyflow.accountNumber }}
                   </div>
                   <div
-                    class="col-md-1 col-xs-6 d-flex justify-content-end align-items-center"
+                    class="md:col-span-1 col-span-6 flex justify-end items-center"
                     style="font-weight: 700; font-size: 10.5px"
                   >
                     {{ $t("General.bic") }}:
                   </div>
-                  <div class="col-md-2 col-xs-6 text-start">
+                  <div class="md:col-span-2 col-span-6 text-left">
                     {{ importedMoneyflow.bankCode }}
                   </div>
                   <div
-                    class="col-md-2 col-xs-6 d-flex justify-content-end align-items-center"
+                    class="md:col-span-2 col-span-6 flex justify-end items-center"
                     style="font-weight: 700; font-size: 10.5px"
                   >
                     {{ $t("Moneyflow.partner") }}:
                   </div>
-                  <div class="col-md-4 col-xs-6 text-start">
+                  <div class="md:col-span-4 col-span-6 text-left">
                     {{ importedMoneyflow.name }}
                   </div>
                 </div>
-                <div class="row mb-3">
+                <div class="grid gap-2 md:grid-cols-12">
                   <div
-                    class="col-md-1 col-xs-6 d-flex justify-content-end align-items-center"
+                    class="md:col-span-1 col-span-6 flex justify-end items-center"
                     style="font-weight: 700; font-size: 10.5px"
                   >
                     {{ $t("Moneyflow.reference") }}:
                   </div>
-                  <div class="col-md-11 col-xs-6 text-start">
+                  <div class="md:col-span-11 col-span-6 text-left">
                     {{ importedMoneyflow.usage }}
                   </div>
                 </div>
@@ -70,22 +66,18 @@
                   :id-suffix="importedMoneyflow.id + ''"
                   :fill-contractpartner-defaults="true"
                 />
-                <div class="row no-gutters flex-lg-nowrap">
-                  <div class="col-12">
+                <div class="flex flex-wrap items-center justify-center gap-2">
                     <ButtonSubmit :button-label="$t('Moneyflow.apply')" />
-                    <button
+                    <Button
                       type="button"
-                      class="btn btn-danger mx-2"
+                      variant="destructive"
                       @click="deleteImportedMoneyflow(importedMoneyflow)"
                     >
                       {{ $t("General.delete") }}
-                    </button>
-                  </div>
+                    </Button>
                 </div>
               </div>
             </form>
-          </div>
-        </div>
       </div>
     </div>
   </div>
@@ -101,6 +93,8 @@ import type { ImportedMoneyflow } from "@/model/moneyflow/ImportedMoneyflow";
 import ImportedMoneyflowService from "@/service/ImportedMoneyflowService";
 import DivError from "@/components/DivError.vue";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
+import { Smile } from "lucide-vue-next";
+import { Button } from "@/components/ui/button";
 
 const serverErrors = ref(new Array<string>());
 

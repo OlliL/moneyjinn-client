@@ -1,20 +1,16 @@
 <template>
-  <div class="container-fluid text-center">
-    <div class="row justify-content-md-center">
-      <div class="col-xs-12 mb-4">
-        <h4>{{ $t("Reports.title.costReporting") }}</h4>
-      </div>
+  <div class="container mx-auto py-6 space-y-6 text-center">
+    <div>
+      <h4 class="text-xl font-bold">{{ $t("Reports.title.costReporting") }}</h4>
     </div>
     <DivError :server-errors="serverErrors" />
 
-    <div class="row justify-content-md-center mb-4">
-      <div class="col-xl-6 col-md-12 col-xs-12">
-        <div class="card w-100 bg-light">
-          <div class="card-body">
+    <div class="flex justify-center">
+      <div class="w-full max-w-5xl rounded-lg border bg-card text-card-foreground shadow-sm p-4">
             <form @submit.prevent="showReportingGraph">
-              <div class="container-fluid">
-                <div class="row no-gutters flex-lg-nowrap mb-2">
-                  <div class="col-md-4 col-xs-12" v-show="!groupByYear">
+              <div class="space-y-4">
+                <div class="grid gap-3 md:grid-cols-12">
+                  <div class="md:col-span-4" v-show="!groupByYear">
                     <InputDate
                       v-model="startDateMonth"
                       :validation-schema-ref="schema.startDateMonth"
@@ -23,7 +19,7 @@
                       :field-label="$t('General.startDate')"
                     />
                   </div>
-                  <div class="col-md-4 col-xs-12" v-show="!groupByYear">
+                  <div class="md:col-span-4" v-show="!groupByYear">
                     <InputDate
                       v-model="endDateMonth"
                       :validation-schema-ref="schema.endDateMonth"
@@ -33,7 +29,7 @@
                     />
                   </div>
 
-                  <div class="col-md-4 col-xs-12" v-show="groupByYear">
+                  <div class="md:col-span-4" v-show="groupByYear">
                     <InputDate
                       v-model="startDateYear"
                       :validation-schema-ref="schema.startDateYear"
@@ -42,7 +38,7 @@
                       :field-label="$t('General.startDate')"
                     />
                   </div>
-                  <div class="col-md-4 col-xs-12" v-show="groupByYear">
+                  <div class="md:col-span-4" v-show="groupByYear">
                     <InputDate
                       v-model="endDateYear"
                       :validation-schema-ref="schema.endDateYear"
@@ -51,28 +47,26 @@
                       :field-label="$t('General.endDate')"
                     />
                   </div>
-                  <div class="col-md-4 col-xs-12">
-                    <div class="form-check form-switch text-start">
+                  <div class="md:col-span-4 space-y-2">
+                    <div class="flex items-center gap-2 text-left">
                       <input
-                        class="form-check-input"
+                        class="h-4 w-4"
                         type="checkbox"
                         id="showreppostingaccountmode"
                         v-model="singlePostingAccounts"
                       />
-                      <label
-                        class="form-check-label"
-                        for="showreppostingaccountmode"
+                      <label for="showreppostingaccountmode"
                         >{{ singlePostingAccountsLabel }}</label
                       >
                     </div>
-                    <div class="form-check form-switch text-start">
+                    <div class="flex items-center gap-2 text-left">
                       <input
-                        class="form-check-input"
+                        class="h-4 w-4"
                         type="checkbox"
                         id="showrepmonth"
                         v-model="groupByYear"
                       />
-                      <label class="form-check-label" for="showrepmonth">{{
+                      <label for="showrepmonth">{{
                         groupByYearLabel
                       }}</label>
                     </div>
@@ -80,10 +74,10 @@
                 </div>
 
                 <div
-                  class="row no-gutters flex-lg-nowrap"
+                  class="grid grid-cols-12 gap-3"
                   v-show="!singlePostingAccounts"
                 >
-                  <div class="col-5 text-start">
+                  <div class="col-span-5 text-left">
                     <label
                       for="postingAccountIdsYes"
                       :style="
@@ -99,7 +93,7 @@
                       id="postingAccountIdsYes"
                       name="postingAccountIdsYes"
                       :class="
-                        'form-select form-control ' +
+                        'w-full rounded-md border border-input bg-background px-3 py-2 text-sm ' +
                         errorDatasPostingAccountsYes.inputClass
                       "
                       multiple
@@ -114,55 +108,48 @@
                       </option>
                     </select>
                   </div>
-                  <div class="col-2">
-                    <br />
-                    <button
+                  <div class="col-span-2 space-y-2 pt-6">
+                    <Button
                       type="button"
-                      class="btn btn-light btn-sm"
-                      style="padding: 0.1rem 0.3rem !important"
+                      variant="outline"
+                      size="sm"
                       @click="removeAllPostingAccounts"
                     >
-                      <i class="bi bi-caret-right-fill"></i>
-                      <i class="bi bi-caret-right-fill"></i>
-                    </button>
-                    <br />
-                    <button
+                      <ChevronsRight class="h-4 w-4" />
+                    </Button>
+                    <Button
                       type="button"
-                      class="btn btn-light btn-sm"
-                      style="padding: 0.1rem 0.3rem !important"
+                      variant="outline"
+                      size="sm"
                       @click="removeSelectedPostingAccounts"
                     >
-                      <i class="bi bi-caret-right"></i>
-                    </button>
-                    <br />
-                    <br />
-                    <button
+                      <ChevronRight class="h-4 w-4" />
+                    </Button>
+                    <Button
                       type="button"
-                      class="btn btn-light btn-sm"
-                      style="padding: 0.1rem 0.3rem !important"
+                      variant="outline"
+                      size="sm"
                       @click="addSelectedPostingAccounts"
                     >
-                      <i class="bi bi-caret-left"></i>
-                    </button>
-                    <br />
-                    <button
+                      <ChevronLeft class="h-4 w-4" />
+                    </Button>
+                    <Button
                       type="button"
-                      class="btn btn-light btn-sm"
-                      style="padding: 0.1rem 0.3rem !important"
+                      variant="outline"
+                      size="sm"
                       @click="addAllPostingAccounts"
                     >
-                      <i class="bi bi-caret-left-fill"></i>
-                      <i class="bi bi-caret-left-fill"></i>
-                    </button>
+                      <ChevronsLeft class="h-4 w-4" />
+                    </Button>
                   </div>
-                  <div class="col-5 text-start">
+                  <div class="col-span-5 text-left">
                     <label for="postingAccountIdsYes" style="opacity: 0.65"
                       ><small>{{ $t("Reports.excluded") }}</small></label
                     >
                     <select
                       v-model="selectedPostingAccountsNo"
                       id="postingAccountIdsNo"
-                      class="form-select form-control"
+                      class="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
                       multiple
                       size="5"
                     >
@@ -177,10 +164,10 @@
                   </div>
                 </div>
                 <div
-                  class="row no-gutters flex-lg-nowrap justify-content-md-center mt-3"
+                  class="flex justify-center mt-3"
                   v-show="singlePostingAccounts"
                 >
-                  <div class="col-12 col-sm-6">
+                  <div class="w-full sm:w-1/2">
                     <SelectPostingAccount
                       v-model="selectedPostingAccount"
                       :validation-schema-ref="schema.selectedPostingAccount"
@@ -190,22 +177,15 @@
                   </div>
                 </div>
 
-                <div class="row no-gutters flex-lg-nowrap mt-3">
-                  <div class="col-12">
+                <div class="mt-3">
                     <ButtonSubmit :button-label="$t('General.show')" />
-                  </div>
                 </div>
               </div>
             </form>
-          </div>
-        </div>
       </div>
     </div>
-    <div
-      class="row justify-content-md-center"
-      style="position: relative; height: 55vh"
-    >
-      <div class="col-xxl-8 col-xs-12">
+    <div class="flex justify-center" style="position: relative; height: 55vh">
+      <div class="w-full lg:w-10/12">
         <Bar
           :data="chartData"
           :options="chartOptions"
@@ -253,6 +233,13 @@ import type { ReportingParameter } from "@/model/report/ReportingParameter";
 import type { ReportingMonthAmount } from "@/model/report/ReportingMonthAmount";
 
 import ReportService from "@/service/ReportService";
+import { Button } from "@/components/ui/button";
+import {
+  ChevronLeft,
+  ChevronRight,
+  ChevronsLeft,
+  ChevronsRight,
+} from "lucide-vue-next";
 
 const { t } = useI18n();
 
@@ -327,10 +314,10 @@ const endDateSchema = date(globErr(t("General.validation.endDate")));
 const optionalSchema = any().optional();
 const schema = {
   startDateMonth: computed(() =>
-    !groupByYear.value ? startDateSchema : optionalSchema,
+    groupByYear.value ? optionalSchema : startDateSchema,
   ),
   endDateMonth: computed(() =>
-    !groupByYear.value ? endDateSchema : optionalSchema,
+    groupByYear.value ? optionalSchema : endDateSchema,
   ),
   startDateYear: computed(() =>
     groupByYear.value ? startDateSchema : optionalSchema,
@@ -419,18 +406,16 @@ const loadData = () => {
       const maxDate = reportingParameter.endDate;
 
       if (minDate) {
-        startDateMonth.value = new Date(minDate.getTime());
-        startDateYear.value = new Date(minDate.getTime());
+        startDateMonth.value = new Date(minDate);
+        startDateYear.value = new Date(minDate);
       }
       if (maxDate) {
-        endDateMonth.value = new Date(maxDate.getTime());
-        endDateYear.value = new Date(maxDate.getTime());
+        endDateMonth.value = new Date(maxDate);
+        endDateYear.value = new Date(maxDate);
       }
 
       postingAccountsYes.value = reportingParameter.selectedPostingAccounts;
-      postingAccountsNo.value = reportingParameter.unselectedPostingAccounts
-        ? reportingParameter.unselectedPostingAccounts
-        : new Array();
+      postingAccountsNo.value = reportingParameter.unselectedPostingAccounts ?? [];
       postingAccounts.value = postingAccountsYes.value.concat(
         postingAccountsNo.value,
       );
@@ -451,7 +436,7 @@ const movePostingAccounts = (
     toBeMovedIds.find((id) => id == mpa.id),
   );
   const newFrom = from.filter(
-    (mpa) => !toBeMovedIds.find((id) => id == mpa.id),
+    (mpa) => !toBeMovedIds.includes(mpa.id),
   );
   for (let mpa of toBeMoved) {
     to.push(mpa);
@@ -471,10 +456,10 @@ const removeSelectedPostingAccounts = () => {
     postingAccountsNo.value,
     selectedPostingAccountsYes.value,
   );
-  selectedPostingAccountsYes.value = new Array();
+  selectedPostingAccountsYes.value = [];
 };
 const addAllPostingAccounts = () => {
-  postingAccountsNo.value = new Array<PostingAccount>();
+  postingAccountsNo.value = [];
   postingAccountsYes.value = postingAccounts.value;
   setState({ touched: true });
 };
@@ -484,7 +469,7 @@ const addSelectedPostingAccounts = () => {
     postingAccountsYes.value,
     selectedPostingAccountsNo.value,
   );
-  selectedPostingAccountsNo.value = new Array();
+  selectedPostingAccountsNo.value = [];
 };
 const randomColor = () => {
   const possibilities = [1, 2, 3, 4, 5, 6, 7, 8, 9, "A", "B", "C", "D"];
@@ -569,10 +554,12 @@ const showReportingGraph = handleSubmit(() => {
 
   if (singlePostingAccounts.value) {
     const selectedPostingAccounts = new Array<PostingAccount>();
-    const _selectedPostingAccount = postingAccounts.value.filter(
-      (mpa) => mpa.id == selectedPostingAccount.value,
-    )[0] as PostingAccount;
-    selectedPostingAccounts.push(_selectedPostingAccount);
+    const _selectedPostingAccount = postingAccounts.value.find(
+      (mpa) => mpa.id === selectedPostingAccount.value,
+    );
+    if (_selectedPostingAccount) {
+      selectedPostingAccounts.push(_selectedPostingAccount);
+    }
     reportingParameter.selectedPostingAccounts = selectedPostingAccounts;
   } else {
     reportingParameter.selectedPostingAccounts = postingAccountsYes.value;
@@ -586,8 +573,8 @@ const showReportingGraph = handleSubmit(() => {
         const chartTitle = makeChartTitle(reportingParameter);
         const resultMap = makeResultMap(reportingMonthAmounts);
 
-        chartData.value.labels = new Array();
-        chartData.value.datasets[0]!.data = new Array();
+    chartData.value.labels = [];
+    chartData.value.datasets[0]!.data = [];
         chartOptions.value.plugins.title.text = chartTitle;
 
         for (let [key, value] of resultMap) {

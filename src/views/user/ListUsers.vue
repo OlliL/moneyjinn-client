@@ -11,11 +11,9 @@
     @user-deleted="reloadView"
   />
 
-  <div class="container-fluid text-center">
-    <div class="row justify-content-md-center">
-      <div class="col-xs-12 mb-4">
-        <h4>{{ $t("General.users") }}</h4>
-      </div>
+  <div class="container mx-auto py-6 space-y-6 text-center">
+    <div>
+      <h4 class="text-xl font-bold">{{ $t("General.users") }}</h4>
     </div>
 
     <DivFilter
@@ -27,17 +25,17 @@
 
     <DivError :server-errors="serverErrors" />
 
-    <DivContentTable clazz="col-xxl-5 col-xs-12">
-      <thead>
-        <tr>
-          <th scope="col">{{ $t("General.name") }}</th>
-          <th scope="col">{{ $t("General.group") }}</th>
-          <th scope="col">{{ $t("User.role") }}</th>
-          <th scope="col">{{ $t("User.new") }}</th>
-          <th scope="col" colspan="2"></th>
-        </tr>
-      </thead>
-      <tbody>
+    <DivContentTable clazz="w-full lg:w-3/4">
+      <TableHeader>
+        <TableRow>
+          <TableHead class="font-bold border text-foreground">{{ $t("General.name") }}</TableHead>
+          <TableHead class="font-bold border text-foreground">{{ $t("General.group") }}</TableHead>
+          <TableHead class="font-bold border text-foreground">{{ $t("User.role") }}</TableHead>
+          <TableHead class="font-bold border text-foreground">{{ $t("User.new") }}</TableHead>
+          <TableHead class="border" colspan="2"></TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
         <ListUserRowVue
           v-for="user in users"
           :key="user.id"
@@ -45,7 +43,7 @@
           @edit-user="editUser"
           @delete-user="deleteUser"
         />
-      </tbody>
+      </TableBody>
     </DivContentTable>
   </div>
 </template>
@@ -59,6 +57,12 @@ import DivFilter from "@/components/DivFilter.vue";
 import CreateUserModalVue from "@/components/user/CreateUserModal.vue";
 import DeleteUserModalVue from "@/components/user/DeleteUserModal.vue";
 import ListUserRowVue from "@/components/user/ListUserRow.vue";
+import {
+  TableBody,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 import type { User } from "@/model/user/User";
 

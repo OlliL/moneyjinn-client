@@ -10,11 +10,9 @@
     @postingAccount-deleted="searchContent"
   />
 
-  <div class="container-fluid text-center">
-    <div class="row justify-content-md-center">
-      <div class="col-xs-12 mb-4">
-        <h4>{{ $t("General.postingAccounts") }}</h4>
-      </div>
+  <div class="container mx-auto py-6 space-y-6 text-center">
+    <div>
+      <h4 class="text-xl font-bold">{{ $t("General.postingAccounts") }}</h4>
     </div>
 
     <DivFilter
@@ -24,14 +22,14 @@
       @createClicked="showCreatePostingAccountModal"
     />
 
-    <DivContentTable clazz="col-md-3 col-xs-12">
-      <thead>
-        <tr>
-          <th scope="col">{{ $t("General.name") }}</th>
-          <th scope="colgroup" colspan="2"></th>
-        </tr>
-      </thead>
-      <tbody>
+    <DivContentTable clazz="w-full lg:w-2/5">
+      <TableHeader>
+        <TableRow>
+          <TableHead class="font-bold border text-foreground">{{ $t("General.name") }}</TableHead>
+          <TableHead class="border" colspan="2"></TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
         <ListPostingAccountRowVue
           v-for="mpa in postingAccounts"
           :key="mpa.id"
@@ -39,7 +37,7 @@
           @delete-postingAccount="deletePostingAccount"
           @edit-postingAccount="editPostingAccount"
         />
-      </tbody>
+      </TableBody>
     </DivContentTable>
   </div>
 </template>
@@ -54,6 +52,12 @@ import DivFilter from "@/components/DivFilter.vue";
 import CreatePostingAccountModalVue from "@/components/postingaccount/CreatePostingAccountModal.vue";
 import DeletePostingAccountModalVue from "@/components/postingaccount/DeletePostingAccountModal.vue";
 import ListPostingAccountRowVue from "@/components/postingaccount/ListPostingAccountRow.vue";
+import {
+  TableBody,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 import type { PostingAccount } from "@/model/postingaccount/PostingAccount";
 import { storeToRefs } from "pinia";

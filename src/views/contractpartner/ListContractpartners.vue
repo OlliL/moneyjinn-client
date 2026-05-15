@@ -12,11 +12,9 @@
 
   <ListContractpartnerAccountsModal ref="accountsModal" />
 
-  <div class="container-fluid text-center">
-    <div class="row justify-content-md-center">
-      <div class="col-xs-12 mb-4">
-        <h4 class="text-xl font-bold">{{ $t("General.contractpartner") }}</h4>
-      </div>
+  <div class="container mx-auto py-6 space-y-6 text-center">
+    <div>
+      <h4 class="text-xl font-bold">{{ $t("General.contractpartner") }}</h4>
     </div>
 
     <DivFilter

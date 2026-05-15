@@ -10,11 +10,9 @@
     @capitalsource-deleted="searchContent"
   />
 
-  <div class="container-fluid text-center">
-    <div class="row justify-content-md-center">
-      <div class="col-xs-12 mb-4">
-        <h4>{{ $t("General.capitalsources") }}</h4>
-      </div>
+  <div class="container mx-auto py-6 space-y-6 text-center">
+    <div>
+      <h4 class="text-xl font-bold">{{ $t("General.capitalsources") }}</h4>
     </div>
 
     <DivFilter
@@ -25,21 +23,21 @@
     />
 
     <DivContentTable>
-      <thead>
-        <tr>
-          <th scope="col">{{ $t("General.name") }}</th>
-          <th scope="col">{{ $t("Capitalsource.type") }}</th>
-          <th scope="col">{{ $t("Capitalsource.state") }}</th>
-          <th scope="col">{{ $t("General.iban") }}</th>
-          <th scope="col">{{ $t("General.bic") }}</th>
-          <th scope="col">{{ $t("General.validFrom") }}</th>
-          <th scope="col">{{ $t("General.validTil") }}</th>
-          <th scope="col">{{ $t("Capitalsource.groupUse") }}</th>
-          <th scope="col">{{ $t("Capitalsource.importAllowed") }}</th>
-          <th scope="colgroup" colspan="2"></th>
-        </tr>
-      </thead>
-      <tbody>
+      <TableHeader>
+        <TableRow>
+          <TableHead class="font-bold border text-foreground">{{ $t("General.name") }}</TableHead>
+          <TableHead class="font-bold border text-foreground">{{ $t("Capitalsource.type") }}</TableHead>
+          <TableHead class="font-bold border text-foreground">{{ $t("Capitalsource.state") }}</TableHead>
+          <TableHead class="font-bold border text-foreground">{{ $t("General.iban") }}</TableHead>
+          <TableHead class="font-bold border text-foreground">{{ $t("General.bic") }}</TableHead>
+          <TableHead class="font-bold border text-foreground">{{ $t("General.validFrom") }}</TableHead>
+          <TableHead class="font-bold border text-foreground">{{ $t("General.validTil") }}</TableHead>
+          <TableHead class="font-bold border text-foreground">{{ $t("Capitalsource.groupUse") }}</TableHead>
+          <TableHead class="font-bold border text-foreground">{{ $t("Capitalsource.importAllowed") }}</TableHead>
+          <TableHead class="border" colspan="2"></TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
         <ListCapitalsourceRowVue
           v-for="mcs in capitalsources"
           :key="mcs.id"
@@ -48,7 +46,7 @@
           @delete-capitalsource="deleteCapitalsource"
           @edit-capitalsource="editCapitalsource"
         />
-      </tbody>
+      </TableBody>
     </DivContentTable>
   </div>
 </template>
@@ -58,6 +56,12 @@ import { onMounted, ref, useTemplateRef, watch } from "vue";
 
 import { useCapitalsourceStore } from "@/stores/CapitalsourceStore";
 import { useUserSessionStore } from "@/stores/UserSessionStore";
+import {
+  TableBody,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 import DivContentTable from "@/components/DivContentTable.vue";
 import DivFilter from "@/components/DivFilter.vue";

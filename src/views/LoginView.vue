@@ -1,20 +1,18 @@
 <template>
   <form @submit.prevent="handleLogin">
-    <div
-      class="d-flex flex-column min-vh-100 justify-content-center align-items-center"
-    >
-      <div class="card">
-        <div class="card-header text-center p-3">
-          <h4>{{ $t("LoginView.welcome") }}</h4>
+    <div class="flex min-h-screen items-center justify-center px-4">
+      <div class="w-full max-w-md rounded-lg border bg-card text-card-foreground shadow-sm">
+        <div class="border-b p-4 text-center">
+          <h4 class="text-xl font-bold">{{ $t("LoginView.welcome") }}</h4>
         </div>
-        <div class="card-body">
-          <div class="text-center p-3">
-            <h5>
+        <div class="p-4">
+          <div class="text-center pb-3">
+            <h5 class="font-medium">
               {{ $t("LoginView.enterYourData") }}
             </h5>
           </div>
           <DivError :server-errors="serverErrors" />
-          <div class="row no-gutters flex-lg-nowrap mb-2">
+          <div class="mb-2">
             <InputStandard
               v-model="username"
               :validation-schema="schema.username"
@@ -22,13 +20,14 @@
               :field-label="$t('General.username')"
               :focus="true"
             >
-              <template #icon
-                ><span class="input-group-text"
-                  ><i class="bi bi-person"></i></span
-              ></template>
+              <template #icon>
+                <span class="inline-flex items-center rounded-l-md border border-r-0 bg-muted px-2 text-muted-foreground">
+                  <User class="h-4 w-4" />
+                </span>
+              </template>
             </InputStandard>
           </div>
-          <div class="row no-gutters flex-lg-nowrap mb-2">
+          <div class="mb-2">
             <InputStandard
               v-model="password"
               :validation-schema="schema.password"
@@ -36,22 +35,20 @@
               id="password"
               :field-label="$t('General.password')"
             >
-              <template #icon
-                ><span class="input-group-text"><i class="bi bi-lock"></i></span
-              ></template>
+              <template #icon>
+                <span class="inline-flex items-center rounded-l-md border border-r-0 bg-muted px-2 text-muted-foreground">
+                  <Lock class="h-4 w-4" />
+                </span>
+              </template>
             </InputStandard>
           </div>
-          <div class="row no-gutters flex-lg-nowrap mb-2">
-            <div class="p-1 form-group col-sm-12 text-center">
+          <div class="mb-2 text-center">
               <ButtonSubmit :button-label="$t('LoginView.login')">
-                <template #icon
-                  ><i class="bi bi-box-arrow-in-right"></i>&nbsp;
-                </template>
+                <template #icon><LogIn class="h-4 w-4" /> </template>
               </ButtonSubmit>
-            </div>
           </div>
         </div>
-        <div class="card-footer text-center">
+        <div class="border-t p-3 text-center text-sm text-muted-foreground">
           <small
             >moneyjin {{ version }} - &copy; {{ $t("LoginView.by") }} Oliver
             Lehmann</small
@@ -73,6 +70,7 @@ import { version } from "../../package.json";
 import ButtonSubmit from "@/components/ButtonSubmit.vue";
 import DivError from "@/components/DivError.vue";
 import InputStandard from "@/components/InputStandard.vue";
+import { Lock, LogIn, User } from "lucide-vue-next";
 
 import UserService from "@/service/UserService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";

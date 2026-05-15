@@ -1,20 +1,16 @@
 <template>
-  <div class="container-fluid text-center">
-    <div class="row justify-content-md-center">
-      <div class="col-xs-12 mb-4">
-        <h4>{{ $t("Reports.title.trends") }}</h4>
-      </div>
+  <div class="container mx-auto py-6 space-y-6 text-center">
+    <div>
+      <h4 class="text-xl font-bold">{{ $t("Reports.title.trends") }}</h4>
     </div>
     <DivError :server-errors="serverErrors" />
 
-    <div class="row justify-content-md-center mb-2">
-      <div class="col-xxl-4 col-md-7 col-xs-12">
-        <div class="card w-100 bg-light">
-          <div class="card-body">
+    <div class="flex justify-center">
+      <div class="w-full max-w-3xl rounded-lg border bg-card text-card-foreground shadow-sm p-4">
             <form @submit.prevent="showTrends">
-              <div class="container-fluid">
-                <div class="row no-gutters flex-lg-nowrap">
-                  <div class="col-md-6 col-xs-12 mb-2">
+              <div class="space-y-4">
+                <div class="grid gap-3 md:grid-cols-2">
+                  <div>
                     <InputDate
                       v-model="startDate"
                       :validation-schema="schema.startDate"
@@ -23,7 +19,7 @@
                       :field-label="$t('General.startDate')"
                     />
                   </div>
-                  <div class="col-md-6 col-xs-12">
+                  <div>
                     <InputDate
                       v-model="endDate"
                       :validation-schema="schema.endDate"
@@ -34,31 +30,29 @@
                   </div>
                 </div>
 
-                <div class="row no-gutters flex-lg-nowrap">
-                  <div class="col-md-2 col-xs-12 d-flex align-items-center">
-                    <div class="form-check form-switch text-start">
+                <div class="flex justify-start">
+                  <div class="flex items-center gap-3 text-left">
                       <input
-                        class="form-check-input"
+                        class="h-4 w-4"
                         type="checkbox"
                         id="capitalsourcesActive"
                         v-model="capitalsourcesActive"
                       />
-                      <label for="capitalsourcesActive" style="opacity: 0.65">{{
+                      <label for="capitalsourcesActive" class="text-muted-foreground">{{
                         $t("General.capitalsources")
                       }}</label>
-                    </div>
                   </div>
                 </div>
                 <div
-                  class="row no-gutters flex-lg-nowrap"
+                  class="grid"
                   v-if="capitalsourcesActive"
                 >
-                  <div class="col-12 mb-3 text-start">
+                  <div class="mb-3 text-left">
                     <select
                       v-model="capitalsourceIds"
                       id="capitalsourceIds"
                       name="capitalsourceIds"
-                      class="form-select form-control"
+                      class="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
                       multiple
                       size="4"
                     >
@@ -73,28 +67,26 @@
                   </div>
                 </div>
 
-                <div class="row no-gutters flex-lg-nowrap">
-                  <div class="col-md-2 col-xs-12 d-flex align-items-center">
-                    <div class="form-check form-switch text-start">
+                <div class="flex justify-start">
+                  <div class="flex items-center gap-3 text-left">
                       <input
-                        class="form-check-input"
+                        class="h-4 w-4"
                         type="checkbox"
                         id="etfsActive"
                         v-model="etfsActive"
                       />
-                      <label for="etfs" style="opacity: 0.65">{{
+                      <label for="etfs" class="text-muted-foreground">{{
                         $t("General.etfs")
                       }}</label>
-                    </div>
                   </div>
                 </div>
-                <div class="row no-gutters flex-lg-nowrap" v-if="etfsActive">
-                  <div class="col-12 mb-3 text-start">
+                <div class="grid" v-if="etfsActive">
+                  <div class="mb-3 text-left">
                     <select
                       v-model="selectedEtfIds"
                       id="etfIds"
                       name="etfIds"
-                      class="form-select form-control"
+                      class="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
                       multiple
                       size="4"
                     >
@@ -109,24 +101,17 @@
                   </div>
                 </div>
 
-                <div class="row no-gutters flex-lg-nowrap">
-                  <div class="col-12">
-                    <button type="submit" class="btn btn-primary">
+                <div>
+                    <Button type="submit">
                       {{ $t("General.show") }}
-                    </button>
-                  </div>
+                    </Button>
                 </div>
               </div>
             </form>
-          </div>
-        </div>
       </div>
     </div>
-    <div
-      class="row justify-content-md-center"
-      style="position: relative; height: 55vh"
-    >
-      <div class="col-xxl-7 col-xl-10 col-xs-12">
+    <div class="flex justify-center" style="position: relative; height: 55vh">
+      <div class="w-full lg:w-10/12 xl:w-9/12">
         <Line
           :data="chartData"
           :options="chartOptions"
@@ -169,6 +154,7 @@ import ReportService from "@/service/ReportService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import type { Trends } from "@/model/report/Trends";
 import { useEtfStore } from "@/stores/EtfStore";
+import { Button } from "@/components/ui/button";
 
 const { t } = useI18n();
 

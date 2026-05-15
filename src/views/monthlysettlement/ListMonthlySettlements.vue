@@ -7,28 +7,19 @@
     ref="editModal"
     @monthly-settlement-upserted="monthlySettlementUpserted"
   />
-  <div class="container-fluid text-center">
-    <div class="row justify-content-md-center">
-      <div class="col-xs-12 mb-4">
-        <h4>{{ $t("General.monthlysettlements") }}</h4>
-      </div>
+  <div class="container mx-auto py-6 space-y-6 text-center">
+    <div>
+      <h4 class="text-xl font-bold">{{ $t("General.monthlysettlements") }}</h4>
     </div>
 
-    <div class="row justify-content-md-center">
-      <div class="col-md-auto mb-3">
-        <div class="row">
-          <div class="col-md-auto mb-3">
-            <button
-              type="button"
-              class="btn btn-primary"
-              @click="showEditMonthlySettlementModal()"
-            >
-              {{ $t("General.new") }}
-            </button>
-          </div>
-          <div class="col-md-auto">
+    <div class="flex justify-center">
+      <div class="flex flex-wrap items-center justify-center gap-3">
+          <Button type="button" @click="showEditMonthlySettlementModal()">
+            {{ $t("General.new") }}
+          </Button>
+          <div>
             <select
-              class="form-select"
+              class="h-9 rounded-md border border-input bg-background px-3 text-sm"
               v-model="selectedYear"
               @change="selectMonth(selectedYear + '', selectedMonth + '')"
             >
@@ -37,13 +28,15 @@
               </option>
             </select>
           </div>
-          <div class="col">
+          <div>
             <nav aria-label="Month navigation" v-if="dataLoaded">
-              <ul class="pagination month-selection">
-                <li class="page-item" v-for="month in months" :key="month">
+              <ul class="month-selection flex flex-wrap justify-center gap-2">
+                <li v-for="month in months" :key="month">
                   <router-link
                     :class="
-                      selectedMonth == month ? 'page-link active' : 'page-link'
+                      selectedMonth == month
+                        ? 'inline-flex h-9 items-center rounded-md bg-primary px-3 text-sm text-primary-foreground'
+                        : 'inline-flex h-9 items-center rounded-md border border-input px-3 text-sm hover:bg-accent'
                     "
                     :to="{
                       name: Routes.ListMonthlySettlements,
@@ -56,7 +49,6 @@
               </ul>
             </nav>
           </div>
-        </div>
       </div>
     </div>
 
@@ -64,22 +56,21 @@
 
     <ShowMontlySettlementVue :year="selectedYear" :month="selectedMonth" />
 
-    <div class="row justify-content-md-center mb-4" v-if="selectedMonth">
-      <div class="col-md-4 col-xs-12">
-        <button
+    <div class="flex justify-center pb-4" v-if="selectedMonth">
+      <div class="flex flex-wrap justify-center gap-2">
+        <Button
           type="button"
-          class="btn btn-primary mx-2"
           @click="showEditMonthlySettlementModal(selectedYear, selectedMonth)"
         >
           {{ $t("General.edit") }}
-        </button>
-        <button
+        </Button>
+        <Button
           type="button"
-          class="btn btn-danger mx-2"
+          variant="destructive"
           @click="showDeleteMonthlySettlementModal"
         >
           {{ $t("General.delete") }}
-        </button>
+        </Button>
       </div>
     </div>
     <!---->
@@ -94,6 +85,7 @@ import DeleteMonthlySettlementModalVue from "@/components/monthlysettlement/Dele
 import DivError from "@/components/DivError.vue";
 import EditMonthlySettlementModalVue from "@/components/monthlysettlement/EditMonthlySettlementModal.vue";
 import ShowMontlySettlementVue from "@/components/monthlysettlement/ShowMonthlySettlement.vue";
+import { Button } from "@/components/ui/button";
 
 import router, { Routes } from "@/router";
 

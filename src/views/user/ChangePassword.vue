@@ -1,19 +1,14 @@
 <template>
-  <div class="container-fluid text-center">
-    <div class="row justify-content-md-center">
-      <div class="col-xs-12 mb-4">
-        <h4>{{ $t("User.title.changePassword") }}</h4>
-      </div>
+  <div class="container mx-auto py-6 space-y-6 text-center">
+    <div>
+      <h4 class="text-xl font-bold">{{ $t("User.title.changePassword") }}</h4>
     </div>
-    <div class="row justify-content-md-center mb-2">
-      <div class="col-xxl-3 col-xl-5 col-md-6 col-xs-12">
-        <div class="card w-100 bg-light">
-          <div class="card-body">
+    <div class="flex justify-center">
+      <div class="w-full max-w-xl rounded-lg border bg-card text-card-foreground shadow-sm p-4">
             <form @submit.prevent="changePassword">
-              <div class="container-fluid">
+              <div class="space-y-4">
                 <DivError :server-errors="serverErrors" />
-                <div class="row no-gutters flex-lg-nowrap mb-4">
-                  <div class="col-md-12 col-xs-12">
+                <div>
                     <InputStandard
                       v-model="passwordOld"
                       :validation-schema="schema.passwordOld"
@@ -21,10 +16,8 @@
                       :field-label="$t('User.oldPassword')"
                       field-type="password"
                     />
-                  </div>
                 </div>
-                <div class="row no-gutters flex-lg-nowrap mb-2">
-                  <div class="col-md-12 col-xs-12">
+                <div>
                     <InputStandard
                       v-model="password1"
                       :validation-schema-ref="schema.password"
@@ -32,10 +25,8 @@
                       :field-label="$t('User.newPassword')"
                       field-type="password"
                     />
-                  </div>
                 </div>
-                <div class="row no-gutters flex-lg-nowrap mb-3">
-                  <div class="col-md-12 col-xs-12">
+                <div>
                     <InputStandard
                       v-model="password2"
                       :validation-schema-ref="schema.password"
@@ -43,19 +34,14 @@
                       :field-label="$t('User.passwordVerify')"
                       field-type="password"
                     />
-                  </div>
                 </div>
-                <div class="row no-gutters flex-lg-nowrap mt-2">
-                  <div class="col-12">
-                    <button type="submit" class="btn btn-primary">
+                <div>
+                    <Button type="submit">
                       {{ $t("General.save") }}
-                    </button>
-                  </div>
+                    </Button>
                 </div>
               </div>
             </form>
-          </div>
-        </div>
       </div>
     </div>
   </div>
@@ -70,6 +56,7 @@ import router, { Routes } from "@/router";
 
 import DivError from "@/components/DivError.vue";
 import InputStandard from "@/components/InputStandard.vue";
+import { Button } from "@/components/ui/button";
 
 import { useUserSessionStore } from "@/stores/UserSessionStore";
 

@@ -26,16 +26,14 @@
     @etf-preliminary-lump-sum-deleted="reloadView"
     ref="deleteModalYearly"
   />
-  <div class="container-fluid text-center">
-    <div class="row justify-content-md-center">
-      <div class="col-xs-12 mb-4">
-        <h4>{{ $t("General.preliminaryLumpSums") }}</h4>
-      </div>
+  <div class="container mx-auto py-6 space-y-6 text-center">
+    <div>
+      <h4 class="text-xl font-bold">{{ $t("General.preliminaryLumpSums") }}</h4>
     </div>
-    <div class="row justify-content-md-center">
-      <div class="col-xxl-5 col-xl-6 col-md-8 col-xs-12">
-        <div class="row flex-lg-nowrap d-flex align-items-center">
-          <div class="col-xxl-6 col-md-8 col-xs-12 mb-3">
+    <div class="flex justify-center">
+      <div class="w-full max-w-5xl space-y-4">
+        <div class="grid gap-3 md:grid-cols-12 items-end">
+          <div class="md:col-span-6">
             <SelectStandard
               v-model="selectedEtfId"
               id="etf"
@@ -43,10 +41,9 @@
               :select-box-values="getAsSelectBoxValues()"
             />
           </div>
-          <div class="col-md-auto mb-3" v-if="selectedEtf">
-            <button
+          <div class="md:col-span-2" v-if="selectedEtf">
+            <Button
               type="button"
-              class="btn btn-primary"
               @click="
                 showCreateEtfPreliminaryLumpSumModal(
                   selectedEtfId,
@@ -55,12 +52,11 @@
               "
             >
               {{ $t("ETFPreliminaryLumpSum.newMonthly") }}
-            </button>
+            </Button>
           </div>
-          <div class="col-md-auto mb-3" v-if="selectedEtf">
-            <button
+          <div class="md:col-span-2" v-if="selectedEtf">
+            <Button
               type="button"
-              class="btn btn-primary"
               @click="
                 showCreateEtfPreliminaryLumpSumModal(
                   selectedEtfId,
@@ -69,12 +65,11 @@
               "
             >
               {{ $t("ETFPreliminaryLumpSum.newPiece") }}
-            </button>
+            </Button>
           </div>
-          <div class="col-md-auto mb-3" v-if="selectedEtf">
-            <button
+          <div class="md:col-span-2" v-if="selectedEtf">
+            <Button
               type="button"
-              class="btn btn-primary"
               @click="
                 showCreateEtfPreliminaryLumpSumModal(
                   selectedEtfId,
@@ -83,27 +78,25 @@
               "
             >
               {{ $t("ETFPreliminaryLumpSum.newYearly") }}
-            </button>
+            </Button>
           </div>
         </div>
       </div>
 
-      <div class="row justify-content-md-center mb-12 pb-3">
-        <div class="col-xxl-1 col-xl-2 col-md-3 col-xs-12">
+      <div class="flex justify-center pb-3">
+        <div class="w-full max-w-xs">
           <div
-            class="col-xxl-12 col-xs-12 d-flex align-items-center justify-content-start"
+            class="flex items-center justify-start"
             v-if="yearsLoaded"
           >
-            <span
+            <button
               @click="navigateToPreviousYear"
-              :class="[
-                'bi bi-caret-left-fill link-primary me-2 fs-3',
-                { invisible: !showPreviousYearLink },
-              ]"
-              style="width: 1.5rem; display: inline-block"
-            ></span>
+              :class="['mr-2', { invisible: !showPreviousYearLink }]"
+            >
+              <ChevronLeft class="h-6 w-6 text-primary" />
+            </button>
             <select
-              class="form-select flex-grow-1"
+              class="h-9 grow rounded-md border border-input bg-background px-3 text-sm"
               v-model="selectedYear"
               style="min-width: 6rem"
             >
@@ -112,14 +105,12 @@
               </option>
             </select>
 
-            <span
+            <button
               @click="navigateToNextYear"
-              :class="[
-                'bi bi-caret-right-fill link-primary ms-2 fs-3',
-                { invisible: !showNextYearLink },
-              ]"
-              style="width: 1.5rem; display: inline-block"
-            ></span>
+              :class="['ml-2', { invisible: !showNextYearLink }]"
+            >
+              <ChevronRight class="h-6 w-6 text-primary" />
+            </button>
           </div>
         </div>
       </div>
@@ -134,16 +125,15 @@
           EtfPreliminaryLumpSumType.AMOUNT_PER_MONTH
       "
     >
-      <div class="row justify-content-md-center mb-4">
-        <div class="col-xl-3 col-lg-6 col-xs-12">
+      <div class="flex justify-center pb-4">
+        <div class="w-full max-w-md">
           <ShowEtfPreliminaryLumpSumMonthlyVue :mep="etfPreliminaryLumpSum" />
         </div>
       </div>
-      <div class="row justify-content-md-center mb-4">
-        <div class="col-md-4 col-xs-12">
-          <button
+      <div class="flex justify-center pb-4">
+        <div class="flex flex-wrap justify-center gap-2">
+          <Button
             type="button"
-            class="btn btn-primary mx-2"
             @click="
               showCreateEtfPreliminaryLumpSumModal(
                 selectedEtfId,
@@ -153,14 +143,14 @@
             "
           >
             {{ $t("General.edit") }}
-          </button>
-          <button
+          </Button>
+          <Button
             type="button"
-            class="btn btn-danger mx-2"
+            variant="destructive"
             @click="showDeleteEtfPreliminaryLumpSumModal"
           >
             {{ $t("General.delete") }}
-          </button>
+          </Button>
         </div>
       </div>
     </div>
@@ -172,16 +162,15 @@
           EtfPreliminaryLumpSumType.AMOUNT_PER_PIECE
       "
     >
-      <div class="row justify-content-md-center mb-4">
-        <div class="col-xl-3 col-lg-6 col-xs-12">
+      <div class="flex justify-center pb-4">
+        <div class="w-full max-w-md">
           <ShowEtfPreliminaryLumpSumPieceVue :mep="etfPreliminaryLumpSum" />
         </div>
       </div>
-      <div class="row justify-content-md-center mb-4">
-        <div class="col-md-4 col-xs-12">
-          <button
+      <div class="flex justify-center pb-4">
+        <div class="flex flex-wrap justify-center gap-2">
+          <Button
             type="button"
-            class="btn btn-primary mx-2"
             @click="
               showCreateEtfPreliminaryLumpSumModal(
                 selectedEtfId,
@@ -191,14 +180,14 @@
             "
           >
             {{ $t("General.edit") }}
-          </button>
-          <button
+          </Button>
+          <Button
             type="button"
-            class="btn btn-danger mx-2"
+            variant="destructive"
             @click="showDeleteEtfPreliminaryLumpSumModal"
           >
             {{ $t("General.delete") }}
-          </button>
+          </Button>
         </div>
       </div>
     </div>
@@ -209,16 +198,15 @@
         etfPreliminaryLumpSum?.type == EtfPreliminaryLumpSumType.AMOUNT_PER_YEAR
       "
     >
-      <div class="row justify-content-md-center mb-4">
-        <div class="col-xl-3 col-lg-6 col-xs-12">
+      <div class="flex justify-center pb-4">
+        <div class="w-full max-w-md">
           <ShowEtfPreliminaryLumpSumYearly :mep="etfPreliminaryLumpSum" />
         </div>
       </div>
-      <div class="row justify-content-md-center mb-4">
-        <div class="col-md-4 col-xs-12">
-          <button
+      <div class="flex justify-center pb-4">
+        <div class="flex flex-wrap justify-center gap-2">
+          <Button
             type="button"
-            class="btn btn-primary mx-2"
             @click="
               showCreateEtfPreliminaryLumpSumModal(
                 selectedEtfId,
@@ -228,14 +216,14 @@
             "
           >
             {{ $t("General.edit") }}
-          </button>
-          <button
+          </Button>
+          <Button
             type="button"
-            class="btn btn-danger mx-2"
+            variant="destructive"
             @click="showDeleteEtfPreliminaryLumpSumModal"
           >
             {{ $t("General.delete") }}
-          </button>
+          </Button>
         </div>
       </div>
     </div>
@@ -264,6 +252,8 @@ import { useEtfStore } from "@/stores/EtfStore";
 import CreateEtfPreliminaryLumpSumModalYearly from "@/components/etf/CreateEtfPreliminaryLumpSumModalYearly.vue";
 import DeleteEtfPreliminaryLumpSumModalYearly from "@/components/etf/DeleteEtfPreliminaryLumpSumModalYearly.vue";
 import ShowEtfPreliminaryLumpSumYearly from "@/components/etf/ShowEtfPreliminaryLumpSumYearly.vue";
+import { Button } from "@/components/ui/button";
+import { ChevronLeft, ChevronRight } from "lucide-vue-next";
 
 const serverErrors = ref(new Array<string>());
 

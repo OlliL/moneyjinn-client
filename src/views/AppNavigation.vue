@@ -467,7 +467,7 @@
       <MenubarContent>
         <MenubarItem>
           <router-link
-            class="dropdown-item"
+            class="!text-foreground !no-underline"
             :to="{ name: Routes.ChangePassword, force: true }"
             >{{ $t("User.title.changePassword") }}</router-link
           >
@@ -475,7 +475,7 @@
         <MenubarSeparator v-if="userIsAdmin" />
         <MenubarItem v-if="userIsAdmin">
           <router-link
-            class="dropdown-item"
+            class="!text-foreground !no-underline"
             :to="{ name: Routes.ListPostingAccounts, force: true }"
             >{{ $t("General.postingAccounts") }}</router-link
           >
@@ -483,14 +483,14 @@
         <MenubarSeparator v-if="userIsAdmin" />
         <MenubarItem v-if="userIsAdmin">
           <router-link
-            class="dropdown-item"
+            class="!text-foreground !no-underline"
             :to="{ name: Routes.ListUsers, force: true }"
             >{{ $t("General.users") }}</router-link
           >
         </MenubarItem>
         <MenubarItem v-if="userIsAdmin">
           <router-link
-            class="dropdown-item"
+            class="!text-foreground !no-underline"
             :to="{ name: Routes.ListGroups, force: true }"
             >{{ $t("General.groups") }}</router-link
           >
@@ -707,6 +707,6 @@ watch(
 </script>
 <style scoped>
 .router-link-active {
-  background-color: lightgrey;
+  background-color: hsl(var(--accent));
 }
 </style>

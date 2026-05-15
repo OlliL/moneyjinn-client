@@ -11,11 +11,9 @@
     @etf-deleted="searchContent"
   />
 
-  <div class="container-fluid text-center">
-    <div class="row justify-content-md-center">
-      <div class="col-xs-12 mb-4">
-        <h4>{{ $t("General.etfs") }}</h4>
-      </div>
+  <div class="container mx-auto py-6 space-y-6 text-center">
+    <div>
+      <h4 class="text-xl font-bold">{{ $t("General.etfs") }}</h4>
     </div>
 
     <DivFilter
@@ -27,37 +25,37 @@
 
     <DivError :server-errors="serverErrors" />
 
-    <DivContentTable clazz="col-xxl-8 col-xs-12">
-      <thead>
-        <tr>
-          <th scope="col" rowspan="2" id="name">{{ $t("General.name") }}</th>
-          <th scope="col" rowspan="2" id="isin">{{ $t("ETF.isin") }}</th>
-          <th scope="col" rowspan="2" id="wkn">{{ $t("ETF.wkn") }}</th>
-          <th scope="col" rowspan="2" id="ticker">{{ $t("ETF.ticker") }}</th>
-          <th scope="colgroup" colspan="3" id="transactionCosts">
+    <DivContentTable clazz="w-full lg:w-11/12">
+      <TableHeader>
+        <TableRow>
+          <TableHead class="font-bold border text-foreground" rowspan="2" id="name">{{ $t("General.name") }}</TableHead>
+          <TableHead class="font-bold border text-foreground" rowspan="2" id="isin">{{ $t("ETF.isin") }}</TableHead>
+          <TableHead class="font-bold border text-foreground" rowspan="2" id="wkn">{{ $t("ETF.wkn") }}</TableHead>
+          <TableHead class="font-bold border text-foreground" rowspan="2" id="ticker">{{ $t("ETF.ticker") }}</TableHead>
+          <TableHead class="font-bold border text-foreground" colspan="3" id="transactionCosts">
             {{ $t("ETFFlow.transactionCosts") }}
-          </th>
-          <th scope="col" rowspan="2" id="partialTaxExemption">
+          </TableHead>
+          <TableHead class="font-bold border text-foreground" rowspan="2" id="partialTaxExemption">
             {{ $t("ETF.partialTaxExemption") }}
-          </th>
-          <th scope="col" rowspan="2" id="favorite">
-            <i class="bi bi-star-fill text-warning"></i>
-          </th>
-          <th scope="col" rowspan="2" colspan="2" id="editDelete"></th>
-        </tr>
-        <tr>
-          <th scope="col" id="abs">
+          </TableHead>
+          <TableHead class="font-bold border text-foreground" rowspan="2" id="favorite">
+            <Star class="h-4 w-4 text-yellow-500" />
+          </TableHead>
+          <TableHead class="border" rowspan="2" colspan="2" id="editDelete"></TableHead>
+        </TableRow>
+        <TableRow>
+          <TableHead class="font-bold border text-foreground" id="abs">
             {{ $t("ETFFlow.transactionCostsAbsolute") }}
-          </th>
-          <th scope="col" id="rel">
+          </TableHead>
+          <TableHead class="font-bold border text-foreground" id="rel">
             {{ $t("ETFFlow.transactionCostsRelative") }}
-          </th>
-          <th scope="col" id="max">
+          </TableHead>
+          <TableHead class="font-bold border text-foreground" id="max">
             {{ $t("ETFFlow.transactionCostsMaximum") }}
-          </th>
-        </tr>
-      </thead>
-      <tbody>
+          </TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
         <ListEtfRowVue
           v-for="met in etfs"
           :key="met.id"
@@ -65,7 +63,7 @@
           @edit-etf="editEtf"
           @delete-etf="deleteEtf"
         />
-      </tbody>
+      </TableBody>
     </DivContentTable>
   </div>
 </template>
@@ -79,11 +77,18 @@ import DivFilter from "@/components/DivFilter.vue";
 import CreateEtfModalVue from "@/components/etf/CreateEtfModal.vue";
 import DeleteEtfModalVue from "@/components/etf/DeleteEtfModal.vue";
 import ListEtfRowVue from "@/components/etf/ListEtfRow.vue";
+import {
+  TableBody,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 import type { Etf } from "@/model/etf/Etf";
 
 import { useEtfStore } from "@/stores/EtfStore";
 import { storeToRefs } from "pinia";
+import { Star } from "lucide-vue-next";
 
 const serverErrors = ref(new Array<string>());
 const etfs = ref(new Array<Etf>());

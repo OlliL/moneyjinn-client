@@ -1,16 +1,13 @@
 <template>
-  <div class="container-fluid">
-    <div class="row justify-content-md-center">
-      <div class="col-xs-12 mb-4 text-center">
-        <h4>{{ $t("Reports.title.reports") }}</h4>
-      </div>
+  <div class="container mx-auto py-6 space-y-6">
+    <div class="text-center">
+      <h4 class="text-xl font-bold">{{ $t("Reports.title.reports") }}</h4>
     </div>
-    <div class="row justify-content-md-center">
-      <div class="col-md-auto mb-3">
-        <div class="row">
-          <div class="col-md-auto">
+    <div class="flex justify-center">
+      <div class="flex flex-wrap items-center justify-center gap-3">
+          <div>
             <select
-              class="form-select"
+              class="h-9 rounded-md border border-input bg-background px-3 text-sm"
               v-model="selectedYear"
               @change="selectMonth(selectedYear + '')"
             >
@@ -19,15 +16,15 @@
               </option>
             </select>
           </div>
-          <div class="col">
+          <div>
             <nav aria-label="Month navigation" v-if="dataLoaded">
-              <ul class="pagination month-selection flex-wrap">
-                <li class="page-item" v-for="month in months" :key="month">
+              <ul class="month-selection flex flex-wrap justify-center gap-2">
+                <li v-for="month in months" :key="month">
                   <router-link
                     :class="
                       $props.month == month + ''
-                        ? 'page-link active'
-                        : 'page-link'
+                        ? 'inline-flex h-9 items-center rounded-md bg-primary px-3 text-sm text-primary-foreground'
+                        : 'inline-flex h-9 items-center rounded-md border border-input px-3 text-sm hover:bg-accent'
                     "
                     :to="{
                       name: Routes.ListReports,
@@ -47,31 +44,24 @@
               </ul>
             </nav>
           </div>
-        </div>
       </div>
     </div>
     <DivError :server-errors="serverErrors" />
 
-    <div class="row d-none d-md-block">
-      <div
-        class="col-md-3 text-start g-0"
-        style="position: fixed; z-index: 1030; margin-top: 35vh"
-      >
-        <span
-          @click="navigateToPreviousMonth"
+    <div class="hidden md:block">
+      <div class="fixed left-4 top-1/2 z-20 -translate-y-1/2">
+        <ChevronLeft
           v-if="previousMonthLink"
-          class="bi bi-caret-left-fill link-primary"
-        ></span>
+          class="h-10 w-10 cursor-pointer text-primary"
+          @click="navigateToPreviousMonth"
+        />
       </div>
-      <div
-        class="col-md-3 text-end g-0 offset-md-9"
-        style="position: fixed; z-index: 1030; margin-top: 35vh"
-      >
-        <span
-          @click="navigateToNextMonth"
+      <div class="fixed right-4 top-1/2 z-20 -translate-y-1/2">
+        <ChevronRight
           v-if="nextMonthLink"
-          class="bi bi-caret-right-fill link-primary"
-        ></span>
+          class="h-10 w-10 cursor-pointer text-primary"
+          @click="navigateToNextMonth"
+        />
       </div>
     </div>
     <ReportTableVue
@@ -99,6 +89,7 @@ import { getMonthName } from "@/tools/views/MonthName";
 import ReportService from "@/service/ReportService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
+import { ChevronLeft, ChevronRight } from "lucide-vue-next";
 
 const serverErrors = ref(new Array<string>());
 
@@ -235,8 +226,3 @@ const selectMonth = (year: string, month?: string) => {
 };
 </script>
 
-<style scoped>
-span.bi {
-  font-size: 2.5rem;
-}
-</style>
