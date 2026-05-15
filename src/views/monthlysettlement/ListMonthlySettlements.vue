@@ -7,8 +7,8 @@
     ref="editModal"
     @monthly-settlement-upserted="monthlySettlementUpserted"
   />
-  <div class="container mx-auto py-6 space-y-6 text-center">
-    <div>
+  <div class="custom-container space-y-6">
+    <div class="text-center">
       <h4 class="text-2xl font-bold">{{ $t("General.monthlysettlements") }}</h4>
     </div>
 

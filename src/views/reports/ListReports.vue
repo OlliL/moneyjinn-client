@@ -1,5 +1,5 @@
 <template>
-  <div class="container mx-auto space-y-6">
+  <div class="custom-container space-y-6">
     <div class="text-center">
       <h4 class="text-2xl font-bold">{{ $t("Reports.title.reports") }}</h4>
     </div>

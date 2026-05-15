@@ -1,9 +1,7 @@
 <template>
   <div class="custom-container space-y-6">
     <div class="text-center">
-      <h4 class="text-2xl font-semibold tracking-tight">
-        {{ $t("Moneyflow.title.create") }}
-      </h4>
+      <h4 class="text-2xl font-bold">{{ $t("Moneyflow.title.create") }}</h4>
     </div>
 
     <div class="flex justify-center">

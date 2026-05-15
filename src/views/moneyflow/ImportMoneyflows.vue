@@ -1,6 +1,6 @@
 <template>
-  <div class="container mx-auto py-6 space-y-6 text-center">
-    <div>
+  <div class="custom-container space-y-6">
+    <div class="text-center">
       <h4 class="text-2xl font-bold">{{ $t("Moneyflow.title.import") }}</h4>
     </div>
 
@@ -18,50 +18,58 @@
       :key="importedMoneyflow.externalid"
     >
       <div
-        class="w-full max-w-6xl rounded-lg border bg-card text-card-foreground shadow-sm p-4"
+        class="w-full rounded-lg border bg-card text-card-foreground shadow-sm p-4"
       >
         <form @submit.prevent="importImportedMoneyflow(importedMoneyflow)">
           <div class="space-y-3">
-            <div class="grid gap-2 md:grid-cols-12">
+            <div
+              class="grid gap-y-2 gap-x-4 grid-cols-6 md:grid-cols-12 items-center"
+            >
               <div
-                class="md:col-span-1 col-span-6 flex justify-end items-center"
-                style="font-weight: 700; font-size: 10.5px"
+                class="col-span-2 md:col-span-1 flex justify-start md:justify-end"
+                style="font-weight: 700; font-size: 10.5px; line-height: 1"
               >
                 {{ $t("General.iban") }}:
               </div>
-              <div class="md:col-span-2 col-span-6 text-left">
+              <div class="col-span-4 md:col-span-2 text-left">
                 {{ importedMoneyflow.accountNumber }}
               </div>
+
               <div
-                class="md:col-span-1 col-span-6 flex justify-end items-center"
-                style="font-weight: 700; font-size: 10.5px"
+                class="col-span-2 md:col-span-1 flex justify-start md:justify-end"
+                style="font-weight: 700; font-size: 10.5px; line-height: 1"
               >
                 {{ $t("General.bic") }}:
               </div>
-              <div class="md:col-span-2 col-span-6 text-left">
+              <div class="col-span-4 md:col-span-2 text-left">
                 {{ importedMoneyflow.bankCode }}
               </div>
+
               <div
-                class="md:col-span-2 col-span-6 flex justify-end items-center"
-                style="font-weight: 700; font-size: 10.5px"
+                class="col-span-2 md:col-span-2 flex justify-start md:justify-end"
+                style="font-weight: 700; font-size: 10.5px; line-height: 1"
               >
-                {{ $t("Moneyflow.partner") }}:
+                {{ $t("General.contractpartner") }}:
               </div>
-              <div class="md:col-span-4 col-span-6 text-left">
+              <div class="col-span-4 md:col-span-4 text-left">
                 {{ importedMoneyflow.name }}
               </div>
             </div>
-            <div class="grid gap-2 md:grid-cols-12">
+
+            <div
+              class="grid gap-y-2 gap-x-4 grid-cols-6 md:grid-cols-12 items-center"
+            >
               <div
-                class="md:col-span-1 col-span-6 flex justify-end items-center"
-                style="font-weight: 700; font-size: 10.5px"
+                class="col-span-2 md:col-span-1 flex justify-start md:justify-end"
+                style="font-weight: 700; font-size: 10.5px; line-height: 1"
               >
                 {{ $t("Moneyflow.reference") }}:
               </div>
-              <div class="md:col-span-11 col-span-6 text-left">
+              <div class="col-span-4 md:col-span-11 text-left">
                 {{ importedMoneyflow.usage }}
               </div>
             </div>
+            <Separator class="mb-6 mt-6" />
             <EditMoneyflowBase
               :ref="(el) => editMoneyflowRefs.set(importedMoneyflow.id, el)"
               :mmf-to-edit="importedMoneyflow"
@@ -97,6 +105,7 @@ import DivError from "@/components/DivError.vue";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { Smile } from "lucide-vue-next";
 import { Button } from "@/components/ui/button";
+import Separator from "@/components/ui/separator/Separator.vue";
 
 const serverErrors = ref(new Array<string>());
 

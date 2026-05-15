@@ -3,7 +3,7 @@
     ref="editModal"
     @monthly-settlement-upserted="monthlySettlementUpserted"
   />
-  <div class="container mx-auto py-6 space-y-8">
+  <div class="custom-container space-y-6">
     <!-- Header -->
     <div class="text-center">
       <h4 class="text-2xl font-bold tracking-tight">
