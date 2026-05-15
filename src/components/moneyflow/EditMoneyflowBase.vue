@@ -596,6 +596,15 @@ const selectPreDefMoneyflow = (
     resetForm();
   } else if (preDefMoneyflow) {
     amount.value = preDefMoneyflow.amount;
+
+    // Determine what the contractpartnerId-watcher would auto-fill for comment/postingAccount.
+    // By pre-setting previousComment/PostingAccount to those auto-fill values we ensure
+    // the watcher guard ("only overwrite if the user hasn't changed the value") treats the
+    // PreDefMoneyflow values as "manually entered" and does NOT overwrite them.
+    const contractpartner = contractpartnerStore.getContractpartner(preDefMoneyflow.contractpartnerId);
+    previousCommentSetByContractpartnerDefaults.value = contractpartner?.moneyflowComment ?? "";
+    previousPostingAccountSetByContractpartnerDefaults.value = contractpartner?.postingAccountId ?? 0;
+
     mmf.value.contractpartnerId = preDefMoneyflow.contractpartnerId;
     mmf.value.comment = preDefMoneyflow.comment;
     mmf.value.postingAccountId = preDefMoneyflow.postingAccountId;

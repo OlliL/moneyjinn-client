@@ -23,6 +23,7 @@ import { setInputValueAndWait, waitForInputHasValue } from "@/tests/TestUtil";
 import CrudEtfService from "@/service/CrudEtfService";
 import MoneyflowService from "@/service/MoneyflowService";
 import { BackendError, BackendErrorType } from "@/model/BackendError";
+import { nextTick } from "vue";
 
 vi.mock("@/service/PreDefMoneyflowService", () => ({
   default: {
@@ -364,7 +365,7 @@ test("select a PreDefMoneyflow - fill input fields", async () => {
     assertCheckboxChecked("keep"),
     assertCheckboxUnchecked("renew"),
     assertInputValueToBe("amount", "20.4"),
-    assertInputValueToBe("comment", ""),
+    assertInputValueToBe("comment", "PreDefMoneyflow Comment 1"),
     assertInputValueToBe("contractpartnerCreateMoneyflow-id", "1"),
     assertInputValueToBe("capitalsourceCreateMoneyflow-id", "2"),
     assertInputValueToBe("postingAccountCreateMoneyflow-id", "1"),
@@ -789,12 +790,8 @@ test("remainder button with no amount set - remainder stays zero", async () => {
   }, { timeout: 2000 });
 });
 
-// ── Test 12: PreDefMoneyflow-Kommentar: comment-Feld bleibt leer (by design) ──
-// In EditMoneyflowBase selectPreDefMoneyflow() sets mmf.value.comment but the rendered
-// <InputStandard> shows an empty value because the vee-validate field is controlled
-// separately from the reactive mmf object before the next tick.
-// The existing "fill input fields" test also asserts "" - this test documents that behavior.
-test("select a PreDefMoneyflow - comment field stays empty (vee-validate controlled field)", async () => {
+// ── Test 12: PreDefMoneyflow-Kommentar wird korrekt ins comment-Feld gesetzt ──
+test("select a PreDefMoneyflow - comment field is filled from PreDefMoneyflow", async () => {
   await StoreService.getInstance().initAllStores();
   useUserSessionStore().setUserSession({ userId: 1 } as UserSession);
 
@@ -804,17 +801,13 @@ test("select a PreDefMoneyflow - comment field stays empty (vee-validate control
   await waitForOptionSelected(selectMoneyflow, "0");
   await selectOptionAndWait(selectMoneyflow, "1");
 
-  // The comment input remains empty because the vee-validate binding does not
-  // reflect changes to mmf.value.comment made outside of its own input event.
-  await assertInputValueToBe(
-    "comment",
-    "",
-    "comment field is empty after PreDefMoneyflow selection (vee-validate controlled)",
-  );
-
-  // But amount, capitalsource, contractpartner and postingAccount ARE filled
+  // preDefMoneyflow: { amount: 20.4, capitalsourceId: 2, contractpartnerId: 1,
+  //   comment: "PreDefMoneyflow Comment 1", postingAccountId: 1 }
+  // All fields must be filled correctly after PreDefMoneyflow selection.
   await Promise.all([
     assertInputValueToBe("amount", "20.4"),
+    assertInputValueToBe("comment", "PreDefMoneyflow Comment 1",
+      "PreDefMoneyflow comment must be transferred to comment field"),
     assertInputValueToBe("contractpartnerCreateMoneyflow-id", "1"),
     assertInputValueToBe("capitalsourceCreateMoneyflow-id", "2"),
     assertInputValueToBe("postingAccountCreateMoneyflow-id", "1"),

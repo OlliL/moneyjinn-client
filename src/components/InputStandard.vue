@@ -127,6 +127,7 @@ const {
   errorMessage,
   setState,
   handleChange,
+  setValue,
 } = useField(props.id, schema, {
   syncVModel: true,
 });
@@ -169,7 +170,16 @@ onMounted(() => {
 watch(
   () => props.modelValue,
   (newValue) => {
-    fieldValue.value = newValue;
+    setValue(newValue, false);
+    // The shadcn Input uses useVModel with passive:true, which means it does not
+    // react to external modelValue changes. We therefore update the native input
+    // element's value directly so the DOM stays in sync.
+    nextTick(() => {
+      const el = getInputElement();
+      if (el && el.value !== String(newValue ?? "")) {
+        el.value = String(newValue ?? "");
+      }
+    });
   },
   { immediate: true },
 );
