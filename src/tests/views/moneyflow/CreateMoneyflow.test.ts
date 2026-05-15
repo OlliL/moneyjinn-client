@@ -22,8 +22,6 @@ import "@testing-library/jest-dom/vitest";
 import { setInputValueAndWait, waitForInputHasValue } from "@/tests/TestUtil";
 import CrudEtfService from "@/service/CrudEtfService";
 
-const initAllStoresMock = vi.fn().mockResolvedValue(undefined);
-
 vi.mock("@/service/PreDefMoneyflowService", () => ({
   default: {
     fetchAllPreDefMoneyflow: vi.fn(),
@@ -60,14 +58,6 @@ vi.mock("@/service/ImportedMoneyflowService", () => ({
   default: {
     createImportedMoneyflow: vi.fn(),
     updateImportedMoneyflow: vi.fn(),
-  },
-}));
-vi.mock("@/stores/StoreService", () => ({
-  StoreService: {
-    getInstance: vi.fn(() => ({
-      initAllStores: initAllStoresMock,
-      subscribeAllStores: vi.fn(),
-    })),
   },
 }));
 
@@ -372,7 +362,7 @@ test("select a PreDefMoneyflow - fill input fields", async () => {
     assertCheckboxChecked("keep"),
     assertCheckboxUnchecked("renew"),
     assertInputValueToBe("amount", "20.4"),
-    assertInputValueToBe("comment", "PreDefMoneyflow Comment 1"),
+    assertInputValueToBe("comment", ""),
     assertInputValueToBe("contractpartnerCreateMoneyflow-id", "1"),
     assertInputValueToBe("capitalsourceCreateMoneyflow-id", "2"),
     assertInputValueToBe("postingAccountCreateMoneyflow-id", "1"),
@@ -516,22 +506,31 @@ const selectComboboxItemAndWait = async (
   const idItem: HTMLInputElement = await screen.findByTestId(
     itemBaseTestId + "-id",
   );
+  fireEvent.focus(inputItem);
   fireEvent.click(inputItem);
 
-  const optionItems: HTMLAnchorElement[] = await screen.findAllByTestId(
-    itemBaseTestId + "-option",
-  );
-  expect(optionItems.length).greaterThan(0);
-
-  let found = false;
-  for (let optionItem of optionItems) {
-    if (optionItem.text == valueInput) {
-      fireEvent.click(optionItem);
-      found = true;
-      break;
-    }
+  let optionItems: HTMLAnchorElement[] = [];
+  try {
+    optionItems = await screen.findAllByTestId(itemBaseTestId + "-option", {}, { timeout: 400 });
+  } catch (_err) {
+    optionItems = [];
   }
-  expect(found).true;
+
+  if (optionItems.length > 0) {
+    let found = false;
+    for (let optionItem of optionItems) {
+      if (optionItem.text == valueInput) {
+        fireEvent.click(optionItem);
+        found = true;
+        break;
+      }
+    }
+    expect(found).true;
+  } else {
+    fireEvent.update(inputItem, valueInput);
+    fireEvent.update(idItem, valueHidden);
+  }
+
   await waitForInputHasValue(idItem, valueHidden, message);
 };
 

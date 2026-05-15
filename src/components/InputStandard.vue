@@ -52,6 +52,7 @@ import {
   nextTick,
   onMounted,
   useTemplateRef,
+  watch,
   type PropType,
   type Ref,
 } from "vue";
@@ -158,12 +159,18 @@ const getInputElement = () => {
   return refValue as HTMLInputElement;
 };
 onMounted(() => {
-  fieldValue.value = props.modelValue;
-
   if (props.focus) {
     nextTick(() => {
       getInputElement()?.focus();
     });
   }
 });
+
+watch(
+  () => props.modelValue,
+  (newValue) => {
+    fieldValue.value = newValue;
+  },
+  { immediate: true },
+);
 </script>

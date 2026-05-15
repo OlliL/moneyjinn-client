@@ -81,6 +81,7 @@
           <div
             class="flex items-center justify-center px-2 border border-input rounded-l-md text-foreground transition-colors relative cursor-pointer"
             @click="useRemainder"
+            data-testid="remainderButton"
           >
             <ArrowLeft />
           </div>
@@ -89,6 +90,7 @@
             disabled
             :model-value="remainder.toFixed(2)"
             id="remainder-input"
+            data-testid="remainder"
             :class="[
               'rounded-l-none',
               remainderErrorData.inputClass == 'is-invalid'
