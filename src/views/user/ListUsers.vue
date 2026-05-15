@@ -25,13 +25,21 @@
 
     <DivError :server-errors="serverErrors" />
 
-    <DivContentTable clazz="w-full lg:w-3/4">
+    <DivContentTable>
       <TableHeader>
         <TableRow>
-          <TableHead class="font-bold border text-foreground">{{ $t("General.name") }}</TableHead>
-          <TableHead class="font-bold border text-foreground">{{ $t("General.group") }}</TableHead>
-          <TableHead class="font-bold border text-foreground">{{ $t("User.role") }}</TableHead>
-          <TableHead class="font-bold border text-foreground">{{ $t("User.new") }}</TableHead>
+          <TableHead class="font-bold border text-foreground text-center">{{
+            $t("General.name")
+          }}</TableHead>
+          <TableHead class="font-bold border text-foreground text-center">{{
+            $t("General.group")
+          }}</TableHead>
+          <TableHead class="font-bold border text-foreground text-center">{{
+            $t("User.role")
+          }}</TableHead>
+          <TableHead class="font-bold border text-foreground text-center">{{
+            $t("User.new")
+          }}</TableHead>
           <TableHead class="border" colspan="2"></TableHead>
         </TableRow>
       </TableHeader>

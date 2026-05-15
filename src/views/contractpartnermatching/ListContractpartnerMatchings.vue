@@ -13,7 +13,9 @@
 
   <div class="container mx-auto py-6 space-y-6 text-center">
     <div>
-      <h4 class="text-xl font-bold">{{ $t("General.contractpartnerMatchings") }}</h4>
+      <h4 class="text-xl font-bold">
+        {{ $t("General.contractpartnerMatchings") }}
+      </h4>
     </div>
 
     <DivFilter
@@ -33,13 +35,21 @@
 
     <DivError :server-errors="serverErrors" />
 
-    <DivContentTable clazz="w-full lg:w-4/5">
+    <DivContentTable>
       <TableHeader>
         <TableRow>
-          <TableHead class="font-bold border text-foreground">{{ $t("ContractpartnerMatching.matchingText") }}</TableHead>
-          <TableHead class="font-bold border text-foreground">{{ $t("General.contractpartner") }}</TableHead>
-          <TableHead class="font-bold border text-foreground">{{ $t("Contractpartner.moneyflowComment") }}</TableHead>
-          <TableHead class="font-bold border text-foreground">{{ $t("General.postingAccount") }}</TableHead>
+          <TableHead class="font-bold border text-foreground text-center">{{
+            $t("ContractpartnerMatching.matchingText")
+          }}</TableHead>
+          <TableHead class="font-bold border text-foreground text-center">{{
+            $t("General.contractpartner")
+          }}</TableHead>
+          <TableHead class="font-bold border text-foreground text-center">{{
+            $t("Contractpartner.moneyflowComment")
+          }}</TableHead>
+          <TableHead class="font-bold border text-foreground text-center">{{
+            $t("General.postingAccount")
+          }}</TableHead>
           <TableHead class="border" colspan="2"></TableHead>
         </TableRow>
       </TableHeader>

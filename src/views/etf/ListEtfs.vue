@@ -25,23 +25,60 @@
 
     <DivError :server-errors="serverErrors" />
 
-    <DivContentTable clazz="w-full lg:w-11/12">
+    <DivContentTable>
       <TableHeader>
         <TableRow>
-          <TableHead class="font-bold border text-foreground" rowspan="2" id="name">{{ $t("General.name") }}</TableHead>
-          <TableHead class="font-bold border text-foreground" rowspan="2" id="isin">{{ $t("ETF.isin") }}</TableHead>
-          <TableHead class="font-bold border text-foreground" rowspan="2" id="wkn">{{ $t("ETF.wkn") }}</TableHead>
-          <TableHead class="font-bold border text-foreground" rowspan="2" id="ticker">{{ $t("ETF.ticker") }}</TableHead>
-          <TableHead class="font-bold border text-foreground" colspan="3" id="transactionCosts">
+          <TableHead
+            class="font-bold border text-foreground"
+            rowspan="2"
+            id="name"
+            >{{ $t("General.name") }}</TableHead
+          >
+          <TableHead
+            class="font-bold border text-foreground"
+            rowspan="2"
+            id="isin"
+            >{{ $t("ETF.isin") }}</TableHead
+          >
+          <TableHead
+            class="font-bold border text-foreground"
+            rowspan="2"
+            id="wkn"
+            >{{ $t("ETF.wkn") }}</TableHead
+          >
+          <TableHead
+            class="font-bold border text-foreground"
+            rowspan="2"
+            id="ticker"
+            >{{ $t("ETF.ticker") }}</TableHead
+          >
+          <TableHead
+            class="font-bold border text-foreground"
+            colspan="3"
+            id="transactionCosts"
+          >
             {{ $t("ETFFlow.transactionCosts") }}
           </TableHead>
-          <TableHead class="font-bold border text-foreground" rowspan="2" id="partialTaxExemption">
+          <TableHead
+            class="font-bold border text-foreground"
+            rowspan="2"
+            id="partialTaxExemption"
+          >
             {{ $t("ETF.partialTaxExemption") }}
           </TableHead>
-          <TableHead class="font-bold border text-foreground" rowspan="2" id="favorite">
+          <TableHead
+            class="font-bold border text-foreground"
+            rowspan="2"
+            id="favorite"
+          >
             <Star class="h-4 w-4 text-yellow-500" />
           </TableHead>
-          <TableHead class="border" rowspan="2" colspan="2" id="editDelete"></TableHead>
+          <TableHead
+            class="border"
+            rowspan="2"
+            colspan="2"
+            id="editDelete"
+          ></TableHead>
         </TableRow>
         <TableRow>
           <TableHead class="font-bold border text-foreground" id="abs">

@@ -41,7 +41,7 @@
     <template #footer>
       <Button
         variant="destructive"
-        class="flex items-center gap-2 !rounded-md px-6"
+        class="flex items-center gap-2 px-6"
         @click="deleteEtfPreliminaryLumpSum"
       >
         <Trash2 />
@@ -101,4 +101,3 @@ const deleteEtfPreliminaryLumpSum = () => {
 
 defineExpose({ _show });
 </script>
-

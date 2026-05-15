@@ -12,7 +12,9 @@
           data-testid="selectmoneyflow"
           class="hidden"
           :value="String(preDefMoneyflowId)"
-          @change="handleSelectChange(($event.target as HTMLSelectElement).value)"
+          @change="
+            handleSelectChange(($event.target as HTMLSelectElement).value)
+          "
         >
           <option value="0">{{ $t("Moneyflow.newBooking") }}</option>
           <option
@@ -65,12 +67,7 @@
         />
 
         <div class="flex justify-center gap-4">
-          <Button
-            type="button"
-            variant="secondary"
-            @click="resetForm"
-            class="!rounded-md"
-          >
+          <Button type="button" variant="secondary" @click="resetForm">
             {{ $t("General.reset") }}
           </Button>
           <ButtonSubmit

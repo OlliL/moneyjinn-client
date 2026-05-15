@@ -68,7 +68,7 @@
     <template #footer>
       <Button
         variant="destructive"
-        class="flex items-center gap-2 !rounded-md px-6"
+        class="flex items-center gap-2 px-6"
         @click="deleteMoneyflow"
       >
         <Trash2 />
@@ -121,4 +121,3 @@ const deleteMoneyflow = () => {
 };
 defineExpose({ _show });
 </script>
-

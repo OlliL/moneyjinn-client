@@ -24,10 +24,12 @@
 
     <DivError :server-errors="serverErrors" />
 
-    <DivContentTable clazz="w-full lg:w-2/5">
+    <DivContentTable>
       <TableHeader>
         <TableRow>
-          <TableHead class="font-bold border text-foreground">{{ $t("General.name") }}</TableHead>
+          <TableHead class="font-bold border text-foreground text-center">{{
+            $t("General.name")
+          }}</TableHead>
           <TableHead class="border" colspan="2"></TableHead>
         </TableRow>
       </TableHeader>

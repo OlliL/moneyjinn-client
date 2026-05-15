@@ -9,7 +9,7 @@
         <div class="p-4">
           <div class="overflow-x-auto text-center">
             <div class="flex flex-col rounded-md border">
-              <Table>
+              <Table class="[&_tbody_tr:nth-child(even)]:bg-primary/[0.10]">
                 <TableHeader>
                   <TableRow>
                     <TableHead class="text-center" rowspan="2" id="thEtf">
@@ -18,24 +18,41 @@
                     <TableHead class="text-center" rowspan="2" id="thShares">
                       {{ $t("ETFFlow.shares") }}
                     </TableHead>
-                    <TableHead class="text-center hidden md:table-cell" colspan="3" id="thAmount">
+                    <TableHead
+                      class="text-center hidden md:table-cell"
+                      colspan="3"
+                      id="thAmount"
+                    >
                       {{ $t("ETFFlow.amount") }}
                     </TableHead>
                     <TableHead class="text-center" colspan="3" id="thOverall">
                       {{ $t("ETFFlow.overall") }}
                     </TableHead>
-                    <TableHead class="text-center hidden md:table-cell" rowspan="2" id="thState">
+                    <TableHead
+                      class="text-center hidden md:table-cell"
+                      rowspan="2"
+                      id="thState"
+                    >
                       {{ $t("Reports.state") }}
                     </TableHead>
                   </TableRow>
                   <TableRow>
-                    <TableHead class="text-center hidden md:table-cell" id="thAmountPayed">
+                    <TableHead
+                      class="text-center hidden md:table-cell"
+                      id="thAmountPayed"
+                    >
                       {{ $t("ETFFlow.payed") }} &#8709;
                     </TableHead>
-                    <TableHead class="text-center hidden md:table-cell" id="thAmountBid">
+                    <TableHead
+                      class="text-center hidden md:table-cell"
+                      id="thAmountBid"
+                    >
                       {{ $t("ETFFlow.bid") }}
                     </TableHead>
-                    <TableHead class="text-center hidden md:table-cell" id="thAmountAsk">
+                    <TableHead
+                      class="text-center hidden md:table-cell"
+                      id="thAmountAsk"
+                    >
                       {{ $t("ETFFlow.ask") }}
                     </TableHead>
                     <TableHead class="text-center" id="thOverallPayed">
@@ -74,7 +91,13 @@ import { computed, onMounted, ref, watch } from "vue";
 import DivError from "../DivError.vue";
 import EtfTableRowVue from "./EtfTableRow.vue";
 
-import { Table, TableBody, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  Table,
+  TableBody,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 const serverErrors = ref(new Array<string>());
 

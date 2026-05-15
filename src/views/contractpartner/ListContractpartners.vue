@@ -27,19 +27,19 @@
     <DivContentTable>
       <TableHeader>
         <TableRow>
-          <TableHead class="font-bold border text-foreground">
+          <TableHead class="font-bold border text-foreground text-center">
             {{ $t("General.name") }}
           </TableHead>
-          <TableHead class="font-bold border text-foreground">
+          <TableHead class="font-bold border text-foreground text-center">
             {{ $t("General.validFrom") }}
           </TableHead>
-          <TableHead class="font-bold border text-foreground">
+          <TableHead class="font-bold border text-foreground text-center">
             {{ $t("General.validTil") }}
           </TableHead>
-          <TableHead class="font-bold border text-foreground">
+          <TableHead class="font-bold border text-foreground text-center">
             {{ $t("Contractpartner.moneyflowComment") }}
           </TableHead>
-          <TableHead class="font-bold border text-foreground">
+          <TableHead class="font-bold border text-foreground text-center">
             {{ $t("General.postingAccount") }}
           </TableHead>
           <TableHead class="border" colspan="3"></TableHead>

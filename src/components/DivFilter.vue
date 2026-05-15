@@ -1,18 +1,15 @@
 <template>
   <div class="flex justify-center w-full mb-6">
-    <div
-      class="flex flex-wrap items-center gap-4 bg-background p-1"
-      :class="$slots.right ? 'w-full lg:w-3/4' : 'w-auto'"
-    >
-      <Button class="!rounded-md" @click="$emit('createClicked')">
+    <div class="flex flex-wrap items-end gap-4 bg-background p-1 w-auto">
+      <Button @click="$emit('createClicked')">
         <Plus class="mr-2 h-4 w-4" />
         {{ $t("General.new") }}
       </Button>
 
-      <div class="flex flex-1 min-w-[300px] items-center">
+      <div class="flex w-80 items-center">
         <Button
           variant="secondary"
-          class="!rounded-md !rounded-r-none border-r-0"
+          class="!rounded-r-none border-r-0"
           @click="clearSearch"
         >
           {{ $t("General.all") }}

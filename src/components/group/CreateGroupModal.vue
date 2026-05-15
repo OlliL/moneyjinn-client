@@ -14,7 +14,7 @@
       </form>
     </template>
     <template #footer>
-      <Button variant="secondary" class="!rounded-md" @click="resetForm">
+      <Button variant="secondary" @click="resetForm">
         {{ $t("General.reset") }}
       </Button>
       <ButtonSubmit
@@ -55,7 +55,7 @@ const schema: Partial<{ [key in keyof Group]: ZodType }> = {
 
 const group = ref({} as Group);
 const origGroup = ref({} as Group | undefined);
-const modalComponent = useTemplateRef<typeof ModalVue>('modalComponent');
+const modalComponent = useTemplateRef<typeof ModalVue>("modalComponent");
 const emit = defineEmits(["groupUpdated", "groupCreated"]);
 
 const { handleSubmit, values, setFieldTouched } = useForm();

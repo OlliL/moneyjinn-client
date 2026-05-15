@@ -25,15 +25,33 @@
     <DivContentTable>
       <TableHeader>
         <TableRow>
-          <TableHead class="font-bold border text-foreground">{{ $t("General.name") }}</TableHead>
-          <TableHead class="font-bold border text-foreground">{{ $t("Capitalsource.type") }}</TableHead>
-          <TableHead class="font-bold border text-foreground">{{ $t("Capitalsource.state") }}</TableHead>
-          <TableHead class="font-bold border text-foreground">{{ $t("General.iban") }}</TableHead>
-          <TableHead class="font-bold border text-foreground">{{ $t("General.bic") }}</TableHead>
-          <TableHead class="font-bold border text-foreground">{{ $t("General.validFrom") }}</TableHead>
-          <TableHead class="font-bold border text-foreground">{{ $t("General.validTil") }}</TableHead>
-          <TableHead class="font-bold border text-foreground">{{ $t("Capitalsource.groupUse") }}</TableHead>
-          <TableHead class="font-bold border text-foreground">{{ $t("Capitalsource.importAllowed") }}</TableHead>
+          <TableHead class="font-bold border text-foreground text-center">{{
+            $t("General.name")
+          }}</TableHead>
+          <TableHead class="font-bold border text-foreground text-center">{{
+            $t("Capitalsource.type")
+          }}</TableHead>
+          <TableHead class="font-bold border text-foreground text-center">{{
+            $t("Capitalsource.state")
+          }}</TableHead>
+          <TableHead class="font-bold border text-foreground text-center">{{
+            $t("General.iban")
+          }}</TableHead>
+          <TableHead class="font-bold border text-foreground text-center">{{
+            $t("General.bic")
+          }}</TableHead>
+          <TableHead class="font-bold border text-foreground text-center">{{
+            $t("General.validFrom")
+          }}</TableHead>
+          <TableHead class="font-bold border text-foreground text-center">{{
+            $t("General.validTil")
+          }}</TableHead>
+          <TableHead class="font-bold border text-foreground text-center">{{
+            $t("Capitalsource.groupUse")
+          }}</TableHead>
+          <TableHead class="font-bold border text-foreground text-center">{{
+            $t("Capitalsource.importAllowed")
+          }}</TableHead>
           <TableHead class="border" colspan="2"></TableHead>
         </TableRow>
       </TableHeader>

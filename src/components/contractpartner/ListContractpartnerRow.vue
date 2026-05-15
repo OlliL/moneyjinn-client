@@ -30,7 +30,7 @@
       </Button>
     </TableCell>
 
-    <TableCell class="text-right border py-0 px-1 w-[40px]">
+    <TableCell class="text-right mt-1 py-0 px-1 w-[40px]">
       <Button
         variant="ghost"
         size="icon"

@@ -2,7 +2,7 @@
   <div class="flex justify-center w-full my-4">
     <div class="relative rounded-md border overflow-hidden w-full">
       <div class="overflow-x-auto">
-        <Table>
+        <Table class="[&_tr:nth-child(even)]:bg-primary/[0.10]">
           <TableHeader>
             <TableRow>
               <TableHead class="text-center hidden md:table-cell">
@@ -11,7 +11,9 @@
               <TableHead class="text-center hidden md:table-cell">
                 {{ $t("Capitalsource.state") }}
               </TableHead>
-              <TableHead class="text-center">{{ $t("General.comment") }}</TableHead>
+              <TableHead class="text-center">{{
+                $t("General.comment")
+              }}</TableHead>
               <TableHead class="text-center">
                 {{ $t("Reports.beginOfMonth") }}
               </TableHead>
@@ -48,7 +50,7 @@
                 currentMonthIsSettled: currentMonthIsSettled,
               }"
             />
-            <TableRow class="font-bold bg-primary/[0.10]">
+            <TableRow class="font-bold">
               <TableCell class="text-right hidden md:table-cell" colspan="3"
                 >&sum;</TableCell
               >
@@ -88,7 +90,14 @@
 <script lang="ts" setup>
 import { computed } from "vue";
 
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 import CapitalsourceTableRowVue from "./CapitalsourceTableRow.vue";
 import SpanAmount from "../SpanAmount.vue";

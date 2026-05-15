@@ -1,7 +1,9 @@
 <template>
   <form @submit.prevent="handleLogin">
     <div class="flex min-h-screen items-center justify-center px-4">
-      <div class="w-full max-w-md rounded-lg border bg-card text-card-foreground shadow-sm">
+      <div
+        class="w-full max-w-md rounded-lg border bg-card text-card-foreground shadow-sm"
+      >
         <div class="border-b p-4 text-center">
           <h4 class="text-xl font-bold">{{ $t("LoginView.welcome") }}</h4>
         </div>
@@ -21,9 +23,7 @@
               :focus="true"
             >
               <template #icon>
-                <span class="inline-flex items-center rounded-l-md border border-r-0 bg-muted px-2 text-muted-foreground">
-                  <User class="h-4 w-4" />
-                </span>
+                <User />
               </template>
             </InputStandard>
           </div>
@@ -36,16 +36,14 @@
               :field-label="$t('General.password')"
             >
               <template #icon>
-                <span class="inline-flex items-center rounded-l-md border border-r-0 bg-muted px-2 text-muted-foreground">
-                  <Lock class="h-4 w-4" />
-                </span>
+                <Lock />
               </template>
             </InputStandard>
           </div>
-          <div class="mb-2 text-center">
-              <ButtonSubmit :button-label="$t('LoginView.login')">
-                <template #icon><LogIn class="h-4 w-4" /> </template>
-              </ButtonSubmit>
+          <div class="mb-2 mt-6 flex flex-col items-center">
+            <ButtonSubmit :button-label="$t('LoginView.login')">
+              <template #icon><LogIn /> </template>
+            </ButtonSubmit>
           </div>
         </div>
         <div class="border-t p-3 text-center text-sm text-muted-foreground">

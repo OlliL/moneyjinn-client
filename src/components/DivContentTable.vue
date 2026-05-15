@@ -16,7 +16,7 @@ import { Table } from "@/components/ui/table";
 defineProps({
   clazz: {
     type: String,
-    default: "w-full lg:w-3/4",
+    default: "w-max mx-auto max-w-full",
   },
 });
 </script>

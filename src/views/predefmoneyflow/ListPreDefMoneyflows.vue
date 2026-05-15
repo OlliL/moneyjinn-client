@@ -28,14 +28,30 @@
     <DivContentTable>
       <TableHeader>
         <TableRow>
-          <TableHead class="font-bold border text-foreground">{{ $t("General.amount") }}</TableHead>
-          <TableHead class="font-bold border text-foreground">{{ $t("General.contractpartner") }}</TableHead>
-          <TableHead class="font-bold border text-foreground">{{ $t("General.comment") }}</TableHead>
-          <TableHead class="font-bold border text-foreground">{{ $t("General.postingAccount") }}</TableHead>
-          <TableHead class="font-bold border text-foreground">{{ $t("General.capitalsource") }}</TableHead>
-          <TableHead class="font-bold border text-foreground">{{ $t("PreDefMoneyflow.onceAMonthShort") }}</TableHead>
-          <TableHead class="font-bold border text-foreground">{{ $t("PreDefMoneyflow.createDate") }}</TableHead>
-          <TableHead class="font-bold border text-foreground">{{ $t("PreDefMoneyflow.lastUsed") }}</TableHead>
+          <TableHead class="font-bold border text-foreground text-center">{{
+            $t("General.amount")
+          }}</TableHead>
+          <TableHead class="font-bold border text-foreground text-center">{{
+            $t("General.contractpartner")
+          }}</TableHead>
+          <TableHead class="font-bold border text-foreground text-center">{{
+            $t("General.comment")
+          }}</TableHead>
+          <TableHead class="font-bold border text-foreground text-center">{{
+            $t("General.postingAccount")
+          }}</TableHead>
+          <TableHead class="font-bold border text-foreground text-center">{{
+            $t("General.capitalsource")
+          }}</TableHead>
+          <TableHead class="font-bold border text-foreground text-center">{{
+            $t("PreDefMoneyflow.onceAMonthShort")
+          }}</TableHead>
+          <TableHead class="font-bold border text-foreground text-center">{{
+            $t("PreDefMoneyflow.createDate")
+          }}</TableHead>
+          <TableHead class="font-bold border text-foreground text-center">{{
+            $t("PreDefMoneyflow.lastUsed")
+          }}</TableHead>
           <TableHead class="border" colspan="2"></TableHead>
         </TableRow>
       </TableHeader>

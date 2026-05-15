@@ -16,7 +16,7 @@
 
       <DialogFooter class="sm:justify-center gap-2">
         <DialogClose as-child>
-          <Button type="button" variant="secondary" class="!rounded-md">
+          <Button type="button" variant="secondary">
             {{ $t("Modal.cancel") }}
           </Button>
         </DialogClose>

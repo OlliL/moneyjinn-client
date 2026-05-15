@@ -46,7 +46,7 @@
     <template #footer>
       <Button
         variant="destructive"
-        class="flex items-center gap-2 !rounded-md px-6"
+        class="flex items-center gap-2 px-6"
         @click="deleteEtfFlow"
       >
         <Trash2 />
@@ -118,4 +118,3 @@ const deleteEtfFlow = () => {
 
 defineExpose({ _show });
 </script>
-

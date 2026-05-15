@@ -32,7 +32,7 @@
     </template>
 
     <template #footer>
-      <Button class="!rounded-md" variant="outline" @click="resetForm">
+      <Button variant="outline" @click="resetForm">
         {{ $t("General.reset") }}
       </Button>
 
