@@ -13,8 +13,8 @@
         id="upsertMonthlySettlementForm"
       >
         <DivError :server-errors="serverErrors" />
-        <div class="row justify-content-md-center mb-4">
-          <div class="col-6">
+        <div class="flex justify-center mb-4">
+          <div class="w-1/3">
             <InputDate
               v-model="selectedMonth"
               :validation-schema="schema.month"
@@ -24,84 +24,84 @@
             />
           </div>
         </div>
-        <div class="row justify-content-md-center mb-4">
-          <div class="col">
-            <table
-              class="table table-striped table-bordered table-hover"
+        <div class="flex justify-center mb-4">
+          <div class="w-full">
+            <div
+              class="flex flex-col rounded-md border mb-4"
               v-if="monthlySettlementsNoCredit"
             >
-              <colgroup>
-                <col style="width: 60%" />
-                <col style="width: 40%" />
-              </colgroup>
-              <thead>
-                <tr>
-                  <th scope="col">{{ $t("General.capitalsource") }}</th>
-                  <th scope="col">{{ $t("General.amount") }}</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr
-                  v-for="(mms, idx) in monthlySettlementsNoCredit"
-                  :key="mms.id"
-                >
-                  <td class="text-start">{{ mms.capitalsourceComment }}</td>
-                  <td>
-                    <InputStandard
-                      v-model="mms.amount"
-                      :validation-schema="schema.amount"
-                      :disabled="mms.imported"
-                      :id="'amountNoCredit' + idx"
-                      field-type="number"
-                      step="0.01"
-                    >
-                      <template #icon
-                        ><span class="input-group-text"
-                          ><i class="bi bi-currency-euro"></i></span
-                      ></template>
-                    </InputStandard>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-            <table
-              class="table table-striped table-bordered table-hover"
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>{{ $t("General.capitalsource") }}</TableHead>
+                    <TableHead>{{ $t("General.amount") }}</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  <TableRow
+                    v-for="(mms, idx) in monthlySettlementsNoCredit"
+                    :key="mms.id"
+                  >
+                    <TableCell class="text-left">
+                      {{ mms.capitalsourceComment }}
+                    </TableCell>
+                    <TableCell>
+                      <InputStandard
+                        v-model="mms.amount"
+                        :validation-schema="schema.amount"
+                        :disabled="mms.imported"
+                        :id="'amountNoCredit' + idx"
+                        field-type="number"
+                        step="0.01"
+                      >
+                        <template #icon
+                          ><span class="text-muted-foreground"
+                            >€</span
+                        ></template>
+                      </InputStandard>
+                    </TableCell>
+                  </TableRow>
+                </TableBody>
+              </Table>
+            </div>
+            <div
+              class="flex flex-col rounded-md border"
               v-if="monthlySettlementsCredit"
             >
-              <colgroup>
-                <col style="width: 60%" />
-                <col style="width: 40%" />
-              </colgroup>
-              <thead v-if="!monthlySettlementsNoCredit">
-                <tr>
-                  <th scope="col">{{ $t("General.capitalsource") }}</th>
-                  <th scope="col">{{ $t("General.amount") }}</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr
-                  v-for="(mms, idx) in monthlySettlementsCredit"
-                  :key="mms.id"
-                >
-                  <td class="text-start">{{ mms.capitalsourceComment }}</td>
-                  <td>
-                    <InputStandard
-                      v-model="mms.amount"
-                      :validation-schema="schema.amount"
-                      :disabled="mms.imported"
-                      :id="'amountCredit' + idx"
-                      field-type="number"
-                      step="0.01"
-                    >
-                      <template #icon
-                        ><span class="input-group-text"
-                          ><i class="bi bi-currency-euro"></i></span
-                      ></template>
-                    </InputStandard>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+              <Table>
+                <TableHeader v-if="monthlySettlementsNoCredit.length">
+                  <TableRow>
+                    <TableHead>{{ $t("General.capitalsource") }}</TableHead>
+                    <TableHead>{{ $t("General.amount") }}</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  <TableRow
+                    v-for="(mms, idx) in monthlySettlementsCredit"
+                    :key="mms.id"
+                  >
+                    <TableCell class="text-left">
+                      {{ mms.capitalsourceComment }}
+                    </TableCell>
+                    <TableCell>
+                      <InputStandard
+                        v-model="mms.amount"
+                        :validation-schema="schema.amount"
+                        :disabled="mms.imported"
+                        :id="'amountCredit' + idx"
+                        field-type="number"
+                        step="0.01"
+                      >
+                        <template #icon
+                          ><span class="text-muted-foreground"
+                            >€</span
+                        ></template>
+                      </InputStandard>
+                    </TableCell>
+                  </TableRow>
+                </TableBody>
+              </Table>
+            </div>
           </div>
         </div>
       </form>
@@ -126,6 +126,8 @@ import DivError from "../DivError.vue";
 import InputDate from "../InputDate.vue";
 import InputStandard from "../InputStandard.vue";
 import ModalVue from "../Modal.vue";
+
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { amountSchema, globErr } from "@/tools/views/ZodUtil";

@@ -2,12 +2,12 @@
   <ModalVue :title="title" :max-width="maxWidth" ref="modalComponent">
     <template #body
       ><form @submit.prevent="createUser" :id="'createUserForm' + idSuffix">
-        <div class="container-fluid">
-          <div class="row">
+        <div class="space-y-2">
+          <div class="grid grid-cols-1 gap-2">
             <div class="col">
               <DivError :server-errors="serverErrors" />
-              <div class="row pt-2">
-                <div class="col-xs-12">
+              <div class="grid grid-cols-1 gap-2 pt-2">
+                <div>
                   <InputStandard
                     v-model="user.userName"
                     :validation-schema="schema.userName"
@@ -16,8 +16,8 @@
                   />
                 </div>
               </div>
-              <div class="row pt-2">
-                <div class="col-xs-12">
+              <div class="grid grid-cols-1 gap-2 pt-2">
+                <div>
                   <InputStandard
                     v-model="password1"
                     :validation-schema-ref="schema.password"
@@ -27,8 +27,8 @@
                   />
                 </div>
               </div>
-              <div class="row pt-2">
-                <div class="col-xs-12">
+              <div class="grid grid-cols-1 gap-2 pt-2">
+                <div>
                   <InputStandard
                     v-model="password2"
                     :validation-schema-ref="schema.password"
@@ -38,8 +38,8 @@
                   />
                 </div>
               </div>
-              <div class="row pt-2">
-                <div class="col-xs-12">
+              <div class="grid grid-cols-1 gap-2 pt-2">
+                <div>
                   <SelectStandard
                     v-model="user.role"
                     :validation-schema="schema.userRole"
@@ -49,8 +49,8 @@
                   />
                 </div>
               </div>
-              <div class="row pt-2" v-if="editMode">
-                <div class="col-xs-12">
+              <div class="grid grid-cols-1 gap-2 pt-2" v-if="editMode">
+                <div>
                   <SelectStandard
                     v-model="user.userIsNew"
                     :validation-schema="schema.userIsNew"
@@ -60,8 +60,8 @@
                   />
                 </div>
               </div>
-              <div class="row pt-5">
-                <div class="col-xs-12">
+              <div class="grid grid-cols-1 gap-2 pt-5">
+                <div>
                   <SelectStandard
                     v-model="user.groupId"
                     :validation-schema="schema.groupId"
@@ -71,8 +71,8 @@
                   />
                 </div>
               </div>
-              <div class="row pt-2">
-                <div class="col-xs-12">
+              <div class="grid grid-cols-1 gap-2 pt-2">
+                <div>
                   <InputDate
                     v-model="validFrom"
                     :validation-schema="schema.validFrom"
@@ -83,29 +83,31 @@
               </div>
             </div>
             <div class="col" v-if="editMode">
-              <div class="row justify-content-md-center">
-                <div class="col-xs-12 mb-4 text-center">
+              <div class="flex justify-center">
+                <div class="w-full mb-4 text-center">
                   <h5>{{ $t("User.groupHistory") }}</h5>
                 </div>
               </div>
-              <div class="row justify-content-md-center">
-                <div class="col-xs-12 mb-4 text-center">
-                  <table class="table table-striped table-bordered table-hover">
-                    <thead>
-                      <tr>
-                        <th scope="col">{{ $t("General.group") }}</th>
-                        <th scope="col">{{ $t("General.validFrom") }}</th>
-                        <th scope="col">{{ $t("General.validTil") }}</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr v-for="userGroup in userGroups" :key="userGroup.id">
-                        <td>{{ userGroup.group?.name }}</td>
-                        <td><SpanDate :date="userGroup.validFrom" /></td>
-                        <td><SpanDate :date="userGroup.validTil" /></td>
-                      </tr>
-                    </tbody>
-                  </table>
+              <div class="flex justify-center">
+                <div class="w-full mb-4 text-center">
+                  <div class="flex flex-col rounded-md border">
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead>{{ $t("General.group") }}</TableHead>
+                          <TableHead>{{ $t("General.validFrom") }}</TableHead>
+                          <TableHead>{{ $t("General.validTil") }}</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        <TableRow v-for="userGroup in userGroups" :key="userGroup.id">
+                          <TableCell>{{ userGroup.group?.name }}</TableCell>
+                          <TableCell><SpanDate :date="userGroup.validFrom" /></TableCell>
+                          <TableCell><SpanDate :date="userGroup.validTil" /></TableCell>
+                        </TableRow>
+                      </TableBody>
+                    </Table>
+                  </div>
                 </div>
               </div>
             </div>
@@ -114,9 +116,9 @@
       </form>
     </template>
     <template #footer>
-      <button type="button" class="btn btn-secondary" @click="resetForm">
+      <Button type="button" variant="outline" @click="resetForm">
         {{ $t("General.reset") }}
-      </button>
+      </Button>
       <ButtonSubmit
         :button-label="$t('General.save')"
         :form-id="'createUserForm' + idSuffix"
@@ -138,6 +140,9 @@ import InputStandard from "../InputStandard.vue";
 import ModalVue from "../Modal.vue";
 import SelectStandard from "../SelectStandard.vue";
 import SpanDate from "../SpanDate.vue";
+
+import { Button } from "@/components/ui/button";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { globErr } from "@/tools/views/ZodUtil";

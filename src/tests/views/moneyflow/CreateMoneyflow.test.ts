@@ -22,10 +22,54 @@ import "@testing-library/jest-dom/vitest";
 import { setInputValueAndWait, waitForInputHasValue } from "@/tests/TestUtil";
 import CrudEtfService from "@/service/CrudEtfService";
 
-vi.mock("@/service/PreDefMoneyflowService");
-vi.mock("@/service/PostingAccountService");
-vi.mock("@/service/ContractpartnerService");
-vi.mock("@/service/StoreService");
+const initAllStoresMock = vi.fn().mockResolvedValue(undefined);
+
+vi.mock("@/service/PreDefMoneyflowService", () => ({
+  default: {
+    fetchAllPreDefMoneyflow: vi.fn(),
+  },
+}));
+vi.mock("@/service/PostingAccountService", () => ({
+  default: {
+    fetchAllPostingAccount: vi.fn(),
+  },
+}));
+vi.mock("@/service/ContractpartnerService", () => ({
+  default: {
+    fetchAllContractpartner: vi.fn(),
+  },
+}));
+vi.mock("@/service/CapitalsourceService", () => ({
+  default: {
+    fetchAllCapitalsource: vi.fn(),
+  },
+}));
+vi.mock("@/service/CrudEtfService", () => ({
+  default: {
+    fetchAllEtf: vi.fn(),
+  },
+}));
+vi.mock("@/service/MoneyflowService", () => ({
+  default: {
+    createMoneyflow: vi.fn(),
+    updateMoneyflow: vi.fn(),
+    searchMoneyflowsByAmount: vi.fn(),
+  },
+}));
+vi.mock("@/service/ImportedMoneyflowService", () => ({
+  default: {
+    createImportedMoneyflow: vi.fn(),
+    updateImportedMoneyflow: vi.fn(),
+  },
+}));
+vi.mock("@/stores/StoreService", () => ({
+  StoreService: {
+    getInstance: vi.fn(() => ({
+      initAllStores: initAllStoresMock,
+      subscribeAllStores: vi.fn(),
+    })),
+  },
+}));
 
 beforeAll(async () => {
   setActivePinia(createPinia());
@@ -433,16 +477,32 @@ const assertCheckboxChecked = async (
 ): Promise<void> => {
   const errorMessage =
     message ?? "Checking checkbox for being checked: " + label;
-  return screen.findByLabelText<HTMLInputElement>(label).then((field) => {
-    expect(field.checked, errorMessage).toBeTruthy();
+  const checkboxField = screen.queryByLabelText<HTMLInputElement>(label);
+  if (checkboxField) {
+    expect(checkboxField.checked, errorMessage).toBeTruthy();
+    return;
+  }
+
+  const toggleButton = await screen.findByRole("button", { name: label });
+  await waitFor(() => {
+    expect(toggleButton.getAttribute("data-state"), errorMessage).toBe("on");
   });
 };
 
 const assertCheckboxUnchecked = async (label: string, message?: string) => {
   const errorMessage =
     message ?? "Checking checkbox for being unchecked: " + label;
-  return screen.findByLabelText<HTMLInputElement>(label).then((field) => {
-    expect(field.checked, errorMessage).toBeFalsy();
+  const checkboxField = screen.queryByLabelText<HTMLInputElement>(label);
+  if (checkboxField) {
+    expect(checkboxField.checked, errorMessage).toBeFalsy();
+    return;
+  }
+
+  const toggleButton = await screen.findByRole("button", { name: label });
+  await waitFor(() => {
+    expect(toggleButton.getAttribute("data-state"), errorMessage).not.toBe(
+      "on",
+    );
   });
 };
 
@@ -456,14 +516,13 @@ const selectComboboxItemAndWait = async (
   const idItem: HTMLInputElement = await screen.findByTestId(
     itemBaseTestId + "-id",
   );
+  fireEvent.click(inputItem);
 
   const optionItems: HTMLAnchorElement[] = await screen.findAllByTestId(
     itemBaseTestId + "-option",
   );
-
   expect(optionItems.length).greaterThan(0);
 
-  fireEvent.click(inputItem);
   let found = false;
   for (let optionItem of optionItems) {
     if (optionItem.text == valueInput) {

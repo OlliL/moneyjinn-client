@@ -1,7 +1,5 @@
 <template>
-  <span
-    ><b :style="'color:' + color" data-testid="booleanSpan">{{ text }}</b></span
-  >
+  <span><b :class="colorClass" data-testid="booleanSpan">{{ text }}</b></span>
 </template>
 
 <script lang="ts" setup>
@@ -17,8 +15,8 @@ const props = defineProps({
   },
 });
 
-const color = computed(() => {
-  return props.value ? "green" : "red";
+const colorClass = computed(() => {
+  return props.value ? "text-green-600" : "text-red-600";
 });
 
 const text = computed(() => {

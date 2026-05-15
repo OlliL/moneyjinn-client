@@ -5,49 +5,46 @@
   >
     <template #body>
       <DivError :server-errors="serverErrors" />
-      <div class="row d-flex justify-content-center mt-3">
-        <div class="col-11">
-          <table class="table table-bordered table-hover">
-            <tbody>
-              <tr>
-                <th scope="row">{{ $t("General.etf") }}</th>
-                <td>{{ etfName }}</td>
-              </tr>
-              <tr>
-                <th scope="row">{{ $t("General.year") }}</th>
-                <td>{{ etfPreliminaryLumpSum.year }}</td>
-              </tr>
-              <tr v-for="month in dataArray" :key="month.month">
-                <th scope="row">
-                  {{
-                    $t("ETFPreliminaryLumpSum.monthlyAmount", {
-                      month: month.month,
-                    })
-                  }}
-                </th>
-                <td>
-                  <SpanAmount :amount="month.amount" />
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+      <div class="flex flex-col rounded-md border">
+        <Table>
+          <TableBody>
+            <TableRow>
+              <TableCell class="font-bold bg-primary/10 w-40 whitespace-nowrap text-foreground border-r">{{ $t("General.etf") }}</TableCell>
+              <TableCell>{{ etfName }}</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell class="font-bold bg-primary/10 w-40 whitespace-nowrap text-foreground border-r">{{ $t("General.year") }}</TableCell>
+              <TableCell>{{ etfPreliminaryLumpSum.year }}</TableCell>
+            </TableRow>
+            <TableRow v-for="month in dataArray" :key="month.month">
+              <TableCell class="font-bold bg-primary/10 w-40 whitespace-nowrap text-foreground border-r">
+                {{
+                  $t("ETFPreliminaryLumpSum.monthlyAmount", {
+                    month: month.month,
+                  })
+                }}
+              </TableCell>
+              <TableCell><SpanAmount :amount="month.amount" /></TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
       </div>
     </template>
     <template #footer>
-      <button
-        type="button"
-        class="btn btn-danger"
-        @click="deleteEtfPreliminaryLumpSum"
-      >
+      <Button variant="destructive" class="flex items-center gap-2 rounded-md px-6" @click="deleteEtfPreliminaryLumpSum">
+        <Trash2 class="h-4 w-4" />
         {{ $t("General.delete") }}
-      </button>
+      </Button>
     </template>
   </ModalVue>
 </template>
 
 <script lang="ts" setup>
 import { computed, ref, useTemplateRef } from "vue";
+import { Trash2 } from "lucide-vue-next";
+
+import { Button } from "@/components/ui/button";
+import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 
 import DivError from "../DivError.vue";
 import ModalVue from "../Modal.vue";
@@ -120,9 +117,3 @@ const deleteEtfPreliminaryLumpSum = () => {
 defineExpose({ _show });
 </script>
 
-<style scoped>
-th {
-  background-color: #f2f2f2;
-  white-space: nowrap;
-}
-</style>

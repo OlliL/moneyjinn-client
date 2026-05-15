@@ -1,22 +1,21 @@
 <template>
-  <div class="row justify-content-md-center mb-4">
-    <div class="col-md-9 col-xs-12">
-      <div class="card w-100 bg-light">
-        <div class="card-body">
+  <div class="flex justify-center mb-4">
+    <div class="w-full max-w-6xl">
+      <div class="rounded-lg border bg-muted/20">
+        <div class="p-4">
           <DivError :server-errors="serverErrors" />
-          <div class="row">
+          <div class="flex flex-col md:flex-row gap-4">
             <div
-              style="overflow-x: scroll; white-space: nowrap; height: 400px"
-              class="col-md-3 col-xs-12"
+              class="w-full md:w-1/3 overflow-x-scroll whitespace-nowrap h-[400px]"
             >
               <img
                 v-if="isJpeg"
                 :src="`data:image/png;base64,${receipt.receipt}`"
-                style="max-width: 100%"
+                class="max-w-full"
                 alt="receipt"
               />
               <object
-                style="height: 75vh; width: 100%"
+                class="h-[75vh] w-full"
                 v-if="isPdf"
                 id="pdf"
                 :data="`data:application/pdf;base64,${receipt.receipt}`"
@@ -25,24 +24,19 @@
                 receipt
               </object>
             </div>
-            <div class="col-md-9 col-xs-12">
+            <div class="w-full md:w-2/3">
               <form
                 @submit.prevent="searchMoneyflows"
                 :id="'searchReceipt' + receipt.id"
               >
-                <div
-                  class="row no-gutters flex-lg-nowrap mb-4 justify-content-center"
-                >
-                  <div
-                    class="col-md-1 col-xs-6 d-flex align-items-center justify-content-end"
-                  >
+                <div class="flex flex-wrap gap-2 mb-4 justify-center">
+                  <div class="w-full md:w-auto flex items-center justify-end">
                     <ButtonSubmit :form-id="'searchReceipt' + receipt.id">
-                      <template #icon
-                        ><i class="bi bi-search"></i>&nbsp;
-                      </template></ButtonSubmit
+                      <template #icon><Search class="h-4 w-4" /></template>
+                    </ButtonSubmit
                     >
                   </div>
-                  <div class="col-md-3 col-xs-12">
+                  <div class="w-full md:w-[31%]">
                     <InputStandard
                       v-model="amount"
                       :validation-schema="schema.amount"
@@ -51,13 +45,10 @@
                       step="0.01"
                       :field-label="$t('General.amount')"
                     >
-                      <template #icon
-                        ><span class="input-group-text"
-                          ><i class="bi bi-currency-euro"></i></span
-                      ></template>
+                      <template #icon><Euro class="h-4 w-4" /></template>
                     </InputStandard>
                   </div>
-                  <div class="col-md-3 col-xs-12">
+                  <div class="w-full md:w-[31%]">
                     <InputDate
                       v-model="startDate"
                       :validation-schema="schema.startDate"
@@ -65,7 +56,7 @@
                       :field-label="$t('General.startDate')"
                     />
                   </div>
-                  <div class="col-md-3 col-xs-12">
+                  <div class="w-full md:w-[31%]">
                     <InputDate
                       v-model="endDate"
                       :validation-schema="schema.endDate"
@@ -75,37 +66,36 @@
                   </div>
                 </div>
               </form>
-              <div
-                class="row no-gutters flex-lg-nowrap mb-4 justify-content-center"
-              >
-                <div class="col-xs-12">
-                  <table
-                    class="table table-striped table-bordered table-hover"
-                    v-if="searchExecuted && searchSuccessful"
-                  >
-                    <thead>
-                      <tr>
-                        <th scope="col"></th>
-                        <th scope="col">{{ $t("Moneyflow.invoicedate") }}</th>
-                        <th scope="col">{{ $t("General.amount") }}</th>
-                        <th scope="col">{{ $t("General.contractpartner") }}</th>
-                        <th scope="col">{{ $t("General.comment") }}</th>
-                        <th scope="colgroup" colspan="2"></th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <ImportReceiptSearchRowVue
-                        v-for="moneyflow in moneyflows"
-                        v-model="selectedMoneyflowId"
-                        :key="moneyflow.id"
-                        :mmf="moneyflow"
-                        :preselected="preselected"
-                        :receipt-id="receipt.id"
-                        @delete-moneyflow="emitDeleteMoneyflow"
-                        @edit-moneyflow="emitEditMoneyflow"
-                      />
-                    </tbody>
-                  </table>
+              <div class="mb-4">
+                <div class="w-full">
+                  <div class="flex flex-col rounded-md border" v-if="searchExecuted && searchSuccessful">
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead class="w-10">
+                            <span class="sr-only">Selection</span>
+                          </TableHead>
+                          <TableHead>{{ $t("Moneyflow.invoicedate") }}</TableHead>
+                          <TableHead>{{ $t("General.amount") }}</TableHead>
+                          <TableHead>{{ $t("General.contractpartner") }}</TableHead>
+                          <TableHead>{{ $t("General.comment") }}</TableHead>
+                          <TableHead colspan="2"></TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        <ImportReceiptSearchRowVue
+                          v-for="moneyflow in moneyflows"
+                          v-model="selectedMoneyflowId"
+                          :key="moneyflow.id"
+                          :mmf="moneyflow"
+                          :preselected="preselected"
+                          :receipt-id="receipt.id"
+                          @delete-moneyflow="emitDeleteMoneyflow"
+                          @edit-moneyflow="emitEditMoneyflow"
+                        />
+                      </TableBody>
+                    </Table>
+                  </div>
                   <div v-if="searchExecuted && !searchSuccessful">
                     {{ $t("Moneyflow.noMatchingMoneyflow") }}
                   </div>
@@ -113,24 +103,26 @@
               </div>
             </div>
           </div>
-          <div class="row no-gutters flex-lg-nowrap">
-            <div class="col-12">
-              <button
+          <div class="mt-2">
+            <div class="w-full">
+              <Button
                 type="button"
-                class="btn btn-primary mx-2"
+                variant="default"
+                class="mx-2"
                 @click="importReceipt"
                 v-if="searchExecuted && searchSuccessful"
                 :disabled="!moneyflowSelected"
               >
                 {{ $t("Moneyflow.apply") }}
-              </button>
-              <button
+              </Button>
+              <Button
                 type="button"
-                class="btn btn-danger mx-2"
+                variant="destructive"
+                class="mx-2"
                 @click="deleteReceipt"
               >
                 {{ $t("General.delete") }}
-              </button>
+              </Button>
             </div>
           </div>
         </div>
@@ -144,12 +136,16 @@ import { useForm } from "vee-validate";
 import { computed, nextTick, onMounted, ref, type PropType } from "vue";
 import { useI18n } from "vue-i18n";
 import { date } from "zod";
+import { Euro, Search } from "lucide-vue-next";
 
 import ButtonSubmit from "../ButtonSubmit.vue";
 import DivError from "../DivError.vue";
 import ImportReceiptSearchRowVue from "./ImportReceiptSearchRow.vue";
 import InputStandard from "../InputStandard.vue";
 import InputDate from "../InputDate.vue";
+
+import { Button } from "@/components/ui/button";
+import { Table, TableBody, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
 import { amountSchema, globErr } from "@/tools/views/ZodUtil";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
@@ -237,7 +233,7 @@ onMounted(() => {
 
   const posOfDot = props.receipt.filename.indexOf(".");
   const amountFromFilename = props.receipt.filename.substring(0, posOfDot);
-  if (!isNaN(Number(amountFromFilename))) {
+  if (!Number.isNaN(Number(amountFromFilename))) {
     amount.value = toFixed(+amountFromFilename / 100, 2);
     nextTick(() => {
       searchMoneyflows();

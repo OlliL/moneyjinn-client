@@ -9,6 +9,7 @@
         type="hidden"
         :id="id"
         :name="id"
+        :data-testid="id + '-id'"
         ref="hiddenRef"
         v-model="hiddenValue"
       />
@@ -55,8 +56,7 @@
       <div
         v-if="isOpen && items.length > 0"
         ref="dropdownRef"
-        class="absolute z-50 top-[calc(100%+4px)] left-0 min-w-[8rem] w-full rounded-md border bg-popover text-popover-foreground shadow-md animate-in fade-in-0 zoom-in-95 flex flex-col"
-        style="max-height: 300px"
+        class="absolute z-50 top-[calc(100%+4px)] left-0 min-w-[8rem] w-full max-h-[300px] rounded-md border bg-popover text-popover-foreground shadow-md animate-in fade-in-0 zoom-in-95 flex flex-col"
       >
         <div class="p-1 overflow-y-auto overscroll-contain custom-scrollbar">
           <a

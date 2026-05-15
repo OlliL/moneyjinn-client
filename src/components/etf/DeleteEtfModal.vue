@@ -2,78 +2,64 @@
   <ModalVue :title="$t('ETF.title.delete')" ref="modalComponent">
     <template #body>
       <DivError :server-errors="serverErrors" />
-      <div class="row d-flex justify-content-center mt-3">
-        <div class="col-11">
-          <table class="table table-bordered table-hover">
-            <tbody>
-              <tr>
-                <th scope="row" colspan="2" id="name">
-                  {{ $t("General.name") }}
-                </th>
-                <td>{{ etf.name }}</td>
-              </tr>
-              <tr>
-                <th scope="row" colspan="2" id="isin">{{ $t("ETF.isin") }}</th>
-                <td>{{ etf.isin }}</td>
-              </tr>
-              <tr>
-                <th scope="row" colspan="2" id="wkn">{{ $t("ETF.wkn") }}</th>
-                <td>{{ etf.wkn }}</td>
-              </tr>
-              <tr>
-                <th scope="row" colspan="2" id="ticker">
-                  {{ $t("ETF.ticker") }}
-                </th>
-                <td>{{ etf.ticker }}</td>
-              </tr>
-              <tr>
-                <th scope="row" colspan="2" id="chartUrl">
-                  {{ $t("ETF.chartUrl") }}
-                </th>
-                <td><a :href="etf.chartUrl">Link</a></td>
-              </tr>
-              <tr>
-                <th scope="rowgroup" rowspan="3" id="transactionCosts">
-                  {{ $t("ETFFlow.transactionCosts") }}
-                </th>
-                <th scope="row" id="abs">
-                  {{ $t("ETFFlow.transactionCostsAbsolute") }}
-                </th>
-                <td><SpanAmount :amount="etf.transactionCostsAbsolute" /></td>
-              </tr>
-              <tr>
-                <th scope="row" id="rel">
-                  {{ $t("ETFFlow.transactionCostsRelative") }}
-                </th>
-                <td>{{ trabsactionCostsRelativeString }}</td>
-              </tr>
-              <tr>
-                <th scope="row" id="max">
-                  {{ $t("ETFFlow.transactionCostsMaximum") }}
-                </th>
-                <td><SpanAmount :amount="etf.transactionCostsMaximum" /></td>
-              </tr>
-              <tr>
-                <th scope="row" colspan="2" id="taxExemption">
-                  {{ $t("ETF.partialTaxExemption") }}
-                </th>
-                <td>{{ partialTaxExemptionString }}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+      <div class="flex flex-col rounded-md border">
+        <Table>
+          <TableBody>
+            <TableRow>
+              <TableCell class="font-bold bg-primary/10 w-40 whitespace-normal text-foreground border-r">{{ $t("General.name") }}</TableCell>
+              <TableCell>{{ etf.name }}</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell class="font-bold bg-primary/10 w-40 whitespace-normal text-foreground border-r">{{ $t("ETF.isin") }}</TableCell>
+              <TableCell>{{ etf.isin }}</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell class="font-bold bg-primary/10 w-40 whitespace-normal text-foreground border-r">{{ $t("ETF.wkn") }}</TableCell>
+              <TableCell>{{ etf.wkn }}</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell class="font-bold bg-primary/10 w-40 whitespace-normal text-foreground border-r">{{ $t("ETF.ticker") }}</TableCell>
+              <TableCell>{{ etf.ticker }}</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell class="font-bold bg-primary/10 w-40 whitespace-normal text-foreground border-r">{{ $t("ETF.chartUrl") }}</TableCell>
+              <TableCell><a :href="etf.chartUrl">Link</a></TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell class="font-bold bg-primary/10 w-40 whitespace-normal text-foreground border-r">{{ $t("ETFFlow.transactionCostsAbsolute") }}</TableCell>
+              <TableCell><SpanAmount :amount="etf.transactionCostsAbsolute" /></TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell class="font-bold bg-primary/10 w-40 whitespace-normal text-foreground border-r">{{ $t("ETFFlow.transactionCostsRelative") }}</TableCell>
+              <TableCell>{{ trabsactionCostsRelativeString }}</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell class="font-bold bg-primary/10 w-40 whitespace-normal text-foreground border-r">{{ $t("ETFFlow.transactionCostsMaximum") }}</TableCell>
+              <TableCell><SpanAmount :amount="etf.transactionCostsMaximum" /></TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell class="font-bold bg-primary/10 w-40 whitespace-normal text-foreground border-r">{{ $t("ETF.partialTaxExemption") }}</TableCell>
+              <TableCell>{{ partialTaxExemptionString }}</TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
       </div>
     </template>
     <template #footer>
-      <button type="button" class="btn btn-danger" @click="deleteEtf">
+      <Button variant="destructive" class="flex items-center gap-2 rounded-md px-6" @click="deleteEtf">
+        <Trash2 class="h-4 w-4" />
         {{ $t("General.delete") }}
-      </button>
+      </Button>
     </template>
   </ModalVue>
 </template>
 
 <script lang="ts" setup>
 import { computed, ref, useTemplateRef } from "vue";
+import { Trash2 } from "lucide-vue-next";
+
+import { Button } from "@/components/ui/button";
+import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 
 import DivError from "../DivError.vue";
 import ModalVue from "../Modal.vue";
@@ -126,8 +112,3 @@ const deleteEtf = () => {
 defineExpose({ _show });
 </script>
 
-<style scoped>
-th {
-  background-color: #f2f2f2;
-}
-</style>

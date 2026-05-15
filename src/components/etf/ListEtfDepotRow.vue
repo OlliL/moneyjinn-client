@@ -1,78 +1,100 @@
 <template>
-  <tr>
-    <td class="text-start">
+  <TableRow>
+    <TableCell class="text-left">
       {{ timestampString }}
-    </td>
-    <td class="text-end">
+    </TableCell>
+    <TableCell class="text-right">
       <span :class="amountClass">{{ amountString }}</span>
-    </td>
-    <td class="text-end">
-      <SpanAmount :amount="flow.price" :decimalPlaces="3" />
-    </td>
-    <td class="text-end"><SpanAmount :amount="flow.amount * flow.price" /></td>
-    <td class="text-end mytooltip" v-if="showLumpSum">
+    </TableCell>
+    <TableCell class="text-right">
+      <SpanAmount :amount="flow.price" :decimal-places="3" />
+    </TableCell>
+    <TableCell class="text-right"><SpanAmount :amount="flow.amount * flow.price" /></TableCell>
+    <TableCell class="text-right group relative cursor-pointer" v-if="showLumpSum">
       <SpanAmount
         :amount="flow.accumulatedPreliminaryLumpSum * (partial / 100)"
-        :decimalPlaces="3"
+        :decimal-places="3"
       />
-      <span class="tooltiptext p-3">
-        <table class="table table-striped table-bordered table-hover">
-          <tr>
-            <th scope="col"></th>
-            <th scope="col" class="text-center">100%</th>
-            <th scope="col" class="text-center" v-if="partial < 100">
-              {{ formatNumber(partial, 0) }}%
-            </th>
-          </tr>
-          <tr
-            v-for="entry of flow.preliminaryLumpSumPerYear.entries()"
-            :key="entry[0]"
-          >
-            <th scope="row">{{ entry[0] }}</th>
-            <td class="text-end">
-              <SpanAmount :amount="entry[1]" :decimalPlaces="3" />
-            </td>
-            <td class="text-end" v-if="partial < 100">
-              <SpanAmount
-                :amount="entry[1] * (partial / 100)"
-                :decimalPlaces="3"
-              />
-            </td>
-          </tr>
-          <tr>
-            <th class="text-end" scope="row">&sum;</th>
-            <td class="text-end">
-              <u
-                ><SpanAmount
-                  :amount="flow.accumulatedPreliminaryLumpSum"
-                  :decimalPlaces="3"
-              /></u>
-            </td>
-            <td class="text-end" v-if="partial < 100">
-              <u
-                ><SpanAmount
-                  :amount="flow.accumulatedPreliminaryLumpSum * (partial / 100)"
-                  :decimalPlaces="3"
-              /></u>
-            </td>
-          </tr>
-        </table>
-      </span>
-    </td>
-    <td class="text-center">
-      <span class="link-primary" @click="editEtfFlow"
-        ><i class="bi bi-pencil-square"></i
-      ></span>
-    </td>
-    <td class="text-center">
-      <span class="link-primary" @click="deleteEtfFlow"
-        ><i class="bi bi-trash"></i
-      ></span>
-    </td>
-  </tr>
+      <div class="absolute hidden group-hover:block bottom-full right-0 mb-2 bg-background border border-border rounded-lg shadow-lg z-10 p-3 w-max">
+        <Table class="border">
+          <TableHeader>
+            <TableRow>
+              <TableHead><span class="sr-only">Year</span></TableHead>
+              <TableHead class="text-center">100%</TableHead>
+              <TableHead class="text-center" v-if="partial < 100">
+                {{ formatNumber(partial, 0) }}%
+              </TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            <TableRow
+              v-for="entry of flow.preliminaryLumpSumPerYear.entries()"
+              :key="entry[0]"
+            >
+              <TableCell class="font-bold">{{ entry[0] }}</TableCell>
+              <TableCell class="text-right">
+                <SpanAmount :amount="entry[1]" :decimal-places="3" />
+              </TableCell>
+              <TableCell class="text-right" v-if="partial < 100">
+                <SpanAmount
+                  :amount="entry[1] * (partial / 100)"
+                  :decimal-places="3"
+                />
+              </TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell class="font-bold text-right">&sum;</TableCell>
+              <TableCell class="text-right">
+                <u
+                  ><SpanAmount
+                    :amount="flow.accumulatedPreliminaryLumpSum"
+                    :decimal-places="3"
+                /></u>
+              </TableCell>
+              <TableCell class="text-right" v-if="partial < 100">
+                <u
+                  ><SpanAmount
+                    :amount="flow.accumulatedPreliminaryLumpSum * (partial / 100)"
+                    :decimal-places="3"
+                /></u>
+              </TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
+      </div>
+    </TableCell>
+    <TableCell class="text-center">
+      <Button
+        variant="ghost"
+        size="icon"
+        @click="editEtfFlow"
+        :title="$t('General.edit')"
+        :aria-label="$t('General.edit')"
+        class="h-6 w-6"
+      >
+        <Pencil class="h-4 w-4" />
+      </Button>
+    </TableCell>
+    <TableCell class="text-center">
+      <Button
+        variant="ghost"
+        size="icon"
+        @click="deleteEtfFlow"
+        :title="$t('General.delete')"
+        :aria-label="$t('General.delete')"
+        class="h-6 w-6"
+      >
+        <Trash2 class="h-4 w-4" />
+      </Button>
+    </TableCell>
+  </TableRow>
 </template>
 <script lang="ts" setup>
 import { computed, type PropType } from "vue";
+import { Pencil, Trash2 } from "lucide-vue-next";
+
+import { TableCell, TableHead, TableHeader, TableRow, Table, TableBody } from "@/components/ui/table";
+import { Button } from "@/components/ui/button";
 
 import SpanAmount from "../SpanAmount.vue";
 
@@ -124,21 +146,3 @@ const editEtfFlow = () => {
 };
 </script>
 
-<style scoped>
-.mytooltip {
-  cursor: pointer;
-}
-
-.tooltiptext {
-  border-radius: 10px;
-  visibility: hidden;
-  background-color: #f2f2f2;
-  position: absolute;
-  z-index: 1;
-  border: 1px solid grey;
-}
-
-.mytooltip:hover .tooltiptext {
-  visibility: visible;
-}
-</style>

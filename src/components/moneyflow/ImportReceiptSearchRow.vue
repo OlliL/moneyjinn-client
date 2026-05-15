@@ -1,31 +1,49 @@
 <template>
-  <tr>
-    <td class="">
-      <div class="form-check d-flex align-items-center justify-content-center">
+  <TableRow>
+    <TableCell>
+      <div class="flex items-center justify-center">
         <input
-          class="form-check-input"
           type="radio"
           :name="'selectMoneyflow' + receiptId"
           :checked="preselected"
           @change="moneyflowSelected"
+          class="rounded-sm border border-primary"
         />
       </div>
-    </td>
-    <td><SpanDate :date="mmf.invoiceDate" /></td>
-    <td class="text-end"><SpanAmount :amount="mmf.amount" /></td>
-    <td class="text-start">{{ mmf.contractpartnerName }}</td>
-    <td class="text-start">{{ mmf.comment }}</td>
-    <td class="text-center" v-if="isOwnMoneyflow">
-      <span class="link-primary" @click="editMoneyflow"><i class="bi bi-pencil-square"></i></span>
-    </td>
-    <td class="text-center" v-if="isOwnMoneyflow">
-      <span class="link-primary" @click="deleteMoneyflow"><i class="bi bi-trash"></i></span>
-    </td>
-    <td colspan="2" v-if="!isOwnMoneyflow"></td>
-  </tr>
+    </TableCell>
+    <TableCell><SpanDate :date="mmf.invoiceDate" /></TableCell>
+    <TableCell class="text-right"><SpanAmount :amount="mmf.amount" /></TableCell>
+    <TableCell class="text-left">{{ mmf.contractpartnerName }}</TableCell>
+    <TableCell class="text-left">{{ mmf.comment }}</TableCell>
+    <TableCell class="text-center" v-if="isOwnMoneyflow">
+      <Button
+        variant="ghost"
+        size="icon"
+        @click="editMoneyflow"
+        class="h-6 w-6"
+      >
+        <Pencil class="h-4 w-4" />
+      </Button>
+    </TableCell>
+    <TableCell class="text-center" v-if="isOwnMoneyflow">
+      <Button
+        variant="ghost"
+        size="icon"
+        @click="deleteMoneyflow"
+        class="h-6 w-6"
+      >
+        <Trash2 class="h-4 w-4" />
+      </Button>
+    </TableCell>
+    <TableCell v-if="!isOwnMoneyflow"></TableCell>
+  </TableRow>
 </template>
 <script lang="ts" setup>
 import { computed, type PropType } from "vue";
+import { Pencil, Trash2 } from "lucide-vue-next";
+
+import { TableCell, TableRow } from "@/components/ui/table";
+import { Button } from "@/components/ui/button";
 
 import SpanAmount from "../SpanAmount.vue";
 import SpanDate from "../SpanDate.vue";

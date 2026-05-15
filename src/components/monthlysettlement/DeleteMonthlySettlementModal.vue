@@ -7,26 +7,30 @@
   >
     <template #body>
       <DivError :server-errors="serverErrors" />
-      <div class="row justify-content-md-center mb-4" v-if="month">
-        <div class="col">
+      <div class="flex justify-center mb-4" v-if="month">
+        <div class="w-full">
           <ShowMonthlySettlementVue :year="year" :month="month" />
         </div>
       </div>
     </template>
     <template #footer>
-      <button
+      <Button
         type="button"
-        class="btn btn-danger"
+        variant="destructive"
         @click="deleteMonthlySettlement"
       >
+        <Trash2 class="h-4 w-4" />
         {{ $t("General.delete") }}
-      </button>
+      </Button>
     </template>
   </ModalVue>
 </template>
 
 <script lang="ts" setup>
 import { ref, useTemplateRef } from "vue";
+import { Trash2 } from "lucide-vue-next";
+
+import { Button } from "@/components/ui/button";
 
 import DivError from "../DivError.vue";
 import ModalVue from "../Modal.vue";

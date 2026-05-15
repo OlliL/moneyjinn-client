@@ -1,88 +1,94 @@
 <template>
-  <div class="row">
-    <div class="col-xs-12 text-center table-responsive">
-      <table class="table table-striped table-bordered table-hover">
-        <thead>
-          <tr>
-            <th scope="col" class="text-center d-none d-md-table-cell">
-              {{ $t("Capitalsource.type") }}
-            </th>
-            <th scope="col" class="text-center d-none d-md-table-cell">
-              {{ $t("Capitalsource.state") }}
-            </th>
-            <th scope="col" class="text-center">{{ $t("General.comment") }}</th>
-            <th scope="col" class="text-center">
-              {{ $t("Reports.beginOfMonth") }}
-            </th>
-            <th scope="col" class="text-center" v-if="currentMonthIsSettled">
-              {{ $t("Reports.endOfMonthFixed") }}
-            </th>
-            <th scope="col" class="text-center d-none d-md-table-cell">
-              {{ $t("Reports.endOfMonthCalculated") }}
-            </th>
-            <th scope="col" class="text-center" v-if="!currentMonthIsSettled">
-              {{ $t("Reports.currentAmount") }}
-            </th>
-            <th
-              class="text-center d-none d-md-table-cell"
-              v-if="!currentMonthIsSettled"
-            >
-              {{ $t("Reports.state") }}
-            </th>
-            <th
-              class="text-center d-none d-md-table-cell"
-              v-if="currentMonthIsSettled"
-            >
-              {{ $t("Reports.difference") }}
-            </th>
-          </tr>
-        </thead>
+  <div class="flex justify-center w-full my-4">
+    <div class="relative rounded-md border overflow-hidden w-full">
+      <div class="overflow-x-auto">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead class="text-center hidden md:table-cell">
+                {{ $t("Capitalsource.type") }}
+              </TableHead>
+              <TableHead class="text-center hidden md:table-cell">
+                {{ $t("Capitalsource.state") }}
+              </TableHead>
+              <TableHead class="text-center">{{ $t("General.comment") }}</TableHead>
+              <TableHead class="text-center">
+                {{ $t("Reports.beginOfMonth") }}
+              </TableHead>
+              <TableHead class="text-center" v-if="currentMonthIsSettled">
+                {{ $t("Reports.endOfMonthFixed") }}
+              </TableHead>
+              <TableHead class="text-center hidden md:table-cell">
+                {{ $t("Reports.endOfMonthCalculated") }}
+              </TableHead>
+              <TableHead class="text-center" v-if="!currentMonthIsSettled">
+                {{ $t("Reports.currentAmount") }}
+              </TableHead>
+              <TableHead
+                class="text-center hidden md:table-cell"
+                v-if="!currentMonthIsSettled"
+              >
+                {{ $t("Reports.state") }}
+              </TableHead>
+              <TableHead
+                class="text-center hidden md:table-cell"
+                v-if="currentMonthIsSettled"
+              >
+                {{ $t("Reports.difference") }}
+              </TableHead>
+            </TableRow>
+          </TableHeader>
 
-        <tbody>
-          <CapitalsourceTableRowVue
-            v-for="data in capitalsourceData"
-            :key="data.capitalsourceComment"
-            v-bind="{
-              ...data,
-              currentMonthIsSettled: currentMonthIsSettled,
-            }"
-          />
-          <tr>
-            <td class="text-end d-none d-md-table-cell" colspan="3">&sum;</td>
-            <td class="text-end d-block d-sm-none">&sum;</td>
-            <td class="text-end">
-              <u><SpanAmount :amount="amountBeginOfMonthFixedSum" /></u>
-            </td>
-            <td class="text-end" v-if="currentMonthIsSettled">
-              <u><SpanAmount :amount="amountEndOfMonthFixedSum" /></u>
-            </td>
-            <td class="text-end d-none d-md-table-cell">
-              <u><SpanAmount :amount="amountEndOfMonthCalculatedSum" /></u>
-            </td>
-            <td class="text-end" v-if="!currentMonthIsSettled">
-              <u><SpanAmount :amount="amountCurrentSum" /></u>
-            </td>
-            <td
-              class="text-end d-none d-md-table-cell"
-              v-if="currentMonthIsSettled"
-            >
-              <u><SpanAmount :amount="differenceFixedCalculatedSum" /></u>
-            </td>
-            <td
-              class="text-end d-none d-md-table-cell"
-              v-if="!currentMonthIsSettled"
-            >
-              &nbsp;
-            </td>
-          </tr>
-        </tbody>
-      </table>
+          <TableBody>
+            <CapitalsourceTableRowVue
+              v-for="data in capitalsourceData"
+              :key="data.capitalsourceComment"
+              v-bind="{
+                ...data,
+                currentMonthIsSettled: currentMonthIsSettled,
+              }"
+            />
+            <TableRow class="font-bold bg-primary/[0.10]">
+              <TableCell class="text-right hidden md:table-cell" colspan="3"
+                >&sum;</TableCell
+              >
+              <TableCell class="text-right block md:hidden">&sum;</TableCell>
+              <TableCell class="text-right">
+                <u><SpanAmount :amount="amountBeginOfMonthFixedSum" /></u>
+              </TableCell>
+              <TableCell class="text-right" v-if="currentMonthIsSettled">
+                <u><SpanAmount :amount="amountEndOfMonthFixedSum" /></u>
+              </TableCell>
+              <TableCell class="text-right hidden md:table-cell">
+                <u><SpanAmount :amount="amountEndOfMonthCalculatedSum" /></u>
+              </TableCell>
+              <TableCell class="text-right" v-if="!currentMonthIsSettled">
+                <u><SpanAmount :amount="amountCurrentSum" /></u>
+              </TableCell>
+              <TableCell
+                class="text-right hidden md:table-cell"
+                v-if="currentMonthIsSettled"
+              >
+                <u><SpanAmount :amount="differenceFixedCalculatedSum" /></u>
+              </TableCell>
+              <TableCell
+                class="text-right hidden md:table-cell"
+                v-if="!currentMonthIsSettled"
+              >
+                &nbsp;
+              </TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
+      </div>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
 import { computed } from "vue";
+
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
 import CapitalsourceTableRowVue from "./CapitalsourceTableRow.vue";
 import SpanAmount from "../SpanAmount.vue";

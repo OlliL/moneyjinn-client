@@ -1,75 +1,68 @@
 <template>
-  <tr>
-    <td style="vertical-align: middle">
-      <a
-        class="btn btn-outline-primary"
-        data-bs-toggle="collapse"
-        :href="'#collapseResults' + compareDataKey"
-        aria-expanded="false"
-        aria-controls="collapseExample"
+  <TableRow>
+    <TableCell class="align-middle">
+      <Button
         v-if="compareDatasCount > 0"
-        ><span class="link-primary"><i :class="collapseIconClass"></i></span
-      ></a>
-    </td>
-    <th
-      scope="row"
-      style="vertical-align: middle"
-      :class="amountClass"
-      id="amount"
-    >
+        variant="ghost"
+        size="icon"
+        @click="toggleCollapse"
+        :title="isCollapsed ? 'Collapse details' : 'Expand details'"
+        :aria-label="isCollapsed ? 'Collapse details' : 'Expand details'"
+        class="h-8 w-8"
+      >
+        <ChevronRight v-if="!isCollapsed" class="h-4 w-4" />
+        <ChevronDown v-else class="h-4 w-4" />
+      </Button>
+    </TableCell>
+    <TableCell class="align-middle font-bold" :class="amountClass">
       {{ compareDatasCount }}
-    </th>
-    <td class="text-start" style="vertical-align: middle">
+    </TableCell>
+    <TableCell class="text-left align-middle">
       {{ comment }}
-    </td>
-  </tr>
-  <tr v-if="compareData">
-    <td colspan="5" style="padding: 0">
-      <div class="collapse" :id="'collapseResults' + compareDataKey">
-        <table class="table table-bordered table-hover" v-if="showDetails">
-          <colgroup>
-            <col style="width: 10%" />
-            <col style="width: 10%" />
-            <col style="width: 10%" />
-            <col style="width: 7%" />
-            <col style="width: 17%" />
-            <col style="width: 25%" />
-            <col style="width: 13%" />
-            <col style="width: 4%" />
-            <col style="width: 4%" />
-          </colgroup>
-          <thead>
-            <tr>
-              <th scope="col"></th>
-              <th scope="col">{{ $t("Moneyflow.bookingdate") }}</th>
-              <th scope="col">{{ $t("Moneyflow.invoicedate") }}</th>
-              <th scope="col">{{ $t("General.amount") }}</th>
-              <th scope="col">{{ $t("General.contractpartner") }}</th>
-              <th scope="col">{{ $t("General.comment") }}</th>
-              <th scope="col">{{ $t("General.capitalsource") }}</th>
-              <th scope="colgroup" colspan="2"></th>
-            </tr>
-          </thead>
-          <tbody>
-            <CompareDataResultRowVue
-              v-for="(data, idx) in compareData"
-              :key="idx"
-              :mmf="data.moneyflow"
-              :import-data="data.compareDataDataset"
-              :capitalsource-id="capitalsourceId"
-              :capitalsource-comment="capitalsourceComment"
-              @delete-moneyflow="emitDeleteMoneyflow"
-              @edit-moneyflow="emitEditMoneyflow"
-              @create-moneyflow="emitCreateMoneyflow"
-            />
-          </tbody>
-        </table>
+    </TableCell>
+  </TableRow>
+  <TableRow v-if="compareData && isCollapsed">
+    <TableCell colspan="5" class="p-0">
+      <div class="p-4">
+        <div class="flex flex-col rounded-md border">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead><span class="sr-only">Status</span></TableHead>
+                <TableHead>{{ $t("Moneyflow.bookingdate") }}</TableHead>
+                <TableHead>{{ $t("Moneyflow.invoicedate") }}</TableHead>
+                <TableHead>{{ $t("General.amount") }}</TableHead>
+                <TableHead>{{ $t("General.contractpartner") }}</TableHead>
+                <TableHead>{{ $t("General.comment") }}</TableHead>
+                <TableHead>{{ $t("General.capitalsource") }}</TableHead>
+                <TableHead colspan="2"><span class="sr-only">Actions</span></TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              <CompareDataResultRowVue
+                v-for="(data, idx) in compareData"
+                :key="idx"
+                :mmf="data.moneyflow"
+                :import-data="data.compareDataDataset"
+                :capitalsource-id="capitalsourceId"
+                :capitalsource-comment="capitalsourceComment"
+                @delete-moneyflow="emitDeleteMoneyflow"
+                @edit-moneyflow="emitEditMoneyflow"
+                @create-moneyflow="emitCreateMoneyflow"
+              />
+            </TableBody>
+          </Table>
+        </div>
       </div>
-    </td>
-  </tr>
+    </TableCell>
+  </TableRow>
 </template>
 <script lang="ts" setup>
-import { computed, onMounted, ref, type PropType } from "vue";
+import { computed, ref, type PropType } from "vue";
+import { ChevronRight, ChevronDown } from "lucide-vue-next";
+
+import { TableCell, TableHead, TableHeader, TableRow, Table, TableBody } from "@/components/ui/table";
+import { Button } from "@/components/ui/button";
 
 import CompareDataResultRowVue from "./CompareDataResultRow.vue";
 
@@ -103,21 +96,15 @@ const props = defineProps({
   },
 });
 
-const collapseIconClass = ref("bi bi-caret-right-fill");
-const showDetails = ref(false);
+const isCollapsed = ref(false);
 const emit = defineEmits([
   "deleteMoneyflow",
   "editMoneyflow",
   "createMoneyflow",
 ]);
 
-const toggleButtonShow = () => {
-  collapseIconClass.value = "bi bi-caret-down-fill";
-  showDetails.value = true;
-};
-const toggleButtonHide = () => {
-  collapseIconClass.value = "bi bi-caret-right-fill";
-  showDetails.value = false;
+const toggleCollapse = () => {
+  isCollapsed.value = !isCollapsed.value;
 };
 const emitDeleteMoneyflow = (id: number) => {
   emit("deleteMoneyflow", id);
@@ -130,14 +117,5 @@ const emitCreateMoneyflow = (moneyflow: Moneyflow) => {
 };
 const compareDatasCount = computed(() => {
   return props.compareData ? props.compareData.length : 0;
-});
-
-onMounted(() => {
-  document
-    .getElementById("collapseResults" + props.compareDataKey)
-    ?.addEventListener("show.bs.collapse", () => toggleButtonShow());
-  document
-    .getElementById("collapseResults" + props.compareDataKey)
-    ?.addEventListener("hide.bs.collapse", () => toggleButtonHide());
 });
 </script>

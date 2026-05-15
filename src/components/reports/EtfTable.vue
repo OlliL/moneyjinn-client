@@ -1,93 +1,63 @@
 <template>
   <DivError :server-errors="serverErrors" />
-  <div
-    class="row justify-content-md-center py-4"
-    v-if="dataLoaded && etfSummaryReceived"
-  >
-    <div class="col col-xxl-8">
-      <div class="card">
-        <div class="card-header text-center p-3">
-          <h4>{{ $t("General.etf") }}</h4>
+  <div class="flex justify-center py-4" v-if="dataLoaded && etfSummaryReceived">
+    <div class="w-full max-w-7xl">
+      <div class="rounded-lg border">
+        <div class="border-b p-3 text-center">
+          <h4 class="font-semibold">{{ $t("General.etf") }}</h4>
         </div>
-        <div class="card-body">
-          <div class="row">
-            <div class="col-xs-12 text-center table-responsive">
-              <table class="table table-striped table-bordered table-hover">
-                <thead>
-                  <tr>
-                    <th scope="col" class="text-center" rowspan="2" id="thEtf">
+        <div class="p-4">
+          <div class="overflow-x-auto text-center">
+            <div class="flex flex-col rounded-md border">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead class="text-center" rowspan="2" id="thEtf">
                       {{ $t("General.etf") }}
-                    </th>
-                    <th
-                      scope="col"
-                      class="text-center"
-                      rowspan="2"
-                      id="thShares"
-                    >
+                    </TableHead>
+                    <TableHead class="text-center" rowspan="2" id="thShares">
                       {{ $t("ETFFlow.shares") }}
-                    </th>
-                    <th
-                      class="text-center d-none d-md-table-cell"
-                      colspan="3"
-                      id="thAmount"
-                    >
+                    </TableHead>
+                    <TableHead class="text-center hidden md:table-cell" colspan="3" id="thAmount">
                       {{ $t("ETFFlow.amount") }}
-                    </th>
-                    <th
-                      scope="col"
-                      class="text-center"
-                      colspan="3"
-                      id="thOverall"
-                    >
+                    </TableHead>
+                    <TableHead class="text-center" colspan="3" id="thOverall">
                       {{ $t("ETFFlow.overall") }}
-                    </th>
-                    <th
-                      class="text-center d-none d-md-table-cell"
-                      rowspan="2"
-                      id="thState"
-                    >
+                    </TableHead>
+                    <TableHead class="text-center hidden md:table-cell" rowspan="2" id="thState">
                       {{ $t("Reports.state") }}
-                    </th>
-                  </tr>
-                  <tr>
-                    <th
-                      class="text-center d-none d-md-table-cell"
-                      id="thAmountPayed"
-                    >
+                    </TableHead>
+                  </TableRow>
+                  <TableRow>
+                    <TableHead class="text-center hidden md:table-cell" id="thAmountPayed">
                       {{ $t("ETFFlow.payed") }} &#8709;
-                    </th>
-                    <th
-                      class="text-center d-none d-md-table-cell"
-                      id="thAmountBid"
-                    >
+                    </TableHead>
+                    <TableHead class="text-center hidden md:table-cell" id="thAmountBid">
                       {{ $t("ETFFlow.bid") }}
-                    </th>
-                    <th
-                      class="text-center d-none d-md-table-cell"
-                      id="thAmountAsk"
-                    >
+                    </TableHead>
+                    <TableHead class="text-center hidden md:table-cell" id="thAmountAsk">
                       {{ $t("ETFFlow.ask") }}
-                    </th>
-                    <th scope="col" class="text-center" id="thOverallPayed">
+                    </TableHead>
+                    <TableHead class="text-center" id="thOverallPayed">
                       {{ $t("ETFFlow.payed") }}
-                    </th>
-                    <th scope="col" class="text-center" id="thOverallBid">
+                    </TableHead>
+                    <TableHead class="text-center" id="thOverallBid">
                       {{ $t("ETFFlow.bid") }}
-                    </th>
-                    <th scope="col" class="text-center" id="thOverallProfit">
+                    </TableHead>
+                    <TableHead class="text-center" id="thOverallProfit">
                       {{ $t("ETFFlow.profit") }}
-                    </th>
-                  </tr>
-                </thead>
+                    </TableHead>
+                  </TableRow>
+                </TableHeader>
 
-                <tbody v-if="dataLoaded">
+                <TableBody v-if="dataLoaded">
                   <EtfTableRowVue
                     v-for="etfData in etfSummaryArray"
                     :key="etfData.etfId"
                     v-bind="etfData"
                   />
-                </tbody>
-              </table>
+                </TableBody>
+              </Table>
             </div>
           </div>
         </div>
@@ -103,6 +73,8 @@ import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { computed, onMounted, ref, watch } from "vue";
 import DivError from "../DivError.vue";
 import EtfTableRowVue from "./EtfTableRow.vue";
+
+import { Table, TableBody, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
 const serverErrors = ref(new Array<string>());
 

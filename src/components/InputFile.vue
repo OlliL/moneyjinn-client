@@ -1,18 +1,31 @@
 <template>
-  <label
-    for="input"
-    :style="'opacity: .65; color: ' + errorData.fieldColor"
-    v-if="errorData.fieldLabel"
-    ><small>{{ errorData.fieldLabel }}</small></label
-  >
-  <input
-    type="file"
-    :class="' form-control ' + errorData.inputClass"
-    :id="id"
-    multiple
-    ref="fileUpload"
-    @change="onInput"
-  />
+  <div class="grid w-full gap-1.5 relative">
+    <Label v-if="fieldLabel" :for="id" class="text-left ml-1">
+      {{ fieldLabel }}
+    </Label>
+
+    <input
+      type="file"
+      :id="id"
+      :data-testid="id"
+      multiple
+      ref="fileUpload"
+      :class="[
+        'flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50',
+        errorData.inputClass === 'is-invalid'
+          ? '!border-destructive bg-destructive/[0.03] focus-visible:ring-destructive/15'
+          : 'border-input focus-visible:ring-ring',
+      ]"
+      @change="onInput"
+    />
+
+    <p
+      v-if="errorData.inputClass === 'is-invalid'"
+      class="text-[0.8rem] font-medium text-destructive mt-0.5 text-left ml-1"
+    >
+      {{ errorMessage }}
+    </p>
+  </div>
 </template>
 
 <script lang="ts" setup>
@@ -26,6 +39,8 @@ import {
   type Ref,
 } from "vue";
 import { any, type ZodType } from "zod";
+
+import { Label } from "@/components/ui/label";
 
 import {
   generateErrorDataVeeValidate,

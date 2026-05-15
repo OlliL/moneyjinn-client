@@ -1,75 +1,68 @@
 <template>
-  <div class="row justify-content-md-center" v-if="etfSummary">
-    <div class="col-xxl-6 col-xs-12 mb-4">
-      <table class="table table-striped table-bordered table-hover">
-        <thead>
-          <tr>
-            <th scope="col" class="text-center" rowspan="2" id="thShares">
-              {{ $t("ETFFlow.shares") }}
-            </th>
-            <th
-              scope="colgroup"
-              class="text-center d-none d-md-table-cell"
-              colspan="3"
-              id="thAmount"
-            >
-              {{ $t("ETFFlow.amount") }}
-            </th>
-            <th scope="colgroup" class="text-center" colspan="3" id="thOverall">
-              {{ $t("ETFFlow.overall") }}
-            </th>
-            <th
-              scope="col"
-              class="text-center d-none d-md-table-cell"
-              rowspan="2"
-              id="thState"
-            >
-              {{ $t("Reports.state") }}
-            </th>
-          </tr>
-          <tr>
-            <th
-              scope="col"
-              class="text-center d-none d-md-table-cell"
-              id="thAmountPayed"
-            >
-              {{ $t("ETFFlow.payed") }} &#8709;
-            </th>
-            <th
-              scope="col"
-              class="text-center d-none d-md-table-cell"
-              id="thAmountBid"
-            >
-              {{ $t("ETFFlow.bid") }}
-            </th>
-            <th
-              scope="col"
-              class="text-center d-none d-md-table-cell"
-              id="thAmountAsk"
-            >
-              {{ $t("ETFFlow.ask") }}
-            </th>
-            <th scope="col" class="text-center" id="thOverallPayed">
-              {{ $t("ETFFlow.payed") }}
-            </th>
-            <th scope="col" class="text-center" id="thOverallBid">
-              {{ $t("ETFFlow.bid") }}
-            </th>
-            <th scope="col" class="text-center" id="thOverallProfit">
-              {{ $t("ETFFlow.profit") }}
-            </th>
-          </tr>
-        </thead>
+  <div class="flex justify-center py-4" v-if="etfSummary">
+    <div class="w-full max-w-2xl">
+      <div class="flex flex-col rounded-md border">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead class="text-center" rowspan="2">
+                {{ $t("ETFFlow.shares") }}
+              </TableHead>
+              <TableHead
+                class="text-center hidden md:table-cell"
+                colspan="3"
+              >
+                {{ $t("ETFFlow.amount") }}
+              </TableHead>
+              <TableHead class="text-center" colspan="3">
+                {{ $t("ETFFlow.overall") }}
+              </TableHead>
+              <TableHead
+                class="text-center hidden md:table-cell"
+                rowspan="2"
+              >
+                {{ $t("Reports.state") }}
+              </TableHead>
+            </TableRow>
+            <TableRow>
+              <TableHead
+                class="text-center hidden md:table-cell"
+              >
+                {{ $t("ETFFlow.payed") }} &#8709;
+              </TableHead>
+              <TableHead
+                class="text-center hidden md:table-cell"
+              >
+                {{ $t("ETFFlow.bid") }}
+              </TableHead>
+              <TableHead
+                class="text-center hidden md:table-cell"
+              >
+                {{ $t("ETFFlow.ask") }}
+              </TableHead>
+              <TableHead class="text-center">
+                {{ $t("ETFFlow.payed") }}
+              </TableHead>
+              <TableHead class="text-center">
+                {{ $t("ETFFlow.bid") }}
+              </TableHead>
+              <TableHead class="text-center">
+                {{ $t("ETFFlow.profit") }}
+              </TableHead>
+            </TableRow>
+          </TableHeader>
 
-        <tbody v-if="etfSummary">
-          <EtfTableRow v-bind="etfSummary" />
-        </tbody>
-      </table>
+          <TableBody v-if="etfSummary">
+            <EtfTableRow v-bind="etfSummary" />
+          </TableBody>
+        </Table>
+      </div>
     </div>
   </div>
 </template>
 <script lang="ts" setup>
 import type { PropType } from "vue";
+import { Table, TableBody, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import EtfTableRow from "../reports/EtfTableRow.vue";
 import type { EtfSummary } from "@/model/etf/EtfSummary";
 

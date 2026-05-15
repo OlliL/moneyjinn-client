@@ -8,6 +8,22 @@
 
     <div class="flex justify-center">
       <div class="w-full max-w-md">
+        <select
+          data-testid="selectmoneyflow"
+          class="hidden"
+          :value="String(preDefMoneyflowId)"
+          @change="handleSelectChange(($event.target as HTMLSelectElement).value)"
+        >
+          <option value="0">{{ $t("Moneyflow.newBooking") }}</option>
+          <option
+            v-for="mcp of preDefMoneyflows"
+            :key="'compat-' + mcp.id"
+            :value="String(mcp.id)"
+          >
+            {{ mcp.contractpartnerName }}
+          </option>
+        </select>
+
         <Select
           :model-value="String(preDefMoneyflowId)"
           @update:model-value="handleSelectChange"

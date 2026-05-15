@@ -5,10 +5,10 @@
         @submit.prevent="createEtfPreliminaryLumpSum"
         id="createEtfPreliminaryLumpSumYearForm"
       >
-        <div class="container-fluid">
+        <div class="space-y-2">
           <DivError :server-errors="serverErrors" />
-          <div class="row pt-2">
-            <div class="col-xs-12">
+          <div class="grid grid-cols-1 gap-2 pt-2">
+            <div>
               <SelectStandard
                 v-model="mep.etfId"
                 :validation-schema="schema.etfId"
@@ -18,8 +18,8 @@
               />
             </div>
           </div>
-          <div class="row pt-2">
-            <div class="col-xs-12">
+          <div class="grid grid-cols-1 gap-2 pt-2">
+            <div>
               <InputDate
                 v-model="year"
                 :validation-schema="schema.year"
@@ -29,8 +29,8 @@
               />
             </div>
           </div>
-          <div class="row pt-2">
-            <div class="col-xs-12">
+          <div class="grid grid-cols-1 gap-2 pt-2">
+            <div>
               <InputStandard
                 v-model="mep.amountDecember"
                 :validation-schema="schema.amountDecember"
@@ -39,10 +39,7 @@
                 field-type="number"
                 :field-label="$t('ETFPreliminaryLumpSum.yearlySum')"
               >
-                <template #icon
-                  ><span class="input-group-text"
-                    ><i class="bi bi-currency-euro"></i></span
-                ></template>
+                <template #icon><Euro class="h-4 w-4" /></template>
               </InputStandard>
             </div>
           </div>
@@ -50,9 +47,9 @@
       </form>
     </template>
     <template #footer>
-      <button type="button" class="btn btn-secondary" @click="resetForm">
+      <Button type="button" variant="outline" @click="resetForm">
         {{ $t("General.reset") }}
-      </button>
+      </Button>
       <ButtonSubmit
         :button-label="$t('General.save')"
         form-id="createEtfPreliminaryLumpSumYearForm"
@@ -66,6 +63,7 @@ import { useForm } from "vee-validate";
 import { computed, ref, useTemplateRef } from "vue";
 import { useI18n } from "vue-i18n";
 import { date, type ZodType, number } from "zod";
+import { Euro } from "lucide-vue-next";
 
 import ButtonSubmit from "../ButtonSubmit.vue";
 import DivError from "../DivError.vue";
@@ -73,6 +71,8 @@ import InputDate from "../InputDate.vue";
 import InputStandard from "../InputStandard.vue";
 import ModalVue from "../Modal.vue";
 import SelectStandard from "../SelectStandard.vue";
+
+import { Button } from "@/components/ui/button";
 
 import { amountSchema, globErr } from "@/tools/views/ZodUtil";
 import { handleBackendError } from "@/tools/views/HandleBackendError";

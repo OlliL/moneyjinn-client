@@ -1,70 +1,100 @@
 <template>
-  <tr v-if="mmf">
-    <th scope="row" class="db" id="thDatabase">
+  <TableRow v-if="mmf">
+    <TableCell class="font-bold bg-primary/10 border-r text-left">
       {{ $t("CompareData.database") }}
-    </th>
-    <td class="db">
+    </TableCell>
+    <TableCell>
       <SpanDate :date="mmf.bookingDate" />
-    </td>
-    <td class="db">
+    </TableCell>
+    <TableCell>
       <SpanDate :date="mmf.invoiceDate" />
-    </td>
-    <td class="db text-end">
+    </TableCell>
+    <TableCell class="text-right">
       <SpanAmount :amount="mmf.amount" />
-    </td>
-    <td class="db text-start">
+    </TableCell>
+    <TableCell class="text-left">
       {{ mmf.contractpartnerName }}
-    </td>
-    <td class="db text-start">
+    </TableCell>
+    <TableCell class="text-left">
       {{ mmf.comment }}
-    </td>
-    <td class="db text-start">
+    </TableCell>
+    <TableCell class="text-left">
       {{ mmf.capitalsourceComment }}
-    </td>
-    <td class="db text-center" v-if="isOwnMoneyflow">
-      <span class="link-primary" @click="editMoneyflow"
-        ><i class="bi bi-pencil-square"></i
-      ></span>
-    </td>
-    <td class="db text-center" v-if="isOwnMoneyflow">
-      <span class="link-primary" @click="deleteMoneyflow"
-        ><i class="bi bi-trash"></i
-      ></span>
-    </td>
-    <td class="db" colspan="2" v-if="!isOwnMoneyflow"></td>
-  </tr>
-  <tr v-if="importData">
-    <th scope="row" id="thSource">{{ $t("CompareData.source") }}</th>
-    <td>
+    </TableCell>
+    <TableCell class="text-center" v-if="isOwnMoneyflow">
+      <Button
+        variant="ghost"
+        size="icon"
+        @click="editMoneyflow"
+        :title="$t('General.edit')"
+        class="group hover:bg-transparent h-8 w-8"
+      >
+        <Pencil
+          class="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors"
+        />
+      </Button>
+    </TableCell>
+    <TableCell class="text-center" v-if="isOwnMoneyflow">
+      <Button
+        variant="ghost"
+        size="icon"
+        @click="deleteMoneyflow"
+        :title="$t('General.delete')"
+        class="group hover:bg-transparent h-8 w-8"
+      >
+        <Trash2
+          class="h-4 w-4 text-muted-foreground group-hover:text-destructive transition-colors"
+        />
+      </Button>
+    </TableCell>
+    <TableCell v-if="!isOwnMoneyflow"></TableCell>
+  </TableRow>
+  <TableRow v-if="importData">
+    <TableCell class="font-bold bg-primary/10 border-r text-left">
+      {{ $t("CompareData.source") }}
+    </TableCell>
+    <TableCell>
       <SpanDate :date="importData.bookingDate" />
-    </td>
-    <td>
+    </TableCell>
+    <TableCell>
       <SpanDate :date="importData.invoiceDate" />
-    </td>
-    <td class="text-end">
+    </TableCell>
+    <TableCell class="text-right">
       <SpanAmount :amount="importData.amount" />
-    </td>
-    <td class="text-start" v-if="importData.partner">
+    </TableCell>
+    <TableCell class="text-left" v-if="importData.partner">
       {{ importData.partner }}
-    </td>
-    <td class="text-start" v-else>
+    </TableCell>
+    <TableCell class="text-left" v-else>
       <i>{{ importData.contractpartnerName }}</i>
-    </td>
-    <td class="text-start">{{ importData.comment }}</td>
-    <td class="text-start">
+    </TableCell>
+    <TableCell class="text-left">{{ importData.comment }}</TableCell>
+    <TableCell class="text-left">
       {{ capitalsourceComment }}
-    </td>
-    <td class="text-center">
-      <span class="link-primary" @click="createMoneyflow"
-        ><i class="bi bi-plus-circle"></i
-      ></span>
-    </td>
-    <td></td>
-  </tr>
-  <tr style="border-bottom: 2px solid #000"></tr>
+    </TableCell>
+    <TableCell class="text-center">
+      <Button
+        variant="ghost"
+        size="icon"
+        @click="createMoneyflow"
+        :title="$t('General.create')"
+        class="group hover:bg-transparent h-8 w-8"
+      >
+        <Plus
+          class="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors"
+        />
+      </Button>
+    </TableCell>
+    <TableCell></TableCell>
+  </TableRow>
+  <TableRow class="border-b-2 border-black"></TableRow>
 </template>
 <script lang="ts" setup>
 import { computed, type PropType } from "vue";
+import { Pencil, Trash2, Plus } from "lucide-vue-next";
+
+import { TableCell, TableRow } from "@/components/ui/table";
+import { Button } from "@/components/ui/button";
 
 import SpanAmount from "../SpanAmount.vue";
 import SpanDate from "../SpanDate.vue";
@@ -129,9 +159,3 @@ const createMoneyflow = () => {
 };
 </script>
 
-<style scoped>
-th.db,
-td.db {
-  background-color: #f2f2f2;
-}
-</style>

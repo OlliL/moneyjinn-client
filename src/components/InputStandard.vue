@@ -7,8 +7,13 @@
     <div class="flex -space-x-px relative">
       <Input
         v-model="fieldValue"
+        ref="fieldRef"
         :id="id"
+        :name="name"
+        :data-testid="id"
         :type="fieldType"
+        :disabled="disabled"
+        :step="step"
         :class="[
           alignmentClass,
           $slots.icon ? 'rounded-r-none' : '',
@@ -141,13 +146,23 @@ const errorData = computed((): ErrorData => {
 
 const alignmentClass = props.align ? "text-" + props.align : "";
 
-const fieldRef = useTemplateRef<HTMLInputElement>("fieldRef");
+const fieldRef = useTemplateRef<typeof Input>("fieldRef");
+
+const getInputElement = () => {
+  const refValue = fieldRef.value as unknown as
+    | HTMLInputElement
+    | { $el?: HTMLInputElement }
+    | undefined;
+  if (!refValue) return undefined;
+  if ("$el" in refValue && refValue.$el) return refValue.$el;
+  return refValue as HTMLInputElement;
+};
 onMounted(() => {
   fieldValue.value = props.modelValue;
 
   if (props.focus) {
     nextTick(() => {
-      fieldRef.value?.focus();
+      getInputElement()?.focus();
     });
   }
 });

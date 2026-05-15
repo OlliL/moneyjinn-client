@@ -2,25 +2,21 @@
   <ModalVue :title="title" ref="modalComponent">
     <template #body
       ><form @submit.prevent="createGroup" id="createGroupForm">
-        <div class="container-fluid">
+        <div class="space-y-4">
           <DivError :server-errors="serverErrors" />
-          <div class="row pt-2">
-            <div class="col-xs-12">
-              <InputStandard
-                v-model="group.name"
-                :validation-schema="schema.name"
-                id="name"
-                :field-label="$t('General.name')"
-              />
-            </div>
-          </div>
+          <InputStandard
+            v-model="group.name"
+            :validation-schema="schema.name"
+            id="name"
+            :field-label="$t('General.name')"
+          />
         </div>
       </form>
     </template>
     <template #footer>
-      <button type="button" class="btn btn-secondary" @click="resetForm">
+      <Button variant="secondary" class="!rounded-md" @click="resetForm">
         {{ $t("General.reset") }}
-      </button>
+      </Button>
       <ButtonSubmit
         :button-label="$t('General.save')"
         form-id="createGroupForm"
@@ -34,6 +30,8 @@ import { useForm } from "vee-validate";
 import { computed, ref, useTemplateRef } from "vue";
 import { useI18n } from "vue-i18n";
 import { string, ZodType } from "zod";
+
+import { Button } from "@/components/ui/button";
 
 import ButtonSubmit from "../ButtonSubmit.vue";
 import DivError from "../DivError.vue";

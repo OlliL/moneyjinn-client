@@ -1,25 +1,45 @@
 <template>
-  <tr>
-    <td class="text-start">{{ user.userName }}</td>
-    <td class="text-start">{{ user.groupName }}</td>
-    <td class="text-center">{{ role }}</td>
-    <td class="text-center">
+  <TableRow>
+    <TableCell class="text-left border py-1 px-2">{{ user.userName }}</TableCell>
+    <TableCell class="text-left border py-1 px-2">{{ user.groupName }}</TableCell>
+    <TableCell class="text-center border py-1 px-2">{{ role }}</TableCell>
+    <TableCell class="text-center border py-1 px-2">
       <SpanBoolean :value="user.userIsNew" />
-    </td>
-    <td class="text-center">
-      <span class="link-primary" @click="editUser"
-        ><i class="bi bi-pencil-square"></i
-      ></span>
-    </td>
-    <td class="text-center">
-      <span class="link-primary" @click="deleteUser"
-        ><i class="bi bi-trash"></i
-      ></span>
-    </td>
-  </tr>
+    </TableCell>
+    <TableCell class="text-center border py-0 px-1 w-10">
+      <Button
+        variant="ghost"
+        size="icon"
+        @click="editUser"
+        :title="$t('General.edit')"
+        class="group hover:bg-transparent h-8 w-8"
+      >
+        <Pencil
+          class="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors"
+        />
+      </Button>
+    </TableCell>
+    <TableCell class="text-center border py-0 px-1 w-10">
+      <Button
+        variant="ghost"
+        size="icon"
+        @click="deleteUser"
+        :title="$t('General.delete')"
+        class="group hover:bg-transparent h-8 w-8"
+      >
+        <Trash2
+          class="h-4 w-4 text-muted-foreground group-hover:text-destructive transition-colors"
+        />
+      </Button>
+    </TableCell>
+  </TableRow>
 </template>
 <script lang="ts" setup>
 import { computed, type PropType } from "vue";
+import { Pencil, Trash2 } from "lucide-vue-next";
+
+import { TableCell, TableRow } from "@/components/ui/table";
+import { Button } from "@/components/ui/button";
 
 import SpanBoolean from "../SpanBoolean.vue";
 

@@ -1,7 +1,7 @@
 <template>
-  <div class="row" style="margin-top: 20px" v-if="dataLoaded">
-    <div class="card">
-      <div class="card-header text-center p-3">
+  <div class="mt-5" v-if="dataLoaded">
+    <div class="rounded-lg border">
+      <div class="border-b text-center p-3">
         <h5>
           {{ $t("Reports.title.report", { month: monthName, year: year }) }}
         </h5>
@@ -21,154 +21,162 @@
       />
       <ListMoneyflowModal ref="listModal" />
 
-      <div
-        class="card-body table-responsive text-center"
-        v-if="filteredMoneyflows"
-      >
-        <table class="table table-striped table-bordered table-hover">
-          <thead>
-            <tr>
-              <th scope="col" class="d-none d-md-table-cell align-top"></th>
-              <th scope="col" class="align-top">
-                <span class="d-none d-md-block"
+      <div class="p-4 overflow-x-auto text-center" v-if="filteredMoneyflows">
+        <div class="flex flex-col rounded-md border">
+          <Table>
+            <TableHeader>
+              <TableRow>
+              <TableHead class="hidden md:table-cell align-top"></TableHead>
+              <TableHead class="align-top">
+                <span class="hidden md:block"
                   >{{ $t("Moneyflow.bookingdate") }}
-                  <i
-                    :class="`bi ${sortIcon('bookingDate')} link-primary`"
+                  <component
+                    :is="sortIcon('bookingDate')"
+                    class="inline h-4 w-4 text-primary cursor-pointer"
+                    :title="$t('Moneyflow.bookingdate')"
+                    :aria-label="$t('Moneyflow.bookingdate')"
                     @click="sortByColumn('bookingDate')"
-                  ></i
-                ></span>
-                <span class="d-block d-md-none">
-                  <i
-                    :class="`bi ${sortIcon('bookingDate')} link-primary`"
+                  />
+                </span>
+                <span class="block md:hidden">
+                  <component
+                    :is="sortIcon('bookingDate')"
+                    class="inline h-4 w-4 text-primary cursor-pointer"
+                    :title="$t('Moneyflow.bookingdate')"
+                    :aria-label="$t('Moneyflow.bookingdate')"
                     @click="sortByColumn('bookingDate')"
-                  ></i
-                ></span>
-              </th>
-              <th scope="col" class="d-none d-md-table-cell align-top">
+                  />
+                </span>
+              </TableHead>
+              <TableHead class="hidden md:table-cell align-top">
                 {{ $t("Moneyflow.invoicedate") }}
-                <i
-                  :class="`bi ${sortIcon('invoiceDate')} link-primary`"
+                <component
+                  :is="sortIcon('invoiceDate')"
+                  class="inline h-4 w-4 text-primary cursor-pointer"
+                  :title="$t('Moneyflow.invoicedate')"
+                  :aria-label="$t('Moneyflow.invoicedate')"
                   @click="sortByColumn('invoiceDate')"
-                ></i>
-              </th>
-              <th scope="colgroup" colspan="2" class="align-top">
-                <span class="d-none d-md-block">
+                />
+              </TableHead>
+              <TableHead colspan="2" class="align-top">
+                <span class="hidden md:block">
                   {{ $t("General.amount") }}
-                  <i
-                    :class="`bi ${sortIcon('amount')} link-primary`"
+                  <component
+                    :is="sortIcon('amount')"
+                    class="inline h-4 w-4 text-primary cursor-pointer"
+                    :title="$t('General.amount')"
+                    :aria-label="$t('General.amount')"
                     @click="sortByColumn('amount')"
-                  ></i
-                ></span>
-                <span class="d-block d-md-none align-top">
-                  <i
-                    :class="`bi ${sortIcon('amount')} link-primary`"
+                  />
+                </span>
+                <span class="block md:hidden align-top">
+                  <component
+                    :is="sortIcon('amount')"
+                    class="inline h-4 w-4 text-primary cursor-pointer"
+                    :title="$t('General.amount')"
+                    :aria-label="$t('General.amount')"
                     @click="sortByColumn('amount')"
-                  ></i
-                ></span>
-              </th>
-              <th scope="col" class="d-none d-md-table-cell align-top">
+                  />
+                </span>
+              </TableHead>
+              <TableHead class="hidden md:table-cell align-top">
                 {{ $t("General.contractpartner") }}
-                <i
-                  :class="`bi ${sortIcon('contractpartnerName')} link-primary`"
+                <component
+                  :is="sortIcon('contractpartnerName')"
+                  class="inline h-4 w-4 text-primary cursor-pointer"
+                  :title="$t('General.contractpartner')"
+                  :aria-label="$t('General.contractpartner')"
                   @click="sortByColumn('contractpartnerName')"
-                ></i>
-                <div class="input-group" style="width: auto">
+                />
+                <div class="flex items-center gap-1 w-auto">
                   <input
-                    class="form-control form-control-sm"
+                    class="h-8 w-full rounded-md border border-input bg-background px-2 text-sm min-w-5"
                     type="text"
                     :placeholder="$t('General.enterFilter')"
                     v-model="filterContractpartner"
-                    style="min-width: 20px"
                   />
-                  <button
-                    class="btn btn-outline-secondary btn-sm"
-                    type="button"
-                    @click="filterContractpartner = ''"
-                  >
-                    <i class="bi bi-x"></i>
-                  </button>
+                  <Button variant="outline" size="icon" type="button" :title="$t('General.reset')" :aria-label="$t('General.reset')" @click="filterContractpartner = ''" class="h-8 w-8">
+                    <X class="h-4 w-4" />
+                  </Button>
                 </div>
-              </th>
-              <th scope="col" class="align-top">
-                <span class="d-none d-md-block">
+              </TableHead>
+              <TableHead class="align-top">
+                <div class="hidden md:block">
                   {{ $t("General.comment") }}
-                  <i
-                    :class="`bi ${sortIcon('comment')} link-primary`"
+                  <component
+                    :is="sortIcon('comment')"
+                    class="inline h-4 w-4 text-primary cursor-pointer"
+                    :title="$t('General.comment')"
+                    :aria-label="$t('General.comment')"
                     @click="sortByColumn('comment')"
-                  ></i>
-                  <div class="input-group" style="width: auto">
+                  />
+                  <div class="flex items-center gap-1 w-auto">
                     <input
-                      class="form-control form-control-sm"
+                      class="h-8 w-full rounded-md border border-input bg-background px-2 text-sm min-w-5"
                       type="text"
                       :placeholder="$t('General.enterFilter')"
                       v-model="filterComment"
-                      style="min-width: 20px"
                     />
-                    <button
-                      class="btn btn-outline-secondary btn-sm"
-                      type="button"
-                      @click="filterComment = ''"
-                    >
-                      <i class="bi bi-x"></i>
-                    </button>
-                  </div> </span
-                ><span class="d-block d-md-none"
-                  ><i
-                    :class="`bi ${sortIcon('comment')} link-primary`"
+                    <Button variant="outline" size="icon" type="button" :title="$t('General.reset')" :aria-label="$t('General.reset')" @click="filterComment = ''" class="h-8 w-8">
+                      <X class="h-4 w-4" />
+                    </Button>
+                  </div>
+                </div>
+                <div class="block md:hidden"
+                  ><component
+                    :is="sortIcon('comment')"
+                    class="inline h-4 w-4 text-primary cursor-pointer"
+                    :title="$t('General.comment')"
+                    :aria-label="$t('General.comment')"
                     @click="sortByColumn('comment')"
-                  ></i
-                ></span>
-              </th>
-              <th scope="col" class="d-none d-md-table-cell align-top">
+                  /></div>
+              </TableHead>
+              <TableHead class="hidden md:table-cell align-top">
                 {{ $t("General.postingAccount") }}
-                <i
-                  :class="`bi ${sortIcon('postingAccountName')} link-primary`"
+                <component
+                  :is="sortIcon('postingAccountName')"
+                  class="inline h-4 w-4 text-primary cursor-pointer"
+                  :title="$t('General.postingAccount')"
+                  :aria-label="$t('General.postingAccount')"
                   @click="sortByColumn('postingAccountName')"
-                ></i>
-                <div class="input-group" style="width: auto">
+                />
+                <div class="flex items-center gap-1 w-auto">
                   <input
-                    class="form-control form-control-sm"
+                    class="h-8 w-full rounded-md border border-input bg-background px-2 text-sm min-w-5"
                     type="text"
                     :placeholder="$t('General.enterFilter')"
                     v-model="filterPostingAccount"
-                    style="min-width: 20px"
                   />
-                  <button
-                    class="btn btn-outline-secondary btn-sm"
-                    type="button"
-                    @click="filterPostingAccount = ''"
-                  >
-                    <i class="bi bi-x"></i>
-                  </button>
+                  <Button variant="outline" size="icon" type="button" :title="$t('General.reset')" :aria-label="$t('General.reset')" @click="filterPostingAccount = ''" class="h-8 w-8">
+                    <X class="h-4 w-4" />
+                  </Button>
                 </div>
-              </th>
-              <th scope="col" class="d-none d-md-table-cell align-top">
+              </TableHead>
+              <TableHead class="hidden md:table-cell align-top">
                 {{ $t("General.capitalsource") }}
-                <i
-                  :class="`bi ${sortIcon('capitalsourceComment')} link-primary`"
+                <component
+                  :is="sortIcon('capitalsourceComment')"
+                  class="inline h-4 w-4 text-primary cursor-pointer"
+                  :title="$t('General.capitalsource')"
+                  :aria-label="$t('General.capitalsource')"
                   @click="sortByColumn('capitalsourceComment')"
-                ></i>
-                <div class="input-group" style="width: auto">
+                />
+                <div class="flex items-center gap-1 w-auto">
                   <input
-                    class="form-control form-control-sm"
+                    class="h-8 w-full rounded-md border border-input bg-background px-2 text-sm min-w-5"
                     type="text"
                     :placeholder="$t('General.enterFilter')"
                     v-model="filterCapitalsource"
-                    style="min-width: 20px"
                   />
-                  <button
-                    class="btn btn-outline-secondary btn-sm"
-                    type="button"
-                    @click="filterCapitalsource = ''"
-                  >
-                    <i class="bi bi-x"></i>
-                  </button>
+                  <Button variant="outline" size="icon" type="button" :title="$t('General.reset')" :aria-label="$t('General.reset')" @click="filterCapitalsource = ''" class="h-8 w-8">
+                    <X class="h-4 w-4" />
+                  </Button>
                 </div>
-              </th>
-              <th scope="colgroup" colspan="2"></th>
-            </tr>
-          </thead>
-          <tbody>
+              </TableHead>
+              <TableHead colspan="2"></TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
             <ReportTableRowVue
               v-for="mmf in filteredMoneyflows"
               :key="mmf.id"
@@ -178,93 +186,96 @@
               @edit-moneyflow="editMoneyflow"
               @list-moneyflow="listMoneyflow"
             />
-            <tr>
-              <td colspan="3" class="text-end d-block d-md-table-cell">
+            <TableRow>
+              <TableCell colspan="3" class="text-end block md:table-cell">
                 &sum;
-              </td>
-              <td colspan="2" class="text-end">
+              </TableCell>
+              <TableCell colspan="2" class="text-end">
                 <u><SpanAmount :amount="amountSum" /></u>
-              </td>
-              <td colspan="6" class="d-block d-md-table-cell"></td>
-            </tr>
-          </tbody>
-        </table>
+              </TableCell>
+              <TableCell colspan="6" class="block md:table-cell"></TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
+      </div>
       </div>
     </div>
   </div>
   <div v-if="report.reportTurnoverCapitalsources">
-    <div class="row" style="margin-top: 40px">
-      <div class="col-xs-12 text-center">
+    <div class="mt-10">
+      <div class="text-center">
         <h1>{{ $t("Reports.overview") }}</h1>
       </div>
     </div>
 
     <div
-      class="row justify-content-md-center py-4"
+      class="flex justify-center py-4"
       v-if="
         assetsTurnoverCapitalsources && assetsTurnoverCapitalsources.length > 0
       "
     >
-      <div class="col col-xxl-8">
-        <div class="card">
-          <div class="card-header text-center p-3">
+      <div class="w-full max-w-7xl">
+        <div class="rounded-lg border">
+          <div class="border-b text-center p-3">
             <h4>{{ $t("Reports.ownCapital") }}</h4>
           </div>
-          <div class="card-body">
+          <div class="p-4">
             <CapitalsourceTableVue
               :capitalsource-data="assetsTurnoverCapitalsources"
               :current-month-is-settled="currentMonthIsSettled"
             />
-            <div class="row justify-content-md-center">
-              <div class="col col-lg-4">
-                <table class="table table-striped table-bordered table-hover">
-                  <thead>
-                    <tr>
-                      <th scope="col" id="thEmpty"></th>
-                      <th scope="col" id="thMonth">
+            <div class="flex justify-center">
+              <div class="w-full max-w-lg">
+                <div class="flex flex-col rounded-md border">
+                  <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead id="thEmpty"></TableHead>
+                      <TableHead id="thMonth">
                         {{ $t("General.month") }}
-                      </th>
-                      <th scope="col" id="thYear">{{ $t("General.year") }}</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr v-if="currentMonthIsSettled">
-                      <th scope="col" class="text-end" id="thFixedProfit">
+                      </TableHead>
+                      <TableHead id="thYear">{{ $t("General.year") }}</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    <TableRow v-if="currentMonthIsSettled">
+                      <TableHead class="text-end" id="thFixedProfit">
                         {{ $t("Reports.fixedProfit") }}
-                      </th>
-                      <td class="text-end">
+                      </TableHead>
+                      <TableCell class="text-end">
                         <SpanAmount :amount="assetsMonthlyFixedTurnover" />
-                      </td>
-                      <td class="text-end">
+                      </TableCell>
+                      <TableCell class="text-end">
                         <SpanAmount :amount="assetsYearlyFixedTurnover" />
-                      </td>
-                    </tr>
-                    <tr>
-                      <th scope="col" class="text-end" id="thCalculatedProfit">
+                      </TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableHead class="text-end" id="thCalculatedProfit">
                         {{ $t("Reports.calculatedProfit") }}
-                      </th>
-                      <td class="text-end">
+                      </TableHead>
+                      <TableCell class="text-end">
                         <SpanAmount :amount="assetsMonthlyCalculatedTurnover" />
-                      </td>
-                      <td class="text-end">
+                      </TableCell>
+                      <TableCell class="text-end">
                         <SpanAmount
                           :amount="report.turnoverEndOfYearCalculated"
                         />
-                      </td>
-                    </tr>
-                    <tr v-if="currentMonthIsSettled">
-                      <th scope="col" class="text-end" id="thDifference">
+                      </TableCell>
+                    </TableRow>
+                    <TableRow v-if="currentMonthIsSettled">
+                      <TableHead class="text-end" id="thDifference">
                         {{ $t("Reports.difference") }}
-                      </th>
-                      <td class="text-end">
+                      </TableHead>
+                      <TableCell class="text-end">
                         <SpanAmount :amount="assetsMonthlyDifference" />
-                      </td>
-                      <td class="text-end">
+                      </TableCell>
+                      <TableCell class="text-end">
                         <SpanAmount :amount="assetsYearlyDifference" />
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
+                      </TableCell>
+                    </TableRow>
+                  </TableBody>
+                </Table>
+              </div>
               </div>
             </div>
           </div>
@@ -273,18 +284,18 @@
     </div>
 
     <div
-      class="row justify-content-md-center py-4"
+      class="flex justify-center py-4"
       v-if="
         liabilitiesTurnoverCapitalsources &&
         liabilitiesTurnoverCapitalsources.length > 0
       "
     >
-      <div class="col col-xxl-8">
-        <div class="card">
-          <div class="card-header text-center p-3">
+      <div class="w-full max-w-7xl">
+        <div class="rounded-lg border">
+          <div class="border-b text-center p-3">
             <h4>{{ $t("Reports.debtCapital") }}</h4>
           </div>
-          <div class="card-body">
+          <div class="p-4">
             <CapitalsourceTableVue
               :capitalsource-data="liabilitiesTurnoverCapitalsources"
               :current-month-is-settled="currentMonthIsSettled"
@@ -295,17 +306,17 @@
     </div>
 
     <div
-      class="row justify-content-md-center py-4"
+      class="flex justify-center py-4"
       v-if="
         creditTurnoverCapitalsources && creditTurnoverCapitalsources.length > 0
       "
     >
-      <div class="col col-xxl-8">
-        <div class="card">
-          <div class="card-header text-center p-3">
+      <div class="w-full max-w-7xl">
+        <div class="rounded-lg border">
+          <div class="border-b text-center p-3">
             <h4>{{ $t("Reports.loans") }}</h4>
           </div>
-          <div class="card-body">
+          <div class="p-4">
             <CapitalsourceTableVue
               :capitalsource-data="creditTurnoverCapitalsources"
               :current-month-is-settled="currentMonthIsSettled"
@@ -334,6 +345,16 @@ import EditMoneyflowModalVue from "../moneyflow/EditMoneyflowModal.vue";
 import ReceiptModalVue from "./ReceiptModal.vue";
 import ReportTableRowVue from "./ReportTableRow.vue";
 import SpanAmount from "../SpanAmount.vue";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Button } from "@/components/ui/button";
+import { ArrowDown, ArrowUp, ArrowUpDown, X } from "lucide-vue-next";
 
 import { getMonthName } from "@/tools/views/MonthName";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
@@ -552,14 +573,13 @@ const listMoneyflow = (mmf: Moneyflow) => {
   listModal.value?._show(mmf);
 };
 /**
- * recalculate End of Month amount (for matching Capitalsource),
- * recalculate End of Month amount (overall),
- * recalculate End of Year amount,
- * @param capitalsourceComment
- * @param amount
+ * Recalculate end-of-month amounts (matching capitalsource and overall)
+ * and end-of-year amount when a moneyflow is added/removed.
+ * @param mmf moneyflow entry to book in/out
+ * @param bookOut true to subtract values, false to add values
  */
 const bookCapitalsourceAmounts = (mmf: Moneyflow, bookOut: boolean) => {
-  const bookingDate = mmf.bookingDate;
+  const bookingDate = new Date(mmf.bookingDate);
   bookingDate.setHours(0, 0, 0, 0);
   const today = new Date();
   today.setHours(0, 0, 0, 0);
@@ -619,11 +639,11 @@ const moneyflowUpdated = (mmf: Moneyflow) => {
 };
 const sortIcon = (sortedField: keyof Moneyflow) => {
   if (sortBy.value.get(sortedField) === undefined) {
-    return "bi-caret-up-square";
+    return ArrowUpDown;
   } else if (sortBy.value.get(sortedField)) {
-    return "bi-caret-up-square-fill";
+    return ArrowUp;
   }
-  return "bi-caret-down-square-fill";
+  return ArrowDown;
 };
 const compareColumns = (
   a: Moneyflow,
@@ -643,7 +663,7 @@ const compareColumns = (
 };
 const sortByColumn = (field: keyof Moneyflow) => {
   let sortByField = sortBy.value.get(field);
-  if (sortByField == undefined || !sortByField) {
+  if (sortByField === undefined || !sortByField) {
     report.value.moneyflows.sort((a, b) => compareColumns(a, b, field));
     sortByField = true;
   } else {

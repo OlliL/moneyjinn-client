@@ -1,21 +1,20 @@
 <template>
   <DivError :server-errors="serverErrors" />
 
-  <div class="row justify-content-md-center mb-4" v-if="props.month">
-    <div class="col-xl-4 col-md-6 col-xs-12">
-      <div class="card">
-        <div
-          class="card-header text-center p-3 d-flex align-items-center justify-content-center"
-        >
-          <span
+  <div class="flex justify-center mb-4" v-if="props.month">
+    <div class="w-full max-w-md">
+      <div class="rounded-lg border">
+        <div class="flex items-center justify-between bg-background border-b p-3">
+          <Button
+            variant="ghost"
+            size="sm"
             @click="navigateToPreviousMonth"
-            :class="[
-              'bi bi-caret-left-fill link-primary me-2 fs-3',
-              { invisible: !(prevMonth && prevYear) },
-            ]"
-            style="width: 1.5rem; display: inline-block"
-          ></span>
-          <h5 class="flex-grow-1 mb-0 text-center">
+            :disabled="!(prevMonth && prevYear)"
+            class="h-8 w-8"
+          >
+            <ChevronLeft class="h-5 w-5" />
+          </Button>
+          <h5 class="flex-grow-1 text-center font-bold">
             {{
               $t("MonthlySettlement.headline", {
                 month: monthName,
@@ -23,72 +22,63 @@
               })
             }}
           </h5>
-          <span
+          <Button
+            variant="ghost"
+            size="sm"
             @click="navigateToNextMonth"
-            :class="[
-              'bi bi-caret-right-fill link-primary ms-2 fs-3',
-              { invisible: !(nextMonth && nextYear) },
-            ]"
-            style="width: 1.5rem; display: inline-block"
-          ></span>
+            :disabled="!(nextMonth && nextYear)"
+            class="h-8 w-8"
+          >
+            <ChevronRight class="h-5 w-5" />
+          </Button>
         </div>
-        <div class="card-body">
-          <table
-            class="table table-striped table-bordered table-hover"
-            v-if="monthlySettlementsNoCredit.length"
-          >
-            <colgroup>
-              <col style="width: 70%" />
-              <col style="width: 30%" />
-            </colgroup>
-            <thead>
-              <tr>
-                <th scope="col">{{ $t("General.capitalsource") }}</th>
-                <th scope="col">{{ $t("General.amount") }}</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="mms in monthlySettlementsNoCredit" :key="mms.id">
-                <td class="text-start">{{ mms.capitalsourceComment }}</td>
-                <td class="text-end"><SpanAmount :amount="mms.amount" /></td>
-              </tr>
-              <tr>
-                <td class="text-end">&sum;</td>
-                <td class="text-end">
-                  <u><SpanAmount :amount="monthlySettlementNoCreditSum" /></u>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-          <table
-            class="table table-striped table-bordered table-hover"
-            v-if="monthlySettlementsCredit.length"
-          >
-            <colgroup>
-              <col style="width: 70%" />
-              <col style="width: 30%" />
-            </colgroup>
-            <thead v-if="!monthlySettlementsNoCredit.length">
-              <tr>
-                <th scope="col">{{ $t("General.capitalsource") }}</th>
-                <th scope="col">{{ $t("General.amount") }}</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="mms in monthlySettlementsCredit" :key="mms.id">
-                <td class="text-start">{{ mms.capitalsourceComment }}</td>
-                <td class="text-end"><SpanAmount :amount="mms.amount" /></td>
-              </tr>
-              <tr>
-                <td class="text-end">&sum;</td>
-                <td class="text-end">
-                  <u>
-                    <SpanAmount :amount="monthlySettlementCreditSum" />
-                  </u>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+        <div class="p-4">
+          <div class="flex flex-col rounded-md border mb-4" v-if="monthlySettlementsNoCredit.length">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>{{ $t("General.capitalsource") }}</TableHead>
+                  <TableHead>{{ $t("General.amount") }}</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                <TableRow v-for="mms in monthlySettlementsNoCredit" :key="mms.id">
+                  <TableCell class="text-left">{{ mms.capitalsourceComment }}</TableCell>
+                  <TableCell class="text-right"><SpanAmount :amount="mms.amount" /></TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell class="text-right font-bold">&sum;</TableCell>
+                  <TableCell class="text-right">
+                    <u><SpanAmount :amount="monthlySettlementNoCreditSum" /></u>
+                  </TableCell>
+                </TableRow>
+              </TableBody>
+            </Table>
+          </div>
+          <div class="flex flex-col rounded-md border" v-if="monthlySettlementsCredit.length">
+            <Table>
+              <TableHeader v-if="monthlySettlementsNoCredit.length">
+                <TableRow>
+                  <TableHead>{{ $t("General.capitalsource") }}</TableHead>
+                  <TableHead>{{ $t("General.amount") }}</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                <TableRow v-for="mms in monthlySettlementsCredit" :key="mms.id">
+                  <TableCell class="text-left">{{ mms.capitalsourceComment }}</TableCell>
+                  <TableCell class="text-right"><SpanAmount :amount="mms.amount" /></TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell class="text-right font-bold">&sum;</TableCell>
+                  <TableCell class="text-right">
+                    <u>
+                      <SpanAmount :amount="monthlySettlementCreditSum" />
+                    </u>
+                  </TableCell>
+                </TableRow>
+              </TableBody>
+            </Table>
+          </div>
         </div>
       </div>
     </div>
@@ -97,6 +87,10 @@
 
 <script lang="ts" setup>
 import { computed, onMounted, ref, watch } from "vue";
+import { ChevronLeft, ChevronRight } from "lucide-vue-next";
+
+import { Button } from "@/components/ui/button";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
 import DivError from "../DivError.vue";
 import SpanAmount from "../SpanAmount.vue";

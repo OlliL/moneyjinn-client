@@ -144,7 +144,10 @@
         v-show="isExpanded"
         :id="'collapseSplitEntries' + idSuffix"
         :data-testid="'collapseSplitEntries' + idSuffix"
-        class="transition-all animate-in fade-in duration-200"
+        :class="[
+          'transition-all animate-in fade-in duration-200',
+          isExpanded ? 'show' : 'collapse',
+        ]"
       >
         <div class="p-4 bg-background">
           <EditMoneyflowBaseSplitEntryRowVue

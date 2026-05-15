@@ -13,21 +13,20 @@
         @submit.prevent="mmf.id == 0 ? createMoneyflow() : updateMoneyflow()"
         id="updateMoneyflowForm"
       >
-        <div class="container-fluid">
-          <div class="row">
+        <div class="w-full">
+          <div class="flex gap-4">
             <div
-              style="overflow-x: scroll; white-space: nowrap; height: 600px"
-              class="col-3"
+              class="w-1/3 overflow-x-scroll whitespace-nowrap h-[600px]"
               v-if="receiptBase64"
             >
               <img
                 v-if="isJpeg"
                 :src="`data:image/png;base64,${receiptBase64}`"
-                style="max-width: 100%"
+                class="max-w-full"
                 alt="receipt"
               />
               <object
-                style="height: 75vh; width: 100%"
+                class="h-[75vh] w-full"
                 v-if="isPdf"
                 id="pdf"
                 :data="`data:application/pdf;base64,${receiptBase64}`"
@@ -36,7 +35,7 @@
                 receipt
               </object>
             </div>
-            <div class="col">
+            <div class="flex-1">
               <EditMoneyflowBase :mmf-to-edit="mmf" ref="editMoneyflowVue" />
             </div>
           </div>
@@ -44,14 +43,15 @@
       </form>
     </template>
     <template #footer>
-      <button
+      <Button
         type="button"
-        class="btn btn-danger"
+        variant="destructive"
         @click="deleteMoneyflowReceipt"
         v-if="mmf.hasReceipt"
       >
+        <Trash2 class="h-4 w-4" />
         {{ $t("Moneyflow.deleteReceipt") }}
-      </button>
+      </Button>
 
       <ButtonSubmit
         :button-label="$t('General.save')"
@@ -64,11 +64,14 @@
 <script lang="ts" setup>
 import { useForm } from "vee-validate";
 import { computed, ref, useTemplateRef } from "vue";
+import { Trash2 } from "lucide-vue-next";
 
 import ButtonSubmit from "@/components/ButtonSubmit.vue";
 import DivError from "../DivError.vue";
 import EditMoneyflowBase from "@/components/moneyflow/EditMoneyflowBase.vue";
 import ModalVue from "../Modal.vue";
+
+import { Button } from "@/components/ui/button";
 
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 

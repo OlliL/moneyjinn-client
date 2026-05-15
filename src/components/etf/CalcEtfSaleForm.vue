@@ -1,6 +1,6 @@
 <template>
-  <div class="row justify-content-md-center" v-if="etf.id">
-    <div class="col-xs-12 mb-4">
+  <div class="flex justify-center" v-if="etf.id">
+    <div class="w-full mb-4">
       <h4>{{ $t("ETFFlow.calculateSale") }}</h4>
     </div>
   </div>
@@ -10,14 +10,14 @@
     v-if="etf.id"
     id="calculateEtfSaleForm"
   >
-    <div class="row justify-content-md-center">
-      <div class="col-xxl-4 col-xs-12 mb-4">
-        <div class="card w-100 bg-light">
-          <div class="card-body">
-            <div class="container-fluid">
+    <div class="flex justify-center">
+      <div class="w-full max-w-3xl mb-4">
+        <div class="rounded-lg border bg-muted/20">
+          <div class="p-4">
+            <div class="space-y-4">
               <DivError :server-errors="serverErrors" />
-              <div class="row no-gutters flex-lg-nowrap mb-4">
-                <div class="col">
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-2 mb-4">
+                <div class="w-full">
                   <InputStandard
                     v-model="calcEtfSalePieces"
                     :validation-schema="schema.pieces"
@@ -27,7 +27,7 @@
                     :field-label="$t('ETFFlow.amount')"
                   />
                 </div>
-                <div class="col">
+                <div class="w-full">
                   <InputStandard
                     v-model="calcEtfBidPrice"
                     :validation-schema="schema.bidPrice"
@@ -36,13 +36,10 @@
                     step="0.001"
                     :field-label="$t('ETFFlow.bid')"
                   >
-                    <template #icon
-                      ><span class="input-group-text"
-                        ><i class="bi bi-currency-euro"></i></span
-                    ></template>
+                    <template #icon><Euro class="h-4 w-4" /></template>
                   </InputStandard>
                 </div>
-                <div class="col">
+                <div class="w-full">
                   <InputStandard
                     v-model="calcEtfAskPrice"
                     :validation-schema="schema.askPrice"
@@ -51,19 +48,16 @@
                     step="0.001"
                     :field-label="$t('ETFFlow.ask')"
                   >
-                    <template #icon
-                      ><span class="input-group-text"
-                        ><i class="bi bi-currency-euro"></i></span
-                    ></template>
+                    <template #icon><Euro class="h-4 w-4" /></template>
                   </InputStandard>
                 </div>
               </div>
-              <div class="row no-gutters flex-lg-nowrap mb-4">
-                <div class="col">{{ $t("ETFFlow.transactionCosts") }}</div>
+              <div class="mb-1">
+                <div class="w-full">{{ $t("ETFFlow.transactionCosts") }}</div>
               </div>
 
-              <div class="row no-gutters flex-lg-nowrap mb-4">
-                <div class="col">
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-2 mb-4">
+                <div class="w-full">
                   <InputStandard
                     v-model="calcEtfTransactionCostsAbsolute"
                     :validation-schema="schema.transactionCostsAbsolute"
@@ -72,13 +66,10 @@
                     step="0.01"
                     :field-label="$t('ETFFlow.transactionCostsAbsolute')"
                   >
-                    <template #icon
-                      ><span class="input-group-text"
-                        ><i class="bi bi-currency-euro"></i></span
-                    ></template>
+                    <template #icon><Euro class="h-4 w-4" /></template>
                   </InputStandard>
                 </div>
-                <div class="col">
+                <div class="w-full">
                   <InputStandard
                     v-model="calcEtfTransactionCostsRelative"
                     :validation-schema="schema.transactionCostsRelative"
@@ -87,13 +78,10 @@
                     step="0.01"
                     :field-label="$t('ETFFlow.transactionCostsRelative')"
                   >
-                    <template #icon
-                      ><span class="input-group-text"
-                        ><i class="bi bi-percent"></i></span
-                    ></template>
+                    <template #icon><Percent class="h-4 w-4" /></template>
                   </InputStandard>
                 </div>
-                <div class="col">
+                <div class="w-full">
                   <InputStandard
                     v-model="calcEtfTransactionCostsMaximum"
                     :validation-schema="schema.transactionCostsMaximum"
@@ -102,15 +90,12 @@
                     step="0.01"
                     :field-label="$t('ETFFlow.transactionCostsMaximum')"
                   >
-                    <template #icon
-                      ><span class="input-group-text"
-                        ><i class="bi bi-currency-euro"></i></span
-                    ></template>
+                    <template #icon><Euro class="h-4 w-4" /></template>
                   </InputStandard>
                 </div>
               </div>
-              <div class="row no-gutters flex-lg-nowrap">
-                <div class="col-12">
+              <div>
+                <div class="w-full">
                   <ButtonSubmit
                     :button-label="$t('ETFFlow.calculate')"
                     form-id="calculateEtfSaleForm"
@@ -129,6 +114,7 @@
 
 <script lang="ts" setup>
 import type { Etf } from "@/model/etf/Etf";
+import { Euro, Percent } from "lucide-vue-next";
 import DivError from "../DivError.vue";
 import InputStandard from "../InputStandard.vue";
 import type { EtfSummary } from "@/model/etf/EtfSummary";

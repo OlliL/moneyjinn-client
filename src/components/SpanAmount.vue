@@ -1,7 +1,6 @@
 <template>
   <span
-    :class="amountClass"
-    style="white-space: nowrap"
+    :class="`${amountClass} whitespace-nowrap`"
     data-testid="amountSpan"
     >{{ amountString }}</span
   >

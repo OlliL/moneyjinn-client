@@ -1,114 +1,177 @@
 <template>
-  <tr
+  <TableRow
     v-if="
       mmf.moneyflowSplitEntries == null || mmf.moneyflowSplitEntries.length == 0
     "
   >
-    <td :class="redIfPrivate">
-      <span class="link-primary" @click="showReceipt" v-if="mmf.hasReceipt"
-        ><i class="bi bi-card-image"></i
-      ></span>
-    </td>
-    <td><SpanDate :date="mmf.bookingDate" /></td>
-    <td class="d-none d-md-table-cell"><SpanDate :date="mmf.invoiceDate" /></td>
-    <td colspan="2" class="text-end">
+    <TableCell :class="redIfPrivate">
+      <Button
+        v-if="mmf.hasReceipt"
+        variant="ghost"
+        size="icon"
+        @click="showReceipt"
+        :title="$t('Receipt.receipt')"
+        :aria-label="$t('Receipt.receipt')"
+        class="h-6 w-6"
+      >
+        <Image class="h-4 w-4" />
+      </Button>
+    </TableCell>
+    <TableCell><SpanDate :date="mmf.bookingDate" /></TableCell>
+    <TableCell class="hidden md:table-cell"><SpanDate :date="mmf.invoiceDate" /></TableCell>
+    <TableCell class="text-right"></TableCell>
+    <TableCell class="text-right">
       <SpanAmount :amount="mmf.amount" />
-    </td>
-    <td class="text-start d-none d-md-table-cell">
+    </TableCell>
+    <TableCell class="text-left hidden md:table-cell">
       {{ mmf.contractpartnerName }}
-    </td>
-    <td class="text-start">{{ mmf.comment }}</td>
-    <td class="text-start d-none d-md-table-cell">
+    </TableCell>
+    <TableCell class="text-left">{{ mmf.comment }}</TableCell>
+    <TableCell class="text-left hidden md:table-cell">
       {{ mmf.postingAccountName }}
-    </td>
-    <td class="text-start d-none d-md-table-cell">
+    </TableCell>
+    <TableCell class="text-left hidden md:table-cell">
       {{ mmf.capitalsourceComment }}
-    </td>
-    <td class="text-center" v-if="isOwnMoneyflow">
-      <span class="link-primary" @click="editMoneyflow"
-        ><i class="bi bi-pencil-square"></i
-      ></span>
-    </td>
-    <td class="text-center" v-if="isOwnMoneyflow">
-      <span class="link-primary" @click="deleteMoneyflow"
-        ><i class="bi bi-trash"></i
-      ></span>
-    </td>
-    <td class="text-center" v-if="!isOwnMoneyflow">
-      <span class="link-primary" @click="listMoneyflow"
-        ><i class="bi bi-eye"></i
-      ></span>
-    </td>
-    <td colspan="2" v-if="!isOwnMoneyflow"></td>
-  </tr>
-  <tr v-for="(mse, index) in mmf.moneyflowSplitEntries" :key="mse.id">
-    <td :rowspan="rowspan" v-if="index == 0" :class="redIfPrivate">
-      <span class="link-primary" @click="showReceipt" v-if="mmf.hasReceipt"
-        ><i class="bi bi-card-image"></i
-      ></span>
-    </td>
-    <td :rowspan="rowspan" v-if="index == 0">
+    </TableCell>
+    <TableCell class="text-center" v-if="isOwnMoneyflow">
+      <Button
+        variant="ghost"
+        size="icon"
+        @click="editMoneyflow"
+        :title="$t('General.edit')"
+        :aria-label="$t('General.edit')"
+        class="h-6 w-6"
+      >
+        <Pencil class="h-4 w-4" />
+      </Button>
+    </TableCell>
+    <TableCell class="text-center" v-if="isOwnMoneyflow">
+      <Button
+        variant="ghost"
+        size="icon"
+        @click="deleteMoneyflow"
+        :title="$t('General.delete')"
+        :aria-label="$t('General.delete')"
+        class="h-6 w-6"
+      >
+        <Trash2 class="h-4 w-4" />
+      </Button>
+    </TableCell>
+    <TableCell class="text-center" v-if="!isOwnMoneyflow">
+      <Button
+        variant="ghost"
+        size="icon"
+        @click="listMoneyflow"
+        :title="$t('General.moneyflow')"
+        :aria-label="$t('General.moneyflow')"
+        class="h-6 w-6"
+      >
+        <Eye class="h-4 w-4" />
+      </Button>
+    </TableCell>
+    <TableCell v-if="!isOwnMoneyflow"></TableCell>
+  </TableRow>
+  <TableRow v-for="(mse, index) in mmf.moneyflowSplitEntries" :key="mse.id">
+    <TableCell :rowspan="rowspan" v-if="index == 0" :class="redIfPrivate">
+      <Button
+        v-if="mmf.hasReceipt"
+        variant="ghost"
+        size="icon"
+        @click="showReceipt"
+        :title="$t('Receipt.receipt')"
+        :aria-label="$t('Receipt.receipt')"
+        class="h-6 w-6"
+      >
+        <Image class="h-4 w-4" />
+      </Button>
+    </TableCell>
+    <TableCell :rowspan="rowspan" v-if="index == 0">
       <SpanDate :date="mmf.bookingDate" />
-    </td>
-    <td :rowspan="rowspan" v-if="index == 0" class="d-none d-md-table-cell">
+    </TableCell>
+    <TableCell :rowspan="rowspan" v-if="index == 0" class="hidden md:table-cell">
       <SpanDate :date="mmf.invoiceDate" />
-    </td>
-    <td :rowspan="rowspan" v-if="index == 0" class="text-end">
+    </TableCell>
+    <TableCell :rowspan="rowspan" v-if="index == 0" class="text-right">
       <SpanAmount :amount="mmf.amount" />
-    </td>
-    <td class="text-end">
+    </TableCell>
+    <TableCell class="text-right">
       <SpanAmount :amount="mse.amount" />
-    </td>
-    <td
+    </TableCell>
+    <TableCell
       :rowspan="rowspan"
       v-if="index == 0"
-      class="text-start d-none d-md-table-cell"
+      class="text-left hidden md:table-cell"
     >
       {{ mmf.contractpartnerName }}
-    </td>
-    <td class="text-start">{{ mse.comment }}</td>
-    <td class="text-start d-none d-md-table-cell">
+    </TableCell>
+    <TableCell class="text-left">{{ mse.comment }}</TableCell>
+    <TableCell class="text-left hidden md:table-cell">
       {{ mse.postingAccountName }}
-    </td>
-    <td
+    </TableCell>
+    <TableCell
       :rowspan="rowspan"
       v-if="index == 0"
-      class="text-start d-none d-md-table-cell"
+      class="text-left hidden md:table-cell"
     >
       {{ mmf.capitalsourceComment }}
-    </td>
-    <td
+    </TableCell>
+    <TableCell
       :rowspan="rowspan"
       v-if="index == 0 && isOwnMoneyflow"
       class="text-center"
     >
-      <span class="link-primary" @click="editMoneyflow"
-        ><i class="bi bi-pencil-square"></i
-      ></span>
-    </td>
-    <td
+      <Button
+        variant="ghost"
+        size="icon"
+        @click="editMoneyflow"
+        :title="$t('General.edit')"
+        :aria-label="$t('General.edit')"
+        class="h-6 w-6"
+      >
+        <Pencil class="h-4 w-4" />
+      </Button>
+    </TableCell>
+    <TableCell
       :rowspan="rowspan"
       v-if="index == 0 && isOwnMoneyflow"
       class="text-center"
     >
-      <span class="link-primary" @click="deleteMoneyflow"
-        ><i class="bi bi-trash"></i
-      ></span>
-    </td>
-    <td
+      <Button
+        variant="ghost"
+        size="icon"
+        @click="deleteMoneyflow"
+        :title="$t('General.delete')"
+        :aria-label="$t('General.delete')"
+        class="h-6 w-6"
+      >
+        <Trash2 class="h-4 w-4" />
+      </Button>
+    </TableCell>
+    <TableCell
       :rowspan="rowspan"
       v-if="index == 0 && !isOwnMoneyflow"
       class="text-center"
     >
-      <span class="link-primary" @click="listMoneyflow"
-        ><i class="bi bi-eye"></i
-      ></span>
-    </td>
-    <td :rowspan="rowspan" v-if="index == 0 && !isOwnMoneyflow"></td>
-  </tr>
+      <Button
+        variant="ghost"
+        size="icon"
+        @click="listMoneyflow"
+        :title="$t('General.moneyflow')"
+        :aria-label="$t('General.moneyflow')"
+        class="h-6 w-6"
+      >
+        <Eye class="h-4 w-4" />
+      </Button>
+    </TableCell>
+    <TableCell :rowspan="rowspan" v-if="index == 0 && !isOwnMoneyflow"></TableCell>
+  </TableRow>
 </template>
 <script lang="ts" setup>
 import { computed, type PropType } from "vue";
+import { Image, Pencil, Trash2, Eye } from "lucide-vue-next";
+
+import { Button } from "@/components/ui/button";
+import { TableCell, TableRow } from "@/components/ui/table";
 
 import SpanAmount from "../SpanAmount.vue";
 import SpanDate from "../SpanDate.vue";
@@ -143,10 +206,9 @@ const isOwnMoneyflow = computed(() => {
 });
 
 const redIfPrivate = computed(() => {
-  return props.mmf.private
-    ? "table-danger d-none d-md-table-cell"
-    : "d-none d-md-table-cell";
+  return props.mmf.private ? "bg-destructive/10 hidden md:table-cell" : "hidden md:table-cell";
 });
+
 const showReceipt = () => {
   emit("showReceipt", props.mmf.id);
 };
@@ -161,10 +223,3 @@ const listMoneyflow = () => {
 };
 </script>
 
-<style scoped>
-@media (max-width: 768px) {
-  td {
-    padding: 0.25em !important;
-  }
-}
-</style>

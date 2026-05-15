@@ -22,7 +22,7 @@
 
       <div class="flex flex-col rounded-md border">
         <Table
-          class="[&_tr:nth-child(even)]:bg-primary/[0.10] [&_td]:!py-1 [&_th]:!py-1"
+          class="[&_tr:nth-child(even)]:bg-primary/10 [&_td]:py-1! [&_th]:py-1!"
         >
           <TableHeader>
             <TableRow>
@@ -32,8 +32,8 @@
               <TableHead class="text-center font-bold border">{{
                 $t("General.bic")
               }}</TableHead>
-              <TableHead></TableHead>
-              <TableHead></TableHead>
+              <TableHead><span class="sr-only">Edit</span></TableHead>
+              <TableHead><span class="sr-only">Delete</span></TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -60,7 +60,7 @@
     <template #footer>
       <Button
         @click="showCreateContractpartnerAccountModal"
-        class="flex items-center gap-2 !rounded-md px-6"
+        class="flex items-center gap-2 rounded-md! px-6"
       >
         <Plus />
         {{ $t("General.new") }}

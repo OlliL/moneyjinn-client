@@ -2,53 +2,88 @@
   <ModalVue :title="$t('Moneyflow.title.delete')" ref="modalComponent">
     <template #body>
       <DivError :server-errors="serverErrors" />
-      <div class="row d-flex justify-content-center mt-3">
-        <div class="col-11">
-          <table class="table table-bordered table-hover">
-            <tbody>
-              <tr>
-                <th scope="row">{{ $t("Moneyflow.bookingdate") }}</th>
-                <td><SpanDate :date="mmf.bookingDate" /></td>
-              </tr>
-              <tr>
-                <th scope="row">{{ $t("Moneyflow.invoicedate") }}</th>
-                <td><SpanDate :date="mmf.invoiceDate" /></td>
-              </tr>
-              <tr>
-                <th scope="row">{{ $t("General.contractpartner") }}</th>
-                <td>{{ mmf.contractpartnerName }}</td>
-              </tr>
-              <tr>
-                <th scope="row">{{ $t("General.capitalsource") }}</th>
-                <td>{{ mmf.capitalsourceComment }}</td>
-              </tr>
-              <tr>
-                <th scope="row">{{ $t("General.amount") }}</th>
-                <td><SpanAmount :amount="mmf.amount" /></td>
-              </tr>
-              <tr>
-                <th scope="row">{{ $t("General.comment") }}</th>
-                <td>{{ mmf.comment }}</td>
-              </tr>
-              <tr>
-                <th scope="row">{{ $t("General.postingAccount") }}</th>
-                <td>{{ mmf.postingAccountName }}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+      <div class="flex flex-col rounded-md border">
+        <Table>
+          <TableBody>
+            <TableRow>
+              <TableCell
+                class="font-bold bg-primary/[0.10] w-40 whitespace-normal text-foreground border-r"
+              >
+                {{ $t("Moneyflow.bookingdate") }}
+              </TableCell>
+              <TableCell><SpanDate :date="mmf.bookingDate" /></TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell
+                class="font-bold bg-primary/[0.10] w-40 whitespace-normal text-foreground border-r"
+              >
+                {{ $t("Moneyflow.invoicedate") }}
+              </TableCell>
+              <TableCell><SpanDate :date="mmf.invoiceDate" /></TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell
+                class="font-bold bg-primary/[0.10] w-40 whitespace-normal text-foreground border-r"
+              >
+                {{ $t("General.contractpartner") }}
+              </TableCell>
+              <TableCell>{{ mmf.contractpartnerName }}</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell
+                class="font-bold bg-primary/[0.10] w-40 whitespace-normal text-foreground border-r"
+              >
+                {{ $t("General.capitalsource") }}
+              </TableCell>
+              <TableCell>{{ mmf.capitalsourceComment }}</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell
+                class="font-bold bg-primary/[0.10] w-40 whitespace-normal text-foreground border-r"
+              >
+                {{ $t("General.amount") }}
+              </TableCell>
+              <TableCell><SpanAmount :amount="mmf.amount" /></TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell
+                class="font-bold bg-primary/[0.10] w-40 whitespace-normal text-foreground border-r"
+              >
+                {{ $t("General.comment") }}
+              </TableCell>
+              <TableCell>{{ mmf.comment }}</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell
+                class="font-bold bg-primary/[0.10] w-40 whitespace-normal text-foreground border-r"
+              >
+                {{ $t("General.postingAccount") }}
+              </TableCell>
+              <TableCell>{{ mmf.postingAccountName }}</TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
       </div>
     </template>
     <template #footer>
-      <button type="button" class="btn btn-danger" @click="deleteMoneyflow">
+      <Button
+        variant="destructive"
+        class="flex items-center gap-2 !rounded-md px-6"
+        @click="deleteMoneyflow"
+      >
+        <Trash2 />
         {{ $t("General.delete") }}
-      </button>
+      </Button>
     </template>
   </ModalVue>
 </template>
 
 <script lang="ts" setup>
 import { ref, useTemplateRef } from "vue";
+
+import { Button } from "@/components/ui/button";
+import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
+import { Trash2 } from "lucide-vue-next";
 
 import ModalVue from "../Modal.vue";
 import SpanAmount from "../SpanAmount.vue";
@@ -87,8 +122,3 @@ const deleteMoneyflow = () => {
 defineExpose({ _show });
 </script>
 
-<style scoped>
-th {
-  background-color: #f2f2f2;
-}
-</style>
