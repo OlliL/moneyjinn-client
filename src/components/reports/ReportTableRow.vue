@@ -32,7 +32,7 @@
     </TableCell>
     <TableCell
       :class="[
-        'text-left break-words whitespace-normal min-w-[150px] w-full',
+        'text-left break-words whitespace-normal w-full min-w-0 break-all',
         rowBgClass,
       ]"
       >{{ mmf.comment }}</TableCell
@@ -40,7 +40,7 @@
     <TableCell :class="['text-left hidden md:table-cell border', rowBgClass]">
       {{ mmf.postingAccountName }}
     </TableCell>
-    <TableCell :class="['text-left hidden md:table-cell border', rowBgClass]">
+    <TableCell :class="['text-left hidden md:table-cell border ', rowBgClass]">
       {{ mmf.capitalsourceComment }}
     </TableCell>
     <TableCell

@@ -160,6 +160,61 @@
                 class="group flex cursor-pointer items-center justify-between gap-2 p-1 hover:bg-accent rounded-md transition-all"
               >
                 <div class="flex items-center gap-2">
+                  <Wrench :size="20" />
+                  <span>{{ $t("General.edit") }}</span>
+                </div>
+
+                <ChevronDown
+                  class="h-4 w-4 transition-transform duration-200 group-data-[state=open]:rotate-180 text-muted-foreground"
+                />
+              </div>
+            </CollapsibleTrigger>
+
+            <CollapsibleContent class="space-y-1 ml-6 border-l pl-2">
+              <router-link
+                @click="isMenuOpen = false"
+                class="flex items-center gap-2 p-2 text-sm hover:bg-accent rounded-md !text-foreground !no-underline"
+                :to="{ name: Routes.ListCapitalsources, force: true }"
+              >
+                {{ $t("General.capitalsource") }}
+              </router-link>
+              <router-link
+                @click="isMenuOpen = false"
+                class="flex items-center gap-2 p-2 text-sm hover:bg-accent rounded-md !text-foreground !no-underline"
+                :to="{ name: Routes.ListContractpartners, force: true }"
+              >
+                {{ $t("General.contractpartner") }}
+              </router-link>
+              <router-link
+                @click="isMenuOpen = false"
+                class="flex items-center gap-2 p-2 text-sm hover:bg-accent rounded-md !text-foreground !no-underline"
+                :to="{ name: Routes.ListContractpartnerMatchings, force: true }"
+              >
+                {{ $t("General.contractpartnerMatchings") }}
+              </router-link>
+              <router-link
+                @click="isMenuOpen = false"
+                class="flex items-center gap-2 p-2 text-sm hover:bg-accent rounded-md !text-foreground !no-underline"
+                :to="{ name: Routes.ListPreDefMoneyflows, force: true }"
+              >
+                {{ $t("General.preDefMoneyflows") }}
+              </router-link>
+              <router-link
+                @click="isMenuOpen = false"
+                class="flex items-center gap-2 p-2 text-sm hover:bg-accent rounded-md !text-foreground !no-underline"
+                :to="{ name: Routes.ListMonthlySettlements, force: true }"
+              >
+                {{ $t("General.monthlysettlements") }}
+              </router-link>
+            </CollapsibleContent>
+          </Collapsible>
+
+          <Collapsible class="w-full space-y-1">
+            <CollapsibleTrigger as-child>
+              <div
+                class="group flex cursor-pointer items-center justify-between gap-2 p-1 hover:bg-accent rounded-md transition-all"
+              >
+                <div class="flex items-center gap-2">
                   <ChartCandlestick :size="20" />
                   <span>{{ $t("General.etfs") }}</span>
                 </div>

@@ -23,12 +23,13 @@
 
       <div class="p-4 overflow-x-auto text-center" v-if="filteredMoneyflows">
         <div class="flex flex-col rounded-md border">
-          <Table>
+          <Table class="w-full text-xs md:text-sm">
             <TableHeader>
               <TableRow>
                 <TableHead class="hidden md:table-cell align-top"></TableHead>
-                <TableHead class="align-top text-center">
-                  <span class="hidden md:block items-center justify-center mt-1"
+                <TableHead class="border text-foreground text-center align-top">
+                  <span
+                    class="hidden md:block items-center justify-center mt-1 font-bold"
                     >{{ $t("Moneyflow.bookingdate") }}
                     <component
                       :is="sortIcon('bookingDate')"
@@ -49,10 +50,10 @@
                   </span>
                 </TableHead>
                 <TableHead
-                  class="font-bold border text-foreground text-center align-top hidden md:table-cell"
+                  class="border text-foreground text-center align-top hidden md:table-cell"
                 >
                   <span
-                    class="hidden md:flex items-center justify-center gap-1 mt-1"
+                    class="hidden md:flex items-center justify-center gap-1 mt-1 font-bold"
                   >
                     {{ $t("Moneyflow.invoicedate") }}
                     <component
@@ -65,11 +66,11 @@
                   </span>
                 </TableHead>
                 <TableHead
-                  class="font-bold border text-foreground text-center align-top"
+                  class="border text-foreground text-center align-top"
                   colspan="2"
                 >
                   <span
-                    class="hidden md:flex items-center justify-center gap-1 mt-1"
+                    class="hidden md:flex items-center justify-center gap-1 mt-1 font-bold"
                   >
                     {{ $t("General.amount") }}
                     <component
@@ -94,10 +95,10 @@
                   </span>
                 </TableHead>
                 <TableHead
-                  class="font-bold border text-foreground text-center align-top hidden md:table-cell"
+                  class="border text-foreground text-center align-top hidden md:table-cell"
                 >
                   <span
-                    class="hidden md:flex items-center justify-center gap-1 mt-1"
+                    class="hidden md:flex items-center justify-center gap-1 mt-1 font-bold"
                   >
                     {{ $t("General.contractpartner") }}
                     <component
@@ -129,10 +130,10 @@
                     </Button>
                   </div>
                 </TableHead>
-                <TableHead class="font-bold border text-foreground text-center">
+                <TableHead class="border text-foreground text-center align-top">
                   <div class="hidden md:block">
                     <span
-                      class="hidden md:flex items-center justify-center gap-1 mt-1"
+                      class="hidden md:flex items-center justify-center gap-1 mt-1 font-bold"
                     >
                       {{ $t("General.comment") }}
                       <component
@@ -163,7 +164,9 @@
                       </Button>
                     </div>
                   </div>
-                  <div class="block md:hidden">
+                  <span
+                    class="flex md:hidden items-center justify-center min-w-0 break-words"
+                  >
                     <component
                       :is="sortIcon('comment')"
                       class="inline h-4 w-4 text-primary cursor-pointer"
@@ -171,14 +174,14 @@
                       :aria-label="$t('General.comment')"
                       @click="sortByColumn('comment')"
                     />
-                  </div>
+                  </span>
                 </TableHead>
 
                 <TableHead
-                  class="font-bold border text-foreground text-center align-top hidden md:table-cell"
+                  class="border text-foreground text-center align-top hidden md:table-cell"
                 >
                   <span
-                    class="hidden md:flex items-center justify-center gap-1 mt-1"
+                    class="hidden md:flex items-center justify-center gap-1 mt-1 font-bold"
                   >
                     {{ $t("General.postingAccount") }}
                     <component
@@ -211,10 +214,10 @@
                 </TableHead>
 
                 <TableHead
-                  class="font-bold border text-foreground text-center align-top hidden md:table-cell"
+                  class="border text-foreground text-center align-top hidden md:table-cell"
                 >
                   <span
-                    class="hidden md:flex items-center justify-center gap-1 mt-1"
+                    class="hidden md:flex items-center justify-center gap-1 mt-1 font-bold"
                   >
                     {{ $t("General.capitalsource") }}
                     <component
