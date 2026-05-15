@@ -55,7 +55,7 @@ class CompareDataService extends AbstractService {
     const result = {} as CompareDataResult;
 
     if (compareDataResponse.compareDataMatchingTransports) {
-      const compareData = Array<CompareData>();
+      const compareData = new Array<CompareData>();
       for (const transport of compareDataResponse.compareDataMatchingTransports) {
         compareData.push({
           moneyflow: mapMoneyflowTransportToModel(
@@ -71,7 +71,7 @@ class CompareDataService extends AbstractService {
     }
 
     if (compareDataResponse.compareDataNotInDatabaseTransports) {
-      const compareData = Array<CompareData>();
+      const compareData = new Array<CompareData>();
       for (const transport of compareDataResponse.compareDataNotInDatabaseTransports) {
         compareData.push({
           compareDataDataset: mapCCompareDataDatasetTransportToModel(
@@ -83,7 +83,7 @@ class CompareDataService extends AbstractService {
     }
 
     if (compareDataResponse.compareDataNotInFileTransports) {
-      const compareData = Array<CompareData>();
+      const compareData = new Array<CompareData>();
       for (const transport of compareDataResponse.compareDataNotInFileTransports) {
         compareData.push({
           moneyflow: mapMoneyflowTransportToModel(
@@ -96,7 +96,7 @@ class CompareDataService extends AbstractService {
     }
 
     if (compareDataResponse.compareDataWrongCapitalsourceTransports) {
-      const compareData = Array<CompareData>();
+      const compareData = new Array<CompareData>();
       for (const transport of compareDataResponse.compareDataWrongCapitalsourceTransports) {
         compareData.push({
           moneyflow: mapMoneyflowTransportToModel(

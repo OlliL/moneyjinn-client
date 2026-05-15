@@ -18,7 +18,7 @@ export const capitalsourceImportValues = [
 ] as Array<SelectBoxValue>;
 for (const importAllowed in CapitalsourceImport) {
   const importNum = Number(importAllowed);
-  if (!isNaN(importNum)) {
+  if (!Number.isNaN(importNum)) {
     capitalsourceImportValues.push({
       id: importNum,
       value: capitalsourceImportNames[importNum] ?? "",

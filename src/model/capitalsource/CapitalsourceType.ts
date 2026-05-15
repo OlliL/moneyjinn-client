@@ -22,7 +22,7 @@ export const capitalsourceTypeNames = [
 export const capitalsourceTypeValues = new Array<SelectBoxValue>();
 for (const type in CapitalsourceType) {
   const typeNum = Number(type);
-  if (!isNaN(typeNum)) {
+  if (!Number.isNaN(typeNum)) {
     capitalsourceTypeValues.push({
       id: typeNum,
       value: capitalsourceTypeNames[typeNum] ?? "",

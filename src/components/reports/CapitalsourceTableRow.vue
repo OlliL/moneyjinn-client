@@ -7,20 +7,28 @@
       {{ capitalsourceStateString }}
     </TableCell>
     <TableCell class="text-left">{{ capitalsourceComment }}</TableCell>
-    <TableCell class="text-right"><SpanAmount :amount="amountBeginOfMonthFixed" /></TableCell>
+    <TableCell class="text-right"
+      ><SpanAmount :amount="amountBeginOfMonthFixed"
+    /></TableCell>
     <TableCell class="text-right" v-if="currentMonthIsSettled">
       <SpanAmount :amount="amountEndOfMonthFixed" />
     </TableCell>
     <TableCell class="text-right hidden md:table-cell">
       <SpanAmount :amount="amountEndOfMonthCalculated" />
     </TableCell>
-    <TableCell class="text-right hidden md:table-cell" v-if="currentMonthIsSettled">
+    <TableCell
+      class="text-right hidden md:table-cell"
+      v-if="currentMonthIsSettled"
+    >
       <SpanAmount :amount="differenceFixedCalculated" />
     </TableCell>
     <TableCell class="text-right" v-if="!currentMonthIsSettled">
       <SpanAmount :amount="amountCurrent" />
     </TableCell>
-    <TableCell class="text-right hidden md:table-cell" v-if="!currentMonthIsSettled">
+    <TableCell
+      class="text-right hidden md:table-cell"
+      v-if="!currentMonthIsSettled"
+    >
       {{ amountCurrentStateString }}
     </TableCell>
   </TableRow>
@@ -93,13 +101,13 @@ const capitalsourceStateString = computed(() => {
   return capitalsourceStateNames[props.capitalsourceState];
 });
 const differenceFixedCalculated = computed(() => {
-  return props.amountEndOfMonthFixed != null
-    ? props.amountEndOfMonthFixed - props.amountEndOfMonthCalculated
-    : 0;
+  return props.amountEndOfMonthFixed == null
+    ? 0
+    : props.amountEndOfMonthFixed - props.amountEndOfMonthCalculated;
 });
 const amountCurrentStateString = computed(() => {
-  return props.amountCurrentState != null
-    ? formatDateWithTime(props.amountCurrentState)
-    : t("Reports.calculated");
+  return props.amountCurrentState == null
+    ? t("Reports.calculated")
+    : formatDateWithTime(props.amountCurrentState);
 });
 </script>
