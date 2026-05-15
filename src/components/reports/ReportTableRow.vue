@@ -237,7 +237,6 @@ const props = defineProps({
   },
 });
 const rowBgClass = computed(() => {
-  // Wenn der Index gerade ist, kriegt die Zelle den leicht bläulichen Hintergrund
   return props.index % 2 === 0 ? "bg-primary/[0.06]" : "bg-background";
 });
 const emit = defineEmits([

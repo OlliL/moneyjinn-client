@@ -64,7 +64,6 @@
 import { onMounted, ref, watch, useTemplateRef } from "vue";
 import { storeToRefs } from "pinia";
 
-// Shadcn UI Komponenten
 import {
   TableBody,
   TableHead,

@@ -42,15 +42,12 @@
                   force: true,
                 }"
                 :class="[
-                  // Gemeinsame Basis-Klassen (Höhe, Text, Borders, Übergänge)
                   'inline-flex h-9 items-center justify-center px-4 text-sm font-medium border border-input transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:z-10 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring',
 
-                  // Aktiver Zustand vs. Inaktiver Zustand
                   $props.month == month + ''
                     ? 'bg-primary text-primary-foreground border-primary hover:bg-primary/90 hover:text-primary-foreground'
                     : 'bg-background text-foreground',
 
-                  // Steuerung der Ecken (Erstes Element rundet links, letztes rechts, Mitte bleibt eckig)
                   index === 0 ? 'rounded-l-md' : '',
                   index === months!.length - 1 ? 'rounded-r-md' : '',
                   index > 0 && index < months!.length - 1 ? 'rounded-none' : '',

@@ -50,7 +50,6 @@ import { computed, ref, useTemplateRef } from "vue";
 import { useI18n } from "vue-i18n";
 import { string, ZodType } from "zod";
 
-// Shadcn UI Komponenten
 import { Button } from "@/components/ui/button";
 
 import ButtonSubmit from "../ButtonSubmit.vue";

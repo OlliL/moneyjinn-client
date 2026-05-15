@@ -20,6 +20,7 @@
         ref="fieldRef"
         @keyup="onKeyboardInput($event)"
         @focus="(($event as FocusEvent)?.target as HTMLInputElement)?.select()"
+        @blur="onBlur"
       />
 
       <div
@@ -149,7 +150,6 @@ const fieldRef = useTemplateRef<typeof Input>("fieldRef");
 let datepicker = {} as Datepicker;
 
 const getInputElement = () => {
-  // Shadcn Komponenten-Instanz -> HTML Element
   return fieldRef.value?.$el as HTMLInputElement;
 };
 
@@ -167,7 +167,6 @@ onMounted(() => {
     });
     viewMounted.value = true;
 
-    // NEU: Initialen Wert setzen, nachdem die Instanz erstellt wurde
     if (props.modelValue) {
       setDate(props.modelValue);
     }
@@ -183,6 +182,12 @@ onUnmounted(() => {
     getInputElement().removeEventListener("changeDate", onInput);
   }
 });
+
+const onBlur = () => {
+  if (datepicker && typeof datepicker.hide === "function") {
+    datepicker.hide();
+  }
+};
 
 const setDate = (newVal?: Date) => {
   if (datepicker instanceof Datepicker) {

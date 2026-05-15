@@ -50,7 +50,7 @@ const props = defineProps({
   },
   maxWidth: {
     type: String,
-    default: "", // z.B. "800px" oder "60%"
+    default: "",
   },
   zIndex: {
     type: String,

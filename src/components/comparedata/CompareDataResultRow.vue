@@ -21,7 +21,10 @@
     <TableCell class="text-left">
       {{ mmf.capitalsourceComment }}
     </TableCell>
-    <TableCell class="text-center" v-if="isOwnMoneyflow">
+    <TableCell
+      class="w-0 border whitespace-nowrap text-center p-0"
+      v-if="isOwnMoneyflow"
+    >
       <Button
         variant="ghost"
         size="icon"
@@ -29,12 +32,13 @@
         :title="$t('General.edit')"
         class="h-8 w-8 cursor-pointer"
       >
-        <Pencil
-          class="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors"
-        />
+        <Pencil class="h-4 w-4" />
       </Button>
     </TableCell>
-    <TableCell class="text-center" v-if="isOwnMoneyflow">
+    <TableCell
+      class="w-0 border whitespace-nowrap text-center p-0"
+      v-if="isOwnMoneyflow"
+    >
       <Button
         variant="ghost"
         size="icon"
@@ -42,9 +46,7 @@
         :title="$t('General.delete')"
         class="h-8 w-8 cursor-pointer"
       >
-        <Trash2
-          class="h-4 w-4 text-muted-foreground group-hover:text-destructive transition-colors"
-        />
+        <Trash2 class="h-4 w-4" />
       </Button>
     </TableCell>
     <TableCell v-if="!isOwnMoneyflow"></TableCell>
@@ -72,7 +74,7 @@
     <TableCell class="text-left">
       {{ capitalsourceComment }}
     </TableCell>
-    <TableCell class="text-center">
+    <TableCell class="w-0 border whitespace-nowrap text-center p-0">
       <Button
         variant="ghost"
         size="icon"
@@ -80,9 +82,7 @@
         :title="$t('General.create')"
         class="h-8 w-8 cursor-pointer"
       >
-        <Plus
-          class="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors"
-        />
+        <Plus class="h-4 w-4" />
       </Button>
     </TableCell>
     <TableCell></TableCell>

@@ -116,7 +116,6 @@ import { computed, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { Minus, Plus, Euro, ArrowLeft } from "lucide-vue-next";
 
-// Shadcn UI Components
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
@@ -130,7 +129,6 @@ import SelectPostingAccount from "../postingaccount/SelectPostingAccount.vue";
 
 const { t } = useI18n();
 
-// ... (Logik bleibt identisch zum Original)
 const schema = {
   amount: computed(() =>
     rowEmpty.value
@@ -190,7 +188,6 @@ const remainderErrorData = computed(() =>
   ),
 );
 
-// Watcher für Initialisierung und Änderungen
 watch(
   () => props.amount,
   (newVal, oldVal) => {

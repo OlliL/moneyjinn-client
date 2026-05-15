@@ -66,7 +66,7 @@
         @click="showCreateContractpartnerAccountModal"
         class="flex items-center gap-2 rounded-md! px-6"
       >
-        <Plus />
+        <Plus class="h-4 w-4" />
         {{ $t("General.new") }}
       </Button>
     </template>
@@ -77,7 +77,6 @@
 import { ref, useTemplateRef } from "vue";
 import { Plus } from "lucide-vue-next";
 
-// Shadcn UI Komponenten
 import { Button } from "@/components/ui/button";
 import {
   Table,

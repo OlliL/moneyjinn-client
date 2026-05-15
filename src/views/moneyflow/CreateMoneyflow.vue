@@ -128,10 +128,7 @@ onMounted(() => {
 });
 
 const handleSelectChange = (val: any) => {
-  // 1. Den Wert wieder in eine Zahl umwandeln, damit dein State (preDefMoneyflowId) korrekt bleibt
   preDefMoneyflowId.value = Number(val);
-
-  // 2. Deine ursprüngliche Logik-Funktion aufrufen
   selectPreDefMoneyflow();
 };
 

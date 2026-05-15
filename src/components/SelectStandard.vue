@@ -176,7 +176,6 @@ const isOpen = ref(false);
 const showDropdown = async () => {
   isOpen.value = true;
 
-  // Warten, bis Vue das Dropdown ins DOM gerendert hat
   await nextTick();
 
   if (getInputElement()) {
@@ -222,7 +221,6 @@ const setFieldValue = () => {
 };
 
 const onBlur = (event: FocusEvent) => {
-  // hide dropdown if the input was left except if the target is the Dropdown-Menu itself
   if (
     dropdownItemRef.value &&
     dropdownItemRef.value?.indexOf(event.relatedTarget as HTMLAnchorElement) < 0
@@ -233,7 +231,6 @@ const onBlur = (event: FocusEvent) => {
 };
 
 const getInputElement = () => {
-  // Shadcn Komponenten-Instanz -> HTML Element
   return fieldRef.value?.$el as HTMLInputElement;
 };
 
@@ -242,7 +239,6 @@ const onFocus = (event: Event) => {
   getInputElement().select();
 
   setTimeout(() => {
-    // If onFocus is triggered from ESC inside Dropdown-Menu don't reopen it again.
     if (!preventOnFocus.value) {
       preventOnFocus.value = false;
       showDropdown();
@@ -267,7 +263,6 @@ const onKeydownAnchor = (event: KeyboardEvent) => {
   } else if (event.key === "ArrowUp") {
     event.preventDefault();
     if (currentIndex === 0) {
-      // Zurück ins Input Feld springen
       getInputElement().focus();
     } else {
       const prevIndex = (currentIndex - 1 + anchors.length) % anchors.length;
