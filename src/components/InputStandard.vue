@@ -161,11 +161,6 @@ const getInputElement = () => {
 };
 onMounted(() => {
   if (props.focus) {
-    console.log(
-      props.fieldLabel
-        ? `Focusing input ${props.fieldLabel}`
-        : "Focusing input",
-    );
     nextTick(() => {
       getInputElement()?.focus();
     });
