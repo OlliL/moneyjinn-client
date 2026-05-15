@@ -9,19 +9,33 @@
     <TableCell class="text-right">
       <SpanAmount :amount="flow.price" :decimal-places="3" />
     </TableCell>
-    <TableCell class="text-right"><SpanAmount :amount="flow.amount * flow.price" /></TableCell>
-    <TableCell class="text-right group relative cursor-pointer" v-if="showLumpSum">
+    <TableCell class="text-right"
+      ><SpanAmount :amount="flow.amount * flow.price"
+    /></TableCell>
+    <TableCell
+      class="text-right group relative cursor-pointer"
+      v-if="showLumpSum"
+    >
       <SpanAmount
         :amount="flow.accumulatedPreliminaryLumpSum * (partial / 100)"
         :decimal-places="3"
       />
-      <div class="absolute hidden group-hover:block bottom-full right-0 mb-2 bg-background border border-border rounded-lg shadow-lg z-10 p-3 w-max">
+      <div
+        class="absolute hidden group-hover:block bottom-full right-0 mb-2 bg-background border border-border rounded-lg shadow-lg z-10 p-3 w-max"
+      >
         <Table class="border">
           <TableHeader>
             <TableRow>
-              <TableHead><span class="sr-only">Year</span></TableHead>
-              <TableHead class="text-center">100%</TableHead>
-              <TableHead class="text-center" v-if="partial < 100">
+              <TableHead class="font-bold border text-foreground text-center"
+                ><span class="sr-only">Year</span></TableHead
+              >
+              <TableHead class="font-bold border text-foreground text-center"
+                >100%</TableHead
+              >
+              <TableHead
+                class="font-bold border text-foreground text-center"
+                v-if="partial < 100"
+              >
                 {{ formatNumber(partial, 0) }}%
               </TableHead>
             </TableRow>
@@ -54,7 +68,9 @@
               <TableCell class="text-right" v-if="partial < 100">
                 <u
                   ><SpanAmount
-                    :amount="flow.accumulatedPreliminaryLumpSum * (partial / 100)"
+                    :amount="
+                      flow.accumulatedPreliminaryLumpSum * (partial / 100)
+                    "
                     :decimal-places="3"
                 /></u>
               </TableCell>
@@ -93,7 +109,14 @@
 import { computed, type PropType } from "vue";
 import { Pencil, Trash2 } from "lucide-vue-next";
 
-import { TableCell, TableHead, TableHeader, TableRow, Table, TableBody } from "@/components/ui/table";
+import {
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+  Table,
+  TableBody,
+} from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 
 import SpanAmount from "../SpanAmount.vue";
@@ -145,4 +168,3 @@ const editEtfFlow = () => {
   emit("editEtfFlow", props.flow);
 };
 </script>
-

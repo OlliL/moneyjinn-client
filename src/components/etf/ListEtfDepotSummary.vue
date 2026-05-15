@@ -5,48 +5,48 @@
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead class="text-center" rowspan="2">
-                {{ $t("ETFFlow.shares") }}
-              </TableHead>
               <TableHead
-                class="text-center hidden md:table-cell"
-                colspan="3"
-              >
-                {{ $t("ETFFlow.amount") }}
-              </TableHead>
-              <TableHead class="text-center" colspan="3">
-                {{ $t("ETFFlow.overall") }}
-              </TableHead>
-              <TableHead
-                class="text-center hidden md:table-cell"
+                class="font-bold border text-foreground text-center"
                 rowspan="2"
               >
+                {{ $t("ETFFlow.shares") }}
+              </TableHead>
+              <TableHead class="text-center hidden md:table-cell" colspan="3">
+                {{ $t("ETFFlow.amount") }}
+              </TableHead>
+              <TableHead
+                class="font-bold border text-foreground text-center"
+                colspan="3"
+              >
+                {{ $t("ETFFlow.overall") }}
+              </TableHead>
+              <TableHead class="text-center hidden md:table-cell" rowspan="2">
                 {{ $t("Reports.state") }}
               </TableHead>
             </TableRow>
             <TableRow>
               <TableHead
-                class="text-center hidden md:table-cell"
+                class="font-bold border text-foreground text-center hidden md:table-cell"
               >
                 {{ $t("ETFFlow.payed") }} &#8709;
               </TableHead>
               <TableHead
-                class="text-center hidden md:table-cell"
+                class="font-bold border text-foreground text-center hidden md:table-cell"
               >
                 {{ $t("ETFFlow.bid") }}
               </TableHead>
               <TableHead
-                class="text-center hidden md:table-cell"
+                class="font-bold border text-foreground text-center hidden md:table-cell"
               >
                 {{ $t("ETFFlow.ask") }}
               </TableHead>
-              <TableHead class="text-center">
+              <TableHead class="font-bold border text-foreground text-center">
                 {{ $t("ETFFlow.payed") }}
               </TableHead>
-              <TableHead class="text-center">
+              <TableHead class="font-bold border text-foreground text-center">
                 {{ $t("ETFFlow.bid") }}
               </TableHead>
-              <TableHead class="text-center">
+              <TableHead class="font-bold border text-foreground text-center">
                 {{ $t("ETFFlow.profit") }}
               </TableHead>
             </TableRow>
@@ -62,7 +62,13 @@
 </template>
 <script lang="ts" setup>
 import type { PropType } from "vue";
-import { Table, TableBody, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  Table,
+  TableBody,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import EtfTableRow from "../reports/EtfTableRow.vue";
 import type { EtfSummary } from "@/model/etf/EtfSummary";
 

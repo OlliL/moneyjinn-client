@@ -28,14 +28,38 @@
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead><span class="sr-only">Status</span></TableHead>
-                <TableHead>{{ $t("Moneyflow.bookingdate") }}</TableHead>
-                <TableHead>{{ $t("Moneyflow.invoicedate") }}</TableHead>
-                <TableHead>{{ $t("General.amount") }}</TableHead>
-                <TableHead>{{ $t("General.contractpartner") }}</TableHead>
-                <TableHead>{{ $t("General.comment") }}</TableHead>
-                <TableHead>{{ $t("General.capitalsource") }}</TableHead>
-                <TableHead colspan="2"><span class="sr-only">Actions</span></TableHead>
+                <TableHead class="font-bold border text-foreground text-center"
+                  ><span class="sr-only">Status</span></TableHead
+                >
+                <TableHead
+                  class="font-bold border text-foreground text-center"
+                  >{{ $t("Moneyflow.bookingdate") }}</TableHead
+                >
+                <TableHead
+                  class="font-bold border text-foreground text-center"
+                  >{{ $t("Moneyflow.invoicedate") }}</TableHead
+                >
+                <TableHead
+                  class="font-bold border text-foreground text-center"
+                  >{{ $t("General.amount") }}</TableHead
+                >
+                <TableHead
+                  class="font-bold border text-foreground text-center"
+                  >{{ $t("General.contractpartner") }}</TableHead
+                >
+                <TableHead
+                  class="font-bold border text-foreground text-center"
+                  >{{ $t("General.comment") }}</TableHead
+                >
+                <TableHead
+                  class="font-bold border text-foreground text-center"
+                  >{{ $t("General.capitalsource") }}</TableHead
+                >
+                <TableHead
+                  class="font-bold border text-foreground text-center"
+                  colspan="2"
+                  ><span class="sr-only">Actions</span></TableHead
+                >
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -61,7 +85,14 @@
 import { computed, ref, type PropType } from "vue";
 import { ChevronRight, ChevronDown } from "lucide-vue-next";
 
-import { TableCell, TableHead, TableHeader, TableRow, Table, TableBody } from "@/components/ui/table";
+import {
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+  Table,
+  TableBody,
+} from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 
 import CompareDataResultRowVue from "./CompareDataResultRow.vue";

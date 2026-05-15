@@ -42,8 +42,16 @@
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>{{ $t("General.capitalsource") }}</TableHead>
-                  <TableHead>{{ $t("General.amount") }}</TableHead>
+                  <TableHead
+                    class="w-2/3 font-bold border text-foreground text-center"
+                  >
+                    {{ $t("General.capitalsource") }}
+                  </TableHead>
+                  <TableHead
+                    class="w-1/3 font-bold border text-foreground text-center"
+                  >
+                    {{ $t("General.amount") }}
+                  </TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -51,16 +59,16 @@
                   v-for="mms in monthlySettlementsNoCredit"
                   :key="mms.id"
                 >
-                  <TableCell class="text-left">{{
+                  <TableCell class="border text-left">{{
                     mms.capitalsourceComment
                   }}</TableCell>
-                  <TableCell class="text-right"
+                  <TableCell class="border text-right"
                     ><SpanAmount :amount="mms.amount"
                   /></TableCell>
                 </TableRow>
                 <TableRow>
                   <TableCell class="text-right font-bold">&sum;</TableCell>
-                  <TableCell class="text-right">
+                  <TableCell class="border text-right">
                     <u><SpanAmount :amount="monthlySettlementNoCreditSum" /></u>
                   </TableCell>
                 </TableRow>
@@ -74,13 +82,19 @@
             <Table>
               <TableHeader v-if="monthlySettlementsNoCredit.length">
                 <TableRow>
-                  <TableHead>{{ $t("General.capitalsource") }}</TableHead>
-                  <TableHead>{{ $t("General.amount") }}</TableHead>
+                  <TableHead
+                    class="w-2/3 font-bold border text-foreground text-center"
+                    >{{ $t("General.capitalsource") }}</TableHead
+                  >
+                  <TableHead
+                    class="w-1/3 font-bold border text-foreground text-center"
+                    >{{ $t("General.amount") }}</TableHead
+                  >
                 </TableRow>
               </TableHeader>
               <TableBody>
                 <TableRow v-for="mms in monthlySettlementsCredit" :key="mms.id">
-                  <TableCell class="text-left">{{
+                  <TableCell class="border text-left">{{
                     mms.capitalsourceComment
                   }}</TableCell>
                   <TableCell class="text-right"
@@ -89,7 +103,7 @@
                 </TableRow>
                 <TableRow>
                   <TableCell class="text-right font-bold">&sum;</TableCell>
-                  <TableCell class="text-right">
+                  <TableCell class="border text-right">
                     <u>
                       <SpanAmount :amount="monthlySettlementCreditSum" />
                     </u>

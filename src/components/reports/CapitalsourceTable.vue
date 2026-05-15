@@ -5,25 +5,37 @@
         <Table class="[&_tr:nth-child(even)]:bg-primary/[0.10]">
           <TableHeader>
             <TableRow>
-              <TableHead class="text-center hidden md:table-cell">
+              <TableHead
+                class="font-bold border text-foreground text-center hidden md:table-cell"
+              >
                 {{ $t("Capitalsource.type") }}
               </TableHead>
-              <TableHead class="text-center hidden md:table-cell">
+              <TableHead
+                class="font-bold border text-foreground text-center hidden md:table-cell"
+              >
                 {{ $t("Capitalsource.state") }}
               </TableHead>
-              <TableHead class="text-center">{{
+              <TableHead class="font-bold border text-foreground text-center">{{
                 $t("General.comment")
               }}</TableHead>
-              <TableHead class="text-center">
+              <TableHead class="font-bold border text-foreground text-center">
                 {{ $t("Reports.beginOfMonth") }}
               </TableHead>
-              <TableHead class="text-center" v-if="currentMonthIsSettled">
+              <TableHead
+                class="font-bold border text-foreground text-center"
+                v-if="currentMonthIsSettled"
+              >
                 {{ $t("Reports.endOfMonthFixed") }}
               </TableHead>
-              <TableHead class="text-center hidden md:table-cell">
+              <TableHead
+                class="font-bold border text-foreground text-center hidden md:table-cell"
+              >
                 {{ $t("Reports.endOfMonthCalculated") }}
               </TableHead>
-              <TableHead class="text-center" v-if="!currentMonthIsSettled">
+              <TableHead
+                class="font-bold border text-foreground text-center"
+                v-if="!currentMonthIsSettled"
+              >
                 {{ $t("Reports.currentAmount") }}
               </TableHead>
               <TableHead

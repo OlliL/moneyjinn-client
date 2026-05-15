@@ -30,11 +30,17 @@
               class="flex flex-col rounded-md border mb-4"
               v-if="monthlySettlementsNoCredit"
             >
-              <Table>
+              <Table class="[&_td]:py-0.5! [&_th]:py-1!">
                 <TableHeader>
                   <TableRow>
-                    <TableHead>{{ $t("General.capitalsource") }}</TableHead>
-                    <TableHead>{{ $t("General.amount") }}</TableHead>
+                    <TableHead
+                      class="w-2/3 font-bold border text-foreground text-center"
+                      >{{ $t("General.capitalsource") }}</TableHead
+                    >
+                    <TableHead
+                      class="w-1/3 font-bold border text-foreground text-center"
+                      >{{ $t("General.amount") }}</TableHead
+                    >
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -42,10 +48,10 @@
                     v-for="(mms, idx) in monthlySettlementsNoCredit"
                     :key="mms.id"
                   >
-                    <TableCell class="text-left">
+                    <TableCell class="text-left border">
                       {{ mms.capitalsourceComment }}
                     </TableCell>
-                    <TableCell>
+                    <TableCell class="border">
                       <InputStandard
                         v-model="mms.amount"
                         :validation-schema="schema.amount"
@@ -54,10 +60,7 @@
                         field-type="number"
                         step="0.01"
                       >
-                        <template #icon
-                          ><span class="text-muted-foreground"
-                            >€</span
-                        ></template>
+                        <template #icon><Euro /></template>
                       </InputStandard>
                     </TableCell>
                   </TableRow>
@@ -71,8 +74,14 @@
               <Table>
                 <TableHeader v-if="monthlySettlementsNoCredit.length">
                   <TableRow>
-                    <TableHead>{{ $t("General.capitalsource") }}</TableHead>
-                    <TableHead>{{ $t("General.amount") }}</TableHead>
+                    <TableHead
+                      class="w-2/3 font-bold border text-foreground text-center"
+                      >{{ $t("General.capitalsource") }}</TableHead
+                    >
+                    <TableHead
+                      class="w-1/3 font-bold border text-foreground text-center"
+                      >{{ $t("General.amount") }}</TableHead
+                    >
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -80,10 +89,10 @@
                     v-for="(mms, idx) in monthlySettlementsCredit"
                     :key="mms.id"
                   >
-                    <TableCell class="text-left">
+                    <TableCell class="text-left border">
                       {{ mms.capitalsourceComment }}
                     </TableCell>
-                    <TableCell>
+                    <TableCell class="border">
                       <InputStandard
                         v-model="mms.amount"
                         :validation-schema="schema.amount"
@@ -92,10 +101,7 @@
                         field-type="number"
                         step="0.01"
                       >
-                        <template #icon
-                          ><span class="text-muted-foreground"
-                            >€</span
-                        ></template>
+                        <template #icon><Euro /></template>
                       </InputStandard>
                     </TableCell>
                   </TableRow>
@@ -127,7 +133,14 @@ import InputDate from "../InputDate.vue";
 import InputStandard from "../InputStandard.vue";
 import ModalVue from "../Modal.vue";
 
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { amountSchema, globErr } from "@/tools/views/ZodUtil";
@@ -137,6 +150,7 @@ import type { MonthlySettlement } from "@/model/monthlysettlement/MonthlySettlem
 import type { MonthlySettlementEditTransporter } from "@/model/monthlysettlement/MonthlySettlementEditTransporter";
 
 import MonthlySettlementService from "@/service/MonthlySettlementService";
+import { Euro } from "lucide-vue-next";
 
 const { t } = useI18n();
 

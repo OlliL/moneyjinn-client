@@ -94,9 +94,18 @@
                     <Table>
                       <TableHeader>
                         <TableRow>
-                          <TableHead>{{ $t("General.group") }}</TableHead>
-                          <TableHead>{{ $t("General.validFrom") }}</TableHead>
-                          <TableHead>{{ $t("General.validTil") }}</TableHead>
+                          <TableHead
+                            class="font-bold border text-foreground text-center"
+                            >{{ $t("General.group") }}</TableHead
+                          >
+                          <TableHead
+                            class="font-bold border text-foreground text-center"
+                            >{{ $t("General.validFrom") }}</TableHead
+                          >
+                          <TableHead
+                            class="font-bold border text-foreground text-center"
+                            >{{ $t("General.validTil") }}</TableHead
+                          >
                         </TableRow>
                       </TableHeader>
                       <TableBody>
@@ -123,7 +132,7 @@
       </form>
     </template>
     <template #footer>
-      <Button type="button" variant="outline" @click="resetForm">
+      <Button type="button" variant="secondary" @click="resetForm">
         {{ $t("General.reset") }}
       </Button>
       <ButtonSubmit

@@ -64,7 +64,7 @@
                   :field-label="$t('General.comment')"
                 />
               </div>
-              <div class="md:col-span-2 flex items-center gap-2 text-left">
+              <div class="md:col-span-1 flex items-center gap-2 text-left">
                 <input
                   class="h-4 w-4"
                   type="checkbox"
@@ -86,7 +86,7 @@
                   {{ $t("Moneyflow.caseSensitivity") }}
                 </label>
               </div>
-              <div class="md:col-span-1 flex items-center gap-2 text-left">
+              <div class="md:col-span-2 flex items-center gap-2 text-left">
                 <input
                   class="h-4 w-4"
                   type="checkbox"
@@ -149,7 +149,7 @@
       </div>
     </div>
     <div class="flex justify-center" v-if="dataLoaded">
-      <DivContentTable>
+      <DivContentTable :alternate-row-background="false" class="max-w-7xl">
         <TableHeader>
           <TableRow>
             <TableHead

@@ -33,8 +33,7 @@
                   <div class="w-full md:w-auto flex items-center justify-end">
                     <ButtonSubmit :form-id="'searchReceipt' + receipt.id">
                       <template #icon><Search class="h-4 w-4" /></template>
-                    </ButtonSubmit
-                    >
+                    </ButtonSubmit>
                   </div>
                   <div class="w-full md:w-[31%]">
                     <InputStandard
@@ -68,18 +67,36 @@
               </form>
               <div class="mb-4">
                 <div class="w-full">
-                  <div class="flex flex-col rounded-md border" v-if="searchExecuted && searchSuccessful">
+                  <div
+                    class="flex flex-col rounded-md border"
+                    v-if="searchExecuted && searchSuccessful"
+                  >
                     <Table>
                       <TableHeader>
                         <TableRow>
                           <TableHead class="w-10">
                             <span class="sr-only">Selection</span>
                           </TableHead>
-                          <TableHead>{{ $t("Moneyflow.invoicedate") }}</TableHead>
-                          <TableHead>{{ $t("General.amount") }}</TableHead>
-                          <TableHead>{{ $t("General.contractpartner") }}</TableHead>
-                          <TableHead>{{ $t("General.comment") }}</TableHead>
-                          <TableHead colspan="2"></TableHead>
+                          <TableHead
+                            class="font-bold border text-foreground text-center"
+                            >{{ $t("Moneyflow.invoicedate") }}</TableHead
+                          >
+                          <TableHead
+                            class="font-bold border text-foreground text-center"
+                            >{{ $t("General.amount") }}</TableHead
+                          >
+                          <TableHead
+                            class="font-bold border text-foreground text-center"
+                            >{{ $t("General.contractpartner") }}</TableHead
+                          >
+                          <TableHead
+                            class="font-bold border text-foreground text-center"
+                            >{{ $t("General.comment") }}</TableHead
+                          >
+                          <TableHead
+                            class="font-bold border text-foreground text-center"
+                            colspan="2"
+                          ></TableHead>
                         </TableRow>
                       </TableHeader>
                       <TableBody>
@@ -145,7 +162,13 @@ import InputStandard from "../InputStandard.vue";
 import InputDate from "../InputDate.vue";
 
 import { Button } from "@/components/ui/button";
-import { Table, TableBody, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  Table,
+  TableBody,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 import { amountSchema, globErr } from "@/tools/views/ZodUtil";
 import { handleBackendError } from "@/tools/views/HandleBackendError";

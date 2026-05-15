@@ -1,22 +1,25 @@
 <template>
-  <div class="flex justify-center w-full my-4">
-    <div :class="[clazz, 'rounded-md border overflow-hidden']">
-      <Table
-        class="[&_tr:nth-child(even)]:bg-primary/[0.10] [&_td]:!py-1 [&_th]:!py-1"
-      >
-        <slot name="default"></slot>
-      </Table>
-    </div>
+  <div class="mx-auto rounded-md border w-full">
+    <Table :class="[clazz, '[&_td]:!py-1 [&_th]:!py-1']">
+      <slot name="default"></slot>
+    </Table>
   </div>
 </template>
 
 <script lang="ts" setup>
 import { Table } from "@/components/ui/table";
+import { computed } from "vue";
 
-defineProps({
-  clazz: {
-    type: String,
-    default: "w-max mx-auto max-w-full",
+const props = defineProps({
+  alternateRowBackground: {
+    type: Boolean,
+    default: "true",
   },
+});
+
+const clazz = computed(() => {
+  return props.alternateRowBackground
+    ? "[&_tr:nth-child(even)]:bg-primary/[0.10]"
+    : "";
 });
 </script>

@@ -2,15 +2,20 @@
   <Dialog v-model:open="isOpen">
     <DialogContent
       :style="modalStyle"
-      :class="['sm:max-w-lg', `!z-[${zIndex}]`]"
+      :class="[
+        'sm:max-w-lg',
+        'max-h-[90vh]',
+        'flex flex-col',
+        `!z-[${zIndex}]`,
+      ]"
     >
       <DialogHeader>
         <DialogTitle class="text-center w-full">
-          {{ title }}
+          <h4 class="text-2xl font-bold">{{ title }}</h4>
         </DialogTitle>
       </DialogHeader>
 
-      <div class="py-2">
+      <div class="py-2 overflow-y-auto flex-1">
         <slot name="body" />
       </div>
 

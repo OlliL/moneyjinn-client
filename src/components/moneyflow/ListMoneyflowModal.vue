@@ -9,10 +9,7 @@
       <DivError :server-errors="serverErrors" />
       <div class="w-full">
         <div class="flex gap-4">
-          <div
-            class="w-1/3"
-            v-if="receiptBase64"
-          >
+          <div class="w-1/3" v-if="receiptBase64">
             <div class="overflow-x-auto h-96">
               <img
                 v-if="isJpeg"
@@ -37,28 +34,59 @@
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead>{{ $t("Moneyflow.bookingdate") }}</TableHead>
-                      <TableHead>{{ $t("Moneyflow.invoicedate") }}</TableHead>
-                      <TableHead :colspan="rowspan > 1 ? 2 : 1">
+                      <TableHead
+                        class="font-bold border text-foreground text-center"
+                        >{{ $t("Moneyflow.bookingdate") }}</TableHead
+                      >
+                      <TableHead
+                        class="font-bold border text-foreground text-center"
+                        >{{ $t("Moneyflow.invoicedate") }}</TableHead
+                      >
+                      <TableHead
+                        class="font-bold border text-foreground text-center"
+                        :colspan="rowspan > 1 ? 2 : 1"
+                      >
                         {{ $t("General.amount") }}
                       </TableHead>
-                      <TableHead>{{ $t("General.contractpartner") }}</TableHead>
-                      <TableHead>{{ $t("General.comment") }}</TableHead>
-                      <TableHead>{{ $t("General.postingAccount") }}</TableHead>
-                      <TableHead>{{ $t("General.capitalsource") }}</TableHead>
+                      <TableHead
+                        class="font-bold border text-foreground text-center"
+                        >{{ $t("General.contractpartner") }}</TableHead
+                      >
+                      <TableHead
+                        class="font-bold border text-foreground text-center"
+                        >{{ $t("General.comment") }}</TableHead
+                      >
+                      <TableHead
+                        class="font-bold border text-foreground text-center"
+                        >{{ $t("General.postingAccount") }}</TableHead
+                      >
+                      <TableHead
+                        class="font-bold border text-foreground text-center"
+                        >{{ $t("General.capitalsource") }}</TableHead
+                      >
                     </TableRow>
                   </TableHeader>
                   <TableBody>
                     <TableRow v-if="rowspan == 1">
-                      <TableCell><SpanDate :date="mmf.bookingDate" /></TableCell>
-                      <TableCell><SpanDate :date="mmf.invoiceDate" /></TableCell>
+                      <TableCell
+                        ><SpanDate :date="mmf.bookingDate"
+                      /></TableCell>
+                      <TableCell
+                        ><SpanDate :date="mmf.invoiceDate"
+                      /></TableCell>
                       <TableCell class="text-right">
                         <SpanAmount :amount="mmf.amount" />
                       </TableCell>
-                      <TableCell class="text-left">{{ mmf.contractpartnerName }}</TableCell>
+                      <TableCell class="text-left">{{
+                        mmf.contractpartnerName
+                      }}</TableCell>
                       <TableCell class="text-left">{{ mmf.comment }}</TableCell>
-                      <TableCell class="text-left">{{ mmf.postingAccountName }}</TableCell>
-                      <TableCell class="text-left">{{ mmf.capitalsourceComment }}</TableCell>
+                      <TableCell class="text-left">{{
+                        mmf.postingAccountName
+                      }}</TableCell>
+                      <TableCell class="text-left">{{
+                        mmf.capitalsourceComment
+                      }}</TableCell>
                     </TableRow>
                     <TableRow
                       v-for="(mse, index) in mmf.moneyflowSplitEntries"
@@ -70,7 +98,11 @@
                       <TableCell :rowspan="rowspan" v-if="index == 0">
                         <SpanDate :date="mmf.invoiceDate" />
                       </TableCell>
-                      <TableCell :rowspan="rowspan" v-if="index == 0" class="text-right">
+                      <TableCell
+                        :rowspan="rowspan"
+                        v-if="index == 0"
+                        class="text-right"
+                      >
                         <SpanAmount :amount="mmf.amount" />
                       </TableCell>
                       <TableCell class="text-right">
@@ -84,7 +116,9 @@
                         {{ mmf.contractpartnerName }}
                       </TableCell>
                       <TableCell class="text-left">{{ mse.comment }}</TableCell>
-                      <TableCell class="text-left">{{ mse.postingAccountName }}</TableCell>
+                      <TableCell class="text-left">{{
+                        mse.postingAccountName
+                      }}</TableCell>
                       <TableCell
                         :rowspan="rowspan"
                         v-if="index == 0"
@@ -118,7 +152,14 @@ import { computed, ref, useTemplateRef } from "vue";
 import DivError from "../DivError.vue";
 import ModalVue from "../Modal.vue";
 
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 import { MoneyflowReceiptType } from "@/model/moneyflow/MoneyflowReceiptType";

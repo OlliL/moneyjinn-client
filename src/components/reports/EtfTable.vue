@@ -12,10 +12,18 @@
               <Table class="[&_tbody_tr:nth-child(even)]:bg-primary/[0.10]">
                 <TableHeader>
                   <TableRow>
-                    <TableHead class="text-center" rowspan="2" id="thEtf">
+                    <TableHead
+                      class="font-bold border text-foreground text-center"
+                      rowspan="2"
+                      id="thEtf"
+                    >
                       {{ $t("General.etf") }}
                     </TableHead>
-                    <TableHead class="text-center" rowspan="2" id="thShares">
+                    <TableHead
+                      class="font-bold border text-foreground text-center"
+                      rowspan="2"
+                      id="thShares"
+                    >
                       {{ $t("ETFFlow.shares") }}
                     </TableHead>
                     <TableHead
@@ -25,7 +33,11 @@
                     >
                       {{ $t("ETFFlow.amount") }}
                     </TableHead>
-                    <TableHead class="text-center" colspan="3" id="thOverall">
+                    <TableHead
+                      class="font-bold border text-foreground text-center"
+                      colspan="3"
+                      id="thOverall"
+                    >
                       {{ $t("ETFFlow.overall") }}
                     </TableHead>
                     <TableHead
@@ -55,13 +67,22 @@
                     >
                       {{ $t("ETFFlow.ask") }}
                     </TableHead>
-                    <TableHead class="text-center" id="thOverallPayed">
+                    <TableHead
+                      class="font-bold border text-foreground text-center"
+                      id="thOverallPayed"
+                    >
                       {{ $t("ETFFlow.payed") }}
                     </TableHead>
-                    <TableHead class="text-center" id="thOverallBid">
+                    <TableHead
+                      class="font-bold border text-foreground text-center"
+                      id="thOverallBid"
+                    >
                       {{ $t("ETFFlow.bid") }}
                     </TableHead>
-                    <TableHead class="text-center" id="thOverallProfit">
+                    <TableHead
+                      class="font-bold border text-foreground text-center"
+                      id="thOverallProfit"
+                    >
                       {{ $t("ETFFlow.profit") }}
                     </TableHead>
                   </TableRow>

@@ -20,12 +20,7 @@
         class="grid grid-cols-12 items-center gap-4 p-2 rounded-lg hover:bg-accent transition-colors"
       >
         <div class="col-span-4 sm:col-span-3 flex justify-end">
-          <Button
-            variant="outline"
-            size="sm"
-            class="shadow-md"
-            @click="navigateImportMoneyflows"
-          >
+          <Button variant="default" @click="navigateImportMoneyflows">
             <ExternalLink />
             {{ $t("General.edit") }}
           </Button>
@@ -40,12 +35,7 @@
         class="grid grid-cols-12 items-center gap-4 p-2 rounded-lg hover:bg-accent transition-colors"
       >
         <div class="col-span-4 sm:col-span-3 flex justify-end">
-          <Button
-            variant="outline"
-            size="sm"
-            class="shadow-md"
-            @click="navigateImportMoneyflows"
-          >
+          <Button variant="default" @click="navigateImportMoneyflows">
             <ExternalLink />
             {{ $t("General.edit") }}
           </Button>

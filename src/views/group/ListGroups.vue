@@ -10,8 +10,8 @@
     id-suffix="List"
     @group-deleted="reloadView"
   />
-  <div class="container mx-auto py-6 space-y-6 text-center">
-    <div>
+  <div class="custom-container space-y-6">
+    <div class="text-center">
       <h4 class="text-2xl font-bold">{{ $t("General.groups") }}</h4>
     </div>
 
@@ -24,7 +24,7 @@
 
     <DivError :server-errors="serverErrors" />
 
-    <DivContentTable>
+    <DivContentTable class="max-w-sm">
       <TableHeader>
         <TableRow>
           <TableHead class="font-bold border text-foreground text-center">{{

@@ -22,7 +22,7 @@
       @createClicked="showCreatePostingAccountModal"
     />
 
-    <DivContentTable>
+    <DivContentTable class="max-w-sm">
       <TableHeader>
         <TableRow>
           <TableHead class="font-bold border text-foreground text-center">{{

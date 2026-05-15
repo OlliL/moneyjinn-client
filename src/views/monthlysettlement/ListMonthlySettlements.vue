@@ -12,49 +12,64 @@
       <h4 class="text-2xl font-bold">{{ $t("General.monthlysettlements") }}</h4>
     </div>
 
-    <div class="flex justify-center">
-      <div class="flex flex-wrap items-center justify-center gap-3">
-        <Button type="button" @click="showEditMonthlySettlementModal()">
-          {{ $t("General.new") }}
-        </Button>
-        <div>
-          <select
-            class="h-9 rounded-md border border-input bg-background px-3 text-sm"
-            v-model="selectedYear"
-            @change="selectMonth(selectedYear + '', selectedMonth + '')"
-          >
-            <option v-for="year in years" :key="year" :value="year">
+    <div class="flex flex-wrap items-center justify-center gap-4">
+      <Button type="button" @click="showEditMonthlySettlementModal()">
+        {{ $t("General.new") }}
+      </Button>
+      <div>
+        <Select v-model="selectedYear">
+          <SelectTrigger class="w-[120px] h-9">
+            <SelectValue
+              :placeholder="selectedYear ? selectedYear.toString() : ''"
+            />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem v-for="year in years" :key="year" :value="year">
               {{ year }}
-            </option>
-          </select>
-        </div>
-        <div>
-          <nav aria-label="Month navigation" v-if="dataLoaded">
-            <ul class="month-selection flex flex-wrap justify-center gap-2">
-              <li v-for="month in months" :key="month">
-                <router-link
-                  :class="
-                    selectedMonth == month
-                      ? 'inline-flex h-9 items-center rounded-md bg-primary px-3 text-sm text-primary-foreground'
-                      : 'inline-flex h-9 items-center rounded-md border border-input px-3 text-sm hover:bg-accent'
-                  "
-                  :to="{
-                    name: Routes.ListMonthlySettlements,
-                    params: { year: selectedYear, month: month },
-                    force: true,
-                  }"
-                  >{{ getMonthName(month) }}</router-link
-                >
-              </li>
-            </ul>
-          </nav>
-        </div>
+            </SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+
+      <div>
+        <nav aria-label="Month navigation" v-if="dataLoaded">
+          <ul class="flex flex-wrap justify-center -space-x-px">
+            <li v-for="(month, index) in months" :key="month">
+              <router-link
+                :to="{
+                  name: Routes.ListMonthlySettlements,
+                  params: { year: selectedYear, month: month },
+                  force: true,
+                }"
+                :class="[
+                  // Gemeinsame Basis-Klassen (Höhe, Text, Borders, Übergänge)
+                  'inline-flex h-9 items-center justify-center px-4 text-sm font-medium border border-input transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:z-10 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring',
+
+                  // Aktiver Zustand vs. Inaktiver Zustand
+                  $props.month == month + ''
+                    ? 'bg-primary text-primary-foreground border-primary hover:bg-primary/90 hover:text-primary-foreground'
+                    : 'bg-background text-foreground',
+
+                  // Steuerung der Ecken (Erstes Element rundet links, letztes rechts, Mitte bleibt eckig)
+                  index === 0 ? 'rounded-l-md' : '',
+                  index === months!.length - 1 ? 'rounded-r-md' : '',
+                  index > 0 && index < months!.length - 1 ? 'rounded-none' : '',
+                ]"
+              >
+                {{ getMonthName(month) }}
+              </router-link>
+            </li>
+          </ul>
+        </nav>
       </div>
     </div>
 
     <DivError :server-errors="serverErrors" />
 
-    <ShowMontlySettlementVue :year="selectedYear" :month="selectedMonth" />
+    <ShowMontlySettlementVue
+      :year="Number(selectedYear)"
+      :month="selectedMonth"
+    />
 
     <div class="flex justify-center pb-4" v-if="selectedMonth">
       <div class="flex flex-wrap justify-center gap-2">
@@ -86,6 +101,13 @@ import DivError from "@/components/DivError.vue";
 import EditMonthlySettlementModalVue from "@/components/monthlysettlement/EditMonthlySettlementModal.vue";
 import ShowMontlySettlementVue from "@/components/monthlysettlement/ShowMonthlySettlement.vue";
 import { Button } from "@/components/ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 import router, { Routes } from "@/router";
 
@@ -99,9 +121,9 @@ const serverErrors = ref(new Array<string>());
 const dataLoaded = ref(false);
 const months = ref([] as number[]);
 const years = ref([] as number[]);
-const selectedYear = ref(0);
+const selectedYear = ref("0");
 const selectedMonth = ref(0);
-const currentlyShownYear = ref(0);
+const currentlyShownYear = ref("0");
 
 const deleteModal =
   useTemplateRef<typeof DeleteMonthlySettlementModalVue>("deleteModal");
@@ -120,21 +142,22 @@ const props = defineProps({
 });
 
 onMounted(() => {
-  const year: number | undefined = props.year ? +props.year : undefined;
+  const year = props.year ? props.year : undefined;
   const month: number | undefined = props.month ? +props.month : undefined;
   loadMonth(year, month);
 });
 
-const loadMonth = (year?: number, month?: number) => {
+const loadMonth = (year?: string, month?: number) => {
   serverErrors.value = new Array<string>();
 
-  MonthlySettlementService.getAvailableMonth(year, month)
+  MonthlySettlementService.getAvailableMonth(Number(year), month)
     .then((response) => {
       months.value = response.allMonth;
       years.value = response.allYears;
 
-      selectedYear.value = Number(response.year);
       selectedMonth.value = Number(response.month);
+
+      selectedYear.value = response.year.toString();
 
       if (selectedYear.value != currentlyShownYear.value)
         currentlyShownYear.value = selectedYear.value;
@@ -151,7 +174,7 @@ const loadMonth = (year?: number, month?: number) => {
 };
 
 onBeforeRouteUpdate((to, from) => {
-  const year = to.params.year ? Number(to.params.year) : undefined;
+  const year = to.params.year ? to.params.year.toString() : undefined;
   const fallbackMonth = from.params.month ? Number(from.params.month) : 0;
   const month = to.params.month ? Number(to.params.month) : fallbackMonth;
   if (
@@ -173,11 +196,11 @@ const selectMonth = (year: string, month?: string) => {
   });
 };
 
-const showEditMonthlySettlementModal = (year?: number, month?: number) => {
+const showEditMonthlySettlementModal = (year?: string, month?: number) => {
   (editModal.value as typeof EditMonthlySettlementModalVue)._show(year, month);
 };
 
-const monthlySettlementUpserted = (year: number, month: number) => {
+const monthlySettlementUpserted = (year: string, month: number) => {
   selectedMonth.value = 0;
   router.push({
     name: Routes.ListMonthlySettlements,
@@ -193,7 +216,7 @@ const showDeleteMonthlySettlementModal = () => {
   );
 };
 
-const monthlySettlementDeleted = (year: number) => {
+const monthlySettlementDeleted = (year: string) => {
   if (months.value.length > 1) {
     router.push({
       name: Routes.ListMonthlySettlements,

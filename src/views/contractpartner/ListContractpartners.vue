@@ -24,7 +24,7 @@
       @createClicked="showCreateContractpartnerModal"
     />
 
-    <DivContentTable>
+    <DivContentTable class="max-w-5xl">
       <TableHeader>
         <TableRow>
           <TableHead class="font-bold border text-foreground text-center">

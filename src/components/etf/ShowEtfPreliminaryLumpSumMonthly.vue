@@ -3,14 +3,20 @@
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead>{{ $t("General.month") }}</TableHead>
-          <TableHead>{{ $t("General.amount") }}</TableHead>
+          <TableHead class="font-bold border text-foreground text-center">{{
+            $t("General.month")
+          }}</TableHead>
+          <TableHead class="font-bold border text-foreground text-center">{{
+            $t("General.amount")
+          }}</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
         <TableRow v-for="month in dataArray" :key="month.month">
           <TableCell class="text-left">{{ month.month }}</TableCell>
-          <TableCell class="text-right"><SpanAmount :amount="month.amount" /></TableCell>
+          <TableCell class="text-right"
+            ><SpanAmount :amount="month.amount"
+          /></TableCell>
         </TableRow>
         <TableRow>
           <TableCell class="text-right font-bold">&sum;</TableCell>
@@ -26,7 +32,14 @@
 <script lang="ts" setup>
 import { computed, type PropType } from "vue";
 
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 import SpanAmount from "../SpanAmount.vue";
 

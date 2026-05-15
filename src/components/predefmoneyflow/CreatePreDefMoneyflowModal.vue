@@ -81,7 +81,7 @@
       </form>
     </template>
     <template #footer>
-      <Button type="button" variant="outline" @click="resetForm">
+      <Button type="button" variant="secondary" @click="resetForm">
         {{ $t("General.reset") }}
       </Button>
       <ButtonSubmit
@@ -146,7 +146,7 @@ const schema: Partial<{ [key in keyof PreDefMoneyflow]: ZodType }> = {
 
 const mpm = ref({} as PreDefMoneyflow);
 const origMpm = ref({} as PreDefMoneyflow | undefined);
-const modalComponent = useTemplateRef<typeof ModalVue>('modalComponent');
+const modalComponent = useTemplateRef<typeof ModalVue>("modalComponent");
 const validityDate = new Date();
 validityDate.setHours(0, 0, 0, 0);
 const emit = defineEmits(["preDefMoneyflowCreated", "preDefMoneyflowUpdated"]);

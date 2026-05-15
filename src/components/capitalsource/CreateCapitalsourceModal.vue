@@ -92,7 +92,7 @@
     </template>
 
     <template #footer>
-      <Button type="button" variant="outline" @click="resetForm">
+      <Button type="button" variant="secondary" @click="resetForm">
         {{ $t("General.reset") }}
       </Button>
 

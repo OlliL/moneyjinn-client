@@ -62,7 +62,11 @@
                     />
                   </span>
                 </TableHead>
-                <TableHead colspan="2" class="align-top text-center">
+                <TableHead
+                  class="font-bold border text-foreground text-center"
+                  colspan="2"
+                  class="align-top text-center"
+                >
                   <span
                     class="hidden md:flex items-center justify-center gap-1 mt-1"
                   >
@@ -234,7 +238,10 @@
                     </Button>
                   </div>
                 </TableHead>
-                <TableHead colspan="2"></TableHead>
+                <TableHead
+                  class="font-bold border text-foreground text-center"
+                  colspan="2"
+                ></TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>

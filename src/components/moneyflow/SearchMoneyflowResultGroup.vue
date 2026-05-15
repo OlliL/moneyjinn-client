@@ -50,17 +50,42 @@
     <TableCell colspan="5" class="p-0">
       <div class="p-4">
         <div class="flex flex-col rounded-md border">
-          <Table>
+          <Table
+            class="[&_tr:nth-child(even)]:bg-primary/[0.10] [&_td]:!py-1 [&_th]:!py-1"
+          >
             <TableHeader>
               <TableRow>
-                <TableHead class="hidden md:table-cell"><span class="sr-only">Status</span></TableHead>
-                <TableHead>{{ $t("Moneyflow.bookingdate") }}</TableHead>
-                <TableHead>{{ $t("General.amount") }}</TableHead>
-                <TableHead>{{ $t("General.contractpartner") }}</TableHead>
-                <TableHead>{{ $t("General.comment") }}</TableHead>
-                <TableHead>{{ $t("General.postingAccount") }}</TableHead>
-                <TableHead>{{ $t("General.capitalsource") }}</TableHead>
-                <TableHead colspan="2"></TableHead>
+                <TableHead class="hidden md:table-cell"
+                  ><span class="sr-only">Status</span></TableHead
+                >
+                <TableHead
+                  class="font-bold border text-foreground text-center"
+                  >{{ $t("Moneyflow.bookingdate") }}</TableHead
+                >
+                <TableHead
+                  class="font-bold border text-foreground text-center"
+                  >{{ $t("General.amount") }}</TableHead
+                >
+                <TableHead
+                  class="font-bold border text-foreground text-center"
+                  >{{ $t("General.contractpartner") }}</TableHead
+                >
+                <TableHead
+                  class="font-bold border text-foreground text-center"
+                  >{{ $t("General.comment") }}</TableHead
+                >
+                <TableHead
+                  class="font-bold border text-foreground text-center"
+                  >{{ $t("General.postingAccount") }}</TableHead
+                >
+                <TableHead
+                  class="font-bold border text-foreground text-center"
+                  >{{ $t("General.capitalsource") }}</TableHead
+                >
+                <TableHead
+                  class="font-bold border text-foreground text-center"
+                  colspan="2"
+                ></TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -88,7 +113,14 @@
 import { ref, watch, type PropType } from "vue";
 import { ChevronRight, ChevronDown } from "lucide-vue-next";
 
-import { TableCell, TableHead, TableHeader, TableRow, Table, TableBody } from "@/components/ui/table";
+import {
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+  Table,
+  TableBody,
+} from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 
 import { Routes } from "@/router";

@@ -20,7 +20,7 @@
     </template>
 
     <template #footer>
-      <Button variant="outline" @click="resetForm">
+      <Button variant="secondary" @click="resetForm">
         {{ $t("General.reset") }}
       </Button>
 

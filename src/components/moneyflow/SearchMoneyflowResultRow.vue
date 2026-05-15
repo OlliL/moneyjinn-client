@@ -20,9 +20,9 @@
     <TableCell :rowspan="rowspan" v-if="isFirstOfMultipleRowsForSameMoneyflow">
       <SpanDate :date="mmf.bookingDate" />
     </TableCell>
-        :title="$t('Receipt.receipt')"
-        :aria-label="$t('Receipt.receipt')"
-    <TableCell class="text-right"><SpanAmount :amount="mmf.amount" /></TableCell>
+    <TableCell class="text-right"
+      ><SpanAmount :amount="mmf.amount"
+    /></TableCell>
     <TableCell
       class="text-left"
       :rowspan="rowspan"
@@ -57,8 +57,8 @@
     </TableCell>
     <TableCell
       class="text-center"
-        :title="$t('General.edit')"
-        :aria-label="$t('General.edit')"
+      :title="$t('General.edit')"
+      :aria-label="$t('General.edit')"
       :rowspan="rowspan"
       v-if="isFirstOfMultipleRowsForSameMoneyflow && isOwnMoneyflow"
     >
@@ -75,8 +75,8 @@
     </TableCell>
     <TableCell
       class="text-center"
-        :title="$t('General.delete')"
-        :aria-label="$t('General.delete')"
+      :title="$t('General.delete')"
+      :aria-label="$t('General.delete')"
       :rowspan="rowspan"
       v-if="isFirstOfMultipleRowsForSameMoneyflow && !isOwnMoneyflow"
     >
@@ -93,8 +93,8 @@
     </TableCell>
     <TableCell
       :rowspan="rowspan"
-        :title="$t('General.moneyflow')"
-        :aria-label="$t('General.moneyflow')"
+      :title="$t('General.moneyflow')"
+      :aria-label="$t('General.moneyflow')"
       v-if="isFirstOfMultipleRowsForSameMoneyflow && !isOwnMoneyflow"
     ></TableCell>
   </TableRow>
