@@ -259,7 +259,9 @@
     </Sheet>
   </div>
   <!-- Desktop Navigation-->
-  <Menubar class="hidden md:flex p-4">
+  <Menubar
+    class="hidden md:flex py-0 px-4 h-12 w-full sticky top-0 z-50 rounded-none border-b top-0 z-50 bg-background rounded-none border-b"
+  >
     <MenubarMenu>
       <MenubarTrigger>
         <router-link
@@ -274,6 +276,7 @@
         ><router-link
           class="!text-foreground !no-underline"
           :to="{ name: Routes.CreateMoneyflow, force: true }"
+          :title="$t('Moneyflow.title.create')"
           ><Euro class="m-2"
         /></router-link>
       </MenubarTrigger>
@@ -287,6 +290,7 @@
             params: { year: year, month: month },
             force: true,
           }"
+          :title="$t('Reports.title.reports')"
           ><Table2 class="m-2"
         /></router-link>
       </MenubarTrigger>
@@ -296,6 +300,7 @@
         <router-link
           class="!text-foreground !no-underline"
           :to="{ name: Routes.SearchMoneyflows, force: true }"
+          :title="$t('Moneyflow.title.search')"
           ><Search class="m-2"
         /></router-link>
       </MenubarTrigger>
@@ -305,6 +310,7 @@
         <router-link
           class="!text-foreground !no-underline"
           :to="{ name: Routes.ImportMoneyflows, force: true }"
+          :title="$t('Moneyflow.title.import')"
           ><SquareArrowRightEnter class="m-2"
         /></router-link>
       </MenubarTrigger>
@@ -314,6 +320,7 @@
         <router-link
           class="!text-foreground !no-underline"
           :to="{ name: Routes.CompareData, force: true }"
+          :title="$t('CompareData.title')"
           ><ListTodo class="m-2"
         /></router-link>
       </MenubarTrigger>
@@ -321,8 +328,9 @@
 
     <MenubarMenu>
       <MenubarTrigger
-        ><span ref="dropdownChart"
-          ><ChartColumnIncreasing class="m-2 text-foreground" /></span
+        ><span ref="dropdownChart" class="flex flex-row items-center"
+          ><ChartColumnIncreasing class="ml-2 text-foreground" />
+          <ChevronDown :size="10" class="ml-1 opacity-70" /></span
       ></MenubarTrigger>
       <MenubarContent>
         <MenubarItem>
@@ -343,8 +351,10 @@
     </MenubarMenu>
     <MenubarMenu>
       <MenubarTrigger
-        ><span ref="dropdownPlus"
-          ><SquarePlus class="m-2 text-foreground" /></span
+        ><span ref="dropdownPlus" class="flex flex-row items-center"
+          ><SquarePlus class="ml-2 text-foreground" /><ChevronDown
+            :size="10"
+            class="ml-1 opacity-70" /></span
       ></MenubarTrigger>
       <MenubarContent>
         <MenubarItem>
@@ -384,7 +394,10 @@
     </MenubarMenu>
     <MenubarMenu>
       <MenubarTrigger
-        ><span ref="dropdownWrench"><Wrench class="m-2 text-foreground" /></span
+        ><span ref="dropdownWrench" class="flex flex-row items-center"
+          ><Wrench class="ml-2 text-foreground" /><ChevronDown
+            :size="10"
+            class="ml-1 opacity-70" /></span
       ></MenubarTrigger>
       <MenubarContent>
         <MenubarItem>
@@ -429,8 +442,10 @@
     </MenubarMenu>
     <MenubarMenu>
       <MenubarTrigger
-        ><span ref="dropdownEtf"
-          ><ChartCandlestick class="m-2 text-foreground" /></span
+        ><span ref="dropdownEtf" class="flex flex-row items-center"
+          ><ChartCandlestick class="ml-2 text-foreground" /><ChevronDown
+            :size="10"
+            class="ml-1 opacity-70" /></span
       ></MenubarTrigger>
       <MenubarContent>
         <MenubarItem>
@@ -461,8 +476,10 @@
 
     <MenubarMenu>
       <MenubarTrigger
-        ><span ref="dropdownUser"
-          ><SquareUserRound class="m-2 text-foreground" /></span
+        ><span ref="dropdownUser" class="flex flex-row items-center"
+          ><SquareUserRound class="ml-2 text-foreground" /><ChevronDown
+            :size="10"
+            class="ml-1 opacity-70" /></span
       ></MenubarTrigger>
       <MenubarContent>
         <MenubarItem>
@@ -498,7 +515,7 @@
       </MenubarContent>
     </MenubarMenu>
     <MenubarMenu>
-      <MenubarTrigger
+      <MenubarTrigger :title="$t('General.logout')"
         ><span><LogOut class="m-2 text-foreground" @click="logout" /></span
       ></MenubarTrigger>
     </MenubarMenu>
@@ -706,7 +723,9 @@ watch(
 );
 </script>
 <style scoped>
-.router-link-active {
-  background-color: hsl(var(--accent));
+/* Wenn a aktiv ist, färbe alle Svg-Icons im Inneren blau */
+:deep(.router-link-active svg) {
+  stroke: blue !important; /* Ein schönes Bootstrap-Blau */
+  stroke-width: 2.5px !important;
 }
 </style>
