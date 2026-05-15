@@ -1,7 +1,7 @@
 <template>
   <div class="flex justify-center" v-if="etf.id">
     <div class="w-full mb-4">
-      <h4>{{ $t("ETFFlow.calculateSale") }}</h4>
+      <h4 class="text-2xl font-bold">{{ $t("ETFFlow.calculateSale") }}</h4>
     </div>
   </div>
 

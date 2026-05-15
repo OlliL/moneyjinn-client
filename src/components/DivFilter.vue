@@ -83,7 +83,6 @@ const clearSearch = () => {
 };
 
 const handleToggle = (val: boolean) => {
-  console.log("Switch getoggled:", val);
   validNow.value = val;
   emit("validNowToggled", val);
 };

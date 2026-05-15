@@ -1,8 +1,8 @@
 <template>
-  <div class="mt-5" v-if="dataLoaded">
+  <div class="mt-8" v-if="dataLoaded">
     <div class="rounded-lg border">
-      <div class="border-b text-center p-3">
-        <h5>
+      <div class="border-b text-center p-3 py-4">
+        <h5 class="text-xl">
           {{ $t("Reports.title.report", { month: monthName, year: year }) }}
         </h5>
       </div>
@@ -266,7 +266,7 @@
   <div v-if="report.reportTurnoverCapitalsources">
     <div class="mt-10">
       <div class="text-center">
-        <h1>{{ $t("Reports.overview") }}</h1>
+        <h1 class="text-3xl">{{ $t("Reports.overview") }}</h1>
       </div>
     </div>
 
@@ -279,7 +279,7 @@
       <div class="w-full max-w-7xl">
         <div class="rounded-lg border">
           <div class="border-b text-center p-3">
-            <h4>{{ $t("Reports.ownCapital") }}</h4>
+            <h4 class="text-2xl font-bold">{{ $t("Reports.ownCapital") }}</h4>
           </div>
           <div class="p-4">
             <CapitalsourceTableVue
@@ -361,7 +361,7 @@
       <div class="w-full max-w-7xl">
         <div class="rounded-lg border">
           <div class="border-b text-center p-3">
-            <h4>{{ $t("Reports.debtCapital") }}</h4>
+            <h4 class="text-2xl font-bold">{{ $t("Reports.debtCapital") }}</h4>
           </div>
           <div class="p-4">
             <CapitalsourceTableVue
@@ -382,7 +382,7 @@
       <div class="w-full max-w-7xl">
         <div class="rounded-lg border">
           <div class="border-b text-center p-3">
-            <h4>{{ $t("Reports.loans") }}</h4>
+            <h4 class="text-2xl font-bold">{{ $t("Reports.loans") }}</h4>
           </div>
           <div class="p-4">
             <CapitalsourceTableVue

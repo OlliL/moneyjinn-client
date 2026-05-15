@@ -1,187 +1,189 @@
 <template>
   <div class="container mx-auto py-6 space-y-6 text-center">
     <div>
-      <h4 class="text-xl font-bold">{{ $t("Reports.title.costReporting") }}</h4>
+      <h4 class="text-2xl font-bold">
+        {{ $t("Reports.title.costReporting") }}
+      </h4>
     </div>
     <DivError :server-errors="serverErrors" />
 
     <div class="flex justify-center">
-      <div class="w-full max-w-5xl rounded-lg border bg-card text-card-foreground shadow-sm p-4">
-            <form @submit.prevent="showReportingGraph">
-              <div class="space-y-4">
-                <div class="grid gap-3 md:grid-cols-12">
-                  <div class="md:col-span-4" v-show="!groupByYear">
-                    <InputDate
-                      v-model="startDateMonth"
-                      :validation-schema-ref="schema.startDateMonth"
-                      id="startDateMonth"
-                      pickMode="month"
-                      :field-label="$t('General.startDate')"
-                    />
-                  </div>
-                  <div class="md:col-span-4" v-show="!groupByYear">
-                    <InputDate
-                      v-model="endDateMonth"
-                      :validation-schema-ref="schema.endDateMonth"
-                      id="endDateMonth"
-                      pickMode="month"
-                      :field-label="$t('General.endDate')"
-                    />
-                  </div>
+      <div
+        class="w-full max-w-5xl rounded-lg border bg-card text-card-foreground shadow-sm p-4"
+      >
+        <form @submit.prevent="showReportingGraph">
+          <div class="space-y-4">
+            <div class="grid gap-3 md:grid-cols-12">
+              <div class="md:col-span-4" v-show="!groupByYear">
+                <InputDate
+                  v-model="startDateMonth"
+                  :validation-schema-ref="schema.startDateMonth"
+                  id="startDateMonth"
+                  pickMode="month"
+                  :field-label="$t('General.startDate')"
+                />
+              </div>
+              <div class="md:col-span-4" v-show="!groupByYear">
+                <InputDate
+                  v-model="endDateMonth"
+                  :validation-schema-ref="schema.endDateMonth"
+                  id="endDateMonth"
+                  pickMode="month"
+                  :field-label="$t('General.endDate')"
+                />
+              </div>
 
-                  <div class="md:col-span-4" v-show="groupByYear">
-                    <InputDate
-                      v-model="startDateYear"
-                      :validation-schema-ref="schema.startDateYear"
-                      id="startDateYear"
-                      pickMode="year"
-                      :field-label="$t('General.startDate')"
-                    />
-                  </div>
-                  <div class="md:col-span-4" v-show="groupByYear">
-                    <InputDate
-                      v-model="endDateYear"
-                      :validation-schema-ref="schema.endDateYear"
-                      id="endDateYear"
-                      pickMode="year"
-                      :field-label="$t('General.endDate')"
-                    />
-                  </div>
-                  <div class="md:col-span-4 space-y-2">
-                    <div class="flex items-center gap-2 text-left">
-                      <input
-                        class="h-4 w-4"
-                        type="checkbox"
-                        id="showreppostingaccountmode"
-                        v-model="singlePostingAccounts"
-                      />
-                      <label for="showreppostingaccountmode"
-                        >{{ singlePostingAccountsLabel }}</label
-                      >
-                    </div>
-                    <div class="flex items-center gap-2 text-left">
-                      <input
-                        class="h-4 w-4"
-                        type="checkbox"
-                        id="showrepmonth"
-                        v-model="groupByYear"
-                      />
-                      <label for="showrepmonth">{{
-                        groupByYearLabel
-                      }}</label>
-                    </div>
-                  </div>
+              <div class="md:col-span-4" v-show="groupByYear">
+                <InputDate
+                  v-model="startDateYear"
+                  :validation-schema-ref="schema.startDateYear"
+                  id="startDateYear"
+                  pickMode="year"
+                  :field-label="$t('General.startDate')"
+                />
+              </div>
+              <div class="md:col-span-4" v-show="groupByYear">
+                <InputDate
+                  v-model="endDateYear"
+                  :validation-schema-ref="schema.endDateYear"
+                  id="endDateYear"
+                  pickMode="year"
+                  :field-label="$t('General.endDate')"
+                />
+              </div>
+              <div class="md:col-span-4 space-y-2">
+                <div class="flex items-center gap-2 text-left">
+                  <input
+                    class="h-4 w-4"
+                    type="checkbox"
+                    id="showreppostingaccountmode"
+                    v-model="singlePostingAccounts"
+                  />
+                  <label for="showreppostingaccountmode">{{
+                    singlePostingAccountsLabel
+                  }}</label>
                 </div>
-
-                <div
-                  class="grid grid-cols-12 gap-3"
-                  v-show="!singlePostingAccounts"
-                >
-                  <div class="col-span-5 text-left">
-                    <label
-                      for="postingAccountIdsYes"
-                      :style="
-                        'opacity: .65; color: ' +
-                        errorDatasPostingAccountsYes.fieldColor
-                      "
-                      ><small>{{
-                        errorDatasPostingAccountsYes.fieldLabel
-                      }}</small></label
-                    >
-                    <select
-                      v-model="selectedPostingAccountsYes"
-                      id="postingAccountIdsYes"
-                      name="postingAccountIdsYes"
-                      :class="
-                        'w-full rounded-md border border-input bg-background px-3 py-2 text-sm ' +
-                        errorDatasPostingAccountsYes.inputClass
-                      "
-                      multiple
-                      size="5"
-                    >
-                      <option
-                        v-for="postingAccount of postingAccountsYes"
-                        :key="postingAccount.id"
-                        :value="postingAccount.id"
-                      >
-                        {{ postingAccount.name }}
-                      </option>
-                    </select>
-                  </div>
-                  <div class="col-span-2 space-y-2 pt-6">
-                    <Button
-                      type="button"
-                      variant="outline"
-                      size="sm"
-                      @click="removeAllPostingAccounts"
-                    >
-                      <ChevronsRight class="h-4 w-4" />
-                    </Button>
-                    <Button
-                      type="button"
-                      variant="outline"
-                      size="sm"
-                      @click="removeSelectedPostingAccounts"
-                    >
-                      <ChevronRight class="h-4 w-4" />
-                    </Button>
-                    <Button
-                      type="button"
-                      variant="outline"
-                      size="sm"
-                      @click="addSelectedPostingAccounts"
-                    >
-                      <ChevronLeft class="h-4 w-4" />
-                    </Button>
-                    <Button
-                      type="button"
-                      variant="outline"
-                      size="sm"
-                      @click="addAllPostingAccounts"
-                    >
-                      <ChevronsLeft class="h-4 w-4" />
-                    </Button>
-                  </div>
-                  <div class="col-span-5 text-left">
-                    <label for="postingAccountIdsYes" style="opacity: 0.65"
-                      ><small>{{ $t("Reports.excluded") }}</small></label
-                    >
-                    <select
-                      v-model="selectedPostingAccountsNo"
-                      id="postingAccountIdsNo"
-                      class="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
-                      multiple
-                      size="5"
-                    >
-                      <option
-                        v-for="postingAccount of postingAccountsNo"
-                        :key="postingAccount.id"
-                        :value="postingAccount.id"
-                      >
-                        {{ postingAccount.name }}
-                      </option>
-                    </select>
-                  </div>
-                </div>
-                <div
-                  class="flex justify-center mt-3"
-                  v-show="singlePostingAccounts"
-                >
-                  <div class="w-full sm:w-1/2">
-                    <SelectPostingAccount
-                      v-model="selectedPostingAccount"
-                      :validation-schema-ref="schema.selectedPostingAccount"
-                      id-suffix="ShowReporting"
-                      :field-label="$t('General.postingAccount')"
-                    />
-                  </div>
-                </div>
-
-                <div class="mt-3">
-                    <ButtonSubmit :button-label="$t('General.show')" />
+                <div class="flex items-center gap-2 text-left">
+                  <input
+                    class="h-4 w-4"
+                    type="checkbox"
+                    id="showrepmonth"
+                    v-model="groupByYear"
+                  />
+                  <label for="showrepmonth">{{ groupByYearLabel }}</label>
                 </div>
               </div>
-            </form>
+            </div>
+
+            <div
+              class="grid grid-cols-12 gap-3"
+              v-show="!singlePostingAccounts"
+            >
+              <div class="col-span-5 text-left">
+                <label
+                  for="postingAccountIdsYes"
+                  :style="
+                    'opacity: .65; color: ' +
+                    errorDatasPostingAccountsYes.fieldColor
+                  "
+                  ><small>{{
+                    errorDatasPostingAccountsYes.fieldLabel
+                  }}</small></label
+                >
+                <select
+                  v-model="selectedPostingAccountsYes"
+                  id="postingAccountIdsYes"
+                  name="postingAccountIdsYes"
+                  :class="
+                    'w-full rounded-md border border-input bg-background px-3 py-2 text-sm ' +
+                    errorDatasPostingAccountsYes.inputClass
+                  "
+                  multiple
+                  size="5"
+                >
+                  <option
+                    v-for="postingAccount of postingAccountsYes"
+                    :key="postingAccount.id"
+                    :value="postingAccount.id"
+                  >
+                    {{ postingAccount.name }}
+                  </option>
+                </select>
+              </div>
+              <div class="col-span-2 space-y-2 pt-6">
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  @click="removeAllPostingAccounts"
+                >
+                  <ChevronsRight class="h-4 w-4" />
+                </Button>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  @click="removeSelectedPostingAccounts"
+                >
+                  <ChevronRight class="h-4 w-4" />
+                </Button>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  @click="addSelectedPostingAccounts"
+                >
+                  <ChevronLeft class="h-4 w-4" />
+                </Button>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  @click="addAllPostingAccounts"
+                >
+                  <ChevronsLeft class="h-4 w-4" />
+                </Button>
+              </div>
+              <div class="col-span-5 text-left">
+                <label for="postingAccountIdsYes" style="opacity: 0.65"
+                  ><small>{{ $t("Reports.excluded") }}</small></label
+                >
+                <select
+                  v-model="selectedPostingAccountsNo"
+                  id="postingAccountIdsNo"
+                  class="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                  multiple
+                  size="5"
+                >
+                  <option
+                    v-for="postingAccount of postingAccountsNo"
+                    :key="postingAccount.id"
+                    :value="postingAccount.id"
+                  >
+                    {{ postingAccount.name }}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div
+              class="flex justify-center mt-3"
+              v-show="singlePostingAccounts"
+            >
+              <div class="w-full sm:w-1/2">
+                <SelectPostingAccount
+                  v-model="selectedPostingAccount"
+                  :validation-schema-ref="schema.selectedPostingAccount"
+                  id-suffix="ShowReporting"
+                  :field-label="$t('General.postingAccount')"
+                />
+              </div>
+            </div>
+
+            <div class="mt-3">
+              <ButtonSubmit :button-label="$t('General.show')" />
+            </div>
+          </div>
+        </form>
       </div>
     </div>
     <div class="flex justify-center" style="position: relative; height: 55vh">
@@ -415,7 +417,8 @@ const loadData = () => {
       }
 
       postingAccountsYes.value = reportingParameter.selectedPostingAccounts;
-      postingAccountsNo.value = reportingParameter.unselectedPostingAccounts ?? [];
+      postingAccountsNo.value =
+        reportingParameter.unselectedPostingAccounts ?? [];
       postingAccounts.value = postingAccountsYes.value.concat(
         postingAccountsNo.value,
       );
@@ -435,9 +438,7 @@ const movePostingAccounts = (
   const toBeMoved = from.filter((mpa) =>
     toBeMovedIds.find((id) => id == mpa.id),
   );
-  const newFrom = from.filter(
-    (mpa) => !toBeMovedIds.includes(mpa.id),
-  );
+  const newFrom = from.filter((mpa) => !toBeMovedIds.includes(mpa.id));
   for (let mpa of toBeMoved) {
     to.push(mpa);
   }
@@ -573,8 +574,8 @@ const showReportingGraph = handleSubmit(() => {
         const chartTitle = makeChartTitle(reportingParameter);
         const resultMap = makeResultMap(reportingMonthAmounts);
 
-    chartData.value.labels = [];
-    chartData.value.datasets[0]!.data = [];
+        chartData.value.labels = [];
+        chartData.value.datasets[0]!.data = [];
         chartOptions.value.plugins.title.text = chartTitle;
 
         for (let [key, value] of resultMap) {

@@ -5,11 +5,11 @@
         class="w-full max-w-md rounded-lg border bg-card text-card-foreground shadow-sm"
       >
         <div class="border-b p-4 text-center">
-          <h4 class="text-xl font-bold">{{ $t("LoginView.welcome") }}</h4>
+          <h4 class="text-2xl font-bold">{{ $t("LoginView.welcome") }}</h4>
         </div>
         <div class="p-4">
           <div class="text-center pb-3">
-            <h5 class="font-medium">
+            <h5 class="text-xl font-medium">
               {{ $t("LoginView.enterYourData") }}
             </h5>
           </div>

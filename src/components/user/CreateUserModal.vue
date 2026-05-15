@@ -85,7 +85,7 @@
             <div class="col" v-if="editMode">
               <div class="flex justify-center">
                 <div class="w-full mb-4 text-center">
-                  <h5>{{ $t("User.groupHistory") }}</h5>
+                  <h5 class="text-xl">{{ $t("User.groupHistory") }}</h5>
                 </div>
               </div>
               <div class="flex justify-center">
@@ -100,10 +100,17 @@
                         </TableRow>
                       </TableHeader>
                       <TableBody>
-                        <TableRow v-for="userGroup in userGroups" :key="userGroup.id">
+                        <TableRow
+                          v-for="userGroup in userGroups"
+                          :key="userGroup.id"
+                        >
                           <TableCell>{{ userGroup.group?.name }}</TableCell>
-                          <TableCell><SpanDate :date="userGroup.validFrom" /></TableCell>
-                          <TableCell><SpanDate :date="userGroup.validTil" /></TableCell>
+                          <TableCell
+                            ><SpanDate :date="userGroup.validFrom"
+                          /></TableCell>
+                          <TableCell
+                            ><SpanDate :date="userGroup.validTil"
+                          /></TableCell>
                         </TableRow>
                       </TableBody>
                     </Table>
@@ -142,7 +149,14 @@ import SelectStandard from "../SelectStandard.vue";
 import SpanDate from "../SpanDate.vue";
 
 import { Button } from "@/components/ui/button";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { globErr } from "@/tools/views/ZodUtil";

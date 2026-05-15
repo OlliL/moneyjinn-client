@@ -1,7 +1,7 @@
 <template>
   <div class="container mx-auto py-6 space-y-6 text-center">
     <div>
-      <h4 class="text-xl font-bold">{{ $t("Moneyflow.title.import") }}</h4>
+      <h4 class="text-2xl font-bold">{{ $t("Moneyflow.title.import") }}</h4>
     </div>
 
     <DivError :server-errors="serverErrors" />
@@ -17,67 +17,69 @@
       v-for="importedMoneyflow in importMoneyflows"
       :key="importedMoneyflow.externalid"
     >
-      <div class="w-full max-w-6xl rounded-lg border bg-card text-card-foreground shadow-sm p-4">
-            <form @submit.prevent="importImportedMoneyflow(importedMoneyflow)">
-              <div class="space-y-3">
-                <div class="grid gap-2 md:grid-cols-12">
-                  <div
-                    class="md:col-span-1 col-span-6 flex justify-end items-center"
-                    style="font-weight: 700; font-size: 10.5px"
-                  >
-                    {{ $t("General.iban") }}:
-                  </div>
-                  <div class="md:col-span-2 col-span-6 text-left">
-                    {{ importedMoneyflow.accountNumber }}
-                  </div>
-                  <div
-                    class="md:col-span-1 col-span-6 flex justify-end items-center"
-                    style="font-weight: 700; font-size: 10.5px"
-                  >
-                    {{ $t("General.bic") }}:
-                  </div>
-                  <div class="md:col-span-2 col-span-6 text-left">
-                    {{ importedMoneyflow.bankCode }}
-                  </div>
-                  <div
-                    class="md:col-span-2 col-span-6 flex justify-end items-center"
-                    style="font-weight: 700; font-size: 10.5px"
-                  >
-                    {{ $t("Moneyflow.partner") }}:
-                  </div>
-                  <div class="md:col-span-4 col-span-6 text-left">
-                    {{ importedMoneyflow.name }}
-                  </div>
-                </div>
-                <div class="grid gap-2 md:grid-cols-12">
-                  <div
-                    class="md:col-span-1 col-span-6 flex justify-end items-center"
-                    style="font-weight: 700; font-size: 10.5px"
-                  >
-                    {{ $t("Moneyflow.reference") }}:
-                  </div>
-                  <div class="md:col-span-11 col-span-6 text-left">
-                    {{ importedMoneyflow.usage }}
-                  </div>
-                </div>
-                <EditMoneyflowBase
-                  :ref="(el) => editMoneyflowRefs.set(importedMoneyflow.id, el)"
-                  :mmf-to-edit="importedMoneyflow"
-                  :id-suffix="importedMoneyflow.id + ''"
-                  :fill-contractpartner-defaults="true"
-                />
-                <div class="flex flex-wrap items-center justify-center gap-2">
-                    <ButtonSubmit :button-label="$t('Moneyflow.apply')" />
-                    <Button
-                      type="button"
-                      variant="destructive"
-                      @click="deleteImportedMoneyflow(importedMoneyflow)"
-                    >
-                      {{ $t("General.delete") }}
-                    </Button>
-                </div>
+      <div
+        class="w-full max-w-6xl rounded-lg border bg-card text-card-foreground shadow-sm p-4"
+      >
+        <form @submit.prevent="importImportedMoneyflow(importedMoneyflow)">
+          <div class="space-y-3">
+            <div class="grid gap-2 md:grid-cols-12">
+              <div
+                class="md:col-span-1 col-span-6 flex justify-end items-center"
+                style="font-weight: 700; font-size: 10.5px"
+              >
+                {{ $t("General.iban") }}:
               </div>
-            </form>
+              <div class="md:col-span-2 col-span-6 text-left">
+                {{ importedMoneyflow.accountNumber }}
+              </div>
+              <div
+                class="md:col-span-1 col-span-6 flex justify-end items-center"
+                style="font-weight: 700; font-size: 10.5px"
+              >
+                {{ $t("General.bic") }}:
+              </div>
+              <div class="md:col-span-2 col-span-6 text-left">
+                {{ importedMoneyflow.bankCode }}
+              </div>
+              <div
+                class="md:col-span-2 col-span-6 flex justify-end items-center"
+                style="font-weight: 700; font-size: 10.5px"
+              >
+                {{ $t("Moneyflow.partner") }}:
+              </div>
+              <div class="md:col-span-4 col-span-6 text-left">
+                {{ importedMoneyflow.name }}
+              </div>
+            </div>
+            <div class="grid gap-2 md:grid-cols-12">
+              <div
+                class="md:col-span-1 col-span-6 flex justify-end items-center"
+                style="font-weight: 700; font-size: 10.5px"
+              >
+                {{ $t("Moneyflow.reference") }}:
+              </div>
+              <div class="md:col-span-11 col-span-6 text-left">
+                {{ importedMoneyflow.usage }}
+              </div>
+            </div>
+            <EditMoneyflowBase
+              :ref="(el) => editMoneyflowRefs.set(importedMoneyflow.id, el)"
+              :mmf-to-edit="importedMoneyflow"
+              :id-suffix="importedMoneyflow.id + ''"
+              :fill-contractpartner-defaults="true"
+            />
+            <div class="flex flex-wrap items-center justify-center gap-2">
+              <ButtonSubmit :button-label="$t('Moneyflow.apply')" />
+              <Button
+                type="button"
+                variant="destructive"
+                @click="deleteImportedMoneyflow(importedMoneyflow)"
+              >
+                {{ $t("General.delete") }}
+              </Button>
+            </div>
+          </div>
+        </form>
       </div>
     </div>
   </div>

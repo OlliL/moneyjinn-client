@@ -7,7 +7,7 @@
   />
   <div class="container mx-auto py-6 space-y-6 text-center">
     <div>
-      <h4 class="text-xl font-bold">{{ $t("General.etfDepot") }}</h4>
+      <h4 class="text-2xl font-bold">{{ $t("General.etfDepot") }}</h4>
     </div>
     <DivError :server-errors="serverErrors" />
 
@@ -37,21 +37,31 @@
           <Button
             v-if="etfEffectiveFlows.length > 0"
             variant="ghost"
-            :class="currentTab === 'effective' ? 'border-b-2 border-primary rounded-none' : ''"
+            :class="
+              currentTab === 'effective'
+                ? 'border-b-2 border-primary rounded-none'
+                : ''
+            "
             @click="showEffective"
           >
             {{ $t("ETFFlow.effective") }}
           </Button>
           <Button
             variant="ghost"
-            :class="currentTab === 'all' ? 'border-b-2 border-primary rounded-none' : ''"
+            :class="
+              currentTab === 'all'
+                ? 'border-b-2 border-primary rounded-none'
+                : ''
+            "
             @click="showAll"
           >
             {{ $t("General.all") }}
           </Button>
         </div>
         <div>
-          <div v-if="currentTab === 'effective' && etfEffectiveFlows.length > 0">
+          <div
+            v-if="currentTab === 'effective' && etfEffectiveFlows.length > 0"
+          >
             <table class="w-full border text-sm">
               <colgroup>
                 <col style="width: 30%" />
@@ -79,7 +89,11 @@
                   <th scope="col" class="border p-2 text-center">
                     {{ $t("ETFFlow.preliminaryLumpSum") }}
                   </th>
-                  <th scope="col" class="border p-2 text-center" colspan="2"></th>
+                  <th
+                    scope="col"
+                    class="border p-2 text-center"
+                    colspan="2"
+                  ></th>
                 </tr>
               </thead>
               <tbody>
@@ -145,7 +159,11 @@
                   <th scope="col" class="border p-2 text-center">
                     {{ $t("ETFFlow.sumprice") }}
                   </th>
-                  <th scope="col" class="border p-2 text-center" colspan="2"></th>
+                  <th
+                    scope="col"
+                    class="border p-2 text-center"
+                    colspan="2"
+                  ></th>
                 </tr>
               </thead>
               <tbody>

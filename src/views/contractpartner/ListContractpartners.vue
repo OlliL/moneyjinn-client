@@ -14,7 +14,7 @@
 
   <div class="container mx-auto py-6 space-y-6 text-center">
     <div>
-      <h4 class="text-xl font-bold">{{ $t("General.contractpartner") }}</h4>
+      <h4 class="text-2xl font-bold">{{ $t("General.contractpartner") }}</h4>
     </div>
 
     <DivFilter

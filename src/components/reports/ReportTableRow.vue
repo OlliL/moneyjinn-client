@@ -4,7 +4,7 @@
       mmf.moneyflowSplitEntries == null || mmf.moneyflowSplitEntries.length == 0
     "
   >
-    <TableCell :class="[redIfPrivate, 'border', rowBgClass]">
+    <TableCell :class="[redIfPrivate, 'border py-0 px-1', rowBgClass]">
       <Button
         v-if="mmf.hasReceipt"
         variant="ghost"
@@ -12,7 +12,7 @@
         @click="showReceipt"
         :title="$t('Receipt.receipt')"
         :aria-label="$t('Receipt.receipt')"
-        class="h-8 w-8"
+        class="h-8 w-8 cursor-pointer"
       >
         <Image class="h-4 w-4" />
       </Button>
@@ -30,7 +30,13 @@
     <TableCell :class="['text-left hidden md:table-cell border', rowBgClass]">
       {{ mmf.contractpartnerName }}
     </TableCell>
-    <TableCell :class="['text-left', rowBgClass]">{{ mmf.comment }}</TableCell>
+    <TableCell
+      :class="[
+        'text-left break-words whitespace-normal min-w-[150px] w-full',
+        rowBgClass,
+      ]"
+      >{{ mmf.comment }}</TableCell
+    >
     <TableCell :class="['text-left hidden md:table-cell border', rowBgClass]">
       {{ mmf.postingAccountName }}
     </TableCell>
@@ -38,7 +44,7 @@
       {{ mmf.capitalsourceComment }}
     </TableCell>
     <TableCell
-      :class="['text-center border', rowBgClass]"
+      :class="['text-center border py-0 px-1', rowBgClass]"
       v-if="isOwnMoneyflow"
     >
       <Button
@@ -47,13 +53,13 @@
         @click="editMoneyflow"
         :title="$t('General.edit')"
         :aria-label="$t('General.edit')"
-        class="h-8 w-8"
+        class="h-8 w-8 cursor-pointer"
       >
         <Pencil class="h-4 w-4" />
       </Button>
     </TableCell>
     <TableCell
-      :class="['text-center border', rowBgClass]"
+      :class="['text-center border py-0 px-1', rowBgClass]"
       v-if="isOwnMoneyflow"
     >
       <Button
@@ -62,13 +68,13 @@
         @click="deleteMoneyflow"
         :title="$t('General.delete')"
         :aria-label="$t('General.delete')"
-        class="h-8 w-8"
+        class="h-8 w-8 cursor-pointer"
       >
         <Trash2 class="h-4 w-4" />
       </Button>
     </TableCell>
     <TableCell
-      :class="['text-center border', rowBgClass]"
+      :class="['text-center border py-0 px-1', rowBgClass]"
       v-if="!isOwnMoneyflow"
     >
       <Button
@@ -77,7 +83,7 @@
         @click="listMoneyflow"
         :title="$t('General.moneyflow')"
         :aria-label="$t('General.moneyflow')"
-        class="h-8 w-8"
+        class="h-8 w-8 cursor-pointer"
       >
         <Eye class="h-4 w-4" />
       </Button>
@@ -89,7 +95,7 @@
     <TableCell
       :rowspan="rowspan"
       v-if="index == 0"
-      :class="[redIfPrivate, 'border', rowBgClass]"
+      :class="[redIfPrivate, 'border py-0 px-1', rowBgClass]"
     >
       <Button
         v-if="mmf.hasReceipt"
@@ -98,7 +104,7 @@
         @click="showReceipt"
         :title="$t('Receipt.receipt')"
         :aria-label="$t('Receipt.receipt')"
-        class="h-8 w-8"
+        class="h-8 w-8 cursor-pointer"
       >
         <Image class="h-4 w-4" />
       </Button>
@@ -134,9 +140,13 @@
     >
       {{ mmf.contractpartnerName }}
     </TableCell>
-    <TableCell :class="['text-left border', rowBgClass]">{{
-      mse.comment
-    }}</TableCell>
+    <TableCell
+      :class="[
+        'text-left break-words whitespace-normal min-w-[150px] w-full',
+        rowBgClass,
+      ]"
+      >{{ mse.comment }}</TableCell
+    >
     <TableCell :class="['text-left hidden md:table-cell border', rowBgClass]">
       {{ mse.postingAccountName }}
     </TableCell>
@@ -150,7 +160,7 @@
     <TableCell
       :rowspan="rowspan"
       v-if="index == 0 && isOwnMoneyflow"
-      :class="['text-center border', rowBgClass]"
+      :class="['text-center border py-0 px-1', rowBgClass]"
     >
       <Button
         variant="ghost"
@@ -158,7 +168,7 @@
         @click="editMoneyflow"
         :title="$t('General.edit')"
         :aria-label="$t('General.edit')"
-        class="h-8 w-8"
+        class="h-8 w-8 cursor-pointer"
       >
         <Pencil class="h-4 w-4" />
       </Button>
@@ -166,7 +176,7 @@
     <TableCell
       :rowspan="rowspan"
       v-if="index == 0 && isOwnMoneyflow"
-      :class="['text-center border', rowBgClass]"
+      :class="['text-center border py-0 px-1', rowBgClass]"
     >
       <Button
         variant="ghost"
@@ -174,7 +184,7 @@
         @click="deleteMoneyflow"
         :title="$t('General.delete')"
         :aria-label="$t('General.delete')"
-        class="h-8 w-8"
+        class="h-8 w-8 cursor-pointer"
       >
         <Trash2 class="h-4 w-4" />
       </Button>
@@ -182,7 +192,7 @@
     <TableCell
       :rowspan="rowspan"
       v-if="index == 0 && !isOwnMoneyflow"
-      :class="['text-center border', rowBgClass]"
+      :class="['text-center border py-0 px-1', rowBgClass]"
     >
       <Button
         variant="ghost"
@@ -190,7 +200,7 @@
         @click="listMoneyflow"
         :title="$t('General.moneyflow')"
         :aria-label="$t('General.moneyflow')"
-        class="h-8 w-8"
+        class="h-8 w-8 cursor-pointer"
       >
         <Eye class="h-4 w-4" />
       </Button>

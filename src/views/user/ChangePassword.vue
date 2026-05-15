@@ -1,47 +1,49 @@
 <template>
   <div class="container mx-auto py-6 space-y-6 text-center">
     <div>
-      <h4 class="text-xl font-bold">{{ $t("User.title.changePassword") }}</h4>
+      <h4 class="text-2xl font-bold">{{ $t("User.title.changePassword") }}</h4>
     </div>
     <div class="flex justify-center">
-      <div class="w-full max-w-xl rounded-lg border bg-card text-card-foreground shadow-sm p-4">
-            <form @submit.prevent="changePassword">
-              <div class="space-y-4">
-                <DivError :server-errors="serverErrors" />
-                <div>
-                    <InputStandard
-                      v-model="passwordOld"
-                      :validation-schema="schema.passwordOld"
-                      id="passwordOld"
-                      :field-label="$t('User.oldPassword')"
-                      field-type="password"
-                    />
-                </div>
-                <div>
-                    <InputStandard
-                      v-model="password1"
-                      :validation-schema-ref="schema.password"
-                      id="password1"
-                      :field-label="$t('User.newPassword')"
-                      field-type="password"
-                    />
-                </div>
-                <div>
-                    <InputStandard
-                      v-model="password2"
-                      :validation-schema-ref="schema.password"
-                      id="password2"
-                      :field-label="$t('User.passwordVerify')"
-                      field-type="password"
-                    />
-                </div>
-                <div>
-                    <Button type="submit">
-                      {{ $t("General.save") }}
-                    </Button>
-                </div>
-              </div>
-            </form>
+      <div
+        class="w-full max-w-xl rounded-lg border bg-card text-card-foreground shadow-sm p-4"
+      >
+        <form @submit.prevent="changePassword">
+          <div class="space-y-4">
+            <DivError :server-errors="serverErrors" />
+            <div>
+              <InputStandard
+                v-model="passwordOld"
+                :validation-schema="schema.passwordOld"
+                id="passwordOld"
+                :field-label="$t('User.oldPassword')"
+                field-type="password"
+              />
+            </div>
+            <div>
+              <InputStandard
+                v-model="password1"
+                :validation-schema-ref="schema.password"
+                id="password1"
+                :field-label="$t('User.newPassword')"
+                field-type="password"
+              />
+            </div>
+            <div>
+              <InputStandard
+                v-model="password2"
+                :validation-schema-ref="schema.password"
+                id="password2"
+                :field-label="$t('User.passwordVerify')"
+                field-type="password"
+              />
+            </div>
+            <div>
+              <Button type="submit">
+                {{ $t("General.save") }}
+              </Button>
+            </div>
+          </div>
+        </form>
       </div>
     </div>
   </div>

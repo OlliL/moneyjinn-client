@@ -9,46 +9,46 @@
   />
   <div class="container mx-auto py-6 space-y-6 text-center">
     <div>
-      <h4 class="text-xl font-bold">{{ $t("General.monthlysettlements") }}</h4>
+      <h4 class="text-2xl font-bold">{{ $t("General.monthlysettlements") }}</h4>
     </div>
 
     <div class="flex justify-center">
       <div class="flex flex-wrap items-center justify-center gap-3">
-          <Button type="button" @click="showEditMonthlySettlementModal()">
-            {{ $t("General.new") }}
-          </Button>
-          <div>
-            <select
-              class="h-9 rounded-md border border-input bg-background px-3 text-sm"
-              v-model="selectedYear"
-              @change="selectMonth(selectedYear + '', selectedMonth + '')"
-            >
-              <option v-for="year in years" :key="year" :value="year">
-                {{ year }}
-              </option>
-            </select>
-          </div>
-          <div>
-            <nav aria-label="Month navigation" v-if="dataLoaded">
-              <ul class="month-selection flex flex-wrap justify-center gap-2">
-                <li v-for="month in months" :key="month">
-                  <router-link
-                    :class="
-                      selectedMonth == month
-                        ? 'inline-flex h-9 items-center rounded-md bg-primary px-3 text-sm text-primary-foreground'
-                        : 'inline-flex h-9 items-center rounded-md border border-input px-3 text-sm hover:bg-accent'
-                    "
-                    :to="{
-                      name: Routes.ListMonthlySettlements,
-                      params: { year: selectedYear, month: month },
-                      force: true,
-                    }"
-                    >{{ getMonthName(month) }}</router-link
-                  >
-                </li>
-              </ul>
-            </nav>
-          </div>
+        <Button type="button" @click="showEditMonthlySettlementModal()">
+          {{ $t("General.new") }}
+        </Button>
+        <div>
+          <select
+            class="h-9 rounded-md border border-input bg-background px-3 text-sm"
+            v-model="selectedYear"
+            @change="selectMonth(selectedYear + '', selectedMonth + '')"
+          >
+            <option v-for="year in years" :key="year" :value="year">
+              {{ year }}
+            </option>
+          </select>
+        </div>
+        <div>
+          <nav aria-label="Month navigation" v-if="dataLoaded">
+            <ul class="month-selection flex flex-wrap justify-center gap-2">
+              <li v-for="month in months" :key="month">
+                <router-link
+                  :class="
+                    selectedMonth == month
+                      ? 'inline-flex h-9 items-center rounded-md bg-primary px-3 text-sm text-primary-foreground'
+                      : 'inline-flex h-9 items-center rounded-md border border-input px-3 text-sm hover:bg-accent'
+                  "
+                  :to="{
+                    name: Routes.ListMonthlySettlements,
+                    params: { year: selectedYear, month: month },
+                    force: true,
+                  }"
+                  >{{ getMonthName(month) }}</router-link
+                >
+              </li>
+            </ul>
+          </nav>
+        </div>
       </div>
     </div>
 

@@ -12,7 +12,7 @@
 
   <div class="container mx-auto py-6 space-y-6 text-center">
     <div>
-      <h4 class="text-xl font-bold">{{ $t("Moneyflow.title.search") }}</h4>
+      <h4 class="text-2xl font-bold">{{ $t("Moneyflow.title.search") }}</h4>
     </div>
     <div class="flex justify-center">
       <div

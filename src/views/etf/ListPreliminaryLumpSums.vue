@@ -28,7 +28,9 @@
   />
   <div class="container mx-auto py-6 space-y-6 text-center">
     <div>
-      <h4 class="text-xl font-bold">{{ $t("General.preliminaryLumpSums") }}</h4>
+      <h4 class="text-2xl font-bold">
+        {{ $t("General.preliminaryLumpSums") }}
+      </h4>
     </div>
     <div class="flex justify-center">
       <div class="w-full max-w-5xl space-y-4">
@@ -85,10 +87,7 @@
 
       <div class="flex justify-center pb-3">
         <div class="w-full max-w-xs">
-          <div
-            class="flex items-center justify-start"
-            v-if="yearsLoaded"
-          >
+          <div class="flex items-center justify-start" v-if="yearsLoaded">
             <button
               @click="navigateToPreviousYear"
               :class="['mr-2', { invisible: !showPreviousYearLink }]"

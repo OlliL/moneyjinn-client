@@ -1,7 +1,7 @@
 <template>
-  <div class="container mx-auto py-6 space-y-6">
+  <div class="container mx-auto space-y-6">
     <div class="text-center">
-      <h4 class="text-xl font-bold">{{ $t("Reports.title.reports") }}</h4>
+      <h4 class="text-2xl font-bold">{{ $t("Reports.title.reports") }}</h4>
     </div>
 
     <div class="flex justify-center">
@@ -243,14 +243,6 @@ watch(
     }
   },
 );
-const onYearChange = (yearStr: any) => {
-  console.log("onYearChange: " + yearStr);
-  // Wandelt den String vom Shadcn-Select wieder in eine Zahl um
-  selectedYear.value = Number.parseInt(yearStr, 10);
-
-  // Ruft deine original vorhandene Methode auf
-  selectMonth(yearStr);
-};
 
 const selectMonth = (year: string, month?: string) => {
   router.push({

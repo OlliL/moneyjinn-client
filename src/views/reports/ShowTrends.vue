@@ -1,113 +1,114 @@
 <template>
   <div class="container mx-auto py-6 space-y-6 text-center">
     <div>
-      <h4 class="text-xl font-bold">{{ $t("Reports.title.trends") }}</h4>
+      <h4 class="text-2xl font-bold">{{ $t("Reports.title.trends") }}</h4>
     </div>
     <DivError :server-errors="serverErrors" />
 
     <div class="flex justify-center">
-      <div class="w-full max-w-3xl rounded-lg border bg-card text-card-foreground shadow-sm p-4">
-            <form @submit.prevent="showTrends">
-              <div class="space-y-4">
-                <div class="grid gap-3 md:grid-cols-2">
-                  <div>
-                    <InputDate
-                      v-model="startDate"
-                      :validation-schema="schema.startDate"
-                      id="startDate"
-                      pickMode="month"
-                      :field-label="$t('General.startDate')"
-                    />
-                  </div>
-                  <div>
-                    <InputDate
-                      v-model="endDate"
-                      :validation-schema="schema.endDate"
-                      id="endDate"
-                      pickMode="month"
-                      :field-label="$t('General.endDate')"
-                    />
-                  </div>
-                </div>
-
-                <div class="flex justify-start">
-                  <div class="flex items-center gap-3 text-left">
-                      <input
-                        class="h-4 w-4"
-                        type="checkbox"
-                        id="capitalsourcesActive"
-                        v-model="capitalsourcesActive"
-                      />
-                      <label for="capitalsourcesActive" class="text-muted-foreground">{{
-                        $t("General.capitalsources")
-                      }}</label>
-                  </div>
-                </div>
-                <div
-                  class="grid"
-                  v-if="capitalsourcesActive"
-                >
-                  <div class="mb-3 text-left">
-                    <select
-                      v-model="capitalsourceIds"
-                      id="capitalsourceIds"
-                      name="capitalsourceIds"
-                      class="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
-                      multiple
-                      size="4"
-                    >
-                      <option
-                        v-for="value of selectBoxValues"
-                        :key="value.id"
-                        :value="value.id"
-                      >
-                        {{ value.value }}
-                      </option>
-                    </select>
-                  </div>
-                </div>
-
-                <div class="flex justify-start">
-                  <div class="flex items-center gap-3 text-left">
-                      <input
-                        class="h-4 w-4"
-                        type="checkbox"
-                        id="etfsActive"
-                        v-model="etfsActive"
-                      />
-                      <label for="etfs" class="text-muted-foreground">{{
-                        $t("General.etfs")
-                      }}</label>
-                  </div>
-                </div>
-                <div class="grid" v-if="etfsActive">
-                  <div class="mb-3 text-left">
-                    <select
-                      v-model="selectedEtfIds"
-                      id="etfIds"
-                      name="etfIds"
-                      class="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
-                      multiple
-                      size="4"
-                    >
-                      <option
-                        v-for="value of etfSelectBoxValues"
-                        :key="value.id"
-                        :value="value.id"
-                      >
-                        {{ value.value }}
-                      </option>
-                    </select>
-                  </div>
-                </div>
-
-                <div>
-                    <Button type="submit">
-                      {{ $t("General.show") }}
-                    </Button>
-                </div>
+      <div
+        class="w-full max-w-3xl rounded-lg border bg-card text-card-foreground shadow-sm p-4"
+      >
+        <form @submit.prevent="showTrends">
+          <div class="space-y-4">
+            <div class="grid gap-3 md:grid-cols-2">
+              <div>
+                <InputDate
+                  v-model="startDate"
+                  :validation-schema="schema.startDate"
+                  id="startDate"
+                  pickMode="month"
+                  :field-label="$t('General.startDate')"
+                />
               </div>
-            </form>
+              <div>
+                <InputDate
+                  v-model="endDate"
+                  :validation-schema="schema.endDate"
+                  id="endDate"
+                  pickMode="month"
+                  :field-label="$t('General.endDate')"
+                />
+              </div>
+            </div>
+
+            <div class="flex justify-start">
+              <div class="flex items-center gap-3 text-left">
+                <input
+                  class="h-4 w-4"
+                  type="checkbox"
+                  id="capitalsourcesActive"
+                  v-model="capitalsourcesActive"
+                />
+                <label
+                  for="capitalsourcesActive"
+                  class="text-muted-foreground"
+                  >{{ $t("General.capitalsources") }}</label
+                >
+              </div>
+            </div>
+            <div class="grid" v-if="capitalsourcesActive">
+              <div class="mb-3 text-left">
+                <select
+                  v-model="capitalsourceIds"
+                  id="capitalsourceIds"
+                  name="capitalsourceIds"
+                  class="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                  multiple
+                  size="4"
+                >
+                  <option
+                    v-for="value of selectBoxValues"
+                    :key="value.id"
+                    :value="value.id"
+                  >
+                    {{ value.value }}
+                  </option>
+                </select>
+              </div>
+            </div>
+
+            <div class="flex justify-start">
+              <div class="flex items-center gap-3 text-left">
+                <input
+                  class="h-4 w-4"
+                  type="checkbox"
+                  id="etfsActive"
+                  v-model="etfsActive"
+                />
+                <label for="etfs" class="text-muted-foreground">{{
+                  $t("General.etfs")
+                }}</label>
+              </div>
+            </div>
+            <div class="grid" v-if="etfsActive">
+              <div class="mb-3 text-left">
+                <select
+                  v-model="selectedEtfIds"
+                  id="etfIds"
+                  name="etfIds"
+                  class="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                  multiple
+                  size="4"
+                >
+                  <option
+                    v-for="value of etfSelectBoxValues"
+                    :key="value.id"
+                    :value="value.id"
+                  >
+                    {{ value.value }}
+                  </option>
+                </select>
+              </div>
+            </div>
+
+            <div>
+              <Button type="submit">
+                {{ $t("General.show") }}
+              </Button>
+            </div>
+          </div>
+        </form>
       </div>
     </div>
     <div class="flex justify-center" style="position: relative; height: 55vh">

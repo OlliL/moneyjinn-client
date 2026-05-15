@@ -4,7 +4,9 @@
   <div class="flex justify-center mb-4" v-if="props.month">
     <div class="w-full max-w-md">
       <div class="rounded-lg border">
-        <div class="flex items-center justify-between bg-background border-b p-3">
+        <div
+          class="flex items-center justify-between bg-background border-b p-3"
+        >
           <Button
             variant="ghost"
             size="sm"
@@ -14,7 +16,7 @@
           >
             <ChevronLeft class="h-5 w-5" />
           </Button>
-          <h5 class="flex-grow-1 text-center font-bold">
+          <h5 class="text-xl flex-grow-1 text-center font-bold">
             {{
               $t("MonthlySettlement.headline", {
                 month: monthName,
@@ -33,7 +35,10 @@
           </Button>
         </div>
         <div class="p-4">
-          <div class="flex flex-col rounded-md border mb-4" v-if="monthlySettlementsNoCredit.length">
+          <div
+            class="flex flex-col rounded-md border mb-4"
+            v-if="monthlySettlementsNoCredit.length"
+          >
             <Table>
               <TableHeader>
                 <TableRow>
@@ -42,9 +47,16 @@
                 </TableRow>
               </TableHeader>
               <TableBody>
-                <TableRow v-for="mms in monthlySettlementsNoCredit" :key="mms.id">
-                  <TableCell class="text-left">{{ mms.capitalsourceComment }}</TableCell>
-                  <TableCell class="text-right"><SpanAmount :amount="mms.amount" /></TableCell>
+                <TableRow
+                  v-for="mms in monthlySettlementsNoCredit"
+                  :key="mms.id"
+                >
+                  <TableCell class="text-left">{{
+                    mms.capitalsourceComment
+                  }}</TableCell>
+                  <TableCell class="text-right"
+                    ><SpanAmount :amount="mms.amount"
+                  /></TableCell>
                 </TableRow>
                 <TableRow>
                   <TableCell class="text-right font-bold">&sum;</TableCell>
@@ -55,7 +67,10 @@
               </TableBody>
             </Table>
           </div>
-          <div class="flex flex-col rounded-md border" v-if="monthlySettlementsCredit.length">
+          <div
+            class="flex flex-col rounded-md border"
+            v-if="monthlySettlementsCredit.length"
+          >
             <Table>
               <TableHeader v-if="monthlySettlementsNoCredit.length">
                 <TableRow>
@@ -65,8 +80,12 @@
               </TableHeader>
               <TableBody>
                 <TableRow v-for="mms in monthlySettlementsCredit" :key="mms.id">
-                  <TableCell class="text-left">{{ mms.capitalsourceComment }}</TableCell>
-                  <TableCell class="text-right"><SpanAmount :amount="mms.amount" /></TableCell>
+                  <TableCell class="text-left">{{
+                    mms.capitalsourceComment
+                  }}</TableCell>
+                  <TableCell class="text-right"
+                    ><SpanAmount :amount="mms.amount"
+                  /></TableCell>
                 </TableRow>
                 <TableRow>
                   <TableCell class="text-right font-bold">&sum;</TableCell>
@@ -90,7 +109,14 @@ import { computed, onMounted, ref, watch } from "vue";
 import { ChevronLeft, ChevronRight } from "lucide-vue-next";
 
 import { Button } from "@/components/ui/button";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 import DivError from "../DivError.vue";
 import SpanAmount from "../SpanAmount.vue";
