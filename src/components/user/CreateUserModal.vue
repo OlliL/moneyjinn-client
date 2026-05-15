@@ -221,7 +221,7 @@ const title = computed(() => {
 });
 
 const maxWidth = computed(() => {
-  return editMode.value ? "45%" : "var(--bs-modal-width);";
+  return editMode.value ? "45%" : "500px";
 });
 
 const resetForm = () => {
