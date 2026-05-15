@@ -3,26 +3,25 @@
     <TableCell class="font-bold bg-primary/10 border-r text-left">
       {{ $t("CompareData.database") }}
     </TableCell>
-    <TableCell>
-      <SpanDate :date="mmf.bookingDate" />
-    </TableCell>
-    <TableCell>
-      <SpanDate :date="mmf.invoiceDate" />
-    </TableCell>
-    <TableCell class="text-right">
-      <SpanAmount :amount="mmf.amount" />
-    </TableCell>
-    <TableCell class="text-left">
+    <TableCell><SpanDate :date="mmf.bookingDate" /></TableCell>
+    <TableCell><SpanDate :date="mmf.invoiceDate" /></TableCell>
+    <TableCell class="text-right"
+      ><SpanAmount :amount="mmf.amount"
+    /></TableCell>
+
+    <TableCell class="text-left !whitespace-normal break-words">
       {{ mmf.contractpartnerName }}
     </TableCell>
-    <TableCell class="text-left">
+    <TableCell class="text-left !whitespace-normal break-words">
       {{ mmf.comment }}
     </TableCell>
-    <TableCell class="text-left">
+
+    <TableCell class="text-left whitespace-nowrap">
       {{ mmf.capitalsourceComment }}
     </TableCell>
+
     <TableCell
-      class="w-0 border whitespace-nowrap text-center p-0"
+      class="border whitespace-nowrap text-center p-0"
       v-if="isOwnMoneyflow"
     >
       <Button
@@ -36,7 +35,7 @@
       </Button>
     </TableCell>
     <TableCell
-      class="w-0 border whitespace-nowrap text-center p-0"
+      class="border whitespace-nowrap text-center p-0"
       v-if="isOwnMoneyflow"
     >
       <Button
@@ -49,32 +48,36 @@
         <Trash2 class="h-4 w-4" />
       </Button>
     </TableCell>
-    <TableCell v-if="!isOwnMoneyflow"></TableCell>
   </TableRow>
+
   <TableRow v-if="importData">
     <TableCell class="font-bold bg-primary/10 border-r text-left">
       {{ $t("CompareData.source") }}
     </TableCell>
-    <TableCell>
-      <SpanDate :date="importData.bookingDate" />
-    </TableCell>
-    <TableCell>
-      <SpanDate :date="importData.invoiceDate" />
-    </TableCell>
-    <TableCell class="text-right">
-      <SpanAmount :amount="importData.amount" />
-    </TableCell>
-    <TableCell class="text-left" v-if="importData.partner">
+    <TableCell><SpanDate :date="importData.bookingDate" /></TableCell>
+    <TableCell><SpanDate :date="importData.invoiceDate" /></TableCell>
+    <TableCell class="text-right"
+      ><SpanAmount :amount="importData.amount"
+    /></TableCell>
+
+    <TableCell
+      class="text-left !whitespace-normal break-words"
+      v-if="importData.partner"
+    >
       {{ importData.partner }}
     </TableCell>
-    <TableCell class="text-left" v-else>
+    <TableCell class="text-left !whitespace-normal break-words" v-else>
       <i>{{ importData.contractpartnerName }}</i>
     </TableCell>
-    <TableCell class="text-left">{{ importData.comment }}</TableCell>
-    <TableCell class="text-left">
+    <TableCell class="text-left !whitespace-normal break-words">
+      {{ importData.comment }}
+    </TableCell>
+
+    <TableCell class="text-left whitespace-nowrap">
       {{ capitalsourceComment }}
     </TableCell>
-    <TableCell class="w-0 border whitespace-nowrap text-center p-0">
+
+    <TableCell class="border whitespace-nowrap text-center p-0">
       <Button
         variant="ghost"
         size="icon"
@@ -85,7 +88,7 @@
         <Plus class="h-4 w-4" />
       </Button>
     </TableCell>
-    <TableCell></TableCell>
+    <TableCell class="border"></TableCell>
   </TableRow>
   <TableRow class="border-b-2 border-black"></TableRow>
 </template>

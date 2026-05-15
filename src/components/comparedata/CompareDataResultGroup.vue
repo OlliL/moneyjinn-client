@@ -21,45 +21,63 @@
       {{ comment }}
     </TableCell>
   </TableRow>
-  <TableRow v-if="compareData && isCollapsed">
-    <TableCell colspan="5" class="p-0">
+  <TableRow v-if="compareData && isCollapsed" class="hover:bg-transparent!">
+    <TableCell colspan="3" class="p-0">
       <div class="p-4">
-        <div class="flex flex-col rounded-md border">
-          <Table>
+        <div class="flex flex-col rounded-md border w-full overflow-hidden">
+          <Table class="w-full table-fixed [&_td]:py-0.5! [&_th]:py-1!">
             <TableHeader>
               <TableRow>
-                <TableHead class="font-bold border text-foreground text-center"
-                  ><span class="sr-only">Status</span></TableHead
-                >
                 <TableHead
-                  class="font-bold border text-foreground text-center"
-                  >{{ $t("Moneyflow.bookingdate") }}</TableHead
+                  class="font-bold border text-foreground text-center w-[120px]"
                 >
+                  <span class="sr-only">Status</span>
+                </TableHead>
+
                 <TableHead
-                  class="font-bold border text-foreground text-center"
-                  >{{ $t("Moneyflow.invoicedate") }}</TableHead
+                  class="font-bold border text-foreground text-center w-[140px]"
                 >
+                  {{ $t("Moneyflow.bookingdate") }}
+                </TableHead>
                 <TableHead
-                  class="font-bold border text-foreground text-center"
-                  >{{ $t("General.amount") }}</TableHead
+                  class="font-bold border text-foreground text-center w-[140px]"
                 >
+                  {{ $t("Moneyflow.invoicedate") }}
+                </TableHead>
+
                 <TableHead
-                  class="font-bold border text-foreground text-center"
-                  >{{ $t("General.contractpartner") }}</TableHead
+                  class="font-bold border text-foreground text-center w-25"
                 >
+                  {{ $t("General.amount") }}
+                </TableHead>
+
                 <TableHead
-                  class="font-bold border text-foreground text-center"
-                  >{{ $t("General.comment") }}</TableHead
+                  class="font-bold border text-foreground text-center w-[20%]"
                 >
+                  {{ $t("General.contractpartner") }}
+                </TableHead>
                 <TableHead
-                  class="font-bold border text-foreground text-center"
-                  >{{ $t("General.capitalsource") }}</TableHead
+                  class="font-bold border text-foreground text-center w-[30%]"
                 >
+                  {{ $t("General.comment") }}
+                </TableHead>
+
                 <TableHead
-                  class="font-bold border text-foreground text-center"
-                  colspan="2"
-                  ><span class="sr-only">Actions</span></TableHead
+                  class="font-bold border text-foreground text-center w-45"
                 >
+                  {{ $t("General.capitalsource") }}
+                </TableHead>
+
+                <TableHead
+                  class="font-bold border text-foreground text-center w-11.25"
+                >
+                  <span class="sr-only">Edit</span>
+                </TableHead>
+                <TableHead
+                  class="font-bold border text-foreground text-center w-11.25"
+                >
+                  <span class="sr-only">Delete</span>
+                </TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>

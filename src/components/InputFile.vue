@@ -4,7 +4,7 @@
       {{ fieldLabel }}
     </Label>
 
-    <input
+    <Input
       type="file"
       :id="id"
       :data-testid="id"
@@ -46,6 +46,7 @@ import {
   generateErrorDataVeeValidate,
   type ErrorData,
 } from "@/tools/views/ErrorData";
+import Input from "./ui/input/Input.vue";
 
 const props = defineProps({
   modelValue: {

@@ -270,3 +270,27 @@ watch(
   { immediate: true },
 );
 </script>
+
+<style>
+@reference "@/style.css";
+
+.datepicker-footer .datepicker-controls {
+  @apply !flex !w-full !gap-2 !p-2 !box-border !float-none !clear-both;
+}
+
+.datepicker-footer {
+  @apply !w-full !p-0 !float-none !clear-both;
+}
+
+.datepicker-footer .btn {
+  @apply !flex-1 !w-1/2 !min-w-0 !max-w-none !inline-flex !items-center !justify-center !rounded-md !border !px-3 !py-1.5 !text-sm !font-medium !transition-colors !shadow-none !float-none;
+}
+
+.datepicker-footer .today-btn {
+  @apply !border-input !bg-background !text-foreground hover:!bg-accent hover:!text-accent-foreground;
+}
+
+.datepicker-footer .clear-btn {
+  @apply !border-transparent !bg-transparent !text-muted-foreground hover:!bg-destructive/10 hover:!text-destructive;
+}
+</style>

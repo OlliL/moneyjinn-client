@@ -43,22 +43,18 @@
                   :validity-date="new Date()"
                 />
               </div>
-              <div class="md:col-span-2 flex items-center justify-start">
-                <div class="flex items-center gap-3 text-left">
-                  <input
-                    class="h-4 w-4"
-                    type="checkbox"
-                    id="sourceIsImport"
-                    v-model="sourceIsImport"
-                  />
-                  <label for="sourceIsImport">{{ sourceIsImportLabel }}</label>
-                </div>
+
+              <div class="md:col-span-2 flex items-start gap-3 px-3 py-2 mt-5">
+                <Switch id="sourceIsImport" v-model="sourceIsImport" />
+                <Label
+                  for="sourceIsImport"
+                  class="cursor-pointer text-sm font-medium select-none"
+                >
+                  {{ sourceIsImportLabel }}
+                </Label>
               </div>
             </div>
-            <div
-              class="grid items-center gap-3 md:grid-cols-12"
-              v-show="!sourceIsImport"
-            >
+            <div class="grid gap-3 md:grid-cols-12" v-show="!sourceIsImport">
               <div class="md:col-span-6 text-left">
                 <InputFile
                   v-model="files"
@@ -77,7 +73,7 @@
                 />
               </div>
             </div>
-            <div class="pt-2">
+            <div class="pt-2 flex justify-center">
               <ButtonSubmit
                 :button-label="$t('General.show')"
                 form-id="compareDataForm"
@@ -88,7 +84,7 @@
       </div>
     </div>
     <div class="flex justify-center pt-5" v-if="dataCompared">
-      <DivContentTable>
+      <DivContentTable :alternateRowBackground="false">
         <colgroup>
           <col style="width: 5%" />
           <col style="width: 5%" />
@@ -96,9 +92,11 @@
         </colgroup>
         <TableHeader>
           <TableRow>
-            <TableHead class="font-bold border text-foreground" colspan="3">{{
-              $t("CompareData.result")
-            }}</TableHead>
+            <TableHead
+              class="font-bold border text-foreground text-center"
+              colspan="3"
+              >{{ $t("CompareData.result") }}</TableHead
+            >
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -185,6 +183,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
 
 const { t } = useI18n();
 
