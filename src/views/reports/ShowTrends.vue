@@ -102,7 +102,7 @@
               </div>
             </div>
 
-            <div>
+            <div class="flex justify-center">
               <Button type="submit">
                 {{ $t("General.show") }}
               </Button>

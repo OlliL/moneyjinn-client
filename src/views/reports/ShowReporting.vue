@@ -51,118 +51,124 @@
                   :field-label="$t('General.endDate')"
                 />
               </div>
-              <div class="md:col-span-4 space-y-2">
+              <div class="md:col-span-4 space-y-2 pt-2">
                 <div class="flex items-center gap-2 text-left">
-                  <input
-                    class="h-4 w-4"
-                    type="checkbox"
+                  <Switch
                     id="showreppostingaccountmode"
                     v-model="singlePostingAccounts"
                   />
-                  <label for="showreppostingaccountmode">{{
-                    singlePostingAccountsLabel
-                  }}</label>
+                  <Label
+                    for="showreppostingaccountmode"
+                    class="cursor-pointer text-sm font-medium select-none"
+                  >
+                    {{ singlePostingAccountsLabel }}
+                  </Label>
                 </div>
                 <div class="flex items-center gap-2 text-left">
-                  <input
-                    class="h-4 w-4"
-                    type="checkbox"
-                    id="showrepmonth"
-                    v-model="groupByYear"
-                  />
-                  <label for="showrepmonth">{{ groupByYearLabel }}</label>
+                  <Switch id="showrepmonth" v-model="groupByYear" />
+                  <Label
+                    for="showrepmonth"
+                    class="cursor-pointer text-sm font-medium select-none"
+                  >
+                    {{ groupByYearLabel }}
+                  </Label>
                 </div>
               </div>
             </div>
 
             <div
-              class="grid grid-cols-12 gap-3"
+              class="grid gap-3 md:grid-cols-12"
               v-show="!singlePostingAccounts"
             >
-              <div class="col-span-5 text-left">
-                <label
-                  for="postingAccountIdsYes"
-                  :style="
-                    'opacity: .65; color: ' +
-                    errorDatasPostingAccountsYes.fieldColor
-                  "
-                  ><small>{{
-                    errorDatasPostingAccountsYes.fieldLabel
-                  }}</small></label
-                >
-                <select
-                  v-model="selectedPostingAccountsYes"
-                  id="postingAccountIdsYes"
-                  name="postingAccountIdsYes"
-                  :class="
-                    'w-full rounded-md border border-input bg-background px-3 py-2 text-sm ' +
-                    errorDatasPostingAccountsYes.inputClass
-                  "
-                  multiple
-                  size="5"
-                >
-                  <option
-                    v-for="postingAccount of postingAccountsYes"
-                    :key="postingAccount.id"
-                    :value="postingAccount.id"
+              <div
+                class="md:col-span-12 flex flex-row items-center justify-between gap-4"
+              >
+                <div class="flex-1">
+                  <Label
+                    for="postingAccountIdsYes"
+                    class="text-left ml-1 pb-2"
+                    >{{ errorDatasPostingAccountsYes.fieldLabel }}</Label
                   >
-                    {{ postingAccount.name }}
-                  </option>
-                </select>
-              </div>
-              <div class="col-span-2 space-y-2 pt-6">
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  @click="removeAllPostingAccounts"
-                >
-                  <ChevronsRight class="h-4 w-4" />
-                </Button>
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  @click="removeSelectedPostingAccounts"
-                >
-                  <ChevronRight class="h-4 w-4" />
-                </Button>
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  @click="addSelectedPostingAccounts"
-                >
-                  <ChevronLeft class="h-4 w-4" />
-                </Button>
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  @click="addAllPostingAccounts"
-                >
-                  <ChevronsLeft class="h-4 w-4" />
-                </Button>
-              </div>
-              <div class="col-span-5 text-left">
-                <label for="postingAccountIdsYes" style="opacity: 0.65"
-                  ><small>{{ $t("Reports.excluded") }}</small></label
-                >
-                <select
-                  v-model="selectedPostingAccountsNo"
-                  id="postingAccountIdsNo"
-                  class="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
-                  multiple
-                  size="5"
-                >
-                  <option
-                    v-for="postingAccount of postingAccountsNo"
-                    :key="postingAccount.id"
-                    :value="postingAccount.id"
+                  <select
+                    v-model="selectedPostingAccountsYes"
+                    id="postingAccountIdsYes"
+                    name="postingAccountIdsYes"
+                    :class="
+                      'w-full rounded-md border border-input bg-background px-3 py-2 text-sm h-40' +
+                      errorDatasPostingAccountsYes.inputClass
+                    "
+                    multiple
+                    size="5"
                   >
-                    {{ postingAccount.name }}
-                  </option>
-                </select>
+                    <option
+                      v-for="postingAccount of postingAccountsYes"
+                      :key="postingAccount.id"
+                      :value="postingAccount.id"
+                    >
+                      {{ postingAccount.name }}
+                    </option>
+                  </select>
+                </div>
+
+                <div
+                  class="w-20 flex flex-col items-center justify-center gap-2 pt-5"
+                >
+                  <Button
+                    type="button"
+                    variant="outline"
+                    class="h-8 w-8"
+                    @click="removeAllPostingAccounts"
+                  >
+                    <ChevronsRight class="h-4 w-4" />
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    class="h-8 w-8"
+                    @click="removeSelectedPostingAccounts"
+                  >
+                    <ChevronRight class="h-4 w-4" />
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    class="h-8 w-8"
+                    @click="addSelectedPostingAccounts"
+                  >
+                    <ChevronLeft class="h-4 w-4" />
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    class="h-8 w-8"
+                    @click="addAllPostingAccounts"
+                  >
+                    <ChevronsLeft class="h-4 w-4" />
+                  </Button>
+                </div>
+
+                <div class="flex-1">
+                  <Label
+                    for="postingAccountIdsNo"
+                    class="text-left ml-1 pb-2"
+                    >{{ $t("Reports.excluded") }}</Label
+                  >
+                  <select
+                    v-model="selectedPostingAccountsNo"
+                    id="postingAccountIdsNo"
+                    class="w-full rounded-md border border-input bg-background px-3 py-2 text-sm h-40"
+                    multiple
+                    size="5"
+                  >
+                    <option
+                      v-for="postingAccount of postingAccountsNo"
+                      :key="postingAccount.id"
+                      :value="postingAccount.id"
+                    >
+                      {{ postingAccount.name }}
+                    </option>
+                  </select>
+                </div>
               </div>
             </div>
             <div
@@ -179,7 +185,7 @@
               </div>
             </div>
 
-            <div class="mt-3">
+            <div class="mt-3 flex justify-center">
               <ButtonSubmit :button-label="$t('General.show')" />
             </div>
           </div>
@@ -236,12 +242,14 @@ import type { ReportingMonthAmount } from "@/model/report/ReportingMonthAmount";
 
 import ReportService from "@/service/ReportService";
 import { Button } from "@/components/ui/button";
+import { Switch } from "@/components/ui/switch";
 import {
   ChevronLeft,
   ChevronRight,
   ChevronsLeft,
   ChevronsRight,
 } from "lucide-vue-next";
+import Label from "@/components/ui/label/Label.vue";
 
 const { t } = useI18n();
 
