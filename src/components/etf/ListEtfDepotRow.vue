@@ -12,72 +12,76 @@
     <TableCell class="text-right"
       ><SpanAmount :amount="flow.amount * flow.price"
     /></TableCell>
-    <TableCell
-      class="text-right group relative cursor-pointer"
-      v-if="showLumpSum"
-    >
-      <SpanAmount
-        :amount="flow.accumulatedPreliminaryLumpSum * (partial / 100)"
-        :decimal-places="3"
-      />
-      <div
-        class="absolute hidden group-hover:block bottom-full right-0 mb-2 bg-background border border-border rounded-lg shadow-lg z-10 p-3 w-max"
-      >
-        <Table class="border">
-          <TableHeader>
-            <TableRow>
-              <TableHead class="font-bold border text-foreground text-center"
-                ><span class="sr-only">Year</span></TableHead
+    <TableCell class="text-right" v-if="showLumpSum">
+      <HoverCard :open-delay="100" :close-delay="100">
+        <HoverCardTrigger class="text-right group relative cursor-pointer">
+          <SpanAmount
+            :amount="flow.accumulatedPreliminaryLumpSum * (partial / 100)"
+            :decimal-places="3"
+          />
+        </HoverCardTrigger>
+
+        <HoverCardContent
+          side="top"
+          align="end"
+          class="w-auto p-3 bg-background border rounded-lg shadow-lg z-50"
+        >
+          <Table class="border">
+            <TableHeader>
+              <TableRow>
+                <TableHead class="font-bold border text-foreground text-center">
+                  <span class="sr-only">Year</span>
+                </TableHead>
+                <TableHead class="font-bold border text-foreground text-center"
+                  >100%</TableHead
+                >
+                <TableHead
+                  class="font-bold border text-foreground text-center"
+                  v-if="partial < 100"
+                >
+                  {{ formatNumber(partial, 0) }}%
+                </TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              <TableRow
+                v-for="entry of flow.preliminaryLumpSumPerYear.entries()"
+                :key="entry[0]"
               >
-              <TableHead class="font-bold border text-foreground text-center"
-                >100%</TableHead
-              >
-              <TableHead
-                class="font-bold border text-foreground text-center"
-                v-if="partial < 100"
-              >
-                {{ formatNumber(partial, 0) }}%
-              </TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            <TableRow
-              v-for="entry of flow.preliminaryLumpSumPerYear.entries()"
-              :key="entry[0]"
-            >
-              <TableCell class="font-bold">{{ entry[0] }}</TableCell>
-              <TableCell class="text-right">
-                <SpanAmount :amount="entry[1]" :decimal-places="3" />
-              </TableCell>
-              <TableCell class="text-right" v-if="partial < 100">
-                <SpanAmount
-                  :amount="entry[1] * (partial / 100)"
-                  :decimal-places="3"
-                />
-              </TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell class="font-bold text-right">&sum;</TableCell>
-              <TableCell class="text-right">
-                <u
-                  ><SpanAmount
-                    :amount="flow.accumulatedPreliminaryLumpSum"
+                <TableCell class="font-bold">{{ entry[0] }}</TableCell>
+                <TableCell class="text-right">
+                  <SpanAmount :amount="entry[1]" :decimal-places="3" />
+                </TableCell>
+                <TableCell class="text-right" v-if="partial < 100">
+                  <SpanAmount
+                    :amount="entry[1] * (partial / 100)"
                     :decimal-places="3"
-                /></u>
-              </TableCell>
-              <TableCell class="text-right" v-if="partial < 100">
-                <u
-                  ><SpanAmount
-                    :amount="
-                      flow.accumulatedPreliminaryLumpSum * (partial / 100)
-                    "
-                    :decimal-places="3"
-                /></u>
-              </TableCell>
-            </TableRow>
-          </TableBody>
-        </Table>
-      </div>
+                  />
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell class="font-bold text-right">&sum;</TableCell>
+                <TableCell class="text-right">
+                  <u
+                    ><SpanAmount
+                      :amount="flow.accumulatedPreliminaryLumpSum"
+                      :decimal-places="3"
+                  /></u>
+                </TableCell>
+                <TableCell class="text-right" v-if="partial < 100">
+                  <u
+                    ><SpanAmount
+                      :amount="
+                        flow.accumulatedPreliminaryLumpSum * (partial / 100)
+                      "
+                      :decimal-places="3"
+                  /></u>
+                </TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
+        </HoverCardContent>
+      </HoverCard>
     </TableCell>
     <TableCell class="text-center">
       <Button
@@ -117,6 +121,11 @@ import {
   Table,
   TableBody,
 } from "@/components/ui/table";
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card";
 import { Button } from "@/components/ui/button";
 
 import SpanAmount from "../SpanAmount.vue";

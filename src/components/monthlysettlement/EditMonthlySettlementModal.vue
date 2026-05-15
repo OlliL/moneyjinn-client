@@ -60,7 +60,7 @@
                         field-type="number"
                         step="0.01"
                       >
-                        <template #icon><Euro /></template>
+                        <template #icon><Euro class="h-4 w-4" /></template>
                       </InputStandard>
                     </TableCell>
                   </TableRow>
@@ -101,7 +101,7 @@
                         field-type="number"
                         step="0.01"
                       >
-                        <template #icon><Euro /></template>
+                        <template #icon><Euro class="h-4 w-4" /></template>
                       </InputStandard>
                     </TableCell>
                   </TableRow>

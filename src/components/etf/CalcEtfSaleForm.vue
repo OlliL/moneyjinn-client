@@ -1,5 +1,5 @@
 <template>
-  <div class="flex justify-center" v-if="etf.id">
+  <div class="flex text-center" v-if="etf.id">
     <div class="w-full mb-4">
       <h4 class="text-2xl font-bold">{{ $t("ETFFlow.calculateSale") }}</h4>
     </div>
@@ -11,7 +11,7 @@
     id="calculateEtfSaleForm"
   >
     <div class="flex justify-center">
-      <div class="w-full max-w-3xl mb-4">
+      <div class="w-full max-w-xl mb-4">
         <div class="rounded-lg border bg-muted/20">
           <div class="p-4">
             <div class="space-y-4">
@@ -52,8 +52,11 @@
                   </InputStandard>
                 </div>
               </div>
+
               <div class="mb-1">
-                <div class="w-full">{{ $t("ETFFlow.transactionCosts") }}</div>
+                <div class="w-full text-center mb-2 font-bold text-foreground">
+                  {{ $t("ETFFlow.transactionCosts") }}
+                </div>
               </div>
 
               <div class="grid grid-cols-1 md:grid-cols-3 gap-2 mb-4">
@@ -95,7 +98,7 @@
                 </div>
               </div>
               <div>
-                <div class="w-full">
+                <div class="w-full justify-center flex">
                   <ButtonSubmit
                     :button-label="$t('ETFFlow.calculate')"
                     form-id="calculateEtfSaleForm"

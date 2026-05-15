@@ -48,7 +48,9 @@
                     />
                   </span>
                 </TableHead>
-                <TableHead class="hidden md:table-cell align-top text-center">
+                <TableHead
+                  class="font-bold border text-foreground text-center align-top hidden md:table-cell"
+                >
                   <span
                     class="hidden md:flex items-center justify-center gap-1 mt-1"
                   >
@@ -63,9 +65,8 @@
                   </span>
                 </TableHead>
                 <TableHead
-                  class="font-bold border text-foreground text-center"
+                  class="font-bold border text-foreground text-center align-top"
                   colspan="2"
-                  class="align-top text-center"
                 >
                   <span
                     class="hidden md:flex items-center justify-center gap-1 mt-1"
@@ -92,7 +93,9 @@
                     />
                   </span>
                 </TableHead>
-                <TableHead class="hidden md:table-cell align-top text-center">
+                <TableHead
+                  class="font-bold border text-foreground text-center align-top hidden md:table-cell"
+                >
                   <span
                     class="hidden md:flex items-center justify-center gap-1 mt-1"
                   >
@@ -126,7 +129,7 @@
                     </Button>
                   </div>
                 </TableHead>
-                <TableHead class="align-top text-center">
+                <TableHead class="font-bold border text-foreground text-center">
                   <div class="hidden md:block">
                     <span
                       class="hidden md:flex items-center justify-center gap-1 mt-1"
@@ -171,7 +174,9 @@
                   </div>
                 </TableHead>
 
-                <TableHead class="hidden md:table-cell align-top text-center">
+                <TableHead
+                  class="font-bold border text-foreground text-center align-top hidden md:table-cell"
+                >
                   <span
                     class="hidden md:flex items-center justify-center gap-1 mt-1"
                   >
@@ -205,7 +210,9 @@
                   </div>
                 </TableHead>
 
-                <TableHead class="hidden md:table-cell align-top text-center">
+                <TableHead
+                  class="font-bold border text-foreground text-center align-top hidden md:table-cell"
+                >
                   <span
                     class="hidden md:flex items-center justify-center gap-1 mt-1"
                   >

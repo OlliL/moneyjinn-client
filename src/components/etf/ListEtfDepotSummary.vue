@@ -1,6 +1,6 @@
 <template>
   <div class="flex justify-center py-4" v-if="etfSummary">
-    <div class="w-full max-w-2xl">
+    <div class="w-full max-w-5xl">
       <div class="flex flex-col rounded-md border">
         <Table>
           <TableHeader>
