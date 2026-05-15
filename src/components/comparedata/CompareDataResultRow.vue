@@ -27,7 +27,7 @@
         size="icon"
         @click="editMoneyflow"
         :title="$t('General.edit')"
-        class="group hover:bg-transparent h-8 w-8"
+        class="h-8 w-8 cursor-pointer"
       >
         <Pencil
           class="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors"
@@ -40,7 +40,7 @@
         size="icon"
         @click="deleteMoneyflow"
         :title="$t('General.delete')"
-        class="group hover:bg-transparent h-8 w-8"
+        class="h-8 w-8 cursor-pointer"
       >
         <Trash2
           class="h-4 w-4 text-muted-foreground group-hover:text-destructive transition-colors"
@@ -78,7 +78,7 @@
         size="icon"
         @click="createMoneyflow"
         :title="$t('General.create')"
-        class="group hover:bg-transparent h-8 w-8"
+        class="h-8 w-8 cursor-pointer"
       >
         <Plus
           class="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors"
@@ -158,4 +158,3 @@ const createMoneyflow = () => {
   emit("createMoneyflow", moneyflowToCreate);
 };
 </script>
-

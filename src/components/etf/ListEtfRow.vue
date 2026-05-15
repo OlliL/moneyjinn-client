@@ -1,23 +1,43 @@
 <template>
   <TableRow>
-    <TableCell class="text-left"><a :href="etf.chartUrl">{{ etf.name }}</a></TableCell>
+    <TableCell class="text-left"
+      ><a :href="etf.chartUrl">{{ etf.name }}</a></TableCell
+    >
     <TableCell class="text-left">{{ etf.isin }}</TableCell>
     <TableCell class="text-left">{{ etf.wkn }}</TableCell>
     <TableCell class="text-left">{{ etf.ticker }}</TableCell>
-    <TableCell class="text-right"><SpanAmount :amount="etf.transactionCostsAbsolute" /></TableCell>
+    <TableCell class="text-right"
+      ><SpanAmount :amount="etf.transactionCostsAbsolute"
+    /></TableCell>
     <TableCell class="text-right">{{ relativeString }}</TableCell>
-    <TableCell class="text-right"><SpanAmount :amount="etf.transactionCostsMaximum" /></TableCell>
+    <TableCell class="text-right"
+      ><SpanAmount :amount="etf.transactionCostsMaximum"
+    /></TableCell>
     <TableCell class="text-right">{{ taxExemptionString }}</TableCell>
-    <TableCell class="text-center" v-if="etf.isFavorite"><Star class="h-4 w-4 text-yellow-500 fill-yellow-500" /></TableCell>
+    <TableCell class="text-center" v-if="etf.isFavorite"
+      ><Star class="h-4 w-4 text-yellow-500 fill-yellow-500"
+    /></TableCell>
     <TableCell class="text-start" v-if="!etf.isFavorite"></TableCell>
-    <TableCell class="text-center">
-      <Button variant="ghost" size="icon" @click="editEtf" :title="$t('General.edit')" class="group hover:bg-transparent h-8 w-8">
-        <Pencil class="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors" />
+    <TableCell class="w-0 border whitespace-nowrap text-center p-0">
+      <Button
+        variant="ghost"
+        size="icon"
+        @click="editEtf"
+        :title="$t('General.edit')"
+        class="h-8 w-8 cursor-pointer"
+      >
+        <Pencil class="h-4 w-4" />
       </Button>
     </TableCell>
-    <TableCell class="text-center">
-      <Button variant="ghost" size="icon" @click="deleteEtf" :title="$t('General.delete')" class="group hover:bg-transparent h-8 w-8">
-        <Trash2 class="h-4 w-4 text-muted-foreground group-hover:text-destructive transition-colors" />
+    <TableCell class="w-0 border whitespace-nowrap text-center p-0">
+      <Button
+        variant="ghost"
+        size="icon"
+        @click="deleteEtf"
+        :title="$t('General.delete')"
+        class="h-8 w-8 cursor-pointer"
+      >
+        <Trash2 class="h-4 w-4" />
       </Button>
     </TableCell>
   </TableRow>

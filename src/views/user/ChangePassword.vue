@@ -37,7 +37,7 @@
                 field-type="password"
               />
             </div>
-            <div>
+            <div class="flex justify-center">
               <Button type="submit">
                 {{ $t("General.save") }}
               </Button>

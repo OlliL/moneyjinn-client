@@ -25,7 +25,7 @@
 
     <DivError :server-errors="serverErrors" />
 
-    <DivContentTable>
+    <DivContentTable class="max-w-xl">
       <TableHeader>
         <TableRow>
           <TableHead class="font-bold border text-foreground text-center">{{

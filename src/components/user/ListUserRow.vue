@@ -1,35 +1,35 @@
 <template>
   <TableRow>
-    <TableCell class="text-left border py-1 px-2">{{ user.userName }}</TableCell>
-    <TableCell class="text-left border py-1 px-2">{{ user.groupName }}</TableCell>
+    <TableCell class="text-left border py-1 px-2">{{
+      user.userName
+    }}</TableCell>
+    <TableCell class="text-left border py-1 px-2">{{
+      user.groupName
+    }}</TableCell>
     <TableCell class="text-center border py-1 px-2">{{ role }}</TableCell>
     <TableCell class="text-center border py-1 px-2">
       <SpanBoolean :value="user.userIsNew" />
     </TableCell>
-    <TableCell class="text-center border py-0 px-1 w-10">
+    <TableCell class="w-0 border whitespace-nowrap text-center p-0">
       <Button
         variant="ghost"
         size="icon"
         @click="editUser"
         :title="$t('General.edit')"
-        class="group hover:bg-transparent h-8 w-8"
+        class="h-8 w-8 cursor-pointer"
       >
-        <Pencil
-          class="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors"
-        />
+        <Pencil class="h-4 w-4" />
       </Button>
     </TableCell>
-    <TableCell class="text-center border py-0 px-1 w-10">
+    <TableCell class="w-0 border whitespace-nowrap text-center p-0">
       <Button
         variant="ghost"
         size="icon"
         @click="deleteUser"
         :title="$t('General.delete')"
-        class="group hover:bg-transparent h-8 w-8"
+        class="h-8 w-8 cursor-pointer"
       >
-        <Trash2
-          class="h-4 w-4 text-muted-foreground group-hover:text-destructive transition-colors"
-        />
+        <Trash2 class="h-4 w-4" />
       </Button>
     </TableCell>
   </TableRow>

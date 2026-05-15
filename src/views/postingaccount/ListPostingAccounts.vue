@@ -25,9 +25,10 @@
     <DivContentTable class="max-w-sm">
       <TableHeader>
         <TableRow>
-          <TableHead class="font-bold border text-foreground text-center">{{
-            $t("General.name")
-          }}</TableHead>
+          <TableHead
+            class="font-bold border text-foreground text-center w-full"
+            >{{ $t("General.name") }}</TableHead
+          >
           <TableHead class="border" colspan="2"></TableHead>
         </TableRow>
       </TableHeader>

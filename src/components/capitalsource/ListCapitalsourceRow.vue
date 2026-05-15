@@ -7,30 +7,38 @@
     <TableCell class="text-left">{{ mcs.bankCode }}</TableCell>
     <TableCell class="text-left"><SpanDate :date="mcs.validFrom" /></TableCell>
     <TableCell class="text-left"><SpanDate :date="mcs.validTil" /></TableCell>
-    <TableCell class="text-center"><SpanBoolean :value="mcs.groupUse" /></TableCell>
+    <TableCell class="text-center"
+      ><SpanBoolean :value="mcs.groupUse"
+    /></TableCell>
     <TableCell class="text-center">
       <b :class="importAllowedColorClass">{{ importAllowedString }}</b>
     </TableCell>
-    <TableCell class="text-center" v-if="owner">
+    <TableCell
+      class="w-0 border whitespace-nowrap text-center p-0"
+      v-if="owner"
+    >
       <Button
         variant="ghost"
         size="icon"
         @click="editCapitalsource"
         :title="$t('General.edit')"
-        class="group hover:bg-transparent h-8 w-8"
+        class="h-8 w-8 cursor-pointer"
       >
-        <Pencil class="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors" />
+        <Pencil class="h-4 w-4" />
       </Button>
     </TableCell>
-    <TableCell class="text-center" v-if="owner">
+    <TableCell
+      class="w-0 border whitespace-nowrap text-center p-0"
+      v-if="owner"
+    >
       <Button
         variant="ghost"
         size="icon"
         @click="deleteCapitalsource"
         :title="$t('General.delete')"
-        class="group hover:bg-transparent h-8 w-8"
+        class="h-8 w-8 cursor-pointer"
       >
-        <Trash2 class="h-4 w-4 text-muted-foreground group-hover:text-destructive transition-colors" />
+        <Trash2 class="h-4 w-4" />
       </Button>
     </TableCell>
   </TableRow>

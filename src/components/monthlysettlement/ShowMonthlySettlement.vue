@@ -12,7 +12,7 @@
             size="sm"
             @click="navigateToPreviousMonth"
             :disabled="!(prevMonth && prevYear)"
-            class="h-8 w-8"
+            class="h-8 w-8 cursor-pointer"
           >
             <ChevronLeft class="h-5 w-5" />
           </Button>
@@ -29,7 +29,7 @@
             size="sm"
             @click="navigateToNextMonth"
             :disabled="!(nextMonth && nextYear)"
-            class="h-8 w-8"
+            class="h-8 w-8 cursor-pointer"
           >
             <ChevronRight class="h-5 w-5" />
           </Button>

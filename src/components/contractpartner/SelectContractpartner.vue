@@ -16,7 +16,7 @@
     <template #icon
       ><SquarePlus
         @click="showCreateContractpartnerModal"
-        class="cursor-pointer"
+        class="h-4 w-4 cursor-pointer"
     /></template>
   </SelectStandard>
 </template>

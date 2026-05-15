@@ -1,14 +1,26 @@
 <template>
   <TableRow>
-    <TableCell class="text-left">{{ mpa.name }}</TableCell>
-    <TableCell class="text-center">
-      <Button variant="ghost" size="icon" @click="editPostingAccount" :title="$t('General.edit')" class="group hover:bg-transparent h-8 w-8">
-        <Pencil class="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors" />
+    <TableCell class="text-left border">{{ mpa.name }}</TableCell>
+    <TableCell class="w-0 border whitespace-nowrap text-center p-0">
+      <Button
+        variant="ghost"
+        size="icon"
+        @click="editPostingAccount"
+        :title="$t('General.edit')"
+        class="h-8 w-8 cursor-pointer"
+      >
+        <Pencil class="h-4 w-4" />
       </Button>
     </TableCell>
-    <TableCell class="text-center">
-      <Button variant="ghost" size="icon" @click="deletePostingAccount" :title="$t('General.delete')" class="group hover:bg-transparent h-8 w-8">
-        <Trash2 class="h-4 w-4 text-muted-foreground group-hover:text-destructive transition-colors" />
+    <TableCell class="w-0 border whitespace-nowrap text-center p-0">
+      <Button
+        variant="ghost"
+        size="icon"
+        @click="deletePostingAccount"
+        :title="$t('General.delete')"
+        class="h-8 w-8 cursor-pointer"
+      >
+        <Trash2 class="h-4 w-4" />
       </Button>
     </TableCell>
   </TableRow>
