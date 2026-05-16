@@ -54,81 +54,87 @@
     </div>
 
     <template v-if="showMoneyflowFields">
-      <div class="md:col-span-4">
-        <InputStandard
-          v-model="mmf.comment"
-          :validation-schema-ref="schema.comment"
-          :id="'comment' + idSuffix"
-          :field-label="$t('General.comment')"
-          name="comment"
-        />
-      </div>
-      <div class="md:col-span-3">
-        <SelectPostingAccount
-          v-model="mmf.postingAccountId"
-          :validation-schema-ref="schema.postingAccountId"
-          :id-suffix="'CreateMoneyflow' + idSuffix"
-          :field-label="$t('General.postingAccount')"
-        />
-      </div>
-    </template>
-    <div v-else class="md:col-span-7"></div>
+      <div
+        class="md:col-span-10 flex flex-col md:flex-row items-start gap-4 w-full"
+      >
+        <div class="flex-1 w-full">
+          <InputStandard
+            v-model="mmf.comment"
+            :validation-schema-ref="schema.comment"
+            :id="'comment' + idSuffix"
+            :field-label="$t('General.comment')"
+            name="comment"
+          />
+        </div>
 
-    <div class="md:col-span-3 col-span-1">
-      <div class="grid w-full gap-1.5 relative">
-        <Label
-          class="text-left ml-1 text-sm font-medium text-foreground leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-        >
-          Optionen
-        </Label>
+        <div class="w-full md:w-[220px] shrink-0">
+          <SelectPostingAccount
+            v-model="mmf.postingAccountId"
+            :validation-schema-ref="schema.postingAccountId"
+            :id-suffix="'CreateMoneyflow' + idSuffix"
+            :field-label="$t('General.postingAccount')"
+          />
+        </div>
 
-        <div class="flex flex-wrap items-center gap-2 h-10 -mt-[2px]">
-          <ToggleGroup
-            type="single"
-            class="bg-muted p-1 rounded-lg inline-flex border border-input h-10 shadow-sm"
-            :model-value="mmf.private ? 'private' : 'public'"
-            @update:model-value="
-              (val: any) => val && (mmf.private = val === 'private')
-            "
-          >
-            <ToggleGroupItem
-              value="public"
-              class="text-xs font-medium h-8 px-2.5 transition-all rounded-md data-[state=on]:bg-primary data-[state=on]:text-primary-foreground data-[state=on]:shadow-sm border-none text-muted-foreground"
+        <div class="shrink-0">
+          <div class="grid gap-1.5 relative justify-items-start">
+            <Label
+              class="text-left ml-1 text-sm font-medium text-foreground leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
             >
-              {{ $t("Moneyflow.public") }}
-            </ToggleGroupItem>
-            <ToggleGroupItem
-              value="private"
-              class="text-xs font-medium h-8 px-2.5 transition-all rounded-md data-[state=on]:bg-primary data-[state=on]:text-primary-foreground data-[state=on]:shadow-sm border-none text-muted-foreground"
-            >
-              {{ $t("Moneyflow.private") }}
-            </ToggleGroupItem>
-          </ToggleGroup>
+              Optionen
+            </Label>
 
-          <ToggleGroup
-            type="single"
-            class="bg-muted p-1 rounded-lg inline-flex border border-input h-10 shadow-sm"
-            :model-value="saveAsPreDefMoneyflow ? 'favorite' : 'once'"
-            @update:model-value="
-              (val: any) => val && (saveAsPreDefMoneyflow = val === 'favorite')
-            "
-          >
-            <ToggleGroupItem
-              value="once"
-              class="text-xs font-medium h-8 px-2.5 transition-all rounded-md data-[state=on]:bg-primary data-[state=on]:text-primary-foreground data-[state=on]:shadow-sm border-none text-muted-foreground"
-            >
-              {{ toggleTextOff }}
-            </ToggleGroupItem>
-            <ToggleGroupItem
-              value="favorite"
-              class="text-xs font-medium h-8 px-2.5 transition-all rounded-md data-[state=on]:bg-primary data-[state=on]:text-primary-foreground data-[state=on]:shadow-sm border-none text-muted-foreground"
-            >
-              {{ toggleTextOn }}
-            </ToggleGroupItem>
-          </ToggleGroup>
+            <div class="flex flex-wrap items-center gap-2 h-10 -mt-[1px]">
+              <ToggleGroup
+                type="single"
+                class="bg-muted p-1 rounded-lg inline-flex border border-input h-10 shadow-sm"
+                :model-value="mmf.private ? 'private' : 'public'"
+                @update:model-value="
+                  (val: any) => val && (mmf.private = val === 'private')
+                "
+              >
+                <ToggleGroupItem
+                  value="public"
+                  class="text-xs font-medium h-8 px-2.5 transition-all rounded-md data-[state=on]:bg-primary data-[state=on]:text-primary-foreground data-[state=on]:shadow-sm border-none text-muted-foreground"
+                >
+                  {{ $t("Moneyflow.public") }}
+                </ToggleGroupItem>
+                <ToggleGroupItem
+                  value="private"
+                  class="text-xs font-medium h-8 px-2.5 transition-all rounded-md data-[state=on]:bg-primary data-[state=on]:text-primary-foreground data-[state=on]:shadow-sm border-none text-muted-foreground"
+                >
+                  {{ $t("Moneyflow.private") }}
+                </ToggleGroupItem>
+              </ToggleGroup>
+
+              <ToggleGroup
+                type="single"
+                class="bg-muted p-1 rounded-lg inline-flex border border-input h-10 shadow-sm"
+                :model-value="saveAsPreDefMoneyflow ? 'favorite' : 'once'"
+                @update:model-value="
+                  (val: any) =>
+                    val && (saveAsPreDefMoneyflow = val === 'favorite')
+                "
+              >
+                <ToggleGroupItem
+                  value="once"
+                  class="text-xs font-medium h-8 px-2.5 transition-all rounded-md data-[state=on]:bg-primary data-[state=on]:text-primary-foreground data-[state=on]:shadow-sm border-none text-muted-foreground"
+                >
+                  {{ toggleTextOff }}
+                </ToggleGroupItem>
+                <ToggleGroupItem
+                  value="favorite"
+                  class="text-xs font-medium h-8 px-2.5 transition-all rounded-md data-[state=on]:bg-primary data-[state=on]:text-primary-foreground data-[state=on]:shadow-sm border-none text-muted-foreground"
+                >
+                  {{ toggleTextOn }}
+                </ToggleGroupItem>
+              </ToggleGroup>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
+    </template>
+    <div v-else class="md:col-span-10"></div>
   </div>
 
   <div class="w-full mb-4">
