@@ -67,7 +67,7 @@
           />
         </div>
 
-        <div class="w-full md:w-[220px] shrink-0">
+        <div class="w-full md:w-[350px] shrink-0">
           <SelectPostingAccount
             v-model="mmf.postingAccountId"
             :validation-schema-ref="schema.postingAccountId"
@@ -79,12 +79,16 @@
         <div class="shrink-0">
           <div class="grid gap-1.5 relative justify-items-start">
             <Label
+              for="toggles"
               class="text-left ml-1 text-sm font-medium text-foreground leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
             >
               Optionen
             </Label>
 
-            <div class="flex flex-wrap items-center gap-2 h-10 -mt-[1px]">
+            <div
+              class="flex flex-wrap items-center gap-2 h-10 -mt-[2px]"
+              id="toggles"
+            >
               <ToggleGroup
                 type="single"
                 class="bg-muted p-1 rounded-lg inline-flex border border-input h-10 shadow-sm"

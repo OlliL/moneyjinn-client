@@ -4,26 +4,8 @@
       <h4 class="text-2xl font-bold">{{ $t("Moneyflow.title.create") }}</h4>
     </div>
 
-    <div class="flex justify-center">
+    <div class="flex justify-center mb-6">
       <div class="w-full max-w-md">
-        <select
-          data-testid="selectmoneyflow"
-          class="hidden"
-          :value="String(preDefMoneyflowId)"
-          @change="
-            handleSelectChange(($event.target as HTMLSelectElement).value)
-          "
-        >
-          <option value="0">{{ $t("Moneyflow.newBooking") }}</option>
-          <option
-            v-for="mcp of preDefMoneyflows"
-            :key="'compat-' + mcp.id"
-            :value="String(mcp.id)"
-          >
-            {{ mcp.contractpartnerName }}
-          </option>
-        </select>
-
         <Select
           :model-value="String(preDefMoneyflowId)"
           @update:model-value="handleSelectChange"
@@ -58,15 +40,19 @@
     <DivError :server-errors="serverErrors" />
 
     <div
-      class="flex rounded-lg border bg-card text-card-foreground shadow bg-muted/40 p-4"
+      class="rounded-lg border bg-card text-card-foreground shadow bg-muted/40 p-4"
     >
-      <form @submit.prevent="createMoneyflow" id="createMoneyflowForm">
+      <form
+        @submit.prevent="createMoneyflow"
+        id="createMoneyflowForm"
+        class="w-full"
+      >
         <EditMoneyflowBase
           :selected-pre-def-moneyflow="selectedPreDefMoneyflow"
           ref="editMoneyflowVue"
         />
 
-        <div class="flex justify-center gap-4">
+        <div class="flex justify-center gap-4 mt-6">
           <Button type="button" variant="secondary" @click="resetForm">
             {{ $t("General.reset") }}
           </Button>
