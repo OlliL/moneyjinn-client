@@ -88,7 +88,7 @@
           </div>
         </div>
 
-        <div class="rounded-xl border bg-background p-4 space-y-4 shadow-sm">
+        <div class="rounded-xl border bg-background p-4 space-y-4">
           <div class="flex items-center space-x-2 border-b border-border/40">
             <span
               class="text-xs font-bold uppercase tracking-wider text-muted-foreground block mb-0"

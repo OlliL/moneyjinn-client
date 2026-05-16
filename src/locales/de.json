@@ -104,6 +104,9 @@
     },
     "Contractpartner": {
         "moneyflowComment": "Standard-Kommentar der Geldbewegung",
+        "adressData": "Adressdaten (optional)",
+        "validityData":"Gültigkeitszeitraum",
+        "moneyflowDefaults": "Standardwerte für neue Geldbewegungen",
         "street": "Straße",
         "postcode": "Postleitzahl",
         "town": "Stadt",

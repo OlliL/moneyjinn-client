@@ -104,6 +104,9 @@
     },
     "Contractpartner": {
         "moneyflowComment": "the moneyflows default comment",
+        "adressData": "Address data (optional)",
+        "validityData":"Validity period",
+        "moneyflowDefaults": "Standard values for new moneyflows",
         "street": "street",
         "postcode": "postcode",
         "town": "town",

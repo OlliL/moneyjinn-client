@@ -4,80 +4,127 @@
       <form
         @submit.prevent="createContractpartner"
         :id="'createContractpartnerForm' + idSuffix"
-        class="space-y-4"
+        class="space-y-6"
       >
         <DivError :server-errors="serverErrors" />
 
-        <div class="flex flex-col gap-4">
+        <div class="rounded-xl border bg-muted/30 p-4 space-y-4">
           <InputStandard
             v-model="mcp.name"
             :validation-schema="schema.name"
             :id="'name' + idSuffix"
             :field-label="$t('General.name')"
           />
-
+        </div>
+        <div class="rounded-xl border bg-background p-4 space-y-3">
+          <div
+            class="flex items-center space-x-2 border-b border-border/40 pb-1.5"
+          >
+            <span
+              class="text-xs font-bold uppercase tracking-wider text-muted-foreground block mb-0"
+            >
+              {{ $t("Contractpartner.moneyflowDefaults") }}
+            </span>
+          </div>
           <InputStandard
             v-model="mcp.moneyflowComment"
             :validation-schema="schema.moneyflowComment"
             :id="'moneyflowComment' + idSuffix"
-            :field-label="$t('Contractpartner.moneyflowComment')"
+            :field-label="$t('General.comment')"
           />
-
           <SelectPostingAccount
             v-model="mcp.postingAccountId"
             :validation-schema="schema.postingAccountId"
             :id-suffix="idSuffix + 'CreateContractpartner'"
             :field-label="$t('General.postingAccount')"
           />
-
-          <InputStandard
-            v-model="mcp.street"
-            :validation-schema="schema.street"
-            :id="'street' + idSuffix"
-            :field-label="$t('Contractpartner.street')"
-          />
-
-          <div class="grid grid-cols-3 gap-4">
-            <div class="col-span-1">
-              <InputStandard
-                v-model="mcp.postcode"
-                :validation-schema="schema.postcode"
-                :id="'postcode' + idSuffix"
-                :field-label="$t('Contractpartner.postcode')"
+        </div>
+        <div class="grid grid-cols-1 gap-4">
+          <div
+            class="rounded-xl border p-4 bg-muted/10 flex flex-col justify-between"
+          >
+            <span
+              class="text-xs font-bold uppercase tracking-wider text-muted-foreground block mb-2"
+            >
+              {{ $t("Contractpartner.validityData") }}
+            </span>
+            <div class="grid grid-cols-2 gap-4 mt-2">
+              <InputDate
+                v-model="mcp.validFrom"
+                :validation-schema="schema.validFrom"
+                :id="'validFrom' + idSuffix"
+                :field-label="$t('General.validFrom')"
+              />
+              <InputDate
+                v-model="mcp.validTil"
+                :validation-schema="schema.validTil"
+                :id="'validTil' + idSuffix"
+                :field-label="$t('General.validTil')"
               />
             </div>
-            <div class="col-span-2">
-              <InputStandard
-                v-model="mcp.town"
-                :validation-schema="schema.town"
-                :id="'town' + idSuffix"
-                :field-label="$t('Contractpartner.town')"
-              />
-            </div>
-          </div>
-
-          <InputStandard
-            v-model="mcp.country"
-            :validation-schema="schema.country"
-            :id="'country' + idSuffix"
-            :field-label="$t('Contractpartner.country')"
-          />
-
-          <div class="grid grid-cols-2 gap-4">
-            <InputDate
-              v-model="mcp.validFrom"
-              :validation-schema="schema.validFrom"
-              :id="'validFrom' + idSuffix"
-              :field-label="$t('General.validFrom')"
-            />
-            <InputDate
-              v-model="mcp.validTil"
-              :validation-schema="schema.validTil"
-              :id="'validTil' + idSuffix"
-              :field-label="$t('General.validTil')"
-            />
           </div>
         </div>
+
+        <Collapsible
+          class="rounded-xl border bg-background shadow-sm overflow-hidden"
+        >
+          <CollapsibleTrigger
+            class="flex items-center justify-between w-full p-4 hover:bg-muted/30 text-left transition-colors group"
+          >
+            <div class="flex items-center space-x-2">
+              <span
+                class="text-xs font-bold uppercase tracking-wider text-muted-foreground block mb-0"
+              >
+                {{ $t("Contractpartner.adressData") }}
+              </span>
+            </div>
+            <ChevronDown
+              class="h-4 w-4 text-muted-foreground transition-transform duration-200 group-data-[state=open]:rotate-180"
+            />
+          </CollapsibleTrigger>
+
+          <CollapsibleContent
+            class="p-4 pt-0 space-y-3 border-t border-border/40 mt-3 data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down"
+          >
+            <div class="grid grid-cols-3 gap-4 pt-3">
+              <div class="col-span-2">
+                <InputStandard
+                  v-model="mcp.street"
+                  :validation-schema="schema.street"
+                  :id="'street' + idSuffix"
+                  :field-label="$t('Contractpartner.street')"
+                />
+              </div>
+              <div class="col-span-1">
+                <InputStandard
+                  v-model="mcp.country"
+                  :validation-schema="schema.country"
+                  :id="'country' + idSuffix"
+                  :field-label="$t('Contractpartner.country')"
+                />
+              </div>
+            </div>
+
+            <div class="grid grid-cols-3 gap-4">
+              <div class="col-span-1">
+                <InputStandard
+                  v-model="mcp.postcode"
+                  :validation-schema="schema.postcode"
+                  :id="'postcode' + idSuffix"
+                  :field-label="$t('Contractpartner.postcode')"
+                />
+              </div>
+              <div class="col-span-2">
+                <InputStandard
+                  v-model="mcp.town"
+                  :validation-schema="schema.town"
+                  :id="'town' + idSuffix"
+                  :field-label="$t('Contractpartner.town')"
+                />
+              </div>
+            </div>
+          </CollapsibleContent>
+        </Collapsible>
       </form>
     </template>
 
@@ -122,7 +169,10 @@ import { globErr } from "@/tools/views/ZodUtil";
 
 import type { Contractpartner } from "@/model/contractpartner/Contractpartner";
 import ContractpartnerService from "@/service/ContractpartnerService";
-import { Save, Undo2 } from "lucide-vue-next";
+import { ChevronDown, Save, Undo2 } from "lucide-vue-next";
+import Collapsible from "../ui/collapsible/Collapsible.vue";
+import CollapsibleContent from "../ui/collapsible/CollapsibleContent.vue";
+import CollapsibleTrigger from "../ui/collapsible/CollapsibleTrigger.vue";
 
 const { t } = useI18n();
 
@@ -176,8 +226,12 @@ const resetForm = () => {
   if (origMcp.value) {
     Object.assign(mcp.value, origMcp.value);
   } else {
+    const beginningOfPreviousMonth = new Date();
+    beginningOfPreviousMonth.setDate(1);
+    beginningOfPreviousMonth.setHours(0, 0, 0, 0);
+    beginningOfPreviousMonth.setMonth(beginningOfPreviousMonth.getMonth() - 1);
     mcp.value = {
-      validFrom: new Date(),
+      validFrom: beginningOfPreviousMonth,
       validTil: new Date("2999-12-31"),
     } as Contractpartner;
   }
