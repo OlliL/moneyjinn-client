@@ -10,7 +10,6 @@
         :id="id"
         :name="id"
         :data-testid="id + '-id'"
-        ref="hiddenRef"
         v-model="hiddenValue"
       />
 
@@ -66,7 +65,6 @@
             v-for="selectBoxValue in items"
             :key="selectBoxValue.id"
             v-memo="[selectBoxValue.id]"
-            ref="dropdownItemRef"
             href="#"
             class="relative flex w-full cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground !text-foreground !no-underline"
             @click.prevent="onClickAnchor(selectBoxValue)"
@@ -329,10 +327,7 @@ const errorData = computed((): ErrorData => {
 });
 
 const fieldRef = useTemplateRef<typeof Input>("fieldRef");
-const hiddenRef = useTemplateRef<HTMLInputElement>("hiddenRef");
 const dropdownRef = useTemplateRef<HTMLDivElement>("dropdownRef");
-const dropdownItemRef =
-  useTemplateRef<Array<HTMLAnchorElement>>("dropdownItemRef");
 
 watch(
   () => props.modelValue,

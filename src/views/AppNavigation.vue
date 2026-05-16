@@ -316,9 +316,10 @@
   <!-- Desktop Navigation-->
   <Menubar
     class="hidden md:flex py-0 px-4 h-12 w-full sticky top-0 z-50 rounded-none border-b top-0 z-50 bg-background rounded-none border-b"
+    :key="route.name"
   >
     <MenubarMenu>
-      <MenubarTrigger>
+      <MenubarTrigger as-child>
         <router-link
           class="navbar-brand bg-light"
           :to="{ name: Routes.Home, force: true }"
@@ -327,7 +328,7 @@
       >
     </MenubarMenu>
     <MenubarMenu>
-      <MenubarTrigger
+      <MenubarTrigger as-child
         ><router-link
           class="!text-foreground !no-underline"
           :to="{ name: Routes.CreateMoneyflow, force: true }"
@@ -337,7 +338,7 @@
       </MenubarTrigger>
     </MenubarMenu>
     <MenubarMenu>
-      <MenubarTrigger>
+      <MenubarTrigger as-child>
         <router-link
           class="!text-foreground !no-underline"
           :to="{
@@ -351,7 +352,7 @@
       </MenubarTrigger>
     </MenubarMenu>
     <MenubarMenu>
-      <MenubarTrigger>
+      <MenubarTrigger as-child>
         <router-link
           class="!text-foreground !no-underline"
           :to="{ name: Routes.SearchMoneyflows, force: true }"
@@ -361,7 +362,7 @@
       </MenubarTrigger>
     </MenubarMenu>
     <MenubarMenu>
-      <MenubarTrigger>
+      <MenubarTrigger as-child>
         <router-link
           class="!text-foreground !no-underline"
           :to="{ name: Routes.ImportMoneyflows, force: true }"
@@ -371,7 +372,7 @@
       </MenubarTrigger>
     </MenubarMenu>
     <MenubarMenu>
-      <MenubarTrigger>
+      <MenubarTrigger as-child>
         <router-link
           class="!text-foreground !no-underline"
           :to="{ name: Routes.CompareData, force: true }"
@@ -382,20 +383,20 @@
     </MenubarMenu>
 
     <MenubarMenu>
-      <MenubarTrigger
+      <MenubarTrigger as-child
         ><span ref="dropdownChart" class="flex flex-row items-center"
           ><ChartColumnIncreasing class="m-1 text-muted-foreground" />
           <ChevronDown :size="10" class="ml-1 opacity-70" /></span
       ></MenubarTrigger>
       <MenubarContent>
-        <MenubarItem>
+        <MenubarItem as-child class="cursor-pointer">
           <router-link
             class="!text-foreground !no-underline"
             :to="{ name: Routes.ShowTrends, force: true }"
             >{{ $t("Reports.title.trends") }}</router-link
           >
         </MenubarItem>
-        <MenubarItem>
+        <MenubarItem as-child class="cursor-pointer">
           <router-link
             class="!text-foreground !no-underline"
             :to="{ name: Routes.ShowReporting, force: true }"
@@ -405,14 +406,14 @@
       </MenubarContent>
     </MenubarMenu>
     <MenubarMenu>
-      <MenubarTrigger
+      <MenubarTrigger as-child
         ><span ref="dropdownPlus" class="flex flex-row items-center"
           ><SquarePlus class="m-1 text-muted-foreground" /><ChevronDown
             :size="10"
             class="ml-1 opacity-70" /></span
       ></MenubarTrigger>
       <MenubarContent>
-        <MenubarItem>
+        <MenubarItem as-child class="cursor-pointer">
           <router-link
             class="!text-foreground !no-underline"
             :to="{ name: Routes.CreateMoneyflow, force: true }"
@@ -420,7 +421,7 @@
           >
         </MenubarItem>
         <MenubarSeparator />
-        <MenubarItem>
+        <MenubarItem as-child class="cursor-pointer">
           <router-link
             class="!text-foreground !no-underline"
             :to="{ name: Routes.ImportReceipts, force: true }"
@@ -428,19 +429,19 @@
           >
         </MenubarItem>
         <MenubarSeparator />
-        <MenubarItem>
+        <MenubarItem as-child>
           <span class="cursor-pointer" @click="showCreateCapitalsourceModal">{{
             $t("General.capitalsource")
           }}</span>
         </MenubarItem>
-        <MenubarItem>
+        <MenubarItem as-child>
           <span
             class="cursor-pointer"
             @click="showCreateContractpartnerModal"
             >{{ $t("General.contractpartner") }}</span
           >
         </MenubarItem>
-        <MenubarItem>
+        <MenubarItem as-child>
           <span class="cursor-pointer" @click="showPreDefMoneyflowModal">{{
             $t("General.preDefMoneyflow")
           }}</span>
@@ -448,28 +449,28 @@
       </MenubarContent>
     </MenubarMenu>
     <MenubarMenu>
-      <MenubarTrigger
+      <MenubarTrigger as-child
         ><span ref="dropdownWrench" class="flex flex-row items-center"
           ><Wrench class="m-1 text-muted-foreground" /><ChevronDown
             :size="10"
             class="ml-1 opacity-70" /></span
       ></MenubarTrigger>
       <MenubarContent>
-        <MenubarItem>
+        <MenubarItem as-child class="cursor-pointer">
           <router-link
             class="!text-foreground !no-underline"
             :to="{ name: Routes.ListCapitalsources, force: true }"
             >{{ $t("General.capitalsources") }}</router-link
           >
         </MenubarItem>
-        <MenubarItem>
+        <MenubarItem as-child class="cursor-pointer">
           <router-link
             class="!text-foreground !no-underline"
             :to="{ name: Routes.ListContractpartners, force: true }"
             >{{ $t("General.contractpartners") }}</router-link
           >
         </MenubarItem>
-        <MenubarItem>
+        <MenubarItem as-child>
           <router-link
             class="!text-foreground !no-underline"
             :to="{
@@ -479,14 +480,14 @@
             >{{ $t("General.contractpartnerMatchings") }}</router-link
           >
         </MenubarItem>
-        <MenubarItem>
+        <MenubarItem as-child class="cursor-pointer">
           <router-link
             class="!text-foreground !no-underline"
             :to="{ name: Routes.ListPreDefMoneyflows, force: true }"
             >{{ $t("General.preDefMoneyflows") }}</router-link
           >
         </MenubarItem>
-        <MenubarItem>
+        <MenubarItem as-child class="cursor-pointer">
           <router-link
             class="!text-foreground !no-underline"
             :to="{ name: Routes.ListMonthlySettlements, force: true }"
@@ -496,28 +497,28 @@
       </MenubarContent>
     </MenubarMenu>
     <MenubarMenu>
-      <MenubarTrigger
+      <MenubarTrigger as-child
         ><span ref="dropdownEtf" class="flex flex-row items-center"
           ><ChartCandlestick class="m-1 text-muted-foreground" /><ChevronDown
             :size="10"
             class="ml-1 opacity-70" /></span
       ></MenubarTrigger>
       <MenubarContent>
-        <MenubarItem>
+        <MenubarItem as-child class="cursor-pointer">
           <router-link
             class="!text-foreground !no-underline"
             :to="{ name: Routes.ListEtfDepot, force: true }"
             >{{ $t("General.etfDepot") }}</router-link
           >
         </MenubarItem>
-        <MenubarItem>
+        <MenubarItem as-child class="cursor-pointer">
           <router-link
             class="!text-foreground !no-underline"
             :to="{ name: Routes.ListEtfs, force: true }"
             >{{ $t("General.etfs") }}</router-link
           >
         </MenubarItem>
-        <MenubarItem>
+        <MenubarItem as-child class="cursor-pointer">
           <router-link
             class="!text-foreground !no-underline"
             :to="{ name: Routes.ListEtfPreliminaryLumpSums, force: true }"
@@ -530,14 +531,14 @@
     <div class="flex-grow"></div>
 
     <MenubarMenu>
-      <MenubarTrigger
+      <MenubarTrigger as-child
         ><span ref="dropdownUser" class="flex flex-row items-center"
           ><SquareUserRound class="m-1 text-muted-foreground" /><ChevronDown
             :size="10"
             class="ml-1 opacity-70" /></span
       ></MenubarTrigger>
       <MenubarContent>
-        <MenubarItem>
+        <MenubarItem as-child class="cursor-pointer">
           <router-link
             class="!text-foreground !no-underline"
             :to="{ name: Routes.ChangePassword, force: true }"
@@ -545,7 +546,7 @@
           >
         </MenubarItem>
         <MenubarSeparator v-if="userIsAdmin" />
-        <MenubarItem v-if="userIsAdmin">
+        <MenubarItem as-child class="cursor-pointer" v-if="userIsAdmin">
           <router-link
             class="!text-foreground !no-underline"
             :to="{ name: Routes.ListPostingAccounts, force: true }"
@@ -553,14 +554,14 @@
           >
         </MenubarItem>
         <MenubarSeparator v-if="userIsAdmin" />
-        <MenubarItem v-if="userIsAdmin">
+        <MenubarItem as-child class="cursor-pointer" v-if="userIsAdmin">
           <router-link
             class="!text-foreground !no-underline"
             :to="{ name: Routes.ListUsers, force: true }"
             >{{ $t("General.users") }}</router-link
           >
         </MenubarItem>
-        <MenubarItem v-if="userIsAdmin">
+        <MenubarItem as-child class="cursor-pointer" v-if="userIsAdmin">
           <router-link
             class="!text-foreground !no-underline"
             :to="{ name: Routes.ListGroups, force: true }"
@@ -570,7 +571,10 @@
       </MenubarContent>
     </MenubarMenu>
     <MenubarMenu>
-      <MenubarTrigger :title="$t('General.logout')"
+      <MenubarTrigger
+        as-child
+        class="cursor-pointer"
+        :title="$t('General.logout')"
         ><span
           ><LogOut class="m-2 text-muted-foreground" @click="logout" /></span
       ></MenubarTrigger>

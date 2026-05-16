@@ -62,6 +62,7 @@
                   :validation-schema-ref="schema.searchCriteria"
                   id="comment"
                   :field-label="$t('General.comment')"
+                  :focus="true"
                 />
               </div>
               <div class="md:col-span-1 flex items-center gap-2 text-left">
