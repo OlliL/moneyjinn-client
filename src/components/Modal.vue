@@ -5,26 +5,30 @@
       :class="[
         'sm:max-w-lg',
         'max-h-[90vh]',
-        'flex flex-col',
+        'flex flex-col gap-6 p-6 overflow-visible',
         `!z-[${zIndex}]`,
       ]"
     >
-      <DialogHeader>
-        <DialogTitle class="text-center w-full">
-          <h4 class="text-2xl font-bold">{{ title }}</h4>
+      <DialogHeader class="space-y-1.5 text-left">
+        <DialogTitle>
+          <h4 class="text-lg font-semibold leading-none tracking-tight">
+            {{ title }}
+          </h4>
         </DialogTitle>
       </DialogHeader>
 
-      <div class="py-2 overflow-y-auto flex-1">
+      <div class="overflow-y-auto flex-1 pr-1">
         <slot name="body" />
       </div>
 
-      <DialogFooter class="sm:justify-center gap-2">
+      <DialogFooter
+        class="flex flex-row justify-end gap-2 pt-4 border-t border-border/40"
+      >
         <DialogClose as-child>
           <Button
             type="button"
-            variant="secondary"
-            class="flex items-center gap-2 px-6"
+            variant="ghost"
+            class="flex items-center gap-2 px-4"
           >
             <X class="h-4 w-4" />
             {{ $t("Modal.cancel") }}
@@ -50,18 +54,9 @@ import { Button } from "@/components/ui/button";
 import { X } from "lucide-vue-next";
 
 const props = defineProps({
-  title: {
-    type: String,
-    default: "",
-  },
-  maxWidth: {
-    type: String,
-    default: "",
-  },
-  zIndex: {
-    type: String,
-    default: "2000",
-  },
+  title: { type: String, default: "" },
+  maxWidth: { type: String, default: "" },
+  zIndex: { type: String, default: "2000" },
 });
 
 const isOpen = ref(false);
@@ -73,9 +68,13 @@ const modalStyle = computed(() => {
 const _show = () => {
   isOpen.value = true;
 };
+
 const _hide = () => {
   isOpen.value = false;
 };
 
-defineExpose({ _show, _hide });
+defineExpose({
+  _show,
+  _hide,
+});
 </script>

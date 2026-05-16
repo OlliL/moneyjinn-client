@@ -1,90 +1,113 @@
 <template>
-  <ModalVue :title="title" ref="modalComponent">
+  <ModalVue :title="title" ref="modalComponent" maxWidth="640px">
     <template #body>
       <form
         @submit.prevent="createCapitalsource"
         :id="'createCapitalsourceForm' + idSuffix"
-        class="space-y-4"
+        class="space-y-6"
       >
         <DivError :server-errors="serverErrors" />
 
-        <div class="flex flex-col gap-4">
-          <InputStandard
-            v-model="mcs.comment"
-            :validation-schema="schema.comment"
-            :id="'comment' + idSuffix"
-            :field-label="$t('General.name')"
-          />
-
-          <div class="grid grid-cols-12 gap-4">
-            <div class="col-span-7">
-              <SelectStandard
-                v-model="mcs.type"
-                :validation-schema="schema.type"
-                :id="'type' + idSuffix"
-                :field-label="$t('Capitalsource.type')"
-                :select-box-values="capitalsourceTypeValues"
-              />
-            </div>
-            <div class="col-span-5">
-              <SelectStandard
-                v-model="mcs.state"
-                :validation-schema="schema.state"
-                :id="'state' + idSuffix"
-                :field-label="$t('Capitalsource.state')"
-                :select-box-values="capitalsourceStateValues"
-              />
-            </div>
-          </div>
-
-          <div class="grid grid-cols-12 gap-4">
-            <div class="col-span-7">
-              <InputStandard
-                v-model="mcs.accountNumber"
-                :validation-schema="schema.accountNumber"
-                :id="'accountNumber' + idSuffix"
-                :field-label="$t('General.iban')"
-              />
-            </div>
-            <div class="col-span-5">
-              <InputStandard
-                v-model="mcs.bankCode"
-                :validation-schema="schema.bankCode"
-                :id="'bankCode' + idSuffix"
-                :field-label="$t('General.bic')"
-              />
-            </div>
-          </div>
-
-          <div class="grid grid-cols-2 gap-4">
-            <InputDate
-              v-model="mcs.validFrom"
-              :validation-schema="schema.validFrom"
-              :id="'validFrom' + idSuffix"
-              :field-label="$t('General.validFrom')"
-            />
-            <InputDate
-              v-model="mcs.validTil"
-              :validation-schema="schema.validTil"
-              :id="'validTil' + idSuffix"
-              :field-label="$t('General.validTil')"
+        <div class="rounded-xl border bg-muted/30 p-4 space-y-4">
+          <div class="grid gap-1.5">
+            <InputStandard
+              v-model="mcs.comment"
+              :validation-schema="schema.comment"
+              :id="'comment' + idSuffix"
+              :field-label="$t('General.name')"
             />
           </div>
 
           <div class="grid grid-cols-2 gap-4">
             <SelectStandard
-              v-model="mcs.groupUse"
-              :validation-schema="schema.groupUse"
-              :id="'groupUse' + idSuffix"
-              :field-label="$t('Capitalsource.groupUse')"
-              :select-box-values="groupUseValues"
+              v-model="mcs.type"
+              :validation-schema="schema.type"
+              :id="'type' + idSuffix"
+              :field-label="$t('Capitalsource.type')"
+              :select-box-values="capitalsourceTypeValues"
             />
             <SelectStandard
-              v-model="mcs.importAllowed"
-              :validation-schema="schema.importAllowed"
-              :id="'importAllowed' + idSuffix"
-              :field-label="$t('Capitalsource.importAllowed')"
-              :select-box-values="capitalsourceImportValues"
+              v-model="mcs.state"
+              :validation-schema="schema.state"
+              :id="'state' + idSuffix"
+              :field-label="$t('Capitalsource.state')"
+              :select-box-values="capitalsourceStateValues"
+            />
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div
+            class="rounded-xl border p-4 bg-muted/10 flex flex-col justify-between min-h-[175px]"
+          >
+            <span
+              class="text-xs font-bold uppercase tracking-wider text-muted-foreground block mb-2"
+            >
+              {{ $t("Capitalsource.validityData") }}
+            </span>
+            <div class="space-y-4 flex-1 flex flex-col justify-end mt-2">
+              <InputDate
+                v-model="mcs.validFrom"
+                :validation-schema="schema.validFrom"
+                :id="'validFrom' + idSuffix"
+                :field-label="$t('General.validFrom')"
+              />
+              <InputDate
+                v-model="mcs.validTil"
+                :validation-schema="schema.validTil"
+                :id="'validTil' + idSuffix"
+                :field-label="$t('General.validTil')"
+              />
+            </div>
+          </div>
+
+          <div
+            class="rounded-xl border p-4 bg-muted/10 flex flex-col justify-between min-h-[175px]"
+          >
+            <span
+              class="text-xs font-bold uppercase tracking-wider text-muted-foreground block"
+            >
+              {{ $t("Capitalsource.permissions") }}
+            </span>
+            <div class="space-y-4 flex-1 flex flex-col justify-end mt-2">
+              <SelectStandard
+                v-model="mcs.groupUse"
+                :validation-schema="schema.groupUse"
+                :id="'groupUse' + idSuffix"
+                :field-label="$t('Capitalsource.groupUse')"
+                :select-box-values="groupUseValues"
+              />
+              <SelectStandard
+                v-model="mcs.importAllowed"
+                :validation-schema="schema.importAllowed"
+                :id="'importAllowed' + idSuffix"
+                :field-label="$t('Capitalsource.importAllowed')"
+                :select-box-values="capitalsourceImportValues"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div class="rounded-xl border bg-background p-4 space-y-4 shadow-sm">
+          <div class="flex items-center space-x-2 border-b border-border/40">
+            <span
+              class="text-xs font-bold uppercase tracking-wider text-muted-foreground block mb-0"
+            >
+              {{ $t("Capitalsource.accountData") }}
+            </span>
+          </div>
+          <div class="grid grid-cols-2 gap-4">
+            <InputStandard
+              v-model="mcs.accountNumber"
+              :validation-schema="schema.accountNumber"
+              :id="'accountNumber' + idSuffix"
+              :field-label="$t('General.iban')"
+            />
+            <InputStandard
+              v-model="mcs.bankCode"
+              :validation-schema="schema.bankCode"
+              :id="'bankCode' + idSuffix"
+              :field-label="$t('General.bic')"
             />
           </div>
         </div>
@@ -105,8 +128,9 @@
       <ButtonSubmit
         :button-label="$t('General.save')"
         :form-id="'createCapitalsourceForm' + idSuffix"
-        ><template #icon><Save class="h-4 w-4" /></template
-      ></ButtonSubmit>
+      >
+        <template #icon><Save class="h-4 w-4" /></template>
+      </ButtonSubmit>
     </template>
   </ModalVue>
 </template>

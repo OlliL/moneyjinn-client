@@ -82,14 +82,22 @@
     </template>
 
     <template #footer>
-      <Button type="button" variant="secondary" @click="resetForm">
+      <Button
+        type="button"
+        variant="secondary"
+        class="flex items-center gap-2 px-6"
+        @click="resetForm"
+      >
+        <Undo2 class="h-4 w-4" />
         {{ $t("General.reset") }}
       </Button>
 
       <ButtonSubmit
         :button-label="$t('General.save')"
         :form-id="'createContractpartnerForm' + idSuffix"
-      />
+      >
+        <template #icon><Save class="h-4 w-4" /></template>
+      </ButtonSubmit>
     </template>
   </ModalVue>
 </template>
@@ -114,6 +122,7 @@ import { globErr } from "@/tools/views/ZodUtil";
 
 import type { Contractpartner } from "@/model/contractpartner/Contractpartner";
 import ContractpartnerService from "@/service/ContractpartnerService";
+import { Save, Undo2 } from "lucide-vue-next";
 
 const { t } = useI18n();
 
