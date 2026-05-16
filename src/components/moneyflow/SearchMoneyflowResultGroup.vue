@@ -35,27 +35,37 @@
         {{ moneyflowGroup.year }}
       </router-link>
     </TableCell>
-    <TableCell class="align-middle" v-if="colContractpartner">
+    <TableCell
+      class="align-middle !whitespace-normal"
+      v-if="colContractpartner"
+    >
       {{ moneyflowGroup.contractpartnerName }}
     </TableCell>
 
-    <TableCell class="text-right whitespace-nowrap align-middle">
+    <TableCell class="text-right align-middle">
       <SpanAmount :amount="moneyflowGroup.amount" />
     </TableCell>
-    <TableCell class="text-left align-middle">
+    <TableCell class="text-left align-middle break-words !whitespace-normal">
       {{ moneyflowGroup.commentString }}
     </TableCell>
   </TableRow>
+
   <TableRow v-if="isCollapsed">
-    <TableCell colspan="5" class="p-0">
+    <TableCell
+      :colspan="
+        3 +
+        (colBookingMonth ? 1 : 0) +
+        (colBookingYear ? 1 : 0) +
+        (colContractpartner ? 1 : 0)
+      "
+      class="p-0"
+    >
       <div class="p-4">
-        <div class="flex flex-col rounded-md border">
-          <Table
-            class="[&_tr:nth-child(even)]:bg-primary/7 [&_td]:!py-1 [&_th]:!py-1"
-          >
+        <div class="flex flex-col rounded-md border w-full overflow-x-auto">
+          <Table class="[&_td]:!py-1 [&_th]:!py-1">
             <TableHeader>
               <TableRow>
-                <TableHead class="hidden md:table-cell"
+                <TableHead class="hidden border md:table-cell"
                   ><span class="sr-only">Status</span></TableHead
                 >
                 <TableHead
@@ -96,6 +106,9 @@
                 :rowspan="rowsPerMoneyflow.get(moneyflow.id) ?? 1"
                 :isFirstOfMultipleRowsForSameMoneyflow="
                   firstIndexForMoneyflow.get(moneyflow.id) === index
+                "
+                :alternateRowBackground="
+                  alternateRowBackground.get(moneyflow.id)
                 "
                 @delete-moneyflow="emitDeleteMoneyflow"
                 @edit-moneyflow="emitEditMoneyflow"
@@ -173,13 +186,17 @@ const emit = defineEmits([
 ]);
 const rowsPerMoneyflow = ref(new Map<number, number>());
 const firstIndexForMoneyflow = ref(new Map<number, number>());
+const alternateRowBackground = ref(new Map<number, boolean>());
 
 watch(
   () => props.moneyflowGroup.moneyflows,
   (moneyflows) => {
+    let i = 0;
     moneyflows.forEach((mmf) => {
       const curVal = rowsPerMoneyflow.value.get(mmf.id);
       if (curVal === undefined) {
+        i++;
+        alternateRowBackground.value.set(mmf.id, i % 2 === 0);
         rowsPerMoneyflow.value.set(mmf.id, 1);
       } else {
         rowsPerMoneyflow.value.set(mmf.id, curVal + 1);

@@ -21,7 +21,7 @@
           :id="id"
           :data-testid="id"
           :class="[
-            'bg-white z-10',
+            'bg-background z-10',
             $slots.icon ? 'rounded-r-none' : '',
             errorData.inputClass == 'is-invalid'
               ? '!border-destructive bg-destructive/[0.03] focus-visible:ring-destructive/15 !border-r-destructive'

@@ -55,7 +55,7 @@
                 />
               </div>
             </div>
-            <div class="grid gap-3 md:grid-cols-12 items-center">
+            <div class="grid gap-3 md:grid-cols-12 items-start">
               <div class="md:col-span-4">
                 <InputStandard
                   v-model="comment"
@@ -65,47 +65,45 @@
                   :focus="true"
                 />
               </div>
-              <div class="md:col-span-1 flex items-center gap-2 text-left">
-                <input
-                  class="h-4 w-4"
-                  type="checkbox"
-                  v-model="featureEqual"
+              <div class="md:col-span-1 flex items-start gap-2 text-left mt-8">
+                <Checkbox
                   id="featureEqual"
+                  class="bg-background"
+                  v-model:checked="featureEqual"
                 />
-                <label for="featureEqual">
+                <Label for="featureEqual" class="cursor-pointer">
                   {{ $t("Moneyflow.equal") }}
-                </label>
+                </Label>
               </div>
-              <div class="md:col-span-3 flex items-center gap-2 text-left">
-                <input
-                  class="h-4 w-4"
-                  type="checkbox"
-                  v-model="featureCaseSensitive"
+              <div class="md:col-span-3 flex items-start gap-2 text-left mt-8">
+                <Checkbox
                   id="featureCaseSensitive"
+                  class="bg-background"
+                  v-model:checked="featureCaseSensitive"
                 />
-                <label for="featureCaseSensitive">
+                <Label for="featureCaseSensitive" class="cursor-pointer">
                   {{ $t("Moneyflow.caseSensitivity") }}
-                </label>
+                </Label>
               </div>
-              <div class="md:col-span-2 flex items-center gap-2 text-left">
-                <input
-                  class="h-4 w-4"
-                  type="checkbox"
-                  v-model="featureRegexp"
+              <div class="md:col-span-2 flex items-start gap-2 text-left mt-8">
+                <Checkbox
                   id="featureRegexp"
+                  class="bg-background"
+                  v-model:checked="featureRegexp"
                 />
-                <label for="featureRegexp">{{ $t("Moneyflow.regexp") }}</label>
+                <Label for="featureRegexp" class="cursor-pointer">
+                  {{ $t("Moneyflow.regexp") }}
+                </Label>
               </div>
-              <div class="md:col-span-2 flex items-center gap-2 text-left">
-                <input
-                  class="h-4 w-4"
-                  type="checkbox"
-                  v-model="featureOnlyMinusAmounts"
+              <div class="md:col-span-2 flex items-start gap-2 text-left mt-8">
+                <Checkbox
                   id="featureOnlyMinusAmounts"
+                  class="bg-background"
+                  v-model:checked="featureOnlyMinusAmounts"
                 />
-                <label for="featureOnlyMinusAmounts">
+                <Label for="featureOnlyMinusAmounts" class="cursor-pointer">
                   {{ $t("Moneyflow.onlyNegative") }}
-                </label>
+                </Label>
               </div>
             </div>
             <div class="grid gap-3 md:grid-cols-12 items-end">
@@ -156,37 +154,46 @@
         </form>
       </div>
     </div>
-    <div class="flex justify-center" v-if="dataLoaded">
-      <DivContentTable :alternate-row-background="false" class="max-w-7xl">
+    <div class="flex justify-center w-full" v-if="dataLoaded">
+      <DivContentTable :alternate-row-background="false" class="w-full">
         <TableHeader>
           <TableRow>
             <TableHead
-              class="font-bold border text-foreground text-center"
+              class="font-bold border text-foreground text-center w-12"
             ></TableHead>
+
             <TableHead
-              class="font-bold border text-foreground"
+              class="font-bold border text-foreground w-36"
               v-if="colBookingMonth"
             >
               {{ $t("Moneyflow.bookingMonth") }}
             </TableHead>
+
             <TableHead
-              class="font-bold border text-foreground"
+              class="font-bold border text-foreground w-28"
               v-if="colBookingYear"
             >
               {{ $t("Moneyflow.bookingYear") }}
             </TableHead>
+
             <TableHead
-              class="font-bold border text-foreground"
+              class="font-bold border text-foreground w-48 !whitespace-normal"
               v-if="colContractpartner"
             >
               {{ $t("General.contractpartner") }}
             </TableHead>
-            <TableHead class="font-bold border text-foreground text-center">{{
-              $t("General.amount")
-            }}</TableHead>
-            <TableHead class="font-bold border text-foreground text-center">{{
-              $t("General.comment")
-            }}</TableHead>
+
+            <TableHead
+              class="font-bold border text-foreground text-center w-28"
+            >
+              {{ $t("General.amount") }}
+            </TableHead>
+
+            <TableHead
+              class="font-bold border text-foreground text-center !whitespace-normal"
+            >
+              {{ $t("General.comment") }}
+            </TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -245,6 +252,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@/components/ui/label";
 import { Search, Undo2 } from "lucide-vue-next";
 
 const { t } = useI18n();

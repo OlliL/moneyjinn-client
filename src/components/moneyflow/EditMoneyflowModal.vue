@@ -16,7 +16,7 @@
         <div class="w-full">
           <div class="flex gap-4">
             <div
-              class="w-1/3 overflow-x-scroll whitespace-nowrap h-[600px]"
+              class="w-1/3 overflow-x-scroll whitespace-nowrap h-[600px] max-w-120"
               v-if="receiptBase64"
             >
               <img
@@ -101,7 +101,9 @@ const emit = defineEmits([
 const { handleSubmit, values, setFieldTouched } = useForm();
 
 const modalWidth = computed(() => {
-  return receiptBase64.value ? "100%" : "75%";
+  return receiptBase64.value
+    ? "md:max-w-full w-full mx-auto"
+    : "md:max-w-2xl lg:max-w-7xl w-full mx-auto";
 });
 const _show = (_mmf: Moneyflow, receipt?: ImportedMoneyflowReceipt) => {
   mmf.value = _mmf;

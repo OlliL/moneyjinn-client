@@ -15,7 +15,7 @@
         :disabled="disabled"
         :step="step"
         :class="[
-          'bg-white z-10',
+          'bg-background z-10',
           alignmentClass,
           $slots.icon ? 'rounded-r-none' : '',
           errorData.inputClass == 'is-invalid'

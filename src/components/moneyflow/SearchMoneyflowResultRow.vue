@@ -1,7 +1,7 @@
 <template>
   <TableRow>
     <TableCell
-      :class="redIfPrivate"
+      :class="[redIfPrivate, rowBgClass]"
       :rowspan="rowspan"
       v-if="isFirstOfMultipleRowsForSameMoneyflow"
     >
@@ -10,37 +10,43 @@
         variant="ghost"
         size="icon"
         @click="showReceipt"
-        :title="$t('Moneyflow.showReceipt')"
-        :aria-label="$t('Moneyflow.showReceipt')"
+        :title="$t('Receipt.receipt')"
+        :aria-label="$t('Receipt.receipt')"
         class="h-6 w-6"
       >
         <Image class="h-4 w-4" />
       </Button>
     </TableCell>
-    <TableCell :rowspan="rowspan" v-if="isFirstOfMultipleRowsForSameMoneyflow">
+    <TableCell
+      :class="rowBgClass"
+      :rowspan="rowspan"
+      v-if="isFirstOfMultipleRowsForSameMoneyflow"
+    >
       <SpanDate :date="mmf.bookingDate" />
     </TableCell>
-    <TableCell class="text-right"
+    <TableCell :class="['text-right', rowBgClass]"
       ><SpanAmount :amount="mmf.amount"
     /></TableCell>
     <TableCell
-      class="text-left"
+      :class="['text-left', rowBgClass]"
       :rowspan="rowspan"
       v-if="isFirstOfMultipleRowsForSameMoneyflow"
     >
       {{ mmf.contractpartnerName }}
     </TableCell>
-    <TableCell class="text-left">{{ mmf.comment }}</TableCell>
-    <TableCell class="text-left">{{ mmf.postingAccountName }}</TableCell>
+    <TableCell :class="['text-left', rowBgClass]">{{ mmf.comment }}</TableCell>
+    <TableCell :class="['text-left', rowBgClass]">{{
+      mmf.postingAccountName
+    }}</TableCell>
     <TableCell
-      class="text-left"
+      :class="['text-left', rowBgClass]"
       :rowspan="rowspan"
       v-if="isFirstOfMultipleRowsForSameMoneyflow"
     >
       {{ mmf.capitalsourceComment }}
     </TableCell>
     <TableCell
-      class="text-center"
+      :class="['w-8 h-8 text-center', rowBgClass]"
       :rowspan="rowspan"
       v-if="isFirstOfMultipleRowsForSameMoneyflow && isOwnMoneyflow"
     >
@@ -56,7 +62,7 @@
       </Button>
     </TableCell>
     <TableCell
-      class="text-center"
+      :class="['w-8 h-8 text-center', rowBgClass]"
       :title="$t('General.edit')"
       :aria-label="$t('General.edit')"
       :rowspan="rowspan"
@@ -74,7 +80,7 @@
       </Button>
     </TableCell>
     <TableCell
-      class="text-center"
+      :class="['w-8 h-8 text-center', rowBgClass]"
       :title="$t('General.delete')"
       :aria-label="$t('General.delete')"
       :rowspan="rowspan"
@@ -84,19 +90,13 @@
         variant="ghost"
         size="icon"
         @click="listMoneyflow"
-        :title="$t('General.list')"
-        :aria-label="$t('General.list')"
+        :title="$t('General.moneyflow')"
+        :aria-label="$t('General.moneyflow')"
         class="h-6 w-6"
       >
         <Eye class="h-4 w-4" />
       </Button>
     </TableCell>
-    <TableCell
-      :rowspan="rowspan"
-      :title="$t('General.moneyflow')"
-      :aria-label="$t('General.moneyflow')"
-      v-if="isFirstOfMultipleRowsForSameMoneyflow && !isOwnMoneyflow"
-    ></TableCell>
   </TableRow>
 </template>
 <script lang="ts" setup>
@@ -126,6 +126,10 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  alternateRowBackground: {
+    type: Boolean,
+    default: false,
+  },
 });
 const userSessionStore = useUserSessionStore();
 const emit = defineEmits([
@@ -139,7 +143,9 @@ const redIfPrivate = computed(() => {
     ? "bg-destructive/10 hidden md:table-cell"
     : "hidden md:table-cell";
 });
-
+const rowBgClass = computed(() => {
+  return props.alternateRowBackground ? "bg-primary/7" : "bg-background";
+});
 const isOwnMoneyflow = computed(() => {
   return props.mmf.userId === userSessionStore.getUserId;
 });

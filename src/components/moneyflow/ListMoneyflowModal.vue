@@ -9,24 +9,25 @@
       <DivError :server-errors="serverErrors" />
       <div class="w-full">
         <div class="flex gap-4">
-          <div class="w-1/3" v-if="receiptBase64">
-            <div class="overflow-x-auto h-96">
-              <img
-                v-if="isJpeg"
-                :src="`data:image/png;base64,${receiptBase64}`"
-                class="max-w-full"
-                alt="receipt"
-              />
-              <object
-                class="h-96 w-full"
-                v-if="isPdf"
-                id="pdf"
-                :data="`data:application/pdf;base64,${receiptBase64}`"
-                type="application/pdf"
-              >
-                receipt
-              </object>
-            </div>
+          <div
+            class="w-1/3 overflow-x-scroll whitespace-nowrap h-[600px] max-w-120"
+            v-if="receiptBase64"
+          >
+            <img
+              v-if="isJpeg"
+              :src="`data:image/png;base64,${receiptBase64}`"
+              class="max-w-full"
+              alt="receipt"
+            />
+            <object
+              class="h-[75vh] w-full"
+              v-if="isPdf"
+              id="pdf"
+              :data="`data:application/pdf;base64,${receiptBase64}`"
+              type="application/pdf"
+            >
+              receipt
+            </object>
           </div>
           <div class="flex-1">
             <div class="flex flex-col rounded-md border">
@@ -138,13 +139,6 @@
   </ModalVue>
 </template>
 
-<style lang="css" scoped>
-th,
-td {
-  font-size: 0.9rem;
-}
-</style>
-
 <script lang="ts" setup>
 import { useForm } from "vee-validate";
 import { computed, ref, useTemplateRef } from "vue";
@@ -182,7 +176,9 @@ const emit = defineEmits(["moneyflowUpdated", "moneyflowReceiptDeleted"]);
 const { handleSubmit, values, setFieldTouched } = useForm();
 
 const modalWidth = computed(() => {
-  return receiptBase64.value ? "100%" : "75%";
+  return receiptBase64.value
+    ? "md:max-w-full w-full mx-auto"
+    : "md:max-w-2xl lg:max-w-7xl w-full mx-auto";
 });
 
 const rowspan = computed(() => {

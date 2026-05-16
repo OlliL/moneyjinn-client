@@ -1,6 +1,6 @@
 <template>
   <div class="mx-auto rounded-md border w-full">
-    <Table :class="[clazz, '[&_td]:!py-1 [&_th]:!py-1']">
+    <Table :class="[clazz, '[&_td]:!py-1 [&_th]:!py-1', $attrs.class]">
       <slot name="default"></slot>
     </Table>
   </div>
@@ -15,6 +15,10 @@ const props = defineProps({
     type: Boolean,
     default: true,
   },
+});
+
+defineOptions({
+  inheritAttrs: false,
 });
 
 const clazz = computed(() => {

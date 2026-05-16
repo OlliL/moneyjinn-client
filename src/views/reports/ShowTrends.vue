@@ -31,77 +31,202 @@
                 />
               </div>
             </div>
+            <div class="grid gap-4 md:grid-cols-2">
+              <div class="flex justify-start">
+                <div class="flex items-center gap-3 text-left">
+                  <Checkbox
+                    id="capitalsourcesActive"
+                    class="bg-background"
+                    v-model="capitalsourcesActive"
+                  />
+                  <Label for="capitalsourcesActive" class="cursor-pointer">
+                    {{ $t("General.capitalsources") }}
+                  </Label>
+                </div>
+              </div>
 
-            <div class="flex justify-start">
-              <div class="flex items-center gap-3 text-left">
-                <input
-                  class="h-4 w-4"
-                  type="checkbox"
-                  id="capitalsourcesActive"
-                  v-model="capitalsourcesActive"
-                />
-                <label
-                  for="capitalsourcesActive"
-                  class="text-muted-foreground"
-                  >{{ $t("General.capitalsources") }}</label
-                >
+              <div class="flex justify-start">
+                <div class="flex items-center gap-3 text-left">
+                  <Checkbox
+                    id="etfs"
+                    class="bg-background"
+                    v-model="etfsActive"
+                  />
+                  <Label for="etfs" class="cursor-pointer">
+                    {{ $t("General.etfs") }}
+                  </Label>
+                </div>
               </div>
             </div>
-            <div class="grid" v-if="capitalsourcesActive">
-              <div class="mb-3 text-left">
-                <select
-                  v-model="capitalsourceIds"
-                  id="capitalsourceIds"
-                  name="capitalsourceIds"
-                  class="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
-                  multiple
-                  size="4"
+            <div class="grid gap-4 md:grid-cols-2">
+              <div class="grid" v-if="capitalsourcesActive">
+                <div
+                  class="mb-3 text-left rounded-lg border bg-background p-3 shadow-sm space-y-2 w-full"
                 >
-                  <option
-                    v-for="value of selectBoxValues"
-                    :key="value.id"
-                    :value="value.id"
+                  <div class="flex items-center justify-between pb-1 border-b">
+                    <Label class="text-xs font-semibold text-muted-foreground">
+                      {{ $t("General.capitalsources") }}
+                    </Label>
+
+                    <div class="flex items-center space-x-1 text-xs">
+                      <button
+                        type="button"
+                        class="px-1.5 py-0.5 text-muted-foreground hover:text-foreground font-medium rounded hover:bg-muted cursor-pointer transition-colors"
+                        @click="
+                          selectBoxValues.forEach(
+                            (v) => (capitalsourceIds[v.id] = true),
+                          )
+                        "
+                      >
+                        Alle
+                      </button>
+                      <span class="text-muted-foreground/40">|</span>
+                      <button
+                        type="button"
+                        class="px-1.5 py-0.5 text-muted-foreground hover:text-foreground font-medium rounded hover:bg-muted cursor-pointer transition-colors"
+                        @click="
+                          selectBoxValues.forEach(
+                            (v) => (capitalsourceIds[v.id] = false),
+                          )
+                        "
+                      >
+                        Keine
+                      </button>
+                    </div>
+                  </div>
+
+                  <Command
+                    class="rounded-md border border-input h-[160px] overflow-hidden flex flex-col"
                   >
-                    {{ value.value }}
-                  </option>
-                </select>
-              </div>
-            </div>
+                    <CommandInput
+                      placeholder="Nach Kapitalquelle suchen..."
+                      class="h-8 text-xs text-xs w-full !px-3"
+                    />
 
-            <div class="flex justify-start">
-              <div class="flex items-center gap-3 text-left">
-                <input
-                  class="h-4 w-4"
-                  type="checkbox"
-                  id="etfsActive"
-                  v-model="etfsActive"
-                />
-                <label for="etfs" class="text-muted-foreground">{{
-                  $t("General.etfs")
-                }}</label>
-              </div>
-            </div>
-            <div class="grid" v-if="etfsActive">
-              <div class="mb-3 text-left">
-                <select
-                  v-model="selectedEtfIds"
-                  id="etfIds"
-                  name="etfIds"
-                  class="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
-                  multiple
-                  size="4"
-                >
-                  <option
-                    v-for="value of etfSelectBoxValues"
-                    :key="value.id"
-                    :value="value.id"
+                    <CommandEmpty
+                      class="py-4 text-xs text-muted-foreground w-full text-center block"
+                    >
+                      Keine Einträge.
+                    </CommandEmpty>
+
+                    <ScrollArea
+                      class="flex-1 w-full overflow-y-auto overflow-x-hidden -mx-1 px-1"
+                    >
+                      <CommandGroup class="p-1">
+                        <CommandItem
+                          v-for="value of selectBoxValues"
+                          :key="value.id"
+                          :value="value.value"
+                          class="flex items-center space-x-2 py-1 px-2 cursor-pointer rounded-sm hover:bg-accent data-[selected='true']:bg-transparent"
+                        >
+                          <Checkbox
+                            :id="`capitalsource-${value.id}`"
+                            v-model="capitalsourceIds[value.id]"
+                          />
+                          <Label
+                            :for="`capitalsource-${value.id}`"
+                            class="text-xs font-medium cursor-pointer select-none truncate w-full"
+                          >
+                            {{ value.value }}
+                          </Label>
+                        </CommandItem>
+                      </CommandGroup>
+                    </ScrollArea>
+                  </Command>
+
+                  <div
+                    class="text-[10px] text-muted-foreground text-right pr-1"
                   >
-                    {{ value.value }}
-                  </option>
-                </select>
+                    {{ Object.values(capitalsourceIds).filter(Boolean).length }}
+                    von {{ selectBoxValues.length }} ausgewählt
+                  </div>
+                </div>
+              </div>
+
+              <div class="grid" v-if="etfsActive">
+                <div
+                  class="mb-3 text-left rounded-lg border bg-background p-3 shadow-sm space-y-2 w-full"
+                >
+                  <div class="flex items-center justify-between pb-1 border-b">
+                    <Label class="text-xs font-semibold text-muted-foreground">
+                      {{ $t("General.etfs") }}
+                    </Label>
+
+                    <div class="flex items-center space-x-1 text-xs">
+                      <button
+                        type="button"
+                        class="px-1.5 py-0.5 text-muted-foreground hover:text-foreground font-medium rounded hover:bg-muted cursor-pointer transition-colors"
+                        @click="
+                          etfSelectBoxValues.forEach(
+                            (v) => (etfIds[v.id] = true),
+                          )
+                        "
+                      >
+                        Alle
+                      </button>
+                      <span class="text-muted-foreground/40">|</span>
+                      <button
+                        type="button"
+                        class="px-1.5 py-0.5 text-muted-foreground hover:text-foreground font-medium rounded hover:bg-muted cursor-pointer transition-colors"
+                        @click="
+                          etfSelectBoxValues.forEach(
+                            (v) => (etfIds[v.id] = false),
+                          )
+                        "
+                      >
+                        Keine
+                      </button>
+                    </div>
+                  </div>
+
+                  <Command
+                    class="rounded-md border border-input h-[160px] overflow-hidden flex flex-col"
+                  >
+                    <CommandInput
+                      placeholder="Nach Kapitalquelle suchen..."
+                      class="h-8 text-xs text-xs w-full !px-3"
+                    />
+
+                    <CommandEmpty
+                      class="py-4 text-xs text-muted-foreground w-full text-center block"
+                    >
+                      Keine Einträge.
+                    </CommandEmpty>
+
+                    <ScrollArea
+                      class="flex-1 w-full overflow-y-auto overflow-x-hidden -mx-1 px-1"
+                    >
+                      <CommandGroup class="p-1">
+                        <CommandItem
+                          v-for="value of etfSelectBoxValues"
+                          :key="value.id"
+                          :value="value.value"
+                          class="flex items-center space-x-2 py-1 px-2 cursor-pointer rounded-sm hover:bg-accent data-[selected='true']:bg-transparent"
+                        >
+                          <Checkbox
+                            :id="`etf-${value.id}`"
+                            v-model="etfIds[value.id]"
+                          />
+                          <Label
+                            :for="`etf-${value.id}`"
+                            class="text-xs font-medium cursor-pointer select-none truncate w-full"
+                          >
+                            {{ value.value }}
+                          </Label>
+                        </CommandItem>
+                      </CommandGroup>
+                    </ScrollArea>
+                  </Command>
+
+                  <div
+                    class="text-[10px] text-muted-foreground text-right pr-1"
+                  >
+                    {{ Object.values(etfIds).filter(Boolean).length }}
+                    von {{ etfSelectBoxValues.length }} ausgewählt
+                  </div>
+                </div>
               </div>
             </div>
-
             <div class="mt-3 flex justify-center">
               <ButtonSubmit :button-label="$t('General.show')"
                 ><template #icon><Eye class="h-4 w-4" /></template
@@ -157,6 +282,16 @@ import type { Trends } from "@/model/report/Trends";
 import { useEtfStore } from "@/stores/EtfStore";
 import ButtonSubmit from "@/components/ButtonSubmit.vue";
 import { Eye } from "lucide-vue-next";
+import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+} from "@/components/ui/command";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 const { t } = useI18n();
 
@@ -309,8 +444,8 @@ const etfSelectBoxValues = computed(
   (): Array<SelectBoxValue> => etfStore.getAsSelectBoxValues(),
 );
 
-const capitalsourceIds = ref(new Array<number>());
-const selectedEtfIds = ref(new Array<number>());
+const capitalsourceIds = ref(new Array<boolean>());
+const etfIds = ref(new Array<boolean>());
 const { handleSubmit, values, setFieldTouched } = useForm();
 
 onMounted(() => {
@@ -319,7 +454,12 @@ onMounted(() => {
 
 const loadData = () => {
   serverErrors.value = new Array<string>();
-
+  capitalsourceStore.capitalsource.forEach((capitalsource) => {
+    capitalsourceIds.value[capitalsource.id] = false;
+  });
+  etfStore.etf.forEach((etf) => {
+    etfIds.value[etf.id] = false;
+  });
   dataLoaded.value = false;
   ReportService.showTrendsForm()
     .then((trendsTransporter) => {
@@ -332,10 +472,14 @@ const loadData = () => {
       capitalsourcesActive.value = trendsTransporter.capitalsourcesActive;
 
       if (trendsTransporter.selectedCapitalsourceIds)
-        capitalsourceIds.value = trendsTransporter.selectedCapitalsourceIds;
+        trendsTransporter.selectedCapitalsourceIds.forEach((id: number) => {
+          capitalsourceIds.value[id] = true;
+        });
 
       if (trendsTransporter.selectedEtfIds)
-        selectedEtfIds.value = trendsTransporter.selectedEtfIds;
+        trendsTransporter.selectedEtfIds.forEach((id: number) => {
+          etfIds.value[id] = true;
+        });
 
       dataLoaded.value = true;
       Object.keys(values).forEach((field) => setFieldTouched(field, false));
@@ -439,6 +583,18 @@ const addEtfData = (trends: Trends) => {
 const showTrends = handleSubmit(() => {
   serverErrors.value = new Array<string>();
   trendsGraphLoaded.value = false;
+  const selectedCapitalsourceIds = new Array<number>();
+  for (const key of capitalsourceIds.value.keys()) {
+    if (capitalsourceIds.value[key]) {
+      selectedCapitalsourceIds.push(key);
+    }
+  }
+  const selectedEtfIds = new Array<number>();
+  for (const key of etfIds.value.keys()) {
+    if (etfIds.value[key]) {
+      selectedEtfIds.push(key);
+    }
+  }
 
   const _endDate = endDate.value;
   _endDate.setMonth(_endDate.getMonth() + 1);
@@ -446,8 +602,8 @@ const showTrends = handleSubmit(() => {
   const trendsParameter: TrendsParameter = {
     startDate: startDate.value,
     endDate: _endDate,
-    selectedCapitalsourceIds: capitalsourceIds.value,
-    selectedEtfIds: selectedEtfIds.value,
+    selectedCapitalsourceIds: selectedCapitalsourceIds,
+    selectedEtfIds: selectedEtfIds,
     capitalsourcesActive: capitalsourcesActive.value,
     etfsActive: etfsActive.value,
   };
