@@ -9,15 +9,23 @@
         <Table>
           <TableBody>
             <TableRow>
-              <TableCell class="font-bold bg-primary/10 w-40 whitespace-nowrap text-foreground border-r">{{ $t("General.etf") }}</TableCell>
+              <TableCell
+                class="font-bold bg-primary/10 w-40 whitespace-nowrap text-foreground border-r"
+                >{{ $t("General.etf") }}</TableCell
+              >
               <TableCell>{{ etfName }}</TableCell>
             </TableRow>
             <TableRow>
-              <TableCell class="font-bold bg-primary/10 w-40 whitespace-nowrap text-foreground border-r">{{ $t("General.year") }}</TableCell>
+              <TableCell
+                class="font-bold bg-primary/10 w-40 whitespace-nowrap text-foreground border-r"
+                >{{ $t("General.year") }}</TableCell
+              >
               <TableCell>{{ etfPreliminaryLumpSum.year }}</TableCell>
             </TableRow>
             <TableRow v-for="month in dataArray" :key="month.month">
-              <TableCell class="font-bold bg-primary/10 w-40 whitespace-nowrap text-foreground border-r">
+              <TableCell
+                class="font-bold bg-primary/10 w-40 whitespace-nowrap text-foreground border-r"
+              >
                 {{
                   $t("ETFPreliminaryLumpSum.monthlyAmount", {
                     month: month.month,
@@ -31,7 +39,11 @@
       </div>
     </template>
     <template #footer>
-      <Button variant="destructive" class="flex items-center gap-2 rounded-md px-6" @click="deleteEtfPreliminaryLumpSum">
+      <Button
+        variant="destructive"
+        class="flex items-center gap-2 rounded-md px-6"
+        @click="deleteEtfPreliminaryLumpSum"
+      >
         <Trash2 class="h-4 w-4" />
         {{ $t("General.delete") }}
       </Button>
@@ -116,4 +128,3 @@ const deleteEtfPreliminaryLumpSum = () => {
 
 defineExpose({ _show });
 </script>
-

@@ -1,5 +1,5 @@
 <template>
-  <div class="mx-auto rounded-md border w-full">
+  <div :class="[$attrs.class, 'mx-auto', 'border rounded-md overflow-hidden']">
     <Table :class="[clazz, '[&_td]:!py-1 [&_th]:!py-1', $attrs.class]">
       <slot name="default"></slot>
     </Table>

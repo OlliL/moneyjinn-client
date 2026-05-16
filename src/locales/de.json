@@ -271,6 +271,7 @@
             "delete": "ETF Vorabpauschale löschen"
         },
         "amounts": "Beträge",
+        "monthlyAmount": "Betrag {month}",
         "validation": {
             "etfId": "Bitte ETF auswählen!",
             "year": "Bitte Jahr angeben!",

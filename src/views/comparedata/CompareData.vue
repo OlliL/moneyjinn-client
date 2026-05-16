@@ -85,7 +85,7 @@
       </div>
     </div>
     <div class="flex justify-center pt-5" v-if="dataCompared">
-      <DivContentTable :alternateRowBackground="false">
+      <DivContentTable :alternateRowBackground="false" class="w-full">
         <colgroup>
           <col style="width: 5%" />
           <col style="width: 5%" />

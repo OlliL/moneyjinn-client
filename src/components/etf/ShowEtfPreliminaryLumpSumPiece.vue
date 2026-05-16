@@ -3,8 +3,13 @@
     <Table>
       <TableBody>
         <TableRow>
-          <TableCell class="font-bold bg-primary/10 w-40 whitespace-normal text-foreground border-r">{{ $t("ETFPreliminaryLumpSum.price") }}</TableCell>
-          <TableCell class="text-right"><SpanAmount :amount="mep.amountPerPiece" :decimal-places="8" /></TableCell>
+          <TableHead
+            class="font-bold border-r text-foreground text-center w-40"
+            >{{ $t("ETFPreliminaryLumpSum.price") }}</TableHead
+          >
+          <TableCell class="text-right"
+            ><SpanAmount :amount="mep.amountPerPiece" :decimal-places="8"
+          /></TableCell>
         </TableRow>
       </TableBody>
     </Table>
@@ -14,7 +19,13 @@
 <script lang="ts" setup>
 import { type PropType } from "vue";
 
-import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableRow,
+  TableHead,
+} from "@/components/ui/table";
 
 import SpanAmount from "../SpanAmount.vue";
 import type { EtfPreliminaryLumpSum } from "@/model/etf/EtfPreliminaryLumpSum";

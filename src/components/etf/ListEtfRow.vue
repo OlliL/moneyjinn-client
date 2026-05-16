@@ -1,23 +1,23 @@
 <template>
   <TableRow>
-    <TableCell class="text-left"
+    <TableCell class="border text-left"
       ><a :href="etf.chartUrl">{{ etf.name }}</a></TableCell
     >
-    <TableCell class="text-left">{{ etf.isin }}</TableCell>
-    <TableCell class="text-left">{{ etf.wkn }}</TableCell>
-    <TableCell class="text-left">{{ etf.ticker }}</TableCell>
-    <TableCell class="text-right"
+    <TableCell class="border text-left">{{ etf.isin }}</TableCell>
+    <TableCell class="border text-left">{{ etf.wkn }}</TableCell>
+    <TableCell class="border text-left">{{ etf.ticker }}</TableCell>
+    <TableCell class="border text-right"
       ><SpanAmount :amount="etf.transactionCostsAbsolute"
     /></TableCell>
-    <TableCell class="text-right">{{ relativeString }}</TableCell>
-    <TableCell class="text-right"
+    <TableCell class="border text-right">{{ relativeString }}</TableCell>
+    <TableCell class="border text-right"
       ><SpanAmount :amount="etf.transactionCostsMaximum"
     /></TableCell>
-    <TableCell class="text-right">{{ taxExemptionString }}</TableCell>
-    <TableCell class="text-center" v-if="etf.isFavorite">
+    <TableCell class="border text-right">{{ taxExemptionString }}</TableCell>
+    <TableCell class="border text-center" v-if="etf.isFavorite">
       <Star class="h-5 w-5 transition-all fill-primary text-primary"
     /></TableCell>
-    <TableCell class="text-start" v-if="!etf.isFavorite"></TableCell>
+    <TableCell class="border text-start" v-if="!etf.isFavorite"></TableCell>
     <TableCell class="w-0 border whitespace-nowrap text-center p-0">
       <Button
         variant="ghost"

@@ -50,13 +50,15 @@
                     </div>
 
                     <div class="flex items-center space-x-1 text-xs">
-                      <button
+                      <Button
                         type="button"
+                        variant="ghost"
+                        size="sm"
                         :class="[
+                          'px-1.5 py-0.5 h-auto text-muted-foreground hover:text-foreground font-medium cursor-pointer transition-colors font-normal',
                           !capitalsourcesActive
-                            ? 'opacity-40 pointer-events-none select-none bg-muted/50'
+                            ? 'opacity-40 pointer-events-none select-none'
                             : '',
-                          'px-1.5 py-0.5 text-muted-foreground hover:text-foreground font-medium rounded hover:bg-muted cursor-pointer transition-colors',
                         ]"
                         @click="
                           selectBoxValues.forEach(
@@ -65,15 +67,17 @@
                         "
                       >
                         {{ $t("General.all") }}
-                      </button>
+                      </Button>
                       <span class="text-muted-foreground/40">|</span>
-                      <button
+                      <Button
                         type="button"
+                        variant="ghost"
+                        size="sm"
                         :class="[
+                          'px-1.5 py-0.5 h-auto text-muted-foreground hover:text-foreground font-medium cursor-pointer transition-colors font-normal',
                           !capitalsourcesActive
-                            ? 'opacity-40 pointer-events-none select-none bg-muted/50'
+                            ? 'opacity-40 pointer-events-none select-none'
                             : '',
-                          'px-1.5 py-0.5 text-muted-foreground hover:text-foreground font-medium rounded hover:bg-muted cursor-pointer transition-colors',
                         ]"
                         @click="
                           selectBoxValues.forEach(
@@ -82,7 +86,7 @@
                         "
                       >
                         {{ $t("General.none") }}
-                      </button>
+                      </Button>
                     </div>
                   </div>
 
@@ -164,13 +168,15 @@
                       </Label>
                     </div>
                     <div class="flex items-center space-x-1 text-xs">
-                      <button
+                      <Button
                         type="button"
+                        variant="ghost"
+                        size="sm"
                         :class="[
+                          'px-1.5 py-0.5 h-auto text-muted-foreground hover:text-foreground font-medium cursor-pointer transition-colors font-normal',
                           !etfsActive
-                            ? 'opacity-40 pointer-events-none select-none bg-muted/50'
+                            ? 'opacity-40 pointer-events-none select-none'
                             : '',
-                          'px-1.5 py-0.5 text-muted-foreground hover:text-foreground font-medium rounded hover:bg-muted cursor-pointer transition-colors',
                         ]"
                         @click="
                           etfSelectBoxValues.forEach(
@@ -179,15 +185,17 @@
                         "
                       >
                         {{ $t("General.all") }}
-                      </button>
+                      </Button>
                       <span class="text-muted-foreground/40">|</span>
-                      <button
+                      <Button
                         type="button"
+                        variant="ghost"
+                        size="sm"
                         :class="[
+                          'px-1.5 py-0.5 h-auto text-muted-foreground hover:text-foreground font-medium cursor-pointer transition-colors font-normal',
                           !etfsActive
-                            ? 'opacity-40 pointer-events-none select-none bg-muted/50'
+                            ? 'opacity-40 pointer-events-none select-none'
                             : '',
-                          'px-1.5 py-0.5 text-muted-foreground hover:text-foreground font-medium rounded hover:bg-muted cursor-pointer transition-colors',
                         ]"
                         @click="
                           etfSelectBoxValues.forEach(
@@ -196,7 +204,7 @@
                         "
                       >
                         {{ $t("General.none") }}
-                      </button>
+                      </Button>
                     </div>
                   </div>
 
@@ -324,6 +332,7 @@ import {
   CommandInput,
   CommandItem,
 } from "@/components/ui/command";
+import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
 const { t } = useI18n();

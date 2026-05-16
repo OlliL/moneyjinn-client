@@ -1,6 +1,6 @@
 <template>
   <TableRow v-if="mmf">
-    <TableCell class="font-bold bg-primary/10 border-r text-left">
+    <TableCell class="font-bold bg-primary/7 border-r text-left">
       {{ $t("CompareData.database") }}
     </TableCell>
     <TableCell><SpanDate :date="mmf.bookingDate" /></TableCell>
@@ -51,7 +51,7 @@
   </TableRow>
 
   <TableRow v-if="importData">
-    <TableCell class="font-bold bg-primary/10 border-r text-left">
+    <TableCell class="font-bold bg-primary/7 border-r text-left">
       {{ $t("CompareData.source") }}
     </TableCell>
     <TableCell><SpanDate :date="importData.bookingDate" /></TableCell>
