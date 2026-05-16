@@ -17,10 +17,14 @@
     <div class="max-w-3xl mx-auto space-y-4">
       <div
         v-if="importedMoneyflows"
-        class="grid grid-cols-12 items-center gap-4 p-2 rounded-lg hover:bg-accent transition-colors"
+        class="grid grid-cols-12 items-center gap-4 p-2"
       >
         <div class="col-span-4 sm:col-span-3 flex justify-end">
-          <Button variant="default" @click="navigateImportMoneyflows">
+          <Button
+            variant="default"
+            class="cursor-pointer"
+            @click="navigateImportMoneyflows"
+          >
             <ExternalLink />
             {{ $t("General.edit") }}
           </Button>
@@ -32,10 +36,14 @@
 
       <div
         v-if="monthlySettlementMissing"
-        class="grid grid-cols-12 items-center gap-4 p-2 rounded-lg hover:bg-accent transition-colors"
+        class="grid grid-cols-12 items-center gap-4 p-2"
       >
         <div class="col-span-4 sm:col-span-3 flex justify-end">
-          <Button variant="default" @click="navigateImportMoneyflows">
+          <Button
+            variant="default"
+            class="cursor-pointer"
+            @click="showEditMonthlySettlementModal"
+          >
             <ExternalLink />
             {{ $t("General.edit") }}
           </Button>

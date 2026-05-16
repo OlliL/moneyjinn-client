@@ -1,7 +1,7 @@
 <template>
   <div class="flex justify-center mb-4">
     <div class="w-full max-w-6xl">
-      <div class="rounded-lg border bg-muted/20">
+      <div class="rounded-lg border bg-muted">
         <div class="p-4">
           <DivError :server-errors="serverErrors" />
           <div class="flex flex-col md:flex-row gap-4">
@@ -121,7 +121,7 @@
             </div>
           </div>
           <div class="mt-2">
-            <div class="w-full">
+            <div class="w-full flex justify-center">
               <Button
                 type="button"
                 variant="default"

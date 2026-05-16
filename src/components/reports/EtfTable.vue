@@ -9,7 +9,7 @@
         <div class="p-4">
           <div class="overflow-x-auto text-center">
             <div class="flex flex-col rounded-md border">
-              <Table class="[&_tbody_tr:nth-child(even)]:bg-primary/[0.10]">
+              <Table class="[&_tbody_tr:nth-child(even)]:bg-primary/7">
                 <TableHeader>
                   <TableRow>
                     <TableHead

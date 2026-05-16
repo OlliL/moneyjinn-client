@@ -332,7 +332,7 @@
           class="!text-foreground !no-underline"
           :to="{ name: Routes.CreateMoneyflow, force: true }"
           :title="$t('Moneyflow.title.create')"
-          ><Euro class="m-2"
+          ><Euro class="m-2 text-muted-foreground"
         /></router-link>
       </MenubarTrigger>
     </MenubarMenu>
@@ -346,7 +346,7 @@
             force: true,
           }"
           :title="$t('Reports.title.reports')"
-          ><Table2 class="m-2"
+          ><Table2 class="m-2 text-muted-foreground"
         /></router-link>
       </MenubarTrigger>
     </MenubarMenu>
@@ -356,7 +356,7 @@
           class="!text-foreground !no-underline"
           :to="{ name: Routes.SearchMoneyflows, force: true }"
           :title="$t('Moneyflow.title.search')"
-          ><Search class="m-2"
+          ><Search class="m-2 text-muted-foreground"
         /></router-link>
       </MenubarTrigger>
     </MenubarMenu>
@@ -366,7 +366,7 @@
           class="!text-foreground !no-underline"
           :to="{ name: Routes.ImportMoneyflows, force: true }"
           :title="$t('Moneyflow.title.import')"
-          ><SquareArrowRightEnter class="m-2"
+          ><SquareArrowRightEnter class="m-2 text-muted-foreground"
         /></router-link>
       </MenubarTrigger>
     </MenubarMenu>
@@ -376,7 +376,7 @@
           class="!text-foreground !no-underline"
           :to="{ name: Routes.CompareData, force: true }"
           :title="$t('CompareData.title')"
-          ><ListTodo class="m-2"
+          ><ListTodo class="m-2 text-muted-foreground"
         /></router-link>
       </MenubarTrigger>
     </MenubarMenu>
@@ -384,7 +384,7 @@
     <MenubarMenu>
       <MenubarTrigger
         ><span ref="dropdownChart" class="flex flex-row items-center"
-          ><ChartColumnIncreasing class="ml-2 text-foreground" />
+          ><ChartColumnIncreasing class="m-1 text-muted-foreground" />
           <ChevronDown :size="10" class="ml-1 opacity-70" /></span
       ></MenubarTrigger>
       <MenubarContent>
@@ -407,7 +407,7 @@
     <MenubarMenu>
       <MenubarTrigger
         ><span ref="dropdownPlus" class="flex flex-row items-center"
-          ><SquarePlus class="ml-2 text-foreground" /><ChevronDown
+          ><SquarePlus class="m-1 text-muted-foreground" /><ChevronDown
             :size="10"
             class="ml-1 opacity-70" /></span
       ></MenubarTrigger>
@@ -450,7 +450,7 @@
     <MenubarMenu>
       <MenubarTrigger
         ><span ref="dropdownWrench" class="flex flex-row items-center"
-          ><Wrench class="ml-2 text-foreground" /><ChevronDown
+          ><Wrench class="m-1 text-muted-foreground" /><ChevronDown
             :size="10"
             class="ml-1 opacity-70" /></span
       ></MenubarTrigger>
@@ -498,7 +498,7 @@
     <MenubarMenu>
       <MenubarTrigger
         ><span ref="dropdownEtf" class="flex flex-row items-center"
-          ><ChartCandlestick class="ml-2 text-foreground" /><ChevronDown
+          ><ChartCandlestick class="m-1 text-muted-foreground" /><ChevronDown
             :size="10"
             class="ml-1 opacity-70" /></span
       ></MenubarTrigger>
@@ -532,7 +532,7 @@
     <MenubarMenu>
       <MenubarTrigger
         ><span ref="dropdownUser" class="flex flex-row items-center"
-          ><SquareUserRound class="ml-2 text-foreground" /><ChevronDown
+          ><SquareUserRound class="m-1 text-muted-foreground" /><ChevronDown
             :size="10"
             class="ml-1 opacity-70" /></span
       ></MenubarTrigger>
@@ -571,7 +571,8 @@
     </MenubarMenu>
     <MenubarMenu>
       <MenubarTrigger :title="$t('General.logout')"
-        ><span><LogOut class="m-2 text-foreground" @click="logout" /></span
+        ><span
+          ><LogOut class="m-2 text-muted-foreground" @click="logout" /></span
       ></MenubarTrigger>
     </MenubarMenu>
   </Menubar>
@@ -778,9 +779,11 @@ watch(
 );
 </script>
 <style scoped>
-/* Wenn a aktiv ist, färbe alle Svg-Icons im Inneren blau */
-:deep(.router-link-active svg) {
-  stroke: blue !important; /* Ein schönes Bootstrap-Blau */
+@reference "@/style.css";
+
+:deep(.router-link-active svg),
+:deep(span.router-link-active svg) {
+  @apply !stroke-primary; /* Nutzt direkt die originale Tailwind-Klasse für Linienfarben */
   stroke-width: 2.5px !important;
 }
 </style>

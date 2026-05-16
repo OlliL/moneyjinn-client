@@ -64,7 +64,7 @@
             class="flex flex-col rounded-md border"
           >
             <Table
-              class="[&_tr:nth-child(even)]:bg-primary/[0.10] [&_td]:!py-1 [&_th]:!py-1"
+              class="[&_tr:nth-child(even)]:bg-primary/7 [&_td]:!py-1 [&_th]:!py-1"
             >
               <TableHeader>
                 <TableRow>
@@ -131,7 +131,7 @@
           </div>
           <div v-else class="flex flex-col rounded-md border">
             <Table
-              class="[&_tr:nth-child(even)]:bg-primary/[0.10] [&_td]:!py-1 [&_th]:!py-1"
+              class="[&_tr:nth-child(even)]:bg-primary/7 [&_td]:!py-1 [&_th]:!py-1"
             >
               <TableHeader>
                 <TableRow>

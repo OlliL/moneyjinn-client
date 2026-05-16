@@ -57,7 +57,9 @@
 
     <DivError :server-errors="serverErrors" />
 
-    <div class="flex border bg-card text-card-foreground shadow p-4">
+    <div
+      class="flex rounded-lg border bg-card text-card-foreground shadow bg-muted/40 p-4"
+    >
       <form @submit.prevent="createMoneyflow" id="createMoneyflowForm">
         <EditMoneyflowBase
           :selected-pre-def-moneyflow="selectedPreDefMoneyflow"

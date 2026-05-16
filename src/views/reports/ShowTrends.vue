@@ -7,7 +7,7 @@
 
     <div class="flex justify-center">
       <div
-        class="w-full max-w-3xl rounded-lg border bg-card text-card-foreground shadow-sm p-4"
+        class="w-full max-w-3xl rounded-lg border bg-card text-card-foreground shadow-sm bg-muted p-4"
       >
         <form @submit.prevent="showTrends">
           <div class="space-y-4">

@@ -30,6 +30,7 @@
     "pinia-plugin-persistedstate": "^4.3.0",
     "pinia-shared-state": "^2.0.1",
     "reka-ui": "^2.9.7",
+    "shadcn-vue": "^2.7.3",
     "tailwind-merge": "^3.6.0",
     "tailwindcss": "^4.3.0",
     "vanillajs-datepicker": "^1.2.0",

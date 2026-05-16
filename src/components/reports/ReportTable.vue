@@ -307,22 +307,25 @@
               <div class="w-full max-w-lg">
                 <div class="flex flex-col rounded-md border">
                   <Table
-                    class="[&_tr:nth-child(even)]:bg-primary/[0.10] [&_td]:!py-1 [&_th]:!py-1"
+                    class="[&_tr:nth-child(even)]:bg-primary/7 [&_td]:!py-1 [&_th]:!py-1"
                   >
                     <TableHeader>
                       <TableRow>
                         <TableHead id="thEmpty"></TableHead>
-                        <TableHead id="thMonth">
+                        <TableHead id="thMonth" class="text-center font-bold">
                           {{ $t("General.month") }}
                         </TableHead>
-                        <TableHead id="thYear">{{
-                          $t("General.year")
-                        }}</TableHead>
+                        <TableHead id="thYear" class="text-center font-bold">
+                          {{ $t("General.year") }}
+                        </TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
                       <TableRow v-if="currentMonthIsSettled">
-                        <TableHead class="text-end" id="thFixedProfit">
+                        <TableHead
+                          class="text-end font-bold"
+                          id="thFixedProfit"
+                        >
                           {{ $t("Reports.fixedProfit") }}
                         </TableHead>
                         <TableCell class="text-end">
@@ -333,7 +336,10 @@
                         </TableCell>
                       </TableRow>
                       <TableRow>
-                        <TableHead class="text-end" id="thCalculatedProfit">
+                        <TableHead
+                          class="text-end font-bold"
+                          id="thCalculatedProfit"
+                        >
                           {{ $t("Reports.calculatedProfit") }}
                         </TableHead>
                         <TableCell class="text-end">
@@ -348,7 +354,7 @@
                         </TableCell>
                       </TableRow>
                       <TableRow v-if="currentMonthIsSettled">
-                        <TableHead class="text-end" id="thDifference">
+                        <TableHead class="text-end font-bold" id="thDifference">
                           {{ $t("Reports.difference") }}
                         </TableHead>
                         <TableCell class="text-end">

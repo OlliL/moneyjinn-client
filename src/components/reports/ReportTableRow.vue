@@ -237,7 +237,7 @@ const props = defineProps({
   },
 });
 const rowBgClass = computed(() => {
-  return props.index % 2 === 0 ? "bg-primary/[0.06]" : "bg-background";
+  return props.index % 2 === 0 ? "bg-primary/7" : "bg-background";
 });
 const emit = defineEmits([
   "showReceipt",

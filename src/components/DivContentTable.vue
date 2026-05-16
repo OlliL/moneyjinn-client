@@ -19,7 +19,7 @@ const props = defineProps({
 
 const clazz = computed(() => {
   return props.alternateRowBackground
-    ? "[&_tr:nth-child(even)]:bg-primary/[0.10]"
+    ? "[&_tr:nth-child(even)]:bg-primary/7"
     : "";
 });
 </script>

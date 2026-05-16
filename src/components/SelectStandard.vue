@@ -22,10 +22,10 @@
           :id="id"
           :data-testid="id"
           :class="[
-            'pr-9 transition-all',
+            'bg-white z-10',
             $slots.icon ? 'rounded-r-none' : '',
-            errorData.inputClass === 'is-invalid'
-              ? '!border-destructive bg-destructive/[0.03] focus-visible:ring-destructive/15'
+            errorData.inputClass == 'is-invalid'
+              ? '!border-destructive bg-destructive/[0.03] focus-visible:ring-destructive/15 !border-r-destructive'
               : 'border-input focus-visible:ring-ring',
           ]"
           @input="onInput"
@@ -48,7 +48,10 @@
 
       <div
         v-if="$slots.icon"
-        class="flex items-center justify-center px-2 border border-input rounded-r-md text-foreground transition-colors relative"
+        :class="[
+          'flex items-center justify-center px-2 border border-input rounded-r-md text-foreground transition-colors relative',
+          errorData.inputClass == 'is-invalid' ? 'border-l-transparent' : '',
+        ]"
       >
         <slot name="icon"></slot>
       </div>

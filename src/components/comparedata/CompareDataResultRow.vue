@@ -70,7 +70,7 @@
       <i>{{ importData.contractpartnerName }}</i>
     </TableCell>
     <TableCell class="text-left !whitespace-normal break-words">
-      {{ importData.comment }}
+      <SpanImportComment :comment="importData.comment" />
     </TableCell>
 
     <TableCell class="text-left whitespace-nowrap">
@@ -82,7 +82,7 @@
         variant="ghost"
         size="icon"
         @click="createMoneyflow"
-        :title="$t('General.create')"
+        :title="$t('General.new')"
         class="h-8 w-8 cursor-pointer"
       >
         <Plus class="h-4 w-4" />
@@ -106,6 +106,7 @@ import { useUserSessionStore } from "@/stores/UserSessionStore";
 
 import type { CompareDataDataset } from "@/model/comparedata/CompareDataDataset";
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
+import SpanImportComment from "../SpanImportComment.vue";
 
 const props = defineProps({
   mmf: {

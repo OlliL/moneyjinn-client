@@ -38,7 +38,7 @@
     </div>
   </div>
 
-  <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-start mb-6">
+  <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-start mb-4">
     <div class="md:col-span-2">
       <InputStandard
         v-model="amount"
@@ -54,7 +54,7 @@
     </div>
 
     <template v-if="showMoneyflowFields">
-      <div class="md:col-span-3">
+      <div class="md:col-span-4">
         <InputStandard
           v-model="mmf.comment"
           :validation-schema-ref="schema.comment"
@@ -72,53 +72,61 @@
         />
       </div>
     </template>
-    <div v-else class="md:col-span-6"></div>
+    <div v-else class="md:col-span-7"></div>
 
-    <div class="md:col-span-4 col-span-1">
-      <div class="items-center justify-center h-9 gap-4 mt-[20px] flex">
-        <ToggleGroup
-          type="single"
-          class="bg-transparent p-1 rounded-lg inline-flex border border-input h-10"
-          :model-value="mmf.private ? 'private' : 'public'"
-          @update:model-value="
-            (val: any) => val && (mmf.private = val === 'private')
-          "
+    <div class="md:col-span-3 col-span-1">
+      <div class="grid w-full gap-1.5 relative">
+        <Label
+          class="text-left ml-1 text-sm font-medium text-foreground leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
         >
-          <ToggleGroupItem
-            value="public"
-            class="text-xs h-8 px-3 transition-all rounded-md bg-transparent data-[state=on]:!bg-slate-300 data-[state=on]:text-blue-700 border-none"
-          >
-            {{ $t("Moneyflow.public") }}
-          </ToggleGroupItem>
-          <ToggleGroupItem
-            value="private"
-            class="text-xs h-8 px-3 transition-all rounded-md bg-transparent data-[state=on]:!bg-slate-300 data-[state=on]:text-blue-700 border-none"
-          >
-            {{ $t("Moneyflow.private") }}
-          </ToggleGroupItem>
-        </ToggleGroup>
+          Optionen
+        </Label>
 
-        <ToggleGroup
-          type="single"
-          class="bg-transparent p-1 rounded-lg inline-flex border border-input h-10"
-          :model-value="saveAsPreDefMoneyflow ? 'favorite' : 'once'"
-          @update:model-value="
-            (val: any) => val && (saveAsPreDefMoneyflow = val === 'favorite')
-          "
-        >
-          <ToggleGroupItem
-            value="once"
-            class="text-xs h-8 px-3 transition-all rounded-md bg-transparent data-[state=on]:!bg-slate-300 data-[state=on]:text-blue-700 border-none"
+        <div class="flex flex-wrap items-center gap-2 h-10 -mt-[2px]">
+          <ToggleGroup
+            type="single"
+            class="bg-muted p-1 rounded-lg inline-flex border border-input h-10 shadow-sm"
+            :model-value="mmf.private ? 'private' : 'public'"
+            @update:model-value="
+              (val: any) => val && (mmf.private = val === 'private')
+            "
           >
-            {{ toggleTextOff }}
-          </ToggleGroupItem>
-          <ToggleGroupItem
-            value="favorite"
-            class="text-xs h-8 px-3 transition-all rounded-md bg-transparent data-[state=on]:!bg-slate-300 data-[state=on]:text-blue-700 border-none"
+            <ToggleGroupItem
+              value="public"
+              class="text-xs font-medium h-8 px-2.5 transition-all rounded-md data-[state=on]:bg-primary data-[state=on]:text-primary-foreground data-[state=on]:shadow-sm border-none text-muted-foreground"
+            >
+              {{ $t("Moneyflow.public") }}
+            </ToggleGroupItem>
+            <ToggleGroupItem
+              value="private"
+              class="text-xs font-medium h-8 px-2.5 transition-all rounded-md data-[state=on]:bg-primary data-[state=on]:text-primary-foreground data-[state=on]:shadow-sm border-none text-muted-foreground"
+            >
+              {{ $t("Moneyflow.private") }}
+            </ToggleGroupItem>
+          </ToggleGroup>
+
+          <ToggleGroup
+            type="single"
+            class="bg-muted p-1 rounded-lg inline-flex border border-input h-10 shadow-sm"
+            :model-value="saveAsPreDefMoneyflow ? 'favorite' : 'once'"
+            @update:model-value="
+              (val: any) => val && (saveAsPreDefMoneyflow = val === 'favorite')
+            "
           >
-            {{ toggleTextOn }}
-          </ToggleGroupItem>
-        </ToggleGroup>
+            <ToggleGroupItem
+              value="once"
+              class="text-xs font-medium h-8 px-2.5 transition-all rounded-md data-[state=on]:bg-primary data-[state=on]:text-primary-foreground data-[state=on]:shadow-sm border-none text-muted-foreground"
+            >
+              {{ toggleTextOff }}
+            </ToggleGroupItem>
+            <ToggleGroupItem
+              value="favorite"
+              class="text-xs font-medium h-8 px-2.5 transition-all rounded-md data-[state=on]:bg-primary data-[state=on]:text-primary-foreground data-[state=on]:shadow-sm border-none text-muted-foreground"
+            >
+              {{ toggleTextOn }}
+            </ToggleGroupItem>
+          </ToggleGroup>
+        </div>
       </div>
     </div>
   </div>
@@ -141,11 +149,11 @@
         :id="'collapseSplitEntries' + idSuffix"
         :data-testid="'collapseSplitEntries' + idSuffix"
         :class="[
-          'transition-all animate-in fade-in duration-200',
+          'transition-all animate-in fade-in duration-200 bg-white',
           isExpanded ? 'show' : 'collapse',
         ]"
       >
-        <div class="p-4 bg-background">
+        <div class="p-4 !bg-muted/50">
           <EditMoneyflowBaseSplitEntryRowVue
             v-for="(mse, index) in mmf.moneyflowSplitEntries"
             :key="mse.id"
@@ -371,6 +379,7 @@ const resetEditForm = () => {
     }
     addNewMoneyflowSplitEntryRow();
     document.getElementById("collapseSplitEntries")?.classList.add("show");
+    isExpanded.value = true;
   }
   toggleMoneyflowFieldsForMse();
 };

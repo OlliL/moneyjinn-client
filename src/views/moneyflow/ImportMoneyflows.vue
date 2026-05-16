@@ -18,73 +18,90 @@
       :key="importedMoneyflow.externalid"
     >
       <div
-        class="w-full rounded-lg border bg-card text-card-foreground shadow-sm p-4"
+        class="w-full rounded-xl border bg-card text-card-foreground shadow-sm overflow-hidden"
       >
         <form @submit.prevent="importImportedMoneyflow(importedMoneyflow)">
-          <div class="space-y-3">
+          <div class="grid grid-cols-1 lg:grid-cols-4 min-h-full">
             <div
-              class="grid gap-y-2 gap-x-4 grid-cols-6 md:grid-cols-12 items-center"
+              class="bg-muted/40 p-5 border-b lg:border-b-0 lg:border-r border-border/60 space-y-4"
             >
-              <div
-                class="col-span-2 md:col-span-1 flex justify-start md:justify-end"
-                style="font-weight: 700; font-size: 10.5px; line-height: 1"
-              >
-                {{ $t("General.iban") }}:
-              </div>
-              <div class="col-span-4 md:col-span-2 text-left">
-                {{ importedMoneyflow.accountNumber }}
-              </div>
+              <dl class="space-y-1">
+                <dt
+                  class="text-[10px] font-bold uppercase tracking-wider text-muted-foreground/80"
+                >
+                  {{ $t("General.contractpartner") }}
+                </dt>
+                <dd class="font-semibold text-sm text-foreground break-words">
+                  {{ importedMoneyflow.name }}
+                </dd>
+              </dl>
 
-              <div
-                class="col-span-2 md:col-span-1 flex justify-start md:justify-end"
-                style="font-weight: 700; font-size: 10.5px; line-height: 1"
-              >
-                {{ $t("General.bic") }}:
-              </div>
-              <div class="col-span-4 md:col-span-2 text-left">
-                {{ importedMoneyflow.bankCode }}
-              </div>
+              <dl class="space-y-1">
+                <dt
+                  class="text-[10px] font-bold uppercase tracking-wider text-muted-foreground/80"
+                >
+                  {{ $t("General.iban") }}
+                </dt>
+                <dd
+                  class="font-mono text-xs text-foreground bg-background/80 px-2 py-1 rounded border border-border/40 inline-block break-all"
+                >
+                  {{ importedMoneyflow.accountNumber }}
+                </dd>
+              </dl>
 
-              <div
-                class="col-span-2 md:col-span-2 flex justify-start md:justify-end"
-                style="font-weight: 700; font-size: 10.5px; line-height: 1"
-              >
-                {{ $t("General.contractpartner") }}:
-              </div>
-              <div class="col-span-4 md:col-span-4 text-left">
-                {{ importedMoneyflow.name }}
-              </div>
+              <dl class="space-y-1">
+                <dt
+                  class="text-[10px] font-bold uppercase tracking-wider text-muted-foreground/80"
+                >
+                  {{ $t("General.bic") }}
+                </dt>
+                <dd
+                  class="font-mono text-xs text-foreground bg-background/80 px-2 py-1 rounded border border-border/40 inline-block"
+                >
+                  {{ importedMoneyflow.bankCode }}
+                </dd>
+              </dl>
+
+              <dl class="space-y-1 pt-2 border-t border-border/40">
+                <dt
+                  class="text-[10px] font-bold uppercase tracking-wider text-muted-foreground/80 mb-1"
+                >
+                  {{ $t("Moneyflow.reference") }}
+                </dt>
+                <dd
+                  class="text-xs text-foreground/90 bg-background/60 p-2.5 rounded border border-border/40 leading-relaxed max-h-40 overflow-y-auto backdrop-blur-sm"
+                >
+                  <SpanImportComment :comment="importedMoneyflow.usage" />
+                </dd>
+              </dl>
             </div>
 
             <div
-              class="grid gap-y-2 gap-x-4 grid-cols-6 md:grid-cols-12 items-center"
+              class="lg:col-span-3 p-6 space-y-6 flex flex-col justify-between"
             >
+              <EditMoneyflowBase
+                :ref="(el) => editMoneyflowRefs.set(importedMoneyflow.id, el)"
+                :mmf-to-edit="importedMoneyflow"
+                :id-suffix="importedMoneyflow.id + ''"
+                :fill-contractpartner-defaults="true"
+              />
+
               <div
-                class="col-span-2 md:col-span-1 flex justify-start md:justify-end"
-                style="font-weight: 700; font-size: 10.5px; line-height: 1"
+                class="flex flex-wrap items-center justify-center gap-3 pt-4 border-t border-border/40"
               >
-                {{ $t("Moneyflow.reference") }}:
+                <ButtonSubmit
+                  :button-label="$t('Moneyflow.apply')"
+                  class="px-6"
+                />
+                <Button
+                  type="button"
+                  variant="destructive"
+                  class="px-6"
+                  @click="deleteImportedMoneyflow(importedMoneyflow)"
+                >
+                  {{ $t("General.delete") }}
+                </Button>
               </div>
-              <div class="col-span-4 md:col-span-11 text-left">
-                {{ importedMoneyflow.usage }}
-              </div>
-            </div>
-            <Separator class="mb-6 mt-6" />
-            <EditMoneyflowBase
-              :ref="(el) => editMoneyflowRefs.set(importedMoneyflow.id, el)"
-              :mmf-to-edit="importedMoneyflow"
-              :id-suffix="importedMoneyflow.id + ''"
-              :fill-contractpartner-defaults="true"
-            />
-            <div class="flex flex-wrap items-center justify-center gap-2">
-              <ButtonSubmit :button-label="$t('Moneyflow.apply')" />
-              <Button
-                type="button"
-                variant="destructive"
-                @click="deleteImportedMoneyflow(importedMoneyflow)"
-              >
-                {{ $t("General.delete") }}
-              </Button>
             </div>
           </div>
         </form>
@@ -105,7 +122,7 @@ import DivError from "@/components/DivError.vue";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { Smile } from "lucide-vue-next";
 import { Button } from "@/components/ui/button";
-import Separator from "@/components/ui/separator/Separator.vue";
+import SpanImportComment from "@/components/SpanImportComment.vue";
 
 const serverErrors = ref(new Array<string>());
 

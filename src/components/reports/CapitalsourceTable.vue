@@ -2,7 +2,7 @@
   <div class="flex justify-center w-full my-4">
     <div class="relative rounded-md border overflow-hidden w-full">
       <div class="overflow-x-auto">
-        <Table class="[&_tr:nth-child(even)]:bg-primary/[0.10]">
+        <Table class="[&_tr:nth-child(even)]:bg-primary/7">
           <TableHeader>
             <TableRow>
               <TableHead

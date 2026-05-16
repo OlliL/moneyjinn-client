@@ -12,9 +12,9 @@
         type="text"
         @changeDate="onInput($event)"
         :class="[
-          'rounded-r-none',
+          'rounded-r-none bg-white z-10',
           errorData.inputClass == 'is-invalid'
-            ? '!border-destructive bg-destructive/[0.03] focus-visible:ring-destructive/15'
+            ? '!border-destructive bg-destructive/[0.03] focus-visible:ring-destructive/15 !border-r-destructive'
             : 'border-input focus-visible:ring-ring',
         ]"
         ref="fieldRef"
@@ -24,7 +24,10 @@
       />
 
       <div
-        class="flex items-center justify-center px-2 border border-input rounded-r-md text-foreground transition-colors relative"
+        :class="[
+          'flex items-center justify-center px-2 border border-input rounded-r-md text-foreground transition-colors relative',
+          errorData.inputClass == 'is-invalid' ? 'border-l-transparent' : '',
+        ]"
       >
         <CalendarDays class="w-4 h-4" />
       </div>
