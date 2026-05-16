@@ -14,8 +14,8 @@
       ><SpanAmount :amount="etf.transactionCostsMaximum"
     /></TableCell>
     <TableCell class="text-right">{{ taxExemptionString }}</TableCell>
-    <TableCell class="text-center" v-if="etf.isFavorite"
-      ><Star class="h-4 w-4 text-yellow-500 fill-yellow-500"
+    <TableCell class="text-center" v-if="etf.isFavorite">
+      <Star class="h-5 w-5 transition-all fill-primary text-primary"
     /></TableCell>
     <TableCell class="text-start" v-if="!etf.isFavorite"></TableCell>
     <TableCell class="w-0 border whitespace-nowrap text-center p-0">

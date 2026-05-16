@@ -1,9 +1,8 @@
 <template>
   <Dialog v-model:open="isOpen">
     <DialogContent
-      :style="modalStyle"
       :class="[
-        'sm:max-w-lg',
+        props.maxWidth ? props.maxWidth : 'max-w-[calc(100%-2rem)] sm:max-w-lg',
         'max-h-[90vh]',
         'flex flex-col gap-6 p-6 overflow-visible',
         `!z-[${zIndex}]`,
@@ -41,7 +40,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref } from "vue";
+import { ref } from "vue";
 import {
   Dialog,
   DialogContent,
@@ -60,10 +59,6 @@ const props = defineProps({
 });
 
 const isOpen = ref(false);
-
-const modalStyle = computed(() => {
-  return props.maxWidth ? { maxWidth: props.maxWidth } : {};
-});
 
 const _show = () => {
   isOpen.value = true;

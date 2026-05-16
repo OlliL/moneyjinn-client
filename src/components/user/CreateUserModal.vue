@@ -6,7 +6,7 @@
           class="grid grid-cols-1"
           :class="{ 'lg:grid-cols-12 gap-6': editMode }"
         >
-          <div :class="{ 'lg:col-span-7': editMode }">
+          <div :class="{ 'lg:col-span-6': editMode }">
             <div class="space-y-4">
               <DivError :server-errors="serverErrors" />
 
@@ -107,7 +107,7 @@
               </div>
             </div>
           </div>
-          <div :class="{ 'lg:col-span-5': editMode }">
+          <div :class="{ 'lg:col-span-6': editMode }">
             <div class="col" v-if="editMode">
               <div class="flex justify-center">
                 <div class="w-full mb-4 text-center">
@@ -279,8 +279,11 @@ const title = computed(() => {
     : t("User.title.update");
 });
 
+// Liefert nun vollständige Tailwind-Klassen-Kombinationen anstatt Style-Strings
 const maxWidth = computed(() => {
-  return editMode.value ? "45%" : "500px";
+  return editMode.value
+    ? "max-w-[calc(100%-2rem)] md:max-w-2xl lg:max-w-4xl w-full mx-auto"
+    : "max-w-[calc(100%-2rem)] sm:max-w-md w-full mx-auto";
 });
 
 const resetForm = () => {

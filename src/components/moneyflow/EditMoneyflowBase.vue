@@ -209,7 +209,9 @@ import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { computed, onMounted, ref, watch, type PropType } from "vue";
 import { useI18n } from "vue-i18n";
 import { date, number, string } from "zod";
-import { Plus } from "lucide-vue-next"; // Icons für besseres Feedback
+import { Plus, Euro } from "lucide-vue-next";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
 
 import DivError from "../DivError.vue";
 import EditMoneyflowBaseSplitEntryRowVue from "@/components/moneyflow/EditMoneyflowBaseSplitEntryRow.vue";
@@ -235,7 +237,6 @@ import type { PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
 import MoneyflowService from "@/service/MoneyflowService";
 import ImportedMoneyflowService from "@/service/ImportedMoneyflowService";
 import type { Contractpartner } from "@/model/contractpartner/Contractpartner";
-import { Euro } from "lucide-vue-next"; // Icons für besseres Feedback
 
 const isExpanded = ref(false);
 const toggleCollapse = () => (isExpanded.value = !isExpanded.value);

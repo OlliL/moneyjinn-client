@@ -24,7 +24,8 @@
             />
           </div>
           <div class="md:col-span-4">
-            <Button type="button" class="w-full" @click="createEtfFlow">
+            <Button type="button" @click="createEtfFlow">
+              <Plus class="mr-2 h-4 w-4" />
               {{ $t("ETFFlow.newBooking") }}
             </Button>
           </div>
@@ -238,6 +239,7 @@ import EtfService from "@/service/EtfService";
 import DivError from "@/components/DivError.vue";
 import ListEtfDepotSummary from "@/components/etf/ListEtfDepotSummary.vue";
 import { useEtfStore } from "@/stores/EtfStore";
+import { Plus } from "lucide-vue-next";
 
 const { t } = useI18n();
 

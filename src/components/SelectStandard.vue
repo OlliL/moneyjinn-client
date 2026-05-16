@@ -224,13 +224,17 @@ const setFieldValue = () => {
 };
 
 const onBlur = (event: FocusEvent) => {
-  if (
-    dropdownItemRef.value &&
-    dropdownItemRef.value?.indexOf(event.relatedTarget as HTMLAnchorElement) < 0
-  ) {
-    hideDropdown();
-    setFieldValue();
-  }
+  setTimeout(() => {
+    const activeEl = document.activeElement;
+    const isInsideDropdown =
+      dropdownRef.value?.contains(activeEl) || getInputElement() === activeEl;
+
+    if (!isInsideDropdown) {
+      preventOnFocus.value = true;
+      hideDropdown();
+      setFieldValue();
+    }
+  }, 100);
 };
 
 const getInputElement = () => {

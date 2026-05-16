@@ -6,8 +6,8 @@
           <DivError :server-errors="serverErrors" />
 
           <div class="rounded-xl border bg-muted/30 p-4 space-y-4">
-            <div class="grid grid-cols-1 gap-2">
-              <div>
+            <div class="flex items-end gap-3">
+              <div class="flex-1">
                 <InputStandard
                   v-model="met.name"
                   :validation-schema="schema.name"
@@ -15,6 +15,22 @@
                   :field-label="$t('General.name')"
                 />
               </div>
+
+              <button
+                type="button"
+                @click="markAsFavorite = !markAsFavorite"
+                class="flex items-center justify-center p-2 rounded-md border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 w-10 transition-colors"
+                :title="$t('ETF.markAsFav')"
+              >
+                <Star
+                  class="h-5 w-5 transition-all"
+                  :class="
+                    markAsFavorite
+                      ? 'fill-primary text-primary'
+                      : 'text-muted-foreground'
+                  "
+                />
+              </button>
             </div>
           </div>
 
@@ -69,22 +85,6 @@
                   :id="'chartUrl' + idSuffix"
                   :field-label="$t('ETF.chartUrl')"
                 />
-              </div>
-            </div>
-
-            <div class="grid grid-cols-1 gap-2 pt-2 border-t border-border/40">
-              <div>
-                <div class="inline-flex items-center gap-2">
-                  <input
-                    class="h-4 w-4 rounded border-input"
-                    type="checkbox"
-                    v-model="markAsFavorite"
-                    id="markAsFavorite"
-                  />
-                  <label class="text-sm" for="markAsFavorite">
-                    {{ $t("ETF.markAsFav") }}
-                  </label>
-                </div>
               </div>
             </div>
           </div>
@@ -145,13 +145,22 @@
       </form>
     </template>
     <template #footer>
-      <Button type="button" variant="secondary" @click="resetForm">
+      <Button
+        type="button"
+        variant="secondary"
+        class="flex items-center gap-2 px-6"
+        @click="resetForm"
+      >
+        <Undo2 class="h-4 w-4" />
         {{ $t("General.reset") }}
       </Button>
+
       <ButtonSubmit
         :button-label="$t('General.save')"
         :form-id="'createEtfForm' + idSuffix"
-      />
+      >
+        <template #icon><Save class="h-4 w-4" /></template>
+      </ButtonSubmit>
     </template>
   </ModalVue>
 </template>
@@ -161,7 +170,7 @@ import { useForm } from "vee-validate";
 import { computed, ref, useTemplateRef } from "vue";
 import { useI18n } from "vue-i18n";
 import { string, ZodType } from "zod";
-import { Euro, Percent } from "lucide-vue-next";
+import { Euro, Percent, Save, Star, Undo2 } from "lucide-vue-next";
 
 import ButtonSubmit from "../ButtonSubmit.vue";
 import DivError from "../DivError.vue";

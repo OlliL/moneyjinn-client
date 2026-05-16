@@ -1,65 +1,66 @@
 <template>
   <ModalVue :title="title" ref="modalComponent">
-    <template #body
-      ><form @submit.prevent="createEtfFlow" id="createEtfFlowForm">
-        <div class="space-y-2">
+    <template #body>
+      <form @submit.prevent="createEtfFlow" id="createEtfFlowForm">
+        <div class="space-y-4">
           <DivError :server-errors="serverErrors" />
-          <div class="grid grid-cols-1 gap-2">
-            <div>
-              <SelectStandard
-                v-model="defaultEtfId"
-                :validation-schema="schema.etfId"
-                id="etf"
-                :field-label="$t('General.etf')"
-                :select-box-values="etfs"
-              />
-            </div>
-          </div>
-          <div class="grid grid-cols-1 gap-2 pt-2">
-            <div>
-              <InputDate
-                v-model="bookingdate"
-                :validation-schema="schema.timestamp"
-                id="bookingdate"
-                :field-label="$t('ETFFlow.bookingdate')"
-              />
-            </div>
-          </div>
-          <div class="grid grid-cols-1 gap-2 pt-2">
-            <div>
-              <InputStandard
-                v-model="bookingtime"
-                :validation-schema="schema.nanoseconds"
-                id="bookingtime"
-                :field-label="$t('ETFFlow.bookingtime')"
-              />
-            </div>
-          </div>
-          <div class="grid grid-cols-1 gap-2 pt-2">
-            <div>
-              <InputStandard
-                v-model="etfFlow.amount"
-                :validation-schema="schema.amount"
-                id="amount"
-                field-type="number"
-                step="0.000001"
-                :field-label="$t('ETFFlow.amount')"
-              />
-            </div>
-          </div>
 
-          <div class="grid grid-cols-1 gap-2 pt-2">
-            <div>
-              <InputStandard
-                v-model="etfFlow.price"
-                :validation-schema="schema.price"
-                id="price"
-                step="0.001"
-                field-type="number"
-                :field-label="$t('ETFFlow.price')"
-              >
-                <template #icon><Euro class="h-4 w-4" /></template>
-              </InputStandard>
+          <div class="rounded-xl border bg-background p-4 space-y-4 shadow-sm">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div class="sm:col-span-2">
+                <SelectStandard
+                  v-model="defaultEtfId"
+                  :validation-schema="schema.etfId"
+                  id="etf"
+                  :field-label="$t('General.etf')"
+                  :select-box-values="etfs"
+                />
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <InputDate
+                  v-model="bookingdate"
+                  :validation-schema="schema.timestamp"
+                  id="bookingdate"
+                  :field-label="$t('ETFFlow.bookingdate')"
+                />
+              </div>
+              <div>
+                <InputStandard
+                  v-model="bookingtime"
+                  :validation-schema="schema.nanoseconds"
+                  id="bookingtime"
+                  :field-label="$t('ETFFlow.bookingtime')"
+                  :focus="true"
+                />
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <InputStandard
+                  v-model="etfFlow.amount"
+                  :validation-schema="schema.amount"
+                  id="amount"
+                  field-type="number"
+                  step="0.000001"
+                  :field-label="$t('ETFFlow.amount')"
+                />
+              </div>
+              <div>
+                <InputStandard
+                  v-model="etfFlow.price"
+                  :validation-schema="schema.price"
+                  id="price"
+                  step="0.001"
+                  field-type="number"
+                  :field-label="$t('ETFFlow.price')"
+                >
+                  <template #icon><Euro class="h-4 w-4" /></template>
+                </InputStandard>
+              </div>
             </div>
           </div>
         </div>
@@ -131,9 +132,9 @@ const etfStore = useEtfStore();
 const { handleSubmit, values, setFieldTouched } = useForm();
 
 const title = computed(() => {
-  return etfFlow.value === undefined
-    ? t("ETFFlow.title.create")
-    : t("ETFFlow.title.update");
+  return etfFlow.value?.etfflowid > 0
+    ? t("ETFFlow.title.update")
+    : t("ETFFlow.title.create");
 });
 
 const resetForm = () => {
@@ -145,7 +146,7 @@ const resetForm = () => {
     bookingtime.value =
       formatTime(origEtfFlow.value.timestamp) +
       ":" +
-      String(origEtfFlow.value.nanoseconds + 1000000000).substring(1, 4); //80000000 -> 1080000000 -> 080
+      String(origEtfFlow.value.nanoseconds + 1000000000).substring(1, 4);
   } else {
     etfFlow.value = {
       etfId: defaultEtfId.value,
@@ -185,7 +186,6 @@ const createEtfFlow = handleSubmit(() => {
     etfFlow.value.etfId = defaultEtfId.value;
 
     if (etfFlow.value.etfflowid > 0) {
-      //update
       CrudEtfFlowService.updateEtfFlow(etfFlow.value)
         .then(() => {
           modalComponent.value?._hide();
@@ -195,7 +195,6 @@ const createEtfFlow = handleSubmit(() => {
           handleBackendError(backendError, serverErrors);
         });
     } else {
-      //create
       CrudEtfFlowService.createEtfFlow(etfFlow.value)
         .then((_etfFlow) => {
           etfFlow.value = _etfFlow;

@@ -71,7 +71,7 @@
             rowspan="2"
             id="favorite"
           >
-            <Star class="h-4 w-4 text-yellow-500" />
+            <Star class="h-5 w-5 transition-all text-muted-foreground" />
           </TableHead>
           <TableHead
             class="border"
