@@ -1,5 +1,5 @@
 <template>
-  <ModalVue :title="title" ref="modalComponent" maxWidth="640px">
+  <ModalVue :title="title" ref="modalComponent">
     <template #body>
       <form
         @submit.prevent="createCapitalsource"
