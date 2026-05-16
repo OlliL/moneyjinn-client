@@ -114,8 +114,15 @@
                 <ButtonSubmit
                   :button-label="$t('Moneyflow.search')"
                   form-id="searchMoneyflowsForm"
-                />
-                <Button type="button" variant="secondary" @click="resetForm">
+                  ><template #icon><Search class="h-4 w-4" /></template
+                ></ButtonSubmit>
+                <Button
+                  type="button"
+                  variant="secondary"
+                  class="flex items-center gap-2 px-6"
+                  @click="resetForm"
+                >
+                  <Undo2 class="h-4 w-4" />
                   {{ $t("General.reset") }}
                 </Button>
               </div>
@@ -237,6 +244,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Search, Undo2 } from "lucide-vue-next";
 
 const { t } = useI18n();
 

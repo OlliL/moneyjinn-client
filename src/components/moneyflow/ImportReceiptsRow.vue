@@ -1,21 +1,26 @@
 <template>
-  <div class="flex justify-center mb-4">
+  <div class="flex justify-center mb-6">
     <div class="w-full max-w-6xl">
-      <div class="rounded-lg border bg-muted">
-        <div class="p-4">
-          <DivError :server-errors="serverErrors" />
-          <div class="flex flex-col md:flex-row gap-4">
+      <div
+        class="w-full rounded-xl border bg-card text-card-foreground shadow-sm overflow-hidden"
+      >
+        <div class="grid grid-cols-1 lg:grid-cols-5 min-h-full">
+          <div
+            class="lg:col-span-2 bg-muted/40 p-5 border-b lg:border-b-0 lg:border-r border-border/60 flex flex-col justify-center items-center"
+          >
             <div
-              class="w-full md:w-1/3 overflow-x-scroll whitespace-nowrap h-[400px]"
+              class="bg-background/60 p-2 rounded border border-border/40 backdrop-blur-sm w-full flex justify-center items-start h-[calc(100vh-420px)] max-h-[520px]"
+              :class="isPdf ? 'overflow-hidden' : 'overflow-y-auto'"
             >
               <img
                 v-if="isJpeg"
                 :src="`data:image/png;base64,${receipt.receipt}`"
-                class="max-w-full"
+                class="max-w-full h-auto rounded-sm shadow-sm"
                 alt="receipt"
               />
+
               <object
-                class="h-[75vh] w-full"
+                class="h-full w-full min-h-[320px] block rounded-sm shadow-inner"
                 v-if="isPdf"
                 id="pdf"
                 :data="`data:application/pdf;base64,${receipt.receipt}`"
@@ -24,18 +29,20 @@
                 receipt
               </object>
             </div>
-            <div class="w-full md:w-2/3">
+          </div>
+
+          <div
+            class="lg:col-span-3 p-6 space-y-6 flex flex-col justify-between"
+          >
+            <div>
+              <DivError :server-errors="serverErrors" />
+
               <form
                 @submit.prevent="searchMoneyflows"
                 :id="'searchReceipt' + receipt.id"
               >
-                <div class="flex flex-wrap gap-2 mb-4 justify-center">
-                  <div class="w-full md:w-auto flex items-center justify-end">
-                    <ButtonSubmit :form-id="'searchReceipt' + receipt.id">
-                      <template #icon><Search class="h-4 w-4" /></template>
-                    </ButtonSubmit>
-                  </div>
-                  <div class="w-full md:w-[31%]">
+                <div class="flex flex-wrap items-end gap-3 mb-6">
+                  <div class="flex-1 min-w-[180px]">
                     <InputStandard
                       v-model="amount"
                       :validation-schema="schema.amount"
@@ -47,7 +54,7 @@
                       <template #icon><Euro class="h-4 w-4" /></template>
                     </InputStandard>
                   </div>
-                  <div class="w-full md:w-[31%]">
+                  <div class="flex-1 min-w-[140px]">
                     <InputDate
                       v-model="startDate"
                       :validation-schema="schema.startDate"
@@ -55,7 +62,7 @@
                       :field-label="$t('General.startDate')"
                     />
                   </div>
-                  <div class="w-full md:w-[31%]">
+                  <div class="flex-1 min-w-[140px]">
                     <InputDate
                       v-model="endDate"
                       :validation-schema="schema.endDate"
@@ -63,82 +70,97 @@
                       :field-label="$t('General.endDate')"
                     />
                   </div>
+                  <div class="shrink-0">
+                    <ButtonSubmit
+                      :form-id="'searchReceipt' + receipt.id"
+                      class="h-10"
+                    >
+                      <template #icon><Search class="h-4 w-4" /></template>
+                    </ButtonSubmit>
+                  </div>
                 </div>
               </form>
-              <div class="mb-4">
-                <div class="w-full">
-                  <div
-                    class="flex flex-col rounded-md border"
-                    v-if="searchExecuted && searchSuccessful"
-                  >
-                    <Table>
-                      <TableHeader>
-                        <TableRow>
-                          <TableHead class="w-10">
-                            <span class="sr-only">Selection</span>
-                          </TableHead>
-                          <TableHead
-                            class="font-bold border text-foreground text-center"
-                            >{{ $t("Moneyflow.invoicedate") }}</TableHead
-                          >
-                          <TableHead
-                            class="font-bold border text-foreground text-center"
-                            >{{ $t("General.amount") }}</TableHead
-                          >
-                          <TableHead
-                            class="font-bold border text-foreground text-center"
-                            >{{ $t("General.contractpartner") }}</TableHead
-                          >
-                          <TableHead
-                            class="font-bold border text-foreground text-center"
-                            >{{ $t("General.comment") }}</TableHead
-                          >
-                          <TableHead
-                            class="font-bold border text-foreground text-center"
-                            colspan="2"
-                          ></TableHead>
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                        <ImportReceiptSearchRowVue
-                          v-for="moneyflow in moneyflows"
-                          v-model="selectedMoneyflowId"
-                          :key="moneyflow.id"
-                          :mmf="moneyflow"
-                          :preselected="preselected"
-                          :receipt-id="receipt.id"
-                          @delete-moneyflow="emitDeleteMoneyflow"
-                          @edit-moneyflow="emitEditMoneyflow"
-                        />
-                      </TableBody>
-                    </Table>
-                  </div>
-                  <div v-if="searchExecuted && !searchSuccessful">
-                    {{ $t("Moneyflow.noMatchingMoneyflow") }}
-                  </div>
+
+              <div class="w-full">
+                <div
+                  class="flex flex-col rounded-md border overflow-hidden shadow-sm"
+                  v-if="searchExecuted && searchSuccessful"
+                >
+                  <Table>
+                    <TableHeader class="bg-muted/30">
+                      <TableRow>
+                        <TableHead class="w-10">
+                          <span class="sr-only">Selection</span>
+                        </TableHead>
+                        <TableHead
+                          class="font-bold border-r text-foreground text-center px-3 py-2 text-xs"
+                        >
+                          {{ $t("Moneyflow.invoicedate") }}
+                        </TableHead>
+                        <TableHead
+                          class="font-bold border-r text-foreground text-center px-3 py-2 text-xs"
+                        >
+                          {{ $t("General.amount") }}
+                        </TableHead>
+                        <TableHead
+                          class="font-bold border-r text-foreground text-center px-3 py-2 text-xs"
+                        >
+                          {{ $t("General.contractpartner") }}
+                        </TableHead>
+                        <TableHead
+                          class="font-bold text-foreground text-center px-3 py-2 text-xs"
+                        >
+                          {{ $t("General.comment") }}
+                        </TableHead>
+                        <TableHead class="w-16" colspan="2"></TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      <ImportReceiptSearchRowVue
+                        v-for="moneyflow in moneyflows"
+                        v-model="selectedMoneyflowId"
+                        :key="moneyflow.id"
+                        :mmf="moneyflow"
+                        :preselected="preselected"
+                        :receipt-id="receipt.id"
+                        @delete-moneyflow="emitDeleteMoneyflow"
+                        @edit-moneyflow="emitEditMoneyflow"
+                      />
+                    </TableBody>
+                  </Table>
+                </div>
+
+                <div
+                  v-if="searchExecuted && !searchSuccessful"
+                  class="text-sm text-center py-6 text-muted-foreground border border-dashed rounded-lg bg-muted/10"
+                >
+                  {{ $t("Moneyflow.noMatchingMoneyflow") }}
                 </div>
               </div>
             </div>
-          </div>
-          <div class="mt-2">
-            <div class="w-full flex justify-center">
+
+            <div
+              class="flex flex-wrap items-center justify-center gap-3 pt-4 border-t border-border/40"
+            >
+              <Button
+                type="button"
+                variant="destructive"
+                class="flex items-center gap-2 px-6"
+                @click="deleteReceipt"
+              >
+                <Trash2 class="h-4 w-4" />
+                {{ $t("General.delete") }}
+              </Button>
               <Button
                 type="button"
                 variant="default"
-                class="mx-2"
+                class="flex items-center gap-2 px-6"
                 @click="importReceipt"
                 v-if="searchExecuted && searchSuccessful"
                 :disabled="!moneyflowSelected"
               >
+                <Save class="h-4 w-4" />
                 {{ $t("Moneyflow.apply") }}
-              </Button>
-              <Button
-                type="button"
-                variant="destructive"
-                class="mx-2"
-                @click="deleteReceipt"
-              >
-                {{ $t("General.delete") }}
               </Button>
             </div>
           </div>
@@ -153,7 +175,7 @@ import { useForm } from "vee-validate";
 import { computed, nextTick, onMounted, ref, type PropType } from "vue";
 import { useI18n } from "vue-i18n";
 import { date } from "zod";
-import { Euro, Search } from "lucide-vue-next";
+import { Euro, Save, Search, Trash2 } from "lucide-vue-next";
 
 import ButtonSubmit from "../ButtonSubmit.vue";
 import DivError from "../DivError.vue";
@@ -198,6 +220,7 @@ const searchExecuted = ref(false);
 const searchSuccessful = ref(false);
 const selectedMoneyflowId = ref(0);
 const preselected = ref(false);
+
 const emit = defineEmits([
   "deleteMoneyflow",
   "editMoneyflow",

@@ -21,7 +21,12 @@
 
       <DialogFooter class="sm:justify-center gap-2">
         <DialogClose as-child>
-          <Button type="button" variant="secondary">
+          <Button
+            type="button"
+            variant="secondary"
+            class="flex items-center gap-2 px-6"
+          >
+            <X class="h-4 w-4" />
             {{ $t("Modal.cancel") }}
           </Button>
         </DialogClose>
@@ -42,6 +47,7 @@ import {
   DialogClose,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import { X } from "lucide-vue-next";
 
 const props = defineProps({
   title: {

@@ -40,7 +40,7 @@
     <DivError :server-errors="serverErrors" />
 
     <div
-      class="rounded-lg border bg-card text-card-foreground shadow bg-muted/40 p-4"
+      class="rounded-lg border bg-card text-card-foreground shadow bg-muted p-4"
     >
       <form
         @submit.prevent="createMoneyflow"
@@ -53,13 +53,20 @@
         />
 
         <div class="flex justify-center gap-4 mt-6">
-          <Button type="button" variant="secondary" @click="resetForm">
+          <Button
+            type="button"
+            variant="secondary"
+            class="flex items-center gap-2 px-6"
+            @click="resetForm"
+          >
+            <Undo2 class="h-4 w-4" />
             {{ $t("General.reset") }}
           </Button>
           <ButtonSubmit
             :button-label="$t('General.save')"
             form-id="createMoneyflowForm"
-          />
+            ><template #icon><Save class="h-4 w-4" /></template
+          ></ButtonSubmit>
         </div>
       </form>
     </div>
@@ -87,6 +94,7 @@ import PreDefMoneyflowService from "@/service/PreDefMoneyflowService";
 import { useForm } from "vee-validate";
 import DivError from "@/components/DivError.vue";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
+import { Save, Undo2 } from "lucide-vue-next";
 
 const serverErrors = ref(new Array<string>());
 

@@ -77,7 +77,8 @@
               <ButtonSubmit
                 :button-label="$t('General.show')"
                 form-id="compareDataForm"
-              />
+                ><template #icon><Eye class="h-4 w-4" /></template
+              ></ButtonSubmit>
             </div>
           </div>
         </form>
@@ -185,6 +186,7 @@ import {
 } from "@/components/ui/table";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
+import { Eye } from "lucide-vue-next";
 
 const { t } = useI18n();
 

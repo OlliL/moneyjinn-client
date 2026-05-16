@@ -89,18 +89,18 @@
               <div
                 class="flex flex-wrap items-center justify-center gap-3 pt-4 border-t border-border/40"
               >
-                <ButtonSubmit
-                  :button-label="$t('Moneyflow.apply')"
-                  class="px-6"
-                />
                 <Button
                   type="button"
                   variant="destructive"
-                  class="px-6"
+                  class="flex items-center gap-2 px-6"
                   @click="deleteImportedMoneyflow(importedMoneyflow)"
                 >
+                  <Trash2 class="h-4 w-4" />
                   {{ $t("General.delete") }}
                 </Button>
+                <ButtonSubmit :button-label="$t('Moneyflow.apply')" class="px-6"
+                  ><template #icon><Save class="h-4 w-4" /></template
+                ></ButtonSubmit>
               </div>
             </div>
           </div>
@@ -120,7 +120,7 @@ import type { ImportedMoneyflow } from "@/model/moneyflow/ImportedMoneyflow";
 import ImportedMoneyflowService from "@/service/ImportedMoneyflowService";
 import DivError from "@/components/DivError.vue";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
-import { Smile } from "lucide-vue-next";
+import { Save, Smile, Trash2 } from "lucide-vue-next";
 import { Button } from "@/components/ui/button";
 import SpanImportComment from "@/components/SpanImportComment.vue";
 

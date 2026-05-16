@@ -186,7 +186,9 @@
             </div>
 
             <div class="mt-3 flex justify-center">
-              <ButtonSubmit :button-label="$t('General.show')" />
+              <ButtonSubmit :button-label="$t('General.show')"
+                ><template #icon><Eye class="h-4 w-4" /></template
+              ></ButtonSubmit>
             </div>
           </div>
         </form>
@@ -248,6 +250,7 @@ import {
   ChevronRight,
   ChevronsLeft,
   ChevronsRight,
+  Eye,
 } from "lucide-vue-next";
 import Label from "@/components/ui/label/Label.vue";
 

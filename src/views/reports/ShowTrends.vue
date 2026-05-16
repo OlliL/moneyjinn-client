@@ -102,10 +102,10 @@
               </div>
             </div>
 
-            <div class="flex justify-center">
-              <Button type="submit">
-                {{ $t("General.show") }}
-              </Button>
+            <div class="mt-3 flex justify-center">
+              <ButtonSubmit :button-label="$t('General.show')"
+                ><template #icon><Eye class="h-4 w-4" /></template
+              ></ButtonSubmit>
             </div>
           </div>
         </form>
@@ -155,7 +155,8 @@ import ReportService from "@/service/ReportService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import type { Trends } from "@/model/report/Trends";
 import { useEtfStore } from "@/stores/EtfStore";
-import { Button } from "@/components/ui/button";
+import ButtonSubmit from "@/components/ButtonSubmit.vue";
+import { Eye } from "lucide-vue-next";
 
 const { t } = useI18n();
 

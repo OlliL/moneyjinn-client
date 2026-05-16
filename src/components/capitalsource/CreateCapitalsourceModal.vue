@@ -92,14 +92,21 @@
     </template>
 
     <template #footer>
-      <Button type="button" variant="secondary" @click="resetForm">
+      <Button
+        type="button"
+        variant="secondary"
+        class="flex items-center gap-2 px-6"
+        @click="resetForm"
+      >
+        <Undo2 class="h-4 w-4" />
         {{ $t("General.reset") }}
       </Button>
 
       <ButtonSubmit
         :button-label="$t('General.save')"
         :form-id="'createCapitalsourceForm' + idSuffix"
-      />
+        ><template #icon><Save class="h-4 w-4" /></template
+      ></ButtonSubmit>
     </template>
   </ModalVue>
 </template>
@@ -129,6 +136,7 @@ import { capitalsourceStateValues } from "@/model/capitalsource/CapitalsourceSta
 import { capitalsourceTypeValues } from "@/model/capitalsource/CapitalsourceType";
 
 import CapitalsourceService from "@/service/CapitalsourceService";
+import { Save, Undo2 } from "lucide-vue-next";
 
 const { t } = useI18n();
 
