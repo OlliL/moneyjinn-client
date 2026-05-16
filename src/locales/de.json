@@ -430,6 +430,8 @@
             "delete": "Benutzerkonto löschen",
             "changePassword": "Passwortwechsel"
         },
+        "loginData": "Anmeldedaten",
+        "permissions": "Berechtigungen",
         "groupHistory": "Gruppenhistorie",
         "new": "neu",
         "role": "Benutzerrolle",

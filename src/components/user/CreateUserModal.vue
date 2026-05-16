@@ -1,12 +1,28 @@
 <template>
   <ModalVue :title="title" :max-width="maxWidth" ref="modalComponent">
-    <template #body
-      ><form @submit.prevent="createUser" :id="'createUserForm' + idSuffix">
-        <div class="space-y-2">
-          <div class="grid grid-cols-1 gap-2">
-            <div class="col">
+    <template #body>
+      <form @submit.prevent="createUser" :id="'createUserForm' + idSuffix">
+        <div
+          class="grid grid-cols-1"
+          :class="{ 'lg:grid-cols-12 gap-6': editMode }"
+        >
+          <div :class="{ 'lg:col-span-7': editMode }">
+            <div class="space-y-4">
               <DivError :server-errors="serverErrors" />
-              <div class="grid grid-cols-1 gap-2 pt-2">
+
+              <div
+                class="rounded-xl border bg-background p-4 space-y-4 shadow-sm"
+              >
+                <div
+                  class="flex items-center space-x-2 border-b border-border/40 pb-2"
+                >
+                  <span
+                    class="text-xs font-bold uppercase tracking-wider text-muted-foreground block mb-0"
+                  >
+                    {{ $t("User.loginData") }}
+                  </span>
+                </div>
+
                 <div>
                   <InputStandard
                     v-model="user.userName"
@@ -15,73 +31,83 @@
                     :field-label="$t('General.username')"
                   />
                 </div>
-              </div>
-              <div class="grid grid-cols-1 gap-2 pt-2">
-                <div>
-                  <InputStandard
-                    v-model="password1"
-                    :validation-schema-ref="schema.password"
-                    :id="'password1' + idSuffix"
-                    :field-label="$t('General.password')"
-                    field-type="password"
-                  />
+                <div class="grid grid-cols-2 gap-2">
+                  <div>
+                    <InputStandard
+                      v-model="password1"
+                      :validation-schema-ref="schema.password"
+                      :id="'password1' + idSuffix"
+                      :field-label="$t('General.password')"
+                      field-type="password"
+                    />
+                  </div>
+
+                  <div>
+                    <InputStandard
+                      v-model="password2"
+                      :validation-schema-ref="schema.password"
+                      :id="'password2' + idSuffix"
+                      :field-label="$t('User.passwordVerify')"
+                      field-type="password"
+                    />
+                  </div>
                 </div>
               </div>
-              <div class="grid grid-cols-1 gap-2 pt-2">
-                <div>
-                  <InputStandard
-                    v-model="password2"
-                    :validation-schema-ref="schema.password"
-                    :id="'password2' + idSuffix"
-                    :field-label="$t('User.passwordVerify')"
-                    field-type="password"
-                  />
+
+              <div
+                class="rounded-xl border bg-background p-4 space-y-4 shadow-sm"
+              >
+                <div
+                  class="flex items-center space-x-2 border-b border-border/40 pb-2"
+                >
+                  <span
+                    class="text-xs font-bold uppercase tracking-wider text-muted-foreground block mb-0"
+                  >
+                    {{ $t("User.permissions") }}
+                  </span>
                 </div>
-              </div>
-              <div class="grid grid-cols-1 gap-2 pt-2">
-                <div>
-                  <SelectStandard
-                    v-model="user.role"
-                    :validation-schema="schema.userRole"
-                    :id="'groupUse' + idSuffix"
-                    :field-label="$t('User.role')"
-                    :select-box-values="userRoleValues"
-                  />
-                </div>
-              </div>
-              <div class="grid grid-cols-1 gap-2 pt-2" v-if="editMode">
-                <div>
-                  <SelectStandard
-                    v-model="user.userIsNew"
-                    :validation-schema="schema.userIsNew"
-                    :id="'userIsNew' + idSuffix"
-                    :field-label="$t('User.new')"
-                    :select-box-values="yesNoValues"
-                  />
-                </div>
-              </div>
-              <div class="grid grid-cols-1 gap-2 pt-5">
-                <div>
-                  <SelectStandard
-                    v-model="user.groupId"
-                    :validation-schema="schema.groupId"
-                    :id="'groupId' + idSuffix"
-                    :field-label="$t('General.group')"
-                    :select-box-values="groupValues"
-                  />
-                </div>
-              </div>
-              <div class="grid grid-cols-1 gap-2 pt-2">
-                <div>
-                  <InputDate
-                    v-model="validFrom"
-                    :validation-schema="schema.validFrom"
-                    :id="'validFrom' + idSuffix"
-                    :field-label="$t('General.validFrom')"
-                  />
+
+                <div class="grid grid-cols-2 gap-4">
+                  <div>
+                    <SelectStandard
+                      v-model="user.role"
+                      :validation-schema="schema.userRole"
+                      :id="'role' + idSuffix"
+                      :field-label="$t('User.role')"
+                      :select-box-values="userRoleValues"
+                    />
+                  </div>
+                  <div>
+                    <SelectStandard
+                      v-model="user.groupId"
+                      :validation-schema="schema.groupId"
+                      :id="'groupId' + idSuffix"
+                      :field-label="$t('General.group')"
+                      :select-box-values="groupValues"
+                    />
+                  </div>
+                  <div>
+                    <InputDate
+                      v-model="validFrom"
+                      :validation-schema="schema.validFrom"
+                      :id="'validFrom' + idSuffix"
+                      :field-label="$t('General.validFrom')"
+                    />
+                  </div>
+                  <div v-if="editMode">
+                    <SelectStandard
+                      v-model="user.userIsNew"
+                      :validation-schema="schema.userIsNew"
+                      :id="'userIsNew' + idSuffix"
+                      :field-label="$t('User.new')"
+                      :select-box-values="yesNoValues"
+                    />
+                  </div>
                 </div>
               </div>
             </div>
+          </div>
+          <div :class="{ 'lg:col-span-5': editMode }">
             <div class="col" v-if="editMode">
               <div class="flex justify-center">
                 <div class="w-full mb-4 text-center">
@@ -132,13 +158,22 @@
       </form>
     </template>
     <template #footer>
-      <Button type="button" variant="secondary" @click="resetForm">
+      <Button
+        type="button"
+        variant="secondary"
+        class="flex items-center gap-2 px-6"
+        @click="resetForm"
+      >
+        <Undo2 class="h-4 w-4" />
         {{ $t("General.reset") }}
       </Button>
+
       <ButtonSubmit
         :button-label="$t('General.save')"
         :form-id="'createUserForm' + idSuffix"
-      />
+      >
+        <template #icon><Save class="h-4 w-4" /></template>
+      </ButtonSubmit>
     </template>
   </ModalVue>
 </template>
@@ -178,6 +213,7 @@ import type { SelectBoxValue } from "@/model/SelectBoxValue";
 
 import GroupService from "@/service/GroupService";
 import UserService from "@/service/UserService";
+import { Save, Undo2 } from "lucide-vue-next";
 
 const { t } = useI18n();
 

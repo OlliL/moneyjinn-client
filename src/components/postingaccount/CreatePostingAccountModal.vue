@@ -4,11 +4,11 @@
       <form
         @submit.prevent="createPostingAccount"
         :id="'createPostingAccountForm' + idSuffix"
-        class="space-y-4"
+        class="space-y-6"
       >
         <DivError :server-errors="serverErrors" />
 
-        <div class="flex flex-col gap-4">
+        <div class="rounded-xl border bg-muted/30 p-4 space-y-4">
           <InputStandard
             v-model="mpa.name"
             :validation-schema="schema.name"
@@ -18,16 +18,23 @@
         </div>
       </form>
     </template>
-
     <template #footer>
-      <Button variant="secondary" @click="resetForm">
+      <Button
+        type="button"
+        variant="secondary"
+        class="flex items-center gap-2 px-6"
+        @click="resetForm"
+      >
+        <Undo2 class="h-4 w-4" />
         {{ $t("General.reset") }}
       </Button>
 
       <ButtonSubmit
         :button-label="$t('General.save')"
         :form-id="'createPostingAccountForm' + idSuffix"
-      />
+      >
+        <template #icon><Save class="h-4 w-4" /></template>
+      </ButtonSubmit>
     </template>
   </ModalVue>
 </template>
@@ -45,15 +52,16 @@ import DivError from "../DivError.vue";
 import InputStandard from "../InputStandard.vue";
 import ModalVue from "../Modal.vue";
 
-import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { globErr } from "@/tools/views/ZodUtil";
+import { handleBackendError } from "@/tools/views/HandleBackendError";
 
 import type { PostingAccount } from "@/model/postingaccount/PostingAccount";
 import PostingAccountService from "@/service/PostingAccountService";
+import { Save, Undo2 } from "lucide-vue-next";
 
 const { t } = useI18n();
 
-const props = defineProps({
+defineProps({
   idSuffix: {
     type: String,
     default: "",

@@ -430,6 +430,8 @@
             "delete": "delete user",
             "changePassword": "change password"
         },
+        "loginData": "login data",
+        "permissions": "permissions",
         "groupHistory": "group history",
         "new": "new",
         "role": "userrole",

@@ -2,138 +2,142 @@
   <ModalVue :title="title" ref="modalComponent">
     <template #body
       ><form @submit.prevent="createEtf" :id="'createEtfForm' + idSuffix">
-        <div class="space-y-2">
+        <div class="space-y-4">
           <DivError :server-errors="serverErrors" />
-          <div class="grid grid-cols-1 gap-2">
-            <div>
-              <InputStandard
-                v-model="met.name"
-                :validation-schema="schema.name"
-                :id="'name' + idSuffix"
-                :field-label="$t('General.name')"
-              />
-            </div>
-          </div>
-          <div class="grid grid-cols-1 gap-2 pt-2">
-            <div>
-              <InputStandard
-                v-model="met.isin"
-                :validation-schema="schema.isin"
-                :id="'isin' + idSuffix"
-                :field-label="$t('ETF.isin')"
-              />
-            </div>
-          </div>
-          <div class="grid grid-cols-1 gap-2 pt-2">
-            <div>
-              <InputStandard
-                v-model="met.wkn"
-                :validation-schema="schema.wkn"
-                :id="'wkn' + idSuffix"
-                :field-label="$t('ETF.wkn')"
-              />
-            </div>
-          </div>
-          <div class="grid grid-cols-1 gap-2 pt-2">
-            <div>
-              <InputStandard
-                v-model="met.ticker"
-                :validation-schema="schema.ticker"
-                :id="'ticker' + idSuffix"
-                :field-label="$t('ETF.ticker')"
-              />
-            </div>
-          </div>
-          <div class="grid grid-cols-1 gap-2 pt-2">
-            <div>
-              <InputStandard
-                v-model="met.chartUrl"
-                :validation-schema="schema.chartUrl"
-                :id="'chartUrl' + idSuffix"
-                :field-label="$t('ETF.chartUrl')"
-              />
-            </div>
-          </div>
-          <div class="grid grid-cols-1 gap-2 pt-2">
-            <div>
-              <InputStandard
-                v-model="met.transactionCostsAbsolute"
-                :validation-schema="schema.transactionCostsAbsolute"
-                :id="'transactionCostsAbsolute' + idSuffix"
-                field-type="number"
-                step="0.01"
-                :field-label="
-                  $t('ETFFlow.transactionCosts') +
-                  ' ' +
-                  $t('ETFFlow.transactionCostsAbsolute')
-                "
-              >
-                <template #icon><Euro class="h-4 w-4" /></template>
-              </InputStandard>
-            </div>
-          </div>
-          <div class="grid grid-cols-1 gap-2 pt-2">
-            <div>
-              <InputStandard
-                v-model="met.transactionCostsRelative"
-                :validation-schema="schema.transactionCostsRelative"
-                :id="'transactionCostsRelative' + idSuffix"
-                field-type="number"
-                step="0.01"
-                :field-label="
-                  $t('ETFFlow.transactionCosts') +
-                  ' ' +
-                  $t('ETFFlow.transactionCostsRelative')
-                "
-              >
-                <template #icon><Percent class="h-4 w-4" /></template>
-              </InputStandard>
-            </div>
-          </div>
-          <div class="grid grid-cols-1 gap-2 pt-2">
-            <div>
-              <InputStandard
-                v-model="met.transactionCostsMaximum"
-                :validation-schema="schema.transactionCostsMaximum"
-                :id="'transactionCostsMaximum' + idSuffix"
-                field-type="number"
-                step="0.01"
-                :field-label="
-                  $t('ETFFlow.transactionCosts') +
-                  ' ' +
-                  $t('ETFFlow.transactionCostsMaximum')
-                "
-              >
-                <template #icon><Euro class="h-4 w-4" /></template>
-              </InputStandard>
-            </div>
-          </div>
-          <div class="grid grid-cols-1 gap-2 pt-2">
-            <div>
-              <InputStandard
-                v-model="met.partialTaxExemption"
-                :validation-schema="schema.partialTaxExemption"
-                :id="'partialTaxExemption' + idSuffix"
-                field-type="number"
-                step="0.01"
-                :field-label="$t('ETF.partialTaxExemption')"
-              >
-                <template #icon><Percent class="h-4 w-4" /></template>
-              </InputStandard>
-            </div>
-          </div>
-          <div class="grid grid-cols-1 gap-2 pt-3">
-            <div>
-              <div class="inline-flex items-center gap-2">
-                <input
-                  class="h-4 w-4 rounded border-input"
-                  type="checkbox"
-                  v-model="markAsFavorite"
-                  id="markAsFavorite"
+
+          <div class="rounded-xl border bg-muted/30 p-4 space-y-4">
+            <div class="grid grid-cols-1 gap-2">
+              <div>
+                <InputStandard
+                  v-model="met.name"
+                  :validation-schema="schema.name"
+                  :id="'name' + idSuffix"
+                  :field-label="$t('General.name')"
                 />
-                <label class="text-sm" for="markAsFavorite">
-                  {{ $t("ETF.markAsFav") }}
-                </label>
+              </div>
+            </div>
+          </div>
+
+          <div class="rounded-xl border bg-muted/30 p-4 space-y-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <InputStandard
+                  v-model="met.partialTaxExemption"
+                  :validation-schema="schema.partialTaxExemption"
+                  :id="'partialTaxExemption' + idSuffix"
+                  field-type="number"
+                  step="0.01"
+                  :field-label="$t('ETF.partialTaxExemption')"
+                >
+                  <template #icon><Percent class="h-4 w-4" /></template>
+                </InputStandard>
+              </div>
+              <div>
+                <InputStandard
+                  v-model="met.isin"
+                  :validation-schema="schema.isin"
+                  :id="'isin' + idSuffix"
+                  :field-label="$t('ETF.isin')"
+                />
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <InputStandard
+                  v-model="met.wkn"
+                  :validation-schema="schema.wkn"
+                  :id="'wkn' + idSuffix"
+                  :field-label="$t('ETF.wkn')"
+                />
+              </div>
+              <div>
+                <InputStandard
+                  v-model="met.ticker"
+                  :validation-schema="schema.ticker"
+                  :id="'ticker' + idSuffix"
+                  :field-label="$t('ETF.ticker')"
+                />
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 gap-2">
+              <div>
+                <InputStandard
+                  v-model="met.chartUrl"
+                  :validation-schema="schema.chartUrl"
+                  :id="'chartUrl' + idSuffix"
+                  :field-label="$t('ETF.chartUrl')"
+                />
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 gap-2 pt-2 border-t border-border/40">
+              <div>
+                <div class="inline-flex items-center gap-2">
+                  <input
+                    class="h-4 w-4 rounded border-input"
+                    type="checkbox"
+                    v-model="markAsFavorite"
+                    id="markAsFavorite"
+                  />
+                  <label class="text-sm" for="markAsFavorite">
+                    {{ $t("ETF.markAsFav") }}
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="rounded-xl border bg-muted/30 p-4 space-y-4">
+            <div
+              class="flex items-center space-x-2 border-b border-border/40 pb-2"
+            >
+              <span
+                class="text-xs font-bold uppercase tracking-wider text-muted-foreground block mb-0"
+              >
+                {{ $t("ETFFlow.transactionCosts") }}
+              </span>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div>
+                <InputStandard
+                  v-model="met.transactionCostsAbsolute"
+                  :validation-schema="schema.transactionCostsAbsolute"
+                  :id="'transactionCostsAbsolute' + idSuffix"
+                  field-type="number"
+                  step="0.01"
+                  :field-label="$t('ETFFlow.transactionCostsAbsolute')"
+                >
+                  <template #icon><Euro class="h-4 w-4" /></template>
+                </InputStandard>
+              </div>
+
+              <div>
+                <InputStandard
+                  v-model="met.transactionCostsRelative"
+                  :validation-schema="schema.transactionCostsRelative"
+                  :id="'transactionCostsRelative' + idSuffix"
+                  field-type="number"
+                  step="0.01"
+                  :field-label="$t('ETFFlow.transactionCostsRelative')"
+                >
+                  <template #icon><Percent class="h-4 w-4" /></template>
+                </InputStandard>
+              </div>
+
+              <div>
+                <InputStandard
+                  v-model="met.transactionCostsMaximum"
+                  :validation-schema="schema.transactionCostsMaximum"
+                  :id="'transactionCostsMaximum' + idSuffix"
+                  field-type="number"
+                  step="0.01"
+                  :field-label="$t('ETFFlow.transactionCostsMaximum')"
+                >
+                  <template #icon><Euro class="h-4 w-4" /></template>
+                </InputStandard>
               </div>
             </div>
           </div>
