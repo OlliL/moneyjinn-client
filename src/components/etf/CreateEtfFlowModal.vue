@@ -5,7 +5,7 @@
         <div class="space-y-4">
           <DivError :server-errors="serverErrors" />
 
-          <div class="rounded-xl border bg-background p-4 space-y-4 shadow-sm">
+          <div class="rounded-xl border bg-muted/30 p-4 shadow-sm space-y-4">
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div class="sm:col-span-2">
                 <SelectStandard
@@ -66,14 +66,24 @@
         </div>
       </form>
     </template>
+
     <template #footer>
-      <Button type="button" variant="secondary" @click="resetForm">
+      <Button
+        type="button"
+        variant="secondary"
+        class="flex items-center gap-2 px-6"
+        @click="resetForm"
+      >
+        <Undo2 class="h-4 w-4" />
         {{ $t("General.reset") }}
       </Button>
+
       <ButtonSubmit
         :button-label="$t('General.save')"
         form-id="createEtfFlowForm"
-      />
+      >
+        <template #icon><Save class="h-4 w-4" /></template>
+      </ButtonSubmit>
     </template>
   </ModalVue>
 </template>
@@ -83,7 +93,7 @@ import { useForm } from "vee-validate";
 import { computed, ref, useTemplateRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { date, string, type ZodType, number } from "zod";
-import { Euro } from "lucide-vue-next";
+import { Euro, Save, Undo2 } from "lucide-vue-next";
 
 import ButtonSubmit from "../ButtonSubmit.vue";
 import DivError from "../DivError.vue";

@@ -11,7 +11,7 @@
               <DivError :server-errors="serverErrors" />
 
               <div
-                class="rounded-xl border bg-background p-4 space-y-4 shadow-sm"
+                class="rounded-xl border bg-muted/30 p-4 shadow-sm space-y-4"
               >
                 <div
                   class="flex items-center space-x-2 border-b border-border/40 pb-2"
@@ -55,7 +55,7 @@
               </div>
 
               <div
-                class="rounded-xl border bg-background p-4 space-y-4 shadow-sm"
+                class="rounded-xl border bg-muted/30 p-4 shadow-sm space-y-4"
               >
                 <div
                   class="flex items-center space-x-2 border-b border-border/40 pb-2"
@@ -279,7 +279,6 @@ const title = computed(() => {
     : t("User.title.update");
 });
 
-// Liefert nun vollständige Tailwind-Klassen-Kombinationen anstatt Style-Strings
 const maxWidth = computed(() => {
   return editMode.value
     ? "max-w-[calc(100%-2rem)] md:max-w-2xl lg:max-w-4xl w-full mx-auto"

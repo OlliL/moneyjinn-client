@@ -1,24 +1,21 @@
 <template>
   <ModalVue :title="title" ref="modalComponent">
-    <template #body
-      ><form
+    <template #body>
+      <form
         @submit.prevent="createContractpartnerMatching"
         :id="'createContractpartnerMatchingForm' + idSuffix"
       >
-        <div class="space-y-2">
+        <div class="space-y-4">
           <DivError :server-errors="serverErrors" />
-          <div class="grid grid-cols-1 gap-2">
-            <div>
+
+          <div class="rounded-xl border bg-muted/30 p-4 shadow-sm space-y-4">
+            <div class="grid grid-cols-1 gap-4">
               <InputStandard
                 v-model="mcm.matchingText"
                 :validation-schema="schema.matchingText"
                 :id="'name' + idSuffix"
                 :field-label="$t('ContractpartnerMatching.matchingText')"
               />
-            </div>
-          </div>
-          <div class="grid grid-cols-1 gap-2">
-            <div>
               <SelectContractpartner
                 v-model="mcm.contractpartnerId"
                 :validation-schema="schema.contractpartnerId"
@@ -27,38 +24,51 @@
               />
             </div>
           </div>
-          <div class="grid grid-cols-1 gap-2 pt-2">
-            <div>
-              <InputStandard
-                v-model="mcm.moneyflowComment"
-                :validation-schema="schema.moneyflowComment"
-                :id="'moneyflowComment' + idSuffix"
-                :field-label="$t('Contractpartner.moneyflowComment')"
-              />
-            </div>
-          </div>
 
-          <div class="grid grid-cols-1 gap-2 pt-2">
-            <div>
-              <SelectPostingAccount
-                v-model="mcm.postingAccountId"
-                :validation-schema="schema.postingAccountId"
-                :id-suffix="idSuffix + 'CreateContractpartner'"
-                :field-label="$t('General.postingAccount')"
-              />
+          <div class="rounded-xl border bg-muted/30 p-4 shadow-sm space-y-4">
+            <div
+              class="flex items-center space-x-2 border-b border-border/40 pb-2"
+            >
+              <span
+                class="text-xs font-bold uppercase tracking-wider text-muted-foreground block mb-0"
+              >
+                {{ $t("Contractpartner.moneyflowDefaults") }}
+              </span>
             </div>
+            <InputStandard
+              v-model="mcm.moneyflowComment"
+              :validation-schema="schema.moneyflowComment"
+              :id="'moneyflowComment' + idSuffix"
+              :field-label="$t('General.comment')"
+            />
+            <SelectPostingAccount
+              v-model="mcm.postingAccountId"
+              :validation-schema="schema.postingAccountId"
+              :id-suffix="idSuffix + 'CreateContractpartner'"
+              :field-label="$t('General.postingAccount')"
+            />
           </div>
         </div>
       </form>
     </template>
+
     <template #footer>
-      <Button type="button" variant="secondary" @click="resetForm">
+      <Button
+        type="button"
+        variant="secondary"
+        class="flex items-center gap-2 px-6"
+        @click="resetForm"
+      >
+        <Undo2 class="h-4 w-4" />
         {{ $t("General.reset") }}
       </Button>
+
       <ButtonSubmit
         :button-label="$t('General.save')"
         :form-id="'createContractpartnerMatchingForm' + idSuffix"
-      />
+      >
+        <template #icon><Save class="h-4 w-4" /></template>
+      </ButtonSubmit>
     </template>
   </ModalVue>
 </template>
@@ -84,6 +94,7 @@ import type { ContractpartnerMatching } from "@/model/contractpartnermatching/Co
 import ContractpartnerMatchingService from "@/service/ContractpartnerMatchingService";
 import SelectContractpartner from "../contractpartner/SelectContractpartner.vue";
 import SelectPostingAccount from "../postingaccount/SelectPostingAccount.vue";
+import { Save, Undo2 } from "lucide-vue-next";
 
 const { t } = useI18n();
 

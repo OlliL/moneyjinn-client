@@ -4,27 +4,29 @@
       <form
         @submit.prevent="createContractpartnerAccount"
         :id="'createContractpartnerAccountForm' + idSuffix"
-        class="space-y-4"
       >
-        <DivError :server-errors="serverErrors" />
+        <div class="space-y-4">
+          <DivError :server-errors="serverErrors" />
 
-        <div class="flex flex-col gap-4">
-          <div class="grid grid-cols-4 gap-4">
-            <div class="col-span-3">
-              <InputStandard
-                v-model="mca.accountNumber"
-                :validation-schema="schema.accountNumber"
-                :id="'accountNumber' + idSuffix"
-                :field-label="$t('General.iban')"
-              />
-            </div>
-            <div class="col-span-1">
-              <InputStandard
-                v-model="mca.bankCode"
-                :validation-schema="schema.bankCode"
-                :id="'bankCode' + idSuffix"
-                :field-label="$t('General.bic')"
-              />
+          <div class="rounded-xl border bg-muted/30 p-4 shadow-sm space-y-4">
+            <div class="grid grid-cols-1 sm:grid-cols-12 gap-4">
+              <div class="sm:col-span-8">
+                <InputStandard
+                  v-model="mca.accountNumber"
+                  :validation-schema="schema.accountNumber"
+                  :id="'accountNumber' + idSuffix"
+                  :field-label="$t('General.iban')"
+                />
+              </div>
+
+              <div class="sm:col-span-4">
+                <InputStandard
+                  v-model="mca.bankCode"
+                  :validation-schema="schema.bankCode"
+                  :id="'bankCode' + idSuffix"
+                  :field-label="$t('General.bic')"
+                />
+              </div>
             </div>
           </div>
         </div>
@@ -32,14 +34,22 @@
     </template>
 
     <template #footer>
-      <Button variant="secondary" @click="resetForm">
+      <Button
+        type="button"
+        variant="secondary"
+        class="flex items-center gap-2 px-6"
+        @click="resetForm"
+      >
+        <Undo2 class="h-4 w-4" />
         {{ $t("General.reset") }}
       </Button>
 
       <ButtonSubmit
         :button-label="$t('General.save')"
         :form-id="'createContractpartnerAccountForm' + idSuffix"
-      />
+      >
+        <template #icon><Save class="h-4 w-4" /></template>
+      </ButtonSubmit>
     </template>
   </ModalVue>
 </template>
@@ -62,6 +72,7 @@ import { globErr } from "@/tools/views/ZodUtil";
 
 import type { ContractpartnerAccount } from "@/model/contractpartneraccount/ContractpartnerAccount";
 import ContractpartnerAccountService from "@/service/ContractpartnerAccountService";
+import { Save, Undo2 } from "lucide-vue-next";
 
 const { t } = useI18n();
 

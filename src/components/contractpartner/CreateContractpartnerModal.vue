@@ -8,7 +8,7 @@
       >
         <DivError :server-errors="serverErrors" />
 
-        <div class="rounded-xl border bg-muted/30 p-4 space-y-4">
+        <div class="rounded-xl border bg-muted/30 p-4 shadow-sm space-y-4">
           <InputStandard
             v-model="mcp.name"
             :validation-schema="schema.name"
@@ -16,9 +16,9 @@
             :field-label="$t('General.name')"
           />
         </div>
-        <div class="rounded-xl border bg-background p-4 space-y-3">
+        <div class="rounded-xl border bg-muted/30 p-4 shadow-sm space-y-4">
           <div
-            class="flex items-center space-x-2 border-b border-border/40 pb-1.5"
+            class="flex items-center space-x-2 border-b border-border/40 pb-2"
           >
             <span
               class="text-xs font-bold uppercase tracking-wider text-muted-foreground block mb-0"
@@ -41,7 +41,7 @@
         </div>
         <div class="grid grid-cols-1 gap-4">
           <div
-            class="rounded-xl border p-4 bg-muted/10 flex flex-col justify-between"
+            class="rounded-xl border bg-muted/30 p-4 shadow-sm flex flex-col justify-between"
           >
             <span
               class="text-xs font-bold uppercase tracking-wider text-muted-foreground block mb-2"
@@ -65,9 +65,7 @@
           </div>
         </div>
 
-        <Collapsible
-          class="rounded-xl border bg-background shadow-sm overflow-hidden"
-        >
+        <Collapsible class="rounded-xl border bg-muted/30 overflow-hidden">
           <CollapsibleTrigger
             class="flex items-center justify-between w-full p-4 hover:bg-muted/30 text-left transition-colors group"
           >

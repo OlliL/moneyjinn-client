@@ -13,7 +13,7 @@ import { computed } from "vue";
 const props = defineProps({
   alternateRowBackground: {
     type: Boolean,
-    default: "true",
+    default: true,
   },
 });
 

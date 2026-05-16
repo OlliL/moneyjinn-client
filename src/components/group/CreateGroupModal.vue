@@ -8,7 +8,7 @@
       >
         <DivError :server-errors="serverErrors" />
 
-        <div class="rounded-xl border bg-muted/30 p-4 space-y-4">
+        <div class="rounded-xl border bg-muted/30 p-4 shadow-sm space-y-4">
           <InputStandard
             v-model="group.name"
             :validation-schema="schema.name"

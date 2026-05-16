@@ -1,93 +1,98 @@
 <template>
-  <ModalVue :title="title" ref="modalComponent">
-    <template #body
-      ><form
+  <ModalVue
+    :title="title"
+    maxWidth="max-w-[calc(100%-2rem)] md:max-w-2xl lg:max-w-2xl w-full mx-auto"
+    ref="modalComponent"
+  >
+    <template #body>
+      <form
         @submit.prevent="createPreDefMoneyflow"
         :id="'createPreDefMoneyflowForm' + idSuffix"
       >
-        <div class="space-y-2">
+        <div class="space-y-4">
           <DivError :server-errors="serverErrors" />
-          <div class="grid grid-cols-1 gap-2">
-            <div>
-              <InputStandard
-                v-model="mpm.amount"
-                :validation-schema="schema.amount"
-                id="amount"
-                field-type="number"
-                step="0.01"
-                :field-label="$t('General.amount')"
-              >
-                <template #icon><Euro class="h-4 w-4" /></template>
-              </InputStandard>
-            </div>
-          </div>
-          <div class="grid grid-cols-1 gap-2 pt-2">
-            <div>
-              <SelectContractpartner
-                v-model="mpm.contractpartnerId"
-                :validation-schema="schema.contractpartnerId"
-                :id-suffix="'CreatePreDefMoneyflow' + idSuffix"
-                :field-label="$t('General.contractpartner')"
-                :validity-date="validityDate"
-              />
-            </div>
-          </div>
 
-          <div class="grid grid-cols-1 gap-2 pt-2">
-            <div>
-              <InputStandard
-                v-model="mpm.comment"
-                :validation-schema="schema.comment"
-                :id="'comment' + idSuffix"
-                :field-label="$t('General.comment')"
-              />
-            </div>
-          </div>
+          <div class="rounded-xl border bg-muted/30 p-4 shadow-sm space-y-4">
+            <div class="grid grid-cols-1 sm:grid-cols-12 gap-4">
+              <div class="sm:col-span-4">
+                <InputStandard
+                  v-model="mpm.amount"
+                  :validation-schema="schema.amount"
+                  id="amount"
+                  field-type="number"
+                  step="0.01"
+                  :field-label="$t('General.amount')"
+                >
+                  <template #icon><Euro class="h-4 w-4" /></template>
+                </InputStandard>
+              </div>
+              <div class="sm:col-span-8">
+                <InputStandard
+                  v-model="mpm.comment"
+                  :validation-schema="schema.comment"
+                  :id="'comment' + idSuffix"
+                  :field-label="$t('General.comment')"
+                />
+              </div>
 
-          <div class="grid grid-cols-1 gap-2 pt-2">
-            <div>
-              <SelectPostingAccount
-                v-model="mpm.postingAccountId"
-                :validation-schema="schema.postingAccountId"
-                :id-suffix="'CreatePreDefMoneyflow' + idSuffix"
-                :field-label="$t('General.postingAccount')"
-              />
-            </div>
-          </div>
+              <div class="sm:col-span-8">
+                <SelectContractpartner
+                  v-model="mpm.contractpartnerId"
+                  :validation-schema="schema.contractpartnerId"
+                  :id-suffix="'CreatePreDefMoneyflow' + idSuffix"
+                  :field-label="$t('General.contractpartner')"
+                />
+              </div>
+              <div class="sm:col-span-4">
+                <SelectStandard
+                  v-model="mpm.onceAMonth"
+                  :validation-schema="schema.onceAMonth"
+                  :id="'onceAMonth' + idSuffix"
+                  :field-label="$t('PreDefMoneyflow.onceAMonth')"
+                  :select-box-values="onceAMonthValues"
+                />
+              </div>
 
-          <div class="grid grid-cols-1 gap-2 pt-2">
-            <div>
-              <SelectCapitalsource
-                v-model="mpm.capitalsourceId"
-                :validation-schema="schema.capitalsourceId"
-                :id-suffix="'CreatePreDefMoneyflow' + idSuffix"
-                :field-label="$t('General.capitalsource')"
-                :validity-date="validityDate"
-              />
-            </div>
-          </div>
-          <div class="grid grid-cols-1 gap-2 pt-2">
-            <div>
-              <SelectStandard
-                v-model="mpm.onceAMonth"
-                :validation-schema="schema.onceAMonth"
-                :id="'onceAMonth' + idSuffix"
-                :field-label="$t('PreDefMoneyflow.onceAMonth')"
-                :select-box-values="onceAMonthValues"
-              />
+              <div class="sm:col-span-6">
+                <SelectCapitalsource
+                  v-model="mpm.capitalsourceId"
+                  :validation-schema="schema.capitalsourceId"
+                  :id-suffix="'CreatePreDefMoneyflow' + idSuffix"
+                  :field-label="$t('General.capitalsource')"
+                  :validity-date="validityDate"
+                />
+              </div>
+              <div class="sm:col-span-6">
+                <SelectPostingAccount
+                  v-model="mpm.postingAccountId"
+                  :validation-schema="schema.postingAccountId"
+                  :id-suffix="'CreatePreDefMoneyflow' + idSuffix"
+                  :field-label="$t('General.postingAccount')"
+                />
+              </div>
             </div>
           </div>
         </div>
       </form>
     </template>
+
     <template #footer>
-      <Button type="button" variant="secondary" @click="resetForm">
+      <Button
+        type="button"
+        variant="secondary"
+        class="flex items-center gap-2 px-6"
+        @click="resetForm"
+      >
+        <Undo2 class="h-4 w-4" />
         {{ $t("General.reset") }}
       </Button>
+
       <ButtonSubmit
         :button-label="$t('General.save')"
         :form-id="'createPreDefMoneyflowForm' + idSuffix"
-      />
+      >
+        <template #icon><Save class="h-4 w-4" /></template>
+      </ButtonSubmit>
     </template>
   </ModalVue>
 </template>
@@ -97,7 +102,7 @@ import { useForm } from "vee-validate";
 import { computed, ref, useTemplateRef } from "vue";
 import { useI18n } from "vue-i18n";
 import { boolean, number, string, ZodType } from "zod";
-import { Euro } from "lucide-vue-next";
+import { Euro, Save, Undo2 } from "lucide-vue-next";
 
 import ButtonSubmit from "../ButtonSubmit.vue";
 import DivError from "../DivError.vue";

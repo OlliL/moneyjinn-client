@@ -8,7 +8,7 @@
       >
         <DivError :server-errors="serverErrors" />
 
-        <div class="rounded-xl border bg-muted/30 p-4 space-y-4">
+        <div class="rounded-xl border bg-muted/30 p-4 shadow-sm space-y-4">
           <div class="grid gap-1.5">
             <InputStandard
               v-model="mcs.comment"
@@ -17,7 +17,6 @@
               :field-label="$t('General.name')"
             />
           </div>
-
           <div class="grid grid-cols-2 gap-4">
             <SelectStandard
               v-model="mcs.type"
@@ -38,7 +37,7 @@
 
         <div class="grid grid-cols-2 gap-4">
           <div
-            class="rounded-xl border p-4 bg-muted/10 flex flex-col justify-between min-h-[175px]"
+            class="rounded-xl border bg-muted/30 p-4 shadow-sm flex flex-col justify-between min-h-[175px]"
           >
             <span
               class="text-xs font-bold uppercase tracking-wider text-muted-foreground block mb-2"
@@ -62,7 +61,7 @@
           </div>
 
           <div
-            class="rounded-xl border p-4 bg-muted/10 flex flex-col justify-between min-h-[175px]"
+            class="rounded-xl border bg-muted/30 p-4 shadow-sm flex flex-col justify-between min-h-[175px]"
           >
             <span
               class="text-xs font-bold uppercase tracking-wider text-muted-foreground block"
@@ -88,8 +87,8 @@
           </div>
         </div>
 
-        <div class="rounded-xl border bg-background p-4 space-y-4">
-          <div class="flex items-center space-x-2 border-b border-border/40">
+        <div class="rounded-xl border bg-muted/30 p-4 shadow-sm space-y-4">
+          <div class="flex items-center space-x-2">
             <span
               class="text-xs font-bold uppercase tracking-wider text-muted-foreground block mb-0"
             >
