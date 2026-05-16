@@ -1,59 +1,69 @@
 <template>
   <ModalVue :title="title" ref="modalComponent">
-    <template #body
-      ><form
+    <template #body>
+      <form
         @submit.prevent="createEtfPreliminaryLumpSum"
         id="createEtfPreliminaryLumpSumYearForm"
       >
-        <div class="space-y-2">
+        <div class="space-y-4">
           <DivError :server-errors="serverErrors" />
-          <div class="grid grid-cols-1 gap-2 pt-2">
-            <div>
-              <SelectStandard
-                v-model="mep.etfId"
-                :validation-schema="schema.etfId"
-                id="etf"
-                :field-label="$t('General.etf')"
-                :select-box-values="etfs"
-              />
-            </div>
-          </div>
-          <div class="grid grid-cols-1 gap-2 pt-2">
-            <div>
-              <InputDate
-                v-model="year"
-                :validation-schema="schema.year"
-                id="bookingdate"
-                :field-label="$t('General.year')"
-                pick-mode="year"
-              />
-            </div>
-          </div>
-          <div class="grid grid-cols-1 gap-2 pt-2">
-            <div>
-              <InputStandard
-                v-model="mep.amountDecember"
-                :validation-schema="schema.amountDecember"
-                id="amountPerYear"
-                step="0.01"
-                field-type="number"
-                :field-label="$t('ETFPreliminaryLumpSum.yearlySum')"
-              >
-                <template #icon><Euro class="h-4 w-4" /></template>
-              </InputStandard>
+
+          <div class="rounded-xl border bg-background p-4 shadow-sm">
+            <div class="grid grid-cols-1 sm:grid-cols-12 gap-4">
+              <div class="sm:col-span-9">
+                <SelectStandard
+                  v-model="mep.etfId"
+                  :validation-schema="schema.etfId"
+                  id="etf"
+                  :field-label="$t('General.etf')"
+                  :select-box-values="etfs"
+                />
+              </div>
+              <div class="sm:col-span-3">
+                <InputDate
+                  v-model="year"
+                  :validation-schema="schema.year"
+                  id="bookingdate"
+                  :field-label="$t('General.year')"
+                  pick-mode="year"
+                />
+              </div>
+
+              <div class="sm:col-span-12">
+                <InputStandard
+                  v-model="mep.amountDecember"
+                  :validation-schema="schema.amountDecember"
+                  id="amountPerYear"
+                  step="0.01"
+                  field-type="number"
+                  :field-label="$t('ETFPreliminaryLumpSum.yearlySum')"
+                  :focus="true"
+                >
+                  <template #icon><Euro class="h-4 w-4" /></template>
+                </InputStandard>
+              </div>
             </div>
           </div>
         </div>
       </form>
     </template>
     <template #footer>
-      <Button type="button" variant="secondary" @click="resetForm">
+      <Button
+        type="button"
+        variant="secondary"
+        class="flex items-center gap-2 px-6"
+        @click="resetForm"
+      >
+        <Undo2 class="h-4 w-4" />
         {{ $t("General.reset") }}
       </Button>
+
       <ButtonSubmit
         :button-label="$t('General.save')"
         form-id="createEtfPreliminaryLumpSumYearForm"
-      />
+      >
+        <template #icon><Save class="h-4 w-4" /></template>
+      </ButtonSubmit>
     </template>
   </ModalVue>
 </template>
@@ -63,7 +73,7 @@ import { useForm } from "vee-validate";
 import { computed, ref, useTemplateRef } from "vue";
 import { useI18n } from "vue-i18n";
 import { date, type ZodType, number } from "zod";
-import { Euro } from "lucide-vue-next";
+import { Euro, Save, Undo2 } from "lucide-vue-next";
 
 import ButtonSubmit from "../ButtonSubmit.vue";
 import DivError from "../DivError.vue";
