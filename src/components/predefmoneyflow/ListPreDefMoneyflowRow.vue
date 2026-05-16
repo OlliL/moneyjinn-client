@@ -1,28 +1,60 @@
 <template>
-  <tr>
-    <td class="text-end"><SpanAmount :amount="mpm.amount" /></td>
-    <td class="text-start">{{ mpm.contractpartnerName }}</td>
-    <td class="text-start">{{ mpm.comment }}</td>
-    <td class="text-start">{{ mpm.postingAccountName }}</td>
-    <td class="text-start">{{ mpm.capitalsourceComment }}</td>
-    <td class="text-center"><SpanBoolean :value="mpm.onceAMonth" /></td>
+  <TableRow>
+    <TableCell class="text-right border py-1 px-2">
+      <SpanAmount :amount="mpm.amount" />
+    </TableCell>
+    <TableCell class="text-left border py-1 px-2">
+      {{ mpm.contractpartnerName }}
+    </TableCell>
+    <TableCell class="text-left border py-1 px-2">
+      {{ mpm.comment }}
+    </TableCell>
+    <TableCell class="text-left border py-1 px-2">
+      {{ mpm.postingAccountName }}
+    </TableCell>
+    <TableCell class="text-left border py-1 px-2">
+      {{ mpm.capitalsourceComment }}
+    </TableCell>
+    <TableCell class="text-center border py-1 px-2">
+      <SpanBoolean :value="mpm.onceAMonth" />
+    </TableCell>
 
-    <td class="text-center"><SpanDate :date="mpm.createDate" /></td>
-    <td class="text-center"><SpanDate :date="mpm.lastUsed" /></td>
-    <td class="text-center">
-      <span class="link-primary" @click="editPreDefMoneyflow"
-        ><i class="bi bi-pencil-square"></i
-      ></span>
-    </td>
-    <td class="text-center">
-      <span class="link-primary" @click="deletePreDefMoneyflow"
-        ><i class="bi bi-trash"></i
-      ></span>
-    </td>
-  </tr>
+    <TableCell class="text-center border py-1 px-2">
+      <SpanDate :date="mpm.createDate" />
+    </TableCell>
+    <TableCell class="text-center border py-1 px-2">
+      <SpanDate :date="mpm.lastUsed" />
+    </TableCell>
+    <TableCell class="w-0 border whitespace-nowrap text-center p-0">
+      <Button
+        variant="ghost"
+        size="icon"
+        @click="editPreDefMoneyflow"
+        :title="$t('General.edit')"
+        class="h-8 w-8 cursor-pointer"
+      >
+        <Pencil class="h-4 w-4" />
+      </Button>
+    </TableCell>
+    <TableCell class="w-0 border whitespace-nowrap text-center p-0">
+      <Button
+        variant="ghost"
+        size="icon"
+        @click="deletePreDefMoneyflow"
+        :title="$t('General.delete')"
+        class="h-8 w-8 cursor-pointer"
+      >
+        <Trash2 class="h-4 w-4" />
+      </Button>
+    </TableCell>
+  </TableRow>
 </template>
 <script lang="ts" setup>
 import type { PropType } from "vue";
+import { Pencil, Trash2 } from "lucide-vue-next";
+
+import { TableCell, TableRow } from "@/components/ui/table";
+import { Button } from "@/components/ui/button";
 
 import SpanAmount from "../SpanAmount.vue";
 import SpanDate from "../SpanDate.vue";

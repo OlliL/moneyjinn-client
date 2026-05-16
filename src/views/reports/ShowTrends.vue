@@ -1,132 +1,118 @@
 <template>
-  <div class="container-fluid text-center">
-    <div class="row justify-content-md-center">
-      <div class="col-xs-12 mb-4">
-        <h4>{{ $t("Reports.title.trends") }}</h4>
-      </div>
+  <div class="custom-container space-y-6">
+    <div class="text-center">
+      <h4 class="text-2xl font-bold">{{ $t("Reports.title.trends") }}</h4>
     </div>
     <DivError :server-errors="serverErrors" />
 
-    <div class="row justify-content-md-center mb-2">
-      <div class="col-xxl-4 col-md-7 col-xs-12">
-        <div class="card w-100 bg-light">
-          <div class="card-body">
-            <form @submit.prevent="showTrends">
-              <div class="container-fluid">
-                <div class="row no-gutters flex-lg-nowrap">
-                  <div class="col-md-6 col-xs-12 mb-2">
-                    <InputDate
-                      v-model="startDate"
-                      :validation-schema="schema.startDate"
-                      id="startDate"
-                      pickMode="month"
-                      :field-label="$t('General.startDate')"
-                    />
-                  </div>
-                  <div class="col-md-6 col-xs-12">
-                    <InputDate
-                      v-model="endDate"
-                      :validation-schema="schema.endDate"
-                      id="endDate"
-                      pickMode="month"
-                      :field-label="$t('General.endDate')"
-                    />
-                  </div>
-                </div>
-
-                <div class="row no-gutters flex-lg-nowrap">
-                  <div class="col-md-2 col-xs-12 d-flex align-items-center">
-                    <div class="form-check form-switch text-start">
-                      <input
-                        class="form-check-input"
-                        type="checkbox"
-                        id="capitalsourcesActive"
-                        v-model="capitalsourcesActive"
-                      />
-                      <label for="capitalsourcesActive" style="opacity: 0.65">{{
-                        $t("General.capitalsources")
-                      }}</label>
-                    </div>
-                  </div>
-                </div>
-                <div
-                  class="row no-gutters flex-lg-nowrap"
-                  v-if="capitalsourcesActive"
-                >
-                  <div class="col-12 mb-3 text-start">
-                    <select
-                      v-model="capitalsourceIds"
-                      id="capitalsourceIds"
-                      name="capitalsourceIds"
-                      class="form-select form-control"
-                      multiple
-                      size="4"
-                    >
-                      <option
-                        v-for="value of selectBoxValues"
-                        :key="value.id"
-                        :value="value.id"
-                      >
-                        {{ value.value }}
-                      </option>
-                    </select>
-                  </div>
-                </div>
-
-                <div class="row no-gutters flex-lg-nowrap">
-                  <div class="col-md-2 col-xs-12 d-flex align-items-center">
-                    <div class="form-check form-switch text-start">
-                      <input
-                        class="form-check-input"
-                        type="checkbox"
-                        id="etfsActive"
-                        v-model="etfsActive"
-                      />
-                      <label for="etfs" style="opacity: 0.65">{{
-                        $t("General.etfs")
-                      }}</label>
-                    </div>
-                  </div>
-                </div>
-                <div class="row no-gutters flex-lg-nowrap" v-if="etfsActive">
-                  <div class="col-12 mb-3 text-start">
-                    <select
-                      v-model="selectedEtfIds"
-                      id="etfIds"
-                      name="etfIds"
-                      class="form-select form-control"
-                      multiple
-                      size="4"
-                    >
-                      <option
-                        v-for="value of etfSelectBoxValues"
-                        :key="value.id"
-                        :value="value.id"
-                      >
-                        {{ value.value }}
-                      </option>
-                    </select>
-                  </div>
-                </div>
-
-                <div class="row no-gutters flex-lg-nowrap">
-                  <div class="col-12">
-                    <button type="submit" class="btn btn-primary">
-                      {{ $t("General.show") }}
-                    </button>
-                  </div>
-                </div>
+    <div class="flex justify-center">
+      <div
+        class="w-full max-w-3xl rounded-lg border bg-card text-card-foreground shadow-sm bg-muted p-4"
+      >
+        <form @submit.prevent="showTrends">
+          <div class="space-y-4">
+            <div class="grid gap-3 md:grid-cols-2">
+              <div>
+                <InputDate
+                  v-model="startDate"
+                  :validation-schema="schema.startDate"
+                  id="startDate"
+                  pickMode="month"
+                  :field-label="$t('General.startDate')"
+                />
               </div>
-            </form>
+              <div>
+                <InputDate
+                  v-model="endDate"
+                  :validation-schema="schema.endDate"
+                  id="endDate"
+                  pickMode="month"
+                  :field-label="$t('General.endDate')"
+                />
+              </div>
+            </div>
+
+            <div class="flex justify-start">
+              <div class="flex items-center gap-3 text-left">
+                <input
+                  class="h-4 w-4"
+                  type="checkbox"
+                  id="capitalsourcesActive"
+                  v-model="capitalsourcesActive"
+                />
+                <label
+                  for="capitalsourcesActive"
+                  class="text-muted-foreground"
+                  >{{ $t("General.capitalsources") }}</label
+                >
+              </div>
+            </div>
+            <div class="grid" v-if="capitalsourcesActive">
+              <div class="mb-3 text-left">
+                <select
+                  v-model="capitalsourceIds"
+                  id="capitalsourceIds"
+                  name="capitalsourceIds"
+                  class="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                  multiple
+                  size="4"
+                >
+                  <option
+                    v-for="value of selectBoxValues"
+                    :key="value.id"
+                    :value="value.id"
+                  >
+                    {{ value.value }}
+                  </option>
+                </select>
+              </div>
+            </div>
+
+            <div class="flex justify-start">
+              <div class="flex items-center gap-3 text-left">
+                <input
+                  class="h-4 w-4"
+                  type="checkbox"
+                  id="etfsActive"
+                  v-model="etfsActive"
+                />
+                <label for="etfs" class="text-muted-foreground">{{
+                  $t("General.etfs")
+                }}</label>
+              </div>
+            </div>
+            <div class="grid" v-if="etfsActive">
+              <div class="mb-3 text-left">
+                <select
+                  v-model="selectedEtfIds"
+                  id="etfIds"
+                  name="etfIds"
+                  class="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                  multiple
+                  size="4"
+                >
+                  <option
+                    v-for="value of etfSelectBoxValues"
+                    :key="value.id"
+                    :value="value.id"
+                  >
+                    {{ value.value }}
+                  </option>
+                </select>
+              </div>
+            </div>
+
+            <div class="flex justify-center">
+              <Button type="submit">
+                {{ $t("General.show") }}
+              </Button>
+            </div>
           </div>
-        </div>
+        </form>
       </div>
     </div>
-    <div
-      class="row justify-content-md-center"
-      style="position: relative; height: 55vh"
-    >
-      <div class="col-xxl-7 col-xl-10 col-xs-12">
+    <div class="flex justify-center" style="position: relative; height: 55vh">
+      <div class="w-full lg:w-10/12 xl:w-9/12">
         <Line
           :data="chartData"
           :options="chartOptions"
@@ -169,6 +155,7 @@ import ReportService from "@/service/ReportService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import type { Trends } from "@/model/report/Trends";
 import { useEtfStore } from "@/stores/EtfStore";
+import { Button } from "@/components/ui/button";
 
 const { t } = useI18n();
 

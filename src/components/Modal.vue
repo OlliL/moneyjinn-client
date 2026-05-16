@@ -1,50 +1,47 @@
 <template>
-  <div
-    class="modal fade"
-    tabindex="-1"
-    aria-hidden="true"
-    ref="modalEle"
-    :style="'z-index: ' + zIndex"
-  >
-    <div class="modal-dialog" :style="modalStyle">
-      <div class="modal-content">
-        <div class="modal-header text-center">
-          <h5 class="modal-title w-100">{{ title }}</h5>
-          <button
-            type="button"
-            class="btn-close"
-            data-bs-dismiss="modal"
-            aria-label="Close"
-          ></button>
-        </div>
-        <div class="modal-body">
-          <slot name="body" />
-        </div>
-        <div class="modal-footer justify-content-md-center">
-          <button
-            type="button"
-            class="btn btn-secondary"
-            data-bs-dismiss="modal"
-          >
-            {{ $t("Modal.cancel") }}
-          </button>
-          <slot name="footer"></slot>
-        </div>
+  <Dialog v-model:open="isOpen">
+    <DialogContent
+      :style="modalStyle"
+      :class="[
+        'sm:max-w-lg',
+        'max-h-[90vh]',
+        'flex flex-col',
+        `!z-[${zIndex}]`,
+      ]"
+    >
+      <DialogHeader>
+        <DialogTitle class="text-center w-full">
+          <h4 class="text-2xl font-bold">{{ title }}</h4>
+        </DialogTitle>
+      </DialogHeader>
+
+      <div class="py-2 overflow-y-auto flex-1">
+        <slot name="body" />
       </div>
-    </div>
-  </div>
+
+      <DialogFooter class="sm:justify-center gap-2">
+        <DialogClose as-child>
+          <Button type="button" variant="secondary">
+            {{ $t("Modal.cancel") }}
+          </Button>
+        </DialogClose>
+        <slot name="footer" />
+      </DialogFooter>
+    </DialogContent>
+  </Dialog>
 </template>
 
-<script lang="ts">
-export default { name: "MyModal" };
-</script>
-
 <script lang="ts" setup>
-import { computed, onMounted, ref, useTemplateRef } from "vue";
-import { Modal } from "bootstrap";
-
-const thisModalObj = ref({} as Modal);
-const modalEle = useTemplateRef<HTMLDivElement>('modalEle');
+import { computed, ref } from "vue";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+  DialogClose,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 
 const props = defineProps({
   title: {
@@ -61,24 +58,18 @@ const props = defineProps({
   },
 });
 
+const isOpen = ref(false);
+
 const modalStyle = computed(() => {
-  if (props.maxWidth) {
-    return "max-width: " + props.maxWidth;
-  }
-  return "";
+  return props.maxWidth ? { maxWidth: props.maxWidth } : {};
 });
 
-const _show = async () => {
-  thisModalObj.value.show();
+const _show = () => {
+  isOpen.value = true;
 };
-const _hide = async () => {
-  thisModalObj.value.hide();
+const _hide = () => {
+  isOpen.value = false;
 };
 
 defineExpose({ _show, _hide });
-
-onMounted(() => {
-  if(modalEle.value)
-    thisModalObj.value = new Modal(modalEle.value);
-});
 </script>

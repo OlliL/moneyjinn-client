@@ -1,68 +1,97 @@
 <template>
-  <div class="input-group">
-    <div class="form-floating">
+  <div class="grid w-full gap-1.5 relative">
+    <Label v-if="fieldLabel" :for="id" class="text-left ml-1">
+      {{ fieldLabel }}
+    </Label>
+
+    <div class="flex -space-x-px relative">
       <input
         type="hidden"
         :id="id"
         :name="id"
+        :data-testid="id + '-id'"
         ref="hiddenRef"
         v-model="hiddenValue"
-        :data-testid="id + '-id'"
-      />
-      <i
-        class="bi bi-x-lg position-absolute"
-        style="
-          right: 32px;
-          top: 18px;
-          cursor: pointer;
-          -webkit-text-stroke: 2px;
-        "
-        :data-testid="id + '-clear'"
-        @click="clearInput"
-      >
-      </i>
-      <input
-        :class="'form-control dropdown-toggle ' + errorData.inputClass"
-        style="scroll-margin-top: 56px"
-        data-bs-toggle="dropdown"
-        v-model="fieldValue"
-        ref="fieldRef"
-        :data-testid="id"
-        @input="onInput"
-        @keydown="onKeydownInput"
-        @keyup="onKeyupInput"
-        @focus="onFocus"
-        @blur="onBlur"
       />
 
-      <div
-        class="dropdown-menu"
-        style="max-height: 400px; overflow: scroll"
-        ref="dropdownRef"
-      >
-        <a
-          class="dropdown-item"
-          :href="'#' + selectBoxValue.value"
-          v-for="selectBoxValue in items"
-          :key="selectBoxValue.id"
-          ref="dropdownItemRef"
-          @click.prevent="onClickAnchor(selectBoxValue)"
-          @keydown="onKeydownAnchor"
-          :data-testid="id + '-option'"
+      <div class="relative flex-1">
+        <Input
+          autocomplete="off"
+          v-model="fieldValue"
+          ref="fieldRef"
+          :id="id"
+          :data-testid="id"
+          :class="[
+            'bg-white z-10',
+            $slots.icon ? 'rounded-r-none' : '',
+            errorData.inputClass == 'is-invalid'
+              ? '!border-destructive bg-destructive/[0.03] focus-visible:ring-destructive/15 !border-r-destructive'
+              : 'border-input focus-visible:ring-ring',
+          ]"
+          @input="onInput"
+          @keydown="onKeydownInput"
+          @keyup="onKeyupInput"
+          @focus="onFocus"
+          @blur="onBlur"
+        />
+
+        <button
+          v-if="fieldValue"
+          type="button"
+          class="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors p-1"
+          @click="clearInput"
+          :data-testid="id + '-clear'"
         >
-          {{ selectBoxValue.value }}
-        </a>
+          <X class="h-4 w-4 stroke-[3px]" />
+        </button>
       </div>
 
-      <label :for="id" :style="'color: ' + errorData.fieldColor">{{
-        errorData.fieldLabel
-      }}</label>
+      <div
+        v-if="$slots.icon"
+        :class="[
+          'flex items-center justify-center px-2 border border-input rounded-r-md text-foreground transition-colors relative',
+          errorData.inputClass == 'is-invalid' ? 'border-l-transparent' : '',
+        ]"
+      >
+        <slot name="icon"></slot>
+      </div>
+
+      <div
+        v-if="isOpen && items.length > 0"
+        ref="dropdownRef"
+        class="absolute z-50 top-[calc(100%+4px)] left-0 min-w-[8rem] w-full max-h-[300px] rounded-md border bg-popover text-popover-foreground shadow-md animate-in fade-in-0 zoom-in-95 flex flex-col"
+      >
+        <div class="p-1 overflow-y-auto overscroll-contain custom-scrollbar">
+          <a
+            v-for="selectBoxValue in items"
+            :key="selectBoxValue.id"
+            v-memo="[selectBoxValue.id]"
+            ref="dropdownItemRef"
+            href="#"
+            class="relative flex w-full cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground !text-foreground !no-underline"
+            @click.prevent="onClickAnchor(selectBoxValue)"
+            @keydown="onKeydownAnchor"
+            :data-testid="id + '-option'"
+          >
+            {{ selectBoxValue.value }}
+          </a>
+        </div>
+      </div>
     </div>
-    <slot name="icon"></slot>
+
+    <p
+      v-if="errorData.inputClass === 'is-invalid'"
+      class="text-[0.8rem] font-medium text-destructive mt-0.5 text-left ml-1"
+    >
+      {{ errorMessage }}
+    </p>
   </div>
 </template>
 
 <script lang="ts" setup>
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { X } from "lucide-vue-next";
 import { useField } from "vee-validate";
 import { toTypedSchema } from "@vee-validate/zod";
 import {
@@ -146,35 +175,40 @@ const filterItemList = () => {
   else items.value = props.selectBoxValues;
 };
 
-const showDropdown = () => {
-  if (!dropdownRef.value?.classList.contains("show"))
-    dropdownRef.value?.classList.add("show");
-  fieldRef.value?.scrollIntoView();
+const isOpen = ref(false);
+const showDropdown = async () => {
+  isOpen.value = true;
+
+  await nextTick();
+
+  if (getInputElement()) {
+    getInputElement().scrollIntoView({ behavior: "smooth", block: "nearest" });
+  }
 };
 
 const hideDropdown = () => {
-  if (dropdownRef.value?.classList.contains("show"))
-    dropdownRef.value?.classList.remove("show");
+  isOpen.value = false;
 };
 
 const focusNextInputElement = () => {
-  const form = fieldRef.value?.closest("form");
+  const form = getInputElement().closest("form");
   const inputElements = Array.prototype.filter.call(
     form,
     (i) => i instanceof HTMLInputElement && i.type != "hidden",
   );
-  const index = inputElements.indexOf(fieldRef.value);
+  const index = inputElements.indexOf(getInputElement());
   nextTick(() => {
     inputElements[index + 1].focus();
   });
 };
 
+const getDropdownAnchors = () => {
+  // Findet alle Anker innerhalb des Dropdowns
+  return dropdownRef.value?.querySelectorAll("a") || [];
+};
+
 const getFirstDropdownAnchor = () => {
-  return dropdownRef.value?.children
-    ? [...dropdownRef.value.children].find(
-        (c) => c instanceof HTMLAnchorElement,
-      )
-    : undefined;
+  return getDropdownAnchors()[0] as HTMLAnchorElement | undefined;
 };
 
 const clearInput = () => {
@@ -190,7 +224,6 @@ const setFieldValue = () => {
 };
 
 const onBlur = (event: FocusEvent) => {
-  // hide dropdown if the input was left except if the target is the Dropdown-Menu itself
   if (
     dropdownItemRef.value &&
     dropdownItemRef.value?.indexOf(event.relatedTarget as HTMLAnchorElement) < 0
@@ -200,11 +233,15 @@ const onBlur = (event: FocusEvent) => {
   }
 };
 
+const getInputElement = () => {
+  return fieldRef.value?.$el as HTMLInputElement;
+};
+
 const onFocus = (event: Event) => {
-  // select whole text on focus to easily overtype it, show Dropdown-Menu - needed if source was not a click but a <tab> navigation
-  fieldRef.value?.select();
+  showDropdown();
+  getInputElement().select();
+
   setTimeout(() => {
-    // If onFocus is triggered from ESC inside Dropdown-Menu don't reopen it again.
     if (!preventOnFocus.value) {
       preventOnFocus.value = false;
       showDropdown();
@@ -218,11 +255,28 @@ const onClickAnchor = (selectBoxValue: SelectBoxValue) => {
   hideDropdown();
 };
 
-const onKeydownAnchor = async (event: KeyboardEvent) => {
-  // select currently focused Dropdown-Menu element
-  if (event.key == "Tab") {
+const onKeydownAnchor = (event: KeyboardEvent) => {
+  const anchors = Array.from(getDropdownAnchors());
+  const currentIndex = anchors.indexOf(event.target as HTMLAnchorElement);
+
+  if (event.key === "ArrowDown") {
+    event.preventDefault();
+    const nextIndex = (currentIndex + 1) % anchors.length;
+    anchors[nextIndex]?.focus();
+  } else if (event.key === "ArrowUp") {
+    event.preventDefault();
+    if (currentIndex === 0) {
+      getInputElement().focus();
+    } else {
+      const prevIndex = (currentIndex - 1 + anchors.length) % anchors.length;
+      anchors[prevIndex]?.focus();
+    }
+  } else if (event.key === "Tab" || event.key === "Enter") {
     event.preventDefault();
     (event.target as HTMLAnchorElement).click();
+  } else if (event.key === "Escape") {
+    hideDropdown();
+    getInputElement().focus();
   }
 };
 
@@ -270,7 +324,7 @@ const errorData = computed((): ErrorData => {
   );
 });
 
-const fieldRef = useTemplateRef<HTMLInputElement>("fieldRef");
+const fieldRef = useTemplateRef<typeof Input>("fieldRef");
 const hiddenRef = useTemplateRef<HTMLInputElement>("hiddenRef");
 const dropdownRef = useTemplateRef<HTMLDivElement>("dropdownRef");
 const dropdownItemRef =
@@ -287,7 +341,7 @@ watch(
 onMounted(() => {
   if (props.focus) {
     nextTick(() => {
-      fieldRef.value?.focus();
+      getInputElement().focus();
     });
   }
 });
@@ -296,7 +350,7 @@ watch(
   () => props.selectBoxValues,
   (newVal) => {
     // reset the fieldValue in case its not part of the select-box. But only do that if the hiddenValue is set at all.
-    if (hiddenValue.value != undefined) {
+    if (hiddenValue.value != undefined && hiddenValue.value !== 0) {
       const foundElement = newVal.find((sbv) => sbv.id == hiddenValue.value);
       if (!foundElement) {
         hiddenValue.value = undefined;

@@ -1,7 +1,8 @@
 <template>
   <DivError :server-errors="serverErrors" />
-  <div class="row no-gutters flex-lg-nowrap mb-2">
-    <div class="col-md-2 col-xs-12 mb-2">
+
+  <div class="grid grid-cols-1 md:grid-cols-12 gap-4 mb-4">
+    <div class="md:col-span-2">
       <InputDate
         v-model="mmf.bookingDate"
         :validation-schema="schema.bookingDate"
@@ -9,7 +10,7 @@
         :field-label="$t('Moneyflow.bookingdate')"
       />
     </div>
-    <div class="col-md-2 col-xs-12 mb-2">
+    <div class="md:col-span-2">
       <InputDate
         v-model="mmf.invoiceDate"
         :validation-schema="schema.invoiceDate"
@@ -17,7 +18,7 @@
         :field-label="$t('Moneyflow.invoicedate')"
       />
     </div>
-    <div class="col-md-4 col-xs-12 mb-2">
+    <div class="md:col-span-4">
       <SelectContractpartner
         v-model="mmf.contractpartnerId"
         :validation-schema="schema.contractpartnerId"
@@ -26,8 +27,7 @@
         :validity-date="validityDate"
       />
     </div>
-
-    <div class="col-md-4 col-xs-12 mb-2">
+    <div class="md:col-span-4">
       <SelectCapitalsource
         v-model="mmf.capitalsourceId"
         :validation-schema="schema.capitalsourceId"
@@ -38,8 +38,8 @@
     </div>
   </div>
 
-  <div class="row no-gutters flex-lg-nowrap mb-2">
-    <div class="col-md-2 col-xs-12 mb-2">
+  <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-start mb-4">
+    <div class="md:col-span-2">
       <InputStandard
         v-model="amount"
         :validation-schema="schema.amount"
@@ -49,130 +49,138 @@
         :field-label="$t('General.amount')"
         :focus="true"
       >
-        <template #icon
-          ><span class="input-group-text"
-            ><i class="bi bi-currency-euro"></i></span
-        ></template>
+        <template #icon><Euro class="h-4 w-4" /></template>
       </InputStandard>
     </div>
-    <div class="col-md-7" v-show="!showMoneyflowFields"></div>
-    <div class="col-md-4 col-xs-12 mb-2" v-show="showMoneyflowFields">
-      <InputStandard
-        v-model="mmf.comment"
-        :validation-schema-ref="schema.comment"
-        :id="'comment' + idSuffix"
-        :field-label="$t('General.comment')"
-        name="comment"
-      />
-    </div>
-    <div class="col-md-3 col-xs-12 mb-2" v-show="showMoneyflowFields">
-      <SelectPostingAccount
-        v-model="mmf.postingAccountId"
-        :validation-schema-ref="schema.postingAccountId"
-        :id-suffix="'CreateMoneyflow' + idSuffix"
-        :field-label="$t('General.postingAccount')"
-      />
-    </div>
-    <div
-      class="col-md-3 col-xs-12 mb-2 d-flex align-items-center justify-content-center"
-    >
-      <div class="btn-group mx-2">
-        <input
-          type="radio"
-          class="btn-check"
-          name="public-private"
-          :id="'public' + idSuffix"
-          autocomplete="off"
-          v-model="mmf.private"
-          :value="false"
-        />
-        <label class="btn btn-outline-success" :for="'public' + idSuffix"
-          ><small> {{ $t("Moneyflow.public") }}</small></label
-        >
 
-        <input
-          type="radio"
-          class="btn-check"
-          name="public-private"
-          :id="'private' + idSuffix"
-          autocomplete="off"
-          v-model="mmf.private"
-          :value="true"
-        />
-        <label class="btn btn-outline-danger" :for="'private' + idSuffix"
-          ><small>{{ $t("Moneyflow.private") }}</small></label
-        >
-      </div>
-      <div class="btn-group mx-2">
-        <input
-          type="radio"
-          class="btn-check"
-          name="once-favorite"
-          :id="'once' + idSuffix"
-          autocomplete="off"
-          v-model="saveAsPreDefMoneyflow"
-          :value="false"
-        />
-        <label class="btn btn-outline-secondary" :for="'once' + idSuffix"
-          ><small>{{ toggleTextOff }}</small></label
-        >
+    <template v-if="showMoneyflowFields">
+      <div
+        class="md:col-span-10 flex flex-col md:flex-row items-start gap-4 w-full"
+      >
+        <div class="flex-1 w-full">
+          <InputStandard
+            v-model="mmf.comment"
+            :validation-schema-ref="schema.comment"
+            :id="'comment' + idSuffix"
+            :field-label="$t('General.comment')"
+            name="comment"
+          />
+        </div>
 
-        <input
-          type="radio"
-          class="btn-check"
-          name="once-favorite"
-          :id="'favorite' + idSuffix"
-          autocomplete="off"
-          v-model="saveAsPreDefMoneyflow"
-          :value="true"
-        />
-        <label class="btn btn-outline-primary" :for="'favorite' + idSuffix"
-          ><small>{{ toggleTextOn }}</small></label
-        >
+        <div class="w-full md:w-[220px] shrink-0">
+          <SelectPostingAccount
+            v-model="mmf.postingAccountId"
+            :validation-schema-ref="schema.postingAccountId"
+            :id-suffix="'CreateMoneyflow' + idSuffix"
+            :field-label="$t('General.postingAccount')"
+          />
+        </div>
+
+        <div class="shrink-0">
+          <div class="grid gap-1.5 relative justify-items-start">
+            <Label
+              class="text-left ml-1 text-sm font-medium text-foreground leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+            >
+              Optionen
+            </Label>
+
+            <div class="flex flex-wrap items-center gap-2 h-10 -mt-[1px]">
+              <ToggleGroup
+                type="single"
+                class="bg-muted p-1 rounded-lg inline-flex border border-input h-10 shadow-sm"
+                :model-value="mmf.private ? 'private' : 'public'"
+                @update:model-value="
+                  (val: any) => val && (mmf.private = val === 'private')
+                "
+              >
+                <ToggleGroupItem
+                  value="public"
+                  class="text-xs font-medium h-8 px-2.5 transition-all rounded-md data-[state=on]:bg-primary data-[state=on]:text-primary-foreground data-[state=on]:shadow-sm border-none text-muted-foreground"
+                >
+                  {{ $t("Moneyflow.public") }}
+                </ToggleGroupItem>
+                <ToggleGroupItem
+                  value="private"
+                  class="text-xs font-medium h-8 px-2.5 transition-all rounded-md data-[state=on]:bg-primary data-[state=on]:text-primary-foreground data-[state=on]:shadow-sm border-none text-muted-foreground"
+                >
+                  {{ $t("Moneyflow.private") }}
+                </ToggleGroupItem>
+              </ToggleGroup>
+
+              <ToggleGroup
+                type="single"
+                class="bg-muted p-1 rounded-lg inline-flex border border-input h-10 shadow-sm"
+                :model-value="saveAsPreDefMoneyflow ? 'favorite' : 'once'"
+                @update:model-value="
+                  (val: any) =>
+                    val && (saveAsPreDefMoneyflow = val === 'favorite')
+                "
+              >
+                <ToggleGroupItem
+                  value="once"
+                  class="text-xs font-medium h-8 px-2.5 transition-all rounded-md data-[state=on]:bg-primary data-[state=on]:text-primary-foreground data-[state=on]:shadow-sm border-none text-muted-foreground"
+                >
+                  {{ toggleTextOff }}
+                </ToggleGroupItem>
+                <ToggleGroupItem
+                  value="favorite"
+                  class="text-xs font-medium h-8 px-2.5 transition-all rounded-md data-[state=on]:bg-primary data-[state=on]:text-primary-foreground data-[state=on]:shadow-sm border-none text-muted-foreground"
+                >
+                  {{ toggleTextOn }}
+                </ToggleGroupItem>
+              </ToggleGroup>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
+    </template>
+    <div v-else class="md:col-span-10"></div>
   </div>
 
-  <div class="row no-gutters flex-lg-nowrap mb-4">
-    <div class="col-12">
-      <div class="card w-100 bg-light d-none d-lg-block">
-        <div class="card-header text-start">
-          <a
-            data-bs-toggle="collapse"
-            :href="'#collapseSplitEntries' + idSuffix"
-            :id="'mseContainer' + idSuffix"
-            ref="mseContainer"
-            >{{ $t("Moneyflow.subbooking") }}</a
-          >
-        </div>
-        <div
-          class="collapse"
-          :id="'collapseSplitEntries' + idSuffix"
-          :data-testid="'collapseSplitEntries' + idSuffix"
+  <div class="w-full mb-4">
+    <div class="rounded-lg border bg-muted/30 overflow-hidden">
+      <div class="px-4 py-3 border-b text-left">
+        <button
+          type="button"
+          class="text-sm font-medium text-primary hover:underline bg-transparent border-none p-0"
+          :id="'mseContainer' + idSuffix"
+          @click="isExpanded = !isExpanded"
         >
-          <div class="card-body">
-            <EditMoneyflowBaseSplitEntryRowVue
-              v-for="(mse, index) in mmf.moneyflowSplitEntries"
-              :key="mse.id"
-              :amount="mse.amount"
-              :comment="mse.comment"
-              :moneyflowComment="mmf.comment"
-              :moneyflowPostingAccountId="mmf.postingAccountId"
-              :posting-account-id="mse.postingAccountId"
-              :is-last-row="index + 1 === mmf.moneyflowSplitEntries?.length"
-              :index="index"
-              :remainder="mseRemainder"
-              :remainder-is-valid="mseRemainderIsValid"
-              :id-suffix="idSuffix + '#' + mse.id"
-              @delete-moneyflow-split-entry-row="onDeleteMoneyflowSplitEntryRow"
-              @add-moneyflow-split-entry-row="onAddMoneyflowSplitEntryRow"
-              @amount-changed="onMoneyflowSplitEntryRowAmountChanged"
-              @comment-changed="onMoneyflowSplitEntryRowCommentChanged"
-              @posting-account-id-changed="
-                onMoneyflowSplitEntryRowPostingAccountIdChanged
-              "
-            />
-          </div>
+          {{ $t("Moneyflow.subbooking") }}
+        </button>
+      </div>
+
+      <div
+        v-show="isExpanded"
+        :id="'collapseSplitEntries' + idSuffix"
+        :data-testid="'collapseSplitEntries' + idSuffix"
+        :class="[
+          'transition-all animate-in fade-in duration-200 bg-white',
+          isExpanded ? 'show' : 'collapse',
+        ]"
+      >
+        <div class="p-4 !bg-muted/50">
+          <EditMoneyflowBaseSplitEntryRowVue
+            v-for="(mse, index) in mmf.moneyflowSplitEntries"
+            :key="mse.id"
+            :amount="mse.amount"
+            :comment="mse.comment"
+            :moneyflowComment="mmf.comment"
+            :moneyflowPostingAccountId="mmf.postingAccountId"
+            :posting-account-id="mse.postingAccountId"
+            :is-last-row="index + 1 === mmf.moneyflowSplitEntries?.length"
+            :index="index"
+            :remainder="mseRemainder"
+            :remainder-is-valid="mseRemainderIsValid"
+            :id-suffix="idSuffix + '#' + mse.id"
+            @delete-moneyflow-split-entry-row="onDeleteMoneyflowSplitEntryRow"
+            @add-moneyflow-split-entry-row="onAddMoneyflowSplitEntryRow"
+            @amount-changed="onMoneyflowSplitEntryRowAmountChanged"
+            @comment-changed="onMoneyflowSplitEntryRowCommentChanged"
+            @posting-account-id-changed="
+              onMoneyflowSplitEntryRowPostingAccountIdChanged
+            "
+          />
         </div>
       </div>
     </div>
@@ -180,6 +188,8 @@
 </template>
 
 <script lang="ts" setup>
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+
 import { computed, onMounted, ref, watch, type PropType } from "vue";
 import { useI18n } from "vue-i18n";
 import { date, number, string } from "zod";
@@ -208,6 +218,10 @@ import type { PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
 import MoneyflowService from "@/service/MoneyflowService";
 import ImportedMoneyflowService from "@/service/ImportedMoneyflowService";
 import type { Contractpartner } from "@/model/contractpartner/Contractpartner";
+import { Euro } from "lucide-vue-next"; // Icons für besseres Feedback
+
+const isExpanded = ref(false);
+const toggleCollapse = () => (isExpanded.value = !isExpanded.value);
 
 const { t } = useI18n();
 
@@ -278,13 +292,6 @@ watch(
   () => props.selectedPreDefMoneyflow,
   (newVal, oldVal) => {
     if (newVal !== oldVal) selectPreDefMoneyflow(newVal);
-  },
-);
-
-watch(
-  () => props.mmfToEdit,
-  (newVal, oldVal) => {
-    if (newVal !== oldVal) resetForm();
   },
 );
 
@@ -378,6 +385,7 @@ const resetEditForm = () => {
     }
     addNewMoneyflowSplitEntryRow();
     document.getElementById("collapseSplitEntries")?.classList.add("show");
+    isExpanded.value = true;
   }
   toggleMoneyflowFieldsForMse();
 };
@@ -592,6 +600,19 @@ const selectPreDefMoneyflow = (
     resetForm();
   } else if (preDefMoneyflow) {
     amount.value = preDefMoneyflow.amount;
+
+    // Determine what the contractpartnerId-watcher would auto-fill for comment/postingAccount.
+    // By pre-setting previousComment/PostingAccount to those auto-fill values we ensure
+    // the watcher guard ("only overwrite if the user hasn't changed the value") treats the
+    // PreDefMoneyflow values as "manually entered" and does NOT overwrite them.
+    const contractpartner = contractpartnerStore.getContractpartner(
+      preDefMoneyflow.contractpartnerId,
+    );
+    previousCommentSetByContractpartnerDefaults.value =
+      contractpartner?.moneyflowComment ?? "";
+    previousPostingAccountSetByContractpartnerDefaults.value =
+      contractpartner?.postingAccountId ?? 0;
+
     mmf.value.contractpartnerId = preDefMoneyflow.contractpartnerId;
     mmf.value.comment = preDefMoneyflow.comment;
     mmf.value.postingAccountId = preDefMoneyflow.postingAccountId;
@@ -671,7 +692,7 @@ const importImportedMoneyflow = async (
         return false;
       });
   }
-  return Promise.resolve(false);
+  return false;
 };
 const deleteImportedMoneyflow = async (id: number): Promise<boolean> => {
   return ImportedMoneyflowService.deleteImportedMoneyflow(id)
@@ -699,7 +720,7 @@ const createMoneyflow = async (): Promise<boolean> => {
         return false;
       });
   }
-  return Promise.resolve(false);
+  return false;
 };
 const updateMoneyflow = async (): Promise<Moneyflow | undefined> => {
   if (prepareServerCall()) {
@@ -737,6 +758,14 @@ const updateMoneyflow = async (): Promise<Moneyflow | undefined> => {
   }
   return undefined;
 };
+
+watch(
+  () => props.mmfToEdit,
+  (newVal, oldVal) => {
+    if (newVal !== oldVal) resetForm();
+  },
+  { immediate: true },
+);
 
 defineExpose({
   createMoneyflow,

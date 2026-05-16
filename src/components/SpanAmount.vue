@@ -1,10 +1,7 @@
 <template>
-  <span
-    :class="amountClass"
-    style="white-space: nowrap"
-    data-testid="amountSpan"
-    >{{ amountString }}</span
-  >
+  <span :class="`${amountClass} whitespace-nowrap`" data-testid="amountSpan">{{
+    amountString
+  }}</span>
 </template>
 
 <script lang="ts" setup>
@@ -12,6 +9,7 @@ import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 
 import { formatNumber, redIfNegative } from "@/tools/views/FormatNumber";
+import { toFixed } from "@/tools/math";
 
 const { t } = useI18n();
 
@@ -26,7 +24,7 @@ const props = defineProps({
 });
 
 const amountClass = computed(() => {
-  return redIfNegative(props.amount);
+  return redIfNegative(toFixed(props.amount ?? 0, props.decimalPlaces));
 });
 
 const amountString = computed(() => {

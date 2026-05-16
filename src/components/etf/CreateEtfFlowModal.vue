@@ -2,10 +2,10 @@
   <ModalVue :title="title" ref="modalComponent">
     <template #body
       ><form @submit.prevent="createEtfFlow" id="createEtfFlowForm">
-        <div class="container-fluid">
+        <div class="space-y-2">
           <DivError :server-errors="serverErrors" />
-          <div class="row">
-            <div class="col-xs-12">
+          <div class="grid grid-cols-1 gap-2">
+            <div>
               <SelectStandard
                 v-model="defaultEtfId"
                 :validation-schema="schema.etfId"
@@ -15,8 +15,8 @@
               />
             </div>
           </div>
-          <div class="row pt-2">
-            <div class="col-xs-12">
+          <div class="grid grid-cols-1 gap-2 pt-2">
+            <div>
               <InputDate
                 v-model="bookingdate"
                 :validation-schema="schema.timestamp"
@@ -25,8 +25,8 @@
               />
             </div>
           </div>
-          <div class="row pt-2">
-            <div class="col-xs-12">
+          <div class="grid grid-cols-1 gap-2 pt-2">
+            <div>
               <InputStandard
                 v-model="bookingtime"
                 :validation-schema="schema.nanoseconds"
@@ -35,8 +35,8 @@
               />
             </div>
           </div>
-          <div class="row pt-2">
-            <div class="col-xs-12">
+          <div class="grid grid-cols-1 gap-2 pt-2">
+            <div>
               <InputStandard
                 v-model="etfFlow.amount"
                 :validation-schema="schema.amount"
@@ -48,8 +48,8 @@
             </div>
           </div>
 
-          <div class="row pt-2">
-            <div class="col-xs-12">
+          <div class="grid grid-cols-1 gap-2 pt-2">
+            <div>
               <InputStandard
                 v-model="etfFlow.price"
                 :validation-schema="schema.price"
@@ -58,10 +58,7 @@
                 field-type="number"
                 :field-label="$t('ETFFlow.price')"
               >
-                <template #icon
-                  ><span class="input-group-text"
-                    ><i class="bi bi-currency-euro"></i></span
-                ></template>
+                <template #icon><Euro class="h-4 w-4" /></template>
               </InputStandard>
             </div>
           </div>
@@ -69,9 +66,9 @@
       </form>
     </template>
     <template #footer>
-      <button type="button" class="btn btn-secondary" @click="resetForm">
+      <Button type="button" variant="secondary" @click="resetForm">
         {{ $t("General.reset") }}
-      </button>
+      </Button>
       <ButtonSubmit
         :button-label="$t('General.save')"
         form-id="createEtfFlowForm"
@@ -85,6 +82,7 @@ import { useForm } from "vee-validate";
 import { computed, ref, useTemplateRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { date, string, type ZodType, number } from "zod";
+import { Euro } from "lucide-vue-next";
 
 import ButtonSubmit from "../ButtonSubmit.vue";
 import DivError from "../DivError.vue";
@@ -92,6 +90,8 @@ import InputDate from "../InputDate.vue";
 import InputStandard from "../InputStandard.vue";
 import ModalVue from "../Modal.vue";
 import SelectStandard from "../SelectStandard.vue";
+
+import { Button } from "@/components/ui/button";
 
 import { formatTime } from "@/tools/views/FormatDate";
 import { amountSchema, globErr } from "@/tools/views/ZodUtil";

@@ -6,149 +6,144 @@
     @moneyflow-created="compareData"
   />
 
-  <div class="container-fluid text-center">
-    <div class="row justify-content-md-center">
-      <div class="col-xs-12 mb-4">
-        <h4>{{ $t("CompareData.title") }}</h4>
-      </div>
+  <div class="custom-container space-y-6">
+    <div class="text-center">
+      <h4 class="text-2xl font-bold">{{ $t("CompareData.title") }}</h4>
     </div>
-    <div class="row justify-content-md-center mb-2">
-      <div class="col-xxl-7 col-xs-12">
-        <div class="card w-100 bg-light">
-          <div class="card-body">
-            <form @submit.prevent="compareData" id="compareDataForm">
-              <div class="container-fluid">
-                <DivError :server-errors="serverErrors" />
-                <div class="row">
-                  <div class="col-md-3 col-xs-12 mb-2">
-                    <InputDate
-                      v-model="startDate"
-                      :validation-schema="schema.startDate"
-                      id="startDate"
-                      :field-label="$t('General.startDate')"
-                    />
-                  </div>
-                  <div class="col-md-3 col-xs-12">
-                    <InputDate
-                      v-model="endDate"
-                      :validation-schema="schema.endDate"
-                      id="endDate"
-                      :field-label="$t('General.endDate')"
-                    />
-                  </div>
-                  <div class="col-md-4 col-xs-12">
-                    <SelectCapitalsource
-                      v-model="capitalsourceId"
-                      :validation-schema="schema.capitalsourceId"
-                      id-suffix="CompareData"
-                      :field-label="$t('General.capitalsource')"
-                      :validity-date="new Date()"
-                    />
-                  </div>
-                  <div class="col-md-2 col-xs-12 d-flex align-items-center">
-                    <div class="form-check form-switch text-start">
-                      <input
-                        class="form-check-input"
-                        type="checkbox"
-                        id="sourceIsImport"
-                        v-model="sourceIsImport"
-                      />
-                      <label class="form-check-label" for="sourceIsImport">{{
-                        sourceIsImportLabel
-                      }}</label>
-                    </div>
-                  </div>
-                </div>
-                <div class="row align-items-center" v-show="!sourceIsImport">
-                  <div class="col-md-6 col-xs-12 mb-2 text-start">
-                    <InputFile
-                      v-model="files"
-                      :validation-schema-ref="schema.importfile"
-                      id="fileUpload"
-                      :field-label="$t('CompareData.importfile')"
-                    />
-                  </div>
-                  <div class="col-md-4 col-xs-12 mb-2">
-                    <SelectStandard
-                      v-model="compareDataFormat"
-                      :validation-schema-ref="schema.compareDataFormat"
-                      id="compareDataFormat"
-                      :field-label="$t('CompareData.format')"
-                      :select-box-values="compareDataFormats"
-                    />
-                  </div>
-                </div>
-                <div class="row mt-2">
-                  <div class="col-12">
-                    <ButtonSubmit
-                      :button-label="$t('General.show')"
-                      form-id="compareDataForm"
-                    />
-                  </div>
-                </div>
+    <div class="flex justify-center">
+      <div
+        class="w-full max-w-6xl rounded-lg border bg-card text-card-foreground shadow-sm bg-muted p-4"
+      >
+        <form @submit.prevent="compareData" id="compareDataForm">
+          <div class="space-y-4">
+            <DivError :server-errors="serverErrors" />
+            <div class="grid gap-3 md:grid-cols-12">
+              <div class="md:col-span-3">
+                <InputDate
+                  v-model="startDate"
+                  :validation-schema="schema.startDate"
+                  id="startDate"
+                  :field-label="$t('General.startDate')"
+                />
               </div>
-            </form>
+              <div class="md:col-span-3">
+                <InputDate
+                  v-model="endDate"
+                  :validation-schema="schema.endDate"
+                  id="endDate"
+                  :field-label="$t('General.endDate')"
+                />
+              </div>
+              <div class="md:col-span-4">
+                <SelectCapitalsource
+                  v-model="capitalsourceId"
+                  :validation-schema="schema.capitalsourceId"
+                  id-suffix="CompareData"
+                  :field-label="$t('General.capitalsource')"
+                  :validity-date="new Date()"
+                />
+              </div>
+
+              <div class="md:col-span-2 flex items-start gap-3 px-3 py-2 mt-5">
+                <Switch id="sourceIsImport" v-model="sourceIsImport" />
+                <Label
+                  for="sourceIsImport"
+                  class="cursor-pointer text-sm font-medium select-none"
+                >
+                  {{ sourceIsImportLabel }}
+                </Label>
+              </div>
+            </div>
+            <div class="grid gap-3 md:grid-cols-12" v-show="!sourceIsImport">
+              <div class="md:col-span-6 text-left">
+                <InputFile
+                  v-model="files"
+                  :validation-schema-ref="schema.importfile"
+                  id="fileUpload"
+                  :field-label="$t('CompareData.importfile')"
+                />
+              </div>
+              <div class="md:col-span-4">
+                <SelectStandard
+                  v-model="compareDataFormat"
+                  :validation-schema-ref="schema.compareDataFormat"
+                  id="compareDataFormat"
+                  :field-label="$t('CompareData.format')"
+                  :select-box-values="compareDataFormats"
+                />
+              </div>
+            </div>
+            <div class="pt-2 flex justify-center">
+              <ButtonSubmit
+                :button-label="$t('General.show')"
+                form-id="compareDataForm"
+              />
+            </div>
           </div>
-        </div>
+        </form>
       </div>
     </div>
-    <div class="row justify-content-md-center mt-5" v-if="dataCompared">
-      <div class="col-xxl-10 col-md-12 col-sm-12 col-xs-12">
-        <table class="table table-hover">
-          <colgroup>
-            <col style="width: 5%" />
-            <col style="width: 5%" />
-            <col style="width: 90%" />
-          </colgroup>
-          <thead>
-            <th scope="colgroup" colspan="3">{{ $t("CompareData.result") }}</th>
-          </thead>
-          <tbody>
-            <CompareDataResultGroupVue
-              :comment="$t('CompareData.dataInSourceNotInDb')"
-              :compare-data="compareDatasNotInDatabase"
-              compare-data-key="notInDatabase"
-              :amount-class="compareDatasNotInDatabaseCountClass"
-              :capitalsource-id="capitalsourceId"
-              :capitalsource-comment="capitalsourceComment"
-              @create-moneyflow="createMoneyflow"
-            />
-            <CompareDataResultGroupVue
-              :comment="$t('CompareData.dataNotInSourceInDb')"
-              :compare-data="compareDatasNotInFile"
-              compare-data-key="notInFile"
-              :amount-class="compareDatasNotInFileCountClass"
-              :capitalsource-id="capitalsourceId"
-              :capitalsource-comment="capitalsourceComment"
-              @delete-moneyflow="deleteMoneyflow"
-              @edit-moneyflow="editMoneyflow"
-              @create-moneyflow="createMoneyflow"
-            />
-            <CompareDataResultGroupVue
-              :comment="$t('CompareData.dataMatchingButWrongCapitalsource')"
-              :compare-data="compareDatasWrongCapitalsource"
-              compare-data-key="wrongCapitalsource"
-              :amount-class="compareDatasWrongCapitalsourceCountClass"
-              :capitalsource-id="capitalsourceId"
-              :capitalsource-comment="capitalsourceComment"
-              @delete-moneyflow="deleteMoneyflow"
-              @edit-moneyflow="editMoneyflow"
-              @create-moneyflow="createMoneyflow"
-            />
-            <CompareDataResultGroupVue
-              :comment="$t('CompareData.dataMatching')"
-              :compare-data="compareDatasMatching"
-              compare-data-key="matching"
-              :amount-class="compareDatasMatchingCountClass"
-              :capitalsource-id="capitalsourceId"
-              :capitalsource-comment="capitalsourceComment"
-              @delete-moneyflow="deleteMoneyflow"
-              @edit-moneyflow="editMoneyflow"
-              @create-moneyflow="createMoneyflow"
-            />
-          </tbody>
-        </table>
-      </div>
+    <div class="flex justify-center pt-5" v-if="dataCompared">
+      <DivContentTable :alternateRowBackground="false">
+        <colgroup>
+          <col style="width: 5%" />
+          <col style="width: 5%" />
+          <col style="width: 90%" />
+        </colgroup>
+        <TableHeader>
+          <TableRow>
+            <TableHead
+              class="font-bold border text-foreground text-center"
+              colspan="3"
+              >{{ $t("CompareData.result") }}</TableHead
+            >
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          <CompareDataResultGroupVue
+            :comment="$t('CompareData.dataInSourceNotInDb')"
+            :compare-data="compareDatasNotInDatabase"
+            compare-data-key="notInDatabase"
+            :amount-class="compareDatasNotInDatabaseCountClass"
+            :capitalsource-id="capitalsourceId"
+            :capitalsource-comment="capitalsourceComment"
+            @create-moneyflow="createMoneyflow"
+          />
+          <CompareDataResultGroupVue
+            :comment="$t('CompareData.dataNotInSourceInDb')"
+            :compare-data="compareDatasNotInFile"
+            compare-data-key="notInFile"
+            :amount-class="compareDatasNotInFileCountClass"
+            :capitalsource-id="capitalsourceId"
+            :capitalsource-comment="capitalsourceComment"
+            @delete-moneyflow="deleteMoneyflow"
+            @edit-moneyflow="editMoneyflow"
+            @create-moneyflow="createMoneyflow"
+          />
+          <CompareDataResultGroupVue
+            :comment="$t('CompareData.dataMatchingButWrongCapitalsource')"
+            :compare-data="compareDatasWrongCapitalsource"
+            compare-data-key="wrongCapitalsource"
+            :amount-class="compareDatasWrongCapitalsourceCountClass"
+            :capitalsource-id="capitalsourceId"
+            :capitalsource-comment="capitalsourceComment"
+            @delete-moneyflow="deleteMoneyflow"
+            @edit-moneyflow="editMoneyflow"
+            @create-moneyflow="createMoneyflow"
+          />
+          <CompareDataResultGroupVue
+            :comment="$t('CompareData.dataMatching')"
+            :compare-data="compareDatasMatching"
+            compare-data-key="matching"
+            :amount-class="compareDatasMatchingCountClass"
+            :capitalsource-id="capitalsourceId"
+            :capitalsource-comment="capitalsourceComment"
+            @delete-moneyflow="deleteMoneyflow"
+            @edit-moneyflow="editMoneyflow"
+            @create-moneyflow="createMoneyflow"
+          />
+        </TableBody>
+      </DivContentTable>
     </div>
   </div>
 </template>
@@ -162,6 +157,7 @@ import { any, date, number, array as arr, instanceof as instof } from "zod";
 import ButtonSubmit from "@/components/ButtonSubmit.vue";
 import CompareDataResultGroupVue from "@/components/comparedata/CompareDataResultGroup.vue";
 import DeleteMoneyflowModalVue from "@/components/moneyflow/DeleteMoneyflowModal.vue";
+import DivContentTable from "@/components/DivContentTable.vue";
 import DivError from "@/components/DivError.vue";
 import EditMoneyflowModalVue from "@/components/moneyflow/EditMoneyflowModal.vue";
 import InputDate from "@/components/InputDate.vue";
@@ -181,6 +177,14 @@ import CompareDataService from "@/service/CompareDataService";
 import MoneyflowService from "@/service/MoneyflowService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
+import {
+  TableBody,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
 
 const { t } = useI18n();
 
@@ -236,7 +240,9 @@ const compareDatasMatchingCount = computed(() => {
   return compareDatasMatching.value ? compareDatasMatching.value.length : 0;
 });
 const compareDatasMatchingCountClass = computed(() => {
-  return compareDatasMatchingCount.value > 0 ? "text-success" : "text-danger";
+  return compareDatasMatchingCount.value > 0
+    ? "text-green-600"
+    : "text-red-600";
 });
 const compareDatasWrongCapitalsourceCount = computed(() => {
   return compareDatasWrongCapitalsource.value
@@ -245,14 +251,16 @@ const compareDatasWrongCapitalsourceCount = computed(() => {
 });
 const compareDatasWrongCapitalsourceCountClass = computed(() => {
   return compareDatasWrongCapitalsourceCount.value > 0
-    ? "text-danger"
-    : "text-success";
+    ? "text-red-600"
+    : "text-green-600";
 });
 const compareDatasNotInFileCount = computed(() => {
   return compareDatasNotInFile.value ? compareDatasNotInFile.value.length : 0;
 });
 const compareDatasNotInFileCountClass = computed(() => {
-  return compareDatasNotInFileCount.value > 0 ? "text-danger" : "text-success";
+  return compareDatasNotInFileCount.value > 0
+    ? "text-red-600"
+    : "text-green-600";
 });
 const compareDatasNotInDatabaseCount = computed(() => {
   return compareDatasNotInDatabase.value
@@ -261,8 +269,8 @@ const compareDatasNotInDatabaseCount = computed(() => {
 });
 const compareDatasNotInDatabaseCountClass = computed(() => {
   return compareDatasNotInDatabaseCount.value > 0
-    ? "text-danger"
-    : "text-success";
+    ? "text-red-600"
+    : "text-green-600";
 });
 
 const loadData = () => {

@@ -2,65 +2,108 @@
   <ModalVue :title="$t('Capitalsource.title.delete')" ref="modalComponent">
     <template #body>
       <DivError :server-errors="serverErrors" />
-      <div class="row d-flex justify-content-center mt-3">
-        <div class="col-11">
-          <table class="table table-bordered table-hover">
-            <tbody>
-              <tr>
-                <th scope="row">{{ $t("General.name") }}</th>
-                <td>{{ mcs.comment }}</td>
-              </tr>
-              <tr>
-                <th scope="row">{{ $t("Capitalsource.type") }}</th>
-                <td>{{ typeString }}</td>
-              </tr>
-              <tr>
-                <th scope="row">{{ $t("Capitalsource.state") }}</th>
-                <td>{{ stateString }}</td>
-              </tr>
-              <tr>
-                <th scope="row">{{ $t("General.iban") }}</th>
-                <td>{{ mcs.accountNumber }}</td>
-              </tr>
-              <tr>
-                <th scope="row">{{ $t("General.bic") }}</th>
-                <td>{{ mcs.bankCode }}</td>
-              </tr>
-              <tr>
-                <th scope="row">{{ $t("General.validFrom") }}</th>
-                <td><SpanDate :date="mcs.validFrom" /></td>
-              </tr>
-              <tr>
-                <th scope="row">{{ $t("General.validTil") }}</th>
-                <td><SpanDate :date="mcs.validTil" /></td>
-              </tr>
-              <tr>
-                <th scope="row">{{ $t("Capitalsource.groupUse") }}</th>
-                <td><SpanBoolean :value="mcs.groupUse" /></td>
-              </tr>
-              <tr>
-                <th scope="row">{{ $t("Capitalsource.importAllowed") }}</th>
-                <td>
-                  <b :style="'color:' + importAllowedColor">{{
-                    importAllowedString
-                  }}</b>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+      <div class="flex flex-col rounded-md border">
+        <Table>
+          <TableBody>
+            <TableRow>
+              <TableCell
+                class="font-bold bg-primary/[0.10] w-40 whitespace-normal text-foreground border-r"
+              >
+                {{ $t("General.name") }}
+              </TableCell>
+              <TableCell>{{ mcs.comment }}</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell
+                class="font-bold bg-primary/[0.10] w-40 whitespace-normal text-foreground border-r"
+              >
+                {{ $t("Capitalsource.type") }}
+              </TableCell>
+              <TableCell>{{ typeString }}</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell
+                class="font-bold bg-primary/[0.10] w-40 whitespace-normal text-foreground border-r"
+              >
+                {{ $t("Capitalsource.state") }}
+              </TableCell>
+              <TableCell>{{ stateString }}</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell
+                class="font-bold bg-primary/[0.10] w-40 whitespace-normal text-foreground border-r"
+              >
+                {{ $t("General.iban") }}
+              </TableCell>
+              <TableCell>{{ mcs.accountNumber }}</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell
+                class="font-bold bg-primary/[0.10] w-40 whitespace-normal text-foreground border-r"
+              >
+                {{ $t("General.bic") }}
+              </TableCell>
+              <TableCell>{{ mcs.bankCode }}</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell
+                class="font-bold bg-primary/[0.10] w-40 whitespace-normal text-foreground border-r"
+              >
+                {{ $t("General.validFrom") }}
+              </TableCell>
+              <TableCell><SpanDate :date="mcs.validFrom" /></TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell
+                class="font-bold bg-primary/[0.10] w-40 whitespace-normal text-foreground border-r"
+              >
+                {{ $t("General.validTil") }}
+              </TableCell>
+              <TableCell><SpanDate :date="mcs.validTil" /></TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell
+                class="font-bold bg-primary/[0.10] w-40 whitespace-normal text-foreground border-r"
+              >
+                {{ $t("Capitalsource.groupUse") }}
+              </TableCell>
+              <TableCell><SpanBoolean :value="mcs.groupUse" /></TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell
+                class="font-bold bg-primary/[0.10] w-40 whitespace-normal text-foreground border-r"
+              >
+                {{ $t("Capitalsource.importAllowed") }}
+              </TableCell>
+              <TableCell>
+                <b :class="importAllowedColorClass">{{
+                  importAllowedString
+                }}</b>
+              </TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
       </div>
     </template>
     <template #footer>
-      <button type="button" class="btn btn-danger" @click="deleteCapitalsource">
+      <Button
+        variant="destructive"
+        class="flex items-center gap-2 px-6"
+        @click="deleteCapitalsource"
+      >
+        <Trash2 />
         {{ $t("General.delete") }}
-      </button>
+      </Button>
     </template>
   </ModalVue>
 </template>
 
 <script lang="ts" setup>
 import { computed, ref, useTemplateRef } from "vue";
+
+import { Button } from "@/components/ui/button";
+import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
+import { Trash2 } from "lucide-vue-next";
 
 import DivError from "../DivError.vue";
 import ModalVue from "../Modal.vue";
@@ -82,8 +125,8 @@ const mcs = ref({} as Capitalsource);
 const modalComponent = useTemplateRef<typeof ModalVue>("modalComponent");
 const emit = defineEmits(["capitalsourceDeleted"]);
 
-const importAllowedColor = computed(() => {
-  return mcs.value.importAllowed > 0 ? "green" : "red";
+const importAllowedColorClass = computed(() => {
+  return mcs.value.importAllowed > 0 ? "text-green-600" : "text-red-600";
 });
 
 const importAllowedString = computed(() => {
@@ -119,9 +162,3 @@ const deleteCapitalsource = () => {
 
 defineExpose({ _show });
 </script>
-
-<style scoped>
-th {
-  background-color: #f2f2f2;
-}
-</style>

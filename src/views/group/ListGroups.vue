@@ -10,11 +10,9 @@
     id-suffix="List"
     @group-deleted="reloadView"
   />
-  <div class="container-fluid text-center">
-    <div class="row justify-content-md-center">
-      <div class="col-xs-12 mb-4">
-        <h4>{{ $t("General.groups") }}</h4>
-      </div>
+  <div class="custom-container space-y-6">
+    <div class="text-center">
+      <h4 class="text-2xl font-bold">{{ $t("General.groups") }}</h4>
     </div>
 
     <DivFilter
@@ -26,14 +24,16 @@
 
     <DivError :server-errors="serverErrors" />
 
-    <DivContentTable clazz="col-md-2 col-xs-12">
-      <thead>
-        <tr>
-          <th scope="col">{{ $t("General.name") }}</th>
-          <th scope="colgroup" colspan="2"></th>
-        </tr>
-      </thead>
-      <tbody>
+    <DivContentTable class="max-w-sm">
+      <TableHeader>
+        <TableRow>
+          <TableHead class="font-bold border text-foreground text-center">{{
+            $t("General.name")
+          }}</TableHead>
+          <TableHead class="border" colspan="2"></TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
         <ListGroupRowVue
           v-for="group in groups"
           :key="group.id"
@@ -41,7 +41,7 @@
           @edit-group="editGroup"
           @delete-group="deleteGroup"
         />
-      </tbody>
+      </TableBody>
     </DivContentTable>
   </div>
 </template>
@@ -57,6 +57,12 @@ import DivFilter from "@/components/DivFilter.vue";
 import CreateGroupModalVue from "@/components/group/CreateGroupModal.vue";
 import DeleteGroupModalVue from "@/components/group/DeleteGroupModal.vue";
 import ListGroupRowVue from "@/components/group/ListGroupRow.vue";
+import {
+  TableBody,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 import type { Group } from "@/model/group/Group";
 

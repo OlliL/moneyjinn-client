@@ -1,31 +1,58 @@
 <template>
-  <div class="input-group">
-    <div class="form-floating">
-      <input
+  <div class="grid w-full gap-1.5 relative">
+    <Label v-if="fieldLabel" :for="id" class="text-left ml-1">
+      {{ fieldLabel }}
+    </Label>
+
+    <div class="flex -space-x-px relative">
+      <Input
+        autocomplete="off"
         :id="id"
         :data-testid="id"
         type="text"
         @changeDate="onInput($event)"
-        :class="'form-control ' + errorData.inputClass"
+        :class="[
+          'rounded-r-none bg-white z-10',
+          errorData.inputClass == 'is-invalid'
+            ? '!border-destructive bg-destructive/[0.03] focus-visible:ring-destructive/15 !border-r-destructive'
+            : 'border-input focus-visible:ring-ring',
+        ]"
         ref="fieldRef"
         @keyup="onKeyboardInput($event)"
         @focus="(($event as FocusEvent)?.target as HTMLInputElement)?.select()"
+        @blur="onBlur"
       />
-      <label :for="id" :style="'color: ' + errorData.fieldColor">{{
-        errorData.fieldLabel
-      }}</label>
+
+      <div
+        :class="[
+          'flex items-center justify-center px-2 border border-input rounded-r-md text-foreground transition-colors relative',
+          errorData.inputClass == 'is-invalid' ? 'border-l-transparent' : '',
+        ]"
+      >
+        <CalendarDays class="w-4 h-4" />
+      </div>
     </div>
-    <span class="input-group-text"><i class="bi bi-calendar-date"></i></span>
+
+    <p
+      v-if="errorData.inputClass == 'is-invalid'"
+      class="text-[0.8rem] font-medium text-destructive mt-0.5 text-left ml-1"
+    >
+      {{ errorMessage }}
+    </p>
   </div>
 </template>
 
 <script lang="ts" setup>
+import { CalendarDays } from "lucide-vue-next";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { Datepicker } from "vanillajs-datepicker";
 import { useField } from "vee-validate";
 import { toTypedSchema } from "@vee-validate/zod";
 import {
   computed,
   onMounted,
+  onUnmounted,
   ref,
   useTemplateRef,
   watch,
@@ -122,12 +149,16 @@ switch (props.pickMode) {
   }
 }
 
-const fieldRef = useTemplateRef<HTMLInputElement>("fieldRef");
+const fieldRef = useTemplateRef<typeof Input>("fieldRef");
 let datepicker = {} as Datepicker;
+
+const getInputElement = () => {
+  return fieldRef.value?.$el as HTMLInputElement;
+};
 
 onMounted(() => {
   if (!(datepicker instanceof Datepicker) && fieldRef.value) {
-    datepicker = new Datepicker(fieldRef.value, {
+    datepicker = new Datepicker(getInputElement(), {
       buttonClass: "btn",
       pickLevel: pickLevel,
       clearButton: true,
@@ -138,8 +169,28 @@ onMounted(() => {
       format: format,
     });
     viewMounted.value = true;
+
+    if (props.modelValue) {
+      setDate(props.modelValue);
+    }
+  }
+
+  if (getInputElement()) {
+    getInputElement().addEventListener("changeDate", onInput);
   }
 });
+
+onUnmounted(() => {
+  if (getInputElement()) {
+    getInputElement().removeEventListener("changeDate", onInput);
+  }
+});
+
+const onBlur = () => {
+  if (datepicker && typeof datepicker.hide === "function") {
+    datepicker.hide();
+  }
+};
 
 const setDate = (newVal?: Date) => {
   if (datepicker instanceof Datepicker) {
@@ -224,8 +275,25 @@ watch(
 </script>
 
 <style>
-.form-floating > .bi-calendar-date + .datepicker_input + label {
-  padding-left: 3.5rem;
-  z-index: 3;
+@reference "@/style.css";
+
+.datepicker-footer .datepicker-controls {
+  @apply !flex !w-full !gap-2 !p-2 !box-border !float-none !clear-both;
+}
+
+.datepicker-footer {
+  @apply !w-full !p-0 !float-none !clear-both;
+}
+
+.datepicker-footer .btn {
+  @apply !flex-1 !w-1/2 !min-w-0 !max-w-none !inline-flex !items-center !justify-center !rounded-md !border !px-3 !py-1.5 !text-sm !font-medium !transition-colors !shadow-none !float-none;
+}
+
+.datepicker-footer .today-btn {
+  @apply !border-input !bg-background !text-foreground hover:!bg-accent hover:!text-accent-foreground;
+}
+
+.datepicker-footer .clear-btn {
+  @apply !border-transparent !bg-transparent !text-muted-foreground hover:!bg-destructive/10 hover:!text-destructive;
 }
 </style>

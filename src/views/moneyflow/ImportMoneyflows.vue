@@ -1,91 +1,110 @@
 <template>
-  <div class="container-fluid text-center">
-    <div class="row justify-content-md-center">
-      <div class="col-xs-12 mb-4">
-        <h4>{{ $t("Moneyflow.title.import") }}</h4>
-      </div>
+  <div class="custom-container space-y-6">
+    <div class="text-center">
+      <h4 class="text-2xl font-bold">{{ $t("Moneyflow.title.import") }}</h4>
     </div>
 
     <DivError :server-errors="serverErrors" />
 
     <div
-      class="text-center text-success"
+      class="text-center text-green-600"
       v-if="dataLoaded && importMoneyflows.length == 0"
     >
-      {{ $t("AppHome.allDone") }} <i class="bi bi-emoji-smile"></i>
+      {{ $t("AppHome.allDone") }} <Smile class="inline h-4 w-4" />
     </div>
     <div
-      class="row justify-content-md-center mb-5"
+      class="flex justify-center pb-5"
       v-for="importedMoneyflow in importMoneyflows"
       :key="importedMoneyflow.externalid"
     >
-      <div class="col-xxl-9 col-xs-12">
-        <div class="card w-100 bg-light">
-          <div class="card-body">
-            <form @submit.prevent="importImportedMoneyflow(importedMoneyflow)">
-              <div class="container-fluid">
-                <div class="row mb-2">
-                  <div
-                    class="col-md-1 col-xs-6 d-flex justify-content-end align-items-center"
-                    style="font-weight: 700; font-size: 10.5px"
-                  >
-                    {{ $t("General.iban") }}:
-                  </div>
-                  <div class="col-md-2 col-xs-6 text-start">
-                    {{ importedMoneyflow.accountNumber }}
-                  </div>
-                  <div
-                    class="col-md-1 col-xs-6 d-flex justify-content-end align-items-center"
-                    style="font-weight: 700; font-size: 10.5px"
-                  >
-                    {{ $t("General.bic") }}:
-                  </div>
-                  <div class="col-md-2 col-xs-6 text-start">
-                    {{ importedMoneyflow.bankCode }}
-                  </div>
-                  <div
-                    class="col-md-2 col-xs-6 d-flex justify-content-end align-items-center"
-                    style="font-weight: 700; font-size: 10.5px"
-                  >
-                    {{ $t("Moneyflow.partner") }}:
-                  </div>
-                  <div class="col-md-4 col-xs-6 text-start">
-                    {{ importedMoneyflow.name }}
-                  </div>
-                </div>
-                <div class="row mb-3">
-                  <div
-                    class="col-md-1 col-xs-6 d-flex justify-content-end align-items-center"
-                    style="font-weight: 700; font-size: 10.5px"
-                  >
-                    {{ $t("Moneyflow.reference") }}:
-                  </div>
-                  <div class="col-md-11 col-xs-6 text-start">
-                    {{ importedMoneyflow.usage }}
-                  </div>
-                </div>
-                <EditMoneyflowBase
-                  :ref="(el) => editMoneyflowRefs.set(importedMoneyflow.id, el)"
-                  :mmf-to-edit="importedMoneyflow"
-                  :id-suffix="importedMoneyflow.id + ''"
-                  :fill-contractpartner-defaults="true"
+      <div
+        class="w-full rounded-xl border bg-card text-card-foreground shadow-sm overflow-hidden"
+      >
+        <form @submit.prevent="importImportedMoneyflow(importedMoneyflow)">
+          <div class="grid grid-cols-1 lg:grid-cols-4 min-h-full">
+            <div
+              class="bg-muted/40 p-5 border-b lg:border-b-0 lg:border-r border-border/60 space-y-4"
+            >
+              <dl class="space-y-1">
+                <dt
+                  class="text-[10px] font-bold uppercase tracking-wider text-muted-foreground/80"
+                >
+                  {{ $t("General.contractpartner") }}
+                </dt>
+                <dd class="font-semibold text-sm text-foreground break-words">
+                  {{ importedMoneyflow.name }}
+                </dd>
+              </dl>
+
+              <dl class="space-y-1">
+                <dt
+                  class="text-[10px] font-bold uppercase tracking-wider text-muted-foreground/80"
+                >
+                  {{ $t("General.iban") }}
+                </dt>
+                <dd
+                  class="font-mono text-xs text-foreground bg-background/80 px-2 py-1 rounded border border-border/40 inline-block break-all"
+                >
+                  {{ importedMoneyflow.accountNumber }}
+                </dd>
+              </dl>
+
+              <dl class="space-y-1">
+                <dt
+                  class="text-[10px] font-bold uppercase tracking-wider text-muted-foreground/80"
+                >
+                  {{ $t("General.bic") }}
+                </dt>
+                <dd
+                  class="font-mono text-xs text-foreground bg-background/80 px-2 py-1 rounded border border-border/40 inline-block"
+                >
+                  {{ importedMoneyflow.bankCode }}
+                </dd>
+              </dl>
+
+              <dl class="space-y-1 pt-2 border-t border-border/40">
+                <dt
+                  class="text-[10px] font-bold uppercase tracking-wider text-muted-foreground/80 mb-1"
+                >
+                  {{ $t("Moneyflow.reference") }}
+                </dt>
+                <dd
+                  class="text-xs text-foreground/90 bg-background/60 p-2.5 rounded border border-border/40 leading-relaxed max-h-40 overflow-y-auto backdrop-blur-sm"
+                >
+                  <SpanImportComment :comment="importedMoneyflow.usage" />
+                </dd>
+              </dl>
+            </div>
+
+            <div
+              class="lg:col-span-3 p-6 space-y-6 flex flex-col justify-between"
+            >
+              <EditMoneyflowBase
+                :ref="(el) => editMoneyflowRefs.set(importedMoneyflow.id, el)"
+                :mmf-to-edit="importedMoneyflow"
+                :id-suffix="importedMoneyflow.id + ''"
+                :fill-contractpartner-defaults="true"
+              />
+
+              <div
+                class="flex flex-wrap items-center justify-center gap-3 pt-4 border-t border-border/40"
+              >
+                <ButtonSubmit
+                  :button-label="$t('Moneyflow.apply')"
+                  class="px-6"
                 />
-                <div class="row no-gutters flex-lg-nowrap">
-                  <div class="col-12">
-                    <ButtonSubmit :button-label="$t('Moneyflow.apply')" />
-                    <button
-                      type="button"
-                      class="btn btn-danger mx-2"
-                      @click="deleteImportedMoneyflow(importedMoneyflow)"
-                    >
-                      {{ $t("General.delete") }}
-                    </button>
-                  </div>
-                </div>
+                <Button
+                  type="button"
+                  variant="destructive"
+                  class="px-6"
+                  @click="deleteImportedMoneyflow(importedMoneyflow)"
+                >
+                  {{ $t("General.delete") }}
+                </Button>
               </div>
-            </form>
+            </div>
           </div>
-        </div>
+        </form>
       </div>
     </div>
   </div>
@@ -101,6 +120,9 @@ import type { ImportedMoneyflow } from "@/model/moneyflow/ImportedMoneyflow";
 import ImportedMoneyflowService from "@/service/ImportedMoneyflowService";
 import DivError from "@/components/DivError.vue";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
+import { Smile } from "lucide-vue-next";
+import { Button } from "@/components/ui/button";
+import SpanImportComment from "@/components/SpanImportComment.vue";
 
 const serverErrors = ref(new Array<string>());
 

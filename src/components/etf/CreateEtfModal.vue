@@ -2,10 +2,10 @@
   <ModalVue :title="title" ref="modalComponent">
     <template #body
       ><form @submit.prevent="createEtf" :id="'createEtfForm' + idSuffix">
-        <div class="container-fluid">
+        <div class="space-y-2">
           <DivError :server-errors="serverErrors" />
-          <div class="row">
-            <div class="col-xs-12">
+          <div class="grid grid-cols-1 gap-2">
+            <div>
               <InputStandard
                 v-model="met.name"
                 :validation-schema="schema.name"
@@ -14,8 +14,8 @@
               />
             </div>
           </div>
-          <div class="row pt-2">
-            <div class="col-xs-12">
+          <div class="grid grid-cols-1 gap-2 pt-2">
+            <div>
               <InputStandard
                 v-model="met.isin"
                 :validation-schema="schema.isin"
@@ -24,8 +24,8 @@
               />
             </div>
           </div>
-          <div class="row pt-2">
-            <div class="col-xs-12">
+          <div class="grid grid-cols-1 gap-2 pt-2">
+            <div>
               <InputStandard
                 v-model="met.wkn"
                 :validation-schema="schema.wkn"
@@ -34,8 +34,8 @@
               />
             </div>
           </div>
-          <div class="row pt-2">
-            <div class="col-xs-12">
+          <div class="grid grid-cols-1 gap-2 pt-2">
+            <div>
               <InputStandard
                 v-model="met.ticker"
                 :validation-schema="schema.ticker"
@@ -44,8 +44,8 @@
               />
             </div>
           </div>
-          <div class="row pt-2">
-            <div class="col-xs-12">
+          <div class="grid grid-cols-1 gap-2 pt-2">
+            <div>
               <InputStandard
                 v-model="met.chartUrl"
                 :validation-schema="schema.chartUrl"
@@ -54,8 +54,8 @@
               />
             </div>
           </div>
-          <div class="row pt-2">
-            <div class="col-xs-12">
+          <div class="grid grid-cols-1 gap-2 pt-2">
+            <div>
               <InputStandard
                 v-model="met.transactionCostsAbsolute"
                 :validation-schema="schema.transactionCostsAbsolute"
@@ -68,15 +68,12 @@
                   $t('ETFFlow.transactionCostsAbsolute')
                 "
               >
-                <template #icon
-                  ><span class="input-group-text"
-                    ><i class="bi bi-currency-euro"></i></span
-                ></template>
+                <template #icon><Euro class="h-4 w-4" /></template>
               </InputStandard>
             </div>
           </div>
-          <div class="row pt-2">
-            <div class="col-xs-12">
+          <div class="grid grid-cols-1 gap-2 pt-2">
+            <div>
               <InputStandard
                 v-model="met.transactionCostsRelative"
                 :validation-schema="schema.transactionCostsRelative"
@@ -89,15 +86,12 @@
                   $t('ETFFlow.transactionCostsRelative')
                 "
               >
-                <template #icon
-                  ><span class="input-group-text"
-                    ><i class="bi bi-percent"></i></span
-                ></template>
+                <template #icon><Percent class="h-4 w-4" /></template>
               </InputStandard>
             </div>
           </div>
-          <div class="row pt-2">
-            <div class="col-xs-12">
+          <div class="grid grid-cols-1 gap-2 pt-2">
+            <div>
               <InputStandard
                 v-model="met.transactionCostsMaximum"
                 :validation-schema="schema.transactionCostsMaximum"
@@ -110,15 +104,12 @@
                   $t('ETFFlow.transactionCostsMaximum')
                 "
               >
-                <template #icon
-                  ><span class="input-group-text"
-                    ><i class="bi bi-currency-euro"></i></span
-                ></template>
+                <template #icon><Euro class="h-4 w-4" /></template>
               </InputStandard>
             </div>
           </div>
-          <div class="row pt-2">
-            <div class="col-xs-12">
+          <div class="grid grid-cols-1 gap-2 pt-2">
+            <div>
               <InputStandard
                 v-model="met.partialTaxExemption"
                 :validation-schema="schema.partialTaxExemption"
@@ -127,23 +118,20 @@
                 step="0.01"
                 :field-label="$t('ETF.partialTaxExemption')"
               >
-                <template #icon
-                  ><span class="input-group-text"
-                    ><i class="bi bi-percent"></i></span
-                ></template>
+                <template #icon><Percent class="h-4 w-4" /></template>
               </InputStandard>
             </div>
           </div>
-          <div class="row pt-3">
-            <div class="col-xs-12">
-              <div class="form-check form-check-inline form-switch">
+          <div class="grid grid-cols-1 gap-2 pt-3">
+            <div>
+              <div class="inline-flex items-center gap-2">
                 <input
-                  class="form-check-input"
+                  class="h-4 w-4 rounded border-input"
                   type="checkbox"
                   v-model="markAsFavorite"
                   id="markAsFavorite"
                 />
-                <label class="form-check-label" for="markAsFavorite">
+                <label class="text-sm" for="markAsFavorite">
                   {{ $t("ETF.markAsFav") }}
                 </label>
               </div>
@@ -153,9 +141,9 @@
       </form>
     </template>
     <template #footer>
-      <button type="button" class="btn btn-secondary" @click="resetForm">
+      <Button type="button" variant="secondary" @click="resetForm">
         {{ $t("General.reset") }}
-      </button>
+      </Button>
       <ButtonSubmit
         :button-label="$t('General.save')"
         :form-id="'createEtfForm' + idSuffix"
@@ -169,11 +157,14 @@ import { useForm } from "vee-validate";
 import { computed, ref, useTemplateRef } from "vue";
 import { useI18n } from "vue-i18n";
 import { string, ZodType } from "zod";
+import { Euro, Percent } from "lucide-vue-next";
 
 import ButtonSubmit from "../ButtonSubmit.vue";
 import DivError from "../DivError.vue";
 import InputStandard from "../InputStandard.vue";
 import ModalVue from "../Modal.vue";
+
+import { Button } from "@/components/ui/button";
 
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { amountSchema, globErr } from "@/tools/views/ZodUtil";
@@ -240,11 +231,7 @@ const resetForm = () => {
   } else {
     met.value = {} as Etf;
   }
-  if (met.value.isFavorite) {
-    markAsFavorite.value = true;
-  } else {
-    markAsFavorite.value = false;
-  }
+  markAsFavorite.value = !!met.value.isFavorite;
   serverErrors.value = new Array<string>();
   Object.keys(values).forEach((field) => setFieldTouched(field, false));
 };

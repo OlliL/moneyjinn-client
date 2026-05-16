@@ -1,166 +1,174 @@
 <template>
-  <div class="row justify-content-md-center" v-if="calcResults.etfId">
-    <div class="col-xxl-3 col-md-6 col-xs-12 mb-4">
-      <table class="table table-bordered table-hover">
-        <colgroup>
-          <col style="width: 75%" />
-          <col style="width: 25%" />
-        </colgroup>
-        <tbody>
-          <tr>
-            <th scope="col" class="text-start">
-              {{ $t("ETFFlow.calculateResults.pieces") }}
-            </th>
-            <td class="text-end">{{ calcResults.pieces }}</td>
-          </tr>
-          <tr>
-            <th scope="col" class="text-start">
-              {{ $t("ETFFlow.calculateResults.originalBuyPrice") }}
-            </th>
-            <td class="text-end">
-              <SpanAmount :amount="calcResults.originalBuyPrice" />
-            </td>
-          </tr>
-          <tr>
-            <th scope="col" class="text-start">
-              {{ $t("ETFFlow.calculateResults.sellPrice") }}
-            </th>
-            <td class="text-end">
-              <SpanAmount :amount="calcResults.sellPrice" />
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      <table class="table table-bordered table-hover">
-        <colgroup>
-          <col style="width: 75%" />
-          <col style="width: 25%" />
-        </colgroup>
-        <tbody>
-          <tr>
-            <th scope="col" class="text-start">
-              {{ $t("ETFFlow.profit") }}
-            </th>
-            <td class="text-end">
-              <SpanAmount :amount="calcResults.profit" />
-            </td>
-          </tr>
-          <tr>
-            <th scope="col" class="text-start">
-              {{ $t("ETFFlow.calculateResults.accumulatedPreliminaryLumpSum") }}
-            </th>
-            <td class="text-end">
-              <SpanAmount :amount="calcResults.accumulatedPreliminaryLumpSum" />
-            </td>
-          </tr>
-          <tr>
-            <th scope="col" class="text-start">
-              {{ $t("ETFFlow.calculateResults.chargeable") }}
-            </th>
-            <td class="text-end">
-              <b><SpanAmount :amount="calcResults.chargeable" /></b>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      <table class="table table-bordered table-hover">
-        <colgroup>
-          <col style="width: 38%" />
-          <col style="width: 19%" />
-          <col style="width: 18%" />
-          <col style="width: 25%" />
-        </colgroup>
-        <tbody>
-          <tr>
-            <th scope="col" class="text-start" colspan="3" id="newBuyProce">
-              {{ $t("ETFFlow.calculateResults.newBuyPrice") }}
-            </th>
-            <td class="text-end">
-              <SpanAmount :amount="calcResults.newBuyPrice" />
-            </td>
-          </tr>
-          <tr>
-            <th scope="col" class="text-start" colspan="3" id="rebuyLosses">
-              {{ $t("ETFFlow.calculateResults.rebuyLosses") }}
-            </th>
-            <td class="text-end">
-              <SpanAmount :amount="calcResults.rebuyLosses" />
-            </td>
-          </tr>
-          <tr>
-            <th
-              scope="col"
-              class="text-start"
-              rowspan="4"
-              id="transactionCosts"
-            >
-              {{ $t("ETFFlow.transactionCosts") }}
-            </th>
-            <th
-              scope="col"
-              class="text-start"
-              rowspan="2"
-              id="transactionCostsSell"
-            >
-              {{ $t("ETFFlow.transactionCostsSell") }}
-            </th>
-            <th
-              scope="col"
-              class="text-start"
-              id="transactionCostsSellAbsolute"
-            >
-              {{ $t("ETFFlow.transactionCostsAbsolute") }}
-            </th>
-            <td class="text-end">
-              <SpanAmount :amount="calcResults.transactionCostsAbsoluteSell" />
-            </td>
-          </tr>
-          <tr>
-            <th
-              scope="col"
-              class="text-start"
-              id="transactionCostsSellRelative"
-            >
-              {{ $t("ETFFlow.transactionCostsRelative") }}
-            </th>
-            <td class="text-end">
-              <SpanAmount :amount="calcResults.transactionCostsRelativeSell" />
-            </td>
-          </tr>
-          <tr>
-            <th
-              scope="col"
-              class="text-start"
-              rowspan="2"
-              id="transactionCostsBuy"
-            >
-              {{ $t("ETFFlow.transactionCostsBuy") }}
-            </th>
-            <th scope="col" class="text-start" id="transactionCostsBuyAbsolute">
-              {{ $t("ETFFlow.transactionCostsAbsolute") }}
-            </th>
-            <td class="text-end">
-              <SpanAmount :amount="calcResults.transactionCostsAbsoluteBuy" />
-            </td>
-          </tr>
-          <tr>
-            <th scope="col" class="text-start" id="transactionCostsBuyRelative">
-              {{ $t("ETFFlow.transactionCostsRelative") }}
-            </th>
-            <td class="text-end">
-              <SpanAmount :amount="calcResults.transactionCostsRelativeBuy" />
-            </td>
-          </tr>
-          <tr>
-            <th scope="col" class="text-start" colspan="3" id="overallCosts">
-              {{ $t("ETFFlow.calculateResults.overallCosts") }}
-            </th>
-            <td class="text-end">
-              <b><SpanAmount :amount="calcResults.overallCosts" /></b>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+  <div class="flex justify-center" v-if="calcResults.etfId">
+    <div class="w-full max-w-md mb-4 space-y-4">
+      <div class="flex flex-col rounded-md border">
+        <Table>
+          <TableBody>
+            <TableRow>
+              <TableCell class="font-bold bg-primary/10 text-left w-3/4">
+                {{ $t("ETFFlow.calculateResults.pieces") }}
+              </TableCell>
+              <TableCell class="text-right">{{ calcResults.pieces }}</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell class="font-bold bg-primary/10 text-left">
+                {{ $t("ETFFlow.calculateResults.originalBuyPrice") }}
+              </TableCell>
+              <TableCell class="text-right"
+                ><SpanAmount :amount="calcResults.originalBuyPrice"
+              /></TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell class="font-bold bg-primary/10 text-left">
+                {{ $t("ETFFlow.calculateResults.sellPrice") }}
+              </TableCell>
+              <TableCell class="text-right"
+                ><SpanAmount :amount="calcResults.sellPrice"
+              /></TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
+      </div>
+      <div class="flex flex-col rounded-md border">
+        <Table>
+          <TableBody>
+            <TableRow>
+              <TableCell class="font-bold bg-primary/10 text-left w-3/4">
+                {{ $t("ETFFlow.profit") }}
+              </TableCell>
+              <TableCell class="text-right"
+                ><SpanAmount :amount="calcResults.profit"
+              /></TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell class="font-bold bg-primary/10 text-left">
+                {{
+                  $t("ETFFlow.calculateResults.accumulatedPreliminaryLumpSum")
+                }}
+              </TableCell>
+              <TableCell class="text-right"
+                ><SpanAmount
+                  :amount="calcResults.accumulatedPreliminaryLumpSum"
+              /></TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell class="font-bold bg-primary/10 text-left">
+                {{ $t("ETFFlow.calculateResults.chargeable") }}
+              </TableCell>
+              <TableCell class="text-right"
+                ><b><SpanAmount :amount="calcResults.chargeable" /></b
+              ></TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
+      </div>
+      <div class="flex flex-col rounded-md border">
+        <Table>
+          <TableBody>
+            <TableRow>
+              <TableCell
+                class="font-bold bg-primary/10 text-left"
+                colspan="3"
+                id="newBuyProce"
+              >
+                {{ $t("ETFFlow.calculateResults.newBuyPrice") }}
+              </TableCell>
+              <TableCell class="text-right"
+                ><SpanAmount :amount="calcResults.newBuyPrice"
+              /></TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell
+                class="font-bold bg-primary/10 text-left"
+                colspan="3"
+                id="rebuyLosses"
+              >
+                {{ $t("ETFFlow.calculateResults.rebuyLosses") }}
+              </TableCell>
+              <TableCell class="text-right"
+                ><SpanAmount :amount="calcResults.rebuyLosses"
+              /></TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell
+                class="font-bold bg-primary/10 text-left"
+                rowspan="4"
+                id="transactionCosts"
+              >
+                {{ $t("ETFFlow.transactionCosts") }}
+              </TableCell>
+              <TableCell
+                class="font-bold bg-primary/10 text-left"
+                rowspan="2"
+                id="transactionCostsSell"
+              >
+                {{ $t("ETFFlow.transactionCostsSell") }}
+              </TableCell>
+              <TableCell
+                class="font-bold bg-primary/10 text-left"
+                id="transactionCostsSellAbsolute"
+              >
+                {{ $t("ETFFlow.transactionCostsAbsolute") }}
+              </TableCell>
+              <TableCell class="text-right"
+                ><SpanAmount :amount="calcResults.transactionCostsAbsoluteSell"
+              /></TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell
+                class="font-bold bg-primary/10 text-left"
+                id="transactionCostsSellRelative"
+              >
+                {{ $t("ETFFlow.transactionCostsRelative") }}
+              </TableCell>
+              <TableCell class="text-right"
+                ><SpanAmount :amount="calcResults.transactionCostsRelativeSell"
+              /></TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell
+                class="font-bold bg-primary/10 text-left"
+                rowspan="2"
+                id="transactionCostsBuy"
+              >
+                {{ $t("ETFFlow.transactionCostsBuy") }}
+              </TableCell>
+              <TableCell
+                class="font-bold bg-primary/10 text-left"
+                id="transactionCostsBuyAbsolute"
+              >
+                {{ $t("ETFFlow.transactionCostsAbsolute") }}
+              </TableCell>
+              <TableCell class="text-right"
+                ><SpanAmount :amount="calcResults.transactionCostsAbsoluteBuy"
+              /></TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell
+                class="font-bold bg-primary/10 text-left"
+                id="transactionCostsBuyRelative"
+              >
+                {{ $t("ETFFlow.transactionCostsRelative") }}
+              </TableCell>
+              <TableCell class="text-right"
+                ><SpanAmount :amount="calcResults.transactionCostsRelativeBuy"
+              /></TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell
+                class="font-bold bg-primary/10 text-left"
+                colspan="3"
+                id="overallCosts"
+              >
+                {{ $t("ETFFlow.calculateResults.overallCosts") }}
+              </TableCell>
+              <TableCell class="text-right"
+                ><b><SpanAmount :amount="calcResults.overallCosts" /></b
+              ></TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
+      </div>
     </div>
   </div>
 </template>
@@ -168,6 +176,9 @@
 <script lang="ts" setup>
 import type { EtfSalesCalculation } from "@/model/etf/EtfSalesCalculation";
 import type { PropType } from "vue";
+
+import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
+
 import SpanAmount from "../SpanAmount.vue";
 
 defineProps({
@@ -177,9 +188,3 @@ defineProps({
   },
 });
 </script>
-
-<style scoped>
-th {
-  background-color: #f2f2f2;
-}
-</style>

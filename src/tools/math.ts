@@ -1,4 +1,5 @@
 export function toFixed(value: number, precision: number): number {
   const power = Math.pow(10, precision || 0);
-  return Math.round(value * power) / power;
+  const result = Math.round(value * power) / power;
+  return result === -0 ? 0 : result;
 }

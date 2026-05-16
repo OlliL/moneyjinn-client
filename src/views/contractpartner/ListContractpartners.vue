@@ -12,11 +12,9 @@
 
   <ListContractpartnerAccountsModal ref="accountsModal" />
 
-  <div class="container-fluid text-center">
-    <div class="row justify-content-md-center">
-      <div class="col-xs-12 mb-4">
-        <h4>{{ $t("General.contractpartner") }}</h4>
-      </div>
+  <div class="custom-container space-y-6">
+    <div class="text-center">
+      <h4 class="text-2xl font-bold">{{ $t("General.contractpartner") }}</h4>
     </div>
 
     <DivFilter
@@ -26,33 +24,52 @@
       @createClicked="showCreateContractpartnerModal"
     />
 
-    <DivContentTable>
-      <thead>
-        <tr>
-          <th scope="col">{{ $t("General.name") }}</th>
-          <th scope="col">{{ $t("General.validFrom") }}</th>
-          <th scope="col">{{ $t("General.validTil") }}</th>
-          <th scope="col">{{ $t("Contractpartner.moneyflowComment") }}</th>
-          <th scope="col">{{ $t("General.postingAccount") }}</th>
-          <th scope="colgroup" colspan="3"></th>
-        </tr>
-      </thead>
-      <tbody>
+    <DivContentTable class="max-w-5xl">
+      <TableHeader>
+        <TableRow>
+          <TableHead class="font-bold border text-foreground text-center">
+            {{ $t("General.name") }}
+          </TableHead>
+          <TableHead class="font-bold border text-foreground text-center">
+            {{ $t("General.validFrom") }}
+          </TableHead>
+          <TableHead class="font-bold border text-foreground text-center">
+            {{ $t("General.validTil") }}
+          </TableHead>
+          <TableHead class="font-bold border text-foreground text-center">
+            {{ $t("Contractpartner.moneyflowComment") }}
+          </TableHead>
+          <TableHead class="font-bold border text-foreground text-center">
+            {{ $t("General.postingAccount") }}
+          </TableHead>
+          <TableHead class="border" colspan="3"></TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
         <ListContractpartnerRowVue
           v-for="mcp in contractpartners"
           :key="mcp.id"
+          v-memo="[mcp.id]"
           :mcp="mcp"
           @delete-contractpartner="deleteContractpartner"
           @edit-contractpartner="editContractpartner"
           @list-contractpartner-accounts="listContractpartnerAccounts"
         />
-      </tbody>
+      </TableBody>
     </DivContentTable>
   </div>
 </template>
 
 <script lang="ts" setup>
 import { onMounted, ref, watch, useTemplateRef } from "vue";
+import { storeToRefs } from "pinia";
+
+import {
+  TableBody,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 import { useContractpartnerStore } from "@/stores/ContractpartnerStore";
 
@@ -64,7 +81,6 @@ import ListContractpartnerAccountsModal from "@/components/contractpartneraccoun
 import ListContractpartnerRowVue from "@/components/contractpartner/ListContractpartnerRow.vue";
 
 import type { Contractpartner } from "@/model/contractpartner/Contractpartner";
-import { storeToRefs } from "pinia";
 
 const validNow = ref(true);
 const contractpartners = ref(new Array<Contractpartner>());

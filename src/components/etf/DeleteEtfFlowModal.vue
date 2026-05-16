@@ -2,43 +2,66 @@
   <ModalVue :title="$t('ETFFlow.title.delete')" ref="modalComponent">
     <template #body>
       <DivError :server-errors="serverErrors" />
-      <div class="row d-flex justify-content-center mt-3">
-        <div class="col-11">
-          <table class="table table-bordered table-hover">
-            <tbody>
-              <tr>
-                <th scope="row">{{ $t("General.etf") }}</th>
-                <td>{{ etfName }}</td>
-              </tr>
-              <tr>
-                <th scope="row">{{ $t("ETFFlow.bookingdate") }}</th>
-                <td>{{ timestampString }}</td>
-              </tr>
-              <tr>
-                <th scope="row">{{ $t("ETFFlow.amount") }}</th>
-                <td :class="amountClass">{{ amountString }}</td>
-              </tr>
-              <tr>
-                <th scope="row">{{ $t("ETFFlow.price") }}</th>
-                <td>
-                  <SpanAmount :amount="etfFlow.price" :decimal-places="3" />
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+      <div class="flex flex-col rounded-md border">
+        <Table>
+          <TableBody>
+            <TableRow>
+              <TableCell
+                class="font-bold bg-primary/[0.10] w-40 whitespace-normal text-foreground border-r"
+              >
+                {{ $t("General.etf") }}
+              </TableCell>
+              <TableCell>{{ etfName }}</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell
+                class="font-bold bg-primary/[0.10] w-40 whitespace-normal text-foreground border-r"
+              >
+                {{ $t("ETFFlow.bookingdate") }}
+              </TableCell>
+              <TableCell>{{ timestampString }}</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell
+                class="font-bold bg-primary/[0.10] w-40 whitespace-normal text-foreground border-r"
+              >
+                {{ $t("ETFFlow.amount") }}
+              </TableCell>
+              <TableCell :class="amountClass">{{ amountString }}</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell
+                class="font-bold bg-primary/[0.10] w-40 whitespace-normal text-foreground border-r"
+              >
+                {{ $t("ETFFlow.price") }}
+              </TableCell>
+              <TableCell>
+                <SpanAmount :amount="etfFlow.price" :decimal-places="3" />
+              </TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
       </div>
     </template>
     <template #footer>
-      <button type="button" class="btn btn-danger" @click="deleteEtfFlow">
+      <Button
+        variant="destructive"
+        class="flex items-center gap-2 px-6"
+        @click="deleteEtfFlow"
+      >
+        <Trash2 />
         {{ $t("General.delete") }}
-      </button>
+      </Button>
     </template>
   </ModalVue>
 </template>
 
 <script lang="ts" setup>
 import { computed, ref, useTemplateRef } from "vue";
+
+import { Button } from "@/components/ui/button";
+import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
+import { Trash2 } from "lucide-vue-next";
 
 import DivError from "../DivError.vue";
 import ModalVue from "../Modal.vue";
@@ -95,9 +118,3 @@ const deleteEtfFlow = () => {
 
 defineExpose({ _show });
 </script>
-
-<style scoped>
-th {
-  background-color: #f2f2f2;
-}
-</style>

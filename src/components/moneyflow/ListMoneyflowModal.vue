@@ -7,104 +7,128 @@
   >
     <template #body>
       <DivError :server-errors="serverErrors" />
-      <div class="container-fluid">
-        <div class="row">
-          <div
-            style="overflow-x: scroll; white-space: nowrap; height: 600px"
-            class="col-3"
-            v-if="receiptBase64"
-          >
-            <img
-              v-if="isJpeg"
-              :src="`data:image/png;base64,${receiptBase64}`"
-              style="max-width: 100%"
-              alt="receipt"
-            />
-            <object
-              style="height: 75vh; width: 100%"
-              v-if="isPdf"
-              id="pdf"
-              :data="`data:application/pdf;base64,${receiptBase64}`"
-              type="application/pdf"
-            >
-              receipt
-            </object>
+      <div class="w-full">
+        <div class="flex gap-4">
+          <div class="w-1/3" v-if="receiptBase64">
+            <div class="overflow-x-auto h-96">
+              <img
+                v-if="isJpeg"
+                :src="`data:image/png;base64,${receiptBase64}`"
+                class="max-w-full"
+                alt="receipt"
+              />
+              <object
+                class="h-96 w-full"
+                v-if="isPdf"
+                id="pdf"
+                :data="`data:application/pdf;base64,${receiptBase64}`"
+                type="application/pdf"
+              >
+                receipt
+              </object>
+            </div>
           </div>
-          <div class="col">
-            <div class="row no-gutters flex-lg-nowrap mb-2">
-              <div class="card-body table-responsive text-center">
-                <table class="table table-striped table-bordered table-hover">
-                  <colgroup>
-                    <col style="width: 10%" />
-                    <col style="width: 10%" />
-                    <col style="width: 10%" v-if="rowspan == 1" />
-                    <col style="width: 6%" v-if="rowspan > 1" />
-                    <col style="width: 6%" v-if="rowspan > 1" />
-                    <col style="width: 17%" />
-                    <col style="width: 19%" />
-                    <col style="width: 16%" />
-                    <col style="width: 16%" />
-                  </colgroup>
-                  <thead>
-                    <tr>
-                      <th scope="col">{{ $t("Moneyflow.bookingdate") }}</th>
-                      <th scope="col">{{ $t("Moneyflow.invoicedate") }}</th>
-                      <th scope="col" :colspan="rowspan > 1 ? 2 : 1">
+          <div class="flex-1">
+            <div class="flex flex-col rounded-md border">
+              <div class="overflow-x-auto text-center">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead
+                        class="font-bold border text-foreground text-center"
+                        >{{ $t("Moneyflow.bookingdate") }}</TableHead
+                      >
+                      <TableHead
+                        class="font-bold border text-foreground text-center"
+                        >{{ $t("Moneyflow.invoicedate") }}</TableHead
+                      >
+                      <TableHead
+                        class="font-bold border text-foreground text-center"
+                        :colspan="rowspan > 1 ? 2 : 1"
+                      >
                         {{ $t("General.amount") }}
-                      </th>
-                      <th scope="col">{{ $t("General.contractpartner") }}</th>
-                      <th scope="col">{{ $t("General.comment") }}</th>
-                      <th scope="col">{{ $t("General.postingAccount") }}</th>
-                      <th scope="col">{{ $t("General.capitalsource") }}</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr v-if="rowspan == 1">
-                      <td><SpanDate :date="mmf.bookingDate" /></td>
-                      <td><SpanDate :date="mmf.invoiceDate" /></td>
-                      <td class="text-end">
+                      </TableHead>
+                      <TableHead
+                        class="font-bold border text-foreground text-center"
+                        >{{ $t("General.contractpartner") }}</TableHead
+                      >
+                      <TableHead
+                        class="font-bold border text-foreground text-center"
+                        >{{ $t("General.comment") }}</TableHead
+                      >
+                      <TableHead
+                        class="font-bold border text-foreground text-center"
+                        >{{ $t("General.postingAccount") }}</TableHead
+                      >
+                      <TableHead
+                        class="font-bold border text-foreground text-center"
+                        >{{ $t("General.capitalsource") }}</TableHead
+                      >
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    <TableRow v-if="rowspan == 1">
+                      <TableCell
+                        ><SpanDate :date="mmf.bookingDate"
+                      /></TableCell>
+                      <TableCell
+                        ><SpanDate :date="mmf.invoiceDate"
+                      /></TableCell>
+                      <TableCell class="text-right">
                         <SpanAmount :amount="mmf.amount" />
-                      </td>
-                      <td class="text-start">{{ mmf.contractpartnerName }}</td>
-                      <td class="text-start">{{ mmf.comment }}</td>
-                      <td class="text-start">{{ mmf.postingAccountName }}</td>
-                      <td class="text-start">{{ mmf.capitalsourceComment }}</td>
-                    </tr>
-                    <tr
+                      </TableCell>
+                      <TableCell class="text-left">{{
+                        mmf.contractpartnerName
+                      }}</TableCell>
+                      <TableCell class="text-left">{{ mmf.comment }}</TableCell>
+                      <TableCell class="text-left">{{
+                        mmf.postingAccountName
+                      }}</TableCell>
+                      <TableCell class="text-left">{{
+                        mmf.capitalsourceComment
+                      }}</TableCell>
+                    </TableRow>
+                    <TableRow
                       v-for="(mse, index) in mmf.moneyflowSplitEntries"
                       :key="mse.id"
                     >
-                      <td :rowspan="rowspan" v-if="index == 0">
+                      <TableCell :rowspan="rowspan" v-if="index == 0">
                         <SpanDate :date="mmf.bookingDate" />
-                      </td>
-                      <td :rowspan="rowspan" v-if="index == 0">
+                      </TableCell>
+                      <TableCell :rowspan="rowspan" v-if="index == 0">
                         <SpanDate :date="mmf.invoiceDate" />
-                      </td>
-                      <td :rowspan="rowspan" v-if="index == 0" class="text-end">
-                        <SpanAmount :amount="mmf.amount" />
-                      </td>
-                      <td class="text-end">
-                        <SpanAmount :amount="mse.amount" />
-                      </td>
-                      <td
+                      </TableCell>
+                      <TableCell
                         :rowspan="rowspan"
                         v-if="index == 0"
-                        class="text-start"
+                        class="text-right"
+                      >
+                        <SpanAmount :amount="mmf.amount" />
+                      </TableCell>
+                      <TableCell class="text-right">
+                        <SpanAmount :amount="mse.amount" />
+                      </TableCell>
+                      <TableCell
+                        :rowspan="rowspan"
+                        v-if="index == 0"
+                        class="text-left"
                       >
                         {{ mmf.contractpartnerName }}
-                      </td>
-                      <td class="text-start">{{ mse.comment }}</td>
-                      <td class="text-start">{{ mse.postingAccountName }}</td>
-                      <td
+                      </TableCell>
+                      <TableCell class="text-left">{{ mse.comment }}</TableCell>
+                      <TableCell class="text-left">{{
+                        mse.postingAccountName
+                      }}</TableCell>
+                      <TableCell
                         :rowspan="rowspan"
                         v-if="index == 0"
-                        class="text-start"
+                        class="text-left"
                       >
                         {{ mmf.capitalsourceComment }}
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
+                      </TableCell>
+                    </TableRow>
+                  </TableBody>
+                </Table>
               </div>
             </div>
           </div>
@@ -127,6 +151,15 @@ import { computed, ref, useTemplateRef } from "vue";
 
 import DivError from "../DivError.vue";
 import ModalVue from "../Modal.vue";
+
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 import { MoneyflowReceiptType } from "@/model/moneyflow/MoneyflowReceiptType";

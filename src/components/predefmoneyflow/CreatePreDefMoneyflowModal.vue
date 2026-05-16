@@ -5,10 +5,10 @@
         @submit.prevent="createPreDefMoneyflow"
         :id="'createPreDefMoneyflowForm' + idSuffix"
       >
-        <div class="container-fluid">
+        <div class="space-y-2">
           <DivError :server-errors="serverErrors" />
-          <div class="row">
-            <div class="col-xs-12">
+          <div class="grid grid-cols-1 gap-2">
+            <div>
               <InputStandard
                 v-model="mpm.amount"
                 :validation-schema="schema.amount"
@@ -17,15 +17,12 @@
                 step="0.01"
                 :field-label="$t('General.amount')"
               >
-                <template #icon
-                  ><span class="input-group-text"
-                    ><i class="bi bi-currency-euro"></i></span
-                ></template>
+                <template #icon><Euro class="h-4 w-4" /></template>
               </InputStandard>
             </div>
           </div>
-          <div class="row pt-2">
-            <div class="col-xs-12">
+          <div class="grid grid-cols-1 gap-2 pt-2">
+            <div>
               <SelectContractpartner
                 v-model="mpm.contractpartnerId"
                 :validation-schema="schema.contractpartnerId"
@@ -36,8 +33,8 @@
             </div>
           </div>
 
-          <div class="row pt-2">
-            <div class="col-xs-12">
+          <div class="grid grid-cols-1 gap-2 pt-2">
+            <div>
               <InputStandard
                 v-model="mpm.comment"
                 :validation-schema="schema.comment"
@@ -47,8 +44,8 @@
             </div>
           </div>
 
-          <div class="row pt-2">
-            <div class="col-xs-12">
+          <div class="grid grid-cols-1 gap-2 pt-2">
+            <div>
               <SelectPostingAccount
                 v-model="mpm.postingAccountId"
                 :validation-schema="schema.postingAccountId"
@@ -58,8 +55,8 @@
             </div>
           </div>
 
-          <div class="row pt-2">
-            <div class="col-xs-12">
+          <div class="grid grid-cols-1 gap-2 pt-2">
+            <div>
               <SelectCapitalsource
                 v-model="mpm.capitalsourceId"
                 :validation-schema="schema.capitalsourceId"
@@ -69,8 +66,8 @@
               />
             </div>
           </div>
-          <div class="row pt-2">
-            <div class="col-xs-12">
+          <div class="grid grid-cols-1 gap-2 pt-2">
+            <div>
               <SelectStandard
                 v-model="mpm.onceAMonth"
                 :validation-schema="schema.onceAMonth"
@@ -84,9 +81,9 @@
       </form>
     </template>
     <template #footer>
-      <button type="button" class="btn btn-secondary" @click="resetForm">
+      <Button type="button" variant="secondary" @click="resetForm">
         {{ $t("General.reset") }}
-      </button>
+      </Button>
       <ButtonSubmit
         :button-label="$t('General.save')"
         :form-id="'createPreDefMoneyflowForm' + idSuffix"
@@ -100,6 +97,7 @@ import { useForm } from "vee-validate";
 import { computed, ref, useTemplateRef } from "vue";
 import { useI18n } from "vue-i18n";
 import { boolean, number, string, ZodType } from "zod";
+import { Euro } from "lucide-vue-next";
 
 import ButtonSubmit from "../ButtonSubmit.vue";
 import DivError from "../DivError.vue";
@@ -109,6 +107,8 @@ import SelectStandard from "../SelectStandard.vue";
 import SelectPostingAccount from "../postingaccount/SelectPostingAccount.vue";
 import SelectContractpartner from "../contractpartner/SelectContractpartner.vue";
 import SelectCapitalsource from "../capitalsource/SelectCapitalsource.vue";
+
+import { Button } from "@/components/ui/button";
 
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { amountSchema, globErr } from "@/tools/views/ZodUtil";
@@ -146,7 +146,7 @@ const schema: Partial<{ [key in keyof PreDefMoneyflow]: ZodType }> = {
 
 const mpm = ref({} as PreDefMoneyflow);
 const origMpm = ref({} as PreDefMoneyflow | undefined);
-const modalComponent = useTemplateRef<typeof ModalVue>('modalComponent');
+const modalComponent = useTemplateRef<typeof ModalVue>("modalComponent");
 const validityDate = new Date();
 validityDate.setHours(0, 0, 0, 0);
 const emit = defineEmits(["preDefMoneyflowCreated", "preDefMoneyflowUpdated"]);

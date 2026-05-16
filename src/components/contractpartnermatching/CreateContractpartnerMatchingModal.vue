@@ -5,10 +5,10 @@
         @submit.prevent="createContractpartnerMatching"
         :id="'createContractpartnerMatchingForm' + idSuffix"
       >
-        <div class="container-fluid">
+        <div class="space-y-2">
           <DivError :server-errors="serverErrors" />
-          <div class="row">
-            <div class="col-xs-12">
+          <div class="grid grid-cols-1 gap-2">
+            <div>
               <InputStandard
                 v-model="mcm.matchingText"
                 :validation-schema="schema.matchingText"
@@ -17,8 +17,8 @@
               />
             </div>
           </div>
-          <div class="row">
-            <div class="col-xs-12">
+          <div class="grid grid-cols-1 gap-2">
+            <div>
               <SelectContractpartner
                 v-model="mcm.contractpartnerId"
                 :validation-schema="schema.contractpartnerId"
@@ -27,8 +27,8 @@
               />
             </div>
           </div>
-          <div class="row pt-2">
-            <div class="col-xs-12">
+          <div class="grid grid-cols-1 gap-2 pt-2">
+            <div>
               <InputStandard
                 v-model="mcm.moneyflowComment"
                 :validation-schema="schema.moneyflowComment"
@@ -38,8 +38,8 @@
             </div>
           </div>
 
-          <div class="row pt-2">
-            <div class="col-xs-12">
+          <div class="grid grid-cols-1 gap-2 pt-2">
+            <div>
               <SelectPostingAccount
                 v-model="mcm.postingAccountId"
                 :validation-schema="schema.postingAccountId"
@@ -52,9 +52,9 @@
       </form>
     </template>
     <template #footer>
-      <button type="button" class="btn btn-secondary" @click="resetForm">
+      <Button type="button" variant="secondary" @click="resetForm">
         {{ $t("General.reset") }}
-      </button>
+      </Button>
       <ButtonSubmit
         :button-label="$t('General.save')"
         :form-id="'createContractpartnerMatchingForm' + idSuffix"
@@ -73,6 +73,8 @@ import ButtonSubmit from "../ButtonSubmit.vue";
 import DivError from "../DivError.vue";
 import InputStandard from "../InputStandard.vue";
 import ModalVue from "../Modal.vue";
+
+import { Button } from "@/components/ui/button";
 
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { globErr } from "@/tools/views/ZodUtil";

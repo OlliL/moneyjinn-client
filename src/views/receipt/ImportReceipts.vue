@@ -2,27 +2,26 @@
   <DeleteMoneyflowModalVue ref="deleteModal" />
   <EditMoneyflowModalVue ref="editModal" />
 
-  <div class="container-fluid text-center">
-    <div class="row justify-content-md-center">
-      <div class="col-xs-12 mb-4">
-        <h4>{{ $t("Receipt.importReceipts") }}</h4>
-      </div>
+  <div class="custom-container space-y-6">
+    <div class="text-center">
+      <h4 class="text-2xl font-bold">{{ $t("Receipt.importReceipts") }}</h4>
     </div>
-    <div class="row justify-content-md-center">
-      <div class="col-sm-3 mb-5">
+    <div class="flex justify-center">
+      <div class="w-full max-w-md">
         <DivError :server-errors="serverErrors" />
         <form
           @submit.prevent="uploadReceipts"
           id="uploadReceiptsForm"
           ref="uploadReceiptsForm"
+          class="space-y-3"
         >
-          <div class="input-group">
+          <div class="flex items-center gap-2">
             <InputFile v-model="files" id="fileUpload" />
             <ButtonSubmit
               :button-label="$t('Receipt.upload')"
               form-id="uploadReceiptsForm"
             >
-              <template #icon><i class="bi bi-upload"></i>&nbsp; </template>
+              <template #icon><Upload class="h-4 w-4" /> </template>
             </ButtonSubmit>
           </div>
         </form>
@@ -56,6 +55,7 @@ import type { ImportedMoneyflowReceipt } from "@/model/moneyflow/ImportedMoneyfl
 
 import ImportedMoneyflowReceiptService from "@/service/ImportedMoneyflowReceiptService";
 import MoneyflowService from "@/service/MoneyflowService";
+import { Upload } from "lucide-vue-next";
 
 const serverErrors = ref(new Array<string>());
 

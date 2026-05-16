@@ -2,35 +2,48 @@
   <ModalVue
     :title="$t('ContractpartnerAccount.title.delete')"
     ref="modalComponent"
-    zIndex="2001"
+    z-index="2001"
   >
     <template #body>
       <DivError :server-errors="serverErrors" />
-      <div class="row d-flex justify-content-center mt-3">
-        <div class="col-11">
-          <table class="table table-bordered table-hover">
-            <tbody>
-              <tr>
-                <th scope="row">{{ $t("General.iban") }}</th>
-                <td>{{ mca.accountNumber }}</td>
-              </tr>
-              <tr>
-                <th scope="row">{{ $t("General.bic") }}</th>
-                <td>{{ mca.bankCode }}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+
+      <div class="flex flex-col rounded-md border">
+        <Table>
+          <TableBody>
+            <TableRow>
+              <TableCell
+                class="font-bold bg-primary/[0.10] w-40 whitespace-normal text-foreground border-r"
+              >
+                {{ $t("General.iban") }}
+              </TableCell>
+              <TableCell>
+                {{ mca.accountNumber }}
+              </TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell
+                class="font-bold bg-primary/[0.10] w-40 whitespace-normal text-foreground border-r"
+              >
+                {{ $t("General.bic") }}
+              </TableCell>
+              <TableCell>
+                {{ mca.bankCode }}
+              </TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
       </div>
     </template>
+
     <template #footer>
-      <button
-        type="button"
-        class="btn btn-danger"
+      <Button
+        variant="destructive"
+        class="flex items-center gap-2 px-6"
         @click="deleteContractpartnerAccount"
       >
+        <Trash2 />
         {{ $t("General.delete") }}
-      </button>
+      </Button>
     </template>
   </ModalVue>
 </template>
@@ -38,17 +51,18 @@
 <script lang="ts" setup>
 import { ref, useTemplateRef } from "vue";
 
+import { Button } from "@/components/ui/button";
+import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
+import { Trash2 } from "lucide-vue-next";
+
 import DivError from "../DivError.vue";
 import ModalVue from "../Modal.vue";
 
 import { handleBackendError } from "@/tools/views/HandleBackendError";
-
 import type { ContractpartnerAccount } from "@/model/contractpartneraccount/ContractpartnerAccount";
-
 import ContractpartnerAccountService from "@/service/ContractpartnerAccountService";
 
 const serverErrors = ref(new Array<string>());
-
 const mca = ref({} as ContractpartnerAccount);
 const modalComponent = useTemplateRef<typeof ModalVue>("modalComponent");
 const emit = defineEmits(["contractpartnerAccountDeleted"]);
@@ -74,9 +88,3 @@ const deleteContractpartnerAccount = () => {
 
 defineExpose({ _show });
 </script>
-
-<style scoped>
-th {
-  background-color: #f2f2f2;
-}
-</style>

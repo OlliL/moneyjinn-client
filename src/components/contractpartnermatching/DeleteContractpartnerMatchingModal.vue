@@ -5,49 +5,52 @@
   >
     <template #body>
       <DivError :server-errors="serverErrors" />
-      <div class="row d-flex justify-content-center mt-3">
-        <div class="col-11">
-          <table class="table table-bordered table-hover">
-            <tbody>
-              <tr>
-                <th scope="row">
-                  {{ $t("ContractpartnerMatching.matchingText") }}
-                </th>
-                <td>{{ mcm.matchingText }}</td>
-              </tr>
-              <tr>
-                <th scope="row">{{ $t("General.contractpartner") }}</th>
-                <td>{{ mcm.contractpartnerName }}</td>
-              </tr>
-              <tr>
-                <th scope="row">
-                  {{ $t("Contractpartner.moneyflowComment") }}
-                </th>
-                <td>{{ mcm.moneyflowComment }}</td>
-              </tr>
-              <tr>
-                <th scope="row">{{ $t("General.postingAccount") }}</th>
-                <td>{{ mcm.postingAccountName }}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+      <div class="flex flex-col rounded-md border">
+        <Table>
+          <TableBody>
+            <TableRow>
+              <TableCell class="font-bold bg-primary/10 w-40 whitespace-normal text-foreground border-r">
+                {{ $t("ContractpartnerMatching.matchingText") }}
+              </TableCell>
+              <TableCell>{{ mcm.matchingText }}</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell class="font-bold bg-primary/10 w-40 whitespace-normal text-foreground border-r">
+                {{ $t("General.contractpartner") }}
+              </TableCell>
+              <TableCell>{{ mcm.contractpartnerName }}</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell class="font-bold bg-primary/10 w-40 whitespace-normal text-foreground border-r">
+                {{ $t("Contractpartner.moneyflowComment") }}
+              </TableCell>
+              <TableCell>{{ mcm.moneyflowComment }}</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell class="font-bold bg-primary/10 w-40 whitespace-normal text-foreground border-r">
+                {{ $t("General.postingAccount") }}
+              </TableCell>
+              <TableCell>{{ mcm.postingAccountName }}</TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
       </div>
     </template>
     <template #footer>
-      <button
-        type="button"
-        class="btn btn-danger"
-        @click="deleteContractpartnerMatching"
-      >
+      <Button variant="destructive" class="flex items-center gap-2 rounded-md px-6" @click="deleteContractpartnerMatching">
+        <Trash2 class="h-4 w-4" />
         {{ $t("General.delete") }}
-      </button>
+      </Button>
     </template>
   </ModalVue>
 </template>
 
 <script lang="ts" setup>
 import { ref, useTemplateRef } from "vue";
+import { Trash2 } from "lucide-vue-next";
+
+import { Button } from "@/components/ui/button";
+import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 
 import DivError from "../DivError.vue";
 import ModalVue from "../Modal.vue";
@@ -86,8 +89,3 @@ const deleteContractpartnerMatching = () => {
 defineExpose({ _show });
 </script>
 
-<style scoped>
-th {
-  background-color: #f2f2f2;
-}
-</style>

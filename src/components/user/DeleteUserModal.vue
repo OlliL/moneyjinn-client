@@ -2,41 +2,64 @@
   <ModalVue :title="$t('User.title.delete')" ref="modalComponent">
     <template #body>
       <DivError :server-errors="serverErrors" />
-      <div class="row d-flex justify-content-center mt-3">
-        <div class="col-11">
-          <table class="table table-bordered table-hover">
-            <tbody>
-              <tr>
-                <th scope="row">{{ $t("General.name") }}</th>
-                <td>{{ user.userName }}</td>
-              </tr>
-              <tr>
-                <th scope="row">{{ $t("General.group") }}</th>
-                <td>{{ user.groupName }}</td>
-              </tr>
-              <tr>
-                <th scope="row">{{ $t("User.role") }}</th>
-                <td>{{ role }}</td>
-              </tr>
-              <tr>
-                <th scope="row">{{ $t("User.new") }}</th>
-                <td><SpanBoolean :value="user.userIsNew" /></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+      <div class="flex flex-col rounded-md border">
+        <Table>
+          <TableBody>
+            <TableRow>
+              <TableCell
+                class="font-bold bg-primary/[0.10] w-40 whitespace-normal text-foreground border-r"
+              >
+                {{ $t("General.name") }}
+              </TableCell>
+              <TableCell>{{ user.userName }}</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell
+                class="font-bold bg-primary/[0.10] w-40 whitespace-normal text-foreground border-r"
+              >
+                {{ $t("General.group") }}
+              </TableCell>
+              <TableCell>{{ user.groupName }}</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell
+                class="font-bold bg-primary/[0.10] w-40 whitespace-normal text-foreground border-r"
+              >
+                {{ $t("User.role") }}
+              </TableCell>
+              <TableCell>{{ role }}</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell
+                class="font-bold bg-primary/[0.10] w-40 whitespace-normal text-foreground border-r"
+              >
+                {{ $t("User.new") }}
+              </TableCell>
+              <TableCell><SpanBoolean :value="user.userIsNew" /></TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
       </div>
     </template>
     <template #footer>
-      <button type="button" class="btn btn-danger" @click="deleteUser">
+      <Button
+        variant="destructive"
+        class="flex items-center gap-2 px-6"
+        @click="deleteUser"
+      >
+        <Trash2 />
         {{ $t("General.delete") }}
-      </button>
+      </Button>
     </template>
   </ModalVue>
 </template>
 
 <script lang="ts" setup>
 import { computed, ref, useTemplateRef } from "vue";
+
+import { Button } from "@/components/ui/button";
+import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
+import { Trash2 } from "lucide-vue-next";
 
 import DivError from "../DivError.vue";
 import ModalVue from "../Modal.vue";
@@ -79,9 +102,3 @@ const deleteUser = () => {
 
 defineExpose({ _show });
 </script>
-
-<style scoped>
-th {
-  background-color: #f2f2f2;
-}
-</style>

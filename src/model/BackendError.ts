@@ -9,10 +9,10 @@ export enum BackendErrorType {
 }
 
 export class BackendError {
-  private errorType: BackendErrorType;
-  private errorCode: number | undefined;
-  private errorMessage: string | undefined;
-  private validationResult: ValidationResult | undefined;
+  private readonly errorType: BackendErrorType;
+  private readonly errorCode: number | undefined;
+  private readonly errorMessage: string | undefined;
+  private readonly validationResult: ValidationResult | undefined;
 
   constructor(
     _errorType: BackendErrorType,

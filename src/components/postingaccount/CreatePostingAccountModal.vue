@@ -1,29 +1,29 @@
 <template>
   <ModalVue :title="title" ref="modalComponent">
-    <template #body
-      ><form
+    <template #body>
+      <form
         @submit.prevent="createPostingAccount"
         :id="'createPostingAccountForm' + idSuffix"
+        class="space-y-4"
       >
-        <div class="container-fluid">
-          <DivError :server-errors="serverErrors" />
-          <div class="row">
-            <div class="col-xs-12">
-              <InputStandard
-                v-model="mpa.name"
-                :validation-schema="schema.name"
-                :id="'name' + idSuffix"
-                :field-label="$t('General.name')"
-              />
-            </div>
-          </div>
+        <DivError :server-errors="serverErrors" />
+
+        <div class="flex flex-col gap-4">
+          <InputStandard
+            v-model="mpa.name"
+            :validation-schema="schema.name"
+            :id="'name' + idSuffix"
+            :field-label="$t('General.name')"
+          />
         </div>
       </form>
     </template>
+
     <template #footer>
-      <button type="button" class="btn btn-secondary" @click="resetForm">
+      <Button variant="secondary" @click="resetForm">
         {{ $t("General.reset") }}
-      </button>
+      </Button>
+
       <ButtonSubmit
         :button-label="$t('General.save')"
         :form-id="'createPostingAccountForm' + idSuffix"
@@ -38,6 +38,8 @@ import { computed, ref, useTemplateRef } from "vue";
 import { useI18n } from "vue-i18n";
 import { string, ZodType } from "zod";
 
+import { Button } from "@/components/ui/button";
+
 import ButtonSubmit from "../ButtonSubmit.vue";
 import DivError from "../DivError.vue";
 import InputStandard from "../InputStandard.vue";
@@ -47,12 +49,11 @@ import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { globErr } from "@/tools/views/ZodUtil";
 
 import type { PostingAccount } from "@/model/postingaccount/PostingAccount";
-
 import PostingAccountService from "@/service/PostingAccountService";
 
 const { t } = useI18n();
 
-defineProps({
+const props = defineProps({
   idSuffix: {
     type: String,
     default: "",
@@ -60,19 +61,19 @@ defineProps({
 });
 
 const serverErrors = ref(new Array<string>());
+const mpa = ref({} as PostingAccount);
+const origMpa = ref({} as PostingAccount | undefined);
+const modalComponent = useTemplateRef<typeof ModalVue>("modalComponent");
+
+const emit = defineEmits(["postingAccountCreated", "postingAccountUpdated"]);
+
+const { handleSubmit, values, setFieldTouched } = useForm();
 
 const schema: Partial<{ [key in keyof PostingAccount]: ZodType }> = {
   name: string(globErr(t("PostingAccount.validation.name")))
     .min(1)
-    .max(60, t("PostingAccount.validation.length.name")),
+    .max(100, t("PostingAccount.validation.length.name")),
 };
-
-const mpa = ref({} as PostingAccount);
-const origMpa = ref({} as PostingAccount | undefined);
-const modalComponent = useTemplateRef<typeof ModalVue>('modalComponent');
-const emit = defineEmits(["postingAccountCreated", "postingAccountUpdated"]);
-
-const { handleSubmit, values, setFieldTouched } = useForm();
 
 const title = computed(() => {
   return origMpa.value === undefined
@@ -99,28 +100,26 @@ const _show = async (_mpa?: PostingAccount) => {
 const createPostingAccount = handleSubmit(() => {
   serverErrors.value = new Array<string>();
 
-  if (mpa.value.id > 0) {
-    //update
-    PostingAccountService.updatePostingAccount(mpa.value)
-      .then(() => {
-        modalComponent.value?._hide();
-        emit("postingAccountUpdated", mpa.value);
-      })
-      .catch((backendError) => {
-        handleBackendError(backendError, serverErrors);
-      });
-  } else {
-    //create
-    PostingAccountService.createPostingAccount(mpa.value)
-      .then((_mpa) => {
-        mpa.value = _mpa;
-        modalComponent.value?._hide();
-        emit("postingAccountCreated", mpa.value);
-      })
-      .catch((backendError) => {
-        handleBackendError(backendError, serverErrors);
-      });
-  }
+  const serviceCall =
+    mpa.value.id > 0
+      ? PostingAccountService.updatePostingAccount(mpa.value)
+      : PostingAccountService.createPostingAccount(mpa.value);
+
+  serviceCall
+    .then((result) => {
+      const isUpdate = mpa.value.id > 0;
+      if (!isUpdate) mpa.value = result as PostingAccount;
+
+      modalComponent.value?._hide();
+      emit(
+        isUpdate ? "postingAccountUpdated" : "postingAccountCreated",
+        mpa.value,
+      );
+    })
+    .catch((backendError) => {
+      handleBackendError(backendError, serverErrors);
+    });
 });
+
 defineExpose({ _show });
 </script>

@@ -5,11 +5,11 @@
       <img
         v-if="isJpeg"
         :src="`data:image/png;base64,${receiptBase64}`"
-        style="max-width: 100%; max-height: 100%"
+        class="max-w-full max-h-full"
         alt="receipt"
       />
       <object
-        style="height: 75vh; width: 100%"
+        class="h-[75vh] w-full"
         v-if="isPdf"
         id="pdf"
         :data="`data:application/pdf;base64,${receiptBase64}`"

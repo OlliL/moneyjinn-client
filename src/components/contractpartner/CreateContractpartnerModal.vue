@@ -1,56 +1,44 @@
 <template>
   <ModalVue :title="title" ref="modalComponent">
-    <template #body
-      ><form
+    <template #body>
+      <form
         @submit.prevent="createContractpartner"
         :id="'createContractpartnerForm' + idSuffix"
+        class="space-y-4"
       >
-        <div class="container-fluid">
-          <DivError :server-errors="serverErrors" />
-          <div class="row">
-            <div class="col-xs-12">
-              <InputStandard
-                v-model="mcp.name"
-                :validation-schema="schema.name"
-                :id="'name' + idSuffix"
-                :field-label="$t('General.name')"
-              />
-            </div>
-          </div>
-          <div class="row pt-2">
-            <div class="col-xs-12">
-              <InputStandard
-                v-model="mcp.moneyflowComment"
-                :validation-schema="schema.moneyflowComment"
-                :id="'moneyflowComment' + idSuffix"
-                :field-label="$t('Contractpartner.moneyflowComment')"
-              />
-            </div>
-          </div>
+        <DivError :server-errors="serverErrors" />
 
-          <div class="row pt-2">
-            <div class="col-xs-12">
-              <SelectPostingAccount
-                v-model="mcp.postingAccountId"
-                :validation-schema="schema.postingAccountId"
-                :id-suffix="idSuffix + 'CreateContractpartner'"
-                :field-label="$t('General.postingAccount')"
-              />
-            </div>
-          </div>
+        <div class="flex flex-col gap-4">
+          <InputStandard
+            v-model="mcp.name"
+            :validation-schema="schema.name"
+            :id="'name' + idSuffix"
+            :field-label="$t('General.name')"
+          />
 
-          <div class="row pt-2">
-            <div class="col-xs-12">
-              <InputStandard
-                v-model="mcp.street"
-                :validation-schema="schema.street"
-                :id="'street' + idSuffix"
-                :field-label="$t('Contractpartner.street')"
-              />
-            </div>
-          </div>
-          <div class="row pt-2">
-            <div class="col-xs-12">
+          <InputStandard
+            v-model="mcp.moneyflowComment"
+            :validation-schema="schema.moneyflowComment"
+            :id="'moneyflowComment' + idSuffix"
+            :field-label="$t('Contractpartner.moneyflowComment')"
+          />
+
+          <SelectPostingAccount
+            v-model="mcp.postingAccountId"
+            :validation-schema="schema.postingAccountId"
+            :id-suffix="idSuffix + 'CreateContractpartner'"
+            :field-label="$t('General.postingAccount')"
+          />
+
+          <InputStandard
+            v-model="mcp.street"
+            :validation-schema="schema.street"
+            :id="'street' + idSuffix"
+            :field-label="$t('Contractpartner.street')"
+          />
+
+          <div class="grid grid-cols-3 gap-4">
+            <div class="col-span-1">
               <InputStandard
                 v-model="mcp.postcode"
                 :validation-schema="schema.postcode"
@@ -58,9 +46,7 @@
                 :field-label="$t('Contractpartner.postcode')"
               />
             </div>
-          </div>
-          <div class="row pt-2">
-            <div class="col-xs-12">
+            <div class="col-span-2">
               <InputStandard
                 v-model="mcp.town"
                 :validation-schema="schema.town"
@@ -69,43 +55,37 @@
               />
             </div>
           </div>
-          <div class="row pt-2">
-            <div class="col-xs-12">
-              <InputStandard
-                v-model="mcp.country"
-                :validation-schema="schema.country"
-                :id="'country' + idSuffix"
-                :field-label="$t('Contractpartner.country')"
-              />
-            </div>
-          </div>
-          <div class="row pt-2">
-            <div class="col-xs-12">
-              <InputDate
-                v-model="mcp.validFrom"
-                :validation-schema="schema.validFrom"
-                :id="'validFrom' + idSuffix"
-                :field-label="$t('General.validFrom')"
-              />
-            </div>
-          </div>
-          <div class="row pt-2">
-            <div class="col-xs-12">
-              <InputDate
-                v-model="mcp.validTil"
-                :validation-schema="schema.validTil"
-                :id="'validTil' + idSuffix"
-                :field-label="$t('General.validTil')"
-              />
-            </div>
+
+          <InputStandard
+            v-model="mcp.country"
+            :validation-schema="schema.country"
+            :id="'country' + idSuffix"
+            :field-label="$t('Contractpartner.country')"
+          />
+
+          <div class="grid grid-cols-2 gap-4">
+            <InputDate
+              v-model="mcp.validFrom"
+              :validation-schema="schema.validFrom"
+              :id="'validFrom' + idSuffix"
+              :field-label="$t('General.validFrom')"
+            />
+            <InputDate
+              v-model="mcp.validTil"
+              :validation-schema="schema.validTil"
+              :id="'validTil' + idSuffix"
+              :field-label="$t('General.validTil')"
+            />
           </div>
         </div>
       </form>
     </template>
+
     <template #footer>
-      <button type="button" class="btn btn-secondary" @click="resetForm">
+      <Button type="button" variant="secondary" @click="resetForm">
         {{ $t("General.reset") }}
-      </button>
+      </Button>
+
       <ButtonSubmit
         :button-label="$t('General.save')"
         :form-id="'createContractpartnerForm' + idSuffix"
@@ -120,22 +100,24 @@ import { computed, ref, useTemplateRef } from "vue";
 import { useI18n } from "vue-i18n";
 import { coerce, date, number, string, ZodType } from "zod";
 
+import { Button } from "@/components/ui/button";
+
 import ButtonSubmit from "../ButtonSubmit.vue";
 import DivError from "../DivError.vue";
 import InputDate from "../InputDate.vue";
 import InputStandard from "../InputStandard.vue";
 import ModalVue from "../Modal.vue";
+import SelectPostingAccount from "../postingaccount/SelectPostingAccount.vue";
 
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { globErr } from "@/tools/views/ZodUtil";
 
 import type { Contractpartner } from "@/model/contractpartner/Contractpartner";
 import ContractpartnerService from "@/service/ContractpartnerService";
-import SelectPostingAccount from "../postingaccount/SelectPostingAccount.vue";
 
 const { t } = useI18n();
 
-defineProps({
+const props = defineProps({
   idSuffix: {
     type: String,
     default: "",
@@ -170,7 +152,7 @@ const schema: Partial<{ [key in keyof Contractpartner]: ZodType }> = {
 
 const mcp = ref({} as Contractpartner);
 const origMcp = ref({} as Contractpartner | undefined);
-const modalComponent = useTemplateRef<typeof ModalVue>('modalComponent');
+const modalComponent = useTemplateRef<typeof ModalVue>("modalComponent");
 const emit = defineEmits(["contractpartnerCreated", "contractpartnerUpdated"]);
 
 const { handleSubmit, values, setFieldTouched } = useForm();
@@ -203,28 +185,26 @@ const _show = async (_mcp?: Contractpartner) => {
 const createContractpartner = handleSubmit(() => {
   serverErrors.value = new Array<string>();
 
-  if (mcp.value.id > 0) {
-    //update
-    ContractpartnerService.updateContractpartner(mcp.value)
-      .then(() => {
-        modalComponent.value?._hide();
-        emit("contractpartnerUpdated", mcp.value);
-      })
-      .catch((backendError) => {
-        handleBackendError(backendError, serverErrors);
-      });
-  } else {
-    //create
-    ContractpartnerService.createContractpartner(mcp.value)
-      .then((contractpartner) => {
-        mcp.value = contractpartner;
-        modalComponent.value?._hide();
-        emit("contractpartnerCreated", mcp.value);
-      })
-      .catch((backendError) => {
-        handleBackendError(backendError, serverErrors);
-      });
-  }
+  const serviceCall =
+    mcp.value.id > 0
+      ? ContractpartnerService.updateContractpartner(mcp.value)
+      : ContractpartnerService.createContractpartner(mcp.value);
+
+  serviceCall
+    .then((result) => {
+      const isUpdate = mcp.value.id > 0;
+      if (!isUpdate) mcp.value = result as Contractpartner;
+
+      modalComponent.value?._hide();
+      emit(
+        isUpdate ? "contractpartnerUpdated" : "contractpartnerCreated",
+        mcp.value,
+      );
+    })
+    .catch((backendError) => {
+      handleBackendError(backendError, serverErrors);
+    });
 });
+
 defineExpose({ _show });
 </script>

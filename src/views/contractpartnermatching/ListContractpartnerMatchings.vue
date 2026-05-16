@@ -11,11 +11,11 @@
     @contractpartner-matching-deleted="reloadView"
   />
 
-  <div class="container-fluid text-center">
-    <div class="row justify-content-md-center">
-      <div class="col-xs-12 mb-4">
-        <h4>{{ $t("General.contractpartnerMatchings") }}</h4>
-      </div>
+  <div class="custom-container space-y-6">
+    <div class="text-center">
+      <h4 class="text-2xl font-bold">
+        {{ $t("General.contractpartnerMatchings") }}
+      </h4>
     </div>
 
     <DivFilter
@@ -24,7 +24,7 @@
       :placeholder="$t('ContractpartnerMatching.searchBy')"
       @createClicked="showCreateContractpartnerMatchingModal"
       ><template #right>
-        <div class="col-md-6 ms-2">
+        <div class="w-full md:w-[20rem]">
           <SelectContractpartner
             v-model="searchContractpartnerId"
             id-suffix="ContractpartnerMatching-searchContractpartner"
@@ -35,17 +35,25 @@
 
     <DivError :server-errors="serverErrors" />
 
-    <DivContentTable clazz="col-md-7 col-xs-12">
-      <thead>
-        <tr>
-          <th scope="col">{{ $t("ContractpartnerMatching.matchingText") }}</th>
-          <th scope="col">{{ $t("General.contractpartner") }}</th>
-          <th scope="col">{{ $t("Contractpartner.moneyflowComment") }}</th>
-          <th scope="col">{{ $t("General.postingAccount") }}</th>
-          <th scope="colgroup" colspan="2"></th>
-        </tr>
-      </thead>
-      <tbody>
+    <DivContentTable class="max-w-5xl">
+      <TableHeader>
+        <TableRow>
+          <TableHead class="font-bold border text-foreground text-center">{{
+            $t("ContractpartnerMatching.matchingText")
+          }}</TableHead>
+          <TableHead class="font-bold border text-foreground text-center">{{
+            $t("General.contractpartner")
+          }}</TableHead>
+          <TableHead class="font-bold border text-foreground text-center">{{
+            $t("Contractpartner.moneyflowComment")
+          }}</TableHead>
+          <TableHead class="font-bold border text-foreground text-center">{{
+            $t("General.postingAccount")
+          }}</TableHead>
+          <TableHead class="border" colspan="2"></TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
         <ListContractpartnerMatchingRowVue
           v-for="mcm in contractpartnerMatchings"
           :key="mcm.id"
@@ -53,7 +61,7 @@
           @edit-contractpartner-matching="editContractpartnerMatching"
           @delete-contractpartner-matching="deleteContractpartnerMatching"
         />
-      </tbody>
+      </TableBody>
     </DivContentTable>
   </div>
 </template>
@@ -67,6 +75,12 @@ import DivFilter from "@/components/DivFilter.vue";
 import CreateContractpartnerMatchingModalVue from "@/components/contractpartnermatching/CreateContractpartnerMatchingModal.vue";
 import DeleteContractpartnerMatchingModalVue from "@/components/contractpartnermatching/DeleteContractpartnerMatchingModal.vue";
 import ListContractpartnerMatchingRowVue from "@/components/contractpartnermatching/ListContractpartnerMatchingRow.vue";
+import {
+  TableBody,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 import type { ContractpartnerMatching } from "@/model/contractpartnermatching/ContractpartnerMatching";
 

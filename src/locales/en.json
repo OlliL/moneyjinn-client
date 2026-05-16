@@ -1,5 +1,8 @@
 {
     "General": {
+        "logout": "logout",
+        "profile": "profile",
+        "add": "add",
         "currency": "€",
         "etf": "ETF",
         "selectEtf": "select ETF...",
@@ -61,7 +64,8 @@
         "taskList": "task list",
         "importableMoneyflows": "There are moneyflows waiting to be imported!",
         "createSettlements": "There exists no monthly settlement for the previous month!",
-        "allDone": "It's all done!"
+        "allDone": "It's all done!",
+        "allDoneTitle": "Done!"
     },
     "Capitalsource": {
         "type": "type",
@@ -126,6 +130,7 @@
             "update": "update contractpartner account",
             "delete": "delete contractpartner account"
         },
+        "nothingFound": "No bank accounts found.",
         "validation": {
             "accountNumber": "Please specify the IBAN!",
             "accountNumberMax": "The IBAN must not exceed 22 characters!",
@@ -378,6 +383,7 @@
     },
     "Reports": {
         "title": {
+            "charts": "charts",
             "reports": "reports",
             "report": "moneyflows {month} {year}",
             "costReporting": "cost reporting",

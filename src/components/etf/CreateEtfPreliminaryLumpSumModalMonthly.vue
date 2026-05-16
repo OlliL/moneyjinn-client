@@ -5,10 +5,10 @@
         @submit.prevent="createEtfPreliminaryLumpSum"
         id="createEtfPreliminaryLumpSumForm"
       >
-        <div class="container-fluid">
+        <div class="space-y-2">
           <DivError :server-errors="serverErrors" />
-          <div class="row pt-2">
-            <div class="col-xl-9 col-xs-12">
+          <div class="grid grid-cols-1 xl:grid-cols-12 gap-2 pt-2">
+            <div class="xl:col-span-9">
               <SelectStandard
                 v-model="mep.etfId"
                 :validation-schema="schema.etfId"
@@ -17,7 +17,7 @@
                 :select-box-values="etfs"
               />
             </div>
-            <div class="col-xl-3 col-xs-12">
+            <div class="xl:col-span-3">
               <InputDate
                 v-model="year"
                 :validation-schema="schema.year"
@@ -27,8 +27,8 @@
               />
             </div>
           </div>
-          <div class="row pt-2">
-            <div class="col-md-6 col-xs-12">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-2 pt-2">
+            <div>
               <InputStandard
                 v-model="mep.amountJanuary"
                 :validation-schema="schema.amountJanuary"
@@ -41,13 +41,10 @@
                   })
                 "
               >
-                <template #icon
-                  ><span class="input-group-text"
-                    ><i class="bi bi-currency-euro"></i></span
-                ></template>
+                <template #icon><Euro class="h-4 w-4" /></template>
               </InputStandard>
             </div>
-            <div class="col-md-6 col-xs-12">
+            <div>
               <InputStandard
                 v-model="mep.amountFebruary"
                 :validation-schema="schema.amountFebruary"
@@ -60,15 +57,12 @@
                   })
                 "
               >
-                <template #icon
-                  ><span class="input-group-text"
-                    ><i class="bi bi-currency-euro"></i></span
-                ></template>
+                <template #icon><Euro class="h-4 w-4" /></template>
               </InputStandard>
             </div>
           </div>
-          <div class="row pt-2">
-            <div class="col-md-6 col-xs-12">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-2 pt-2">
+            <div>
               <InputStandard
                 v-model="mep.amountMarch"
                 :validation-schema="schema.amountMarch"
@@ -81,13 +75,10 @@
                   })
                 "
               >
-                <template #icon
-                  ><span class="input-group-text"
-                    ><i class="bi bi-currency-euro"></i></span
-                ></template>
+                <template #icon><Euro class="h-4 w-4" /></template>
               </InputStandard>
             </div>
-            <div class="col-md-6 col-xs-12">
+            <div>
               <InputStandard
                 v-model="mep.amountApril"
                 :validation-schema="schema.amountApril"
@@ -100,15 +91,12 @@
                   })
                 "
               >
-                <template #icon
-                  ><span class="input-group-text"
-                    ><i class="bi bi-currency-euro"></i></span
-                ></template>
+                <template #icon><Euro class="h-4 w-4" /></template>
               </InputStandard>
             </div>
           </div>
-          <div class="row pt-2">
-            <div class="col-md-6 col-xs-12">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-2 pt-2">
+            <div>
               <InputStandard
                 v-model="mep.amountMay"
                 :validation-schema="schema.amountMay"
@@ -121,13 +109,10 @@
                   })
                 "
               >
-                <template #icon
-                  ><span class="input-group-text"
-                    ><i class="bi bi-currency-euro"></i></span
-                ></template>
+                <template #icon><Euro class="h-4 w-4" /></template>
               </InputStandard>
             </div>
-            <div class="col-md-6 col-xs-12">
+            <div>
               <InputStandard
                 v-model="mep.amountJune"
                 :validation-schema="schema.amountJune"
@@ -140,15 +125,12 @@
                   })
                 "
               >
-                <template #icon
-                  ><span class="input-group-text"
-                    ><i class="bi bi-currency-euro"></i></span
-                ></template>
+                <template #icon><Euro class="h-4 w-4" /></template>
               </InputStandard>
             </div>
           </div>
-          <div class="row pt-2">
-            <div class="col-md-6 col-xs-12">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-2 pt-2">
+            <div>
               <InputStandard
                 v-model="mep.amountJuly"
                 :validation-schema="schema.amountJuly"
@@ -161,13 +143,10 @@
                   })
                 "
               >
-                <template #icon
-                  ><span class="input-group-text"
-                    ><i class="bi bi-currency-euro"></i></span
-                ></template>
+                <template #icon><Euro class="h-4 w-4" /></template>
               </InputStandard>
             </div>
-            <div class="col-md-6 col-xs-12">
+            <div>
               <InputStandard
                 v-model="mep.amountAugust"
                 :validation-schema="schema.amountAugust"
@@ -180,15 +159,12 @@
                   })
                 "
               >
-                <template #icon
-                  ><span class="input-group-text"
-                    ><i class="bi bi-currency-euro"></i></span
-                ></template>
+                <template #icon><Euro class="h-4 w-4" /></template>
               </InputStandard>
             </div>
           </div>
-          <div class="row pt-2">
-            <div class="col-md-6 col-xs-12">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-2 pt-2">
+            <div>
               <InputStandard
                 v-model="mep.amountSeptember"
                 :validation-schema="schema.amountSeptember"
@@ -201,13 +177,10 @@
                   })
                 "
               >
-                <template #icon
-                  ><span class="input-group-text"
-                    ><i class="bi bi-currency-euro"></i></span
-                ></template>
+                <template #icon><Euro class="h-4 w-4" /></template>
               </InputStandard>
             </div>
-            <div class="col-md-6 col-xs-12">
+            <div>
               <InputStandard
                 v-model="mep.amountOctober"
                 :validation-schema="schema.amountOctober"
@@ -220,15 +193,12 @@
                   })
                 "
               >
-                <template #icon
-                  ><span class="input-group-text"
-                    ><i class="bi bi-currency-euro"></i></span
-                ></template>
+                <template #icon><Euro class="h-4 w-4" /></template>
               </InputStandard>
             </div>
           </div>
-          <div class="row pt-2">
-            <div class="col-md-6 col-xs-12">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-2 pt-2">
+            <div>
               <InputStandard
                 v-model="mep.amountNovember"
                 :validation-schema="schema.amountNovember"
@@ -241,13 +211,10 @@
                   })
                 "
               >
-                <template #icon
-                  ><span class="input-group-text"
-                    ><i class="bi bi-currency-euro"></i></span
-                ></template>
+                <template #icon><Euro class="h-4 w-4" /></template>
               </InputStandard>
             </div>
-            <div class="col-md-6 col-xs-12">
+            <div>
               <InputStandard
                 v-model="mep.amountDecember"
                 :validation-schema="schema.amountDecember"
@@ -260,10 +227,7 @@
                   })
                 "
               >
-                <template #icon
-                  ><span class="input-group-text"
-                    ><i class="bi bi-currency-euro"></i></span
-                ></template>
+                <template #icon><Euro class="h-4 w-4" /></template>
               </InputStandard>
             </div>
           </div>
@@ -271,9 +235,9 @@
       </form>
     </template>
     <template #footer>
-      <button type="button" class="btn btn-secondary" @click="resetForm">
+      <Button type="button" variant="secondary" @click="resetForm">
         {{ $t("General.reset") }}
-      </button>
+      </Button>
       <ButtonSubmit
         :button-label="$t('General.save')"
         form-id="createEtfPreliminaryLumpSumForm"
@@ -287,6 +251,7 @@ import { useForm } from "vee-validate";
 import { computed, ref, useTemplateRef } from "vue";
 import { useI18n } from "vue-i18n";
 import { date, type ZodType, number } from "zod";
+import { Euro } from "lucide-vue-next";
 
 import ButtonSubmit from "../ButtonSubmit.vue";
 import DivError from "../DivError.vue";
@@ -294,6 +259,8 @@ import InputDate from "../InputDate.vue";
 import InputStandard from "../InputStandard.vue";
 import ModalVue from "../Modal.vue";
 import SelectStandard from "../SelectStandard.vue";
+
+import { Button } from "@/components/ui/button";
 
 import { amountSchema, globErr } from "@/tools/views/ZodUtil";
 import { handleBackendError } from "@/tools/views/HandleBackendError";

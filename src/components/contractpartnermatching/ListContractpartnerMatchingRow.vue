@@ -1,24 +1,48 @@
 <template>
-  <tr>
-    <td class="text-start">{{ mcm.matchingText }}</td>
-    <td class="text-start">{{ mcm.contractpartnerName }}</td>
-    <td class="text-start">{{ mcm.moneyflowComment }}</td>
-    <td class="text-start">{{ mcm.postingAccountName }}</td>
-    <td class="text-center">
-      <span class="link-primary" @click="editContractpartnerMatching"
-        ><i class="bi bi-pencil-square"></i
-      ></span>
-    </td>
-    <td class="text-center">
-      <span class="link-primary" @click="deleteContractpartnerMatching"
-        ><i class="bi bi-trash"></i
-      ></span>
-    </td>
-  </tr>
+  <TableRow>
+    <TableCell class="text-left border py-1 px-2">
+      {{ mcm.matchingText }}
+    </TableCell>
+    <TableCell class="text-left border py-1 px-2">
+      {{ mcm.contractpartnerName }}
+    </TableCell>
+    <TableCell class="text-left border py-1 px-2">
+      {{ mcm.moneyflowComment }}
+    </TableCell>
+    <TableCell class="text-left border py-1 px-2">
+      {{ mcm.postingAccountName }}
+    </TableCell>
+    <TableCell class="w-0 border whitespace-nowrap text-center p-0">
+      <Button
+        variant="ghost"
+        size="icon"
+        @click="editContractpartnerMatching"
+        :title="$t('General.edit')"
+        class="h-8 w-8 cursor-pointer"
+      >
+        <Pencil class="h-4 w-4" />
+      </Button>
+    </TableCell>
+    <TableCell class="w-0 border whitespace-nowrap text-center p-0">
+      <Button
+        variant="ghost"
+        size="icon"
+        @click="deleteContractpartnerMatching"
+        :title="$t('General.delete')"
+        class="h-8 w-8 cursor-pointer"
+      >
+        <Trash2 class="h-4 w-4" />
+      </Button>
+    </TableCell>
+  </TableRow>
 </template>
 
 <script lang="ts" setup>
 import type { PropType } from "vue";
+import { Pencil, Trash2 } from "lucide-vue-next";
+
+import { TableCell, TableRow } from "@/components/ui/table";
+import { Button } from "@/components/ui/button";
 
 import type { ContractpartnerMatching } from "@/model/contractpartnermatching/ContractpartnerMatching";
 

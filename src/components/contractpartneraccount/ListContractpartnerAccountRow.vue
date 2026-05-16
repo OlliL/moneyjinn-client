@@ -1,21 +1,46 @@
 <template>
-  <tr>
-    <td class="text-start">{{ mca.accountNumber }}</td>
-    <td class="text-start">{{ mca.bankCode }}</td>
-    <td class="text-center">
-      <span class="link-primary" @click="editContractpartnerAccount"
-        ><i class="bi bi-pencil-square"></i
-      ></span>
-    </td>
-    <td class="text-center">
-      <span class="link-primary" @click="deleteContractpartnerAccount"
-        ><i class="bi bi-trash"></i
-      ></span>
-    </td>
-  </tr>
+  <TableRow>
+    <TableCell class="text-left border">
+      {{ mca.accountNumber }}
+    </TableCell>
+    <TableCell class="text-left border">
+      {{ mca.bankCode }}
+    </TableCell>
+    <TableCell class="text-right border">
+      <Button
+        variant="ghost"
+        size="icon"
+        @click="editContractpartnerAccount"
+        :title="$t('General.edit')"
+        class="group hover:bg-transparent"
+      >
+        <Pencil
+          class="h-4 w-4 text-muted-foreground group-hover:text-blue-500 transition-colors"
+        />
+      </Button>
+    </TableCell>
+    <TableCell class="text-right border">
+      <Button
+        variant="ghost"
+        size="icon"
+        @click="deleteContractpartnerAccount"
+        :title="$t('General.delete')"
+        class="group hover:bg-transparent"
+      >
+        <Trash2
+          class="h-4 w-4 text-muted-foreground group-hover:text-destructive transition-colors"
+        />
+      </Button>
+    </TableCell>
+  </TableRow>
 </template>
+
 <script lang="ts" setup>
 import type { PropType } from "vue";
+import { Pencil, Trash2 } from "lucide-vue-next";
+
+import { TableCell, TableRow } from "@/components/ui/table";
+import { Button } from "@/components/ui/button";
 
 import type { ContractpartnerAccount } from "@/model/contractpartneraccount/ContractpartnerAccount";
 
@@ -34,6 +59,7 @@ const emit = defineEmits([
 const deleteContractpartnerAccount = () => {
   emit("deleteContractpartnerAccount", props.mca);
 };
+
 const editContractpartnerAccount = () => {
   emit("editContractpartnerAccount", props.mca);
 };

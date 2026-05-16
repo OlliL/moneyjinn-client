@@ -11,11 +11,9 @@
     @pre-def-moneyflow-deleted="reloadView"
   />
 
-  <div class="container-fluid text-center">
-    <div class="row justify-content-md-center">
-      <div class="col-xs-12 mb-4">
-        <h4>{{ $t("General.preDefMoneyflows") }}</h4>
-      </div>
+  <div class="custom-container space-y-6">
+    <div class="text-center">
+      <h4 class="text-2xl font-bold">{{ $t("General.preDefMoneyflows") }}</h4>
     </div>
 
     <DivFilter
@@ -28,20 +26,36 @@
     <DivError :server-errors="serverErrors" />
 
     <DivContentTable>
-      <thead>
-        <tr>
-          <th scope="col">{{ $t("General.amount") }}</th>
-          <th scope="col">{{ $t("General.contractpartner") }}</th>
-          <th scope="col">{{ $t("General.comment") }}</th>
-          <th scope="col">{{ $t("General.postingAccount") }}</th>
-          <th scope="col">{{ $t("General.capitalsource") }}</th>
-          <th scope="col">{{ $t("PreDefMoneyflow.onceAMonthShort") }}</th>
-          <th scope="col">{{ $t("PreDefMoneyflow.createDate") }}</th>
-          <th scope="col">{{ $t("PreDefMoneyflow.lastUsed") }}</th>
-          <th scope="colgroup" colspan="2"></th>
-        </tr>
-      </thead>
-      <tbody>
+      <TableHeader>
+        <TableRow>
+          <TableHead class="font-bold border text-foreground text-center">{{
+            $t("General.amount")
+          }}</TableHead>
+          <TableHead class="font-bold border text-foreground text-center">{{
+            $t("General.contractpartner")
+          }}</TableHead>
+          <TableHead class="font-bold border text-foreground text-center">{{
+            $t("General.comment")
+          }}</TableHead>
+          <TableHead class="font-bold border text-foreground text-center">{{
+            $t("General.postingAccount")
+          }}</TableHead>
+          <TableHead class="font-bold border text-foreground text-center">{{
+            $t("General.capitalsource")
+          }}</TableHead>
+          <TableHead class="font-bold border text-foreground text-center">{{
+            $t("PreDefMoneyflow.onceAMonthShort")
+          }}</TableHead>
+          <TableHead class="font-bold border text-foreground text-center">{{
+            $t("PreDefMoneyflow.createDate")
+          }}</TableHead>
+          <TableHead class="font-bold border text-foreground text-center">{{
+            $t("PreDefMoneyflow.lastUsed")
+          }}</TableHead>
+          <TableHead class="border" colspan="2"></TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
         <ListPreDefMoneyflowRowVue
           v-for="mpm in preDefMoneyflows"
           :key="mpm.id"
@@ -49,7 +63,7 @@
           @edit-pre-def-moneyflow="editPreDefMoneyflow"
           @delete-pre-def-moneyflow="deletePreDefMoneyflow"
         />
-      </tbody>
+      </TableBody>
     </DivContentTable>
   </div>
 </template>
@@ -63,6 +77,12 @@ import DivFilter from "@/components/DivFilter.vue";
 import CreatePreDefMoneyflowModalVue from "@/components/predefmoneyflow/CreatePreDefMoneyflowModal.vue";
 import DeletePreDefMoneyflowModalVue from "@/components/predefmoneyflow/DeletePreDefMoneyflowModal.vue";
 import ListPreDefMoneyflowRowVue from "@/components/predefmoneyflow/ListPreDefMoneyflowRow.vue";
+import {
+  TableBody,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 import type { PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
 

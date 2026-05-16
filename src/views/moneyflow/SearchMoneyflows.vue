@@ -10,212 +10,193 @@
   />
   <ListMoneyflowModal ref="listModal" />
 
-  <div class="container-fluid text-center">
-    <div class="row justify-content-md-center">
-      <div class="col-xs-12 mb-4">
-        <h4>{{ $t("Moneyflow.title.search") }}</h4>
-      </div>
+  <div class="custom-container space-y-6">
+    <div class="text-center">
+      <h4 class="text-2xl font-bold">{{ $t("Moneyflow.title.search") }}</h4>
     </div>
-    <div class="row justify-content-md-center mb-4">
-      <div class="col-xxl-9 col-xs-12">
-        <div class="card w-100 bg-light">
-          <div class="card-body">
-            <form @submit.prevent="searchMoneyflows" id="searchMoneyflowsForm">
-              <div class="container-fluid">
-                <DivError :server-errors="serverErrors" />
-                <div class="row no-gutters flex-lg-nowrap mb-4">
-                  <div class="col-md-2 col-xs-12">
-                    <InputDate
-                      v-model="startDate"
-                      :validation-schema="schema.startDate"
-                      id="startDate"
-                      :field-label="$t('General.startDate')"
-                    />
-                  </div>
-                  <div class="col-md-2 col-xs-12">
-                    <InputDate
-                      v-model="endDate"
-                      :validation-schema="schema.endDate"
-                      id="endDate"
-                      :field-label="$t('General.endDate')"
-                    />
-                  </div>
-                  <div class="col-md-4 col-xs-12">
-                    <SelectContractpartner
-                      v-model="contractpartnerId"
-                      :validation-schema-ref="schema.searchCriteria"
-                      id-suffix="SearchMoneyflows"
-                      :field-label="$t('General.contractpartner')"
-                    />
-                  </div>
-                  <div class="col-md-4 col-xs-12">
-                    <SelectPostingAccount
-                      v-model="postingAccountId"
-                      :validation-schema-ref="schema.searchCriteria"
-                      id-suffix="SearchMoneyflows"
-                      :field-label="$t('General.postingAccount')"
-                    />
-                  </div>
-                </div>
-                <div class="row no-gutters flex-lg-nowrap mb-4">
-                  <div class="col-md-4 col-xs-12">
-                    <InputStandard
-                      v-model="comment"
-                      :validation-schema-ref="schema.searchCriteria"
-                      id="comment"
-                      :field-label="$t('General.comment')"
-                    />
-                  </div>
-                  <div
-                    class="col-md-1 col-xs-12 justify-content-start d-flex align-items-center"
-                  >
-                    <div class="form-check form-check-inline form-switch">
-                      <input
-                        class="form-check-input"
-                        type="checkbox"
-                        v-model="featureEqual"
-                        id="featureEqual"
-                      />
-                      <label class="form-check-label" for="featureEqual">
-                        {{ $t("Moneyflow.equal") }}
-                      </label>
-                    </div>
-                  </div>
-                  <div
-                    class="col-md-3 col-xs-12 justify-content-start d-flex align-items-center"
-                  >
-                    <div class="form-check form-check-inline form-switch">
-                      <input
-                        class="form-check-input"
-                        type="checkbox"
-                        v-model="featureCaseSensitive"
-                        id="featureCaseSensitive"
-                      />
-                      <label
-                        class="form-check-label"
-                        for="featureCaseSensitive"
-                      >
-                        {{ $t("Moneyflow.caseSensitivity") }}
-                      </label>
-                    </div>
-                  </div>
-                  <div
-                    class="col-md-2 col-xs-12 justify-content-start d-flex align-items-center"
-                  >
-                    <div class="form-check form-check-inline form-switch">
-                      <input
-                        class="form-check-input"
-                        type="checkbox"
-                        v-model="featureRegexp"
-                        id="featureRegexp"
-                      />
-                      <label class="form-check-label" for="featureRegexp">
-                        {{ $t("Moneyflow.regexp") }}
-                      </label>
-                    </div>
-                  </div>
-                  <div
-                    class="col-md-2 col-xs-12 justify-content-start d-flex align-items-center"
-                  >
-                    <div class="form-check form-check-inline form-switch">
-                      <input
-                        class="form-check-input"
-                        type="checkbox"
-                        v-model="featureOnlyMinusAmounts"
-                        id="featureOnlyMinusAmounts"
-                      />
-                      <label
-                        class="form-check-label"
-                        for="featureOnlyMinusAmounts"
-                      >
-                        {{ $t("Moneyflow.onlyNegative") }}
-                      </label>
-                    </div>
-                  </div>
-                </div>
-                <div class="row no-gutters mb-4">
-                  <div
-                    class="col-md-3 col-xs-12 mx-auto d-flex align-items-center justify-content-center mb-4 mb-md-0"
-                  >
-                    <ButtonSubmit
-                      :button-label="$t('Moneyflow.search')"
-                      form-id="searchMoneyflowsForm"
-                    />
-                    <button
-                      type="button"
-                      class="btn btn-secondary mx-2"
-                      @click="resetForm"
-                    >
-                      {{ $t("General.reset") }}
-                    </button>
-                  </div>
-                  <div class="col-md-3 col-xs-12">
-                    <SelectStandard
-                      v-model="groupByFirst"
-                      id="groupByFirst"
-                      :field-label="$t('Moneyflow.1stGroupingCriteria')"
-                      :select-box-values="groupValues"
-                    />
-                  </div>
-                  <div class="col-md-3 col-xs-12">
-                    <SelectStandard
-                      v-model="groupBySecond"
-                      id="groupBySecond"
-                      :field-label="$t('Moneyflow.2ndGroupingCriteria')"
-                      :select-box-values="groupValues"
-                    />
-                  </div>
-                  <div class="col-md-3 col-xs-12">
-                    <SelectStandard
-                      v-model="orderBy"
-                      id="orderBy"
-                      :field-label="$t('Moneyflow.orderBy')"
-                      :select-box-values="orderValues"
-                    />
-                  </div>
-                </div>
+    <div class="flex justify-center">
+      <div
+        class="w-full max-w-7xl rounded-lg border bg-card text-card-foreground shadow-sm bg-muted p-4"
+      >
+        <form @submit.prevent="searchMoneyflows" id="searchMoneyflowsForm">
+          <div class="space-y-4">
+            <DivError :server-errors="serverErrors" />
+            <div class="grid gap-3 md:grid-cols-12">
+              <div class="md:col-span-2">
+                <InputDate
+                  v-model="startDate"
+                  :validation-schema="schema.startDate"
+                  id="startDate"
+                  :field-label="$t('General.startDate')"
+                />
               </div>
-            </form>
+              <div class="md:col-span-2">
+                <InputDate
+                  v-model="endDate"
+                  :validation-schema="schema.endDate"
+                  id="endDate"
+                  :field-label="$t('General.endDate')"
+                />
+              </div>
+              <div class="md:col-span-4">
+                <SelectContractpartner
+                  v-model="contractpartnerId"
+                  :validation-schema-ref="schema.searchCriteria"
+                  id-suffix="SearchMoneyflows"
+                  :field-label="$t('General.contractpartner')"
+                />
+              </div>
+              <div class="md:col-span-4">
+                <SelectPostingAccount
+                  v-model="postingAccountId"
+                  :validation-schema-ref="schema.searchCriteria"
+                  id-suffix="SearchMoneyflows"
+                  :field-label="$t('General.postingAccount')"
+                />
+              </div>
+            </div>
+            <div class="grid gap-3 md:grid-cols-12 items-center">
+              <div class="md:col-span-4">
+                <InputStandard
+                  v-model="comment"
+                  :validation-schema-ref="schema.searchCriteria"
+                  id="comment"
+                  :field-label="$t('General.comment')"
+                />
+              </div>
+              <div class="md:col-span-1 flex items-center gap-2 text-left">
+                <input
+                  class="h-4 w-4"
+                  type="checkbox"
+                  v-model="featureEqual"
+                  id="featureEqual"
+                />
+                <label for="featureEqual">
+                  {{ $t("Moneyflow.equal") }}
+                </label>
+              </div>
+              <div class="md:col-span-3 flex items-center gap-2 text-left">
+                <input
+                  class="h-4 w-4"
+                  type="checkbox"
+                  v-model="featureCaseSensitive"
+                  id="featureCaseSensitive"
+                />
+                <label for="featureCaseSensitive">
+                  {{ $t("Moneyflow.caseSensitivity") }}
+                </label>
+              </div>
+              <div class="md:col-span-2 flex items-center gap-2 text-left">
+                <input
+                  class="h-4 w-4"
+                  type="checkbox"
+                  v-model="featureRegexp"
+                  id="featureRegexp"
+                />
+                <label for="featureRegexp">{{ $t("Moneyflow.regexp") }}</label>
+              </div>
+              <div class="md:col-span-2 flex items-center gap-2 text-left">
+                <input
+                  class="h-4 w-4"
+                  type="checkbox"
+                  v-model="featureOnlyMinusAmounts"
+                  id="featureOnlyMinusAmounts"
+                />
+                <label for="featureOnlyMinusAmounts">
+                  {{ $t("Moneyflow.onlyNegative") }}
+                </label>
+              </div>
+            </div>
+            <div class="grid gap-3 md:grid-cols-12 items-end">
+              <div
+                class="md:col-span-3 mx-auto flex items-center justify-center gap-2"
+              >
+                <ButtonSubmit
+                  :button-label="$t('Moneyflow.search')"
+                  form-id="searchMoneyflowsForm"
+                />
+                <Button type="button" variant="secondary" @click="resetForm">
+                  {{ $t("General.reset") }}
+                </Button>
+              </div>
+              <div class="md:col-span-3">
+                <SelectStandard
+                  v-model="groupByFirst"
+                  id="groupByFirst"
+                  :field-label="$t('Moneyflow.1stGroupingCriteria')"
+                  :select-box-values="groupValues"
+                />
+              </div>
+              <div class="md:col-span-3">
+                <SelectStandard
+                  v-model="groupBySecond"
+                  id="groupBySecond"
+                  :field-label="$t('Moneyflow.2ndGroupingCriteria')"
+                  :select-box-values="groupValues"
+                />
+              </div>
+              <div class="md:col-span-3">
+                <SelectStandard
+                  v-model="orderBy"
+                  id="orderBy"
+                  :field-label="$t('Moneyflow.orderBy')"
+                  :select-box-values="orderValues"
+                />
+              </div>
+            </div>
           </div>
-        </div>
+        </form>
       </div>
     </div>
-    <div class="row justify-content-md-center" v-if="dataLoaded">
-      <div class="col-xxl-9 col-xs-12">
-        <table class="table table-striped table-bordered table-hover">
-          <thead>
-            <tr>
-              <th scope="col"></th>
-              <th scope="col" v-if="colBookingMonth">
-                {{ $t("Moneyflow.bookingMonth") }}
-              </th>
-              <th scope="col" v-if="colBookingYear">
-                {{ $t("Moneyflow.bookingYear") }}
-              </th>
-              <th scope="col" v-if="colContractpartner">
-                {{ $t("General.contractpartner") }}
-              </th>
-              <th scope="col">{{ $t("General.amount") }}</th>
-              <th scope="col">{{ $t("General.comment") }}</th>
-            </tr>
-          </thead>
-          <tbody>
-            <SearchMoneyflowResultGroupVue
-              v-for="[index, moneyflowGroup] in moneyflowGroups"
-              :key="index.toString()"
-              :moneyflow-group="moneyflowGroup"
-              :moneyflow-group-key="index.toString()"
-              :col-booking-month="colBookingMonth"
-              :col-booking-year="colBookingYear"
-              :col-contractpartner="colContractpartner"
-              @delete-moneyflow="deleteMoneyflow"
-              @edit-moneyflow="editMoneyflow"
-              @list-moneyflow="listMoneyflow"
-              @show-receipt="showReceipt"
-            />
-          </tbody>
-        </table>
-      </div>
+    <div class="flex justify-center" v-if="dataLoaded">
+      <DivContentTable :alternate-row-background="false" class="max-w-7xl">
+        <TableHeader>
+          <TableRow>
+            <TableHead
+              class="font-bold border text-foreground text-center"
+            ></TableHead>
+            <TableHead
+              class="font-bold border text-foreground"
+              v-if="colBookingMonth"
+            >
+              {{ $t("Moneyflow.bookingMonth") }}
+            </TableHead>
+            <TableHead
+              class="font-bold border text-foreground"
+              v-if="colBookingYear"
+            >
+              {{ $t("Moneyflow.bookingYear") }}
+            </TableHead>
+            <TableHead
+              class="font-bold border text-foreground"
+              v-if="colContractpartner"
+            >
+              {{ $t("General.contractpartner") }}
+            </TableHead>
+            <TableHead class="font-bold border text-foreground text-center">{{
+              $t("General.amount")
+            }}</TableHead>
+            <TableHead class="font-bold border text-foreground text-center">{{
+              $t("General.comment")
+            }}</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          <SearchMoneyflowResultGroupVue
+            v-for="[index, moneyflowGroup] in moneyflowGroups"
+            :key="index.toString()"
+            :moneyflow-group="moneyflowGroup"
+            :moneyflow-group-key="index.toString()"
+            :col-booking-month="colBookingMonth"
+            :col-booking-year="colBookingYear"
+            :col-contractpartner="colContractpartner"
+            @delete-moneyflow="deleteMoneyflow"
+            @edit-moneyflow="editMoneyflow"
+            @list-moneyflow="listMoneyflow"
+            @show-receipt="showReceipt"
+          />
+        </TableBody>
+      </DivContentTable>
     </div>
   </div>
 </template>
@@ -226,6 +207,7 @@ import { useI18n } from "vue-i18n";
 import { any, date, type ZodTypeAny } from "zod";
 
 import ButtonSubmit from "@/components/ButtonSubmit.vue";
+import DivContentTable from "@/components/DivContentTable.vue";
 import DeleteMoneyflowModalVue from "@/components/moneyflow/DeleteMoneyflowModal.vue";
 import DivError from "@/components/DivError.vue";
 import EditMoneyflowModalVue from "@/components/moneyflow/EditMoneyflowModal.vue";
@@ -248,6 +230,13 @@ import type { SelectBoxValue } from "@/model/SelectBoxValue";
 import MoneyflowService from "@/service/MoneyflowService";
 import ListMoneyflowModal from "@/components/moneyflow/ListMoneyflowModal.vue";
 import ReceiptModal from "@/components/reports/ReceiptModal.vue";
+import { Button } from "@/components/ui/button";
+import {
+  TableBody,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 const { t } = useI18n();
 

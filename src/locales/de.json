@@ -1,5 +1,8 @@
 {
     "General": {
+        "logout": "Abmelden",
+        "profile": "Profil",
+        "add": "Hinzufügen",
         "currency": "€",
         "etf": "ETF",
         "selectEtf": "ETF auswählen...",
@@ -61,7 +64,8 @@
         "taskList": "Aufgabenliste",
         "importableMoneyflows": "Es liegen noch nicht bearbeitete importierte Geldbewegungen vor!",
         "createSettlements": "Für den vergangenen Monat existiert kein Monatsabschluß!",
-        "allDone": "Alles erledigt!"
+        "allDone": "Alles erledigt!",
+        "allDoneTitle": "Erledigt!"
     },
     "Capitalsource": {
         "type": "Typ",
@@ -126,6 +130,7 @@
             "update": "Vertragspartnerkonto bearbeiten",
             "delete": "Vertragspartnerkonto löschen"
         },
+        "nothingFound": "Keine Kontoverbindungen gefunden.",
         "validation": {
             "accountNumber": "Bitte IBAN angeben!",
             "accountNumberMax": "Die IBAN darf maximal 22 Stellen haben!",
@@ -378,6 +383,7 @@
     },
     "Reports": {
         "title": {
+            "charts": "Auswertungen",
             "reports": "Reports",
             "report": "Geldbewegungen {month} {year}",
             "costReporting": "Ausgabenauswertung",
