@@ -28,10 +28,10 @@ const amountClass = computed(() => {
 });
 
 const amountString = computed(() => {
-  return props.amount !== undefined
-    ? formatNumber(props.amount, props.decimalPlaces) +
+  return props.amount === undefined
+    ? ""
+    : formatNumber(props.amount, props.decimalPlaces) +
         " " +
-        t("General.currency")
-    : "";
+        t("General.currency");
 });
 </script>

@@ -26,7 +26,9 @@
     <TableCell class="text-right">
       <u><SpanAmount :amount="profit" v-if="profit" /></u>
     </TableCell>
-    <TableCell class="text-right hidden md:table-cell">{{ pricesTimestampString }}</TableCell>
+    <TableCell class="text-right hidden md:table-cell">{{
+      pricesTimestampString
+    }}</TableCell>
   </TableRow>
 </template>
 

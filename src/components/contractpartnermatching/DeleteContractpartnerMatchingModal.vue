@@ -9,25 +9,33 @@
         <Table>
           <TableBody>
             <TableRow>
-              <TableCell class="font-bold bg-primary/10 w-40 whitespace-normal text-foreground border-r">
+              <TableCell
+                class="font-bold bg-primary/10 w-40 whitespace-normal text-foreground border-r"
+              >
                 {{ $t("ContractpartnerMatching.matchingText") }}
               </TableCell>
               <TableCell>{{ mcm.matchingText }}</TableCell>
             </TableRow>
             <TableRow>
-              <TableCell class="font-bold bg-primary/10 w-40 whitespace-normal text-foreground border-r">
+              <TableCell
+                class="font-bold bg-primary/10 w-40 whitespace-normal text-foreground border-r"
+              >
                 {{ $t("General.contractpartner") }}
               </TableCell>
               <TableCell>{{ mcm.contractpartnerName }}</TableCell>
             </TableRow>
             <TableRow>
-              <TableCell class="font-bold bg-primary/10 w-40 whitespace-normal text-foreground border-r">
+              <TableCell
+                class="font-bold bg-primary/10 w-40 whitespace-normal text-foreground border-r"
+              >
                 {{ $t("Contractpartner.moneyflowComment") }}
               </TableCell>
               <TableCell>{{ mcm.moneyflowComment }}</TableCell>
             </TableRow>
             <TableRow>
-              <TableCell class="font-bold bg-primary/10 w-40 whitespace-normal text-foreground border-r">
+              <TableCell
+                class="font-bold bg-primary/10 w-40 whitespace-normal text-foreground border-r"
+              >
                 {{ $t("General.postingAccount") }}
               </TableCell>
               <TableCell>{{ mcm.postingAccountName }}</TableCell>
@@ -37,7 +45,11 @@
       </div>
     </template>
     <template #footer>
-      <Button variant="destructive" class="flex items-center gap-2 rounded-md px-6" @click="deleteContractpartnerMatching">
+      <Button
+        variant="destructive"
+        class="flex items-center gap-2 rounded-md px-6"
+        @click="deleteContractpartnerMatching"
+      >
         <Trash2 class="h-4 w-4" />
         {{ $t("General.delete") }}
       </Button>
@@ -88,4 +100,3 @@ const deleteContractpartnerMatching = () => {
 
 defineExpose({ _show });
 </script>
-

@@ -6,7 +6,10 @@
         <Table>
           <TableBody>
             <TableRow>
-              <TableCell class="font-bold bg-primary/10 w-40 whitespace-normal text-foreground border-r">{{ $t("General.name") }}</TableCell>
+              <TableCell
+                class="font-bold bg-primary/10 w-40 whitespace-normal text-foreground border-r"
+                >{{ $t("General.name") }}</TableCell
+              >
               <TableCell>{{ mpa.name }}</TableCell>
             </TableRow>
           </TableBody>
@@ -14,7 +17,11 @@
       </div>
     </template>
     <template #footer>
-      <Button variant="destructive" class="flex items-center gap-2 rounded-md px-6" @click="deletePostingAccount">
+      <Button
+        variant="destructive"
+        class="flex items-center gap-2 rounded-md px-6"
+        @click="deletePostingAccount"
+      >
         <Trash2 class="h-4 w-4" />
         {{ $t("General.delete") }}
       </Button>
@@ -65,4 +72,3 @@ const deletePostingAccount = () => {
 
 defineExpose({ _show });
 </script>
-

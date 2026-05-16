@@ -46,7 +46,7 @@ const serverErrors = ref(new Array<string>());
 const month = ref(0);
 const monthName = ref("");
 const year = ref(0);
-const modalComponent = useTemplateRef<typeof ModalVue>('modalComponent');
+const modalComponent = useTemplateRef<typeof ModalVue>("modalComponent");
 const emit = defineEmits(["monthlySettlementDeleted"]);
 
 const _show = (_year: number, _month: number) => {
@@ -60,10 +60,7 @@ const _show = (_year: number, _month: number) => {
 const deleteMonthlySettlement = () => {
   serverErrors.value = new Array<string>();
 
-  MonthlySettlementService.deleteMonthlySettlement(
-    year.value,
-    month.value,
-  )
+  MonthlySettlementService.deleteMonthlySettlement(year.value, month.value)
     .then(() => {
       modalComponent.value?._hide();
       emit("monthlySettlementDeleted", year.value, month.value);

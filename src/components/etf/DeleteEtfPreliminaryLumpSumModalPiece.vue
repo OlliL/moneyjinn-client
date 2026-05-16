@@ -9,23 +9,38 @@
         <Table>
           <TableBody>
             <TableRow>
-              <TableCell class="font-bold bg-primary/10 w-40 whitespace-normal text-foreground border-r">{{ $t("General.etf") }}</TableCell>
+              <TableCell
+                class="font-bold bg-primary/10 w-40 whitespace-normal text-foreground border-r"
+                >{{ $t("General.etf") }}</TableCell
+              >
               <TableCell>{{ etfName }}</TableCell>
             </TableRow>
             <TableRow>
-              <TableCell class="font-bold bg-primary/10 w-40 whitespace-normal text-foreground border-r">{{ $t("General.year") }}</TableCell>
+              <TableCell
+                class="font-bold bg-primary/10 w-40 whitespace-normal text-foreground border-r"
+                >{{ $t("General.year") }}</TableCell
+              >
               <TableCell>{{ etfPreliminaryLumpSum.year }}</TableCell>
             </TableRow>
             <TableRow>
-              <TableCell class="font-bold bg-primary/10 w-40 whitespace-normal text-foreground border-r">{{ $t("ETFPreliminaryLumpSum.price") }}</TableCell>
-              <TableCell><SpanAmount :amount="etfPreliminaryLumpSum.amountPerPiece" /></TableCell>
+              <TableCell
+                class="font-bold bg-primary/10 w-40 whitespace-normal text-foreground border-r"
+                >{{ $t("ETFPreliminaryLumpSum.price") }}</TableCell
+              >
+              <TableCell
+                ><SpanAmount :amount="etfPreliminaryLumpSum.amountPerPiece"
+              /></TableCell>
             </TableRow>
           </TableBody>
         </Table>
       </div>
     </template>
     <template #footer>
-      <Button variant="destructive" class="flex items-center gap-2 rounded-md px-6" @click="deleteEtfPreliminaryLumpSum">
+      <Button
+        variant="destructive"
+        class="flex items-center gap-2 rounded-md px-6"
+        @click="deleteEtfPreliminaryLumpSum"
+      >
         <Trash2 class="h-4 w-4" />
         {{ $t("General.delete") }}
       </Button>
@@ -83,4 +98,3 @@ const deleteEtfPreliminaryLumpSum = () => {
 
 defineExpose({ _show });
 </script>
-

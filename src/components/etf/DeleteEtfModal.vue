@@ -6,39 +6,70 @@
         <Table>
           <TableBody>
             <TableRow>
-              <TableCell class="font-bold bg-primary/10 w-40 whitespace-normal text-foreground border-r">{{ $t("General.name") }}</TableCell>
+              <TableCell
+                class="font-bold bg-primary/10 w-40 whitespace-normal text-foreground border-r"
+                >{{ $t("General.name") }}</TableCell
+              >
               <TableCell>{{ etf.name }}</TableCell>
             </TableRow>
             <TableRow>
-              <TableCell class="font-bold bg-primary/10 w-40 whitespace-normal text-foreground border-r">{{ $t("ETF.isin") }}</TableCell>
+              <TableCell
+                class="font-bold bg-primary/10 w-40 whitespace-normal text-foreground border-r"
+                >{{ $t("ETF.isin") }}</TableCell
+              >
               <TableCell>{{ etf.isin }}</TableCell>
             </TableRow>
             <TableRow>
-              <TableCell class="font-bold bg-primary/10 w-40 whitespace-normal text-foreground border-r">{{ $t("ETF.wkn") }}</TableCell>
+              <TableCell
+                class="font-bold bg-primary/10 w-40 whitespace-normal text-foreground border-r"
+                >{{ $t("ETF.wkn") }}</TableCell
+              >
               <TableCell>{{ etf.wkn }}</TableCell>
             </TableRow>
             <TableRow>
-              <TableCell class="font-bold bg-primary/10 w-40 whitespace-normal text-foreground border-r">{{ $t("ETF.ticker") }}</TableCell>
+              <TableCell
+                class="font-bold bg-primary/10 w-40 whitespace-normal text-foreground border-r"
+                >{{ $t("ETF.ticker") }}</TableCell
+              >
               <TableCell>{{ etf.ticker }}</TableCell>
             </TableRow>
             <TableRow>
-              <TableCell class="font-bold bg-primary/10 w-40 whitespace-normal text-foreground border-r">{{ $t("ETF.chartUrl") }}</TableCell>
+              <TableCell
+                class="font-bold bg-primary/10 w-40 whitespace-normal text-foreground border-r"
+                >{{ $t("ETF.chartUrl") }}</TableCell
+              >
               <TableCell><a :href="etf.chartUrl">Link</a></TableCell>
             </TableRow>
             <TableRow>
-              <TableCell class="font-bold bg-primary/10 w-40 whitespace-normal text-foreground border-r">{{ $t("ETFFlow.transactionCostsAbsolute") }}</TableCell>
-              <TableCell><SpanAmount :amount="etf.transactionCostsAbsolute" /></TableCell>
+              <TableCell
+                class="font-bold bg-primary/10 w-40 whitespace-normal text-foreground border-r"
+                >{{ $t("ETFFlow.transactionCostsAbsolute") }}</TableCell
+              >
+              <TableCell
+                ><SpanAmount :amount="etf.transactionCostsAbsolute"
+              /></TableCell>
             </TableRow>
             <TableRow>
-              <TableCell class="font-bold bg-primary/10 w-40 whitespace-normal text-foreground border-r">{{ $t("ETFFlow.transactionCostsRelative") }}</TableCell>
+              <TableCell
+                class="font-bold bg-primary/10 w-40 whitespace-normal text-foreground border-r"
+                >{{ $t("ETFFlow.transactionCostsRelative") }}</TableCell
+              >
               <TableCell>{{ trabsactionCostsRelativeString }}</TableCell>
             </TableRow>
             <TableRow>
-              <TableCell class="font-bold bg-primary/10 w-40 whitespace-normal text-foreground border-r">{{ $t("ETFFlow.transactionCostsMaximum") }}</TableCell>
-              <TableCell><SpanAmount :amount="etf.transactionCostsMaximum" /></TableCell>
+              <TableCell
+                class="font-bold bg-primary/10 w-40 whitespace-normal text-foreground border-r"
+                >{{ $t("ETFFlow.transactionCostsMaximum") }}</TableCell
+              >
+              <TableCell
+                ><SpanAmount :amount="etf.transactionCostsMaximum"
+              /></TableCell>
             </TableRow>
             <TableRow>
-              <TableCell class="font-bold bg-primary/10 w-40 whitespace-normal text-foreground border-r">{{ $t("ETF.partialTaxExemption") }}</TableCell>
+              <TableCell
+                class="font-bold bg-primary/10 w-40 whitespace-normal text-foreground border-r"
+                >{{ $t("ETF.partialTaxExemption") }}</TableCell
+              >
               <TableCell>{{ partialTaxExemptionString }}</TableCell>
             </TableRow>
           </TableBody>
@@ -46,7 +77,11 @@
       </div>
     </template>
     <template #footer>
-      <Button variant="destructive" class="flex items-center gap-2 rounded-md px-6" @click="deleteEtf">
+      <Button
+        variant="destructive"
+        class="flex items-center gap-2 rounded-md px-6"
+        @click="deleteEtf"
+      >
         <Trash2 class="h-4 w-4" />
         {{ $t("General.delete") }}
       </Button>
@@ -111,4 +146,3 @@ const deleteEtf = () => {
 
 defineExpose({ _show });
 </script>
-

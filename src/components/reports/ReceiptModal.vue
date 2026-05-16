@@ -38,7 +38,7 @@ const serverErrors = ref(new Array<string>());
 const receiptBase64 = ref("");
 const isJpeg = ref(false);
 const isPdf = ref(false);
-const modalComponent = useTemplateRef<typeof ModalVue>('modalComponent');
+const modalComponent = useTemplateRef<typeof ModalVue>("modalComponent");
 
 const _show = (moneyflowId: number) => {
   serverErrors.value = new Array<string>();

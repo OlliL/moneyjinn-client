@@ -1,5 +1,7 @@
 <template>
-  <span><b :class="colorClass" data-testid="booleanSpan">{{ text }}</b></span>
+  <span
+    ><b :class="colorClass" data-testid="booleanSpan">{{ text }}</b></span
+  >
 </template>
 
 <script lang="ts" setup>
