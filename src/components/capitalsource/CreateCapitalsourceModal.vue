@@ -36,15 +36,13 @@
         </div>
 
         <div class="grid grid-cols-2 gap-4">
-          <div
-            class="rounded-xl border bg-muted/30 p-4 shadow-sm flex flex-col justify-between min-h-[175px]"
-          >
+          <div class="rounded-xl border bg-muted/30 p-4 shadow-sm space-y-4">
             <span
-              class="text-xs font-bold uppercase tracking-wider text-muted-foreground block mb-2"
+              class="text-xs font-bold uppercase tracking-wider text-muted-foreground block"
             >
               {{ $t("Capitalsource.validityData") }}
             </span>
-            <div class="space-y-4 flex-1 flex flex-col justify-end mt-2">
+            <div class="space-y-4">
               <InputDate
                 v-model="mcs.validFrom"
                 :validation-schema="schema.validFrom"
@@ -60,15 +58,13 @@
             </div>
           </div>
 
-          <div
-            class="rounded-xl border bg-muted/30 p-4 shadow-sm flex flex-col justify-between min-h-[175px]"
-          >
+          <div class="rounded-xl border bg-muted/30 p-4 shadow-sm space-y-4">
             <span
               class="text-xs font-bold uppercase tracking-wider text-muted-foreground block"
             >
               {{ $t("Capitalsource.permissions") }}
             </span>
-            <div class="space-y-4 flex-1 flex flex-col justify-end mt-2">
+            <div class="space-y-4">
               <SelectStandard
                 v-model="mcs.groupUse"
                 :validation-schema="schema.groupUse"
