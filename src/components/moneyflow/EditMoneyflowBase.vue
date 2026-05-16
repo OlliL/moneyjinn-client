@@ -185,6 +185,18 @@
               onMoneyflowSplitEntryRowPostingAccountIdChanged
             "
           />
+          <div class="flex justify-start mt-0">
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              class="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium text-muted-foreground hover:text-primary transition-colors h-9 px-3 gap-2"
+              @click="onAddMoneyflowSplitEntryRow"
+            >
+              <Plus class="h-4 w-4 shrink-0" />
+              <span>Position hinzufügen</span>
+            </Button>
+          </div>
         </div>
       </div>
     </div>
@@ -197,6 +209,7 @@ import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { computed, onMounted, ref, watch, type PropType } from "vue";
 import { useI18n } from "vue-i18n";
 import { date, number, string } from "zod";
+import { Plus } from "lucide-vue-next"; // Icons für besseres Feedback
 
 import DivError from "../DivError.vue";
 import EditMoneyflowBaseSplitEntryRowVue from "@/components/moneyflow/EditMoneyflowBaseSplitEntryRow.vue";
