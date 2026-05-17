@@ -65,7 +65,7 @@
                   :focus="true"
                 />
               </div>
-              <div class="md:col-span-1 flex items-start gap-2 text-left mt-8">
+              <div class="md:col-span-1 flex items-start gap-2 text-left mt-7">
                 <Checkbox
                   id="featureEqual"
                   class="bg-background"
@@ -75,7 +75,7 @@
                   {{ $t("Moneyflow.equal") }}
                 </Label>
               </div>
-              <div class="md:col-span-3 flex items-start gap-2 text-left mt-8">
+              <div class="md:col-span-3 flex items-start gap-2 text-left mt-7">
                 <Checkbox
                   id="featureCaseSensitive"
                   class="bg-background"
@@ -85,7 +85,7 @@
                   {{ $t("Moneyflow.caseSensitivity") }}
                 </Label>
               </div>
-              <div class="md:col-span-2 flex items-start gap-2 text-left mt-8">
+              <div class="md:col-span-2 flex items-start gap-2 text-left mt-7">
                 <Checkbox
                   id="featureRegexp"
                   class="bg-background"
@@ -95,7 +95,7 @@
                   {{ $t("Moneyflow.regexp") }}
                 </Label>
               </div>
-              <div class="md:col-span-2 flex items-start gap-2 text-left mt-8">
+              <div class="md:col-span-2 flex items-start gap-2 text-left mt-7">
                 <Checkbox
                   id="featureOnlyMinusAmounts"
                   class="bg-background"
@@ -118,7 +118,7 @@
                 <Button
                   type="button"
                   variant="secondary"
-                  class="flex items-center gap-2 px-6"
+                  class="flex items-center gap-2 px-6 border-sm"
                   @click="resetForm"
                 >
                   <Undo2 class="h-4 w-4" />
@@ -222,14 +222,14 @@ import { useI18n } from "vue-i18n";
 import { any, date, type ZodTypeAny } from "zod";
 
 import ButtonSubmit from "@/components/ButtonSubmit.vue";
+import SelectContractpartner from "@/components/contractpartner/SelectContractpartner.vue";
 import DivContentTable from "@/components/DivContentTable.vue";
-import DeleteMoneyflowModalVue from "@/components/moneyflow/DeleteMoneyflowModal.vue";
 import DivError from "@/components/DivError.vue";
-import EditMoneyflowModalVue from "@/components/moneyflow/EditMoneyflowModal.vue";
 import InputDate from "@/components/InputDate.vue";
 import InputStandard from "@/components/InputStandard.vue";
+import DeleteMoneyflowModalVue from "@/components/moneyflow/DeleteMoneyflowModal.vue";
+import EditMoneyflowModalVue from "@/components/moneyflow/EditMoneyflowModal.vue";
 import SearchMoneyflowResultGroupVue from "@/components/moneyflow/SearchMoneyflowResultGroup.vue";
-import SelectContractpartner from "@/components/contractpartner/SelectContractpartner.vue";
 import SelectPostingAccount from "@/components/postingaccount/SelectPostingAccount.vue";
 import SelectStandard from "@/components/SelectStandard.vue";
 
@@ -242,18 +242,18 @@ import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 import type { MoneyflowSearchParams } from "@/model/moneyflow/MoneyflowSearchParams";
 import type { SelectBoxValue } from "@/model/SelectBoxValue";
 
-import MoneyflowService from "@/service/MoneyflowService";
 import ListMoneyflowModal from "@/components/moneyflow/ListMoneyflowModal.vue";
 import ReceiptModal from "@/components/reports/ReceiptModal.vue";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@/components/ui/label";
 import {
   TableBody,
   TableHead,
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Label } from "@/components/ui/label";
+import MoneyflowService from "@/service/MoneyflowService";
 import { Search, Undo2 } from "lucide-vue-next";
 
 const { t } = useI18n();
@@ -321,6 +321,7 @@ watch(
       t("Moneyflow.validation.oneSearchCriteria"),
     );
   },
+  { immediate: true },
 );
 
 type MoneyflowGroup = {

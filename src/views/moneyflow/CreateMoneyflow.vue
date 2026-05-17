@@ -61,7 +61,7 @@
           <Button
             type="button"
             variant="secondary"
-            class="flex items-center gap-2 px-6"
+            class="flex items-center gap-2 px-6 border-sm"
             @click="resetForm"
           >
             <Undo2 class="h-4 w-4" />

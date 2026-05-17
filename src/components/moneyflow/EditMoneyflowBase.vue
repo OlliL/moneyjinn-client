@@ -185,7 +185,7 @@
           <div class="flex justify-start mt-0">
             <Button
               type="button"
-              variant="outline"
+              variant="ghost"
               size="sm"
               data-testid="addMoneyflowSplitEntryRowButton"
               class="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium text-muted-foreground hover:text-primary transition-colors h-9 px-3 gap-2"
