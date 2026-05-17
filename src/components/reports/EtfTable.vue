@@ -4,7 +4,7 @@
     <div class="w-full max-w-7xl">
       <div class="rounded-sm border">
         <div class="border-b p-3 text-center">
-          <h4 class="font-semibold">{{ $t("General.etf") }}</h4>
+          <h4 class="text-2xl font-bold">{{ $t("General.etf") }}</h4>
         </div>
         <div class="p-4">
           <div class="overflow-x-auto text-center">
