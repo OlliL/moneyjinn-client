@@ -38,13 +38,11 @@
 </template>
 
 <script lang="ts" setup>
-import { Pencil, Trash2 } from "lucide-vue-next";
-import type { PropType } from "vue";
-
 import { Button } from "@/components/ui/button";
 import { TableCell, TableRow } from "@/components/ui/table";
-
 import type { ContractpartnerMatching } from "@/model/contractpartnermatching/ContractpartnerMatching";
+import { Pencil, Trash2 } from "lucide-vue-next";
+import type { PropType } from "vue";
 
 const props = defineProps({
   mcm: {

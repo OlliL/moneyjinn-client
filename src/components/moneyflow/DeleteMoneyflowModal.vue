@@ -2,64 +2,86 @@
   <ModalVue :title="$t('Moneyflow.title.delete')" ref="modalComponent">
     <template #body>
       <DivError :server-errors="serverErrors" />
-      <div class="flex flex-col rounded-md border">
+      <div class="flex flex-col rounded-xl border bg-card overflow-hidden">
         <Table>
           <TableBody>
-            <TableRow>
+            <TableRow class="hover:bg-transparent border-b last:border-0">
               <TableCell
-                class="font-bold bg-primary/[0.10] w-40 whitespace-normal text-foreground border-r"
+                class="font-normal text-muted-foreground max-w-[11rem] w-44 pl-4 pr-2 py-3 whitespace-normal break-words"
               >
                 {{ $t("Moneyflow.bookingdate") }}
               </TableCell>
-              <TableCell><SpanDate :date="mmf.bookingDate" /></TableCell>
+              <TableCell class="font-medium text-foreground pr-4 py-3">
+                <SpanDate :date="mmf.bookingDate" />
+              </TableCell>
             </TableRow>
-            <TableRow>
+
+            <TableRow class="hover:bg-transparent border-b last:border-0">
               <TableCell
-                class="font-bold bg-primary/[0.10] w-40 whitespace-normal text-foreground border-r"
+                class="font-normal text-muted-foreground max-w-[11rem] w-44 pl-4 pr-2 py-3 whitespace-normal break-words"
               >
                 {{ $t("Moneyflow.invoicedate") }}
               </TableCell>
-              <TableCell><SpanDate :date="mmf.invoiceDate" /></TableCell>
+              <TableCell class="font-medium text-foreground pr-4 py-3">
+                <SpanDate :date="mmf.invoiceDate" />
+              </TableCell>
             </TableRow>
-            <TableRow>
+
+            <TableRow class="hover:bg-transparent border-b last:border-0">
               <TableCell
-                class="font-bold bg-primary/[0.10] w-40 whitespace-normal text-foreground border-r"
+                class="font-normal text-muted-foreground max-w-[11rem] w-44 pl-4 pr-2 py-3 whitespace-normal break-words"
               >
                 {{ $t("General.contractpartner") }}
               </TableCell>
-              <TableCell>{{ mmf.contractpartnerName }}</TableCell>
+              <TableCell class="font-medium text-foreground pr-4 py-3">
+                {{ mmf.contractpartnerName }}
+              </TableCell>
             </TableRow>
-            <TableRow>
+
+            <TableRow class="hover:bg-transparent border-b last:border-0">
               <TableCell
-                class="font-bold bg-primary/[0.10] w-40 whitespace-normal text-foreground border-r"
+                class="font-normal text-muted-foreground max-w-[11rem] w-44 pl-4 pr-2 py-3 whitespace-normal break-words"
               >
                 {{ $t("General.capitalsource") }}
               </TableCell>
-              <TableCell>{{ mmf.capitalsourceComment }}</TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell
-                class="font-bold bg-primary/[0.10] w-40 whitespace-normal text-foreground border-r"
-              >
-                {{ $t("General.amount") }}
+              <TableCell class="font-medium text-foreground pr-4 py-3">
+                {{ mmf.capitalsourceComment }}
               </TableCell>
-              <TableCell><SpanAmount :amount="mmf.amount" /></TableCell>
             </TableRow>
-            <TableRow>
+
+            <TableRow class="hover:bg-transparent border-b last:border-0">
               <TableCell
-                class="font-bold bg-primary/[0.10] w-40 whitespace-normal text-foreground border-r"
+                class="font-normal text-muted-foreground max-w-[11rem] w-44 pl-4 pr-2 py-3 whitespace-normal break-words"
               >
                 {{ $t("General.comment") }}
               </TableCell>
-              <TableCell>{{ mmf.comment }}</TableCell>
+              <TableCell class="font-medium text-foreground pr-4 py-3">
+                {{ mmf.comment }}
+              </TableCell>
             </TableRow>
-            <TableRow>
+
+            <TableRow class="hover:bg-transparent border-b last:border-0">
               <TableCell
-                class="font-bold bg-primary/[0.10] w-40 whitespace-normal text-foreground border-r"
+                class="font-normal text-muted-foreground max-w-[11rem] w-44 pl-4 pr-2 py-3 whitespace-normal break-words"
+              >
+                {{ $t("General.amount") }}
+              </TableCell>
+              <TableCell
+                class="font-semibold text-foreground pr-4 py-3 text-base"
+              >
+                <SpanAmount :amount="mmf.amount" />
+              </TableCell>
+            </TableRow>
+
+            <TableRow class="hover:bg-transparent border-b last:border-0">
+              <TableCell
+                class="font-normal text-muted-foreground max-w-[11rem] w-44 pl-4 pr-2 py-3 whitespace-normal break-words"
               >
                 {{ $t("General.postingAccount") }}
               </TableCell>
-              <TableCell>{{ mmf.postingAccountName }}</TableCell>
+              <TableCell class="font-medium text-foreground pr-4 py-3">
+                {{ mmf.postingAccountName }}
+              </TableCell>
             </TableRow>
           </TableBody>
         </Table>
@@ -71,7 +93,7 @@
         class="flex items-center gap-2 px-6"
         @click="deleteMoneyflow"
       >
-        <Trash2 />
+        <Trash2 class="h-4 w-4" />
         {{ $t("General.delete") }}
       </Button>
     </template>
@@ -92,8 +114,8 @@ import SpanDate from "../SpanDate.vue";
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 
 import MoneyflowService from "@/service/MoneyflowService";
-import DivError from "../DivError.vue";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
+import DivError from "../DivError.vue";
 
 const serverErrors = ref(new Array<string>());
 

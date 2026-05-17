@@ -1,122 +1,116 @@
 <template>
   <DivError :server-errors="serverErrors" />
 
-  <div class="flex justify-center mb-4" v-if="props.month">
+  <div class="flex justify-center" v-if="props.month">
     <div class="w-full max-w-md">
-      <div class="rounded-sm border overflow-hidden">
-        <div
-          class="flex items-center justify-between bg-background border-b p-3"
+      <div
+        v-if="showHeader"
+        class="flex items-center justify-between bg-background border-b p-3"
+      >
+        <Button
+          variant="ghost"
+          size="sm"
+          @click="navigateToPreviousMonth"
+          :disabled="!(prevMonth && prevYear)"
+          class="h-8 w-8 cursor-pointer"
         >
-          <Button
-            variant="ghost"
-            size="sm"
-            @click="navigateToPreviousMonth"
-            :disabled="!(prevMonth && prevYear)"
-            class="h-8 w-8 cursor-pointer"
-          >
-            <ChevronLeft class="h-5 w-5" />
-          </Button>
-          <h5 class="text-xl flex-grow-1 text-center font-bold">
-            {{
-              $t("MonthlySettlement.headline", {
-                month: monthName,
-                year: year,
-              })
-            }}
-          </h5>
-          <Button
-            variant="ghost"
-            size="sm"
-            @click="navigateToNextMonth"
-            :disabled="!(nextMonth && nextYear)"
-            class="h-8 w-8 cursor-pointer"
-            border-r
-          >
-            <ChevronRight class="h-5 w-5" />
-          </Button>
-        </div>
-        <div class="p-4">
-          <div
-            class="flex flex-col rounded-md border mb-4"
-            v-if="monthlySettlementsNoCredit.length"
-          >
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead
-                    class="w-2/3 font-bold border-r text-foreground text-center"
-                  >
-                    {{ $t("General.capitalsource") }}
-                  </TableHead>
-                  <TableHead
-                    class="w-1/3 font-bold text-foreground text-center"
-                  >
-                    {{ $t("General.amount") }}
-                  </TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                <TableRow
-                  v-for="mms in monthlySettlementsNoCredit"
-                  :key="mms.id"
+          <ChevronLeft class="h-5 w-5" />
+        </Button>
+        <h5 class="text-xl flex-grow-1 text-center font-bold">
+          {{
+            $t("MonthlySettlement.headline", {
+              month: monthName,
+              year: year,
+            })
+          }}
+        </h5>
+        <Button
+          variant="ghost"
+          size="sm"
+          @click="navigateToNextMonth"
+          :disabled="!(nextMonth && nextYear)"
+          class="h-8 w-8 cursor-pointer"
+          border-r
+        >
+          <ChevronRight class="h-5 w-5" />
+        </Button>
+      </div>
+      <div class="p-4">
+        <div
+          class="flex flex-col rounded-md border mb-4"
+          v-if="monthlySettlementsNoCredit.length"
+        >
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead
+                  class="w-2/3 font-bold border-r text-foreground text-center"
                 >
-                  <TableCell class="border-r text-left">{{
-                    mms.capitalsourceComment
-                  }}</TableCell>
-                  <TableCell class="text-right"
-                    ><SpanAmount :amount="mms.amount"
-                  /></TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell class="text-right border-r font-bold"
-                    >&sum;</TableCell
-                  >
-                  <TableCell class="text-right">
-                    <u><SpanAmount :amount="monthlySettlementNoCreditSum" /></u>
-                  </TableCell>
-                </TableRow>
-              </TableBody>
-            </Table>
-          </div>
-          <div
-            class="flex flex-col rounded-md border"
-            v-if="monthlySettlementsCredit.length"
-          >
-            <Table>
-              <TableHeader v-if="monthlySettlementsNoCredit.length">
-                <TableRow>
-                  <TableHead
-                    class="w-2/3 font-bold border-r text-foreground text-center"
-                    >{{ $t("General.capitalsource") }}</TableHead
-                  >
-                  <TableHead
-                    class="w-1/3 font-bold text-foreground text-center"
-                    >{{ $t("General.amount") }}</TableHead
-                  >
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                <TableRow v-for="mms in monthlySettlementsCredit" :key="mms.id">
-                  <TableCell class="border-r text-left">{{
-                    mms.capitalsourceComment
-                  }}</TableCell>
-                  <TableCell class="text-right"
-                    ><SpanAmount :amount="mms.amount"
-                  /></TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell class="text-right border-r font-bold"
-                    >&sum;</TableCell
-                  >
-                  <TableCell class="text-right">
-                    <u>
-                      <SpanAmount :amount="monthlySettlementCreditSum" />
-                    </u>
-                  </TableCell>
-                </TableRow>
-              </TableBody>
-            </Table>
-          </div>
+                  {{ $t("General.capitalsource") }}
+                </TableHead>
+                <TableHead class="w-1/3 font-bold text-foreground text-center">
+                  {{ $t("General.amount") }}
+                </TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              <TableRow v-for="mms in monthlySettlementsNoCredit" :key="mms.id">
+                <TableCell class="border-r text-left">{{
+                  mms.capitalsourceComment
+                }}</TableCell>
+                <TableCell class="text-right"
+                  ><SpanAmount :amount="mms.amount"
+                /></TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell class="text-right border-r font-bold"
+                  >&sum;</TableCell
+                >
+                <TableCell class="text-right">
+                  <u><SpanAmount :amount="monthlySettlementNoCreditSum" /></u>
+                </TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
+        </div>
+        <div
+          class="flex flex-col rounded-md border"
+          v-if="monthlySettlementsCredit.length"
+        >
+          <Table>
+            <TableHeader v-if="monthlySettlementsNoCredit.length">
+              <TableRow>
+                <TableHead
+                  class="w-2/3 font-bold border-r text-foreground text-center"
+                  >{{ $t("General.capitalsource") }}</TableHead
+                >
+                <TableHead
+                  class="w-1/3 font-bold text-foreground text-center"
+                  >{{ $t("General.amount") }}</TableHead
+                >
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              <TableRow v-for="mms in monthlySettlementsCredit" :key="mms.id">
+                <TableCell class="border-r text-left">{{
+                  mms.capitalsourceComment
+                }}</TableCell>
+                <TableCell class="text-right"
+                  ><SpanAmount :amount="mms.amount"
+                /></TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell class="text-right border-r font-bold"
+                  >&sum;</TableCell
+                >
+                <TableCell class="text-right">
+                  <u>
+                    <SpanAmount :amount="monthlySettlementCreditSum" />
+                  </u>
+                </TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
         </div>
       </div>
     </div>
@@ -159,6 +153,10 @@ const props = defineProps({
   month: {
     type: Number,
     required: true,
+  },
+  showHeader: {
+    type: Boolean,
+    default: true,
   },
 });
 

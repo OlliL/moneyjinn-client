@@ -5,40 +5,53 @@
   >
     <template #body>
       <DivError :server-errors="serverErrors" />
-      <div class="flex flex-col rounded-md border">
+      <div class="flex flex-col rounded-xl border bg-card overflow-hidden">
         <Table>
           <TableBody>
-            <TableRow>
+            <TableRow class="hover:bg-transparent border-b last:border-0">
               <TableCell
-                class="font-bold bg-primary/10 w-40 whitespace-normal text-foreground border-r"
+                class="font-normal text-muted-foreground max-w-[11rem] w-44 pl-4 pr-2 py-3 whitespace-normal break-words"
               >
                 {{ $t("ContractpartnerMatching.matchingText") }}
               </TableCell>
-              <TableCell>{{ mcm.matchingText }}</TableCell>
-            </TableRow>
-            <TableRow>
               <TableCell
-                class="font-bold bg-primary/10 w-40 whitespace-normal text-foreground border-r"
+                class="font-semibold text-foreground pr-4 py-3 text-base"
+              >
+                {{ mcm.matchingText }}
+              </TableCell>
+            </TableRow>
+
+            <TableRow class="hover:bg-transparent border-b last:border-0">
+              <TableCell
+                class="font-normal text-muted-foreground max-w-[11rem] w-44 pl-4 pr-2 py-3 whitespace-normal break-words"
               >
                 {{ $t("General.contractpartner") }}
               </TableCell>
-              <TableCell>{{ mcm.contractpartnerName }}</TableCell>
+              <TableCell class="font-medium text-foreground pr-4 py-3">
+                {{ mcm.contractpartnerName }}
+              </TableCell>
             </TableRow>
-            <TableRow>
+
+            <TableRow class="hover:bg-transparent border-b last:border-0">
               <TableCell
-                class="font-bold bg-primary/10 w-40 whitespace-normal text-foreground border-r"
+                class="font-normal text-muted-foreground max-w-[11rem] w-44 pl-4 pr-2 py-3 whitespace-normal break-words"
               >
                 {{ $t("Contractpartner.moneyflowComment") }}
               </TableCell>
-              <TableCell>{{ mcm.moneyflowComment }}</TableCell>
+              <TableCell class="font-medium text-foreground pr-4 py-3">
+                {{ mcm.moneyflowComment }}
+              </TableCell>
             </TableRow>
-            <TableRow>
+
+            <TableRow class="hover:bg-transparent border-b last:border-0">
               <TableCell
-                class="font-bold bg-primary/10 w-40 whitespace-normal text-foreground border-r"
+                class="font-normal text-muted-foreground max-w-[11rem] w-44 pl-4 pr-2 py-3 whitespace-normal break-words"
               >
                 {{ $t("General.postingAccount") }}
               </TableCell>
-              <TableCell>{{ mcm.postingAccountName }}</TableCell>
+              <TableCell class="font-medium text-foreground pr-4 py-3">
+                {{ mcm.postingAccountName }}
+              </TableCell>
             </TableRow>
           </TableBody>
         </Table>
@@ -58,20 +71,15 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, useTemplateRef } from "vue";
-import { Trash2 } from "lucide-vue-next";
-
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
-
+import type { ContractpartnerMatching } from "@/model/contractpartnermatching/ContractpartnerMatching";
+import ContractpartnerMatchingService from "@/service/ContractpartnerMatchingService";
+import { handleBackendError } from "@/tools/views/HandleBackendError";
+import { Trash2 } from "lucide-vue-next";
+import { ref, useTemplateRef } from "vue";
 import DivError from "../DivError.vue";
 import ModalVue from "../Modal.vue";
-
-import { handleBackendError } from "@/tools/views/HandleBackendError";
-
-import type { ContractpartnerMatching } from "@/model/contractpartnermatching/ContractpartnerMatching";
-
-import ContractpartnerMatchingService from "@/service/ContractpartnerMatchingService";
 
 const serverErrors = ref(new Array<string>());
 

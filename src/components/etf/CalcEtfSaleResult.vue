@@ -174,11 +174,9 @@
 </template>
 
 <script lang="ts" setup>
+import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import type { EtfSalesCalculation } from "@/model/etf/EtfSalesCalculation";
 import type { PropType } from "vue";
-
-import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
-
 import SpanAmount from "../SpanAmount.vue";
 
 defineProps({

@@ -2,41 +2,52 @@
   <ModalVue :title="$t('ETFFlow.title.delete')" ref="modalComponent">
     <template #body>
       <DivError :server-errors="serverErrors" />
-      <div class="flex flex-col rounded-md border">
+      <div class="flex flex-col rounded-xl border bg-card overflow-hidden">
         <Table>
           <TableBody>
-            <TableRow>
+            <TableRow class="hover:bg-transparent border-b last:border-0">
               <TableCell
-                class="font-bold bg-primary/[0.10] w-40 whitespace-normal text-foreground border-r"
+                class="font-normal text-muted-foreground max-w-[11rem] w-44 pl-4 pr-2 py-3 whitespace-normal break-words"
               >
                 {{ $t("General.etf") }}
               </TableCell>
-              <TableCell>{{ etfName }}</TableCell>
+              <TableCell class="font-medium text-foreground pr-4 py-3">
+                {{ etfName }}
+              </TableCell>
             </TableRow>
-            <TableRow>
+
+            <TableRow class="hover:bg-transparent border-b last:border-0">
               <TableCell
-                class="font-bold bg-primary/[0.10] w-40 whitespace-normal text-foreground border-r"
+                class="font-normal text-muted-foreground max-w-[11rem] w-44 pl-4 pr-2 py-3 whitespace-normal break-words"
               >
                 {{ $t("ETFFlow.bookingdate") }}
               </TableCell>
-              <TableCell>{{ timestampString }}</TableCell>
-            </TableRow>
-            <TableRow>
               <TableCell
-                class="font-bold bg-primary/[0.10] w-40 whitespace-normal text-foreground border-r"
+                class="font-semibold text-foreground pr-4 py-3 text-base"
+              >
+                {{ timestampString }}
+              </TableCell>
+            </TableRow>
+
+            <TableRow class="hover:bg-transparent border-b last:border-0">
+              <TableCell
+                class="font-normal text-muted-foreground max-w-[11rem] w-44 pl-4 pr-2 py-3 whitespace-normal break-words"
               >
                 {{ $t("ETFFlow.amount") }}
               </TableCell>
-              <TableCell :class="amountClass">{{ amountString }}</TableCell>
+              <TableCell class="font-medium pr-4 py-3" :class="amountClass">
+                {{ amountString }}
+              </TableCell>
             </TableRow>
-            <TableRow>
+
+            <TableRow class="hover:bg-transparent border-b last:border-0">
               <TableCell
-                class="font-bold bg-primary/[0.10] w-40 whitespace-normal text-foreground border-r"
+                class="font-normal text-muted-foreground max-w-[11rem] w-44 pl-4 pr-2 py-3 whitespace-normal break-words"
               >
                 {{ $t("ETFFlow.price") }}
               </TableCell>
-              <TableCell>
-                <SpanAmount :amount="etfFlow.price" :decimal-places="3" />
+              <TableCell class="font-medium text-foreground pr-4 py-3">
+                <SpanAmount :amount="etfFlow.price" />
               </TableCell>
             </TableRow>
           </TableBody>
@@ -57,23 +68,18 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref, useTemplateRef } from "vue";
-
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
-import { Trash2 } from "lucide-vue-next";
-
-import DivError from "../DivError.vue";
-import ModalVue from "../Modal.vue";
-import SpanAmount from "../SpanAmount.vue";
-
+import type { EtfFlow } from "@/model/etf/EtfFlow";
+import CrudEtfFlowService from "@/service/CrudEtfFlowService";
 import { formatDateWithTime } from "@/tools/views/FormatDate";
 import { formatNumber, redIfNegative } from "@/tools/views/FormatNumber";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
-
-import type { EtfFlow } from "@/model/etf/EtfFlow";
-
-import CrudEtfFlowService from "@/service/CrudEtfFlowService";
+import { Trash2 } from "lucide-vue-next";
+import { computed, ref, useTemplateRef } from "vue";
+import DivError from "../DivError.vue";
+import ModalVue from "../Modal.vue";
+import SpanAmount from "../SpanAmount.vue";
 
 const serverErrors = ref(new Array<string>());
 

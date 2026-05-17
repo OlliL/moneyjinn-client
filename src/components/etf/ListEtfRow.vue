@@ -43,14 +43,12 @@
   </TableRow>
 </template>
 <script lang="ts" setup>
-import { Pencil, Star, Trash2 } from "lucide-vue-next";
-import { computed, type PropType } from "vue";
-
 import { Button } from "@/components/ui/button";
 import { TableCell, TableRow } from "@/components/ui/table";
-
 import type { Etf } from "@/model/etf/Etf";
 import { formatNumber } from "@/tools/views/FormatNumber";
+import { Pencil, Star, Trash2 } from "lucide-vue-next";
+import { computed, type PropType } from "vue";
 import SpanAmount from "../SpanAmount.vue";
 
 const props = defineProps({

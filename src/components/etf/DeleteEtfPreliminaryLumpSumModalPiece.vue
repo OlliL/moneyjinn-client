@@ -5,31 +5,42 @@
   >
     <template #body>
       <DivError :server-errors="serverErrors" />
-      <div class="flex flex-col rounded-md border">
+      <div class="flex flex-col rounded-xl border bg-card overflow-hidden">
         <Table>
           <TableBody>
-            <TableRow>
+            <TableRow class="hover:bg-transparent border-b last:border-0">
               <TableCell
-                class="font-bold bg-primary/10 w-40 whitespace-normal text-foreground border-r"
-                >{{ $t("General.etf") }}</TableCell
+                class="font-normal text-muted-foreground max-w-[11rem] w-44 pl-4 pr-2 py-3 whitespace-normal break-words"
               >
-              <TableCell>{{ etfName }}</TableCell>
+                {{ $t("General.etf") }}
+              </TableCell>
+              <TableCell class="font-medium text-foreground pr-4 py-3">
+                {{ etfName }}
+              </TableCell>
             </TableRow>
-            <TableRow>
+
+            <TableRow class="hover:bg-transparent border-b last:border-0">
               <TableCell
-                class="font-bold bg-primary/10 w-40 whitespace-normal text-foreground border-r"
-                >{{ $t("General.year") }}</TableCell
+                class="font-normal text-muted-foreground max-w-[11rem] w-44 pl-4 pr-2 py-3 whitespace-normal break-words"
               >
-              <TableCell>{{ etfPreliminaryLumpSum.year }}</TableCell>
+                {{ $t("General.year") }}
+              </TableCell>
+              <TableCell
+                class="font-semibold text-foreground pr-4 py-3 text-base"
+              >
+                {{ etfPreliminaryLumpSum.year }}
+              </TableCell>
             </TableRow>
-            <TableRow>
+
+            <TableRow class="hover:bg-transparent border-b last:border-0">
               <TableCell
-                class="font-bold bg-primary/10 w-40 whitespace-normal text-foreground border-r"
-                >{{ $t("ETFPreliminaryLumpSum.price") }}</TableCell
+                class="font-normal text-muted-foreground max-w-[11rem] w-44 pl-4 pr-2 py-3 whitespace-normal break-words"
               >
-              <TableCell
-                ><SpanAmount :amount="etfPreliminaryLumpSum.amountPerPiece"
-              /></TableCell>
+                {{ $t("ETFPreliminaryLumpSum.price") }}
+              </TableCell>
+              <TableCell class="font-medium text-foreground pr-4 py-3">
+                <SpanAmount :amount="etfPreliminaryLumpSum.amountPerPiece" />
+              </TableCell>
             </TableRow>
           </TableBody>
         </Table>
@@ -49,22 +60,17 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref, useTemplateRef } from "vue";
-import { Trash2 } from "lucide-vue-next";
-
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
-
+import type { EtfPreliminaryLumpSum } from "@/model/etf/EtfPreliminaryLumpSum";
+import CrudEtfPreliminaryLumpSumService from "@/service/CrudEtfPreliminaryLumpSumService";
+import { useEtfStore } from "@/stores/EtfStore";
+import { handleBackendError } from "@/tools/views/HandleBackendError";
+import { Trash2 } from "lucide-vue-next";
+import { computed, ref, useTemplateRef } from "vue";
 import DivError from "../DivError.vue";
 import ModalVue from "../Modal.vue";
 import SpanAmount from "../SpanAmount.vue";
-
-import { handleBackendError } from "@/tools/views/HandleBackendError";
-
-import type { EtfPreliminaryLumpSum } from "@/model/etf/EtfPreliminaryLumpSum";
-
-import CrudEtfPreliminaryLumpSumService from "@/service/CrudEtfPreliminaryLumpSumService";
-import { useEtfStore } from "@/stores/EtfStore";
 
 const serverErrors = ref(new Array<string>());
 

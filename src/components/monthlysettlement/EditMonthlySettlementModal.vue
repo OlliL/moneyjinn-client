@@ -34,11 +34,11 @@
                 <TableHeader>
                   <TableRow>
                     <TableHead
-                      class="w-2/3 font-bold border text-foreground text-center"
+                      class="w-7/12 font-bold border-r text-foreground text-center"
                       >{{ $t("General.capitalsource") }}</TableHead
                     >
                     <TableHead
-                      class="w-1/3 font-bold border text-foreground text-center"
+                      class="w-5/12 font-bold borer text-foreground text-center"
                       >{{ $t("General.amount") }}</TableHead
                     >
                   </TableRow>
@@ -48,10 +48,10 @@
                     v-for="(mms, idx) in monthlySettlementsNoCredit"
                     :key="mms.id"
                   >
-                    <TableCell class="text-left border">
+                    <TableCell class="text-left border-r">
                       {{ mms.capitalsourceComment }}
                     </TableCell>
-                    <TableCell class="border">
+                    <TableCell>
                       <InputStandard
                         v-model="mms.amount"
                         :validation-schema="schema.amount"
@@ -75,11 +75,11 @@
                 <TableHeader v-if="monthlySettlementsNoCredit.length">
                   <TableRow>
                     <TableHead
-                      class="w-2/3 font-bold border text-foreground text-center"
+                      class="w-7/12 font-bold border-r text-foreground text-center"
                       >{{ $t("General.capitalsource") }}</TableHead
                     >
                     <TableHead
-                      class="w-1/3 font-bold border text-foreground text-center"
+                      class="w-5/12 font-bold text-foreground text-center"
                       >{{ $t("General.amount") }}</TableHead
                     >
                   </TableRow>
@@ -89,10 +89,10 @@
                     v-for="(mms, idx) in monthlySettlementsCredit"
                     :key="mms.id"
                   >
-                    <TableCell class="text-left border">
+                    <TableCell class="text-left border-r">
                       {{ mms.capitalsourceComment }}
                     </TableCell>
-                    <TableCell class="border">
+                    <TableCell>
                       <InputStandard
                         v-model="mms.amount"
                         :validation-schema="schema.amount"
@@ -123,7 +123,7 @@
 
 <script lang="ts" setup>
 import { useForm } from "vee-validate";
-import { ref, watch, useTemplateRef } from "vue";
+import { ref, useTemplateRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { date, ZodType } from "zod";
 

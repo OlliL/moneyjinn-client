@@ -26,7 +26,7 @@
         <DialogClose as-child>
           <Button
             type="button"
-            variant="ghost"
+            variant="outline"
             class="flex items-center gap-2 px-4"
           >
             <X class="h-4 w-4" />

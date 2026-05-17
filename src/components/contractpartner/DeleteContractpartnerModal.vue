@@ -2,95 +2,80 @@
   <ModalVue :title="$t('Contractpartner.title.delete')" ref="modalComponent">
     <template #body>
       <DivError :server-errors="serverErrors" />
-
-      <div class="flex flex-col rounded-md border">
+      <div class="flex flex-col rounded-xl border bg-card overflow-hidden">
         <Table>
           <TableBody>
-            <TableRow>
+            <TableRow class="hover:bg-transparent border-b last:border-0">
               <TableCell
-                class="font-bold bg-primary/[0.10] w-40 whitespace-normal text-foreground border-r"
+                class="font-normal text-muted-foreground max-w-[11rem] w-44 pl-4 pr-2 py-3 whitespace-normal break-words"
               >
                 {{ $t("General.name") }}
               </TableCell>
-              <TableCell>{{ mcp.name }}</TableCell>
+              <TableCell
+                class="font-semibold text-foreground pr-4 py-3 text-base"
+              >
+                {{ mcp.name }}
+              </TableCell>
             </TableRow>
 
-            <TableRow>
+            <TableRow class="hover:bg-transparent border-b last:border-0">
               <TableCell
-                class="font-bold bg-primary/[0.10] w-40 whitespace-normal text-foreground border-r"
+                class="font-normal text-muted-foreground max-w-[11rem] w-44 pl-4 pr-2 py-3 whitespace-normal break-words"
               >
                 {{ $t("Contractpartner.street") }}
               </TableCell>
-              <TableCell>{{ mcp.street }}</TableCell>
+              <TableCell class="font-medium text-foreground pr-4 py-3">
+                {{ mcp.street }}
+              </TableCell>
             </TableRow>
 
-            <TableRow>
+            <TableRow class="hover:bg-transparent border-b last:border-0">
               <TableCell
-                class="font-bold bg-primary/[0.10] w-40 whitespace-normal text-foreground border-r"
+                class="font-normal text-muted-foreground max-w-[11rem] w-44 pl-4 pr-2 py-3 whitespace-normal break-words"
               >
                 {{ $t("Contractpartner.postcode") }}
               </TableCell>
-              <TableCell>{{ mcp.postcode }}</TableCell>
+              <TableCell class="font-medium text-foreground pr-4 py-3">
+                {{ mcp.postcode }}
+              </TableCell>
             </TableRow>
 
-            <TableRow>
+            <TableRow class="hover:bg-transparent border-b last:border-0">
               <TableCell
-                class="font-bold bg-primary/[0.10] w-40 whitespace-normal text-foreground border-r"
+                class="font-normal text-muted-foreground max-w-[11rem] w-44 pl-4 pr-2 py-3 whitespace-normal break-words"
               >
                 {{ $t("Contractpartner.town") }}
               </TableCell>
-              <TableCell>{{ mcp.town }}</TableCell>
-            </TableRow>
-
-            <TableRow>
-              <TableCell
-                class="font-bold bg-primary/[0.10] w-40 whitespace-normal text-foreground border-r"
-              >
-                {{ $t("Contractpartner.country") }}
+              <TableCell class="font-medium text-foreground pr-4 py-3">
+                {{ mcp.town }}
               </TableCell>
-              <TableCell>{{ mcp.country }}</TableCell>
             </TableRow>
 
-            <TableRow>
+            <TableRow class="hover:bg-transparent border-b last:border-0">
               <TableCell
-                class="font-bold bg-primary/[0.10] w-40 whitespace-normal text-foreground border-r"
+                class="font-normal text-muted-foreground max-w-[11rem] w-44 pl-4 pr-2 py-3 whitespace-normal break-words"
               >
                 {{ $t("General.validFrom") }}
               </TableCell>
-              <TableCell><SpanDate :date="mcp.validFrom" /></TableCell>
+              <TableCell class="font-medium text-foreground pr-4 py-3">
+                <SpanDate :date="mcp.validFrom" />
+              </TableCell>
             </TableRow>
 
-            <TableRow>
+            <TableRow class="hover:bg-transparent border-b last:border-0">
               <TableCell
-                class="font-bold bg-primary/[0.10] w-40 whitespace-normal text-foreground border-r"
+                class="font-normal text-muted-foreground max-w-[11rem] w-44 pl-4 pr-2 py-3 whitespace-normal break-words"
               >
                 {{ $t("General.validTil") }}
               </TableCell>
-              <TableCell><SpanDate :date="mcp.validTil" /></TableCell>
-            </TableRow>
-
-            <TableRow>
-              <TableCell
-                class="font-bold bg-primary/[0.10] w-40 whitespace-normal text-foreground border-r"
-              >
-                {{ $t("Contractpartner.moneyflowComment") }}
+              <TableCell class="font-medium text-foreground pr-4 py-3">
+                <SpanDate :date="mcp.validTil" />
               </TableCell>
-              <TableCell>{{ mcp.moneyflowComment }}</TableCell>
-            </TableRow>
-
-            <TableRow>
-              <TableCell
-                class="font-bold bg-primary/[0.10] w-40 whitespace-normal text-foreground border-r"
-              >
-                {{ $t("General.postingAccount") }}
-              </TableCell>
-              <TableCell>{{ mcp.postingAccountName }}</TableCell>
             </TableRow>
           </TableBody>
         </Table>
       </div>
     </template>
-
     <template #footer>
       <Button
         variant="destructive"
@@ -115,9 +100,9 @@ import DivError from "../DivError.vue";
 import ModalVue from "../Modal.vue";
 import SpanDate from "../SpanDate.vue";
 
-import { handleBackendError } from "@/tools/views/HandleBackendError";
 import type { Contractpartner } from "@/model/contractpartner/Contractpartner";
 import ContractpartnerService from "@/service/ContractpartnerService";
+import { handleBackendError } from "@/tools/views/HandleBackendError";
 
 const serverErrors = ref(new Array<string>());
 const mcp = ref({} as Contractpartner);

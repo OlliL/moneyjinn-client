@@ -2,16 +2,20 @@
   <ModalVue :title="$t('Group.title.delete')" ref="modalComponent">
     <template #body>
       <DivError :server-errors="serverErrors" />
-      <div class="flex flex-col rounded-md border">
+      <div class="flex flex-col rounded-xl border bg-card overflow-hidden">
         <Table>
           <TableBody>
-            <TableRow>
+            <TableRow class="hover:bg-transparent border-b last:border-0">
               <TableCell
-                class="font-bold bg-primary/[0.10] w-40 whitespace-normal text-foreground border-r"
+                class="font-normal text-muted-foreground max-w-[11rem] w-44 pl-4 pr-2 py-3 whitespace-normal break-words"
               >
                 {{ $t("General.name") }}
               </TableCell>
-              <TableCell>{{ group.name }}</TableCell>
+              <TableCell
+                class="font-semibold text-foreground pr-4 py-3 text-base"
+              >
+                {{ group.name }}
+              </TableCell>
             </TableRow>
           </TableBody>
         </Table>
@@ -31,20 +35,15 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, useTemplateRef } from "vue";
-
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
+import type { Group } from "@/model/group/Group";
+import GroupService from "@/service/GroupService";
+import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { Trash2 } from "lucide-vue-next";
-
+import { ref, useTemplateRef } from "vue";
 import DivError from "../DivError.vue";
 import ModalVue from "../Modal.vue";
-
-import { handleBackendError } from "@/tools/views/HandleBackendError";
-
-import type { Group } from "@/model/group/Group";
-
-import GroupService from "@/service/GroupService";
 
 const serverErrors = ref(new Array<string>());
 

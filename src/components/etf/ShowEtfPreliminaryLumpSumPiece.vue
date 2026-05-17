@@ -17,18 +17,16 @@
 </template>
 
 <script lang="ts" setup>
-import { type PropType } from "vue";
-
 import {
   Table,
   TableBody,
   TableCell,
-  TableRow,
   TableHead,
+  TableRow,
 } from "@/components/ui/table";
-
-import SpanAmount from "../SpanAmount.vue";
 import type { EtfPreliminaryLumpSum } from "@/model/etf/EtfPreliminaryLumpSum";
+import { type PropType } from "vue";
+import SpanAmount from "../SpanAmount.vue";
 
 const props = defineProps({
   mep: {

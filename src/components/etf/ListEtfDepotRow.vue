@@ -110,9 +110,6 @@
   </TableRow>
 </template>
 <script lang="ts" setup>
-import { Pencil, Trash2 } from "lucide-vue-next";
-import { computed, type PropType } from "vue";
-
 import { Button } from "@/components/ui/button";
 import {
   HoverCard,
@@ -127,13 +124,13 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-
-import SpanAmount from "../SpanAmount.vue";
-
 import type { EtfFlow } from "@/model/etf/EtfFlow";
 import { useEtfStore } from "@/stores/EtfStore";
 import { formatDateWithTime } from "@/tools/views/FormatDate";
 import { formatNumber, redIfNegative } from "@/tools/views/FormatNumber";
+import { Pencil, Trash2 } from "lucide-vue-next";
+import { computed, type PropType } from "vue";
+import SpanAmount from "../SpanAmount.vue";
 
 const props = defineProps({
   etfName: {

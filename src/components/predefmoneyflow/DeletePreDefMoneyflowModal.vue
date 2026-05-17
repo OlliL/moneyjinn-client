@@ -2,80 +2,97 @@
   <ModalVue :title="$t('PreDefMoneyflow.title.delete')" ref="modalComponent">
     <template #body>
       <DivError :server-errors="serverErrors" />
-
-      <div class="flex flex-col rounded-md border">
+      <div class="flex flex-col rounded-xl border bg-card overflow-hidden">
         <Table>
           <TableBody>
-            <TableRow>
+            <TableRow class="hover:bg-transparent border-b last:border-0">
               <TableCell
-                class="font-bold bg-primary/[0.10] w-40 whitespace-normal text-foreground border-r"
+                class="font-normal text-muted-foreground max-w-[11rem] w-44 pl-4 pr-2 py-3 whitespace-normal break-words"
               >
                 {{ $t("General.amount") }}
               </TableCell>
-              <TableCell><SpanAmount :amount="mpm.amount" /></TableCell>
+              <TableCell
+                class="font-semibold text-foreground pr-4 py-3 text-base"
+              >
+                <SpanAmount :amount="mpm.amount" />
+              </TableCell>
             </TableRow>
 
-            <TableRow>
+            <TableRow class="hover:bg-transparent border-b last:border-0">
               <TableCell
-                class="font-bold bg-primary/[0.10] w-40 whitespace-normal text-foreground border-r"
+                class="font-normal text-muted-foreground max-w-[11rem] w-44 pl-4 pr-2 py-3 whitespace-normal break-words"
               >
                 {{ $t("General.contractpartner") }}
               </TableCell>
-              <TableCell>{{ mpm.contractpartnerName }}</TableCell>
+              <TableCell class="font-medium text-foreground pr-4 py-3">
+                {{ mpm.contractpartnerName }}
+              </TableCell>
             </TableRow>
 
-            <TableRow>
+            <TableRow class="hover:bg-transparent border-b last:border-0">
               <TableCell
-                class="font-bold bg-primary/[0.10] w-40 whitespace-normal text-foreground border-r"
+                class="font-normal text-muted-foreground max-w-[11rem] w-44 pl-4 pr-2 py-3 whitespace-normal break-words"
               >
                 {{ $t("General.comment") }}
               </TableCell>
-              <TableCell>{{ mpm.comment }}</TableCell>
+              <TableCell class="font-medium text-foreground pr-4 py-3">
+                {{ mpm.comment }}
+              </TableCell>
             </TableRow>
 
-            <TableRow>
+            <TableRow class="hover:bg-transparent border-b last:border-0">
               <TableCell
-                class="font-bold bg-primary/[0.10] w-40 whitespace-normal text-foreground border-r"
+                class="font-normal text-muted-foreground max-w-[11rem] w-44 pl-4 pr-2 py-3 whitespace-normal break-words"
               >
                 {{ $t("General.postingAccount") }}
               </TableCell>
-              <TableCell>{{ mpm.postingAccountName }}</TableCell>
+              <TableCell class="font-medium text-foreground pr-4 py-3">
+                {{ mpm.postingAccountName }}
+              </TableCell>
             </TableRow>
 
-            <TableRow>
+            <TableRow class="hover:bg-transparent border-b last:border-0">
               <TableCell
-                class="font-bold bg-primary/[0.10] w-40 whitespace-normal text-foreground border-r"
+                class="font-normal text-muted-foreground max-w-[11rem] w-44 pl-4 pr-2 py-3 whitespace-normal break-words"
               >
                 {{ $t("General.capitalsource") }}
               </TableCell>
-              <TableCell>{{ mpm.capitalsourceComment }}</TableCell>
+              <TableCell class="font-medium text-foreground pr-4 py-3">
+                {{ mpm.capitalsourceComment }}
+              </TableCell>
             </TableRow>
 
-            <TableRow>
+            <TableRow class="hover:bg-transparent border-b last:border-0">
               <TableCell
-                class="font-bold bg-primary/[0.10] w-40 whitespace-normal text-foreground border-r"
+                class="font-normal text-muted-foreground max-w-[11rem] w-44 pl-4 pr-2 py-3 whitespace-normal break-words"
               >
                 {{ $t("PreDefMoneyflow.onceAMonth") }}
               </TableCell>
-              <TableCell><SpanBoolean :value="mpm.onceAMonth" /></TableCell>
+              <TableCell class="font-medium text-foreground pr-4 py-3">
+                <SpanBoolean :value="!mpm.onceAMonth" />
+              </TableCell>
             </TableRow>
 
-            <TableRow>
+            <TableRow class="hover:bg-transparent border-b last:border-0">
               <TableCell
-                class="font-bold bg-primary/[0.10] w-40 whitespace-normal text-foreground border-r"
+                class="font-normal text-muted-foreground max-w-[11rem] w-44 pl-4 pr-2 py-3 whitespace-normal break-words"
               >
                 {{ $t("PreDefMoneyflow.createDate") }}
               </TableCell>
-              <TableCell><SpanDate :date="mpm.createDate" /></TableCell>
+              <TableCell class="font-medium text-foreground pr-4 py-3">
+                <SpanDate :date="mpm.createDate" />
+              </TableCell>
             </TableRow>
 
-            <TableRow>
+            <TableRow class="hover:bg-transparent border-b last:border-0">
               <TableCell
-                class="font-bold bg-primary/[0.10] w-40 whitespace-normal text-foreground border-r"
+                class="font-normal text-muted-foreground max-w-[11rem] w-44 pl-4 pr-2 py-3 whitespace-normal break-words"
               >
                 {{ $t("PreDefMoneyflow.lastUsed") }}
               </TableCell>
-              <TableCell><SpanDate :date="mpm.lastUsed" /></TableCell>
+              <TableCell class="font-medium text-foreground pr-4 py-3">
+                <SpanDate :date="mpm.lastUsed" />
+              </TableCell>
             </TableRow>
           </TableBody>
         </Table>

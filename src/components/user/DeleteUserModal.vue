@@ -2,40 +2,53 @@
   <ModalVue :title="$t('User.title.delete')" ref="modalComponent">
     <template #body>
       <DivError :server-errors="serverErrors" />
-      <div class="flex flex-col rounded-md border">
+      <div class="flex flex-col rounded-xl border bg-card overflow-hidden">
         <Table>
           <TableBody>
-            <TableRow>
+            <TableRow class="hover:bg-transparent border-b last:border-0">
               <TableCell
-                class="font-bold bg-primary/[0.10] w-40 whitespace-normal text-foreground border-r"
+                class="font-normal text-muted-foreground max-w-[11rem] w-44 pl-4 pr-2 py-3 whitespace-normal break-words"
               >
                 {{ $t("General.name") }}
               </TableCell>
-              <TableCell>{{ user.userName }}</TableCell>
-            </TableRow>
-            <TableRow>
               <TableCell
-                class="font-bold bg-primary/[0.10] w-40 whitespace-normal text-foreground border-r"
+                class="font-semibold text-foreground pr-4 py-3 text-base"
+              >
+                {{ user.userName }}
+              </TableCell>
+            </TableRow>
+
+            <TableRow class="hover:bg-transparent border-b last:border-0">
+              <TableCell
+                class="font-normal text-muted-foreground max-w-[11rem] w-44 pl-4 pr-2 py-3 whitespace-normal break-words"
               >
                 {{ $t("General.group") }}
               </TableCell>
-              <TableCell>{{ user.groupName }}</TableCell>
+              <TableCell class="font-medium text-foreground pr-4 py-3">
+                {{ user.groupName }}
+              </TableCell>
             </TableRow>
-            <TableRow>
+
+            <TableRow class="hover:bg-transparent border-b last:border-0">
               <TableCell
-                class="font-bold bg-primary/[0.10] w-40 whitespace-normal text-foreground border-r"
+                class="font-normal text-muted-foreground max-w-[11rem] w-44 pl-4 pr-2 py-3 whitespace-normal break-words"
               >
                 {{ $t("User.role") }}
               </TableCell>
-              <TableCell>{{ role }}</TableCell>
+              <TableCell class="font-medium text-foreground pr-4 py-3">
+                {{ role }}
+              </TableCell>
             </TableRow>
-            <TableRow>
+
+            <TableRow class="hover:bg-transparent border-b last:border-0">
               <TableCell
-                class="font-bold bg-primary/[0.10] w-40 whitespace-normal text-foreground border-r"
+                class="font-normal text-muted-foreground max-w-[11rem] w-44 pl-4 pr-2 py-3 whitespace-normal break-words"
               >
                 {{ $t("User.new") }}
               </TableCell>
-              <TableCell><SpanBoolean :value="user.userIsNew" /></TableCell>
+              <TableCell class="font-medium text-foreground pr-4 py-3">
+                <SpanBoolean :value="user.userIsNew" />
+              </TableCell>
             </TableRow>
           </TableBody>
         </Table>
