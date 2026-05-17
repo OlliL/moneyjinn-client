@@ -24,7 +24,7 @@
         <HoverCardContent
           side="top"
           align="end"
-          class="w-auto p-3 bg-background border rounded-lg shadow-lg z-50"
+          class="w-auto p-3 bg-background border rounded-sm shadow-lg z-50"
         >
           <Table class="border">
             <TableHeader>
@@ -110,30 +110,30 @@
   </TableRow>
 </template>
 <script lang="ts" setup>
-import { computed, type PropType } from "vue";
 import { Pencil, Trash2 } from "lucide-vue-next";
+import { computed, type PropType } from "vue";
 
-import {
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-  Table,
-  TableBody,
-} from "@/components/ui/table";
+import { Button } from "@/components/ui/button";
 import {
   HoverCard,
   HoverCardContent,
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
-import { Button } from "@/components/ui/button";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 import SpanAmount from "../SpanAmount.vue";
 
-import { formatDateWithTime } from "@/tools/views/FormatDate";
-import { formatNumber, redIfNegative } from "@/tools/views/FormatNumber";
 import type { EtfFlow } from "@/model/etf/EtfFlow";
 import { useEtfStore } from "@/stores/EtfStore";
+import { formatDateWithTime } from "@/tools/views/FormatDate";
+import { formatNumber, redIfNegative } from "@/tools/views/FormatNumber";
 
 const props = defineProps({
   etfName: {

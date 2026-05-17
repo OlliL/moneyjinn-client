@@ -6,40 +6,41 @@
           <TableHeader>
             <TableRow>
               <TableHead
-                class="font-bold border text-foreground text-center hidden md:table-cell"
+                class="font-bold border-r text-foreground text-center hidden md:table-cell"
               >
                 {{ $t("Capitalsource.type") }}
               </TableHead>
               <TableHead
-                class="font-bold border text-foreground text-center hidden md:table-cell"
+                class="font-bold border-r text-foreground text-center hidden md:table-cell"
               >
                 {{ $t("Capitalsource.state") }}
               </TableHead>
-              <TableHead class="font-bold border text-foreground text-center">{{
-                $t("General.comment")
-              }}</TableHead>
-              <TableHead class="font-bold border text-foreground text-center">
+              <TableHead
+                class="font-bold border-r text-foreground text-center"
+                >{{ $t("General.comment") }}</TableHead
+              >
+              <TableHead class="font-bold border-r text-foreground text-center">
                 {{ $t("Reports.beginOfMonth") }}
               </TableHead>
               <TableHead
-                class="font-bold border text-foreground text-center"
+                class="font-bold border-r text-foreground text-center"
                 v-if="currentMonthIsSettled"
               >
                 {{ $t("Reports.endOfMonthFixed") }}
               </TableHead>
               <TableHead
-                class="font-bold border text-foreground text-center hidden md:table-cell"
+                class="font-bold border-r text-foreground text-center hidden md:table-cell"
               >
                 {{ $t("Reports.endOfMonthCalculated") }}
               </TableHead>
               <TableHead
-                class="font-bold border text-foreground text-center"
+                class="font-bold text-foreground text-center"
                 v-if="!currentMonthIsSettled"
               >
                 {{ $t("Reports.currentAmount") }}
               </TableHead>
               <TableHead
-                class="text-center hidden md:table-cell"
+                class="text-center border-l hidden md:table-cell"
                 v-if="!currentMonthIsSettled"
               >
                 {{ $t("Reports.state") }}

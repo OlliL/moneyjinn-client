@@ -45,7 +45,7 @@
     <DivError :server-errors="serverErrors" />
 
     <div
-      class="rounded-lg border bg-card text-card-foreground shadow bg-muted p-4"
+      class="rounded-sm border bg-card text-card-foreground shadow bg-muted p-4"
     >
       <form
         @submit.prevent="createMoneyflow"

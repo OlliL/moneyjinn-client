@@ -38,19 +38,19 @@
     <DivContentTable class="max-w-5xl">
       <TableHeader>
         <TableRow>
-          <TableHead class="font-bold border text-foreground text-center">{{
+          <TableHead class="font-bold border-r text-foreground text-center">{{
             $t("ContractpartnerMatching.matchingText")
           }}</TableHead>
-          <TableHead class="font-bold border text-foreground text-center">{{
+          <TableHead class="font-bold border-r text-foreground text-center">{{
             $t("General.contractpartner")
           }}</TableHead>
-          <TableHead class="font-bold border text-foreground text-center">{{
+          <TableHead class="font-bold border-r text-foreground text-center">{{
             $t("Contractpartner.moneyflowComment")
           }}</TableHead>
-          <TableHead class="font-bold border text-foreground text-center">{{
+          <TableHead class="font-bold border-r text-foreground text-center">{{
             $t("General.postingAccount")
           }}</TableHead>
-          <TableHead class="border" colspan="2"></TableHead>
+          <TableHead colspan="2"></TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -67,7 +67,7 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref, watch, useTemplateRef } from "vue";
+import { onMounted, ref, useTemplateRef, watch } from "vue";
 
 import DivContentTable from "@/components/DivContentTable.vue";
 import DivError from "@/components/DivError.vue";
@@ -84,9 +84,9 @@ import {
 
 import type { ContractpartnerMatching } from "@/model/contractpartnermatching/ContractpartnerMatching";
 
+import SelectContractpartner from "@/components/contractpartner/SelectContractpartner.vue";
 import ContractpartnerMatchingService from "@/service/ContractpartnerMatchingService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
-import SelectContractpartner from "@/components/contractpartner/SelectContractpartner.vue";
 
 const serverErrors = ref(new Array<string>());
 

@@ -28,31 +28,31 @@
     <DivContentTable>
       <TableHeader>
         <TableRow>
-          <TableHead class="font-bold border text-foreground text-center">{{
+          <TableHead class="font-bold border-r text-foreground text-center">{{
             $t("General.amount")
           }}</TableHead>
-          <TableHead class="font-bold border text-foreground text-center">{{
+          <TableHead class="font-bold border-r text-foreground text-center">{{
             $t("General.contractpartner")
           }}</TableHead>
-          <TableHead class="font-bold border text-foreground text-center">{{
+          <TableHead class="font-bold border-r text-foreground text-center">{{
             $t("General.comment")
           }}</TableHead>
-          <TableHead class="font-bold border text-foreground text-center">{{
+          <TableHead class="font-bold border-r text-foreground text-center">{{
             $t("General.postingAccount")
           }}</TableHead>
-          <TableHead class="font-bold border text-foreground text-center">{{
+          <TableHead class="font-bold border-r text-foreground text-center">{{
             $t("General.capitalsource")
           }}</TableHead>
-          <TableHead class="font-bold border text-foreground text-center">{{
+          <TableHead class="font-bold border-r text-foreground text-center">{{
             $t("PreDefMoneyflow.onceAMonthShort")
           }}</TableHead>
-          <TableHead class="font-bold border text-foreground text-center">{{
+          <TableHead class="font-bold border-r text-foreground text-center">{{
             $t("PreDefMoneyflow.createDate")
           }}</TableHead>
-          <TableHead class="font-bold border text-foreground text-center">{{
+          <TableHead class="font-bold border-r text-foreground text-center">{{
             $t("PreDefMoneyflow.lastUsed")
           }}</TableHead>
-          <TableHead class="border" colspan="2"></TableHead>
+          <TableHead colspan="2"></TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -69,8 +69,6 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref, watch, useTemplateRef } from "vue";
-
 import DivContentTable from "@/components/DivContentTable.vue";
 import DivError from "@/components/DivError.vue";
 import DivFilter from "@/components/DivFilter.vue";
@@ -83,11 +81,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-
 import type { PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
-
 import PreDefMoneyflowService from "@/service/PreDefMoneyflowService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
+import { onMounted, ref, useTemplateRef, watch } from "vue";
 
 const serverErrors = ref(new Array<string>());
 

@@ -8,7 +8,7 @@
       >
         <DivError :server-errors="serverErrors" />
 
-        <div class="rounded-xl border bg-muted/30 p-4 shadow-sm space-y-4">
+        <div class="rounded-sm border bg-muted/30 p-4 shadow-sm space-y-4">
           <div class="grid gap-1.5">
             <InputStandard
               v-model="mcs.comment"
@@ -36,7 +36,7 @@
         </div>
 
         <div class="grid grid-cols-2 gap-4">
-          <div class="rounded-xl border bg-muted/30 p-4 shadow-sm space-y-4">
+          <div class="rounded-sm border bg-muted/30 p-4 shadow-sm space-y-4">
             <span
               class="text-xs font-bold uppercase tracking-wider text-muted-foreground block"
             >
@@ -58,7 +58,7 @@
             </div>
           </div>
 
-          <div class="rounded-xl border bg-muted/30 p-4 shadow-sm space-y-4">
+          <div class="rounded-sm border bg-muted/30 p-4 shadow-sm space-y-4">
             <span
               class="text-xs font-bold uppercase tracking-wider text-muted-foreground block"
             >
@@ -83,7 +83,7 @@
           </div>
         </div>
 
-        <div class="rounded-xl border bg-muted/30 p-4 shadow-sm space-y-4">
+        <div class="rounded-sm border bg-muted/30 p-4 shadow-sm space-y-4">
           <div class="flex items-center space-x-2">
             <span
               class="text-xs font-bold uppercase tracking-wider text-muted-foreground block mb-0"

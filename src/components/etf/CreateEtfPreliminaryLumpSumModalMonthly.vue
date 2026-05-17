@@ -8,7 +8,7 @@
         <div class="space-y-4">
           <DivError :server-errors="serverErrors" />
 
-          <div class="rounded-xl border bg-muted/30 p-4 shadow-sm space-y-4">
+          <div class="rounded-sm border bg-muted/30 p-4 shadow-sm space-y-4">
             <div class="grid grid-cols-1 sm:grid-cols-12 gap-4">
               <div class="sm:col-span-9">
                 <SelectStandard
@@ -31,7 +31,7 @@
             </div>
           </div>
 
-          <div class="rounded-xl border bg-muted/30 p-4 shadow-sm space-y-4">
+          <div class="rounded-sm border bg-muted/30 p-4 shadow-sm space-y-4">
             <div
               class="flex items-center space-x-2 border-b border-border/40 pb-2"
             >

@@ -1,24 +1,24 @@
 <template>
   <TableRow>
-    <TableCell class="border text-left"
+    <TableCell class="border-r text-left"
       ><a :href="etf.chartUrl">{{ etf.name }}</a></TableCell
     >
-    <TableCell class="border text-left">{{ etf.isin }}</TableCell>
-    <TableCell class="border text-left">{{ etf.wkn }}</TableCell>
-    <TableCell class="border text-left">{{ etf.ticker }}</TableCell>
-    <TableCell class="border text-right"
+    <TableCell class="border-r text-left">{{ etf.isin }}</TableCell>
+    <TableCell class="border-r text-left">{{ etf.wkn }}</TableCell>
+    <TableCell class="border-r text-left">{{ etf.ticker }}</TableCell>
+    <TableCell class="border-r text-right"
       ><SpanAmount :amount="etf.transactionCostsAbsolute"
     /></TableCell>
-    <TableCell class="border text-right">{{ relativeString }}</TableCell>
-    <TableCell class="border text-right"
+    <TableCell class="border-r text-right">{{ relativeString }}</TableCell>
+    <TableCell class="border-r text-right"
       ><SpanAmount :amount="etf.transactionCostsMaximum"
     /></TableCell>
-    <TableCell class="border text-right">{{ taxExemptionString }}</TableCell>
-    <TableCell class="border text-center" v-if="etf.isFavorite">
+    <TableCell class="border-r text-right">{{ taxExemptionString }}</TableCell>
+    <TableCell class="border-r text-center" v-if="etf.isFavorite">
       <Star class="h-5 w-5 transition-all fill-primary text-primary"
     /></TableCell>
-    <TableCell class="border text-start" v-if="!etf.isFavorite"></TableCell>
-    <TableCell class="w-0 border whitespace-nowrap text-center p-0">
+    <TableCell class="border-r text-start" v-if="!etf.isFavorite"></TableCell>
+    <TableCell class="w-0 whitespace-nowrap text-center p-0">
       <Button
         variant="ghost"
         size="icon"
@@ -29,7 +29,7 @@
         <Pencil class="h-4 w-4" />
       </Button>
     </TableCell>
-    <TableCell class="w-0 border whitespace-nowrap text-center p-0">
+    <TableCell class="w-0 border-l whitespace-nowrap text-center p-0">
       <Button
         variant="ghost"
         size="icon"
@@ -43,15 +43,15 @@
   </TableRow>
 </template>
 <script lang="ts" setup>
-import { computed, type PropType } from "vue";
 import { Pencil, Star, Trash2 } from "lucide-vue-next";
+import { computed, type PropType } from "vue";
 
-import { TableCell, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
+import { TableCell, TableRow } from "@/components/ui/table";
 
 import type { Etf } from "@/model/etf/Etf";
-import SpanAmount from "../SpanAmount.vue";
 import { formatNumber } from "@/tools/views/FormatNumber";
+import SpanAmount from "../SpanAmount.vue";
 
 const props = defineProps({
   etf: {

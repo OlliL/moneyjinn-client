@@ -5,7 +5,7 @@
     </div>
     <div class="flex justify-center">
       <div
-        class="w-full max-w-xl rounded-lg border bg-card text-card-foreground shadow-sm p-4"
+        class="w-full max-w-xl rounded-sm border bg-card text-card-foreground shadow-sm p-4"
       >
         <form @submit.prevent="changePassword">
           <div class="space-y-4">

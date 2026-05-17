@@ -28,19 +28,19 @@
     <DivContentTable class="max-w-xl">
       <TableHeader>
         <TableRow>
-          <TableHead class="font-bold border text-foreground text-center">{{
+          <TableHead class="font-bold border-r text-foreground text-center">{{
             $t("General.name")
           }}</TableHead>
-          <TableHead class="font-bold border text-foreground text-center">{{
+          <TableHead class="font-bold border-r text-foreground text-center">{{
             $t("General.group")
           }}</TableHead>
-          <TableHead class="font-bold border text-foreground text-center">{{
+          <TableHead class="font-bold border-r text-foreground text-center">{{
             $t("User.role")
           }}</TableHead>
-          <TableHead class="font-bold border text-foreground text-center">{{
+          <TableHead class="font-bold border-r text-foreground text-center">{{
             $t("User.new")
           }}</TableHead>
-          <TableHead class="border" colspan="2"></TableHead>
+          <TableHead colspan="2"></TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -57,20 +57,20 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref, watch, useTemplateRef } from "vue";
+import { onMounted, ref, useTemplateRef, watch } from "vue";
 
 import DivContentTable from "@/components/DivContentTable.vue";
 import DivError from "@/components/DivError.vue";
 import DivFilter from "@/components/DivFilter.vue";
-import CreateUserModalVue from "@/components/user/CreateUserModal.vue";
-import DeleteUserModalVue from "@/components/user/DeleteUserModal.vue";
-import ListUserRowVue from "@/components/user/ListUserRow.vue";
 import {
   TableBody,
   TableHead,
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import CreateUserModalVue from "@/components/user/CreateUserModal.vue";
+import DeleteUserModalVue from "@/components/user/DeleteUserModal.vue";
+import ListUserRowVue from "@/components/user/ListUserRow.vue";
 
 import type { User } from "@/model/user/User";
 

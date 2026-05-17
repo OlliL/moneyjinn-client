@@ -1,18 +1,18 @@
 <template>
   <TableRow>
-    <TableCell class="text-left border py-1 px-2">
+    <TableCell class="text-left border-r py-1 px-2">
       {{ mcm.matchingText }}
     </TableCell>
-    <TableCell class="text-left border py-1 px-2">
+    <TableCell class="text-left border-r py-1 px-2">
       {{ mcm.contractpartnerName }}
     </TableCell>
-    <TableCell class="text-left border py-1 px-2">
+    <TableCell class="text-left border-r py-1 px-2">
       {{ mcm.moneyflowComment }}
     </TableCell>
-    <TableCell class="text-left border py-1 px-2">
+    <TableCell class="text-left border-r py-1 px-2">
       {{ mcm.postingAccountName }}
     </TableCell>
-    <TableCell class="w-0 border whitespace-nowrap text-center p-0">
+    <TableCell class="w-0 whitespace-nowrap text-center p-0">
       <Button
         variant="ghost"
         size="icon"
@@ -23,7 +23,7 @@
         <Pencil class="h-4 w-4" />
       </Button>
     </TableCell>
-    <TableCell class="w-0 border whitespace-nowrap text-center p-0">
+    <TableCell class="w-0 border-l whitespace-nowrap text-center p-0">
       <Button
         variant="ghost"
         size="icon"
@@ -38,11 +38,11 @@
 </template>
 
 <script lang="ts" setup>
-import type { PropType } from "vue";
 import { Pencil, Trash2 } from "lucide-vue-next";
+import type { PropType } from "vue";
 
-import { TableCell, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
+import { TableCell, TableRow } from "@/components/ui/table";
 
 import type { ContractpartnerMatching } from "@/model/contractpartnermatching/ContractpartnerMatching";
 

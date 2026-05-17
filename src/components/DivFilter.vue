@@ -9,7 +9,7 @@
       <div class="flex w-80 items-center">
         <Button
           variant="secondary"
-          class="!rounded-r-none border-r-0"
+          class="!rounded-r-none"
           @click="clearSearch"
         >
           {{ $t("General.all") }}

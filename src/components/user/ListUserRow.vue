@@ -1,16 +1,16 @@
 <template>
   <TableRow>
-    <TableCell class="text-left border py-1 px-2">{{
+    <TableCell class="text-left border-r py-1 px-2">{{
       user.userName
     }}</TableCell>
-    <TableCell class="text-left border py-1 px-2">{{
+    <TableCell class="text-left border-r py-1 px-2">{{
       user.groupName
     }}</TableCell>
-    <TableCell class="text-center border py-1 px-2">{{ role }}</TableCell>
-    <TableCell class="text-center border py-1 px-2">
+    <TableCell class="text-center border-r py-1 px-2">{{ role }}</TableCell>
+    <TableCell class="text-center border-r py-1 px-2">
       <SpanBoolean :value="user.userIsNew" />
     </TableCell>
-    <TableCell class="w-0 border whitespace-nowrap text-center p-0">
+    <TableCell class="w-0 whitespace-nowrap text-center p-0">
       <Button
         variant="ghost"
         size="icon"
@@ -21,7 +21,7 @@
         <Pencil class="h-4 w-4" />
       </Button>
     </TableCell>
-    <TableCell class="w-0 border whitespace-nowrap text-center p-0">
+    <TableCell class="w-0 border-l whitespace-nowrap text-center p-0">
       <Button
         variant="ghost"
         size="icon"

@@ -4,7 +4,7 @@
       mmf.moneyflowSplitEntries == null || mmf.moneyflowSplitEntries.length == 0
     "
   >
-    <TableCell :class="[redIfPrivate, 'border py-0 px-1', rowBgClass]">
+    <TableCell :class="[redIfPrivate, ' border-r py-0 px-1', rowBgClass]">
       <Button
         v-if="mmf.hasReceipt"
         variant="ghost"
@@ -17,17 +17,19 @@
         <Image class="h-4 w-4" />
       </Button>
     </TableCell>
-    <TableCell :class="['border', rowBgClass]"
+    <TableCell :class="[' border-r', rowBgClass]"
       ><SpanDate :date="mmf.bookingDate"
     /></TableCell>
-    <TableCell :class="['hidden md:table-cell border', rowBgClass]"
+    <TableCell :class="['hidden md:table-cell  border-r', rowBgClass]"
       ><SpanDate :date="mmf.invoiceDate"
     /></TableCell>
     <TableCell :class="['text-right', rowBgClass]"></TableCell>
     <TableCell :class="['text-right', rowBgClass]">
       <SpanAmount :amount="mmf.amount" />
     </TableCell>
-    <TableCell :class="['text-left hidden md:table-cell border', rowBgClass]">
+    <TableCell
+      :class="['text-left hidden md:table-cell  border-r', rowBgClass]"
+    >
       {{ mmf.contractpartnerName }}
     </TableCell>
     <TableCell
@@ -37,14 +39,18 @@
       ]"
       >{{ mmf.comment }}</TableCell
     >
-    <TableCell :class="['text-left hidden md:table-cell border', rowBgClass]">
+    <TableCell
+      :class="['text-left hidden md:table-cell  border-r', rowBgClass]"
+    >
       {{ mmf.postingAccountName }}
     </TableCell>
-    <TableCell :class="['text-left hidden md:table-cell border ', rowBgClass]">
+    <TableCell
+      :class="['text-left hidden md:table-cell  border-r ', rowBgClass]"
+    >
       {{ mmf.capitalsourceComment }}
     </TableCell>
     <TableCell
-      :class="['text-center border py-0 px-1', rowBgClass]"
+      :class="['text-center py-0 px-1', rowBgClass]"
       v-if="isOwnMoneyflow"
     >
       <Button
@@ -59,7 +65,7 @@
       </Button>
     </TableCell>
     <TableCell
-      :class="['text-center border py-0 px-1', rowBgClass]"
+      :class="['text-center border-l py-0 px-1', rowBgClass]"
       v-if="isOwnMoneyflow"
     >
       <Button
@@ -74,7 +80,7 @@
       </Button>
     </TableCell>
     <TableCell
-      :class="['text-center border py-0 px-1', rowBgClass]"
+      :class="['text-center border-r py-0 px-1', rowBgClass]"
       v-if="!isOwnMoneyflow"
     >
       <Button
@@ -95,7 +101,7 @@
     <TableCell
       :rowspan="rowspan"
       v-if="index == 0"
-      :class="[redIfPrivate, 'border py-0 px-1', rowBgClass]"
+      :class="[redIfPrivate, ' border-r py-0 px-1', rowBgClass]"
     >
       <Button
         v-if="mmf.hasReceipt"
@@ -111,7 +117,7 @@
     </TableCell>
     <TableCell
       :rowspan="rowspan"
-      :class="['border', rowBgClass]"
+      :class="[' border-r', rowBgClass]"
       v-if="index == 0"
     >
       <SpanDate :date="mmf.bookingDate" />
@@ -119,48 +125,50 @@
     <TableCell
       :rowspan="rowspan"
       v-if="index == 0"
-      :class="['hidden md:table-cell border', rowBgClass]"
+      :class="['hidden md:table-cell  border-r', rowBgClass]"
     >
       <SpanDate :date="mmf.invoiceDate" />
     </TableCell>
     <TableCell
       :rowspan="rowspan"
       v-if="index == 0"
-      :class="['text-right border', rowBgClass]"
+      :class="['text-right  border-r', rowBgClass]"
     >
       <SpanAmount :amount="mmf.amount" />
     </TableCell>
-    <TableCell :class="['text-right border', rowBgClass]">
+    <TableCell :class="['text-right  border-r', rowBgClass]">
       <SpanAmount :amount="mse.amount" />
     </TableCell>
     <TableCell
       :rowspan="rowspan"
       v-if="index == 0"
-      :class="['text-left hidden md:table-cell border', rowBgClass]"
+      :class="['text-left hidden md:table-cell  border-r', rowBgClass]"
     >
       {{ mmf.contractpartnerName }}
     </TableCell>
     <TableCell
       :class="[
-        'text-left break-words whitespace-normal min-w-[150px] w-full',
+        'text-left border-r break-words whitespace-normal min-w-[150px] w-full',
         rowBgClass,
       ]"
       >{{ mse.comment }}</TableCell
     >
-    <TableCell :class="['text-left hidden md:table-cell border', rowBgClass]">
+    <TableCell
+      :class="['text-left hidden md:table-cell  border-r', rowBgClass]"
+    >
       {{ mse.postingAccountName }}
     </TableCell>
     <TableCell
       :rowspan="rowspan"
       v-if="index == 0"
-      :class="['text-left hidden md:table-cell border', rowBgClass]"
+      :class="['text-left hidden md:table-cell  border-r', rowBgClass]"
     >
       {{ mmf.capitalsourceComment }}
     </TableCell>
     <TableCell
       :rowspan="rowspan"
       v-if="index == 0 && isOwnMoneyflow"
-      :class="['text-center border py-0 px-1', rowBgClass]"
+      :class="['text-center  py-0 px-1', rowBgClass]"
     >
       <Button
         variant="ghost"
@@ -176,7 +184,7 @@
     <TableCell
       :rowspan="rowspan"
       v-if="index == 0 && isOwnMoneyflow"
-      :class="['text-center border py-0 px-1', rowBgClass]"
+      :class="['text-center border-l py-0 px-1', rowBgClass]"
     >
       <Button
         variant="ghost"
@@ -192,7 +200,7 @@
     <TableCell
       :rowspan="rowspan"
       v-if="index == 0 && !isOwnMoneyflow"
-      :class="['text-center border py-0 px-1', rowBgClass]"
+      :class="['text-center  border-r py-0 px-1', rowBgClass]"
     >
       <Button
         variant="ghost"

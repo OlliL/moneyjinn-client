@@ -13,13 +13,13 @@
       </TableHeader>
       <TableBody>
         <TableRow v-for="month in dataArray" :key="month.month">
-          <TableCell class="text-left">{{ month.month }}</TableCell>
+          <TableCell class="text-left border-r">{{ month.month }}</TableCell>
           <TableCell class="text-right"
             ><SpanAmount :amount="month.amount"
           /></TableCell>
         </TableRow>
         <TableRow>
-          <TableCell class="text-right font-bold">&sum;</TableCell>
+          <TableCell class="text-right border-r font-bold">&sum;</TableCell>
           <TableCell class="text-right">
             <u><SpanAmount :amount="sum" /></u>
           </TableCell>

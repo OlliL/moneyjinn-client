@@ -25,34 +25,34 @@
     <DivContentTable>
       <TableHeader>
         <TableRow>
-          <TableHead class="font-bold border text-foreground text-center">{{
+          <TableHead class="font-bold border-r text-foreground text-center">{{
             $t("General.name")
           }}</TableHead>
-          <TableHead class="font-bold border text-foreground text-center">{{
+          <TableHead class="font-bold border-r text-foreground text-center">{{
             $t("Capitalsource.type")
           }}</TableHead>
-          <TableHead class="font-bold border text-foreground text-center">{{
+          <TableHead class="font-bold border-r text-foreground text-center">{{
             $t("Capitalsource.state")
           }}</TableHead>
-          <TableHead class="font-bold border text-foreground text-center">{{
+          <TableHead class="font-bold border-r text-foreground text-center">{{
             $t("General.iban")
           }}</TableHead>
-          <TableHead class="font-bold border text-foreground text-center">{{
+          <TableHead class="font-bold border-r text-foreground text-center">{{
             $t("General.bic")
           }}</TableHead>
-          <TableHead class="font-bold border text-foreground text-center">{{
+          <TableHead class="font-bold border-r text-foreground text-center">{{
             $t("General.validFrom")
           }}</TableHead>
-          <TableHead class="font-bold border text-foreground text-center">{{
+          <TableHead class="font-bold border-r text-foreground text-center">{{
             $t("General.validTil")
           }}</TableHead>
-          <TableHead class="font-bold border text-foreground text-center">{{
+          <TableHead class="font-bold border-r text-foreground text-center">{{
             $t("Capitalsource.groupUse")
           }}</TableHead>
-          <TableHead class="font-bold border text-foreground text-center">{{
+          <TableHead class="font-bold border-r text-foreground text-center">{{
             $t("Capitalsource.importAllowed")
           }}</TableHead>
-          <TableHead class="border" colspan="2"></TableHead>
+          <TableHead colspan="2"></TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -72,14 +72,14 @@
 <script lang="ts" setup>
 import { onMounted, ref, useTemplateRef, watch } from "vue";
 
-import { useCapitalsourceStore } from "@/stores/CapitalsourceStore";
-import { useUserSessionStore } from "@/stores/UserSessionStore";
 import {
   TableBody,
   TableHead,
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { useCapitalsourceStore } from "@/stores/CapitalsourceStore";
+import { useUserSessionStore } from "@/stores/UserSessionStore";
 
 import DivContentTable from "@/components/DivContentTable.vue";
 import DivFilter from "@/components/DivFilter.vue";

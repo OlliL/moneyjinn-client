@@ -29,56 +29,51 @@
       <TableHeader>
         <TableRow>
           <TableHead
-            class="font-bold border text-foreground text-center"
+            class="font-bold border-r text-foreground text-center"
             rowspan="2"
             id="name"
             >{{ $t("General.name") }}</TableHead
           >
           <TableHead
-            class="font-bold border text-foreground text-center"
+            class="font-bold border-r text-foreground text-center"
             rowspan="2"
             id="isin"
             >{{ $t("ETF.isin") }}</TableHead
           >
           <TableHead
-            class="font-bold border text-foreground text-center"
+            class="font-bold border-r text-foreground text-center"
             rowspan="2"
             id="wkn"
             >{{ $t("ETF.wkn") }}</TableHead
           >
           <TableHead
-            class="font-bold border text-foreground text-center"
+            class="font-bold border-r text-foreground text-center"
             rowspan="2"
             id="ticker"
             >{{ $t("ETF.ticker") }}</TableHead
           >
           <TableHead
-            class="font-bold border text-foreground text-center"
+            class="font-bold border-r text-foreground text-center"
             colspan="3"
             id="transactionCosts"
           >
             {{ $t("ETFFlow.transactionCosts") }}
           </TableHead>
           <TableHead
-            class="font-bold border text-foreground text-center"
+            class="font-bold border-r text-foreground text-center"
             rowspan="2"
             id="partialTaxExemption"
           >
             {{ $t("ETF.partialTaxExemption") }}
           </TableHead>
           <TableHead
-            class="font-bold border text-foreground text-center"
+            class="font-bold border-r text-foreground text-center"
             rowspan="2"
             id="favorite"
           >
             <Star class="h-5 w-5 transition-all text-muted-foreground" />
           </TableHead>
-          <TableHead
-            class="border"
-            rowspan="2"
-            colspan="2"
-            id="editDelete"
-          ></TableHead>
+          <TableHead rowspan="2" colspan="2" id="editDelete"></TableHead>
         </TableRow>
         <TableRow>
           <TableHead
@@ -115,7 +110,7 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref, watch, useTemplateRef } from "vue";
+import { onMounted, ref, useTemplateRef, watch } from "vue";
 
 import DivContentTable from "@/components/DivContentTable.vue";
 import DivError from "@/components/DivError.vue";
@@ -133,8 +128,8 @@ import {
 import type { Etf } from "@/model/etf/Etf";
 
 import { useEtfStore } from "@/stores/EtfStore";
-import { storeToRefs } from "pinia";
 import { Star } from "lucide-vue-next";
+import { storeToRefs } from "pinia";
 
 const serverErrors = ref(new Array<string>());
 const etfs = ref(new Array<Etf>());

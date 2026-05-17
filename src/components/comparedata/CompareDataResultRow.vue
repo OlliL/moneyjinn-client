@@ -3,20 +3,20 @@
     <TableCell class="font-bold bg-primary/7 border-r text-left">
       {{ $t("CompareData.database") }}
     </TableCell>
-    <TableCell><SpanDate :date="mmf.bookingDate" /></TableCell>
-    <TableCell><SpanDate :date="mmf.invoiceDate" /></TableCell>
-    <TableCell class="text-right"
+    <TableCell class="border-r"><SpanDate :date="mmf.bookingDate" /></TableCell>
+    <TableCell class="border-r"><SpanDate :date="mmf.invoiceDate" /></TableCell>
+    <TableCell class="text-right border-r"
       ><SpanAmount :amount="mmf.amount"
     /></TableCell>
 
-    <TableCell class="text-left !whitespace-normal break-words">
+    <TableCell class="text-left border-r !whitespace-normal break-words">
       {{ mmf.contractpartnerName }}
     </TableCell>
-    <TableCell class="text-left !whitespace-normal break-words">
+    <TableCell class="text-left border-r !whitespace-normal break-words">
       {{ mmf.comment }}
     </TableCell>
 
-    <TableCell class="text-left whitespace-nowrap">
+    <TableCell class="text-left border-r whitespace-nowrap">
       {{ mmf.capitalsourceComment }}
     </TableCell>
 
@@ -35,7 +35,7 @@
       </Button>
     </TableCell>
     <TableCell
-      class="border whitespace-nowrap text-center p-0"
+      class="border whitespace-nowrap border-l text-center p-0"
       v-if="isOwnMoneyflow"
     >
       <Button
@@ -54,30 +54,34 @@
     <TableCell class="font-bold bg-primary/7 border-r text-left">
       {{ $t("CompareData.source") }}
     </TableCell>
-    <TableCell><SpanDate :date="importData.bookingDate" /></TableCell>
-    <TableCell><SpanDate :date="importData.invoiceDate" /></TableCell>
-    <TableCell class="text-right"
+    <TableCell class="border-r"
+      ><SpanDate :date="importData.bookingDate"
+    /></TableCell>
+    <TableCell class="border-r"
+      ><SpanDate :date="importData.invoiceDate"
+    /></TableCell>
+    <TableCell class="text-right border-r"
       ><SpanAmount :amount="importData.amount"
     /></TableCell>
 
     <TableCell
-      class="text-left !whitespace-normal break-words"
+      class="text-left border-r !whitespace-normal break-words"
       v-if="importData.partner"
     >
       {{ importData.partner }}
     </TableCell>
-    <TableCell class="text-left !whitespace-normal break-words" v-else>
+    <TableCell class="text-left border-r !whitespace-normal break-words" v-else>
       <i>{{ importData.contractpartnerName }}</i>
     </TableCell>
-    <TableCell class="text-left !whitespace-normal break-words">
+    <TableCell class="text-left border-r !whitespace-normal break-words">
       <SpanImportComment :comment="importData.comment" />
     </TableCell>
 
-    <TableCell class="text-left whitespace-nowrap">
+    <TableCell class="text-left border-r whitespace-nowrap">
       {{ capitalsourceComment }}
     </TableCell>
 
-    <TableCell class="border whitespace-nowrap text-center p-0">
+    <TableCell class="whitespace-nowrap text-center p-0">
       <Button
         variant="ghost"
         size="icon"
@@ -88,16 +92,16 @@
         <Plus class="h-4 w-4" />
       </Button>
     </TableCell>
-    <TableCell class="border"></TableCell>
+    <TableCell class="border-l"></TableCell>
   </TableRow>
   <TableRow class="border-b-2 border-black"></TableRow>
 </template>
 <script lang="ts" setup>
+import { Pencil, Plus, Trash2 } from "lucide-vue-next";
 import { computed, type PropType } from "vue";
-import { Pencil, Trash2, Plus } from "lucide-vue-next";
 
-import { TableCell, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
+import { TableCell, TableRow } from "@/components/ui/table";
 
 import SpanAmount from "../SpanAmount.vue";
 import SpanDate from "../SpanDate.vue";

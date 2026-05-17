@@ -1,6 +1,6 @@
 <template>
   <div class="mt-8" v-if="dataLoaded">
-    <div class="rounded-lg border">
+    <div class="rounded-sm border">
       <div class="border-b text-center p-3 py-4">
         <h5 class="text-xl">
           {{ $t("Reports.title.report", { month: monthName, year: year }) }}
@@ -27,7 +27,9 @@
             <TableHeader>
               <TableRow>
                 <TableHead class="hidden md:table-cell align-top"></TableHead>
-                <TableHead class="border text-foreground text-center align-top">
+                <TableHead
+                  class="border-r text-foreground text-center align-top"
+                >
                   <span
                     class="hidden md:block items-center justify-center mt-1 font-bold"
                     >{{ $t("Moneyflow.bookingdate") }}
@@ -50,7 +52,7 @@
                   </span>
                 </TableHead>
                 <TableHead
-                  class="border text-foreground text-center align-top hidden md:table-cell"
+                  class="border-r text-foreground text-center align-top hidden md:table-cell"
                 >
                   <span
                     class="hidden md:flex items-center justify-center gap-1 mt-1 font-bold"
@@ -66,7 +68,7 @@
                   </span>
                 </TableHead>
                 <TableHead
-                  class="border text-foreground text-center align-top"
+                  class="border-r text-foreground text-center align-top"
                   colspan="2"
                 >
                   <span
@@ -95,7 +97,7 @@
                   </span>
                 </TableHead>
                 <TableHead
-                  class="border text-foreground text-center align-top hidden md:table-cell"
+                  class="border-r text-foreground text-center align-top hidden md:table-cell"
                 >
                   <span
                     class="hidden md:flex items-center justify-center gap-1 mt-1 font-bold"
@@ -109,12 +111,12 @@
                       @click="sortByColumn('contractpartnerName')"
                     />
                   </span>
-                  <div class="flex items-center w-full max-w-sm mt-1">
+                  <div class="flex items-center w-full max-w-sm mt-1 mb-2">
                     <Input
                       type="text"
                       :placeholder="$t('General.enterFilter')"
                       v-model="filterContractpartner"
-                      class="h-8 rounded-r-none border-r-0 focus-visible:ring-1 focus-visible:ring-offset-0 focus-visible:z-10"
+                      class="h-8 rounded-r-none focus-visible:ring-1 focus-visible:ring-offset-0 focus-visible:z-10"
                     />
 
                     <Button
@@ -130,7 +132,9 @@
                     </Button>
                   </div>
                 </TableHead>
-                <TableHead class="border text-foreground text-center align-top">
+                <TableHead
+                  class="border-r text-foreground text-center align-top"
+                >
                   <div class="hidden md:block">
                     <span
                       class="hidden md:flex items-center justify-center gap-1 mt-1 font-bold"
@@ -149,7 +153,7 @@
                         type="text"
                         :placeholder="$t('General.enterFilter')"
                         v-model="filterComment"
-                        class="h-8 rounded-r-none border-r-0 focus-visible:ring-1 focus-visible:ring-offset-0 focus-visible:z-10"
+                        class="h-8 rounded-r-none focus-visible:ring-1 focus-visible:ring-offset-0 focus-visible:z-10"
                       />
                       <Button
                         variant="outline"
@@ -178,7 +182,7 @@
                 </TableHead>
 
                 <TableHead
-                  class="border text-foreground text-center align-top hidden md:table-cell"
+                  class="border-r text-foreground text-center align-top hidden md:table-cell"
                 >
                   <span
                     class="hidden md:flex items-center justify-center gap-1 mt-1 font-bold"
@@ -197,7 +201,7 @@
                       type="text"
                       :placeholder="$t('General.enterFilter')"
                       v-model="filterPostingAccount"
-                      class="h-8 rounded-r-none border-r-0 focus-visible:ring-1 focus-visible:ring-offset-0 focus-visible:z-10"
+                      class="h-8 rounded-r-none focus-visible:ring-1 focus-visible:ring-offset-0 focus-visible:z-10"
                     />
                     <Button
                       variant="outline"
@@ -214,7 +218,7 @@
                 </TableHead>
 
                 <TableHead
-                  class="border text-foreground text-center align-top hidden md:table-cell"
+                  class="border-r text-foreground text-center align-top hidden md:table-cell"
                 >
                   <span
                     class="hidden md:flex items-center justify-center gap-1 mt-1 font-bold"
@@ -233,7 +237,7 @@
                       type="text"
                       :placeholder="$t('General.enterFilter')"
                       v-model="filterCapitalsource"
-                      class="h-8 rounded-r-none border-r-0 focus-visible:ring-1 focus-visible:ring-offset-0 focus-visible:z-10"
+                      class="h-8 rounded-r-none focus-visible:ring-1 focus-visible:ring-offset-0 focus-visible:z-10"
                     />
                     <Button
                       variant="outline"
@@ -248,10 +252,7 @@
                     </Button>
                   </div>
                 </TableHead>
-                <TableHead
-                  class="font-bold border text-foreground text-center"
-                  colspan="2"
-                ></TableHead>
+                <TableHead colspan="2"></TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -294,7 +295,7 @@
       "
     >
       <div class="w-full max-w-7xl">
-        <div class="rounded-lg border">
+        <div class="rounded-sm border">
           <div class="border-b text-center p-3">
             <h4 class="text-2xl font-bold">{{ $t("Reports.ownCapital") }}</h4>
           </div>
@@ -312,10 +313,16 @@
                     <TableHeader>
                       <TableRow>
                         <TableHead id="thEmpty"></TableHead>
-                        <TableHead id="thMonth" class="text-center font-bold">
+                        <TableHead
+                          id="thMonth"
+                          class="text-center border-l font-bold"
+                        >
                           {{ $t("General.month") }}
                         </TableHead>
-                        <TableHead id="thYear" class="text-center font-bold">
+                        <TableHead
+                          id="thYear"
+                          class="text-center border-l font-bold"
+                        >
                           {{ $t("General.year") }}
                         </TableHead>
                       </TableRow>
@@ -323,12 +330,12 @@
                     <TableBody>
                       <TableRow v-if="currentMonthIsSettled">
                         <TableHead
-                          class="text-end font-bold"
+                          class="text-end font-bold border-r"
                           id="thFixedProfit"
                         >
                           {{ $t("Reports.fixedProfit") }}
                         </TableHead>
-                        <TableCell class="text-end">
+                        <TableCell class="text-end border-r">
                           <SpanAmount :amount="assetsMonthlyFixedTurnover" />
                         </TableCell>
                         <TableCell class="text-end">
@@ -337,12 +344,12 @@
                       </TableRow>
                       <TableRow>
                         <TableHead
-                          class="text-end font-bold"
+                          class="text-end font-bold border-r"
                           id="thCalculatedProfit"
                         >
                           {{ $t("Reports.calculatedProfit") }}
                         </TableHead>
-                        <TableCell class="text-end">
+                        <TableCell class="text-end border-r">
                           <SpanAmount
                             :amount="assetsMonthlyCalculatedTurnover"
                           />
@@ -354,10 +361,13 @@
                         </TableCell>
                       </TableRow>
                       <TableRow v-if="currentMonthIsSettled">
-                        <TableHead class="text-end font-bold" id="thDifference">
+                        <TableHead
+                          class="text-end font-bold border-r"
+                          id="thDifference"
+                        >
                           {{ $t("Reports.difference") }}
                         </TableHead>
-                        <TableCell class="text-end">
+                        <TableCell class="text-end border-r">
                           <SpanAmount :amount="assetsMonthlyDifference" />
                         </TableCell>
                         <TableCell class="text-end">
@@ -382,7 +392,7 @@
       "
     >
       <div class="w-full max-w-7xl">
-        <div class="rounded-lg border">
+        <div class="rounded-sm border">
           <div class="border-b text-center p-3">
             <h4 class="text-2xl font-bold">{{ $t("Reports.debtCapital") }}</h4>
           </div>
@@ -403,7 +413,7 @@
       "
     >
       <div class="w-full max-w-7xl">
-        <div class="rounded-lg border">
+        <div class="rounded-sm border">
           <div class="border-b text-center p-3">
             <h4 class="text-2xl font-bold">{{ $t("Reports.loans") }}</h4>
           </div>

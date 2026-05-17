@@ -11,7 +11,7 @@
               <DivError :server-errors="serverErrors" />
 
               <div
-                class="rounded-xl border bg-muted/30 p-4 shadow-sm space-y-4"
+                class="rounded-sm border bg-muted/30 p-4 shadow-sm space-y-4"
               >
                 <div
                   class="flex items-center space-x-2 border-b border-border/40 pb-2"
@@ -55,7 +55,7 @@
               </div>
 
               <div
-                class="rounded-xl border bg-muted/30 p-4 shadow-sm space-y-4"
+                class="rounded-sm border bg-muted/30 p-4 shadow-sm space-y-4"
               >
                 <div
                   class="flex items-center space-x-2 border-b border-border/40 pb-2"

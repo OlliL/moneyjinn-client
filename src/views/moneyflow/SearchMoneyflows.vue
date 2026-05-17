@@ -16,7 +16,7 @@
     </div>
     <div class="flex justify-center">
       <div
-        class="w-full max-w-7xl rounded-lg border bg-card text-card-foreground shadow-sm bg-muted p-4"
+        class="w-full max-w-7xl rounded-sm border bg-card text-card-foreground shadow-sm bg-muted p-4"
       >
         <form @submit.prevent="searchMoneyflows" id="searchMoneyflowsForm">
           <div class="space-y-4">
@@ -159,38 +159,38 @@
         <TableHeader>
           <TableRow>
             <TableHead
-              class="font-bold border text-foreground text-center w-12"
+              class="font-bold border-r text-foreground text-center w-12"
             ></TableHead>
 
             <TableHead
-              class="font-bold border text-foreground w-36"
+              class="font-bold border-r text-foreground w-36"
               v-if="colBookingMonth"
             >
               {{ $t("Moneyflow.bookingMonth") }}
             </TableHead>
 
             <TableHead
-              class="font-bold border text-foreground w-28"
+              class="font-bold border-r text-foreground w-28"
               v-if="colBookingYear"
             >
               {{ $t("Moneyflow.bookingYear") }}
             </TableHead>
 
             <TableHead
-              class="font-bold border text-foreground w-48 !whitespace-normal"
+              class="font-bold border-r text-foreground w-48 !whitespace-normal"
               v-if="colContractpartner"
             >
               {{ $t("General.contractpartner") }}
             </TableHead>
 
             <TableHead
-              class="font-bold border text-foreground text-center w-28"
+              class="font-bold border-r text-foreground text-center w-28"
             >
               {{ $t("General.amount") }}
             </TableHead>
 
             <TableHead
-              class="font-bold border text-foreground text-center !whitespace-normal"
+              class="font-bold text-foreground text-center !whitespace-normal"
             >
               {{ $t("General.comment") }}
             </TableHead>

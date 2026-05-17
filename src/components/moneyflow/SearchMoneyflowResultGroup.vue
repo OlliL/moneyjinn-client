@@ -1,6 +1,6 @@
 <template>
   <TableRow>
-    <TableCell class="align-middle">
+    <TableCell class="align-middle border-r">
       <Button
         variant="ghost"
         size="icon"
@@ -13,7 +13,7 @@
         <ChevronDown v-else class="h-4 w-4" />
       </Button>
     </TableCell>
-    <TableCell class="align-middle" v-if="colBookingMonth">
+    <TableCell class="align-middle border-r" v-if="colBookingMonth">
       <router-link
         class="text-primary hover:underline"
         :to="{
@@ -24,7 +24,7 @@
         {{ moneyflowGroup.monthString }} {{ moneyflowGroup.year }}
       </router-link>
     </TableCell>
-    <TableCell class="align-middle" v-if="colBookingYear">
+    <TableCell class="align-middle border-r" v-if="colBookingYear">
       <router-link
         class="text-primary hover:underline"
         :to="{
@@ -36,13 +36,13 @@
       </router-link>
     </TableCell>
     <TableCell
-      class="align-middle !whitespace-normal"
+      class="align-middle border-r !whitespace-normal"
       v-if="colContractpartner"
     >
       {{ moneyflowGroup.contractpartnerName }}
     </TableCell>
 
-    <TableCell class="text-right align-middle">
+    <TableCell class="text-right border-r align-middle">
       <SpanAmount :amount="moneyflowGroup.amount" />
     </TableCell>
     <TableCell class="text-left align-middle break-words !whitespace-normal">
@@ -65,35 +65,35 @@
           <Table class="[&_td]:!py-1 [&_th]:!py-1">
             <TableHeader>
               <TableRow>
-                <TableHead class="hidden border md:table-cell"
+                <TableHead class="hidden border-r border-b md:table-cell"
                   ><span class="sr-only">Status</span></TableHead
                 >
                 <TableHead
-                  class="font-bold border text-foreground text-center"
+                  class="font-bold border-r border-b text-foreground text-center"
                   >{{ $t("Moneyflow.bookingdate") }}</TableHead
                 >
                 <TableHead
-                  class="font-bold border text-foreground text-center"
+                  class="font-bold border-r border-b text-foreground text-center"
                   >{{ $t("General.amount") }}</TableHead
                 >
                 <TableHead
-                  class="font-bold border text-foreground text-center"
+                  class="font-bold border-r border-b text-foreground text-center"
                   >{{ $t("General.contractpartner") }}</TableHead
                 >
                 <TableHead
-                  class="font-bold border text-foreground text-center"
+                  class="font-bold border-r border-b text-foreground text-center"
                   >{{ $t("General.comment") }}</TableHead
                 >
                 <TableHead
-                  class="font-bold border text-foreground text-center"
+                  class="font-bold border-r border-b text-foreground text-center"
                   >{{ $t("General.postingAccount") }}</TableHead
                 >
                 <TableHead
-                  class="font-bold border text-foreground text-center"
+                  class="font-bold border-r border-b text-foreground text-center"
                   >{{ $t("General.capitalsource") }}</TableHead
                 >
                 <TableHead
-                  class="font-bold border text-foreground text-center"
+                  class="font-bold border-b text-foreground text-center"
                   colspan="2"
                 ></TableHead>
               </TableRow>
@@ -123,23 +123,23 @@
   </TableRow>
 </template>
 <script lang="ts" setup>
+import { ChevronDown, ChevronRight } from "lucide-vue-next";
 import { ref, watch, type PropType } from "vue";
-import { ChevronRight, ChevronDown } from "lucide-vue-next";
 
+import { Button } from "@/components/ui/button";
 import {
+  Table,
+  TableBody,
   TableCell,
   TableHead,
   TableHeader,
   TableRow,
-  Table,
-  TableBody,
 } from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
 
 import { Routes } from "@/router";
 
-import SearchMoneyflowResultRowVue from "./SearchMoneyflowResultRow.vue";
 import SpanAmount from "../SpanAmount.vue";
+import SearchMoneyflowResultRowVue from "./SearchMoneyflowResultRow.vue";
 
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 

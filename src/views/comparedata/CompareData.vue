@@ -12,7 +12,7 @@
     </div>
     <div class="flex justify-center">
       <div
-        class="w-full max-w-6xl rounded-lg border bg-card text-card-foreground shadow-sm bg-muted p-4"
+        class="w-full max-w-6xl rounded-sm border bg-card text-card-foreground shadow-sm bg-muted p-4"
       >
         <form @submit.prevent="compareData" id="compareDataForm">
           <div class="space-y-4">
@@ -94,7 +94,7 @@
         <TableHeader>
           <TableRow>
             <TableHead
-              class="font-bold border text-foreground text-center"
+              class="font-bold text-foreground text-center"
               colspan="3"
               >{{ $t("CompareData.result") }}</TableHead
             >
@@ -153,17 +153,17 @@
 import { useForm } from "vee-validate";
 import { computed, onMounted, ref, useTemplateRef } from "vue";
 import { useI18n } from "vue-i18n";
-import { any, date, number, array as arr, instanceof as instof } from "zod";
+import { any, array as arr, date, instanceof as instof, number } from "zod";
 
 import ButtonSubmit from "@/components/ButtonSubmit.vue";
+import SelectCapitalsource from "@/components/capitalsource/SelectCapitalsource.vue";
 import CompareDataResultGroupVue from "@/components/comparedata/CompareDataResultGroup.vue";
-import DeleteMoneyflowModalVue from "@/components/moneyflow/DeleteMoneyflowModal.vue";
 import DivContentTable from "@/components/DivContentTable.vue";
 import DivError from "@/components/DivError.vue";
-import EditMoneyflowModalVue from "@/components/moneyflow/EditMoneyflowModal.vue";
 import InputDate from "@/components/InputDate.vue";
 import InputFile from "@/components/InputFile.vue";
-import SelectCapitalsource from "@/components/capitalsource/SelectCapitalsource.vue";
+import DeleteMoneyflowModalVue from "@/components/moneyflow/DeleteMoneyflowModal.vue";
+import EditMoneyflowModalVue from "@/components/moneyflow/EditMoneyflowModal.vue";
 import SelectStandard from "@/components/SelectStandard.vue";
 
 import { useCapitalsourceStore } from "@/stores/CapitalsourceStore";
@@ -174,18 +174,18 @@ import type { CompareData } from "@/model/comparedata/CompareData";
 import type { CompareDataParameter } from "@/model/comparedata/CompareDataParameter";
 import type { SelectBoxValue } from "@/model/SelectBoxValue";
 
-import CompareDataService from "@/service/CompareDataService";
-import MoneyflowService from "@/service/MoneyflowService";
-import { handleBackendError } from "@/tools/views/HandleBackendError";
-import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
+import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
 import {
   TableBody,
   TableHead,
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Label } from "@/components/ui/label";
-import { Switch } from "@/components/ui/switch";
+import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
+import CompareDataService from "@/service/CompareDataService";
+import MoneyflowService from "@/service/MoneyflowService";
+import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { Eye } from "lucide-vue-next";
 
 const { t } = useI18n();

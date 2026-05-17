@@ -3,7 +3,7 @@
 
   <div class="flex justify-center mb-4" v-if="props.month">
     <div class="w-full max-w-md">
-      <div class="rounded-lg border">
+      <div class="rounded-sm border overflow-hidden">
         <div
           class="flex items-center justify-between bg-background border-b p-3"
         >
@@ -30,6 +30,7 @@
             @click="navigateToNextMonth"
             :disabled="!(nextMonth && nextYear)"
             class="h-8 w-8 cursor-pointer"
+            border-r
           >
             <ChevronRight class="h-5 w-5" />
           </Button>
@@ -43,12 +44,12 @@
               <TableHeader>
                 <TableRow>
                   <TableHead
-                    class="w-2/3 font-bold border text-foreground text-center"
+                    class="w-2/3 font-bold border-r text-foreground text-center"
                   >
                     {{ $t("General.capitalsource") }}
                   </TableHead>
                   <TableHead
-                    class="w-1/3 font-bold border text-foreground text-center"
+                    class="w-1/3 font-bold text-foreground text-center"
                   >
                     {{ $t("General.amount") }}
                   </TableHead>
@@ -59,16 +60,18 @@
                   v-for="mms in monthlySettlementsNoCredit"
                   :key="mms.id"
                 >
-                  <TableCell class="border text-left">{{
+                  <TableCell class="border-r text-left">{{
                     mms.capitalsourceComment
                   }}</TableCell>
-                  <TableCell class="border text-right"
+                  <TableCell class="text-right"
                     ><SpanAmount :amount="mms.amount"
                   /></TableCell>
                 </TableRow>
                 <TableRow>
-                  <TableCell class="text-right font-bold">&sum;</TableCell>
-                  <TableCell class="border text-right">
+                  <TableCell class="text-right border-r font-bold"
+                    >&sum;</TableCell
+                  >
+                  <TableCell class="text-right">
                     <u><SpanAmount :amount="monthlySettlementNoCreditSum" /></u>
                   </TableCell>
                 </TableRow>
@@ -83,18 +86,18 @@
               <TableHeader v-if="monthlySettlementsNoCredit.length">
                 <TableRow>
                   <TableHead
-                    class="w-2/3 font-bold border text-foreground text-center"
+                    class="w-2/3 font-bold border-r text-foreground text-center"
                     >{{ $t("General.capitalsource") }}</TableHead
                   >
                   <TableHead
-                    class="w-1/3 font-bold border text-foreground text-center"
+                    class="w-1/3 font-bold text-foreground text-center"
                     >{{ $t("General.amount") }}</TableHead
                   >
                 </TableRow>
               </TableHeader>
               <TableBody>
                 <TableRow v-for="mms in monthlySettlementsCredit" :key="mms.id">
-                  <TableCell class="border text-left">{{
+                  <TableCell class="border-r text-left">{{
                     mms.capitalsourceComment
                   }}</TableCell>
                   <TableCell class="text-right"
@@ -102,8 +105,10 @@
                   /></TableCell>
                 </TableRow>
                 <TableRow>
-                  <TableCell class="text-right font-bold">&sum;</TableCell>
-                  <TableCell class="border text-right">
+                  <TableCell class="text-right border-r font-bold"
+                    >&sum;</TableCell
+                  >
+                  <TableCell class="text-right">
                     <u>
                       <SpanAmount :amount="monthlySettlementCreditSum" />
                     </u>
@@ -119,8 +124,8 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, onMounted, ref, watch } from "vue";
 import { ChevronLeft, ChevronRight } from "lucide-vue-next";
+import { computed, onMounted, ref, watch } from "vue";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -140,9 +145,9 @@ import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { CapitalsourceType } from "@/model/capitalsource/CapitalsourceType";
 import type { MonthlySettlement } from "@/model/monthlysettlement/MonthlySettlement";
 
+import router, { Routes } from "@/router";
 import MonthlySettlementService from "@/service/MonthlySettlementService";
 import { getMonthName } from "@/tools/views/MonthName";
-import router, { Routes } from "@/router";
 
 const serverErrors = ref(new Array<string>());
 

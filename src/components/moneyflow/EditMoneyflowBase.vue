@@ -139,7 +139,7 @@
   </div>
 
   <div class="w-full mb-4">
-    <div class="rounded-lg border bg-muted/30 overflow-hidden">
+    <div class="rounded-sm border bg-muted/30 overflow-hidden">
       <div class="px-4 py-3 border-b text-left">
         <button
           type="button"

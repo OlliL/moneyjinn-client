@@ -1,7 +1,7 @@
 <template>
   <TableRow>
     <TableCell
-      :class="[redIfPrivate, rowBgClass]"
+      :class="[redIfPrivate, rowBgClass, 'border-r']"
       :rowspan="rowspan"
       v-if="isFirstOfMultipleRowsForSameMoneyflow"
     >
@@ -18,35 +18,37 @@
       </Button>
     </TableCell>
     <TableCell
-      :class="rowBgClass"
+      :class="[rowBgClass, 'border-r']"
       :rowspan="rowspan"
       v-if="isFirstOfMultipleRowsForSameMoneyflow"
     >
       <SpanDate :date="mmf.bookingDate" />
     </TableCell>
-    <TableCell :class="['text-right', rowBgClass]"
+    <TableCell :class="['text-right border-r', rowBgClass]"
       ><SpanAmount :amount="mmf.amount"
     /></TableCell>
     <TableCell
-      :class="['text-left', rowBgClass]"
+      :class="['text-left border-r', rowBgClass]"
       :rowspan="rowspan"
       v-if="isFirstOfMultipleRowsForSameMoneyflow"
     >
       {{ mmf.contractpartnerName }}
     </TableCell>
-    <TableCell :class="['text-left', rowBgClass]">{{ mmf.comment }}</TableCell>
-    <TableCell :class="['text-left', rowBgClass]">{{
+    <TableCell :class="['text-left border-r', rowBgClass]">{{
+      mmf.comment
+    }}</TableCell>
+    <TableCell :class="['text-left border-r', rowBgClass]">{{
       mmf.postingAccountName
     }}</TableCell>
     <TableCell
-      :class="['text-left', rowBgClass]"
+      :class="['text-left border-r', rowBgClass]"
       :rowspan="rowspan"
       v-if="isFirstOfMultipleRowsForSameMoneyflow"
     >
       {{ mmf.capitalsourceComment }}
     </TableCell>
     <TableCell
-      :class="['w-8 h-8 text-center', rowBgClass]"
+      :class="['w-8 h-8 text-center border-r', rowBgClass]"
       :rowspan="rowspan"
       v-if="isFirstOfMultipleRowsForSameMoneyflow && isOwnMoneyflow"
     >

@@ -1,22 +1,22 @@
 <template>
   <TableRow>
-    <TableCell class="text-left border py-1 px-2">
+    <TableCell class="text-left border-r py-1 px-2">
       {{ mcp.name }}
     </TableCell>
-    <TableCell class="text-center border py-1 px-2">
+    <TableCell class="text-center border-r py-1 px-2">
       <SpanDate :date="mcp.validFrom" />
     </TableCell>
-    <TableCell class="text-center border py-1 px-2">
+    <TableCell class="text-center border-r py-1 px-2">
       <SpanDate :date="mcp.validTil" />
     </TableCell>
-    <TableCell class="text-left border py-1 px-2">
+    <TableCell class="text-left border-r py-1 px-2">
       {{ mcp.moneyflowComment }}
     </TableCell>
-    <TableCell class="text-left border py-1 px-2">
+    <TableCell class="text-left border-r py-1 px-2">
       {{ mcp.postingAccountName }}
     </TableCell>
 
-    <TableCell class="w-0 border whitespace-nowrap text-center p-0">
+    <TableCell class="w-0 whitespace-nowrap text-center p-0">
       <Button
         variant="ghost"
         size="icon"
@@ -28,7 +28,7 @@
       </Button>
     </TableCell>
 
-    <TableCell class="w-0 border whitespace-nowrap text-center p-0">
+    <TableCell class="w-0 border-l whitespace-nowrap text-center p-0">
       <Button
         variant="ghost"
         size="icon"
@@ -40,7 +40,7 @@
       </Button>
     </TableCell>
 
-    <TableCell class="w-0 border whitespace-nowrap text-center p-0">
+    <TableCell class="w-0 border-l whitespace-nowrap text-center p-0">
       <Button
         variant="ghost"
         size="icon"
@@ -55,14 +55,14 @@
 </template>
 
 <script lang="ts" setup>
+import { Banknote, Pencil, Trash2 } from "lucide-vue-next";
 import type { PropType } from "vue";
-import { Pencil, Trash2, Banknote } from "lucide-vue-next";
 
-import { TableCell, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
+import { TableCell, TableRow } from "@/components/ui/table";
 
-import SpanDate from "../SpanDate.vue";
 import type { Contractpartner } from "@/model/contractpartner/Contractpartner";
+import SpanDate from "../SpanDate.vue";
 
 const props = defineProps({
   mcp: {

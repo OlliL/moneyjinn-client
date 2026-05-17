@@ -9,7 +9,7 @@
 
     <div class="flex justify-center">
       <div
-        class="w-full max-w-xl rounded-xl border bg-card text-card-foreground shadow-sm bg-muted p-6"
+        class="w-full max-w-xl rounded-sm border bg-card text-card-foreground shadow-sm bg-muted p-6"
       >
         <form @submit.prevent="showReportingGraph">
           <div class="space-y-6">
@@ -82,7 +82,7 @@
             </div>
             <div>
               <div
-                class="mb-3 text-left rounded-xl border bg-background p-4 shadow-sm space-y-3 w-full"
+                class="mb-3 text-left rounded-sm border bg-background p-4 shadow-sm space-y-3 w-full"
                 v-show="!singlePostingAccounts"
               >
                 <div class="flex items-center justify-between pb-2 border-b">
@@ -124,7 +124,7 @@
                 </div>
 
                 <Command
-                  class="rounded-lg border border-input h-[180px] overflow-hidden flex flex-col transition-opacity bg-background"
+                  class="rounded-sm border border-input h-[180px] overflow-hidden flex flex-col transition-opacity bg-background"
                   id="postingAccounts"
                 >
                   <CommandInput

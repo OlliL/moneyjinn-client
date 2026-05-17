@@ -1,29 +1,31 @@
 <template>
   <TableRow>
-    <TableCell class="text-left" v-if="name">
+    <TableCell class="text-left border-r" v-if="name">
       <a :href="chartUrl">{{ name }}</a>
     </TableCell>
-    <TableCell class="text-right">{{ etfFlowAmountSumString }}</TableCell>
-    <TableCell class="text-right hidden md:table-cell">
+    <TableCell class="text-right border-r">{{
+      etfFlowAmountSumString
+    }}</TableCell>
+    <TableCell class="text-right border-r hidden md:table-cell">
       <SpanAmount
         :amount="avgSpentPrice"
         :decimal-places="4"
         v-if="avgSpentPrice"
       />
     </TableCell>
-    <TableCell class="text-right hidden md:table-cell">
+    <TableCell class="text-right border-r hidden md:table-cell">
       <SpanAmount :amount="sellPrice" :decimal-places="3" v-if="sellPrice" />
     </TableCell>
-    <TableCell class="text-right hidden md:table-cell">
+    <TableCell class="text-right border-r hidden md:table-cell">
       <SpanAmount :amount="buyPrice" :decimal-places="3" v-if="buyPrice" />
     </TableCell>
-    <TableCell class="text-right">
+    <TableCell class="text-right border-r">
       <SpanAmount :amount="spentValue" v-if="spentValue" />
     </TableCell>
-    <TableCell class="text-right">
+    <TableCell class="text-right border-r">
       <SpanAmount :amount="sumSellPrice" v-if="sumSellPrice" />
     </TableCell>
-    <TableCell class="text-right">
+    <TableCell class="text-right border-r">
       <u><SpanAmount :amount="profit" v-if="profit" /></u>
     </TableCell>
     <TableCell class="text-right hidden md:table-cell">{{

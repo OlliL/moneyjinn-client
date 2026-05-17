@@ -27,22 +27,22 @@
     <DivContentTable class="max-w-5xl">
       <TableHeader>
         <TableRow>
-          <TableHead class="font-bold border text-foreground text-center">
+          <TableHead class="font-bold border-r text-foreground text-center">
             {{ $t("General.name") }}
           </TableHead>
-          <TableHead class="font-bold border text-foreground text-center">
+          <TableHead class="font-bold border-r text-foreground text-center">
             {{ $t("General.validFrom") }}
           </TableHead>
-          <TableHead class="font-bold border text-foreground text-center">
+          <TableHead class="font-bold border-r text-foreground text-center">
             {{ $t("General.validTil") }}
           </TableHead>
-          <TableHead class="font-bold border text-foreground text-center">
+          <TableHead class="font-bold border-r text-foreground text-center">
             {{ $t("Contractpartner.moneyflowComment") }}
           </TableHead>
-          <TableHead class="font-bold border text-foreground text-center">
+          <TableHead class="font-bold border-r text-foreground text-center">
             {{ $t("General.postingAccount") }}
           </TableHead>
-          <TableHead class="border" colspan="3"></TableHead>
+          <TableHead colspan="3"></TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -61,8 +61,8 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref, watch, useTemplateRef } from "vue";
 import { storeToRefs } from "pinia";
+import { onMounted, ref, useTemplateRef, watch } from "vue";
 
 import {
   TableBody,
@@ -77,8 +77,8 @@ import DivContentTable from "@/components/DivContentTable.vue";
 import DivFilter from "@/components/DivFilter.vue";
 import CreateContractpartnerModalVue from "@/components/contractpartner/CreateContractpartnerModal.vue";
 import DeleteContractpartnerModalVue from "@/components/contractpartner/DeleteContractpartnerModal.vue";
-import ListContractpartnerAccountsModal from "@/components/contractpartneraccount/ListContractpartnerAccountsModal.vue";
 import ListContractpartnerRowVue from "@/components/contractpartner/ListContractpartnerRow.vue";
+import ListContractpartnerAccountsModal from "@/components/contractpartneraccount/ListContractpartnerAccountsModal.vue";
 
 import type { Contractpartner } from "@/model/contractpartner/Contractpartner";
 

@@ -2,7 +2,7 @@
   <DivError :server-errors="serverErrors" />
   <div class="flex justify-center py-4" v-if="dataLoaded && etfSummaryReceived">
     <div class="w-full max-w-7xl">
-      <div class="rounded-lg border">
+      <div class="rounded-sm border">
         <div class="border-b p-3 text-center">
           <h4 class="font-semibold">{{ $t("General.etf") }}</h4>
         </div>
@@ -13,14 +13,14 @@
                 <TableHeader>
                   <TableRow>
                     <TableHead
-                      class="font-bold border text-foreground text-center"
+                      class="font-bold border-r text-foreground text-center"
                       rowspan="2"
                       id="thEtf"
                     >
                       {{ $t("General.etf") }}
                     </TableHead>
                     <TableHead
-                      class="font-bold border text-foreground text-center"
+                      class="font-bold border-r text-foreground text-center"
                       rowspan="2"
                       id="thShares"
                     >
@@ -34,7 +34,7 @@
                       {{ $t("ETFFlow.amount") }}
                     </TableHead>
                     <TableHead
-                      class="font-bold border text-foreground text-center"
+                      class="font-bold border-r text-foreground text-center"
                       colspan="3"
                       id="thOverall"
                     >

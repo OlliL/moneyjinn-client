@@ -1,7 +1,7 @@
 <template>
   <TableRow>
-    <TableCell class="text-left border">{{ group.name }}</TableCell>
-    <TableCell class="w-0 border whitespace-nowrap text-center p-0">
+    <TableCell class="text-left border-r">{{ group.name }}</TableCell>
+    <TableCell class="w-0 whitespace-nowrap text-center p-0">
       <Button
         variant="ghost"
         size="icon"
@@ -12,7 +12,7 @@
         <Pencil class="h-4 w-4" />
       </Button>
     </TableCell>
-    <TableCell class="w-0 border whitespace-nowrap text-center p-0">
+    <TableCell class="w-0 border-l whitespace-nowrap text-center p-0">
       <Button
         variant="ghost"
         size="icon"
@@ -26,13 +26,11 @@
   </TableRow>
 </template>
 <script lang="ts" setup>
-import type { PropType } from "vue";
-import { Pencil, Trash2 } from "lucide-vue-next";
-
-import { TableCell, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-
+import { TableCell, TableRow } from "@/components/ui/table";
 import type { Group } from "@/model/group/Group";
+import { Pencil, Trash2 } from "lucide-vue-next";
+import type { PropType } from "vue";
 
 const props = defineProps({
   group: {

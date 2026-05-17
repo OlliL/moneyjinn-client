@@ -18,7 +18,7 @@
       :key="importedMoneyflow.externalid"
     >
       <div
-        class="w-full rounded-xl border bg-card text-card-foreground shadow-sm overflow-hidden"
+        class="w-full rounded-sm border bg-card text-card-foreground shadow-sm overflow-hidden"
       >
         <form @submit.prevent="importImportedMoneyflow(importedMoneyflow)">
           <div class="grid grid-cols-1 lg:grid-cols-4 min-h-full">
@@ -117,12 +117,12 @@ import EditMoneyflowBase from "@/components/moneyflow/EditMoneyflowBase.vue";
 
 import type { ImportedMoneyflow } from "@/model/moneyflow/ImportedMoneyflow";
 
-import ImportedMoneyflowService from "@/service/ImportedMoneyflowService";
 import DivError from "@/components/DivError.vue";
+import SpanImportComment from "@/components/SpanImportComment.vue";
+import { Button } from "@/components/ui/button";
+import ImportedMoneyflowService from "@/service/ImportedMoneyflowService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { Save, Smile, Trash2 } from "lucide-vue-next";
-import { Button } from "@/components/ui/button";
-import SpanImportComment from "@/components/SpanImportComment.vue";
 
 const serverErrors = ref(new Array<string>());
 

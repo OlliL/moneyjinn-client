@@ -29,52 +29,52 @@
             <TableHeader>
               <TableRow>
                 <TableHead
-                  class="font-bold border text-foreground text-center w-[120px]"
+                  class="font-bold border-r border-b text-foreground text-center w-[120px]"
                 >
                   <span class="sr-only">Status</span>
                 </TableHead>
 
                 <TableHead
-                  class="font-bold border text-foreground text-center w-[140px]"
+                  class="font-bold border-r border-b text-foreground text-center w-[140px]"
                 >
                   {{ $t("Moneyflow.bookingdate") }}
                 </TableHead>
                 <TableHead
-                  class="font-bold border text-foreground text-center w-[140px]"
+                  class="font-bold border-r border-b text-foreground text-center w-[140px]"
                 >
                   {{ $t("Moneyflow.invoicedate") }}
                 </TableHead>
 
                 <TableHead
-                  class="font-bold border text-foreground text-center w-25"
+                  class="font-bold border-r border-b text-foreground text-center w-25"
                 >
                   {{ $t("General.amount") }}
                 </TableHead>
 
                 <TableHead
-                  class="font-bold border text-foreground text-center w-[20%]"
+                  class="font-bold border-r border-b text-foreground text-center w-[20%]"
                 >
                   {{ $t("General.contractpartner") }}
                 </TableHead>
                 <TableHead
-                  class="font-bold border text-foreground text-center w-[30%]"
+                  class="font-bold border-r border-b text-foreground text-center w-[30%]"
                 >
                   {{ $t("General.comment") }}
                 </TableHead>
 
                 <TableHead
-                  class="font-bold border text-foreground text-center w-45"
+                  class="font-bold border-r border-b text-foreground text-center w-45"
                 >
                   {{ $t("General.capitalsource") }}
                 </TableHead>
 
                 <TableHead
-                  class="font-bold border text-foreground text-center w-11.25"
+                  class="font-bold border-b text-foreground text-center w-11.25"
                 >
                   <span class="sr-only">Edit</span>
                 </TableHead>
                 <TableHead
-                  class="font-bold border text-foreground text-center w-11.25"
+                  class="font-bold border-b text-foreground text-center w-11.25"
                 >
                   <span class="sr-only">Delete</span>
                 </TableHead>

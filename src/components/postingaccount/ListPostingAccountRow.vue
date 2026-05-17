@@ -1,7 +1,7 @@
 <template>
   <TableRow>
-    <TableCell class="text-left border">{{ mpa.name }}</TableCell>
-    <TableCell class="w-0 border whitespace-nowrap text-center p-0">
+    <TableCell class="text-left border-r">{{ mpa.name }}</TableCell>
+    <TableCell class="w-0 whitespace-nowrap text-center p-0">
       <Button
         variant="ghost"
         size="icon"
@@ -12,7 +12,7 @@
         <Pencil class="h-4 w-4" />
       </Button>
     </TableCell>
-    <TableCell class="w-0 border whitespace-nowrap text-center p-0">
+    <TableCell class="w-0 border-l whitespace-nowrap text-center p-0">
       <Button
         variant="ghost"
         size="icon"

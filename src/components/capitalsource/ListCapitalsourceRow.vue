@@ -1,22 +1,23 @@
 <template>
   <TableRow>
-    <TableCell class="text-left">{{ mcs.comment }}</TableCell>
-    <TableCell class="text-left">{{ typeString }}</TableCell>
-    <TableCell class="text-left">{{ stateString }}</TableCell>
-    <TableCell class="text-left">{{ mcs.accountNumber }}</TableCell>
-    <TableCell class="text-left">{{ mcs.bankCode }}</TableCell>
-    <TableCell class="text-left"><SpanDate :date="mcs.validFrom" /></TableCell>
-    <TableCell class="text-left"><SpanDate :date="mcs.validTil" /></TableCell>
-    <TableCell class="text-center"
+    <TableCell class="text-left border-r">{{ mcs.comment }}</TableCell>
+    <TableCell class="text-left border-r">{{ typeString }}</TableCell>
+    <TableCell class="text-left border-r">{{ stateString }}</TableCell>
+    <TableCell class="text-left border-r">{{ mcs.accountNumber }}</TableCell>
+    <TableCell class="text-left border-r">{{ mcs.bankCode }}</TableCell>
+    <TableCell class="text-left border-r"
+      ><SpanDate :date="mcs.validFrom"
+    /></TableCell>
+    <TableCell class="text-left border-r"
+      ><SpanDate :date="mcs.validTil"
+    /></TableCell>
+    <TableCell class="text-center border-r"
       ><SpanBoolean :value="mcs.groupUse"
     /></TableCell>
-    <TableCell class="text-center">
+    <TableCell class="text-center border-r">
       <b :class="importAllowedColorClass">{{ importAllowedString }}</b>
     </TableCell>
-    <TableCell
-      class="w-0 border whitespace-nowrap text-center p-0"
-      v-if="owner"
-    >
+    <TableCell class="w-0 whitespace-nowrap text-center p-0" v-if="owner">
       <Button
         variant="ghost"
         size="icon"
@@ -28,7 +29,7 @@
       </Button>
     </TableCell>
     <TableCell
-      class="w-0 border whitespace-nowrap text-center p-0"
+      class="w-0 border-l whitespace-nowrap text-center p-0"
       v-if="owner"
     >
       <Button
@@ -44,11 +45,11 @@
   </TableRow>
 </template>
 <script lang="ts" setup>
-import { computed, type PropType } from "vue";
 import { Pencil, Trash2 } from "lucide-vue-next";
+import { computed, type PropType } from "vue";
 
-import { TableCell, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
+import { TableCell, TableRow } from "@/components/ui/table";
 
 import SpanDate from "../SpanDate.vue";
 

@@ -12,7 +12,7 @@
   >
     <div class="flex justify-center">
       <div class="w-full max-w-xl mb-4">
-        <div class="rounded-lg border bg-muted/20">
+        <div class="rounded-sm border bg-muted/20">
           <div class="p-4">
             <div class="space-y-4">
               <DivError :server-errors="serverErrors" />
@@ -117,19 +117,19 @@
 
 <script lang="ts" setup>
 import type { Etf } from "@/model/etf/Etf";
+import type { EtfSalesCalculation } from "@/model/etf/EtfSalesCalculation";
+import type { EtfSummary } from "@/model/etf/EtfSummary";
+import EtfService from "@/service/EtfService";
+import { handleBackendError } from "@/tools/views/HandleBackendError";
+import { amountSchema } from "@/tools/views/ZodUtil";
 import { Euro, Percent } from "lucide-vue-next";
+import { useForm } from "vee-validate";
+import { ref, watch, type PropType } from "vue";
+import { useI18n } from "vue-i18n";
+import ButtonSubmit from "../ButtonSubmit.vue";
 import DivError from "../DivError.vue";
 import InputStandard from "../InputStandard.vue";
-import type { EtfSummary } from "@/model/etf/EtfSummary";
-import { ref, watch, type PropType } from "vue";
-import { useForm } from "vee-validate";
-import { amountSchema } from "@/tools/views/ZodUtil";
-import { useI18n } from "vue-i18n";
-import EtfService from "@/service/EtfService";
-import type { EtfSalesCalculation } from "@/model/etf/EtfSalesCalculation";
-import { handleBackendError } from "@/tools/views/HandleBackendError";
 import CalcEtfSaleResult from "./CalcEtfSaleResult.vue";
-import ButtonSubmit from "../ButtonSubmit.vue";
 
 const props = defineProps({
   etf: {

@@ -1,31 +1,31 @@
 <template>
   <TableRow>
-    <TableCell class="text-right border py-1 px-2">
+    <TableCell class="text-right border-r py-1 px-2">
       <SpanAmount :amount="mpm.amount" />
     </TableCell>
-    <TableCell class="text-left border py-1 px-2">
+    <TableCell class="text-left border-r py-1 px-2">
       {{ mpm.contractpartnerName }}
     </TableCell>
-    <TableCell class="text-left border py-1 px-2">
+    <TableCell class="text-left border-r py-1 px-2">
       {{ mpm.comment }}
     </TableCell>
-    <TableCell class="text-left border py-1 px-2">
+    <TableCell class="text-left border-r py-1 px-2">
       {{ mpm.postingAccountName }}
     </TableCell>
-    <TableCell class="text-left border py-1 px-2">
+    <TableCell class="text-left border-r py-1 px-2">
       {{ mpm.capitalsourceComment }}
     </TableCell>
-    <TableCell class="text-center border py-1 px-2">
+    <TableCell class="text-center border-r py-1 px-2">
       <SpanBoolean :value="mpm.onceAMonth" />
     </TableCell>
 
-    <TableCell class="text-center border py-1 px-2">
+    <TableCell class="text-center border-r py-1 px-2">
       <SpanDate :date="mpm.createDate" />
     </TableCell>
-    <TableCell class="text-center border py-1 px-2">
+    <TableCell class="text-center border-r py-1 px-2">
       <SpanDate :date="mpm.lastUsed" />
     </TableCell>
-    <TableCell class="w-0 border whitespace-nowrap text-center p-0">
+    <TableCell class="w-0 whitespace-nowrap text-center p-0">
       <Button
         variant="ghost"
         size="icon"
@@ -36,7 +36,7 @@
         <Pencil class="h-4 w-4" />
       </Button>
     </TableCell>
-    <TableCell class="w-0 border whitespace-nowrap text-center p-0">
+    <TableCell class="w-0 border-l whitespace-nowrap text-center p-0">
       <Button
         variant="ghost"
         size="icon"

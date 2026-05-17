@@ -26,10 +26,10 @@
       <TableHeader>
         <TableRow>
           <TableHead
-            class="font-bold border text-foreground text-center w-full"
+            class="font-bold border-r text-foreground text-center w-full"
             >{{ $t("General.name") }}</TableHead
           >
-          <TableHead class="border" colspan="2"></TableHead>
+          <TableHead colspan="2"></TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -48,8 +48,6 @@
 <script lang="ts" setup>
 import { onMounted, ref, useTemplateRef, watch } from "vue";
 
-import { usePostingAccountStore } from "@/stores/PostingAccountStore";
-
 import DivContentTable from "@/components/DivContentTable.vue";
 import DivFilter from "@/components/DivFilter.vue";
 import CreatePostingAccountModalVue from "@/components/postingaccount/CreatePostingAccountModal.vue";
@@ -61,8 +59,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-
 import type { PostingAccount } from "@/model/postingaccount/PostingAccount";
+import { usePostingAccountStore } from "@/stores/PostingAccountStore";
 import { storeToRefs } from "pinia";
 
 const postingAccounts = ref(new Array<PostingAccount>());

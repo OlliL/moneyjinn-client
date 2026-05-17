@@ -2,7 +2,7 @@
   <div class="flex justify-center mb-6">
     <div class="w-full max-w-6xl">
       <div
-        class="w-full rounded-xl border bg-card text-card-foreground shadow-sm overflow-hidden"
+        class="w-full rounded-sm border bg-card text-card-foreground shadow-sm overflow-hidden"
       >
         <div class="grid grid-cols-1 lg:grid-cols-5 min-h-full">
           <div
@@ -132,7 +132,7 @@
 
                 <div
                   v-if="searchExecuted && !searchSuccessful"
-                  class="text-sm text-center py-6 text-muted-foreground border border-dashed rounded-lg bg-muted/10"
+                  class="text-sm text-center py-6 text-muted-foreground border border-dashed rounded-sm bg-muted/10"
                 >
                   {{ $t("Moneyflow.noMatchingMoneyflow") }}
                 </div>
@@ -171,17 +171,17 @@
 </template>
 
 <script lang="ts" setup>
+import { Euro, Save, Search, Trash2 } from "lucide-vue-next";
 import { useForm } from "vee-validate";
 import { computed, nextTick, onMounted, ref, type PropType } from "vue";
 import { useI18n } from "vue-i18n";
 import { date } from "zod";
-import { Euro, Save, Search, Trash2 } from "lucide-vue-next";
 
 import ButtonSubmit from "../ButtonSubmit.vue";
 import DivError from "../DivError.vue";
-import ImportReceiptSearchRowVue from "./ImportReceiptSearchRow.vue";
-import InputStandard from "../InputStandard.vue";
 import InputDate from "../InputDate.vue";
+import InputStandard from "../InputStandard.vue";
+import ImportReceiptSearchRowVue from "./ImportReceiptSearchRow.vue";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -192,9 +192,9 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-import { amountSchema, globErr } from "@/tools/views/ZodUtil";
-import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { toFixed } from "@/tools/math";
+import { handleBackendError } from "@/tools/views/HandleBackendError";
+import { amountSchema, globErr } from "@/tools/views/ZodUtil";
 
 import type { ImportedMoneyflowReceipt } from "@/model/moneyflow/ImportedMoneyflowReceipt";
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";

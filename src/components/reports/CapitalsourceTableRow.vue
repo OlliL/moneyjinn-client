@@ -1,28 +1,28 @@
 <template>
-  <TableRow class="[&_td]:border">
-    <TableCell class="text-left hidden md:table-cell">
+  <TableRow class="">
+    <TableCell class="text-left border-r hidden md:table-cell">
       {{ capitalsourceTypeString }}
     </TableCell>
-    <TableCell class="text-left hidden md:table-cell">
+    <TableCell class="text-left border-r hidden md:table-cell">
       {{ capitalsourceStateString }}
     </TableCell>
-    <TableCell class="text-left">{{ capitalsourceComment }}</TableCell>
-    <TableCell class="text-right"
+    <TableCell class="text-left border-r">{{ capitalsourceComment }}</TableCell>
+    <TableCell class="text-right border-r"
       ><SpanAmount :amount="amountBeginOfMonthFixed"
     /></TableCell>
-    <TableCell class="text-right" v-if="currentMonthIsSettled">
+    <TableCell class="text-right border-r" v-if="currentMonthIsSettled">
       <SpanAmount :amount="amountEndOfMonthFixed" />
     </TableCell>
-    <TableCell class="text-right hidden md:table-cell">
+    <TableCell class="text-right border-r hidden md:table-cell">
       <SpanAmount :amount="amountEndOfMonthCalculated" />
     </TableCell>
     <TableCell
-      class="text-right hidden md:table-cell"
+      class="text-right border-r hidden md:table-cell"
       v-if="currentMonthIsSettled"
     >
       <SpanAmount :amount="differenceFixedCalculated" />
     </TableCell>
-    <TableCell class="text-right" v-if="!currentMonthIsSettled">
+    <TableCell class="text-right border-r" v-if="!currentMonthIsSettled">
       <SpanAmount :amount="amountCurrent" />
     </TableCell>
     <TableCell

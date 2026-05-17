@@ -6,16 +6,19 @@
           <TableHeader>
             <TableRow>
               <TableHead
-                class="font-bold border text-foreground text-center"
+                class="font-bold text-foreground text-center"
                 rowspan="2"
               >
                 {{ $t("ETFFlow.shares") }}
               </TableHead>
-              <TableHead class="text-center hidden md:table-cell" colspan="3">
+              <TableHead
+                class="text-center border-l hidden md:table-cell"
+                colspan="3"
+              >
                 {{ $t("ETFFlow.amount") }}
               </TableHead>
               <TableHead
-                class="font-bold border text-foreground text-center"
+                class="font-bold border-l border-r text-foreground text-center"
                 colspan="3"
               >
                 {{ $t("ETFFlow.overall") }}
@@ -61,7 +64,6 @@
   </div>
 </template>
 <script lang="ts" setup>
-import type { PropType } from "vue";
 import {
   Table,
   TableBody,
@@ -69,8 +71,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import EtfTableRow from "../reports/EtfTableRow.vue";
 import type { EtfSummary } from "@/model/etf/EtfSummary";
+import type { PropType } from "vue";
+import EtfTableRow from "../reports/EtfTableRow.vue";
 
 defineProps({
   etfSummary: {

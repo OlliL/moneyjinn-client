@@ -27,10 +27,10 @@
     <DivContentTable class="max-w-sm">
       <TableHeader>
         <TableRow>
-          <TableHead class="font-bold border text-foreground text-center">{{
+          <TableHead class="font-bold border-r text-foreground text-center">{{
             $t("General.name")
           }}</TableHead>
-          <TableHead class="border" colspan="2"></TableHead>
+          <TableHead colspan="2"></TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -47,7 +47,7 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref, watch, useTemplateRef } from "vue";
+import { onMounted, ref, useTemplateRef, watch } from "vue";
 
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 
