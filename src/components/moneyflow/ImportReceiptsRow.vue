@@ -73,7 +73,7 @@
                   <div class="shrink-0">
                     <ButtonSubmit
                       :form-id="'searchReceipt' + receipt.id"
-                      class="h-10"
+                      class="h-8 w-8"
                     >
                       <template #icon><Search class="h-4 w-4" /></template>
                     </ButtonSubmit>
@@ -86,48 +86,54 @@
                   class="flex flex-col rounded-md border overflow-hidden shadow-sm"
                   v-if="searchExecuted && searchSuccessful"
                 >
-                  <Table>
-                    <TableHeader class="bg-muted/30">
-                      <TableRow>
-                        <TableHead class="w-10">
-                          <span class="sr-only">Selection</span>
-                        </TableHead>
-                        <TableHead
-                          class="font-bold border-r text-foreground text-center px-3 py-2 text-xs"
-                        >
-                          {{ $t("Moneyflow.invoicedate") }}
-                        </TableHead>
-                        <TableHead
-                          class="font-bold border-r text-foreground text-center px-3 py-2 text-xs"
-                        >
-                          {{ $t("General.amount") }}
-                        </TableHead>
-                        <TableHead
-                          class="font-bold border-r text-foreground text-center px-3 py-2 text-xs"
-                        >
-                          {{ $t("General.contractpartner") }}
-                        </TableHead>
-                        <TableHead
-                          class="font-bold text-foreground text-center px-3 py-2 text-xs"
-                        >
-                          {{ $t("General.comment") }}
-                        </TableHead>
-                        <TableHead class="w-16" colspan="2"></TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      <ImportReceiptSearchRowVue
-                        v-for="moneyflow in moneyflows"
-                        v-model="selectedMoneyflowId"
-                        :key="moneyflow.id"
-                        :mmf="moneyflow"
-                        :preselected="preselected"
-                        :receipt-id="receipt.id"
-                        @delete-moneyflow="emitDeleteMoneyflow"
-                        @edit-moneyflow="emitEditMoneyflow"
-                      />
-                    </TableBody>
-                  </Table>
+                  <RadioGroup
+                    :model-value="String(selectedMoneyflowId)"
+                    @update:model-value="
+                      (val) => (selectedMoneyflowId = Number(val))
+                    "
+                  >
+                    <Table>
+                      <TableHeader class="bg-muted/30">
+                        <TableRow>
+                          <TableHead class="w-10 border-r">
+                            <span class="sr-only">Selection</span>
+                          </TableHead>
+                          <TableHead
+                            class="font-bold border-r text-foreground text-center px-3 py-2 text-xs"
+                          >
+                            {{ $t("Moneyflow.invoicedate") }}
+                          </TableHead>
+                          <TableHead
+                            class="font-bold border-r text-foreground text-center px-3 py-2 text-xs"
+                          >
+                            {{ $t("General.amount") }}
+                          </TableHead>
+                          <TableHead
+                            class="font-bold border-r text-foreground text-center px-3 py-2 text-xs"
+                          >
+                            {{ $t("General.contractpartner") }}
+                          </TableHead>
+                          <TableHead
+                            class="font-bold border-r text-foreground text-center px-3 py-2 text-xs"
+                          >
+                            {{ $t("General.comment") }}
+                          </TableHead>
+                          <TableHead class="w-16" colspan="2"></TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        <ImportReceiptSearchRowVue
+                          v-for="(moneyflow, index) in moneyflows"
+                          v-model="selectedMoneyflowId"
+                          :key="moneyflow.id"
+                          :mmf="moneyflow"
+                          :receipt-id="receipt.id"
+                          @delete-moneyflow="emitDeleteMoneyflow"
+                          @edit-moneyflow="emitEditMoneyflow"
+                        />
+                      </TableBody>
+                    </Table>
+                  </RadioGroup>
                 </div>
 
                 <div
@@ -171,18 +177,6 @@
 </template>
 
 <script lang="ts" setup>
-import { Euro, Save, Search, Trash2 } from "lucide-vue-next";
-import { useForm } from "vee-validate";
-import { computed, nextTick, onMounted, ref, type PropType } from "vue";
-import { useI18n } from "vue-i18n";
-import { date } from "zod";
-
-import ButtonSubmit from "../ButtonSubmit.vue";
-import DivError from "../DivError.vue";
-import InputDate from "../InputDate.vue";
-import InputStandard from "../InputStandard.vue";
-import ImportReceiptSearchRowVue from "./ImportReceiptSearchRow.vue";
-
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -191,16 +185,24 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-
+import type { ImportedMoneyflowReceipt } from "@/model/moneyflow/ImportedMoneyflowReceipt";
+import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
+import ImportedMoneyflowReceiptService from "@/service/ImportedMoneyflowReceiptService";
+import MoneyflowService from "@/service/MoneyflowService";
 import { toFixed } from "@/tools/math";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { amountSchema, globErr } from "@/tools/views/ZodUtil";
-
-import type { ImportedMoneyflowReceipt } from "@/model/moneyflow/ImportedMoneyflowReceipt";
-import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
-
-import ImportedMoneyflowReceiptService from "@/service/ImportedMoneyflowReceiptService";
-import MoneyflowService from "@/service/MoneyflowService";
+import { Euro, Save, Search, Trash2 } from "lucide-vue-next";
+import { useForm } from "vee-validate";
+import { computed, nextTick, onMounted, ref, type PropType } from "vue";
+import { useI18n } from "vue-i18n";
+import { date } from "zod";
+import ButtonSubmit from "../ButtonSubmit.vue";
+import DivError from "../DivError.vue";
+import InputDate from "../InputDate.vue";
+import InputStandard from "../InputStandard.vue";
+import { RadioGroup } from "../ui/radio-group";
+import ImportReceiptSearchRowVue from "./ImportReceiptSearchRow.vue";
 
 const { t } = useI18n();
 
@@ -219,7 +221,6 @@ const moneyflows = ref({} as Array<Moneyflow>);
 const searchExecuted = ref(false);
 const searchSuccessful = ref(false);
 const selectedMoneyflowId = ref(0);
-const preselected = ref(false);
 
 const emit = defineEmits([
   "deleteMoneyflow",
@@ -256,7 +257,6 @@ const searchMoneyflows = handleSubmit(() => {
       searchExecuted.value = true;
       searchSuccessful.value = moneyflows.value.length > 0;
       if (moneyflows.value.length === 1 && moneyflows.value[0]) {
-        preselected.value = true;
         selectedMoneyflowId.value = moneyflows.value[0].id;
       } else {
         selectedMoneyflowId.value = 0;

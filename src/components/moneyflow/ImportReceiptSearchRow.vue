@@ -1,20 +1,22 @@
 <template>
   <TableRow>
-    <TableCell>
+    <TableCell class="border-r">
       <div class="flex items-center justify-center">
-        <input
-          type="radio"
-          :name="'selectMoneyflow' + receiptId"
-          :checked="preselected"
-          @change="moneyflowSelected"
-          class="rounded-sm border border-primary"
+        <RadioGroupItem
+          :id="'radio-' + props.mmf.id"
+          :value="String(props.mmf.id)"
+          class="h-4 w-4 rounded-full border border-primary text-primary shadow focus:outline-none focus-visible:ring-1 focus-visible:ring-ring"
         />
       </div>
     </TableCell>
-    <TableCell><SpanDate :date="mmf.invoiceDate" /></TableCell>
-    <TableCell class="text-right"><SpanAmount :amount="mmf.amount" /></TableCell>
-    <TableCell class="text-left">{{ mmf.contractpartnerName }}</TableCell>
-    <TableCell class="text-left">{{ mmf.comment }}</TableCell>
+    <TableCell class="border-r"><SpanDate :date="mmf.invoiceDate" /></TableCell>
+    <TableCell class="text-right border-r"
+      ><SpanAmount :amount="mmf.amount"
+    /></TableCell>
+    <TableCell class="text-left border-r">{{
+      mmf.contractpartnerName
+    }}</TableCell>
+    <TableCell class="text-left border-r">{{ mmf.comment }}</TableCell>
     <TableCell class="text-center" v-if="isOwnMoneyflow">
       <Button
         variant="ghost"
@@ -25,7 +27,7 @@
         <Pencil class="h-4 w-4" />
       </Button>
     </TableCell>
-    <TableCell class="text-center" v-if="isOwnMoneyflow">
+    <TableCell class="text-center border-l" v-if="isOwnMoneyflow">
       <Button
         variant="ghost"
         size="icon"
@@ -39,26 +41,18 @@
   </TableRow>
 </template>
 <script lang="ts" setup>
-import { computed, type PropType } from "vue";
-import { Pencil, Trash2 } from "lucide-vue-next";
-
-import { TableCell, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-
+import { RadioGroupItem } from "@/components/ui/radio-group";
+import { TableCell, TableRow } from "@/components/ui/table";
+import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
+import { useUserSessionStore } from "@/stores/UserSessionStore";
+import { Pencil, Trash2 } from "lucide-vue-next";
+import { computed, type PropType } from "vue";
 import SpanAmount from "../SpanAmount.vue";
 import SpanDate from "../SpanDate.vue";
-
-import { useUserSessionStore } from "@/stores/UserSessionStore";
-
-import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
-
 const props = defineProps({
   mmf: {
     type: Object as PropType<Moneyflow>,
-    required: true,
-  },
-  preselected: {
-    type: Boolean,
     required: true,
   },
   receiptId: {
@@ -83,8 +77,5 @@ const deleteMoneyflow = () => {
 };
 const editMoneyflow = () => {
   emit("editMoneyflow", props.mmf.id);
-};
-const moneyflowSelected = () => {
-  emit("update:modelValue", props.mmf.id);
 };
 </script>
