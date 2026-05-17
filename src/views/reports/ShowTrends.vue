@@ -592,7 +592,7 @@ const addCapitalsourceData = (trends: Trends) => {
 
       for (let i = 0; i < dataSettled.length; i++) {
         if (i + 1 == dataSettled.length) {
-          dataCalculated.push(0.0);
+          dataCalculated.push(0);
         } else {
           dataCalculated.push(null);
         }

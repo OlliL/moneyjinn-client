@@ -9,6 +9,19 @@
               <TableCell
                 class="font-normal text-muted-foreground max-w-[11rem] w-44 pl-4 pr-2 py-3 whitespace-normal break-words"
               >
+                {{ $t("General.amount") }}
+              </TableCell>
+              <TableCell
+                class="font-semibold text-foreground pr-4 py-3 text-base"
+              >
+                <SpanAmount :amount="mmf.amount" />
+              </TableCell>
+            </TableRow>
+
+            <TableRow class="hover:bg-transparent border-b last:border-0">
+              <TableCell
+                class="font-normal text-muted-foreground max-w-[11rem] w-44 pl-4 pr-2 py-3 whitespace-normal break-words"
+              >
                 {{ $t("Moneyflow.bookingdate") }}
               </TableCell>
               <TableCell class="font-medium text-foreground pr-4 py-3">
@@ -57,19 +70,6 @@
               </TableCell>
               <TableCell class="font-medium text-foreground pr-4 py-3">
                 {{ mmf.comment }}
-              </TableCell>
-            </TableRow>
-
-            <TableRow class="hover:bg-transparent border-b last:border-0">
-              <TableCell
-                class="font-normal text-muted-foreground max-w-[11rem] w-44 pl-4 pr-2 py-3 whitespace-normal break-words"
-              >
-                {{ $t("General.amount") }}
-              </TableCell>
-              <TableCell
-                class="font-semibold text-foreground pr-4 py-3 text-base"
-              >
-                <SpanAmount :amount="mmf.amount" />
               </TableCell>
             </TableRow>
 

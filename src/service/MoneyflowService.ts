@@ -1,14 +1,3 @@
-import AbstractService from "@/service/AbstractService";
-import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
-import type { MoneyflowSearchParams } from "@/model/moneyflow/MoneyflowSearchParams";
-import type { MoneyflowSplitEntry } from "@/model/moneyflow/MoneyflowSplitEntry";
-import { mapMoneyflowSearchParamsToTransport } from "./mapper/MoneyflowSearchParamsTransportMapper";
-import { mapMoneyflowSplitEntryToTransport } from "./mapper/MoneyflowSplitEntryTransportMapper";
-import {
-  mapMoneyflowToTransport,
-  mapMoneyflowTransportToModel,
-} from "./mapper/MoneyflowTransportMapper";
-import { getISOStringDate } from "@/tools/views/FormatDate";
 import {
   MoneyflowControllerApi,
   type CreateMoneyflowRequest,
@@ -16,6 +5,17 @@ import {
   type SearchMoneyflowsRequest,
   type UpdateMoneyflowRequest,
 } from "@/api";
+import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
+import type { MoneyflowSearchParams } from "@/model/moneyflow/MoneyflowSearchParams";
+import type { MoneyflowSplitEntry } from "@/model/moneyflow/MoneyflowSplitEntry";
+import AbstractService from "@/service/AbstractService";
+import { getISOStringDate } from "@/tools/views/FormatDate";
+import { mapMoneyflowSearchParamsToTransport } from "./mapper/MoneyflowSearchParamsTransportMapper";
+import { mapMoneyflowSplitEntryToTransport } from "./mapper/MoneyflowSplitEntryTransportMapper";
+import {
+  mapMoneyflowToTransport,
+  mapMoneyflowTransportToModel,
+} from "./mapper/MoneyflowTransportMapper";
 
 class MoneyflowService extends AbstractService {
   private readonly api: MoneyflowControllerApi;
@@ -37,7 +37,6 @@ class MoneyflowService extends AbstractService {
 
     if (usedPreDefMoneyflowId != 0) {
       request.usedPreDefMoneyflowId = usedPreDefMoneyflowId;
-      request.saveAsPreDefMoneyflow = 1;
     }
 
     if (moneyflow.moneyflowSplitEntries) {
