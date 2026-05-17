@@ -397,7 +397,6 @@
     "Reports": {
         "title": {
             "charts": "charts",
-            "reports": "reports",
             "report": "moneyflows {month} {year}",
             "costReporting": "cost reporting",
             "costReportYear": "{year}",

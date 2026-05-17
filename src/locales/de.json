@@ -397,7 +397,6 @@
     "Reports": {
         "title": {
             "charts": "Auswertungen",
-            "reports": "Reports",
             "report": "Geldbewegungen {month} {year}",
             "costReporting": "Ausgabenauswertung",
             "costReportYear": "{year}",

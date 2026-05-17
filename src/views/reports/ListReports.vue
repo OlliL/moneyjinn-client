@@ -1,7 +1,9 @@
 <template>
   <div class="custom-container space-y-6">
     <div class="text-center">
-      <h4 class="text-2xl font-bold">{{ $t("Reports.title.reports") }}</h4>
+      <h4 class="text-2xl font-bold">
+        {{ $t("Reports.title.report", { month: monthName, year: year }) }}
+      </h4>
     </div>
 
     <div class="flex justify-center">
@@ -88,7 +90,7 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref, watch } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 import { onBeforeRouteUpdate, type RouteParamsGeneric } from "vue-router";
 
 import router, { Routes } from "@/router";
@@ -97,10 +99,6 @@ import DivError from "@/components/DivError.vue";
 import EtfTableVue from "@/components/reports/EtfTable.vue";
 import ReportTableVue from "@/components/reports/ReportTable.vue";
 
-import ReportService from "@/service/ReportService";
-import { handleBackendError } from "@/tools/views/HandleBackendError";
-import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
-import { ChevronLeft, ChevronRight } from "lucide-vue-next";
 import {
   Select,
   SelectContent,
@@ -108,7 +106,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
+import ReportService from "@/service/ReportService";
+import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { getMonthName } from "@/tools/views/MonthName";
+import { ChevronLeft, ChevronRight } from "lucide-vue-next";
 
 const serverErrors = ref(new Array<string>());
 
@@ -240,6 +242,12 @@ watch(
     }
   },
 );
+
+const monthName = computed(() => {
+  return props.month && !Number.isNaN(props.month)
+    ? getMonthName(Number(props.month))
+    : undefined;
+});
 
 const selectMonth = (year: string, month?: string) => {
   router.push({

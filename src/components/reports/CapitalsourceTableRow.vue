@@ -17,7 +17,7 @@
       <SpanAmount :amount="amountEndOfMonthCalculated" />
     </TableCell>
     <TableCell
-      class="text-right border-r hidden md:table-cell"
+      class="text-right hidden md:table-cell"
       v-if="currentMonthIsSettled"
     >
       <SpanAmount :amount="differenceFixedCalculated" />

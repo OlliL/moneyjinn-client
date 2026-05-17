@@ -64,20 +64,30 @@
               }"
             />
             <TableRow class="font-bold">
-              <TableCell class="text-right hidden md:table-cell" colspan="3"
+              <TableCell
+                class="text-right border-r hidden md:table-cell"
+                colspan="3"
                 >&sum;</TableCell
               >
-              <TableCell class="text-right block md:hidden">&sum;</TableCell>
-              <TableCell class="text-right">
+              <TableCell class="text-right border-r block md:hidden"
+                >&sum;</TableCell
+              >
+              <TableCell class="text-right border-r">
                 <u><SpanAmount :amount="amountBeginOfMonthFixedSum" /></u>
               </TableCell>
-              <TableCell class="text-right" v-if="currentMonthIsSettled">
+              <TableCell
+                class="text-right border-r"
+                v-if="currentMonthIsSettled"
+              >
                 <u><SpanAmount :amount="amountEndOfMonthFixedSum" /></u>
               </TableCell>
-              <TableCell class="text-right hidden md:table-cell">
+              <TableCell class="text-right border-r hidden md:table-cell">
                 <u><SpanAmount :amount="amountEndOfMonthCalculatedSum" /></u>
               </TableCell>
-              <TableCell class="text-right" v-if="!currentMonthIsSettled">
+              <TableCell
+                class="text-right border-r"
+                v-if="!currentMonthIsSettled"
+              >
                 <u><SpanAmount :amount="amountCurrentSum" /></u>
               </TableCell>
               <TableCell

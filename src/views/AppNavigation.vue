@@ -46,7 +46,7 @@
               params: { year: year, month: month },
               force: true,
             }"
-            ><Table2 :size="20" /> {{ $t("Reports.title.reports") }}
+            ><Table2 :size="20" /> {{ $t("General.moneyflows") }}
           </router-link>
           <router-link
             @click="isMenuOpen = false"
@@ -348,7 +348,7 @@
             params: { year: year, month: month },
             force: true,
           }"
-          :title="$t('Reports.title.reports')"
+          :title="$t('General.moneyflows')"
           ><Table2 class="m-2 text-muted-foreground"
         /></router-link>
       </MenubarTrigger>
