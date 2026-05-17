@@ -25,7 +25,7 @@
     <TableCell colspan="3" class="p-0">
       <div class="p-4">
         <div class="flex flex-col rounded-md border w-full overflow-hidden">
-          <Table class="w-full table-fixed [&_td]:py-0.5! [&_th]:py-1!">
+          <Table class="w-full [&_td]:py-0.5! [&_th]:py-1!">
             <TableHeader>
               <TableRow>
                 <TableHead
@@ -100,23 +100,20 @@
   </TableRow>
 </template>
 <script lang="ts" setup>
-import { computed, ref, type PropType } from "vue";
-import { ChevronRight, ChevronDown } from "lucide-vue-next";
-
+import { Button } from "@/components/ui/button";
 import {
+  Table,
+  TableBody,
   TableCell,
   TableHead,
   TableHeader,
   TableRow,
-  Table,
-  TableBody,
 } from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
-
-import CompareDataResultRowVue from "./CompareDataResultRow.vue";
-
 import type { CompareData } from "@/model/comparedata/CompareData";
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
+import { ChevronDown, ChevronRight } from "lucide-vue-next";
+import { computed, ref, type PropType } from "vue";
+import CompareDataResultRowVue from "./CompareDataResultRow.vue";
 
 const props = defineProps({
   compareDataKey: {

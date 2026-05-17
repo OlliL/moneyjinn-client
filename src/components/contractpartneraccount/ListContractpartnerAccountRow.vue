@@ -12,11 +12,9 @@
         size="icon"
         @click="editContractpartnerAccount"
         :title="$t('General.edit')"
-        class="group hover:bg-transparent"
+        class="h-8 w-8 cursor-pointer"
       >
-        <Pencil
-          class="h-4 w-4 text-muted-foreground group-hover:text-blue-500 transition-colors"
-        />
+        <Pencil class="h-4 w-4" />
       </Button>
     </TableCell>
     <TableCell class="text-right border">
@@ -25,22 +23,20 @@
         size="icon"
         @click="deleteContractpartnerAccount"
         :title="$t('General.delete')"
-        class="group hover:bg-transparent"
+        class="h-8 w-8 cursor-pointer"
       >
-        <Trash2
-          class="h-4 w-4 text-muted-foreground group-hover:text-destructive transition-colors"
-        />
+        <Trash2 class="h-4 w-4" />
       </Button>
     </TableCell>
   </TableRow>
 </template>
 
 <script lang="ts" setup>
-import type { PropType } from "vue";
 import { Pencil, Trash2 } from "lucide-vue-next";
+import type { PropType } from "vue";
 
-import { TableCell, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
+import { TableCell, TableRow } from "@/components/ui/table";
 
 import type { ContractpartnerAccount } from "@/model/contractpartneraccount/ContractpartnerAccount";
 

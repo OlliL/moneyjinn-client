@@ -205,39 +205,33 @@
 </template>
 
 <script lang="ts" setup>
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-
+import EditMoneyflowBaseSplitEntryRowVue from "@/components/moneyflow/EditMoneyflowBaseSplitEntryRow.vue";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { CapitalsourceState } from "@/model/capitalsource/CapitalsourceState";
+import type { Contractpartner } from "@/model/contractpartner/Contractpartner";
+import type { ImportedMoneyflow } from "@/model/moneyflow/ImportedMoneyflow";
+import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
+import type { MoneyflowSplitEntry } from "@/model/moneyflow/MoneyflowSplitEntry";
+import type { PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
+import ImportedMoneyflowService from "@/service/ImportedMoneyflowService";
+import MoneyflowService from "@/service/MoneyflowService";
+import { useCapitalsourceStore } from "@/stores/CapitalsourceStore";
+import { useContractpartnerStore } from "@/stores/ContractpartnerStore";
+import { toFixed } from "@/tools/math";
+import { handleBackendError } from "@/tools/views/HandleBackendError";
+import { amountSchema, globErr } from "@/tools/views/ZodUtil";
 import { Euro, Plus } from "lucide-vue-next";
-import { computed, onMounted, ref, watch, type PropType } from "vue";
+import { computed, onMounted, ref, toRaw, watch, type PropType } from "vue";
 import { useI18n } from "vue-i18n";
 import { date, number, string } from "zod";
-
-import EditMoneyflowBaseSplitEntryRowVue from "@/components/moneyflow/EditMoneyflowBaseSplitEntryRow.vue";
 import DivError from "../DivError.vue";
 import InputDate from "../InputDate.vue";
 import InputStandard from "../InputStandard.vue";
 import SelectCapitalsource from "../capitalsource/SelectCapitalsource.vue";
 import SelectContractpartner from "../contractpartner/SelectContractpartner.vue";
 import SelectPostingAccount from "../postingaccount/SelectPostingAccount.vue";
-
-import { useCapitalsourceStore } from "@/stores/CapitalsourceStore";
-import { useContractpartnerStore } from "@/stores/ContractpartnerStore";
-
-import { toFixed } from "@/tools/math";
-import { handleBackendError } from "@/tools/views/HandleBackendError";
-import { amountSchema, globErr } from "@/tools/views/ZodUtil";
-
-import { CapitalsourceState } from "@/model/capitalsource/CapitalsourceState";
-import type { ImportedMoneyflow } from "@/model/moneyflow/ImportedMoneyflow";
-import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
-import type { MoneyflowSplitEntry } from "@/model/moneyflow/MoneyflowSplitEntry";
-import type { PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
-
-import type { Contractpartner } from "@/model/contractpartner/Contractpartner";
-import ImportedMoneyflowService from "@/service/ImportedMoneyflowService";
-import MoneyflowService from "@/service/MoneyflowService";
 
 const isExpanded = ref(false);
 const toggleCollapse = () => (isExpanded.value = !isExpanded.value);
@@ -371,7 +365,7 @@ const resetForm = () => {
 };
 
 const resetEditForm = () => {
-  Object.assign(mmf.value, props.mmfToEdit);
+  mmf.value = structuredClone(toRaw(props.mmfToEdit))!;
 
   amount.value = mmf.value.amount;
 

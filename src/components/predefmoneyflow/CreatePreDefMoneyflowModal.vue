@@ -106,7 +106,7 @@ import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { amountSchema, globErr } from "@/tools/views/ZodUtil";
 import { Euro, Save, Undo2 } from "lucide-vue-next";
 import { useForm } from "vee-validate";
-import { computed, ref, useTemplateRef } from "vue";
+import { computed, ref, toRaw, useTemplateRef } from "vue";
 import { useI18n } from "vue-i18n";
 import { boolean, number, string, ZodType } from "zod";
 import ButtonSubmit from "../ButtonSubmit.vue";
@@ -167,7 +167,7 @@ const title = computed(() => {
 
 const resetForm = () => {
   if (origMpm.value) {
-    Object.assign(mpm.value, origMpm.value);
+    mpm.value = structuredClone(toRaw(origMpm.value))!;
   } else {
     mpm.value = {} as PreDefMoneyflow;
   }

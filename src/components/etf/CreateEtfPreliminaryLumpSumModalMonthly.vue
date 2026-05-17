@@ -83,31 +83,26 @@
 </template>
 
 <script lang="ts" setup>
+import { Button } from "@/components/ui/button";
+import type { EtfPreliminaryLumpSum } from "@/model/etf/EtfPreliminaryLumpSum";
+import { EtfPreliminaryLumpSumType } from "@/model/etf/EtfPreliminaryLumpSumType";
+import type { SelectBoxValue } from "@/model/SelectBoxValue";
+import CrudEtfPreliminaryLumpSumService from "@/service/CrudEtfPreliminaryLumpSumService";
+import { useEtfStore } from "@/stores/EtfStore";
+import { handleBackendError } from "@/tools/views/HandleBackendError";
+import { getMonthName } from "@/tools/views/MonthName";
+import { amountSchema, globErr } from "@/tools/views/ZodUtil";
+import { Euro, Save, Undo2 } from "lucide-vue-next";
 import { useForm } from "vee-validate";
-import { computed, ref, useTemplateRef } from "vue";
+import { computed, ref, toRaw, useTemplateRef } from "vue";
 import { useI18n } from "vue-i18n";
 import { date, number, type ZodType } from "zod";
-import { Euro, Save, Undo2 } from "lucide-vue-next";
-
 import ButtonSubmit from "../ButtonSubmit.vue";
 import DivError from "../DivError.vue";
 import InputDate from "../InputDate.vue";
 import InputStandard from "../InputStandard.vue";
 import ModalVue from "../Modal.vue";
 import SelectStandard from "../SelectStandard.vue";
-
-import { Button } from "@/components/ui/button";
-
-import { amountSchema, globErr } from "@/tools/views/ZodUtil";
-import { handleBackendError } from "@/tools/views/HandleBackendError";
-
-import type { EtfPreliminaryLumpSum } from "@/model/etf/EtfPreliminaryLumpSum";
-import type { SelectBoxValue } from "@/model/SelectBoxValue";
-
-import CrudEtfPreliminaryLumpSumService from "@/service/CrudEtfPreliminaryLumpSumService";
-import { useEtfStore } from "@/stores/EtfStore";
-import { getMonthName } from "@/tools/views/MonthName";
-import { EtfPreliminaryLumpSumType } from "@/model/etf/EtfPreliminaryLumpSumType";
 
 const { t } = useI18n();
 
@@ -172,7 +167,7 @@ const title = computed(() => {
 const resetForm = () => {
   mep.value = {} as EtfPreliminaryLumpSum;
   if (origMep.value) {
-    Object.assign(mep.value, origMep.value);
+    mep.value = structuredClone(toRaw(origMep.value))!;
   } else {
     if (defaultEtfId.value !== undefined) mep.value.etfId = defaultEtfId.value;
     mep.value.year = new Date().getFullYear();

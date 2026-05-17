@@ -55,24 +55,20 @@
 </template>
 
 <script lang="ts" setup>
+import { Button } from "@/components/ui/button";
+import type { ContractpartnerAccount } from "@/model/contractpartneraccount/ContractpartnerAccount";
+import ContractpartnerAccountService from "@/service/ContractpartnerAccountService";
+import { handleBackendError } from "@/tools/views/HandleBackendError";
+import { globErr } from "@/tools/views/ZodUtil";
+import { Save, Undo2 } from "lucide-vue-next";
 import { useForm } from "vee-validate";
-import { computed, ref, useTemplateRef } from "vue";
+import { computed, ref, toRaw, useTemplateRef } from "vue";
 import { useI18n } from "vue-i18n";
 import { string, ZodType } from "zod";
-
-import { Button } from "@/components/ui/button";
-
 import ButtonSubmit from "../ButtonSubmit.vue";
 import DivError from "../DivError.vue";
 import InputStandard from "../InputStandard.vue";
 import ModalVue from "../Modal.vue";
-
-import { handleBackendError } from "@/tools/views/HandleBackendError";
-import { globErr } from "@/tools/views/ZodUtil";
-
-import type { ContractpartnerAccount } from "@/model/contractpartneraccount/ContractpartnerAccount";
-import ContractpartnerAccountService from "@/service/ContractpartnerAccountService";
-import { Save, Undo2 } from "lucide-vue-next";
 
 const { t } = useI18n();
 
@@ -122,7 +118,7 @@ const title = computed(() => {
 
 const resetForm = () => {
   if (origMca.value) {
-    Object.assign(mca.value, origMca.value);
+    mca.value = structuredClone(toRaw(origMca.value))!;
   } else {
     mca.value = {
       contractpartnerid: props.contractpartnerId,

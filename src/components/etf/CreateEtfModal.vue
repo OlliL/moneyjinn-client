@@ -166,24 +166,20 @@
 </template>
 
 <script lang="ts" setup>
+import { Button } from "@/components/ui/button";
+import type { Etf } from "@/model/etf/Etf";
+import CrudEtfService from "@/service/CrudEtfService";
+import { handleBackendError } from "@/tools/views/HandleBackendError";
+import { amountSchema, globErr } from "@/tools/views/ZodUtil";
+import { Euro, Percent, Save, Star, Undo2 } from "lucide-vue-next";
 import { useForm } from "vee-validate";
-import { computed, ref, useTemplateRef } from "vue";
+import { computed, ref, toRaw, useTemplateRef } from "vue";
 import { useI18n } from "vue-i18n";
 import { string, ZodType } from "zod";
-import { Euro, Percent, Save, Star, Undo2 } from "lucide-vue-next";
-
 import ButtonSubmit from "../ButtonSubmit.vue";
 import DivError from "../DivError.vue";
 import InputStandard from "../InputStandard.vue";
 import ModalVue from "../Modal.vue";
-
-import { Button } from "@/components/ui/button";
-
-import { handleBackendError } from "@/tools/views/HandleBackendError";
-import { amountSchema, globErr } from "@/tools/views/ZodUtil";
-
-import type { Etf } from "@/model/etf/Etf";
-import CrudEtfService from "@/service/CrudEtfService";
 
 const { t } = useI18n();
 
@@ -240,7 +236,7 @@ const title = computed(() => {
 
 const resetForm = () => {
   if (origMet.value) {
-    Object.assign(met.value, origMet.value);
+    met.value = structuredClone(toRaw(origMet.value))!;
   } else {
     met.value = {} as Etf;
   }

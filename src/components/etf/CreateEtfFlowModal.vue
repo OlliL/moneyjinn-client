@@ -89,30 +89,25 @@
 </template>
 
 <script lang="ts" setup>
-import { useForm } from "vee-validate";
-import { computed, ref, useTemplateRef, watch } from "vue";
-import { useI18n } from "vue-i18n";
-import { date, string, type ZodType, number } from "zod";
+import { Button } from "@/components/ui/button";
+import type { EtfFlow } from "@/model/etf/EtfFlow";
+import type { SelectBoxValue } from "@/model/SelectBoxValue";
+import CrudEtfFlowService from "@/service/CrudEtfFlowService";
+import { useEtfStore } from "@/stores/EtfStore";
+import { formatTime } from "@/tools/views/FormatDate";
+import { handleBackendError } from "@/tools/views/HandleBackendError";
+import { amountSchema, globErr } from "@/tools/views/ZodUtil";
 import { Euro, Save, Undo2 } from "lucide-vue-next";
-
+import { useForm } from "vee-validate";
+import { computed, ref, toRaw, useTemplateRef, watch } from "vue";
+import { useI18n } from "vue-i18n";
+import { date, number, string, type ZodType } from "zod";
 import ButtonSubmit from "../ButtonSubmit.vue";
 import DivError from "../DivError.vue";
 import InputDate from "../InputDate.vue";
 import InputStandard from "../InputStandard.vue";
 import ModalVue from "../Modal.vue";
 import SelectStandard from "../SelectStandard.vue";
-
-import { Button } from "@/components/ui/button";
-
-import { formatTime } from "@/tools/views/FormatDate";
-import { amountSchema, globErr } from "@/tools/views/ZodUtil";
-import { handleBackendError } from "@/tools/views/HandleBackendError";
-
-import type { EtfFlow } from "@/model/etf/EtfFlow";
-import type { SelectBoxValue } from "@/model/SelectBoxValue";
-
-import CrudEtfFlowService from "@/service/CrudEtfFlowService";
-import { useEtfStore } from "@/stores/EtfStore";
 
 const { t } = useI18n();
 
@@ -149,7 +144,7 @@ const title = computed(() => {
 
 const resetForm = () => {
   if (origEtfFlow.value) {
-    Object.assign(etfFlow.value, origEtfFlow.value);
+    etfFlow.value = structuredClone(toRaw(origEtfFlow.value))!;
     bookingdate.value = new Date(origEtfFlow.value.timestamp);
     bookingdate.value.setHours(0, 0, 0, 0);
 

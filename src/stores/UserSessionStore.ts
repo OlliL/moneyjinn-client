@@ -29,7 +29,7 @@ export const useUserSessionStore = defineStore(
     });
 
     function setUserSession(userSess: UserSession) {
-      Object.assign(userSession.value, userSess);
+      userSession.value = structuredClone(toRaw(userSess))!;
     }
 
     function logout() {

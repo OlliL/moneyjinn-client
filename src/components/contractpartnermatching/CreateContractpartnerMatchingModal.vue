@@ -74,27 +74,22 @@
 </template>
 
 <script lang="ts" setup>
+import { Button } from "@/components/ui/button";
+import type { ContractpartnerMatching } from "@/model/contractpartnermatching/ContractpartnerMatching";
+import ContractpartnerMatchingService from "@/service/ContractpartnerMatchingService";
+import { handleBackendError } from "@/tools/views/HandleBackendError";
+import { globErr } from "@/tools/views/ZodUtil";
+import { Save, Undo2 } from "lucide-vue-next";
 import { useForm } from "vee-validate";
-import { computed, ref, useTemplateRef } from "vue";
+import { computed, ref, toRaw, useTemplateRef } from "vue";
 import { useI18n } from "vue-i18n";
 import { number, string, ZodType } from "zod";
-
 import ButtonSubmit from "../ButtonSubmit.vue";
+import SelectContractpartner from "../contractpartner/SelectContractpartner.vue";
 import DivError from "../DivError.vue";
 import InputStandard from "../InputStandard.vue";
 import ModalVue from "../Modal.vue";
-
-import { Button } from "@/components/ui/button";
-
-import { handleBackendError } from "@/tools/views/HandleBackendError";
-import { globErr } from "@/tools/views/ZodUtil";
-
-import type { ContractpartnerMatching } from "@/model/contractpartnermatching/ContractpartnerMatching";
-
-import ContractpartnerMatchingService from "@/service/ContractpartnerMatchingService";
-import SelectContractpartner from "../contractpartner/SelectContractpartner.vue";
 import SelectPostingAccount from "../postingaccount/SelectPostingAccount.vue";
-import { Save, Undo2 } from "lucide-vue-next";
 
 const { t } = useI18n();
 
@@ -140,7 +135,7 @@ const title = computed(() => {
 
 const resetForm = () => {
   if (origMpa.value) {
-    Object.assign(mcm.value, origMpa.value);
+    mcm.value = structuredClone(toRaw(origMpa.value))!;
   } else {
     mcm.value = {} as ContractpartnerMatching;
   }

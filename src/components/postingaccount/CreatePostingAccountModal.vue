@@ -47,7 +47,7 @@ import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { globErr } from "@/tools/views/ZodUtil";
 import { Save, Undo2 } from "lucide-vue-next";
 import { useForm } from "vee-validate";
-import { computed, ref, useTemplateRef } from "vue";
+import { computed, ref, toRaw, useTemplateRef } from "vue";
 import { useI18n } from "vue-i18n";
 import { string, ZodType } from "zod";
 import ButtonSubmit from "../ButtonSubmit.vue";
@@ -87,7 +87,7 @@ const title = computed(() => {
 
 const resetForm = () => {
   if (origMpa.value) {
-    Object.assign(mpa.value, origMpa.value);
+    mpa.value = structuredClone(toRaw(origMpa.value))!;
   } else {
     mpa.value = {} as PostingAccount;
   }

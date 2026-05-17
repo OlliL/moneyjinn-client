@@ -42,6 +42,7 @@
         </div>
       </form>
     </template>
+
     <template #footer>
       <Button
         type="button"
@@ -53,33 +54,40 @@
         {{ $t("Moneyflow.deleteReceipt") }}
       </Button>
 
+      <Button
+        type="button"
+        variant="secondary"
+        class="flex items-center gap-2 px-6"
+        @click="resetForm"
+      >
+        <Undo2 class="h-4 w-4" />
+        {{ $t("General.reset") }}
+      </Button>
+
       <ButtonSubmit
         :button-label="$t('General.save')"
         form-id="updateMoneyflowForm"
-      />
+      >
+        <template #icon><Save class="h-4 w-4" /></template>
+      </ButtonSubmit>
     </template>
   </ModalVue>
 </template>
 
 <script lang="ts" setup>
-import { useForm } from "vee-validate";
-import { computed, ref, useTemplateRef } from "vue";
-import { Trash2 } from "lucide-vue-next";
-
 import ButtonSubmit from "@/components/ButtonSubmit.vue";
-import DivError from "../DivError.vue";
 import EditMoneyflowBase from "@/components/moneyflow/EditMoneyflowBase.vue";
-import ModalVue from "../Modal.vue";
-
 import { Button } from "@/components/ui/button";
-
-import { handleBackendError } from "@/tools/views/HandleBackendError";
-
+import type { ImportedMoneyflowReceipt } from "@/model/moneyflow/ImportedMoneyflowReceipt";
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 import { MoneyflowReceiptType } from "@/model/moneyflow/MoneyflowReceiptType";
-import type { ImportedMoneyflowReceipt } from "@/model/moneyflow/ImportedMoneyflowReceipt";
-
 import MoneyflowReceiptService from "@/service/MoneyflowReceiptService";
+import { handleBackendError } from "@/tools/views/HandleBackendError";
+import { Save, Trash2, Undo2 } from "lucide-vue-next";
+import { useForm } from "vee-validate";
+import { computed, ref, useTemplateRef } from "vue";
+import DivError from "../DivError.vue";
+import ModalVue from "../Modal.vue";
 
 const serverErrors = ref(new Array<string>());
 
@@ -177,6 +185,9 @@ const deleteMoneyflowReceipt = () => {
       handleBackendError(backendError, serverErrors);
     });
 };
-
+const resetForm = () => {
+  editMoneyflowVue.value?.resetForm();
+  Object.keys(values).forEach((field) => setFieldTouched(field, false));
+};
 defineExpose({ _show });
 </script>

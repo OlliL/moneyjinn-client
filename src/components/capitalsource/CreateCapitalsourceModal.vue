@@ -131,31 +131,26 @@
 </template>
 
 <script lang="ts" setup>
+import { Button } from "@/components/ui/button";
+import type { Capitalsource } from "@/model/capitalsource/Capitalsource";
+import { capitalsourceImportValues } from "@/model/capitalsource/CapitalsourceImport";
+import { capitalsourceStateValues } from "@/model/capitalsource/CapitalsourceState";
+import { capitalsourceTypeValues } from "@/model/capitalsource/CapitalsourceType";
+import type { SelectBoxValue } from "@/model/SelectBoxValue";
+import CapitalsourceService from "@/service/CapitalsourceService";
+import { handleBackendError } from "@/tools/views/HandleBackendError";
+import { globErr } from "@/tools/views/ZodUtil";
+import { Save, Undo2 } from "lucide-vue-next";
 import { useForm } from "vee-validate";
-import { computed, ref, useTemplateRef } from "vue";
+import { computed, ref, toRaw, useTemplateRef } from "vue";
 import { useI18n } from "vue-i18n";
 import { boolean, date, number, string, ZodType } from "zod";
-
-import { Button } from "@/components/ui/button";
-
 import ButtonSubmit from "../ButtonSubmit.vue";
 import DivError from "../DivError.vue";
 import InputDate from "../InputDate.vue";
 import InputStandard from "../InputStandard.vue";
 import ModalVue from "../Modal.vue";
 import SelectStandard from "../SelectStandard.vue";
-
-import { handleBackendError } from "@/tools/views/HandleBackendError";
-import { globErr } from "@/tools/views/ZodUtil";
-
-import type { Capitalsource } from "@/model/capitalsource/Capitalsource";
-import type { SelectBoxValue } from "@/model/SelectBoxValue";
-import { capitalsourceImportValues } from "@/model/capitalsource/CapitalsourceImport";
-import { capitalsourceStateValues } from "@/model/capitalsource/CapitalsourceState";
-import { capitalsourceTypeValues } from "@/model/capitalsource/CapitalsourceType";
-
-import CapitalsourceService from "@/service/CapitalsourceService";
-import { Save, Undo2 } from "lucide-vue-next";
 
 const { t } = useI18n();
 
@@ -211,7 +206,7 @@ const title = computed(() => {
 
 const resetForm = () => {
   if (origMcs.value) {
-    Object.assign(mcs.value, origMcs.value);
+    mcs.value = structuredClone(toRaw(origMcs.value))!;
   } else {
     mcs.value = {
       validFrom: new Date(),

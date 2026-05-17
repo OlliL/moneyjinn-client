@@ -148,26 +148,22 @@
 </template>
 
 <script lang="ts" setup>
+import { Button } from "@/components/ui/button";
+import type { Contractpartner } from "@/model/contractpartner/Contractpartner";
+import ContractpartnerService from "@/service/ContractpartnerService";
+import { handleBackendError } from "@/tools/views/HandleBackendError";
+import { globErr } from "@/tools/views/ZodUtil";
+import { ChevronDown, Save, Undo2 } from "lucide-vue-next";
 import { useForm } from "vee-validate";
-import { computed, ref, useTemplateRef } from "vue";
+import { computed, ref, toRaw, useTemplateRef } from "vue";
 import { useI18n } from "vue-i18n";
 import { coerce, date, number, string, ZodType } from "zod";
-
-import { Button } from "@/components/ui/button";
-
 import ButtonSubmit from "../ButtonSubmit.vue";
 import DivError from "../DivError.vue";
 import InputDate from "../InputDate.vue";
 import InputStandard from "../InputStandard.vue";
 import ModalVue from "../Modal.vue";
 import SelectPostingAccount from "../postingaccount/SelectPostingAccount.vue";
-
-import { handleBackendError } from "@/tools/views/HandleBackendError";
-import { globErr } from "@/tools/views/ZodUtil";
-
-import type { Contractpartner } from "@/model/contractpartner/Contractpartner";
-import ContractpartnerService from "@/service/ContractpartnerService";
-import { ChevronDown, Save, Undo2 } from "lucide-vue-next";
 import Collapsible from "../ui/collapsible/Collapsible.vue";
 import CollapsibleContent from "../ui/collapsible/CollapsibleContent.vue";
 import CollapsibleTrigger from "../ui/collapsible/CollapsibleTrigger.vue";
@@ -222,7 +218,7 @@ const title = computed(() => {
 
 const resetForm = () => {
   if (origMcp.value) {
-    Object.assign(mcp.value, origMcp.value);
+    mcp.value = structuredClone(toRaw(origMcp.value))!;
   } else {
     const beginningOfPreviousMonth = new Date();
     beginningOfPreviousMonth.setDate(1);

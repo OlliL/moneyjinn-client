@@ -199,7 +199,7 @@ import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { globErr } from "@/tools/views/ZodUtil";
 import { Save, Undo2 } from "lucide-vue-next";
 import { useForm } from "vee-validate";
-import { computed, ref, useTemplateRef, watch } from "vue";
+import { computed, ref, toRaw, useTemplateRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { boolean, date, number, string, type ZodTypeAny } from "zod";
 import ButtonSubmit from "../ButtonSubmit.vue";
@@ -293,7 +293,7 @@ const resetForm = () => {
     }
 
     if (origUser.value) {
-      Object.assign(user.value, origUser.value);
+      user.value = structuredClone(toRaw(origUser.value))!;
       if (user.value.id) {
         const groupsById = new Map<number, Group>();
         for (const group of _groups) {
