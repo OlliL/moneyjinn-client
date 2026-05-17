@@ -7,12 +7,12 @@
 
     <div class="flex justify-center">
       <div
-        class="w-full max-w-3xl rounded-lg border bg-card text-card-foreground shadow-sm bg-muted p-4"
+        class="w-full max-w-3xl rounded-xl border bg-card text-card-foreground shadow-sm bg-muted p-6"
       >
         <form @submit.prevent="showTrends">
-          <div class="space-y-4">
-            <div class="grid gap-3 md:grid-cols-2">
-              <div>
+          <div class="space-y-6">
+            <div class="flex flex-wrap items-end gap-4 pb-4 border-b">
+              <div class="w-36">
                 <InputDate
                   v-model="startDate"
                   :validation-schema="schema.startDate"
@@ -21,7 +21,7 @@
                   :field-label="$t('General.startDate')"
                 />
               </div>
-              <div>
+              <div class="w-36">
                 <InputDate
                   v-model="endDate"
                   :validation-schema="schema.endDate"
@@ -35,27 +35,30 @@
             <div class="grid gap-4 md:grid-cols-2">
               <div class="grid">
                 <div
-                  class="mb-3 text-left rounded-lg border bg-background p-3 shadow-sm space-y-2 w-full"
+                  class="mb-3 text-left rounded-xl border bg-background p-4 shadow-sm space-y-3 w-full"
                 >
-                  <div class="flex items-center justify-between pb-1 border-b">
+                  <div class="flex items-center justify-between pb-2 border-b">
                     <div class="flex items-center gap-2">
                       <Checkbox
                         id="capitalsourcesActive"
                         class="bg-background"
                         v-model="capitalsourcesActive"
                       />
-                      <Label for="capitalsourcesActive" class="cursor-pointer">
+                      <Label
+                        for="capitalsourcesActive"
+                        class="cursor-pointer font-semibold text-sm"
+                      >
                         {{ $t("General.capitalsources") }}
                       </Label>
                     </div>
 
-                    <div class="flex items-center space-x-1 text-xs">
+                    <div class="flex items-center gap-1 text-xs">
                       <Button
                         type="button"
-                        variant="ghost"
+                        variant="link"
                         size="sm"
                         :class="[
-                          'px-1.5 py-0.5 h-auto text-muted-foreground hover:text-foreground font-medium cursor-pointer transition-colors font-normal',
+                          'h-auto p-0 text-muted-foreground hover:text-primary transition-colors font-normal no-underline hover:underline cursor-pointer',
                           !capitalsourcesActive
                             ? 'opacity-40 pointer-events-none select-none'
                             : '',
@@ -68,13 +71,13 @@
                       >
                         {{ $t("General.all") }}
                       </Button>
-                      <span class="text-muted-foreground/40">|</span>
+                      <span class="text-muted-foreground/30 px-0.5">|</span>
                       <Button
                         type="button"
-                        variant="ghost"
+                        variant="link"
                         size="sm"
                         :class="[
-                          'px-1.5 py-0.5 h-auto text-muted-foreground hover:text-foreground font-medium cursor-pointer transition-colors font-normal',
+                          'h-auto p-0 text-muted-foreground hover:text-primary transition-colors font-normal no-underline hover:underline cursor-pointer',
                           !capitalsourcesActive
                             ? 'opacity-40 pointer-events-none select-none'
                             : '',
@@ -92,40 +95,39 @@
 
                   <Command
                     :class="[
-                      'rounded-md border border-input h-[160px] overflow-hidden flex flex-col transition-opacity',
+                      'rounded-lg border border-input h-[180px] overflow-hidden flex flex-col transition-opacity bg-background',
                       !capitalsourcesActive
-                        ? 'opacity-40 pointer-events-none select-none bg-muted/50'
+                        ? 'opacity-40 pointer-events-none select-none bg-muted/30'
                         : '',
                     ]"
                   >
                     <CommandInput
                       :placeholder="$t('General.searchForCapitalsource')"
-                      class="h-8 text-xs text-xs w-full !px-3"
+                      class="h-9 text-xs w-full px-3"
                     />
 
                     <CommandEmpty
-                      class="py-4 text-xs text-muted-foreground w-full text-center block"
+                      class="py-6 text-xs text-muted-foreground w-full text-center block"
                     >
                       {{ $t("General.noEntries") }}
                     </CommandEmpty>
 
-                    <ScrollArea
-                      class="flex-1 w-full overflow-y-auto overflow-x-hidden -mx-1 px-1"
-                    >
-                      <CommandGroup class="p-1">
+                    <ScrollArea class="flex-1 w-full overflow-y-auto">
+                      <CommandGroup class="p-1.5">
                         <CommandItem
                           v-for="value of selectBoxValues"
                           :key="value.id"
                           :value="value.value"
-                          class="flex items-center space-x-2 py-1 px-2 cursor-pointer rounded-sm hover:bg-accent data-[selected='true']:bg-transparent"
+                          class="flex items-center space-x-2 py-1.5 px-2 cursor-pointer rounded-md transition-colors data-[selected='true']:bg-accent data-[selected='true']:text-accent-foreground"
                         >
                           <Checkbox
                             :id="`capitalsource-${value.id}`"
                             v-model="capitalsourceIds[value.id]"
+                            class="h-4 w-4"
                           />
                           <Label
                             :for="`capitalsource-${value.id}`"
-                            class="text-xs font-medium cursor-pointer select-none truncate w-full"
+                            class="text-xs font-medium cursor-pointer select-none truncate w-full pr-2"
                           >
                             {{ value.value }}
                           </Label>
@@ -136,8 +138,10 @@
 
                   <div
                     :class="[
-                      'text-[10px] text-muted-foreground text-right pr-1',
-                      !capitalsourcesActive ? 'hidden' : '',
+                      'text-xs text-muted-foreground text-right pr-1 transition-opacity',
+                      !capitalsourcesActive
+                        ? 'opacity-0 pointer-events-none'
+                        : 'opacity-100',
                     ]"
                   >
                     {{
@@ -154,26 +158,30 @@
 
               <div class="grid">
                 <div
-                  class="mb-3 text-left rounded-lg border bg-background p-3 shadow-sm space-y-2 w-full"
+                  class="mb-3 text-left rounded-xl border bg-background p-4 shadow-sm space-y-3 w-full"
                 >
-                  <div class="flex items-center justify-between pb-1 border-b">
+                  <div class="flex items-center justify-between pb-2 border-b">
                     <div class="flex items-center gap-2">
                       <Checkbox
                         id="etfs"
                         class="bg-background"
                         v-model="etfsActive"
                       />
-                      <Label for="etfs" class="cursor-pointer">
+                      <Label
+                        for="etfs"
+                        class="cursor-pointer font-semibold text-sm"
+                      >
                         {{ $t("General.etfs") }}
                       </Label>
                     </div>
-                    <div class="flex items-center space-x-1 text-xs">
+
+                    <div class="flex items-center gap-1 text-xs">
                       <Button
                         type="button"
-                        variant="ghost"
+                        variant="link"
                         size="sm"
                         :class="[
-                          'px-1.5 py-0.5 h-auto text-muted-foreground hover:text-foreground font-medium cursor-pointer transition-colors font-normal',
+                          'h-auto p-0 text-muted-foreground hover:text-primary transition-colors font-normal no-underline hover:underline cursor-pointer',
                           !etfsActive
                             ? 'opacity-40 pointer-events-none select-none'
                             : '',
@@ -186,13 +194,13 @@
                       >
                         {{ $t("General.all") }}
                       </Button>
-                      <span class="text-muted-foreground/40">|</span>
+                      <span class="text-muted-foreground/30 px-0.5">|</span>
                       <Button
                         type="button"
-                        variant="ghost"
+                        variant="link"
                         size="sm"
                         :class="[
-                          'px-1.5 py-0.5 h-auto text-muted-foreground hover:text-foreground font-medium cursor-pointer transition-colors font-normal',
+                          'h-auto p-0 text-muted-foreground hover:text-primary transition-colors font-normal no-underline hover:underline cursor-pointer',
                           !etfsActive
                             ? 'opacity-40 pointer-events-none select-none'
                             : '',
@@ -210,40 +218,39 @@
 
                   <Command
                     :class="[
-                      'rounded-md border border-input h-[160px] overflow-hidden flex flex-col transition-opacity',
+                      'rounded-lg border border-input h-[180px] overflow-hidden flex flex-col transition-opacity bg-background',
                       !etfsActive
-                        ? 'opacity-40 pointer-events-none select-none bg-muted/50'
+                        ? 'opacity-40 pointer-events-none select-none bg-muted/30'
                         : '',
                     ]"
                   >
                     <CommandInput
                       :placeholder="$t('General.searchForEtf')"
-                      class="h-8 text-xs text-xs w-full !px-3"
+                      class="h-9 text-xs w-full px-3"
                     />
 
                     <CommandEmpty
-                      class="py-4 text-xs text-muted-foreground w-full text-center block"
+                      class="py-6 text-xs text-muted-foreground w-full text-center block"
                     >
                       {{ $t("General.noEntries") }}
                     </CommandEmpty>
 
-                    <ScrollArea
-                      class="flex-1 w-full overflow-y-auto overflow-x-hidden -mx-1 px-1"
-                    >
-                      <CommandGroup class="p-1">
+                    <ScrollArea class="flex-1 w-full overflow-y-auto">
+                      <CommandGroup class="p-1.5">
                         <CommandItem
                           v-for="value of etfSelectBoxValues"
                           :key="value.id"
                           :value="value.value"
-                          class="flex items-center space-x-2 py-1 px-2 cursor-pointer rounded-sm hover:bg-accent data-[selected='true']:bg-transparent"
+                          class="flex items-center space-x-2 py-1.5 px-2 cursor-pointer rounded-md transition-colors data-[selected='true']:bg-accent data-[selected='true']:text-accent-foreground"
                         >
                           <Checkbox
                             :id="`etf-${value.id}`"
                             v-model="etfIds[value.id]"
+                            class="h-4 w-4"
                           />
                           <Label
                             :for="`etf-${value.id}`"
-                            class="text-xs font-medium cursor-pointer select-none truncate w-full"
+                            class="text-xs font-medium cursor-pointer select-none truncate w-full pr-2"
                           >
                             {{ value.value }}
                           </Label>
@@ -254,8 +261,10 @@
 
                   <div
                     :class="[
-                      'text-[10px] text-muted-foreground text-right pr-1',
-                      !etfsActive ? 'hidden' : '',
+                      'text-xs text-muted-foreground text-right pr-1 transition-opacity',
+                      !etfsActive
+                        ? 'opacity-0 pointer-events-none'
+                        : 'opacity-100',
                     ]"
                   >
                     {{
@@ -291,39 +300,34 @@
 
 <script lang="ts" setup>
 import {
-  Chart as ChartJS,
   CategoryScale,
+  Chart as ChartJS,
+  Filler,
+  Legend,
   LinearScale,
-  PointElement,
   LineElement,
+  PointElement,
   Title,
   Tooltip,
-  Legend,
-  Filler,
 } from "chart.js";
 import { useForm } from "vee-validate";
 import { computed, onMounted, ref } from "vue";
-import { useI18n } from "vue-i18n";
 import { Line } from "vue-chartjs";
+import { useI18n } from "vue-i18n";
 import { date } from "zod";
 
 import DivError from "@/components/DivError.vue";
 import InputDate from "@/components/InputDate.vue";
 
-import { formatNumber } from "@/tools/views/FormatNumber";
 import { useCapitalsourceStore } from "@/stores/CapitalsourceStore";
+import { formatNumber } from "@/tools/views/FormatNumber";
 import { globErr } from "@/tools/views/ZodUtil";
 
 import type { SelectBoxValue } from "@/model/SelectBoxValue";
 import type { TrendsParameter } from "@/model/report/TrendsParameter";
 
-import ReportService from "@/service/ReportService";
-import { handleBackendError } from "@/tools/views/HandleBackendError";
-import type { Trends } from "@/model/report/Trends";
-import { useEtfStore } from "@/stores/EtfStore";
 import ButtonSubmit from "@/components/ButtonSubmit.vue";
-import { Eye } from "lucide-vue-next";
-import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
   Command,
@@ -332,8 +336,13 @@ import {
   CommandInput,
   CommandItem,
 } from "@/components/ui/command";
-import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import type { Trends } from "@/model/report/Trends";
+import ReportService from "@/service/ReportService";
+import { useEtfStore } from "@/stores/EtfStore";
+import { handleBackendError } from "@/tools/views/HandleBackendError";
+import { Eye } from "lucide-vue-next";
 
 const { t } = useI18n();
 

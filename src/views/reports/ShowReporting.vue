@@ -9,196 +9,201 @@
 
     <div class="flex justify-center">
       <div
-        class="w-full max-w-xl rounded-lg border bg-card text-card-foreground shadow-sm bg-muted p-4"
+        class="w-full max-w-xl rounded-xl border bg-card text-card-foreground shadow-sm bg-muted p-6"
       >
         <form @submit.prevent="showReportingGraph">
-          <div class="space-y-4">
-            <div class="grid gap-3 md:grid-cols-24">
-              <div class="md:col-span-7" v-show="!groupByYear">
-                <InputDate
-                  v-model="startDateMonth"
-                  :validation-schema-ref="schema.startDateMonth"
-                  id="startDateMonth"
-                  pickMode="month"
-                  :field-label="$t('General.startDate')"
-                />
-              </div>
-              <div class="md:col-span-7" v-show="!groupByYear">
-                <InputDate
-                  v-model="endDateMonth"
-                  :validation-schema-ref="schema.endDateMonth"
-                  id="endDateMonth"
-                  pickMode="month"
-                  :field-label="$t('General.endDate')"
-                />
+          <div class="space-y-6">
+            <div
+              class="flex flex-wrap items-end justify-between gap-4 pb-4 border-b"
+            >
+              <div class="flex flex-wrap items-end gap-4">
+                <div class="w-36" v-show="!groupByYear">
+                  <InputDate
+                    v-model="startDateMonth"
+                    :validation-schema-ref="schema.startDateMonth"
+                    id="startDateMonth"
+                    pickMode="month"
+                    :field-label="$t('General.startDate')"
+                  />
+                </div>
+                <div class="w-36" v-show="!groupByYear">
+                  <InputDate
+                    v-model="endDateMonth"
+                    :validation-schema-ref="schema.endDateMonth"
+                    id="endDateMonth"
+                    pickMode="month"
+                    :field-label="$t('General.endDate')"
+                  />
+                </div>
+
+                <div class="w-36" v-show="groupByYear">
+                  <InputDate
+                    v-model="startDateYear"
+                    :validation-schema-ref="schema.startDateYear"
+                    id="startDateYear"
+                    pickMode="year"
+                    :field-label="$t('General.startDate')"
+                  />
+                </div>
+                <div class="w-36" v-show="groupByYear">
+                  <InputDate
+                    v-model="endDateYear"
+                    :validation-schema-ref="schema.endDateYear"
+                    id="endDateYear"
+                    pickMode="year"
+                    :field-label="$t('General.endDate')"
+                  />
+                </div>
               </div>
 
-              <div class="md:col-span-7" v-show="groupByYear">
-                <InputDate
-                  v-model="startDateYear"
-                  :validation-schema-ref="schema.startDateYear"
-                  id="startDateYear"
-                  pickMode="year"
-                  :field-label="$t('General.startDate')"
-                />
-              </div>
-              <div class="md:col-span-7" v-show="groupByYear">
-                <InputDate
-                  v-model="endDateYear"
-                  :validation-schema-ref="schema.endDateYear"
-                  id="endDateYear"
-                  pickMode="year"
-                  :field-label="$t('General.endDate')"
-                />
-              </div>
-              <div class="md:col-span-10 space-y-2 pt-2">
-                <div class="flex items-center gap-2 text-left">
+              <div class="space-y-2 text-left min-w-[200px] pt-2 md:pt-0">
+                <div class="flex items-center gap-2">
                   <Switch
                     id="showreppostingaccountmode"
                     v-model="singlePostingAccounts"
                   />
                   <Label
                     for="showreppostingaccountmode"
-                    class="cursor-pointer text-sm font-medium select-none"
+                    class="cursor-pointer text-sm font-medium select-none text-muted-foreground hover:text-foreground transition-colors"
                   >
                     {{ singlePostingAccountsLabel }}
                   </Label>
                 </div>
-                <div class="flex items-center gap-2 text-left">
+                <div class="flex items-center gap-2">
                   <Switch id="showrepmonth" v-model="groupByYear" />
                   <Label
                     for="showrepmonth"
-                    class="cursor-pointer text-sm font-medium select-none"
+                    class="cursor-pointer text-sm font-medium select-none text-muted-foreground hover:text-foreground transition-colors"
                   >
                     {{ groupByYearLabel }}
                   </Label>
                 </div>
               </div>
             </div>
-
-            <div
-              class="mb-3 text-left rounded-lg border bg-background p-3 shadow-sm space-y-2 w-full"
-              v-show="!singlePostingAccounts"
-            >
-              <div class="flex items-center justify-between pb-1 border-b">
-                <div class="flex items-center gap-2">
-                  <Label for="capitalsourcesActive">
-                    {{ $t("General.postingAccounts") }}
-                  </Label>
-                </div>
-
-                <div class="flex items-center space-x-1 text-xs">
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    class="px-1.5 py-0.5 h-auto text-muted-foreground hover:text-foreground font-medium cursor-pointer transition-colors font-normal"
-                    @click="
-                      selectBoxValues.forEach(
-                        (v) => (selectedPostingAccountIds[v.id] = true),
-                      )
-                    "
-                  >
-                    {{ $t("General.all") }}
-                  </Button>
-                  <span class="text-muted-foreground/40">|</span>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    class="px-1.5 py-0.5 h-auto text-muted-foreground hover:text-foreground font-medium cursor-pointer transition-colors font-normal"
-                    @click="
-                      selectBoxValues.forEach(
-                        (v) => (selectedPostingAccountIds[v.id] = false),
-                      )
-                    "
-                  >
-                    {{ $t("General.none") }}
-                  </Button>
-                </div>
-              </div>
-
-              <Command
-                class="rounded-md border border-input h-[160px] overflow-hidden flex flex-col transition-opacity"
+            <div>
+              <div
+                class="mb-3 text-left rounded-xl border bg-background p-4 shadow-sm space-y-3 w-full"
+                v-show="!singlePostingAccounts"
               >
-                <CommandInput
-                  :placeholder="$t('General.searchForPostingAccount')"
-                  class="h-8 text-xs text-xs w-full !px-3"
-                />
+                <div class="flex items-center justify-between pb-2 border-b">
+                  <div class="flex items-center gap-2">
+                    <Label class="font-semibold text-sm" for="postingAccounts">
+                      {{ $t("General.postingAccounts") }}
+                    </Label>
+                  </div>
 
-                <CommandEmpty
-                  class="py-4 text-xs text-muted-foreground w-full text-center block"
-                >
-                  {{ $t("General.noEntries") }}
-                </CommandEmpty>
-
-                <ScrollArea
-                  class="flex-1 w-full overflow-y-auto overflow-x-hidden -mx-1 px-1"
-                >
-                  <CommandGroup class="p-1">
-                    <CommandItem
-                      v-for="value of selectBoxValues"
-                      :key="value.id"
-                      :value="value.value"
-                      class="flex items-center space-x-2 py-1 px-2 cursor-pointer rounded-sm hover:bg-accent data-[selected='true']:bg-transparent"
+                  <div class="flex items-center gap-1 text-xs">
+                    <Button
+                      type="button"
+                      variant="link"
+                      size="sm"
+                      class="h-auto p-0 text-muted-foreground hover:text-primary transition-colors font-normal no-underline hover:underline cursor-pointer"
+                      @click="
+                        selectBoxValues.forEach(
+                          (v) => (selectedPostingAccountIds[v.id] = true),
+                        )
+                      "
                     >
-                      <Checkbox
-                        :id="`capitalsource-${value.id}`"
-                        v-model="selectedPostingAccountIds[value.id]"
-                      />
-                      <Label
-                        :for="`capitalsource-${value.id}`"
-                        class="text-xs font-medium cursor-pointer select-none truncate w-full"
+                      {{ $t("General.all") }}
+                    </Button>
+                    <span class="text-muted-foreground/30 px-0.5">|</span>
+                    <Button
+                      type="button"
+                      variant="link"
+                      size="sm"
+                      class="h-auto p-0 text-muted-foreground hover:text-primary transition-colors font-normal no-underline hover:underline cursor-pointer"
+                      @click="
+                        selectBoxValues.forEach(
+                          (v) => (selectedPostingAccountIds[v.id] = false),
+                        )
+                      "
+                    >
+                      {{ $t("General.none") }}
+                    </Button>
+                  </div>
+                </div>
+
+                <Command
+                  class="rounded-lg border border-input h-[180px] overflow-hidden flex flex-col transition-opacity bg-background"
+                  id="postingAccounts"
+                >
+                  <CommandInput
+                    :placeholder="$t('General.searchForPostingAccount')"
+                    class="h-9 text-xs w-full px-3"
+                  />
+                  <CommandEmpty
+                    class="py-6 text-xs text-muted-foreground w-full text-center block"
+                  >
+                    {{ $t("General.noEntries") }}
+                  </CommandEmpty>
+
+                  <ScrollArea class="flex-1 w-full overflow-y-auto">
+                    <CommandGroup class="p-1.5">
+                      <CommandItem
+                        v-for="value of selectBoxValues"
+                        :key="value.id"
+                        :value="value.value"
+                        class="flex items-center space-x-2 py-1.5 px-2 cursor-pointer rounded-md transition-colors data-[selected='true']:bg-accent data-[selected='true']:text-accent-foreground"
                       >
-                        {{ value.value }}
-                      </Label>
-                    </CommandItem>
-                  </CommandGroup>
-                </ScrollArea>
-              </Command>
+                        <Checkbox
+                          :id="`postingaccount-${value.id}`"
+                          v-model="selectedPostingAccountIds[value.id]"
+                          class="h-4 w-4"
+                        />
+                        <Label
+                          :for="`postingaccount-${value.id}`"
+                          class="text-xs font-medium cursor-pointer select-none truncate w-full pr-2"
+                        >
+                          {{ value.value }}
+                        </Label>
+                      </CommandItem>
+                    </CommandGroup>
+                  </ScrollArea>
+                </Command>
 
-              <div class="text-[10px] text-muted-foreground text-right pr-1">
-                {{
-                  $t("General.xOfySelected", {
-                    selected: Object.values(selectedPostingAccountIds).filter(
-                      Boolean,
-                    ).length,
-                    total: selectBoxValues.length,
-                  })
-                }}
+                <div class="text-xs text-muted-foreground text-right pr-1 pt-1">
+                  {{
+                    $t("General.xOfySelected", {
+                      selected: Object.values(selectedPostingAccountIds).filter(
+                        Boolean,
+                      ).length,
+                      total: selectBoxValues.length,
+                    })
+                  }}
+                </div>
+              </div>
+
+              <div
+                class="flex justify-center mt-3 w-full"
+                v-show="singlePostingAccounts"
+              >
+                <div class="w-full sm:w-5/6 text-left">
+                  <SelectPostingAccount
+                    v-model="selectedPostingAccountId"
+                    :validation-schema-ref="schema.selectedPostingAccount"
+                    id-suffix="ShowReporting"
+                    :field-label="$t('General.postingAccount')"
+                  />
+                </div>
               </div>
             </div>
 
-            <div
-              class="flex justify-center mt-3"
-              v-show="singlePostingAccounts"
-            >
-              <div class="w-full sm:w-2/3">
-                <SelectPostingAccount
-                  v-model="selectedPostingAccountId"
-                  :validation-schema-ref="schema.selectedPostingAccount"
-                  id-suffix="ShowReporting"
-                  :field-label="$t('General.postingAccount')"
-                />
-              </div>
-            </div>
-
-            <div class="mt-3 flex justify-center">
-              <ButtonSubmit :button-label="$t('General.show')"
-                ><template #icon><Eye class="h-4 w-4" /></template
-              ></ButtonSubmit>
+            <div class="pt-4 flex justify-center">
+              <ButtonSubmit :button-label="$t('General.show')">
+                <template #icon><Eye class="h-4 w-4" /></template>
+              </ButtonSubmit>
             </div>
           </div>
         </form>
       </div>
     </div>
-    <div class="flex justify-center" style="position: relative; height: 55vh">
+    <div
+      class="flex justify-center"
+      style="position: relative; height: 55vh"
+      v-if="reportingGraphLoaded"
+    >
       <div class="w-full lg:w-10/12">
-        <Bar
-          :data="chartData"
-          :options="chartOptions"
-          v-if="reportingGraphLoaded"
-        />
+        <Bar :data="chartData" :options="chartOptions" />
       </div>
     </div>
   </div>
