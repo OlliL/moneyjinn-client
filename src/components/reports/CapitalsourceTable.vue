@@ -1,8 +1,8 @@
 <template>
-  <div class="flex justify-center w-full my-4">
+  <div class="flex justify-center w-full">
     <div class="relative rounded-md border overflow-hidden w-full">
       <div class="overflow-x-auto">
-        <Table class="[&_tr:nth-child(even)]:bg-primary/7">
+        <Table class="[&_tr:nth-child(even)]:bg-muted">
           <TableHeader>
             <TableRow>
               <TableHead

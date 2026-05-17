@@ -22,8 +22,6 @@ defineOptions({
 });
 
 const clazz = computed(() => {
-  return props.alternateRowBackground
-    ? "[&_tr:nth-child(even)]:bg-primary/7"
-    : "";
+  return props.alternateRowBackground ? "[&_tr:nth-child(even)]:bg-muted" : "";
 });
 </script>

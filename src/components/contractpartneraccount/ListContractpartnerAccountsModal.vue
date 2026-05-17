@@ -22,7 +22,7 @@
 
       <div class="flex flex-col rounded-md border">
         <Table
-          class="[&_tr:nth-child(even)]:bg-primary/7 [&_td]:py-1! [&_th]:py-1!"
+          class="[&_tr:nth-child(even)]:bg-muted [&_td]:py-1! [&_th]:py-1!"
         >
           <TableHeader>
             <TableRow>
@@ -74,8 +74,8 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, useTemplateRef } from "vue";
 import { Plus } from "lucide-vue-next";
+import { ref, useTemplateRef } from "vue";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -87,11 +87,11 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
+import DivError from "../DivError.vue";
+import ModalVue from "../Modal.vue";
 import CreateContractpartnerAccountModalVue from "./CreateContractpartnerAccountModal.vue";
 import DeleteContractpartnerAccountModalVue from "./DeleteContractpartnerAccountModal.vue";
 import ListContractpartnerAccountRowVue from "./ListContractpartnerAccountRow.vue";
-import DivError from "../DivError.vue";
-import ModalVue from "../Modal.vue";
 
 import type { Contractpartner } from "@/model/contractpartner/Contractpartner";
 import type { ContractpartnerAccount } from "@/model/contractpartneraccount/ContractpartnerAccount";

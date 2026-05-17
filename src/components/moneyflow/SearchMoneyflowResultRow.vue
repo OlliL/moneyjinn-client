@@ -146,7 +146,7 @@ const redIfPrivate = computed(() => {
     : "hidden md:table-cell";
 });
 const rowBgClass = computed(() => {
-  return props.alternateRowBackground ? "bg-primary/7" : "bg-background";
+  return props.alternateRowBackground ? "bg-muted" : "bg-background";
 });
 const isOwnMoneyflow = computed(() => {
   return props.mmf.userId === userSessionStore.getUserId;

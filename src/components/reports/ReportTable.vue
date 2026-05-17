@@ -294,7 +294,7 @@
               <div class="w-full max-w-lg">
                 <div class="flex flex-col rounded-md border">
                   <Table
-                    class="[&_tr:nth-child(even)]:bg-primary/7 [&_td]:!py-1 [&_th]:!py-1"
+                    class="[&_tr:nth-child(even)]:bg-muted [&_td]:!py-1 [&_th]:!py-1"
                   >
                     <TableHeader>
                       <TableRow>

@@ -5,13 +5,13 @@
         <Table>
           <TableBody>
             <TableRow>
-              <TableCell class="font-bold bg-primary/10 text-left w-3/4">
+              <TableCell class="font-bold bg-muted text-left w-3/4">
                 {{ $t("ETFFlow.calculateResults.pieces") }}
               </TableCell>
               <TableCell class="text-right">{{ calcResults.pieces }}</TableCell>
             </TableRow>
             <TableRow>
-              <TableCell class="font-bold bg-primary/10 text-left">
+              <TableCell class="font-bold bg-muted text-left">
                 {{ $t("ETFFlow.calculateResults.originalBuyPrice") }}
               </TableCell>
               <TableCell class="text-right"
@@ -19,7 +19,7 @@
               /></TableCell>
             </TableRow>
             <TableRow>
-              <TableCell class="font-bold bg-primary/10 text-left">
+              <TableCell class="font-bold bg-muted text-left">
                 {{ $t("ETFFlow.calculateResults.sellPrice") }}
               </TableCell>
               <TableCell class="text-right"
@@ -33,7 +33,7 @@
         <Table>
           <TableBody>
             <TableRow>
-              <TableCell class="font-bold bg-primary/10 text-left w-3/4">
+              <TableCell class="font-bold bg-muted text-left w-3/4">
                 {{ $t("ETFFlow.profit") }}
               </TableCell>
               <TableCell class="text-right"
@@ -41,7 +41,7 @@
               /></TableCell>
             </TableRow>
             <TableRow>
-              <TableCell class="font-bold bg-primary/10 text-left">
+              <TableCell class="font-bold bg-muted text-left">
                 {{
                   $t("ETFFlow.calculateResults.accumulatedPreliminaryLumpSum")
                 }}
@@ -52,7 +52,7 @@
               /></TableCell>
             </TableRow>
             <TableRow>
-              <TableCell class="font-bold bg-primary/10 text-left">
+              <TableCell class="font-bold bg-muted text-left">
                 {{ $t("ETFFlow.calculateResults.chargeable") }}
               </TableCell>
               <TableCell class="text-right"
@@ -67,7 +67,7 @@
           <TableBody>
             <TableRow>
               <TableCell
-                class="font-bold bg-primary/10 text-left"
+                class="font-bold bg-muted text-left"
                 colspan="3"
                 id="newBuyProce"
               >
@@ -79,7 +79,7 @@
             </TableRow>
             <TableRow>
               <TableCell
-                class="font-bold bg-primary/10 text-left"
+                class="font-bold bg-muted text-left"
                 colspan="3"
                 id="rebuyLosses"
               >
@@ -91,21 +91,21 @@
             </TableRow>
             <TableRow>
               <TableCell
-                class="font-bold bg-primary/10 text-left"
+                class="font-bold bg-muted text-left"
                 rowspan="4"
                 id="transactionCosts"
               >
                 {{ $t("ETFFlow.transactionCosts") }}
               </TableCell>
               <TableCell
-                class="font-bold bg-primary/10 text-left"
+                class="font-bold bg-muted text-left"
                 rowspan="2"
                 id="transactionCostsSell"
               >
                 {{ $t("ETFFlow.transactionCostsSell") }}
               </TableCell>
               <TableCell
-                class="font-bold bg-primary/10 text-left"
+                class="font-bold bg-muted text-left"
                 id="transactionCostsSellAbsolute"
               >
                 {{ $t("ETFFlow.transactionCostsAbsolute") }}
@@ -116,7 +116,7 @@
             </TableRow>
             <TableRow>
               <TableCell
-                class="font-bold bg-primary/10 text-left"
+                class="font-bold bg-muted text-left"
                 id="transactionCostsSellRelative"
               >
                 {{ $t("ETFFlow.transactionCostsRelative") }}
@@ -127,14 +127,14 @@
             </TableRow>
             <TableRow>
               <TableCell
-                class="font-bold bg-primary/10 text-left"
+                class="font-bold bg-muted text-left"
                 rowspan="2"
                 id="transactionCostsBuy"
               >
                 {{ $t("ETFFlow.transactionCostsBuy") }}
               </TableCell>
               <TableCell
-                class="font-bold bg-primary/10 text-left"
+                class="font-bold bg-muted text-left"
                 id="transactionCostsBuyAbsolute"
               >
                 {{ $t("ETFFlow.transactionCostsAbsolute") }}
@@ -145,7 +145,7 @@
             </TableRow>
             <TableRow>
               <TableCell
-                class="font-bold bg-primary/10 text-left"
+                class="font-bold bg-muted text-left"
                 id="transactionCostsBuyRelative"
               >
                 {{ $t("ETFFlow.transactionCostsRelative") }}
@@ -156,7 +156,7 @@
             </TableRow>
             <TableRow>
               <TableCell
-                class="font-bold bg-primary/10 text-left"
+                class="font-bold bg-muted text-left"
                 colspan="3"
                 id="overallCosts"
               >

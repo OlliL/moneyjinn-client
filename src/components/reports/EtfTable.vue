@@ -3,13 +3,13 @@
   <div class="flex justify-center py-4" v-if="dataLoaded && etfSummaryReceived">
     <div class="w-full max-w-7xl">
       <div class="rounded-sm border">
-        <div class="border-b p-3 text-center">
+        <div class="border-b text-center p-3">
           <h4 class="text-2xl font-bold">{{ $t("General.etf") }}</h4>
         </div>
         <div class="p-4">
           <div class="overflow-x-auto text-center">
             <div class="flex flex-col rounded-md border">
-              <Table class="[&_tbody_tr:nth-child(even)]:bg-primary/7">
+              <Table class="[&_tbody_tr:nth-child(even)]:bg-muted">
                 <TableHeader>
                   <TableRow>
                     <TableHead
