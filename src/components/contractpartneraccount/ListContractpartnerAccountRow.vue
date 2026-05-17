@@ -1,7 +1,7 @@
 <template>
   <TableRow>
     <TableCell class="text-left border">
-      {{ mca.accountNumber }}
+      <SpanIban :iban="mca.accountNumber" />
     </TableCell>
     <TableCell class="text-left border">
       {{ mca.bankCode }}
@@ -39,6 +39,7 @@ import { Button } from "@/components/ui/button";
 import { TableCell, TableRow } from "@/components/ui/table";
 
 import type { ContractpartnerAccount } from "@/model/contractpartneraccount/ContractpartnerAccount";
+import SpanIban from "../SpanIban.vue";
 
 const props = defineProps({
   mca: {

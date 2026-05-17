@@ -18,7 +18,7 @@
               <TableCell
                 class="font-semibold text-foreground pr-4 py-3 text-base"
               >
-                {{ mca.accountNumber }}
+                <SpanIban :iban="mca.accountNumber" />
               </TableCell>
             </TableRow>
 
@@ -59,6 +59,7 @@ import { Trash2 } from "lucide-vue-next";
 import { ref, useTemplateRef } from "vue";
 import DivError from "../DivError.vue";
 import ModalVue from "../Modal.vue";
+import SpanIban from "../SpanIban.vue";
 
 const serverErrors = ref(new Array<string>());
 const mca = ref({} as ContractpartnerAccount);

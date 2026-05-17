@@ -3,7 +3,9 @@
     <TableCell class="text-left border-r">{{ mcs.comment }}</TableCell>
     <TableCell class="text-left border-r">{{ typeString }}</TableCell>
     <TableCell class="text-left border-r">{{ stateString }}</TableCell>
-    <TableCell class="text-left border-r">{{ mcs.accountNumber }}</TableCell>
+    <TableCell class="text-left border-r"
+      ><SpanIban :iban="mcs.accountNumber"
+    /></TableCell>
     <TableCell class="text-left border-r">{{ mcs.bankCode }}</TableCell>
     <TableCell class="text-left border-r"
       ><SpanDate :date="mcs.validFrom"
@@ -58,6 +60,7 @@ import { capitalsourceImportNames } from "@/model/capitalsource/CapitalsourceImp
 import { capitalsourceStateNames } from "@/model/capitalsource/CapitalsourceState";
 import { capitalsourceTypeNames } from "@/model/capitalsource/CapitalsourceType";
 import SpanBoolean from "../SpanBoolean.vue";
+import SpanIban from "../SpanIban.vue";
 
 const props = defineProps({
   mcs: {

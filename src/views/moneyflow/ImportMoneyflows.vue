@@ -31,7 +31,9 @@
                 >
                   {{ $t("General.contractpartner") }}
                 </dt>
-                <dd class="font-semibold text-sm text-foreground break-words">
+                <dd
+                  class="text-sm text-foreground bg-background/80 px-2 py-1 rounded border border-border/40 inline-block font-semibold"
+                >
                   {{ importedMoneyflow.name }}
                 </dd>
               </dl>
@@ -43,9 +45,9 @@
                   {{ $t("General.iban") }}
                 </dt>
                 <dd
-                  class="font-mono text-xs text-foreground bg-background/80 px-2 py-1 rounded border border-border/40 inline-block break-all"
+                  class="text-xs text-foreground bg-background/80 px-2 py-1 rounded border border-border/40 inline-block break-all"
                 >
-                  {{ importedMoneyflow.accountNumber }}
+                  <SpanIban :iban="importedMoneyflow.accountNumber" />
                 </dd>
               </dl>
 
@@ -56,7 +58,7 @@
                   {{ $t("General.bic") }}
                 </dt>
                 <dd
-                  class="font-mono text-xs text-foreground bg-background/80 px-2 py-1 rounded border border-border/40 inline-block"
+                  class="text-xs text-foreground bg-background/80 px-2 py-1 rounded border border-border/40 inline-block"
                 >
                   {{ importedMoneyflow.bankCode }}
                 </dd>
@@ -118,6 +120,7 @@ import EditMoneyflowBase from "@/components/moneyflow/EditMoneyflowBase.vue";
 import type { ImportedMoneyflow } from "@/model/moneyflow/ImportedMoneyflow";
 
 import DivError from "@/components/DivError.vue";
+import SpanIban from "@/components/SpanIban.vue";
 import SpanImportComment from "@/components/SpanImportComment.vue";
 import { Button } from "@/components/ui/button";
 import ImportedMoneyflowService from "@/service/ImportedMoneyflowService";

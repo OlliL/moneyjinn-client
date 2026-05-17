@@ -47,7 +47,7 @@
                 {{ $t("General.iban") }}
               </TableCell>
               <TableCell class="font-medium text-foreground pr-4 py-3">
-                {{ mcs.accountNumber }}
+                <SpanIban :iban="mcs.accountNumber" />
               </TableCell>
             </TableRow>
 
@@ -113,6 +113,7 @@ import { computed, ref, useTemplateRef } from "vue";
 import DivError from "../DivError.vue";
 import ModalVue from "../Modal.vue";
 import SpanDate from "../SpanDate.vue";
+import SpanIban from "../SpanIban.vue";
 
 const serverErrors = ref(new Array<string>());
 
