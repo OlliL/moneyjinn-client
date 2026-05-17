@@ -38,6 +38,7 @@
         "validNow": "jetzt gültig",
         "startDate": "Startdatum",
         "endDate": "Enddatum",
+        "searchForPostingAccount": "Nach Buchungskonto suchen...",
         "searchForCapitalsource": "Nach Kapitalquelle suchen...",
         "searchForEtf": "Nach ETF suchen...",
         "xOfySelected": "{selected} von {total} ausgewählt",

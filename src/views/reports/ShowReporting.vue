@@ -9,12 +9,12 @@
 
     <div class="flex justify-center">
       <div
-        class="w-full max-w-5xl rounded-lg border bg-card text-card-foreground shadow-sm bg-muted p-4"
+        class="w-full max-w-xl rounded-lg border bg-card text-card-foreground shadow-sm bg-muted p-4"
       >
         <form @submit.prevent="showReportingGraph">
           <div class="space-y-4">
-            <div class="grid gap-3 md:grid-cols-12">
-              <div class="md:col-span-4" v-show="!groupByYear">
+            <div class="grid gap-3 md:grid-cols-24">
+              <div class="md:col-span-7" v-show="!groupByYear">
                 <InputDate
                   v-model="startDateMonth"
                   :validation-schema-ref="schema.startDateMonth"
@@ -23,7 +23,7 @@
                   :field-label="$t('General.startDate')"
                 />
               </div>
-              <div class="md:col-span-4" v-show="!groupByYear">
+              <div class="md:col-span-7" v-show="!groupByYear">
                 <InputDate
                   v-model="endDateMonth"
                   :validation-schema-ref="schema.endDateMonth"
@@ -33,7 +33,7 @@
                 />
               </div>
 
-              <div class="md:col-span-4" v-show="groupByYear">
+              <div class="md:col-span-7" v-show="groupByYear">
                 <InputDate
                   v-model="startDateYear"
                   :validation-schema-ref="schema.startDateYear"
@@ -42,7 +42,7 @@
                   :field-label="$t('General.startDate')"
                 />
               </div>
-              <div class="md:col-span-4" v-show="groupByYear">
+              <div class="md:col-span-7" v-show="groupByYear">
                 <InputDate
                   v-model="endDateYear"
                   :validation-schema-ref="schema.endDateYear"
@@ -51,7 +51,7 @@
                   :field-label="$t('General.endDate')"
                 />
               </div>
-              <div class="md:col-span-4 space-y-2 pt-2">
+              <div class="md:col-span-10 space-y-2 pt-2">
                 <div class="flex items-center gap-2 text-left">
                   <Switch
                     id="showreppostingaccountmode"
@@ -77,107 +77,105 @@
             </div>
 
             <div
-              class="grid gap-3 md:grid-cols-12"
+              class="mb-3 text-left rounded-lg border bg-background p-3 shadow-sm space-y-2 w-full"
               v-show="!singlePostingAccounts"
             >
-              <div
-                class="md:col-span-12 flex flex-row items-center justify-between gap-4"
-              >
-                <div class="flex-1">
-                  <Label
-                    for="postingAccountIdsYes"
-                    class="text-left ml-1 pb-2"
-                    >{{ errorDatasPostingAccountsYes.fieldLabel }}</Label
-                  >
-                  <select
-                    v-model="selectedPostingAccountsYes"
-                    id="postingAccountIdsYes"
-                    name="postingAccountIdsYes"
-                    :class="
-                      'w-full rounded-md border border-input bg-background px-3 py-2 text-sm h-40' +
-                      errorDatasPostingAccountsYes.inputClass
+              <div class="flex items-center justify-between pb-1 border-b">
+                <div class="flex items-center gap-2">
+                  <Label for="capitalsourcesActive">
+                    {{ $t("General.postingAccounts") }}
+                  </Label>
+                </div>
+
+                <div class="flex items-center space-x-1 text-xs">
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    class="px-1.5 py-0.5 h-auto text-muted-foreground hover:text-foreground font-medium cursor-pointer transition-colors font-normal"
+                    @click="
+                      selectBoxValues.forEach(
+                        (v) => (selectedPostingAccountIds[v.id] = true),
+                      )
                     "
-                    multiple
-                    size="5"
                   >
-                    <option
-                      v-for="postingAccount of postingAccountsYes"
-                      :key="postingAccount.id"
-                      :value="postingAccount.id"
-                    >
-                      {{ postingAccount.name }}
-                    </option>
-                  </select>
-                </div>
-
-                <div
-                  class="w-20 flex flex-col items-center justify-center gap-2 pt-5"
-                >
+                    {{ $t("General.all") }}
+                  </Button>
+                  <span class="text-muted-foreground/40">|</span>
                   <Button
                     type="button"
-                    variant="outline"
-                    class="h-8 w-8"
-                    @click="removeAllPostingAccounts"
+                    variant="ghost"
+                    size="sm"
+                    class="px-1.5 py-0.5 h-auto text-muted-foreground hover:text-foreground font-medium cursor-pointer transition-colors font-normal"
+                    @click="
+                      selectBoxValues.forEach(
+                        (v) => (selectedPostingAccountIds[v.id] = false),
+                      )
+                    "
                   >
-                    <ChevronsRight class="h-4 w-4" />
+                    {{ $t("General.none") }}
                   </Button>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    class="h-8 w-8"
-                    @click="removeSelectedPostingAccounts"
-                  >
-                    <ChevronRight class="h-4 w-4" />
-                  </Button>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    class="h-8 w-8"
-                    @click="addSelectedPostingAccounts"
-                  >
-                    <ChevronLeft class="h-4 w-4" />
-                  </Button>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    class="h-8 w-8"
-                    @click="addAllPostingAccounts"
-                  >
-                    <ChevronsLeft class="h-4 w-4" />
-                  </Button>
-                </div>
-
-                <div class="flex-1">
-                  <Label
-                    for="postingAccountIdsNo"
-                    class="text-left ml-1 pb-2"
-                    >{{ $t("Reports.excluded") }}</Label
-                  >
-                  <select
-                    v-model="selectedPostingAccountsNo"
-                    id="postingAccountIdsNo"
-                    class="w-full rounded-md border border-input bg-background px-3 py-2 text-sm h-40"
-                    multiple
-                    size="5"
-                  >
-                    <option
-                      v-for="postingAccount of postingAccountsNo"
-                      :key="postingAccount.id"
-                      :value="postingAccount.id"
-                    >
-                      {{ postingAccount.name }}
-                    </option>
-                  </select>
                 </div>
               </div>
+
+              <Command
+                class="rounded-md border border-input h-[160px] overflow-hidden flex flex-col transition-opacity"
+              >
+                <CommandInput
+                  :placeholder="$t('General.searchForPostingAccount')"
+                  class="h-8 text-xs text-xs w-full !px-3"
+                />
+
+                <CommandEmpty
+                  class="py-4 text-xs text-muted-foreground w-full text-center block"
+                >
+                  {{ $t("General.noEntries") }}
+                </CommandEmpty>
+
+                <ScrollArea
+                  class="flex-1 w-full overflow-y-auto overflow-x-hidden -mx-1 px-1"
+                >
+                  <CommandGroup class="p-1">
+                    <CommandItem
+                      v-for="value of selectBoxValues"
+                      :key="value.id"
+                      :value="value.value"
+                      class="flex items-center space-x-2 py-1 px-2 cursor-pointer rounded-sm hover:bg-accent data-[selected='true']:bg-transparent"
+                    >
+                      <Checkbox
+                        :id="`capitalsource-${value.id}`"
+                        v-model="selectedPostingAccountIds[value.id]"
+                      />
+                      <Label
+                        :for="`capitalsource-${value.id}`"
+                        class="text-xs font-medium cursor-pointer select-none truncate w-full"
+                      >
+                        {{ value.value }}
+                      </Label>
+                    </CommandItem>
+                  </CommandGroup>
+                </ScrollArea>
+              </Command>
+
+              <div class="text-[10px] text-muted-foreground text-right pr-1">
+                {{
+                  $t("General.xOfySelected", {
+                    selected: Object.values(selectedPostingAccountIds).filter(
+                      Boolean,
+                    ).length,
+                    total: selectBoxValues.length,
+                  })
+                }}
+              </div>
             </div>
+
             <div
               class="flex justify-center mt-3"
               v-show="singlePostingAccounts"
             >
-              <div class="w-full sm:w-1/2">
+              <div class="w-full sm:w-2/3">
                 <SelectPostingAccount
-                  v-model="selectedPostingAccount"
+                  v-model="selectedPostingAccountId"
                   :validation-schema-ref="schema.selectedPostingAccount"
                   id-suffix="ShowReporting"
                   :field-label="$t('General.postingAccount')"
@@ -207,53 +205,47 @@
 </template>
 
 <script lang="ts" setup>
-import {
-  Chart as ChartJS,
-  Title,
-  Tooltip,
-  Legend,
-  BarElement,
-  CategoryScale,
-  LinearScale,
-} from "chart.js";
-import { toTypedSchema } from "@vee-validate/zod";
-import { useField, useForm } from "vee-validate";
-import { computed, onMounted, ref } from "vue";
-import { Bar } from "vue-chartjs";
-import { useI18n } from "vue-i18n";
-import { any, date, number, object } from "zod";
-
 import ButtonSubmit from "@/components/ButtonSubmit.vue";
 import DivError from "@/components/DivError.vue";
 import InputDate from "@/components/InputDate.vue";
 import SelectPostingAccount from "@/components/postingaccount/SelectPostingAccount.vue";
-
-import { formatNumber } from "@/tools/views/FormatNumber";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
-  generateErrorDataVeeValidate,
-  type ErrorData,
-} from "@/tools/views/ErrorData";
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+} from "@/components/ui/command";
+import { Label } from "@/components/ui/label";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Switch } from "@/components/ui/switch";
+import type { PostingAccount } from "@/model/postingaccount/PostingAccount";
+import type { ReportingMonthAmount } from "@/model/report/ReportingMonthAmount";
+import type { ReportingParameter } from "@/model/report/ReportingParameter";
+import ReportService from "@/service/ReportService";
+import { usePostingAccountStore } from "@/stores/PostingAccountStore";
+import { toFixed } from "@/tools/math";
+import { formatNumber } from "@/tools/views/FormatNumber";
+import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { getMonthName } from "@/tools/views/MonthName";
 import { globErr } from "@/tools/views/ZodUtil";
-import { handleBackendError } from "@/tools/views/HandleBackendError";
-import { toFixed } from "@/tools/math";
-
-import type { PostingAccount } from "@/model/postingaccount/PostingAccount";
-import type { ReportingParameter } from "@/model/report/ReportingParameter";
-import type { ReportingMonthAmount } from "@/model/report/ReportingMonthAmount";
-
-import ReportService from "@/service/ReportService";
-import { Button } from "@/components/ui/button";
-import { Switch } from "@/components/ui/switch";
 import {
-  ChevronLeft,
-  ChevronRight,
-  ChevronsLeft,
-  ChevronsRight,
-  Eye,
-} from "lucide-vue-next";
-import Label from "@/components/ui/label/Label.vue";
-
+  BarElement,
+  CategoryScale,
+  Chart as ChartJS,
+  Legend,
+  LinearScale,
+  Title,
+  Tooltip,
+} from "chart.js";
+import { Eye } from "lucide-vue-next";
+import { useForm } from "vee-validate";
+import { computed, onMounted, ref } from "vue";
+import { Bar } from "vue-chartjs";
+import { useI18n } from "vue-i18n";
+import { any, date, number } from "zod";
 const { t } = useI18n();
 
 const serverErrors = ref(new Array<string>());
@@ -266,12 +258,15 @@ const startDateMonth = ref(new Date());
 const endDateMonth = ref(new Date());
 const startDateYear = ref(new Date());
 const endDateYear = ref(new Date());
+const postingAccountStore = usePostingAccountStore();
 
-const postingAccounts = ref(new Array<PostingAccount>());
-const postingAccountsNo = ref(new Array<PostingAccount>());
-const selectedPostingAccountsYes = ref(new Array<number>());
-const selectedPostingAccountsNo = ref(new Array<number>());
-const selectedPostingAccount = ref(0);
+const selectBoxValues = computed(
+  () => postingAccountStore.getAsSelectBoxValues,
+);
+
+const selectedPostingAccountIds = ref(new Array<boolean>());
+const selectedPostingAccountId = ref(0);
+
 const chartData = ref({
   labels: new Array<string>(),
   datasets: [
@@ -345,16 +340,6 @@ const schema = {
   ),
 };
 
-const postingAccountIdsYesSchema = computed(() =>
-  singlePostingAccounts.value
-    ? toTypedSchema(optionalSchema)
-    : toTypedSchema(
-        object({ id: number() })
-          .array()
-          .min(1, t("Moneyflow.validation.postingAccountId")),
-      ),
-);
-
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -375,25 +360,6 @@ type ChartData = {
 
 const { handleSubmit, values, setFieldTouched } = useForm();
 
-const {
-  value: postingAccountsYes,
-  meta: postingAccountsYesMeta,
-  errorMessage,
-  setState,
-} = useField<Array<PostingAccount>>(
-  "postingAccountIdsYes",
-  postingAccountIdsYesSchema,
-  { initialValue: new Array<PostingAccount>(), syncVModel: true },
-);
-
-const errorDatasPostingAccountsYes = computed((): ErrorData => {
-  return generateErrorDataVeeValidate(
-    postingAccountsYesMeta.touched,
-    t("Reports.included"),
-    errorMessage.value,
-  );
-});
-
 onMounted(() => {
   loadData();
 });
@@ -413,6 +379,10 @@ const loadData = () => {
   serverErrors.value = new Array<string>();
 
   dataLoaded.value = false;
+  selectedPostingAccountIds.value = new Array<boolean>();
+  postingAccountStore.postingAccount.forEach((mpa) => {
+    selectedPostingAccountIds.value[mpa.id] = false;
+  });
   ReportService.showReportingForm()
     .then((reportingParameter) => {
       const minDate = reportingParameter.startDate;
@@ -426,13 +396,9 @@ const loadData = () => {
         endDateMonth.value = new Date(maxDate);
         endDateYear.value = new Date(maxDate);
       }
-
-      postingAccountsYes.value = reportingParameter.selectedPostingAccounts;
-      postingAccountsNo.value =
-        reportingParameter.unselectedPostingAccounts ?? [];
-      postingAccounts.value = postingAccountsYes.value.concat(
-        postingAccountsNo.value,
-      );
+      reportingParameter.selectedPostingAccounts.forEach((mpa) => {
+        selectedPostingAccountIds.value[mpa.id] = true;
+      });
       dataLoaded.value = true;
       Object.keys(values).forEach((field) => setFieldTouched(field, false));
     })
@@ -441,48 +407,6 @@ const loadData = () => {
     });
 };
 
-const movePostingAccounts = (
-  from: Array<PostingAccount>,
-  to: Array<PostingAccount>,
-  toBeMovedIds: Array<number>,
-): Array<PostingAccount> => {
-  const toBeMoved = from.filter((mpa) =>
-    toBeMovedIds.find((id) => id == mpa.id),
-  );
-  const newFrom = from.filter((mpa) => !toBeMovedIds.includes(mpa.id));
-  for (let mpa of toBeMoved) {
-    to.push(mpa);
-  }
-  to.sort((a, b) => a.name.localeCompare(b.name));
-  setState({ touched: true });
-  return newFrom;
-};
-const removeAllPostingAccounts = () => {
-  postingAccountsNo.value = postingAccounts.value;
-  postingAccountsYes.value = new Array<PostingAccount>();
-  setState({ touched: true });
-};
-const removeSelectedPostingAccounts = () => {
-  postingAccountsYes.value = movePostingAccounts(
-    postingAccountsYes.value,
-    postingAccountsNo.value,
-    selectedPostingAccountsYes.value,
-  );
-  selectedPostingAccountsYes.value = [];
-};
-const addAllPostingAccounts = () => {
-  postingAccountsNo.value = [];
-  postingAccountsYes.value = postingAccounts.value;
-  setState({ touched: true });
-};
-const addSelectedPostingAccounts = () => {
-  postingAccountsNo.value = movePostingAccounts(
-    postingAccountsNo.value,
-    postingAccountsYes.value,
-    selectedPostingAccountsNo.value,
-  );
-  selectedPostingAccountsNo.value = [];
-};
 const randomColor = () => {
   const possibilities = [1, 2, 3, 4, 5, 6, 7, 8, 9, "A", "B", "C", "D"];
   let color = "#";
@@ -566,16 +490,23 @@ const showReportingGraph = handleSubmit(() => {
 
   if (singlePostingAccounts.value) {
     const selectedPostingAccounts = new Array<PostingAccount>();
-    const _selectedPostingAccount = postingAccounts.value.find(
-      (mpa) => mpa.id === selectedPostingAccount.value,
+
+    const _selectedPostingAccount = postingAccountStore.postingAccount.find(
+      (mpa) => mpa.id === selectedPostingAccountId.value,
     );
     if (_selectedPostingAccount) {
       selectedPostingAccounts.push(_selectedPostingAccount);
     }
     reportingParameter.selectedPostingAccounts = selectedPostingAccounts;
   } else {
-    reportingParameter.selectedPostingAccounts = postingAccountsYes.value;
-    reportingParameter.unselectedPostingAccounts = postingAccountsNo.value;
+    reportingParameter.selectedPostingAccounts =
+      postingAccountStore.postingAccount.filter(
+        (mpa) => selectedPostingAccountIds.value[mpa.id],
+      );
+    reportingParameter.unselectedPostingAccounts =
+      postingAccountStore.postingAccount.filter(
+        (mpa) => !selectedPostingAccountIds.value[mpa.id],
+      );
   }
   reportingGraphLoaded.value = false;
 
@@ -598,6 +529,7 @@ const showReportingGraph = handleSubmit(() => {
       reportingGraphLoaded.value = true;
     })
     .catch((backendError) => {
+      console.log(backendError);
       handleBackendError(backendError, serverErrors);
     });
 });
