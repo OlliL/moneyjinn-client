@@ -290,7 +290,7 @@
               :capitalsource-data="assetsTurnoverCapitalsources"
               :current-month-is-settled="currentMonthIsSettled"
             />
-            <div class="flex justify-center">
+            <div class="flex justify-center pt-4">
               <div class="w-full max-w-lg">
                 <div class="flex flex-col rounded-md border">
                   <Table
