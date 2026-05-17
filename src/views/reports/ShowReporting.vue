@@ -538,7 +538,6 @@ const showReportingGraph = handleSubmit(() => {
       reportingGraphLoaded.value = true;
     })
     .catch((backendError) => {
-      console.log(backendError);
       handleBackendError(backendError, serverErrors);
     });
 });
