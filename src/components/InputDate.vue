@@ -43,12 +43,16 @@
 </template>
 
 <script lang="ts" setup>
-import { CalendarDays } from "lucide-vue-next";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import {
+  generateErrorDataVeeValidate,
+  type ErrorData,
+} from "@/tools/views/ErrorData";
+import { toTypedSchema } from "@vee-validate/zod";
+import { CalendarDays } from "lucide-vue-next";
 import { Datepicker } from "vanillajs-datepicker";
 import { useField } from "vee-validate";
-import { toTypedSchema } from "@vee-validate/zod";
 import {
   computed,
   onMounted,
@@ -60,14 +64,8 @@ import {
   type Ref,
 } from "vue";
 import { date, preprocess, type ZodType } from "zod";
-
 // @ts-ignore
 import de from "../../node_modules/vanillajs-datepicker/js/i18n/locales/de.js";
-
-import {
-  generateErrorDataVeeValidate,
-  type ErrorData,
-} from "@/tools/views/ErrorData";
 
 const props = defineProps({
   validationSchema: {

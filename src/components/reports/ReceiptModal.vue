@@ -22,16 +22,12 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, useTemplateRef } from "vue";
-
-import ModalVue from "../Modal.vue";
-
-import { handleBackendError } from "@/tools/views/HandleBackendError";
-
 import { MoneyflowReceiptType } from "@/model/moneyflow/MoneyflowReceiptType";
-
 import MoneyflowReceiptService from "@/service/MoneyflowReceiptService";
+import { handleBackendError } from "@/tools/views/HandleBackendError";
+import { ref, useTemplateRef } from "vue";
 import DivError from "../DivError.vue";
+import ModalVue from "../Modal.vue";
 
 const serverErrors = ref(new Array<string>());
 

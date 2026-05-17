@@ -35,23 +35,19 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, type PropType } from "vue";
-import { useI18n } from "vue-i18n";
-
 import { TableCell, TableRow } from "@/components/ui/table";
-
-import SpanAmount from "../SpanAmount.vue";
-
-import { formatDateWithTime } from "@/tools/views/FormatDate";
-
-import {
-  CapitalsourceType,
-  capitalsourceTypeNames,
-} from "@/model/capitalsource/CapitalsourceType";
 import {
   CapitalsourceState,
   capitalsourceStateNames,
 } from "@/model/capitalsource/CapitalsourceState";
+import {
+  CapitalsourceType,
+  capitalsourceTypeNames,
+} from "@/model/capitalsource/CapitalsourceType";
+import { formatDateWithTime } from "@/tools/views/FormatDate";
+import { computed, type PropType } from "vue";
+import { useI18n } from "vue-i18n";
+import SpanAmount from "../SpanAmount.vue";
 
 const { t } = useI18n();
 

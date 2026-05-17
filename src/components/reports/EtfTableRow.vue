@@ -33,14 +33,11 @@
 </template>
 
 <script lang="ts" setup>
-import { computed } from "vue";
-
 import { TableCell, TableRow } from "@/components/ui/table";
-
-import SpanAmount from "../SpanAmount.vue";
-
 import { formatDateWithTime } from "@/tools/views/FormatDate";
 import { formatNumber } from "@/tools/views/FormatNumber";
+import { computed } from "vue";
+import SpanAmount from "../SpanAmount.vue";
 
 const props = defineProps({
   name: {

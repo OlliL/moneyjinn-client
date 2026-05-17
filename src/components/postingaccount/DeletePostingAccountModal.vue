@@ -30,20 +30,15 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, useTemplateRef } from "vue";
-import { Trash2 } from "lucide-vue-next";
-
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
-
+import type { PostingAccount } from "@/model/postingaccount/PostingAccount";
+import PostingAccountService from "@/service/PostingAccountService";
+import { handleBackendError } from "@/tools/views/HandleBackendError";
+import { Trash2 } from "lucide-vue-next";
+import { ref, useTemplateRef } from "vue";
 import DivError from "../DivError.vue";
 import ModalVue from "../Modal.vue";
-
-import { handleBackendError } from "@/tools/views/HandleBackendError";
-
-import type { PostingAccount } from "@/model/postingaccount/PostingAccount";
-
-import PostingAccountService from "@/service/PostingAccountService";
 
 const serverErrors = ref(new Array<string>());
 

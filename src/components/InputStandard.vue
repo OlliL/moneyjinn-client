@@ -48,9 +48,12 @@
 <script lang="ts" setup>
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-
-import { useField } from "vee-validate";
+import {
+  generateErrorDataVeeValidate,
+  type ErrorData,
+} from "@/tools/views/ErrorData";
 import { toTypedSchema } from "@vee-validate/zod";
+import { useField } from "vee-validate";
 import {
   computed,
   nextTick,
@@ -61,11 +64,6 @@ import {
   type Ref,
 } from "vue";
 import { any, type ZodType } from "zod";
-
-import {
-  generateErrorDataVeeValidate,
-  type ErrorData,
-} from "@/tools/views/ErrorData";
 
 const props = defineProps({
   modelValue: {

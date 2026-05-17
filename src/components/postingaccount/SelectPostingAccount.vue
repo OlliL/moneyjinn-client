@@ -21,6 +21,9 @@
   </SelectStandard>
 </template>
 <script lang="ts" setup>
+import type { PostingAccount } from "@/model/postingaccount/PostingAccount";
+import { usePostingAccountStore } from "@/stores/PostingAccountStore";
+import { useUserSessionStore } from "@/stores/UserSessionStore";
 import { SquarePlus } from "lucide-vue-next";
 import {
   computed,
@@ -31,14 +34,8 @@ import {
   type Ref,
 } from "vue";
 import { any, type ZodType } from "zod";
-
-import CreatePostingAccountModalVue from "./CreatePostingAccountModal.vue";
 import SelectStandard from "../SelectStandard.vue";
-
-import { usePostingAccountStore } from "@/stores/PostingAccountStore";
-import { useUserSessionStore } from "@/stores/UserSessionStore";
-
-import type { PostingAccount } from "@/model/postingaccount/PostingAccount";
+import CreatePostingAccountModalVue from "./CreatePostingAccountModal.vue";
 
 const postingAccountId = defineModel({ type: Number });
 

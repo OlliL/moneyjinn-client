@@ -5,11 +5,10 @@
 </template>
 
 <script lang="ts" setup>
+import { toFixed } from "@/tools/math";
+import { formatNumber, redIfNegative } from "@/tools/views/FormatNumber";
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
-
-import { formatNumber, redIfNegative } from "@/tools/views/FormatNumber";
-import { toFixed } from "@/tools/math";
 
 const { t } = useI18n();
 

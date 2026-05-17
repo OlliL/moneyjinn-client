@@ -40,24 +40,20 @@
 </template>
 
 <script lang="ts" setup>
+import { Button } from "@/components/ui/button";
+import type { PostingAccount } from "@/model/postingaccount/PostingAccount";
+import PostingAccountService from "@/service/PostingAccountService";
+import { handleBackendError } from "@/tools/views/HandleBackendError";
+import { globErr } from "@/tools/views/ZodUtil";
+import { Save, Undo2 } from "lucide-vue-next";
 import { useForm } from "vee-validate";
 import { computed, ref, useTemplateRef } from "vue";
 import { useI18n } from "vue-i18n";
 import { string, ZodType } from "zod";
-
-import { Button } from "@/components/ui/button";
-
 import ButtonSubmit from "../ButtonSubmit.vue";
 import DivError from "../DivError.vue";
 import InputStandard from "../InputStandard.vue";
 import ModalVue from "../Modal.vue";
-
-import { globErr } from "@/tools/views/ZodUtil";
-import { handleBackendError } from "@/tools/views/HandleBackendError";
-
-import type { PostingAccount } from "@/model/postingaccount/PostingAccount";
-import PostingAccountService from "@/service/PostingAccountService";
-import { Save, Undo2 } from "lucide-vue-next";
 
 const { t } = useI18n();
 

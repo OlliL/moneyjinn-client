@@ -35,16 +35,13 @@
   </TableRow>
 </template>
 <script lang="ts" setup>
-import { computed, type PropType } from "vue";
-import { Pencil, Trash2 } from "lucide-vue-next";
-
-import { TableCell, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-
-import SpanBoolean from "../SpanBoolean.vue";
-
+import { TableCell, TableRow } from "@/components/ui/table";
 import type { User } from "@/model/user/User";
 import { userRoleNames } from "@/model/user/UserRole";
+import { Pencil, Trash2 } from "lucide-vue-next";
+import { computed, type PropType } from "vue";
+import SpanBoolean from "../SpanBoolean.vue";
 
 const props = defineProps({
   user: {

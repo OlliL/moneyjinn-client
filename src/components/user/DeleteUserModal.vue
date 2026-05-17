@@ -55,22 +55,17 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref, useTemplateRef } from "vue";
-
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
+import type { User } from "@/model/user/User";
+import { userRoleNames } from "@/model/user/UserRole";
+import UserService from "@/service/UserService";
+import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { Trash2 } from "lucide-vue-next";
-
+import { computed, ref, useTemplateRef } from "vue";
 import DivError from "../DivError.vue";
 import ModalVue from "../Modal.vue";
 import SpanBoolean from "../SpanBoolean.vue";
-
-import { handleBackendError } from "@/tools/views/HandleBackendError";
-
-import type { User } from "@/model/user/User";
-import { userRoleNames } from "@/model/user/UserRole";
-
-import UserService from "@/service/UserService";
 
 const user = ref({} as User);
 const serverErrors = ref(new Array<string>());

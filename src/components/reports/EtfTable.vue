@@ -105,13 +105,6 @@
 </template>
 
 <script lang="ts" setup>
-import EtfService from "@/service/EtfService";
-import type { EtfSummary } from "@/model/etf/EtfSummary";
-import { handleBackendError } from "@/tools/views/HandleBackendError";
-import { computed, onMounted, ref, watch } from "vue";
-import DivError from "../DivError.vue";
-import EtfTableRowVue from "./EtfTableRow.vue";
-
 import {
   Table,
   TableBody,
@@ -119,6 +112,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import type { EtfSummary } from "@/model/etf/EtfSummary";
+import EtfService from "@/service/EtfService";
+import { handleBackendError } from "@/tools/views/HandleBackendError";
+import { computed, onMounted, ref, watch } from "vue";
+import DivError from "../DivError.vue";
+import EtfTableRowVue from "./EtfTableRow.vue";
 
 const serverErrors = ref(new Array<string>());
 

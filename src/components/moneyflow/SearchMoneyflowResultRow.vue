@@ -100,11 +100,11 @@
   </TableRow>
 </template>
 <script lang="ts" setup>
+import { Eye, Image, Pencil, Trash2 } from "lucide-vue-next";
 import { computed, type PropType } from "vue";
-import { Image, Pencil, Trash2, Eye } from "lucide-vue-next";
 
-import { TableCell, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
+import { TableCell, TableRow } from "@/components/ui/table";
 
 import SpanAmount from "../SpanAmount.vue";
 import SpanDate from "../SpanDate.vue";

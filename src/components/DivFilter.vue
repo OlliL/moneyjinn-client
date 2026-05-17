@@ -48,12 +48,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onBeforeUnmount } from "vue";
-import { Plus } from "lucide-vue-next";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
+import { Plus } from "lucide-vue-next";
+import { onBeforeUnmount, ref } from "vue";
 
 const props = defineProps({
   placeholder: { type: String, default: "" },

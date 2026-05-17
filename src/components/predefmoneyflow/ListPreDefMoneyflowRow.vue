@@ -50,17 +50,14 @@
   </TableRow>
 </template>
 <script lang="ts" setup>
-import type { PropType } from "vue";
-import { Pencil, Trash2 } from "lucide-vue-next";
-
-import { TableCell, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-
-import SpanAmount from "../SpanAmount.vue";
-import SpanDate from "../SpanDate.vue";
-
+import { TableCell, TableRow } from "@/components/ui/table";
 import type { PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
+import { Pencil, Trash2 } from "lucide-vue-next";
+import type { PropType } from "vue";
+import SpanAmount from "../SpanAmount.vue";
 import SpanBoolean from "../SpanBoolean.vue";
+import SpanDate from "../SpanDate.vue";
 
 const props = defineProps({
   mpm: {

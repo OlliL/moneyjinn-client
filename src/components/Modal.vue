@@ -40,17 +40,17 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogFooter,
-  DialogClose,
 } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
 import { X } from "lucide-vue-next";
+import { ref } from "vue";
 
 const props = defineProps({
   title: { type: String, default: "" },

@@ -420,22 +420,8 @@
 </template>
 
 <script lang="ts" setup>
-import {
-  computed,
-  onMounted,
-  ref,
-  useTemplateRef,
-  watch,
-  type PropType,
-} from "vue";
-
-import CapitalsourceTableVue from "./CapitalsourceTable.vue";
-import DeleteMoneyflowModalVue from "../moneyflow/DeleteMoneyflowModal.vue";
-import DivError from "../DivError.vue";
-import EditMoneyflowModalVue from "../moneyflow/EditMoneyflowModal.vue";
-import ReceiptModalVue from "./ReceiptModal.vue";
-import ReportTableRowVue from "./ReportTableRow.vue";
-import SpanAmount from "../SpanAmount.vue";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
   Table,
   TableBody,
@@ -444,20 +430,30 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { ArrowDown, ArrowUp, ArrowUpDown, X } from "lucide-vue-next";
-
-import { getMonthName } from "@/tools/views/MonthName";
-import { handleBackendError } from "@/tools/views/HandleBackendError";
-
+import { CapitalsourceType } from "@/model/capitalsource/CapitalsourceType";
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 import type { Report } from "@/model/report/Report";
-import { CapitalsourceType } from "@/model/capitalsource/CapitalsourceType";
 import type { ReportTurnoverCapitalsource } from "@/model/report/ReportTurnoverCapitalsource";
-
 import ReportService from "@/service/ReportService";
+import { handleBackendError } from "@/tools/views/HandleBackendError";
+import { getMonthName } from "@/tools/views/MonthName";
+import { ArrowDown, ArrowUp, ArrowUpDown, X } from "lucide-vue-next";
+import {
+  computed,
+  onMounted,
+  ref,
+  useTemplateRef,
+  watch,
+  type PropType,
+} from "vue";
+import DivError from "../DivError.vue";
+import DeleteMoneyflowModalVue from "../moneyflow/DeleteMoneyflowModal.vue";
+import EditMoneyflowModalVue from "../moneyflow/EditMoneyflowModal.vue";
 import ListMoneyflowModal from "../moneyflow/ListMoneyflowModal.vue";
+import SpanAmount from "../SpanAmount.vue";
+import CapitalsourceTableVue from "./CapitalsourceTable.vue";
+import ReceiptModalVue from "./ReceiptModal.vue";
+import ReportTableRowVue from "./ReportTableRow.vue";
 
 const serverErrors = ref(new Array<string>());
 

@@ -100,8 +100,6 @@
 </template>
 
 <script lang="ts" setup>
-import { computed } from "vue";
-
 import {
   Table,
   TableBody,
@@ -110,11 +108,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-
-import CapitalsourceTableRowVue from "./CapitalsourceTableRow.vue";
-import SpanAmount from "../SpanAmount.vue";
-
 import type { ReportTurnoverCapitalsource } from "@/model/report/ReportTurnoverCapitalsource";
+import { computed } from "vue";
+import SpanAmount from "../SpanAmount.vue";
+import CapitalsourceTableRowVue from "./CapitalsourceTableRow.vue";
 
 const props = defineProps({
   capitalsourceData: {

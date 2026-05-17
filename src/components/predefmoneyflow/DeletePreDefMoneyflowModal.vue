@@ -95,23 +95,18 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, useTemplateRef } from "vue";
-
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
+import type { PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
+import PreDefMoneyflowService from "@/service/PreDefMoneyflowService";
+import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { Trash2 } from "lucide-vue-next";
-
+import { ref, useTemplateRef } from "vue";
 import DivError from "../DivError.vue";
 import ModalVue from "../Modal.vue";
 import SpanAmount from "../SpanAmount.vue";
 import SpanBoolean from "../SpanBoolean.vue";
 import SpanDate from "../SpanDate.vue";
-
-import { handleBackendError } from "@/tools/views/HandleBackendError";
-
-import type { PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
-
-import PreDefMoneyflowService from "@/service/PreDefMoneyflowService";
 
 const serverErrors = ref(new Array<string>());
 

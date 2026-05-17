@@ -29,8 +29,13 @@
 </template>
 
 <script lang="ts" setup>
-import { useField } from "vee-validate";
+import { Label } from "@/components/ui/label";
+import {
+  generateErrorDataVeeValidate,
+  type ErrorData,
+} from "@/tools/views/ErrorData";
 import { toTypedSchema } from "@vee-validate/zod";
+import { useField } from "vee-validate";
 import {
   computed,
   onMounted,
@@ -39,13 +44,6 @@ import {
   type Ref,
 } from "vue";
 import { any, type ZodType } from "zod";
-
-import { Label } from "@/components/ui/label";
-
-import {
-  generateErrorDataVeeValidate,
-  type ErrorData,
-} from "@/tools/views/ErrorData";
 import Input from "./ui/input/Input.vue";
 
 const props = defineProps({

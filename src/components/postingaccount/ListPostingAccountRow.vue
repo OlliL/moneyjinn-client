@@ -27,13 +27,11 @@
 </template>
 
 <script lang="ts" setup>
-import type { PropType } from "vue";
-import { Pencil, Trash2 } from "lucide-vue-next";
-
-import { TableCell, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-
+import { TableCell, TableRow } from "@/components/ui/table";
 import type { PostingAccount } from "@/model/postingaccount/PostingAccount";
+import { Pencil, Trash2 } from "lucide-vue-next";
+import type { PropType } from "vue";
 
 const props = defineProps({
   mpa: {
