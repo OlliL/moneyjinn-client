@@ -67,7 +67,7 @@
           />
         </div>
 
-        <div class="w-full md:w-[350px] shrink-0">
+        <div class="w-full md:w-4/12 shrink-0">
           <SelectPostingAccount
             v-model="mmf.postingAccountId"
             :validation-schema-ref="schema.postingAccountId"
