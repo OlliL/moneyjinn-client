@@ -10,7 +10,11 @@
           :model-value="String(preDefMoneyflowId)"
           @update:model-value="handleSelectChange"
         >
-          <SelectTrigger id="selectmoneyflow" class="w-full h-10">
+          <SelectTrigger
+            id="selectmoneyflow"
+            data-testid="selectmoneyflow"
+            class="w-full h-10"
+          >
             <SelectValue :placeholder="$t('Moneyflow.newBooking')" />
           </SelectTrigger>
           <SelectContent>
@@ -21,6 +25,7 @@
               v-for="mcp of preDefMoneyflows"
               :key="mcp.id"
               :value="String(mcp.id)"
+              :data-testid="'selectmoneyflowitem-' + mcp.id"
             >
               <div class="flex flex-row gap-2">
                 <span class="font-medium">{{ mcp.contractpartnerName }}</span>
@@ -74,6 +79,9 @@
 </template>
 
 <script lang="ts" setup>
+import ButtonSubmit from "@/components/ButtonSubmit.vue";
+import DivError from "@/components/DivError.vue";
+import EditMoneyflowBase from "@/components/moneyflow/EditMoneyflowBase.vue";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -82,19 +90,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { onMounted, ref, useTemplateRef } from "vue";
-
-import EditMoneyflowBase from "@/components/moneyflow/EditMoneyflowBase.vue";
-
-import ButtonSubmit from "@/components/ButtonSubmit.vue";
-import { preDefMoneyflowAlreadyUsedThisMonth } from "@/model/moneyflow/PreDefMoneyflow";
 import type { PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
-
+import { preDefMoneyflowAlreadyUsedThisMonth } from "@/model/moneyflow/PreDefMoneyflow";
 import PreDefMoneyflowService from "@/service/PreDefMoneyflowService";
-import { useForm } from "vee-validate";
-import DivError from "@/components/DivError.vue";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { Save, Undo2 } from "lucide-vue-next";
+import { useForm } from "vee-validate";
+import { onMounted, ref, useTemplateRef } from "vue";
 
 const serverErrors = ref(new Array<string>());
 

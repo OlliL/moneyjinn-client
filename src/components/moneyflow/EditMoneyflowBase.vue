@@ -190,6 +190,7 @@
               type="button"
               variant="outline"
               size="sm"
+              data-testid="addMoneyflowSplitEntryRowButton"
               class="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium text-muted-foreground hover:text-primary transition-colors h-9 px-3 gap-2"
               @click="onAddMoneyflowSplitEntryRow"
             >
@@ -206,27 +207,27 @@
 <script lang="ts" setup>
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { Euro, Plus } from "lucide-vue-next";
 import { computed, onMounted, ref, watch, type PropType } from "vue";
 import { useI18n } from "vue-i18n";
 import { date, number, string } from "zod";
-import { Plus, Euro } from "lucide-vue-next";
-import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
 
-import DivError from "../DivError.vue";
 import EditMoneyflowBaseSplitEntryRowVue from "@/components/moneyflow/EditMoneyflowBaseSplitEntryRow.vue";
+import DivError from "../DivError.vue";
 import InputDate from "../InputDate.vue";
 import InputStandard from "../InputStandard.vue";
-import SelectContractpartner from "../contractpartner/SelectContractpartner.vue";
 import SelectCapitalsource from "../capitalsource/SelectCapitalsource.vue";
+import SelectContractpartner from "../contractpartner/SelectContractpartner.vue";
 import SelectPostingAccount from "../postingaccount/SelectPostingAccount.vue";
 
 import { useCapitalsourceStore } from "@/stores/CapitalsourceStore";
 import { useContractpartnerStore } from "@/stores/ContractpartnerStore";
 
-import { amountSchema, globErr } from "@/tools/views/ZodUtil";
-import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { toFixed } from "@/tools/math";
+import { handleBackendError } from "@/tools/views/HandleBackendError";
+import { amountSchema, globErr } from "@/tools/views/ZodUtil";
 
 import { CapitalsourceState } from "@/model/capitalsource/CapitalsourceState";
 import type { ImportedMoneyflow } from "@/model/moneyflow/ImportedMoneyflow";
@@ -234,9 +235,9 @@ import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 import type { MoneyflowSplitEntry } from "@/model/moneyflow/MoneyflowSplitEntry";
 import type { PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
 
-import MoneyflowService from "@/service/MoneyflowService";
-import ImportedMoneyflowService from "@/service/ImportedMoneyflowService";
 import type { Contractpartner } from "@/model/contractpartner/Contractpartner";
+import ImportedMoneyflowService from "@/service/ImportedMoneyflowService";
+import MoneyflowService from "@/service/MoneyflowService";
 
 const isExpanded = ref(false);
 const toggleCollapse = () => (isExpanded.value = !isExpanded.value);

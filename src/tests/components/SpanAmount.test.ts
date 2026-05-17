@@ -1,7 +1,7 @@
 import SpanAmount from "@/components/SpanAmount.vue";
+import "@testing-library/jest-dom/vitest";
 import { render, screen } from "@testing-library/vue";
 import { expect, test } from "vitest";
-import "@testing-library/jest-dom/vitest";
 
 test("fill up number with 2 decimal places", async () => {
   render(SpanAmount, { props: { amount: 2 } });
@@ -37,11 +37,11 @@ test("reduce too much decimal places by rounding down", async () => {
 test("format negative number red", async () => {
   render(SpanAmount, { props: { amount: -2 } });
   const amountSpan = screen.getByTestId<HTMLSpanElement>("amountSpan");
-  expect(amountSpan).toHaveClass("text-danger");
+  expect(amountSpan).toHaveClass("text-destructive");
 });
 
 test("format positive number not red", async () => {
   render(SpanAmount, { props: { amount: 2 } });
   const amountSpan = screen.getByTestId<HTMLSpanElement>("amountSpan");
-  expect(amountSpan).not.toHaveClass("text-danger");
+  expect(amountSpan).not.toHaveClass("text-destructive");
 });
