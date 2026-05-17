@@ -1,23 +1,45 @@
 <template>
-  <tr>
-    <td class="text-start">{{ mca.accountNumber }}</td>
-    <td class="text-start">{{ mca.bankCode }}</td>
-    <td class="text-center">
-      <span class="link-primary" @click="editContractpartnerAccount"
-        ><i class="bi bi-pencil-square"></i
-      ></span>
-    </td>
-    <td class="text-center">
-      <span class="link-primary" @click="deleteContractpartnerAccount"
-        ><i class="bi bi-trash"></i
-      ></span>
-    </td>
-  </tr>
+  <TableRow>
+    <TableCell class="text-left border">
+      <SpanIban :iban="mca.accountNumber" />
+    </TableCell>
+    <TableCell class="text-left border">
+      {{ mca.bankCode }}
+    </TableCell>
+    <TableCell class="text-right border">
+      <Button
+        variant="ghost"
+        size="icon"
+        @click="editContractpartnerAccount"
+        :title="$t('General.edit')"
+        class="h-8 w-8 cursor-pointer"
+      >
+        <Pencil class="h-4 w-4" />
+      </Button>
+    </TableCell>
+    <TableCell class="text-right border">
+      <Button
+        variant="ghost"
+        size="icon"
+        @click="deleteContractpartnerAccount"
+        :title="$t('General.delete')"
+        class="h-8 w-8 cursor-pointer"
+      >
+        <Trash2 class="h-4 w-4" />
+      </Button>
+    </TableCell>
+  </TableRow>
 </template>
+
 <script lang="ts" setup>
+import { Pencil, Trash2 } from "lucide-vue-next";
 import type { PropType } from "vue";
 
+import { Button } from "@/components/ui/button";
+import { TableCell, TableRow } from "@/components/ui/table";
+
 import type { ContractpartnerAccount } from "@/model/contractpartneraccount/ContractpartnerAccount";
+import SpanIban from "../SpanIban.vue";
 
 const props = defineProps({
   mca: {
@@ -34,6 +56,7 @@ const emit = defineEmits([
 const deleteContractpartnerAccount = () => {
   emit("deleteContractpartnerAccount", props.mca);
 };
+
 const editContractpartnerAccount = () => {
   emit("editContractpartnerAccount", props.mca);
 };

@@ -3,57 +3,78 @@
     ref="editModal"
     @monthly-settlement-upserted="monthlySettlementUpserted"
   />
-  <div class="container-fluid">
-    <div class="row justify-content-md-center text-center">
-      <div class="col-xs-12 mb-4">
-        <h4>{{ $t("AppHome.taskList") }}</h4>
-      </div>
+  <div class="custom-container space-y-6">
+    <!-- Header -->
+    <div class="text-center">
+      <h4 class="text-2xl font-bold tracking-tight">
+        {{ $t("AppHome.taskList") }}
+      </h4>
+      <Separator class="my-4" />
     </div>
+
     <DivError :server-errors="serverErrors" />
-    <div class="row justify-content-md-center" v-if="importedMoneyflows">
-      <div class="col-4 col-sm-2 col-lg-2 col-xl-1 col-xxl-1 mb-4 text-end">
-        <button
-          type="button"
-          class="btn btn-primary"
-          @click="navigateImportMoneyflows()"
-        >
-          {{ $t("General.edit") }}
-        </button>
-      </div>
+
+    <div class="max-w-3xl mx-auto space-y-4">
       <div
-        class="col-8 col-sm-10 col-lg-8 col-xl-6 col-xxl-4 mb-4 d-flex align-items-center"
+        v-if="importedMoneyflows"
+        class="grid grid-cols-12 items-center gap-4 p-2"
       >
-        {{ $t("AppHome.importableMoneyflows") }}
+        <div class="col-span-4 sm:col-span-3 flex justify-end">
+          <Button
+            variant="default"
+            class="cursor-pointer"
+            @click="navigateImportMoneyflows"
+          >
+            <ExternalLink />
+            {{ $t("General.edit") }}
+          </Button>
+        </div>
+        <div class="col-span-8 sm:col-span-9">
+          {{ $t("AppHome.importableMoneyflows") }}
+        </div>
+      </div>
+
+      <div
+        v-if="monthlySettlementMissing"
+        class="grid grid-cols-12 items-center gap-4 p-2"
+      >
+        <div class="col-span-4 sm:col-span-3 flex justify-end">
+          <Button
+            variant="default"
+            class="cursor-pointer"
+            @click="showEditMonthlySettlementModal"
+          >
+            <ExternalLink />
+            {{ $t("General.edit") }}
+          </Button>
+        </div>
+        <div class="col-span-8 sm:col-span-9">
+          {{ $t("AppHome.createSettlements") }}
+        </div>
       </div>
     </div>
-    <div class="row justify-content-md-center" v-if="monthlySettlementMissing">
-      <div class="col-4 col-sm-2 col-lg-2 col-xl-1 col-xxl-1 mb-4 text-end">
-        <button
-          type="button"
-          class="btn btn-primary"
-          @click="showEditMonthlySettlementModal()"
-        >
-          {{ $t("General.edit") }}
-        </button>
-      </div>
-      <div
-        class="col-8 col-sm-10 col-lg-8 col-xl-6 col-xxl-4 mb-4 d-flex align-items-center"
-      >
-        {{ $t("AppHome.createSettlements") }}
-      </div>
-    </div>
-    <div
-      class="text-center text-success"
+
+    <Alert
       v-if="dataLoaded && !importedMoneyflows && !monthlySettlementMissing"
+      class="border-green-200 bg-green-50 dark:bg-green-950/20 dark:border-green-900"
     >
-      {{ $t("AppHome.allDone") }} <i class="bi bi-emoji-smile"></i>
-    </div>
+      <CheckCircle2 />
+      <AlertTitle>
+        {{ $t("AppHome.allDoneTitle") }}
+      </AlertTitle>
+      <AlertDescription>
+        {{ $t("AppHome.allDone") }}
+      </AlertDescription>
+    </Alert>
   </div>
 </template>
 
 <script lang="ts" setup>
 import { onMounted, ref, useTemplateRef } from "vue";
 
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
+import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import EditMonthlySettlementModalVue from "@/components/monthlysettlement/EditMonthlySettlementModal.vue";
 
 import router, { Routes } from "@/router";
@@ -62,13 +83,16 @@ import EventService from "@/service/EventService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import DivError from "@/components/DivError.vue";
 
+import { ExternalLink, CheckCircle2 } from "lucide-vue-next";
+
 const serverErrors = ref(new Array<string>());
 
 const importedMoneyflows = ref(false);
 const monthlySettlementMissing = ref(false);
 const monthlySettlementMonth = ref(0);
 const monthlySettlementYear = ref(0);
-const editModal = useTemplateRef<typeof EditMonthlySettlementModalVue>('editModal');
+const editModal =
+  useTemplateRef<typeof EditMonthlySettlementModalVue>("editModal");
 const dataLoaded = ref(false);
 
 const loadData = () => {

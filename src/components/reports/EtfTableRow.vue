@@ -1,42 +1,45 @@
 <template>
-  <tr>
-    <td class="text-start" v-if="name">
+  <TableRow>
+    <TableCell class="text-left border-r" v-if="name">
       <a :href="chartUrl">{{ name }}</a>
-    </td>
-    <td class="text-end">{{ etfFlowAmountSumString }}</td>
-    <td class="text-end d-none d-md-table-cell">
+    </TableCell>
+    <TableCell class="text-right border-r">{{
+      etfFlowAmountSumString
+    }}</TableCell>
+    <TableCell class="text-right border-r hidden md:table-cell">
       <SpanAmount
         :amount="avgSpentPrice"
         :decimal-places="4"
         v-if="avgSpentPrice"
       />
-    </td>
-    <td class="text-end d-none d-md-table-cell">
+    </TableCell>
+    <TableCell class="text-right border-r hidden md:table-cell">
       <SpanAmount :amount="sellPrice" :decimal-places="3" v-if="sellPrice" />
-    </td>
-    <td class="text-end d-none d-md-table-cell">
+    </TableCell>
+    <TableCell class="text-right border-r hidden md:table-cell">
       <SpanAmount :amount="buyPrice" :decimal-places="3" v-if="buyPrice" />
-    </td>
-    <td class="text-end">
+    </TableCell>
+    <TableCell class="text-right border-r">
       <SpanAmount :amount="spentValue" v-if="spentValue" />
-    </td>
-    <td class="text-end">
+    </TableCell>
+    <TableCell class="text-right border-r">
       <SpanAmount :amount="sumSellPrice" v-if="sumSellPrice" />
-    </td>
-    <td class="text-end">
+    </TableCell>
+    <TableCell class="text-right border-r">
       <u><SpanAmount :amount="profit" v-if="profit" /></u>
-    </td>
-    <td class="text-end d-none d-md-table-cell">{{ pricesTimestampString }}</td>
-  </tr>
+    </TableCell>
+    <TableCell class="text-right hidden md:table-cell">{{
+      pricesTimestampString
+    }}</TableCell>
+  </TableRow>
 </template>
 
 <script lang="ts" setup>
-import { computed } from "vue";
-
-import SpanAmount from "../SpanAmount.vue";
-
+import { TableCell, TableRow } from "@/components/ui/table";
 import { formatDateWithTime } from "@/tools/views/FormatDate";
 import { formatNumber } from "@/tools/views/FormatNumber";
+import { computed } from "vue";
+import SpanAmount from "../SpanAmount.vue";
 
 const props = defineProps({
   name: {

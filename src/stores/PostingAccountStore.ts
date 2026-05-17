@@ -1,11 +1,11 @@
-import { mapPostingAccountTransportToModel } from "@/service/mapper/PostingAccountTransportMapper";
-import PostingAccountService from "@/service/PostingAccountService";
 import { WebSocketSingleton } from "@/config/WebSocketSingleton";
 import type { PostingAccount } from "@/model/postingaccount/PostingAccount";
-import type { PostingAccountChangedEventTransport } from "@/model/wsevent/PostingAccountChangedEventTransport";
 import type { SelectBoxValue } from "@/model/SelectBoxValue";
+import type { PostingAccountChangedEventTransport } from "@/model/wsevent/PostingAccountChangedEventTransport";
+import { mapPostingAccountTransportToModel } from "@/service/mapper/PostingAccountTransportMapper";
+import PostingAccountService from "@/service/PostingAccountService";
 import { defineStore } from "pinia";
-import { ref, computed } from "vue";
+import { computed, ref } from "vue";
 
 export const usePostingAccountStore = defineStore("postingAccount", () => {
   const postingAccount = ref([] as Array<PostingAccount>);
@@ -16,7 +16,7 @@ export const usePostingAccountStore = defineStore("postingAccount", () => {
 
   const getAsSelectBoxValues = computed((): Array<SelectBoxValue> => {
     return postingAccount.value.map((mpa) => {
-      return { id: mpa.id, value: mpa.name } as SelectBoxValue;
+      return { id: mpa.id, value: mpa.name };
     });
   });
 

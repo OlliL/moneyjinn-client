@@ -1,69 +1,112 @@
 <template>
-  <tr>
-    <td
-      :class="redIfPrivate"
+  <TableRow>
+    <TableCell
+      :class="[redIfPrivate, rowBgClass, 'border-r']"
       :rowspan="rowspan"
       v-if="isFirstOfMultipleRowsForSameMoneyflow"
     >
-      <span class="link-primary" @click="showReceipt" v-if="mmf.hasReceipt"
-        ><i class="bi bi-card-image"></i
-      ></span>
-    </td>
-    <td :rowspan="rowspan" v-if="isFirstOfMultipleRowsForSameMoneyflow">
+      <Button
+        v-if="mmf.hasReceipt"
+        variant="ghost"
+        size="icon"
+        @click="showReceipt"
+        :title="$t('Receipt.receipt')"
+        :aria-label="$t('Receipt.receipt')"
+        class="h-6 w-6"
+      >
+        <Image class="h-4 w-4" />
+      </Button>
+    </TableCell>
+    <TableCell
+      :class="[rowBgClass, 'border-r']"
+      :rowspan="rowspan"
+      v-if="isFirstOfMultipleRowsForSameMoneyflow"
+    >
       <SpanDate :date="mmf.bookingDate" />
-    </td>
-    <td class="text-end"><SpanAmount :amount="mmf.amount" /></td>
-    <td
-      class="text-start"
+    </TableCell>
+    <TableCell :class="['text-right border-r', rowBgClass]"
+      ><SpanAmount :amount="mmf.amount"
+    /></TableCell>
+    <TableCell
+      :class="['text-left border-r', rowBgClass]"
       :rowspan="rowspan"
       v-if="isFirstOfMultipleRowsForSameMoneyflow"
     >
       {{ mmf.contractpartnerName }}
-    </td>
-    <td class="text-start">{{ mmf.comment }}</td>
-    <td class="text-start">{{ mmf.postingAccountName }}</td>
-    <td
-      class="text-start"
+    </TableCell>
+    <TableCell :class="['text-left border-r', rowBgClass]">{{
+      mmf.comment
+    }}</TableCell>
+    <TableCell :class="['text-left border-r', rowBgClass]">{{
+      mmf.postingAccountName
+    }}</TableCell>
+    <TableCell
+      :class="['text-left border-r', rowBgClass]"
       :rowspan="rowspan"
       v-if="isFirstOfMultipleRowsForSameMoneyflow"
     >
       {{ mmf.capitalsourceComment }}
-    </td>
-    <td
-      class="text-center"
+    </TableCell>
+    <TableCell
+      :class="['w-8 h-8 text-center border-r', rowBgClass]"
       :rowspan="rowspan"
       v-if="isFirstOfMultipleRowsForSameMoneyflow && isOwnMoneyflow"
     >
-      <span class="link-primary" @click="editMoneyflow"
-        ><i class="bi bi-pencil-square"></i
-      ></span>
-    </td>
-    <td
-      class="text-center"
+      <Button
+        variant="ghost"
+        size="icon"
+        @click="editMoneyflow"
+        :title="$t('General.edit')"
+        :aria-label="$t('General.edit')"
+        class="h-6 w-6"
+      >
+        <Pencil class="h-4 w-4" />
+      </Button>
+    </TableCell>
+    <TableCell
+      :class="['w-8 h-8 text-center', rowBgClass]"
+      :title="$t('General.edit')"
+      :aria-label="$t('General.edit')"
       :rowspan="rowspan"
       v-if="isFirstOfMultipleRowsForSameMoneyflow && isOwnMoneyflow"
     >
-      <span class="link-primary" @click="deleteMoneyflow"
-        ><i class="bi bi-trash"></i
-      ></span>
-    </td>
-    <td
-      class="text-center"
+      <Button
+        variant="ghost"
+        size="icon"
+        @click="deleteMoneyflow"
+        :title="$t('General.delete')"
+        :aria-label="$t('General.delete')"
+        class="h-6 w-6"
+      >
+        <Trash2 class="h-4 w-4" />
+      </Button>
+    </TableCell>
+    <TableCell
+      :class="['w-8 h-8 text-center', rowBgClass]"
+      :title="$t('General.delete')"
+      :aria-label="$t('General.delete')"
       :rowspan="rowspan"
       v-if="isFirstOfMultipleRowsForSameMoneyflow && !isOwnMoneyflow"
     >
-      <span class="link-primary" @click="listMoneyflow"
-        ><i class="bi bi-eye"></i
-      ></span>
-    </td>
-    <td
-      :rowspan="rowspan"
-      v-if="isFirstOfMultipleRowsForSameMoneyflow && !isOwnMoneyflow"
-    ></td>
-  </tr>
+      <Button
+        variant="ghost"
+        size="icon"
+        @click="listMoneyflow"
+        :title="$t('General.moneyflow')"
+        :aria-label="$t('General.moneyflow')"
+        class="h-6 w-6"
+      >
+        <Eye class="h-4 w-4" />
+      </Button>
+    </TableCell>
+  </TableRow>
 </template>
 <script lang="ts" setup>
+import { Eye, Image, Pencil, Trash2 } from "lucide-vue-next";
 import { computed, type PropType } from "vue";
+
+import { Button } from "@/components/ui/button";
+import { TableCell, TableRow } from "@/components/ui/table";
 
 import SpanAmount from "../SpanAmount.vue";
 import SpanDate from "../SpanDate.vue";
@@ -85,6 +128,10 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  alternateRowBackground: {
+    type: Boolean,
+    default: false,
+  },
 });
 const userSessionStore = useUserSessionStore();
 const emit = defineEmits([
@@ -95,10 +142,12 @@ const emit = defineEmits([
 ]);
 const redIfPrivate = computed(() => {
   return props.mmf.private
-    ? "table-danger d-none d-md-table-cell"
-    : "d-none d-md-table-cell";
+    ? "bg-destructive/10 hidden md:table-cell"
+    : "hidden md:table-cell";
 });
-
+const rowBgClass = computed(() => {
+  return props.alternateRowBackground ? "bg-muted" : "bg-background";
+});
 const isOwnMoneyflow = computed(() => {
   return props.mmf.userId === userSessionStore.getUserId;
 });

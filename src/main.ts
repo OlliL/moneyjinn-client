@@ -6,10 +6,9 @@ import { PiniaSharedState } from "pinia-shared-state";
 import App from "./App.vue";
 import router from "./router";
 
-import "bootstrap/dist/css/bootstrap.min.css";
-import "bootstrap-icons/font/bootstrap-icons.css";
-import "bootstrap";
-import "../node_modules/vanillajs-datepicker/dist/css/datepicker-bs5.min.css";
+import "vanillajs-datepicker/css/datepicker.min.css";
+
+import "./style.css";
 
 import I18nSingleton from "./config/I18nSingleton";
 import { jsonParseWithDate } from "./tools/PiniaUtil";

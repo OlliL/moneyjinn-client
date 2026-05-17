@@ -11,11 +11,9 @@
     @etf-deleted="searchContent"
   />
 
-  <div class="container-fluid text-center">
-    <div class="row justify-content-md-center">
-      <div class="col-xs-12 mb-4">
-        <h4>{{ $t("General.etfs") }}</h4>
-      </div>
+  <div class="custom-container space-y-6">
+    <div class="text-center">
+      <h4 class="text-2xl font-bold">{{ $t("General.etfs") }}</h4>
     </div>
 
     <DivFilter
@@ -27,37 +25,78 @@
 
     <DivError :server-errors="serverErrors" />
 
-    <DivContentTable clazz="col-xxl-8 col-xs-12">
-      <thead>
-        <tr>
-          <th scope="col" rowspan="2" id="name">{{ $t("General.name") }}</th>
-          <th scope="col" rowspan="2" id="isin">{{ $t("ETF.isin") }}</th>
-          <th scope="col" rowspan="2" id="wkn">{{ $t("ETF.wkn") }}</th>
-          <th scope="col" rowspan="2" id="ticker">{{ $t("ETF.ticker") }}</th>
-          <th scope="colgroup" colspan="3" id="transactionCosts">
+    <DivContentTable class="max-w-5xl">
+      <TableHeader>
+        <TableRow>
+          <TableHead
+            class="font-bold border-r text-foreground text-center"
+            rowspan="2"
+            id="name"
+            >{{ $t("General.name") }}</TableHead
+          >
+          <TableHead
+            class="font-bold border-r text-foreground text-center"
+            rowspan="2"
+            id="isin"
+            >{{ $t("ETF.isin") }}</TableHead
+          >
+          <TableHead
+            class="font-bold border-r text-foreground text-center"
+            rowspan="2"
+            id="wkn"
+            >{{ $t("ETF.wkn") }}</TableHead
+          >
+          <TableHead
+            class="font-bold border-r text-foreground text-center"
+            rowspan="2"
+            id="ticker"
+            >{{ $t("ETF.ticker") }}</TableHead
+          >
+          <TableHead
+            class="font-bold border-r text-foreground text-center"
+            colspan="3"
+            id="transactionCosts"
+          >
             {{ $t("ETFFlow.transactionCosts") }}
-          </th>
-          <th scope="col" rowspan="2" id="partialTaxExemption">
+          </TableHead>
+          <TableHead
+            class="font-bold border-r text-foreground text-center"
+            rowspan="2"
+            id="partialTaxExemption"
+          >
             {{ $t("ETF.partialTaxExemption") }}
-          </th>
-          <th scope="col" rowspan="2" id="favorite">
-            <i class="bi bi-star-fill text-warning"></i>
-          </th>
-          <th scope="col" rowspan="2" colspan="2" id="editDelete"></th>
-        </tr>
-        <tr>
-          <th scope="col" id="abs">
+          </TableHead>
+          <TableHead
+            class="font-bold border-r text-foreground text-center"
+            rowspan="2"
+            id="favorite"
+          >
+            <Star class="h-5 w-5 transition-all text-muted-foreground" />
+          </TableHead>
+          <TableHead rowspan="2" colspan="2" id="editDelete"></TableHead>
+        </TableRow>
+        <TableRow>
+          <TableHead
+            class="font-bold border text-foreground text-center"
+            id="abs"
+          >
             {{ $t("ETFFlow.transactionCostsAbsolute") }}
-          </th>
-          <th scope="col" id="rel">
+          </TableHead>
+          <TableHead
+            class="font-bold border text-foreground text-center"
+            id="rel"
+          >
             {{ $t("ETFFlow.transactionCostsRelative") }}
-          </th>
-          <th scope="col" id="max">
+          </TableHead>
+          <TableHead
+            class="font-bold border text-foreground text-center"
+            id="max"
+          >
             {{ $t("ETFFlow.transactionCostsMaximum") }}
-          </th>
-        </tr>
-      </thead>
-      <tbody>
+          </TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
         <ListEtfRowVue
           v-for="met in etfs"
           :key="met.id"
@@ -65,13 +104,13 @@
           @edit-etf="editEtf"
           @delete-etf="deleteEtf"
         />
-      </tbody>
+      </TableBody>
     </DivContentTable>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref, watch, useTemplateRef } from "vue";
+import { onMounted, ref, useTemplateRef, watch } from "vue";
 
 import DivContentTable from "@/components/DivContentTable.vue";
 import DivError from "@/components/DivError.vue";
@@ -79,10 +118,17 @@ import DivFilter from "@/components/DivFilter.vue";
 import CreateEtfModalVue from "@/components/etf/CreateEtfModal.vue";
 import DeleteEtfModalVue from "@/components/etf/DeleteEtfModal.vue";
 import ListEtfRowVue from "@/components/etf/ListEtfRow.vue";
+import {
+  TableBody,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 import type { Etf } from "@/model/etf/Etf";
 
 import { useEtfStore } from "@/stores/EtfStore";
+import { Star } from "lucide-vue-next";
 import { storeToRefs } from "pinia";
 
 const serverErrors = ref(new Array<string>());

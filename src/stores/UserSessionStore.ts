@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { computed, ref } from "vue";
+import { computed, ref, toRaw } from "vue";
 
 export type UserSession = {
   userId: number;
@@ -29,7 +29,7 @@ export const useUserSessionStore = defineStore(
     });
 
     function setUserSession(userSess: UserSession) {
-      Object.assign(userSession.value, userSess);
+      userSession.value = structuredClone(toRaw(userSess))!;
     }
 
     function logout() {

@@ -7,33 +7,41 @@
   >
     <template #body>
       <DivError :server-errors="serverErrors" />
-      <div class="row justify-content-md-center mb-4" v-if="month">
-        <div class="col">
-          <ShowMonthlySettlementVue :year="year" :month="month" />
+      <div class="flex justify-center mb-4" v-if="month">
+        <div class="w-full">
+          <ShowMonthlySettlementVue
+            :year="year"
+            :month="month"
+            :show-header="false"
+          />
         </div>
       </div>
     </template>
     <template #footer>
-      <button
+      <Button
         type="button"
-        class="btn btn-danger"
+        variant="destructive"
         @click="deleteMonthlySettlement"
       >
+        <Trash2 class="h-4 w-4" />
         {{ $t("General.delete") }}
-      </button>
+      </Button>
     </template>
   </ModalVue>
 </template>
 
 <script lang="ts" setup>
+import { Trash2 } from "lucide-vue-next";
 import { ref, useTemplateRef } from "vue";
+
+import { Button } from "@/components/ui/button";
 
 import DivError from "../DivError.vue";
 import ModalVue from "../Modal.vue";
 import ShowMonthlySettlementVue from "./ShowMonthlySettlement.vue";
 
-import { getMonthName } from "@/tools/views/MonthName";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
+import { getMonthName } from "@/tools/views/MonthName";
 
 import MonthlySettlementService from "@/service/MonthlySettlementService";
 
@@ -42,7 +50,7 @@ const serverErrors = ref(new Array<string>());
 const month = ref(0);
 const monthName = ref("");
 const year = ref(0);
-const modalComponent = useTemplateRef<typeof ModalVue>('modalComponent');
+const modalComponent = useTemplateRef<typeof ModalVue>("modalComponent");
 const emit = defineEmits(["monthlySettlementDeleted"]);
 
 const _show = (_year: number, _month: number) => {
@@ -56,10 +64,7 @@ const _show = (_year: number, _month: number) => {
 const deleteMonthlySettlement = () => {
   serverErrors.value = new Array<string>();
 
-  MonthlySettlementService.deleteMonthlySettlement(
-    year.value,
-    month.value,
-  )
+  MonthlySettlementService.deleteMonthlySettlement(year.value, month.value)
     .then(() => {
       modalComponent.value?._hide();
       emit("monthlySettlementDeleted", year.value, month.value);

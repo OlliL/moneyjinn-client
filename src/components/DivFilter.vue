@@ -1,64 +1,62 @@
 <template>
-  <div class="row justify-content-md-center">
-    <div :class="$slots.right ? 'col-md-5 mb-3' : 'col-md-auto mb-3'">
-      <div class="row">
-        <div class="col-md-auto align-self-center">
-          <button
-            type="button"
-            class="btn btn-primary"
-            @click="$emit('createClicked')"
-          >
-            {{ $t("General.new") }}
-          </button>
-        </div>
-        <div class="col-md flex-grow-1">
-          <div class="input-group align-items-center">
-            <button
-              type="button"
-              class="btn btn-primary"
-              @click="emit('update:modelValue', '')"
-            >
-              {{ $t("General.all") }}
-            </button>
-            <input
-              class="form-control"
-              type="text"
-              :placeholder="placeholder"
-              :value="props.modelValue"
-              @input="
-                emit(
-                  'update:modelValue',
-                  (($event as InputEvent)?.target as HTMLInputElement)?.value,
-                )
-              "
-            />
-            <div
-              class="form-check form-switch align-self-center ms-2"
-              v-if="showValidToggle"
-            >
-              <input
-                class="form-check-input"
-                type="checkbox"
-                id="validInput"
-                v-model="validNow"
-                @change="emit('validNowToggled', validNow)"
-              />
-              <label class="form-check-label" for="validInput">{{
-                $t("General.validNow")
-              }}</label>
-            </div>
-            <slot name="right"></slot>
-          </div>
-        </div>
+  <div class="flex justify-center w-full mb-6">
+    <div class="flex flex-wrap items-end gap-4 bg-background p-1 w-auto">
+      <Button @click="$emit('createClicked')">
+        <Plus class="mr-2 h-4 w-4" />
+        {{ $t("General.new") }}
+      </Button>
+
+      <div class="flex w-80 items-center">
+        <Button
+          variant="secondary"
+          class="!rounded-r-none"
+          @click="clearSearch"
+        >
+          {{ $t("General.all") }}
+        </Button>
+        <Input
+          type="text"
+          :placeholder="placeholder"
+          :model-value="modelValue"
+          class="rounded-l-none focus-visible:ring-1"
+          @update:model-value="handleInput"
+        />
+      </div>
+
+      <div v-if="showValidToggle" class="flex items-center gap-3 pb-1.5">
+        <Switch
+          id="validInput"
+          :modelValue="validNow"
+          @update:model-value="handleToggle"
+        />
+        <Label
+          for="validInput"
+          class="cursor-pointer text-sm font-medium select-none"
+        >
+          {{ $t("General.validNow") }}
+        </Label>
+      </div>
+
+      <div v-if="$slots.right" class="flex items-center gap-2">
+        <slot name="right"></slot>
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
+import { Plus } from "lucide-vue-next";
+import { onBeforeUnmount, ref } from "vue";
 
-const validNow = ref(true);
+const props = defineProps({
+  placeholder: { type: String, default: "" },
+  modelValue: { type: String, required: true },
+  showValidToggle: { type: Boolean, default: true },
+});
 
 const emit = defineEmits([
   "update:modelValue",
@@ -66,18 +64,27 @@ const emit = defineEmits([
   "createClicked",
 ]);
 
-const props = defineProps({
-  placeholder: {
-    type: String,
-    default: "",
-  },
-  modelValue: {
-    type: String,
-    required: true,
-  },
-  showValidToggle: {
-    type: Boolean,
-    default: true,
-  },
+const validNow = ref(true);
+let debounceTimeout: any;
+
+const handleInput = (val: any) => {
+  globalThis.clearTimeout(debounceTimeout);
+  debounceTimeout = globalThis.setTimeout(() => {
+    emit("update:modelValue", val);
+  }, 300);
+};
+
+const clearSearch = () => {
+  globalThis.clearTimeout(debounceTimeout);
+  emit("update:modelValue", "");
+};
+
+const handleToggle = (val: boolean) => {
+  validNow.value = val;
+  emit("validNowToggled", val);
+};
+
+onBeforeUnmount(() => {
+  globalThis.clearTimeout(debounceTimeout);
 });
 </script>

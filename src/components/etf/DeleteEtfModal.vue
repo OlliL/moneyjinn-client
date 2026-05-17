@@ -2,107 +2,87 @@
   <ModalVue :title="$t('ETF.title.delete')" ref="modalComponent">
     <template #body>
       <DivError :server-errors="serverErrors" />
-      <div class="row d-flex justify-content-center mt-3">
-        <div class="col-11">
-          <table class="table table-bordered table-hover">
-            <tbody>
-              <tr>
-                <th scope="row" colspan="2" id="name">
-                  {{ $t("General.name") }}
-                </th>
-                <td>{{ etf.name }}</td>
-              </tr>
-              <tr>
-                <th scope="row" colspan="2" id="isin">{{ $t("ETF.isin") }}</th>
-                <td>{{ etf.isin }}</td>
-              </tr>
-              <tr>
-                <th scope="row" colspan="2" id="wkn">{{ $t("ETF.wkn") }}</th>
-                <td>{{ etf.wkn }}</td>
-              </tr>
-              <tr>
-                <th scope="row" colspan="2" id="ticker">
-                  {{ $t("ETF.ticker") }}
-                </th>
-                <td>{{ etf.ticker }}</td>
-              </tr>
-              <tr>
-                <th scope="row" colspan="2" id="chartUrl">
-                  {{ $t("ETF.chartUrl") }}
-                </th>
-                <td><a :href="etf.chartUrl">Link</a></td>
-              </tr>
-              <tr>
-                <th scope="rowgroup" rowspan="3" id="transactionCosts">
-                  {{ $t("ETFFlow.transactionCosts") }}
-                </th>
-                <th scope="row" id="abs">
-                  {{ $t("ETFFlow.transactionCostsAbsolute") }}
-                </th>
-                <td><SpanAmount :amount="etf.transactionCostsAbsolute" /></td>
-              </tr>
-              <tr>
-                <th scope="row" id="rel">
-                  {{ $t("ETFFlow.transactionCostsRelative") }}
-                </th>
-                <td>{{ trabsactionCostsRelativeString }}</td>
-              </tr>
-              <tr>
-                <th scope="row" id="max">
-                  {{ $t("ETFFlow.transactionCostsMaximum") }}
-                </th>
-                <td><SpanAmount :amount="etf.transactionCostsMaximum" /></td>
-              </tr>
-              <tr>
-                <th scope="row" colspan="2" id="taxExemption">
-                  {{ $t("ETF.partialTaxExemption") }}
-                </th>
-                <td>{{ partialTaxExemptionString }}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+      <div class="flex flex-col rounded-xl border bg-card overflow-hidden">
+        <Table>
+          <TableBody>
+            <TableRow class="hover:bg-transparent border-b last:border-0">
+              <TableCell
+                class="font-normal text-muted-foreground max-w-[11rem] w-44 pl-4 pr-2 py-3 whitespace-normal break-words"
+              >
+                {{ $t("General.name") }}
+              </TableCell>
+              <TableCell
+                class="font-semibold text-foreground pr-4 py-3 text-base"
+              >
+                {{ etf.name }}
+              </TableCell>
+            </TableRow>
+
+            <TableRow class="hover:bg-transparent border-b last:border-0">
+              <TableCell
+                class="font-normal text-muted-foreground max-w-[11rem] w-44 pl-4 pr-2 py-3 whitespace-normal break-words"
+              >
+                {{ $t("ETF.isin") }}
+              </TableCell>
+              <TableCell class="font-medium text-foreground pr-4 py-3">
+                {{ etf.isin }}
+              </TableCell>
+            </TableRow>
+
+            <TableRow class="hover:bg-transparent border-b last:border-0">
+              <TableCell
+                class="font-normal text-muted-foreground max-w-[11rem] w-44 pl-4 pr-2 py-3 whitespace-normal break-words"
+              >
+                {{ $t("ETF.wkn") }}
+              </TableCell>
+              <TableCell class="font-medium text-foreground pr-4 py-3">
+                {{ etf.wkn }}
+              </TableCell>
+            </TableRow>
+
+            <TableRow class="hover:bg-transparent border-b last:border-0">
+              <TableCell
+                class="font-normal text-muted-foreground max-w-[11rem] w-44 pl-4 pr-2 py-3 whitespace-normal break-words"
+              >
+                {{ $t("ETF.ticker") }}
+              </TableCell>
+              <TableCell class="font-medium text-foreground pr-4 py-3">
+                {{ etf.ticker }}
+              </TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
       </div>
     </template>
     <template #footer>
-      <button type="button" class="btn btn-danger" @click="deleteEtf">
+      <Button
+        variant="destructive"
+        class="flex items-center gap-2 rounded-md px-6"
+        @click="deleteEtf"
+      >
+        <Trash2 class="h-4 w-4" />
         {{ $t("General.delete") }}
-      </button>
+      </Button>
     </template>
   </ModalVue>
 </template>
 
 <script lang="ts" setup>
-import { computed, ref, useTemplateRef } from "vue";
-
+import { Button } from "@/components/ui/button";
+import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
+import type { Etf } from "@/model/etf/Etf";
+import CrudEtfService from "@/service/CrudEtfService";
+import { handleBackendError } from "@/tools/views/HandleBackendError";
+import { Trash2 } from "lucide-vue-next";
+import { ref, useTemplateRef } from "vue";
 import DivError from "../DivError.vue";
 import ModalVue from "../Modal.vue";
-
-import { handleBackendError } from "@/tools/views/HandleBackendError";
-
-import type { Etf } from "@/model/etf/Etf";
-
-import CrudEtfService from "@/service/CrudEtfService";
-import SpanAmount from "../SpanAmount.vue";
-import { formatNumber } from "@/tools/views/FormatNumber";
 
 const serverErrors = ref(new Array<string>());
 
 const etf = ref({} as Etf);
 const modalComponent = useTemplateRef<typeof ModalVue>("modalComponent");
 const emit = defineEmits(["etfDeleted"]);
-
-const trabsactionCostsRelativeString = computed(() => {
-  return etf.value.transactionCostsRelative === undefined
-    ? ""
-    : formatNumber(etf.value.transactionCostsRelative, 2) + " %";
-});
-
-const partialTaxExemptionString = computed(() => {
-  return etf.value.partialTaxExemption === undefined
-    ? ""
-    : formatNumber(etf.value.partialTaxExemption, 2) + " %";
-});
 
 const _show = (_etf: Etf) => {
   etf.value = _etf;
@@ -125,9 +105,3 @@ const deleteEtf = () => {
 
 defineExpose({ _show });
 </script>
-
-<style scoped>
-th {
-  background-color: #f2f2f2;
-}
-</style>

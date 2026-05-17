@@ -1,64 +1,74 @@
 <template>
-  <ModalVue :title="title" ref="modalComponent" zIndex="2001">
-    <template #body
-      ><form
+  <ModalVue :title="title" ref="modalComponent" :z-index="zIndex">
+    <template #body>
+      <form
         @submit.prevent="createContractpartnerAccount"
         :id="'createContractpartnerAccountForm' + idSuffix"
       >
-        <div class="container-fluid">
+        <div class="space-y-4">
           <DivError :server-errors="serverErrors" />
-          <div class="row">
-            <div class="col-xs-12">
-              <InputStandard
-                v-model="mca.accountNumber"
-                :validation-schema="schema.accountNumber"
-                :id="'accountNumber' + idSuffix"
-                :field-label="$t('General.iban')"
-              />
-            </div>
-          </div>
-          <div class="row pt-2">
-            <div class="col-xs-12">
-              <InputStandard
-                v-model="mca.bankCode"
-                :validation-schema="schema.bankCode"
-                :id="'bankCode' + idSuffix"
-                :field-label="$t('General.bic')"
-              />
+
+          <div class="rounded-sm border bg-muted/30 p-4 shadow-sm space-y-4">
+            <div class="grid grid-cols-1 sm:grid-cols-12 gap-4">
+              <div class="sm:col-span-8">
+                <InputStandard
+                  v-model="mca.accountNumber"
+                  :validation-schema="schema.accountNumber"
+                  :id="'accountNumber' + idSuffix"
+                  :field-label="$t('General.iban')"
+                />
+              </div>
+
+              <div class="sm:col-span-4">
+                <InputStandard
+                  v-model="mca.bankCode"
+                  :validation-schema="schema.bankCode"
+                  :id="'bankCode' + idSuffix"
+                  :field-label="$t('General.bic')"
+                />
+              </div>
             </div>
           </div>
         </div>
       </form>
     </template>
+
     <template #footer>
-      <button type="button" class="btn btn-secondary" @click="resetForm">
+      <Button
+        type="button"
+        variant="secondary"
+        class="flex items-center gap-2 px-6"
+        @click="resetForm"
+      >
+        <Undo2 class="h-4 w-4" />
         {{ $t("General.reset") }}
-      </button>
+      </Button>
+
       <ButtonSubmit
         :button-label="$t('General.save')"
         :form-id="'createContractpartnerAccountForm' + idSuffix"
-      />
+      >
+        <template #icon><Save class="h-4 w-4" /></template>
+      </ButtonSubmit>
     </template>
   </ModalVue>
 </template>
 
 <script lang="ts" setup>
+import { Button } from "@/components/ui/button";
+import type { ContractpartnerAccount } from "@/model/contractpartneraccount/ContractpartnerAccount";
+import ContractpartnerAccountService from "@/service/ContractpartnerAccountService";
+import { handleBackendError } from "@/tools/views/HandleBackendError";
+import { globErr } from "@/tools/views/ZodUtil";
+import { Save, Undo2 } from "lucide-vue-next";
 import { useForm } from "vee-validate";
-import { computed, ref, useTemplateRef } from "vue";
+import { computed, ref, toRaw, useTemplateRef } from "vue";
 import { useI18n } from "vue-i18n";
 import { string, ZodType } from "zod";
-
 import ButtonSubmit from "../ButtonSubmit.vue";
 import DivError from "../DivError.vue";
 import InputStandard from "../InputStandard.vue";
 import ModalVue from "../Modal.vue";
-
-import { handleBackendError } from "@/tools/views/HandleBackendError";
-import { globErr } from "@/tools/views/ZodUtil";
-
-import type { ContractpartnerAccount } from "@/model/contractpartneraccount/ContractpartnerAccount";
-
-import ContractpartnerAccountService from "@/service/ContractpartnerAccountService";
 
 const { t } = useI18n();
 
@@ -71,30 +81,34 @@ const props = defineProps({
     type: Number,
     required: true,
   },
+  zIndex: {
+    type: String,
+    default: "2001",
+  },
 });
 
 const serverErrors = ref(new Array<string>());
-
-const schema: Partial<{ [key in keyof ContractpartnerAccount]: ZodType }> = {
-  accountNumber: string(
-    globErr(t("ContractpartnerAccount.validation.accountNumber")),
-  )
-    .min(1)
-    .max(22, t("ContractpartnerAccount.validation.accountNumberMax")),
-  bankCode: string(globErr(t("ContractpartnerAccount.validation.bankCode")))
-    .min(1)
-    .max(11, t("ContractpartnerAccount.validation.bankCodeMax")),
-};
-
 const mca = ref({} as ContractpartnerAccount);
 const origMca = ref({} as ContractpartnerAccount | undefined);
-const modalComponent = useTemplateRef<typeof ModalVue>('modalComponent');
+const modalComponent = useTemplateRef<typeof ModalVue>("modalComponent");
+
 const emit = defineEmits([
   "contractpartnerAccountCreated",
   "contractpartnerAccountUpdated",
 ]);
 
 const { handleSubmit, values, setFieldTouched } = useForm();
+
+const schema: Partial<{ [key in keyof ContractpartnerAccount]: ZodType }> = {
+  accountNumber: string(
+    globErr(t("ContractpartnerAccount.validation.accountNumber")),
+  )
+    .min(1)
+    .max(34, t("ContractpartnerAccount.validation.length.accountNumber")),
+  bankCode: string()
+    .max(11, t("ContractpartnerAccount.validation.length.bankCode"))
+    .optional(),
+};
 
 const title = computed(() => {
   return origMca.value === undefined
@@ -104,7 +118,7 @@ const title = computed(() => {
 
 const resetForm = () => {
   if (origMca.value) {
-    Object.assign(mca.value, origMca.value);
+    mca.value = structuredClone(toRaw(origMca.value))!;
   } else {
     mca.value = {
       contractpartnerid: props.contractpartnerId,
@@ -123,32 +137,28 @@ const _show = async (_mca?: ContractpartnerAccount) => {
 const createContractpartnerAccount = handleSubmit(() => {
   serverErrors.value = new Array<string>();
 
-  if (mca.value.id > 0) {
-    //update
-    ContractpartnerAccountService.updateContractpartnerAccount(
-      mca.value,
-    )
-      .then(() => {
-        modalComponent.value?._hide();
-        emit("contractpartnerAccountUpdated", mca.value);
-      })
-      .catch((backendError) => {
-        handleBackendError(backendError, serverErrors);
-      });
-  } else {
-    //create
-    ContractpartnerAccountService.createContractpartnerAccount(
-      mca.value,
-    )
-      .then((_mca) => {
-        mca.value = _mca;
-        modalComponent.value?._hide();
-        emit("contractpartnerAccountCreated", mca.value);
-      })
-      .catch((backendError) => {
-        handleBackendError(backendError, serverErrors);
-      });
-  }
+  const serviceCall =
+    mca.value.id > 0
+      ? ContractpartnerAccountService.updateContractpartnerAccount(mca.value)
+      : ContractpartnerAccountService.createContractpartnerAccount(mca.value);
+
+  serviceCall
+    .then((result) => {
+      const isUpdate = mca.value.id > 0;
+      if (!isUpdate) mca.value = result as ContractpartnerAccount;
+
+      modalComponent.value?._hide();
+      emit(
+        isUpdate
+          ? "contractpartnerAccountUpdated"
+          : "contractpartnerAccountCreated",
+        mca.value,
+      );
+    })
+    .catch((backendError) => {
+      handleBackendError(backendError, serverErrors);
+    });
 });
+
 defineExpose({ _show });
 </script>

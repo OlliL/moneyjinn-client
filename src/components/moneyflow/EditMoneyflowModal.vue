@@ -13,21 +13,20 @@
         @submit.prevent="mmf.id == 0 ? createMoneyflow() : updateMoneyflow()"
         id="updateMoneyflowForm"
       >
-        <div class="container-fluid">
-          <div class="row">
+        <div class="w-full">
+          <div class="flex gap-4">
             <div
-              style="overflow-x: scroll; white-space: nowrap; height: 600px"
-              class="col-3"
+              class="w-1/3 overflow-x-scroll whitespace-nowrap h-[600px] max-w-120"
               v-if="receiptBase64"
             >
               <img
                 v-if="isJpeg"
                 :src="`data:image/png;base64,${receiptBase64}`"
-                style="max-width: 100%"
+                class="max-w-full"
                 alt="receipt"
               />
               <object
-                style="height: 75vh; width: 100%"
+                class="h-[75vh] w-full"
                 v-if="isPdf"
                 id="pdf"
                 :data="`data:application/pdf;base64,${receiptBase64}`"
@@ -36,47 +35,59 @@
                 receipt
               </object>
             </div>
-            <div class="col">
+            <div class="flex-1">
               <EditMoneyflowBase :mmf-to-edit="mmf" ref="editMoneyflowVue" />
             </div>
           </div>
         </div>
       </form>
     </template>
+
     <template #footer>
-      <button
+      <Button
         type="button"
-        class="btn btn-danger"
+        variant="destructive"
         @click="deleteMoneyflowReceipt"
         v-if="mmf.hasReceipt"
       >
+        <Trash2 class="h-4 w-4" />
         {{ $t("Moneyflow.deleteReceipt") }}
-      </button>
+      </Button>
+
+      <Button
+        type="button"
+        variant="secondary"
+        class="flex items-center gap-2 px-6"
+        @click="resetForm"
+      >
+        <Undo2 class="h-4 w-4" />
+        {{ $t("General.reset") }}
+      </Button>
 
       <ButtonSubmit
         :button-label="$t('General.save')"
         form-id="updateMoneyflowForm"
-      />
+      >
+        <template #icon><Save class="h-4 w-4" /></template>
+      </ButtonSubmit>
     </template>
   </ModalVue>
 </template>
 
 <script lang="ts" setup>
-import { useForm } from "vee-validate";
-import { computed, ref, useTemplateRef } from "vue";
-
 import ButtonSubmit from "@/components/ButtonSubmit.vue";
-import DivError from "../DivError.vue";
 import EditMoneyflowBase from "@/components/moneyflow/EditMoneyflowBase.vue";
-import ModalVue from "../Modal.vue";
-
-import { handleBackendError } from "@/tools/views/HandleBackendError";
-
+import { Button } from "@/components/ui/button";
+import type { ImportedMoneyflowReceipt } from "@/model/moneyflow/ImportedMoneyflowReceipt";
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 import { MoneyflowReceiptType } from "@/model/moneyflow/MoneyflowReceiptType";
-import type { ImportedMoneyflowReceipt } from "@/model/moneyflow/ImportedMoneyflowReceipt";
-
 import MoneyflowReceiptService from "@/service/MoneyflowReceiptService";
+import { handleBackendError } from "@/tools/views/HandleBackendError";
+import { Save, Trash2, Undo2 } from "lucide-vue-next";
+import { useForm } from "vee-validate";
+import { computed, ref, useTemplateRef } from "vue";
+import DivError from "../DivError.vue";
+import ModalVue from "../Modal.vue";
 
 const serverErrors = ref(new Array<string>());
 
@@ -98,7 +109,9 @@ const emit = defineEmits([
 const { handleSubmit, values, setFieldTouched } = useForm();
 
 const modalWidth = computed(() => {
-  return receiptBase64.value ? "100%" : "75%";
+  return receiptBase64.value
+    ? "md:max-w-full w-full mx-auto"
+    : "md:max-w-2xl lg:max-w-7xl w-full mx-auto";
 });
 const _show = (_mmf: Moneyflow, receipt?: ImportedMoneyflowReceipt) => {
   mmf.value = _mmf;
@@ -172,6 +185,9 @@ const deleteMoneyflowReceipt = () => {
       handleBackendError(backendError, serverErrors);
     });
 };
-
+const resetForm = () => {
+  editMoneyflowVue.value?.resetForm();
+  Object.keys(values).forEach((field) => setFieldTouched(field, false));
+};
 defineExpose({ _show });
 </script>

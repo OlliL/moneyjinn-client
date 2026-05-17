@@ -10,11 +10,9 @@
     @postingAccount-deleted="searchContent"
   />
 
-  <div class="container-fluid text-center">
-    <div class="row justify-content-md-center">
-      <div class="col-xs-12 mb-4">
-        <h4>{{ $t("General.postingAccounts") }}</h4>
-      </div>
+  <div class="custom-container space-y-6">
+    <div class="text-center">
+      <h4 class="text-2xl font-bold">{{ $t("General.postingAccounts") }}</h4>
     </div>
 
     <DivFilter
@@ -24,14 +22,17 @@
       @createClicked="showCreatePostingAccountModal"
     />
 
-    <DivContentTable clazz="col-md-3 col-xs-12">
-      <thead>
-        <tr>
-          <th scope="col">{{ $t("General.name") }}</th>
-          <th scope="colgroup" colspan="2"></th>
-        </tr>
-      </thead>
-      <tbody>
+    <DivContentTable class="max-w-sm">
+      <TableHeader>
+        <TableRow>
+          <TableHead
+            class="font-bold border-r text-foreground text-center w-full"
+            >{{ $t("General.name") }}</TableHead
+          >
+          <TableHead colspan="2"></TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
         <ListPostingAccountRowVue
           v-for="mpa in postingAccounts"
           :key="mpa.id"
@@ -39,7 +40,7 @@
           @delete-postingAccount="deletePostingAccount"
           @edit-postingAccount="editPostingAccount"
         />
-      </tbody>
+      </TableBody>
     </DivContentTable>
   </div>
 </template>
@@ -47,15 +48,19 @@
 <script lang="ts" setup>
 import { onMounted, ref, useTemplateRef, watch } from "vue";
 
-import { usePostingAccountStore } from "@/stores/PostingAccountStore";
-
 import DivContentTable from "@/components/DivContentTable.vue";
 import DivFilter from "@/components/DivFilter.vue";
 import CreatePostingAccountModalVue from "@/components/postingaccount/CreatePostingAccountModal.vue";
 import DeletePostingAccountModalVue from "@/components/postingaccount/DeletePostingAccountModal.vue";
 import ListPostingAccountRowVue from "@/components/postingaccount/ListPostingAccountRow.vue";
-
+import {
+  TableBody,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import type { PostingAccount } from "@/model/postingaccount/PostingAccount";
+import { usePostingAccountStore } from "@/stores/PostingAccountStore";
 import { storeToRefs } from "pinia";
 
 const postingAccounts = ref(new Array<PostingAccount>());

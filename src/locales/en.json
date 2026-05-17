@@ -1,5 +1,8 @@
 {
     "General": {
+        "logout": "logout",
+        "profile": "profile",
+        "add": "add",
         "currency": "€",
         "etf": "ETF",
         "selectEtf": "select ETF...",
@@ -35,6 +38,10 @@
         "validNow": "valid now",
         "startDate": "startdate",
         "endDate": "enddate",
+        "searchForPostingAccount": "Search for posting account...",
+        "searchForCapitalsource": "Search for capitalsource...",
+        "searchForEtf": "Search for ETF...",
+        "xOfySelected": "{selected} of {total} selected",
         "delete": "delete",
         "edit": "edit",
         "reset": "reset",
@@ -43,6 +50,8 @@
         "yes": "yes",
         "no": "no",
         "all": "all",
+        "none": "none",
+                "noEntries": "No entries found.",
         "new": "new",
         "year": "year",
         "month": "month",
@@ -61,13 +70,17 @@
         "taskList": "task list",
         "importableMoneyflows": "There are moneyflows waiting to be imported!",
         "createSettlements": "There exists no monthly settlement for the previous month!",
-        "allDone": "It's all done!"
+        "allDone": "It's all done!",
+        "allDoneTitle": "Done!"
     },
     "Capitalsource": {
         "type": "type",
         "state": "state",
         "groupUse": "group usage",
         "importAllowed": "data import",
+        "accountData":"Bank account (optional)",
+        "validityData":"Validity period",
+        "permissions": "Permissions",
         "nonCash": "non cash",
         "cash": "cash",
         "balance": "balance",
@@ -97,6 +110,9 @@
     },
     "Contractpartner": {
         "moneyflowComment": "the moneyflows default comment",
+        "adressData": "Address data (optional)",
+        "validityData":"Validity period",
+        "moneyflowDefaults": "Standard values for new moneyflows",
         "street": "street",
         "postcode": "postcode",
         "town": "town",
@@ -126,6 +142,7 @@
             "update": "update contractpartner account",
             "delete": "delete contractpartner account"
         },
+        "nothingFound": "No bank accounts found.",
         "validation": {
             "accountNumber": "Please specify the IBAN!",
             "accountNumberMax": "The IBAN must not exceed 22 characters!",
@@ -254,6 +271,7 @@
             "update": "update ETF preliminary lump sums",
             "delete": "delete ETF preliminary lump sums"
         },
+        "amounts": "amounts",
         "monthlyAmount": "amount {month}",
         "validation": {
             "etfId": "Please select an ETF!",
@@ -378,7 +396,7 @@
     },
     "Reports": {
         "title": {
-            "reports": "reports",
+            "charts": "charts",
             "report": "moneyflows {month} {year}",
             "costReporting": "cost reporting",
             "costReportYear": "{year}",
@@ -418,6 +436,8 @@
             "delete": "delete user",
             "changePassword": "change password"
         },
+        "loginData": "login data",
+        "permissions": "permissions",
         "groupHistory": "group history",
         "new": "new",
         "role": "userrole",

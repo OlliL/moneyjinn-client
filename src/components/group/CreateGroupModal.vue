@@ -1,66 +1,74 @@
 <template>
   <ModalVue :title="title" ref="modalComponent">
     <template #body
-      ><form @submit.prevent="createGroup" id="createGroupForm">
-        <div class="container-fluid">
-          <DivError :server-errors="serverErrors" />
-          <div class="row pt-2">
-            <div class="col-xs-12">
-              <InputStandard
-                v-model="group.name"
-                :validation-schema="schema.name"
-                id="name"
-                :field-label="$t('General.name')"
-              />
-            </div>
-          </div>
+      ><form
+        @submit.prevent="createGroup"
+        id="createGroupForm"
+        class="space-y-6"
+      >
+        <DivError :server-errors="serverErrors" />
+
+        <div class="rounded-sm border bg-muted/30 p-4 shadow-sm space-y-4">
+          <InputStandard
+            v-model="group.name"
+            :validation-schema="schema.name"
+            id="name"
+            :field-label="$t('General.name')"
+          />
         </div>
       </form>
     </template>
     <template #footer>
-      <button type="button" class="btn btn-secondary" @click="resetForm">
+      <Button
+        type="button"
+        variant="secondary"
+        class="flex items-center gap-2 px-6"
+        @click="resetForm"
+      >
+        <Undo2 class="h-4 w-4" />
         {{ $t("General.reset") }}
-      </button>
+      </Button>
+
       <ButtonSubmit
         :button-label="$t('General.save')"
         form-id="createGroupForm"
-      />
+      >
+        <template #icon><Save class="h-4 w-4" /></template>
+      </ButtonSubmit>
     </template>
   </ModalVue>
 </template>
 
 <script lang="ts" setup>
+import { Button } from "@/components/ui/button";
+import type { Group } from "@/model/group/Group";
+import GroupService from "@/service/GroupService";
+import { handleBackendError } from "@/tools/views/HandleBackendError";
+import { globErr } from "@/tools/views/ZodUtil";
+import { Save, Undo2 } from "lucide-vue-next";
 import { useForm } from "vee-validate";
-import { computed, ref, useTemplateRef } from "vue";
+import { computed, ref, toRaw, useTemplateRef } from "vue";
 import { useI18n } from "vue-i18n";
 import { string, ZodType } from "zod";
-
 import ButtonSubmit from "../ButtonSubmit.vue";
 import DivError from "../DivError.vue";
-import ModalVue from "../Modal.vue";
-
-import { globErr } from "@/tools/views/ZodUtil";
-import { handleBackendError } from "@/tools/views/HandleBackendError";
-
-import type { Group } from "@/model/group/Group";
-
-import GroupService from "@/service/GroupService";
 import InputStandard from "../InputStandard.vue";
+import ModalVue from "../Modal.vue";
 
 const { t } = useI18n();
 
 const serverErrors = ref(new Array<string>());
+const group = ref({} as Group);
+const origGroup = ref({} as Group | undefined);
+const modalComponent = useTemplateRef<typeof ModalVue>("modalComponent");
+
+const emit = defineEmits(["groupUpdated", "groupCreated"]);
+
+const { handleSubmit, values, setFieldTouched } = useForm();
 
 const schema: Partial<{ [key in keyof Group]: ZodType }> = {
   name: string(globErr(t("Group.validation.name"))).min(1),
 };
-
-const group = ref({} as Group);
-const origGroup = ref({} as Group | undefined);
-const modalComponent = useTemplateRef<typeof ModalVue>('modalComponent');
-const emit = defineEmits(["groupUpdated", "groupCreated"]);
-
-const { handleSubmit, values, setFieldTouched } = useForm();
 
 const title = computed(() => {
   return origGroup.value === undefined
@@ -70,7 +78,7 @@ const title = computed(() => {
 
 const resetForm = () => {
   if (origGroup.value) {
-    Object.assign(group.value, origGroup.value);
+    group.value = structuredClone(toRaw(origGroup.value))!;
   } else {
     group.value = {} as Group;
   }
@@ -87,28 +95,23 @@ const _show = async (_group?: Group) => {
 const createGroup = handleSubmit(() => {
   serverErrors.value = new Array<string>();
 
-  if (group.value.id > 0) {
-    //update
-    GroupService.updateGroup(group.value)
-      .then(() => {
-        modalComponent.value?._hide();
-        emit("groupUpdated", group.value);
-      })
-      .catch((backendError) => {
-        handleBackendError(backendError, serverErrors);
-      });
-  } else {
-    //create
-    GroupService.createGroup(group.value)
-      .then((_group) => {
-        group.value = _group;
-        modalComponent.value?._hide();
-        emit("groupCreated", group.value);
-      })
-      .catch((backendError) => {
-        handleBackendError(backendError, serverErrors);
-      });
-  }
+  const serviceCall =
+    group.value.id > 0
+      ? GroupService.updateGroup(group.value)
+      : GroupService.createGroup(group.value);
+
+  serviceCall
+    .then((result) => {
+      const isUpdate = group.value.id > 0;
+      if (!isUpdate) group.value = result as Group;
+
+      modalComponent.value?._hide();
+      emit(isUpdate ? "groupUpdated" : "groupCreated", group.value);
+    })
+    .catch((backendError) => {
+      handleBackendError(backendError, serverErrors);
+    });
 });
+
 defineExpose({ _show });
 </script>

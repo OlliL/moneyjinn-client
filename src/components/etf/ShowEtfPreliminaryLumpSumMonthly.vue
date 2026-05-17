@@ -1,38 +1,47 @@
 <template>
-  <table class="table table-striped table-bordered table-hover">
-    <colgroup>
-      <col style="width: 60%" />
-      <col style="width: 40%" />
-    </colgroup>
-    <thead>
-      <tr>
-        <th scope="col">{{ $t("General.month") }}</th>
-        <th scope="col">{{ $t("General.amount") }}</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr v-for="month in dataArray" :key="month.month">
-        <td class="text-start">{{ month.month }}</td>
-        <td class="text-end"><SpanAmount :amount="month.amount" /></td>
-      </tr>
-      <tr>
-        <td class="text-end">&sum;</td>
-        <td class="text-end">
-          <u><SpanAmount :amount="sum" /></u>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+  <div class="flex flex-col rounded-md border">
+    <Table>
+      <TableHeader>
+        <TableRow>
+          <TableHead class="font-bold border-r text-foreground text-center">{{
+            $t("General.month")
+          }}</TableHead>
+          <TableHead class="font-bold text-foreground text-center">{{
+            $t("General.amount")
+          }}</TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        <TableRow v-for="month in dataArray" :key="month.month">
+          <TableCell class="text-left border-r">{{ month.month }}</TableCell>
+          <TableCell class="text-right"
+            ><SpanAmount :amount="month.amount"
+          /></TableCell>
+        </TableRow>
+        <TableRow>
+          <TableCell class="text-right border-r font-bold">&sum;</TableCell>
+          <TableCell class="text-right">
+            <u><SpanAmount :amount="sum" /></u>
+          </TableCell>
+        </TableRow>
+      </TableBody>
+    </Table>
+  </div>
 </template>
 
 <script lang="ts" setup>
-import { computed, type PropType } from "vue";
-
-import SpanAmount from "../SpanAmount.vue";
-
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import type { EtfPreliminaryLumpSum } from "@/model/etf/EtfPreliminaryLumpSum";
-
 import { getMonthName } from "@/tools/views/MonthName";
+import { computed, type PropType } from "vue";
+import SpanAmount from "../SpanAmount.vue";
 
 const props = defineProps({
   mep: {

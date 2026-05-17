@@ -5,54 +5,72 @@
   >
     <template #body>
       <DivError :server-errors="serverErrors" />
-      <div class="row d-flex justify-content-center mt-3">
-        <div class="col-11">
-          <table class="table table-bordered table-hover">
-            <tbody>
-              <tr>
-                <th scope="row">{{ $t("General.etf") }}</th>
-                <td>{{ etfName }}</td>
-              </tr>
-              <tr>
-                <th scope="row">{{ $t("General.year") }}</th>
-                <td>{{ etfPreliminaryLumpSum.year }}</td>
-              </tr>
-              <tr>
-                <th scope="row">{{ $t("ETFPreliminaryLumpSum.price") }}</th>
-                <td>
-                  <SpanAmount :amount="etfPreliminaryLumpSum.amountPerPiece" />
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+      <div class="flex flex-col rounded-xl border bg-card overflow-hidden">
+        <Table>
+          <TableBody>
+            <TableRow class="hover:bg-transparent border-b last:border-0">
+              <TableCell
+                class="font-normal text-muted-foreground max-w-[11rem] w-44 pl-4 pr-2 py-3 whitespace-normal break-words"
+              >
+                {{ $t("General.etf") }}
+              </TableCell>
+              <TableCell class="font-medium text-foreground pr-4 py-3">
+                {{ etfName }}
+              </TableCell>
+            </TableRow>
+
+            <TableRow class="hover:bg-transparent border-b last:border-0">
+              <TableCell
+                class="font-normal text-muted-foreground max-w-[11rem] w-44 pl-4 pr-2 py-3 whitespace-normal break-words"
+              >
+                {{ $t("General.year") }}
+              </TableCell>
+              <TableCell
+                class="font-semibold text-foreground pr-4 py-3 text-base"
+              >
+                {{ etfPreliminaryLumpSum.year }}
+              </TableCell>
+            </TableRow>
+
+            <TableRow class="hover:bg-transparent border-b last:border-0">
+              <TableCell
+                class="font-normal text-muted-foreground max-w-[11rem] w-44 pl-4 pr-2 py-3 whitespace-normal break-words"
+              >
+                {{ $t("ETFPreliminaryLumpSum.price") }}
+              </TableCell>
+              <TableCell class="font-medium text-foreground pr-4 py-3">
+                <SpanAmount :amount="etfPreliminaryLumpSum.amountPerPiece" />
+              </TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
       </div>
     </template>
     <template #footer>
-      <button
-        type="button"
-        class="btn btn-danger"
+      <Button
+        variant="destructive"
+        class="flex items-center gap-2 rounded-md px-6"
         @click="deleteEtfPreliminaryLumpSum"
       >
+        <Trash2 class="h-4 w-4" />
         {{ $t("General.delete") }}
-      </button>
+      </Button>
     </template>
   </ModalVue>
 </template>
 
 <script lang="ts" setup>
+import { Button } from "@/components/ui/button";
+import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
+import type { EtfPreliminaryLumpSum } from "@/model/etf/EtfPreliminaryLumpSum";
+import CrudEtfPreliminaryLumpSumService from "@/service/CrudEtfPreliminaryLumpSumService";
+import { useEtfStore } from "@/stores/EtfStore";
+import { handleBackendError } from "@/tools/views/HandleBackendError";
+import { Trash2 } from "lucide-vue-next";
 import { computed, ref, useTemplateRef } from "vue";
-
 import DivError from "../DivError.vue";
 import ModalVue from "../Modal.vue";
 import SpanAmount from "../SpanAmount.vue";
-
-import { handleBackendError } from "@/tools/views/HandleBackendError";
-
-import type { EtfPreliminaryLumpSum } from "@/model/etf/EtfPreliminaryLumpSum";
-
-import CrudEtfPreliminaryLumpSumService from "@/service/CrudEtfPreliminaryLumpSumService";
-import { useEtfStore } from "@/stores/EtfStore";
 
 const serverErrors = ref(new Array<string>());
 
@@ -86,9 +104,3 @@ const deleteEtfPreliminaryLumpSum = () => {
 
 defineExpose({ _show });
 </script>
-
-<style scoped>
-th {
-  background-color: #f2f2f2;
-}
-</style>

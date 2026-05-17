@@ -18,9 +18,9 @@ test("error message and regular label get set correctly", async () => {
   });
   const inputStandard = screen.getByTestId<HTMLInputElement>("inputStandard");
   setInputValueAndWait(inputStandard, "1234");
-  await screen.findByLabelText("my error");
+  await screen.findByText("my error");
   setInputValueAndWait(inputStandard, "12345");
-  await screen.findByLabelText("regular label");
+  await screen.findByText("regular label");
 });
 
 test("computed schema also works", async () => {
@@ -35,11 +35,11 @@ test("computed schema also works", async () => {
   });
   const inputStandard = screen.getByTestId<HTMLInputElement>("inputStandard");
   setInputValueAndWait(inputStandard, "1234");
-  await screen.findByLabelText("my error");
+  await screen.findByText("my error");
   setInputValueAndWait(inputStandard, "12345");
-  await screen.findByLabelText("regular label");
+  await screen.findByText("regular label");
   len.value = 6;
-  await screen.findByLabelText("my error");
+  await screen.findByText("my error");
 });
 
 test("untouched field shows regular label", async () => {
@@ -52,7 +52,7 @@ test("untouched field shows regular label", async () => {
     },
   });
   screen.getByTestId<HTMLInputElement>("inputStandard");
-  await screen.findByLabelText("regular label");
+  await screen.findByText("regular label");
 });
 
 test("check that update:modelValue gets emitted", async () => {

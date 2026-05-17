@@ -11,11 +11,9 @@
     @user-deleted="reloadView"
   />
 
-  <div class="container-fluid text-center">
-    <div class="row justify-content-md-center">
-      <div class="col-xs-12 mb-4">
-        <h4>{{ $t("General.users") }}</h4>
-      </div>
+  <div class="custom-container space-y-6">
+    <div class="text-center">
+      <h4 class="text-2xl font-bold">{{ $t("General.users") }}</h4>
     </div>
 
     <DivFilter
@@ -27,17 +25,25 @@
 
     <DivError :server-errors="serverErrors" />
 
-    <DivContentTable clazz="col-xxl-5 col-xs-12">
-      <thead>
-        <tr>
-          <th scope="col">{{ $t("General.name") }}</th>
-          <th scope="col">{{ $t("General.group") }}</th>
-          <th scope="col">{{ $t("User.role") }}</th>
-          <th scope="col">{{ $t("User.new") }}</th>
-          <th scope="col" colspan="2"></th>
-        </tr>
-      </thead>
-      <tbody>
+    <DivContentTable class="max-w-xl">
+      <TableHeader>
+        <TableRow>
+          <TableHead class="font-bold border-r text-foreground text-center">{{
+            $t("General.name")
+          }}</TableHead>
+          <TableHead class="font-bold border-r text-foreground text-center">{{
+            $t("General.group")
+          }}</TableHead>
+          <TableHead class="font-bold border-r text-foreground text-center">{{
+            $t("User.role")
+          }}</TableHead>
+          <TableHead class="font-bold border-r text-foreground text-center">{{
+            $t("User.new")
+          }}</TableHead>
+          <TableHead colspan="2"></TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
         <ListUserRowVue
           v-for="user in users"
           :key="user.id"
@@ -45,17 +51,23 @@
           @edit-user="editUser"
           @delete-user="deleteUser"
         />
-      </tbody>
+      </TableBody>
     </DivContentTable>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref, watch, useTemplateRef } from "vue";
+import { onMounted, ref, useTemplateRef, watch } from "vue";
 
 import DivContentTable from "@/components/DivContentTable.vue";
 import DivError from "@/components/DivError.vue";
 import DivFilter from "@/components/DivFilter.vue";
+import {
+  TableBody,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import CreateUserModalVue from "@/components/user/CreateUserModal.vue";
 import DeleteUserModalVue from "@/components/user/DeleteUserModal.vue";
 import ListUserRowVue from "@/components/user/ListUserRow.vue";

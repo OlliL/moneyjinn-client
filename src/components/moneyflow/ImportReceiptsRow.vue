@@ -1,22 +1,26 @@
 <template>
-  <div class="row justify-content-md-center mb-4">
-    <div class="col-md-9 col-xs-12">
-      <div class="card w-100 bg-light">
-        <div class="card-body">
-          <DivError :server-errors="serverErrors" />
-          <div class="row">
+  <div class="flex justify-center mb-6">
+    <div class="w-full max-w-6xl">
+      <div
+        class="w-full rounded-sm border bg-card text-card-foreground overflow-hidden"
+      >
+        <div class="grid grid-cols-1 lg:grid-cols-5 min-h-full">
+          <div
+            class="lg:col-span-2 bg-muted/40 p-5 border-b lg:border-b-0 lg:border-r border-border/60 flex flex-col justify-center items-center"
+          >
             <div
-              style="overflow-x: scroll; white-space: nowrap; height: 400px"
-              class="col-md-3 col-xs-12"
+              class="bg-background/60 p-2 rounded border border-border/40 backdrop-blur-sm w-full flex justify-center items-start h-[calc(100vh-420px)] max-h-[520px]"
+              :class="isPdf ? 'overflow-hidden' : 'overflow-y-auto'"
             >
               <img
                 v-if="isJpeg"
                 :src="`data:image/png;base64,${receipt.receipt}`"
-                style="max-width: 100%"
+                class="max-w-full h-auto rounded-sm"
                 alt="receipt"
               />
+
               <object
-                style="height: 75vh; width: 100%"
+                class="h-full w-full min-h-[320px] block rounded-sm"
                 v-if="isPdf"
                 id="pdf"
                 :data="`data:application/pdf;base64,${receipt.receipt}`"
@@ -25,24 +29,20 @@
                 receipt
               </object>
             </div>
-            <div class="col-md-9 col-xs-12">
+          </div>
+
+          <div
+            class="lg:col-span-3 p-6 space-y-6 flex flex-col justify-between"
+          >
+            <div>
+              <DivError :server-errors="serverErrors" />
+
               <form
                 @submit.prevent="searchMoneyflows"
                 :id="'searchReceipt' + receipt.id"
               >
-                <div
-                  class="row no-gutters flex-lg-nowrap mb-4 justify-content-center"
-                >
-                  <div
-                    class="col-md-1 col-xs-6 d-flex align-items-center justify-content-end"
-                  >
-                    <ButtonSubmit :form-id="'searchReceipt' + receipt.id">
-                      <template #icon
-                        ><i class="bi bi-search"></i>&nbsp;
-                      </template></ButtonSubmit
-                    >
-                  </div>
-                  <div class="col-md-3 col-xs-12">
+                <div class="flex flex-wrap items-end gap-3 mb-6">
+                  <div class="flex-1 min-w-[180px]">
                     <InputStandard
                       v-model="amount"
                       :validation-schema="schema.amount"
@@ -51,13 +51,10 @@
                       step="0.01"
                       :field-label="$t('General.amount')"
                     >
-                      <template #icon
-                        ><span class="input-group-text"
-                          ><i class="bi bi-currency-euro"></i></span
-                      ></template>
+                      <template #icon><Euro class="h-4 w-4" /></template>
                     </InputStandard>
                   </div>
-                  <div class="col-md-3 col-xs-12">
+                  <div class="flex-1 min-w-[140px]">
                     <InputDate
                       v-model="startDate"
                       :validation-schema="schema.startDate"
@@ -65,7 +62,7 @@
                       :field-label="$t('General.startDate')"
                     />
                   </div>
-                  <div class="col-md-3 col-xs-12">
+                  <div class="flex-1 min-w-[140px]">
                     <InputDate
                       v-model="endDate"
                       :validation-schema="schema.endDate"
@@ -73,64 +70,104 @@
                       :field-label="$t('General.endDate')"
                     />
                   </div>
+                  <div class="shrink-0">
+                    <ButtonSubmit
+                      :form-id="'searchReceipt' + receipt.id"
+                      class="h-8 w-8"
+                    >
+                      <template #icon><Search class="h-4 w-4" /></template>
+                    </ButtonSubmit>
+                  </div>
                 </div>
               </form>
-              <div
-                class="row no-gutters flex-lg-nowrap mb-4 justify-content-center"
-              >
-                <div class="col-xs-12">
-                  <table
-                    class="table table-striped table-bordered table-hover"
-                    v-if="searchExecuted && searchSuccessful"
+
+              <div class="w-full">
+                <div
+                  class="flex flex-col rounded-md border overflow-hidden"
+                  v-if="searchExecuted && searchSuccessful"
+                >
+                  <RadioGroup
+                    :model-value="String(selectedMoneyflowId)"
+                    @update:model-value="
+                      (val) => (selectedMoneyflowId = Number(val))
+                    "
                   >
-                    <thead>
-                      <tr>
-                        <th scope="col"></th>
-                        <th scope="col">{{ $t("Moneyflow.invoicedate") }}</th>
-                        <th scope="col">{{ $t("General.amount") }}</th>
-                        <th scope="col">{{ $t("General.contractpartner") }}</th>
-                        <th scope="col">{{ $t("General.comment") }}</th>
-                        <th scope="colgroup" colspan="2"></th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <ImportReceiptSearchRowVue
-                        v-for="moneyflow in moneyflows"
-                        v-model="selectedMoneyflowId"
-                        :key="moneyflow.id"
-                        :mmf="moneyflow"
-                        :preselected="preselected"
-                        :receipt-id="receipt.id"
-                        @delete-moneyflow="emitDeleteMoneyflow"
-                        @edit-moneyflow="emitEditMoneyflow"
-                      />
-                    </tbody>
-                  </table>
-                  <div v-if="searchExecuted && !searchSuccessful">
-                    {{ $t("Moneyflow.noMatchingMoneyflow") }}
-                  </div>
+                    <Table>
+                      <TableHeader class="bg-muted/30">
+                        <TableRow>
+                          <TableHead class="w-10 border-r">
+                            <span class="sr-only">Selection</span>
+                          </TableHead>
+                          <TableHead
+                            class="font-bold border-r text-foreground text-center px-3 py-2 text-xs"
+                          >
+                            {{ $t("Moneyflow.invoicedate") }}
+                          </TableHead>
+                          <TableHead
+                            class="font-bold border-r text-foreground text-center px-3 py-2 text-xs"
+                          >
+                            {{ $t("General.amount") }}
+                          </TableHead>
+                          <TableHead
+                            class="font-bold border-r text-foreground text-center px-3 py-2 text-xs"
+                          >
+                            {{ $t("General.contractpartner") }}
+                          </TableHead>
+                          <TableHead
+                            class="font-bold border-r text-foreground text-center px-3 py-2 text-xs"
+                          >
+                            {{ $t("General.comment") }}
+                          </TableHead>
+                          <TableHead class="w-16" colspan="2"></TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        <ImportReceiptSearchRowVue
+                          v-for="(moneyflow, index) in moneyflows"
+                          v-model="selectedMoneyflowId"
+                          :key="moneyflow.id"
+                          :mmf="moneyflow"
+                          :receipt-id="receipt.id"
+                          @delete-moneyflow="emitDeleteMoneyflow"
+                          @edit-moneyflow="emitEditMoneyflow"
+                        />
+                      </TableBody>
+                    </Table>
+                  </RadioGroup>
+                </div>
+
+                <div
+                  v-if="searchExecuted && !searchSuccessful"
+                  class="text-sm text-center py-6 text-muted-foreground border border-dashed rounded-sm bg-muted/10"
+                >
+                  {{ $t("Moneyflow.noMatchingMoneyflow") }}
                 </div>
               </div>
             </div>
-          </div>
-          <div class="row no-gutters flex-lg-nowrap">
-            <div class="col-12">
-              <button
+
+            <div
+              class="flex flex-wrap items-center justify-center gap-3 pt-4 border-t border-border/40"
+            >
+              <Button
                 type="button"
-                class="btn btn-primary mx-2"
+                variant="destructive"
+                class="flex items-center gap-2 px-6"
+                @click="deleteReceipt"
+              >
+                <Trash2 class="h-4 w-4" />
+                {{ $t("General.delete") }}
+              </Button>
+              <Button
+                type="button"
+                variant="default"
+                class="flex items-center gap-2 px-6"
                 @click="importReceipt"
                 v-if="searchExecuted && searchSuccessful"
                 :disabled="!moneyflowSelected"
               >
+                <Save class="h-4 w-4" />
                 {{ $t("Moneyflow.apply") }}
-              </button>
-              <button
-                type="button"
-                class="btn btn-danger mx-2"
-                @click="deleteReceipt"
-              >
-                {{ $t("General.delete") }}
-              </button>
+              </Button>
             </div>
           </div>
         </div>
@@ -140,26 +177,32 @@
 </template>
 
 <script lang="ts" setup>
+import { Button } from "@/components/ui/button";
+import {
+  Table,
+  TableBody,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import type { ImportedMoneyflowReceipt } from "@/model/moneyflow/ImportedMoneyflowReceipt";
+import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
+import ImportedMoneyflowReceiptService from "@/service/ImportedMoneyflowReceiptService";
+import MoneyflowService from "@/service/MoneyflowService";
+import { toFixed } from "@/tools/math";
+import { handleBackendError } from "@/tools/views/HandleBackendError";
+import { amountSchema, globErr } from "@/tools/views/ZodUtil";
+import { Euro, Save, Search, Trash2 } from "lucide-vue-next";
 import { useForm } from "vee-validate";
 import { computed, nextTick, onMounted, ref, type PropType } from "vue";
 import { useI18n } from "vue-i18n";
 import { date } from "zod";
-
 import ButtonSubmit from "../ButtonSubmit.vue";
 import DivError from "../DivError.vue";
-import ImportReceiptSearchRowVue from "./ImportReceiptSearchRow.vue";
-import InputStandard from "../InputStandard.vue";
 import InputDate from "../InputDate.vue";
-
-import { amountSchema, globErr } from "@/tools/views/ZodUtil";
-import { handleBackendError } from "@/tools/views/HandleBackendError";
-import { toFixed } from "@/tools/math";
-
-import type { ImportedMoneyflowReceipt } from "@/model/moneyflow/ImportedMoneyflowReceipt";
-import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
-
-import ImportedMoneyflowReceiptService from "@/service/ImportedMoneyflowReceiptService";
-import MoneyflowService from "@/service/MoneyflowService";
+import InputStandard from "../InputStandard.vue";
+import { RadioGroup } from "../ui/radio-group";
+import ImportReceiptSearchRowVue from "./ImportReceiptSearchRow.vue";
 
 const { t } = useI18n();
 
@@ -178,7 +221,7 @@ const moneyflows = ref({} as Array<Moneyflow>);
 const searchExecuted = ref(false);
 const searchSuccessful = ref(false);
 const selectedMoneyflowId = ref(0);
-const preselected = ref(false);
+
 const emit = defineEmits([
   "deleteMoneyflow",
   "editMoneyflow",
@@ -214,7 +257,6 @@ const searchMoneyflows = handleSubmit(() => {
       searchExecuted.value = true;
       searchSuccessful.value = moneyflows.value.length > 0;
       if (moneyflows.value.length === 1 && moneyflows.value[0]) {
-        preselected.value = true;
         selectedMoneyflowId.value = moneyflows.value[0].id;
       } else {
         selectedMoneyflowId.value = 0;
@@ -237,7 +279,7 @@ onMounted(() => {
 
   const posOfDot = props.receipt.filename.indexOf(".");
   const amountFromFilename = props.receipt.filename.substring(0, posOfDot);
-  if (!isNaN(Number(amountFromFilename))) {
+  if (!Number.isNaN(Number(amountFromFilename))) {
     amount.value = toFixed(+amountFromFilename / 100, 2);
     nextTick(() => {
       searchMoneyflows();

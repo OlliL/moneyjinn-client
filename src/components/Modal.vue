@@ -1,84 +1,75 @@
 <template>
-  <div
-    class="modal fade"
-    tabindex="-1"
-    aria-hidden="true"
-    ref="modalEle"
-    :style="'z-index: ' + zIndex"
-  >
-    <div class="modal-dialog" :style="modalStyle">
-      <div class="modal-content">
-        <div class="modal-header text-center">
-          <h5 class="modal-title w-100">{{ title }}</h5>
-          <button
-            type="button"
-            class="btn-close"
-            data-bs-dismiss="modal"
-            aria-label="Close"
-          ></button>
-        </div>
-        <div class="modal-body">
-          <slot name="body" />
-        </div>
-        <div class="modal-footer justify-content-md-center">
-          <button
-            type="button"
-            class="btn btn-secondary"
-            data-bs-dismiss="modal"
-          >
-            {{ $t("Modal.cancel") }}
-          </button>
-          <slot name="footer"></slot>
-        </div>
+  <Dialog v-model:open="isOpen">
+    <DialogContent
+      :class="[
+        props.maxWidth ? props.maxWidth : 'max-w-[calc(100%-2rem)] sm:max-w-lg',
+        'max-h-[90vh]',
+        'flex flex-col gap-6 p-6 overflow-visible',
+        `!z-[${zIndex}]`,
+      ]"
+    >
+      <DialogHeader class="space-y-1.5 text-left">
+        <DialogTitle>
+          <h4 class="text-lg font-semibold leading-none tracking-tight">
+            {{ title }}
+          </h4>
+        </DialogTitle>
+      </DialogHeader>
+
+      <div class="overflow-y-auto flex-1 pr-1">
+        <slot name="body" />
       </div>
-    </div>
-  </div>
+
+      <DialogFooter
+        class="flex flex-row justify-end gap-2 pt-4 border-t border-border/40"
+      >
+        <DialogClose as-child>
+          <Button
+            type="button"
+            variant="outline"
+            class="flex items-center gap-2 px-4"
+          >
+            <X class="h-4 w-4" />
+            {{ $t("Modal.cancel") }}
+          </Button>
+        </DialogClose>
+        <slot name="footer" />
+      </DialogFooter>
+    </DialogContent>
+  </Dialog>
 </template>
 
-<script lang="ts">
-export default { name: "MyModal" };
-</script>
-
 <script lang="ts" setup>
-import { computed, onMounted, ref, useTemplateRef } from "vue";
-import { Modal } from "bootstrap";
-
-const thisModalObj = ref({} as Modal);
-const modalEle = useTemplateRef<HTMLDivElement>('modalEle');
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { X } from "lucide-vue-next";
+import { ref } from "vue";
 
 const props = defineProps({
-  title: {
-    type: String,
-    default: "",
-  },
-  maxWidth: {
-    type: String,
-    default: "",
-  },
-  zIndex: {
-    type: String,
-    default: "2000",
-  },
+  title: { type: String, default: "" },
+  maxWidth: { type: String, default: "" },
+  zIndex: { type: String, default: "2000" },
 });
 
-const modalStyle = computed(() => {
-  if (props.maxWidth) {
-    return "max-width: " + props.maxWidth;
-  }
-  return "";
-});
+const isOpen = ref(false);
 
-const _show = async () => {
-  thisModalObj.value.show();
-};
-const _hide = async () => {
-  thisModalObj.value.hide();
+const _show = () => {
+  isOpen.value = true;
 };
 
-defineExpose({ _show, _hide });
+const _hide = () => {
+  isOpen.value = false;
+};
 
-onMounted(() => {
-  if(modalEle.value)
-    thisModalObj.value = new Modal(modalEle.value);
+defineExpose({
+  _show,
+  _hide,
 });
 </script>

@@ -12,363 +12,684 @@
     id-suffix="Nav"
   />
 
-  <nav class="navbar navbar-expand-lg navbar-light fixed-top bg-light">
-    <div class="container-fluid">
-      <router-link
-        class="navbar-brand bg-light"
-        :to="{ name: Routes.Home, force: true }"
-        ><small>moneyjin {{ version }}</small></router-link
-      >
-      <button
-        class="navbar-toggler"
-        type="button"
-        data-bs-toggle="collapse"
-        data-bs-target="#navbarSupportedContent"
-        aria-controls="navbarSupportedContent"
-        aria-expanded="false"
-        aria-label="Toggle navigation"
-      >
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div
-        class="collapse navbar-collapse"
-        id="navbarSupportedContent"
-        ref="navbarSupportedContent"
-      >
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item">
-            <router-link
-              class="nav-link"
-              :to="{ name: Routes.CreateMoneyflow, force: true }"
-              @click="collapseNavbar"
-              ><i class="bi bi-currency-euro"></i
-            ></router-link>
-          </li>
-          <li class="nav-item">
-            <router-link
-              :class="
-                $route.matched.some(({ name }) => name === Routes.ListReports)
-                  ? 'router-link-active nav-link'
-                  : 'nav-link'
-              "
-              :to="{
-                name: Routes.ListReports,
-                params: { year: year, month: month },
-                force: true,
-              }"
-              @click="collapseNavbar"
-              ><i class="bi bi-card-list"></i
-            ></router-link>
-          </li>
-          <li class="nav-item">
-            <router-link
-              class="nav-link"
-              :to="{ name: Routes.SearchMoneyflows, force: true }"
-              @click="collapseNavbar"
-              ><i class="bi bi-search"></i
-            ></router-link>
-          </li>
+  <!-- Mobile Navigation-->
+  <div class="md:hidden flex items-center justify-between p-2 border-b">
+    <router-link
+      class="navbar-brand bg-light"
+      :to="{ name: Routes.Home, force: true }"
+      ><small>moneyjin {{ version }}</small></router-link
+    >
 
-          <li class="nav-item">
-            <router-link
-              class="nav-link"
-              :to="{ name: Routes.ImportMoneyflows, force: true }"
-              @click="collapseNavbar"
-              ><i class="bi bi-box-arrow-in-down-right"></i
-            ></router-link>
-          </li>
-          <li class="nav-item">
-            <router-link
-              class="nav-link"
-              :to="{ name: Routes.CompareData, force: true }"
-              @click="collapseNavbar"
-              ><i class="bi bi-ui-checks"></i
-            ></router-link>
-          </li>
-          <li class="nav-item dropdown">
-            <a
-              class="nav-link dropdown-toggle"
-              href="#"
-              data-bs-toggle="dropdown"
-            >
-              <i class="bi bi-bar-chart-fill"></i>
-            </a>
-            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <li>
-                <router-link
-                  class="dropdown-item"
-                  :to="{ name: Routes.ShowTrends, force: true }"
-                  @click="collapseNavbar"
-                  >{{ $t("Reports.title.trends") }}</router-link
-                >
-              </li>
-              <li>
-                <router-link
-                  class="dropdown-item"
-                  :to="{ name: Routes.ShowReporting, force: true }"
-                  @click="collapseNavbar"
-                  >{{ $t("Reports.title.costReporting") }}</router-link
-                >
-              </li>
-            </ul>
-          </li>
-          <li class="nav-item dropdown">
-            <a
-              class="nav-link dropdown-toggle"
-              href="#"
-              data-bs-toggle="dropdown"
-              ref="dropdownPlus"
-            >
-              <i class="bi bi-plus-lg"></i>
-            </a>
-            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <li>
-                <router-link
-                  class="dropdown-item"
-                  :to="{ name: Routes.CreateMoneyflow, force: true }"
-                  @click="collapseNavbar"
-                  >{{ $t("General.moneyflow") }}</router-link
-                >
-              </li>
-              <li>
-                <hr class="dropdown-divider" />
-              </li>
-              <li>
-                <router-link
-                  class="dropdown-item"
-                  :to="{ name: Routes.ImportReceipts, force: true }"
-                  @click="collapseNavbar"
-                  >{{ $t("Receipt.importReceipts") }}</router-link
-                >
-              </li>
-              <li>
-                <hr class="dropdown-divider" />
-              </li>
-              <li>
-                <span
-                  class="dropdown-item"
-                  @click="showCreateCapitalsourceModal"
-                  >{{ $t("General.capitalsource") }}</span
-                >
-              </li>
-              <li>
-                <span
-                  class="dropdown-item"
-                  @click="showCreateContractpartnerModal"
-                  >{{ $t("General.contractpartner") }}</span
-                >
-              </li>
-              <li>
-                <span class="dropdown-item" @click="showPreDefMoneyflowModal">{{
-                  $t("General.preDefMoneyflow")
-                }}</span>
-              </li>
-            </ul>
-          </li>
-          <li class="nav-item dropdown">
-            <a
-              class="nav-link dropdown-toggle"
-              href="#"
-              data-bs-toggle="dropdown"
-              ref="dropdownWrench"
-            >
-              <i class="bi bi-wrench"></i>
-            </a>
-            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <li>
-                <router-link
-                  class="dropdown-item"
-                  :to="{ name: Routes.ListCapitalsources, force: true }"
-                  @click="collapseNavbar"
-                  >{{ $t("General.capitalsources") }}</router-link
-                >
-              </li>
-              <li>
-                <router-link
-                  class="dropdown-item"
-                  :to="{ name: Routes.ListContractpartners, force: true }"
-                  @click="collapseNavbar"
-                  >{{ $t("General.contractpartners") }}</router-link
-                >
-              </li>
-              <li>
-                <router-link
-                  class="dropdown-item"
-                  :to="{
-                    name: Routes.ListContractpartnerMatchings,
-                    force: true,
-                  }"
-                  @click="collapseNavbar"
-                  >{{ $t("General.contractpartnerMatchings") }}</router-link
-                >
-              </li>
-              <li>
-                <router-link
-                  class="dropdown-item"
-                  :to="{ name: Routes.ListPreDefMoneyflows, force: true }"
-                  @click="collapseNavbar"
-                  >{{ $t("General.preDefMoneyflows") }}</router-link
-                >
-              </li>
-              <li>
-                <router-link
-                  class="dropdown-item"
-                  :to="{ name: Routes.ListMonthlySettlements, force: true }"
-                  @click="collapseNavbar"
-                  >{{ $t("General.monthlysettlements") }}</router-link
-                >
-              </li>
-            </ul>
-          </li>
-          <li class="nav-item dropdown">
-            <a
-              class="nav-link dropdown-toggle"
-              href="#"
-              data-bs-toggle="dropdown"
-              ref="dropdownGraphUpArrow"
-            >
-              <i class="bi bi-graph-up-arrow"></i>
-            </a>
-            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <li>
-                <router-link
-                  class="dropdown-item"
-                  :to="{ name: Routes.ListEtfDepot, force: true }"
-                  @click="collapseNavbar"
-                  >{{ $t("General.etfDepot") }}</router-link
-                >
-              </li>
-              <li>
-                <router-link
-                  class="dropdown-item"
-                  :to="{ name: Routes.ListEtfs, force: true }"
-                  @click="collapseNavbar"
-                  >{{ $t("General.etfs") }}</router-link
-                >
-              </li>
-              <li>
-                <router-link
-                  class="dropdown-item"
-                  :to="{ name: Routes.ListEtfPreliminaryLumpSums, force: true }"
-                  @click="collapseNavbar"
-                  >{{ $t("General.preliminaryLumpSums") }}</router-link
-                >
-              </li>
-            </ul>
-          </li>
-        </ul>
-        <div v-if="serverErrors">
-          <div
-            class="alert alert-danger text-center"
-            v-for="(error, index) in serverErrors"
-            :key="index"
+    <Sheet v-model:open="isMenuOpen">
+      <SheetTrigger as-child>
+        <Button variant="ghost" size="icon-sm">
+          <Menu />
+          <!-- Hamburger Icon -->
+        </Button>
+      </SheetTrigger>
+      <SheetContent side="right" class="w-[300px] sm:w-[400px] overflow-y-auto">
+        <SheetHeader> </SheetHeader>
+        <div class="flex flex-col gap-2">
+          <!-- Hier deine Links vertikal untereinander -->
+          <router-link
+            @click="isMenuOpen = false"
+            class="flex items-center gap-2 p-1 hover:bg-accent rounded-md !text-foreground !no-underline"
+            :to="{ name: Routes.CreateMoneyflow }"
           >
-            {{ error }}
+            <Euro :size="20" /> {{ $t("Moneyflow.title.create") }}
+          </router-link>
+          <router-link
+            @click="isMenuOpen = false"
+            class="flex items-center gap-2 p-1 hover:bg-accent rounded-md !text-foreground !no-underline"
+            :to="{
+              name: Routes.ListReports,
+              params: { year: year, month: month },
+              force: true,
+            }"
+            ><Table2 :size="20" /> {{ $t("General.moneyflows") }}
+          </router-link>
+          <router-link
+            @click="isMenuOpen = false"
+            class="flex items-center gap-2 p-1 hover:bg-accent rounded-md !text-foreground !no-underline"
+            :to="{ name: Routes.SearchMoneyflows, force: true }"
+            ><Search :size="20" />{{
+              $t("Moneyflow.title.search")
+            }}</router-link
+          >
+          <router-link
+            @click="isMenuOpen = false"
+            class="flex items-center gap-2 p-1 hover:bg-accent rounded-md !text-foreground !no-underline"
+            :to="{ name: Routes.ImportMoneyflows, force: true }"
+            ><SquareArrowRightEnter :size="20" />{{
+              $t("Moneyflow.title.import")
+            }}</router-link
+          >
+          <router-link
+            @click="isMenuOpen = false"
+            class="flex items-center gap-2 p-1 hover:bg-accent rounded-md !text-foreground !no-underline"
+            :to="{ name: Routes.CompareData, force: true }"
+            ><ListTodo :size="20" />{{ $t("CompareData.title") }}</router-link
+          >
+
+          <Collapsible class="w-full space-y-1">
+            <CollapsibleTrigger as-child>
+              <div
+                class="group flex cursor-pointer items-center justify-between gap-2 p-1 hover:bg-accent rounded-md transition-all"
+              >
+                <div class="flex items-center gap-2">
+                  <ChartColumnIncreasing :size="20" />
+                  <span>{{ $t("Reports.title.charts") }}</span>
+                </div>
+
+                <ChevronDown
+                  class="h-4 w-4 transition-transform duration-200 group-data-[state=open]:rotate-180 text-muted-foreground"
+                />
+              </div>
+            </CollapsibleTrigger>
+
+            <CollapsibleContent class="space-y-1 ml-6 border-l pl-2">
+              <router-link
+                @click="isMenuOpen = false"
+                class="flex items-center gap-2 p-2 text-sm hover:bg-accent rounded-md !text-foreground !no-underline"
+                :to="{ name: Routes.ShowTrends, force: true }"
+              >
+                {{ $t("Reports.title.trends") }}
+              </router-link>
+
+              <router-link
+                @click="isMenuOpen = false"
+                class="flex items-center gap-2 p-2 text-sm hover:bg-accent rounded-md !text-foreground !no-underline"
+                :to="{ name: Routes.ShowReporting, force: true }"
+              >
+                {{ $t("Reports.title.costReporting") }}
+              </router-link>
+            </CollapsibleContent>
+          </Collapsible>
+
+          <Collapsible class="w-full space-y-1">
+            <CollapsibleTrigger as-child>
+              <div
+                class="group flex cursor-pointer items-center justify-between gap-2 p-1 hover:bg-accent rounded-md transition-all"
+              >
+                <div class="flex items-center gap-2">
+                  <SquarePlus :size="20" />
+                  <span>{{ $t("General.add") }}</span>
+                </div>
+
+                <ChevronDown
+                  class="h-4 w-4 transition-transform duration-200 group-data-[state=open]:rotate-180 text-muted-foreground"
+                />
+              </div>
+            </CollapsibleTrigger>
+
+            <CollapsibleContent class="space-y-1 ml-6 border-l pl-2">
+              <router-link
+                @click="isMenuOpen = false"
+                class="flex items-center gap-2 p-2 text-sm hover:bg-accent rounded-md !text-foreground !no-underline"
+                :to="{ name: Routes.CreateMoneyflow, force: true }"
+              >
+                {{ $t("General.moneyflow") }}
+              </router-link>
+              <Separator />
+              <router-link
+                @click="isMenuOpen = false"
+                class="flex items-center gap-2 p-2 text-sm hover:bg-accent rounded-md !text-foreground !no-underline"
+                :to="{ name: Routes.ImportReceipts, force: true }"
+              >
+                {{ $t("Receipt.importReceipts") }}
+              </router-link>
+              <Separator />
+              <div
+                class="cursor-pointer flex items-center gap-2 p-2 text-sm hover:bg-accent rounded-md"
+                @click="showCreateCapitalsourceModal"
+              >
+                {{ $t("General.capitalsource") }}
+              </div>
+              <div
+                class="cursor-pointer flex items-center gap-2 p-2 text-sm hover:bg-accent rounded-md"
+                @click="showCreateContractpartnerModal"
+              >
+                {{ $t("General.contractpartner") }}
+              </div>
+            </CollapsibleContent>
+          </Collapsible>
+
+          <Collapsible class="w-full space-y-1">
+            <CollapsibleTrigger as-child>
+              <div
+                class="group flex cursor-pointer items-center justify-between gap-2 p-1 hover:bg-accent rounded-md transition-all"
+              >
+                <div class="flex items-center gap-2">
+                  <Wrench :size="20" />
+                  <span>{{ $t("General.edit") }}</span>
+                </div>
+
+                <ChevronDown
+                  class="h-4 w-4 transition-transform duration-200 group-data-[state=open]:rotate-180 text-muted-foreground"
+                />
+              </div>
+            </CollapsibleTrigger>
+
+            <CollapsibleContent class="space-y-1 ml-6 border-l pl-2">
+              <router-link
+                @click="isMenuOpen = false"
+                class="flex items-center gap-2 p-2 text-sm hover:bg-accent rounded-md !text-foreground !no-underline"
+                :to="{ name: Routes.ListCapitalsources, force: true }"
+              >
+                {{ $t("General.capitalsource") }}
+              </router-link>
+              <router-link
+                @click="isMenuOpen = false"
+                class="flex items-center gap-2 p-2 text-sm hover:bg-accent rounded-md !text-foreground !no-underline"
+                :to="{ name: Routes.ListContractpartners, force: true }"
+              >
+                {{ $t("General.contractpartner") }}
+              </router-link>
+              <router-link
+                @click="isMenuOpen = false"
+                class="flex items-center gap-2 p-2 text-sm hover:bg-accent rounded-md !text-foreground !no-underline"
+                :to="{ name: Routes.ListContractpartnerMatchings, force: true }"
+              >
+                {{ $t("General.contractpartnerMatchings") }}
+              </router-link>
+              <router-link
+                @click="isMenuOpen = false"
+                class="flex items-center gap-2 p-2 text-sm hover:bg-accent rounded-md !text-foreground !no-underline"
+                :to="{ name: Routes.ListPreDefMoneyflows, force: true }"
+              >
+                {{ $t("General.preDefMoneyflows") }}
+              </router-link>
+              <router-link
+                @click="isMenuOpen = false"
+                class="flex items-center gap-2 p-2 text-sm hover:bg-accent rounded-md !text-foreground !no-underline"
+                :to="{ name: Routes.ListMonthlySettlements, force: true }"
+              >
+                {{ $t("General.monthlysettlements") }}
+              </router-link>
+            </CollapsibleContent>
+          </Collapsible>
+
+          <Collapsible class="w-full space-y-1">
+            <CollapsibleTrigger as-child>
+              <div
+                class="group flex cursor-pointer items-center justify-between gap-2 p-1 hover:bg-accent rounded-md transition-all"
+              >
+                <div class="flex items-center gap-2">
+                  <ChartCandlestick :size="20" />
+                  <span>{{ $t("General.etfs") }}</span>
+                </div>
+
+                <ChevronDown
+                  class="h-4 w-4 transition-transform duration-200 group-data-[state=open]:rotate-180 text-muted-foreground"
+                />
+              </div>
+            </CollapsibleTrigger>
+
+            <CollapsibleContent class="space-y-1 ml-6 border-l pl-2">
+              <router-link
+                @click="isMenuOpen = false"
+                class="flex items-center gap-2 p-2 text-sm hover:bg-accent rounded-md !text-foreground !no-underline"
+                :to="{ name: Routes.ListEtfDepot, force: true }"
+              >
+                {{ $t("General.etfDepot") }}
+              </router-link>
+              <router-link
+                @click="isMenuOpen = false"
+                class="flex items-center gap-2 p-2 text-sm hover:bg-accent rounded-md !text-foreground !no-underline"
+                :to="{ name: Routes.ListEtfs, force: true }"
+              >
+                {{ $t("General.etfs") }}
+              </router-link>
+              <router-link
+                @click="isMenuOpen = false"
+                class="flex items-center gap-2 p-2 text-sm hover:bg-accent rounded-md !text-foreground !no-underline"
+                :to="{ name: Routes.ListEtfPreliminaryLumpSums, force: true }"
+              >
+                {{ $t("General.preliminaryLumpSums") }}
+              </router-link>
+            </CollapsibleContent>
+          </Collapsible>
+
+          <Collapsible class="w-full space-y-1">
+            <CollapsibleTrigger as-child>
+              <div
+                class="group flex cursor-pointer items-center justify-between gap-2 p-1 hover:bg-accent rounded-md transition-all"
+              >
+                <div class="flex items-center gap-2">
+                  <SquareUserRound :size="20" />
+                  <span>{{ $t("General.profile") }}</span>
+                </div>
+
+                <ChevronDown
+                  class="h-4 w-4 transition-transform duration-200 group-data-[state=open]:rotate-180 text-muted-foreground"
+                />
+              </div>
+            </CollapsibleTrigger>
+
+            <Separator />
+            <CollapsibleContent class="space-y-1 ml-6 border-l pl-2">
+              <router-link
+                @click="isMenuOpen = false"
+                class="flex items-center gap-2 p-2 text-sm hover:bg-accent rounded-md !text-foreground !no-underline"
+                :to="{ name: Routes.ChangePassword, force: true }"
+              >
+                {{ $t("User.title.changePassword") }}
+              </router-link>
+              <router-link
+                v-if="userIsAdmin"
+                @click="isMenuOpen = false"
+                class="flex items-center gap-2 p-2 text-sm hover:bg-accent rounded-md !text-foreground !no-underline"
+                :to="{ name: Routes.ListPostingAccounts, force: true }"
+              >
+                {{ $t("General.postingAccounts") }}
+              </router-link>
+              <router-link
+                v-if="userIsAdmin"
+                @click="isMenuOpen = false"
+                class="flex items-center gap-2 p-2 text-sm hover:bg-accent rounded-md !text-foreground !no-underline"
+                :to="{ name: Routes.ListUsers, force: true }"
+              >
+                {{ $t("General.users") }}
+              </router-link>
+              <router-link
+                v-if="userIsAdmin"
+                @click="isMenuOpen = false"
+                class="flex items-center gap-2 p-2 text-sm hover:bg-accent rounded-md !text-foreground !no-underline"
+                :to="{ name: Routes.ListGroups, force: true }"
+              >
+                {{ $t("General.groups") }}
+              </router-link>
+            </CollapsibleContent>
+          </Collapsible>
+
+          <div
+            class="flex items-center gap-2 p-1 cursor-pointer"
+            @click="logout"
+          >
+            <LogOut :size="20" @click="logout" />
+            {{ $t("General.logout") }}
           </div>
         </div>
-        <div class="navbar dropstart">
-          <ul class="navbar-nav ms-auto">
-            <li class="nav-item dropdown">
-              <a
-                class="nav-link dropdown-toggle"
-                href="#"
-                data-bs-toggle="dropdown"
-              >
-                <i class="bi bi-incognito"></i>
-              </a>
-              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <li>
-                  <router-link
-                    class="dropdown-item"
-                    :to="{ name: Routes.ChangePassword, force: true }"
-                    @click="collapseNavbar"
-                    >{{ $t("User.title.changePassword") }}</router-link
-                  >
-                </li>
-                <li v-if="userIsAdmin">
-                  <hr class="dropdown-divider" />
-                </li>
-                <li v-if="userIsAdmin">
-                  <router-link
-                    class="dropdown-item"
-                    :to="{ name: Routes.ListPostingAccounts, force: true }"
-                    @click="collapseNavbar"
-                    >{{ $t("General.postingAccounts") }}</router-link
-                  >
-                </li>
-                <li v-if="userIsAdmin">
-                  <hr class="dropdown-divider" />
-                </li>
-                <li v-if="userIsAdmin">
-                  <router-link
-                    class="dropdown-item"
-                    :to="{ name: Routes.ListUsers, force: true }"
-                    @click="collapseNavbar"
-                    >{{ $t("General.users") }}</router-link
-                  >
-                </li>
-                <li v-if="userIsAdmin">
-                  <router-link
-                    class="dropdown-item"
-                    :to="{ name: Routes.ListGroups, force: true }"
-                    @click="collapseNavbar"
-                    >{{ $t("General.groups") }}</router-link
-                  >
-                </li>
-              </ul>
-            </li>
-            <li class="nav-item">
-              <span class="nav-link" @click="logout"
-                ><i class="bi bi-box-arrow-right"></i
-              ></span>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </nav>
-  <main>
-    <div style="margin-top: 80px">
-      <router-view v-slot="{ Component }">
-        <keep-alive include="SearchMoneyflows">
-          <component :is="Component" />
-        </keep-alive>
-      </router-view>
-    </div>
-  </main>
+      </SheetContent>
+    </Sheet>
+  </div>
+  <!-- Desktop Navigation-->
+  <Menubar
+    class="hidden md:flex py-0 px-4 h-12 w-full sticky top-0 z-50 rounded-none border-b top-0 z-50 bg-background rounded-none border-b"
+    :key="route.name"
+  >
+    <MenubarMenu>
+      <MenubarTrigger as-child>
+        <router-link
+          class="navbar-brand bg-light"
+          :to="{ name: Routes.Home, force: true }"
+          ><small>moneyjin {{ version }}</small></router-link
+        ></MenubarTrigger
+      >
+    </MenubarMenu>
+    <MenubarMenu>
+      <MenubarTrigger as-child
+        ><router-link
+          class="text-foreground no-underline transition-colors hover:text-primary"
+          exact-active-class="bg-muted text-primary font-medium"
+          :to="{ name: Routes.CreateMoneyflow, force: true }"
+          :title="$t('Moneyflow.title.create')"
+          ><Euro class="m-2 text-muted-foreground"
+        /></router-link>
+      </MenubarTrigger>
+    </MenubarMenu>
+    <MenubarMenu>
+      <MenubarTrigger as-child>
+        <router-link
+          class="text-foreground no-underline transition-colors hover:text-primary"
+          exact-active-class="bg-muted text-primary font-medium"
+          :to="{
+            name: Routes.ListReports,
+            params: { year: year, month: month },
+            force: true,
+          }"
+          :title="$t('General.moneyflows')"
+          ><Table2 class="m-2 text-muted-foreground"
+        /></router-link>
+      </MenubarTrigger>
+    </MenubarMenu>
+    <MenubarMenu>
+      <MenubarTrigger as-child>
+        <router-link
+          class="text-foreground no-underline transition-colors hover:text-primary"
+          exact-active-class="bg-muted text-primary font-medium"
+          :to="{ name: Routes.SearchMoneyflows, force: true }"
+          :title="$t('Moneyflow.title.search')"
+          ><Search class="m-2 text-muted-foreground"
+        /></router-link>
+      </MenubarTrigger>
+    </MenubarMenu>
+    <MenubarMenu>
+      <MenubarTrigger as-child>
+        <router-link
+          class="text-foreground no-underline transition-colors hover:text-primary"
+          exact-active-class="bg-muted text-primary font-medium"
+          :to="{ name: Routes.ImportMoneyflows, force: true }"
+          :title="$t('Moneyflow.title.import')"
+          ><SquareArrowRightEnter class="m-2 text-muted-foreground"
+        /></router-link>
+      </MenubarTrigger>
+    </MenubarMenu>
+    <MenubarMenu>
+      <MenubarTrigger as-child>
+        <router-link
+          class="text-foreground no-underline transition-colors hover:text-primary"
+          exact-active-class="bg-muted text-primary font-medium"
+          :to="{ name: Routes.CompareData, force: true }"
+          :title="$t('CompareData.title')"
+          ><ListTodo class="m-2 text-muted-foreground"
+        /></router-link>
+      </MenubarTrigger>
+    </MenubarMenu>
+
+    <MenubarMenu>
+      <MenubarTrigger as-child
+        ><span
+          :class="[
+            'flex flex-row items-center',
+            isMenuActve(DropdownMenus.Chart),
+          ]"
+          ><ChartColumnIncreasing class="m-1 text-muted-foreground" />
+          <ChevronDown :size="10" class="ml-1 opacity-70" /></span
+      ></MenubarTrigger>
+      <MenubarContent>
+        <MenubarItem as-child class="cursor-pointer">
+          <router-link
+            class="text-foreground no-underline transition-colors hover:text-primary"
+            exact-active-class="bg-muted text-primary font-medium"
+            :to="{ name: Routes.ShowTrends, force: true }"
+            >{{ $t("Reports.title.trends") }}</router-link
+          >
+        </MenubarItem>
+        <MenubarItem as-child class="cursor-pointer">
+          <router-link
+            class="text-foreground no-underline transition-colors hover:text-primary"
+            exact-active-class="bg-muted text-primary font-medium"
+            :to="{ name: Routes.ShowReporting, force: true }"
+            >{{ $t("Reports.title.costReporting") }}</router-link
+          >
+        </MenubarItem>
+      </MenubarContent>
+    </MenubarMenu>
+    <MenubarMenu>
+      <MenubarTrigger as-child
+        ><span
+          :class="[
+            'flex flex-row items-center',
+            isMenuActve(DropdownMenus.Plus),
+          ]"
+          ><SquarePlus class="m-1 text-muted-foreground" /><ChevronDown
+            :size="10"
+            class="ml-1 opacity-70" /></span
+      ></MenubarTrigger>
+      <MenubarContent>
+        <MenubarItem as-child class="cursor-pointer">
+          <router-link
+            class="text-foreground no-underline transition-colors hover:text-primary"
+            exact-active-class="bg-muted text-primary font-medium"
+            :to="{ name: Routes.CreateMoneyflow, force: true }"
+            >{{ $t("General.moneyflow") }}</router-link
+          >
+        </MenubarItem>
+        <MenubarSeparator />
+        <MenubarItem as-child class="cursor-pointer">
+          <router-link
+            class="text-foreground no-underline transition-colors hover:text-primary"
+            exact-active-class="bg-muted text-primary font-medium"
+            :to="{ name: Routes.ImportReceipts, force: true }"
+            >{{ $t("Receipt.importReceipts") }}</router-link
+          >
+        </MenubarItem>
+        <MenubarSeparator />
+        <MenubarItem as-child>
+          <span class="cursor-pointer" @click="showCreateCapitalsourceModal">{{
+            $t("General.capitalsource")
+          }}</span>
+        </MenubarItem>
+        <MenubarItem as-child>
+          <span
+            class="cursor-pointer"
+            @click="showCreateContractpartnerModal"
+            >{{ $t("General.contractpartner") }}</span
+          >
+        </MenubarItem>
+        <MenubarItem as-child>
+          <span class="cursor-pointer" @click="showPreDefMoneyflowModal">{{
+            $t("General.preDefMoneyflow")
+          }}</span>
+        </MenubarItem>
+      </MenubarContent>
+    </MenubarMenu>
+    <MenubarMenu>
+      <MenubarTrigger as-child
+        ><span
+          :class="[
+            'flex flex-row items-center',
+            isMenuActve(DropdownMenus.Wrench),
+          ]"
+          ><Wrench class="m-1 text-muted-foreground" /><ChevronDown
+            :size="10"
+            class="ml-1 opacity-70" /></span
+      ></MenubarTrigger>
+      <MenubarContent>
+        <MenubarItem as-child class="cursor-pointer">
+          <router-link
+            class="text-foreground no-underline transition-colors hover:text-primary"
+            exact-active-class="bg-muted text-primary font-medium"
+            :to="{ name: Routes.ListCapitalsources, force: true }"
+            >{{ $t("General.capitalsources") }}</router-link
+          >
+        </MenubarItem>
+        <MenubarItem as-child class="cursor-pointer">
+          <router-link
+            class="text-foreground no-underline transition-colors hover:text-primary"
+            exact-active-class="bg-muted text-primary font-medium"
+            :to="{ name: Routes.ListContractpartners, force: true }"
+            >{{ $t("General.contractpartners") }}</router-link
+          >
+        </MenubarItem>
+        <MenubarItem as-child>
+          <router-link
+            class="text-foreground no-underline transition-colors hover:text-primary"
+            exact-active-class="bg-muted text-primary font-medium"
+            :to="{
+              name: Routes.ListContractpartnerMatchings,
+              force: true,
+            }"
+            >{{ $t("General.contractpartnerMatchings") }}</router-link
+          >
+        </MenubarItem>
+        <MenubarItem as-child class="cursor-pointer">
+          <router-link
+            class="text-foreground no-underline transition-colors hover:text-primary"
+            exact-active-class="bg-muted text-primary font-medium"
+            :to="{ name: Routes.ListPreDefMoneyflows, force: true }"
+            >{{ $t("General.preDefMoneyflows") }}</router-link
+          >
+        </MenubarItem>
+        <MenubarItem as-child class="cursor-pointer">
+          <router-link
+            class="text-foreground no-underline transition-colors hover:text-primary"
+            exact-active-class="bg-muted text-primary font-medium"
+            :to="{ name: Routes.ListMonthlySettlements, force: true }"
+            >{{ $t("General.monthlysettlements") }}</router-link
+          >
+        </MenubarItem>
+      </MenubarContent>
+    </MenubarMenu>
+    <MenubarMenu>
+      <MenubarTrigger as-child
+        ><span
+          :class="[
+            'flex flex-row items-center',
+            isMenuActve(DropdownMenus.Etf),
+          ]"
+          ><ChartCandlestick class="m-1 text-muted-foreground" /><ChevronDown
+            :size="10"
+            class="ml-1 opacity-70" /></span
+      ></MenubarTrigger>
+      <MenubarContent>
+        <MenubarItem as-child class="cursor-pointer">
+          <router-link
+            class="text-foreground no-underline transition-colors hover:text-primary"
+            exact-active-class="bg-muted text-primary font-medium"
+            :to="{ name: Routes.ListEtfDepot, force: true }"
+            >{{ $t("General.etfDepot") }}</router-link
+          >
+        </MenubarItem>
+        <MenubarItem as-child class="cursor-pointer">
+          <router-link
+            class="text-foreground no-underline transition-colors hover:text-primary"
+            exact-active-class="bg-muted text-primary font-medium"
+            :to="{ name: Routes.ListEtfs, force: true }"
+            >{{ $t("General.etfs") }}</router-link
+          >
+        </MenubarItem>
+        <MenubarItem as-child class="cursor-pointer">
+          <router-link
+            class="text-foreground no-underline transition-colors hover:text-primary"
+            exact-active-class="bg-muted text-primary font-medium"
+            :to="{ name: Routes.ListEtfPreliminaryLumpSums, force: true }"
+            >{{ $t("General.preliminaryLumpSums") }}</router-link
+          >
+        </MenubarItem>
+      </MenubarContent>
+    </MenubarMenu>
+
+    <div class="flex-grow"></div>
+
+    <MenubarMenu>
+      <MenubarTrigger as-child
+        ><span
+          :class="[
+            'flex flex-row items-center',
+            isMenuActve(DropdownMenus.Profile),
+          ]"
+          ><SquareUserRound class="m-1 text-muted-foreground" /><ChevronDown
+            :size="10"
+            class="ml-1 opacity-70" /></span
+      ></MenubarTrigger>
+      <MenubarContent>
+        <MenubarItem as-child class="cursor-pointer">
+          <router-link
+            class="text-foreground no-underline transition-colors hover:text-primary"
+            exact-active-class="bg-muted text-primary font-medium"
+            :to="{ name: Routes.ChangePassword, force: true }"
+            >{{ $t("User.title.changePassword") }}</router-link
+          >
+        </MenubarItem>
+        <MenubarSeparator v-if="userIsAdmin" />
+        <MenubarItem as-child class="cursor-pointer" v-if="userIsAdmin">
+          <router-link
+            class="text-foreground no-underline transition-colors hover:text-primary"
+            exact-active-class="bg-muted text-primary font-medium"
+            :to="{ name: Routes.ListPostingAccounts, force: true }"
+            >{{ $t("General.postingAccounts") }}</router-link
+          >
+        </MenubarItem>
+        <MenubarSeparator v-if="userIsAdmin" />
+        <MenubarItem as-child class="cursor-pointer" v-if="userIsAdmin">
+          <router-link
+            class="text-foreground no-underline transition-colors hover:text-primary"
+            exact-active-class="bg-muted text-primary font-medium"
+            :to="{ name: Routes.ListUsers, force: true }"
+            >{{ $t("General.users") }}</router-link
+          >
+        </MenubarItem>
+        <MenubarItem as-child class="cursor-pointer" v-if="userIsAdmin">
+          <router-link
+            class="text-foreground no-underline transition-colors hover:text-primary"
+            exact-active-class="bg-muted text-primary font-medium"
+            :to="{ name: Routes.ListGroups, force: true }"
+            >{{ $t("General.groups") }}</router-link
+          >
+        </MenubarItem>
+      </MenubarContent>
+    </MenubarMenu>
+    <MenubarMenu>
+      <MenubarTrigger
+        as-child
+        class="cursor-pointer"
+        :title="$t('General.logout')"
+        ><span
+          ><LogOut class="m-2 text-muted-foreground" @click="logout" /></span
+      ></MenubarTrigger>
+    </MenubarMenu>
+  </Menubar>
+  <div class="mt-10">
+    <router-view v-slot="{ Component }">
+      <keep-alive include="SearchMoneyflows">
+        <component :is="Component" />
+      </keep-alive>
+    </router-view>
+  </div>
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref, useTemplateRef, watch } from "vue";
-import { useI18n } from "vue-i18n";
-import { useRoute, type RouteRecordName } from "vue-router";
-
-import router, { Routes } from "@/router";
-import { version } from "../../package.json";
-
-import CreateContractpartnerModalVue from "@/components/contractpartner/CreateContractpartnerModal.vue";
-import CreateCapitalsourceModalVue from "@/components/capitalsource/CreateCapitalsourceModal.vue";
-import CreatePreDefMoneyflowModalVue from "@/components/predefmoneyflow/CreatePreDefMoneyflowModal.vue";
-
-import { useUserSessionStore } from "@/stores/UserSessionStore";
-import { StoreService } from "@/stores/StoreService";
-
-import { WebSocketSingleton } from "@/config/WebSocketSingleton";
-import { clearAuthTokens } from "axios-jwt";
 import { LogoutApi } from "@/api";
+import CreateCapitalsourceModalVue from "@/components/capitalsource/CreateCapitalsourceModal.vue";
+import CreateContractpartnerModalVue from "@/components/contractpartner/CreateContractpartnerModal.vue";
+import CreatePreDefMoneyflowModalVue from "@/components/predefmoneyflow/CreatePreDefMoneyflowModal.vue";
+import { Button } from "@/components/ui/button";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
+import {
+  Menubar,
+  MenubarContent,
+  MenubarItem,
+  MenubarMenu,
+  MenubarSeparator,
+  MenubarTrigger,
+} from "@/components/ui/menubar";
+import { Separator } from "@/components/ui/separator";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 import { AxiosSingleton } from "@/config/AxiosSingleton";
+import { WebSocketSingleton } from "@/config/WebSocketSingleton";
+import router, { DropdownMenus, Routes } from "@/router";
+import { StoreService } from "@/stores/StoreService";
+import { useUserSessionStore } from "@/stores/UserSessionStore";
+import { clearAuthTokens } from "axios-jwt";
+import {
+  ChartCandlestick,
+  ChartColumnIncreasing,
+  ChevronDown,
+  Euro,
+  ListTodo,
+  LogOut,
+  Menu,
+  Search,
+  SquareArrowRightEnter,
+  SquarePlus,
+  SquareUserRound,
+  Table2,
+  Wrench,
+} from "lucide-vue-next";
+import { onMounted, ref, useTemplateRef } from "vue";
+import { useI18n } from "vue-i18n";
+import { useRoute } from "vue-router";
+import { version } from "../../package.json";
 
 const { t } = useI18n();
 
-const serverErrors = ref(new Array<string>());
-
+const isMenuOpen = ref(false);
 const year = new Date().getFullYear();
 const month = new Date().getMonth() + 1;
 const userIsAdmin = ref(false);
 const route = useRoute();
 
-const dropdownWrench = useTemplateRef<HTMLLinkElement>("dropdownWrench");
-const dropdownPlus = useTemplateRef<HTMLLinkElement>("dropdownPlus");
 const createContractpartnerModalNav = useTemplateRef<
   typeof CreateContractpartnerModalVue
 >("createContractpartnerModalNav");
@@ -378,39 +699,10 @@ const createCapitalsourceModalNav = useTemplateRef<
 const createPreDedMoneyflowModalNav = useTemplateRef<
   typeof CreatePreDefMoneyflowModalVue
 >("createPreDedMoneyflowModalNav");
-const navbarSupportedContent = useTemplateRef<HTMLDivElement>(
-  "navbarSupportedContent",
-);
 
-const markDropdownActive = (routeName: RouteRecordName | null | undefined) => {
-  if (dropdownWrench.value && dropdownPlus.value) {
-    const wrenchClassList = dropdownWrench.value.classList;
-    const plusClassList = dropdownPlus.value.classList;
-    const routerLinkActive = "router-link-active";
-
-    wrenchClassList.remove(routerLinkActive);
-    plusClassList.remove(routerLinkActive);
-    switch (routeName) {
-      case Routes.ListPreDefMoneyflows:
-      case Routes.ListCapitalsources:
-      case Routes.ListContractpartners:
-      case Routes.ListMonthlySettlements: {
-        wrenchClassList.add(routerLinkActive);
-        break;
-      }
-      case Routes.ImportReceipts: {
-        plusClassList.add(routerLinkActive);
-        break;
-      }
-    }
-  }
+const isMenuActve = (menu: DropdownMenus) => {
+  return route.meta?.activeMenu === menu ? "router-link-active" : "";
 };
-
-const collapseNavbar = () => {
-  navbarSupportedContent.value?.classList.add("collapsed");
-  navbarSupportedContent.value?.classList.remove("show");
-};
-
 const showCreateContractpartnerModal = () => {
   createContractpartnerModalNav.value?._show();
 };
@@ -447,7 +739,6 @@ const logout = async () => {
 onMounted(() => {
   const userSessionStore = useUserSessionStore();
   userIsAdmin.value = userSessionStore.isAdmin;
-  markDropdownActive(route.name);
 
   // make WebSocket connection
   WebSocketSingleton.getInstance().connectStompClient();
@@ -461,42 +752,13 @@ onMounted(() => {
       });
     });
 });
-
-watch(
-  () => route.name,
-  (newVal) => {
-    markDropdownActive(newVal);
-  },
-);
 </script>
+
 <style scoped>
-.alert {
-  margin-bottom: 0px !important;
-  margin-left: 20px !important;
-}
+@reference "@/style.css";
 
-.router-link-active {
-  background-color: lightgrey;
-}
-
-.nav-item {
-  padding-left: 15px;
-}
-
-small {
-  font-size: 0.7rem;
-  vertical-align: middle;
-}
-
-.navbar .navbar-nav .nav-link {
-  font-size: 1.1em;
-}
-
-.navbar .navbar-nav .nav-link:hover {
-  background-color: silver;
-}
-
-a.show {
-  background-color: silver;
+:deep(.router-link-active svg) {
+  @apply !stroke-primary;
+  stroke-width: 2.5px !important;
 }
 </style>

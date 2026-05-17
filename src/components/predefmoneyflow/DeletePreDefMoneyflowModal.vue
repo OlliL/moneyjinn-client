@@ -2,73 +2,128 @@
   <ModalVue :title="$t('PreDefMoneyflow.title.delete')" ref="modalComponent">
     <template #body>
       <DivError :server-errors="serverErrors" />
-      <div class="row d-flex justify-content-center mt-3">
-        <div class="col-11">
-          <table class="table table-bordered table-hover">
-            <tbody>
-              <tr>
-                <th scope="row">{{ $t("General.amount") }}</th>
-                <td><SpanAmount :amount="mpm.amount" /></td>
-              </tr>
-              <tr>
-                <th scope="row">{{ $t("General.contractpartner") }}</th>
-                <td>{{ mpm.contractpartnerName }}</td>
-              </tr>
-              <tr>
-                <th scope="row">{{ $t("General.comment") }}</th>
-                <td>{{ mpm.comment }}</td>
-              </tr>
-              <tr>
-                <th scope="row">{{ $t("General.postingAccount") }}</th>
-                <td>{{ mpm.postingAccountName }}</td>
-              </tr>
-              <tr>
-                <th scope="row">{{ $t("General.capitalsource") }}</th>
-                <td>{{ mpm.capitalsourceComment }}</td>
-              </tr>
-              <tr>
-                <th scope="row">{{ $t("PreDefMoneyflow.onceAMonth") }}</th>
-                <td><SpanBoolean :value="mpm.onceAMonth" /></td>
-              </tr>
-              <tr>
-                <th scope="row">{{ $t("PreDefMoneyflow.createDate") }}</th>
-                <td><SpanDate :date="mpm.createDate" /></td>
-              </tr>
-              <tr>
-                <th scope="row">{{ $t("PreDefMoneyflow.lastUsed") }}</th>
-                <td><SpanDate :date="mpm.lastUsed" /></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+      <div class="flex flex-col rounded-xl border bg-card overflow-hidden">
+        <Table>
+          <TableBody>
+            <TableRow class="hover:bg-transparent border-b last:border-0">
+              <TableCell
+                class="font-normal text-muted-foreground max-w-[11rem] w-44 pl-4 pr-2 py-3 whitespace-normal break-words"
+              >
+                {{ $t("General.amount") }}
+              </TableCell>
+              <TableCell
+                class="font-semibold text-foreground pr-4 py-3 text-base"
+              >
+                <SpanAmount :amount="mpm.amount" />
+              </TableCell>
+            </TableRow>
+
+            <TableRow class="hover:bg-transparent border-b last:border-0">
+              <TableCell
+                class="font-normal text-muted-foreground max-w-[11rem] w-44 pl-4 pr-2 py-3 whitespace-normal break-words"
+              >
+                {{ $t("General.contractpartner") }}
+              </TableCell>
+              <TableCell class="font-medium text-foreground pr-4 py-3">
+                {{ mpm.contractpartnerName }}
+              </TableCell>
+            </TableRow>
+
+            <TableRow class="hover:bg-transparent border-b last:border-0">
+              <TableCell
+                class="font-normal text-muted-foreground max-w-[11rem] w-44 pl-4 pr-2 py-3 whitespace-normal break-words"
+              >
+                {{ $t("General.comment") }}
+              </TableCell>
+              <TableCell class="font-medium text-foreground pr-4 py-3">
+                {{ mpm.comment }}
+              </TableCell>
+            </TableRow>
+
+            <TableRow class="hover:bg-transparent border-b last:border-0">
+              <TableCell
+                class="font-normal text-muted-foreground max-w-[11rem] w-44 pl-4 pr-2 py-3 whitespace-normal break-words"
+              >
+                {{ $t("General.postingAccount") }}
+              </TableCell>
+              <TableCell class="font-medium text-foreground pr-4 py-3">
+                {{ mpm.postingAccountName }}
+              </TableCell>
+            </TableRow>
+
+            <TableRow class="hover:bg-transparent border-b last:border-0">
+              <TableCell
+                class="font-normal text-muted-foreground max-w-[11rem] w-44 pl-4 pr-2 py-3 whitespace-normal break-words"
+              >
+                {{ $t("General.capitalsource") }}
+              </TableCell>
+              <TableCell class="font-medium text-foreground pr-4 py-3">
+                {{ mpm.capitalsourceComment }}
+              </TableCell>
+            </TableRow>
+
+            <TableRow class="hover:bg-transparent border-b last:border-0">
+              <TableCell
+                class="font-normal text-muted-foreground max-w-[11rem] w-44 pl-4 pr-2 py-3 whitespace-normal break-words"
+              >
+                {{ $t("PreDefMoneyflow.onceAMonth") }}
+              </TableCell>
+              <TableCell class="font-medium text-foreground pr-4 py-3">
+                <SpanBoolean :value="!mpm.onceAMonth" />
+              </TableCell>
+            </TableRow>
+
+            <TableRow class="hover:bg-transparent border-b last:border-0">
+              <TableCell
+                class="font-normal text-muted-foreground max-w-[11rem] w-44 pl-4 pr-2 py-3 whitespace-normal break-words"
+              >
+                {{ $t("PreDefMoneyflow.createDate") }}
+              </TableCell>
+              <TableCell class="font-medium text-foreground pr-4 py-3">
+                <SpanDate :date="mpm.createDate" />
+              </TableCell>
+            </TableRow>
+
+            <TableRow class="hover:bg-transparent border-b last:border-0">
+              <TableCell
+                class="font-normal text-muted-foreground max-w-[11rem] w-44 pl-4 pr-2 py-3 whitespace-normal break-words"
+              >
+                {{ $t("PreDefMoneyflow.lastUsed") }}
+              </TableCell>
+              <TableCell class="font-medium text-foreground pr-4 py-3">
+                <SpanDate :date="mpm.lastUsed" />
+              </TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
       </div>
     </template>
     <template #footer>
-      <button
-        type="button"
-        class="btn btn-danger"
+      <Button
+        variant="destructive"
+        class="flex items-center gap-2 px-6"
         @click="deletePreDefMoneyflow"
       >
+        <Trash2 />
         {{ $t("General.delete") }}
-      </button>
+      </Button>
     </template>
   </ModalVue>
 </template>
 
 <script lang="ts" setup>
+import { Button } from "@/components/ui/button";
+import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
+import type { PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
+import PreDefMoneyflowService from "@/service/PreDefMoneyflowService";
+import { handleBackendError } from "@/tools/views/HandleBackendError";
+import { Trash2 } from "lucide-vue-next";
 import { ref, useTemplateRef } from "vue";
-
 import DivError from "../DivError.vue";
 import ModalVue from "../Modal.vue";
 import SpanAmount from "../SpanAmount.vue";
 import SpanBoolean from "../SpanBoolean.vue";
 import SpanDate from "../SpanDate.vue";
-
-import { handleBackendError } from "@/tools/views/HandleBackendError";
-
-import type { PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
-
-import PreDefMoneyflowService from "@/service/PreDefMoneyflowService";
 
 const serverErrors = ref(new Array<string>());
 
@@ -97,9 +152,3 @@ const deletePreDefMoneyflow = () => {
 
 defineExpose({ _show });
 </script>
-
-<style scoped>
-th {
-  background-color: #f2f2f2;
-}
-</style>

@@ -1,5 +1,8 @@
 {
     "General": {
+        "logout": "Abmelden",
+        "profile": "Profil",
+        "add": "Hinzufügen",
         "currency": "€",
         "etf": "ETF",
         "selectEtf": "ETF auswählen...",
@@ -35,6 +38,10 @@
         "validNow": "jetzt gültig",
         "startDate": "Startdatum",
         "endDate": "Enddatum",
+        "searchForPostingAccount": "Nach Buchungskonto suchen...",
+        "searchForCapitalsource": "Nach Kapitalquelle suchen...",
+        "searchForEtf": "Nach ETF suchen...",
+        "xOfySelected": "{selected} von {total} ausgewählt",
         "delete": "Löschen",
         "edit": "Bearbeiten",
         "reset": "Rücksetzen",
@@ -43,6 +50,8 @@
         "yes": "Ja",
         "no": "Nein",
         "all": "Alle",
+        "none": "Keine",
+        "noEntries": "Keine Einträge gefunden.",
         "new": "Neu",
         "year": "Jahr",
         "month": "Monat",
@@ -61,13 +70,17 @@
         "taskList": "Aufgabenliste",
         "importableMoneyflows": "Es liegen noch nicht bearbeitete importierte Geldbewegungen vor!",
         "createSettlements": "Für den vergangenen Monat existiert kein Monatsabschluß!",
-        "allDone": "Alles erledigt!"
+        "allDone": "Alles erledigt!",
+        "allDoneTitle": "Erledigt!"
     },
     "Capitalsource": {
         "type": "Typ",
         "state": "Status",
         "groupUse": "Gruppennutzung",
         "importAllowed": "Datenimport",
+        "accountData":"Bankverbindung (optional)",
+        "validityData":"Gültigkeitszeitraum",
+        "permissions": "Berechtigungen",
         "nonCash": "unbar",
         "cash": "bar",
         "balance": "Salden",
@@ -97,6 +110,9 @@
     },
     "Contractpartner": {
         "moneyflowComment": "Standard-Kommentar der Geldbewegung",
+        "adressData": "Adressdaten (optional)",
+        "validityData":"Gültigkeitszeitraum",
+        "moneyflowDefaults": "Standardwerte für neue Geldbewegungen",
         "street": "Straße",
         "postcode": "Postleitzahl",
         "town": "Stadt",
@@ -126,6 +142,7 @@
             "update": "Vertragspartnerkonto bearbeiten",
             "delete": "Vertragspartnerkonto löschen"
         },
+        "nothingFound": "Keine Kontoverbindungen gefunden.",
         "validation": {
             "accountNumber": "Bitte IBAN angeben!",
             "accountNumberMax": "Die IBAN darf maximal 22 Stellen haben!",
@@ -254,6 +271,7 @@
             "update": "ETF Vorabpauschale bearbeiten",
             "delete": "ETF Vorabpauschale löschen"
         },
+        "amounts": "Beträge",
         "monthlyAmount": "Betrag {month}",
         "validation": {
             "etfId": "Bitte ETF auswählen!",
@@ -295,7 +313,7 @@
         "remainder": "Rest",
         "deleteReceipt": "Bon löschen",
         "noMatchingMoneyflow": "Keine passenden Geldbewegungen gefunden!",
-        "apply": "übernehmen",
+        "apply": "Übernehmen",
         "newBooking": "Neue Buchung",
         "partner": "Transaktionspartner",
         "reference": "Verwendungszweck",
@@ -378,7 +396,7 @@
     },
     "Reports": {
         "title": {
-            "reports": "Reports",
+            "charts": "Auswertungen",
             "report": "Geldbewegungen {month} {year}",
             "costReporting": "Ausgabenauswertung",
             "costReportYear": "{year}",
@@ -418,6 +436,8 @@
             "delete": "Benutzerkonto löschen",
             "changePassword": "Passwortwechsel"
         },
+        "loginData": "Anmeldedaten",
+        "permissions": "Berechtigungen",
         "groupHistory": "Gruppenhistorie",
         "new": "neu",
         "role": "Benutzerrolle",

@@ -1,11 +1,15 @@
 <template>
-  <span data-testid="dateSpan">{{ dateString }}</span>
+  <span data-testid="dateSpan" class="hidden md:inline">{{
+    fullDateString
+  }}</span>
+  <span data-testid="dateSpanShort" class="inline md:hidden">{{
+    shortDateString
+  }}</span>
 </template>
 
 <script lang="ts" setup>
-import { computed } from "vue";
-
 import { formatDate } from "@/tools/views/FormatDate";
+import { computed } from "vue";
 
 const props = defineProps({
   date: {
@@ -14,7 +18,11 @@ const props = defineProps({
   },
 });
 
-const dateString = computed(() => {
-  return props.date ? formatDate(props.date) : "";
-});
+const fullDateString = computed(() =>
+  props.date ? formatDate(props.date) : "",
+);
+
+const shortDateString = computed(() =>
+  props.date ? formatDate(props.date).slice(0, 6) : "",
+);
 </script>

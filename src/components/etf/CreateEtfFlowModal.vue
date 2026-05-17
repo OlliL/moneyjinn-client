@@ -1,107 +1,113 @@
 <template>
   <ModalVue :title="title" ref="modalComponent">
-    <template #body
-      ><form @submit.prevent="createEtfFlow" id="createEtfFlowForm">
-        <div class="container-fluid">
+    <template #body>
+      <form @submit.prevent="createEtfFlow" id="createEtfFlowForm">
+        <div class="space-y-4">
           <DivError :server-errors="serverErrors" />
-          <div class="row">
-            <div class="col-xs-12">
-              <SelectStandard
-                v-model="defaultEtfId"
-                :validation-schema="schema.etfId"
-                id="etf"
-                :field-label="$t('General.etf')"
-                :select-box-values="etfs"
-              />
-            </div>
-          </div>
-          <div class="row pt-2">
-            <div class="col-xs-12">
-              <InputDate
-                v-model="bookingdate"
-                :validation-schema="schema.timestamp"
-                id="bookingdate"
-                :field-label="$t('ETFFlow.bookingdate')"
-              />
-            </div>
-          </div>
-          <div class="row pt-2">
-            <div class="col-xs-12">
-              <InputStandard
-                v-model="bookingtime"
-                :validation-schema="schema.nanoseconds"
-                id="bookingtime"
-                :field-label="$t('ETFFlow.bookingtime')"
-              />
-            </div>
-          </div>
-          <div class="row pt-2">
-            <div class="col-xs-12">
-              <InputStandard
-                v-model="etfFlow.amount"
-                :validation-schema="schema.amount"
-                id="amount"
-                field-type="number"
-                step="0.000001"
-                :field-label="$t('ETFFlow.amount')"
-              />
-            </div>
-          </div>
 
-          <div class="row pt-2">
-            <div class="col-xs-12">
-              <InputStandard
-                v-model="etfFlow.price"
-                :validation-schema="schema.price"
-                id="price"
-                step="0.001"
-                field-type="number"
-                :field-label="$t('ETFFlow.price')"
-              >
-                <template #icon
-                  ><span class="input-group-text"
-                    ><i class="bi bi-currency-euro"></i></span
-                ></template>
-              </InputStandard>
+          <div class="rounded-sm border bg-muted/30 p-4 shadow-sm space-y-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div class="sm:col-span-2">
+                <SelectStandard
+                  v-model="defaultEtfId"
+                  :validation-schema="schema.etfId"
+                  id="etf"
+                  :field-label="$t('General.etf')"
+                  :select-box-values="etfs"
+                />
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <InputDate
+                  v-model="bookingdate"
+                  :validation-schema="schema.timestamp"
+                  id="bookingdate"
+                  :field-label="$t('ETFFlow.bookingdate')"
+                />
+              </div>
+              <div>
+                <InputStandard
+                  v-model="bookingtime"
+                  :validation-schema="schema.nanoseconds"
+                  id="bookingtime"
+                  :field-label="$t('ETFFlow.bookingtime')"
+                  :focus="true"
+                />
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <InputStandard
+                  v-model="etfFlow.amount"
+                  :validation-schema="schema.amount"
+                  id="amount"
+                  field-type="number"
+                  step="0.000001"
+                  :field-label="$t('ETFFlow.amount')"
+                />
+              </div>
+              <div>
+                <InputStandard
+                  v-model="etfFlow.price"
+                  :validation-schema="schema.price"
+                  id="price"
+                  step="0.001"
+                  field-type="number"
+                  :field-label="$t('ETFFlow.price')"
+                >
+                  <template #icon><Euro class="h-4 w-4" /></template>
+                </InputStandard>
+              </div>
             </div>
           </div>
         </div>
       </form>
     </template>
+
     <template #footer>
-      <button type="button" class="btn btn-secondary" @click="resetForm">
+      <Button
+        type="button"
+        variant="secondary"
+        class="flex items-center gap-2 px-6"
+        @click="resetForm"
+      >
+        <Undo2 class="h-4 w-4" />
         {{ $t("General.reset") }}
-      </button>
+      </Button>
+
       <ButtonSubmit
         :button-label="$t('General.save')"
         form-id="createEtfFlowForm"
-      />
+      >
+        <template #icon><Save class="h-4 w-4" /></template>
+      </ButtonSubmit>
     </template>
   </ModalVue>
 </template>
 
 <script lang="ts" setup>
+import { Button } from "@/components/ui/button";
+import type { EtfFlow } from "@/model/etf/EtfFlow";
+import type { SelectBoxValue } from "@/model/SelectBoxValue";
+import CrudEtfFlowService from "@/service/CrudEtfFlowService";
+import { useEtfStore } from "@/stores/EtfStore";
+import { formatTime } from "@/tools/views/FormatDate";
+import { handleBackendError } from "@/tools/views/HandleBackendError";
+import { amountSchema, globErr } from "@/tools/views/ZodUtil";
+import { Euro, Save, Undo2 } from "lucide-vue-next";
 import { useForm } from "vee-validate";
-import { computed, ref, useTemplateRef, watch } from "vue";
+import { computed, ref, toRaw, useTemplateRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
-import { date, string, type ZodType, number } from "zod";
-
+import { date, number, string, type ZodType } from "zod";
 import ButtonSubmit from "../ButtonSubmit.vue";
 import DivError from "../DivError.vue";
 import InputDate from "../InputDate.vue";
 import InputStandard from "../InputStandard.vue";
 import ModalVue from "../Modal.vue";
 import SelectStandard from "../SelectStandard.vue";
-
-import { formatTime } from "@/tools/views/FormatDate";
-import { amountSchema, globErr } from "@/tools/views/ZodUtil";
-import { handleBackendError } from "@/tools/views/HandleBackendError";
-
-import type { EtfFlow } from "@/model/etf/EtfFlow";
-import type { SelectBoxValue } from "@/model/SelectBoxValue";
-
-import CrudEtfFlowService from "@/service/CrudEtfFlowService";
-import { useEtfStore } from "@/stores/EtfStore";
 
 const { t } = useI18n();
 
@@ -131,21 +137,21 @@ const etfStore = useEtfStore();
 const { handleSubmit, values, setFieldTouched } = useForm();
 
 const title = computed(() => {
-  return etfFlow.value === undefined
-    ? t("ETFFlow.title.create")
-    : t("ETFFlow.title.update");
+  return etfFlow.value?.etfflowid > 0
+    ? t("ETFFlow.title.update")
+    : t("ETFFlow.title.create");
 });
 
 const resetForm = () => {
   if (origEtfFlow.value) {
-    Object.assign(etfFlow.value, origEtfFlow.value);
+    etfFlow.value = structuredClone(toRaw(origEtfFlow.value))!;
     bookingdate.value = new Date(origEtfFlow.value.timestamp);
     bookingdate.value.setHours(0, 0, 0, 0);
 
     bookingtime.value =
       formatTime(origEtfFlow.value.timestamp) +
       ":" +
-      String(origEtfFlow.value.nanoseconds + 1000000000).substring(1, 4); //80000000 -> 1080000000 -> 080
+      String(origEtfFlow.value.nanoseconds + 1000000000).substring(1, 4);
   } else {
     etfFlow.value = {
       etfId: defaultEtfId.value,
@@ -185,7 +191,6 @@ const createEtfFlow = handleSubmit(() => {
     etfFlow.value.etfId = defaultEtfId.value;
 
     if (etfFlow.value.etfflowid > 0) {
-      //update
       CrudEtfFlowService.updateEtfFlow(etfFlow.value)
         .then(() => {
           modalComponent.value?._hide();
@@ -195,7 +200,6 @@ const createEtfFlow = handleSubmit(() => {
           handleBackendError(backendError, serverErrors);
         });
     } else {
-      //create
       CrudEtfFlowService.createEtfFlow(etfFlow.value)
         .then((_etfFlow) => {
           etfFlow.value = _etfFlow;

@@ -13,16 +13,18 @@
     :field-label="fieldLabel"
     :select-box-values="selectBoxValues"
   >
-    <template #icon
-      ><span
-        class="input-group-text"
+    <template #icon v-if="userIsAdmin"
+      ><SquarePlus
         @click="showCreatePostingAccountModal"
-        v-if="userIsAdmin"
-        ><i class="bi bi-plus"></i></span
-    ></template>
+        class="h-4 w-4 cursor-pointer"
+    /></template>
   </SelectStandard>
 </template>
 <script lang="ts" setup>
+import type { PostingAccount } from "@/model/postingaccount/PostingAccount";
+import { usePostingAccountStore } from "@/stores/PostingAccountStore";
+import { useUserSessionStore } from "@/stores/UserSessionStore";
+import { SquarePlus } from "lucide-vue-next";
 import {
   computed,
   onMounted,
@@ -32,14 +34,8 @@ import {
   type Ref,
 } from "vue";
 import { any, type ZodType } from "zod";
-
-import CreatePostingAccountModalVue from "./CreatePostingAccountModal.vue";
 import SelectStandard from "../SelectStandard.vue";
-
-import { usePostingAccountStore } from "@/stores/PostingAccountStore";
-import { useUserSessionStore } from "@/stores/UserSessionStore";
-
-import type { PostingAccount } from "@/model/postingaccount/PostingAccount";
+import CreatePostingAccountModalVue from "./CreatePostingAccountModal.vue";
 
 const postingAccountId = defineModel({ type: Number });
 

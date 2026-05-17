@@ -1,58 +1,69 @@
 <template>
-  <div class="input-group" v-if="fieldLabel">
-    <div class="form-floating">
-      <input
+  <div class="grid w-full gap-1.5 relative">
+    <Label v-if="fieldLabel" :for="id" class="text-left ml-1">
+      {{ fieldLabel }}
+    </Label>
+
+    <div class="flex -space-x-px relative">
+      <Input
         v-model="fieldValue"
         ref="fieldRef"
         :id="id"
+        :name="name"
         :data-testid="id"
         :type="fieldType"
-        :class="'form-control ' + alignmentClass + ' ' + errorData.inputClass"
         :disabled="disabled"
         :step="step"
-        :name="name"
+        :class="[
+          'bg-background z-10',
+          alignmentClass,
+          $slots.icon ? 'rounded-r-none' : '',
+          errorData.inputClass == 'is-invalid'
+            ? '!border-destructive bg-destructive/[0.03] focus-visible:ring-destructive/15 !border-r-destructive'
+            : 'border-input focus-visible:ring-ring',
+        ]"
         @input="onInput($event)"
       />
-      <label :for="id" :style="'color: ' + errorData.fieldColor">{{
-        errorData.fieldLabel
-      }}</label>
+
+      <div
+        v-if="$slots.icon"
+        :class="[
+          'flex items-center justify-center px-2 border border-input rounded-r-md text-foreground transition-colors relative',
+          errorData.inputClass == 'is-invalid' ? 'border-l-transparent' : '',
+        ]"
+      >
+        <slot name="icon"></slot>
+      </div>
     </div>
-    <slot name="icon"></slot>
-  </div>
-  <div class="input-group" v-else>
-    <input
-      v-model="fieldValue"
-      ref="fieldRef"
-      :id="id"
-      :data-testid="id"
-      :type="fieldType"
-      :class="'form-control ' + alignmentClass + ' ' + errorData.inputClass"
-      :disabled="disabled"
-      :step="step"
-      :name="name"
-      @input="onInput($event)"
-    />
-    <slot name="icon"></slot>
+
+    <p
+      v-if="errorData.inputClass == 'is-invalid'"
+      class="text-[0.8rem] font-medium text-destructive mt-0.5 text-left ml-1"
+    >
+      {{ errorMessage }}
+    </p>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { useField } from "vee-validate";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  generateErrorDataVeeValidate,
+  type ErrorData,
+} from "@/tools/views/ErrorData";
 import { toTypedSchema } from "@vee-validate/zod";
+import { useField } from "vee-validate";
 import {
   computed,
   nextTick,
   onMounted,
   useTemplateRef,
+  watch,
   type PropType,
-  type Ref
+  type Ref,
 } from "vue";
 import { any, type ZodType } from "zod";
-
-import {
-  generateErrorDataVeeValidate,
-  type ErrorData,
-} from "@/tools/views/ErrorData";
 
 const props = defineProps({
   modelValue: {
@@ -118,6 +129,7 @@ const {
   errorMessage,
   setState,
   handleChange,
+  setValue,
 } = useField(props.id, schema, {
   syncVModel: true,
 });
@@ -138,14 +150,39 @@ const errorData = computed((): ErrorData => {
 
 const alignmentClass = props.align ? "text-" + props.align : "";
 
-const fieldRef = useTemplateRef<HTMLInputElement>('fieldRef');
-onMounted(() => {
-  fieldValue.value = props.modelValue;
+const fieldRef = useTemplateRef<typeof Input>("fieldRef");
 
+const getInputElement = () => {
+  const refValue = fieldRef.value as unknown as
+    | HTMLInputElement
+    | { $el?: HTMLInputElement }
+    | undefined;
+  if (!refValue) return undefined;
+  if ("$el" in refValue && refValue.$el) return refValue.$el;
+  return refValue as HTMLInputElement;
+};
+onMounted(() => {
   if (props.focus) {
     nextTick(() => {
-      fieldRef.value?.focus();
+      getInputElement()?.focus();
     });
   }
 });
+
+watch(
+  () => props.modelValue,
+  (newValue) => {
+    setValue(newValue, false);
+    // The shadcn Input uses useVModel with passive:true, which means it does not
+    // react to external modelValue changes. We therefore update the native input
+    // element's value directly so the DOM stays in sync.
+    nextTick(() => {
+      const el = getInputElement();
+      if (el && el.value !== String(newValue ?? "")) {
+        el.value = String(newValue ?? "");
+      }
+    });
+  },
+  { immediate: true },
+);
 </script>

@@ -1,10 +1,10 @@
+import { useUserSessionStore } from "@/stores/UserSessionStore";
+import { isLoggedIn } from "axios-jwt";
 import {
   createRouter,
   createWebHistory,
   type RouteLocationNormalized,
 } from "vue-router";
-import { useUserSessionStore } from "@/stores/UserSessionStore";
-import { isLoggedIn } from "axios-jwt";
 
 export enum Routes {
   Login = "login",
@@ -29,6 +29,13 @@ export enum Routes {
   ShowReporting = "showReporting",
   CompareData = "compareData",
   ChangePassword = "changePassword",
+}
+export enum DropdownMenus {
+  Chart = "chart",
+  Plus = "plus",
+  Wrench = "wrench",
+  Etf = "etf",
+  Profile = "profile",
 }
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -71,6 +78,7 @@ const router = createRouter({
           path: "importReceipts",
           name: Routes.ImportReceipts,
           component: () => import("@/views/receipt/ImportReceipts.vue"),
+          meta: { activeMenu: DropdownMenus.Plus },
         },
         {
           path: "searchMoneyflows",
@@ -83,40 +91,47 @@ const router = createRouter({
           name: Routes.ListCapitalsources,
           component: () =>
             import("@/views/capitalsource/ListCapitalsources.vue"),
+          meta: { activeMenu: DropdownMenus.Wrench },
         },
         {
           path: "listPostingAccounts",
           name: Routes.ListPostingAccounts,
           component: () =>
             import("@/views/postingaccount/ListPostingAccounts.vue"),
+          meta: { activeMenu: DropdownMenus.Profile },
         },
         {
           path: "listContractpartners",
           name: Routes.ListContractpartners,
           component: () =>
             import("@/views/contractpartner/ListContractpartners.vue"),
+          meta: { activeMenu: DropdownMenus.Wrench },
         },
         {
           path: "listContractpartnerMatchings",
           name: Routes.ListContractpartnerMatchings,
           component: () =>
             import("@/views/contractpartnermatching/ListContractpartnerMatchings.vue"),
+          meta: { activeMenu: DropdownMenus.Wrench },
         },
         {
           path: "listGroups",
           name: Routes.ListGroups,
           component: () => import("@/views/group/ListGroups.vue"),
+          meta: { activeMenu: DropdownMenus.Profile },
         },
         {
           path: "listUsers",
           name: Routes.ListUsers,
           component: () => import("@/views/user/ListUsers.vue"),
+          meta: { activeMenu: DropdownMenus.Profile },
         },
         {
           path: "listPreDefMoneyflows",
           name: Routes.ListPreDefMoneyflows,
           component: () =>
             import("@/views/predefmoneyflow/ListPreDefMoneyflows.vue"),
+          meta: { activeMenu: DropdownMenus.Wrench },
         },
         {
           path: "listMonthlySettlements/:year?/:month?",
@@ -124,33 +139,39 @@ const router = createRouter({
           component: () =>
             import("@/views/monthlysettlement/ListMonthlySettlements.vue"),
           props: true,
+          meta: { activeMenu: DropdownMenus.Wrench },
         },
         {
           path: "listEtfDepot/:etfId?",
           name: Routes.ListEtfDepot,
           component: () => import("@/views/etf/ListEtfDepot.vue"),
           props: true,
+          meta: { activeMenu: DropdownMenus.Etf },
         },
         {
           path: "listEtfs",
           name: Routes.ListEtfs,
           component: () => import("@/views/etf/ListEtfs.vue"),
+          meta: { activeMenu: DropdownMenus.Etf },
         },
         {
           path: "listEtfPreliminaryLumpSums/:etfId?/:year?",
           name: Routes.ListEtfPreliminaryLumpSums,
           component: () => import("@/views/etf/ListPreliminaryLumpSums.vue"),
           props: true,
+          meta: { activeMenu: DropdownMenus.Etf },
         },
         {
           path: "showTrends",
           name: Routes.ShowTrends,
           component: () => import("@/views/reports/ShowTrends.vue"),
+          meta: { activeMenu: DropdownMenus.Chart },
         },
         {
           path: "showReporting",
           name: Routes.ShowReporting,
           component: () => import("@/views/reports/ShowReporting.vue"),
+          meta: { activeMenu: DropdownMenus.Chart },
         },
         {
           path: "compareData",
@@ -161,6 +182,7 @@ const router = createRouter({
           path: "changePassword",
           name: Routes.ChangePassword,
           component: () => import("@/views/user/ChangePassword.vue"),
+          meta: { activeMenu: DropdownMenus.Profile },
         },
       ],
     },

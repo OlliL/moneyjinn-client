@@ -1,293 +1,102 @@
 <template>
-  <ModalVue :title="title" ref="modalComponent" max-width="800px">
-    <template #body
-      ><form
+  <ModalVue :title="title" ref="modalComponent">
+    <template #body>
+      <form
         @submit.prevent="createEtfPreliminaryLumpSum"
         id="createEtfPreliminaryLumpSumForm"
       >
-        <div class="container-fluid">
+        <div class="space-y-4">
           <DivError :server-errors="serverErrors" />
-          <div class="row pt-2">
-            <div class="col-xl-9 col-xs-12">
-              <SelectStandard
-                v-model="mep.etfId"
-                :validation-schema="schema.etfId"
-                id="etf"
-                :field-label="$t('General.etf')"
-                :select-box-values="etfs"
-              />
-            </div>
-            <div class="col-xl-3 col-xs-12">
-              <InputDate
-                v-model="year"
-                :validation-schema="schema.year"
-                id="bookingdate"
-                :field-label="$t('General.year')"
-                pick-mode="year"
-              />
-            </div>
-          </div>
-          <div class="row pt-2">
-            <div class="col-md-6 col-xs-12">
-              <InputStandard
-                v-model="mep.amountJanuary"
-                :validation-schema="schema.amountJanuary"
-                id="amountJanuary"
-                step="0.01"
-                field-type="number"
-                :field-label="
-                  $t('ETFPreliminaryLumpSum.monthlyAmount', {
-                    month: getMonthName(1),
-                  })
-                "
-              >
-                <template #icon
-                  ><span class="input-group-text"
-                    ><i class="bi bi-currency-euro"></i></span
-                ></template>
-              </InputStandard>
-            </div>
-            <div class="col-md-6 col-xs-12">
-              <InputStandard
-                v-model="mep.amountFebruary"
-                :validation-schema="schema.amountFebruary"
-                id="amountFebruary"
-                step="0.01"
-                field-type="number"
-                :field-label="
-                  $t('ETFPreliminaryLumpSum.monthlyAmount', {
-                    month: getMonthName(2),
-                  })
-                "
-              >
-                <template #icon
-                  ><span class="input-group-text"
-                    ><i class="bi bi-currency-euro"></i></span
-                ></template>
-              </InputStandard>
+
+          <div class="rounded-sm border bg-muted/30 p-4 shadow-sm space-y-4">
+            <div class="grid grid-cols-1 sm:grid-cols-12 gap-4">
+              <div class="sm:col-span-9">
+                <SelectStandard
+                  v-model="mep.etfId"
+                  :validation-schema="schema.etfId"
+                  id="etf"
+                  :field-label="$t('General.etf')"
+                  :select-box-values="etfs"
+                />
+              </div>
+              <div class="sm:col-span-3">
+                <InputDate
+                  v-model="year"
+                  :validation-schema="schema.year"
+                  id="bookingdate"
+                  :field-label="$t('General.year')"
+                  pick-mode="year"
+                />
+              </div>
             </div>
           </div>
-          <div class="row pt-2">
-            <div class="col-md-6 col-xs-12">
-              <InputStandard
-                v-model="mep.amountMarch"
-                :validation-schema="schema.amountMarch"
-                id="amountMarch"
-                step="0.01"
-                field-type="number"
-                :field-label="
-                  $t('ETFPreliminaryLumpSum.monthlyAmount', {
-                    month: getMonthName(3),
-                  })
-                "
+
+          <div class="rounded-sm border bg-muted/30 p-4 shadow-sm space-y-4">
+            <div
+              class="flex items-center space-x-2 border-b border-border/40 pb-2"
+            >
+              <span
+                class="text-xs font-bold uppercase tracking-wider text-muted-foreground block mb-0"
               >
-                <template #icon
-                  ><span class="input-group-text"
-                    ><i class="bi bi-currency-euro"></i></span
-                ></template>
-              </InputStandard>
+                {{ $t("ETFPreliminaryLumpSum.amounts") }}
+              </span>
             </div>
-            <div class="col-md-6 col-xs-12">
-              <InputStandard
-                v-model="mep.amountApril"
-                :validation-schema="schema.amountApril"
-                id="amountApril"
-                step="0.01"
-                field-type="number"
-                :field-label="
-                  $t('ETFPreliminaryLumpSum.monthlyAmount', {
-                    month: getMonthName(4),
-                  })
-                "
-              >
-                <template #icon
-                  ><span class="input-group-text"
-                    ><i class="bi bi-currency-euro"></i></span
-                ></template>
-              </InputStandard>
-            </div>
-          </div>
-          <div class="row pt-2">
-            <div class="col-md-6 col-xs-12">
-              <InputStandard
-                v-model="mep.amountMay"
-                :validation-schema="schema.amountMay"
-                id="amountMay"
-                step="0.01"
-                field-type="number"
-                :field-label="
-                  $t('ETFPreliminaryLumpSum.monthlyAmount', {
-                    month: getMonthName(5),
-                  })
-                "
-              >
-                <template #icon
-                  ><span class="input-group-text"
-                    ><i class="bi bi-currency-euro"></i></span
-                ></template>
-              </InputStandard>
-            </div>
-            <div class="col-md-6 col-xs-12">
-              <InputStandard
-                v-model="mep.amountJune"
-                :validation-schema="schema.amountJune"
-                id="amountJune"
-                step="0.01"
-                field-type="number"
-                :field-label="
-                  $t('ETFPreliminaryLumpSum.monthlyAmount', {
-                    month: getMonthName(6),
-                  })
-                "
-              >
-                <template #icon
-                  ><span class="input-group-text"
-                    ><i class="bi bi-currency-euro"></i></span
-                ></template>
-              </InputStandard>
-            </div>
-          </div>
-          <div class="row pt-2">
-            <div class="col-md-6 col-xs-12">
-              <InputStandard
-                v-model="mep.amountJuly"
-                :validation-schema="schema.amountJuly"
-                id="amountJuly"
-                step="0.01"
-                field-type="number"
-                :field-label="
-                  $t('ETFPreliminaryLumpSum.monthlyAmount', {
-                    month: getMonthName(7),
-                  })
-                "
-              >
-                <template #icon
-                  ><span class="input-group-text"
-                    ><i class="bi bi-currency-euro"></i></span
-                ></template>
-              </InputStandard>
-            </div>
-            <div class="col-md-6 col-xs-12">
-              <InputStandard
-                v-model="mep.amountAugust"
-                :validation-schema="schema.amountAugust"
-                id="amountAugust"
-                step="0.01"
-                field-type="number"
-                :field-label="
-                  $t('ETFPreliminaryLumpSum.monthlyAmount', {
-                    month: getMonthName(8),
-                  })
-                "
-              >
-                <template #icon
-                  ><span class="input-group-text"
-                    ><i class="bi bi-currency-euro"></i></span
-                ></template>
-              </InputStandard>
-            </div>
-          </div>
-          <div class="row pt-2">
-            <div class="col-md-6 col-xs-12">
-              <InputStandard
-                v-model="mep.amountSeptember"
-                :validation-schema="schema.amountSeptember"
-                id="amountSeptember"
-                step="0.01"
-                field-type="number"
-                :field-label="
-                  $t('ETFPreliminaryLumpSum.monthlyAmount', {
-                    month: getMonthName(9),
-                  })
-                "
-              >
-                <template #icon
-                  ><span class="input-group-text"
-                    ><i class="bi bi-currency-euro"></i></span
-                ></template>
-              </InputStandard>
-            </div>
-            <div class="col-md-6 col-xs-12">
-              <InputStandard
-                v-model="mep.amountOctober"
-                :validation-schema="schema.amountOctober"
-                id="amountOctober"
-                step="0.01"
-                field-type="number"
-                :field-label="
-                  $t('ETFPreliminaryLumpSum.monthlyAmount', {
-                    month: getMonthName(10),
-                  })
-                "
-              >
-                <template #icon
-                  ><span class="input-group-text"
-                    ><i class="bi bi-currency-euro"></i></span
-                ></template>
-              </InputStandard>
-            </div>
-          </div>
-          <div class="row pt-2">
-            <div class="col-md-6 col-xs-12">
-              <InputStandard
-                v-model="mep.amountNovember"
-                :validation-schema="schema.amountNovember"
-                id="amountNovember"
-                step="0.01"
-                field-type="number"
-                :field-label="
-                  $t('ETFPreliminaryLumpSum.monthlyAmount', {
-                    month: getMonthName(11),
-                  })
-                "
-              >
-                <template #icon
-                  ><span class="input-group-text"
-                    ><i class="bi bi-currency-euro"></i></span
-                ></template>
-              </InputStandard>
-            </div>
-            <div class="col-md-6 col-xs-12">
-              <InputStandard
-                v-model="mep.amountDecember"
-                :validation-schema="schema.amountDecember"
-                id="amountDecember"
-                step="0.01"
-                field-type="number"
-                :field-label="
-                  $t('ETFPreliminaryLumpSum.monthlyAmount', {
-                    month: getMonthName(12),
-                  })
-                "
-              >
-                <template #icon
-                  ><span class="input-group-text"
-                    ><i class="bi bi-currency-euro"></i></span
-                ></template>
-              </InputStandard>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+              <div v-for="month in months" :key="month.id">
+                <InputStandard
+                  v-model="mep[month.property]"
+                  :validation-schema="schema[month.property]"
+                  :id="month.property"
+                  step="0.01"
+                  field-type="number"
+                  :field-label="getMonthName(month.id)"
+                  :focus="month.id === 1"
+                >
+                  <template #icon><Euro class="h-4 w-4" /></template>
+                </InputStandard>
+              </div>
             </div>
           </div>
         </div>
       </form>
     </template>
     <template #footer>
-      <button type="button" class="btn btn-secondary" @click="resetForm">
+      <Button
+        type="button"
+        variant="secondary"
+        class="flex items-center gap-2 px-6"
+        @click="resetForm"
+      >
+        <Undo2 class="h-4 w-4" />
         {{ $t("General.reset") }}
-      </button>
+      </Button>
+
       <ButtonSubmit
         :button-label="$t('General.save')"
         form-id="createEtfPreliminaryLumpSumForm"
-      />
+      >
+        <template #icon><Save class="h-4 w-4" /></template>
+      </ButtonSubmit>
     </template>
   </ModalVue>
 </template>
 
 <script lang="ts" setup>
+import { Button } from "@/components/ui/button";
+import type { EtfPreliminaryLumpSum } from "@/model/etf/EtfPreliminaryLumpSum";
+import { EtfPreliminaryLumpSumType } from "@/model/etf/EtfPreliminaryLumpSumType";
+import type { SelectBoxValue } from "@/model/SelectBoxValue";
+import CrudEtfPreliminaryLumpSumService from "@/service/CrudEtfPreliminaryLumpSumService";
+import { useEtfStore } from "@/stores/EtfStore";
+import { handleBackendError } from "@/tools/views/HandleBackendError";
+import { getMonthName } from "@/tools/views/MonthName";
+import { amountSchema, globErr } from "@/tools/views/ZodUtil";
+import { Euro, Save, Undo2 } from "lucide-vue-next";
 import { useForm } from "vee-validate";
-import { computed, ref, useTemplateRef } from "vue";
+import { computed, ref, toRaw, useTemplateRef } from "vue";
 import { useI18n } from "vue-i18n";
-import { date, type ZodType, number } from "zod";
-
+import { date, number, type ZodType } from "zod";
 import ButtonSubmit from "../ButtonSubmit.vue";
 import DivError from "../DivError.vue";
 import InputDate from "../InputDate.vue";
@@ -295,23 +104,12 @@ import InputStandard from "../InputStandard.vue";
 import ModalVue from "../Modal.vue";
 import SelectStandard from "../SelectStandard.vue";
 
-import { amountSchema, globErr } from "@/tools/views/ZodUtil";
-import { handleBackendError } from "@/tools/views/HandleBackendError";
-
-import type { EtfPreliminaryLumpSum } from "@/model/etf/EtfPreliminaryLumpSum";
-import type { SelectBoxValue } from "@/model/SelectBoxValue";
-
-import CrudEtfPreliminaryLumpSumService from "@/service/CrudEtfPreliminaryLumpSumService";
-import { getMonthName } from "@/tools/views/MonthName";
-import { EtfPreliminaryLumpSumType } from "@/model/etf/EtfPreliminaryLumpSumType";
-import { useEtfStore } from "@/stores/EtfStore";
-
 const { t } = useI18n();
 
 const serverErrors = ref(new Array<string>());
 
 const schema: Partial<{ [key in keyof EtfPreliminaryLumpSum]: ZodType }> = {
-  etfId: number(globErr(t("ETFPreliminaryLumpSum.validation.etfId"))).gt(0),
+  etfId: number(globErr(t("ETFFlow.validation.etfId"))).gt(0),
   year: date(globErr(t("ETFPreliminaryLumpSum.validation.year"))),
   amountJanuary: amountSchema(t("ETFPreliminaryLumpSum.validation.amount")),
   amountFebruary: amountSchema(t("ETFPreliminaryLumpSum.validation.amount")),
@@ -326,6 +124,25 @@ const schema: Partial<{ [key in keyof EtfPreliminaryLumpSum]: ZodType }> = {
   amountNovember: amountSchema(t("ETFPreliminaryLumpSum.validation.amount")),
   amountDecember: amountSchema(t("ETFPreliminaryLumpSum.validation.amount")),
 };
+
+// Deine originalen Month-Mappings für die Schleife
+const months: Array<{
+  id: number;
+  property: keyof EtfPreliminaryLumpSum;
+}> = [
+  { id: 1, property: "amountJanuary" },
+  { id: 2, property: "amountFebruary" },
+  { id: 3, property: "amountMarch" },
+  { id: 4, property: "amountApril" },
+  { id: 5, property: "amountMay" },
+  { id: 6, property: "amountJune" },
+  { id: 7, property: "amountJuly" },
+  { id: 8, property: "amountAugust" },
+  { id: 9, property: "amountSeptember" },
+  { id: 10, property: "amountOctober" },
+  { id: 11, property: "amountNovember" },
+  { id: 12, property: "amountDecember" },
+];
 
 const etfs = ref(new Array<SelectBoxValue>());
 const mep = ref({} as EtfPreliminaryLumpSum);
@@ -350,7 +167,7 @@ const title = computed(() => {
 const resetForm = () => {
   mep.value = {} as EtfPreliminaryLumpSum;
   if (origMep.value) {
-    Object.assign(mep.value, origMep.value);
+    mep.value = structuredClone(toRaw(origMep.value))!;
   } else {
     if (defaultEtfId.value !== undefined) mep.value.etfId = defaultEtfId.value;
     mep.value.year = new Date().getFullYear();

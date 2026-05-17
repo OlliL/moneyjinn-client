@@ -1,77 +1,82 @@
 <template>
-  <div class="container-fluid">
-    <div class="row justify-content-md-center">
-      <div class="col-xs-12 mb-4 text-center">
-        <h4>{{ $t("Reports.title.reports") }}</h4>
-      </div>
+  <div class="custom-container space-y-6">
+    <div class="text-center">
+      <h4 class="text-2xl font-bold">
+        {{ $t("Reports.title.report", { month: monthName, year: year }) }}
+      </h4>
     </div>
-    <div class="row justify-content-md-center">
-      <div class="col-md-auto mb-3">
-        <div class="row">
-          <div class="col-md-auto">
-            <select
-              class="form-select"
-              v-model="selectedYear"
-              @change="selectMonth(selectedYear + '')"
-            >
-              <option v-for="year in years" :key="year">
+
+    <div class="flex justify-center">
+      <div class="flex flex-wrap items-center justify-center gap-4">
+        <div>
+          <Select v-model="selectedYear">
+            <SelectTrigger class="w-[120px] h-9">
+              <SelectValue
+                :placeholder="selectedYear ? selectedYear.toString() : ''"
+              />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem v-for="year in years" :key="year" :value="year">
                 {{ year }}
-              </option>
-            </select>
-          </div>
-          <div class="col">
-            <nav aria-label="Month navigation" v-if="dataLoaded">
-              <ul class="pagination month-selection flex-wrap">
-                <li class="page-item" v-for="month in months" :key="month">
-                  <router-link
-                    :class="
-                      $props.month == month + ''
-                        ? 'page-link active'
-                        : 'page-link'
-                    "
-                    :to="{
-                      name: Routes.ListReports,
-                      params: {
-                        year: selectedYear,
-                        month: month,
-                        sortBy: [...sortByMap.keys()][0],
-                        sortDirection: [...sortByMap.values()][0]
-                          ? 'asc'
-                          : 'decs',
-                      },
-                      force: true,
-                    }"
-                    >{{ getMonthName(month) }}</router-link
-                  >
-                </li>
-              </ul>
-            </nav>
-          </div>
+              </SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+
+        <div>
+          <nav aria-label="Month navigation" v-if="dataLoaded">
+            <ul class="flex flex-wrap justify-center -space-x-px">
+              <li v-for="(month, index) in months" :key="month">
+                <router-link
+                  :to="{
+                    name: Routes.ListReports,
+                    params: {
+                      year: selectedYear,
+                      month: month,
+                      sortBy: [...sortByMap.keys()][0],
+                      sortDirection: [...sortByMap.values()][0]
+                        ? 'desc'
+                        : 'asc',
+                    },
+                  }"
+                  :class="[
+                    'inline-flex h-9 items-center justify-center px-4 text-sm font-medium border border-input transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:z-10 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring',
+
+                    $props.month == month + ''
+                      ? 'bg-primary text-primary-foreground border-primary hover:bg-primary/90 hover:text-primary-foreground'
+                      : 'bg-background text-foreground',
+
+                    index === 0 ? 'rounded-l-md' : '',
+                    index === months!.length - 1 ? 'rounded-r-md' : '',
+                    index > 0 && index < months!.length - 1
+                      ? 'rounded-none'
+                      : '',
+                  ]"
+                >
+                  {{ getMonthName(month) }}
+                </router-link>
+              </li>
+            </ul>
+          </nav>
         </div>
       </div>
     </div>
     <DivError :server-errors="serverErrors" />
 
-    <div class="row d-none d-md-block">
-      <div
-        class="col-md-3 text-start g-0"
-        style="position: fixed; z-index: 1030; margin-top: 35vh"
-      >
-        <span
-          @click="navigateToPreviousMonth"
+    <div class="hidden md:block">
+      <div class="fixed left-4 top-1/2 z-20 -translate-y-1/2">
+        <ChevronLeft
           v-if="previousMonthLink"
-          class="bi bi-caret-left-fill link-primary"
-        ></span>
+          class="h-10 w-10 cursor-pointer text-primary"
+          @click="navigateToPreviousMonth"
+        />
       </div>
-      <div
-        class="col-md-3 text-end g-0 offset-md-9"
-        style="position: fixed; z-index: 1030; margin-top: 35vh"
-      >
-        <span
-          @click="navigateToNextMonth"
+      <div class="fixed right-4 top-1/2 z-20 -translate-y-1/2">
+        <ChevronRight
           v-if="nextMonthLink"
-          class="bi bi-caret-right-fill link-primary"
-        ></span>
+          class="h-10 w-10 cursor-pointer text-primary"
+          @click="navigateToNextMonth"
+        />
       </div>
     </div>
     <ReportTableVue
@@ -85,7 +90,7 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 import { onBeforeRouteUpdate, type RouteParamsGeneric } from "vue-router";
 
 import router, { Routes } from "@/router";
@@ -94,17 +99,24 @@ import DivError from "@/components/DivError.vue";
 import EtfTableVue from "@/components/reports/EtfTable.vue";
 import ReportTableVue from "@/components/reports/ReportTable.vue";
 
-import { getMonthName } from "@/tools/views/MonthName";
-
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 import ReportService from "@/service/ReportService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
-import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
+import { getMonthName } from "@/tools/views/MonthName";
+import { ChevronLeft, ChevronRight } from "lucide-vue-next";
 
 const serverErrors = ref(new Array<string>());
 
 const dataLoaded = ref(false);
 const months = ref([] as number[] | undefined);
-const years = ref([] as number[] | undefined);
+const years = ref([] as string[] | undefined);
 const previousMonth = ref(0 as number | undefined);
 const previousYear = ref(0 as number | undefined);
 const nextMonth = ref(0 as number | undefined);
@@ -149,7 +161,7 @@ const loadData = (year?: number, month?: number) => {
   ReportService.getAvailableMonth(year, month)
     .then((response) => {
       months.value = response.allMonth;
-      years.value = response.allYears;
+      years.value = response.allYears?.map(String);
 
       previousMonth.value = response.previousMonth;
       previousMonthLink.value = response.previousMonthHasMoneyflows === 1;
@@ -222,6 +234,21 @@ onBeforeRouteUpdate((to, from) => {
   }
 });
 
+watch(
+  () => selectedYear.value,
+  (newYear) => {
+    if (newYear != currentlyShownYear.value) {
+      selectMonth(newYear + "");
+    }
+  },
+);
+
+const monthName = computed(() => {
+  return props.month && !Number.isNaN(props.month)
+    ? getMonthName(Number(props.month))
+    : undefined;
+});
+
 const selectMonth = (year: string, month?: string) => {
   router.push({
     name: Routes.ListReports,
@@ -234,9 +261,3 @@ const selectMonth = (year: string, month?: string) => {
   });
 };
 </script>
-
-<style scoped>
-span.bi {
-  font-size: 2.5rem;
-}
-</style>

@@ -1,24 +1,21 @@
 <template>
   <ModalVue :title="title" ref="modalComponent">
-    <template #body
-      ><form
+    <template #body>
+      <form
         @submit.prevent="createContractpartnerMatching"
         :id="'createContractpartnerMatchingForm' + idSuffix"
       >
-        <div class="container-fluid">
+        <div class="space-y-4">
           <DivError :server-errors="serverErrors" />
-          <div class="row">
-            <div class="col-xs-12">
+
+          <div class="rounded-sm border bg-muted/30 p-4 shadow-sm space-y-4">
+            <div class="grid grid-cols-1 gap-4">
               <InputStandard
                 v-model="mcm.matchingText"
                 :validation-schema="schema.matchingText"
                 :id="'name' + idSuffix"
                 :field-label="$t('ContractpartnerMatching.matchingText')"
               />
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-xs-12">
               <SelectContractpartner
                 v-model="mcm.contractpartnerId"
                 :validation-schema="schema.contractpartnerId"
@@ -27,60 +24,71 @@
               />
             </div>
           </div>
-          <div class="row pt-2">
-            <div class="col-xs-12">
-              <InputStandard
-                v-model="mcm.moneyflowComment"
-                :validation-schema="schema.moneyflowComment"
-                :id="'moneyflowComment' + idSuffix"
-                :field-label="$t('Contractpartner.moneyflowComment')"
-              />
-            </div>
-          </div>
 
-          <div class="row pt-2">
-            <div class="col-xs-12">
-              <SelectPostingAccount
-                v-model="mcm.postingAccountId"
-                :validation-schema="schema.postingAccountId"
-                :id-suffix="idSuffix + 'CreateContractpartner'"
-                :field-label="$t('General.postingAccount')"
-              />
+          <div class="rounded-sm border bg-muted/30 p-4 shadow-sm space-y-4">
+            <div
+              class="flex items-center space-x-2 border-b border-border/40 pb-2"
+            >
+              <span
+                class="text-xs font-bold uppercase tracking-wider text-muted-foreground block mb-0"
+              >
+                {{ $t("Contractpartner.moneyflowDefaults") }}
+              </span>
             </div>
+            <InputStandard
+              v-model="mcm.moneyflowComment"
+              :validation-schema="schema.moneyflowComment"
+              :id="'moneyflowComment' + idSuffix"
+              :field-label="$t('General.comment')"
+            />
+            <SelectPostingAccount
+              v-model="mcm.postingAccountId"
+              :validation-schema="schema.postingAccountId"
+              :id-suffix="idSuffix + 'CreateContractpartner'"
+              :field-label="$t('General.postingAccount')"
+            />
           </div>
         </div>
       </form>
     </template>
+
     <template #footer>
-      <button type="button" class="btn btn-secondary" @click="resetForm">
+      <Button
+        type="button"
+        variant="secondary"
+        class="flex items-center gap-2 px-6"
+        @click="resetForm"
+      >
+        <Undo2 class="h-4 w-4" />
         {{ $t("General.reset") }}
-      </button>
+      </Button>
+
       <ButtonSubmit
         :button-label="$t('General.save')"
         :form-id="'createContractpartnerMatchingForm' + idSuffix"
-      />
+      >
+        <template #icon><Save class="h-4 w-4" /></template>
+      </ButtonSubmit>
     </template>
   </ModalVue>
 </template>
 
 <script lang="ts" setup>
+import { Button } from "@/components/ui/button";
+import type { ContractpartnerMatching } from "@/model/contractpartnermatching/ContractpartnerMatching";
+import ContractpartnerMatchingService from "@/service/ContractpartnerMatchingService";
+import { handleBackendError } from "@/tools/views/HandleBackendError";
+import { globErr } from "@/tools/views/ZodUtil";
+import { Save, Undo2 } from "lucide-vue-next";
 import { useForm } from "vee-validate";
-import { computed, ref, useTemplateRef } from "vue";
+import { computed, ref, toRaw, useTemplateRef } from "vue";
 import { useI18n } from "vue-i18n";
 import { number, string, ZodType } from "zod";
-
 import ButtonSubmit from "../ButtonSubmit.vue";
+import SelectContractpartner from "../contractpartner/SelectContractpartner.vue";
 import DivError from "../DivError.vue";
 import InputStandard from "../InputStandard.vue";
 import ModalVue from "../Modal.vue";
-
-import { handleBackendError } from "@/tools/views/HandleBackendError";
-import { globErr } from "@/tools/views/ZodUtil";
-
-import type { ContractpartnerMatching } from "@/model/contractpartnermatching/ContractpartnerMatching";
-
-import ContractpartnerMatchingService from "@/service/ContractpartnerMatchingService";
-import SelectContractpartner from "../contractpartner/SelectContractpartner.vue";
 import SelectPostingAccount from "../postingaccount/SelectPostingAccount.vue";
 
 const { t } = useI18n();
@@ -127,7 +135,7 @@ const title = computed(() => {
 
 const resetForm = () => {
   if (origMpa.value) {
-    Object.assign(mcm.value, origMpa.value);
+    mcm.value = structuredClone(toRaw(origMpa.value))!;
   } else {
     mcm.value = {} as ContractpartnerMatching;
   }

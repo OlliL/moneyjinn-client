@@ -1,30 +1,57 @@
 <template>
-  <tr>
-    <td class="text-start">{{ mcs.comment }}</td>
-    <td class="text-start">{{ typeString }}</td>
-    <td class="text-start">{{ stateString }}</td>
-    <td class="text-start">{{ mcs.accountNumber }}</td>
-    <td class="text-start">{{ mcs.bankCode }}</td>
-    <td class="text-start"><SpanDate :date="mcs.validFrom" /></td>
-    <td class="text-start"><SpanDate :date="mcs.validTil" /></td>
-    <td class="text-center"><SpanBoolean :value="mcs.groupUse" /></td>
-    <td class="text-center">
-      <b :style="'color:' + importAllowedColor">{{ importAllowedString }}</b>
-    </td>
-    <td class="text-center" v-if="owner">
-      <span class="link-primary" @click="editCapitalsource"
-        ><i class="bi bi-pencil-square"></i
-      ></span>
-    </td>
-    <td class="text-center" v-if="owner">
-      <span class="link-primary" @click="deleteCapitalsource"
-        ><i class="bi bi-trash"></i
-      ></span>
-    </td>
-  </tr>
+  <TableRow>
+    <TableCell class="text-left border-r">{{ mcs.comment }}</TableCell>
+    <TableCell class="text-left border-r">{{ typeString }}</TableCell>
+    <TableCell class="text-left border-r">{{ stateString }}</TableCell>
+    <TableCell class="text-left border-r"
+      ><SpanIban :iban="mcs.accountNumber"
+    /></TableCell>
+    <TableCell class="text-left border-r">{{ mcs.bankCode }}</TableCell>
+    <TableCell class="text-left border-r"
+      ><SpanDate :date="mcs.validFrom"
+    /></TableCell>
+    <TableCell class="text-left border-r"
+      ><SpanDate :date="mcs.validTil"
+    /></TableCell>
+    <TableCell class="text-center border-r"
+      ><SpanBoolean :value="mcs.groupUse"
+    /></TableCell>
+    <TableCell class="text-center border-r">
+      <b :class="importAllowedColorClass">{{ importAllowedString }}</b>
+    </TableCell>
+    <TableCell class="w-0 whitespace-nowrap text-center p-0" v-if="owner">
+      <Button
+        variant="ghost"
+        size="icon"
+        @click="editCapitalsource"
+        :title="$t('General.edit')"
+        class="h-8 w-8 cursor-pointer"
+      >
+        <Pencil class="h-4 w-4" />
+      </Button>
+    </TableCell>
+    <TableCell
+      class="w-0 border-l whitespace-nowrap text-center p-0"
+      v-if="owner"
+    >
+      <Button
+        variant="ghost"
+        size="icon"
+        @click="deleteCapitalsource"
+        :title="$t('General.delete')"
+        class="h-8 w-8 cursor-pointer"
+      >
+        <Trash2 class="h-4 w-4" />
+      </Button>
+    </TableCell>
+  </TableRow>
 </template>
 <script lang="ts" setup>
+import { Pencil, Trash2 } from "lucide-vue-next";
 import { computed, type PropType } from "vue";
+
+import { Button } from "@/components/ui/button";
+import { TableCell, TableRow } from "@/components/ui/table";
 
 import SpanDate from "../SpanDate.vue";
 
@@ -33,6 +60,7 @@ import { capitalsourceImportNames } from "@/model/capitalsource/CapitalsourceImp
 import { capitalsourceStateNames } from "@/model/capitalsource/CapitalsourceState";
 import { capitalsourceTypeNames } from "@/model/capitalsource/CapitalsourceType";
 import SpanBoolean from "../SpanBoolean.vue";
+import SpanIban from "../SpanIban.vue";
 
 const props = defineProps({
   mcs: {
@@ -46,8 +74,8 @@ const props = defineProps({
 });
 const emit = defineEmits(["deleteCapitalsource", "editCapitalsource"]);
 
-const importAllowedColor = computed(() => {
-  return props.mcs.importAllowed > 0 ? "green" : "red";
+const importAllowedColorClass = computed(() => {
+  return props.mcs.importAllowed > 0 ? "text-green-600" : "text-red-600";
 });
 
 const importAllowedString = computed(() => {

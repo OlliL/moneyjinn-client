@@ -1,78 +1,54 @@
 <template>
   <ModalVue :title="title" ref="modalComponent">
-    <template #body
-      ><form
+    <template #body>
+      <form
         @submit.prevent="createCapitalsource"
         :id="'createCapitalsourceForm' + idSuffix"
+        class="space-y-6"
       >
-        <div class="container-fluid">
-          <DivError :server-errors="serverErrors" />
-          <div class="row">
-            <div class="col-xs-12">
-              <div class="form-floating">
-                <InputStandard
-                  v-model="mcs.comment"
-                  :validation-schema="schema.comment"
-                  :id="'comment' + idSuffix"
-                  :field-label="$t('General.name')"
-                />
-              </div>
-            </div>
+        <DivError :server-errors="serverErrors" />
+
+        <div class="rounded-sm border bg-muted/30 p-4 shadow-sm space-y-4">
+          <div class="grid gap-1.5">
+            <InputStandard
+              v-model="mcs.comment"
+              :validation-schema="schema.comment"
+              :id="'comment' + idSuffix"
+              :field-label="$t('General.name')"
+            />
           </div>
-          <div class="row pt-2">
-            <div class="col-xs-12">
-              <SelectStandard
-                v-model="mcs.type"
-                :validation-schema="schema.type"
-                :id="'type' + idSuffix"
-                :field-label="$t('Capitalsource.type')"
-                :select-box-values="capitalsourceTypeValues"
-              />
-            </div>
+          <div class="grid grid-cols-2 gap-4">
+            <SelectStandard
+              v-model="mcs.type"
+              :validation-schema="schema.type"
+              :id="'type' + idSuffix"
+              :field-label="$t('Capitalsource.type')"
+              :select-box-values="capitalsourceTypeValues"
+            />
+            <SelectStandard
+              v-model="mcs.state"
+              :validation-schema="schema.state"
+              :id="'state' + idSuffix"
+              :field-label="$t('Capitalsource.state')"
+              :select-box-values="capitalsourceStateValues"
+            />
           </div>
-          <div class="row pt-2">
-            <div class="col-xs-12">
-              <SelectStandard
-                v-model="mcs.state"
-                :validation-schema="schema.state"
-                :id="'state' + idSuffix"
-                :field-label="$t('Capitalsource.state')"
-                :select-box-values="capitalsourceStateValues"
-              />
-            </div>
-          </div>
-          <div class="row pt-2">
-            <div class="col-xs-12">
-              <InputStandard
-                v-model="mcs.accountNumber"
-                :validation-schema="schema.accountNumber"
-                :id="'accountNumber' + idSuffix"
-                :field-label="$t('General.iban')"
-              />
-            </div>
-          </div>
-          <div class="row pt-2">
-            <div class="col-xs-12">
-              <InputStandard
-                v-model="mcs.bankCode"
-                :validation-schema="schema.bankCode"
-                :id="'bankCode' + idSuffix"
-                :field-label="$t('General.bic')"
-              />
-            </div>
-          </div>
-          <div class="row pt-2">
-            <div class="col-xs-12">
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div class="rounded-sm border bg-muted/30 p-4 shadow-sm space-y-4">
+            <span
+              class="text-xs font-bold uppercase tracking-wider text-muted-foreground block"
+            >
+              {{ $t("Capitalsource.validityData") }}
+            </span>
+            <div class="space-y-4">
               <InputDate
                 v-model="mcs.validFrom"
                 :validation-schema="schema.validFrom"
                 :id="'validFrom' + idSuffix"
                 :field-label="$t('General.validFrom')"
               />
-            </div>
-          </div>
-          <div class="row pt-2">
-            <div class="col-xs-12">
               <InputDate
                 v-model="mcs.validTil"
                 :validation-schema="schema.validTil"
@@ -81,8 +57,14 @@
               />
             </div>
           </div>
-          <div class="row pt-2">
-            <div class="col-xs-12">
+
+          <div class="rounded-sm border bg-muted/30 p-4 shadow-sm space-y-4">
+            <span
+              class="text-xs font-bold uppercase tracking-wider text-muted-foreground block"
+            >
+              {{ $t("Capitalsource.permissions") }}
+            </span>
+            <div class="space-y-4">
               <SelectStandard
                 v-model="mcs.groupUse"
                 :validation-schema="schema.groupUse"
@@ -90,10 +72,6 @@
                 :field-label="$t('Capitalsource.groupUse')"
                 :select-box-values="groupUseValues"
               />
-            </div>
-          </div>
-          <div class="pt-2">
-            <div class="col-xs-12">
               <SelectStandard
                 v-model="mcs.importAllowed"
                 :validation-schema="schema.importAllowed"
@@ -104,26 +82,69 @@
             </div>
           </div>
         </div>
+
+        <div class="rounded-sm border bg-muted/30 p-4 shadow-sm space-y-4">
+          <div class="flex items-center space-x-2">
+            <span
+              class="text-xs font-bold uppercase tracking-wider text-muted-foreground block mb-0"
+            >
+              {{ $t("Capitalsource.accountData") }}
+            </span>
+          </div>
+          <div class="grid grid-cols-2 gap-4">
+            <InputStandard
+              v-model="mcs.accountNumber"
+              :validation-schema="schema.accountNumber"
+              :id="'accountNumber' + idSuffix"
+              :field-label="$t('General.iban')"
+            />
+            <InputStandard
+              v-model="mcs.bankCode"
+              :validation-schema="schema.bankCode"
+              :id="'bankCode' + idSuffix"
+              :field-label="$t('General.bic')"
+            />
+          </div>
+        </div>
       </form>
     </template>
+
     <template #footer>
-      <button type="button" class="btn btn-secondary" @click="resetForm">
+      <Button
+        type="button"
+        variant="secondary"
+        class="flex items-center gap-2 px-6"
+        @click="resetForm"
+      >
+        <Undo2 class="h-4 w-4" />
         {{ $t("General.reset") }}
-      </button>
+      </Button>
+
       <ButtonSubmit
         :button-label="$t('General.save')"
         :form-id="'createCapitalsourceForm' + idSuffix"
-      />
+      >
+        <template #icon><Save class="h-4 w-4" /></template>
+      </ButtonSubmit>
     </template>
   </ModalVue>
 </template>
 
 <script lang="ts" setup>
+import { Button } from "@/components/ui/button";
+import type { Capitalsource } from "@/model/capitalsource/Capitalsource";
+import { capitalsourceImportValues } from "@/model/capitalsource/CapitalsourceImport";
+import { capitalsourceStateValues } from "@/model/capitalsource/CapitalsourceState";
+import { capitalsourceTypeValues } from "@/model/capitalsource/CapitalsourceType";
+import type { SelectBoxValue } from "@/model/SelectBoxValue";
+import CapitalsourceService from "@/service/CapitalsourceService";
+import { handleBackendError } from "@/tools/views/HandleBackendError";
+import { globErr } from "@/tools/views/ZodUtil";
+import { Save, Undo2 } from "lucide-vue-next";
 import { useForm } from "vee-validate";
-import { computed, ref, useTemplateRef } from "vue";
+import { computed, ref, toRaw, useTemplateRef } from "vue";
 import { useI18n } from "vue-i18n";
 import { boolean, date, number, string, ZodType } from "zod";
-
 import ButtonSubmit from "../ButtonSubmit.vue";
 import DivError from "../DivError.vue";
 import InputDate from "../InputDate.vue";
@@ -131,20 +152,9 @@ import InputStandard from "../InputStandard.vue";
 import ModalVue from "../Modal.vue";
 import SelectStandard from "../SelectStandard.vue";
 
-import { handleBackendError } from "@/tools/views/HandleBackendError";
-import { globErr } from "@/tools/views/ZodUtil";
-
-import type { Capitalsource } from "@/model/capitalsource/Capitalsource";
-import type { SelectBoxValue } from "@/model/SelectBoxValue";
-import { capitalsourceImportValues } from "@/model/capitalsource/CapitalsourceImport";
-import { capitalsourceStateValues } from "@/model/capitalsource/CapitalsourceState";
-import { capitalsourceTypeValues } from "@/model/capitalsource/CapitalsourceType";
-
-import CapitalsourceService from "@/service/CapitalsourceService";
-
 const { t } = useI18n();
 
-defineProps({
+const props = defineProps({
   idSuffix: {
     type: String,
     default: "",
@@ -152,6 +162,19 @@ defineProps({
 });
 
 const serverErrors = ref(new Array<string>());
+const mcs = ref({} as Capitalsource);
+const origMcs = ref({} as Capitalsource | undefined);
+const modalComponent = useTemplateRef<typeof ModalVue>("modalComponent");
+
+const emit = defineEmits(["capitalsourceUpdated", "capitalsourceCreated"]);
+
+const groupUseValues = [
+  { id: undefined, value: "" },
+  { id: false, value: t("General.no") },
+  { id: true, value: t("General.yes") },
+] as Array<SelectBoxValue>;
+
+const { handleSubmit, values, setFieldTouched } = useForm();
 
 const schema: Partial<{ [key in keyof Capitalsource]: ZodType }> = {
   comment: string(globErr(t("Capitalsource.validation.comment")))
@@ -175,20 +198,6 @@ const schema: Partial<{ [key in keyof Capitalsource]: ZodType }> = {
     .max(2),
 };
 
-const mcs = ref({} as Capitalsource);
-const origMcs = ref({} as Capitalsource | undefined);
-const modalComponent = useTemplateRef<typeof ModalVue>('modalComponent');
-
-const emit = defineEmits(["capitalsourceUpdated", "capitalsourceCreated"]);
-
-const groupUseValues = [
-  { id: undefined, value: "" },
-  { id: false, value: t("General.no") },
-  { id: true, value: t("General.yes") },
-] as Array<SelectBoxValue>;
-
-const { handleSubmit, values, setFieldTouched } = useForm();
-
 const title = computed(() => {
   return origMcs.value === undefined
     ? t("Capitalsource.title.create")
@@ -197,7 +206,7 @@ const title = computed(() => {
 
 const resetForm = () => {
   if (origMcs.value) {
-    Object.assign(mcs.value, origMcs.value);
+    mcs.value = structuredClone(toRaw(origMcs.value))!;
   } else {
     mcs.value = {
       validFrom: new Date(),
@@ -217,28 +226,26 @@ const _show = async (_mcs?: Capitalsource) => {
 const createCapitalsource = handleSubmit(() => {
   serverErrors.value = new Array<string>();
 
-  if (mcs.value.id > 0) {
-    //update
-    CapitalsourceService.updateCapitalsource(mcs.value)
-      .then(() => {
-        modalComponent.value?._hide();
-        emit("capitalsourceUpdated", mcs.value);
-      })
-      .catch((backendError) => {
-        handleBackendError(backendError, serverErrors);
-      });
-  } else {
-    //create
-    CapitalsourceService.createCapitalsource(mcs.value)
-      .then((_mcs) => {
-        mcs.value = _mcs;
-        modalComponent.value?._hide();
-        emit("capitalsourceCreated", mcs.value);
-      })
-      .catch((backendError) => {
-        handleBackendError(backendError, serverErrors);
-      });
-  }
+  const serviceCall =
+    mcs.value.id > 0
+      ? CapitalsourceService.updateCapitalsource(mcs.value)
+      : CapitalsourceService.createCapitalsource(mcs.value);
+
+  serviceCall
+    .then((result) => {
+      const isUpdate = mcs.value.id > 0;
+      if (!isUpdate) mcs.value = result as Capitalsource;
+
+      modalComponent.value?._hide();
+      emit(
+        isUpdate ? "capitalsourceUpdated" : "capitalsourceCreated",
+        mcs.value,
+      );
+    })
+    .catch((backendError) => {
+      handleBackendError(backendError, serverErrors);
+    });
 });
+
 defineExpose({ _show });
 </script>

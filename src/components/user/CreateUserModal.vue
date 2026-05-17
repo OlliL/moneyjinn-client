@@ -1,13 +1,29 @@
 <template>
   <ModalVue :title="title" :max-width="maxWidth" ref="modalComponent">
-    <template #body
-      ><form @submit.prevent="createUser" :id="'createUserForm' + idSuffix">
-        <div class="container-fluid">
-          <div class="row">
-            <div class="col">
+    <template #body>
+      <form @submit.prevent="createUser" :id="'createUserForm' + idSuffix">
+        <div
+          class="grid grid-cols-1"
+          :class="{ 'lg:grid-cols-12 gap-6': editMode }"
+        >
+          <div :class="{ 'lg:col-span-6': editMode }">
+            <div class="space-y-4">
               <DivError :server-errors="serverErrors" />
-              <div class="row pt-2">
-                <div class="col-xs-12">
+
+              <div
+                class="rounded-sm border bg-muted/30 p-4 shadow-sm space-y-4"
+              >
+                <div
+                  class="flex items-center space-x-2 border-b border-border/40 pb-2"
+                >
+                  <span
+                    class="text-xs font-bold uppercase tracking-wider text-muted-foreground block mb-0"
+                  >
+                    {{ $t("User.loginData") }}
+                  </span>
+                </div>
+
+                <div>
                   <InputStandard
                     v-model="user.userName"
                     :validation-schema="schema.userName"
@@ -15,97 +31,125 @@
                     :field-label="$t('General.username')"
                   />
                 </div>
-              </div>
-              <div class="row pt-2">
-                <div class="col-xs-12">
-                  <InputStandard
-                    v-model="password1"
-                    :validation-schema-ref="schema.password"
-                    :id="'password1' + idSuffix"
-                    :field-label="$t('General.password')"
-                    field-type="password"
-                  />
+                <div class="grid grid-cols-2 gap-2">
+                  <div>
+                    <InputStandard
+                      v-model="password1"
+                      :validation-schema-ref="schema.password"
+                      :id="'password1' + idSuffix"
+                      :field-label="$t('General.password')"
+                      field-type="password"
+                    />
+                  </div>
+
+                  <div>
+                    <InputStandard
+                      v-model="password2"
+                      :validation-schema-ref="schema.password"
+                      :id="'password2' + idSuffix"
+                      :field-label="$t('User.passwordVerify')"
+                      field-type="password"
+                    />
+                  </div>
                 </div>
               </div>
-              <div class="row pt-2">
-                <div class="col-xs-12">
-                  <InputStandard
-                    v-model="password2"
-                    :validation-schema-ref="schema.password"
-                    :id="'password2' + idSuffix"
-                    :field-label="$t('User.passwordVerify')"
-                    field-type="password"
-                  />
+
+              <div
+                class="rounded-sm border bg-muted/30 p-4 shadow-sm space-y-4"
+              >
+                <div
+                  class="flex items-center space-x-2 border-b border-border/40 pb-2"
+                >
+                  <span
+                    class="text-xs font-bold uppercase tracking-wider text-muted-foreground block mb-0"
+                  >
+                    {{ $t("User.permissions") }}
+                  </span>
                 </div>
-              </div>
-              <div class="row pt-2">
-                <div class="col-xs-12">
-                  <SelectStandard
-                    v-model="user.role"
-                    :validation-schema="schema.userRole"
-                    :id="'groupUse' + idSuffix"
-                    :field-label="$t('User.role')"
-                    :select-box-values="userRoleValues"
-                  />
-                </div>
-              </div>
-              <div class="row pt-2" v-if="editMode">
-                <div class="col-xs-12">
-                  <SelectStandard
-                    v-model="user.userIsNew"
-                    :validation-schema="schema.userIsNew"
-                    :id="'userIsNew' + idSuffix"
-                    :field-label="$t('User.new')"
-                    :select-box-values="yesNoValues"
-                  />
-                </div>
-              </div>
-              <div class="row pt-5">
-                <div class="col-xs-12">
-                  <SelectStandard
-                    v-model="user.groupId"
-                    :validation-schema="schema.groupId"
-                    :id="'groupId' + idSuffix"
-                    :field-label="$t('General.group')"
-                    :select-box-values="groupValues"
-                  />
-                </div>
-              </div>
-              <div class="row pt-2">
-                <div class="col-xs-12">
-                  <InputDate
-                    v-model="validFrom"
-                    :validation-schema="schema.validFrom"
-                    :id="'validFrom' + idSuffix"
-                    :field-label="$t('General.validFrom')"
-                  />
+
+                <div class="grid grid-cols-2 gap-4">
+                  <div>
+                    <SelectStandard
+                      v-model="user.role"
+                      :validation-schema="schema.userRole"
+                      :id="'role' + idSuffix"
+                      :field-label="$t('User.role')"
+                      :select-box-values="userRoleValues"
+                    />
+                  </div>
+                  <div>
+                    <SelectStandard
+                      v-model="user.groupId"
+                      :validation-schema="schema.groupId"
+                      :id="'groupId' + idSuffix"
+                      :field-label="$t('General.group')"
+                      :select-box-values="groupValues"
+                    />
+                  </div>
+                  <div>
+                    <InputDate
+                      v-model="validFrom"
+                      :validation-schema="schema.validFrom"
+                      :id="'validFrom' + idSuffix"
+                      :field-label="$t('General.validFrom')"
+                    />
+                  </div>
+                  <div v-if="editMode">
+                    <SelectStandard
+                      v-model="user.userIsNew"
+                      :validation-schema="schema.userIsNew"
+                      :id="'userIsNew' + idSuffix"
+                      :field-label="$t('User.new')"
+                      :select-box-values="yesNoValues"
+                    />
+                  </div>
                 </div>
               </div>
             </div>
+          </div>
+          <div :class="{ 'lg:col-span-6': editMode }">
             <div class="col" v-if="editMode">
-              <div class="row justify-content-md-center">
-                <div class="col-xs-12 mb-4 text-center">
-                  <h5>{{ $t("User.groupHistory") }}</h5>
+              <div class="flex justify-center">
+                <div class="w-full mb-4 text-center">
+                  <h5 class="text-xl">{{ $t("User.groupHistory") }}</h5>
                 </div>
               </div>
-              <div class="row justify-content-md-center">
-                <div class="col-xs-12 mb-4 text-center">
-                  <table class="table table-striped table-bordered table-hover">
-                    <thead>
-                      <tr>
-                        <th scope="col">{{ $t("General.group") }}</th>
-                        <th scope="col">{{ $t("General.validFrom") }}</th>
-                        <th scope="col">{{ $t("General.validTil") }}</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr v-for="userGroup in userGroups" :key="userGroup.id">
-                        <td>{{ userGroup.group?.name }}</td>
-                        <td><SpanDate :date="userGroup.validFrom" /></td>
-                        <td><SpanDate :date="userGroup.validTil" /></td>
-                      </tr>
-                    </tbody>
-                  </table>
+              <div class="flex justify-center">
+                <div class="w-full mb-4 text-center">
+                  <div class="flex flex-col rounded-md border">
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead
+                            class="font-bold border text-foreground text-center"
+                            >{{ $t("General.group") }}</TableHead
+                          >
+                          <TableHead
+                            class="font-bold border text-foreground text-center"
+                            >{{ $t("General.validFrom") }}</TableHead
+                          >
+                          <TableHead
+                            class="font-bold border text-foreground text-center"
+                            >{{ $t("General.validTil") }}</TableHead
+                          >
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        <TableRow
+                          v-for="userGroup in userGroups"
+                          :key="userGroup.id"
+                        >
+                          <TableCell>{{ userGroup.group?.name }}</TableCell>
+                          <TableCell
+                            ><SpanDate :date="userGroup.validFrom"
+                          /></TableCell>
+                          <TableCell
+                            ><SpanDate :date="userGroup.validTil"
+                          /></TableCell>
+                        </TableRow>
+                      </TableBody>
+                    </Table>
+                  </div>
                 </div>
               </div>
             </div>
@@ -114,23 +158,50 @@
       </form>
     </template>
     <template #footer>
-      <button type="button" class="btn btn-secondary" @click="resetForm">
+      <Button
+        type="button"
+        variant="secondary"
+        class="flex items-center gap-2 px-6"
+        @click="resetForm"
+      >
+        <Undo2 class="h-4 w-4" />
         {{ $t("General.reset") }}
-      </button>
+      </Button>
+
       <ButtonSubmit
         :button-label="$t('General.save')"
         :form-id="'createUserForm' + idSuffix"
-      />
+      >
+        <template #icon><Save class="h-4 w-4" /></template>
+      </ButtonSubmit>
     </template>
   </ModalVue>
 </template>
 
 <script lang="ts" setup>
+import { Button } from "@/components/ui/button";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import type { Group } from "@/model/group/Group";
+import type { SelectBoxValue } from "@/model/SelectBoxValue";
+import type { AccessRelation } from "@/model/user/AccessRelation";
+import type { User } from "@/model/user/User";
+import { UserRole, userRoleValues } from "@/model/user/UserRole";
+import GroupService from "@/service/GroupService";
+import UserService from "@/service/UserService";
+import { handleBackendError } from "@/tools/views/HandleBackendError";
+import { globErr } from "@/tools/views/ZodUtil";
+import { Save, Undo2 } from "lucide-vue-next";
 import { useForm } from "vee-validate";
-import { computed, ref, useTemplateRef, watch } from "vue";
+import { computed, ref, toRaw, useTemplateRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { boolean, date, number, string, type ZodTypeAny } from "zod";
-
 import ButtonSubmit from "../ButtonSubmit.vue";
 import DivError from "../DivError.vue";
 import InputDate from "../InputDate.vue";
@@ -138,18 +209,6 @@ import InputStandard from "../InputStandard.vue";
 import ModalVue from "../Modal.vue";
 import SelectStandard from "../SelectStandard.vue";
 import SpanDate from "../SpanDate.vue";
-
-import { handleBackendError } from "@/tools/views/HandleBackendError";
-import { globErr } from "@/tools/views/ZodUtil";
-
-import type { AccessRelation } from "@/model/user/AccessRelation";
-import type { Group } from "@/model/group/Group";
-import type { User } from "@/model/user/User";
-import { UserRole, userRoleValues } from "@/model/user/UserRole";
-import type { SelectBoxValue } from "@/model/SelectBoxValue";
-
-import GroupService from "@/service/GroupService";
-import UserService from "@/service/UserService";
 
 const { t } = useI18n();
 
@@ -216,7 +275,9 @@ const title = computed(() => {
 });
 
 const maxWidth = computed(() => {
-  return editMode.value ? "45%" : "var(--bs-modal-width);";
+  return editMode.value
+    ? "max-w-[calc(100%-2rem)] md:max-w-2xl lg:max-w-4xl w-full mx-auto"
+    : "max-w-[calc(100%-2rem)] sm:max-w-md w-full mx-auto";
 });
 
 const resetForm = () => {
@@ -232,7 +293,7 @@ const resetForm = () => {
     }
 
     if (origUser.value) {
-      Object.assign(user.value, origUser.value);
+      user.value = structuredClone(toRaw(origUser.value))!;
       if (user.value.id) {
         const groupsById = new Map<number, Group>();
         for (const group of _groups) {

@@ -1,30 +1,47 @@
 <template>
-  <tr>
-    <td class="text-start">{{ user.userName }}</td>
-    <td class="text-start">{{ user.groupName }}</td>
-    <td class="text-center">{{ role }}</td>
-    <td class="text-center">
+  <TableRow>
+    <TableCell class="text-left border-r py-1 px-2">{{
+      user.userName
+    }}</TableCell>
+    <TableCell class="text-left border-r py-1 px-2">{{
+      user.groupName
+    }}</TableCell>
+    <TableCell class="text-center border-r py-1 px-2">{{ role }}</TableCell>
+    <TableCell class="text-center border-r py-1 px-2">
       <SpanBoolean :value="user.userIsNew" />
-    </td>
-    <td class="text-center">
-      <span class="link-primary" @click="editUser"
-        ><i class="bi bi-pencil-square"></i
-      ></span>
-    </td>
-    <td class="text-center">
-      <span class="link-primary" @click="deleteUser"
-        ><i class="bi bi-trash"></i
-      ></span>
-    </td>
-  </tr>
+    </TableCell>
+    <TableCell class="w-0 whitespace-nowrap text-center p-0">
+      <Button
+        variant="ghost"
+        size="icon"
+        @click="editUser"
+        :title="$t('General.edit')"
+        class="h-8 w-8 cursor-pointer"
+      >
+        <Pencil class="h-4 w-4" />
+      </Button>
+    </TableCell>
+    <TableCell class="w-0 border-l whitespace-nowrap text-center p-0">
+      <Button
+        variant="ghost"
+        size="icon"
+        @click="deleteUser"
+        :title="$t('General.delete')"
+        class="h-8 w-8 cursor-pointer"
+      >
+        <Trash2 class="h-4 w-4" />
+      </Button>
+    </TableCell>
+  </TableRow>
 </template>
 <script lang="ts" setup>
-import { computed, type PropType } from "vue";
-
-import SpanBoolean from "../SpanBoolean.vue";
-
+import { Button } from "@/components/ui/button";
+import { TableCell, TableRow } from "@/components/ui/table";
 import type { User } from "@/model/user/User";
 import { userRoleNames } from "@/model/user/UserRole";
+import { Pencil, Trash2 } from "lucide-vue-next";
+import { computed, type PropType } from "vue";
+import SpanBoolean from "../SpanBoolean.vue";
 
 const props = defineProps({
   user: {

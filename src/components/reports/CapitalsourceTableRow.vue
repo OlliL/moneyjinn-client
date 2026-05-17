@@ -1,47 +1,53 @@
 <template>
-  <tr>
-    <td class="text-start d-none d-md-table-cell">
+  <TableRow class="">
+    <TableCell class="text-left border-r hidden md:table-cell">
       {{ capitalsourceTypeString }}
-    </td>
-    <td class="text-start d-none d-md-table-cell">
+    </TableCell>
+    <TableCell class="text-left border-r hidden md:table-cell">
       {{ capitalsourceStateString }}
-    </td>
-    <td class="text-start">{{ capitalsourceComment }}</td>
-    <td class="text-end"><SpanAmount :amount="amountBeginOfMonthFixed" /></td>
-    <td class="text-end" v-if="currentMonthIsSettled">
+    </TableCell>
+    <TableCell class="text-left border-r">{{ capitalsourceComment }}</TableCell>
+    <TableCell class="text-right border-r"
+      ><SpanAmount :amount="amountBeginOfMonthFixed"
+    /></TableCell>
+    <TableCell class="text-right border-r" v-if="currentMonthIsSettled">
       <SpanAmount :amount="amountEndOfMonthFixed" />
-    </td>
-    <td class="text-end d-none d-md-table-cell">
+    </TableCell>
+    <TableCell class="text-right border-r hidden md:table-cell">
       <SpanAmount :amount="amountEndOfMonthCalculated" />
-    </td>
-    <td class="text-end d-none d-md-table-cell" v-if="currentMonthIsSettled">
+    </TableCell>
+    <TableCell
+      class="text-right hidden md:table-cell"
+      v-if="currentMonthIsSettled"
+    >
       <SpanAmount :amount="differenceFixedCalculated" />
-    </td>
-    <td class="text-end" v-if="!currentMonthIsSettled">
+    </TableCell>
+    <TableCell class="text-right border-r" v-if="!currentMonthIsSettled">
       <SpanAmount :amount="amountCurrent" />
-    </td>
-    <td class="text-end d-none d-md-table-cell" v-if="!currentMonthIsSettled">
+    </TableCell>
+    <TableCell
+      class="text-right hidden md:table-cell"
+      v-if="!currentMonthIsSettled"
+    >
       {{ amountCurrentStateString }}
-    </td>
-  </tr>
+    </TableCell>
+  </TableRow>
 </template>
 
 <script lang="ts" setup>
-import { computed, type PropType } from "vue";
-import { useI18n } from "vue-i18n";
-
-import SpanAmount from "../SpanAmount.vue";
-
-import { formatDateWithTime } from "@/tools/views/FormatDate";
-
-import {
-  CapitalsourceType,
-  capitalsourceTypeNames,
-} from "@/model/capitalsource/CapitalsourceType";
+import { TableCell, TableRow } from "@/components/ui/table";
 import {
   CapitalsourceState,
   capitalsourceStateNames,
 } from "@/model/capitalsource/CapitalsourceState";
+import {
+  CapitalsourceType,
+  capitalsourceTypeNames,
+} from "@/model/capitalsource/CapitalsourceType";
+import { formatDateWithTime } from "@/tools/views/FormatDate";
+import { computed, type PropType } from "vue";
+import { useI18n } from "vue-i18n";
+import SpanAmount from "../SpanAmount.vue";
 
 const { t } = useI18n();
 
@@ -91,13 +97,13 @@ const capitalsourceStateString = computed(() => {
   return capitalsourceStateNames[props.capitalsourceState];
 });
 const differenceFixedCalculated = computed(() => {
-  return props.amountEndOfMonthFixed != null
-    ? props.amountEndOfMonthFixed - props.amountEndOfMonthCalculated
-    : 0;
+  return props.amountEndOfMonthFixed == null
+    ? 0
+    : props.amountEndOfMonthFixed - props.amountEndOfMonthCalculated;
 });
 const amountCurrentStateString = computed(() => {
-  return props.amountCurrentState != null
-    ? formatDateWithTime(props.amountCurrentState)
-    : t("Reports.calculated");
+  return props.amountCurrentState == null
+    ? t("Reports.calculated")
+    : formatDateWithTime(props.amountCurrentState);
 });
 </script>

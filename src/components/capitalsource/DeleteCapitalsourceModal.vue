@@ -2,93 +2,124 @@
   <ModalVue :title="$t('Capitalsource.title.delete')" ref="modalComponent">
     <template #body>
       <DivError :server-errors="serverErrors" />
-      <div class="row d-flex justify-content-center mt-3">
-        <div class="col-11">
-          <table class="table table-bordered table-hover">
-            <tbody>
-              <tr>
-                <th scope="row">{{ $t("General.name") }}</th>
-                <td>{{ mcs.comment }}</td>
-              </tr>
-              <tr>
-                <th scope="row">{{ $t("Capitalsource.type") }}</th>
-                <td>{{ typeString }}</td>
-              </tr>
-              <tr>
-                <th scope="row">{{ $t("Capitalsource.state") }}</th>
-                <td>{{ stateString }}</td>
-              </tr>
-              <tr>
-                <th scope="row">{{ $t("General.iban") }}</th>
-                <td>{{ mcs.accountNumber }}</td>
-              </tr>
-              <tr>
-                <th scope="row">{{ $t("General.bic") }}</th>
-                <td>{{ mcs.bankCode }}</td>
-              </tr>
-              <tr>
-                <th scope="row">{{ $t("General.validFrom") }}</th>
-                <td><SpanDate :date="mcs.validFrom" /></td>
-              </tr>
-              <tr>
-                <th scope="row">{{ $t("General.validTil") }}</th>
-                <td><SpanDate :date="mcs.validTil" /></td>
-              </tr>
-              <tr>
-                <th scope="row">{{ $t("Capitalsource.groupUse") }}</th>
-                <td><SpanBoolean :value="mcs.groupUse" /></td>
-              </tr>
-              <tr>
-                <th scope="row">{{ $t("Capitalsource.importAllowed") }}</th>
-                <td>
-                  <b :style="'color:' + importAllowedColor">{{
-                    importAllowedString
-                  }}</b>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+      <div class="flex flex-col rounded-xl border bg-card overflow-hidden">
+        <Table>
+          <TableBody>
+            <TableRow class="hover:bg-transparent border-b last:border-0">
+              <TableCell
+                class="font-normal text-muted-foreground max-w-[11rem] w-44 pl-4 pr-2 py-3 whitespace-normal break-words"
+              >
+                {{ $t("General.name") }}
+              </TableCell>
+              <TableCell
+                class="font-semibold text-foreground pr-4 py-3 text-base"
+              >
+                {{ mcs.comment }}
+              </TableCell>
+            </TableRow>
+
+            <TableRow class="hover:bg-transparent border-b last:border-0">
+              <TableCell
+                class="font-normal text-muted-foreground max-w-[11rem] w-44 pl-4 pr-2 py-3 whitespace-normal break-words"
+              >
+                {{ $t("Capitalsource.type") }}
+              </TableCell>
+              <TableCell class="font-medium text-foreground pr-4 py-3">
+                {{ typeString }}
+              </TableCell>
+            </TableRow>
+
+            <TableRow class="hover:bg-transparent border-b last:border-0">
+              <TableCell
+                class="font-normal text-muted-foreground max-w-[11rem] w-44 pl-4 pr-2 py-3 whitespace-normal break-words"
+              >
+                {{ $t("Capitalsource.state") }}
+              </TableCell>
+              <TableCell class="font-medium text-foreground pr-4 py-3">
+                {{ stateString }}
+              </TableCell>
+            </TableRow>
+
+            <TableRow class="hover:bg-transparent border-b last:border-0">
+              <TableCell
+                class="font-normal text-muted-foreground max-w-[11rem] w-44 pl-4 pr-2 py-3 whitespace-normal break-words"
+              >
+                {{ $t("General.iban") }}
+              </TableCell>
+              <TableCell class="font-medium text-foreground pr-4 py-3">
+                <SpanIban :iban="mcs.accountNumber" />
+              </TableCell>
+            </TableRow>
+
+            <TableRow class="hover:bg-transparent border-b last:border-0">
+              <TableCell
+                class="font-normal text-muted-foreground max-w-[11rem] w-44 pl-4 pr-2 py-3 whitespace-normal break-words"
+              >
+                {{ $t("General.bic") }}
+              </TableCell>
+              <TableCell class="font-medium text-foreground pr-4 py-3">
+                {{ mcs.bankCode }}
+              </TableCell>
+            </TableRow>
+
+            <TableRow class="hover:bg-transparent border-b last:border-0">
+              <TableCell
+                class="font-normal text-muted-foreground max-w-[11rem] w-44 pl-4 pr-2 py-3 whitespace-normal break-words"
+              >
+                {{ $t("General.validFrom") }}
+              </TableCell>
+              <TableCell class="font-medium text-foreground pr-4 py-3">
+                <SpanDate :date="mcs.validFrom" />
+              </TableCell>
+            </TableRow>
+
+            <TableRow class="hover:bg-transparent border-b last:border-0">
+              <TableCell
+                class="font-normal text-muted-foreground max-w-[11rem] w-44 pl-4 pr-2 py-3 whitespace-normal break-words"
+              >
+                {{ $t("General.validTil") }}
+              </TableCell>
+              <TableCell class="font-medium text-foreground pr-4 py-3">
+                <SpanDate :date="mcs.validTil" />
+              </TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
       </div>
     </template>
     <template #footer>
-      <button type="button" class="btn btn-danger" @click="deleteCapitalsource">
+      <Button
+        variant="destructive"
+        class="flex items-center gap-2 px-6"
+        @click="deleteCapitalsource"
+      >
+        <Trash2 class="h-4 w-4" />
         {{ $t("General.delete") }}
-      </button>
+      </Button>
     </template>
   </ModalVue>
 </template>
 
 <script lang="ts" setup>
-import { computed, ref, useTemplateRef } from "vue";
-
-import DivError from "../DivError.vue";
-import ModalVue from "../Modal.vue";
-import SpanBoolean from "../SpanBoolean.vue";
-import SpanDate from "../SpanDate.vue";
-
-import { handleBackendError } from "@/tools/views/HandleBackendError";
-
+import { Button } from "@/components/ui/button";
+import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import type { Capitalsource } from "@/model/capitalsource/Capitalsource";
-import { capitalsourceImportNames } from "@/model/capitalsource/CapitalsourceImport";
 import { capitalsourceStateNames } from "@/model/capitalsource/CapitalsourceState";
 import { capitalsourceTypeNames } from "@/model/capitalsource/CapitalsourceType";
-
 import CapitalsourceService from "@/service/CapitalsourceService";
+import { handleBackendError } from "@/tools/views/HandleBackendError";
+import { Trash2 } from "lucide-vue-next";
+import { computed, ref, useTemplateRef } from "vue";
+import DivError from "../DivError.vue";
+import ModalVue from "../Modal.vue";
+import SpanDate from "../SpanDate.vue";
+import SpanIban from "../SpanIban.vue";
 
 const serverErrors = ref(new Array<string>());
 
 const mcs = ref({} as Capitalsource);
 const modalComponent = useTemplateRef<typeof ModalVue>("modalComponent");
 const emit = defineEmits(["capitalsourceDeleted"]);
-
-const importAllowedColor = computed(() => {
-  return mcs.value.importAllowed > 0 ? "green" : "red";
-});
-
-const importAllowedString = computed(() => {
-  return capitalsourceImportNames[mcs.value.importAllowed];
-});
 
 const typeString = computed(() => {
   return capitalsourceTypeNames[mcs.value.type];
@@ -119,9 +150,3 @@ const deleteCapitalsource = () => {
 
 defineExpose({ _show });
 </script>
-
-<style scoped>
-th {
-  background-color: #f2f2f2;
-}
-</style>

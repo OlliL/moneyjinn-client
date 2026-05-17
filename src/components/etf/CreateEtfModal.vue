@@ -2,150 +2,142 @@
   <ModalVue :title="title" ref="modalComponent">
     <template #body
       ><form @submit.prevent="createEtf" :id="'createEtfForm' + idSuffix">
-        <div class="container-fluid">
+        <div class="space-y-4">
           <DivError :server-errors="serverErrors" />
-          <div class="row">
-            <div class="col-xs-12">
-              <InputStandard
-                v-model="met.name"
-                :validation-schema="schema.name"
-                :id="'name' + idSuffix"
-                :field-label="$t('General.name')"
-              />
-            </div>
-          </div>
-          <div class="row pt-2">
-            <div class="col-xs-12">
-              <InputStandard
-                v-model="met.isin"
-                :validation-schema="schema.isin"
-                :id="'isin' + idSuffix"
-                :field-label="$t('ETF.isin')"
-              />
-            </div>
-          </div>
-          <div class="row pt-2">
-            <div class="col-xs-12">
-              <InputStandard
-                v-model="met.wkn"
-                :validation-schema="schema.wkn"
-                :id="'wkn' + idSuffix"
-                :field-label="$t('ETF.wkn')"
-              />
-            </div>
-          </div>
-          <div class="row pt-2">
-            <div class="col-xs-12">
-              <InputStandard
-                v-model="met.ticker"
-                :validation-schema="schema.ticker"
-                :id="'ticker' + idSuffix"
-                :field-label="$t('ETF.ticker')"
-              />
-            </div>
-          </div>
-          <div class="row pt-2">
-            <div class="col-xs-12">
-              <InputStandard
-                v-model="met.chartUrl"
-                :validation-schema="schema.chartUrl"
-                :id="'chartUrl' + idSuffix"
-                :field-label="$t('ETF.chartUrl')"
-              />
-            </div>
-          </div>
-          <div class="row pt-2">
-            <div class="col-xs-12">
-              <InputStandard
-                v-model="met.transactionCostsAbsolute"
-                :validation-schema="schema.transactionCostsAbsolute"
-                :id="'transactionCostsAbsolute' + idSuffix"
-                field-type="number"
-                step="0.01"
-                :field-label="
-                  $t('ETFFlow.transactionCosts') +
-                  ' ' +
-                  $t('ETFFlow.transactionCostsAbsolute')
-                "
-              >
-                <template #icon
-                  ><span class="input-group-text"
-                    ><i class="bi bi-currency-euro"></i></span
-                ></template>
-              </InputStandard>
-            </div>
-          </div>
-          <div class="row pt-2">
-            <div class="col-xs-12">
-              <InputStandard
-                v-model="met.transactionCostsRelative"
-                :validation-schema="schema.transactionCostsRelative"
-                :id="'transactionCostsRelative' + idSuffix"
-                field-type="number"
-                step="0.01"
-                :field-label="
-                  $t('ETFFlow.transactionCosts') +
-                  ' ' +
-                  $t('ETFFlow.transactionCostsRelative')
-                "
-              >
-                <template #icon
-                  ><span class="input-group-text"
-                    ><i class="bi bi-percent"></i></span
-                ></template>
-              </InputStandard>
-            </div>
-          </div>
-          <div class="row pt-2">
-            <div class="col-xs-12">
-              <InputStandard
-                v-model="met.transactionCostsMaximum"
-                :validation-schema="schema.transactionCostsMaximum"
-                :id="'transactionCostsMaximum' + idSuffix"
-                field-type="number"
-                step="0.01"
-                :field-label="
-                  $t('ETFFlow.transactionCosts') +
-                  ' ' +
-                  $t('ETFFlow.transactionCostsMaximum')
-                "
-              >
-                <template #icon
-                  ><span class="input-group-text"
-                    ><i class="bi bi-currency-euro"></i></span
-                ></template>
-              </InputStandard>
-            </div>
-          </div>
-          <div class="row pt-2">
-            <div class="col-xs-12">
-              <InputStandard
-                v-model="met.partialTaxExemption"
-                :validation-schema="schema.partialTaxExemption"
-                :id="'partialTaxExemption' + idSuffix"
-                field-type="number"
-                step="0.01"
-                :field-label="$t('ETF.partialTaxExemption')"
-              >
-                <template #icon
-                  ><span class="input-group-text"
-                    ><i class="bi bi-percent"></i></span
-                ></template>
-              </InputStandard>
-            </div>
-          </div>
-          <div class="row pt-3">
-            <div class="col-xs-12">
-              <div class="form-check form-check-inline form-switch">
-                <input
-                  class="form-check-input"
-                  type="checkbox"
-                  v-model="markAsFavorite"
-                  id="markAsFavorite"
+
+          <div class="rounded-sm border bg-muted/30 p-4 shadow-sm space-y-4">
+            <div class="flex items-end gap-3">
+              <div class="flex-1">
+                <InputStandard
+                  v-model="met.name"
+                  :validation-schema="schema.name"
+                  :id="'name' + idSuffix"
+                  :field-label="$t('General.name')"
                 />
-                <label class="form-check-label" for="markAsFavorite">
-                  {{ $t("ETF.markAsFav") }}
-                </label>
+              </div>
+
+              <button
+                type="button"
+                @click="markAsFavorite = !markAsFavorite"
+                class="flex items-center justify-center p-2 rounded-md border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 w-10 transition-colors"
+                :title="$t('ETF.markAsFav')"
+              >
+                <Star
+                  class="h-5 w-5 transition-all"
+                  :class="
+                    markAsFavorite
+                      ? 'fill-primary text-primary'
+                      : 'text-muted-foreground'
+                  "
+                />
+              </button>
+            </div>
+          </div>
+
+          <div class="rounded-sm border bg-muted/30 p-4 shadow-sm space-y-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <InputStandard
+                  v-model="met.partialTaxExemption"
+                  :validation-schema="schema.partialTaxExemption"
+                  :id="'partialTaxExemption' + idSuffix"
+                  field-type="number"
+                  step="0.01"
+                  :field-label="$t('ETF.partialTaxExemption')"
+                >
+                  <template #icon><Percent class="h-4 w-4" /></template>
+                </InputStandard>
+              </div>
+              <div>
+                <InputStandard
+                  v-model="met.isin"
+                  :validation-schema="schema.isin"
+                  :id="'isin' + idSuffix"
+                  :field-label="$t('ETF.isin')"
+                />
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <InputStandard
+                  v-model="met.wkn"
+                  :validation-schema="schema.wkn"
+                  :id="'wkn' + idSuffix"
+                  :field-label="$t('ETF.wkn')"
+                />
+              </div>
+              <div>
+                <InputStandard
+                  v-model="met.ticker"
+                  :validation-schema="schema.ticker"
+                  :id="'ticker' + idSuffix"
+                  :field-label="$t('ETF.ticker')"
+                />
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 gap-2">
+              <div>
+                <InputStandard
+                  v-model="met.chartUrl"
+                  :validation-schema="schema.chartUrl"
+                  :id="'chartUrl' + idSuffix"
+                  :field-label="$t('ETF.chartUrl')"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div class="rounded-sm border bg-muted/30 p-4 shadow-sm space-y-4">
+            <div
+              class="flex items-center space-x-2 border-b border-border/40 pb-2"
+            >
+              <span
+                class="text-xs font-bold uppercase tracking-wider text-muted-foreground block mb-0"
+              >
+                {{ $t("ETFFlow.transactionCosts") }}
+              </span>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div>
+                <InputStandard
+                  v-model="met.transactionCostsAbsolute"
+                  :validation-schema="schema.transactionCostsAbsolute"
+                  :id="'transactionCostsAbsolute' + idSuffix"
+                  field-type="number"
+                  step="0.01"
+                  :field-label="$t('ETFFlow.transactionCostsAbsolute')"
+                >
+                  <template #icon><Euro class="h-4 w-4" /></template>
+                </InputStandard>
+              </div>
+
+              <div>
+                <InputStandard
+                  v-model="met.transactionCostsRelative"
+                  :validation-schema="schema.transactionCostsRelative"
+                  :id="'transactionCostsRelative' + idSuffix"
+                  field-type="number"
+                  step="0.01"
+                  :field-label="$t('ETFFlow.transactionCostsRelative')"
+                >
+                  <template #icon><Percent class="h-4 w-4" /></template>
+                </InputStandard>
+              </div>
+
+              <div>
+                <InputStandard
+                  v-model="met.transactionCostsMaximum"
+                  :validation-schema="schema.transactionCostsMaximum"
+                  :id="'transactionCostsMaximum' + idSuffix"
+                  field-type="number"
+                  step="0.01"
+                  :field-label="$t('ETFFlow.transactionCostsMaximum')"
+                >
+                  <template #icon><Euro class="h-4 w-4" /></template>
+                </InputStandard>
               </div>
             </div>
           </div>
@@ -153,33 +145,41 @@
       </form>
     </template>
     <template #footer>
-      <button type="button" class="btn btn-secondary" @click="resetForm">
+      <Button
+        type="button"
+        variant="secondary"
+        class="flex items-center gap-2 px-6"
+        @click="resetForm"
+      >
+        <Undo2 class="h-4 w-4" />
         {{ $t("General.reset") }}
-      </button>
+      </Button>
+
       <ButtonSubmit
         :button-label="$t('General.save')"
         :form-id="'createEtfForm' + idSuffix"
-      />
+      >
+        <template #icon><Save class="h-4 w-4" /></template>
+      </ButtonSubmit>
     </template>
   </ModalVue>
 </template>
 
 <script lang="ts" setup>
+import { Button } from "@/components/ui/button";
+import type { Etf } from "@/model/etf/Etf";
+import CrudEtfService from "@/service/CrudEtfService";
+import { handleBackendError } from "@/tools/views/HandleBackendError";
+import { amountSchema, globErr } from "@/tools/views/ZodUtil";
+import { Euro, Percent, Save, Star, Undo2 } from "lucide-vue-next";
 import { useForm } from "vee-validate";
-import { computed, ref, useTemplateRef } from "vue";
+import { computed, ref, toRaw, useTemplateRef } from "vue";
 import { useI18n } from "vue-i18n";
 import { string, ZodType } from "zod";
-
 import ButtonSubmit from "../ButtonSubmit.vue";
 import DivError from "../DivError.vue";
 import InputStandard from "../InputStandard.vue";
 import ModalVue from "../Modal.vue";
-
-import { handleBackendError } from "@/tools/views/HandleBackendError";
-import { amountSchema, globErr } from "@/tools/views/ZodUtil";
-
-import type { Etf } from "@/model/etf/Etf";
-import CrudEtfService from "@/service/CrudEtfService";
 
 const { t } = useI18n();
 
@@ -236,15 +236,11 @@ const title = computed(() => {
 
 const resetForm = () => {
   if (origMet.value) {
-    Object.assign(met.value, origMet.value);
+    met.value = structuredClone(toRaw(origMet.value))!;
   } else {
     met.value = {} as Etf;
   }
-  if (met.value.isFavorite) {
-    markAsFavorite.value = true;
-  } else {
-    markAsFavorite.value = false;
-  }
+  markAsFavorite.value = !!met.value.isFavorite;
   serverErrors.value = new Array<string>();
   Object.keys(values).forEach((field) => setFieldTouched(field, false));
 };

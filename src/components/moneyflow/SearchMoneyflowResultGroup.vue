@@ -1,98 +1,145 @@
 <template>
-  <tr>
-    <td style="vertical-align: middle">
-      <a
-        class="btn btn-outline-primary"
-        data-bs-toggle="collapse"
-        :href="'#collapseResults' + moneyflowGroupKey"
-        aria-expanded="false"
-        aria-controls="collapseExample"
-        ><span class="link-primary"><i :class="collapseIconClass"></i></span
-      ></a>
-    </td>
-    <td style="vertical-align: middle" v-if="colBookingMonth">
-      <span class="link-primary"
-        ><router-link
-          class="nav-link button"
-          :to="{
-            name: Routes.ListReports,
-            params: { year: moneyflowGroup.year, month: moneyflowGroup.month },
-          }"
-          >{{ moneyflowGroup.monthString }}
-          {{ moneyflowGroup.year }}</router-link
-        ></span
+  <TableRow>
+    <TableCell class="align-middle border-r">
+      <Button
+        variant="ghost"
+        size="icon"
+        @click="toggleCollapse"
+        :title="isCollapsed ? 'Collapse details' : 'Expand details'"
+        :aria-label="isCollapsed ? 'Collapse details' : 'Expand details'"
+        class="h-8 w-8 cursor-pointer"
       >
-    </td>
-    <td style="vertical-align: middle" v-if="colBookingYear">
-      <span class="link-primary"
-        ><router-link
-          class="nav-link button"
-          :to="{
-            name: Routes.ListReports,
-            params: { year: moneyflowGroup.year },
-          }"
-        >
-          {{ moneyflowGroup.year }}</router-link
-        ></span
+        <ChevronRight v-if="!isCollapsed" class="h-4 w-4" />
+        <ChevronDown v-else class="h-4 w-4" />
+      </Button>
+    </TableCell>
+    <TableCell class="align-middle border-r" v-if="colBookingMonth">
+      <router-link
+        class="text-primary hover:underline"
+        :to="{
+          name: Routes.ListReports,
+          params: { year: moneyflowGroup.year, month: moneyflowGroup.month },
+        }"
       >
-    </td>
-    <td style="vertical-align: middle" v-if="colContractpartner">
+        {{ moneyflowGroup.monthString }} {{ moneyflowGroup.year }}
+      </router-link>
+    </TableCell>
+    <TableCell class="align-middle border-r" v-if="colBookingYear">
+      <router-link
+        class="text-primary hover:underline"
+        :to="{
+          name: Routes.ListReports,
+          params: { year: moneyflowGroup.year },
+        }"
+      >
+        {{ moneyflowGroup.year }}
+      </router-link>
+    </TableCell>
+    <TableCell
+      class="align-middle border-r !whitespace-normal"
+      v-if="colContractpartner"
+    >
       {{ moneyflowGroup.contractpartnerName }}
-    </td>
+    </TableCell>
 
-    <td class="text-end" style="white-space: nowrap; vertical-align: middle">
+    <TableCell class="text-right border-r align-middle">
       <SpanAmount :amount="moneyflowGroup.amount" />
-    </td>
-    <td class="text-start" style="vertical-align: middle">
+    </TableCell>
+    <TableCell class="text-left align-middle break-words !whitespace-normal">
       {{ moneyflowGroup.commentString }}
-    </td>
-  </tr>
-  <tr>
-    <td colspan="5" style="padding: 0">
-      <div class="collapse" :id="'collapseResults' + moneyflowGroupKey">
-        <table
-          class="table table-striped table-bordered table-hover"
-          v-if="showDetails"
-        >
-          <thead>
-            <tr>
-              <th scope="col" class="d-none d-md-table-cell align-top"></th>
-              <th scope="col">{{ $t("Moneyflow.bookingdate") }}</th>
-              <th scope="col">{{ $t("General.amount") }}</th>
-              <th scope="col">{{ $t("General.contractpartner") }}</th>
-              <th scope="col">{{ $t("General.comment") }}</th>
-              <th scope="col">{{ $t("General.postingAccount") }}</th>
-              <th scope="col">{{ $t("General.capitalsource") }}</th>
-              <th scope="colgroup" colspan="2"></th>
-            </tr>
-          </thead>
-          <tbody>
-            <SearchMoneyflowResultRowVue
-              v-for="(moneyflow, index) of moneyflowGroup.moneyflows"
-              :key="moneyflow.id"
-              :mmf="moneyflow"
-              :rowspan="rowsPerMoneyflow.get(moneyflow.id) ?? 1"
-              :isFirstOfMultipleRowsForSameMoneyflow="
-                firstIndexForMoneyflow.get(moneyflow.id) === index
-              "
-              @delete-moneyflow="emitDeleteMoneyflow"
-              @edit-moneyflow="emitEditMoneyflow"
-              @list-moneyflow="emitListMoneyflow"
-              @show-receipt="emitShowReceipt"
-            />
-          </tbody>
-        </table>
+    </TableCell>
+  </TableRow>
+
+  <TableRow v-if="isCollapsed">
+    <TableCell
+      :colspan="
+        3 +
+        (colBookingMonth ? 1 : 0) +
+        (colBookingYear ? 1 : 0) +
+        (colContractpartner ? 1 : 0)
+      "
+      class="p-0"
+    >
+      <div class="p-4">
+        <div class="flex flex-col rounded-md border w-full overflow-x-auto">
+          <Table class="[&_td]:!py-1 [&_th]:!py-1">
+            <TableHeader>
+              <TableRow>
+                <TableHead class="hidden border-r border-b md:table-cell"
+                  ><span class="sr-only">Status</span></TableHead
+                >
+                <TableHead
+                  class="font-bold border-r border-b text-foreground text-center"
+                  >{{ $t("Moneyflow.bookingdate") }}</TableHead
+                >
+                <TableHead
+                  class="font-bold border-r border-b text-foreground text-center"
+                  >{{ $t("General.amount") }}</TableHead
+                >
+                <TableHead
+                  class="font-bold border-r border-b text-foreground text-center"
+                  >{{ $t("General.contractpartner") }}</TableHead
+                >
+                <TableHead
+                  class="font-bold border-r border-b text-foreground text-center"
+                  >{{ $t("General.comment") }}</TableHead
+                >
+                <TableHead
+                  class="font-bold border-r border-b text-foreground text-center"
+                  >{{ $t("General.postingAccount") }}</TableHead
+                >
+                <TableHead
+                  class="font-bold border-r border-b text-foreground text-center"
+                  >{{ $t("General.capitalsource") }}</TableHead
+                >
+                <TableHead
+                  class="font-bold border-b text-foreground text-center"
+                  colspan="2"
+                ></TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              <SearchMoneyflowResultRowVue
+                v-for="(moneyflow, index) of moneyflowGroup.moneyflows"
+                :key="moneyflow.id"
+                :mmf="moneyflow"
+                :rowspan="rowsPerMoneyflow.get(moneyflow.id) ?? 1"
+                :isFirstOfMultipleRowsForSameMoneyflow="
+                  firstIndexForMoneyflow.get(moneyflow.id) === index
+                "
+                :alternateRowBackground="
+                  alternateRowBackground.get(moneyflow.id)
+                "
+                @delete-moneyflow="emitDeleteMoneyflow"
+                @edit-moneyflow="emitEditMoneyflow"
+                @list-moneyflow="emitListMoneyflow"
+                @show-receipt="emitShowReceipt"
+              />
+            </TableBody>
+          </Table>
+        </div>
       </div>
-    </td>
-  </tr>
+    </TableCell>
+  </TableRow>
 </template>
 <script lang="ts" setup>
-import { onMounted, ref, watch, type PropType } from "vue";
+import { ChevronDown, ChevronRight } from "lucide-vue-next";
+import { ref, watch, type PropType } from "vue";
+
+import { Button } from "@/components/ui/button";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 import { Routes } from "@/router";
 
-import SearchMoneyflowResultRowVue from "./SearchMoneyflowResultRow.vue";
 import SpanAmount from "../SpanAmount.vue";
+import SearchMoneyflowResultRowVue from "./SearchMoneyflowResultRow.vue";
 
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 
@@ -130,8 +177,7 @@ const props = defineProps({
   },
 });
 
-const collapseIconClass = ref("bi bi-caret-right-fill");
-const showDetails = ref(false);
+const isCollapsed = ref(false);
 const emit = defineEmits([
   "showReceipt",
   "deleteMoneyflow",
@@ -140,13 +186,17 @@ const emit = defineEmits([
 ]);
 const rowsPerMoneyflow = ref(new Map<number, number>());
 const firstIndexForMoneyflow = ref(new Map<number, number>());
+const alternateRowBackground = ref(new Map<number, boolean>());
 
 watch(
   () => props.moneyflowGroup.moneyflows,
   (moneyflows) => {
+    let i = 0;
     moneyflows.forEach((mmf) => {
       const curVal = rowsPerMoneyflow.value.get(mmf.id);
       if (curVal === undefined) {
+        i++;
+        alternateRowBackground.value.set(mmf.id, i % 2 === 0);
         rowsPerMoneyflow.value.set(mmf.id, 1);
       } else {
         rowsPerMoneyflow.value.set(mmf.id, curVal + 1);
@@ -159,12 +209,8 @@ watch(
   { immediate: true },
 );
 
-const toggleButtonShow = () => {
-  collapseIconClass.value = "bi bi-caret-down-fill";
-  showDetails.value = true;
-};
-const toggleButtonHide = () => {
-  collapseIconClass.value = "bi bi-caret-right-fill";
+const toggleCollapse = () => {
+  isCollapsed.value = !isCollapsed.value;
 };
 const emitShowReceipt = (id: number) => {
   emit("showReceipt", id);
@@ -178,13 +224,4 @@ const emitEditMoneyflow = (id: number) => {
 const emitListMoneyflow = (id: number) => {
   emit("listMoneyflow", id);
 };
-
-onMounted(() => {
-  document
-    .getElementById("collapseResults" + props.moneyflowGroupKey)
-    ?.addEventListener("show.bs.collapse", () => toggleButtonShow());
-  document
-    .getElementById("collapseResults" + props.moneyflowGroupKey)
-    ?.addEventListener("hide.bs.collapse", () => toggleButtonHide());
-});
 </script>

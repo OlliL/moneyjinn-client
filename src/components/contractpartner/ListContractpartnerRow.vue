@@ -1,33 +1,68 @@
 <template>
-  <tr>
-    <td class="text-start">{{ mcp.name }}</td>
-    <td><SpanDate :date="mcp.validFrom" /></td>
-    <td><SpanDate :date="mcp.validTil" /></td>
-    <td class="text-start">{{ mcp.moneyflowComment }}</td>
-    <td class="text-start">{{ mcp.postingAccountName }}</td>
-    <td class="text-center">
-      <span class="link-primary" @click="editContractpartner"
-        ><i class="bi bi-pencil-square"></i
-      ></span>
-    </td>
-    <td class="text-center">
-      <span class="link-primary" @click="deleteContractpartner"
-        ><i class="bi bi-trash"></i
-      ></span>
-    </td>
-    <td class="text-center">
-      <span class="link-primary" @click="listAccounts"
-        ><i class="bi bi-bank"></i
-      ></span>
-    </td>
-  </tr>
+  <TableRow>
+    <TableCell class="text-left border-r py-1 px-2">
+      {{ mcp.name }}
+    </TableCell>
+    <TableCell class="text-center border-r py-1 px-2">
+      <SpanDate :date="mcp.validFrom" />
+    </TableCell>
+    <TableCell class="text-center border-r py-1 px-2">
+      <SpanDate :date="mcp.validTil" />
+    </TableCell>
+    <TableCell class="text-left border-r py-1 px-2">
+      {{ mcp.moneyflowComment }}
+    </TableCell>
+    <TableCell class="text-left border-r py-1 px-2">
+      {{ mcp.postingAccountName }}
+    </TableCell>
+
+    <TableCell class="w-0 whitespace-nowrap text-center p-0">
+      <Button
+        variant="ghost"
+        size="icon"
+        @click="editContractpartner"
+        :title="$t('General.edit')"
+        class="h-8 w-8 cursor-pointer"
+      >
+        <Pencil class="h-4 w-4" />
+      </Button>
+    </TableCell>
+
+    <TableCell class="w-0 border-l whitespace-nowrap text-center p-0">
+      <Button
+        variant="ghost"
+        size="icon"
+        @click="deleteContractpartner"
+        :title="$t('General.delete')"
+        class="h-8 w-8 cursor-pointer"
+      >
+        <Trash2 class="h-4 w-4" />
+      </Button>
+    </TableCell>
+
+    <TableCell class="w-0 border-l whitespace-nowrap text-center p-0">
+      <Button
+        variant="ghost"
+        size="icon"
+        @click="listAccounts"
+        :title="$t('General.contractpartnerAccounts')"
+        class="h-8 w-8 cursor-pointer"
+      >
+        <Banknote class="h-4 w-4" />
+      </Button>
+    </TableCell>
+  </TableRow>
 </template>
+
 <script lang="ts" setup>
+import { Banknote, Pencil, Trash2 } from "lucide-vue-next";
 import type { PropType } from "vue";
 
-import SpanDate from "../SpanDate.vue";
+import { Button } from "@/components/ui/button";
+import { TableCell, TableRow } from "@/components/ui/table";
 
 import type { Contractpartner } from "@/model/contractpartner/Contractpartner";
+import SpanDate from "../SpanDate.vue";
 
 const props = defineProps({
   mcp: {
@@ -35,6 +70,7 @@ const props = defineProps({
     required: true,
   },
 });
+
 const emit = defineEmits([
   "deleteContractpartner",
   "editContractpartner",
@@ -44,9 +80,11 @@ const emit = defineEmits([
 const deleteContractpartner = () => {
   emit("deleteContractpartner", props.mcp);
 };
+
 const editContractpartner = () => {
   emit("editContractpartner", props.mcp);
 };
+
 const listAccounts = () => {
   emit("listContractpartnerAccounts", props.mcp);
 };
