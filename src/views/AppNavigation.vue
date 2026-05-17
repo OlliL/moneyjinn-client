@@ -330,7 +330,8 @@
     <MenubarMenu>
       <MenubarTrigger as-child
         ><router-link
-          class="!text-foreground !no-underline"
+          class="text-foreground no-underline transition-colors hover:text-primary"
+          exact-active-class="bg-muted text-primary font-medium"
           :to="{ name: Routes.CreateMoneyflow, force: true }"
           :title="$t('Moneyflow.title.create')"
           ><Euro class="m-2 text-muted-foreground"
@@ -340,7 +341,8 @@
     <MenubarMenu>
       <MenubarTrigger as-child>
         <router-link
-          class="!text-foreground !no-underline"
+          class="text-foreground no-underline transition-colors hover:text-primary"
+          exact-active-class="bg-muted text-primary font-medium"
           :to="{
             name: Routes.ListReports,
             params: { year: year, month: month },
@@ -354,7 +356,8 @@
     <MenubarMenu>
       <MenubarTrigger as-child>
         <router-link
-          class="!text-foreground !no-underline"
+          class="text-foreground no-underline transition-colors hover:text-primary"
+          exact-active-class="bg-muted text-primary font-medium"
           :to="{ name: Routes.SearchMoneyflows, force: true }"
           :title="$t('Moneyflow.title.search')"
           ><Search class="m-2 text-muted-foreground"
@@ -364,7 +367,8 @@
     <MenubarMenu>
       <MenubarTrigger as-child>
         <router-link
-          class="!text-foreground !no-underline"
+          class="text-foreground no-underline transition-colors hover:text-primary"
+          exact-active-class="bg-muted text-primary font-medium"
           :to="{ name: Routes.ImportMoneyflows, force: true }"
           :title="$t('Moneyflow.title.import')"
           ><SquareArrowRightEnter class="m-2 text-muted-foreground"
@@ -374,7 +378,8 @@
     <MenubarMenu>
       <MenubarTrigger as-child>
         <router-link
-          class="!text-foreground !no-underline"
+          class="text-foreground no-underline transition-colors hover:text-primary"
+          exact-active-class="bg-muted text-primary font-medium"
           :to="{ name: Routes.CompareData, force: true }"
           :title="$t('CompareData.title')"
           ><ListTodo class="m-2 text-muted-foreground"
@@ -384,21 +389,27 @@
 
     <MenubarMenu>
       <MenubarTrigger as-child
-        ><span ref="dropdownChart" class="flex flex-row items-center"
+        ><span
+          :class="[
+            'flex flex-row items-center',
+            isMenuActve(DropdownMenus.Chart),
+          ]"
           ><ChartColumnIncreasing class="m-1 text-muted-foreground" />
           <ChevronDown :size="10" class="ml-1 opacity-70" /></span
       ></MenubarTrigger>
       <MenubarContent>
         <MenubarItem as-child class="cursor-pointer">
           <router-link
-            class="!text-foreground !no-underline"
+            class="text-foreground no-underline transition-colors hover:text-primary"
+            exact-active-class="bg-muted text-primary font-medium"
             :to="{ name: Routes.ShowTrends, force: true }"
             >{{ $t("Reports.title.trends") }}</router-link
           >
         </MenubarItem>
         <MenubarItem as-child class="cursor-pointer">
           <router-link
-            class="!text-foreground !no-underline"
+            class="text-foreground no-underline transition-colors hover:text-primary"
+            exact-active-class="bg-muted text-primary font-medium"
             :to="{ name: Routes.ShowReporting, force: true }"
             >{{ $t("Reports.title.costReporting") }}</router-link
           >
@@ -407,7 +418,11 @@
     </MenubarMenu>
     <MenubarMenu>
       <MenubarTrigger as-child
-        ><span ref="dropdownPlus" class="flex flex-row items-center"
+        ><span
+          :class="[
+            'flex flex-row items-center',
+            isMenuActve(DropdownMenus.Plus),
+          ]"
           ><SquarePlus class="m-1 text-muted-foreground" /><ChevronDown
             :size="10"
             class="ml-1 opacity-70" /></span
@@ -415,7 +430,8 @@
       <MenubarContent>
         <MenubarItem as-child class="cursor-pointer">
           <router-link
-            class="!text-foreground !no-underline"
+            class="text-foreground no-underline transition-colors hover:text-primary"
+            exact-active-class="bg-muted text-primary font-medium"
             :to="{ name: Routes.CreateMoneyflow, force: true }"
             >{{ $t("General.moneyflow") }}</router-link
           >
@@ -423,7 +439,8 @@
         <MenubarSeparator />
         <MenubarItem as-child class="cursor-pointer">
           <router-link
-            class="!text-foreground !no-underline"
+            class="text-foreground no-underline transition-colors hover:text-primary"
+            exact-active-class="bg-muted text-primary font-medium"
             :to="{ name: Routes.ImportReceipts, force: true }"
             >{{ $t("Receipt.importReceipts") }}</router-link
           >
@@ -450,7 +467,11 @@
     </MenubarMenu>
     <MenubarMenu>
       <MenubarTrigger as-child
-        ><span ref="dropdownWrench" class="flex flex-row items-center"
+        ><span
+          :class="[
+            'flex flex-row items-center',
+            isMenuActve(DropdownMenus.Wrench),
+          ]"
           ><Wrench class="m-1 text-muted-foreground" /><ChevronDown
             :size="10"
             class="ml-1 opacity-70" /></span
@@ -458,21 +479,24 @@
       <MenubarContent>
         <MenubarItem as-child class="cursor-pointer">
           <router-link
-            class="!text-foreground !no-underline"
+            class="text-foreground no-underline transition-colors hover:text-primary"
+            exact-active-class="bg-muted text-primary font-medium"
             :to="{ name: Routes.ListCapitalsources, force: true }"
             >{{ $t("General.capitalsources") }}</router-link
           >
         </MenubarItem>
         <MenubarItem as-child class="cursor-pointer">
           <router-link
-            class="!text-foreground !no-underline"
+            class="text-foreground no-underline transition-colors hover:text-primary"
+            exact-active-class="bg-muted text-primary font-medium"
             :to="{ name: Routes.ListContractpartners, force: true }"
             >{{ $t("General.contractpartners") }}</router-link
           >
         </MenubarItem>
         <MenubarItem as-child>
           <router-link
-            class="!text-foreground !no-underline"
+            class="text-foreground no-underline transition-colors hover:text-primary"
+            exact-active-class="bg-muted text-primary font-medium"
             :to="{
               name: Routes.ListContractpartnerMatchings,
               force: true,
@@ -482,14 +506,16 @@
         </MenubarItem>
         <MenubarItem as-child class="cursor-pointer">
           <router-link
-            class="!text-foreground !no-underline"
+            class="text-foreground no-underline transition-colors hover:text-primary"
+            exact-active-class="bg-muted text-primary font-medium"
             :to="{ name: Routes.ListPreDefMoneyflows, force: true }"
             >{{ $t("General.preDefMoneyflows") }}</router-link
           >
         </MenubarItem>
         <MenubarItem as-child class="cursor-pointer">
           <router-link
-            class="!text-foreground !no-underline"
+            class="text-foreground no-underline transition-colors hover:text-primary"
+            exact-active-class="bg-muted text-primary font-medium"
             :to="{ name: Routes.ListMonthlySettlements, force: true }"
             >{{ $t("General.monthlysettlements") }}</router-link
           >
@@ -498,7 +524,11 @@
     </MenubarMenu>
     <MenubarMenu>
       <MenubarTrigger as-child
-        ><span ref="dropdownEtf" class="flex flex-row items-center"
+        ><span
+          :class="[
+            'flex flex-row items-center',
+            isMenuActve(DropdownMenus.Etf),
+          ]"
           ><ChartCandlestick class="m-1 text-muted-foreground" /><ChevronDown
             :size="10"
             class="ml-1 opacity-70" /></span
@@ -506,21 +536,24 @@
       <MenubarContent>
         <MenubarItem as-child class="cursor-pointer">
           <router-link
-            class="!text-foreground !no-underline"
+            class="text-foreground no-underline transition-colors hover:text-primary"
+            exact-active-class="bg-muted text-primary font-medium"
             :to="{ name: Routes.ListEtfDepot, force: true }"
             >{{ $t("General.etfDepot") }}</router-link
           >
         </MenubarItem>
         <MenubarItem as-child class="cursor-pointer">
           <router-link
-            class="!text-foreground !no-underline"
+            class="text-foreground no-underline transition-colors hover:text-primary"
+            exact-active-class="bg-muted text-primary font-medium"
             :to="{ name: Routes.ListEtfs, force: true }"
             >{{ $t("General.etfs") }}</router-link
           >
         </MenubarItem>
         <MenubarItem as-child class="cursor-pointer">
           <router-link
-            class="!text-foreground !no-underline"
+            class="text-foreground no-underline transition-colors hover:text-primary"
+            exact-active-class="bg-muted text-primary font-medium"
             :to="{ name: Routes.ListEtfPreliminaryLumpSums, force: true }"
             >{{ $t("General.preliminaryLumpSums") }}</router-link
           >
@@ -532,7 +565,11 @@
 
     <MenubarMenu>
       <MenubarTrigger as-child
-        ><span ref="dropdownUser" class="flex flex-row items-center"
+        ><span
+          :class="[
+            'flex flex-row items-center',
+            isMenuActve(DropdownMenus.Profile),
+          ]"
           ><SquareUserRound class="m-1 text-muted-foreground" /><ChevronDown
             :size="10"
             class="ml-1 opacity-70" /></span
@@ -540,7 +577,8 @@
       <MenubarContent>
         <MenubarItem as-child class="cursor-pointer">
           <router-link
-            class="!text-foreground !no-underline"
+            class="text-foreground no-underline transition-colors hover:text-primary"
+            exact-active-class="bg-muted text-primary font-medium"
             :to="{ name: Routes.ChangePassword, force: true }"
             >{{ $t("User.title.changePassword") }}</router-link
           >
@@ -548,7 +586,8 @@
         <MenubarSeparator v-if="userIsAdmin" />
         <MenubarItem as-child class="cursor-pointer" v-if="userIsAdmin">
           <router-link
-            class="!text-foreground !no-underline"
+            class="text-foreground no-underline transition-colors hover:text-primary"
+            exact-active-class="bg-muted text-primary font-medium"
             :to="{ name: Routes.ListPostingAccounts, force: true }"
             >{{ $t("General.postingAccounts") }}</router-link
           >
@@ -556,14 +595,16 @@
         <MenubarSeparator v-if="userIsAdmin" />
         <MenubarItem as-child class="cursor-pointer" v-if="userIsAdmin">
           <router-link
-            class="!text-foreground !no-underline"
+            class="text-foreground no-underline transition-colors hover:text-primary"
+            exact-active-class="bg-muted text-primary font-medium"
             :to="{ name: Routes.ListUsers, force: true }"
             >{{ $t("General.users") }}</router-link
           >
         </MenubarItem>
         <MenubarItem as-child class="cursor-pointer" v-if="userIsAdmin">
           <router-link
-            class="!text-foreground !no-underline"
+            class="text-foreground no-underline transition-colors hover:text-primary"
+            exact-active-class="bg-muted text-primary font-medium"
             :to="{ name: Routes.ListGroups, force: true }"
             >{{ $t("General.groups") }}</router-link
           >
@@ -590,6 +631,16 @@
 </template>
 
 <script lang="ts" setup>
+import { LogoutApi } from "@/api";
+import CreateCapitalsourceModalVue from "@/components/capitalsource/CreateCapitalsourceModal.vue";
+import CreateContractpartnerModalVue from "@/components/contractpartner/CreateContractpartnerModal.vue";
+import CreatePreDefMoneyflowModalVue from "@/components/predefmoneyflow/CreatePreDefMoneyflowModal.vue";
+import { Button } from "@/components/ui/button";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 import {
   Menubar,
   MenubarContent,
@@ -598,54 +649,38 @@ import {
   MenubarSeparator,
   MenubarTrigger,
 } from "@/components/ui/menubar";
+import { Separator } from "@/components/ui/separator";
 import {
   Sheet,
   SheetContent,
   SheetHeader,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
-
-import { onMounted, ref, useTemplateRef, watch } from "vue";
-import { useI18n } from "vue-i18n";
-import { useRoute, type RouteRecordName } from "vue-router";
-
-import router, { Routes } from "@/router";
-import { version } from "../../package.json";
-
-import CreateContractpartnerModalVue from "@/components/contractpartner/CreateContractpartnerModal.vue";
-import CreateCapitalsourceModalVue from "@/components/capitalsource/CreateCapitalsourceModal.vue";
-import CreatePreDefMoneyflowModalVue from "@/components/predefmoneyflow/CreatePreDefMoneyflowModal.vue";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible";
-
-import { useUserSessionStore } from "@/stores/UserSessionStore";
-import { StoreService } from "@/stores/StoreService";
-
-import { WebSocketSingleton } from "@/config/WebSocketSingleton";
-import { clearAuthTokens } from "axios-jwt";
-import { LogoutApi } from "@/api";
 import { AxiosSingleton } from "@/config/AxiosSingleton";
-
+import { WebSocketSingleton } from "@/config/WebSocketSingleton";
+import router, { DropdownMenus, Routes } from "@/router";
+import { StoreService } from "@/stores/StoreService";
+import { useUserSessionStore } from "@/stores/UserSessionStore";
+import { clearAuthTokens } from "axios-jwt";
 import {
-  Menu,
+  ChartCandlestick,
+  ChartColumnIncreasing,
+  ChevronDown,
   Euro,
-  Table2,
+  ListTodo,
+  LogOut,
+  Menu,
   Search,
   SquareArrowRightEnter,
-  ListTodo,
-  ChartColumnIncreasing,
   SquarePlus,
-  Wrench,
-  ChartCandlestick,
   SquareUserRound,
-  LogOut,
-  ChevronDown,
+  Table2,
+  Wrench,
 } from "lucide-vue-next";
+import { onMounted, ref, useTemplateRef } from "vue";
+import { useI18n } from "vue-i18n";
+import { useRoute } from "vue-router";
+import { version } from "../../package.json";
 
 const { t } = useI18n();
 
@@ -655,11 +690,6 @@ const month = new Date().getMonth() + 1;
 const userIsAdmin = ref(false);
 const route = useRoute();
 
-const dropdownWrench = useTemplateRef<HTMLLinkElement>("dropdownWrench");
-const dropdownPlus = useTemplateRef<HTMLLinkElement>("dropdownPlus");
-const dropdownChart = useTemplateRef<HTMLLinkElement>("dropdownChart");
-const dropdownEtf = useTemplateRef<HTMLLinkElement>("dropdownEtf");
-const dropdownUser = useTemplateRef<HTMLLinkElement>("dropdownUser");
 const createContractpartnerModalNav = useTemplateRef<
   typeof CreateContractpartnerModalVue
 >("createContractpartnerModalNav");
@@ -670,60 +700,9 @@ const createPreDedMoneyflowModalNav = useTemplateRef<
   typeof CreatePreDefMoneyflowModalVue
 >("createPreDedMoneyflowModalNav");
 
-const markDropdownActive = (routeName: RouteRecordName | null | undefined) => {
-  if (
-    dropdownWrench.value &&
-    dropdownPlus.value &&
-    dropdownChart.value &&
-    dropdownEtf.value &&
-    dropdownUser.value
-  ) {
-    const wrenchClassList = dropdownWrench.value.classList;
-    const plusClassList = dropdownPlus.value.classList;
-    const chartClassList = dropdownChart.value.classList;
-    const etfClassList = dropdownEtf.value.classList;
-    const userClassList = dropdownUser.value.classList;
-    const routerLinkActive = "router-link-active";
-
-    wrenchClassList.remove(routerLinkActive);
-    plusClassList.remove(routerLinkActive);
-    chartClassList.remove(routerLinkActive);
-    etfClassList.remove(routerLinkActive);
-    userClassList.remove(routerLinkActive);
-    switch (routeName) {
-      case Routes.ListPreDefMoneyflows:
-      case Routes.ListCapitalsources:
-      case Routes.ListContractpartners:
-      case Routes.ListMonthlySettlements: {
-        wrenchClassList.add(routerLinkActive);
-        break;
-      }
-      case Routes.ImportReceipts: {
-        plusClassList.add(routerLinkActive);
-        break;
-      }
-      case Routes.ShowTrends:
-      case Routes.ShowReporting: {
-        chartClassList.add(routerLinkActive);
-        break;
-      }
-      case Routes.ListEtfs:
-      case Routes.ListEtfDepot:
-      case Routes.ListEtfPreliminaryLumpSums: {
-        etfClassList.add(routerLinkActive);
-        break;
-      }
-      case Routes.ChangePassword:
-      case Routes.ListPostingAccounts:
-      case Routes.ListUsers:
-      case Routes.ListGroups: {
-        userClassList.add(routerLinkActive);
-        break;
-      }
-    }
-  }
+const isMenuActve = (menu: DropdownMenus) => {
+  return route.meta?.activeMenu === menu ? "router-link-active" : "";
 };
-
 const showCreateContractpartnerModal = () => {
   createContractpartnerModalNav.value?._show();
 };
@@ -760,7 +739,6 @@ const logout = async () => {
 onMounted(() => {
   const userSessionStore = useUserSessionStore();
   userIsAdmin.value = userSessionStore.isAdmin;
-  markDropdownActive(route.name);
 
   // make WebSocket connection
   WebSocketSingleton.getInstance().connectStompClient();
@@ -774,20 +752,13 @@ onMounted(() => {
       });
     });
 });
-
-watch(
-  () => route.name,
-  (newVal) => {
-    markDropdownActive(newVal);
-  },
-);
 </script>
+
 <style scoped>
 @reference "@/style.css";
 
-:deep(.router-link-active svg),
-:deep(span.router-link-active svg) {
-  @apply !stroke-primary; /* Nutzt direkt die originale Tailwind-Klasse für Linienfarben */
+:deep(.router-link-active svg) {
+  @apply !stroke-primary;
   stroke-width: 2.5px !important;
 }
 </style>

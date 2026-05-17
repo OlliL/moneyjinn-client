@@ -242,7 +242,7 @@ import {
 } from "chart.js";
 import { Eye } from "lucide-vue-next";
 import { useForm } from "vee-validate";
-import { computed, onMounted, ref } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 import { Bar } from "vue-chartjs";
 import { useI18n } from "vue-i18n";
 import { any, date, number } from "zod";
@@ -373,6 +373,10 @@ const singlePostingAccountsLabel = computed(() => {
   return singlePostingAccounts.value
     ? t("Reports.singlePostingAccount")
     : t("Reports.multiplePostingAccounts");
+});
+
+watch(singlePostingAccounts, () => {
+  setFieldTouched("postingAccountShowReporting", false);
 });
 
 const loadData = () => {
