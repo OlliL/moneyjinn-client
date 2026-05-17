@@ -16,7 +16,7 @@
     </div>
     <div class="flex justify-center">
       <div
-        class="w-full max-w-7xl rounded-sm border bg-card text-card-foreground shadow-sm bg-muted p-4"
+        class="w-full max-w-7xl rounded-sm border bg-card text-card-foreground bg-muted p-4"
       >
         <form @submit.prevent="searchMoneyflows" id="searchMoneyflowsForm">
           <div class="space-y-4">

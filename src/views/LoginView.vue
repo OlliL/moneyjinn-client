@@ -2,7 +2,7 @@
   <form @submit.prevent="handleLogin">
     <div class="flex min-h-screen items-center justify-center px-4">
       <div
-        class="w-full max-w-md rounded-sm border bg-card text-card-foreground shadow-sm"
+        class="w-full max-w-md rounded-sm border bg-card text-card-foreground"
       >
         <div class="border-b p-4 text-center">
           <h4 class="text-2xl font-bold">{{ $t("LoginView.welcome") }}</h4>

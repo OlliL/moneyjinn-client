@@ -7,7 +7,7 @@
 
     <div class="flex justify-center">
       <div
-        class="w-full max-w-3xl rounded-sm border bg-card text-card-foreground shadow-sm bg-muted p-6"
+        class="w-full max-w-3xl rounded-sm border bg-card text-card-foreground bg-muted p-6"
       >
         <form @submit.prevent="showTrends">
           <div class="space-y-6">
@@ -35,7 +35,7 @@
             <div class="grid gap-4 md:grid-cols-2">
               <div class="grid">
                 <div
-                  class="mb-3 text-left rounded-sm border bg-background p-4 shadow-sm space-y-3 w-full"
+                  class="mb-3 text-left rounded-sm border bg-background p-4 space-y-3 w-full"
                 >
                   <div class="flex items-center justify-between pb-2 border-b">
                     <div class="flex items-center gap-2">
@@ -158,7 +158,7 @@
 
               <div class="grid">
                 <div
-                  class="mb-3 text-left rounded-sm border bg-background p-4 shadow-sm space-y-3 w-full"
+                  class="mb-3 text-left rounded-sm border bg-background p-4 space-y-3 w-full"
                 >
                   <div class="flex items-center justify-between pb-2 border-b">
                     <div class="flex items-center gap-2">

@@ -36,19 +36,19 @@
       <div class="w-full max-w-3xl">
         <Tabs v-model="currentTab" class="w-full">
           <TabsList
-            class="flex bg-muted h-10 p-1 justify-start rounded-sm w-full border shadow-sm"
+            class="flex bg-muted h-10 p-1 justify-start rounded-sm w-full border"
           >
             <TabsTrigger
               v-if="etfEffectiveFlows.length > 0"
               value="effective"
-              class="px-4 py-1.5 h-full bg-transparent transition-all font-medium text-sm text-muted-foreground data-[state=active]:text-foreground data-[state=active]:bg-background data-[state=active]:shadow-sm first:rounded-l-sm last:rounded-r-sm cursor-pointer"
+              class="px-4 py-1.5 h-full bg-transparent transition-all font-medium text-sm text-muted-foreground data-[state=active]:text-foreground data-[state=active]:bg-background first:rounded-l-sm last:rounded-r-sm cursor-pointer"
             >
               {{ $t("ETFFlow.effective") }}
             </TabsTrigger>
 
             <TabsTrigger
               value="all"
-              class="px-4 py-1.5 h-full bg-transparent transition-all font-medium text-sm text-muted-foreground data-[state=active]:text-foreground data-[state=active]:bg-background data-[state=active]:shadow-sm first:rounded-l-sm last:rounded-r-sm cursor-pointer"
+              class="px-4 py-1.5 h-full bg-transparent transition-all font-medium text-sm text-muted-foreground data-[state=active]:text-foreground data-[state=active]:bg-background first:rounded-l-sm last:rounded-r-sm cursor-pointer"
             >
               {{ $t("General.all") }}
             </TabsTrigger>

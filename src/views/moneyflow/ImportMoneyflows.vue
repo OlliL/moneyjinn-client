@@ -18,7 +18,7 @@
       :key="importedMoneyflow.externalid"
     >
       <div
-        class="w-full rounded-sm border bg-card text-card-foreground shadow-sm overflow-hidden"
+        class="w-full rounded-sm border bg-card text-card-foreground overflow-hidden"
       >
         <form @submit.prevent="importImportedMoneyflow(importedMoneyflow)">
           <div class="grid grid-cols-1 lg:grid-cols-4 min-h-full">

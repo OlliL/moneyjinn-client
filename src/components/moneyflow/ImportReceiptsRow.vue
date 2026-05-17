@@ -2,7 +2,7 @@
   <div class="flex justify-center mb-6">
     <div class="w-full max-w-6xl">
       <div
-        class="w-full rounded-sm border bg-card text-card-foreground shadow-sm overflow-hidden"
+        class="w-full rounded-sm border bg-card text-card-foreground overflow-hidden"
       >
         <div class="grid grid-cols-1 lg:grid-cols-5 min-h-full">
           <div
@@ -15,12 +15,12 @@
               <img
                 v-if="isJpeg"
                 :src="`data:image/png;base64,${receipt.receipt}`"
-                class="max-w-full h-auto rounded-sm shadow-sm"
+                class="max-w-full h-auto rounded-sm"
                 alt="receipt"
               />
 
               <object
-                class="h-full w-full min-h-[320px] block rounded-sm shadow-inner"
+                class="h-full w-full min-h-[320px] block rounded-sm"
                 v-if="isPdf"
                 id="pdf"
                 :data="`data:application/pdf;base64,${receipt.receipt}`"
@@ -83,7 +83,7 @@
 
               <div class="w-full">
                 <div
-                  class="flex flex-col rounded-md border overflow-hidden shadow-sm"
+                  class="flex flex-col rounded-md border overflow-hidden"
                   v-if="searchExecuted && searchSuccessful"
                 >
                   <RadioGroup
