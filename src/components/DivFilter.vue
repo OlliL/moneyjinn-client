@@ -23,10 +23,7 @@
         />
       </div>
 
-      <div
-        v-if="showValidToggle"
-        class="flex items-center gap-3 px-3 py-2 rounded-md border bg-muted/20"
-      >
+      <div v-if="showValidToggle" class="flex items-center gap-3 pb-1.5">
         <Switch
           id="validInput"
           :modelValue="validNow"

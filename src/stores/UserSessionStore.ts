@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { computed, ref } from "vue";
+import { computed, ref, toRaw } from "vue";
 
 export type UserSession = {
   userId: number;
