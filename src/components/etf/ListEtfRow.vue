@@ -19,14 +19,10 @@
     /></TableCell>
     <TableCell class="border-r text-start" v-if="!etf.isFavorite"></TableCell>
     <TableActionButton :title="$t('General.edit')" @click="editEtf">
-        <Pencil class="h-4 w-4" />
+      <Pencil class="h-4 w-4" />
     </TableActionButton>
-    <TableActionButton
-      :title="$t('General.delete')"
-      cell-class="w-0 border-l whitespace-nowrap text-center p-0"
-      @click="deleteEtf"
-    >
-        <Trash2 class="h-4 w-4" />
+    <TableActionButton :title="$t('General.delete')" @click="deleteEtf">
+      <Trash2 class="h-4 w-4" />
     </TableActionButton>
   </TableRow>
 </template>

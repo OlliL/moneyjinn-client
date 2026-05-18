@@ -1,11 +1,11 @@
 <template>
-  <TableCell :class="cellClass">
+  <TableCell class="w-0 border-l whitespace-nowrap text-center p-0">
     <Button
       variant="ghost"
       size="icon"
       :title="title"
-      :aria-label="ariaLabel || title"
-      :class="buttonClass"
+      :aria-label="title"
+      class="action-icon-button"
       @click="emit('click')"
     >
       <slot />
@@ -22,23 +22,7 @@ defineProps({
     type: String,
     required: true,
   },
-  ariaLabel: {
-    type: String,
-    required: false,
-  },
-  cellClass: {
-    type: String,
-    required: false,
-    default: "w-0 whitespace-nowrap text-center p-0",
-  },
-  buttonClass: {
-    type: String,
-    required: false,
-    default: "action-icon-button",
-  },
 });
 
 const emit = defineEmits(["click"]);
 </script>
-
-

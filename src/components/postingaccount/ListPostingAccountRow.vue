@@ -2,14 +2,13 @@
   <TableRow>
     <TableCell class="text-left border-r">{{ mpa.name }}</TableCell>
     <TableActionButton :title="$t('General.edit')" @click="editPostingAccount">
-        <Pencil class="h-4 w-4" />
+      <Pencil class="h-4 w-4" />
     </TableActionButton>
     <TableActionButton
       :title="$t('General.delete')"
-      cell-class="w-0 border-l whitespace-nowrap text-center p-0"
       @click="deletePostingAccount"
     >
-        <Trash2 class="h-4 w-4" />
+      <Trash2 class="h-4 w-4" />
     </TableActionButton>
   </TableRow>
 </template>

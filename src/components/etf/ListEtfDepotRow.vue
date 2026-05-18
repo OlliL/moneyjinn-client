@@ -86,20 +86,18 @@
     <TableActionButton
       :title="$t('General.edit')"
       :aria-label="$t('General.edit')"
-      cell-class="text-center"
       button-class="h-6 w-6 cursor-pointer"
       @click="editEtfFlow"
     >
-        <Pencil class="h-4 w-4" />
+      <Pencil class="h-4 w-4" />
     </TableActionButton>
     <TableActionButton
       :title="$t('General.delete')"
       :aria-label="$t('General.delete')"
-      cell-class="text-center"
       button-class="h-6 w-6 cursor-pointer"
       @click="deleteEtfFlow"
     >
-        <Trash2 class="h-4 w-4" />
+      <Trash2 class="h-4 w-4" />
     </TableActionButton>
   </TableRow>
 </template>

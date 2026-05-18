@@ -16,14 +16,13 @@
       :title="$t('General.edit')"
       @click="editContractpartnerMatching"
     >
-        <Pencil class="h-4 w-4" />
+      <Pencil class="h-4 w-4" />
     </TableActionButton>
     <TableActionButton
       :title="$t('General.delete')"
-      cell-class="w-0 border-l whitespace-nowrap text-center p-0"
       @click="deleteContractpartnerMatching"
     >
-        <Trash2 class="h-4 w-4" />
+      <Trash2 class="h-4 w-4" />
     </TableActionButton>
   </TableRow>
 </template>

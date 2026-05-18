@@ -24,10 +24,9 @@
       :title="$t('General.edit')"
       @click="editCapitalsource"
     >
-        <Pencil class="h-4 w-4" />
+      <Pencil class="h-4 w-4" />
     </TableActionButton>
     <TableActionButton
-      cell-class="w-0 border-l whitespace-nowrap text-center p-0"
       v-if="owner"
       :title="$t('General.delete')"
       @click="deleteCapitalsource"

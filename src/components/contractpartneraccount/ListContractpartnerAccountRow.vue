@@ -8,17 +8,15 @@
     </TableCell>
     <TableActionButton
       :title="$t('General.edit')"
-      cell-class="text-right border"
       @click="editContractpartnerAccount"
     >
-        <Pencil class="h-4 w-4" />
+      <Pencil class="h-4 w-4" />
     </TableActionButton>
     <TableActionButton
       :title="$t('General.delete')"
-      cell-class="text-right border"
       @click="deleteContractpartnerAccount"
     >
-        <Trash2 class="h-4 w-4" />
+      <Trash2 class="h-4 w-4" />
     </TableActionButton>
   </TableRow>
 </template>
