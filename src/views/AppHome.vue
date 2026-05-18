@@ -4,12 +4,10 @@
     @monthly-settlement-upserted="monthlySettlementUpserted"
   />
   <div class="custom-container space-y-6">
-    <!-- Header -->
     <div class="text-center">
-      <h4 class="text-2xl font-bold tracking-tight">
+      <h4 class="text-2xl font-bold">
         {{ $t("AppHome.taskList") }}
       </h4>
-      <Separator class="my-4" />
     </div>
 
     <DivError :server-errors="serverErrors" />
@@ -54,18 +52,20 @@
       </div>
     </div>
 
-    <Alert
-      v-if="dataLoaded && !importedMoneyflows && !monthlySettlementMissing"
-      class="border-green-200 bg-green-50 dark:bg-green-950/20 dark:border-green-900"
-    >
-      <CheckCircle2 />
-      <AlertTitle>
-        {{ $t("AppHome.allDoneTitle") }}
-      </AlertTitle>
-      <AlertDescription>
-        {{ $t("AppHome.allDone") }}
-      </AlertDescription>
-    </Alert>
+    <div class="flex justify-center">
+      <Alert
+        v-if="dataLoaded && !importedMoneyflows && !monthlySettlementMissing"
+        class="max-w-xl border-green-200 bg-green-50 dark:bg-green-950/20 dark:border-green-900"
+      >
+        <CheckCircle2 />
+        <AlertTitle>
+          {{ $t("AppHome.allDoneTitle") }}
+        </AlertTitle>
+        <AlertDescription>
+          {{ $t("AppHome.allDone") }}
+        </AlertDescription>
+      </Alert>
+    </div>
   </div>
 </template>
 
