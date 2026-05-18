@@ -1,12 +1,12 @@
 <template>
   <TableRow>
     <TableCell class="text-left border-r">{{ group.name }}</TableCell>
-    <TableActionButton :title="$t('General.edit')" @click="editGroup">
+    <ButtonTableIcon :title="$t('General.edit')" @click="editGroup">
       <Pencil class="h-4 w-4" />
-    </TableActionButton>
-    <TableActionButton :title="$t('General.delete')" @click="deleteGroup">
+    </ButtonTableIcon>
+    <ButtonTableIcon :title="$t('General.delete')" @click="deleteGroup">
       <Trash2 class="h-4 w-4" />
-    </TableActionButton>
+    </ButtonTableIcon>
   </TableRow>
 </template>
 <script lang="ts" setup>
@@ -14,7 +14,7 @@ import { TableCell, TableRow } from "@/components/ui/table";
 import type { Group } from "@/model/group/Group";
 import { Pencil, Trash2 } from "lucide-vue-next";
 import type { PropType } from "vue";
-import TableActionButton from "../TableActionButton.vue";
+import ButtonTableIcon from "../ButtonTableIcon.vue";
 
 const props = defineProps({
   group: {

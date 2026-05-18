@@ -3,8 +3,8 @@ import {
   type CreatePreDefMoneyflowRequest,
   type UpdatePreDefMoneyflowRequest,
 } from "@/api";
-import AbstractService from "@/service/AbstractService";
 import type { PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
+import AbstractService from "@/service/AbstractService";
 import {
   mapPreDefMoneyflowToTransport,
   mapPreDefMoneyflowTransportToModel,

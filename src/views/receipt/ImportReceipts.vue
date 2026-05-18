@@ -39,23 +39,19 @@
 </template>
 
 <script lang="ts" setup>
-import { useForm } from "vee-validate";
-import { onMounted, ref, useTemplateRef } from "vue";
-
 import ButtonSubmit from "@/components/ButtonSubmit.vue";
-import DeleteMoneyflowModalVue from "@/components/moneyflow/DeleteMoneyflowModal.vue";
 import DivError from "@/components/DivError.vue";
+import InputFile from "@/components/InputFile.vue";
+import DeleteMoneyflowModalVue from "@/components/moneyflow/DeleteMoneyflowModal.vue";
 import EditMoneyflowModalVue from "@/components/moneyflow/EditMoneyflowModal.vue";
 import ImportReceiptsRowVue from "@/components/moneyflow/ImportReceiptsRow.vue";
-import InputFile from "@/components/InputFile.vue";
-
-import { handleBackendError } from "@/tools/views/HandleBackendError";
-
 import type { ImportedMoneyflowReceipt } from "@/model/moneyflow/ImportedMoneyflowReceipt";
-
 import ImportedMoneyflowReceiptService from "@/service/ImportedMoneyflowReceiptService";
 import MoneyflowService from "@/service/MoneyflowService";
+import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { Upload } from "lucide-vue-next";
+import { useForm } from "vee-validate";
+import { onMounted, ref, useTemplateRef } from "vue";
 
 const serverErrors = ref(new Array<string>());
 

@@ -203,7 +203,8 @@ const setDate = (newVal?: Date) => {
 
       if (
         datepicker.dates.length === 0 ||
-        (datepicker.getDate() as Date).toISOString() != normalizedDate.toISOString()
+        (datepicker.getDate() as Date).toISOString() !=
+          normalizedDate.toISOString()
       ) {
         datepicker.setDate(normalizedDate);
       }

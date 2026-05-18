@@ -16,23 +16,23 @@
       {{ mcp.postingAccountName }}
     </TableCell>
 
-    <TableActionButton :title="$t('General.edit')" @click="editContractpartner">
+    <ButtonTableIcon :title="$t('General.edit')" @click="editContractpartner">
       <Pencil class="h-4 w-4" />
-    </TableActionButton>
+    </ButtonTableIcon>
 
-    <TableActionButton
+    <ButtonTableIcon
       :title="$t('General.delete')"
       @click="deleteContractpartner"
     >
       <Trash2 class="h-4 w-4" />
-    </TableActionButton>
+    </ButtonTableIcon>
 
-    <TableActionButton
+    <ButtonTableIcon
       :title="$t('General.contractpartnerAccounts')"
       @click="listAccounts"
     >
       <Banknote class="h-4 w-4" />
-    </TableActionButton>
+    </ButtonTableIcon>
   </TableRow>
 </template>
 
@@ -43,8 +43,8 @@ import type { PropType } from "vue";
 import { TableCell, TableRow } from "@/components/ui/table";
 
 import type { Contractpartner } from "@/model/contractpartner/Contractpartner";
+import ButtonTableIcon from "../ButtonTableIcon.vue";
 import SpanDate from "../SpanDate.vue";
-import TableActionButton from "../TableActionButton.vue";
 
 const props = defineProps({
   mcp: {

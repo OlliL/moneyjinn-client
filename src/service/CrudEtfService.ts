@@ -1,10 +1,10 @@
-import AbstractService from "@/service/AbstractService";
+import { CrudEtfControllerApi } from "@/api";
 import type { Etf } from "@/model/etf/Etf";
+import AbstractService from "@/service/AbstractService";
 import {
   mapEtfModelToTransport,
   mapEtfTransportToModel,
 } from "./mapper/EtfTransportMapper";
-import { CrudEtfControllerApi } from "@/api";
 
 class EtfService extends AbstractService {
   private readonly api: CrudEtfControllerApi;

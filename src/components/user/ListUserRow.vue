@@ -10,12 +10,12 @@
     <TableCell class="text-center border-r py-1 px-2">
       <SpanBoolean :value="user.userIsNew" />
     </TableCell>
-    <TableActionButton :title="$t('General.edit')" @click="editUser">
+    <ButtonTableIcon :title="$t('General.edit')" @click="editUser">
       <Pencil class="h-4 w-4" />
-    </TableActionButton>
-    <TableActionButton :title="$t('General.delete')" @click="deleteUser">
+    </ButtonTableIcon>
+    <ButtonTableIcon :title="$t('General.delete')" @click="deleteUser">
       <Trash2 class="h-4 w-4" />
-    </TableActionButton>
+    </ButtonTableIcon>
   </TableRow>
 </template>
 <script lang="ts" setup>
@@ -24,8 +24,8 @@ import type { User } from "@/model/user/User";
 import { userRoleNames } from "@/model/user/UserRole";
 import { Pencil, Trash2 } from "lucide-vue-next";
 import { computed, type PropType } from "vue";
+import ButtonTableIcon from "../ButtonTableIcon.vue";
 import SpanBoolean from "../SpanBoolean.vue";
-import TableActionButton from "../TableActionButton.vue";
 
 const props = defineProps({
   user: {

@@ -20,9 +20,7 @@
           <div
             class="flex items-center space-x-2 border-b border-border/40 pb-2"
           >
-            <span
-              class="form-section-title"
-            >
+            <span class="form-section-title">
               {{ $t("Contractpartner.moneyflowDefaults") }}
             </span>
           </div>
@@ -40,9 +38,7 @@
           />
         </div>
         <div class="grid grid-cols-1 gap-4">
-          <div
-            class="form-section flex flex-col justify-between"
-          >
+          <div class="form-section flex flex-col justify-between">
             <span
               class="text-xs font-bold uppercase tracking-wider text-muted-foreground block mb-2"
             >
@@ -70,9 +66,7 @@
             class="flex items-center justify-between w-full p-4 hover:bg-muted/30 text-left transition-colors group"
           >
             <div class="flex items-center space-x-2">
-              <span
-                class="form-section-title"
-              >
+              <span class="form-section-title">
                 {{ $t("Contractpartner.adressData") }}
               </span>
             </div>

@@ -70,20 +70,16 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref, useTemplateRef } from "vue";
-
+import DivError from "@/components/DivError.vue";
+import EditMonthlySettlementModalVue from "@/components/monthlysettlement/EditMonthlySettlementModal.vue";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
-import EditMonthlySettlementModalVue from "@/components/monthlysettlement/EditMonthlySettlementModal.vue";
-
 import router, { Routes } from "@/router";
-
 import EventService from "@/service/EventService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
-import DivError from "@/components/DivError.vue";
-
-import { ExternalLink, CheckCircle2 } from "lucide-vue-next";
+import { CheckCircle2, ExternalLink } from "lucide-vue-next";
+import { onMounted, ref, useTemplateRef } from "vue";
 
 const serverErrors = ref(new Array<string>());
 

@@ -12,18 +12,18 @@
     <TableCell class="text-left border-r py-1 px-2">
       {{ mcm.postingAccountName }}
     </TableCell>
-    <TableActionButton
+    <ButtonTableIcon
       :title="$t('General.edit')"
       @click="editContractpartnerMatching"
     >
       <Pencil class="h-4 w-4" />
-    </TableActionButton>
-    <TableActionButton
+    </ButtonTableIcon>
+    <ButtonTableIcon
       :title="$t('General.delete')"
       @click="deleteContractpartnerMatching"
     >
       <Trash2 class="h-4 w-4" />
-    </TableActionButton>
+    </ButtonTableIcon>
   </TableRow>
 </template>
 
@@ -32,7 +32,7 @@ import { TableCell, TableRow } from "@/components/ui/table";
 import type { ContractpartnerMatching } from "@/model/contractpartnermatching/ContractpartnerMatching";
 import { Pencil, Trash2 } from "lucide-vue-next";
 import type { PropType } from "vue";
-import TableActionButton from "../TableActionButton.vue";
+import ButtonTableIcon from "../ButtonTableIcon.vue";
 
 const props = defineProps({
   mcm: {

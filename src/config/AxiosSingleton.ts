@@ -2,6 +2,7 @@ import type { ErrorResponse, LoginResponse, ValidationResponse } from "@/api";
 import { BackendError, BackendErrorType } from "@/model/BackendError";
 import { ErrorCode } from "@/model/ErrorCode";
 import type { ValidationResult } from "@/model/validation/ValidationResult";
+import { mapValidationItemTransportToModel } from "@/service/mapper/ValidationItemTransportMapper";
 import type { AxiosInstance } from "axios";
 import axios from "axios";
 import {
@@ -10,9 +11,8 @@ import {
   type TokenRefreshRequest,
 } from "axios-jwt";
 import type { Token } from "axios-jwt/dist/src/Token";
-import { mapValidationItemTransportToModel } from "@/service/mapper/ValidationItemTransportMapper";
-import { webServerHost, webServerProtocol } from "./WebServerConfiguration";
 import I18nSingleton from "./I18nSingleton";
+import { webServerHost, webServerProtocol } from "./WebServerConfiguration";
 
 export class AxiosSingleton {
   private static instance: AxiosSingleton;

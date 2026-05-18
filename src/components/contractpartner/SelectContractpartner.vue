@@ -25,8 +25,8 @@ import { SquarePlus } from "lucide-vue-next";
 import { computed, useTemplateRef, type PropType, type Ref } from "vue";
 import { any, type ZodType } from "zod";
 
-import CreateContractpartnerModalVue from "./CreateContractpartnerModal.vue";
 import SelectStandard from "../SelectStandard.vue";
+import CreateContractpartnerModalVue from "./CreateContractpartnerModal.vue";
 
 import { useContractpartnerStore } from "@/stores/ContractpartnerStore";
 

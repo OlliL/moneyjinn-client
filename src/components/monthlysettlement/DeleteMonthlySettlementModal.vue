@@ -18,7 +18,10 @@
       </div>
     </template>
     <template #footer>
-      <ButtonDelete :button-label="$t('General.delete')" @click="deleteMonthlySettlement" />
+      <ButtonDelete
+        :button-label="$t('General.delete')"
+        @click="deleteMonthlySettlement"
+      />
     </template>
   </ModalVue>
 </template>
@@ -26,10 +29,9 @@
 <script lang="ts" setup>
 import { ref, useTemplateRef } from "vue";
 
-
+import ButtonDelete from "../ButtonDelete.vue";
 import DivError from "../DivError.vue";
 import ModalVue from "../Modal.vue";
-import ButtonDelete from "../ButtonDelete.vue";
 import ShowMonthlySettlementVue from "./ShowMonthlySettlement.vue";
 
 import { handleBackendError } from "@/tools/views/HandleBackendError";

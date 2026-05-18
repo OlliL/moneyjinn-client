@@ -1,7 +1,7 @@
+import SpanDate from "@/components/SpanDate.vue";
+import "@testing-library/jest-dom/vitest";
 import { render, screen } from "@testing-library/vue";
 import { expect, test } from "vitest";
-import "@testing-library/jest-dom/vitest";
-import SpanDate from "@/components/SpanDate.vue";
 
 const date = new Date(Date.parse("2020-03-04"));
 

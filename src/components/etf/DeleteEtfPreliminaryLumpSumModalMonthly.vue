@@ -25,9 +25,7 @@
           <div
             class="flex items-center space-x-2 border-b border-border/40 pb-2"
           >
-            <span
-              class="form-section-title"
-            >
+            <span class="form-section-title">
               {{ $t("ETFPreliminaryLumpSum.amounts") }}
             </span>
           </div>

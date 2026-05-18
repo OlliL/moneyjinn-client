@@ -85,9 +85,7 @@
 
         <div class="form-section space-y-4">
           <div class="flex items-center space-x-2">
-            <span
-              class="form-section-title"
-            >
+            <span class="form-section-title">
               {{ $t("Capitalsource.accountData") }}
             </span>
           </div>

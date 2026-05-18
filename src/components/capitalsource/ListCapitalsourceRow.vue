@@ -19,20 +19,20 @@
     <TableCell class="text-center border-r">
       <b :class="importAllowedColorClass">{{ importAllowedString }}</b>
     </TableCell>
-    <TableActionButton
+    <ButtonTableIcon
       v-if="owner"
       :title="$t('General.edit')"
       @click="editCapitalsource"
     >
       <Pencil class="h-4 w-4" />
-    </TableActionButton>
-    <TableActionButton
+    </ButtonTableIcon>
+    <ButtonTableIcon
       v-if="owner"
       :title="$t('General.delete')"
       @click="deleteCapitalsource"
     >
       <Trash2 class="h-4 w-4" />
-    </TableActionButton>
+    </ButtonTableIcon>
   </TableRow>
 </template>
 <script lang="ts" setup>
@@ -47,9 +47,9 @@ import type { Capitalsource } from "@/model/capitalsource/Capitalsource";
 import { capitalsourceImportNames } from "@/model/capitalsource/CapitalsourceImport";
 import { capitalsourceStateNames } from "@/model/capitalsource/CapitalsourceState";
 import { capitalsourceTypeNames } from "@/model/capitalsource/CapitalsourceType";
+import ButtonTableIcon from "../ButtonTableIcon.vue";
 import SpanBoolean from "../SpanBoolean.vue";
 import SpanIban from "../SpanIban.vue";
-import TableActionButton from "../TableActionButton.vue";
 
 const props = defineProps({
   mcs: {

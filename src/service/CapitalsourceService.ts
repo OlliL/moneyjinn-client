@@ -1,10 +1,10 @@
-import AbstractService from "@/service/AbstractService";
+import { CrudCapitalsourceControllerApi } from "@/api";
 import type { Capitalsource } from "@/model/capitalsource/Capitalsource";
+import AbstractService from "@/service/AbstractService";
 import {
   mapCapitalsourceToTransport,
   mapCapitalsourceTransportToModel,
 } from "./mapper/CapitalsourceTransportMapper";
-import { CrudCapitalsourceControllerApi } from "@/api";
 
 class CapitalsourceService extends AbstractService {
   private readonly api: CrudCapitalsourceControllerApi;

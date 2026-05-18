@@ -29,20 +29,15 @@
 </template>
 
 <script lang="ts" setup>
-import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   generateErrorDataVeeValidate,
   type ErrorData,
 } from "@/tools/views/ErrorData";
 import { toTypedSchema } from "@vee-validate/zod";
 import { useField } from "vee-validate";
-import {
-  computed,
-  useTemplateRef,
-  type PropType,
-  type Ref,
-} from "vue";
+import { computed, useTemplateRef, type PropType, type Ref } from "vue";
 import { any, type ZodType } from "zod";
 
 const props = defineProps({

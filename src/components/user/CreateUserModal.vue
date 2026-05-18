@@ -10,15 +10,11 @@
             <div class="space-y-4">
               <DivError :server-errors="serverErrors" />
 
-              <div
-                class="form-section space-y-4"
-              >
+              <div class="form-section space-y-4">
                 <div
                   class="flex items-center space-x-2 border-b border-border/40 pb-2"
                 >
-                  <span
-                    class="form-section-title"
-                  >
+                  <span class="form-section-title">
                     {{ $t("User.loginData") }}
                   </span>
                 </div>
@@ -54,15 +50,11 @@
                 </div>
               </div>
 
-              <div
-                class="form-section space-y-4"
-              >
+              <div class="form-section space-y-4">
                 <div
                   class="flex items-center space-x-2 border-b border-border/40 pb-2"
                 >
-                  <span
-                    class="form-section-title"
-                  >
+                  <span class="form-section-title">
                     {{ $t("User.permissions") }}
                   </span>
                 </div>

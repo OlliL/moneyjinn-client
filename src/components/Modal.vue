@@ -22,11 +22,7 @@
         class="flex flex-row justify-end gap-2 pt-4 border-t border-border/40"
       >
         <DialogClose as-child>
-          <Button
-            type="button"
-            variant="outline"
-            class="button-with-icon px-4"
-          >
+          <Button type="button" variant="outline" class="button-with-icon px-4">
             <X class="h-4 w-4" />
             {{ $t("Modal.cancel") }}
           </Button>

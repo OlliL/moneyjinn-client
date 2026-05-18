@@ -1,11 +1,11 @@
-import { computed, ref } from "vue";
-import { string } from "zod";
 import InputStandard from "@/components/InputStandard.vue";
+import { globErr } from "@/tools/views/ZodUtil";
+import "@testing-library/jest-dom/vitest";
 import { render, screen, waitFor } from "@testing-library/vue";
 import { expect, test } from "vitest";
-import { globErr } from "@/tools/views/ZodUtil";
+import { computed, ref } from "vue";
+import { string } from "zod";
 import { setInputValueAndWait, waitForInputHasValue } from "../TestUtil";
-import "@testing-library/jest-dom/vitest";
 
 test("error message and regular label get set correctly", async () => {
   const schema = string(globErr("my error")).min(5);

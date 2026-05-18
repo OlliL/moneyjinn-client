@@ -83,22 +83,22 @@
         </HoverCardContent>
       </HoverCard>
     </TableCell>
-    <TableActionButton
+    <ButtonTableIcon
       :title="$t('General.edit')"
       :aria-label="$t('General.edit')"
       button-class="h-6 w-6 cursor-pointer"
       @click="editEtfFlow"
     >
       <Pencil class="h-4 w-4" />
-    </TableActionButton>
-    <TableActionButton
+    </ButtonTableIcon>
+    <ButtonTableIcon
       :title="$t('General.delete')"
       :aria-label="$t('General.delete')"
       button-class="h-6 w-6 cursor-pointer"
       @click="deleteEtfFlow"
     >
       <Trash2 class="h-4 w-4" />
-    </TableActionButton>
+    </ButtonTableIcon>
   </TableRow>
 </template>
 <script lang="ts" setup>
@@ -121,8 +121,8 @@ import { formatDateWithTime } from "@/tools/views/FormatDate";
 import { formatNumber, redIfNegative } from "@/tools/views/FormatNumber";
 import { Pencil, Trash2 } from "lucide-vue-next";
 import { computed, type PropType } from "vue";
+import ButtonTableIcon from "../ButtonTableIcon.vue";
 import SpanAmount from "../SpanAmount.vue";
-import TableActionButton from "../TableActionButton.vue";
 
 const props = defineProps({
   etfName: {

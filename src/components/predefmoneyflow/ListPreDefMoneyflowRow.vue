@@ -25,15 +25,15 @@
     <TableCell class="text-center border-r py-1 px-2">
       <SpanDate :date="mpm.lastUsed" />
     </TableCell>
-    <TableActionButton :title="$t('General.edit')" @click="editPreDefMoneyflow">
+    <ButtonTableIcon :title="$t('General.edit')" @click="editPreDefMoneyflow">
       <Pencil class="h-4 w-4" />
-    </TableActionButton>
-    <TableActionButton
+    </ButtonTableIcon>
+    <ButtonTableIcon
       :title="$t('General.delete')"
       @click="deletePreDefMoneyflow"
     >
       <Trash2 class="h-4 w-4" />
-    </TableActionButton>
+    </ButtonTableIcon>
   </TableRow>
 </template>
 <script lang="ts" setup>
@@ -41,10 +41,10 @@ import { TableCell, TableRow } from "@/components/ui/table";
 import type { PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
 import { Pencil, Trash2 } from "lucide-vue-next";
 import type { PropType } from "vue";
+import ButtonTableIcon from "../ButtonTableIcon.vue";
 import SpanAmount from "../SpanAmount.vue";
 import SpanBoolean from "../SpanBoolean.vue";
 import SpanDate from "../SpanDate.vue";
-import TableActionButton from "../TableActionButton.vue";
 
 const props = defineProps({
   mpm: {

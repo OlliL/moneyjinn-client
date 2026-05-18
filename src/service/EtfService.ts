@@ -3,14 +3,14 @@ import {
   type CalcEtfSaleRequest,
   type ListEtfFlowsResponse,
 } from "@/api";
-import AbstractService from "@/service/AbstractService";
 import type { EtfDepot } from "@/model/etf/EtfDepot";
 import type { EtfSalesCalculation } from "@/model/etf/EtfSalesCalculation";
 import type { EtfSummary } from "@/model/etf/EtfSummary";
+import AbstractService from "@/service/AbstractService";
+import type { AxiosResponse } from "axios";
 import { mapEtfEffectiveFlowTransportToModel } from "./mapper/EtfEffectiveFlowTransportMapper";
 import { mapEtfFlowTransportToModel } from "./mapper/EtfFlowTransportMapper";
 import { mapEtfSummaryTransportToEtfSummary } from "./mapper/EtfTSummaryTransportMapper";
-import type { AxiosResponse } from "axios";
 
 class EtfService extends AbstractService {
   private readonly api: EtfControllerApi;

@@ -1,27 +1,27 @@
-import { clearAuthTokens, setAuthTokens } from "axios-jwt";
 import {
   UserControllerApi,
+  UserTransportRoleEnum,
   type ChangePasswordRequest,
   type CreateUserRequest,
   type LoginRequest,
   type UpdateUserRequest,
-  UserTransportRoleEnum,
 } from "@/api";
+import { clearAuthTokens, setAuthTokens } from "axios-jwt";
 
 import {
   useUserSessionStore,
   type UserSession,
 } from "@/stores/UserSessionStore";
 
+import {
+  mapAccessRelationToTransport,
+  mapAccessRelationTransportToModel,
+} from "./mapper/AccessRelationTransportMapper";
 import { mapGroupTransportToModel } from "./mapper/GroupTransportMapper";
 import {
   mapUserToTransport,
   mapUserTransportToModel,
 } from "./mapper/UserTransportMapper";
-import {
-  mapAccessRelationToTransport,
-  mapAccessRelationTransportToModel,
-} from "./mapper/AccessRelationTransportMapper";
 
 import type { Group } from "@/model/group/Group";
 import type { AccessRelation } from "@/model/user/AccessRelation";

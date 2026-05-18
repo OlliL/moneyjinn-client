@@ -43,7 +43,7 @@ const _show = (moneyflowId: number) => {
     .then((response) => {
       receiptBase64.value = response.receipt;
       isJpeg.value = response.receiptType === MoneyflowReceiptType.JPEG;
-      isPdf.value  = response.receiptType === MoneyflowReceiptType.PDF;
+      isPdf.value = response.receiptType === MoneyflowReceiptType.PDF;
 
       modalComponent.value?._show();
     })

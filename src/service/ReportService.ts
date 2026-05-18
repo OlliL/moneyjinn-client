@@ -1,16 +1,3 @@
-import AbstractService from "@/service/AbstractService";
-import type { AvailableMonth } from "@/model/report/AvailableMonth";
-import type { Report } from "@/model/report/Report";
-import { mapReportTurnoverCapitalsourceTransportToModel } from "./mapper/ReportTurnoverCapitalsourceTransportMapper";
-import { mapMoneyflowTransportToModel } from "./mapper/MoneyflowTransportMapper";
-import type { TrendsParameter } from "@/model/report/TrendsParameter";
-import type { Trends } from "@/model/report/Trends";
-import type { ReportingParameter } from "@/model/report/ReportingParameter";
-import { usePostingAccountStore } from "@/stores/PostingAccountStore";
-import type { ReportingMonthAmount } from "@/model/report/ReportingMonthAmount";
-import { mapPostingAccountAmountTransportToModel } from "./mapper/PostingAccountAmountTransportMapper";
-import type { PostingAccount } from "@/model/postingaccount/PostingAccount";
-import { getISOStringDate } from "@/tools/views/FormatDate";
 import {
   ReportControllerApi,
   type GetAvailableReportMonthResponse,
@@ -19,7 +6,20 @@ import {
   type ShowTrendsGraphRequest,
   type ShowYearlyReportGraphRequest,
 } from "@/api";
+import type { PostingAccount } from "@/model/postingaccount/PostingAccount";
+import type { AvailableMonth } from "@/model/report/AvailableMonth";
+import type { Report } from "@/model/report/Report";
+import type { ReportingMonthAmount } from "@/model/report/ReportingMonthAmount";
+import type { ReportingParameter } from "@/model/report/ReportingParameter";
+import type { Trends } from "@/model/report/Trends";
+import type { TrendsParameter } from "@/model/report/TrendsParameter";
+import AbstractService from "@/service/AbstractService";
+import { usePostingAccountStore } from "@/stores/PostingAccountStore";
+import { getISOStringDate } from "@/tools/views/FormatDate";
 import type { AxiosResponse } from "axios";
+import { mapMoneyflowTransportToModel } from "./mapper/MoneyflowTransportMapper";
+import { mapPostingAccountAmountTransportToModel } from "./mapper/PostingAccountAmountTransportMapper";
+import { mapReportTurnoverCapitalsourceTransportToModel } from "./mapper/ReportTurnoverCapitalsourceTransportMapper";
 
 class ReportService extends AbstractService {
   private readonly api: ReportControllerApi;

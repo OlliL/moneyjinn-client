@@ -27,8 +27,8 @@ const props = defineProps({
 });
 
 const valueClassName = computed(() => {
-  return props.highlightValue ? "modal-detail-value-emphasis" : "modal-detail-value";
+  return props.highlightValue
+    ? "modal-detail-value-emphasis"
+    : "modal-detail-value";
 });
 </script>
-
-

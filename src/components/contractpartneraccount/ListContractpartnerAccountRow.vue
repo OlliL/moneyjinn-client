@@ -6,18 +6,18 @@
     <TableCell class="text-left border">
       {{ mca.bankCode }}
     </TableCell>
-    <TableActionButton
+    <ButtonTableIcon
       :title="$t('General.edit')"
       @click="editContractpartnerAccount"
     >
       <Pencil class="h-4 w-4" />
-    </TableActionButton>
-    <TableActionButton
+    </ButtonTableIcon>
+    <ButtonTableIcon
       :title="$t('General.delete')"
       @click="deleteContractpartnerAccount"
     >
       <Trash2 class="h-4 w-4" />
-    </TableActionButton>
+    </ButtonTableIcon>
   </TableRow>
 </template>
 
@@ -28,8 +28,8 @@ import type { PropType } from "vue";
 import { TableCell, TableRow } from "@/components/ui/table";
 
 import type { ContractpartnerAccount } from "@/model/contractpartneraccount/ContractpartnerAccount";
+import ButtonTableIcon from "../ButtonTableIcon.vue";
 import SpanIban from "../SpanIban.vue";
-import TableActionButton from "../TableActionButton.vue";
 
 const props = defineProps({
   mca: {

@@ -189,7 +189,6 @@ const loadMonthlySettlements = async (_year?: number, _month?: number) => {
   monthlySettlementsCredit.value = new Array<MonthlySettlementFormData>();
   monthlySettlementsNoCredit.value = new Array<MonthlySettlementFormData>();
 
-
   return MonthlySettlementService.getMonthlySettlementForEdit(_year, _month)
     .then((transporter: MonthlySettlementEditTransporter) => {
       const monthlySettlements = new Array<MonthlySettlementFormData>();

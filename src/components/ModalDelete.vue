@@ -1,5 +1,10 @@
 <template>
-  <ModalVue :title="title" :max-width="maxWidth" :z-index="zIndex" ref="modalComponent">
+  <ModalVue
+    :title="title"
+    :max-width="maxWidth"
+    :z-index="zIndex"
+    ref="modalComponent"
+  >
     <template #body>
       <DivError :server-errors="serverErrors" />
       <slot name="body">
@@ -22,10 +27,10 @@
 import { useTemplateRef } from "vue";
 import { useI18n } from "vue-i18n";
 
-import ModalVue from "./Modal.vue";
+import { Table, TableBody } from "@/components/ui/table";
 import ButtonDelete from "./ButtonDelete.vue";
 import DivError from "./DivError.vue";
-import { Table, TableBody } from "@/components/ui/table";
+import ModalVue from "./Modal.vue";
 
 const { t } = useI18n();
 
@@ -63,6 +68,3 @@ defineExpose({
   _hide,
 });
 </script>
-
-
-

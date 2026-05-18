@@ -171,7 +171,7 @@ const processImportedReceipt = (receipt: ImportedMoneyflowReceipt) => {
 const processReceipt = (receiptType: MoneyflowReceiptType, receipt: string) => {
   receiptBase64.value = receipt;
   isJpeg.value = receiptType === MoneyflowReceiptType.JPEG;
-  isPdf.value  = receiptType === MoneyflowReceiptType.PDF;
+  isPdf.value = receiptType === MoneyflowReceiptType.PDF;
 };
 
 const deleteMoneyflowReceipt = () => {

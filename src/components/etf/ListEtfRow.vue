@@ -18,12 +18,12 @@
       <Star class="h-5 w-5 transition-all fill-primary text-primary"
     /></TableCell>
     <TableCell class="border-r text-start" v-if="!etf.isFavorite"></TableCell>
-    <TableActionButton :title="$t('General.edit')" @click="editEtf">
+    <ButtonTableIcon :title="$t('General.edit')" @click="editEtf">
       <Pencil class="h-4 w-4" />
-    </TableActionButton>
-    <TableActionButton :title="$t('General.delete')" @click="deleteEtf">
+    </ButtonTableIcon>
+    <ButtonTableIcon :title="$t('General.delete')" @click="deleteEtf">
       <Trash2 class="h-4 w-4" />
-    </TableActionButton>
+    </ButtonTableIcon>
   </TableRow>
 </template>
 <script lang="ts" setup>
@@ -32,8 +32,8 @@ import type { Etf } from "@/model/etf/Etf";
 import { formatNumber } from "@/tools/views/FormatNumber";
 import { Pencil, Star, Trash2 } from "lucide-vue-next";
 import { computed, type PropType } from "vue";
+import ButtonTableIcon from "../ButtonTableIcon.vue";
 import SpanAmount from "../SpanAmount.vue";
-import TableActionButton from "../TableActionButton.vue";
 
 const props = defineProps({
   etf: {

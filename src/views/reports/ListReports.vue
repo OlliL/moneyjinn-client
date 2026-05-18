@@ -227,7 +227,7 @@ const selectMonth = (year: string, month?: string) => {
       year: year,
       month: month,
       sortBy: [...sortByMap.value.keys()][0],
-      sortDirection: [...sortByMap.value.values()][0] ? "desc" : "asc",
+      sortDirection: [...sortByMap.value.values()][0] ? "asc" : "desc",
     },
   });
 };

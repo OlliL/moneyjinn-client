@@ -58,10 +58,7 @@ const props = defineProps({
 });
 
 const userSessionStore = useUserSessionStore();
-const emit = defineEmits([
-  "deleteMoneyflow",
-  "editMoneyflow",
-]);
+const emit = defineEmits(["deleteMoneyflow", "editMoneyflow"]);
 
 const isOwnMoneyflow = computed(() => {
   return props.mmf.userId === userSessionStore.getUserId;

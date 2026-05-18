@@ -1,6 +1,6 @@
 import { EventControllerApi } from "@/api";
-import AbstractService from "@/service/AbstractService";
 import type { Events } from "@/model/event/Events";
+import AbstractService from "@/service/AbstractService";
 
 class EventService extends AbstractService {
   private readonly api: EventControllerApi;

@@ -18,4 +18,3 @@ defineProps({
 
 const emit = defineEmits(["click"]);
 </script>
-
