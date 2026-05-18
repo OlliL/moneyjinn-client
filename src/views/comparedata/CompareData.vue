@@ -77,6 +77,7 @@
               <ButtonSubmit
                 :button-label="$t('General.show')"
                 form-id="compareDataForm"
+                test-id="compare-data-submit"
                 ><template #icon><Eye class="h-4 w-4" /></template
               ></ButtonSubmit>
             </div>
@@ -104,6 +105,7 @@
           <CompareDataResultGroupVue
             :comment="$t('CompareData.dataInSourceNotInDb')"
             :compare-data="compareDatasNotInDatabase"
+            group-test-id="compare-data-group-not-in-database"
             compare-data-key="notInDatabase"
             :amount-class="compareDatasNotInDatabaseCountClass"
             :capitalsource-id="capitalsourceId"
@@ -113,6 +115,7 @@
           <CompareDataResultGroupVue
             :comment="$t('CompareData.dataNotInSourceInDb')"
             :compare-data="compareDatasNotInFile"
+            group-test-id="compare-data-group-not-in-file"
             compare-data-key="notInFile"
             :amount-class="compareDatasNotInFileCountClass"
             :capitalsource-id="capitalsourceId"
@@ -124,6 +127,7 @@
           <CompareDataResultGroupVue
             :comment="$t('CompareData.dataMatchingButWrongCapitalsource')"
             :compare-data="compareDatasWrongCapitalsource"
+            group-test-id="compare-data-group-wrong-capitalsource"
             compare-data-key="wrongCapitalsource"
             :amount-class="compareDatasWrongCapitalsourceCountClass"
             :capitalsource-id="capitalsourceId"
@@ -135,6 +139,7 @@
           <CompareDataResultGroupVue
             :comment="$t('CompareData.dataMatching')"
             :compare-data="compareDatasMatching"
+            group-test-id="compare-data-group-matching"
             compare-data-key="matching"
             :amount-class="compareDatasMatchingCountClass"
             :capitalsource-id="capitalsourceId"

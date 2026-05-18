@@ -6,11 +6,19 @@
 
     <DivError :server-errors="serverErrors" />
 
-    <div
-      class="text-center text-green-600"
-      v-if="dataLoaded && importMoneyflows.length == 0"
-    >
-      {{ $t("AppHome.allDone") }} <Smile class="inline h-4 w-4" />
+    <div class="flex justify-center">
+      <Alert
+        v-if="dataLoaded && importMoneyflows.length == 0"
+        class="max-w-xl border-green-200 bg-green-50 dark:bg-green-950/20 dark:border-green-900"
+      >
+        <CheckCircle2 />
+        <AlertTitle>
+          {{ $t("AppHome.allDoneTitle") }}
+        </AlertTitle>
+        <AlertDescription>
+          {{ $t("AppHome.allDone") }}
+        </AlertDescription>
+      </Alert>
     </div>
     <div
       class="flex justify-center pb-5"
@@ -122,10 +130,13 @@ import type { ImportedMoneyflow } from "@/model/moneyflow/ImportedMoneyflow";
 import DivError from "@/components/DivError.vue";
 import SpanIban from "@/components/SpanIban.vue";
 import SpanImportComment from "@/components/SpanImportComment.vue";
+import Alert from "@/components/ui/alert/Alert.vue";
+import AlertDescription from "@/components/ui/alert/AlertDescription.vue";
+import AlertTitle from "@/components/ui/alert/AlertTitle.vue";
 import { Button } from "@/components/ui/button";
 import ImportedMoneyflowService from "@/service/ImportedMoneyflowService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
-import { Save, Smile, Trash2 } from "lucide-vue-next";
+import { CheckCircle2, Save, Trash2 } from "lucide-vue-next";
 
 const serverErrors = ref(new Array<string>());
 

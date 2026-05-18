@@ -9,6 +9,7 @@
         v-if="mmf.hasReceipt"
         variant="ghost"
         size="icon"
+        :data-testid="`search-moneyflow-receipt-${mmf.id}`"
         @click="showReceipt"
         :title="$t('Receipt.receipt')"
         :aria-label="$t('Receipt.receipt')"
@@ -55,6 +56,7 @@
       <Button
         variant="ghost"
         size="icon"
+        :data-testid="`search-moneyflow-edit-${mmf.id}`"
         @click="editMoneyflow"
         :title="$t('General.edit')"
         :aria-label="$t('General.edit')"
@@ -73,6 +75,7 @@
       <Button
         variant="ghost"
         size="icon"
+        :data-testid="`search-moneyflow-delete-${mmf.id}`"
         @click="deleteMoneyflow"
         :title="$t('General.delete')"
         :aria-label="$t('General.delete')"
@@ -91,6 +94,7 @@
       <Button
         variant="ghost"
         size="icon"
+        :data-testid="`search-moneyflow-list-${mmf.id}`"
         @click="listMoneyflow"
         :title="$t('General.moneyflow')"
         :aria-label="$t('General.moneyflow')"

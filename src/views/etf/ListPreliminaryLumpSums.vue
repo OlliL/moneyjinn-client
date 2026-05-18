@@ -45,6 +45,7 @@
           </div>
           <div class="md:col-span-5" v-if="selectedEtfId !== undefined">
             <Button
+              data-testid="preliminary-lump-sum-create-monthly"
               type="button"
               class="w-full"
               @click="
@@ -59,6 +60,7 @@
           </div>
           <div class="md:col-span-5" v-if="selectedEtfId !== undefined">
             <Button
+              data-testid="preliminary-lump-sum-create-piece"
               type="button"
               class="w-full"
               @click="
@@ -73,6 +75,7 @@
           </div>
           <div class="md:col-span-5" v-if="selectedEtfId !== undefined">
             <Button
+              data-testid="preliminary-lump-sum-create-yearly"
               type="button"
               class="w-full"
               @click="
@@ -90,6 +93,7 @@
         <div class="flex justify-center pb-3 w-full" v-if="yearsLoaded">
           <div class="w-full max-w-xs flex items-center justify-center">
             <Button
+              data-testid="preliminary-lump-sum-year-previous"
               variant="outline"
               size="icon"
               type="button"
@@ -111,6 +115,7 @@
             </Select>
 
             <Button
+              data-testid="preliminary-lump-sum-year-next"
               variant="outline"
               size="icon"
               type="button"
@@ -141,6 +146,7 @@
       <div class="flex justify-center pb-4">
         <div class="flex flex-wrap justify-center gap-2">
           <Button
+            data-testid="preliminary-lump-sum-edit"
             type="button"
             @click="
               showCreateEtfPreliminaryLumpSumModal(
@@ -153,6 +159,7 @@
             {{ $t("General.edit") }}
           </Button>
           <Button
+            data-testid="preliminary-lump-sum-delete"
             type="button"
             variant="destructive"
             @click="showDeleteEtfPreliminaryLumpSumModal"
@@ -178,6 +185,7 @@
       <div class="flex justify-center pb-4">
         <div class="flex flex-wrap justify-center gap-2">
           <Button
+            data-testid="preliminary-lump-sum-edit"
             type="button"
             @click="
               showCreateEtfPreliminaryLumpSumModal(
@@ -190,6 +198,7 @@
             {{ $t("General.edit") }}
           </Button>
           <Button
+            data-testid="preliminary-lump-sum-delete"
             type="button"
             variant="destructive"
             @click="showDeleteEtfPreliminaryLumpSumModal"
@@ -214,6 +223,7 @@
       <div class="flex justify-center pb-4">
         <div class="flex flex-wrap justify-center gap-2">
           <Button
+            data-testid="preliminary-lump-sum-edit"
             type="button"
             @click="
               showCreateEtfPreliminaryLumpSumModal(
@@ -226,6 +236,7 @@
             {{ $t("General.edit") }}
           </Button>
           <Button
+            data-testid="preliminary-lump-sum-delete"
             type="button"
             variant="destructive"
             @click="showDeleteEtfPreliminaryLumpSumModal"

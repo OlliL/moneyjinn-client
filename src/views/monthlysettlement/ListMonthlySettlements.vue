@@ -26,17 +26,23 @@
       </div>
 
       <div class="flex w-full flex-wrap items-center justify-center gap-3">
-        <Button type="button" @click="showEditMonthlySettlementModal()">
+        <Button
+          data-testid="monthly-settlement-new"
+          type="button"
+          @click="showEditMonthlySettlementModal()"
+        >
           {{ $t("General.new") }}
         </Button>
         <Button
+          data-testid="monthly-settlement-edit"
           type="button"
           :disabled="!selectedMonth"
-          @click="showEditMonthlySettlementModal(selectedYear, selectedMonth)"
+          @click="showEditMonthlySettlementModal(Number(selectedYear), selectedMonth)"
         >
           {{ $t("General.edit") }}
         </Button>
         <Button
+          data-testid="monthly-settlement-delete"
           type="button"
           variant="destructive"
           :disabled="!selectedMonth"
@@ -147,7 +153,7 @@ onBeforeRouteUpdate((to, from) => {
   }
 });
 
-const showEditMonthlySettlementModal = (year?: string, month?: number) => {
+const showEditMonthlySettlementModal = (year?: number, month?: number) => {
   (editModal.value as typeof EditMonthlySettlementModalVue)._show(year, month);
 };
 
@@ -175,7 +181,7 @@ const monthlySettlementUpserted = (year: string, month: number) => {
 };
 
 const showDeleteMonthlySettlementModal = () => {
-  deleteModal.value?._show(selectedYear.value, selectedMonth.value);
+  deleteModal.value?._show(Number(selectedYear.value), selectedMonth.value);
 };
 
 const monthlySettlementDeleted = (year: string) => {

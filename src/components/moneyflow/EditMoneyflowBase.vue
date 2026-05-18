@@ -145,6 +145,7 @@
           type="button"
           class="text-sm font-medium text-primary hover:underline bg-transparent border-none p-0"
           :id="'mseContainer' + idSuffix"
+          :data-testid="'subbookingToggle' + idSuffix"
           @click="isExpanded = !isExpanded"
         >
           {{ $t("Moneyflow.subbooking") }}

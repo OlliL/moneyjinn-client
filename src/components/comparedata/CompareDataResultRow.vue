@@ -27,6 +27,7 @@
       <Button
         variant="ghost"
         size="icon"
+        :data-testid="`compare-data-edit-${mmf.id}`"
         @click="editMoneyflow"
         :title="$t('General.edit')"
         class="h-8 w-8 cursor-pointer"
@@ -41,6 +42,7 @@
       <Button
         variant="ghost"
         size="icon"
+        :data-testid="`compare-data-delete-${mmf.id}`"
         @click="deleteMoneyflow"
         :title="$t('General.delete')"
         class="h-8 w-8 cursor-pointer"
@@ -85,6 +87,7 @@
       <Button
         variant="ghost"
         size="icon"
+        :data-testid="`compare-data-create-${rowIndex}`"
         @click="createMoneyflow"
         :title="$t('General.new')"
         class="h-8 w-8 cursor-pointer"
@@ -127,6 +130,10 @@ const props = defineProps({
   },
   capitalsourceComment: {
     type: String,
+    required: true,
+  },
+  rowIndex: {
+    type: Number,
     required: true,
   },
 });

@@ -41,7 +41,10 @@
             </InputStandard>
           </div>
           <div class="mb-2 mt-6 flex flex-col items-center">
-            <ButtonSubmit :button-label="$t('LoginView.login')">
+            <ButtonSubmit
+              :button-label="$t('LoginView.login')"
+              test-id="login-submit"
+            >
               <template #icon><LogIn /> </template>
             </ButtonSubmit>
           </div>

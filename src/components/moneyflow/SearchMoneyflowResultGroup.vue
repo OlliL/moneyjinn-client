@@ -4,6 +4,7 @@
       <Button
         variant="ghost"
         size="icon"
+        data-testid="search-moneyflow-group-expand"
         @click="toggleCollapse"
         :title="isCollapsed ? 'Collapse details' : 'Expand details'"
         :aria-label="isCollapsed ? 'Collapse details' : 'Expand details'"

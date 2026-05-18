@@ -1,18 +1,21 @@
 import SpanBoolean from "@/components/SpanBoolean.vue";
+import { ValueView } from "@/tests/TestViews";
 import "@testing-library/jest-dom/vitest";
-import { render, screen } from "@testing-library/vue";
-import { expect, test } from "vitest";
+import { render } from "@testing-library/vue";
+import { test } from "vitest";
+
+class SpanBooleanView {
+  static readonly Boolean = new ValueView("booleanSpan");
+}
 
 test("test true", async () => {
   render(SpanBoolean, { props: { value: true } });
-  const booleanSpan = screen.getByTestId<HTMLElement>("booleanSpan");
-  expect(booleanSpan.textContent).toEqual("yes");
-  expect(booleanSpan).toHaveClass("text-green-600");
+  await SpanBooleanView.Boolean.assertTextEquals("yes");
+  await SpanBooleanView.Boolean.assertHasClass("text-green-600");
 });
 
 test("test false", async () => {
   render(SpanBoolean, { props: { value: false } });
-  const booleanSpan = screen.getByTestId<HTMLElement>("booleanSpan");
-  expect(booleanSpan.textContent).toEqual("no");
-  expect(booleanSpan).toHaveClass("text-red-600");
+  await SpanBooleanView.Boolean.assertTextEquals("no");
+  await SpanBooleanView.Boolean.assertHasClass("text-red-600");
 });

@@ -38,7 +38,7 @@
               />
             </div>
             <div class="flex justify-center">
-              <Button type="submit">
+              <Button type="submit" data-testid="change-password-submit">
                 {{ $t("General.save") }}
               </Button>
             </div>

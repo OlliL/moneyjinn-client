@@ -42,7 +42,10 @@
       </div>
     </div>
 
-    <DivError :server-errors="serverErrors" />
+    <DivError
+      :server-errors="serverErrors"
+      test-id-prefix="createMoneyflowServerError"
+    />
 
     <div
       class="rounded-sm border bg-card text-card-foreground shadow bg-muted p-4"
@@ -62,6 +65,7 @@
             type="button"
             variant="secondary"
             class="flex items-center gap-2 px-6"
+            data-testid="createMoneyflowResetButton"
             @click="resetForm"
           >
             <Undo2 class="h-4 w-4" />
@@ -70,6 +74,7 @@
           <ButtonSubmit
             :button-label="$t('General.save')"
             form-id="createMoneyflowForm"
+            test-id="createMoneyflowSaveButton"
             ><template #icon><Save class="h-4 w-4" /></template
           ></ButtonSubmit>
         </div>

@@ -5,6 +5,7 @@
         v-if="compareDatasCount > 0"
         variant="ghost"
         size="icon"
+        :data-testid="`${groupTestId}-toggle`"
         @click="toggleCollapse"
         :title="isCollapsed ? 'Collapse details' : 'Expand details'"
         :aria-label="isCollapsed ? 'Collapse details' : 'Expand details'"
@@ -84,6 +85,7 @@
               <CompareDataResultRowVue
                 v-for="(data, idx) in compareData"
                 :key="idx"
+                :row-index="idx"
                 :mmf="data.moneyflow"
                 :import-data="data.compareDataDataset"
                 :capitalsource-id="capitalsourceId"
@@ -135,6 +137,15 @@ const props = defineProps({
   capitalsourceComment: {
     type: String,
     required: true,
+  },
+  groupTestId: {
+    type: String,
+    required: true,
+  },
+  compareDataKey: {
+    type: String,
+    required: false,
+    default: "",
   },
 });
 

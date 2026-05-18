@@ -6,93 +6,122 @@ import { CapitalsourceType } from "@/model/capitalsource/CapitalsourceType";
 import type { Contractpartner } from "@/model/contractpartner/Contractpartner";
 import type { PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
 import type { PostingAccount } from "@/model/postingaccount/PostingAccount";
-import CapitalsourceService from "@/service/CapitalsourceService";
-import ContractpartnerService from "@/service/ContractpartnerService";
-import CrudEtfService from "@/service/CrudEtfService";
 import MoneyflowService from "@/service/MoneyflowService";
-import PostingAccountService from "@/service/PostingAccountService";
-import PreDefMoneyflowService from "@/service/PreDefMoneyflowService";
+import CapitalsourceServiceMocker from "@/service/mocker/CapitalsourceServiceMocker";
+import ContractpartnerServiceMocker from "@/service/mocker/ContractpartnerServiceMocker";
+import CrudEtfServiceMocker from "@/service/mocker/CrudEtfServiceMocker";
+import MoneyflowServiceMocker from "@/service/mocker/MoneyflowServiceMocker";
+import PostingAccountServiceMocker from "@/service/mocker/PostingAccountServiceMocker";
+import PreDefMoneyflowServiceMocker from "@/service/mocker/PreDefMoneyflowServiceMocker";
 import { StoreService } from "@/stores/StoreService";
+import { assertHaveBeenCalledOnce } from "@/tests/TestUtil";
 import {
-  useUserSessionStore,
   type UserSession,
+  useUserSessionStore,
 } from "@/stores/UserSessionStore";
-import { setInputValueAndWait, waitForInputHasValue } from "@/tests/TestUtil";
+import {
+  AlertView,
+  ButtonView,
+  CollapseView,
+  CollectionView,
+  ComboboxView,
+  InputView,
+  SelectView,
+  ToggleView,
+} from "@/tests/TestViews";
 import CreateMoneyflow from "@/views/moneyflow/CreateMoneyflow.vue";
 import "@testing-library/jest-dom/vitest";
-import userEvent from "@testing-library/user-event";
-import { fireEvent, render, screen, waitFor } from "@testing-library/vue";
+import { render } from "@testing-library/vue";
 import { createPinia, setActivePinia } from "pinia";
-import { beforeAll, expect, test, vi } from "vitest";
+import { beforeEach, test, vi } from "vitest";
 
-vi.mock("@/service/PreDefMoneyflowService", () => ({
-  default: {
-    fetchAllPreDefMoneyflow: vi.fn(),
-  },
-}));
-vi.mock("@/service/PostingAccountService", () => ({
-  default: {
-    fetchAllPostingAccount: vi.fn(),
-  },
-}));
-vi.mock("@/service/ContractpartnerService", () => ({
-  default: {
-    fetchAllContractpartner: vi.fn(),
-  },
-}));
-vi.mock("@/service/CapitalsourceService", () => ({
-  default: {
-    fetchAllCapitalsource: vi.fn(),
-  },
-}));
-vi.mock("@/service/CrudEtfService", () => ({
-  default: {
-    fetchAllEtf: vi.fn(),
-  },
-}));
-vi.mock("@/service/MoneyflowService", () => ({
-  default: {
-    createMoneyflow: vi.fn(),
-    updateMoneyflow: vi.fn(),
-    searchMoneyflowsByAmount: vi.fn(),
-  },
-}));
-vi.mock("@/service/ImportedMoneyflowService", () => ({
-  default: {
-    createImportedMoneyflow: vi.fn(),
-    updateImportedMoneyflow: vi.fn(),
-  },
-}));
+vi.mock("@/service/PreDefMoneyflowService");
+vi.mock("@/service/PostingAccountService");
+vi.mock("@/service/ContractpartnerService");
+vi.mock("@/service/CapitalsourceService");
+vi.mock("@/service/CrudEtfService");
+vi.mock("@/service/MoneyflowService");
+vi.mock("@/service/ImportedMoneyflowService");
 
-if (typeof Element !== "undefined") {
-  Element.prototype.setPointerCapture = () => {};
-  Element.prototype.releasePointerCapture = () => {};
-  Element.prototype.hasPointerCapture = () => false;
+class CreateMoneyflowView {
+  static readonly BookingDateInput = new InputView("bookingDate");
+  static readonly InvoiceDateInput = new InputView("invoiceDate");
+  static readonly AmountInput = new InputView("amount");
+  static readonly CommentInput = new InputView("comment");
+  static readonly ContractpartnerInput = new InputView(
+    "contractpartnerCreateMoneyflow",
+  );
+  static readonly ContractpartnerIdInput = new InputView(
+    "contractpartnerCreateMoneyflow-id",
+  );
+  static readonly CapitalsourceIdInput = new InputView(
+    "capitalsourceCreateMoneyflow-id",
+  );
+  static readonly PostingAccountInput = new InputView(
+    "postingAccountCreateMoneyflow",
+  );
+  static readonly PostingAccountIdInput = new InputView(
+    "postingAccountCreateMoneyflow-id",
+  );
+  static readonly RemainderInput = new InputView("remainder");
+  static readonly SplitEntriesCollapse = new CollapseView(
+    "collapseSplitEntries",
+  );
+  static readonly SubbookingToggleButton = new ButtonView("subbookingToggle");
+  static readonly AddSplitEntryRowButton = new ButtonView(
+    "addMoneyflowSplitEntryRowButton",
+  );
+  static readonly RemainderButton = new ButtonView("remainderButton");
+  static readonly SplitEntryRows = new CollectionView("splitEntryRow");
+  static readonly ResetButton = new ButtonView("createMoneyflowResetButton");
+  static readonly SaveButton = new ButtonView("createMoneyflowSaveButton");
+  static readonly ServerErrorItem = new AlertView("serverError-item");
+  static readonly SelectMoneyflow = new SelectView("selectmoneyflow");
+
+  static readonly PostingAccountCombobox = new ComboboxView(
+    "postingAccountCreateMoneyflow",
+  );
+  static readonly ContractpartnerCombobox = new ComboboxView(
+    "contractpartnerCreateMoneyflow",
+  );
+
+  static readonly PublicToggle = new ToggleView("public");
+  static readonly PrivateToggle = new ToggleView("private");
+  static readonly OnceToggle = new ToggleView("once");
+  static readonly FavoriteToggle = new ToggleView("favorite");
+  static readonly KeepToggle = new ToggleView("keep");
+  static readonly RenewToggle = new ToggleView("renew");
+
+  static amountSplitEntryInput(rowId: number): InputView {
+    return new InputView(`amountSplitEntry#${rowId}`);
+  }
+
+  static commentSplitEntryInput(rowId: number): InputView {
+    return new InputView(`commentSplitEntry#${rowId}`);
+  }
+
+  static postingAccountSplitEntryIdInput(rowId: number): InputView {
+    return new InputView(`postingAccountSplitEntry#${rowId}-id`);
+  }
+
+  static splitEntryDeleteButton(rowId: number): ButtonView {
+    return new ButtonView(`splitEntryRowDeleteButton#${rowId}`);
+  }
 }
 
-globalThis.PointerEvent = class PointerEvent extends MouseEvent {
-  readonly pointerId: number;
-  readonly pointerType: string;
-
-  constructor(type: string, params: any = {}) {
-    super(type, params);
-    this.pointerId = params.pointerId ?? 1;
-    this.pointerType = params.pointerType ?? "mouse";
-  }
-} as any;
-
-beforeAll(async () => {
-  setActivePinia(createPinia());
-  const postingAccount1: PostingAccount = {
+const defaultPostingAccounts: PostingAccount[] = [
+  {
     id: 1,
     name: "Posting Account 1",
-  } as PostingAccount;
-  const postingAccount2: PostingAccount = {
+  } as PostingAccount,
+  {
     id: 2,
     name: "Posting Account 2",
-  } as PostingAccount;
+  } as PostingAccount,
+];
 
-  const contractpartner: Contractpartner = {
+const defaultContractpartners: Contractpartner[] = [
+  {
     id: 1,
     userId: 1,
     name: "Contractpartner 1",
@@ -105,9 +134,11 @@ beforeAll(async () => {
     moneyflowComment: "Contractpartner Comment 1",
     postingAccountId: 1,
     postingAccountName: "Posting Account 1",
-  } as Contractpartner;
+  } as Contractpartner,
+];
 
-  const capitalsource1: Capitalsource = {
+const defaultCapitalsources: Capitalsource[] = [
+  {
     id: 1,
     userId: 1,
     type: CapitalsourceType.CURRENT_ASSET,
@@ -117,8 +148,8 @@ beforeAll(async () => {
     validFrom: new Date("2000-01-01"),
     groupUse: false,
     importAllowed: CapitalsourceImport.NOT_ALLOWED,
-  } as Capitalsource;
-  const capitalsource2: Capitalsource = {
+  } as Capitalsource,
+  {
     id: 2,
     userId: 1,
     type: CapitalsourceType.CURRENT_ASSET,
@@ -128,8 +159,11 @@ beforeAll(async () => {
     validFrom: new Date("2000-01-01"),
     groupUse: false,
     importAllowed: CapitalsourceImport.NOT_ALLOWED,
-  } as Capitalsource;
-  const preDefMoneyflow: PreDefMoneyflow = {
+  } as Capitalsource,
+];
+
+const defaultPreDefMoneyflows: PreDefMoneyflow[] = [
+  {
     id: 1,
     userId: 1,
     amount: 20.4,
@@ -140,21 +174,30 @@ beforeAll(async () => {
     createDate: new Date("2010-01-01"),
     onceAMonth: false,
     postingAccountId: 1,
-  } as PreDefMoneyflow;
+  } as PreDefMoneyflow,
+];
 
-  PostingAccountService.fetchAllPostingAccount = vi
-    .fn()
-    .mockResolvedValue(Promise.resolve([postingAccount1, postingAccount2]));
-  ContractpartnerService.fetchAllContractpartner = vi
-    .fn()
-    .mockResolvedValue(Promise.resolve([contractpartner]));
-  CapitalsourceService.fetchAllCapitalsource = vi
-    .fn()
-    .mockResolvedValue(Promise.resolve([capitalsource1, capitalsource2]));
-  PreDefMoneyflowService.fetchAllPreDefMoneyflow = vi
-    .fn()
-    .mockResolvedValue(Promise.resolve([preDefMoneyflow]));
-  CrudEtfService.fetchAllEtf = vi.fn().mockResolvedValue(Promise.resolve([]));
+const applyDefaultMocks = () => {
+  PostingAccountServiceMocker.mockFetchAllPostingAccount([
+    ...defaultPostingAccounts,
+  ]);
+  ContractpartnerServiceMocker.mockFetchAllContractpartner([
+    ...defaultContractpartners,
+  ]);
+  CapitalsourceServiceMocker.mockFetchAllCapitalsource([
+    ...defaultCapitalsources,
+  ]);
+  PreDefMoneyflowServiceMocker.mockFetchAllPreDefMoneyflow([
+    ...defaultPreDefMoneyflows,
+  ]);
+  CrudEtfServiceMocker.mockFetchAllEtf([]);
+  MoneyflowServiceMocker.mockCreateMoneyflowResolved();
+};
+
+beforeEach(() => {
+  setActivePinia(createPinia());
+  vi.clearAllMocks();
+  applyDefaultMocks();
 });
 
 test("render - form initialized", async () => {
@@ -176,25 +219,19 @@ test("render - form initialized", async () => {
 
   const formatted = ddStr + "." + mmStr + "." + yyyy;
 
-  await Promise.all([
-    // 1st row
-    assertInputValueToBe("bookingDate", formatted),
-    assertInputValueToBe("invoiceDate", ""),
-    assertInputValueToBe("contractpartnerCreateMoneyflow", ""),
-    assertInputValueToBe(
-      "capitalsourceCreateMoneyflow-id",
-      "1",
-      "First cash capitalsource has to be selected by default!",
-    ),
-    // 2nd row
-    assertInputValueToBe("amount", ""),
-    assertInputValueToBe("comment", ""),
-    assertInputValueToBe("postingAccountCreateMoneyflow", ""),
-    assertCheckboxChecked("public"),
-    assertCheckboxUnchecked("private"),
-    assertCheckboxChecked("once"),
-    assertCheckboxUnchecked("favorite"),
-  ]);
+  // 1st row
+  await CreateMoneyflowView.BookingDateInput.assertValue(formatted);
+  await CreateMoneyflowView.InvoiceDateInput.assertValue("");
+  await CreateMoneyflowView.ContractpartnerInput.assertValue("");
+  await CreateMoneyflowView.CapitalsourceIdInput.assertValue("1");
+  // 2nd row
+  await CreateMoneyflowView.AmountInput.assertValue("");
+  await CreateMoneyflowView.CommentInput.assertValue("");
+  await CreateMoneyflowView.PostingAccountInput.assertValue("");
+  await CreateMoneyflowView.PublicToggle.assertChecked();
+  await CreateMoneyflowView.PrivateToggle.assertUnchecked();
+  await CreateMoneyflowView.OnceToggle.assertChecked();
+  await CreateMoneyflowView.FavoriteToggle.assertUnchecked();
 });
 
 test("split entries handling", async () => {
@@ -203,162 +240,104 @@ test("split entries handling", async () => {
 
   render(CreateMoneyflow);
 
-  let selectPostingAccount: HTMLSelectElement = await screen.findByTestId(
-    "postingAccountCreateMoneyflow",
-  );
-  let inputComment: HTMLInputElement = await screen.findByTestId("comment");
-  const inputAmount: HTMLInputElement = await screen.findByTestId("amount");
-
   //
   // 01. input moneyflow data
   //
 
-  await Promise.all([
-    setInputValueAndWait(inputAmount, "-100.15", "Amount expected to be set"),
-    setInputValueAndWait(
-      inputComment,
-      "Testcomment",
-      "Comment expected to be set",
-    ),
-    selectComboboxItemAndWait(
-      "postingAccountCreateMoneyflow",
-      "Posting Account 2",
-      "2",
-    ),
-  ]);
+  await CreateMoneyflowView.AmountInput.setValue("-100.15");
+  await CreateMoneyflowView.CommentInput.setValue("Testcomment");
+  await CreateMoneyflowView.PostingAccountCombobox.selectItem(
+    "Posting Account 2",
+    "2",
+  );
 
   //
   // 02. check that subbookings div is collapsed
   //
 
-  const subbookingDiv: HTMLDivElement = screen.getByTestId(
-    "collapseSplitEntries",
-  );
-  const subbookingLink = screen.getByText("subbooking");
-  waitFor(() => expect(subbookingDiv).toHaveClass("collapse"));
-  waitFor(() => expect(subbookingDiv).not.toHaveClass("show"));
+  await CreateMoneyflowView.SplitEntriesCollapse.assertCollapsed();
 
   //
   // 03. show subbookings div and make sure it has 2 rows
   //
 
-  subbookingLink.click();
-  waitFor(() => expect(subbookingDiv).toHaveClass("show"));
-
-  const splitEntryRows: HTMLDivElement[] =
-    await screen.findAllByTestId("splitEntryRow");
-
-  expect(splitEntryRows).toHaveLength(2);
+  await CreateMoneyflowView.SubbookingToggleButton.click();
+  await CreateMoneyflowView.SplitEntriesCollapse.assertExpanded();
+  await CreateMoneyflowView.SplitEntryRows.assertCount(2);
 
   //
   // 04. add one more subbookings row
   //
 
-  const splitEntryRowAddButton = screen.getByTestId(
-    "addMoneyflowSplitEntryRowButton",
-  );
-  splitEntryRowAddButton.click();
-
-  await waitFor(() =>
-    expect(screen.getAllByTestId("splitEntryRow")).toHaveLength(3),
-  );
+  await CreateMoneyflowView.AddSplitEntryRowButton.click();
+  await CreateMoneyflowView.SplitEntryRows.assertCount(3);
 
   //
   // 05. check remainder is filled correctly
   //
 
-  let inputRemainder: HTMLInputElement = await screen.findByTestId("remainder");
-  const buttonRemainder: HTMLSpanElement =
-    screen.getByTestId("remainderButton");
-
-  await waitForInputHasValue(inputRemainder, "-100.15");
+  await CreateMoneyflowView.RemainderInput.assertValue("-100.15");
 
   //
   // 06. check that moneyflow comment/postingAccount inputs are removed on 1st entering of a subbooking
   //
 
-  const inputAmountMse1: HTMLInputElement = screen.getByTestId(
-    "amountSplitEntry#-1",
-  );
-  await setInputValueAndWait(
-    inputAmountMse1,
-    "-50",
-    "Amount expected to be set",
-  );
+  await CreateMoneyflowView.amountSplitEntryInput(-1).setValue("-50");
 
-  expect(inputComment).not.toBeVisible();
-  expect(selectPostingAccount).not.toBeVisible();
-  expect(inputAmount).toBeVisible();
+  await CreateMoneyflowView.CommentInput.assertNotToBeVisible();
+  await CreateMoneyflowView.PostingAccountInput.assertNotToBeVisible();
+  await CreateMoneyflowView.AmountInput.assertToBeVisible();
 
   //
   // 07. check that remainder is now reduced
   //
 
-  await waitForInputHasValue(inputRemainder, "-50.15");
+  await CreateMoneyflowView.RemainderInput.assertValue("-50.15");
 
   //
   // 08. move remainder and original moneyflow comment+PostingAccount to last subbokings row
   //     a new row must be created as well
   //
-  buttonRemainder.click();
-  await Promise.all([
-    assertInputValueToBe("amountSplitEntry#-3", "-50.15"),
-    assertInputValueToBe("commentSplitEntry#-3", "Testcomment"),
-    assertInputValueToBe("postingAccountSplitEntry#-3-id", "2"),
-    waitFor(() =>
-      expect(screen.getAllByTestId("splitEntryRow")).toHaveLength(4),
-    ),
-  ]);
+  await CreateMoneyflowView.RemainderButton.click();
+  await CreateMoneyflowView.amountSplitEntryInput(-3).assertValue("-50.15");
+  await CreateMoneyflowView.commentSplitEntryInput(-3).assertValue(
+    "Testcomment",
+  );
+  await CreateMoneyflowView.postingAccountSplitEntryIdInput(-3).assertValue(
+    "2",
+  );
+  await CreateMoneyflowView.SplitEntryRows.assertCount(4);
 
   //
   // 09. remainder removed because no amount remains to be distributed
   //
 
-  expect(inputRemainder).not.toBeInTheDocument();
+  await CreateMoneyflowView.RemainderInput.assertNotToBeInDocument();
 
   //
   // 10. on deletion of the 1st subbooking row, the remainder must reappear
   //
 
-  const splitEntryRowDelButton1 = screen.getByTestId(
-    "splitEntryRowDeleteButton#-1",
-  );
-  splitEntryRowDelButton1.click();
-  inputRemainder = await screen.findByTestId("remainder");
-  await waitForInputHasValue(
-    inputRemainder,
-    "-50.00",
-    "Remainder is back again",
-  );
+  await CreateMoneyflowView.splitEntryDeleteButton(-1).click();
+  await CreateMoneyflowView.RemainderInput.assertValue("-50.00");
 
   //
   // 11. on deleting the last row with content, the remainder must be updated
   //     and the main comment + PostingAccount fields have to appear back
   //
 
-  const splitEntryRowDelButton3 = screen.getByTestId(
-    "splitEntryRowDeleteButton#-3",
-  );
-  splitEntryRowDelButton3.click();
-  await waitForInputHasValue(
-    inputRemainder,
-    "-100.15",
-    "Remainder is full again",
-  );
+  await CreateMoneyflowView.splitEntryDeleteButton(-3).click();
+  await CreateMoneyflowView.RemainderInput.assertValue("-100.15");
 
-  inputComment = screen.getByTestId("comment");
-
-  await Promise.all([
-    waitForInputHasValue(inputComment, "Testcomment"),
-    assertInputValueToBe("postingAccountCreateMoneyflow-id", "2"),
-  ]);
+  await CreateMoneyflowView.CommentInput.assertValue("Testcomment");
+  await CreateMoneyflowView.PostingAccountIdInput.assertValue("2");
 
   //
   // 12. collapse subbokings div
   //
 
-  subbookingLink.click();
-  waitFor(() => expect(subbookingDiv).not.toHaveClass("show"));
+  await CreateMoneyflowView.SubbookingToggleButton.click();
+  await CreateMoneyflowView.SplitEntriesCollapse.assertCollapsed();
 }, 10000);
 
 test("select a PreDefMoneyflow - fill input fields", async () => {
@@ -367,22 +346,21 @@ test("select a PreDefMoneyflow - fill input fields", async () => {
 
   render(CreateMoneyflow);
 
-  await waitForOptionSelected("selectmoneyflow", "new booking");
-  await selectOptionAndWait(
-    "selectmoneyflow",
+  await CreateMoneyflowView.SelectMoneyflow.waitForSelectedText("new booking");
+  await CreateMoneyflowView.SelectMoneyflow.selectOption(
     "1",
     "Contractpartner 1 | 20.40 € | PreDefMoneyflow Comment 1",
   );
 
-  await Promise.all([
-    assertCheckboxChecked("keep"),
-    assertCheckboxUnchecked("renew"),
-    assertInputValueToBe("amount", "20.4"),
-    assertInputValueToBe("comment", "PreDefMoneyflow Comment 1"),
-    assertInputValueToBe("contractpartnerCreateMoneyflow-id", "1"),
-    assertInputValueToBe("capitalsourceCreateMoneyflow-id", "2"),
-    assertInputValueToBe("postingAccountCreateMoneyflow-id", "1"),
-  ]);
+  await CreateMoneyflowView.KeepToggle.assertChecked();
+  await CreateMoneyflowView.RenewToggle.assertUnchecked();
+  await CreateMoneyflowView.AmountInput.assertValue("20.4");
+  await CreateMoneyflowView.CommentInput.assertValue(
+    "PreDefMoneyflow Comment 1",
+  );
+  await CreateMoneyflowView.ContractpartnerIdInput.assertValue("1");
+  await CreateMoneyflowView.CapitalsourceIdInput.assertValue("2");
+  await CreateMoneyflowView.PostingAccountIdInput.assertValue("1");
 });
 
 test("select a Contractpartner - set and reset input fields", async () => {
@@ -391,40 +369,21 @@ test("select a Contractpartner - set and reset input fields", async () => {
 
   render(CreateMoneyflow);
 
-  await selectComboboxItemAndWait(
-    "contractpartnerCreateMoneyflow",
+  await CreateMoneyflowView.ContractpartnerCombobox.selectItem(
     "Contractpartner 1",
     "1",
   );
 
-  await Promise.all([
-    assertInputValueToBe(
-      "comment",
-      "Contractpartner Comment 1",
-      "Choosing Contractpartner must set its preset comment",
-    ),
-    assertInputValueToBe(
-      "postingAccountCreateMoneyflow-id",
-      "1",
-      "Choosing Contractpartner must set its preset PostingAccount",
-    ),
-  ]);
+  await CreateMoneyflowView.CommentInput.assertValue(
+    "Contractpartner Comment 1",
+  );
+  await CreateMoneyflowView.PostingAccountIdInput.assertValue("1");
 
-  await clearComboboxAndWait("contractpartnerCreateMoneyflow");
+  await CreateMoneyflowView.ContractpartnerCombobox.clear();
 
-  await Promise.all([
-    assertInputValueToBe(
-      "comment",
-      "",
-      "Resetting Contractpartner must reset comment too if it wasn't modified in the meantime",
-    ),
-    assertInputValueToBe(
-      "postingAccountCreateMoneyflow-id",
-      "0",
-      "Resetting Contractpartner must reset PostingAccount too if it wasn't modified in the meantime",
-    ),
-    assertInputValueToBe("contractpartnerCreateMoneyflow-id", "0"),
-  ]);
+  await CreateMoneyflowView.CommentInput.assertValue("");
+  await CreateMoneyflowView.PostingAccountIdInput.assertValue("0");
+  await CreateMoneyflowView.ContractpartnerIdInput.assertValue("0");
 });
 
 test("select a Contractpartner - previously set input fields not overwritten", async () => {
@@ -433,122 +392,68 @@ test("select a Contractpartner - previously set input fields not overwritten", a
 
   render(CreateMoneyflow);
 
-  const inputComment: HTMLInputElement = await screen.findByTestId("comment");
-  await Promise.all([
-    setInputValueAndWait(
-      inputComment,
-      "Testcomment",
-      "Comment expected to be set",
-    ),
-    selectComboboxItemAndWait(
-      "postingAccountCreateMoneyflow",
-      "Posting Account 2",
-      "2",
-    ),
-  ]);
+  await CreateMoneyflowView.CommentInput.setValue("Testcomment");
+  await CreateMoneyflowView.PostingAccountCombobox.selectItem(
+    "Posting Account 2",
+    "2",
+  );
 
-  await selectComboboxItemAndWait(
-    "contractpartnerCreateMoneyflow",
+  await CreateMoneyflowView.ContractpartnerCombobox.selectItem(
     "Contractpartner 1",
     "1",
   );
 
-  await Promise.all([
-    assertInputValueToBe(
-      "comment",
-      "Testcomment",
-      "Previously set comment gets not overwritten by Contractpartner preset",
-    ),
-    assertInputValueToBe(
-      "postingAccountCreateMoneyflow-id",
-      "2",
-      "Previously set PostingAccount gets not overwritten by Contractpartner preset",
-    ),
-  ]);
+  await CreateMoneyflowView.CommentInput.assertValue("Testcomment");
+  await CreateMoneyflowView.PostingAccountIdInput.assertValue("2");
 });
 
-// ── Test 1: Reset-Button setzt Formular zurück ────────────────────────────────
+// Test 1: Reset button clears the form
 test("reset button clears all form fields", async () => {
   await StoreService.getInstance().initAllStores();
   useUserSessionStore().setUserSession({ userId: 1 } as UserSession);
 
   render(CreateMoneyflow);
 
-  const inputAmount: HTMLInputElement = await screen.findByTestId("amount");
-  const inputComment: HTMLInputElement = await screen.findByTestId("comment");
+  await CreateMoneyflowView.AmountInput.setValue("-42");
+  await CreateMoneyflowView.CommentInput.setValue("Before-Reset-Comment");
 
-  await setInputValueAndWait(inputAmount, "-42", "Amount expected to be set");
-  await setInputValueAndWait(
-    inputComment,
-    "Before-Reset-Comment",
-    "Comment expected to be set",
-  );
+  await CreateMoneyflowView.ResetButton.click();
 
-  const resetButton = screen.getByText("reset");
-  fireEvent.click(resetButton);
+  await CreateMoneyflowView.AmountInput.assertValue("");
+  await CreateMoneyflowView.CommentInput.assertValue("");
+  await CreateMoneyflowView.ContractpartnerIdInput.assertValue("0");
+  await CreateMoneyflowView.PostingAccountIdInput.assertValue("0");
 
-  await Promise.all([
-    assertInputValueToBe("amount", "", "Amount must be empty after reset"),
-    assertInputValueToBe("comment", "", "Comment must be empty after reset"),
-    assertInputValueToBe(
-      "contractpartnerCreateMoneyflow-id",
-      "0",
-      "Contractpartner must be reset",
-    ),
-    assertInputValueToBe(
-      "postingAccountCreateMoneyflow-id",
-      "0",
-      "PostingAccount must be reset",
-    ),
-  ]);
-
-  await waitForOptionSelected("selectmoneyflow", "");
+  await CreateMoneyflowView.SelectMoneyflow.waitForSelectedText("");
 });
 
-// ── Test 2: PreDefMoneyflow auswählen → Reset → zurück auf Leer ───────────────
+// Test 2: Select PreDefMoneyflow -> reset -> back to empty state
 test("reset after PreDefMoneyflow selection restores once/favorite toggles", async () => {
   await StoreService.getInstance().initAllStores();
   useUserSessionStore().setUserSession({ userId: 1 } as UserSession);
 
   render(CreateMoneyflow);
 
-  await waitForOptionSelected("selectmoneyflow", "new booking");
-  await selectOptionAndWait(
-    "selectmoneyflow",
+  await CreateMoneyflowView.SelectMoneyflow.waitForSelectedText("new booking");
+  await CreateMoneyflowView.SelectMoneyflow.selectOption(
     "1",
     "Contractpartner 1 | 20.40 € | PreDefMoneyflow Comment 1",
   );
 
   // after selection: keep/renew labels must be present
-  await assertCheckboxChecked(
-    "keep",
-    "keep-toggle must be active after PreDefMoneyflow selection",
-  );
+  await CreateMoneyflowView.KeepToggle.assertChecked();
 
-  const resetButton = screen.getByText("reset");
-  fireEvent.click(resetButton);
+  await CreateMoneyflowView.ResetButton.click();
 
   // after reset: once/favorite labels must be back
-  await assertCheckboxChecked(
-    "once",
-    "once-toggle must be active again after reset",
-  );
-  await assertCheckboxUnchecked(
-    "favorite",
-    "favorite-toggle must be inactive after reset",
-  );
+  await CreateMoneyflowView.OnceToggle.assertChecked();
+  await CreateMoneyflowView.FavoriteToggle.assertUnchecked();
 
-  await waitForOptionSelected(
-    "selectmoneyflow",
-    "new booking",
-    "selectmoneyflow must be back to 0 after reset",
-  );
+  await CreateMoneyflowView.SelectMoneyflow.waitForSelectedText("new booking");
 });
 
-// ── Test 3: PreDefMoneyflow mit onceAMonth=true + lastUsed diesen Monat → nicht in Liste ─────
+// Test 3: once-a-month PreDefMoneyflow already used this month is hidden
 test("PreDefMoneyflow with onceAMonth used this month is not shown in select", async () => {
-  setActivePinia(createPinia());
-
   const now = new Date();
   const onceAMonthUsed: PreDefMoneyflow = {
     id: 99,
@@ -563,110 +468,21 @@ test("PreDefMoneyflow with onceAMonth used this month is not shown in select", a
     postingAccountId: 1,
   };
 
-  const postingAccount1: PostingAccount = {
-    id: 1,
-    name: "Posting Account 1",
-  };
-  const contractpartner: Contractpartner = {
-    id: 1,
-    userId: 1,
-    name: "Contractpartner 1",
-    street: "Street 1",
-    postcode: 11111,
-    town: "Town 1",
-    validTil: new Date("2999-12-01"),
-    validFrom: new Date("2000-01-01"),
-    country: "Germany",
-    moneyflowComment: "CP Comment",
-    postingAccountId: 1,
-    postingAccountName: "Posting Account 1",
-  };
-  const capitalsource1: Capitalsource = {
-    id: 1,
-    userId: 1,
-    type: CapitalsourceType.CURRENT_ASSET,
-    state: CapitalsourceState.CASH,
-    comment: "cash",
-    validTil: new Date("2999-12-01"),
-    validFrom: new Date("2000-01-01"),
-    groupUse: false,
-    importAllowed: CapitalsourceImport.NOT_ALLOWED,
-  };
-
-  PostingAccountService.fetchAllPostingAccount = vi
-    .fn()
-    .mockResolvedValue([postingAccount1]);
-  ContractpartnerService.fetchAllContractpartner = vi
-    .fn()
-    .mockResolvedValue([contractpartner]);
-  CapitalsourceService.fetchAllCapitalsource = vi
-    .fn()
-    .mockResolvedValue([capitalsource1]);
-  PreDefMoneyflowService.fetchAllPreDefMoneyflow = vi
-    .fn()
-    .mockResolvedValue([onceAMonthUsed]);
-  CrudEtfService.fetchAllEtf = vi.fn().mockResolvedValue([]);
+  PreDefMoneyflowServiceMocker.mockFetchAllPreDefMoneyflow([onceAMonthUsed]);
 
   await StoreService.getInstance().initAllStores();
   useUserSessionStore().setUserSession({ userId: 1 } as UserSession);
 
   render(CreateMoneyflow);
 
-  await waitForOptionSelected("selectmoneyflow", "");
+  await CreateMoneyflowView.SelectMoneyflow.waitForSelectedText("");
 
-  const user = userEvent.setup();
-
-  // 1. Den Select-Trigger holen
-  const trigger = screen.getByTestId("selectmoneyflow");
-
-  // 2. WICHTIG: Das Dropdown öffnen, damit Radix die Optionen überhaupt generiert
-  await user.click(trigger);
-
-  // 3. queryByTestId verwenden (gibt null zurück, wenn nicht gefunden)
-  const excludedOption = screen.queryByTestId("selectmoneyflowitem-99");
-
-  // 4. Überprüfen, ob es wirklich null (also nicht da) ist
-  expect(excludedOption).toBeNull();
-
-  // restore mocks for subsequent tests
-  PreDefMoneyflowService.fetchAllPreDefMoneyflow = vi.fn().mockResolvedValue([
-    {
-      id: 1,
-      userId: 1,
-      amount: 20.4,
-      capitalsourceId: 2,
-      contractpartnerId: 1,
-      contractpartnerName: "Contractpartner 1",
-      comment: "PreDefMoneyflow Comment 1",
-      createDate: new Date("2010-01-01"),
-      onceAMonth: false,
-      postingAccountId: 1,
-    } as PreDefMoneyflow,
-  ]);
+  await CreateMoneyflowView.SelectMoneyflow.open();
+  await CreateMoneyflowView.SelectMoneyflow.assertOptionMissingByValue("99");
 });
 
-// ── Test 4: Kein CASH-Kapitalbuchungsquelle → capitalsourceId bleibt 0 ───────
+// Test 4: No CASH capital source available -> capitalsourceId stays 0
 test("no cash capitalsource available - no default capitalsource selected", async () => {
-  setActivePinia(createPinia());
-
-  const postingAccount1: PostingAccount = {
-    id: 1,
-    name: "Posting Account 1",
-  };
-  const contractpartner: Contractpartner = {
-    id: 1,
-    userId: 1,
-    name: "Contractpartner 1",
-    street: "Street 1",
-    postcode: 11111,
-    town: "Town 1",
-    validTil: new Date("2999-12-01"),
-    validFrom: new Date("2000-01-01"),
-    country: "Germany",
-    moneyflowComment: "CP Comment",
-    postingAccountId: 1,
-    postingAccountName: "Posting Account 1",
-  };
   const noCashCapitalsource: Capitalsource = {
     id: 5,
     userId: 1,
@@ -679,74 +495,18 @@ test("no cash capitalsource available - no default capitalsource selected", asyn
     importAllowed: CapitalsourceImport.NOT_ALLOWED,
   };
 
-  PostingAccountService.fetchAllPostingAccount = vi
-    .fn()
-    .mockResolvedValue([postingAccount1]);
-  ContractpartnerService.fetchAllContractpartner = vi
-    .fn()
-    .mockResolvedValue([contractpartner]);
-  CapitalsourceService.fetchAllCapitalsource = vi
-    .fn()
-    .mockResolvedValue([noCashCapitalsource]);
-  PreDefMoneyflowService.fetchAllPreDefMoneyflow = vi
-    .fn()
-    .mockResolvedValue([]);
-  CrudEtfService.fetchAllEtf = vi.fn().mockResolvedValue([]);
+  CapitalsourceServiceMocker.mockFetchAllCapitalsource([noCashCapitalsource]);
+  PreDefMoneyflowServiceMocker.mockFetchAllPreDefMoneyflow([]);
 
   await StoreService.getInstance().initAllStores();
   useUserSessionStore().setUserSession({ userId: 1 } as UserSession);
 
   render(CreateMoneyflow);
 
-  await assertInputValueToBe(
-    "capitalsourceCreateMoneyflow-id",
-    "0",
-    "Without any CASH capitalsource capitalsourceId must be 0",
-  );
-
-  // restore standard mocks
-  const capitalsource1: Capitalsource = {
-    id: 1,
-    userId: 1,
-    type: CapitalsourceType.CURRENT_ASSET,
-    state: CapitalsourceState.CASH,
-    comment: "cash",
-    validTil: new Date("2999-12-01"),
-    validFrom: new Date("2000-01-01"),
-    groupUse: false,
-    importAllowed: CapitalsourceImport.NOT_ALLOWED,
-  };
-  const capitalsource2: Capitalsource = {
-    id: 2,
-    userId: 1,
-    type: CapitalsourceType.CURRENT_ASSET,
-    state: CapitalsourceState.NON_CASH,
-    comment: "non-cash",
-    validTil: new Date("2999-12-01"),
-    validFrom: new Date("2000-01-01"),
-    groupUse: false,
-    importAllowed: CapitalsourceImport.NOT_ALLOWED,
-  };
-  CapitalsourceService.fetchAllCapitalsource = vi
-    .fn()
-    .mockResolvedValue([capitalsource1, capitalsource2]);
-  PreDefMoneyflowService.fetchAllPreDefMoneyflow = vi.fn().mockResolvedValue([
-    {
-      id: 1,
-      userId: 1,
-      amount: 20.4,
-      capitalsourceId: 2,
-      contractpartnerId: 1,
-      contractpartnerName: "Contractpartner 1",
-      comment: "PreDefMoneyflow Comment 1",
-      createDate: new Date("2010-01-01"),
-      onceAMonth: false,
-      postingAccountId: 1,
-    } as PreDefMoneyflow,
-  ]);
+  await CreateMoneyflowView.CapitalsourceIdInput.assertValue("0");
 });
 
-// ── Test 5: InvoiceDate gesetzt → validityDate nutzt invoiceDate ──────────────
+// Test 5: InvoiceDate set -> validityDate uses invoiceDate
 test("invoiceDate set - contractpartner combobox uses invoiceDate for validity", async () => {
   await StoreService.getInstance().initAllStores();
   useUserSessionStore().setUserSession({ userId: 1 } as UserSession);
@@ -756,26 +516,18 @@ test("invoiceDate set - contractpartner combobox uses invoiceDate for validity",
   // The invoiceDateField starts empty - the contractpartner combobox should still work
   // because validityDate falls back to bookingDate (today) when invoiceDate is undefined.
   // Set an invoiceDate and verify contractpartner is still selectable (validity check passes).
-  const invoiceDateInput: HTMLInputElement =
-    await screen.findByTestId("invoiceDate");
-  await setInputValueAndWait(
-    invoiceDateInput,
-    "01.01.2025",
-    "invoiceDate expected to be set",
-  );
+  await CreateMoneyflowView.InvoiceDateInput.setValue("01.01.2025");
 
   // Contractpartner 1 is valid from 2000-01-01 to 2999-12-01, so it must still appear
-  await selectComboboxItemAndWait(
-    "contractpartnerCreateMoneyflow",
+  await CreateMoneyflowView.ContractpartnerCombobox.selectItem(
     "Contractpartner 1",
     "1",
-    "Contractpartner must be selectable when invoiceDate is within validity range",
   );
 
-  await assertInputValueToBe("contractpartnerCreateMoneyflow-id", "1");
+  await CreateMoneyflowView.ContractpartnerIdInput.assertValue("1");
 });
 
-// ── Test 6: Toggle "private/public" umschalten ───────────────────────────────
+// Test 6: Toggle "private/public" switches correctly
 test("toggle private/public - switching works", async () => {
   await StoreService.getInstance().initAllStores();
   useUserSessionStore().setUserSession({ userId: 1 } as UserSession);
@@ -783,24 +535,17 @@ test("toggle private/public - switching works", async () => {
   render(CreateMoneyflow);
 
   // initial: public active, private inactive
-  await assertCheckboxChecked("public", "public must be active by default");
-  await assertCheckboxUnchecked(
-    "private",
-    "private must be inactive by default",
-  );
+  await CreateMoneyflowView.PublicToggle.assertChecked();
+  await CreateMoneyflowView.PrivateToggle.assertUnchecked();
 
   // click private
-  const privateToggle = await screen.findByRole("button", { name: "private" });
-  fireEvent.click(privateToggle);
+  await CreateMoneyflowView.PrivateToggle.click();
 
-  await assertCheckboxChecked("private", "private must be active after click");
-  await assertCheckboxUnchecked(
-    "public",
-    "public must be inactive after switching to private",
-  );
+  await CreateMoneyflowView.PrivateToggle.assertChecked();
+  await CreateMoneyflowView.PublicToggle.assertUnchecked();
 });
 
-// ── Test 7: PreDefMoneyflow auswählen → Toggle-Labels wechseln auf keep/renew ─
+// Test 7: Selecting PreDefMoneyflow changes toggle labels to keep/renew
 test("selecting PreDefMoneyflow changes toggle labels to keep/renew", async () => {
   await StoreService.getInstance().initAllStores();
   useUserSessionStore().setUserSession({ userId: 1 } as UserSession);
@@ -808,120 +553,69 @@ test("selecting PreDefMoneyflow changes toggle labels to keep/renew", async () =
   render(CreateMoneyflow);
 
   // before: once/favorite labels
-  await assertCheckboxChecked(
-    "once",
-    "once toggle must be visible before selecting PreDefMoneyflow",
-  );
+  await CreateMoneyflowView.OnceToggle.assertChecked();
 
-  await waitForOptionSelected("selectmoneyflow", "new booking");
-  await selectOptionAndWait(
-    "selectmoneyflow",
+  await CreateMoneyflowView.SelectMoneyflow.waitForSelectedText("new booking");
+  await CreateMoneyflowView.SelectMoneyflow.selectOption(
     "1",
     "Contractpartner 1 | 20.40 € | PreDefMoneyflow Comment 1",
   );
 
   // after: keep/renew labels
-  await assertCheckboxChecked(
-    "keep",
-    "keep-toggle must appear after PreDefMoneyflow selection",
-  );
-  await assertCheckboxUnchecked(
-    "renew",
-    "renew-toggle must be inactive by default",
-  );
+  await CreateMoneyflowView.KeepToggle.assertChecked();
+  await CreateMoneyflowView.RenewToggle.assertUnchecked();
 });
 
-// ── Test 8: Split-Entry nicht vollständig → mseRemainderIsValid = false ───────
+// Test 8: Incomplete split entry -> mseRemainderIsValid = false
 test("split entries - incomplete remainder makes remainder invalid", async () => {
   await StoreService.getInstance().initAllStores();
   useUserSessionStore().setUserSession({ userId: 1 } as UserSession);
 
   render(CreateMoneyflow);
 
-  const inputAmount: HTMLInputElement = await screen.findByTestId("amount");
-  await setInputValueAndWait(
-    inputAmount,
-    "-100.00",
-    "Amount expected to be set",
-  );
+  await CreateMoneyflowView.AmountInput.setValue("-100.00");
 
   // open split entries
-  const subbookingLink = screen.getByText("subbooking");
-  subbookingLink.click();
+  await CreateMoneyflowView.SubbookingToggleButton.click();
 
-  const inputAmountMse1: HTMLInputElement = await screen.findByTestId(
-    "amountSplitEntry#-1",
-  );
-  await setInputValueAndWait(
-    inputAmountMse1,
-    "-40.00",
-    "Split amount expected to be set",
-  );
+  await CreateMoneyflowView.amountSplitEntryInput(-1).setValue("-40.00");
 
   // remainder must exist and show -60.00 (not 0, so invalid)
-  const inputRemainder: HTMLInputElement =
-    await screen.findByTestId("remainder");
-  await waitForInputHasValue(
-    inputRemainder,
-    "-60.00",
-    "Remainder must be -60.00",
-  );
+  await CreateMoneyflowView.RemainderInput.assertValue("-60.00");
 
   // the remainder input must be visible (showing invalid state)
-  expect(inputRemainder).toBeVisible();
+  await CreateMoneyflowView.RemainderInput.assertToBeVisible();
 });
 
-// ── Test 9: Erfolgreicher Submit → Formular wird resettet ────────────────────
+// Test 9: Successful submit -> form resets
 test("successful submit resets the form", async () => {
   await StoreService.getInstance().initAllStores();
   useUserSessionStore().setUserSession({ userId: 1 } as UserSession);
 
-  MoneyflowService.createMoneyflow = vi.fn().mockResolvedValue(undefined);
+  MoneyflowServiceMocker.mockCreateMoneyflowResolved();
 
   render(CreateMoneyflow);
 
-  const inputAmount: HTMLInputElement = await screen.findByTestId("amount");
-  const inputComment: HTMLInputElement = await screen.findByTestId("comment");
-
-  await setInputValueAndWait(inputAmount, "-50", "Amount expected to be set");
-  await setInputValueAndWait(
-    inputComment,
-    "Submit-Test",
-    "Comment expected to be set",
-  );
-  await selectComboboxItemAndWait(
-    "contractpartnerCreateMoneyflow",
+  await CreateMoneyflowView.AmountInput.setValue("-50");
+  await CreateMoneyflowView.CommentInput.setValue("Submit-Test");
+  await CreateMoneyflowView.ContractpartnerCombobox.selectItem(
     "Contractpartner 1",
     "1",
   );
-  await selectComboboxItemAndWait(
-    "postingAccountCreateMoneyflow",
+  await CreateMoneyflowView.PostingAccountCombobox.selectItem(
     "Posting Account 1",
     "1",
   );
 
-  const saveButton = screen.getByText("save");
-  fireEvent.click(saveButton);
+  await CreateMoneyflowView.SaveButton.click();
 
-  await waitFor(() => {
-    expect(MoneyflowService.createMoneyflow).toHaveBeenCalledOnce();
-  });
+  await assertHaveBeenCalledOnce(MoneyflowService.createMoneyflow);
 
-  await Promise.all([
-    assertInputValueToBe(
-      "amount",
-      "",
-      "Amount must be empty after successful submit",
-    ),
-    assertInputValueToBe(
-      "comment",
-      "",
-      "Comment must be empty after successful submit",
-    ),
-  ]);
+  await CreateMoneyflowView.AmountInput.assertValue("");
+  await CreateMoneyflowView.CommentInput.assertValue("");
 });
 
-// ── Test 10: Fehlerhafter Submit → Server-Fehler wird angezeigt ──────────────
+// Test 10: Failed submit -> server error is shown
 test("failed submit shows server error message", async () => {
   await StoreService.getInstance().initAllStores();
   useUserSessionStore().setUserSession({ userId: 1 } as UserSession);
@@ -931,70 +625,48 @@ test("failed submit shows server error message", async () => {
     undefined,
     "Server not reachable",
   );
-  MoneyflowService.createMoneyflow = vi.fn().mockRejectedValue(backendError);
+  MoneyflowServiceMocker.mockCreateMoneyflowRejected(backendError);
 
   render(CreateMoneyflow);
 
-  const inputAmount: HTMLInputElement = await screen.findByTestId("amount");
-  const inputComment: HTMLInputElement = await screen.findByTestId("comment");
-
-  await setInputValueAndWait(inputAmount, "-50", "Amount expected to be set");
-  await setInputValueAndWait(
-    inputComment,
-    "Error-Test",
-    "Comment expected to be set",
-  );
-  await selectComboboxItemAndWait(
-    "contractpartnerCreateMoneyflow",
+  await CreateMoneyflowView.AmountInput.setValue("-50");
+  await CreateMoneyflowView.CommentInput.setValue("Error-Test");
+  await CreateMoneyflowView.ContractpartnerCombobox.selectItem(
     "Contractpartner 1",
     "1",
   );
-  await selectComboboxItemAndWait(
-    "postingAccountCreateMoneyflow",
+  await CreateMoneyflowView.PostingAccountCombobox.selectItem(
     "Posting Account 1",
     "1",
   );
 
-  const saveButton = screen.getByText("save");
-  fireEvent.click(saveButton);
+  await CreateMoneyflowView.SaveButton.click();
 
-  await waitFor(() => {
-    expect(screen.getByText("Server not reachable")).toBeInTheDocument();
-  });
-
-  // restore mock
-  MoneyflowService.createMoneyflow = vi.fn().mockResolvedValue(undefined);
+  await CreateMoneyflowView.ServerErrorItem.assertMessageContains(
+    "Server not reachable",
+  );
 });
 
-// ── Test 11: Remainder-Button bei leerem Amount → Remainder = 0 (kein Effekt) ─
+// Test 11: Remainder button with empty amount -> no effect
 test("remainder button with no amount set - remainder stays zero", async () => {
   await StoreService.getInstance().initAllStores();
   useUserSessionStore().setUserSession({ userId: 1 } as UserSession);
 
   render(CreateMoneyflow);
 
-  const subbookingLink = screen.getByText("subbooking");
-  subbookingLink.click();
-
-  // with no amount, the remainder field must NOT appear (remainder === 0, isLastRow shows nothing)
-  await waitFor(
-    () => {
-      expect(screen.queryByTestId("remainder")).not.toBeInTheDocument();
-    },
-    { timeout: 2000 },
-  );
+  await CreateMoneyflowView.SubbookingToggleButton.click();
+  await CreateMoneyflowView.RemainderInput.assertNotToBeInDocument(2000);
 });
 
-// ── Test 12: PreDefMoneyflow-Kommentar wird korrekt ins comment-Feld gesetzt ──
-test("select a PreDefMoneyflow - comment field is filled from PreDefMoneyflow", async () => {
+// Test 12: PreDefMoneyflow comment is copied into the comment field
+test("choose a PreDefMoneyflow - comment field is filled from PreDefMoneyflow", async () => {
   await StoreService.getInstance().initAllStores();
   useUserSessionStore().setUserSession({ userId: 1 } as UserSession);
 
   render(CreateMoneyflow);
 
-  await waitForOptionSelected("selectmoneyflow", "new booking");
-  await selectOptionAndWait(
-    "selectmoneyflow",
+  await CreateMoneyflowView.SelectMoneyflow.waitForSelectedText("new booking");
+  await CreateMoneyflowView.SelectMoneyflow.selectOption(
     "1",
     "Contractpartner 1 | 20.40 € | PreDefMoneyflow Comment 1",
   );
@@ -1002,142 +674,11 @@ test("select a PreDefMoneyflow - comment field is filled from PreDefMoneyflow", 
   // preDefMoneyflow: { amount: 20.4, capitalsourceId: 2, contractpartnerId: 1,
   //   comment: "PreDefMoneyflow Comment 1", postingAccountId: 1 }
   // All fields must be filled correctly after PreDefMoneyflow selection.
-  await Promise.all([
-    assertInputValueToBe("amount", "20.4"),
-    assertInputValueToBe(
-      "comment",
-      "PreDefMoneyflow Comment 1",
-      "PreDefMoneyflow comment must be transferred to comment field",
-    ),
-    assertInputValueToBe("contractpartnerCreateMoneyflow-id", "1"),
-    assertInputValueToBe("capitalsourceCreateMoneyflow-id", "2"),
-    assertInputValueToBe("postingAccountCreateMoneyflow-id", "1"),
-  ]);
-});
-
-const assertInputValueToBe = async (
-  testId: string,
-  value: string,
-  message?: string,
-): Promise<void> => {
-  const field: HTMLInputElement = screen.getByTestId(testId);
-  const errorMessage = message ?? "Checking field " + testId;
-  await waitForInputHasValue(field, value, errorMessage);
-};
-
-const assertCheckboxChecked = async (
-  label: string,
-  message?: string,
-): Promise<void> => {
-  const errorMessage =
-    message ?? "Checking checkbox for being checked: " + label;
-  const checkboxField = screen.queryByLabelText<HTMLInputElement>(label);
-  if (checkboxField) {
-    expect(checkboxField.checked, errorMessage).toBeTruthy();
-    return;
-  }
-
-  const toggleButton = await screen.findByRole("button", { name: label });
-  await waitFor(() => {
-    expect(toggleButton.getAttribute("data-state"), errorMessage).toBe("on");
-  });
-};
-
-const assertCheckboxUnchecked = async (label: string, message?: string) => {
-  const errorMessage =
-    message ?? "Checking checkbox for being unchecked: " + label;
-  const checkboxField = screen.queryByLabelText<HTMLInputElement>(label);
-  if (checkboxField) {
-    expect(checkboxField.checked, errorMessage).toBeFalsy();
-    return;
-  }
-
-  const toggleButton = await screen.findByRole("button", { name: label });
-  await waitFor(() => {
-    expect(toggleButton.getAttribute("data-state"), errorMessage).not.toBe(
-      "on",
-    );
-  });
-};
-
-const selectComboboxItemAndWait = async (
-  itemBaseTestId: string,
-  valueInput: string,
-  valueHidden: string,
-  message?: string,
-) => {
-  const inputItem: HTMLInputElement = await screen.findByTestId(itemBaseTestId);
-  const idItem: HTMLInputElement = await screen.findByTestId(
-    itemBaseTestId + "-id",
+  await CreateMoneyflowView.AmountInput.assertValue("20.4");
+  await CreateMoneyflowView.CommentInput.assertValue(
+    "PreDefMoneyflow Comment 1",
   );
-  fireEvent.focus(inputItem);
-  fireEvent.click(inputItem);
-
-  let optionItems: HTMLAnchorElement[] = [];
-  try {
-    optionItems = await screen.findAllByTestId(
-      itemBaseTestId + "-option",
-      {},
-      { timeout: 400 },
-    );
-  } catch (_err) {
-    optionItems = [];
-  }
-
-  if (optionItems.length > 0) {
-    let found = false;
-    for (let optionItem of optionItems) {
-      if (optionItem.text == valueInput) {
-        fireEvent.click(optionItem);
-        found = true;
-        break;
-      }
-    }
-    expect(found).true;
-  } else {
-    fireEvent.update(inputItem, valueInput);
-    fireEvent.update(idItem, valueHidden);
-  }
-
-  await waitForInputHasValue(idItem, valueHidden, message);
-};
-
-const clearComboboxAndWait = async (itemBaseTestId: string) => {
-  const clearItem: HTMLElement = screen.getByTestId(itemBaseTestId + "-clear");
-  const idItem: HTMLInputElement = screen.getByTestId(itemBaseTestId + "-id");
-
-  fireEvent.click(clearItem);
-  await waitForInputHasValue(idItem, "0");
-};
-
-const waitForOptionSelected = async (
-  testId: string,
-  expectedText: string,
-  message?: string,
-) => {
-  const trigger = screen.getByTestId(testId);
-  await waitFor(() => {
-    expect(trigger.textContent, message).toContain(expectedText);
-  });
-};
-
-const selectOptionAndWait = async (
-  testId: string,
-  value: string,
-  labelText: string,
-  message?: string,
-) => {
-  const trigger = screen.getByTestId(testId);
-  const user = userEvent.setup();
-  await user.click(trigger);
-
-  let option: HTMLElement;
-  if (value === "0") {
-    option = await screen.findByRole("option", { name: new RegExp(labelText) });
-  } else {
-    option = await screen.findByTestId(`selectmoneyflowitem-${value}`);
-  }
-
-  await user.click(option);
-  await waitForOptionSelected(testId, labelText, message);
-};
+  await CreateMoneyflowView.ContractpartnerIdInput.assertValue("1");
+  await CreateMoneyflowView.CapitalsourceIdInput.assertValue("2");
+  await CreateMoneyflowView.PostingAccountIdInput.assertValue("1");
+});

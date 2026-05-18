@@ -1,5 +1,5 @@
 <template>
-  <TableRow>
+  <TableRow :data-testid="`contractpartner-row-${mcp.id}`">
     <TableCell class="text-left border-r py-1 px-2">
       {{ mcp.name }}
     </TableCell>
@@ -16,12 +16,17 @@
       {{ mcp.postingAccountName }}
     </TableCell>
 
-    <ButtonTableIcon :title="$t('General.edit')" @click="editContractpartner">
+    <ButtonTableIcon
+      :title="$t('General.edit')"
+      :test-id="`contractpartner-edit-${mcp.id}`"
+      @click="editContractpartner"
+    >
       <Pencil class="h-4 w-4" />
     </ButtonTableIcon>
 
     <ButtonTableIcon
       :title="$t('General.delete')"
+      :test-id="`contractpartner-delete-${mcp.id}`"
       @click="deleteContractpartner"
     >
       <Trash2 class="h-4 w-4" />
@@ -29,6 +34,7 @@
 
     <ButtonTableIcon
       :title="$t('General.contractpartnerAccounts')"
+      :test-id="`contractpartner-accounts-${mcp.id}`"
       @click="listAccounts"
     >
       <Banknote class="h-4 w-4" />

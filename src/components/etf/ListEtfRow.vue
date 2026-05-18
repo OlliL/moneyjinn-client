@@ -1,5 +1,5 @@
 <template>
-  <TableRow>
+  <TableRow :data-testid="`etf-row-${etf.id}`">
     <TableCell class="border-r text-left"
       ><a :href="etf.chartUrl">{{ etf.name }}</a></TableCell
     >
@@ -18,10 +18,18 @@
       <Star class="h-5 w-5 transition-all fill-primary text-primary"
     /></TableCell>
     <TableCell class="border-r text-start" v-if="!etf.isFavorite"></TableCell>
-    <ButtonTableIcon :title="$t('General.edit')" @click="editEtf">
+    <ButtonTableIcon
+      :title="$t('General.edit')"
+      :test-id="`etf-edit-${etf.id}`"
+      @click="editEtf"
+    >
       <Pencil class="h-4 w-4" />
     </ButtonTableIcon>
-    <ButtonTableIcon :title="$t('General.delete')" @click="deleteEtf">
+    <ButtonTableIcon
+      :title="$t('General.delete')"
+      :test-id="`etf-delete-${etf.id}`"
+      @click="deleteEtf"
+    >
       <Trash2 class="h-4 w-4" />
     </ButtonTableIcon>
   </TableRow>

@@ -25,6 +25,7 @@
     <div class="hidden md:block">
       <div class="fixed left-4 top-1/2 z-20 -translate-y-1/2">
         <Button
+          data-testid="reports-previous-month"
           v-if="previousMonthLink"
           type="button"
           variant="outline"
@@ -37,6 +38,7 @@
       </div>
       <div class="fixed right-4 top-1/2 z-20 -translate-y-1/2">
         <Button
+          data-testid="reports-next-month"
           v-if="nextMonthLink"
           type="button"
           variant="outline"
