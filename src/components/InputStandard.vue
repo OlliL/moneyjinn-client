@@ -19,7 +19,7 @@
           alignmentClass,
           $slots.icon ? 'rounded-r-none' : '',
           errorData.inputClass == 'is-invalid'
-            ? '!border-destructive bg-destructive/[0.03] focus-visible:ring-destructive/15 !border-r-destructive'
+            ? 'border-destructive! bg-destructive/3 focus-visible:ring-destructive/15 border-r-destructive!'
             : 'border-input focus-visible:ring-ring',
         ]"
         @input="onInput($event)"
@@ -111,7 +111,7 @@ const props = defineProps({
   },
   step: {
     type: String,
-    requred: false,
+    required: false,
   },
 });
 const emit = defineEmits(["update:modelValue"]);
@@ -148,7 +148,9 @@ const errorData = computed((): ErrorData => {
   );
 });
 
-const alignmentClass = props.align ? "text-" + props.align : "";
+const alignmentClass = computed(() => {
+  return props.align ? "text-" + props.align : "";
+});
 
 const fieldRef = useTemplateRef<typeof Input>("fieldRef");
 

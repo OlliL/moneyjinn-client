@@ -151,7 +151,7 @@
               <Button
                 type="button"
                 variant="destructive"
-                class="flex items-center gap-2 px-6"
+                class="button-with-icon"
                 @click="deleteReceipt"
               >
                 <Trash2 class="h-4 w-4" />
@@ -160,7 +160,7 @@
               <Button
                 type="button"
                 variant="default"
-                class="flex items-center gap-2 px-6"
+                class="button-with-icon"
                 @click="importReceipt"
                 v-if="searchExecuted && searchSuccessful"
                 :disabled="!moneyflowSelected"

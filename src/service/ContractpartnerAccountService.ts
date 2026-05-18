@@ -1,10 +1,10 @@
-import AbstractService from "@/service/AbstractService";
-import type { ContractpartnerAccount } from "@/model/contractpartneraccount/ContractpartnerAccount";
-import {
-  mapContractpartnerAccountTransportToModel,
-  mapContractpartnerAccountToTransport,
-} from "./mapper/ContractpartnerAccountTransportMapper";
 import { CrudContractpartnerAccountControllerApi } from "@/api";
+import type { ContractpartnerAccount } from "@/model/contractpartneraccount/ContractpartnerAccount";
+import AbstractService from "@/service/AbstractService";
+import {
+  mapContractpartnerAccountToTransport,
+  mapContractpartnerAccountTransportToModel,
+} from "./mapper/ContractpartnerAccountTransportMapper";
 
 class ContractpartnerAccountService extends AbstractService {
   private readonly api: CrudContractpartnerAccountControllerApi;

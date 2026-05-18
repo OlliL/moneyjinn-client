@@ -1,12 +1,12 @@
-import { ref, computed } from "vue";
-import { defineStore } from "pinia";
-import CapitalsourceService from "@/service/CapitalsourceService";
-import { mapCapitalsourceTransportToModel } from "@/service/mapper/CapitalsourceTransportMapper";
 import { WebSocketSingleton } from "@/config/WebSocketSingleton";
 import type { Capitalsource } from "@/model/capitalsource/Capitalsource";
 import { CapitalsourceType } from "@/model/capitalsource/CapitalsourceType";
 import type { SelectBoxValue } from "@/model/SelectBoxValue";
 import type { CapitalsourceChangedEventTransport } from "@/model/wsevent/CapitalsourceChangedEventTransport";
+import CapitalsourceService from "@/service/CapitalsourceService";
+import { mapCapitalsourceTransportToModel } from "@/service/mapper/CapitalsourceTransportMapper";
+import { defineStore } from "pinia";
+import { computed, ref } from "vue";
 import { useUserSessionStore } from "./UserSessionStore";
 
 export const useCapitalsourceStore = defineStore("capitalsource", () => {

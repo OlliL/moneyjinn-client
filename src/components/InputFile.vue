@@ -11,9 +11,9 @@
       multiple
       ref="fileUpload"
       :class="[
-        'flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50',
+        'file:mr-2 file:cursor-pointer file:rounded-md file:border file:border-input file:bg-background file:px-2 file:py-1 file:text-sm file:font-medium hover:file:bg-accent',
         errorData.inputClass === 'is-invalid'
-          ? '!border-destructive bg-destructive/[0.03] focus-visible:ring-destructive/15'
+          ? 'border-destructive! bg-destructive/3 focus-visible:ring-destructive/15'
           : 'border-input focus-visible:ring-ring',
       ]"
       @change="onInput"
@@ -29,6 +29,7 @@
 </template>
 
 <script lang="ts" setup>
+import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
   generateErrorDataVeeValidate,
@@ -36,15 +37,8 @@ import {
 } from "@/tools/views/ErrorData";
 import { toTypedSchema } from "@vee-validate/zod";
 import { useField } from "vee-validate";
-import {
-  computed,
-  onMounted,
-  useTemplateRef,
-  type PropType,
-  type Ref,
-} from "vue";
+import { computed, useTemplateRef, type PropType, type Ref } from "vue";
 import { any, type ZodType } from "zod";
-import Input from "./ui/input/Input.vue";
 
 const props = defineProps({
   modelValue: {
@@ -80,7 +74,6 @@ const schema = computed(() => {
 });
 
 const {
-  value: fieldValue,
   meta: fieldMeta,
   errorMessage,
   setState,
@@ -103,9 +96,5 @@ const errorData = computed((): ErrorData => {
     props.fieldLabel ? props.fieldLabel : "",
     errorMessage.value,
   );
-});
-
-onMounted(() => {
-  fieldValue.value = props.modelValue;
 });
 </script>

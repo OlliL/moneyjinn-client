@@ -1,75 +1,34 @@
 <template>
-  <ModalVue
+  <ModalDelete
     :title="$t('ETFPreliminaryLumpSum.title.delete')"
+    :server-errors="serverErrors"
     ref="modalComponent"
+    @confirm="deleteEtfPreliminaryLumpSum"
   >
-    <template #body>
-      <DivError :server-errors="serverErrors" />
-      <div class="flex flex-col rounded-xl border bg-card overflow-hidden">
-        <Table>
-          <TableBody>
-            <TableRow class="hover:bg-transparent border-b last:border-0">
-              <TableCell
-                class="font-normal text-muted-foreground max-w-[11rem] w-44 pl-4 pr-2 py-3 whitespace-normal break-words"
-              >
-                {{ $t("General.etf") }}
-              </TableCell>
-              <TableCell class="font-medium text-foreground pr-4 py-3">
-                {{ etfName }}
-              </TableCell>
-            </TableRow>
+    <template #details>
+      <ModalDeleteRow :label="$t('General.etf')">
+        {{ etfName }}
+      </ModalDeleteRow>
 
-            <TableRow class="hover:bg-transparent border-b last:border-0">
-              <TableCell
-                class="font-normal text-muted-foreground max-w-[11rem] w-44 pl-4 pr-2 py-3 whitespace-normal break-words"
-              >
-                {{ $t("General.year") }}
-              </TableCell>
-              <TableCell
-                class="font-semibold text-foreground pr-4 py-3 text-base"
-              >
-                {{ etfPreliminaryLumpSum.year }}
-              </TableCell>
-            </TableRow>
+      <ModalDeleteRow :label="$t('General.year')" highlight-value>
+        {{ etfPreliminaryLumpSum.year }}
+      </ModalDeleteRow>
 
-            <TableRow class="hover:bg-transparent border-b last:border-0">
-              <TableCell
-                class="font-normal text-muted-foreground max-w-[11rem] w-44 pl-4 pr-2 py-3 whitespace-normal break-words"
-              >
-                {{ $t("ETFPreliminaryLumpSum.price") }}
-              </TableCell>
-              <TableCell class="font-medium text-foreground pr-4 py-3">
-                <SpanAmount :amount="etfPreliminaryLumpSum.amountPerPiece" />
-              </TableCell>
-            </TableRow>
-          </TableBody>
-        </Table>
-      </div>
+      <ModalDeleteRow :label="$t('ETFPreliminaryLumpSum.price')">
+        <SpanAmount :amount="etfPreliminaryLumpSum.amountPerPiece" />
+      </ModalDeleteRow>
     </template>
-    <template #footer>
-      <Button
-        variant="destructive"
-        class="flex items-center gap-2 rounded-md px-6"
-        @click="deleteEtfPreliminaryLumpSum"
-      >
-        <Trash2 class="h-4 w-4" />
-        {{ $t("General.delete") }}
-      </Button>
-    </template>
-  </ModalVue>
+  </ModalDelete>
 </template>
 
 <script lang="ts" setup>
-import { Button } from "@/components/ui/button";
-import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import type { EtfPreliminaryLumpSum } from "@/model/etf/EtfPreliminaryLumpSum";
 import CrudEtfPreliminaryLumpSumService from "@/service/CrudEtfPreliminaryLumpSumService";
 import { useEtfStore } from "@/stores/EtfStore";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
-import { Trash2 } from "lucide-vue-next";
 import { computed, ref, useTemplateRef } from "vue";
-import DivError from "../DivError.vue";
-import ModalVue from "../Modal.vue";
+import ModalDelete from "../ModalDelete.vue";
+import ModalDeleteRow from "../ModalDeleteRow.vue";
 import SpanAmount from "../SpanAmount.vue";
 
 const serverErrors = ref(new Array<string>());
@@ -78,7 +37,7 @@ const etfPreliminaryLumpSum = ref({} as EtfPreliminaryLumpSum);
 const etfName = computed(() => {
   return etfStore.getEtf(etfPreliminaryLumpSum.value.etfId)?.name ?? "";
 });
-const modalComponent = useTemplateRef<typeof ModalVue>("modalComponent");
+const modalComponent = useTemplateRef<typeof ModalDelete>("modalComponent");
 const emit = defineEmits(["etfPreliminaryLumpSumDeleted"]);
 const etfStore = useEtfStore();
 

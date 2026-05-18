@@ -14,7 +14,7 @@
     />
     <ListMoneyflowModal ref="listModal" />
 
-    <div class="p-4 overflow-x-auto text-center" v-if="filteredMoneyflows">
+    <div class="pt-4 overflow-x-auto text-center" v-if="filteredMoneyflows">
       <div class="flex flex-col rounded-md border">
         <Table class="w-full text-xs md:text-sm">
           <TableHeader>
@@ -432,7 +432,6 @@ import type { Report } from "@/model/report/Report";
 import type { ReportTurnoverCapitalsource } from "@/model/report/ReportTurnoverCapitalsource";
 import ReportService from "@/service/ReportService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
-import { getMonthName } from "@/tools/views/MonthName";
 import { ArrowDown, ArrowUp, ArrowUpDown, X } from "lucide-vue-next";
 import {
   computed,
@@ -522,9 +521,6 @@ const props = defineProps({
   },
 });
 
-const monthName = computed(() => {
-  return getMonthName(report.value.month);
-});
 const capitalsourceHasMovement = (
   data: ReportTurnoverCapitalsource,
 ): boolean => {

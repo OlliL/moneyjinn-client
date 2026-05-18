@@ -1,11 +1,11 @@
-import AbstractService from "@/service/AbstractService";
-import type { CompareDataParameter } from "@/model/comparedata/CompareDataParameter";
-import type { CompareDataResult } from "@/model/comparedata/CompareDataResult";
-import { getISOStringDate } from "@/tools/views/FormatDate";
 import { CompareDataControllerApi, type CompareDataRequest } from "@/api";
 import type { CompareData } from "@/model/comparedata/CompareData";
-import { mapMoneyflowTransportToModel } from "./mapper/MoneyflowTransportMapper";
+import type { CompareDataParameter } from "@/model/comparedata/CompareDataParameter";
+import type { CompareDataResult } from "@/model/comparedata/CompareDataResult";
+import AbstractService from "@/service/AbstractService";
+import { getISOStringDate } from "@/tools/views/FormatDate";
 import { mapCCompareDataDatasetTransportToModel } from "./mapper/CompareCompareDataDataset";
+import { mapMoneyflowTransportToModel } from "./mapper/MoneyflowTransportMapper";
 
 class CompareDataService extends AbstractService {
   private readonly api: CompareDataControllerApi;

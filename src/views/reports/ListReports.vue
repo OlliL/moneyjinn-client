@@ -6,77 +6,46 @@
       </h4>
     </div>
 
-    <div class="flex justify-center">
-      <div class="flex flex-wrap items-center justify-center gap-4">
-        <div>
-          <Select v-model="selectedYear">
-            <SelectTrigger class="w-[120px] h-9">
-              <SelectValue
-                :placeholder="selectedYear ? selectedYear.toString() : ''"
-              />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem v-for="year in years" :key="year" :value="year">
-                {{ year }}
-              </SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-
-        <div>
-          <nav aria-label="Month navigation" v-if="dataLoaded">
-            <ul class="flex flex-wrap justify-center -space-x-px">
-              <li v-for="(month, index) in months" :key="month">
-                <router-link
-                  :to="{
-                    name: Routes.ListReports,
-                    params: {
-                      year: selectedYear,
-                      month: month,
-                      sortBy: [...sortByMap.keys()][0],
-                      sortDirection: [...sortByMap.values()][0]
-                        ? 'desc'
-                        : 'asc',
-                    },
-                  }"
-                  :class="[
-                    'inline-flex h-9 items-center justify-center px-4 text-sm font-medium border border-input transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:z-10 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring',
-
-                    $props.month == month + ''
-                      ? 'bg-primary text-primary-foreground border-primary hover:bg-primary/90 hover:text-primary-foreground'
-                      : 'bg-background text-foreground',
-
-                    index === 0 ? 'rounded-l-md' : '',
-                    index === months!.length - 1 ? 'rounded-r-md' : '',
-                    index > 0 && index < months!.length - 1
-                      ? 'rounded-none'
-                      : '',
-                  ]"
-                >
-                  {{ getMonthName(month) }}
-                </router-link>
-              </li>
-            </ul>
-          </nav>
-        </div>
+    <div class="mx-auto flex w-full max-w-4xl flex-col items-center gap-3">
+      <div class="flex w-full justify-center">
+        <MonthYearNavigator
+          v-if="dataLoaded"
+          :years="years ?? []"
+          :months="months ?? []"
+          :selected-year="selectedYear"
+          :selected-month="month"
+          @select-year="handleYearSelect"
+          @select-month="handleMonthSelect"
+        />
       </div>
+
+      <DivError :server-errors="serverErrors" />
     </div>
-    <DivError :server-errors="serverErrors" />
 
     <div class="hidden md:block">
       <div class="fixed left-4 top-1/2 z-20 -translate-y-1/2">
-        <ChevronLeft
+        <Button
           v-if="previousMonthLink"
-          class="h-10 w-10 cursor-pointer text-primary"
+          type="button"
+          variant="outline"
+          size="icon"
+          class="h-10 w-10 rounded-full border-border/70 bg-background/85 text-primary/80 shadow-sm backdrop-blur transition-all hover:bg-background hover:text-primary hover:shadow-md focus-visible:shadow-md supports-backdrop-filter:bg-background/70"
           @click="navigateToPreviousMonth"
-        />
+        >
+          <ChevronLeft class="h-5 w-5" />
+        </Button>
       </div>
       <div class="fixed right-4 top-1/2 z-20 -translate-y-1/2">
-        <ChevronRight
+        <Button
           v-if="nextMonthLink"
-          class="h-10 w-10 cursor-pointer text-primary"
+          type="button"
+          variant="outline"
+          size="icon"
+          class="h-10 w-10 rounded-full border-border/70 bg-background/85 text-primary/80 shadow-sm backdrop-blur transition-all hover:bg-background hover:text-primary hover:shadow-md focus-visible:shadow-md supports-backdrop-filter:bg-background/70"
           @click="navigateToNextMonth"
-        />
+        >
+          <ChevronRight class="h-5 w-5" />
+        </Button>
       </div>
     </div>
     <ReportTableVue
@@ -96,16 +65,10 @@ import { onBeforeRouteUpdate, type RouteParamsGeneric } from "vue-router";
 import router, { Routes } from "@/router";
 
 import DivError from "@/components/DivError.vue";
+import MonthYearNavigator from "@/components/navigation/MonthYearNavigator.vue";
 import EtfTableVue from "@/components/reports/EtfTable.vue";
 import ReportTableVue from "@/components/reports/ReportTable.vue";
-
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 import ReportService from "@/service/ReportService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
@@ -191,6 +154,14 @@ const navigateToNextMonth = () => {
   selectMonth(nextYear.value + "", nextMonth.value + "");
 };
 
+const handleYearSelect = (year: string) => {
+  selectMonth(year);
+};
+
+const handleMonthSelect = (selectedMonth: number) => {
+  selectMonth(String(selectedYear.value), String(selectedMonth));
+};
+
 const updateSortByParams = (params: RouteParamsGeneric) => {
   sortByMap.value.clear();
   if (params.sortBy) {
@@ -203,7 +174,7 @@ const updateSortByParams = (params: RouteParamsGeneric) => {
   }
 };
 
-onBeforeRouteUpdate((to, from) => {
+onBeforeRouteUpdate((to) => {
   const year = to.params.year ? +to.params.year : undefined;
   const month = to.params.month ? +to.params.month : 0;
   const isFirstMonth = months.value ? months.value.indexOf(month) == 0 : true;
@@ -256,7 +227,7 @@ const selectMonth = (year: string, month?: string) => {
       year: year,
       month: month,
       sortBy: [...sortByMap.value.keys()][0],
-      sortDirection: [...sortByMap.value.values()][0] ? "asc" : "decs",
+      sortDirection: [...sortByMap.value.values()][0] ? "asc" : "desc",
     },
   });
 };

@@ -16,41 +16,23 @@
       {{ mcp.postingAccountName }}
     </TableCell>
 
-    <TableCell class="w-0 whitespace-nowrap text-center p-0">
-      <Button
-        variant="ghost"
-        size="icon"
-        @click="editContractpartner"
-        :title="$t('General.edit')"
-        class="h-8 w-8 cursor-pointer"
-      >
-        <Pencil class="h-4 w-4" />
-      </Button>
-    </TableCell>
+    <ButtonTableIcon :title="$t('General.edit')" @click="editContractpartner">
+      <Pencil class="h-4 w-4" />
+    </ButtonTableIcon>
 
-    <TableCell class="w-0 border-l whitespace-nowrap text-center p-0">
-      <Button
-        variant="ghost"
-        size="icon"
-        @click="deleteContractpartner"
-        :title="$t('General.delete')"
-        class="h-8 w-8 cursor-pointer"
-      >
-        <Trash2 class="h-4 w-4" />
-      </Button>
-    </TableCell>
+    <ButtonTableIcon
+      :title="$t('General.delete')"
+      @click="deleteContractpartner"
+    >
+      <Trash2 class="h-4 w-4" />
+    </ButtonTableIcon>
 
-    <TableCell class="w-0 border-l whitespace-nowrap text-center p-0">
-      <Button
-        variant="ghost"
-        size="icon"
-        @click="listAccounts"
-        :title="$t('General.contractpartnerAccounts')"
-        class="h-8 w-8 cursor-pointer"
-      >
-        <Banknote class="h-4 w-4" />
-      </Button>
-    </TableCell>
+    <ButtonTableIcon
+      :title="$t('General.contractpartnerAccounts')"
+      @click="listAccounts"
+    >
+      <Banknote class="h-4 w-4" />
+    </ButtonTableIcon>
   </TableRow>
 </template>
 
@@ -58,10 +40,10 @@
 import { Banknote, Pencil, Trash2 } from "lucide-vue-next";
 import type { PropType } from "vue";
 
-import { Button } from "@/components/ui/button";
 import { TableCell, TableRow } from "@/components/ui/table";
 
 import type { Contractpartner } from "@/model/contractpartner/Contractpartner";
+import ButtonTableIcon from "../ButtonTableIcon.vue";
 import SpanDate from "../SpanDate.vue";
 
 const props = defineProps({

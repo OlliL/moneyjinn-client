@@ -3,8 +3,8 @@ import {
   type CreatePostingAccountRequest,
   type UpdatePostingAccountRequest,
 } from "@/api";
-import AbstractService from "@/service/AbstractService";
 import type { PostingAccount } from "@/model/postingaccount/PostingAccount";
+import AbstractService from "@/service/AbstractService";
 import {
   mapPostingAccountToTransport,
   mapPostingAccountTransportToModel,

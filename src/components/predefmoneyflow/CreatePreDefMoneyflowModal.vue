@@ -12,7 +12,7 @@
         <div class="space-y-4">
           <DivError :server-errors="serverErrors" />
 
-          <div class="rounded-sm border bg-muted/30 p-4 shadow-sm space-y-4">
+          <div class="form-section space-y-4">
             <div class="grid grid-cols-1 sm:grid-cols-12 gap-4">
               <div class="sm:col-span-4">
                 <InputStandard
@@ -80,7 +80,7 @@
       <Button
         type="button"
         variant="secondary"
-        class="flex items-center gap-2 px-6"
+        class="button-with-icon"
         @click="resetForm"
       >
         <Undo2 class="h-4 w-4" />

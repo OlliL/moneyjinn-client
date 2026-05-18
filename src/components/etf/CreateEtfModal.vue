@@ -5,7 +5,7 @@
         <div class="space-y-4">
           <DivError :server-errors="serverErrors" />
 
-          <div class="rounded-sm border bg-muted/30 p-4 shadow-sm space-y-4">
+          <div class="form-section space-y-4">
             <div class="flex items-end gap-3">
               <div class="flex-1">
                 <InputStandard
@@ -34,7 +34,7 @@
             </div>
           </div>
 
-          <div class="rounded-sm border bg-muted/30 p-4 shadow-sm space-y-4">
+          <div class="form-section space-y-4">
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <InputStandard
@@ -89,13 +89,11 @@
             </div>
           </div>
 
-          <div class="rounded-sm border bg-muted/30 p-4 shadow-sm space-y-4">
+          <div class="form-section space-y-4">
             <div
               class="flex items-center space-x-2 border-b border-border/40 pb-2"
             >
-              <span
-                class="text-xs font-bold uppercase tracking-wider text-muted-foreground block mb-0"
-              >
+              <span class="form-section-title">
                 {{ $t("ETFFlow.transactionCosts") }}
               </span>
             </div>
@@ -148,7 +146,7 @@
       <Button
         type="button"
         variant="secondary"
-        class="flex items-center gap-2 px-6"
+        class="button-with-icon"
         @click="resetForm"
       >
         <Undo2 class="h-4 w-4" />
@@ -245,7 +243,7 @@ const resetForm = () => {
   Object.keys(values).forEach((field) => setFieldTouched(field, false));
 };
 
-const _show = async (_met?: Etf) => {
+const _show = (_met?: Etf) => {
   origMet.value = _met ?? undefined;
   resetForm();
   modalComponent.value?._show();

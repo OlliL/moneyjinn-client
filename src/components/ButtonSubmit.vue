@@ -3,10 +3,10 @@
     variant="default"
     type="submit"
     :form="formId"
-    class="flex items-center gap-2 px-6"
+    class="button-with-icon"
   >
     <slot name="icon"></slot>
-    {{ buttonLabel }}
+    <slot>{{ buttonLabel }}</slot>
   </Button>
 </template>
 

@@ -57,7 +57,7 @@
       <Button
         type="button"
         variant="secondary"
-        class="flex items-center gap-2 px-6"
+        class="button-with-icon"
         @click="resetForm"
       >
         <Undo2 class="h-4 w-4" />
@@ -139,16 +139,20 @@ const updateMoneyflow = handleSubmit(() => {
 const createMoneyflow = handleSubmit(() => {
   editMoneyflowVue.value?.createMoneyflow().then((result: boolean) => {
     if (result) {
-      emit("moneyflowCreated", mmf);
+      emit("moneyflowCreated", mmf.value);
       modalComponent.value?._hide();
     }
   });
 });
 
 const loadReceipt = (id: number) => {
-  MoneyflowReceiptService.fetchReceipt(id).then((response) => {
-    processReceipt(response.receiptType, response.receipt);
-  });
+  MoneyflowReceiptService.fetchReceipt(id)
+    .then((response) => {
+      processReceipt(response.receiptType, response.receipt);
+    })
+    .catch((backendError) => {
+      handleBackendError(backendError, serverErrors);
+    });
 };
 
 const processImportedReceipt = (receipt: ImportedMoneyflowReceipt) => {
@@ -166,13 +170,8 @@ const processImportedReceipt = (receipt: ImportedMoneyflowReceipt) => {
 
 const processReceipt = (receiptType: MoneyflowReceiptType, receipt: string) => {
   receiptBase64.value = receipt;
-
-  if (receiptType === MoneyflowReceiptType.JPEG) {
-    isJpeg.value = true;
-  } else if (receiptType === MoneyflowReceiptType.PDF) {
-    isJpeg.value = false;
-  }
-  isPdf.value = !isJpeg.value;
+  isJpeg.value = receiptType === MoneyflowReceiptType.JPEG;
+  isPdf.value = receiptType === MoneyflowReceiptType.PDF;
 };
 
 const deleteMoneyflowReceipt = () => {

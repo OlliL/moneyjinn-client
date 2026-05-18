@@ -18,24 +18,18 @@
       </div>
     </template>
     <template #footer>
-      <Button
-        type="button"
-        variant="destructive"
+      <ButtonDelete
+        :button-label="$t('General.delete')"
         @click="deleteMonthlySettlement"
-      >
-        <Trash2 class="h-4 w-4" />
-        {{ $t("General.delete") }}
-      </Button>
+      />
     </template>
   </ModalVue>
 </template>
 
 <script lang="ts" setup>
-import { Trash2 } from "lucide-vue-next";
 import { ref, useTemplateRef } from "vue";
 
-import { Button } from "@/components/ui/button";
-
+import ButtonDelete from "../ButtonDelete.vue";
 import DivError from "../DivError.vue";
 import ModalVue from "../Modal.vue";
 import ShowMonthlySettlementVue from "./ShowMonthlySettlement.vue";

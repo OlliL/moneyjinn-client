@@ -8,7 +8,7 @@
         <div class="space-y-4">
           <DivError :server-errors="serverErrors" />
 
-          <div class="rounded-sm border bg-muted/30 p-4 shadow-sm space-y-4">
+          <div class="form-section space-y-4">
             <div class="grid grid-cols-1 gap-4">
               <InputStandard
                 v-model="mcm.matchingText"
@@ -25,13 +25,11 @@
             </div>
           </div>
 
-          <div class="rounded-sm border bg-muted/30 p-4 shadow-sm space-y-4">
+          <div class="form-section space-y-4">
             <div
               class="flex items-center space-x-2 border-b border-border/40 pb-2"
             >
-              <span
-                class="text-xs font-bold uppercase tracking-wider text-muted-foreground block mb-0"
-              >
+              <span class="form-section-title">
                 {{ $t("Contractpartner.moneyflowDefaults") }}
               </span>
             </div>
@@ -56,7 +54,7 @@
       <Button
         type="button"
         variant="secondary"
-        class="flex items-center gap-2 px-6"
+        class="button-with-icon"
         @click="resetForm"
       >
         <Undo2 class="h-4 w-4" />
@@ -118,7 +116,7 @@ const schema: Partial<{ [key in keyof ContractpartnerMatching]: ZodType }> = {
 };
 
 const mcm = ref({} as ContractpartnerMatching);
-const origMpa = ref({} as ContractpartnerMatching | undefined);
+const origMcm = ref({} as ContractpartnerMatching | undefined);
 const modalComponent = useTemplateRef<typeof ModalVue>("modalComponent");
 const emit = defineEmits([
   "contractpartnerMatchingCreated",
@@ -128,14 +126,14 @@ const emit = defineEmits([
 const { handleSubmit, values, setFieldTouched } = useForm();
 
 const title = computed(() => {
-  return origMpa.value === undefined
+  return origMcm.value === undefined
     ? t("ContractpartnerMatching.title.create")
     : t("ContractpartnerMatching.title.update");
 });
 
 const resetForm = () => {
-  if (origMpa.value) {
-    mcm.value = structuredClone(toRaw(origMpa.value))!;
+  if (origMcm.value) {
+    mcm.value = structuredClone(toRaw(origMcm.value))!;
   } else {
     mcm.value = {} as ContractpartnerMatching;
   }
@@ -143,8 +141,8 @@ const resetForm = () => {
   Object.keys(values).forEach((field) => setFieldTouched(field, false));
 };
 
-const _show = async (_mcm?: ContractpartnerMatching) => {
-  origMpa.value = _mcm ?? undefined;
+const _show = (_mcm?: ContractpartnerMatching) => {
+  origMcm.value = _mcm ?? undefined;
   resetForm();
   modalComponent.value?._show();
 };

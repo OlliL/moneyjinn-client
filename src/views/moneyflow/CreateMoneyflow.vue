@@ -61,7 +61,7 @@
           <Button
             type="button"
             variant="secondary"
-            class="flex items-center gap-2 px-6 border-sm"
+            class="flex items-center gap-2 px-6"
             @click="resetForm"
           >
             <Undo2 class="h-4 w-4" />
@@ -95,6 +95,7 @@ import { preDefMoneyflowAlreadyUsedThisMonth } from "@/model/moneyflow/PreDefMon
 import PreDefMoneyflowService from "@/service/PreDefMoneyflowService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { Save, Undo2 } from "lucide-vue-next";
+import { type AcceptableValue } from "reka-ui";
 import { useForm } from "vee-validate";
 import { onMounted, ref, useTemplateRef } from "vue";
 
@@ -125,8 +126,8 @@ onMounted(() => {
     });
 });
 
-const handleSelectChange = (val: any) => {
-  preDefMoneyflowId.value = Number(val);
+const handleSelectChange = (val: AcceptableValue) => {
+  preDefMoneyflowId.value = Number(val ?? 0);
   selectPreDefMoneyflow();
 };
 

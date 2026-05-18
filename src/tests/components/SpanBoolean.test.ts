@@ -1,7 +1,7 @@
+import SpanBoolean from "@/components/SpanBoolean.vue";
+import "@testing-library/jest-dom/vitest";
 import { render, screen } from "@testing-library/vue";
 import { expect, test } from "vitest";
-import "@testing-library/jest-dom/vitest";
-import SpanBoolean from "@/components/SpanBoolean.vue";
 
 test("test true", async () => {
   render(SpanBoolean, { props: { value: true } });

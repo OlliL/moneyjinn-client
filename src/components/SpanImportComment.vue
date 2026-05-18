@@ -4,11 +4,16 @@
     :key="index"
     class="block"
   >
-    <b v-if="line[0]">{{ line[0] }}:</b> {{ line[1] }}
+    <b v-if="line.label">{{ line.label }}:</b> {{ line.value }}
   </span>
 </template>
 <script lang="ts" setup>
 import { computed } from "vue";
+
+type ImportCommentLine = {
+  label: string;
+  value: string;
+};
 
 const props = defineProps({
   comment: {
@@ -18,7 +23,7 @@ const props = defineProps({
 });
 
 const importDataCommentLines = computed(() => {
-  const resultArray = new Map<string, string>();
+  const resultArray: Array<ImportCommentLine> = [];
 
   if (!props.comment) return resultArray;
 
@@ -30,7 +35,7 @@ const importDataCommentLines = computed(() => {
     !props.comment.includes("CRED+") &&
     !props.comment.includes("SVWZ+")
   ) {
-    resultArray.set("", props.comment);
+    resultArray.push({ label: "", value: props.comment });
     return resultArray;
   }
 
@@ -54,12 +59,15 @@ const importDataCommentLines = computed(() => {
         break;
     }
     if (lineParts.length === 2) {
-      resultArray.set(lineParts[0], lineParts[1]);
+      resultArray.push({ label: lineParts[0], value: lineParts[1] });
     }
   }
   // push the rest of the parts into resultArray
   for (let i = 1; i < parts.length; i++) {
-    resultArray.set("Verwendungszweck", parts[i].replaceAll("\n", ""));
+    resultArray.push({
+      label: "Verwendungszweck",
+      value: parts[i].replaceAll("\n", ""),
+    });
   }
   return resultArray;
 });

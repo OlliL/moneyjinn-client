@@ -25,8 +25,8 @@ import { SquarePlus } from "lucide-vue-next";
 import { computed, useTemplateRef, type PropType } from "vue";
 import { any, type ZodType } from "zod";
 
-import CreateCapitalsourceModalVue from "./CreateCapitalsourceModal.vue";
 import SelectStandard from "../SelectStandard.vue";
+import CreateCapitalsourceModalVue from "./CreateCapitalsourceModal.vue";
 
 import { useCapitalsourceStore } from "@/stores/CapitalsourceStore";
 

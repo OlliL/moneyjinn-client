@@ -43,7 +43,7 @@
               :select-box-values="getAsSelectBoxValues()"
             />
           </div>
-          <div class="md:col-span-5" v-if="selectedEtf">
+          <div class="md:col-span-5" v-if="selectedEtfId !== undefined">
             <Button
               type="button"
               class="w-full"
@@ -57,7 +57,7 @@
               {{ $t("ETFPreliminaryLumpSum.newMonthly") }}
             </Button>
           </div>
-          <div class="md:col-span-5" v-if="selectedEtf">
+          <div class="md:col-span-5" v-if="selectedEtfId !== undefined">
             <Button
               type="button"
               class="w-full"
@@ -71,7 +71,7 @@
               {{ $t("ETFPreliminaryLumpSum.newPiece") }}
             </Button>
           </div>
-          <div class="md:col-span-5" v-if="selectedEtf">
+          <div class="md:col-span-5" v-if="selectedEtfId !== undefined">
             <Button
               type="button"
               class="w-full"
@@ -128,7 +128,7 @@
     <div
       v-if="
         selectedYear &&
-        selectedEtf &&
+        selectedEtfId !== undefined &&
         etfPreliminaryLumpSum?.type ==
           EtfPreliminaryLumpSumType.AMOUNT_PER_MONTH
       "
@@ -165,7 +165,7 @@
     <div
       v-if="
         selectedYear &&
-        selectedEtf &&
+        selectedEtfId !== undefined &&
         etfPreliminaryLumpSum?.type ==
           EtfPreliminaryLumpSumType.AMOUNT_PER_PIECE
       "
@@ -202,7 +202,7 @@
     <div
       v-if="
         selectedYear &&
-        selectedEtf &&
+        selectedEtfId !== undefined &&
         etfPreliminaryLumpSum?.type == EtfPreliminaryLumpSumType.AMOUNT_PER_YEAR
       "
     >
@@ -240,26 +240,17 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted, watch, useTemplateRef, computed } from "vue";
-import router, { Routes } from "@/router";
-
-import DeleteEtfPreliminaryLumpSumModalMonthlyVue from "@/components/etf/DeleteEtfPreliminaryLumpSumModalMonthly.vue";
-import CreateEtfPreliminaryLumpSumModalMonthlyVue from "@/components/etf/CreateEtfPreliminaryLumpSumModalMonthly.vue";
-import ShowEtfPreliminaryLumpSumMonthlyVue from "@/components/etf/ShowEtfPreliminaryLumpSumMonthly.vue";
-import DeleteEtfPreliminaryLumpSumModalPieceVue from "@/components/etf/DeleteEtfPreliminaryLumpSumModalPiece.vue";
-import CreateEtfPreliminaryLumpSumModalPieceVue from "@/components/etf/CreateEtfPreliminaryLumpSumModalPiece.vue";
-import ShowEtfPreliminaryLumpSumPieceVue from "@/components/etf/ShowEtfPreliminaryLumpSumPiece.vue";
 import DivError from "@/components/DivError.vue";
-import SelectStandard from "@/components/SelectStandard.vue";
-
-import CrudEtfPreliminaryLumpSumService from "@/service/CrudEtfPreliminaryLumpSumService";
-import type { Etf } from "@/model/etf/Etf";
-import type { EtfPreliminaryLumpSum } from "@/model/etf/EtfPreliminaryLumpSum";
-import { EtfPreliminaryLumpSumType } from "@/model/etf/EtfPreliminaryLumpSumType";
-import { useEtfStore } from "@/stores/EtfStore";
+import CreateEtfPreliminaryLumpSumModalMonthlyVue from "@/components/etf/CreateEtfPreliminaryLumpSumModalMonthly.vue";
+import CreateEtfPreliminaryLumpSumModalPieceVue from "@/components/etf/CreateEtfPreliminaryLumpSumModalPiece.vue";
 import CreateEtfPreliminaryLumpSumModalYearly from "@/components/etf/CreateEtfPreliminaryLumpSumModalYearly.vue";
+import DeleteEtfPreliminaryLumpSumModalMonthlyVue from "@/components/etf/DeleteEtfPreliminaryLumpSumModalMonthly.vue";
+import DeleteEtfPreliminaryLumpSumModalPieceVue from "@/components/etf/DeleteEtfPreliminaryLumpSumModalPiece.vue";
 import DeleteEtfPreliminaryLumpSumModalYearly from "@/components/etf/DeleteEtfPreliminaryLumpSumModalYearly.vue";
+import ShowEtfPreliminaryLumpSumMonthlyVue from "@/components/etf/ShowEtfPreliminaryLumpSumMonthly.vue";
+import ShowEtfPreliminaryLumpSumPieceVue from "@/components/etf/ShowEtfPreliminaryLumpSumPiece.vue";
 import ShowEtfPreliminaryLumpSumYearly from "@/components/etf/ShowEtfPreliminaryLumpSumYearly.vue";
+import SelectStandard from "@/components/SelectStandard.vue";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -268,7 +259,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import type { EtfPreliminaryLumpSum } from "@/model/etf/EtfPreliminaryLumpSum";
+import { EtfPreliminaryLumpSumType } from "@/model/etf/EtfPreliminaryLumpSumType";
+import router, { Routes } from "@/router";
+import CrudEtfPreliminaryLumpSumService from "@/service/CrudEtfPreliminaryLumpSumService";
+import { useEtfStore } from "@/stores/EtfStore";
 import { ChevronLeft, ChevronRight } from "lucide-vue-next";
+import { computed, onMounted, ref, useTemplateRef, watch } from "vue";
 
 const serverErrors = ref(new Array<string>());
 
@@ -278,7 +275,6 @@ const displayedYear = ref(undefined as string | undefined);
 const displayedEtf = ref(undefined as number | undefined);
 const years = ref({} as Array<string>);
 
-const selectedEtf = ref({} as Etf);
 const selectedEtfId = ref(undefined as number | undefined);
 
 const etfPreliminaryLumpSums = ref({} as Map<string, EtfPreliminaryLumpSum>);

@@ -83,34 +83,25 @@
         </HoverCardContent>
       </HoverCard>
     </TableCell>
-    <TableCell class="text-center">
-      <Button
-        variant="ghost"
-        size="icon"
-        @click="editEtfFlow"
-        :title="$t('General.edit')"
-        :aria-label="$t('General.edit')"
-        class="h-6 w-6"
-      >
-        <Pencil class="h-4 w-4" />
-      </Button>
-    </TableCell>
-    <TableCell class="text-center">
-      <Button
-        variant="ghost"
-        size="icon"
-        @click="deleteEtfFlow"
-        :title="$t('General.delete')"
-        :aria-label="$t('General.delete')"
-        class="h-6 w-6"
-      >
-        <Trash2 class="h-4 w-4" />
-      </Button>
-    </TableCell>
+    <ButtonTableIcon
+      :title="$t('General.edit')"
+      :aria-label="$t('General.edit')"
+      button-class="h-6 w-6 cursor-pointer"
+      @click="editEtfFlow"
+    >
+      <Pencil class="h-4 w-4" />
+    </ButtonTableIcon>
+    <ButtonTableIcon
+      :title="$t('General.delete')"
+      :aria-label="$t('General.delete')"
+      button-class="h-6 w-6 cursor-pointer"
+      @click="deleteEtfFlow"
+    >
+      <Trash2 class="h-4 w-4" />
+    </ButtonTableIcon>
   </TableRow>
 </template>
 <script lang="ts" setup>
-import { Button } from "@/components/ui/button";
 import {
   HoverCard,
   HoverCardContent,
@@ -130,6 +121,7 @@ import { formatDateWithTime } from "@/tools/views/FormatDate";
 import { formatNumber, redIfNegative } from "@/tools/views/FormatNumber";
 import { Pencil, Trash2 } from "lucide-vue-next";
 import { computed, type PropType } from "vue";
+import ButtonTableIcon from "../ButtonTableIcon.vue";
 import SpanAmount from "../SpanAmount.vue";
 
 const props = defineProps({
@@ -149,8 +141,9 @@ const props = defineProps({
 
 const emit = defineEmits(["deleteEtfFlow", "editEtfFlow"]);
 const etfStore = useEtfStore();
-const partial =
-  100 - (etfStore.getEtf(props.flow.etfId)?.partialTaxExemption ?? 0);
+const partial = computed(
+  () => 100 - (etfStore.getEtf(props.flow.etfId)?.partialTaxExemption ?? 0),
+);
 
 const amountClass = computed(() => {
   return redIfNegative(props.flow.amount);

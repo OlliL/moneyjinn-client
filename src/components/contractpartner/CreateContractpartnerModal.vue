@@ -8,7 +8,7 @@
       >
         <DivError :server-errors="serverErrors" />
 
-        <div class="rounded-sm border bg-muted/30 p-4 shadow-sm space-y-4">
+        <div class="form-section space-y-4">
           <InputStandard
             v-model="mcp.name"
             :validation-schema="schema.name"
@@ -16,13 +16,11 @@
             :field-label="$t('General.name')"
           />
         </div>
-        <div class="rounded-sm border bg-muted/30 p-4 shadow-sm space-y-4">
+        <div class="form-section space-y-4">
           <div
             class="flex items-center space-x-2 border-b border-border/40 pb-2"
           >
-            <span
-              class="text-xs font-bold uppercase tracking-wider text-muted-foreground block mb-0"
-            >
+            <span class="form-section-title">
               {{ $t("Contractpartner.moneyflowDefaults") }}
             </span>
           </div>
@@ -40,9 +38,7 @@
           />
         </div>
         <div class="grid grid-cols-1 gap-4">
-          <div
-            class="rounded-sm border bg-muted/30 p-4 shadow-sm flex flex-col justify-between"
-          >
+          <div class="form-section flex flex-col justify-between">
             <span
               class="text-xs font-bold uppercase tracking-wider text-muted-foreground block mb-2"
             >
@@ -70,9 +66,7 @@
             class="flex items-center justify-between w-full p-4 hover:bg-muted/30 text-left transition-colors group"
           >
             <div class="flex items-center space-x-2">
-              <span
-                class="text-xs font-bold uppercase tracking-wider text-muted-foreground block mb-0"
-              >
+              <span class="form-section-title">
                 {{ $t("Contractpartner.adressData") }}
               </span>
             </div>
@@ -130,7 +124,7 @@
       <Button
         type="button"
         variant="secondary"
-        class="flex items-center gap-2 px-6"
+        class="button-with-icon"
         @click="resetForm"
       >
         <Undo2 class="h-4 w-4" />
@@ -233,7 +227,7 @@ const resetForm = () => {
   Object.keys(values).forEach((field) => setFieldTouched(field, false));
 };
 
-const _show = async (_mcp?: Contractpartner) => {
+const _show = (_mcp?: Contractpartner) => {
   origMcp.value = _mcp ?? undefined;
   resetForm();
   modalComponent.value?._show();

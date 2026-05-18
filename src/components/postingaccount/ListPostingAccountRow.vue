@@ -1,37 +1,24 @@
 <template>
   <TableRow>
     <TableCell class="text-left border-r">{{ mpa.name }}</TableCell>
-    <TableCell class="w-0 whitespace-nowrap text-center p-0">
-      <Button
-        variant="ghost"
-        size="icon"
-        @click="editPostingAccount"
-        :title="$t('General.edit')"
-        class="h-8 w-8 cursor-pointer"
-      >
-        <Pencil class="h-4 w-4" />
-      </Button>
-    </TableCell>
-    <TableCell class="w-0 border-l whitespace-nowrap text-center p-0">
-      <Button
-        variant="ghost"
-        size="icon"
-        @click="deletePostingAccount"
-        :title="$t('General.delete')"
-        class="h-8 w-8 cursor-pointer"
-      >
-        <Trash2 class="h-4 w-4" />
-      </Button>
-    </TableCell>
+    <ButtonTableIcon :title="$t('General.edit')" @click="editPostingAccount">
+      <Pencil class="h-4 w-4" />
+    </ButtonTableIcon>
+    <ButtonTableIcon
+      :title="$t('General.delete')"
+      @click="deletePostingAccount"
+    >
+      <Trash2 class="h-4 w-4" />
+    </ButtonTableIcon>
   </TableRow>
 </template>
 
 <script lang="ts" setup>
-import { Button } from "@/components/ui/button";
 import { TableCell, TableRow } from "@/components/ui/table";
 import type { PostingAccount } from "@/model/postingaccount/PostingAccount";
 import { Pencil, Trash2 } from "lucide-vue-next";
 import type { PropType } from "vue";
+import ButtonTableIcon from "../ButtonTableIcon.vue";
 
 const props = defineProps({
   mpa: {

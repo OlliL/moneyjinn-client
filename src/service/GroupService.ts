@@ -3,8 +3,8 @@ import {
   type CreateGroupRequest,
   type UpdateGroupRequest,
 } from "@/api";
-import AbstractService from "@/service/AbstractService";
 import type { Group } from "@/model/group/Group";
+import AbstractService from "@/service/AbstractService";
 import {
   mapGroupToTransport,
   mapGroupTransportToModel,

@@ -1,533 +1,533 @@
 {
-    "General": {
-        "logout": "logout",
-        "profile": "profile",
-        "add": "add",
-        "currency": "€",
-        "etf": "ETF",
-        "selectEtf": "select ETF...",
-        "etfs": "ETFs",
-        "etfDepot": "ETF depot",
-        "preliminaryLumpSums": "preliminary lump sums",
-        "username": "username",
-        "password": "password",
-        "moneyflow": "flow of money",
-        "moneyflows": "flows of money",
-        "capitalsource": "capitalsource",
-        "capitalsources": "capitalsources",
-        "contractpartner": "contractpartner",
-        "contractpartners": "contractpartners",
-        "contractpartnerAccounts": "contractpartner accounts",
-        "contractpartnerMatchings": "contractpartner matchings",
-        "preDefMoneyflow": "predefined flow of money",
-        "preDefMoneyflows": "predefined flows of money",
-        "monthlysettlements": "monthly balances",
-        "postingAccount": "posting account",
-        "postingAccounts": "posting accounts",
-        "enterFilter": "enter a filter...",
-        "amount": "amount",
-        "comment": "comment",
-        "name": "name",
-        "users": "user accounts",
-        "group": "user group",
-        "groups": "user groups",
-        "iban": "IBAN",
-        "bic": "BIC",
-        "validFrom": "valid from",
-        "validTil": "valid til",
-        "validNow": "valid now",
-        "startDate": "startdate",
-        "endDate": "enddate",
-        "searchForPostingAccount": "Search for posting account...",
-        "searchForCapitalsource": "Search for capitalsource...",
-        "searchForEtf": "Search for ETF...",
-        "xOfySelected": "{selected} of {total} selected",
-        "delete": "delete",
-        "edit": "edit",
-        "reset": "reset",
-        "save": "save",
-        "show": "show",
-        "yes": "yes",
-        "no": "no",
-        "all": "all",
-        "none": "none",
-                "noEntries": "No entries found.",
-        "new": "new",
-        "year": "year",
-        "month": "month",
-        "validation": {
-            "validFrom": "Please specify a valid from date!",
-            "validTil": "Please specify a valid to date!",
-            "startDate": "Please specify a start date!",
-            "endDate": "Please specify an end date!",
-            "capitalsource": "Please specify a capitalsource!"
-        }
-    },
-    "Errors": {
-        "noMasterData": "Session expired. Please log in again!"
-    },
-    "AppHome": {
-        "taskList": "task list",
-        "importableMoneyflows": "There are moneyflows waiting to be imported!",
-        "createSettlements": "There exists no monthly settlement for the previous month!",
-        "allDone": "It's all done!",
-        "allDoneTitle": "Done!"
-    },
-    "Capitalsource": {
-        "type": "type",
-        "state": "state",
-        "groupUse": "group usage",
-        "importAllowed": "data import",
-        "accountData":"Bank account (optional)",
-        "validityData":"Validity period",
-        "permissions": "Permissions",
-        "nonCash": "non cash",
-        "cash": "cash",
-        "balance": "balance",
-        "currentAsset": "current asset",
-        "longTermAsset": "long term asset",
-        "reserveAsset": "reserve asset",
-        "provisionAsset": "provision asset",
-        "credit": "credit",
-        "searchBy": "search by name...",
-        "title": {
-            "create": "create capitalsource",
-            "update": "update capitalsource",
-            "delete": "Delete this capitalsource?"
-        },
-        "validation": {
-            "comment": "Please specify a name!",
-            "type": "Please specify a type!",
-            "state": "Please specify a state!",
-            "groupUse": "Please select a value for group usage!",
-            "importAllowed": "Please select what kind of data import is allowed!",
-            "length": {
-                "comment": "Name is too long!",
-                "accountNumber": "IBAN is too long!",
-                "bankCode": "BIC is too long!"
-            }
-        }
-    },
-    "Contractpartner": {
-        "moneyflowComment": "the moneyflows default comment",
-        "adressData": "Address data (optional)",
-        "validityData":"Validity period",
-        "moneyflowDefaults": "Standard values for new moneyflows",
-        "street": "street",
-        "postcode": "postcode",
-        "town": "town",
-        "country": "country",
-        "accounts": "accounts",
-        "searchBy": "search by name...",
-        "title": {
-            "create": "create contractpartner",
-            "update": "update contractpartner",
-            "delete": "delete contractpartner"
-        },
-        "validation": {
-            "name": "Please specify a name!",
-            "postcode": "Postcode must be a number!",
-            "length": {
-                "name": "Name is too long!",
-                "street": "Street is too long!",
-                "moneyflowComment": "Comment is too long!",
-                "town": "Town is too long!",
-                "country": "Country is too long!"
-            }
-        }
-    },
-    "ContractpartnerAccount": {
-        "title": {
-            "create": "create contractpartner account",
-            "update": "update contractpartner account",
-            "delete": "delete contractpartner account"
-        },
-        "nothingFound": "No bank accounts found.",
-        "validation": {
-            "accountNumber": "Please specify the IBAN!",
-            "accountNumberMax": "The IBAN must not exceed 22 characters!",
-            "bankCode": "Please specify the BIC!",
-            "bankCodeMax": "The BIC must not exceed 11 characters!"
-        }
-    },
-    "ContractpartnerMatching": {
-        "matchingText": "partial text",
-        "searchBy": "search by partial text...",
-        "title": {
-            "create": "create contractpartner matching",
-            "update": "update contractpartner matching",
-            "delete": "delete contractpartner matching"
-        },
-        "validation": {
-            "matchingText": "Please specify a partial text!",
-            "matchingTextMax": "The partial text must not exceed 50 characters!"
-        }
-    },
-    "CompareData": {
-        "source": "source",
-        "title": "compare data",
-        "import": "data import",
-        "file": "file",
-        "importfile": "import file",
-        "format": "format",
-        "database": "database",
-        "result": "result",
-        "dataInSourceNotInDb": "Data the source contains, but not the database",
-        "dataNotInSourceInDb": "Data the database contains, but not the source",
-        "dataMatchingButWrongCapitalsource": "matching data but with wrong capitalsource",
-        "dataMatching": "matching data",
-        "validation": {
-            "compareDataFormat": "Please specify a format!",
-            "importfile": "Please specifiy the import file!"
-        }
-    },
-    "ETF": {
-        "isin": "ISIN",
-        "wkn": "WKN",
-        "ticker": "Ticker",
-        "chartUrl": "Chart URL",
-        "searchBy": "search by name...",
-        "markAsFav": "mark as favorite",
-        "partialTaxExemption": "partial tax exemption",
-        "title": {
-            "create": "create ETF",
-            "update": "update ETF",
-            "delete": "delete ETF"
-        },
-        "validation": {
-            "isin": "Please specifiy a ISIN!",
-            "name": "Please specifiy a Name!",
-            "wkn": "Please specifiy a WKN!",
-            "ticker": "Please specifiy a Ticker!",
-            "partialTaxExemption": "Please specify the partial tax exemption!",
-            "length": {
-                "isin": "ISIN is too long!",
-                "name": "Name is too long!",
-                "wkn": "WKN is too long!",
-                "ticker": "Ticker is too long!",
-                "chartUrl": "Chart URL is too long!"
-            }
-        }
-    },
-    "ETFFlow": {
-        "bookingdate": "bookingdate",
-        "bookingtime": "bookingtime",
-        "amount": "amount",
-        "price": "price per piece",
-        "sumprice": "sum price",
-        "preliminaryLumpSum": "lump sum",
-        "newBooking": "new booking",
-        "effective": "effective",
-        "calculateSale": "calculate sale",
-        "bid": "bid",
-        "ask": "ask",
-        "transactionCosts": "transaction costs",
-        "transactionCostsBuy": "Buy",
-        "transactionCostsSell": "Sale",
-        "transactionCostsAbsolute": "absolute",
-        "transactionCostsRelative": "relative",
-        "transactionCostsMaximum": "maximum",
-        "calculate": "calculate",
-        "shares": "shares",
-        "overall": "overall",
-        "payed": "payes",
-        "profit": "profit",
-        "calculateResults": {
-            "pieces": "pieces to be sold",
-            "originalBuyPrice": "original buy price",
-            "sellPrice": "sales price",
-            "chargeable": "after partial tax exemption",
-            "newBuyPrice": "new buy price",
-            "rebuyLosses": "resale loss",
-            "overallCosts": "final costs",
-            "accumulatedPreliminaryLumpSum": "reduced by preliminary lump sum"
-        },
-        "title": {
-            "create": "create ETF booking",
-            "update": "update ETF booking",
-            "delete": "delete ETF booking"
-        },
-        "validation": {
-            "amount": "Please specify an amount!",
-            "price": "Please specify a price per piece!",
-            "etfId": "Please select an ETF!",
-            "timestamp": "Please specify a bookingtime!",
-            "nanoseconds": "Bookingtime must be in the format 00:00:00:000!",
-            "askPrice": "Please specify the ask price!",
-            "bidPrice": "Please specify the bid price!",
-            "transactionCostsAbsolute": "Please specify the absolute transaction costs!",
-            "transactionCostsRelative": "Please specify the relative transaction costs!",
-            "transactionCostsMaximum": "Please specify the maximum transaction costs as decimal number!"
-        }
-    },
-    "ETFPreliminaryLumpSum": {
-        "newMonthly": "new (monthly)",
-        "newPiece": "new (piece price)",
-        "newYearly": "new (yearly)",
-        "price": "price per piece",
-        "yearlySum": "yearly sum",
-        "title": {
-            "create": "create ETF preliminary lump sums",
-            "update": "update ETF preliminary lump sums",
-            "delete": "delete ETF preliminary lump sums"
-        },
-        "amounts": "amounts",
-        "monthlyAmount": "amount {month}",
-        "validation": {
-            "etfId": "Please select an ETF!",
-            "year": "Please specify a year!",
-            "price": "Please specify a price per piece!",
-            "amount": "Please specify an amount!"
-        }
-    },
-    "Group": {
-        "searchBy": "search by name...",
-        "title": {
-            "create": "create group",
-            "update": "update group",
-            "delete": "delete group"
-        },
-        "validation": {
-            "name": "Please specify a name!"
-        }
-    },
-    "LoginView": {
-        "welcome": "Welcome!",
-        "enterYourData": "Please enter your user credentials and press „login“.",
-        "login": "login",
-        "by": "by"
-    },
-    "Modal": {
-        "cancel": "cancel"
-    },
-    "Moneyflow": {
-        "bookingdate": "bookingdate",
-        "invoicedate": "invoicedate",
-        "public": "public",
-        "private": "private",
-        "once": "once",
-        "favorite": "favorite",
-        "keep": "keep",
-        "renew": "renew",
-        "subbooking": "subbooking",
-        "remainder": "remainder",
-        "deleteReceipt": "delete receipt",
-        "noMatchingMoneyflow": "No matching moneyflow found!",
-        "apply": "apply",
-        "newBooking": "new booking",
-        "partner": "partner",
-        "reference": "reference",
-        "equal": "equal",
-        "caseSensitivity": "respect case sensitivity",
-        "regexp": "regular expression",
-        "onlyNegative": "only negative amounts",
-        "search": "search",
-        "1stGroupingCriteria": "1st grouping criteria",
-        "2ndGroupingCriteria": "2nd grouping criteria",
-        "orderBy": "order by",
-        "bookingMonth": "bookingmonth",
-        "bookingYear": "bookingyear",
-        "grouping": "grouping",
-        "title": {
-            "create": "create moneyflow",
-            "update": "update moneyflow",
-            "delete": "delete moneyflow",
-            "import": "import moneyflows",
-            "search": "search moneyflows"
-        },
-        "validation": {
-            "amount": "Please specify an amount!",
-            "bookingDate": "Please specify a bookingdate!",
-            "contractpartnerId": "Please specify a contractpartner!",
-            "comment": "Please specify a comment!",
-            "postingAccountId": "Please specify a posting account!",
-            "remainder": "remainder must be 0!",
-            "oneSearchCriteria": "At least 1 search criteria must be specified!",
-            "length": {
-                "comment": "Comment is too long!"
-            }
-        }
-    },
-    "MonthlySettlement": {
-        "headline": "monthlysettlement {month} {year}",
-        "title": {
-            "create": "create monthlysettlement",
-            "update": "update monthlysettlement",
-            "delete": "delete monthlysettlement {month} {year}"
-        },
-        "validation": {
-            "amount": "Please specify an amount!",
-            "month": "Please specify a month!"
-        }
-    },
-    "PostingAccount": {
-        "searchBy": "Search by name...",
-        "title": {
-            "create": "create postingaccount",
-            "update": "update postingaccount",
-            "delete": "delete postingaccount"
-        },
-        "validation": {
-            "name": "Please specify a name!",
-            "length": {
-                "name": "Name is too long!"
-            }
-        }
-    },
-    "PreDefMoneyflow": {
-        "onceAMonth": "only once a month",
-        "onceAMonthShort": "1x",
-        "lastUsed": "last used",
-        "createDate": "created",
-        "searchBy": "Search by contractpartner...",
-        "title": {
-            "create": "create predefined moneyflows",
-            "update": "update predefined moneyflows",
-            "delete": "delete predefined moneyflows"
-        },
-        "validation": {
-            "onceAMonth": "Please specify if only once a month!"
-        }
-    },
-    "Receipt": {
-        "importReceipts": "import receipts",
-        "receipt": "receipt",
-        "upload": "upload"
-    },
-    "Reports": {
-        "title": {
-            "charts": "charts",
-            "report": "moneyflows {month} {year}",
-            "costReporting": "cost reporting",
-            "costReportYear": "{year}",
-            "costReportYearTilYear": "{yearFrom} til {yearTil}",
-            "costReportMonthYear": "{month} {year}",
-            "costReportMonthYearTilMonthYear": "{monthFrom} {yearFrom} til {monthTil} {yearTil}",
-            "trends": "trends",
-            "trendGraph": "amount trends of selected capitalsources starting from {startLabel} til {endLabel}",
-            "trendMonthYear": "month / year",
-            "trendAmount": "amount"
-        },
-        "beginOfMonth": "start balance",
-        "endOfMonthFixed": "fixed end balance",
-        "endOfMonthCalculated": "calculated end balance",
-        "currentAmount": "current balance",
-        "state": "state",
-        "difference": "difference",
-        "calculated": "calculated",
-        "overview": "overview",
-        "ownCapital": "own capital",
-        "debtCapital": "debt capital",
-        "loans": "loans",
-        "fixedProfit": "fixed profit",
-        "calculatedProfit": "caluclated profit",
-        "included": "included",
-        "excluded": "excluded",
-        "aggregationOnMonths": "aggregation on months",
-        "aggregationOnYears": "aggregation on years",
-        "singlePostingAccount": "single postingaccount",
-        "multiplePostingAccounts": "multiple postingaccounts",
-        "settled": "settled"
-    },
-    "User": {
-        "title": {
-            "create": "create user",
-            "update": "update user",
-            "delete": "delete user",
-            "changePassword": "change password"
-        },
-        "loginData": "login data",
-        "permissions": "permissions",
-        "groupHistory": "group history",
-        "new": "new",
-        "role": "userrole",
-        "admin": "administrator",
-        "inactive": "locked user",
-        "standard": "standard user",
-        "import": "HBCI interface",
-        "oldPassword": "current password",
-        "newPassword": "new password",
-        "passwordVerify": "repeat password",
-        "searchBy": "search by name...",
-        "validation": {
-            "userName": "Please specify a name!",
-            "groupId": "Please select a group!",
-            "userIsNew": "Please select if new!",
-            "userRole": "Please select a userrole!",
-            "passwordNotEqual": "Both passwords do not match!",
-            "password": "Please specify a passowrd!",
-            "passwordOld": "Please specify the old password!",
-            "length": {
-                "userName": "Name is too long!"
-            }
-        }
-    },
-    "ErrorMessage": {
-        "technicalError": "technical error",
-        "technicalErrorWithStatus": "technical error: ({status}) {statusText}",
-        "CONTRACTPARTNER_DOES_NOT_EXIST": "Contractpartner does not exist!",
-        "CAPITALSOURCE_DOES_NOT_EXIST": "Capitalsource does not exist!",
-        "CAPITALSOURCE_STILL_REFERENCED": "The source of capital cannot be deleted because it is still referenced by a flow of money or a predefined flow of money!",
-        "CAPITALSOURCE_IN_USE_PERIOD": "There are flows of money for this source of capital outside the period of validitiy you've chosen!",
-        "CAPITALSOURCE_USE_OUT_OF_VALIDITY": "The source of capital you've chosen is not valid on the booking date you've specified!",
-        "CONTRACTPARTNER_IN_USE": "The contractpartner cannot be deleted because it is still in use!",
-        "CAPITALSOURCE_IS_NOT_SET": "The capitalsource must be specified!",
-        "CONTRACTPARTNER_IS_NOT_SET": "The contractpartner must be specified!",
-        "BOOKINGDATE_IN_WRONG_FORMAT": "The bookingdate must be a valid date",
-        "COMMENT_IS_NOT_SET": "Ein Kommentar muss angegeben werden!",
-        "USERNAME_PASSWORD_WRONG": "The specified username or password are wrong!",
-        "PASSWORD_NOT_MATCHING": "Wrong Password!",
-        "ACCOUNT_IS_LOCKED": "Your account as been locked!",
-        "PASSWORD_MUST_BE_CHANGED": "You must change your password!",
-        "NO_SEARCH_CRITERIA_ENTERED": "No search criteria specified!",
-        "USER_HAS_DATA": "This user has already entered data and may therefore not be deleted!",
-        "WRONG_FILE_FORMAT": "The specified file is not parseable! Maybe you've selected the wrong format or file?",
-        "AMOUNT_ZERO": "The amount must be higher or lower than 0 but not 0!",
-        "NAME_ALREADY_EXISTS": "The name already exists!",
-        "GROUP_IN_USE": "You may not delete a group while there where/are users assigned to it!",
-        "NAME_MUST_NOT_BE_EMPTY": "The Field 'name' must not be empty!",
-        "ACCOUNT_NUMBER_TO_LONG": "The IBAN must not be longer than 34 digits!",
-        "BANK_CODE_TO_LONG": "The BIC must not be longer than 11 digits!",
-        "VALIDFROM_AFTER_VALIDTIL": "The date specified in 'valid from' must before the date specified 'valid til'!",
-        "LOGGED_OUT": "Access Denied! You are not logged on!",
-        "POSTING_ACCOUNT_NOT_SPECIFIED": "A postingaccount must be specified!",
-        "CONTRACTPARTNER_NO_LONGER_VALID": "The selected contractpartner is not valid at the given date!",
-        "MONEYFLOWS_OUTSIDE_VALIDITY_PERIOD": "There are moneyflows with a bookingdate outside your given validity period!",
-        "GROUP_WITH_SAME_NAME_ALREADY_EXISTS": "Another group with the same name exists already!",
-        "VALIDFROM_NOT_DEFINED": "Valid from must be specified!",
-        "USER_WITH_SAME_NAME_ALREADY_EXISTS": "Another user with the same name exists already!",
-        "GROUP_MUST_BE_SPECIFIED": "You must specify a group!",
-        "VALIDFROM_EARLIER_THAN_TOMORROW": "Validfrom must be tomorrow or later!",
-        "BOOKINGDATE_OUTSIDE_GROUP_ASSIGNMENT": "You cant create a moneyflow for a date you are assigned to a different group than the current!",
-        "POSTINGACCOUNT_STILL_REFERENCED": "The posting account cannot be deleted because it is still referenced by a flow of money or a predefined flow of money!",
-        "POSTINGACCOUNT_WITH_SAME_NAME_ALREADY_EXISTS": "Another posting account with the same name exists already!",
-        "ACCOUNT_NUMBER_CONTAINS_ILLEGAL_CHARS_OR_IS_EMPTY": "The IBAN must not be empty and must only contain letters and numbers!",
-        "BANK_CODE_CONTAINS_ILLEGAL_CHARS_OR_IS_EMPTY": "The BIC must not be empty and must only contain letters and numbers!",
-        "ACCOUNT_NUMBER_CONTAINS_ILLEGAL_CHARS": "The IBAN must only contain letters and numbers",
-        "BANK_CODE_CONTAINS_ILLEGAL_CHARS": "The BIC must only contain letters and numbers!",
-        "ACCOUNT_ALREADY_ASSIGNED_TO_OTHER_PARTNER": "The contractpartneraccount you have entered is already assigned to another contractpartner already!",
-        "CAPITALSOURCE_INVALID": "Capitalsource must not be used!",
-        "SPLIT_ENTRIES_AMOUNT_IS_NOT_EQUALS_MONEYFLOW_AMOUNT": "The summed up amount of the split entries does not match the amount of the moneyflow!",
-        "PIECES_NOT_SET": "Please enter a quantity!",
-        "NO_ETF_SPECIFIED": "Please choose an ETF!",
-        "AMOUNT_TO_HIGH": "More pieces entered than available!",
-        "PRICE_NOT_SET": "Price must be set!",
-        "UNSUPPORTED_MEDIA_TYPE": "Only JPEG or PDF documents are supported!",
-        "RECEIPT_ALREADY_EXISTS": "The selected moneyflow has already a receipt attached!",
-        "AMOUNT_TO_BIG": "Amount to big!",
-        "MEDIA_TYPE_UNKNOWN": "Unknown mediatype!",
-        "AMOUNT_HAS_TO_BE_SPECIFIED": "An amount has to be specified!",
-        "MONEYFLOW_DOES_NOT_EXISTS": "The specified moneyflow does not exist!",
-        "YEAR_NOT_SET": "Year must be set!",
-        "ETF_PRELIMINARY_LUMP_SUM_ALREADY_EXISTS": "Preliminary lump sum for this year already exists!",
-        "ETF_PRELIMINARY_LUMP_SUM_DOES_NOT_EXIST": "Preliminary lump sum for this year does not exist!",
-        "ISIN_MUST_NOT_BE_EMPTY": "ISIN must be set!",
-        "WKN_MUST_NOT_BE_EMPTY": "WKN must be set!",
-        "TICKER_MUST_NOT_BE_EMPTY": "Ticker must be set!",
-        "ETF_STILL_REFERENCED": "The posting account cannot be deleted because it is still referenced inside a depot or has preliminary lump sums recorded!",
-        "ETF_PRELIMINARY_LUMP_SUM_PIECE_PRICE_MUST_BE_NULL": "No piece price must be entered in montly mode!",
-        "ETF_PRELIMINARY_LUMP_SUM_MONTHLY_PRICES_MUST_BE_NULL": "No monthly prices must be entered in single price mode!",
-        "CONTRACTPARTNER_MAPPING_DUPLICATE": "A contractpartner mapping with this partial text and the same contractpartner already exists!",
-        "ETF_PRELIMINARY_LUMP_SUM_ONLY_YEARLY_PRICE_MUST_BE_SET": "Only a yearly price may be entered when entering a lump sum for the year!"
+  "General": {
+    "logout": "logout",
+    "profile": "profile",
+    "add": "add",
+    "currency": "€",
+    "etf": "ETF",
+    "selectEtf": "select ETF...",
+    "etfs": "ETFs",
+    "etfDepot": "ETF depot",
+    "preliminaryLumpSums": "preliminary lump sums",
+    "username": "username",
+    "password": "password",
+    "moneyflow": "flow of money",
+    "moneyflows": "flows of money",
+    "capitalsource": "capitalsource",
+    "capitalsources": "capitalsources",
+    "contractpartner": "contractpartner",
+    "contractpartners": "contractpartners",
+    "contractpartnerAccounts": "contractpartner accounts",
+    "contractpartnerMatchings": "contractpartner matchings",
+    "preDefMoneyflow": "predefined flow of money",
+    "preDefMoneyflows": "predefined flows of money",
+    "monthlysettlements": "monthly balances",
+    "postingAccount": "posting account",
+    "postingAccounts": "posting accounts",
+    "enterFilter": "enter a filter...",
+    "amount": "amount",
+    "comment": "comment",
+    "name": "name",
+    "users": "user accounts",
+    "group": "user group",
+    "groups": "user groups",
+    "iban": "IBAN",
+    "bic": "BIC",
+    "validFrom": "valid from",
+    "validTil": "valid til",
+    "validNow": "valid now",
+    "startDate": "startdate",
+    "endDate": "enddate",
+    "searchForPostingAccount": "Search for posting account...",
+    "searchForCapitalsource": "Search for capitalsource...",
+    "searchForEtf": "Search for ETF...",
+    "xOfySelected": "{selected} of {total} selected",
+    "delete": "delete",
+    "edit": "edit",
+    "reset": "reset",
+    "save": "save",
+    "show": "show",
+    "yes": "yes",
+    "no": "no",
+    "all": "all",
+    "none": "none",
+    "noEntries": "No entries found.",
+    "new": "new",
+    "year": "year",
+    "month": "month",
+    "validation": {
+      "validFrom": "Please specify a valid from date!",
+      "validTil": "Please specify a valid to date!",
+      "startDate": "Please specify a start date!",
+      "endDate": "Please specify an end date!",
+      "capitalsource": "Please specify a capitalsource!"
     }
+  },
+  "Errors": {
+    "noMasterData": "Session expired. Please log in again!"
+  },
+  "AppHome": {
+    "taskList": "task list",
+    "importableMoneyflows": "There are moneyflows waiting to be imported!",
+    "createSettlements": "There exists no monthly settlement for the previous month!",
+    "allDone": "It's all done!",
+    "allDoneTitle": "Done!"
+  },
+  "Capitalsource": {
+    "type": "type",
+    "state": "state",
+    "groupUse": "group usage",
+    "importAllowed": "data import",
+    "accountData": "Bank account (optional)",
+    "validityData": "Validity period",
+    "permissions": "Permissions",
+    "nonCash": "non cash",
+    "cash": "cash",
+    "balance": "balance",
+    "currentAsset": "current asset",
+    "longTermAsset": "long term asset",
+    "reserveAsset": "reserve asset",
+    "provisionAsset": "provision asset",
+    "credit": "credit",
+    "searchBy": "search by name...",
+    "title": {
+      "create": "create capitalsource",
+      "update": "update capitalsource",
+      "delete": "Delete this capitalsource?"
+    },
+    "validation": {
+      "comment": "Please specify a name!",
+      "type": "Please specify a type!",
+      "state": "Please specify a state!",
+      "groupUse": "Please select a value for group usage!",
+      "importAllowed": "Please select what kind of data import is allowed!",
+      "length": {
+        "comment": "Name is too long!",
+        "accountNumber": "IBAN is too long!",
+        "bankCode": "BIC is too long!"
+      }
+    }
+  },
+  "Contractpartner": {
+    "moneyflowComment": "the moneyflows default comment",
+    "adressData": "Address data (optional)",
+    "validityData": "Validity period",
+    "moneyflowDefaults": "Standard values for new moneyflows",
+    "street": "street",
+    "postcode": "postcode",
+    "town": "town",
+    "country": "country",
+    "accounts": "accounts",
+    "searchBy": "search by name...",
+    "title": {
+      "create": "create contractpartner",
+      "update": "update contractpartner",
+      "delete": "delete contractpartner"
+    },
+    "validation": {
+      "name": "Please specify a name!",
+      "postcode": "Postcode must be a number!",
+      "length": {
+        "name": "Name is too long!",
+        "street": "Street is too long!",
+        "moneyflowComment": "Comment is too long!",
+        "town": "Town is too long!",
+        "country": "Country is too long!"
+      }
+    }
+  },
+  "ContractpartnerAccount": {
+    "title": {
+      "create": "create contractpartner account",
+      "update": "update contractpartner account",
+      "delete": "delete contractpartner account"
+    },
+    "nothingFound": "No bank accounts found.",
+    "validation": {
+      "accountNumber": "Please specify the IBAN!",
+      "accountNumberMax": "The IBAN must not exceed 22 characters!",
+      "bankCode": "Please specify the BIC!",
+      "bankCodeMax": "The BIC must not exceed 11 characters!"
+    }
+  },
+  "ContractpartnerMatching": {
+    "matchingText": "partial text",
+    "searchBy": "search by partial text...",
+    "title": {
+      "create": "create contractpartner matching",
+      "update": "update contractpartner matching",
+      "delete": "delete contractpartner matching"
+    },
+    "validation": {
+      "matchingText": "Please specify a partial text!",
+      "matchingTextMax": "The partial text must not exceed 50 characters!"
+    }
+  },
+  "CompareData": {
+    "source": "source",
+    "title": "compare data",
+    "import": "data import",
+    "file": "file",
+    "importfile": "import file",
+    "format": "format",
+    "database": "database",
+    "result": "result",
+    "dataInSourceNotInDb": "Data the source contains, but not the database",
+    "dataNotInSourceInDb": "Data the database contains, but not the source",
+    "dataMatchingButWrongCapitalsource": "matching data but with wrong capitalsource",
+    "dataMatching": "matching data",
+    "validation": {
+      "compareDataFormat": "Please specify a format!",
+      "importfile": "Please specifiy the import file!"
+    }
+  },
+  "ETF": {
+    "isin": "ISIN",
+    "wkn": "WKN",
+    "ticker": "Ticker",
+    "chartUrl": "Chart URL",
+    "searchBy": "search by name...",
+    "markAsFav": "mark as favorite",
+    "partialTaxExemption": "partial tax exemption",
+    "title": {
+      "create": "create ETF",
+      "update": "update ETF",
+      "delete": "delete ETF"
+    },
+    "validation": {
+      "isin": "Please specifiy a ISIN!",
+      "name": "Please specifiy a Name!",
+      "wkn": "Please specifiy a WKN!",
+      "ticker": "Please specifiy a Ticker!",
+      "partialTaxExemption": "Please specify the partial tax exemption!",
+      "length": {
+        "isin": "ISIN is too long!",
+        "name": "Name is too long!",
+        "wkn": "WKN is too long!",
+        "ticker": "Ticker is too long!",
+        "chartUrl": "Chart URL is too long!"
+      }
+    }
+  },
+  "ETFFlow": {
+    "bookingdate": "bookingdate",
+    "bookingtime": "bookingtime",
+    "amount": "amount",
+    "price": "price per piece",
+    "sumprice": "sum price",
+    "preliminaryLumpSum": "lump sum",
+    "newBooking": "new booking",
+    "effective": "effective",
+    "calculateSale": "calculate sale",
+    "bid": "bid",
+    "ask": "ask",
+    "transactionCosts": "transaction costs",
+    "transactionCostsBuy": "Buy",
+    "transactionCostsSell": "Sale",
+    "transactionCostsAbsolute": "absolute",
+    "transactionCostsRelative": "relative",
+    "transactionCostsMaximum": "maximum",
+    "calculate": "calculate",
+    "shares": "shares",
+    "overall": "overall",
+    "payed": "payes",
+    "profit": "profit",
+    "calculateResults": {
+      "pieces": "pieces to be sold",
+      "originalBuyPrice": "original buy price",
+      "sellPrice": "sales price",
+      "chargeable": "after partial tax exemption",
+      "newBuyPrice": "new buy price",
+      "rebuyLosses": "resale loss",
+      "overallCosts": "final costs",
+      "accumulatedPreliminaryLumpSum": "reduced by preliminary lump sum"
+    },
+    "title": {
+      "create": "create ETF booking",
+      "update": "update ETF booking",
+      "delete": "delete ETF booking"
+    },
+    "validation": {
+      "amount": "Please specify an amount!",
+      "price": "Please specify a price per piece!",
+      "etfId": "Please select an ETF!",
+      "timestamp": "Please specify a bookingtime!",
+      "nanoseconds": "Bookingtime must be in the format 00:00:00:000!",
+      "askPrice": "Please specify the ask price!",
+      "bidPrice": "Please specify the bid price!",
+      "transactionCostsAbsolute": "Please specify the absolute transaction costs!",
+      "transactionCostsRelative": "Please specify the relative transaction costs!",
+      "transactionCostsMaximum": "Please specify the maximum transaction costs as decimal number!"
+    }
+  },
+  "ETFPreliminaryLumpSum": {
+    "newMonthly": "new (monthly)",
+    "newPiece": "new (piece price)",
+    "newYearly": "new (yearly)",
+    "price": "price per piece",
+    "yearlySum": "yearly sum",
+    "title": {
+      "create": "create ETF preliminary lump sums",
+      "update": "update ETF preliminary lump sums",
+      "delete": "delete ETF preliminary lump sums"
+    },
+    "amounts": "amounts",
+    "monthlyAmount": "amount {month}",
+    "validation": {
+      "etfId": "Please select an ETF!",
+      "year": "Please specify a year!",
+      "price": "Please specify a price per piece!",
+      "amount": "Please specify an amount!"
+    }
+  },
+  "Group": {
+    "searchBy": "search by name...",
+    "title": {
+      "create": "create group",
+      "update": "update group",
+      "delete": "delete group"
+    },
+    "validation": {
+      "name": "Please specify a name!"
+    }
+  },
+  "LoginView": {
+    "welcome": "Welcome!",
+    "enterYourData": "Please enter your user credentials and press „login“.",
+    "login": "login",
+    "by": "by"
+  },
+  "Modal": {
+    "cancel": "cancel"
+  },
+  "Moneyflow": {
+    "bookingdate": "bookingdate",
+    "invoicedate": "invoicedate",
+    "public": "public",
+    "private": "private",
+    "once": "once",
+    "favorite": "favorite",
+    "keep": "keep",
+    "renew": "renew",
+    "subbooking": "subbooking",
+    "remainder": "remainder",
+    "deleteReceipt": "delete receipt",
+    "noMatchingMoneyflow": "No matching moneyflow found!",
+    "apply": "apply",
+    "newBooking": "new booking",
+    "partner": "partner",
+    "reference": "reference",
+    "equal": "equal",
+    "caseSensitivity": "respect case sensitivity",
+    "regexp": "regular expression",
+    "onlyNegative": "only negative amounts",
+    "search": "search",
+    "1stGroupingCriteria": "1st grouping criteria",
+    "2ndGroupingCriteria": "2nd grouping criteria",
+    "orderBy": "order by",
+    "bookingMonth": "bookingmonth",
+    "bookingYear": "bookingyear",
+    "grouping": "grouping",
+    "title": {
+      "create": "create moneyflow",
+      "update": "update moneyflow",
+      "delete": "delete moneyflow",
+      "import": "import moneyflows",
+      "search": "search moneyflows"
+    },
+    "validation": {
+      "amount": "Please specify an amount!",
+      "bookingDate": "Please specify a bookingdate!",
+      "contractpartnerId": "Please specify a contractpartner!",
+      "comment": "Please specify a comment!",
+      "postingAccountId": "Please specify a posting account!",
+      "remainder": "remainder must be 0!",
+      "oneSearchCriteria": "At least 1 search criteria must be specified!",
+      "length": {
+        "comment": "Comment is too long!"
+      }
+    }
+  },
+  "MonthlySettlement": {
+    "headline": "monthlysettlement {month} {year}",
+    "title": {
+      "create": "create monthlysettlement",
+      "update": "update monthlysettlement",
+      "delete": "delete monthlysettlement {month} {year}"
+    },
+    "validation": {
+      "amount": "Please specify an amount!",
+      "month": "Please specify a month!"
+    }
+  },
+  "PostingAccount": {
+    "searchBy": "Search by name...",
+    "title": {
+      "create": "create postingaccount",
+      "update": "update postingaccount",
+      "delete": "delete postingaccount"
+    },
+    "validation": {
+      "name": "Please specify a name!",
+      "length": {
+        "name": "Name is too long!"
+      }
+    }
+  },
+  "PreDefMoneyflow": {
+    "onceAMonth": "only once a month",
+    "onceAMonthShort": "1x",
+    "lastUsed": "last used",
+    "createDate": "created",
+    "searchBy": "Search by contractpartner...",
+    "title": {
+      "create": "create predefined moneyflows",
+      "update": "update predefined moneyflows",
+      "delete": "delete predefined moneyflows"
+    },
+    "validation": {
+      "onceAMonth": "Please specify if only once a month!"
+    }
+  },
+  "Receipt": {
+    "importReceipts": "import receipts",
+    "receipt": "receipt",
+    "upload": "upload"
+  },
+  "Reports": {
+    "title": {
+      "charts": "charts",
+      "report": "moneyflows {month} {year}",
+      "costReporting": "cost reporting",
+      "costReportYear": "{year}",
+      "costReportYearTilYear": "{yearFrom} til {yearTil}",
+      "costReportMonthYear": "{month} {year}",
+      "costReportMonthYearTilMonthYear": "{monthFrom} {yearFrom} til {monthTil} {yearTil}",
+      "trends": "trends",
+      "trendGraph": "amount trends of selected capitalsources starting from {startLabel} til {endLabel}",
+      "trendMonthYear": "month / year",
+      "trendAmount": "amount"
+    },
+    "beginOfMonth": "start balance",
+    "endOfMonthFixed": "fixed end balance",
+    "endOfMonthCalculated": "calculated end balance",
+    "currentAmount": "current balance",
+    "state": "state",
+    "difference": "difference",
+    "calculated": "calculated",
+    "overview": "overview",
+    "ownCapital": "own capital",
+    "debtCapital": "debt capital",
+    "loans": "loans",
+    "fixedProfit": "fixed profit",
+    "calculatedProfit": "caluclated profit",
+    "included": "included",
+    "excluded": "excluded",
+    "aggregationOnMonths": "aggregation on months",
+    "aggregationOnYears": "aggregation on years",
+    "singlePostingAccount": "single postingaccount",
+    "multiplePostingAccounts": "multiple postingaccounts",
+    "settled": "settled"
+  },
+  "User": {
+    "title": {
+      "create": "create user",
+      "update": "update user",
+      "delete": "delete user",
+      "changePassword": "change password"
+    },
+    "loginData": "login data",
+    "permissions": "permissions",
+    "groupHistory": "group history",
+    "new": "new",
+    "role": "userrole",
+    "admin": "administrator",
+    "inactive": "locked user",
+    "standard": "standard user",
+    "import": "HBCI interface",
+    "oldPassword": "current password",
+    "newPassword": "new password",
+    "passwordVerify": "repeat password",
+    "searchBy": "search by name...",
+    "validation": {
+      "userName": "Please specify a name!",
+      "groupId": "Please select a group!",
+      "userIsNew": "Please select if new!",
+      "userRole": "Please select a userrole!",
+      "passwordNotEqual": "Both passwords do not match!",
+      "password": "Please specify a passowrd!",
+      "passwordOld": "Please specify the old password!",
+      "length": {
+        "userName": "Name is too long!"
+      }
+    }
+  },
+  "ErrorMessage": {
+    "technicalError": "technical error",
+    "technicalErrorWithStatus": "technical error: ({status}) {statusText}",
+    "CONTRACTPARTNER_DOES_NOT_EXIST": "Contractpartner does not exist!",
+    "CAPITALSOURCE_DOES_NOT_EXIST": "Capitalsource does not exist!",
+    "CAPITALSOURCE_STILL_REFERENCED": "The source of capital cannot be deleted because it is still referenced by a flow of money or a predefined flow of money!",
+    "CAPITALSOURCE_IN_USE_PERIOD": "There are flows of money for this source of capital outside the period of validitiy you've chosen!",
+    "CAPITALSOURCE_USE_OUT_OF_VALIDITY": "The source of capital you've chosen is not valid on the booking date you've specified!",
+    "CONTRACTPARTNER_IN_USE": "The contractpartner cannot be deleted because it is still in use!",
+    "CAPITALSOURCE_IS_NOT_SET": "The capitalsource must be specified!",
+    "CONTRACTPARTNER_IS_NOT_SET": "The contractpartner must be specified!",
+    "BOOKINGDATE_IN_WRONG_FORMAT": "The bookingdate must be a valid date",
+    "COMMENT_IS_NOT_SET": "Ein Kommentar muss angegeben werden!",
+    "USERNAME_PASSWORD_WRONG": "The specified username or password are wrong!",
+    "PASSWORD_NOT_MATCHING": "Wrong Password!",
+    "ACCOUNT_IS_LOCKED": "Your account as been locked!",
+    "PASSWORD_MUST_BE_CHANGED": "You must change your password!",
+    "NO_SEARCH_CRITERIA_ENTERED": "No search criteria specified!",
+    "USER_HAS_DATA": "This user has already entered data and may therefore not be deleted!",
+    "WRONG_FILE_FORMAT": "The specified file is not parseable! Maybe you've selected the wrong format or file?",
+    "AMOUNT_ZERO": "The amount must be higher or lower than 0 but not 0!",
+    "NAME_ALREADY_EXISTS": "The name already exists!",
+    "GROUP_IN_USE": "You may not delete a group while there where/are users assigned to it!",
+    "NAME_MUST_NOT_BE_EMPTY": "The Field 'name' must not be empty!",
+    "ACCOUNT_NUMBER_TO_LONG": "The IBAN must not be longer than 34 digits!",
+    "BANK_CODE_TO_LONG": "The BIC must not be longer than 11 digits!",
+    "VALIDFROM_AFTER_VALIDTIL": "The date specified in 'valid from' must before the date specified 'valid til'!",
+    "LOGGED_OUT": "Access Denied! You are not logged on!",
+    "POSTING_ACCOUNT_NOT_SPECIFIED": "A postingaccount must be specified!",
+    "CONTRACTPARTNER_NO_LONGER_VALID": "The selected contractpartner is not valid at the given date!",
+    "MONEYFLOWS_OUTSIDE_VALIDITY_PERIOD": "There are moneyflows with a bookingdate outside your given validity period!",
+    "GROUP_WITH_SAME_NAME_ALREADY_EXISTS": "Another group with the same name exists already!",
+    "VALIDFROM_NOT_DEFINED": "Valid from must be specified!",
+    "USER_WITH_SAME_NAME_ALREADY_EXISTS": "Another user with the same name exists already!",
+    "GROUP_MUST_BE_SPECIFIED": "You must specify a group!",
+    "VALIDFROM_EARLIER_THAN_TOMORROW": "Validfrom must be tomorrow or later!",
+    "BOOKINGDATE_OUTSIDE_GROUP_ASSIGNMENT": "You cant create a moneyflow for a date you are assigned to a different group than the current!",
+    "POSTINGACCOUNT_STILL_REFERENCED": "The posting account cannot be deleted because it is still referenced by a flow of money or a predefined flow of money!",
+    "POSTINGACCOUNT_WITH_SAME_NAME_ALREADY_EXISTS": "Another posting account with the same name exists already!",
+    "ACCOUNT_NUMBER_CONTAINS_ILLEGAL_CHARS_OR_IS_EMPTY": "The IBAN must not be empty and must only contain letters and numbers!",
+    "BANK_CODE_CONTAINS_ILLEGAL_CHARS_OR_IS_EMPTY": "The BIC must not be empty and must only contain letters and numbers!",
+    "ACCOUNT_NUMBER_CONTAINS_ILLEGAL_CHARS": "The IBAN must only contain letters and numbers",
+    "BANK_CODE_CONTAINS_ILLEGAL_CHARS": "The BIC must only contain letters and numbers!",
+    "ACCOUNT_ALREADY_ASSIGNED_TO_OTHER_PARTNER": "The contractpartneraccount you have entered is already assigned to another contractpartner already!",
+    "CAPITALSOURCE_INVALID": "Capitalsource must not be used!",
+    "SPLIT_ENTRIES_AMOUNT_IS_NOT_EQUALS_MONEYFLOW_AMOUNT": "The summed up amount of the split entries does not match the amount of the moneyflow!",
+    "PIECES_NOT_SET": "Please enter a quantity!",
+    "NO_ETF_SPECIFIED": "Please choose an ETF!",
+    "AMOUNT_TO_HIGH": "More pieces entered than available!",
+    "PRICE_NOT_SET": "Price must be set!",
+    "UNSUPPORTED_MEDIA_TYPE": "Only JPEG or PDF documents are supported!",
+    "RECEIPT_ALREADY_EXISTS": "The selected moneyflow has already a receipt attached!",
+    "AMOUNT_TO_BIG": "Amount to big!",
+    "MEDIA_TYPE_UNKNOWN": "Unknown mediatype!",
+    "AMOUNT_HAS_TO_BE_SPECIFIED": "An amount has to be specified!",
+    "MONEYFLOW_DOES_NOT_EXISTS": "The specified moneyflow does not exist!",
+    "YEAR_NOT_SET": "Year must be set!",
+    "ETF_PRELIMINARY_LUMP_SUM_ALREADY_EXISTS": "Preliminary lump sum for this year already exists!",
+    "ETF_PRELIMINARY_LUMP_SUM_DOES_NOT_EXIST": "Preliminary lump sum for this year does not exist!",
+    "ISIN_MUST_NOT_BE_EMPTY": "ISIN must be set!",
+    "WKN_MUST_NOT_BE_EMPTY": "WKN must be set!",
+    "TICKER_MUST_NOT_BE_EMPTY": "Ticker must be set!",
+    "ETF_STILL_REFERENCED": "The posting account cannot be deleted because it is still referenced inside a depot or has preliminary lump sums recorded!",
+    "ETF_PRELIMINARY_LUMP_SUM_PIECE_PRICE_MUST_BE_NULL": "No piece price must be entered in montly mode!",
+    "ETF_PRELIMINARY_LUMP_SUM_MONTHLY_PRICES_MUST_BE_NULL": "No monthly prices must be entered in single price mode!",
+    "CONTRACTPARTNER_MAPPING_DUPLICATE": "A contractpartner mapping with this partial text and the same contractpartner already exists!",
+    "ETF_PRELIMINARY_LUMP_SUM_ONLY_YEARLY_PRICE_MUST_BE_SET": "Only a yearly price may be entered when entering a lump sum for the year!"
+  }
 }

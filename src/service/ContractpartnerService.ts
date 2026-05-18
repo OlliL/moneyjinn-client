@@ -1,10 +1,10 @@
-import AbstractService from "@/service/AbstractService";
+import { CrudContractpartnerControllerApi } from "@/api";
 import type { Contractpartner } from "@/model/contractpartner/Contractpartner";
+import AbstractService from "@/service/AbstractService";
 import {
   mapContractpartnerToTransport,
   mapContractpartnerTransportToModel,
 } from "./mapper/ContractpartnerTransportMapper";
-import { CrudContractpartnerControllerApi } from "@/api";
 
 class ContractpartnerService extends AbstractService {
   private readonly api: CrudContractpartnerControllerApi;

@@ -155,10 +155,6 @@ type MoneyflowGroup = {
 };
 
 const props = defineProps({
-  moneyflowGroupKey: {
-    type: String,
-    required: true,
-  },
   moneyflowGroup: {
     type: Object as PropType<MoneyflowGroup>,
     required: true,
@@ -191,6 +187,9 @@ const alternateRowBackground = ref(new Map<number, boolean>());
 watch(
   () => props.moneyflowGroup.moneyflows,
   (moneyflows) => {
+    rowsPerMoneyflow.value = new Map();
+    firstIndexForMoneyflow.value = new Map();
+    alternateRowBackground.value = new Map();
     let i = 0;
     moneyflows.forEach((mmf) => {
       const curVal = rowsPerMoneyflow.value.get(mmf.id);

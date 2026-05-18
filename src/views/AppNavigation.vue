@@ -15,7 +15,7 @@
   <!-- Mobile Navigation-->
   <div class="md:hidden flex items-center justify-between p-2 border-b">
     <router-link
-      class="navbar-brand bg-light"
+      class="text-foreground no-underline"
       :to="{ name: Routes.Home, force: true }"
       ><small>moneyjin {{ version }}</small></router-link
     >
@@ -321,7 +321,7 @@
     <MenubarMenu>
       <MenubarTrigger as-child>
         <router-link
-          class="navbar-brand bg-light"
+          class="text-foreground no-underline"
           :to="{ name: Routes.Home, force: true }"
           ><small>moneyjin {{ version }}</small></router-link
         ></MenubarTrigger

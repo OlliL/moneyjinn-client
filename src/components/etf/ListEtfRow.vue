@@ -18,37 +18,21 @@
       <Star class="h-5 w-5 transition-all fill-primary text-primary"
     /></TableCell>
     <TableCell class="border-r text-start" v-if="!etf.isFavorite"></TableCell>
-    <TableCell class="w-0 whitespace-nowrap text-center p-0">
-      <Button
-        variant="ghost"
-        size="icon"
-        @click="editEtf"
-        :title="$t('General.edit')"
-        class="h-8 w-8 cursor-pointer"
-      >
-        <Pencil class="h-4 w-4" />
-      </Button>
-    </TableCell>
-    <TableCell class="w-0 border-l whitespace-nowrap text-center p-0">
-      <Button
-        variant="ghost"
-        size="icon"
-        @click="deleteEtf"
-        :title="$t('General.delete')"
-        class="h-8 w-8 cursor-pointer"
-      >
-        <Trash2 class="h-4 w-4" />
-      </Button>
-    </TableCell>
+    <ButtonTableIcon :title="$t('General.edit')" @click="editEtf">
+      <Pencil class="h-4 w-4" />
+    </ButtonTableIcon>
+    <ButtonTableIcon :title="$t('General.delete')" @click="deleteEtf">
+      <Trash2 class="h-4 w-4" />
+    </ButtonTableIcon>
   </TableRow>
 </template>
 <script lang="ts" setup>
-import { Button } from "@/components/ui/button";
 import { TableCell, TableRow } from "@/components/ui/table";
 import type { Etf } from "@/model/etf/Etf";
 import { formatNumber } from "@/tools/views/FormatNumber";
 import { Pencil, Star, Trash2 } from "lucide-vue-next";
 import { computed, type PropType } from "vue";
+import ButtonTableIcon from "../ButtonTableIcon.vue";
 import SpanAmount from "../SpanAmount.vue";
 
 const props = defineProps({

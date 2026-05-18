@@ -1,9 +1,9 @@
+import type { ImportedMoneyflowTransport } from "@/api";
+import type { ImportedMoneyflow } from "@/model/moneyflow/ImportedMoneyflow";
 import {
   mapMoneyflowToTransport,
   mapMoneyflowTransportToModel,
 } from "./MoneyflowTransportMapper";
-import type { ImportedMoneyflow } from "@/model/moneyflow/ImportedMoneyflow";
-import type { ImportedMoneyflowTransport } from "@/api";
 
 export function mapImportedMoneyflowTransportToModel(
   transport: ImportedMoneyflowTransport,

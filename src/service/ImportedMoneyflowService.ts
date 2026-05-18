@@ -1,14 +1,14 @@
+import {
+  ImportedMoneyflowControllerApi,
+  type ImportImportedMoneyflowRequest,
+} from "@/api";
+import type { ImportedMoneyflow } from "@/model/moneyflow/ImportedMoneyflow";
 import AbstractService from "@/service/AbstractService";
 import {
   mapImportedMoneyflowToTransport,
   mapImportedMoneyflowTransportToModel,
 } from "./mapper/ImportedMoneyflowTransportMapper";
-import type { ImportedMoneyflow } from "@/model/moneyflow/ImportedMoneyflow";
 import { mapMoneyflowSplitEntryToTransport } from "./mapper/MoneyflowSplitEntryTransportMapper";
-import {
-  ImportedMoneyflowControllerApi,
-  type ImportImportedMoneyflowRequest,
-} from "@/api";
 
 class ImportedMoneyflowService extends AbstractService {
   private readonly api: ImportedMoneyflowControllerApi;

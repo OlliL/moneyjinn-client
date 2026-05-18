@@ -1,10 +1,10 @@
-import AbstractService from "@/service/AbstractService";
+import { CrudEtfPreliminaryLumpSumControllerApi } from "@/api";
 import type { EtfPreliminaryLumpSum } from "@/model/etf/EtfPreliminaryLumpSum";
+import AbstractService from "@/service/AbstractService";
 import {
   mapEtfPreliminaryLumpSumModelToTransport,
   mapEtfPreliminaryLumpSumTransportToModel,
 } from "./mapper/EtfPreliminaryLumpSumTransportMapper";
-import { CrudEtfPreliminaryLumpSumControllerApi } from "@/api";
 
 class EtfPreliminaryLumpSumService extends AbstractService {
   private readonly api: CrudEtfPreliminaryLumpSumControllerApi;

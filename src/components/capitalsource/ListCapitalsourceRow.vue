@@ -19,38 +19,26 @@
     <TableCell class="text-center border-r">
       <b :class="importAllowedColorClass">{{ importAllowedString }}</b>
     </TableCell>
-    <TableCell class="w-0 whitespace-nowrap text-center p-0" v-if="owner">
-      <Button
-        variant="ghost"
-        size="icon"
-        @click="editCapitalsource"
-        :title="$t('General.edit')"
-        class="h-8 w-8 cursor-pointer"
-      >
-        <Pencil class="h-4 w-4" />
-      </Button>
-    </TableCell>
-    <TableCell
-      class="w-0 border-l whitespace-nowrap text-center p-0"
+    <ButtonTableIcon
       v-if="owner"
+      :title="$t('General.edit')"
+      @click="editCapitalsource"
     >
-      <Button
-        variant="ghost"
-        size="icon"
-        @click="deleteCapitalsource"
-        :title="$t('General.delete')"
-        class="h-8 w-8 cursor-pointer"
-      >
-        <Trash2 class="h-4 w-4" />
-      </Button>
-    </TableCell>
+      <Pencil class="h-4 w-4" />
+    </ButtonTableIcon>
+    <ButtonTableIcon
+      v-if="owner"
+      :title="$t('General.delete')"
+      @click="deleteCapitalsource"
+    >
+      <Trash2 class="h-4 w-4" />
+    </ButtonTableIcon>
   </TableRow>
 </template>
 <script lang="ts" setup>
 import { Pencil, Trash2 } from "lucide-vue-next";
 import { computed, type PropType } from "vue";
 
-import { Button } from "@/components/ui/button";
 import { TableCell, TableRow } from "@/components/ui/table";
 
 import SpanDate from "../SpanDate.vue";
@@ -59,6 +47,7 @@ import type { Capitalsource } from "@/model/capitalsource/Capitalsource";
 import { capitalsourceImportNames } from "@/model/capitalsource/CapitalsourceImport";
 import { capitalsourceStateNames } from "@/model/capitalsource/CapitalsourceState";
 import { capitalsourceTypeNames } from "@/model/capitalsource/CapitalsourceType";
+import ButtonTableIcon from "../ButtonTableIcon.vue";
 import SpanBoolean from "../SpanBoolean.vue";
 import SpanIban from "../SpanIban.vue";
 

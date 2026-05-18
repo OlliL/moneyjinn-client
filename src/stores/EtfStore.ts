@@ -1,11 +1,11 @@
-import { mapEtfTransportToModel } from "@/service/mapper/EtfTransportMapper";
 import { WebSocketSingleton } from "@/config/WebSocketSingleton";
 import type { Etf } from "@/model/etf/Etf";
 import type { SelectBoxValue } from "@/model/SelectBoxValue";
+import type { EtfChangedEventTransport } from "@/model/wsevent/EtfChangedEventTransport";
+import CrudEtfService from "@/service/CrudEtfService";
+import { mapEtfTransportToModel } from "@/service/mapper/EtfTransportMapper";
 import { defineStore } from "pinia";
 import { ref } from "vue";
-import CrudEtfService from "@/service/CrudEtfService";
-import type { EtfChangedEventTransport } from "@/model/wsevent/EtfChangedEventTransport";
 
 export const useEtfStore = defineStore("etf", () => {
   const etf = ref([] as Array<Etf>);

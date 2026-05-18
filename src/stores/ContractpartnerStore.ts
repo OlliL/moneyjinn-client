@@ -1,9 +1,9 @@
-import ContractpartnerService from "@/service/ContractpartnerService";
-import { mapContractpartnerTransportToModel } from "@/service/mapper/ContractpartnerTransportMapper";
 import { WebSocketSingleton } from "@/config/WebSocketSingleton";
 import type { Contractpartner } from "@/model/contractpartner/Contractpartner";
-import type { ContractpartnerChangedEventTransport } from "@/model/wsevent/ContractpartnerChangedEventTransport";
 import type { SelectBoxValue } from "@/model/SelectBoxValue";
+import type { ContractpartnerChangedEventTransport } from "@/model/wsevent/ContractpartnerChangedEventTransport";
+import ContractpartnerService from "@/service/ContractpartnerService";
+import { mapContractpartnerTransportToModel } from "@/service/mapper/ContractpartnerTransportMapper";
 import { defineStore } from "pinia";
 import { ref } from "vue";
 

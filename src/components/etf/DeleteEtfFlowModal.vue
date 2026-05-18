@@ -1,91 +1,46 @@
 <template>
-  <ModalVue :title="$t('ETFFlow.title.delete')" ref="modalComponent">
-    <template #body>
-      <DivError :server-errors="serverErrors" />
-      <div class="flex flex-col rounded-xl border bg-card overflow-hidden">
-        <Table>
-          <TableBody>
-            <TableRow class="hover:bg-transparent border-b last:border-0">
-              <TableCell
-                class="font-normal text-muted-foreground max-w-[11rem] w-44 pl-4 pr-2 py-3 whitespace-normal break-words"
-              >
-                {{ $t("General.etf") }}
-              </TableCell>
-              <TableCell class="font-medium text-foreground pr-4 py-3">
-                {{ etfName }}
-              </TableCell>
-            </TableRow>
+  <ModalDelete
+    :title="$t('ETFFlow.title.delete')"
+    :server-errors="serverErrors"
+    ref="modalComponent"
+    @confirm="deleteEtfFlow"
+  >
+    <template #details>
+      <ModalDeleteRow :label="$t('ETFFlow.bookingdate')" highlight-value>
+        {{ timestampString }}
+      </ModalDeleteRow>
 
-            <TableRow class="hover:bg-transparent border-b last:border-0">
-              <TableCell
-                class="font-normal text-muted-foreground max-w-[11rem] w-44 pl-4 pr-2 py-3 whitespace-normal break-words"
-              >
-                {{ $t("ETFFlow.bookingdate") }}
-              </TableCell>
-              <TableCell
-                class="font-semibold text-foreground pr-4 py-3 text-base"
-              >
-                {{ timestampString }}
-              </TableCell>
-            </TableRow>
+      <ModalDeleteRow :label="$t('General.etf')">
+        {{ etfName }}
+      </ModalDeleteRow>
 
-            <TableRow class="hover:bg-transparent border-b last:border-0">
-              <TableCell
-                class="font-normal text-muted-foreground max-w-[11rem] w-44 pl-4 pr-2 py-3 whitespace-normal break-words"
-              >
-                {{ $t("ETFFlow.amount") }}
-              </TableCell>
-              <TableCell class="font-medium pr-4 py-3" :class="amountClass">
-                {{ amountString }}
-              </TableCell>
-            </TableRow>
+      <ModalDeleteRow :label="$t('ETFFlow.amount')">
+        <span :class="amountClass">{{ amountString }}</span>
+      </ModalDeleteRow>
 
-            <TableRow class="hover:bg-transparent border-b last:border-0">
-              <TableCell
-                class="font-normal text-muted-foreground max-w-[11rem] w-44 pl-4 pr-2 py-3 whitespace-normal break-words"
-              >
-                {{ $t("ETFFlow.price") }}
-              </TableCell>
-              <TableCell class="font-medium text-foreground pr-4 py-3">
-                <SpanAmount :amount="etfFlow.price" />
-              </TableCell>
-            </TableRow>
-          </TableBody>
-        </Table>
-      </div>
+      <ModalDeleteRow :label="$t('ETFFlow.price')">
+        <SpanAmount :amount="etfFlow.price" />
+      </ModalDeleteRow>
     </template>
-    <template #footer>
-      <Button
-        variant="destructive"
-        class="flex items-center gap-2 px-6"
-        @click="deleteEtfFlow"
-      >
-        <Trash2 />
-        {{ $t("General.delete") }}
-      </Button>
-    </template>
-  </ModalVue>
+  </ModalDelete>
 </template>
 
 <script lang="ts" setup>
-import { Button } from "@/components/ui/button";
-import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import type { EtfFlow } from "@/model/etf/EtfFlow";
 import CrudEtfFlowService from "@/service/CrudEtfFlowService";
 import { formatDateWithTime } from "@/tools/views/FormatDate";
 import { formatNumber, redIfNegative } from "@/tools/views/FormatNumber";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
-import { Trash2 } from "lucide-vue-next";
 import { computed, ref, useTemplateRef } from "vue";
-import DivError from "../DivError.vue";
-import ModalVue from "../Modal.vue";
+import ModalDelete from "../ModalDelete.vue";
+import ModalDeleteRow from "../ModalDeleteRow.vue";
 import SpanAmount from "../SpanAmount.vue";
 
 const serverErrors = ref(new Array<string>());
 
 const etfFlow = ref({} as EtfFlow);
 const etfName = ref("");
-const modalComponent = useTemplateRef<typeof ModalVue>("modalComponent");
+const modalComponent = useTemplateRef<typeof ModalDelete>("modalComponent");
 const emit = defineEmits(["etfFlowDeleted"]);
 
 const amountClass = computed(() => {

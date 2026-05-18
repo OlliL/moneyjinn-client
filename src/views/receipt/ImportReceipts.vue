@@ -39,28 +39,24 @@
 </template>
 
 <script lang="ts" setup>
-import { useForm } from "vee-validate";
-import { onMounted, ref, useTemplateRef } from "vue";
-
 import ButtonSubmit from "@/components/ButtonSubmit.vue";
-import DeleteMoneyflowModalVue from "@/components/moneyflow/DeleteMoneyflowModal.vue";
 import DivError from "@/components/DivError.vue";
+import InputFile from "@/components/InputFile.vue";
+import DeleteMoneyflowModalVue from "@/components/moneyflow/DeleteMoneyflowModal.vue";
 import EditMoneyflowModalVue from "@/components/moneyflow/EditMoneyflowModal.vue";
 import ImportReceiptsRowVue from "@/components/moneyflow/ImportReceiptsRow.vue";
-import InputFile from "@/components/InputFile.vue";
-
-import { handleBackendError } from "@/tools/views/HandleBackendError";
-
 import type { ImportedMoneyflowReceipt } from "@/model/moneyflow/ImportedMoneyflowReceipt";
-
 import ImportedMoneyflowReceiptService from "@/service/ImportedMoneyflowReceiptService";
 import MoneyflowService from "@/service/MoneyflowService";
+import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { Upload } from "lucide-vue-next";
+import { useForm } from "vee-validate";
+import { onMounted, ref, useTemplateRef } from "vue";
 
 const serverErrors = ref(new Array<string>());
 
 const importedMoneyflowReceipts = ref(new Array<ImportedMoneyflowReceipt>());
-const files = ref({} as FileList);
+const files = ref<FileList | null>(null);
 
 const deleteModal =
   useTemplateRef<typeof DeleteMoneyflowModalVue>("deleteModal");
@@ -88,13 +84,13 @@ const loadData = () => {
 
 const deleteMoneyflow = (id: number) => {
   MoneyflowService.fetchMoneyflow(id).then((mmf) => {
-    (deleteModal.value as typeof DeleteMoneyflowModalVue)._show(mmf);
+    deleteModal.value?._show(mmf);
   });
 };
 
 const editMoneyflow = (id: number, receipt: ImportedMoneyflowReceipt) => {
   MoneyflowService.fetchMoneyflow(id).then((mmf) => {
-    (editModal.value as typeof EditMoneyflowModalVue)._show(mmf, receipt);
+    editModal.value?._show(mmf, receipt);
   });
 };
 
@@ -109,7 +105,7 @@ const removeReceiptFromView = (id: number) => {
 const uploadReceipts = handleSubmit(async () => {
   serverErrors.value = new Array<string>();
   const receipts = new Array<ImportedMoneyflowReceipt>();
-  if (files.value != null) {
+  if (files.value) {
     for (let file of files.value) {
       const arrayBuffer = new Uint8Array(await file.arrayBuffer());
       let fileContents: string = "";
@@ -136,7 +132,7 @@ const uploadReceipts = handleSubmit(async () => {
         handleBackendError(backendError, serverErrors);
       });
     uploadReceiptsForm.value?.reset();
-    files.value = {} as FileList;
+    files.value = null;
   }
 });
 </script>

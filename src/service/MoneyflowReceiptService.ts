@@ -1,8 +1,8 @@
 import { MoneyflowReceiptControllerApi } from "@/api";
-import AbstractService from "@/service/AbstractService";
 import { ErrorCode, getErrorMessage } from "@/model/ErrorCode";
 import type { MoneyflowReceipt } from "@/model/moneyflow/MoneyflowReceipt";
 import { MoneyflowReceiptType } from "@/model/moneyflow/MoneyflowReceiptType";
+import AbstractService from "@/service/AbstractService";
 
 class MoneyflowReceiptService extends AbstractService {
   private readonly api: MoneyflowReceiptControllerApi;

@@ -208,7 +208,6 @@ const schema = {
   ),
 };
 
-const dataLoaded = ref(false);
 const dataCompared = ref(false);
 const startDate = ref(new Date() as Date | undefined);
 const endDate = ref(new Date() as Date | undefined);
@@ -276,7 +275,6 @@ const compareDatasNotInDatabaseCountClass = computed(() => {
 });
 
 const loadData = () => {
-  dataLoaded.value = false;
   const _startDate = new Date();
   _startDate.setDate(1);
   const _endDate = new Date();
@@ -306,8 +304,6 @@ const loadData = () => {
           capitalsourceComment.value = capitalsource.comment;
         }
       }
-
-      dataLoaded.value = true;
     })
     .catch((backendError) => {
       handleBackendError(backendError, serverErrors);

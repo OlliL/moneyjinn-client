@@ -93,21 +93,18 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref, watch } from "vue";
-import { useI18n } from "vue-i18n";
-import { Trash2, Euro, ArrowLeft } from "lucide-vue-next";
-import { Separator } from "../ui/separator";
-
 import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-
+import { Label } from "@/components/ui/label";
 import { generateErrorData } from "@/tools/views/ErrorData";
 import { amountSchema, globErr } from "@/tools/views/ZodUtil";
+import { ArrowLeft, Euro, Trash2 } from "lucide-vue-next";
+import { computed, ref, watch } from "vue";
+import { useI18n } from "vue-i18n";
 import { any, number, string } from "zod";
-
 import InputStandard from "../InputStandard.vue";
 import SelectPostingAccount from "../postingaccount/SelectPostingAccount.vue";
+import { Separator } from "../ui/separator";
 
 const { t } = useI18n();
 

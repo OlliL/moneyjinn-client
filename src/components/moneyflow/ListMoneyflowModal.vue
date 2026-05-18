@@ -159,8 +159,8 @@ import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 import { MoneyflowReceiptType } from "@/model/moneyflow/MoneyflowReceiptType";
 
 import MoneyflowReceiptService from "@/service/MoneyflowReceiptService";
-import SpanDate from "../SpanDate.vue";
 import SpanAmount from "../SpanAmount.vue";
+import SpanDate from "../SpanDate.vue";
 
 const serverErrors = ref(new Array<string>());
 
@@ -209,13 +209,8 @@ const loadReceipt = (id: number) => {
 
 const processReceipt = (receiptType: MoneyflowReceiptType, receipt: string) => {
   receiptBase64.value = receipt;
-
-  if (receiptType === MoneyflowReceiptType.JPEG) {
-    isJpeg.value = true;
-  } else if (receiptType === MoneyflowReceiptType.PDF) {
-    isJpeg.value = false;
-  }
-  isPdf.value = !isJpeg.value;
+  isJpeg.value = receiptType === MoneyflowReceiptType.JPEG;
+  isPdf.value = receiptType === MoneyflowReceiptType.PDF;
 };
 defineExpose({ _show });
 </script>

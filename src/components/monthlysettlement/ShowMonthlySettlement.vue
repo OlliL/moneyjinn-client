@@ -161,8 +161,8 @@ const props = defineProps({
 });
 
 const dataLoaded = ref(false);
-const monthlySettlementsNoCredit = ref({} as Array<MonthlySettlement>);
-const monthlySettlementsCredit = ref({} as Array<MonthlySettlement>);
+const monthlySettlementsNoCredit = ref([] as Array<MonthlySettlement>);
+const monthlySettlementsCredit = ref([] as Array<MonthlySettlement>);
 const monthlySettlementNoCreditSum = ref(0);
 const monthlySettlementCreditSum = ref(0);
 const prevMonth = ref(0);
