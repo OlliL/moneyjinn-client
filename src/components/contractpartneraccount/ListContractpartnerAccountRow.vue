@@ -6,28 +6,20 @@
     <TableCell class="text-left border">
       {{ mca.bankCode }}
     </TableCell>
-    <TableCell class="text-right border">
-      <Button
-        variant="ghost"
-        size="icon"
-        @click="editContractpartnerAccount"
-        :title="$t('General.edit')"
-        class="h-8 w-8 cursor-pointer"
-      >
+    <TableActionButton
+      :title="$t('General.edit')"
+      cell-class="text-right border"
+      @click="editContractpartnerAccount"
+    >
         <Pencil class="h-4 w-4" />
-      </Button>
-    </TableCell>
-    <TableCell class="text-right border">
-      <Button
-        variant="ghost"
-        size="icon"
-        @click="deleteContractpartnerAccount"
-        :title="$t('General.delete')"
-        class="h-8 w-8 cursor-pointer"
-      >
+    </TableActionButton>
+    <TableActionButton
+      :title="$t('General.delete')"
+      cell-class="text-right border"
+      @click="deleteContractpartnerAccount"
+    >
         <Trash2 class="h-4 w-4" />
-      </Button>
-    </TableCell>
+    </TableActionButton>
   </TableRow>
 </template>
 
@@ -35,11 +27,11 @@
 import { Pencil, Trash2 } from "lucide-vue-next";
 import type { PropType } from "vue";
 
-import { Button } from "@/components/ui/button";
 import { TableCell, TableRow } from "@/components/ui/table";
 
 import type { ContractpartnerAccount } from "@/model/contractpartneraccount/ContractpartnerAccount";
 import SpanIban from "../SpanIban.vue";
+import TableActionButton from "../TableActionButton.vue";
 
 const props = defineProps({
   mca: {

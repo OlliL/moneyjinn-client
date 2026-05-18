@@ -231,7 +231,6 @@ import SelectContractpartner from "../contractpartner/SelectContractpartner.vue"
 import SelectPostingAccount from "../postingaccount/SelectPostingAccount.vue";
 
 const isExpanded = ref(false);
-const toggleCollapse = () => (isExpanded.value = !isExpanded.value);
 
 const { t } = useI18n();
 
@@ -388,13 +387,12 @@ const resetEditForm = () => {
     mmf.value.moneyflowSplitEntries = new Array<MoneyflowSplitEntry>();
     addNewMoneyflowSplitEntryRow();
     addNewMoneyflowSplitEntryRow();
-    document.getElementById("collapseSplitEntries")?.classList.remove("show");
+    isExpanded.value = false;
   } else {
     for (let mse of mmf.value.moneyflowSplitEntries) {
       originalMoneyflowSplitEntryIds.value.push(mse.id);
     }
     addNewMoneyflowSplitEntryRow();
-    document.getElementById("collapseSplitEntries")?.classList.add("show");
     isExpanded.value = true;
   }
   toggleMoneyflowFieldsForMse();

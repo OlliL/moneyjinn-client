@@ -1,113 +1,47 @@
 <template>
-  <ModalVue :title="$t('Moneyflow.title.delete')" ref="modalComponent">
-    <template #body>
-      <DivError :server-errors="serverErrors" />
-      <div class="flex flex-col rounded-xl border bg-card overflow-hidden">
-        <Table>
-          <TableBody>
-            <TableRow class="hover:bg-transparent border-b last:border-0">
-              <TableCell
-                class="font-normal text-muted-foreground max-w-[11rem] w-44 pl-4 pr-2 py-3 whitespace-normal break-words"
-              >
-                {{ $t("General.amount") }}
-              </TableCell>
-              <TableCell
-                class="font-semibold text-foreground pr-4 py-3 text-base"
-              >
-                <SpanAmount :amount="mmf.amount" />
-              </TableCell>
-            </TableRow>
+  <ModalDelete
+    :title="$t('Moneyflow.title.delete')"
+    :server-errors="serverErrors"
+    ref="modalComponent"
+    @confirm="deleteMoneyflow"
+  >
+    <template #details>
+      <ModalDeleteRow :label="$t('General.amount')" highlight-value>
+        <SpanAmount :amount="mmf.amount" />
+      </ModalDeleteRow>
 
-            <TableRow class="hover:bg-transparent border-b last:border-0">
-              <TableCell
-                class="font-normal text-muted-foreground max-w-[11rem] w-44 pl-4 pr-2 py-3 whitespace-normal break-words"
-              >
-                {{ $t("Moneyflow.bookingdate") }}
-              </TableCell>
-              <TableCell class="font-medium text-foreground pr-4 py-3">
-                <SpanDate :date="mmf.bookingDate" />
-              </TableCell>
-            </TableRow>
+      <ModalDeleteRow :label="$t('Moneyflow.bookingdate')">
+        <SpanDate :date="mmf.bookingDate" />
+      </ModalDeleteRow>
 
-            <TableRow class="hover:bg-transparent border-b last:border-0">
-              <TableCell
-                class="font-normal text-muted-foreground max-w-[11rem] w-44 pl-4 pr-2 py-3 whitespace-normal break-words"
-              >
-                {{ $t("Moneyflow.invoicedate") }}
-              </TableCell>
-              <TableCell class="font-medium text-foreground pr-4 py-3">
-                <SpanDate :date="mmf.invoiceDate" />
-              </TableCell>
-            </TableRow>
+      <ModalDeleteRow :label="$t('Moneyflow.invoicedate')">
+        <SpanDate :date="mmf.invoiceDate" />
+      </ModalDeleteRow>
 
-            <TableRow class="hover:bg-transparent border-b last:border-0">
-              <TableCell
-                class="font-normal text-muted-foreground max-w-[11rem] w-44 pl-4 pr-2 py-3 whitespace-normal break-words"
-              >
-                {{ $t("General.contractpartner") }}
-              </TableCell>
-              <TableCell class="font-medium text-foreground pr-4 py-3">
-                {{ mmf.contractpartnerName }}
-              </TableCell>
-            </TableRow>
+      <ModalDeleteRow :label="$t('General.contractpartner')">
+        {{ mmf.contractpartnerName }}
+      </ModalDeleteRow>
 
-            <TableRow class="hover:bg-transparent border-b last:border-0">
-              <TableCell
-                class="font-normal text-muted-foreground max-w-[11rem] w-44 pl-4 pr-2 py-3 whitespace-normal break-words"
-              >
-                {{ $t("General.capitalsource") }}
-              </TableCell>
-              <TableCell class="font-medium text-foreground pr-4 py-3">
-                {{ mmf.capitalsourceComment }}
-              </TableCell>
-            </TableRow>
+      <ModalDeleteRow :label="$t('General.capitalsource')">
+        {{ mmf.capitalsourceComment }}
+      </ModalDeleteRow>
 
-            <TableRow class="hover:bg-transparent border-b last:border-0">
-              <TableCell
-                class="font-normal text-muted-foreground max-w-[11rem] w-44 pl-4 pr-2 py-3 whitespace-normal break-words"
-              >
-                {{ $t("General.comment") }}
-              </TableCell>
-              <TableCell class="font-medium text-foreground pr-4 py-3">
-                {{ mmf.comment }}
-              </TableCell>
-            </TableRow>
+      <ModalDeleteRow :label="$t('General.comment')">
+        {{ mmf.comment }}
+      </ModalDeleteRow>
 
-            <TableRow class="hover:bg-transparent border-b last:border-0">
-              <TableCell
-                class="font-normal text-muted-foreground max-w-[11rem] w-44 pl-4 pr-2 py-3 whitespace-normal break-words"
-              >
-                {{ $t("General.postingAccount") }}
-              </TableCell>
-              <TableCell class="font-medium text-foreground pr-4 py-3">
-                {{ mmf.postingAccountName }}
-              </TableCell>
-            </TableRow>
-          </TableBody>
-        </Table>
-      </div>
+      <ModalDeleteRow :label="$t('General.postingAccount')">
+        {{ mmf.postingAccountName }}
+      </ModalDeleteRow>
     </template>
-    <template #footer>
-      <Button
-        variant="destructive"
-        class="flex items-center gap-2 px-6"
-        @click="deleteMoneyflow"
-      >
-        <Trash2 class="h-4 w-4" />
-        {{ $t("General.delete") }}
-      </Button>
-    </template>
-  </ModalVue>
+  </ModalDelete>
 </template>
 
 <script lang="ts" setup>
 import { ref, useTemplateRef } from "vue";
 
-import { Button } from "@/components/ui/button";
-import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
-import { Trash2 } from "lucide-vue-next";
-
-import ModalVue from "../Modal.vue";
+import ModalDelete from "../ModalDelete.vue";
+import ModalDeleteRow from "../ModalDeleteRow.vue";
 import SpanAmount from "../SpanAmount.vue";
 import SpanDate from "../SpanDate.vue";
 
@@ -115,12 +49,11 @@ import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 
 import MoneyflowService from "@/service/MoneyflowService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
-import DivError from "../DivError.vue";
 
 const serverErrors = ref(new Array<string>());
 
 const mmf = ref({} as Moneyflow);
-const modalComponent = useTemplateRef<typeof ModalVue>("modalComponent");
+const modalComponent = useTemplateRef<typeof ModalDelete>("modalComponent");
 const emit = defineEmits(["moneyflowDeleted"]);
 
 const _show = (_mmf: Moneyflow) => {

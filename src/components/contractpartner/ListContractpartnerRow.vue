@@ -16,41 +16,25 @@
       {{ mcp.postingAccountName }}
     </TableCell>
 
-    <TableCell class="w-0 whitespace-nowrap text-center p-0">
-      <Button
-        variant="ghost"
-        size="icon"
-        @click="editContractpartner"
-        :title="$t('General.edit')"
-        class="h-8 w-8 cursor-pointer"
-      >
+    <TableActionButton :title="$t('General.edit')" @click="editContractpartner">
         <Pencil class="h-4 w-4" />
-      </Button>
-    </TableCell>
+    </TableActionButton>
 
-    <TableCell class="w-0 border-l whitespace-nowrap text-center p-0">
-      <Button
-        variant="ghost"
-        size="icon"
-        @click="deleteContractpartner"
-        :title="$t('General.delete')"
-        class="h-8 w-8 cursor-pointer"
-      >
+    <TableActionButton
+      :title="$t('General.delete')"
+      cell-class="w-0 border-l whitespace-nowrap text-center p-0"
+      @click="deleteContractpartner"
+    >
         <Trash2 class="h-4 w-4" />
-      </Button>
-    </TableCell>
+    </TableActionButton>
 
-    <TableCell class="w-0 border-l whitespace-nowrap text-center p-0">
-      <Button
-        variant="ghost"
-        size="icon"
-        @click="listAccounts"
-        :title="$t('General.contractpartnerAccounts')"
-        class="h-8 w-8 cursor-pointer"
-      >
+    <TableActionButton
+      :title="$t('General.contractpartnerAccounts')"
+      cell-class="w-0 border-l whitespace-nowrap text-center p-0"
+      @click="listAccounts"
+    >
         <Banknote class="h-4 w-4" />
-      </Button>
-    </TableCell>
+    </TableActionButton>
   </TableRow>
 </template>
 
@@ -58,11 +42,11 @@
 import { Banknote, Pencil, Trash2 } from "lucide-vue-next";
 import type { PropType } from "vue";
 
-import { Button } from "@/components/ui/button";
 import { TableCell, TableRow } from "@/components/ui/table";
 
 import type { Contractpartner } from "@/model/contractpartner/Contractpartner";
 import SpanDate from "../SpanDate.vue";
+import TableActionButton from "../TableActionButton.vue";
 
 const props = defineProps({
   mcp: {

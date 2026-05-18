@@ -116,10 +116,6 @@ import { computed, ref, type PropType } from "vue";
 import CompareDataResultRowVue from "./CompareDataResultRow.vue";
 
 const props = defineProps({
-  compareDataKey: {
-    type: String,
-    required: true,
-  },
   compareData: {
     type: Object as PropType<Array<CompareData>>,
     required: false,

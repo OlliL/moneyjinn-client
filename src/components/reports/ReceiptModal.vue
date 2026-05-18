@@ -42,13 +42,8 @@ const _show = (moneyflowId: number) => {
   MoneyflowReceiptService.fetchReceipt(moneyflowId)
     .then((response) => {
       receiptBase64.value = response.receipt;
-
-      if (response.receiptType === MoneyflowReceiptType.JPEG) {
-        isJpeg.value = true;
-      } else if (response.receiptType === MoneyflowReceiptType.PDF) {
-        isJpeg.value = false;
-      }
-      isPdf.value = !isJpeg.value;
+      isJpeg.value = response.receiptType === MoneyflowReceiptType.JPEG;
+      isPdf.value  = response.receiptType === MoneyflowReceiptType.PDF;
 
       modalComponent.value?._show();
     })

@@ -6,15 +6,13 @@
 
     <div class="flex -space-x-px relative">
       <Input
-        autocomplete="off"
         :id="id"
         :data-testid="id"
         type="text"
-        @changeDate="onInput($event)"
         :class="[
           'rounded-r-none bg-white z-10',
           errorData.inputClass == 'is-invalid'
-            ? '!border-destructive bg-destructive/[0.03] focus-visible:ring-destructive/15 !border-r-destructive'
+            ? 'border-destructive! bg-destructive/3 focus-visible:ring-destructive/15 border-r-destructive!'
             : 'border-input focus-visible:ring-ring',
         ]"
         ref="fieldRef"
@@ -52,6 +50,8 @@ import {
 import { toTypedSchema } from "@vee-validate/zod";
 import { CalendarDays } from "lucide-vue-next";
 import { Datepicker } from "vanillajs-datepicker";
+// @ts-ignore
+import de from "vanillajs-datepicker/locales/de";
 import { useField } from "vee-validate";
 import {
   computed,
@@ -64,8 +64,6 @@ import {
   type Ref,
 } from "vue";
 import { date, preprocess, type ZodType } from "zod";
-// @ts-ignore
-import de from "../../node_modules/vanillajs-datepicker/js/i18n/locales/de.js";
 
 const props = defineProps({
   validationSchema: {
@@ -88,10 +86,6 @@ const props = defineProps({
   modelValue: {
     type: Date,
     required: false,
-  },
-  labelStyle: {
-    type: String,
-    default: "",
   },
   pickMode: {
     type: String,
@@ -197,19 +191,21 @@ const setDate = (newVal?: Date) => {
         datepicker.setDate({ clear: true, forceRefresh: true });
       }
     } else {
+      const normalizedDate = new Date(newVal);
+
       if (props.pickMode === "month") {
-        newVal.setDate(1);
+        normalizedDate.setDate(1);
       } else if (props.pickMode === "year") {
-        newVal.setDate(1);
-        newVal.setMonth(0);
+        normalizedDate.setDate(1);
+        normalizedDate.setMonth(0);
       }
-      newVal.setHours(0, 0, 0, 0);
+      normalizedDate.setHours(0, 0, 0, 0);
 
       if (
         datepicker.dates.length === 0 ||
-        (datepicker.getDate() as Date).toISOString() != newVal?.toISOString()
+        (datepicker.getDate() as Date).toISOString() != normalizedDate.toISOString()
       ) {
-        datepicker.setDate(newVal);
+        datepicker.setDate(normalizedDate);
       }
     }
   }
@@ -276,22 +272,22 @@ watch(
 @reference "@/style.css";
 
 .datepicker-footer .datepicker-controls {
-  @apply !flex !w-full !gap-2 !p-2 !box-border !float-none !clear-both;
+  @apply flex! w-full! gap-2! p-2! box-border! float-none! clear-both!;
 }
 
 .datepicker-footer {
-  @apply !w-full !p-0 !float-none !clear-both;
+  @apply w-full! p-0! float-none! clear-both!;
 }
 
 .datepicker-footer .btn {
-  @apply !flex-1 !w-1/2 !min-w-0 !max-w-none !inline-flex !items-center !justify-center !rounded-md !border !px-3 !py-1.5 !text-sm !font-medium !transition-colors !shadow-none !float-none;
+  @apply flex-1! w-1/2! min-w-0! max-w-none! inline-flex! items-center! justify-center! rounded-md! border! px-3! py-1.5! text-sm! font-medium! transition-colors! shadow-none! float-none!;
 }
 
 .datepicker-footer .today-btn {
-  @apply !border-input !bg-background !text-foreground hover:!bg-accent hover:!text-accent-foreground;
+  @apply border-input! bg-background! text-foreground! hover:bg-accent! hover:text-accent-foreground!;
 }
 
 .datepicker-footer .clear-btn {
-  @apply !border-transparent !bg-transparent !text-muted-foreground hover:!bg-destructive/10 hover:!text-destructive;
+  @apply border-transparent! bg-transparent! text-muted-foreground! hover:bg-destructive/10! hover:text-destructive!;
 }
 </style>

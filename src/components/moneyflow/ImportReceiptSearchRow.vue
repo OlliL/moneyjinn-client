@@ -55,17 +55,12 @@ const props = defineProps({
     type: Object as PropType<Moneyflow>,
     required: true,
   },
-  receiptId: {
-    type: Number,
-    required: true,
-  },
 });
 
 const userSessionStore = useUserSessionStore();
 const emit = defineEmits([
   "deleteMoneyflow",
   "editMoneyflow",
-  "update:modelValue",
 ]);
 
 const isOwnMoneyflow = computed(() => {

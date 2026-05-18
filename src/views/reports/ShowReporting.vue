@@ -527,6 +527,7 @@ const showReportingGraph = handleSubmit(() => {
 
         chartData.value.labels = [];
         chartData.value.datasets[0]!.data = [];
+        chartData.value.datasets[0]!.backgroundColor = [];
         chartOptions.value.plugins.title.text = chartTitle;
 
         for (let [key, value] of resultMap) {

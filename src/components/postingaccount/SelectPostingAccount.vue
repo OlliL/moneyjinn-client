@@ -27,7 +27,6 @@ import { useUserSessionStore } from "@/stores/UserSessionStore";
 import { SquarePlus } from "lucide-vue-next";
 import {
   computed,
-  onMounted,
   ref,
   useTemplateRef,
   type PropType,
@@ -62,17 +61,14 @@ const props = defineProps({
 const createPostingAccountModal = useTemplateRef<
   typeof CreatePostingAccountModalVue
 >("createPostingAccountModal");
-const userIsAdmin = ref(false);
+const userSessionStore = useUserSessionStore();
+const userIsAdmin = computed(() => userSessionStore.isAdmin);
 const postingAccountStore = usePostingAccountStore();
 
 const selectBoxValues = computed(
   () => postingAccountStore.getAsSelectBoxValues,
 );
 
-onMounted(() => {
-  const userSessionStore = useUserSessionStore();
-  userIsAdmin.value = userSessionStore.isAdmin;
-});
 
 const showCreatePostingAccountModal = () => {
   createPostingAccountModal.value?._show();

@@ -83,34 +83,27 @@
         </HoverCardContent>
       </HoverCard>
     </TableCell>
-    <TableCell class="text-center">
-      <Button
-        variant="ghost"
-        size="icon"
-        @click="editEtfFlow"
-        :title="$t('General.edit')"
-        :aria-label="$t('General.edit')"
-        class="h-6 w-6"
-      >
+    <TableActionButton
+      :title="$t('General.edit')"
+      :aria-label="$t('General.edit')"
+      cell-class="text-center"
+      button-class="h-6 w-6 cursor-pointer"
+      @click="editEtfFlow"
+    >
         <Pencil class="h-4 w-4" />
-      </Button>
-    </TableCell>
-    <TableCell class="text-center">
-      <Button
-        variant="ghost"
-        size="icon"
-        @click="deleteEtfFlow"
-        :title="$t('General.delete')"
-        :aria-label="$t('General.delete')"
-        class="h-6 w-6"
-      >
+    </TableActionButton>
+    <TableActionButton
+      :title="$t('General.delete')"
+      :aria-label="$t('General.delete')"
+      cell-class="text-center"
+      button-class="h-6 w-6 cursor-pointer"
+      @click="deleteEtfFlow"
+    >
         <Trash2 class="h-4 w-4" />
-      </Button>
-    </TableCell>
+    </TableActionButton>
   </TableRow>
 </template>
 <script lang="ts" setup>
-import { Button } from "@/components/ui/button";
 import {
   HoverCard,
   HoverCardContent,
@@ -131,6 +124,7 @@ import { formatNumber, redIfNegative } from "@/tools/views/FormatNumber";
 import { Pencil, Trash2 } from "lucide-vue-next";
 import { computed, type PropType } from "vue";
 import SpanAmount from "../SpanAmount.vue";
+import TableActionButton from "../TableActionButton.vue";
 
 const props = defineProps({
   etfName: {
@@ -149,8 +143,9 @@ const props = defineProps({
 
 const emit = defineEmits(["deleteEtfFlow", "editEtfFlow"]);
 const etfStore = useEtfStore();
-const partial =
-  100 - (etfStore.getEtf(props.flow.etfId)?.partialTaxExemption ?? 0);
+const partial = computed(
+  () => 100 - (etfStore.getEtf(props.flow.etfId)?.partialTaxExemption ?? 0),
+);
 
 const amountClass = computed(() => {
   return redIfNegative(props.flow.amount);

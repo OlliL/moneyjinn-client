@@ -88,7 +88,7 @@
                   </TableRow>
                 </TableHeader>
 
-                <TableBody v-if="dataLoaded">
+                <TableBody>
                   <EtfTableRowVue
                     v-for="etfData in etfSummaryArray"
                     :key="etfData.etfId"

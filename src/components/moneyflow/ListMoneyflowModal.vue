@@ -209,13 +209,8 @@ const loadReceipt = (id: number) => {
 
 const processReceipt = (receiptType: MoneyflowReceiptType, receipt: string) => {
   receiptBase64.value = receipt;
-
-  if (receiptType === MoneyflowReceiptType.JPEG) {
-    isJpeg.value = true;
-  } else if (receiptType === MoneyflowReceiptType.PDF) {
-    isJpeg.value = false;
-  }
-  isPdf.value = !isJpeg.value;
+  isJpeg.value = receiptType === MoneyflowReceiptType.JPEG;
+  isPdf.value  = receiptType === MoneyflowReceiptType.PDF;
 };
 defineExpose({ _show });
 </script>

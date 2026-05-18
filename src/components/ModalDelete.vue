@@ -1,0 +1,68 @@
+<template>
+  <ModalVue :title="title" :max-width="maxWidth" :z-index="zIndex" ref="modalComponent">
+    <template #body>
+      <DivError :server-errors="serverErrors" />
+      <slot name="body">
+        <div class="modal-detail-card">
+          <Table>
+            <TableBody>
+              <slot name="details" />
+            </TableBody>
+          </Table>
+        </div>
+      </slot>
+    </template>
+    <template #footer>
+      <ButtonDelete :button-label="t('General.delete')" @click="handleDelete" />
+    </template>
+  </ModalVue>
+</template>
+
+<script lang="ts" setup>
+import { useTemplateRef } from "vue";
+import { useI18n } from "vue-i18n";
+
+import ModalVue from "./Modal.vue";
+import ButtonDelete from "./ButtonDelete.vue";
+import DivError from "./DivError.vue";
+import { Table, TableBody } from "@/components/ui/table";
+
+const { t } = useI18n();
+
+const props = withDefaults(
+  defineProps<{
+    title: string;
+    serverErrors: Array<string>;
+    maxWidth?: string;
+    zIndex?: string;
+  }>(),
+  {
+    maxWidth: "",
+    zIndex: "2000",
+  },
+);
+
+const emit = defineEmits(["confirm"]);
+
+const modalComponent = useTemplateRef<typeof ModalVue>("modalComponent");
+
+const handleDelete = () => {
+  emit("confirm");
+};
+
+const _show = () => {
+  modalComponent.value?._show();
+};
+
+const _hide = () => {
+  modalComponent.value?._hide();
+};
+
+defineExpose({
+  _show,
+  _hide,
+});
+</script>
+
+
+

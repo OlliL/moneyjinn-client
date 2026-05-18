@@ -12,52 +12,38 @@
       <h4 class="text-2xl font-bold">{{ $t("General.monthlysettlements") }}</h4>
     </div>
 
-    <div class="flex flex-wrap items-center justify-center gap-4">
-      <Button type="button" @click="showEditMonthlySettlementModal()">
-        {{ $t("General.new") }}
-      </Button>
-      <div>
-        <Select v-model="selectedYear">
-          <SelectTrigger class="w-[120px] h-9">
-            <SelectValue
-              :placeholder="selectedYear ? selectedYear.toString() : ''"
-            />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem v-for="year in years" :key="year" :value="year">
-              {{ year }}
-            </SelectItem>
-          </SelectContent>
-        </Select>
+    <div class="mx-auto flex w-full max-w-5xl flex-col items-center gap-3">
+      <div class="flex w-full justify-center">
+        <MonthYearNavigator
+          v-if="dataLoaded"
+          :years="years"
+          :months="months"
+          :selected-year="selectedYear"
+          :selected-month="selectedMonth > 0 ? selectedMonth : undefined"
+          @select-year="selectYear"
+          @select-month="selectMonth"
+        />
       </div>
 
-      <div>
-        <nav aria-label="Month navigation" v-if="dataLoaded">
-          <ul class="flex flex-wrap justify-center -space-x-px">
-            <li v-for="(month, index) in months" :key="month">
-              <router-link
-                :to="{
-                  name: Routes.ListMonthlySettlements,
-                  params: { year: selectedYear, month: month },
-                  force: true,
-                }"
-                :class="[
-                  'inline-flex h-9 items-center justify-center px-4 text-sm font-medium border border-input transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:z-10 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring',
-
-                  $props.month == month + ''
-                    ? 'bg-primary text-primary-foreground border-primary hover:bg-primary/90 hover:text-primary-foreground'
-                    : 'bg-background text-foreground',
-
-                  index === 0 ? 'rounded-l-md' : '',
-                  index === months!.length - 1 ? 'rounded-r-md' : '',
-                  index > 0 && index < months!.length - 1 ? 'rounded-none' : '',
-                ]"
-              >
-                {{ getMonthName(month) }}
-              </router-link>
-            </li>
-          </ul>
-        </nav>
+      <div class="flex w-full flex-wrap items-center justify-center gap-3">
+        <Button type="button" @click="showEditMonthlySettlementModal()">
+          {{ $t("General.new") }}
+        </Button>
+        <Button
+          type="button"
+          :disabled="!selectedMonth"
+          @click="showEditMonthlySettlementModal(selectedYear, selectedMonth)"
+        >
+          {{ $t("General.edit") }}
+        </Button>
+        <Button
+          type="button"
+          variant="destructive"
+          :disabled="!selectedMonth"
+          @click="showDeleteMonthlySettlementModal"
+        >
+          {{ $t("General.delete") }}
+        </Button>
       </div>
     </div>
 
@@ -67,24 +53,6 @@
       :year="Number(selectedYear)"
       :month="selectedMonth"
     />
-
-    <div class="flex justify-center pb-4" v-if="selectedMonth">
-      <div class="flex flex-wrap justify-center gap-2">
-        <Button
-          type="button"
-          @click="showEditMonthlySettlementModal(selectedYear, selectedMonth)"
-        >
-          {{ $t("General.edit") }}
-        </Button>
-        <Button
-          type="button"
-          variant="destructive"
-          @click="showDeleteMonthlySettlementModal"
-        >
-          {{ $t("General.delete") }}
-        </Button>
-      </div>
-    </div>
     <!---->
   </div>
 </template>
@@ -93,22 +61,15 @@
 import { onMounted, ref, useTemplateRef } from "vue";
 import { onBeforeRouteUpdate } from "vue-router";
 
-import DeleteMonthlySettlementModalVue from "@/components/monthlysettlement/DeleteMonthlySettlementModal.vue";
 import DivError from "@/components/DivError.vue";
+import DeleteMonthlySettlementModalVue from "@/components/monthlysettlement/DeleteMonthlySettlementModal.vue";
 import EditMonthlySettlementModalVue from "@/components/monthlysettlement/EditMonthlySettlementModal.vue";
 import ShowMontlySettlementVue from "@/components/monthlysettlement/ShowMonthlySettlement.vue";
+import MonthYearNavigator from "@/components/navigation/MonthYearNavigator.vue";
 import { Button } from "@/components/ui/button";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 
 import router, { Routes } from "@/router";
 
-import { getMonthName } from "@/tools/views/MonthName";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 
 import MonthlySettlementService from "@/service/MonthlySettlementService";
@@ -186,15 +147,22 @@ onBeforeRouteUpdate((to, from) => {
   }
 });
 
-const selectMonth = (year: string, month?: string) => {
+const showEditMonthlySettlementModal = (year?: string, month?: number) => {
+  (editModal.value as typeof EditMonthlySettlementModalVue)._show(year, month);
+};
+
+const selectYear = (year: string) => {
   router.push({
     name: Routes.ListMonthlySettlements,
-    params: { year: year, month: month },
+    params: { year },
   });
 };
 
-const showEditMonthlySettlementModal = (year?: string, month?: number) => {
-  (editModal.value as typeof EditMonthlySettlementModalVue)._show(year, month);
+const selectMonth = (month: number) => {
+  router.push({
+    name: Routes.ListMonthlySettlements,
+    params: { year: selectedYear.value, month },
+  });
 };
 
 const monthlySettlementUpserted = (year: string, month: number) => {
@@ -207,10 +175,7 @@ const monthlySettlementUpserted = (year: string, month: number) => {
 };
 
 const showDeleteMonthlySettlementModal = () => {
-  (deleteModal.value as typeof DeleteMonthlySettlementModalVue)._show(
-    selectedYear.value,
-    selectedMonth.value,
-  );
+  deleteModal.value?._show(selectedYear.value, selectedMonth.value);
 };
 
 const monthlySettlementDeleted = (year: string) => {

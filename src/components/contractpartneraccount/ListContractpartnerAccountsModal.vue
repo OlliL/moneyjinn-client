@@ -102,7 +102,7 @@ import { handleBackendError } from "@/tools/views/HandleBackendError";
 const serverErrors = ref(new Array<string>());
 
 const mcp = ref({} as Contractpartner);
-const contractpartnerAccount = ref({} as Array<ContractpartnerAccount>);
+const contractpartnerAccount = ref([] as Array<ContractpartnerAccount>);
 const dataLoaded = ref(false);
 
 const modalComponent = useTemplateRef<typeof ModalVue>("modalComponent");

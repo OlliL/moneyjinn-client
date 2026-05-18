@@ -8,7 +8,7 @@
       >
         <DivError :server-errors="serverErrors" />
 
-        <div class="rounded-sm border bg-muted/30 p-4 shadow-sm space-y-4">
+        <div class="form-section space-y-4">
           <InputStandard
             v-model="group.name"
             :validation-schema="schema.name"
@@ -22,7 +22,7 @@
       <Button
         type="button"
         variant="secondary"
-        class="flex items-center gap-2 px-6"
+        class="button-with-icon"
         @click="resetForm"
       >
         <Undo2 class="h-4 w-4" />
@@ -86,7 +86,7 @@ const resetForm = () => {
   Object.keys(values).forEach((field) => setFieldTouched(field, false));
 };
 
-const _show = async (_group?: Group) => {
+const _show = (_group?: Group) => {
   origGroup.value = _group ?? undefined;
   resetForm();
   modalComponent.value?._show();

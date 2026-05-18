@@ -5,14 +5,12 @@
         props.maxWidth ? props.maxWidth : 'max-w-[calc(100%-2rem)] sm:max-w-lg',
         'max-h-[90vh]',
         'flex flex-col gap-6 p-6 overflow-visible',
-        `!z-[${zIndex}]`,
       ]"
+      :style="{ zIndex: props.zIndex }"
     >
       <DialogHeader class="space-y-1.5 text-left">
-        <DialogTitle>
-          <h4 class="text-lg font-semibold leading-none tracking-tight">
-            {{ title }}
-          </h4>
+        <DialogTitle class="text-lg font-semibold leading-none tracking-tight">
+          {{ title }}
         </DialogTitle>
       </DialogHeader>
 
@@ -27,7 +25,7 @@
           <Button
             type="button"
             variant="outline"
-            class="flex items-center gap-2 px-4"
+            class="button-with-icon px-4"
           >
             <X class="h-4 w-4" />
             {{ $t("Modal.cancel") }}

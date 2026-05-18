@@ -50,27 +50,36 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Plus } from "lucide-vue-next";
-import { onBeforeUnmount, ref } from "vue";
+import { onBeforeUnmount, ref, watch } from "vue";
 
 const props = defineProps({
   placeholder: { type: String, default: "" },
   modelValue: { type: String, required: true },
   showValidToggle: { type: Boolean, default: true },
+  validNow: { type: Boolean, default: true },
 });
 
 const emit = defineEmits([
   "update:modelValue",
+  "update:validNow",
   "validNowToggled",
   "createClicked",
 ]);
 
-const validNow = ref(true);
-let debounceTimeout: any;
+const validNow = ref(props.validNow);
+let debounceTimeout: ReturnType<typeof setTimeout> | undefined;
 
-const handleInput = (val: any) => {
+watch(
+  () => props.validNow,
+  (newVal) => {
+    validNow.value = newVal;
+  },
+);
+
+const handleInput = (val: string | number) => {
   globalThis.clearTimeout(debounceTimeout);
   debounceTimeout = globalThis.setTimeout(() => {
-    emit("update:modelValue", val);
+    emit("update:modelValue", String(val));
   }, 300);
 };
 
@@ -81,6 +90,7 @@ const clearSearch = () => {
 
 const handleToggle = (val: boolean) => {
   validNow.value = val;
+  emit("update:validNow", val);
   emit("validNowToggled", val);
 };
 

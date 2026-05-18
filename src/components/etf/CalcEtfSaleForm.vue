@@ -197,34 +197,28 @@ const calculateEtfSale = handleSubmit(() => {
 
 watch(
   () => props.etf,
-  (newVal, oldVal) => {
-    if (newVal != oldVal) {
-      calcResults.value = {} as EtfSalesCalculation;
-      calcEtfTransactionCostsAbsolute.value = newVal.transactionCostsAbsolute;
-      calcEtfTransactionCostsRelative.value = newVal.transactionCostsRelative;
-      calcEtfTransactionCostsMaximum.value = newVal.transactionCostsMaximum;
-    }
+  (newVal) => {
+    calcResults.value = {} as EtfSalesCalculation;
+    calcEtfTransactionCostsAbsolute.value = newVal.transactionCostsAbsolute;
+    calcEtfTransactionCostsRelative.value = newVal.transactionCostsRelative;
+    calcEtfTransactionCostsMaximum.value = newVal.transactionCostsMaximum;
   },
   { immediate: true },
 );
 
 watch(
   () => props.etfSummary,
-  (newVal, oldVal) => {
-    if (newVal != oldVal) {
-      calcEtfAskPrice.value = newVal.buyPrice ?? 0;
-      calcEtfBidPrice.value = newVal.sellPrice ?? 0;
-    }
+  (newVal) => {
+    calcEtfAskPrice.value = newVal.buyPrice ?? 0;
+    calcEtfBidPrice.value = newVal.sellPrice ?? 0;
   },
   { immediate: true },
 );
 
 watch(
   () => props.pieces,
-  (newVal, oldVal) => {
-    if (newVal != oldVal) {
-      calcEtfSalePieces.value = newVal ?? 0;
-    }
+  (newVal) => {
+    calcEtfSalePieces.value = newVal ?? 0;
   },
   { immediate: true },
 );
