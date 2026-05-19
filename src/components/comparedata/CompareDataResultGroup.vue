@@ -142,11 +142,6 @@ const props = defineProps({
     type: String,
     required: true,
   },
-  compareDataKey: {
-    type: String,
-    required: false,
-    default: "",
-  },
 });
 
 const isCollapsed = ref(false);
