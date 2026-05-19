@@ -14,132 +14,489 @@
     />
     <ListMoneyflowModal ref="listModal" />
 
-    <div class="pt-4 overflow-x-auto text-center" v-if="filteredMoneyflows">
-      <div class="flex flex-col rounded-md border">
-        <Table class="w-full text-xs md:text-sm">
-          <TableHeader>
-            <TableRow>
-              <TableHead class="hidden md:table-cell align-top"></TableHead>
-              <TableHead class="border-r text-foreground text-center align-top">
-                <span
-                  class="hidden md:block items-center justify-center mt-1 font-bold"
-                  >{{ $t("Moneyflow.bookingdate") }}
-                  <component
-                    :is="sortIcon('bookingDate')"
-                    class="inline h-4 w-4 text-primary cursor-pointer"
-                    :title="$t('Moneyflow.bookingdate')"
-                    :aria-label="$t('Moneyflow.bookingdate')"
-                    @click="sortByColumn('bookingDate')"
-                  />
-                </span>
-                <span class="block md:hidden">
-                  <component
-                    :is="sortIcon('bookingDate')"
-                    class="inline h-4 w-4 text-primary cursor-pointer"
-                    :title="$t('Moneyflow.bookingdate')"
-                    :aria-label="$t('Moneyflow.bookingdate')"
-                    @click="sortByColumn('bookingDate')"
-                  />
-                </span>
-              </TableHead>
-              <TableHead
-                class="border-r text-foreground text-center align-top hidden md:table-cell"
+    <div class="fixed bottom-6 right-6 z-50 md:hidden">
+      <Sheet>
+        <SheetTrigger as-child>
+          <Button
+            class="shadow-lg rounded-full h-12 w-12 p-0 flex items-center justify-center"
+          >
+            <Filter class="h-5 w-5" />
+          </Button>
+        </SheetTrigger>
+        <SheetContent side="bottom" class="h-[75vh] rounded-t-xl p-6">
+          <SheetHeader class="text-left pb-4 border-b">
+            <SheetTitle>Daten filtern</SheetTitle>
+          </SheetHeader>
+          <div
+            class="py-4 space-y-4 overflow-y-auto h-[calc(75vh-120px)] pb-12"
+          >
+            <div class="space-y-1.5">
+              <label class="text-xs font-semibold text-muted-foreground"
+                >Vertragspartner</label
               >
-                <span
-                  class="hidden md:flex items-center justify-center gap-1 mt-1 font-bold"
-                >
-                  {{ $t("Moneyflow.invoicedate") }}
-                  <component
-                    :is="sortIcon('invoiceDate')"
-                    class="inline h-4 w-4 text-primary cursor-pointer"
-                    :title="$t('Moneyflow.invoicedate')"
-                    :aria-label="$t('Moneyflow.invoicedate')"
-                    @click="sortByColumn('invoiceDate')"
-                  />
-                </span>
-              </TableHead>
-              <TableHead
-                class="border-r text-foreground text-center align-top"
-                colspan="2"
+              <div class="flex items-center">
+                <Input
+                  type="text"
+                  :placeholder="$t('General.enterFilter')"
+                  v-model="filterContractpartner"
+                  class="h-9 rounded-r-none"
+                />
+                <Button
+                  variant="outline"
+                  size="icon"
+                  @click="filterContractpartner = ''"
+                  class="h-9 w-9 rounded-l-none border-l"
+                  ><X class="h-4 w-4"
+                /></Button>
+              </div>
+            </div>
+            <div class="space-y-1.5">
+              <label class="text-xs font-semibold text-muted-foreground"
+                >Kommentar</label
               >
-                <span
-                  class="hidden md:flex items-center justify-center gap-1 mt-1 font-bold"
-                >
-                  {{ $t("General.amount") }}
-                  <component
-                    :is="sortIcon('amount')"
-                    class="h-4 w-4 text-primary cursor-pointer shrink-0"
-                    :title="$t('General.amount')"
-                    :aria-label="$t('General.amount')"
-                    @click="sortByColumn('amount')"
-                  />
-                </span>
+              <div class="flex items-center">
+                <Input
+                  type="text"
+                  :placeholder="$t('General.enterFilter')"
+                  v-model="filterComment"
+                  class="h-9 rounded-r-none"
+                />
+                <Button
+                  variant="outline"
+                  size="icon"
+                  @click="filterComment = ''"
+                  class="h-9 w-9 rounded-l-none border-l"
+                  ><X class="h-4 w-4"
+                /></Button>
+              </div>
+            </div>
+            <div class="space-y-1.5">
+              <label class="text-xs font-semibold text-muted-foreground"
+                >Buchungsposten</label
+              >
+              <div class="flex items-center">
+                <Input
+                  type="text"
+                  :placeholder="$t('General.enterFilter')"
+                  v-model="filterPostingAccount"
+                  class="h-9 rounded-r-none"
+                />
+                <Button
+                  variant="outline"
+                  size="icon"
+                  @click="filterPostingAccount = ''"
+                  class="h-9 w-9 rounded-l-none border-l"
+                  ><X class="h-4 w-4"
+                /></Button>
+              </div>
+            </div>
+            <div class="space-y-1.5">
+              <label class="text-xs font-semibold text-muted-foreground"
+                >Zahlungsmittel</label
+              >
+              <div class="flex items-center">
+                <Input
+                  type="text"
+                  :placeholder="$t('General.enterFilter')"
+                  v-model="filterCapitalsource"
+                  class="h-9 rounded-r-none"
+                />
+                <Button
+                  variant="outline"
+                  size="icon"
+                  @click="filterCapitalsource = ''"
+                  class="h-9 w-9 rounded-l-none border-l"
+                  ><X class="h-4 w-4"
+                /></Button>
+              </div>
+            </div>
+          </div>
+        </SheetContent>
+      </Sheet>
+    </div>
 
-                <span class="flex md:hidden items-center justify-center w-full">
-                  <component
-                    :is="sortIcon('amount')"
-                    class="h-4 w-4 text-primary cursor-pointer"
-                    :title="$t('General.amount')"
-                    :aria-label="$t('General.amount')"
-                    @click="sortByColumn('amount')"
-                  />
-                </span>
-              </TableHead>
-              <TableHead
-                class="border-r text-foreground text-center align-top hidden md:table-cell"
-              >
-                <span
-                  class="hidden md:flex items-center justify-center gap-1 mt-1 font-bold"
-                >
-                  {{ $t("General.contractpartner") }}
-                  <component
-                    :is="sortIcon('contractpartnerName')"
-                    class="inline h-4 w-4 text-primary cursor-pointer"
-                    :title="$t('General.contractpartner')"
-                    :aria-label="$t('General.contractpartner')"
-                    @click="sortByColumn('contractpartnerName')"
-                  />
-                </span>
-                <div class="flex items-center w-full max-w-sm mt-1 mb-2">
-                  <Input
-                    type="text"
-                    :placeholder="$t('General.enterFilter')"
-                    v-model="filterContractpartner"
-                    class="h-8 rounded-r-none focus-visible:ring-1 focus-visible:ring-offset-0 focus-visible:z-10"
-                  />
+    <div class="pt-4" v-if="filteredMoneyflows">
+      <div class="block md:hidden w-full max-w-md mx-auto space-y-2 mb-6 px-2">
+        <div
+          class="p-2 bg-muted/60 text-xs rounded-md text-center text-muted-foreground font-medium"
+        >
+          Zeige {{ filteredMoneyflows.length }} von
+          {{ report.moneyflows?.length || 0 }} Geldbewegungen
+        </div>
 
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    type="button"
-                    :title="$t('General.reset')"
-                    :aria-label="$t('General.reset')"
-                    @click="filterContractpartner = ''"
-                    class="h-8 w-8 rounded-l-none border-l"
+        <Accordion type="multiple" class="space-y-2">
+          <AccordionItem
+            v-for="mmf in filteredMoneyflows"
+            :key="'mobile-' + mmf.id"
+            :value="'item-' + mmf.id"
+            class="border rounded-lg bg-background shadow-sm px-4 py-3 text-left relative"
+            :class="{ 'border-destructive/30 bg-destructive/5': mmf.private }"
+          >
+            <div
+              class="flex justify-between items-center w-full min-h-[48px] relative"
+            >
+              <div
+                class="flex flex-col gap-0.5 min-w-0 flex-1 pr-4 z-10 pointer-events-none"
+              >
+                <div
+                  class="flex items-center gap-1.5 text-xs text-muted-foreground flex-wrap"
+                >
+                  <SpanDate :date="mmf.bookingDate" />
+                  <span
+                    v-if="mmf.private"
+                    class="bg-destructive/20 text-destructive px-1 rounded text-[10px]"
+                    >Privat</span
                   >
-                    <X />
+                  <span
+                    v-if="
+                      mmf.moneyflowSplitEntries &&
+                      mmf.moneyflowSplitEntries.length > 0
+                    "
+                    class="bg-primary/20 text-primary px-1 rounded text-[10px]"
+                    >Aufgeteilt</span
+                  >
+                </div>
+                <span class="font-bold text-sm text-foreground truncate block">
+                  {{ mmf.contractpartnerName || "-" }}
+                </span>
+              </div>
+
+              <div
+                class="flex flex-col items-end gap-1 shrink-0 text-right z-20 relative bg-inherit pl-2"
+              >
+                <span
+                  class="font-extrabold text-sm"
+                  :class="{
+                    'border-b border-double border-foreground':
+                      mmf.moneyflowSplitEntries &&
+                      mmf.moneyflowSplitEntries?.length > 0,
+                  }"
+                >
+                  <SpanAmount :amount="mmf.amount" />
+                </span>
+
+                <div class="flex gap-0.5">
+                  <Button
+                    v-if="mmf.hasReceipt"
+                    variant="ghost"
+                    size="icon"
+                    class="h-7 w-7"
+                    @click.stop="showReceipt(mmf.id)"
+                  >
+                    <Image class="h-3.5 w-3.5" />
+                  </Button>
+                  <Button
+                    v-if="mmf.userId === userSessionStore.getUserId"
+                    variant="ghost"
+                    size="icon"
+                    class="h-7 w-7"
+                    @click.stop="editMoneyflow(mmf)"
+                  >
+                    <Pencil class="h-3.5 w-3.5" />
+                  </Button>
+                  <Button
+                    v-if="mmf.userId === userSessionStore.getUserId"
+                    variant="ghost"
+                    size="icon"
+                    class="h-7 w-7 text-destructive"
+                    @click.stop="deleteMoneyflow(mmf)"
+                  >
+                    <Trash2 class="h-3.5 w-3.5" />
+                  </Button>
+                  <Button
+                    v-if="mmf.userId !== userSessionStore.getUserId"
+                    variant="ghost"
+                    size="icon"
+                    class="h-7 w-7"
+                    @click.stop="listMoneyflow(mmf)"
+                  >
+                    <Eye class="h-3.5 w-3.5" />
                   </Button>
                 </div>
-              </TableHead>
-              <TableHead class="border-r text-foreground text-center align-top">
-                <div class="hidden md:block">
+              </div>
+
+              <AccordionTrigger
+                class="absolute inset-0 h-full w-full opacity-0 z-0 p-0 m-0 [&>svg]:hidden"
+              />
+            </div>
+
+            <AccordionContent class="pt-3 pb-1 space-y-2 border-t mt-2">
+              <div
+                class="text-xs text-muted-foreground bg-muted/40 p-2 rounded space-y-2"
+              >
+                <div
+                  class="flex items-center gap-1.5 break-all w-full"
+                  v-if="
+                    !mmf.moneyflowSplitEntries ||
+                    mmf.moneyflowSplitEntries.length == 0
+                  "
+                >
+                  <MessageSquareMore
+                    class="h-4 w-4 shrink-0 text-muted-foreground/80"
+                    :title="$t('General.comment')"
+                  />
+                  <span class="text-foreground">
+                    {{ mmf.comment }}
+                  </span>
+                </div>
+                <div
+                  class="grid grid-cols-2 gap-1 text-[10px] text-muted-foreground/80 pt-0.5 border-t border-muted/60 mt-1"
+                >
+                  <div class="flex items-center gap-1 min-w-0 truncate">
+                    <CreditCard
+                      class="h-3 w-3 shrink-0 text-muted-foreground/80"
+                      :title="$t('General.capitalsource')"
+                    />
+
+                    {{ mmf.capitalsourceComment }}
+                  </div>
+                  <div
+                    v-if="
+                      mmf.postingAccountName &&
+                      (!mmf.moneyflowSplitEntries ||
+                        mmf.moneyflowSplitEntries.length === 0)
+                    "
+                    class="flex items-center gap-1 min-w-0 truncate"
+                  >
+                    <Tag
+                      class="h-3 w-3 shrink-0 text-muted-foreground/80"
+                      :title="$t('General.postingAccount')"
+                    />
+
+                    {{ mmf.postingAccountName }}
+                  </div>
+                </div>
+              </div>
+
+              <div
+                v-if="
+                  mmf.moneyflowSplitEntries &&
+                  mmf.moneyflowSplitEntries.length > 0
+                "
+                class="pl-3 border-l-2 border-primary/30 space-y-1.5 pt-0.5"
+              >
+                <div
+                  class="text-[10px] font-bold uppercase tracking-wider text-muted-foreground/70 mb-1"
+                >
+                  Unterbuchungen
+                </div>
+                <div
+                  v-for="mse in mmf.moneyflowSplitEntries"
+                  :key="mse.id"
+                  class="flex justify-between items-start text-xs bg-muted/20 p-2 rounded"
+                >
+                  <div class="flex flex-col min-w-0 text-left">
+                    <span
+                      class="font-medium text-foreground text-[11px] truncate"
+                      >{{ mse.postingAccountName }}</span
+                    >
+                    <span
+                      class="text-muted-foreground text-[10px] break-all"
+                      v-if="mse.comment"
+                      >{{ mse.comment }}</span
+                    >
+                  </div>
+                  <span
+                    class="font-semibold text-[11px] shrink-0 pl-2 text-muted-foreground"
+                  >
+                    <SpanAmount :amount="mse.amount" />
+                  </span>
+                </div>
+              </div>
+            </AccordionContent>
+          </AccordionItem>
+        </Accordion>
+
+        <div
+          class="p-4 border rounded-lg bg-muted/40 flex justify-between items-center text-sm font-bold shadow-sm mx-1"
+        >
+          <span>Gesamtsumme (&Sigma;)</span>
+          <span class="underline decoration-double text-base"
+            ><SpanAmount :amount="amountSum"
+          /></span>
+        </div>
+      </div>
+
+      <div class="hidden md:block overflow-x-auto text-center">
+        <div class="flex flex-col rounded-md border">
+          <Table class="w-full text-xs md:text-sm">
+            <TableHeader>
+              <TableRow>
+                <TableHead class="hidden md:table-cell align-top"></TableHead>
+                <TableHead
+                  class="border-r text-foreground text-center align-top"
+                >
+                  <span
+                    class="hidden md:block items-center justify-center mt-1 font-bold"
+                    >{{ $t("Moneyflow.bookingdate") }}
+                    <component
+                      :is="sortIcon('bookingDate')"
+                      class="inline h-4 w-4 text-primary cursor-pointer"
+                      :title="$t('Moneyflow.bookingdate')"
+                      :aria-label="$t('Moneyflow.bookingdate')"
+                      @click="sortByColumn('bookingDate')"
+                    />
+                  </span>
+                  <span class="block md:hidden">
+                    <component
+                      :is="sortIcon('bookingDate')"
+                      class="inline h-4 w-4 text-primary cursor-pointer"
+                      :title="$t('Moneyflow.bookingdate')"
+                      :aria-label="$t('Moneyflow.bookingdate')"
+                      @click="sortByColumn('bookingDate')"
+                    />
+                  </span>
+                </TableHead>
+                <TableHead
+                  class="border-r text-foreground text-center align-top hidden md:table-cell"
+                >
                   <span
                     class="hidden md:flex items-center justify-center gap-1 mt-1 font-bold"
                   >
-                    {{ $t("General.comment") }}
+                    {{ $t("Moneyflow.invoicedate") }}
+                    <component
+                      :is="sortIcon('invoiceDate')"
+                      class="inline h-4 w-4 text-primary cursor-pointer"
+                      :title="$t('Moneyflow.invoicedate')"
+                      :aria-label="$t('Moneyflow.invoicedate')"
+                      @click="sortByColumn('invoiceDate')"
+                    />
+                  </span>
+                </TableHead>
+                <TableHead
+                  class="border-r text-foreground text-center align-top"
+                  colspan="2"
+                >
+                  <span
+                    class="hidden md:flex items-center justify-center gap-1 mt-1 font-bold"
+                  >
+                    {{ $t("General.amount") }}
+                    <component
+                      :is="sortIcon('amount')"
+                      class="h-4 w-4 text-primary cursor-pointer shrink-0"
+                      :title="$t('General.amount')"
+                      :aria-label="$t('General.amount')"
+                      @click="sortByColumn('amount')"
+                    />
+                  </span>
+
+                  <span
+                    class="flex md:hidden items-center justify-center w-full"
+                  >
+                    <component
+                      :is="sortIcon('amount')"
+                      class="h-4 w-4 text-primary cursor-pointer"
+                      :title="$t('General.amount')"
+                      :aria-label="$t('General.amount')"
+                      @click="sortByColumn('amount')"
+                    />
+                  </span>
+                </TableHead>
+                <TableHead
+                  class="border-r text-foreground text-center align-top hidden md:table-cell"
+                >
+                  <span
+                    class="hidden md:flex items-center justify-center gap-1 mt-1 font-bold"
+                  >
+                    {{ $t("General.contractpartner") }}
+                    <component
+                      :is="sortIcon('contractpartnerName')"
+                      class="inline h-4 w-4 text-primary cursor-pointer"
+                      :title="$t('General.contractpartner')"
+                      :aria-label="$t('General.contractpartner')"
+                      @click="sortByColumn('contractpartnerName')"
+                    />
+                  </span>
+                  <div class="flex items-center w-full max-w-sm mt-1 mb-2">
+                    <Input
+                      type="text"
+                      :placeholder="$t('General.enterFilter')"
+                      v-model="filterContractpartner"
+                      class="h-8 rounded-r-none focus-visible:ring-1 focus-visible:ring-offset-0 focus-visible:z-10"
+                    />
+
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      type="button"
+                      :title="$t('General.reset')"
+                      :aria-label="$t('General.reset')"
+                      @click="filterContractpartner = ''"
+                      class="h-8 w-8 rounded-l-none border-l"
+                    >
+                      <X />
+                    </Button>
+                  </div>
+                </TableHead>
+                <TableHead
+                  class="border-r text-foreground text-center align-top"
+                >
+                  <div class="hidden md:block">
+                    <span
+                      class="hidden md:flex items-center justify-center gap-1 mt-1 font-bold"
+                    >
+                      {{ $t("General.comment") }}
+                      <component
+                        :is="sortIcon('comment')"
+                        class="inline h-4 w-4 text-primary cursor-pointer mb-1 ml-0.5"
+                        :title="$t('General.comment')"
+                        :aria-label="$t('General.comment')"
+                        @click="sortByColumn('comment')"
+                      />
+                    </span>
+                    <div class="flex items-center w-full max-w-sm mt-1">
+                      <Input
+                        type="text"
+                        :placeholder="$t('General.enterFilter')"
+                        v-model="filterComment"
+                        class="h-8 rounded-r-none focus-visible:ring-1 focus-visible:ring-offset-0 focus-visible:z-10"
+                      />
+                      <Button
+                        variant="outline"
+                        size="icon"
+                        type="button"
+                        :title="$t('General.reset')"
+                        :aria-label="$t('General.reset')"
+                        @click="filterComment = ''"
+                        class="h-8 w-8 rounded-l-none border-l"
+                      >
+                        <X />
+                      </Button>
+                    </div>
+                  </div>
+                  <span
+                    class="flex md:hidden items-center justify-center min-w-0 break-words"
+                  >
                     <component
                       :is="sortIcon('comment')"
-                      class="inline h-4 w-4 text-primary cursor-pointer mb-1 ml-0.5"
+                      class="inline h-4 w-4 text-primary cursor-pointer"
                       :title="$t('General.comment')"
                       :aria-label="$t('General.comment')"
                       @click="sortByColumn('comment')"
+                    />
+                  </span>
+                </TableHead>
+
+                <TableHead
+                  class="border-r text-foreground text-center align-top hidden md:table-cell"
+                >
+                  <span
+                    class="hidden md:flex items-center justify-center gap-1 mt-1 font-bold"
+                  >
+                    {{ $t("General.postingAccount") }}
+                    <component
+                      :is="sortIcon('postingAccountName')"
+                      class="inline h-4 w-4 text-primary cursor-pointer mb-1 ml-0.5"
+                      :title="$t('General.postingAccount')"
+                      :aria-label="$t('General.postingAccount')"
+                      @click="sortByColumn('postingAccountName')"
                     />
                   </span>
                   <div class="flex items-center w-full max-w-sm mt-1">
                     <Input
                       type="text"
                       :placeholder="$t('General.enterFilter')"
-                      v-model="filterComment"
+                      v-model="filterPostingAccount"
                       class="h-8 rounded-r-none focus-visible:ring-1 focus-visible:ring-offset-0 focus-visible:z-10"
                     />
                     <Button
@@ -148,125 +505,79 @@
                       type="button"
                       :title="$t('General.reset')"
                       :aria-label="$t('General.reset')"
-                      @click="filterComment = ''"
+                      @click="filterPostingAccount = ''"
                       class="h-8 w-8 rounded-l-none border-l"
                     >
                       <X />
                     </Button>
                   </div>
-                </div>
-                <span
-                  class="flex md:hidden items-center justify-center min-w-0 break-words"
-                >
-                  <component
-                    :is="sortIcon('comment')"
-                    class="inline h-4 w-4 text-primary cursor-pointer"
-                    :title="$t('General.comment')"
-                    :aria-label="$t('General.comment')"
-                    @click="sortByColumn('comment')"
-                  />
-                </span>
-              </TableHead>
+                </TableHead>
 
-              <TableHead
-                class="border-r text-foreground text-center align-top hidden md:table-cell"
-              >
-                <span
-                  class="hidden md:flex items-center justify-center gap-1 mt-1 font-bold"
+                <TableHead
+                  class="border-r text-foreground text-center align-top hidden md:table-cell"
                 >
-                  {{ $t("General.postingAccount") }}
-                  <component
-                    :is="sortIcon('postingAccountName')"
-                    class="inline h-4 w-4 text-primary cursor-pointer mb-1 ml-0.5"
-                    :title="$t('General.postingAccount')"
-                    :aria-label="$t('General.postingAccount')"
-                    @click="sortByColumn('postingAccountName')"
-                  />
-                </span>
-                <div class="flex items-center w-full max-w-sm mt-1">
-                  <Input
-                    type="text"
-                    :placeholder="$t('General.enterFilter')"
-                    v-model="filterPostingAccount"
-                    class="h-8 rounded-r-none focus-visible:ring-1 focus-visible:ring-offset-0 focus-visible:z-10"
-                  />
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    type="button"
-                    :title="$t('General.reset')"
-                    :aria-label="$t('General.reset')"
-                    @click="filterPostingAccount = ''"
-                    class="h-8 w-8 rounded-l-none border-l"
+                  <span
+                    class="hidden md:flex items-center justify-center gap-1 mt-1 font-bold"
                   >
-                    <X />
-                  </Button>
-                </div>
-              </TableHead>
-
-              <TableHead
-                class="border-r text-foreground text-center align-top hidden md:table-cell"
-              >
-                <span
-                  class="hidden md:flex items-center justify-center gap-1 mt-1 font-bold"
-                >
-                  {{ $t("General.capitalsource") }}
-                  <component
-                    :is="sortIcon('capitalsourceComment')"
-                    class="inline h-4 w-4 text-primary cursor-pointer mb-1 ml-0.5"
-                    :title="$t('General.capitalsource')"
-                    :aria-label="$t('General.capitalsource')"
-                    @click="sortByColumn('capitalsourceComment')"
-                  />
-                </span>
-                <div class="flex items-center w-full max-w-sm mt-1">
-                  <Input
-                    type="text"
-                    :placeholder="$t('General.enterFilter')"
-                    v-model="filterCapitalsource"
-                    class="h-8 rounded-r-none focus-visible:ring-1 focus-visible:ring-offset-0 focus-visible:z-10"
-                  />
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    type="button"
-                    :title="$t('General.reset')"
-                    :aria-label="$t('General.reset')"
-                    @click="filterCapitalsource = ''"
-                    class="h-8 w-8 rounded-l-none border-l"
-                  >
-                    <X />
-                  </Button>
-                </div>
-              </TableHead>
-              <TableHead colspan="2"></TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            <ReportTableRowVue
-              v-for="(mmf, index) in filteredMoneyflows"
-              :key="mmf.id"
-              :mmf="mmf"
-              :index="index"
-              @show-receipt="showReceipt"
-              @delete-moneyflow="deleteMoneyflow"
-              @edit-moneyflow="editMoneyflow"
-              @list-moneyflow="listMoneyflow"
-            />
-            <TableRow>
-              <TableCell colspan="3" class="text-end block md:table-cell">
-                &sum;
-              </TableCell>
-              <TableCell colspan="2" class="text-end">
-                <u><SpanAmount :amount="amountSum" /></u>
-              </TableCell>
-              <TableCell colspan="6" class="block md:table-cell"></TableCell>
-            </TableRow>
-          </TableBody>
-        </Table>
+                    {{ $t("General.capitalsource") }}
+                    <component
+                      :is="sortIcon('capitalsourceComment')"
+                      class="inline h-4 w-4 text-primary cursor-pointer mb-1 ml-0.5"
+                      :title="$t('General.capitalsource')"
+                      :aria-label="$t('General.capitalsource')"
+                      @click="sortByColumn('capitalsourceComment')"
+                    />
+                  </span>
+                  <div class="flex items-center w-full max-w-sm mt-1">
+                    <Input
+                      type="text"
+                      :placeholder="$t('General.enterFilter')"
+                      v-model="filterCapitalsource"
+                      class="h-8 rounded-r-none focus-visible:ring-1 focus-visible:ring-offset-0 focus-visible:z-10"
+                    />
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      type="button"
+                      :title="$t('General.reset')"
+                      :aria-label="$t('General.reset')"
+                      @click="filterCapitalsource = ''"
+                      class="h-8 w-8 rounded-l-none border-l"
+                    >
+                      <X />
+                    </Button>
+                  </div>
+                </TableHead>
+                <TableHead colspan="2"></TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              <ReportTableRowVue
+                v-for="(mmf, index) in filteredMoneyflows"
+                :key="mmf.id"
+                :mmf="mmf"
+                :index="index"
+                @show-receipt="showReceipt"
+                @delete-moneyflow="deleteMoneyflow"
+                @edit-moneyflow="editMoneyflow"
+                @list-moneyflow="listMoneyflow"
+              />
+              <TableRow>
+                <TableCell colspan="3" class="text-end block md:table-cell">
+                  &sum;
+                </TableCell>
+                <TableCell colspan="2" class="text-end">
+                  <u><SpanAmount :amount="amountSum" /></u>
+                </TableCell>
+                <TableCell colspan="6" class="block md:table-cell"></TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
+        </div>
       </div>
     </div>
   </div>
+
   <div v-if="report.reportTurnoverCapitalsources">
     <div class="mt-10">
       <div class="text-center">
@@ -290,6 +601,7 @@
               :capitalsource-data="assetsTurnoverCapitalsources"
               :current-month-is-settled="currentMonthIsSettled"
             />
+
             <div class="flex justify-center pt-4 hidden md:block">
               <div class="w-full max-w-lg">
                 <div class="flex flex-col rounded-md border">
@@ -416,8 +728,21 @@
 </template>
 
 <script lang="ts" setup>
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 import {
   Table,
   TableBody,
@@ -431,8 +756,22 @@ import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 import type { Report } from "@/model/report/Report";
 import type { ReportTurnoverCapitalsource } from "@/model/report/ReportTurnoverCapitalsource";
 import ReportService from "@/service/ReportService";
+import { useUserSessionStore } from "@/stores/UserSessionStore";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
-import { ArrowDown, ArrowUp, ArrowUpDown, X } from "lucide-vue-next";
+import {
+  ArrowDown,
+  ArrowUp,
+  ArrowUpDown,
+  CreditCard,
+  Eye,
+  Filter,
+  Image,
+  MessageSquareMore,
+  Pencil,
+  Tag,
+  Trash2,
+  X,
+} from "lucide-vue-next";
 import {
   computed,
   onMounted,
@@ -441,15 +780,17 @@ import {
   watch,
   type PropType,
 } from "vue";
+import { useI18n } from "vue-i18n";
 import DivError from "../DivError.vue";
 import DeleteMoneyflowModalVue from "../moneyflow/DeleteMoneyflowModal.vue";
 import EditMoneyflowModalVue from "../moneyflow/EditMoneyflowModal.vue";
 import ListMoneyflowModal from "../moneyflow/ListMoneyflowModal.vue";
 import SpanAmount from "../SpanAmount.vue";
+import SpanDate from "../SpanDate.vue";
 import CapitalsourceTableVue from "./CapitalsourceTable.vue";
 import ReceiptModalVue from "./ReceiptModal.vue";
 import ReportTableRowVue from "./ReportTableRow.vue";
-
+const userSessionStore = useUserSessionStore();
 const serverErrors = ref(new Array<string>());
 
 const report = ref({} as Report);
@@ -468,7 +809,7 @@ const editModal = useTemplateRef<typeof EditMoneyflowModalVue>("editModal");
 const listModal = useTemplateRef<typeof ListMoneyflowModal>("listModal");
 
 const filteredMoneyflows = ref([] as Moneyflow[]);
-
+const { t } = useI18n();
 watch(
   () => report.value.moneyflows,
   () => {
