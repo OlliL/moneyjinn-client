@@ -228,9 +228,13 @@
     "transactionCostsRelative": "relativ",
     "transactionCostsMaximum": "maximal",
     "calculate": "Berechnen",
+    "currentValue": "Aktueller Wert",
+    "linkToChart": "Zum Chart...",
     "shares": "Anteile",
     "overall": "Gesamt",
     "payed": "Bezahlt",
+    "payedAverage": "Bezahlt ∅",
+    "payedOverall": "Bezahlt (Gesamt)",
     "profit": "Gewinn",
     "calculateResults": {
       "pieces": "zu verkaufende Stück",
@@ -405,6 +409,7 @@
       "trendMonthYear": "Monat / Jahr",
       "trendAmount": "Betrag"
     },
+    "overallSums": "Gesamtsummen (Σ)",
     "beginOfMonth": "Anfangsbetrag",
     "endOfMonthFixed": "Endbetrag (fix)",
     "endOfMonthCalculated": "Endbetrag (berechnet)",

@@ -228,9 +228,13 @@
     "transactionCostsRelative": "relative",
     "transactionCostsMaximum": "maximum",
     "calculate": "calculate",
+    "currentValue": "current value",
+    "linkToChart": "link to chart...",
     "shares": "shares",
     "overall": "overall",
-    "payed": "payes",
+    "payed": "payed",
+    "payedAverage": "payed ∅",
+    "payedOverall": "payed (overall)",
     "profit": "profit",
     "calculateResults": {
       "pieces": "pieces to be sold",
@@ -405,6 +409,7 @@
       "trendMonthYear": "month / year",
       "trendAmount": "amount"
     },
+    "overallSums": "grand total (Σ)",
     "beginOfMonth": "start balance",
     "endOfMonthFixed": "fixed end balance",
     "endOfMonthCalculated": "calculated end balance",

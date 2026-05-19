@@ -6,17 +6,17 @@
     <TableCell class="text-right border-r">{{
       etfFlowAmountSumString
     }}</TableCell>
-    <TableCell class="text-right border-r hidden md:table-cell">
+    <TableCell class="text-right border-r">
       <SpanAmount
         :amount="avgSpentPrice"
         :decimal-places="4"
         v-if="avgSpentPrice"
       />
     </TableCell>
-    <TableCell class="text-right border-r hidden md:table-cell">
+    <TableCell class="text-right border-r">
       <SpanAmount :amount="sellPrice" :decimal-places="3" v-if="sellPrice" />
     </TableCell>
-    <TableCell class="text-right border-r hidden md:table-cell">
+    <TableCell class="text-right border-r">
       <SpanAmount :amount="buyPrice" :decimal-places="3" v-if="buyPrice" />
     </TableCell>
     <TableCell class="text-right border-r">
@@ -28,9 +28,7 @@
     <TableCell class="text-right border-r">
       <u><SpanAmount :amount="profit" v-if="profit" /></u>
     </TableCell>
-    <TableCell class="text-right hidden md:table-cell">{{
-      pricesTimestampString
-    }}</TableCell>
+    <TableCell class="text-right">{{ pricesTimestampString }}</TableCell>
   </TableRow>
 </template>
 

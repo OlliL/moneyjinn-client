@@ -7,9 +7,23 @@
           <h4 class="text-2xl font-bold">{{ $t("General.etf") }}</h4>
         </div>
         <div class="p-4">
-          <div class="overflow-x-auto text-center">
+          <div class="block md:hidden">
+            <Accordion
+              type="single"
+              collapsible
+              class="w-full border rounded-md"
+            >
+              <EtfMobileAccordionItem
+                v-for="etfData in etfSummaryArray"
+                :key="'mobile-' + etfData.etfId"
+                v-bind="etfData"
+              />
+            </Accordion>
+          </div>
+
+          <div class="hidden md:block overflow-x-auto text-center">
             <div class="flex flex-col rounded-md border">
-              <Table class="[&_tbody_tr:nth-child(even)]:bg-muted">
+              <Table class="[&_tbody_tr:nth-child(even)]:bg-muted text-sm">
                 <TableHeader>
                   <TableRow>
                     <TableHead
@@ -91,7 +105,7 @@
                 <TableBody>
                   <EtfTableRowVue
                     v-for="etfData in etfSummaryArray"
-                    :key="etfData.etfId"
+                    :key="'desktop-' + etfData.etfId"
                     v-bind="etfData"
                   />
                 </TableBody>
@@ -105,6 +119,9 @@
 </template>
 
 <script lang="ts" setup>
+import { Accordion } from "@/components/ui/accordion";
+import EtfMobileAccordionItem from "./EtfMobileAccordionItem.vue";
+
 import {
   Table,
   TableBody,

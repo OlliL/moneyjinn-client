@@ -1,34 +1,30 @@
 <template>
   <TableRow class="">
-    <TableCell class="text-left border-r hidden md:table-cell">
+    <TableCell class="text-left border-r">
       {{ capitalsourceTypeString }}
     </TableCell>
-    <TableCell class="text-left border-r hidden md:table-cell">
+    <TableCell class="text-left border-r">
       {{ capitalsourceStateString }}
     </TableCell>
-    <TableCell class="text-left border-r">{{ capitalsourceComment }}</TableCell>
+    <TableCell class="text-left break-words whitespace-normal border-r">{{
+      capitalsourceComment
+    }}</TableCell>
     <TableCell class="text-right border-r"
       ><SpanAmount :amount="amountBeginOfMonthFixed"
     /></TableCell>
     <TableCell class="text-right border-r" v-if="currentMonthIsSettled">
       <SpanAmount :amount="amountEndOfMonthFixed" />
     </TableCell>
-    <TableCell class="text-right border-r hidden md:table-cell">
+    <TableCell class="text-right border-r">
       <SpanAmount :amount="amountEndOfMonthCalculated" />
     </TableCell>
-    <TableCell
-      class="text-right hidden md:table-cell"
-      v-if="currentMonthIsSettled"
-    >
+    <TableCell class="text-right" v-if="currentMonthIsSettled">
       <SpanAmount :amount="differenceFixedCalculated" />
     </TableCell>
     <TableCell class="text-right border-r" v-if="!currentMonthIsSettled">
       <SpanAmount :amount="amountCurrent" />
     </TableCell>
-    <TableCell
-      class="text-right hidden md:table-cell"
-      v-if="!currentMonthIsSettled"
-    >
+    <TableCell class="text-right" v-if="!currentMonthIsSettled">
       {{ amountCurrentStateString }}
     </TableCell>
   </TableRow>
