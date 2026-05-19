@@ -26,17 +26,6 @@ export abstract class AbstractView {
     await this.clickElement(element);
   }
 
-  protected async assertDataState(
-    methodName: string,
-    expectedState: string,
-  ): Promise<void> {
-    const testId = this.getRequiredTestId(methodName);
-    const element = await this.findByTestId<HTMLElement>(testId);
-    await waitFor(() => {
-      expect(element.dataset.state).toBe(expectedState);
-    });
-  }
-
   protected getRequiredTestId(methodName: string): string {
     if (!this.testId) {
       throw new Error(`${methodName} requires a bound testId.`);
@@ -60,16 +49,6 @@ export abstract class AbstractView {
 
   protected queryAllByTestId<T extends HTMLElement>(testId: string): T[] {
     return screen.queryAllByTestId<T>(testId);
-  }
-
-  protected async waitForText(
-    testId: string,
-    expectedText: string,
-  ): Promise<void> {
-    const element = this.getByTestId<HTMLElement>(testId);
-    await waitFor(() => {
-      expect(element.textContent).toContain(expectedText);
-    });
   }
 
   async assertToBeVisible(): Promise<void> {
@@ -115,14 +94,6 @@ export abstract class AbstractView {
     const element = await this.findByTestId<HTMLElement>(testId);
     await waitFor(() => {
       expect(element.classList.contains(className)).toBeFalsy();
-    });
-  }
-
-  async assertTextContains(text: string): Promise<void> {
-    const testId = this.getRequiredTestId("assertTextContains");
-    const element = await this.findByTestId<HTMLElement>(testId);
-    await waitFor(() => {
-      expect(element.textContent).toContain(text);
     });
   }
 
@@ -174,7 +145,11 @@ export class ValueView extends AbstractView {}
 
 export class AlertView extends AbstractView {
   async assertMessageContains(text: string): Promise<void> {
-    await this.assertTextContains(text);
+    const testId = this.getRequiredTestId("assertTextContains");
+    const element = await this.findByTestId<HTMLElement>(testId);
+    await waitFor(() => {
+      expect(element.textContent).toContain(text);
+    });
   }
 }
 
@@ -192,6 +167,17 @@ export class CollapseView extends AbstractView {
 export class SwitchView extends AbstractView {
   async click(): Promise<void> {
     await this.clickByTestId("click");
+  }
+
+  private async assertDataState(
+    methodName: string,
+    expectedState: string,
+  ): Promise<void> {
+    const testId = this.getRequiredTestId(methodName);
+    const element = await this.findByTestId<HTMLElement>(testId);
+    await waitFor(() => {
+      expect(element.dataset.state).toBe(expectedState);
+    });
   }
 
   async assertChecked(): Promise<void> {
@@ -357,13 +343,15 @@ export class ComboboxView extends AbstractView {
         break;
       }
     }
-    expect(found, () => {
-      const availableOptions = optionItems
-        .map((entry) => entry.textContent?.trim() || "")
-        .filter((entry) => entry.length > 0)
-        .join(", ");
-      return `Combobox '${this.itemBaseTestId}' cannot select '${valueInput}'. Available options: [${availableOptions}].`;
-    }).toBeTruthy();
+
+    const availableOptions = optionItems
+      .map((entry) => entry.textContent?.trim() || "")
+      .filter((entry) => entry.length > 0)
+      .join(", ");
+    expect(
+      found,
+      `Combobox '${this.itemBaseTestId}' cannot select '${valueInput}'. Available options: [${availableOptions}].`,
+    ).toBeTruthy();
 
     await waitForInputHasValue(idItem, String(valueHidden));
   }
@@ -386,6 +374,16 @@ export class SelectView extends AbstractView {
   constructor(testId: string) {
     super(testId);
     this.optionTestIdPrefix = `${testId}item-`;
+  }
+
+  private async waitForText(
+    testId: string,
+    expectedText: string,
+  ): Promise<void> {
+    const element = this.getByTestId<HTMLElement>(testId);
+    await waitFor(() => {
+      expect(element.textContent).toContain(expectedText);
+    });
   }
 
   async waitForSelectedText(expectedText: string): Promise<void> {

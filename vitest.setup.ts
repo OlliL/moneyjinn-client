@@ -32,7 +32,7 @@ globalThis.EventTarget = class EventTargetPolyfill {
     if (!listener) {
       return;
     }
-    const listenersByType = getListenersByType(this as unknown as object);
+    const listenersByType = getListenersByType(this);
     let typeListeners = listenersByType.get(type);
     if (!typeListeners) {
       typeListeners = new Set<EventListenerLike>();
@@ -45,13 +45,11 @@ globalThis.EventTarget = class EventTargetPolyfill {
     if (!listener) {
       return;
     }
-    getListenersByType(this as unknown as object)
-      .get(type)
-      ?.delete(listener);
+    getListenersByType(this).get(type)?.delete(listener);
   }
 
   dispatchEvent(event: Event): boolean {
-    getListenersByType(this as unknown as object)
+    getListenersByType(this)
       .get(event.type)
       ?.forEach((listener) => {
         if (typeof listener === "function") {
@@ -62,7 +60,7 @@ globalThis.EventTarget = class EventTargetPolyfill {
       });
     return !event.defaultPrevented;
   }
-} as unknown as typeof EventTarget;
+};
 
 if (typeof Element !== "undefined") {
   Element.prototype.setPointerCapture = () => {};
