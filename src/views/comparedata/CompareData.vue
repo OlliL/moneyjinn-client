@@ -151,11 +151,6 @@
 </template>
 
 <script lang="ts" setup>
-import { useForm } from "vee-validate";
-import { computed, onMounted, ref, useTemplateRef } from "vue";
-import { useI18n } from "vue-i18n";
-import { any, array as arr, date, instanceof as instof, number } from "zod";
-
 import ButtonSubmit from "@/components/ButtonSubmit.vue";
 import SelectCapitalsource from "@/components/capitalsource/SelectCapitalsource.vue";
 import CompareDataResultGroupVue from "@/components/comparedata/CompareDataResultGroup.vue";
@@ -166,15 +161,6 @@ import InputFile from "@/components/InputFile.vue";
 import DeleteMoneyflowModalVue from "@/components/moneyflow/DeleteMoneyflowModal.vue";
 import EditMoneyflowModalVue from "@/components/moneyflow/EditMoneyflowModal.vue";
 import SelectStandard from "@/components/SelectStandard.vue";
-
-import { useCapitalsourceStore } from "@/stores/CapitalsourceStore";
-
-import { globErr } from "@/tools/views/ZodUtil";
-
-import type { CompareData } from "@/model/comparedata/CompareData";
-import type { CompareDataParameter } from "@/model/comparedata/CompareDataParameter";
-import type { SelectBoxValue } from "@/model/SelectBoxValue";
-
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import {
@@ -183,11 +169,20 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import type { CompareData } from "@/model/comparedata/CompareData";
+import type { CompareDataParameter } from "@/model/comparedata/CompareDataParameter";
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
+import type { SelectBoxValue } from "@/model/SelectBoxValue";
 import CompareDataService from "@/service/CompareDataService";
 import MoneyflowService from "@/service/MoneyflowService";
+import { useCapitalsourceStore } from "@/stores/CapitalsourceStore";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
+import { globErr } from "@/tools/views/ZodUtil";
 import { Eye } from "lucide-vue-next";
+import { useForm } from "vee-validate";
+import { computed, onMounted, ref, useTemplateRef } from "vue";
+import { useI18n } from "vue-i18n";
+import { any, array as arr, date, instanceof as instof, number } from "zod";
 
 const { t } = useI18n();
 
@@ -313,6 +308,26 @@ const loadData = () => {
   Object.keys(values).forEach((field) => setFieldTouched(field, false));
 };
 
+const compareMoneyflowsByDate = (dataA: CompareData, dataB: CompareData) => {
+  const bookingDate =
+    dataA.moneyflow!.bookingDate.getTime()! -
+    dataB.moneyflow!.bookingDate?.getTime();
+  if (bookingDate === 0) {
+    return (
+      dataA.moneyflow!.invoiceDate!.getTime()! -
+      dataB.moneyflow!.invoiceDate!.getTime()
+    );
+  }
+  return bookingDate;
+};
+
+const compareCompareDataDatasetByDate = (
+  dataA: CompareData,
+  dataB: CompareData,
+) =>
+  dataA.compareDataDataset!.bookingDate.getTime()! -
+  dataB.compareDataDataset!.bookingDate?.getTime();
+
 const compareData = handleSubmit(async () => {
   dataCompared.value = false;
   serverErrors.value = new Array<string>();
@@ -341,12 +356,18 @@ const compareData = handleSubmit(async () => {
 
     CompareDataService.compareData(compareDataParameter)
       .then((compareDataResult) => {
-        compareDatasMatching.value = compareDataResult.compareDatasMatching;
+        compareDatasMatching.value =
+          compareDataResult.compareDatasMatching.sort(compareMoneyflowsByDate);
         compareDatasNotInDatabase.value =
-          compareDataResult.compareDatasNotInDatabase;
-        compareDatasNotInFile.value = compareDataResult.compareDatasNotInFile;
+          compareDataResult.compareDatasNotInDatabase.sort(
+            compareCompareDataDatasetByDate,
+          );
+        compareDatasNotInFile.value =
+          compareDataResult.compareDatasNotInFile.sort(compareMoneyflowsByDate);
         compareDatasWrongCapitalsource.value =
-          compareDataResult.compareDatasWrongCapitalsource;
+          compareDataResult.compareDatasWrongCapitalsource.sort(
+            compareMoneyflowsByDate,
+          );
 
         dataCompared.value = true;
       })

@@ -24,7 +24,7 @@
       :placeholder="$t('ContractpartnerMatching.searchBy')"
       @createClicked="showCreateContractpartnerMatchingModal"
       ><template #right>
-        <div class="w-full md:w-[20rem]">
+        <div class="w-full md:w-auto">
           <SelectContractpartner
             v-model="searchContractpartnerId"
             id-suffix="ContractpartnerMatching-searchContractpartner"

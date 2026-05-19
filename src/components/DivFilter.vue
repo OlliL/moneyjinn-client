@@ -1,12 +1,18 @@
 <template>
   <div class="flex justify-center w-full mb-6">
-    <div class="flex flex-wrap items-end gap-4 bg-background p-1 w-auto">
-      <Button data-testid="div-filter-create" @click="$emit('createClicked')">
+    <div
+      class="flex flex-col items-center gap-4 bg-background p-2 w-full max-w-2xl md:flex-row md:justify-center md:items-end"
+    >
+      <Button
+        data-testid="div-filter-create"
+        @click="$emit('createClicked')"
+        class="w-full md:w-auto"
+      >
         <Plus class="mr-2 h-4 w-4" />
         {{ $t("General.new") }}
       </Button>
 
-      <div class="flex w-80 items-center">
+      <div class="flex w-full md:w-80 items-center">
         <Button
           data-testid="div-filter-all"
           variant="secondary"
@@ -20,7 +26,7 @@
           type="text"
           :placeholder="placeholder"
           :model-value="modelValue"
-          class="rounded-l-none focus-visible:ring-1"
+          class="rounded-l-none focus-visible:ring-1 w-full"
           @update:model-value="handleInput"
         />
       </div>
@@ -34,15 +40,13 @@
         />
         <Label
           for="validInput"
-          class="cursor-pointer text-sm font-medium select-none"
+          class="cursor-pointer text-sm font-medium select-none whitespace-nowrap"
         >
           {{ $t("General.validNow") }}
         </Label>
       </div>
 
-      <div v-if="$slots.right" class="flex items-center gap-2">
-        <slot name="right"></slot>
-      </div>
+      <slot name="right"></slot>
     </div>
   </div>
 </template>
