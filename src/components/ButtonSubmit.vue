@@ -3,6 +3,7 @@
     variant="default"
     type="submit"
     :form="formId"
+    :data-testid="testId"
     class="button-with-icon"
   >
     <slot name="icon"></slot>
@@ -19,6 +20,10 @@ defineProps({
     required: false,
   },
   formId: {
+    type: String,
+    required: false,
+  },
+  testId: {
     type: String,
     required: false,
   },

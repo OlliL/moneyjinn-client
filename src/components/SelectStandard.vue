@@ -23,7 +23,7 @@
           :class="[
             'bg-background z-10',
             $slots.icon ? 'rounded-r-none' : '',
-            errorData.inputClass == 'is-invalid'
+            isInvalid
               ? '!border-destructive bg-destructive/[0.03] focus-visible:ring-destructive/15 !border-r-destructive'
               : 'border-input focus-visible:ring-ring',
           ]"
@@ -49,7 +49,7 @@
         v-if="$slots.icon"
         :class="[
           'flex items-center justify-center px-2 border border-input rounded-r-md text-foreground transition-colors relative',
-          errorData.inputClass == 'is-invalid' ? 'border-l-transparent' : '',
+          isInvalid ? 'border-l-transparent' : '',
         ]"
       >
         <slot name="icon"></slot>
@@ -78,7 +78,7 @@
     </div>
 
     <p
-      v-if="errorData.inputClass === 'is-invalid'"
+      v-if="isInvalid"
       class="text-[0.8rem] font-medium text-destructive mt-0.5 text-left ml-1"
     >
       {{ errorMessage }}
@@ -90,10 +90,6 @@
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import type { SelectBoxValue } from "@/model/SelectBoxValue";
-import {
-  generateErrorDataVeeValidate,
-  type ErrorData,
-} from "@/tools/views/ErrorData";
 import { toTypedSchema } from "@vee-validate/zod";
 import { X } from "lucide-vue-next";
 import { useField } from "vee-validate";
@@ -316,13 +312,7 @@ const onInput = () => {
   filterItemList();
 };
 
-const errorData = computed((): ErrorData => {
-  return generateErrorDataVeeValidate(
-    fieldMeta.touched,
-    props.fieldLabel,
-    errorMessage.value,
-  );
-});
+const isInvalid = computed(() => fieldMeta.touched && !!errorMessage.value);
 
 const fieldRef = useTemplateRef<typeof Input>("fieldRef");
 const dropdownRef = useTemplateRef<HTMLDivElement>("dropdownRef");

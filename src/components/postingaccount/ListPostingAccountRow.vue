@@ -1,11 +1,16 @@
 <template>
-  <TableRow>
+  <TableRow :data-testid="`posting-account-row-${mpa.id}`">
     <TableCell class="text-left border-r">{{ mpa.name }}</TableCell>
-    <ButtonTableIcon :title="$t('General.edit')" @click="editPostingAccount">
+    <ButtonTableIcon
+      :title="$t('General.edit')"
+      :test-id="`posting-account-edit-${mpa.id}`"
+      @click="editPostingAccount"
+    >
       <Pencil class="h-4 w-4" />
     </ButtonTableIcon>
     <ButtonTableIcon
       :title="$t('General.delete')"
+      :test-id="`posting-account-delete-${mpa.id}`"
       @click="deletePostingAccount"
     >
       <Trash2 class="h-4 w-4" />

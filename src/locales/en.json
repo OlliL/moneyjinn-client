@@ -117,7 +117,6 @@
     "postcode": "postcode",
     "town": "town",
     "country": "country",
-    "accounts": "accounts",
     "searchBy": "search by name...",
     "title": {
       "create": "create contractpartner",
@@ -145,9 +144,10 @@
     "nothingFound": "No bank accounts found.",
     "validation": {
       "accountNumber": "Please specify the IBAN!",
-      "accountNumberMax": "The IBAN must not exceed 22 characters!",
-      "bankCode": "Please specify the BIC!",
-      "bankCodeMax": "The BIC must not exceed 11 characters!"
+      "length": {
+        "accountNumber": "The IBAN must not exceed 22 characters!",
+        "bankCode": "The BIC must not exceed 11 characters!"
+      }
     }
   },
   "ContractpartnerMatching": {
@@ -272,11 +272,9 @@
       "delete": "delete ETF preliminary lump sums"
     },
     "amounts": "amounts",
-    "monthlyAmount": "amount {month}",
     "validation": {
       "etfId": "Please select an ETF!",
       "year": "Please specify a year!",
-      "price": "Please specify a price per piece!",
       "amount": "Please specify an amount!"
     }
   },
@@ -315,7 +313,6 @@
     "noMatchingMoneyflow": "No matching moneyflow found!",
     "apply": "apply",
     "newBooking": "new booking",
-    "partner": "partner",
     "reference": "reference",
     "equal": "equal",
     "caseSensitivity": "respect case sensitivity",
@@ -421,8 +418,6 @@
     "loans": "loans",
     "fixedProfit": "fixed profit",
     "calculatedProfit": "caluclated profit",
-    "included": "included",
-    "excluded": "excluded",
     "aggregationOnMonths": "aggregation on months",
     "aggregationOnYears": "aggregation on years",
     "singlePostingAccount": "single postingaccount",

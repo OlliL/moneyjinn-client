@@ -3,7 +3,10 @@
     class="flex w-full flex-col items-center justify-center gap-4 sm:flex-row sm:flex-nowrap sm:items-start"
   >
     <Select v-model="selectedYearModel">
-      <SelectTrigger class="w-25 h-8 shrink-0">
+      <SelectTrigger
+        data-testid="month-year-nav-year-trigger"
+        class="w-25 h-8 shrink-0"
+      >
         <SelectValue :placeholder="selectedYearModel" />
       </SelectTrigger>
       <SelectContent>
@@ -11,6 +14,7 @@
           v-for="year in years"
           :key="String(year)"
           :value="String(year)"
+          :data-testid="`month-year-nav-year-item-${year}`"
         >
           {{ year }}
         </SelectItem>
@@ -29,6 +33,7 @@
         v-for="month in months"
         :key="month"
         :value="String(month)"
+        :data-testid="`month-year-nav-month-${month}`"
         class="h-9 min-w-16 px-3 text-sm"
       >
         {{ getMonthName(month) }}

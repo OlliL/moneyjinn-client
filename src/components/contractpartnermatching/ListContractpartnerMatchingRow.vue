@@ -1,5 +1,5 @@
 <template>
-  <TableRow>
+  <TableRow :data-testid="`contractpartner-matching-row-${mcm.id}`">
     <TableCell class="text-left border-r py-1 px-2">
       {{ mcm.matchingText }}
     </TableCell>
@@ -14,12 +14,14 @@
     </TableCell>
     <ButtonTableIcon
       :title="$t('General.edit')"
+      :test-id="`contractpartner-matching-edit-${mcm.id}`"
       @click="editContractpartnerMatching"
     >
       <Pencil class="h-4 w-4" />
     </ButtonTableIcon>
     <ButtonTableIcon
       :title="$t('General.delete')"
+      :test-id="`contractpartner-matching-delete-${mcm.id}`"
       @click="deleteContractpartnerMatching"
     >
       <Trash2 class="h-4 w-4" />

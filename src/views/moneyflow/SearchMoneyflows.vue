@@ -113,6 +113,7 @@
                 <ButtonSubmit
                   :button-label="$t('Moneyflow.search')"
                   form-id="searchMoneyflowsForm"
+                  test-id="search-moneyflows-submit"
                   ><template #icon><Search class="h-4 w-4" /></template
                 ></ButtonSubmit>
                 <Button
@@ -201,7 +202,6 @@
             v-for="[index, moneyflowGroup] in moneyflowGroups"
             :key="index.toString()"
             :moneyflow-group="moneyflowGroup"
-            :moneyflow-group-key="index.toString()"
             :col-booking-month="colBookingMonth"
             :col-booking-year="colBookingYear"
             :col-contractpartner="colContractpartner"

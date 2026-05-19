@@ -1,18 +1,21 @@
 import SpanDate from "@/components/SpanDate.vue";
+import { ValueView } from "@/tests/TestViews";
 import "@testing-library/jest-dom/vitest";
-import { render, screen } from "@testing-library/vue";
-import { expect, test } from "vitest";
+import { render } from "@testing-library/vue";
+import { test } from "vitest";
 
 const date = new Date(Date.parse("2020-03-04"));
 
+class SpanDateView {
+  static readonly Date = new ValueView("dateSpan");
+}
+
 test("test date locale formatting", async () => {
   render(SpanDate, { props: { date: date } });
-  const dateSpan = screen.getByTestId<HTMLSpanElement>("dateSpan");
-  expect(dateSpan.textContent).toEqual("03/04/2020");
+  await SpanDateView.Date.assertTextEquals("03/04/2020");
 });
 
 test("test date empty no error", async () => {
   render(SpanDate);
-  const dateSpan = screen.getByTestId<HTMLSpanElement>("dateSpan");
-  expect(dateSpan).toBeEmptyDOMElement();
+  await SpanDateView.Date.assertEmpty();
 });

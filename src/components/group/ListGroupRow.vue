@@ -1,10 +1,18 @@
 <template>
-  <TableRow>
+  <TableRow :data-testid="`group-row-${group.id}`">
     <TableCell class="text-left border-r">{{ group.name }}</TableCell>
-    <ButtonTableIcon :title="$t('General.edit')" @click="editGroup">
+    <ButtonTableIcon
+      :title="$t('General.edit')"
+      :test-id="`group-edit-${group.id}`"
+      @click="editGroup"
+    >
       <Pencil class="h-4 w-4" />
     </ButtonTableIcon>
-    <ButtonTableIcon :title="$t('General.delete')" @click="deleteGroup">
+    <ButtonTableIcon
+      :title="$t('General.delete')"
+      :test-id="`group-delete-${group.id}`"
+      @click="deleteGroup"
+    >
       <Trash2 class="h-4 w-4" />
     </ButtonTableIcon>
   </TableRow>

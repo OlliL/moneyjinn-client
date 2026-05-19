@@ -29,6 +29,12 @@
 - start nginx
 - start moneyjinn-server
 
+## Testing
+
+- Test conventions (Page Object pattern, mocker usage, async rules, AI context): `src/tests/Testing-Conventions.md`
+- Type check: `npm run -s type-check`
+- Test suite: `npm run -s test:ci`
+
 ## Configure Application
 
 - open http://localhost/ in your favorite web browser (assuming you installed everything on your local machine)

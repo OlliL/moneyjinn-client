@@ -1,6 +1,7 @@
 <template>
   <Dialog v-model:open="isOpen">
     <DialogContent
+      data-testid="app-modal"
       :class="[
         props.maxWidth ? props.maxWidth : 'max-w-[calc(100%-2rem)] sm:max-w-lg',
         'max-h-[90vh]',
@@ -12,6 +13,7 @@
         <DialogTitle class="text-lg font-semibold leading-none tracking-tight">
           {{ title }}
         </DialogTitle>
+        <DialogDescription class="sr-only">{{ title }}</DialogDescription>
       </DialogHeader>
 
       <div class="overflow-y-auto flex-1 pr-1">
@@ -39,6 +41,7 @@ import {
   Dialog,
   DialogClose,
   DialogContent,
+  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,

@@ -5,6 +5,7 @@
       size="icon"
       :title="title"
       :aria-label="title"
+      :data-testid="testId"
       class="action-icon-button"
       @click="emit('click')"
     >
@@ -21,6 +22,10 @@ defineProps({
   title: {
     type: String,
     required: true,
+  },
+  testId: {
+    type: String,
+    default: "",
   },
 });
 

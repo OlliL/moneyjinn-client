@@ -1,11 +1,17 @@
 import InputStandard from "@/components/InputStandard.vue";
+import { InputView, TextView } from "@/tests/TestViews";
 import { globErr } from "@/tools/views/ZodUtil";
 import "@testing-library/jest-dom/vitest";
-import { render, screen, waitFor } from "@testing-library/vue";
+import { render } from "@testing-library/vue";
 import { expect, test } from "vitest";
 import { computed, ref } from "vue";
 import { string } from "zod";
-import { setInputValueAndWait, waitForInputHasValue } from "../TestUtil";
+
+class InputStandardView {
+  static readonly Input = new InputView("inputStandard");
+  static readonly ErrorText = new TextView("my error");
+  static readonly RegularLabelText = new TextView("regular label");
+}
 
 test("error message and regular label get set correctly", async () => {
   const schema = string(globErr("my error")).min(5);
@@ -16,11 +22,10 @@ test("error message and regular label get set correctly", async () => {
       fieldLabel: "regular label",
     },
   });
-  const inputStandard = screen.getByTestId<HTMLInputElement>("inputStandard");
-  setInputValueAndWait(inputStandard, "1234");
-  await screen.findByText("my error");
-  setInputValueAndWait(inputStandard, "12345");
-  await screen.findByText("regular label");
+  await InputStandardView.Input.setValue("1234");
+  await InputStandardView.ErrorText.assertInDocument();
+  await InputStandardView.Input.setValue("12345");
+  await InputStandardView.RegularLabelText.assertInDocument();
 });
 
 test("computed schema also works", async () => {
@@ -33,13 +38,12 @@ test("computed schema also works", async () => {
       fieldLabel: "regular label",
     },
   });
-  const inputStandard = screen.getByTestId<HTMLInputElement>("inputStandard");
-  setInputValueAndWait(inputStandard, "1234");
-  await screen.findByText("my error");
-  setInputValueAndWait(inputStandard, "12345");
-  await screen.findByText("regular label");
+  await InputStandardView.Input.setValue("1234");
+  await InputStandardView.ErrorText.assertInDocument();
+  await InputStandardView.Input.setValue("12345");
+  await InputStandardView.RegularLabelText.assertInDocument();
   len.value = 6;
-  await screen.findByText("my error");
+  await InputStandardView.ErrorText.assertInDocument();
 });
 
 test("untouched field shows regular label", async () => {
@@ -51,8 +55,8 @@ test("untouched field shows regular label", async () => {
       fieldLabel: "regular label",
     },
   });
-  screen.getByTestId<HTMLInputElement>("inputStandard");
-  await screen.findByText("regular label");
+  await InputStandardView.Input.assertToBeVisible();
+  await InputStandardView.RegularLabelText.assertInDocument();
 });
 
 test("check that update:modelValue gets emitted", async () => {
@@ -62,12 +66,10 @@ test("check that update:modelValue gets emitted", async () => {
       modelValue: "abcd",
     },
   });
-  const inputStandard = screen.getByTestId<HTMLInputElement>("inputStandard");
-  waitForInputHasValue(inputStandard, "abcd");
-  setInputValueAndWait(inputStandard, "1234");
-  expect((emitted()["update:modelValue"]![0]! as Array<string>)[0]).toBe(
-    "1234",
-  );
+  await InputStandardView.Input.assertValue("abcd");
+  await InputStandardView.Input.setValue("1234");
+  const updates = emitted()["update:modelValue"]!;
+  expect((updates[updates.length - 1]! as Array<string>)[0]).toBe("1234");
 });
 
 test("check focus", async () => {
@@ -77,6 +79,5 @@ test("check focus", async () => {
       focus: true,
     },
   });
-  const inputStandard = screen.getByTestId<HTMLInputElement>("inputStandard");
-  await waitFor(() => expect(document.activeElement).toBe(inputStandard));
+  await InputStandardView.Input.assertFocused();
 });

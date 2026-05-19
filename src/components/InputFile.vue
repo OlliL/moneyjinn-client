@@ -12,7 +12,7 @@
       ref="fileUpload"
       :class="[
         'file:mr-2 file:cursor-pointer file:rounded-md file:border file:border-input file:bg-background file:px-2 file:py-1 file:text-sm file:font-medium hover:file:bg-accent',
-        errorData.inputClass === 'is-invalid'
+        isInvalid
           ? 'border-destructive! bg-destructive/3 focus-visible:ring-destructive/15'
           : 'border-input focus-visible:ring-ring',
       ]"
@@ -20,7 +20,7 @@
     />
 
     <p
-      v-if="errorData.inputClass === 'is-invalid'"
+      v-if="isInvalid"
       class="text-[0.8rem] font-medium text-destructive mt-0.5 text-left ml-1"
     >
       {{ errorMessage }}
@@ -31,10 +31,6 @@
 <script lang="ts" setup>
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  generateErrorDataVeeValidate,
-  type ErrorData,
-} from "@/tools/views/ErrorData";
 import { toTypedSchema } from "@vee-validate/zod";
 import { useField } from "vee-validate";
 import { computed, useTemplateRef, type PropType, type Ref } from "vue";
@@ -90,11 +86,5 @@ const onInput = (event: Event) => {
   emit("update:modelValue", files);
 };
 
-const errorData = computed((): ErrorData => {
-  return generateErrorDataVeeValidate(
-    fieldMeta.touched,
-    props.fieldLabel ? props.fieldLabel : "",
-    errorMessage.value,
-  );
-});
+const isInvalid = computed(() => fieldMeta.touched && !!errorMessage.value);
 </script>

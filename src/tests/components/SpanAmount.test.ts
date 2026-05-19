@@ -1,47 +1,45 @@
 import SpanAmount from "@/components/SpanAmount.vue";
+import { ValueView } from "@/tests/TestViews";
 import "@testing-library/jest-dom/vitest";
-import { render, screen } from "@testing-library/vue";
-import { expect, test } from "vitest";
+import { render } from "@testing-library/vue";
+import { test } from "vitest";
+
+class SpanAmountView {
+  static readonly Amount = new ValueView("amountSpan");
+}
 
 test("fill up number with 2 decimal places", async () => {
   render(SpanAmount, { props: { amount: 2 } });
-  const amountSpan = screen.getByTestId<HTMLSpanElement>("amountSpan");
-  expect(amountSpan.textContent).toEqual("2,00 €");
+  await SpanAmountView.Amount.assertTextEquals("2,00 €");
 });
 
 test("fill up number with 3 decimal places and thousand seperator", async () => {
   render(SpanAmount, { props: { amount: 123456789, decimalPlaces: 3 } });
-  const amountSpan = screen.getByTestId<HTMLSpanElement>("amountSpan");
-  expect(amountSpan.textContent).toEqual("123.456.789,000 €");
-  expect(amountSpan).not.toHaveClass("text-danger");
+  await SpanAmountView.Amount.assertTextEquals("123.456.789,000 €");
+  await SpanAmountView.Amount.assertNotHasClass("text-destructive");
 });
 
 test("decimal Places 0 works", async () => {
   render(SpanAmount, { props: { amount: 2, decimalPlaces: 0 } });
-  const amountSpan = screen.getByTestId<HTMLSpanElement>("amountSpan");
-  expect(amountSpan.textContent).toEqual("2 €");
+  await SpanAmountView.Amount.assertTextEquals("2 €");
 });
 
 test("reduce too much decimal places by rounding up", async () => {
   render(SpanAmount, { props: { amount: -2.999999 } });
-  const amountSpan = screen.getByTestId<HTMLSpanElement>("amountSpan");
-  expect(amountSpan.textContent).toEqual("-3,00 €");
+  await SpanAmountView.Amount.assertTextEquals("-3,00 €");
 });
 
 test("reduce too much decimal places by rounding down", async () => {
   render(SpanAmount, { props: { amount: -2.11111 } });
-  const amountSpan = screen.getByTestId<HTMLSpanElement>("amountSpan");
-  expect(amountSpan.textContent).toEqual("-2,11 €");
+  await SpanAmountView.Amount.assertTextEquals("-2,11 €");
 });
 
 test("format negative number red", async () => {
   render(SpanAmount, { props: { amount: -2 } });
-  const amountSpan = screen.getByTestId<HTMLSpanElement>("amountSpan");
-  expect(amountSpan).toHaveClass("text-destructive");
+  await SpanAmountView.Amount.assertHasClass("text-destructive");
 });
 
 test("format positive number not red", async () => {
   render(SpanAmount, { props: { amount: 2 } });
-  const amountSpan = screen.getByTestId<HTMLSpanElement>("amountSpan");
-  expect(amountSpan).not.toHaveClass("text-destructive");
+  await SpanAmountView.Amount.assertNotHasClass("text-destructive");
 });

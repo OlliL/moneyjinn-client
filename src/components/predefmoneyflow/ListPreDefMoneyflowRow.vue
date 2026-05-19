@@ -1,5 +1,5 @@
 <template>
-  <TableRow>
+  <TableRow :data-testid="`predef-moneyflow-row-${mpm.id}`">
     <TableCell class="text-right border-r py-1 px-2">
       <SpanAmount :amount="mpm.amount" />
     </TableCell>
@@ -25,11 +25,16 @@
     <TableCell class="text-center border-r py-1 px-2">
       <SpanDate :date="mpm.lastUsed" />
     </TableCell>
-    <ButtonTableIcon :title="$t('General.edit')" @click="editPreDefMoneyflow">
+    <ButtonTableIcon
+      :title="$t('General.edit')"
+      :test-id="`predef-moneyflow-edit-${mpm.id}`"
+      @click="editPreDefMoneyflow"
+    >
       <Pencil class="h-4 w-4" />
     </ButtonTableIcon>
     <ButtonTableIcon
       :title="$t('General.delete')"
+      :test-id="`predef-moneyflow-delete-${mpm.id}`"
       @click="deletePreDefMoneyflow"
     >
       <Trash2 class="h-4 w-4" />

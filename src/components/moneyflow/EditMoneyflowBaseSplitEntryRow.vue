@@ -73,17 +73,17 @@
             data-testid="remainder"
             :class="[
               'rounded-l-none',
-              remainderErrorData.inputClass == 'is-invalid'
+              isRemainderInvalid
                 ? '!border-destructive bg-destructive/[0.03] focus-visible:ring-destructive/15'
                 : '',
             ]"
           />
         </div>
         <p
-          v-if="remainderErrorData.inputClass == 'is-invalid'"
+          v-if="isRemainderInvalid"
           class="text-[0.8rem] font-medium text-destructive mt-0.5 text-left ml-1"
         >
-          {{ remainderErrorData.fieldLabel }}
+          {{ $t("Moneyflow.validation.remainder") }}
         </p>
       </div>
     </div>
@@ -96,7 +96,6 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { generateErrorData } from "@/tools/views/ErrorData";
 import { amountSchema, globErr } from "@/tools/views/ZodUtil";
 import { ArrowLeft, Euro, Trash2 } from "lucide-vue-next";
 import { computed, ref, watch } from "vue";
@@ -159,13 +158,7 @@ const rowEmpty = computed(
   () => !mseAmount.value && !mseComment.value && !msePostingAccountId.value,
 );
 
-const remainderErrorData = computed(() =>
-  generateErrorData(
-    props.remainderIsValid,
-    t("Moneyflow.remainder"),
-    t("Moneyflow.validation.remainder"),
-  ),
-);
+const isRemainderInvalid = computed(() => props.remainderIsValid === false);
 
 watch(
   () => props.amount,

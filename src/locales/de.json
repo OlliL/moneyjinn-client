@@ -117,7 +117,6 @@
     "postcode": "Postleitzahl",
     "town": "Stadt",
     "country": "Land",
-    "accounts": "Konten",
     "searchBy": "Suchen nach Name...",
     "title": {
       "create": "Vertragspartner hinzufügen",
@@ -145,9 +144,10 @@
     "nothingFound": "Keine Kontoverbindungen gefunden.",
     "validation": {
       "accountNumber": "Bitte IBAN angeben!",
-      "accountNumberMax": "Die IBAN darf maximal 22 Stellen haben!",
-      "bankCode": "Bitte BIC angeben!",
-      "bankCodeMax": "Die BIC darf maximal 11 Stellen haben!"
+      "length": {
+        "accountNumber": "Die IBAN darf maximal 22 Stellen haben!",
+        "bankCode": "Die BIC darf maximal 11 Stellen haben!"
+      }
     }
   },
   "ContractpartnerMatching": {
@@ -272,11 +272,9 @@
       "delete": "ETF Vorabpauschale löschen"
     },
     "amounts": "Beträge",
-    "monthlyAmount": "Betrag {month}",
     "validation": {
       "etfId": "Bitte ETF auswählen!",
       "year": "Bitte Jahr angeben!",
-      "price": "Bitte Stückpreis angeben!",
       "amount": "Bitte Betrag angeben!"
     }
   },
@@ -315,7 +313,6 @@
     "noMatchingMoneyflow": "Keine passenden Geldbewegungen gefunden!",
     "apply": "Übernehmen",
     "newBooking": "Neue Buchung",
-    "partner": "Transaktionspartner",
     "reference": "Verwendungszweck",
     "equal": "gleich",
     "caseSensitivity": "Groß-, Kleinschreibung beachten",
@@ -421,8 +418,6 @@
     "loans": "Kredite",
     "fixedProfit": "Gewinn (fix)",
     "calculatedProfit": "Gewinn (errechnet)",
-    "included": "eingeschlossen",
-    "excluded": "ausgeschlossen",
     "aggregationOnMonths": "Aggregation auf Monate",
     "aggregationOnYears": "Aggregation auf Jahre",
     "singlePostingAccount": "Einzelnes Buchungskonto",

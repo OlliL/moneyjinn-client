@@ -1,5 +1,5 @@
 <template>
-  <TableRow>
+  <TableRow :data-testid="`etf-depot-row-${flow.etfflowid}`">
     <TableCell class="text-left">
       {{ timestampString }}
     </TableCell>
@@ -86,6 +86,7 @@
     <ButtonTableIcon
       :title="$t('General.edit')"
       :aria-label="$t('General.edit')"
+      :test-id="`etf-depot-edit-${flow.etfflowid}`"
       button-class="h-6 w-6 cursor-pointer"
       @click="editEtfFlow"
     >
@@ -94,6 +95,7 @@
     <ButtonTableIcon
       :title="$t('General.delete')"
       :aria-label="$t('General.delete')"
+      :test-id="`etf-depot-delete-${flow.etfflowid}`"
       button-class="h-6 w-6 cursor-pointer"
       @click="deleteEtfFlow"
     >

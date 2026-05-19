@@ -77,6 +77,7 @@
               <ButtonSubmit
                 :button-label="$t('General.show')"
                 form-id="compareDataForm"
+                test-id="compare-data-submit"
                 ><template #icon><Eye class="h-4 w-4" /></template
               ></ButtonSubmit>
             </div>
@@ -104,7 +105,7 @@
           <CompareDataResultGroupVue
             :comment="$t('CompareData.dataInSourceNotInDb')"
             :compare-data="compareDatasNotInDatabase"
-            compare-data-key="notInDatabase"
+            group-test-id="compare-data-group-not-in-database"
             :amount-class="compareDatasNotInDatabaseCountClass"
             :capitalsource-id="capitalsourceId"
             :capitalsource-comment="capitalsourceComment"
@@ -113,7 +114,7 @@
           <CompareDataResultGroupVue
             :comment="$t('CompareData.dataNotInSourceInDb')"
             :compare-data="compareDatasNotInFile"
-            compare-data-key="notInFile"
+            group-test-id="compare-data-group-not-in-file"
             :amount-class="compareDatasNotInFileCountClass"
             :capitalsource-id="capitalsourceId"
             :capitalsource-comment="capitalsourceComment"
@@ -124,7 +125,7 @@
           <CompareDataResultGroupVue
             :comment="$t('CompareData.dataMatchingButWrongCapitalsource')"
             :compare-data="compareDatasWrongCapitalsource"
-            compare-data-key="wrongCapitalsource"
+            group-test-id="compare-data-group-wrong-capitalsource"
             :amount-class="compareDatasWrongCapitalsourceCountClass"
             :capitalsource-id="capitalsourceId"
             :capitalsource-comment="capitalsourceComment"
@@ -135,7 +136,7 @@
           <CompareDataResultGroupVue
             :comment="$t('CompareData.dataMatching')"
             :compare-data="compareDatasMatching"
-            compare-data-key="matching"
+            group-test-id="compare-data-group-matching"
             :amount-class="compareDatasMatchingCountClass"
             :capitalsource-id="capitalsourceId"
             :capitalsource-comment="capitalsourceComment"

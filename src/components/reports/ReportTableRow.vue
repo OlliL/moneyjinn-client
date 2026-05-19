@@ -1,5 +1,6 @@
 <template>
   <TableRow
+    :data-testid="`report-moneyflow-row-${mmf.id}`"
     v-if="
       mmf.moneyflowSplitEntries == null || mmf.moneyflowSplitEntries.length == 0
     "
@@ -56,6 +57,7 @@
       <Button
         variant="ghost"
         size="icon"
+        :data-testid="`report-moneyflow-edit-${mmf.id}`"
         @click="editMoneyflow"
         :title="$t('General.edit')"
         :aria-label="$t('General.edit')"
@@ -71,6 +73,7 @@
       <Button
         variant="ghost"
         size="icon"
+        :data-testid="`report-moneyflow-delete-${mmf.id}`"
         @click="deleteMoneyflow"
         :title="$t('General.delete')"
         :aria-label="$t('General.delete')"
@@ -86,6 +89,7 @@
       <Button
         variant="ghost"
         size="icon"
+        :data-testid="`report-moneyflow-list-${mmf.id}`"
         @click="listMoneyflow"
         :title="$t('General.moneyflow')"
         :aria-label="$t('General.moneyflow')"
@@ -97,7 +101,11 @@
     <TableCell :class="[rowBgClass]" v-if="!isOwnMoneyflow"></TableCell>
   </TableRow>
 
-  <TableRow v-for="(mse, index) in mmf.moneyflowSplitEntries" :key="mse.id">
+  <TableRow
+    v-for="(mse, index) in mmf.moneyflowSplitEntries"
+    :key="mse.id"
+    :data-testid="index === 0 ? `report-moneyflow-row-${mmf.id}` : undefined"
+  >
     <TableCell
       :rowspan="rowspan"
       v-if="index == 0"
@@ -173,6 +181,7 @@
       <Button
         variant="ghost"
         size="icon"
+        :data-testid="`report-moneyflow-edit-${mmf.id}`"
         @click="editMoneyflow"
         :title="$t('General.edit')"
         :aria-label="$t('General.edit')"
@@ -189,6 +198,7 @@
       <Button
         variant="ghost"
         size="icon"
+        :data-testid="`report-moneyflow-delete-${mmf.id}`"
         @click="deleteMoneyflow"
         :title="$t('General.delete')"
         :aria-label="$t('General.delete')"
@@ -205,6 +215,7 @@
       <Button
         variant="ghost"
         size="icon"
+        :data-testid="`report-moneyflow-list-${mmf.id}`"
         @click="listMoneyflow"
         :title="$t('General.moneyflow')"
         :aria-label="$t('General.moneyflow')"

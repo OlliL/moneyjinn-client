@@ -1,5 +1,5 @@
 <template>
-  <TableRow>
+  <TableRow :data-testid="`user-row-${user.id}`">
     <TableCell class="text-left border-r py-1 px-2">{{
       user.userName
     }}</TableCell>
@@ -10,10 +10,18 @@
     <TableCell class="text-center border-r py-1 px-2">
       <SpanBoolean :value="user.userIsNew" />
     </TableCell>
-    <ButtonTableIcon :title="$t('General.edit')" @click="editUser">
+    <ButtonTableIcon
+      :title="$t('General.edit')"
+      :test-id="`user-edit-${user.id}`"
+      @click="editUser"
+    >
       <Pencil class="h-4 w-4" />
     </ButtonTableIcon>
-    <ButtonTableIcon :title="$t('General.delete')" @click="deleteUser">
+    <ButtonTableIcon
+      :title="$t('General.delete')"
+      :test-id="`user-delete-${user.id}`"
+      @click="deleteUser"
+    >
       <Trash2 class="h-4 w-4" />
     </ButtonTableIcon>
   </TableRow>

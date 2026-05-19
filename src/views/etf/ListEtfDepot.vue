@@ -24,7 +24,11 @@
             />
           </div>
           <div class="md:col-span-4 mt-5">
-            <Button type="button" @click="createEtfFlow">
+            <Button
+              data-testid="etf-depot-create"
+              type="button"
+              @click="createEtfFlow"
+            >
               <Plus class="mr-2 h-4 w-4" />
               {{ $t("ETFFlow.newBooking") }}
             </Button>

@@ -1,5 +1,5 @@
 <template>
-  <TableRow>
+  <TableRow :data-testid="`capitalsource-row-${mcs.id}`">
     <TableCell class="text-left border-r">{{ mcs.comment }}</TableCell>
     <TableCell class="text-left border-r">{{ typeString }}</TableCell>
     <TableCell class="text-left border-r">{{ stateString }}</TableCell>
@@ -22,6 +22,7 @@
     <ButtonTableIcon
       v-if="owner"
       :title="$t('General.edit')"
+      :test-id="`capitalsource-edit-${mcs.id}`"
       @click="editCapitalsource"
     >
       <Pencil class="h-4 w-4" />
@@ -29,6 +30,7 @@
     <ButtonTableIcon
       v-if="owner"
       :title="$t('General.delete')"
+      :test-id="`capitalsource-delete-${mcs.id}`"
       @click="deleteCapitalsource"
     >
       <Trash2 class="h-4 w-4" />
