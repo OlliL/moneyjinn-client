@@ -13,4 +13,3 @@ export default class UserServiceMocker {
       .mockResolvedValue(accessRelations as never);
   }
 }
-

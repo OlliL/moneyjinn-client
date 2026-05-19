@@ -9,4 +9,3 @@ export default class CapitalsourceServiceMocker {
       .mockResolvedValue(capitalsources);
   }
 }
-

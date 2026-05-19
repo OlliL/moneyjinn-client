@@ -37,7 +37,9 @@
           data-testid="monthly-settlement-edit"
           type="button"
           :disabled="!selectedMonth"
-          @click="showEditMonthlySettlementModal(Number(selectedYear), selectedMonth)"
+          @click="
+            showEditMonthlySettlementModal(Number(selectedYear), selectedMonth)
+          "
         >
           {{ $t("General.edit") }}
         </Button>

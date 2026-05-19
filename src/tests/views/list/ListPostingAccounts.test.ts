@@ -3,11 +3,11 @@ import ContractpartnerServiceMocker from "@/service/mocker/ContractpartnerServic
 import CrudEtfServiceMocker from "@/service/mocker/CrudEtfServiceMocker";
 import PostingAccountServiceMocker from "@/service/mocker/PostingAccountServiceMocker";
 import { StoreService } from "@/stores/StoreService";
-import { ButtonView, InputView, ModalView, RowView } from "@/tests/TestViews";
 import {
   type UserSession,
   useUserSessionStore,
 } from "@/stores/UserSessionStore";
+import { ButtonView, InputView, ModalView, RowView } from "@/tests/TestViews";
 import ListPostingAccounts from "@/views/postingaccount/ListPostingAccounts.vue";
 import "@testing-library/jest-dom/vitest";
 import { render } from "@testing-library/vue";
@@ -85,4 +85,3 @@ test("ListPostingAccounts opens delete modal from row action", async () => {
   await ListPostingAccountsView.DeleteOneButton.click();
   await ListPostingAccountsView.Modal.assertOpen();
 });
-

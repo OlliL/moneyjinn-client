@@ -2,11 +2,11 @@ import CapitalsourceServiceMocker from "@/service/mocker/CapitalsourceServiceMoc
 import ContractpartnerServiceMocker from "@/service/mocker/ContractpartnerServiceMocker";
 import PostingAccountServiceMocker from "@/service/mocker/PostingAccountServiceMocker";
 import PreDefMoneyflowServiceMocker from "@/service/mocker/PreDefMoneyflowServiceMocker";
-import { ButtonView, InputView, ModalView, RowView } from "@/tests/TestViews";
 import {
   type UserSession,
   useUserSessionStore,
 } from "@/stores/UserSessionStore";
+import { ButtonView, InputView, ModalView, RowView } from "@/tests/TestViews";
 import ListPreDefMoneyflows from "@/views/predefmoneyflow/ListPreDefMoneyflows.vue";
 import "@testing-library/jest-dom/vitest";
 import { render } from "@testing-library/vue";
@@ -101,4 +101,3 @@ test("ListPreDefMoneyflows opens delete modal from row action", async () => {
   await ListPreDefMoneyflowsView.DeleteRowOneButton.click();
   await ListPreDefMoneyflowsView.Modal.assertOpen();
 });
-

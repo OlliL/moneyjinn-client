@@ -7,4 +7,3 @@ export default class CrudEtfServiceMocker {
     CrudEtfService.fetchAllEtf = vi.fn().mockResolvedValue(etfs);
   }
 }
-

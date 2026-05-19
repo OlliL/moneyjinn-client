@@ -69,9 +69,7 @@ test("check that update:modelValue gets emitted", async () => {
   await InputStandardView.Input.assertValue("abcd");
   await InputStandardView.Input.setValue("1234");
   const updates = emitted()["update:modelValue"]!;
-  expect((updates[updates.length - 1]! as Array<string>)[0]).toBe(
-    "1234",
-  );
+  expect((updates[updates.length - 1]! as Array<string>)[0]).toBe("1234");
 });
 
 test("check focus", async () => {

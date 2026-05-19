@@ -3,7 +3,10 @@
     class="flex w-full flex-col items-center justify-center gap-4 sm:flex-row sm:flex-nowrap sm:items-start"
   >
     <Select v-model="selectedYearModel">
-      <SelectTrigger data-testid="month-year-nav-year-trigger" class="w-25 h-8 shrink-0">
+      <SelectTrigger
+        data-testid="month-year-nav-year-trigger"
+        class="w-25 h-8 shrink-0"
+      >
         <SelectValue :placeholder="selectedYearModel" />
       </SelectTrigger>
       <SelectContent>

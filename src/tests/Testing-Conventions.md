@@ -298,10 +298,16 @@ Use isolated default mocks per test via `beforeEach`, not global `beforeAll` sta
 
 ```ts
 const applyDefaultMocks = () => {
-  PostingAccountServiceMocker.mockFetchAllPostingAccount(defaultPostingAccounts);
-  ContractpartnerServiceMocker.mockFetchAllContractpartner(defaultContractpartners);
+  PostingAccountServiceMocker.mockFetchAllPostingAccount(
+    defaultPostingAccounts,
+  );
+  ContractpartnerServiceMocker.mockFetchAllContractpartner(
+    defaultContractpartners,
+  );
   CapitalsourceServiceMocker.mockFetchAllCapitalsource(defaultCapitalsources);
-  PreDefMoneyflowServiceMocker.mockFetchAllPreDefMoneyflow(defaultPreDefMoneyflows);
+  PreDefMoneyflowServiceMocker.mockFetchAllPreDefMoneyflow(
+    defaultPreDefMoneyflows,
+  );
   CrudEtfServiceMocker.mockFetchAllEtf([]);
 };
 
@@ -462,4 +468,3 @@ Use this section as hard context when AI tools modify tests.
 - This document does not prescribe business assertions.
 - This document does not replace feature-specific test design.
 - This document does not require over-engineering tiny one-off tests; use judgment while honoring the core principles.
-

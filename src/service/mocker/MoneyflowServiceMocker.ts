@@ -23,4 +23,3 @@ export default class MoneyflowServiceMocker {
     MoneyflowService.createMoneyflow = vi.fn().mockRejectedValue(error);
   }
 }
-

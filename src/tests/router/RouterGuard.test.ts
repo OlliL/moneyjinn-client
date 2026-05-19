@@ -1,4 +1,7 @@
-import { type UserSession, useUserSessionStore } from "@/stores/UserSessionStore";
+import {
+  type UserSession,
+  useUserSessionStore,
+} from "@/stores/UserSessionStore";
 import { assertHaveBeenCalledWith } from "@/tests/TestUtil";
 import { createPinia, setActivePinia } from "pinia";
 import { beforeEach, describe, expect, test, vi } from "vitest";
@@ -6,9 +9,8 @@ import { beforeEach, describe, expect, test, vi } from "vitest";
 const mockIsLoggedIn = vi.fn();
 const mockRouterGo = vi.fn();
 
-let registeredGuard:
-  | ((to: any, from: any) => Promise<any> | any)
-  | undefined = undefined;
+let registeredGuard: ((to: any, from: any) => Promise<any> | any) | undefined =
+  undefined;
 
 vi.mock("axios-jwt", () => ({
   isLoggedIn: mockIsLoggedIn,
@@ -120,5 +122,3 @@ describe("router guards", () => {
     expect(result).toBe(false);
   });
 });
-
-

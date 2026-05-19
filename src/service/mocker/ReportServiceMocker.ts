@@ -12,4 +12,3 @@ export default class ReportServiceMocker {
     ReportService.listReports = vi.fn().mockResolvedValue(report);
   }
 }
-

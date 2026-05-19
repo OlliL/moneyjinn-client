@@ -76,7 +76,6 @@ import DivError from "@/components/DivError.vue";
 import EditMonthlySettlementModalVue from "@/components/monthlysettlement/EditMonthlySettlementModal.vue";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
 import router, { Routes } from "@/router";
 import EventService from "@/service/EventService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";

@@ -4,16 +4,16 @@ import CrudEtfServiceMocker from "@/service/mocker/CrudEtfServiceMocker";
 import PostingAccountServiceMocker from "@/service/mocker/PostingAccountServiceMocker";
 import { StoreService } from "@/stores/StoreService";
 import {
+  type UserSession,
+  useUserSessionStore,
+} from "@/stores/UserSessionStore";
+import {
   ButtonView,
   InputView,
   ModalView,
   RowView,
   SwitchView,
 } from "@/tests/TestViews";
-import {
-  type UserSession,
-  useUserSessionStore,
-} from "@/stores/UserSessionStore";
 import ListEtfs from "@/views/etf/ListEtfs.vue";
 import "@testing-library/jest-dom/vitest";
 import { render } from "@testing-library/vue";
@@ -125,4 +125,3 @@ test("ListEtfs opens delete modal from row action", async () => {
   await ListEtfsView.DeleteEtf1Button.click();
   await ListEtfsView.Modal.assertOpen();
 });
-

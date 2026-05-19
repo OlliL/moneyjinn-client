@@ -55,4 +55,3 @@ test("LoginView shows provided login error", async () => {
 
   await new TextView("Session abgelaufen").assertInDocument();
 });
-

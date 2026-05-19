@@ -1,9 +1,13 @@
-import ContractpartnerServiceMocker from "@/service/mocker/ContractpartnerServiceMocker";
-import ContractpartnerAccountServiceMocker from "@/service/mocker/ContractpartnerAccountServiceMocker";
-import PostingAccountServiceMocker from "@/service/mocker/PostingAccountServiceMocker";
-import CrudEtfServiceMocker from "@/service/mocker/CrudEtfServiceMocker";
 import CapitalsourceServiceMocker from "@/service/mocker/CapitalsourceServiceMocker";
+import ContractpartnerAccountServiceMocker from "@/service/mocker/ContractpartnerAccountServiceMocker";
+import ContractpartnerServiceMocker from "@/service/mocker/ContractpartnerServiceMocker";
+import CrudEtfServiceMocker from "@/service/mocker/CrudEtfServiceMocker";
+import PostingAccountServiceMocker from "@/service/mocker/PostingAccountServiceMocker";
 import { StoreService } from "@/stores/StoreService";
+import {
+  type UserSession,
+  useUserSessionStore,
+} from "@/stores/UserSessionStore";
 import {
   ButtonView,
   InputView,
@@ -11,10 +15,6 @@ import {
   RowView,
   SwitchView,
 } from "@/tests/TestViews";
-import {
-  type UserSession,
-  useUserSessionStore,
-} from "@/stores/UserSessionStore";
 import ListContractpartners from "@/views/contractpartner/ListContractpartners.vue";
 import "@testing-library/jest-dom/vitest";
 import { render } from "@testing-library/vue";
@@ -119,5 +119,3 @@ test("ListContractpartners opens contractpartner accounts modal", async () => {
   await ListContractpartnersView.AccountsOneButton.click();
   await ListContractpartnersView.Modal.assertOpen();
 });
-
-

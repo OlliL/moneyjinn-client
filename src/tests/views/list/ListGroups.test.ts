@@ -1,9 +1,9 @@
 import GroupServiceMocker from "@/service/mocker/GroupServiceMocker";
-import { ButtonView, InputView, ModalView, RowView } from "@/tests/TestViews";
 import {
   type UserSession,
   useUserSessionStore,
 } from "@/stores/UserSessionStore";
+import { ButtonView, InputView, ModalView, RowView } from "@/tests/TestViews";
 import ListGroups from "@/views/group/ListGroups.vue";
 import "@testing-library/jest-dom/vitest";
 import { render } from "@testing-library/vue";
@@ -70,4 +70,3 @@ test("ListGroups opens delete modal from row action", async () => {
   await ListGroupsView.DeleteOneButton.click();
   await ListGroupsView.Modal.assertOpen();
 });
-

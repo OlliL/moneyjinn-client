@@ -3,10 +3,11 @@ import ContractpartnerMatchingService from "@/service/ContractpartnerMatchingSer
 import { vi } from "vitest";
 
 export default class ContractpartnerMatchingServiceMocker {
-  static mockFetchAllContractpartnerMatching(matchings: ContractpartnerMatching[]): void {
+  static mockFetchAllContractpartnerMatching(
+    matchings: ContractpartnerMatching[],
+  ): void {
     ContractpartnerMatchingService.fetchAllContractpartnerMatching = vi
       .fn()
       .mockResolvedValue(matchings);
   }
 }
-

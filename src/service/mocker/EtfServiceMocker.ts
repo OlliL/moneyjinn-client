@@ -12,4 +12,3 @@ export default class EtfServiceMocker {
     EtfService.listEtfOverview = vi.fn().mockResolvedValue(summary);
   }
 }
-

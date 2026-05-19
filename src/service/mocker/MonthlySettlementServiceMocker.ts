@@ -1,12 +1,14 @@
 import type { AvailableMonth } from "@/model/monthlysettlement/AvailableMonth";
-import type { MonthlySettlementEditTransporter } from "@/model/monthlysettlement/MonthlySettlementEditTransporter";
 import type { MonthlySettlement } from "@/model/monthlysettlement/MonthlySettlement";
+import type { MonthlySettlementEditTransporter } from "@/model/monthlysettlement/MonthlySettlementEditTransporter";
 import MonthlySettlementService from "@/service/MonthlySettlementService";
 import { vi } from "vitest";
 
 export default class MonthlySettlementServiceMocker {
   static mockGetAvailableMonth(availableMonth: AvailableMonth): void {
-    MonthlySettlementService.getAvailableMonth = vi.fn().mockResolvedValue(availableMonth);
+    MonthlySettlementService.getAvailableMonth = vi
+      .fn()
+      .mockResolvedValue(availableMonth);
   }
 
   static mockGetMonthlySettlementList(
@@ -16,13 +18,15 @@ export default class MonthlySettlementServiceMocker {
     nextYear = 0,
     nextMonth = 0,
   ): void {
-    MonthlySettlementService.getMonthlySettlementList = vi.fn().mockResolvedValue({
-      monthlySettlements,
-      prevYear,
-      prevMonth,
-      nextYear,
-      nextMonth,
-    });
+    MonthlySettlementService.getMonthlySettlementList = vi
+      .fn()
+      .mockResolvedValue({
+        monthlySettlements,
+        prevYear,
+        prevMonth,
+        nextYear,
+        nextMonth,
+      });
   }
 
   static mockGetMonthlySettlementForEdit(
@@ -33,4 +37,3 @@ export default class MonthlySettlementServiceMocker {
       .mockResolvedValue(transporter);
   }
 }
-

@@ -1,12 +1,12 @@
+import router, { Routes } from "@/router";
 import MonthlySettlementService from "@/service/MonthlySettlementService";
 import MonthlySettlementServiceMocker from "@/service/mocker/MonthlySettlementServiceMocker";
-import router, { Routes } from "@/router";
-import { assertHaveBeenCalledWith } from "@/tests/TestUtil";
-import { ButtonView, ModalView } from "@/tests/TestViews";
 import {
   type UserSession,
   useUserSessionStore,
 } from "@/stores/UserSessionStore";
+import { assertHaveBeenCalledWith } from "@/tests/TestUtil";
+import { ButtonView, ModalView } from "@/tests/TestViews";
 import ListMonthlySettlements from "@/views/monthlysettlement/ListMonthlySettlements.vue";
 import "@testing-library/jest-dom/vitest";
 import { render } from "@testing-library/vue";
@@ -29,7 +29,9 @@ class ListMonthlySettlementsView {
   static readonly EditButton = new ButtonView("monthly-settlement-edit");
   static readonly DeleteButton = new ButtonView("monthly-settlement-delete");
   static readonly YearTrigger = new ButtonView("month-year-nav-year-trigger");
-  static readonly Year2027Item = new ButtonView("month-year-nav-year-item-2027");
+  static readonly Year2027Item = new ButtonView(
+    "month-year-nav-year-item-2027",
+  );
   static readonly Month2Button = new ButtonView("month-year-nav-month-2");
   static readonly Modal = new ModalView("app-modal");
 }
@@ -113,4 +115,3 @@ test("ListMonthlySettlements selects another month via navigator", async () => {
     }),
   );
 });
-

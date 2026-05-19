@@ -1,7 +1,10 @@
-import router, { Routes } from "@/router";
 import type { Events } from "@/model/event/Events";
+import router, { Routes } from "@/router";
 import EventService from "@/service/EventService";
-import { assertHaveBeenCalled, assertHaveBeenCalledWith } from "@/tests/TestUtil";
+import {
+  assertHaveBeenCalled,
+  assertHaveBeenCalledWith,
+} from "@/tests/TestUtil";
 import { ButtonView } from "@/tests/TestViews";
 import AppHome from "@/views/AppHome.vue";
 import "@testing-library/jest-dom/vitest";
@@ -72,5 +75,3 @@ test("AppHome shows monthly-settlement action when settlement is missing", async
   await AppHomeView.EditMonthlySettlementButton.assertToBeVisible();
   await AppHomeView.ImportMoneyflowsButton.assertNotToBeInDocument();
 });
-
-

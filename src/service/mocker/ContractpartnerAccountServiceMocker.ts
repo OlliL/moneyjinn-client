@@ -3,10 +3,11 @@ import ContractpartnerAccountService from "@/service/ContractpartnerAccountServi
 import { vi } from "vitest";
 
 export default class ContractpartnerAccountServiceMocker {
-  static mockFetchAllContractpartnerAccount(accounts: ContractpartnerAccount[]): void {
+  static mockFetchAllContractpartnerAccount(
+    accounts: ContractpartnerAccount[],
+  ): void {
     ContractpartnerAccountService.fetchAllContractpartnerAccount = vi
       .fn()
       .mockResolvedValue(accounts);
   }
 }
-

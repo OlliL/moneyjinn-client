@@ -1,13 +1,13 @@
-import EtfServiceMocker from "@/service/mocker/EtfServiceMocker";
-import ReportService from "@/service/ReportService";
-import ReportServiceMocker from "@/service/mocker/ReportServiceMocker";
 import router, { Routes } from "@/router";
-import { assertHaveBeenCalledWith } from "@/tests/TestUtil";
-import { ButtonView, ModalView, RowView } from "@/tests/TestViews";
+import EtfServiceMocker from "@/service/mocker/EtfServiceMocker";
+import ReportServiceMocker from "@/service/mocker/ReportServiceMocker";
+import ReportService from "@/service/ReportService";
 import {
   type UserSession,
   useUserSessionStore,
 } from "@/stores/UserSessionStore";
+import { assertHaveBeenCalledWith } from "@/tests/TestUtil";
+import { ButtonView, ModalView, RowView } from "@/tests/TestViews";
 import ListReports from "@/views/reports/ListReports.vue";
 import "@testing-library/jest-dom/vitest";
 import { render } from "@testing-library/vue";
@@ -32,10 +32,14 @@ class ListReportsView {
   static readonly EditOwnButton = new ButtonView("report-moneyflow-edit-1");
   static readonly DeleteOwnButton = new ButtonView("report-moneyflow-delete-1");
   static readonly ListForeignButton = new ButtonView("report-moneyflow-list-2");
-  static readonly PreviousMonthButton = new ButtonView("reports-previous-month");
+  static readonly PreviousMonthButton = new ButtonView(
+    "reports-previous-month",
+  );
   static readonly NextMonthButton = new ButtonView("reports-next-month");
   static readonly YearTrigger = new ButtonView("month-year-nav-year-trigger");
-  static readonly Year2025Item = new ButtonView("month-year-nav-year-item-2025");
+  static readonly Year2025Item = new ButtonView(
+    "month-year-nav-year-item-2025",
+  );
   static readonly Month1Button = new ButtonView("month-year-nav-month-1");
   static readonly Modal = new ModalView("app-modal");
 }
@@ -179,4 +183,3 @@ test("ListReports selects month via navigator", async () => {
     }),
   );
 });
-

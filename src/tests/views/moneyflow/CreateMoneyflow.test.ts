@@ -14,11 +14,11 @@ import MoneyflowServiceMocker from "@/service/mocker/MoneyflowServiceMocker";
 import PostingAccountServiceMocker from "@/service/mocker/PostingAccountServiceMocker";
 import PreDefMoneyflowServiceMocker from "@/service/mocker/PreDefMoneyflowServiceMocker";
 import { StoreService } from "@/stores/StoreService";
-import { assertHaveBeenCalledOnce } from "@/tests/TestUtil";
 import {
   type UserSession,
   useUserSessionStore,
 } from "@/stores/UserSessionStore";
+import { assertHaveBeenCalledOnce } from "@/tests/TestUtil";
 import {
   AlertView,
   ButtonView,

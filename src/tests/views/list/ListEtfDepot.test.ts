@@ -1,13 +1,13 @@
 import EtfService from "@/service/EtfService";
 import CrudEtfServiceMocker from "@/service/mocker/CrudEtfServiceMocker";
 import EtfServiceMocker from "@/service/mocker/EtfServiceMocker";
-import { assertHaveBeenCalledWith } from "@/tests/TestUtil";
-import { ButtonView, InputView, ModalView, TextView } from "@/tests/TestViews";
+import { useEtfStore } from "@/stores/EtfStore";
 import {
   type UserSession,
   useUserSessionStore,
 } from "@/stores/UserSessionStore";
-import { useEtfStore } from "@/stores/EtfStore";
+import { assertHaveBeenCalledWith } from "@/tests/TestUtil";
+import { ButtonView, InputView, ModalView, TextView } from "@/tests/TestViews";
 import ListEtfDepot from "@/views/etf/ListEtfDepot.vue";
 import "@testing-library/jest-dom/vitest";
 import { render } from "@testing-library/vue";
@@ -134,4 +134,3 @@ test("ListEtfDepot opens delete modal from row action", async () => {
   await ListEtfDepotView.DeleteButton.click();
   await ListEtfDepotView.Modal.assertOpen();
 });
-

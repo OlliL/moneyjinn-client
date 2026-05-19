@@ -11,9 +11,14 @@ if (globalThis.HTMLElement !== undefined) {
  * @see https://github.com/jsdom/jsdom/issues/2156
  */
 type EventListenerLike = EventListenerOrEventListenerObject;
-const eventListeners = new WeakMap<object, Map<string, Set<EventListenerLike>>>();
+const eventListeners = new WeakMap<
+  object,
+  Map<string, Set<EventListenerLike>>
+>();
 
-const getListenersByType = (target: object): Map<string, Set<EventListenerLike>> => {
+const getListenersByType = (
+  target: object,
+): Map<string, Set<EventListenerLike>> => {
   let listenersByType = eventListeners.get(target);
   if (!listenersByType) {
     listenersByType = new Map<string, Set<EventListenerLike>>();
@@ -40,17 +45,21 @@ globalThis.EventTarget = class EventTargetPolyfill {
     if (!listener) {
       return;
     }
-    getListenersByType(this as unknown as object).get(type)?.delete(listener);
+    getListenersByType(this as unknown as object)
+      .get(type)
+      ?.delete(listener);
   }
 
   dispatchEvent(event: Event): boolean {
-    getListenersByType(this as unknown as object).get(event.type)?.forEach((listener) => {
-      if (typeof listener === "function") {
-        listener.call(this, event);
-      } else {
-        listener.handleEvent(event);
-      }
-    });
+    getListenersByType(this as unknown as object)
+      .get(event.type)
+      ?.forEach((listener) => {
+        if (typeof listener === "function") {
+          listener.call(this, event);
+        } else {
+          listener.handleEvent(event);
+        }
+      });
     return !event.defaultPrevented;
   }
 } as unknown as typeof EventTarget;
@@ -71,4 +80,3 @@ globalThis.PointerEvent = class PointerEvent extends MouseEvent {
     this.pointerType = params.pointerType ?? "mouse";
   }
 } as unknown as typeof PointerEvent;
-

@@ -2,6 +2,11 @@ import ContractpartnerMatchingService from "@/service/ContractpartnerMatchingSer
 import ContractpartnerMatchingServiceMocker from "@/service/mocker/ContractpartnerMatchingServiceMocker";
 import ContractpartnerServiceMocker from "@/service/mocker/ContractpartnerServiceMocker";
 import PostingAccountServiceMocker from "@/service/mocker/PostingAccountServiceMocker";
+import { useContractpartnerStore } from "@/stores/ContractpartnerStore";
+import {
+  type UserSession,
+  useUserSessionStore,
+} from "@/stores/UserSessionStore";
 import { assertHaveBeenCalledOnce } from "@/tests/TestUtil";
 import {
   ButtonView,
@@ -10,11 +15,6 @@ import {
   ModalView,
   RowView,
 } from "@/tests/TestViews";
-import {
-  type UserSession,
-  useUserSessionStore,
-} from "@/stores/UserSessionStore";
-import { useContractpartnerStore } from "@/stores/ContractpartnerStore";
 import ListContractpartnerMatchings from "@/views/contractpartnermatching/ListContractpartnerMatchings.vue";
 import "@testing-library/jest-dom/vitest";
 import { render } from "@testing-library/vue";
@@ -36,7 +36,9 @@ class ListContractpartnerMatchingsView {
   static readonly CreateButton = new ButtonView("div-filter-create");
   static readonly RowRent = new RowView("contractpartner-matching-row-1");
   static readonly RowSalary = new RowView("contractpartner-matching-row-2");
-  static readonly EditRentButton = new ButtonView("contractpartner-matching-edit-1");
+  static readonly EditRentButton = new ButtonView(
+    "contractpartner-matching-edit-1",
+  );
   static readonly DeleteRentButton = new ButtonView(
     "contractpartner-matching-delete-1",
   );
@@ -147,4 +149,3 @@ test("ListContractpartnerMatchings opens delete modal from row action", async ()
   await ListContractpartnerMatchingsView.DeleteRentButton.click();
   await ListContractpartnerMatchingsView.Modal.assertOpen();
 });
-

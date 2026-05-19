@@ -1,17 +1,17 @@
-import CrudEtfPreliminaryLumpSumServiceMocker from "@/service/mocker/CrudEtfPreliminaryLumpSumServiceMocker";
-import CapitalsourceServiceMocker from "@/service/mocker/CapitalsourceServiceMocker";
-import ContractpartnerServiceMocker from "@/service/mocker/ContractpartnerServiceMocker";
-import CrudEtfServiceMocker from "@/service/mocker/CrudEtfServiceMocker";
 import { EtfPreliminaryLumpSumType } from "@/model/etf/EtfPreliminaryLumpSumType";
 import router, { Routes } from "@/router";
+import CapitalsourceServiceMocker from "@/service/mocker/CapitalsourceServiceMocker";
+import ContractpartnerServiceMocker from "@/service/mocker/ContractpartnerServiceMocker";
+import CrudEtfPreliminaryLumpSumServiceMocker from "@/service/mocker/CrudEtfPreliminaryLumpSumServiceMocker";
+import CrudEtfServiceMocker from "@/service/mocker/CrudEtfServiceMocker";
 import PostingAccountServiceMocker from "@/service/mocker/PostingAccountServiceMocker";
-import { assertHaveBeenCalledWith } from "@/tests/TestUtil";
 import { StoreService } from "@/stores/StoreService";
-import { ButtonView, InputView, ModalView } from "@/tests/TestViews";
 import {
   type UserSession,
   useUserSessionStore,
 } from "@/stores/UserSessionStore";
+import { assertHaveBeenCalledWith } from "@/tests/TestUtil";
+import { ButtonView, InputView, ModalView } from "@/tests/TestViews";
 import ListPreliminaryLumpSums from "@/views/etf/ListPreliminaryLumpSums.vue";
 import "@testing-library/jest-dom/vitest";
 import { render } from "@testing-library/vue";
@@ -43,7 +43,9 @@ class ListPreliminaryLumpSumsView {
   static readonly YearPreviousButton = new ButtonView(
     "preliminary-lump-sum-year-previous",
   );
-  static readonly YearNextButton = new ButtonView("preliminary-lump-sum-year-next");
+  static readonly YearNextButton = new ButtonView(
+    "preliminary-lump-sum-year-next",
+  );
   static readonly EditButton = new ButtonView("preliminary-lump-sum-edit");
   static readonly DeleteButton = new ButtonView("preliminary-lump-sum-delete");
   static readonly Modal = new ModalView("app-modal");
@@ -248,4 +250,3 @@ test("ListPreliminaryLumpSums opens delete action for yearly entry", async () =>
   await ListPreliminaryLumpSumsView.DeleteButton.click();
   await ListPreliminaryLumpSumsView.Modal.assertOpen();
 });
-

@@ -1,6 +1,9 @@
 import router, { Routes } from "@/router";
 import UserService from "@/service/UserService";
-import { type UserSession, useUserSessionStore } from "@/stores/UserSessionStore";
+import {
+  type UserSession,
+  useUserSessionStore,
+} from "@/stores/UserSessionStore";
 import { assertHaveBeenCalledWith } from "@/tests/TestUtil";
 import { ButtonView, InputView } from "@/tests/TestViews";
 import ChangePassword from "@/views/user/ChangePassword.vue";
@@ -84,6 +87,3 @@ test("ChangePassword logs out new users and redirects to login", async () => {
   await assertHaveBeenCalledWith(router.push, { name: Routes.Login });
   expect(useUserSessionStore().userSession.userId).toBe(0);
 });
-
-
-

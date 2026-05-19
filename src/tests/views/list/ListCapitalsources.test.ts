@@ -7,16 +7,16 @@ import CrudEtfServiceMocker from "@/service/mocker/CrudEtfServiceMocker";
 import PostingAccountServiceMocker from "@/service/mocker/PostingAccountServiceMocker";
 import { StoreService } from "@/stores/StoreService";
 import {
+  type UserSession,
+  useUserSessionStore,
+} from "@/stores/UserSessionStore";
+import {
   ButtonView,
   InputView,
   ModalView,
   RowView,
   SwitchView,
 } from "@/tests/TestViews";
-import {
-  type UserSession,
-  useUserSessionStore,
-} from "@/stores/UserSessionStore";
 import ListCapitalsources from "@/views/capitalsource/ListCapitalsources.vue";
 import "@testing-library/jest-dom/vitest";
 import { render } from "@testing-library/vue";

@@ -3,10 +3,11 @@ import CrudEtfPreliminaryLumpSumService from "@/service/CrudEtfPreliminaryLumpSu
 import { vi } from "vitest";
 
 export default class CrudEtfPreliminaryLumpSumServiceMocker {
-  static mockFetchAllEtfPreliminaryLumpSum(items: EtfPreliminaryLumpSum[]): void {
+  static mockFetchAllEtfPreliminaryLumpSum(
+    items: EtfPreliminaryLumpSum[],
+  ): void {
     CrudEtfPreliminaryLumpSumService.fetchAllEtfPreliminaryLumpSum = vi
       .fn()
       .mockResolvedValue(items);
   }
 }
-

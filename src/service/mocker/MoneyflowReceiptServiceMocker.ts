@@ -4,9 +4,8 @@ import { vi } from "vitest";
 
 export default class MoneyflowReceiptServiceMocker {
   static mockFetchReceiptResolved(moneyflowReceipt: MoneyflowReceipt): void {
-    MoneyflowReceiptService.fetchReceipt = vi.fn().mockResolvedValue(
-      moneyflowReceipt,
-    );
+    MoneyflowReceiptService.fetchReceipt = vi
+      .fn()
+      .mockResolvedValue(moneyflowReceipt);
   }
 }
-

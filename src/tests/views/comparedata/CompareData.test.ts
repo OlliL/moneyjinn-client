@@ -2,17 +2,20 @@ import type { CompareDataDataset } from "@/model/comparedata/CompareDataDataset"
 import type { CompareDataParameter } from "@/model/comparedata/CompareDataParameter";
 import type { CompareDataResult } from "@/model/comparedata/CompareDataResult";
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
+import CompareDataService from "@/service/CompareDataService";
 import CapitalsourceServiceMocker from "@/service/mocker/CapitalsourceServiceMocker";
 import CompareDataServiceMocker from "@/service/mocker/CompareDataServiceMocker";
 import MoneyflowServiceMocker from "@/service/mocker/MoneyflowServiceMocker";
-import CompareDataService from "@/service/CompareDataService";
 import MoneyflowService from "@/service/MoneyflowService";
 import { useCapitalsourceStore } from "@/stores/CapitalsourceStore";
 import {
   type UserSession,
   useUserSessionStore,
 } from "@/stores/UserSessionStore";
-import { assertHaveBeenCalled, assertHaveBeenCalledWith } from "@/tests/TestUtil";
+import {
+  assertHaveBeenCalled,
+  assertHaveBeenCalledWith,
+} from "@/tests/TestUtil";
 import { ButtonView, InputView, ModalView } from "@/tests/TestViews";
 import CompareData from "@/views/comparedata/CompareData.vue";
 import "@testing-library/jest-dom/vitest";
@@ -25,7 +28,9 @@ vi.mock("@/service/MoneyflowService");
 vi.mock("@/service/CapitalsourceService");
 
 class CompareDataView {
-  static readonly CapitalsourceIdInput = new InputView("capitalsourceCompareData-id");
+  static readonly CapitalsourceIdInput = new InputView(
+    "capitalsourceCompareData-id",
+  );
   static readonly SubmitButton = new ButtonView("compare-data-submit");
   static readonly GroupMatchingToggle = new ButtonView(
     "compare-data-group-matching-toggle",
@@ -259,7 +264,9 @@ test.each([
 ] as const)(
   "CompareData zeigt nur die erwartete Ergebnisgruppe fuer %s",
   async (groupKey, expectedVisible) => {
-    CompareDataServiceMocker.mockCompareDataResolved(compareDataResultOnly(groupKey));
+    CompareDataServiceMocker.mockCompareDataResolved(
+      compareDataResultOnly(groupKey),
+    );
     render(CompareData);
 
     await runCompare();
@@ -318,8 +325,3 @@ test("CompareData zeigt keine Gruppen-Toggles wenn keine Daten gefunden wurden",
   await CompareDataView.GroupNotInFileToggle.assertNotToBeInDocument();
   await CompareDataView.GroupNotInDatabaseToggle.assertNotToBeInDocument();
 });
-
-
-
-
-

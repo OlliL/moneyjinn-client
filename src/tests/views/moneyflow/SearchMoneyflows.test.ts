@@ -4,12 +4,12 @@ import MoneyflowReceiptServiceMocker from "@/service/mocker/MoneyflowReceiptServ
 import MoneyflowServiceMocker from "@/service/mocker/MoneyflowServiceMocker";
 import MoneyflowReceiptService from "@/service/MoneyflowReceiptService";
 import MoneyflowService from "@/service/MoneyflowService";
-import { assertHaveBeenCalledWith } from "@/tests/TestUtil";
-import { ButtonView, InputView, ModalView } from "@/tests/TestViews";
 import {
   type UserSession,
   useUserSessionStore,
 } from "@/stores/UserSessionStore";
+import { assertHaveBeenCalledWith } from "@/tests/TestUtil";
+import { ButtonView, InputView, ModalView } from "@/tests/TestViews";
 import SearchMoneyflows from "@/views/moneyflow/SearchMoneyflows.vue";
 import "@testing-library/jest-dom/vitest";
 import { render } from "@testing-library/vue";
@@ -22,7 +22,9 @@ vi.mock("@/service/MoneyflowReceiptService");
 class SearchMoneyflowsView {
   static readonly CommentInput = new InputView("comment");
   static readonly SubmitButton = new ButtonView("search-moneyflows-submit");
-  static readonly GroupExpandButton = new ButtonView("search-moneyflow-group-expand");
+  static readonly GroupExpandButton = new ButtonView(
+    "search-moneyflow-group-expand",
+  );
   static readonly DeleteButton = new ButtonView("search-moneyflow-delete-12");
   static readonly EditButton = new ButtonView("search-moneyflow-edit-12");
   static readonly ListButton = new ButtonView("search-moneyflow-list-13");
@@ -30,7 +32,11 @@ class SearchMoneyflowsView {
   static readonly Modal = new ModalView("app-modal");
 }
 
-const createMoneyflow = (id: number, userId = 1, hasReceipt = false): Moneyflow => {
+const createMoneyflow = (
+  id: number,
+  userId = 1,
+  hasReceipt = false,
+): Moneyflow => {
   return {
     id,
     userId,
@@ -76,10 +82,10 @@ beforeEach(() => {
   useUserSessionStore().setUserSession({ userId: 1 } as UserSession);
 
   MoneyflowServiceMocker.mockSearchMoneyflowsResolved([
-      createMoneyflow(12, 1, false),
-      createMoneyflow(13, 2, false),
-      createMoneyflow(14, 2, true),
-    ] as Array<Moneyflow>);
+    createMoneyflow(12, 1, false),
+    createMoneyflow(13, 2, false),
+    createMoneyflow(14, 2, true),
+  ] as Array<Moneyflow>);
   MoneyflowServiceMocker.mockFetchMoneyflowById(createMoneyflow);
   MoneyflowReceiptServiceMocker.mockFetchReceiptResolved({
     moneyflowId: 14,
@@ -152,8 +158,3 @@ test("SearchMoneyflows opens receipt modal from receipt icon", async () => {
   await assertHaveBeenCalledWith(MoneyflowReceiptService.fetchReceipt, 14);
   await SearchMoneyflowsView.Modal.assertOpen();
 });
-
-
-
-
-

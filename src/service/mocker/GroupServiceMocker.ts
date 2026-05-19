@@ -7,4 +7,3 @@ export default class GroupServiceMocker {
     GroupService.fetchAllGroup = vi.fn().mockResolvedValue(groups);
   }
 }
-

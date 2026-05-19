@@ -13,7 +13,8 @@ export default class CompareDataServiceMocker {
   }
 
   static mockCompareDataResolved(compareDataResult: CompareDataResult): void {
-    CompareDataService.compareData = vi.fn().mockResolvedValue(compareDataResult);
+    CompareDataService.compareData = vi
+      .fn()
+      .mockResolvedValue(compareDataResult);
   }
 }
-
