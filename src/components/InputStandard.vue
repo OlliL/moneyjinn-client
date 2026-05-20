@@ -7,6 +7,7 @@
     <div class="flex -space-x-px relative">
       <Input
         v-model="fieldValue"
+        v-bind="$attrs"
         ref="fieldRef"
         :id="id"
         :name="name"
@@ -14,10 +15,11 @@
         :type="fieldType"
         :disabled="disabled"
         :step="step"
+        :placeholder="placeholder"
         :class="[
           'bg-background z-10',
           alignmentClass,
-          $slots.icon ? 'rounded-r-none' : '',
+          $slots.icon || $slots.button ? 'rounded-r-none' : '',
           isInvalid
             ? 'border-destructive! bg-destructive/3 focus-visible:ring-destructive/15 border-r-destructive!'
             : 'border-input focus-visible:ring-ring',
@@ -33,6 +35,15 @@
         ]"
       >
         <slot name="icon"></slot>
+      </div>
+      <div
+        v-if="$slots.button"
+        :class="[
+          'flex items-center justify-center px-2 border border-input rounded-r-md text-foreground transition-colors relative h-8 w-8 ',
+          isInvalid ? 'border-l-transparent' : '',
+        ]"
+      >
+        <slot name="button"></slot>
       </div>
     </div>
 
@@ -60,7 +71,9 @@ import {
   type Ref,
 } from "vue";
 import { any, type ZodType } from "zod";
-
+defineOptions({
+  inheritAttrs: false,
+});
 const props = defineProps({
   modelValue: {
     type: undefined,
@@ -106,6 +119,10 @@ const props = defineProps({
     default: false,
   },
   step: {
+    type: String,
+    required: false,
+  },
+  placeholder: {
     type: String,
     required: false,
   },
