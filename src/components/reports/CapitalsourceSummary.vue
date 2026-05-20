@@ -67,71 +67,67 @@ import {
 } from "@/components/ui/table";
 import { CapitalsourceType } from "@/model/capitalsource/CapitalsourceType";
 import type { Report } from "@/model/report/Report";
-import type { ReportTurnoverCapitalsource } from "@/model/report/ReportTurnoverCapitalsource";
 import { computed } from "vue";
 
 const props = defineProps<{
   report: Report;
 }>();
 
-const assetsMonthlyCalculatedTurnover = computed(() => {
-  return assetSourcesWithMovement.value.reduce((sum, data) => {
-    return (
-      sum + (data.amountEndOfMonthCalculated - data.amountBeginOfMonthFixed)
-    );
-  }, 0);
-});
-const assetsMonthlyDifference = computed(() => {
-  return +(
-    assetsMonthlyFixedTurnover.value - assetsMonthlyCalculatedTurnover.value
-  );
-});
-const assetsYearlyDifference = computed(() => {
-  return +(
-    assetsYearlyFixedTurnover.value -
-    (props.report.turnoverEndOfYearCalculated
-      ? props.report.turnoverEndOfYearCalculated
-      : 0)
-  );
-});
-
-const currentMonthIsSettled = computed(() => {
-  if (props.report.reportTurnoverCapitalsources) {
-    for (let data of props.report.reportTurnoverCapitalsources) {
-      if (data.amountEndOfMonthFixed) {
-        return true;
-      }
-    }
-  }
-  return false;
-});
 const assetSourcesWithMovement = computed(() => {
-  if (!props.report.reportTurnoverCapitalsources) {
-    return [] as ReportTurnoverCapitalsource[];
-  }
-
-  return props.report.reportTurnoverCapitalsources.filter(
+  return (props.report.reportTurnoverCapitalsources ?? []).filter(
     (data) =>
       data.capitalsourceType === CapitalsourceType.CURRENT_ASSET ||
       data.capitalsourceType === CapitalsourceType.LONG_TERM_ASSET,
   );
 });
-const assetsFixAmount = computed(() => {
-  return assetSourcesWithMovement.value.reduce((sum, data) => {
-    return sum + (data.amountEndOfMonthFixed ?? 0);
-  }, 0);
-});
-const assetsMonthlyFixedTurnover = computed(() => {
-  const assetsLastAmount = assetSourcesWithMovement.value.reduce(
-    (sum, data) => sum + data.amountBeginOfMonthFixed,
-    0,
+
+const assetSummary = computed(() => {
+  return assetSourcesWithMovement.value.reduce(
+    (summary, data) => {
+      summary.fixedEnding += data.amountEndOfMonthFixed ?? 0;
+      summary.fixedBeginning += data.amountBeginOfMonthFixed;
+      summary.calculatedDelta +=
+        data.amountEndOfMonthCalculated - data.amountBeginOfMonthFixed;
+      if (!summary.hasFixedEnd && data.amountEndOfMonthFixed) {
+        summary.hasFixedEnd = true;
+      }
+      return summary;
+    },
+    {
+      fixedEnding: 0,
+      fixedBeginning: 0,
+      calculatedDelta: 0,
+      hasFixedEnd: false,
+    } as {
+      fixedEnding: number;
+      fixedBeginning: number;
+      calculatedDelta: number;
+      hasFixedEnd: boolean;
+    },
   );
-  return +(assetsFixAmount.value - assetsLastAmount);
 });
-const assetsYearlyFixedTurnover = computed(() => {
-  return +(
-    assetsFixAmount.value -
-    (props.report.amountBeginOfYear ? props.report.amountBeginOfYear : 0)
-  );
-});
+
+const assetsMonthlyCalculatedTurnover = computed(
+  () => assetSummary.value.calculatedDelta,
+);
+const assetsMonthlyDifference = computed(
+  () =>
+    +(assetsMonthlyFixedTurnover.value - assetsMonthlyCalculatedTurnover.value),
+);
+const assetsYearlyDifference = computed(
+  () =>
+    +(
+      assetsYearlyFixedTurnover.value -
+      (props.report.turnoverEndOfYearCalculated ?? 0)
+    ),
+);
+
+const currentMonthIsSettled = computed(() => assetSummary.value.hasFixedEnd);
+const assetsMonthlyFixedTurnover = computed(
+  () => +(assetSummary.value.fixedEnding - assetSummary.value.fixedBeginning),
+);
+const assetsYearlyFixedTurnover = computed(
+  () =>
+    +(assetSummary.value.fixedEnding - (props.report.amountBeginOfYear ?? 0)),
+);
 </script>

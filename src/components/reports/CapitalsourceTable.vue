@@ -7,7 +7,7 @@
           collapsible
           class="w-full border rounded-md bg-background"
         >
-          <CapitalsourceMobileAccordionItem
+          <CapitalsourceTableMobileRow
             v-for="data in capitalsourceData"
             :key="data.capitalsourceComment"
             v-bind="{
@@ -131,7 +131,7 @@
             </TableHeader>
 
             <TableBody>
-              <CapitalsourceTableRowVue
+              <CapitalsourceTableDesktopRow
                 v-for="data in capitalsourceData"
                 :key="data.capitalsourceComment"
                 v-bind="{
@@ -190,7 +190,7 @@
 <script lang="ts" setup>
 // Accordion imports hinzufügen
 import { Accordion } from "@/components/ui/accordion";
-import CapitalsourceMobileAccordionItem from "./CapitalsourceMobileAccordionItem.vue";
+import CapitalsourceTableMobileRow from "./CapitalsourceTableMobileRow.vue";
 
 import {
   Table,
@@ -203,7 +203,7 @@ import {
 import type { ReportTurnoverCapitalsource } from "@/model/report/ReportTurnoverCapitalsource";
 import { computed } from "vue";
 import SpanAmount from "../SpanAmount.vue";
-import CapitalsourceTableRowVue from "./CapitalsourceTableRow.vue";
+import CapitalsourceTableDesktopRow from "./CapitalsourceTableDesktopRow.vue";
 
 const props = defineProps({
   capitalsourceData: {

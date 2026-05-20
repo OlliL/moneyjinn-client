@@ -140,7 +140,7 @@ import DivError from "../DivError.vue";
 import DeleteMoneyflowModalVue from "../moneyflow/DeleteMoneyflowModal.vue";
 import EditMoneyflowModalVue from "../moneyflow/EditMoneyflowModal.vue";
 import ListMoneyflowModal from "../moneyflow/ListMoneyflowModal.vue";
-import { default as CapitalsourceSummary } from "./CapitalsourceSummary.vue";
+import CapitalsourceSummary from "./CapitalsourceSummary.vue";
 import CapitalsourceTableVue from "./CapitalsourceTable.vue";
 import ReceiptModalVue from "./ReceiptModal.vue";
 import ReportTableDesktop from "./ReportTableDesktop.vue";
@@ -289,22 +289,6 @@ const loadData = (year: number, month: number) => {
   ReportService.listReports(year, month)
     .then((_report) => {
       report.value = _report;
-
-      let assetsLastAmount = 0;
-      let assetsFixAmount = 0;
-      if (report.value.reportTurnoverCapitalsources) {
-        for (const data of report.value.reportTurnoverCapitalsources) {
-          if (
-            data.capitalsourceType === CapitalsourceType.CURRENT_ASSET ||
-            data.capitalsourceType === CapitalsourceType.LONG_TERM_ASSET
-          ) {
-            assetsLastAmount += data.amountBeginOfMonthFixed;
-            if (data.amountEndOfMonthFixed)
-              assetsFixAmount = +(assetsFixAmount + data.amountEndOfMonthFixed);
-          }
-        }
-      }
-
       dataLoaded.value = true;
     })
     .catch((backendError) => {

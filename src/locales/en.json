@@ -409,6 +409,8 @@
       "trendMonthYear": "month / year",
       "trendAmount": "amount"
     },
+    "filterData": "filter data",
+    "howManyFlowsShownMessage": "Show {num} of {all} moneyflows",
     "overallSums": "grand total (Σ)",
     "beginOfMonth": "start balance",
     "endOfMonthFixed": "fixed end balance",

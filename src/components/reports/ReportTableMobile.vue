@@ -10,7 +10,7 @@
       </SheetTrigger>
       <SheetContent side="bottom" class="h-[75vh] rounded-t-xl p-6">
         <SheetHeader class="text-left pb-4 border-b">
-          <SheetTitle>Daten filtern</SheetTitle>
+          <SheetTitle>{{ $t("Reports.filterData") }}</SheetTitle>
         </SheetHeader>
         <form
           @submit.prevent="handleEnter"
@@ -109,8 +109,12 @@
     <div
       class="p-2 bg-muted/60 text-xs rounded-md text-center text-muted-foreground font-medium"
     >
-      Zeige {{ filteredMoneyflows.length }} von
-      {{ moneyflowsCount || 0 }} Geldbewegungen
+      {{
+        $t("Reports.howManyFlowsShownMessage", {
+          num: filteredMoneyflows.length,
+          all: moneyflowsCount || 0,
+        })
+      }}
     </div>
 
     <Accordion type="multiple" class="space-y-2">
