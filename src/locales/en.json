@@ -312,6 +312,7 @@
     "keep": "keep",
     "renew": "renew",
     "subbooking": "subbooking",
+    "subbookings": "subbookings",
     "remainder": "remainder",
     "deleteReceipt": "delete receipt",
     "noMatchingMoneyflow": "No matching moneyflow found!",
