@@ -7,7 +7,7 @@
     </div>
 
     <div class="mx-auto flex w-full max-w-4xl flex-col items-center gap-3">
-      <div class="flex w-full justify-center">
+      <div class="hidden md:flex w-full justify-center">
         <MonthYearNavigator
           v-if="dataLoaded"
           :years="years ?? []"
@@ -18,6 +18,31 @@
           @select-month="handleMonthSelect"
         />
       </div>
+
+      <MobilePeriodSheetNavigator
+        :data-loaded="dataLoaded"
+        :years="years ?? []"
+        :months="months ?? []"
+        :selected-year="selectedYear"
+        :selected-month="Number(month)"
+        test-id-prefix="reports-mobile"
+        navigator-test-id-prefix="month-year-nav-mobile"
+        title-key="Reports.filterData"
+        label-key="General.month"
+        select-label-key="General.select"
+        @select-year="handleYearSelect"
+        @select-month="handleMonthSelect"
+      >
+        <template #actions>
+          <Button
+            data-testid="reports-mobile-create"
+            type="button"
+            @click="navigateToCreateMoneyflow"
+          >
+            {{ $t("General.new") }}
+          </Button>
+        </template>
+      </MobilePeriodSheetNavigator>
 
       <DivError :server-errors="serverErrors" />
     </div>
@@ -67,9 +92,10 @@ import { onBeforeRouteUpdate, type RouteParamsGeneric } from "vue-router";
 import router, { Routes } from "@/router";
 
 import DivError from "@/components/DivError.vue";
+import MobilePeriodSheetNavigator from "@/components/navigation/MobilePeriodSheetNavigator.vue";
 import MonthYearNavigator from "@/components/navigation/MonthYearNavigator.vue";
-import EtfTableVue from "@/components/reports/EtfTable.vue";
-import ReportTableVue from "@/components/reports/ReportTable.vue";
+import EtfTableVue from "./elements/EtfTable.vue";
+import ReportTableVue from "./elements/ReportTable.vue";
 import { Button } from "@/components/ui/button";
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 import ReportService from "@/service/ReportService";
@@ -154,6 +180,10 @@ const navigateToPreviousMonth = () => {
 
 const navigateToNextMonth = () => {
   selectMonth(nextYear.value + "", nextMonth.value + "");
+};
+
+const navigateToCreateMoneyflow = () => {
+  router.push({ name: Routes.CreateMoneyflow });
 };
 
 const handleYearSelect = (year: string) => {

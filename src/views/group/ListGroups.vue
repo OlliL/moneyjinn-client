@@ -24,25 +24,17 @@
 
     <DivError :server-errors="serverErrors" />
 
-    <DivContentTable class="max-w-sm">
-      <TableHeader>
-        <TableRow>
-          <TableHead class="font-bold border-r text-foreground text-center">{{
-            $t("General.name")
-          }}</TableHead>
-          <TableHead colspan="2"></TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        <ListGroupRowVue
-          v-for="group in groups"
-          :key="group.id"
-          :group="group"
-          @edit-group="editGroup"
-          @delete-group="deleteGroup"
-        />
-      </TableBody>
-    </DivContentTable>
+    <ListGroupsMobile
+      :groups="groups"
+      @edit-group="editGroup"
+      @delete-group="deleteGroup"
+    />
+
+    <ListGroupsDesktop
+      :groups="groups"
+      @edit-group="editGroup"
+      @delete-group="deleteGroup"
+    />
   </div>
 </template>
 
@@ -51,18 +43,12 @@ import { onMounted, ref, useTemplateRef, watch } from "vue";
 
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 
-import DivContentTable from "@/components/DivContentTable.vue";
 import DivError from "@/components/DivError.vue";
 import DivFilter from "@/components/DivFilter.vue";
-import CreateGroupModalVue from "@/components/group/CreateGroupModal.vue";
-import DeleteGroupModalVue from "@/components/group/DeleteGroupModal.vue";
-import ListGroupRowVue from "@/components/group/ListGroupRow.vue";
-import {
-  TableBody,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+import CreateGroupModalVue from "./elements/CreateGroupModal.vue";
+import DeleteGroupModalVue from "./elements/DeleteGroupModal.vue";
+import ListGroupsDesktop from "./elements/ListGroupsDesktop.vue";
+import ListGroupsMobile from "./elements/ListGroupsMobile.vue";
 
 import type { Group } from "@/model/group/Group";
 

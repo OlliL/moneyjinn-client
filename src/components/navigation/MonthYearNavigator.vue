@@ -4,7 +4,7 @@
   >
     <Select v-model="selectedYearModel">
       <SelectTrigger
-        data-testid="month-year-nav-year-trigger"
+        :data-testid="`${testIdPrefix}-year-trigger`"
         class="w-25 h-8 shrink-0"
       >
         <SelectValue :placeholder="selectedYearModel" />
@@ -14,7 +14,7 @@
           v-for="year in years"
           :key="String(year)"
           :value="String(year)"
-          :data-testid="`month-year-nav-year-item-${year}`"
+          :data-testid="`${testIdPrefix}-year-item-${year}`"
         >
           {{ year }}
         </SelectItem>
@@ -33,7 +33,7 @@
         v-for="month in months"
         :key="month"
         :value="String(month)"
-        :data-testid="`month-year-nav-month-${month}`"
+        :data-testid="`${testIdPrefix}-month-${month}`"
         class="h-9 min-w-16 px-3 text-sm"
       >
         {{ getMonthName(month) }}
@@ -59,7 +59,10 @@ const props = defineProps<{
   months: number[];
   selectedYear: number | string;
   selectedMonth?: number | string;
+  testIdPrefix?: string;
 }>();
+
+const testIdPrefix = props.testIdPrefix ?? "month-year-nav";
 
 const emit = defineEmits<{
   selectYear: [year: string];

@@ -1,5 +1,5 @@
 <template>
-  <TableRow>
+  <TableRow :data-testid="etfId ? `report-etf-desktop-row-${etfId}` : undefined">
     <TableCell class="text-left border-r" v-if="name">
       <a :href="chartUrl">{{ name }}</a>
     </TableCell>
@@ -40,6 +40,10 @@ import { computed } from "vue";
 import SpanAmount from "../SpanAmount.vue";
 
 const props = defineProps({
+  etfId: {
+    type: Number,
+    required: false,
+  },
   name: {
     type: String,
     required: false,

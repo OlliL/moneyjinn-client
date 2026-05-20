@@ -31,6 +31,22 @@ vi.mock("@/service/CrudEtfService");
 class ListCapitalsourcesView {
   static readonly FilterInput = new InputView("div-filter-input");
   static readonly ValidNowToggle = new SwitchView("div-filter-valid-now");
+  static readonly MobileFilterTrigger = new ButtonView("div-filter-mobile-trigger");
+  static readonly MobileFilterInput = new InputView("div-filter-mobile-input");
+  static readonly MobileValidNowToggle = new SwitchView(
+    "div-filter-mobile-valid-now",
+  );
+  static readonly MobileFilterSheet = new RowView("div-filter-mobile-sheet");
+  static readonly MobileAccordion = new RowView("capitalsource-mobile-accordion");
+  static readonly MobileRowCash = new RowView("capitalsource-mobile-row-1");
+  static readonly MobileRowOldAccount = new RowView("capitalsource-mobile-row-2");
+  static readonly MobileRowCashTrigger = new ButtonView(
+    "capitalsource-mobile-trigger-1",
+  );
+  static readonly EditCashMobileButton = new ButtonView("capitalsource-mobile-edit-1");
+  static readonly DeleteCashMobileButton = new ButtonView(
+    "capitalsource-mobile-delete-1",
+  );
   static readonly RowCash = new RowView("capitalsource-row-1");
   static readonly RowOldAccount = new RowView("capitalsource-row-2");
   static readonly EditCashButton = new ButtonView("capitalsource-edit-1");
@@ -114,3 +130,39 @@ test("ListCapitalsources opens delete modal from row action", async () => {
   await ListCapitalsourcesView.DeleteCashButton.click();
   await ListCapitalsourcesView.Modal.assertOpen();
 });
+
+test("ListCapitalsources filters via mobile sheet", async () => {
+  await StoreService.getInstance().initAllStores();
+  render(ListCapitalsources);
+
+  await ListCapitalsourcesView.MobileAccordion.assertToBeVisible();
+  await ListCapitalsourcesView.MobileFilterTrigger.click();
+  await ListCapitalsourcesView.MobileFilterSheet.assertToBeVisible();
+
+  await ListCapitalsourcesView.MobileValidNowToggle.click();
+  await ListCapitalsourcesView.MobileFilterInput.setValue("old");
+
+  await ListCapitalsourcesView.MobileRowOldAccount.assertToBeVisible();
+  await ListCapitalsourcesView.MobileRowCash.assertNotToBeInDocument();
+});
+
+test("ListCapitalsources opens edit modal from mobile action", async () => {
+  await StoreService.getInstance().initAllStores();
+  render(ListCapitalsources);
+
+  await ListCapitalsourcesView.MobileRowCash.assertToBeVisible();
+  await ListCapitalsourcesView.MobileRowCashTrigger.click();
+  await ListCapitalsourcesView.EditCashMobileButton.click();
+  await ListCapitalsourcesView.Modal.assertOpen();
+});
+
+test("ListCapitalsources opens delete modal from mobile action", async () => {
+  await StoreService.getInstance().initAllStores();
+  render(ListCapitalsources);
+
+  await ListCapitalsourcesView.MobileRowCash.assertToBeVisible();
+  await ListCapitalsourcesView.MobileRowCashTrigger.click();
+  await ListCapitalsourcesView.DeleteCashMobileButton.click();
+  await ListCapitalsourcesView.Modal.assertOpen();
+});
+

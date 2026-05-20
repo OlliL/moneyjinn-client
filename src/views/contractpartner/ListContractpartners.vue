@@ -24,39 +24,19 @@
       @createClicked="showCreateContractpartnerModal"
     />
 
-    <DivContentTable class="max-w-5xl">
-      <TableHeader>
-        <TableRow>
-          <TableHead class="font-bold border-r text-foreground text-center">
-            {{ $t("General.name") }}
-          </TableHead>
-          <TableHead class="font-bold border-r text-foreground text-center">
-            {{ $t("General.validFrom") }}
-          </TableHead>
-          <TableHead class="font-bold border-r text-foreground text-center">
-            {{ $t("General.validTil") }}
-          </TableHead>
-          <TableHead class="font-bold border-r text-foreground text-center">
-            {{ $t("Contractpartner.moneyflowComment") }}
-          </TableHead>
-          <TableHead class="font-bold border-r text-foreground text-center">
-            {{ $t("General.postingAccount") }}
-          </TableHead>
-          <TableHead colspan="3"></TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        <ListContractpartnerRowVue
-          v-for="mcp in contractpartners"
-          :key="mcp.id"
-          v-memo="[mcp.id]"
-          :mcp="mcp"
-          @delete-contractpartner="deleteContractpartner"
-          @edit-contractpartner="editContractpartner"
-          @list-contractpartner-accounts="listContractpartnerAccounts"
-        />
-      </TableBody>
-    </DivContentTable>
+    <ListContractpartnersMobile
+      :contractpartners="contractpartners"
+      @delete-contractpartner="deleteContractpartner"
+      @edit-contractpartner="editContractpartner"
+      @list-contractpartner-accounts="listContractpartnerAccounts"
+    />
+
+    <ListContractpartnersDesktop
+      :contractpartners="contractpartners"
+      @delete-contractpartner="deleteContractpartner"
+      @edit-contractpartner="editContractpartner"
+      @list-contractpartner-accounts="listContractpartnerAccounts"
+    />
   </div>
 </template>
 
@@ -64,21 +44,14 @@
 import { storeToRefs } from "pinia";
 import { onMounted, ref, useTemplateRef, watch } from "vue";
 
-import {
-  TableBody,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-
 import { useContractpartnerStore } from "@/stores/ContractpartnerStore";
 
-import DivContentTable from "@/components/DivContentTable.vue";
 import DivFilter from "@/components/DivFilter.vue";
 import CreateContractpartnerModalVue from "@/components/contractpartner/CreateContractpartnerModal.vue";
-import DeleteContractpartnerModalVue from "@/components/contractpartner/DeleteContractpartnerModal.vue";
-import ListContractpartnerRowVue from "@/components/contractpartner/ListContractpartnerRow.vue";
-import ListContractpartnerAccountsModal from "@/components/contractpartneraccount/ListContractpartnerAccountsModal.vue";
+import DeleteContractpartnerModalVue from "./elements/DeleteContractpartnerModal.vue";
+import ListContractpartnersDesktop from "./elements/ListContractpartnersDesktop.vue";
+import ListContractpartnersMobile from "./elements/ListContractpartnersMobile.vue";
+import ListContractpartnerAccountsModal from "./elements/ListContractpartnerAccountsModal.vue";
 
 import type { Contractpartner } from "@/model/contractpartner/Contractpartner";
 

@@ -6,7 +6,7 @@ import {
   useUserSessionStore,
 } from "@/stores/UserSessionStore";
 import { assertHaveBeenCalledWith } from "@/tests/TestUtil";
-import { ButtonView, ModalView } from "@/tests/TestViews";
+import { ButtonView, ModalView, RowView } from "@/tests/TestViews";
 import ListMonthlySettlements from "@/views/monthlysettlement/ListMonthlySettlements.vue";
 import "@testing-library/jest-dom/vitest";
 import { render } from "@testing-library/vue";
@@ -25,6 +25,26 @@ vi.mock("vue-router", async () => {
 });
 
 class ListMonthlySettlementsView {
+  static readonly MobileOpenPeriodSheetButton = new ButtonView(
+    "monthly-settlement-mobile-open-period-sheet",
+  );
+  static readonly MobilePeriodSheet = new RowView(
+    "monthly-settlement-mobile-period-sheet",
+  );
+  static readonly MobileNewButton = new ButtonView("monthly-settlement-mobile-new");
+  static readonly MobileEditButton = new ButtonView("monthly-settlement-mobile-edit");
+  static readonly MobileDeleteButton = new ButtonView(
+    "monthly-settlement-mobile-delete",
+  );
+  static readonly MobileYearTrigger = new ButtonView(
+    "month-year-nav-mobile-year-trigger",
+  );
+  static readonly MobileYear2027Item = new ButtonView(
+    "month-year-nav-mobile-year-item-2027",
+  );
+  static readonly MobileMonth2Button = new ButtonView(
+    "month-year-nav-mobile-month-2",
+  );
   static readonly NewButton = new ButtonView("monthly-settlement-new");
   static readonly EditButton = new ButtonView("monthly-settlement-edit");
   static readonly DeleteButton = new ButtonView("monthly-settlement-delete");
@@ -115,3 +135,58 @@ test("ListMonthlySettlements selects another month via navigator", async () => {
     }),
   );
 });
+
+test("ListMonthlySettlements opens new modal via mobile action", async () => {
+  render(ListMonthlySettlements, { props: { year: "2026", month: "1" } });
+
+  await ListMonthlySettlementsView.MobileNewButton.click();
+  await ListMonthlySettlementsView.Modal.assertOpen();
+});
+
+test("ListMonthlySettlements opens edit modal via mobile action", async () => {
+  render(ListMonthlySettlements, { props: { year: "2026", month: "1" } });
+
+  await ListMonthlySettlementsView.MobileEditButton.click();
+  await ListMonthlySettlementsView.Modal.assertOpen();
+});
+
+test("ListMonthlySettlements opens delete modal via mobile action", async () => {
+  render(ListMonthlySettlements, { props: { year: "2026", month: "1" } });
+
+  await ListMonthlySettlementsView.MobileDeleteButton.click();
+  await ListMonthlySettlementsView.Modal.assertOpen();
+});
+
+test("ListMonthlySettlements selects another year via mobile period sheet", async () => {
+  render(ListMonthlySettlements, { props: { year: "2026", month: "1" } });
+
+  await ListMonthlySettlementsView.MobileOpenPeriodSheetButton.click();
+  await ListMonthlySettlementsView.MobilePeriodSheet.assertToBeVisible();
+  await ListMonthlySettlementsView.MobileYearTrigger.click();
+  await ListMonthlySettlementsView.MobileYear2027Item.click();
+
+  await assertHaveBeenCalledWith(
+    router.push,
+    expect.objectContaining({
+      name: Routes.ListMonthlySettlements,
+      params: expect.objectContaining({ year: "2027" }),
+    }),
+  );
+});
+
+test("ListMonthlySettlements selects another month via mobile period sheet", async () => {
+  render(ListMonthlySettlements, { props: { year: "2026", month: "1" } });
+
+  await ListMonthlySettlementsView.MobileOpenPeriodSheetButton.click();
+  await ListMonthlySettlementsView.MobilePeriodSheet.assertToBeVisible();
+  await ListMonthlySettlementsView.MobileMonth2Button.click();
+
+  await assertHaveBeenCalledWith(
+    router.push,
+    expect.objectContaining({
+      name: Routes.ListMonthlySettlements,
+      params: expect.objectContaining({ year: "2026", month: 2 }),
+    }),
+  );
+});
+

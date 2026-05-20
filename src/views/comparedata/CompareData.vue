@@ -153,7 +153,7 @@
 <script lang="ts" setup>
 import ButtonSubmit from "@/components/ButtonSubmit.vue";
 import SelectCapitalsource from "@/components/capitalsource/SelectCapitalsource.vue";
-import CompareDataResultGroupVue from "@/components/comparedata/CompareDataResultGroup.vue";
+import CompareDataResultGroupVue from "./elements/CompareDataResultGroup.vue";
 import DivContentTable from "@/components/DivContentTable.vue";
 import DivError from "@/components/DivError.vue";
 import InputDate from "@/components/InputDate.vue";

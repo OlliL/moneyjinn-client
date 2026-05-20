@@ -27,6 +27,9 @@ vi.mock("@/service/PostingAccountService");
 
 class ListContractpartnerMatchingsView {
   static readonly FilterInput = new InputView("div-filter-input");
+  static readonly MobileFilterTrigger = new ButtonView("div-filter-mobile-trigger");
+  static readonly MobileFilterSheet = new RowView("div-filter-mobile-sheet");
+  static readonly MobileFilterInput = new InputView("div-filter-mobile-input");
   static readonly ContractpartnerFilterCombobox = new ComboboxView(
     "contractpartnerContractpartnerMatching-searchContractpartner",
   );
@@ -34,6 +37,21 @@ class ListContractpartnerMatchingsView {
     "contractpartnerContractpartnerMatching-searchContractpartner-id",
   );
   static readonly CreateButton = new ButtonView("div-filter-create");
+  static readonly MobileAccordion = new RowView(
+    "contractpartner-matching-mobile-accordion",
+  );
+  static readonly MobileRowRent = new RowView(
+    "contractpartner-matching-mobile-row-1",
+  );
+  static readonly MobileRowSalary = new RowView(
+    "contractpartner-matching-mobile-row-2",
+  );
+  static readonly MobileEditRentButton = new ButtonView(
+    "contractpartner-matching-mobile-edit-1",
+  );
+  static readonly MobileDeleteRentButton = new ButtonView(
+    "contractpartner-matching-mobile-delete-1",
+  );
   static readonly RowRent = new RowView("contractpartner-matching-row-1");
   static readonly RowSalary = new RowView("contractpartner-matching-row-2");
   static readonly EditRentButton = new ButtonView(
@@ -149,3 +167,32 @@ test("ListContractpartnerMatchings opens delete modal from row action", async ()
   await ListContractpartnerMatchingsView.DeleteRentButton.click();
   await ListContractpartnerMatchingsView.Modal.assertOpen();
 });
+
+test("ListContractpartnerMatchings filters via mobile sheet", async () => {
+  render(ListContractpartnerMatchings);
+
+  await ListContractpartnerMatchingsView.MobileAccordion.assertToBeVisible();
+  await ListContractpartnerMatchingsView.MobileFilterTrigger.click();
+  await ListContractpartnerMatchingsView.MobileFilterSheet.assertToBeVisible();
+  await ListContractpartnerMatchingsView.MobileFilterInput.setValue("salary");
+
+  await ListContractpartnerMatchingsView.MobileRowSalary.assertToBeVisible();
+  await ListContractpartnerMatchingsView.MobileRowRent.assertNotToBeInDocument();
+});
+
+test("ListContractpartnerMatchings opens edit modal from mobile action", async () => {
+  render(ListContractpartnerMatchings);
+
+  await ListContractpartnerMatchingsView.MobileRowRent.assertToBeVisible();
+  await ListContractpartnerMatchingsView.MobileEditRentButton.click();
+  await ListContractpartnerMatchingsView.Modal.assertOpen();
+});
+
+test("ListContractpartnerMatchings opens delete modal from mobile action", async () => {
+  render(ListContractpartnerMatchings);
+
+  await ListContractpartnerMatchingsView.MobileRowRent.assertToBeVisible();
+  await ListContractpartnerMatchingsView.MobileDeleteRentButton.click();
+  await ListContractpartnerMatchingsView.Modal.assertOpen();
+});
+

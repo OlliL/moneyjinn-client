@@ -7,7 +7,7 @@ import {
   useUserSessionStore,
 } from "@/stores/UserSessionStore";
 import { assertHaveBeenCalledWith } from "@/tests/TestUtil";
-import { ButtonView, ModalView, RowView } from "@/tests/TestViews";
+import { ButtonView, InputView, ModalView, RowView } from "@/tests/TestViews";
 import ListReports from "@/views/reports/ListReports.vue";
 import "@testing-library/jest-dom/vitest";
 import { render } from "@testing-library/vue";
@@ -29,9 +29,42 @@ vi.mock("vue-router", async () => {
 class ListReportsView {
   static readonly RowOwn = new RowView("report-moneyflow-row-1");
   static readonly RowForeign = new RowView("report-moneyflow-row-2");
+  static readonly RowOwnMobile = new RowView("report-mobile-moneyflow-row-1");
+  static readonly RowForeignMobile = new RowView("report-mobile-moneyflow-row-2");
   static readonly EditOwnButton = new ButtonView("report-moneyflow-edit-1");
   static readonly DeleteOwnButton = new ButtonView("report-moneyflow-delete-1");
   static readonly ListForeignButton = new ButtonView("report-moneyflow-list-2");
+  static readonly EditOwnMobileButton = new ButtonView("report-mobile-moneyflow-edit-1");
+  static readonly DeleteOwnMobileButton = new ButtonView(
+    "report-mobile-moneyflow-delete-1",
+  );
+  static readonly ReceiptOwnMobileButton = new ButtonView(
+    "report-mobile-moneyflow-receipt-1",
+  );
+  static readonly ListForeignMobileButton = new ButtonView(
+    "report-mobile-moneyflow-list-2",
+  );
+  static readonly MobileFilterTrigger = new ButtonView(
+    "report-table-mobile-filter-trigger",
+  );
+  static readonly MobileFilterSheet = new RowView("report-table-mobile-filter-sheet");
+  static readonly MobileContractpartnerFilter = new InputView(
+    "report-table-mobile-filter-contractpartner",
+  );
+  static readonly MobileContractpartnerFilterReset = new ButtonView(
+    "report-table-mobile-filter-contractpartner-reset",
+  );
+  static readonly EtfDesktopTable = new RowView("report-etf-desktop-table");
+  static readonly EtfMobileAccordion = new RowView("report-etf-mobile-accordion");
+  static readonly EtfDesktopRowOne = new RowView("report-etf-desktop-row-100");
+  static readonly EtfMobileItemOne = new RowView("report-etf-mobile-item-100");
+  static readonly EtfMobileTriggerOne = new ButtonView(
+    "report-etf-mobile-trigger-100",
+  );
+  static readonly EtfMobileContentOne = new RowView("report-etf-mobile-content-100");
+  static readonly EtfMobileChartLinkOne = new RowView(
+    "report-etf-mobile-chart-link-100",
+  );
   static readonly PreviousMonthButton = new ButtonView(
     "reports-previous-month",
   );
@@ -41,6 +74,20 @@ class ListReportsView {
     "month-year-nav-year-item-2025",
   );
   static readonly Month1Button = new ButtonView("month-year-nav-month-1");
+  static readonly MobileOpenPeriodSheetButton = new ButtonView(
+    "reports-mobile-open-period-sheet",
+  );
+  static readonly MobilePeriodSheet = new RowView("reports-mobile-period-sheet");
+  static readonly MobileYearTrigger = new ButtonView(
+    "month-year-nav-mobile-year-trigger",
+  );
+  static readonly MobileYear2025Item = new ButtonView(
+    "month-year-nav-mobile-year-item-2025",
+  );
+  static readonly MobileMonth1Button = new ButtonView(
+    "month-year-nav-mobile-month-1",
+  );
+  static readonly MobileCreateButton = new ButtonView("reports-mobile-create");
   static readonly Modal = new ModalView("app-modal");
 }
 
@@ -78,7 +125,7 @@ beforeEach(() => {
         private: false,
         postingAccountId: 1,
         postingAccountName: "Rent",
-        hasReceipt: false,
+        hasReceipt: true,
       },
       {
         id: 2,
@@ -108,6 +155,49 @@ test("ListReports calls getAvailableMonth on mount", async () => {
   await assertHaveBeenCalledWith(ReportService.getAvailableMonth, 2026, 2);
 });
 
+test("ListReports shows ETF data in desktop and mobile sections", async () => {
+  EtfServiceMocker.mockListEtfOverview([
+    {
+      etfId: 100,
+      name: "ACWI ETF",
+      chartUrl: "https://example.invalid/acwi",
+      amount: 10,
+      spentValue: 1000,
+      buyPrice: 102,
+      sellPrice: 110,
+      pricesTimestamp: new Date("2026-02-10T12:30:00"),
+    },
+  ]);
+
+  render(ListReports, { props: { year: "2026", month: "2" } });
+
+  await ListReportsView.EtfDesktopTable.assertToBeVisible();
+  await ListReportsView.EtfMobileAccordion.assertToBeVisible();
+  await ListReportsView.EtfDesktopRowOne.assertToBeVisible();
+  await ListReportsView.EtfMobileItemOne.assertToBeVisible();
+});
+
+test("ListReports expands mobile ETF accordion and shows chart link", async () => {
+  EtfServiceMocker.mockListEtfOverview([
+    {
+      etfId: 100,
+      name: "ACWI ETF",
+      chartUrl: "https://example.invalid/acwi",
+      amount: 10,
+      spentValue: 1000,
+      buyPrice: 102,
+      sellPrice: 110,
+      pricesTimestamp: new Date("2026-02-10T12:30:00"),
+    },
+  ]);
+
+  render(ListReports, { props: { year: "2026", month: "2" } });
+
+  await ListReportsView.EtfMobileTriggerOne.click();
+  await ListReportsView.EtfMobileContentOne.assertToBeVisible();
+  await ListReportsView.EtfMobileChartLinkOne.assertToBeVisible();
+});
+
 test("ListReports opens edit modal from own moneyflow row", async () => {
   render(ListReports, { props: { year: "2026", month: "2" } });
 
@@ -130,6 +220,76 @@ test("ListReports opens list modal from foreign moneyflow row", async () => {
   await ListReportsView.RowForeign.assertToBeVisible();
   await ListReportsView.ListForeignButton.click();
   await ListReportsView.Modal.assertOpen();
+});
+
+test("ListReports opens edit modal from own mobile moneyflow row", async () => {
+  render(ListReports, { props: { year: "2026", month: "2" } });
+
+  await ListReportsView.RowOwnMobile.assertToBeVisible();
+  await ListReportsView.EditOwnMobileButton.click();
+  await ListReportsView.Modal.assertOpen();
+});
+
+test("ListReports opens delete modal from own mobile moneyflow row", async () => {
+  render(ListReports, { props: { year: "2026", month: "2" } });
+
+  await ListReportsView.RowOwnMobile.assertToBeVisible();
+  await ListReportsView.DeleteOwnMobileButton.click();
+  await ListReportsView.Modal.assertOpen();
+});
+
+test("ListReports opens list modal from foreign mobile moneyflow row", async () => {
+  render(ListReports, { props: { year: "2026", month: "2" } });
+
+  await ListReportsView.RowForeignMobile.assertToBeVisible();
+  await ListReportsView.ListForeignMobileButton.click();
+  await ListReportsView.Modal.assertOpen();
+});
+
+test("ListReports opens receipt modal from own mobile moneyflow row", async () => {
+  render(ListReports, { props: { year: "2026", month: "2" } });
+
+  await ListReportsView.RowOwnMobile.assertToBeVisible();
+  await ListReportsView.ReceiptOwnMobileButton.click();
+  await ListReportsView.Modal.assertOpen();
+});
+
+test("ListReports filters mobile list by contractpartner", async () => {
+  render(ListReports, { props: { year: "2026", month: "2" } });
+
+  await ListReportsView.RowOwnMobile.assertToBeVisible();
+  await ListReportsView.RowForeignMobile.assertToBeVisible();
+
+  await ListReportsView.MobileFilterTrigger.click();
+  await ListReportsView.MobileContractpartnerFilter.setValue("Landlord");
+
+  await ListReportsView.RowOwnMobile.assertToBeVisible();
+  await ListReportsView.RowForeignMobile.assertNotToBeInDocument();
+});
+
+test("ListReports resets mobile contractpartner filter", async () => {
+  render(ListReports, { props: { year: "2026", month: "2" } });
+
+  await ListReportsView.RowOwnMobile.assertToBeVisible();
+  await ListReportsView.RowForeignMobile.assertToBeVisible();
+
+  await ListReportsView.MobileFilterTrigger.click();
+  await ListReportsView.MobileContractpartnerFilter.setValue("Landlord");
+  await ListReportsView.RowForeignMobile.assertNotToBeInDocument();
+
+  await ListReportsView.MobileContractpartnerFilterReset.click();
+  await ListReportsView.RowForeignMobile.assertToBeVisible();
+});
+
+test("ListReports closes mobile filter sheet on Enter", async () => {
+  render(ListReports, { props: { year: "2026", month: "2" } });
+
+  await ListReportsView.MobileFilterTrigger.click();
+  await ListReportsView.MobileFilterSheet.assertToBeVisible();
+  await ListReportsView.MobileContractpartnerFilter.setValue("Landlord");
+  await ListReportsView.MobileContractpartnerFilter.pressEnter();
+
+  await ListReportsView.MobileFilterSheet.assertNotToBeInDocument();
 });
 
 test("ListReports navigates to previous and next month", async () => {
@@ -183,3 +343,50 @@ test("ListReports selects month via navigator", async () => {
     }),
   );
 });
+
+test("ListReports selects year via mobile period sheet", async () => {
+  render(ListReports, { props: { year: "2026", month: "2" } });
+
+  await ListReportsView.MobileOpenPeriodSheetButton.click();
+  await ListReportsView.MobilePeriodSheet.assertToBeVisible();
+  await ListReportsView.MobileYearTrigger.click();
+  await ListReportsView.MobileYear2025Item.click();
+
+  await assertHaveBeenCalledWith(
+    router.push,
+    expect.objectContaining({
+      name: Routes.ListReports,
+      params: expect.objectContaining({ year: "2025" }),
+    }),
+  );
+});
+
+test("ListReports selects month via mobile period sheet", async () => {
+  render(ListReports, { props: { year: "2026", month: "2" } });
+
+  await ListReportsView.MobileOpenPeriodSheetButton.click();
+  await ListReportsView.MobilePeriodSheet.assertToBeVisible();
+  await ListReportsView.MobileMonth1Button.click();
+
+  await assertHaveBeenCalledWith(
+    router.push,
+    expect.objectContaining({
+      name: Routes.ListReports,
+      params: expect.objectContaining({ year: "2026", month: "1" }),
+    }),
+  );
+});
+
+test("ListReports navigates to create moneyflow via mobile action", async () => {
+  render(ListReports, { props: { year: "2026", month: "2" } });
+
+  await ListReportsView.MobileCreateButton.click();
+
+  await assertHaveBeenCalledWith(
+    router.push,
+    expect.objectContaining({
+      name: Routes.CreateMoneyflow,
+    }),
+  );
+});
+

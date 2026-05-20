@@ -22,43 +22,28 @@
       @createClicked="showCreatePostingAccountModal"
     />
 
-    <DivContentTable class="max-w-sm">
-      <TableHeader>
-        <TableRow>
-          <TableHead
-            class="font-bold border-r text-foreground text-center w-full"
-            >{{ $t("General.name") }}</TableHead
-          >
-          <TableHead colspan="2"></TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        <ListPostingAccountRowVue
-          v-for="mpa in postingAccounts"
-          :key="mpa.id"
-          :mpa="mpa"
-          @delete-postingAccount="deletePostingAccount"
-          @edit-postingAccount="editPostingAccount"
-        />
-      </TableBody>
-    </DivContentTable>
+    <ListPostingAccountsMobile
+      :posting-accounts="postingAccounts"
+      @delete-posting-account="deletePostingAccount"
+      @edit-posting-account="editPostingAccount"
+    />
+
+    <ListPostingAccountsDesktop
+      :posting-accounts="postingAccounts"
+      @delete-posting-account="deletePostingAccount"
+      @edit-posting-account="editPostingAccount"
+    />
   </div>
 </template>
 
 <script lang="ts" setup>
 import { onMounted, ref, useTemplateRef, watch } from "vue";
 
-import DivContentTable from "@/components/DivContentTable.vue";
 import DivFilter from "@/components/DivFilter.vue";
 import CreatePostingAccountModalVue from "@/components/postingaccount/CreatePostingAccountModal.vue";
-import DeletePostingAccountModalVue from "@/components/postingaccount/DeletePostingAccountModal.vue";
-import ListPostingAccountRowVue from "@/components/postingaccount/ListPostingAccountRow.vue";
-import {
-  TableBody,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+import DeletePostingAccountModalVue from "./elements/DeletePostingAccountModal.vue";
+import ListPostingAccountsDesktop from "./elements/ListPostingAccountsDesktop.vue";
+import ListPostingAccountsMobile from "./elements/ListPostingAccountsMobile.vue";
 import type { PostingAccount } from "@/model/postingaccount/PostingAccount";
 import { usePostingAccountStore } from "@/stores/PostingAccountStore";
 import { storeToRefs } from "pinia";

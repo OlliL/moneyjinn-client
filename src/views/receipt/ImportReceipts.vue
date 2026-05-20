@@ -44,7 +44,7 @@ import DivError from "@/components/DivError.vue";
 import InputFile from "@/components/InputFile.vue";
 import DeleteMoneyflowModalVue from "@/components/moneyflow/DeleteMoneyflowModal.vue";
 import EditMoneyflowModalVue from "@/components/moneyflow/EditMoneyflowModal.vue";
-import ImportReceiptsRowVue from "@/components/moneyflow/ImportReceiptsRow.vue";
+import ImportReceiptsRowVue from "./elements/ImportReceiptsRow.vue";
 import type { ImportedMoneyflowReceipt } from "@/model/moneyflow/ImportedMoneyflowReceipt";
 import ImportedMoneyflowReceiptService from "@/service/ImportedMoneyflowReceiptService";
 import MoneyflowService from "@/service/MoneyflowService";

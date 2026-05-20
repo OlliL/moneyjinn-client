@@ -229,7 +229,7 @@ import InputDate from "@/components/InputDate.vue";
 import InputStandard from "@/components/InputStandard.vue";
 import DeleteMoneyflowModalVue from "@/components/moneyflow/DeleteMoneyflowModal.vue";
 import EditMoneyflowModalVue from "@/components/moneyflow/EditMoneyflowModal.vue";
-import SearchMoneyflowResultGroupVue from "@/components/moneyflow/SearchMoneyflowResultGroup.vue";
+import SearchMoneyflowResultGroupVue from "./elements/SearchMoneyflowResultGroup.vue";
 import SelectPostingAccount from "@/components/postingaccount/SelectPostingAccount.vue";
 import SelectStandard from "@/components/SelectStandard.vue";
 

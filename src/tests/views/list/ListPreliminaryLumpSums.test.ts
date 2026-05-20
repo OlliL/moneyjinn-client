@@ -31,14 +31,24 @@ vi.mock("@/router", async () => {
 class ListPreliminaryLumpSumsView {
   static readonly EtfInput = new InputView("etf");
   static readonly EtfIdInput = new InputView("etf-id");
-  static readonly CreateMonthlyButton = new ButtonView(
-    "preliminary-lump-sum-create-monthly",
+  static readonly CreateButton = new ButtonView("preliminary-lump-sum-create");
+  static readonly CreateTypeMonthlyButton = new ButtonView(
+    "preliminary-lump-sum-create-type-monthly",
   );
-  static readonly CreatePieceButton = new ButtonView(
-    "preliminary-lump-sum-create-piece",
+  static readonly CreateTypePieceButton = new ButtonView(
+    "preliminary-lump-sum-create-type-piece",
   );
-  static readonly CreateYearlyButton = new ButtonView(
-    "preliminary-lump-sum-create-yearly",
+  static readonly CreateTypeYearlyButton = new ButtonView(
+    "preliminary-lump-sum-create-type-yearly",
+  );
+  static readonly MobileCreateButton = new ButtonView(
+    "preliminary-lump-sum-mobile-create",
+  );
+  static readonly MobileCreateTypePieceButton = new ButtonView(
+    "preliminary-lump-sum-mobile-create-type-piece",
+  );
+  static readonly MobileOpenYearSheetButton = new ButtonView(
+    "preliminary-lump-sum-mobile-open-period-sheet",
   );
   static readonly YearPreviousButton = new ButtonView(
     "preliminary-lump-sum-year-previous",
@@ -81,7 +91,8 @@ test("ListPreliminaryLumpSums opens monthly create modal", async () => {
   render(ListPreliminaryLumpSums, { props: { etfId: "1" } });
 
   await ListPreliminaryLumpSumsView.EtfInput.assertToBeVisible();
-  await ListPreliminaryLumpSumsView.CreateMonthlyButton.click();
+  await ListPreliminaryLumpSumsView.CreateTypeMonthlyButton.click();
+  await ListPreliminaryLumpSumsView.CreateButton.click();
   await ListPreliminaryLumpSumsView.Modal.assertOpen();
 });
 
@@ -90,7 +101,8 @@ test("ListPreliminaryLumpSums opens piece create modal", async () => {
   render(ListPreliminaryLumpSums, { props: { etfId: "1" } });
 
   await ListPreliminaryLumpSumsView.EtfInput.assertToBeVisible();
-  await ListPreliminaryLumpSumsView.CreatePieceButton.click();
+  await ListPreliminaryLumpSumsView.CreateTypePieceButton.click();
+  await ListPreliminaryLumpSumsView.CreateButton.click();
   await ListPreliminaryLumpSumsView.Modal.assertOpen();
 });
 
@@ -99,7 +111,18 @@ test("ListPreliminaryLumpSums opens yearly create modal", async () => {
   render(ListPreliminaryLumpSums, { props: { etfId: "1" } });
 
   await ListPreliminaryLumpSumsView.EtfInput.assertToBeVisible();
-  await ListPreliminaryLumpSumsView.CreateYearlyButton.click();
+  await ListPreliminaryLumpSumsView.CreateTypeYearlyButton.click();
+  await ListPreliminaryLumpSumsView.CreateButton.click();
+  await ListPreliminaryLumpSumsView.Modal.assertOpen();
+});
+
+test("ListPreliminaryLumpSums opens piece create modal via mobile controls", async () => {
+  await StoreService.getInstance().initAllStores();
+  render(ListPreliminaryLumpSums, { props: { etfId: "1" } });
+
+  await ListPreliminaryLumpSumsView.EtfInput.assertToBeVisible();
+  await ListPreliminaryLumpSumsView.MobileCreateTypePieceButton.click();
+  await ListPreliminaryLumpSumsView.MobileCreateButton.click();
   await ListPreliminaryLumpSumsView.Modal.assertOpen();
 });
 

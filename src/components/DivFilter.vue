@@ -1,11 +1,77 @@
 <template>
+  <div class="fixed bottom-6 right-6 z-50 md:hidden">
+    <Sheet v-model:open="isMobileSheetOpen">
+      <SheetTrigger as-child>
+        <Button data-testid="div-filter-mobile-trigger" class="h-12 w-12 p-0 rounded-full shadow-lg">
+          <Filter class="h-5 w-5" />
+        </Button>
+      </SheetTrigger>
+
+      <SheetContent
+        data-testid="div-filter-mobile-sheet"
+        side="bottom"
+        class="h-[70vh] rounded-t-xl p-6 flex flex-col"
+      >
+        <SheetHeader class="text-left pb-4 border-b shrink-0">
+          <SheetTitle>{{ $t("Reports.filterData") }}</SheetTitle>
+          <SheetDescription class="sr-only">
+            {{ $t("Reports.filterData") }}
+          </SheetDescription>
+        </SheetHeader>
+
+        <div class="flex-1 overflow-y-auto space-y-4 py-4">
+          <Button data-testid="div-filter-mobile-create" @click="emitCreateClicked" class="w-full">
+            <Plus class="mr-2 h-4 w-4" />
+            {{ $t("General.new") }}
+          </Button>
+
+          <div class="flex w-full items-center">
+            <Button
+              data-testid="div-filter-mobile-all"
+              variant="secondary"
+              class="rounded-r-none!"
+              @click="clearSearch"
+            >
+              {{ $t("General.all") }}
+            </Button>
+            <Input
+              data-testid="div-filter-mobile-input"
+              type="text"
+              :placeholder="placeholder"
+              :model-value="modelValue"
+              class="rounded-l-none focus-visible:ring-1 w-full"
+              @update:model-value="handleInput"
+            />
+          </div>
+
+          <div v-if="showValidToggle" class="flex items-center gap-3 pb-1.5">
+            <Switch
+              data-testid="div-filter-mobile-valid-now"
+              id="validInputMobile"
+              :modelValue="validNow"
+              @update:model-value="handleToggle"
+            />
+            <Label
+              for="validInputMobile"
+              class="cursor-pointer text-sm font-medium select-none whitespace-nowrap"
+            >
+              {{ $t("General.validNow") }}
+            </Label>
+          </div>
+
+          <slot name="mobile-right"></slot>
+        </div>
+      </SheetContent>
+    </Sheet>
+  </div>
+
   <div class="flex justify-center w-full mb-6">
     <div
       class="flex flex-col items-center gap-4 bg-background p-2 w-full max-w-2xl md:flex-row md:justify-center md:items-end"
     >
       <Button
         data-testid="div-filter-create"
-        @click="$emit('createClicked')"
+        @click="emitCreateClicked"
         class="w-full md:w-auto"
       >
         <Plus class="mr-2 h-4 w-4" />
@@ -16,7 +82,7 @@
         <Button
           data-testid="div-filter-all"
           variant="secondary"
-          class="!rounded-r-none"
+          class="rounded-r-none!"
           @click="clearSearch"
         >
           {{ $t("General.all") }}
@@ -55,8 +121,16 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 import { Switch } from "@/components/ui/switch";
-import { Plus } from "lucide-vue-next";
+import { Filter, Plus } from "lucide-vue-next";
 import { onBeforeUnmount, ref, watch } from "vue";
 
 const props = defineProps({
@@ -74,6 +148,7 @@ const emit = defineEmits([
 ]);
 
 const validNow = ref(props.validNow);
+const isMobileSheetOpen = ref(false);
 let debounceTimeout: ReturnType<typeof setTimeout> | undefined;
 
 watch(
@@ -93,6 +168,10 @@ const handleInput = (val: string | number) => {
 const clearSearch = () => {
   globalThis.clearTimeout(debounceTimeout);
   emit("update:modelValue", "");
+};
+
+const emitCreateClicked = () => {
+  emit("createClicked");
 };
 
 const handleToggle = (val: boolean) => {

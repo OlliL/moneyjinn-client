@@ -12,48 +12,33 @@
       <h4 class="text-2xl font-bold">{{ $t("General.monthlysettlements") }}</h4>
     </div>
 
-    <div class="mx-auto flex w-full max-w-5xl flex-col items-center gap-3">
-      <div class="flex w-full justify-center">
-        <MonthYearNavigator
-          v-if="dataLoaded"
-          :years="years"
-          :months="months"
-          :selected-year="selectedYear"
-          :selected-month="selectedMonth > 0 ? selectedMonth : undefined"
-          @select-year="selectYear"
-          @select-month="selectMonth"
-        />
-      </div>
+    <ListMonthlySettlementsMobile
+      :data-loaded="dataLoaded"
+      :years="years"
+      :months="months"
+      :selected-year="selectedYear"
+      :selected-month="selectedMonth"
+      :can-edit-or-delete="canEditOrDelete"
+      @select-year="selectYear"
+      @select-month="selectMonth"
+      @create="showEditMonthlySettlementModal()"
+      @edit="showEditMonthlySettlementModal(Number(selectedYear), selectedMonth)"
+      @delete="showDeleteMonthlySettlementModal"
+    />
 
-      <div class="flex w-full flex-wrap items-center justify-center gap-3">
-        <Button
-          data-testid="monthly-settlement-new"
-          type="button"
-          @click="showEditMonthlySettlementModal()"
-        >
-          {{ $t("General.new") }}
-        </Button>
-        <Button
-          data-testid="monthly-settlement-edit"
-          type="button"
-          :disabled="!selectedMonth"
-          @click="
-            showEditMonthlySettlementModal(Number(selectedYear), selectedMonth)
-          "
-        >
-          {{ $t("General.edit") }}
-        </Button>
-        <Button
-          data-testid="monthly-settlement-delete"
-          type="button"
-          variant="destructive"
-          :disabled="!selectedMonth"
-          @click="showDeleteMonthlySettlementModal"
-        >
-          {{ $t("General.delete") }}
-        </Button>
-      </div>
-    </div>
+    <ListMonthlySettlementsDesktop
+      :data-loaded="dataLoaded"
+      :years="years"
+      :months="months"
+      :selected-year="selectedYear"
+      :selected-month="selectedMonth"
+      :can-edit-or-delete="canEditOrDelete"
+      @select-year="selectYear"
+      @select-month="selectMonth"
+      @create="showEditMonthlySettlementModal()"
+      @edit="showEditMonthlySettlementModal(Number(selectedYear), selectedMonth)"
+      @delete="showDeleteMonthlySettlementModal"
+    />
 
     <DivError :server-errors="serverErrors" />
 
@@ -66,15 +51,15 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref, useTemplateRef } from "vue";
+import { computed, onMounted, ref, useTemplateRef } from "vue";
 import { onBeforeRouteUpdate } from "vue-router";
 
 import DivError from "@/components/DivError.vue";
-import DeleteMonthlySettlementModalVue from "@/components/monthlysettlement/DeleteMonthlySettlementModal.vue";
+import DeleteMonthlySettlementModalVue from "./elements/DeleteMonthlySettlementModal.vue";
 import EditMonthlySettlementModalVue from "@/components/monthlysettlement/EditMonthlySettlementModal.vue";
-import ShowMontlySettlementVue from "@/components/monthlysettlement/ShowMonthlySettlement.vue";
-import MonthYearNavigator from "@/components/navigation/MonthYearNavigator.vue";
-import { Button } from "@/components/ui/button";
+import ListMonthlySettlementsDesktop from "./elements/ListMonthlySettlementsDesktop.vue";
+import ListMonthlySettlementsMobile from "./elements/ListMonthlySettlementsMobile.vue";
+import ShowMontlySettlementVue from "./elements/ShowMonthlySettlement.vue";
 
 import router, { Routes } from "@/router";
 
@@ -90,6 +75,7 @@ const years = ref([] as number[]);
 const selectedYear = ref("0");
 const selectedMonth = ref(0);
 const currentlyShownYear = ref("0");
+const canEditOrDelete = computed(() => selectedMonth.value > 0);
 
 const deleteModal =
   useTemplateRef<typeof DeleteMonthlySettlementModalVue>("deleteModal");

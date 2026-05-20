@@ -34,63 +34,122 @@
     </div>
     <div class="flex justify-center">
       <div class="w-full max-w-3xl flex flex-col items-center gap-6">
-        <div class="grid gap-3 md:grid-cols-24 items-end w-full">
-          <div class="md:col-span-9">
-            <SelectStandard
-              v-model="selectedEtfId"
-              id="etf"
-              :field-label="$t('General.selectEtf')"
-              :select-box-values="getAsSelectBoxValues()"
-            />
-          </div>
-          <div class="md:col-span-5" v-if="selectedEtfId !== undefined">
-            <Button
-              data-testid="preliminary-lump-sum-create-monthly"
-              type="button"
-              class="w-full"
-              @click="
-                showCreateEtfPreliminaryLumpSumModal(
-                  selectedEtfId,
-                  EtfPreliminaryLumpSumType.AMOUNT_PER_MONTH,
-                )
-              "
-            >
-              {{ $t("ETFPreliminaryLumpSum.newMonthly") }}
-            </Button>
-          </div>
-          <div class="md:col-span-5" v-if="selectedEtfId !== undefined">
-            <Button
-              data-testid="preliminary-lump-sum-create-piece"
-              type="button"
-              class="w-full"
-              @click="
-                showCreateEtfPreliminaryLumpSumModal(
-                  selectedEtfId,
-                  EtfPreliminaryLumpSumType.AMOUNT_PER_PIECE,
-                )
-              "
-            >
-              {{ $t("ETFPreliminaryLumpSum.newPiece") }}
-            </Button>
-          </div>
-          <div class="md:col-span-5" v-if="selectedEtfId !== undefined">
-            <Button
-              data-testid="preliminary-lump-sum-create-yearly"
-              type="button"
-              class="w-full"
-              @click="
-                showCreateEtfPreliminaryLumpSumModal(
-                  selectedEtfId,
-                  EtfPreliminaryLumpSumType.AMOUNT_PER_YEAR,
-                )
-              "
-            >
-              {{ $t("ETFPreliminaryLumpSum.newYearly") }}
-            </Button>
+        <div class="w-full max-w-md">
+          <div class="grid gap-3 items-end w-full md:grid-cols-12">
+            <div class="md:col-span-7">
+              <SelectStandard
+                v-model="selectedEtfId"
+                id="etf"
+                :field-label="$t('General.selectEtf')"
+                :select-box-values="getAsSelectBoxValues()"
+              />
+            </div>
+            <div class="md:col-span-5" v-if="selectedEtfId !== undefined">
+              <Button
+                data-testid="preliminary-lump-sum-create"
+                type="button"
+                class="w-full"
+                @click="createSelectedPreliminaryLumpSum"
+              >
+                {{ $t("General.new") }}
+              </Button>
+            </div>
           </div>
         </div>
 
-        <div class="flex justify-center pb-3 w-full" v-if="yearsLoaded">
+        <div class="hidden md:flex w-full justify-center" v-if="selectedEtfId !== undefined">
+          <ToggleGroup
+            type="single"
+            variant="outline"
+            :model-value="String(createType)"
+            @update:model-value="updateCreateType"
+            class="min-w-0 max-w-full flex-wrap justify-center"
+          >
+            <ToggleGroupItem
+              data-testid="preliminary-lump-sum-create-type-monthly"
+              :value="String(EtfPreliminaryLumpSumType.AMOUNT_PER_MONTH)"
+              class="h-9 px-3 text-sm"
+            >
+              {{ $t("ETFPreliminaryLumpSum.newMonthly") }}
+            </ToggleGroupItem>
+            <ToggleGroupItem
+              data-testid="preliminary-lump-sum-create-type-piece"
+              :value="String(EtfPreliminaryLumpSumType.AMOUNT_PER_PIECE)"
+              class="h-9 px-3 text-sm"
+            >
+              {{ $t("ETFPreliminaryLumpSum.newPiece") }}
+            </ToggleGroupItem>
+            <ToggleGroupItem
+              data-testid="preliminary-lump-sum-create-type-yearly"
+              :value="String(EtfPreliminaryLumpSumType.AMOUNT_PER_YEAR)"
+              class="h-9 px-3 text-sm"
+            >
+              {{ $t("ETFPreliminaryLumpSum.newYearly") }}
+            </ToggleGroupItem>
+          </ToggleGroup>
+        </div>
+
+        <MobilePeriodSheetNavigator
+          :data-loaded="yearsLoaded"
+          :years="years"
+          :months="[]"
+          :selected-year="selectedYear ?? ''"
+          :selected-month="0"
+          test-id-prefix="preliminary-lump-sum-mobile"
+          navigator-test-id-prefix="preliminary-lump-sum-year-mobile"
+          title-key="General.preliminaryLumpSums"
+          label-key="General.year"
+          select-label-key="General.select"
+          @select-year="selectYearMobile"
+        >
+          <template #actions>
+            <div
+              class="grid grid-cols-1 gap-2"
+              v-if="selectedEtfId !== undefined"
+            >
+              <Button
+                data-testid="preliminary-lump-sum-mobile-create"
+                type="button"
+                class="w-full"
+                @click="createSelectedPreliminaryLumpSum"
+              >
+                {{ $t("General.new") }}
+              </Button>
+
+              <ToggleGroup
+                type="single"
+                variant="outline"
+                :model-value="String(createType)"
+                @update:model-value="updateCreateType"
+                class="grid grid-cols-1 gap-2"
+              >
+                <ToggleGroupItem
+                  data-testid="preliminary-lump-sum-mobile-create-type-monthly"
+                  :value="String(EtfPreliminaryLumpSumType.AMOUNT_PER_MONTH)"
+                  class="h-9 px-3 text-sm"
+                >
+                  {{ $t("ETFPreliminaryLumpSum.newMonthly") }}
+                </ToggleGroupItem>
+                <ToggleGroupItem
+                  data-testid="preliminary-lump-sum-mobile-create-type-piece"
+                  :value="String(EtfPreliminaryLumpSumType.AMOUNT_PER_PIECE)"
+                  class="h-9 px-3 text-sm"
+                >
+                  {{ $t("ETFPreliminaryLumpSum.newPiece") }}
+                </ToggleGroupItem>
+                <ToggleGroupItem
+                  data-testid="preliminary-lump-sum-mobile-create-type-yearly"
+                  :value="String(EtfPreliminaryLumpSumType.AMOUNT_PER_YEAR)"
+                  class="h-9 px-3 text-sm"
+                >
+                  {{ $t("ETFPreliminaryLumpSum.newYearly") }}
+                </ToggleGroupItem>
+              </ToggleGroup>
+            </div>
+          </template>
+        </MobilePeriodSheetNavigator>
+
+        <div class="hidden md:flex justify-center pb-3 w-full" v-if="yearsLoaded">
           <div class="w-full max-w-xs flex items-center justify-center">
             <Button
               data-testid="preliminary-lump-sum-year-previous"
@@ -252,15 +311,16 @@
 
 <script lang="ts" setup>
 import DivError from "@/components/DivError.vue";
-import CreateEtfPreliminaryLumpSumModalMonthlyVue from "@/components/etf/CreateEtfPreliminaryLumpSumModalMonthly.vue";
-import CreateEtfPreliminaryLumpSumModalPieceVue from "@/components/etf/CreateEtfPreliminaryLumpSumModalPiece.vue";
-import CreateEtfPreliminaryLumpSumModalYearly from "@/components/etf/CreateEtfPreliminaryLumpSumModalYearly.vue";
-import DeleteEtfPreliminaryLumpSumModalMonthlyVue from "@/components/etf/DeleteEtfPreliminaryLumpSumModalMonthly.vue";
-import DeleteEtfPreliminaryLumpSumModalPieceVue from "@/components/etf/DeleteEtfPreliminaryLumpSumModalPiece.vue";
-import DeleteEtfPreliminaryLumpSumModalYearly from "@/components/etf/DeleteEtfPreliminaryLumpSumModalYearly.vue";
-import ShowEtfPreliminaryLumpSumMonthlyVue from "@/components/etf/ShowEtfPreliminaryLumpSumMonthly.vue";
-import ShowEtfPreliminaryLumpSumPieceVue from "@/components/etf/ShowEtfPreliminaryLumpSumPiece.vue";
-import ShowEtfPreliminaryLumpSumYearly from "@/components/etf/ShowEtfPreliminaryLumpSumYearly.vue";
+import CreateEtfPreliminaryLumpSumModalMonthlyVue from "./elements/CreateEtfPreliminaryLumpSumModalMonthly.vue";
+import CreateEtfPreliminaryLumpSumModalPieceVue from "./elements/CreateEtfPreliminaryLumpSumModalPiece.vue";
+import CreateEtfPreliminaryLumpSumModalYearly from "./elements/CreateEtfPreliminaryLumpSumModalYearly.vue";
+import DeleteEtfPreliminaryLumpSumModalMonthlyVue from "./elements/DeleteEtfPreliminaryLumpSumModalMonthly.vue";
+import DeleteEtfPreliminaryLumpSumModalPieceVue from "./elements/DeleteEtfPreliminaryLumpSumModalPiece.vue";
+import DeleteEtfPreliminaryLumpSumModalYearly from "./elements/DeleteEtfPreliminaryLumpSumModalYearly.vue";
+import MobilePeriodSheetNavigator from "@/components/navigation/MobilePeriodSheetNavigator.vue";
+import ShowEtfPreliminaryLumpSumMonthlyVue from "./elements/ShowEtfPreliminaryLumpSumMonthly.vue";
+import ShowEtfPreliminaryLumpSumPieceVue from "./elements/ShowEtfPreliminaryLumpSumPiece.vue";
+import ShowEtfPreliminaryLumpSumYearly from "./elements/ShowEtfPreliminaryLumpSumYearly.vue";
 import SelectStandard from "@/components/SelectStandard.vue";
 import { Button } from "@/components/ui/button";
 import {
@@ -270,6 +330,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import type { EtfPreliminaryLumpSum } from "@/model/etf/EtfPreliminaryLumpSum";
 import { EtfPreliminaryLumpSumType } from "@/model/etf/EtfPreliminaryLumpSumType";
 import router, { Routes } from "@/router";
@@ -284,9 +345,10 @@ const yearsLoaded = ref(false);
 const selectedYear = ref(undefined as string | undefined);
 const displayedYear = ref(undefined as string | undefined);
 const displayedEtf = ref(undefined as number | undefined);
-const years = ref({} as Array<string>);
+const years = ref([] as Array<string>);
 
 const selectedEtfId = ref(undefined as number | undefined);
+const createType = ref(EtfPreliminaryLumpSumType.AMOUNT_PER_MONTH);
 
 const etfPreliminaryLumpSums = ref({} as Map<string, EtfPreliminaryLumpSum>);
 const etfPreliminaryLumpSum = ref({} as EtfPreliminaryLumpSum | undefined);
@@ -397,6 +459,21 @@ const showCreateEtfPreliminaryLumpSumModal = (
       createModalYearly.value as typeof CreateEtfPreliminaryLumpSumModalYearly
     )._show(etfId, mep);
   }
+};
+
+const updateCreateType = (value?: string) => {
+  if (!value) {
+    return;
+  }
+  createType.value = Number(value) as EtfPreliminaryLumpSumType;
+};
+
+const createSelectedPreliminaryLumpSum = () => {
+  showCreateEtfPreliminaryLumpSumModal(selectedEtfId.value, createType.value);
+};
+
+const selectYearMobile = (year: string) => {
+  selectedYear.value = year;
 };
 
 const showDeleteEtfPreliminaryLumpSumModal = () => {
