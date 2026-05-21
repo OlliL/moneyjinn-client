@@ -142,7 +142,6 @@ import { computed, onMounted, ref, watch } from "vue";
 const serverErrors = ref(new Array<string>());
 
 const etfSummaryArray = ref(new Array<EtfSummary>());
-const dataLoaded = ref(false);
 
 const props = defineProps({
   year: {
@@ -153,6 +152,10 @@ const props = defineProps({
     type: String,
     required: true,
   },
+});
+const dataLoaded = defineModel({
+  type: Boolean,
+  required: true,
 });
 
 const loadData = (year: number, month: number) => {

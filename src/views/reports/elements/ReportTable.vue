@@ -84,7 +84,9 @@
       <div class="w-full max-w-7xl">
         <div class="rounded-sm border">
           <div class="border-b text-center p-3">
-            <h4 class="text-2xl font-bold">{{ $t("Reports.debtCapital") }}</h4>
+            <h4 class="text-2xl font-bold">
+              {{ $t("Reports.debtCapital") }}
+            </h4>
           </div>
           <div class="p-4">
             <CapitalsourceTableVue
@@ -148,9 +150,12 @@ import ReportTableMobile from "./ReportTableMobile.vue";
 const serverErrors = ref(new Array<string>());
 
 const report = ref({} as Report);
-const dataLoaded = ref(false);
+const dataLoaded = defineModel("dataLoaded", {
+  type: Boolean,
+  required: true,
+});
 
-const sortBy = defineModel<Map<keyof Moneyflow, boolean>>({
+const sortBy = defineModel<Map<keyof Moneyflow, boolean>>("sortBy", {
   type: Object as PropType<Map<keyof Moneyflow, boolean>>,
   required: true,
 });

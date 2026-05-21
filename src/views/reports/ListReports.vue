@@ -1,15 +1,18 @@
 <template>
   <div class="custom-container space-y-6">
     <div class="text-center">
-      <h4 class="text-2xl font-bold">
+      <h4 class="text-2xl font-bold hidden md:block">
         {{ $t("Reports.title.report", { month: monthName, year: year }) }}
+      </h4>
+      <h4 class="text-2xl font-bold md:hidden">
+        {{ $t("Reports.title.report") }}
       </h4>
     </div>
 
     <div class="mx-auto flex w-full max-w-4xl flex-col items-center gap-3">
       <div class="hidden md:flex w-full justify-center">
         <MonthYearNavigator
-          v-if="dataLoaded"
+          v-show="dataLoadedMonth"
           :years="years ?? []"
           :months="months ?? []"
           :selected-year="selectedYear"
@@ -20,7 +23,7 @@
       </div>
 
       <MobilePeriodSheetNavigator
-        :data-loaded="dataLoaded"
+        :data-loaded="dataLoadedMonth"
         :years="years ?? []"
         :months="months ?? []"
         :selected-year="selectedYear"
@@ -47,41 +50,53 @@
       <DivError :server-errors="serverErrors" />
     </div>
 
-    <div class="hidden md:block">
-      <div class="fixed left-4 top-1/2 z-20 -translate-y-1/2">
-        <Button
-          data-testid="reports-previous-month"
-          v-if="previousMonthLink"
-          type="button"
-          variant="outline"
-          size="icon"
-          class="h-10 w-10 rounded-full border-border/70 bg-background/85 text-primary/80 shadow-sm backdrop-blur transition-all hover:bg-background hover:text-primary hover:shadow-md focus-visible:shadow-md supports-backdrop-filter:bg-background/70"
-          @click="navigateToPreviousMonth"
-        >
-          <ChevronLeft class="h-5 w-5" />
-        </Button>
-      </div>
-      <div class="fixed right-4 top-1/2 z-20 -translate-y-1/2">
-        <Button
-          data-testid="reports-next-month"
-          v-if="nextMonthLink"
-          type="button"
-          variant="outline"
-          size="icon"
-          class="h-10 w-10 rounded-full border-border/70 bg-background/85 text-primary/80 shadow-sm backdrop-blur transition-all hover:bg-background hover:text-primary hover:shadow-md focus-visible:shadow-md supports-backdrop-filter:bg-background/70"
-          @click="navigateToNextMonth"
-        >
-          <ChevronRight class="h-5 w-5" />
-        </Button>
-      </div>
+    <div class="fixed left-4 top-1/2 z-20 -translate-y-1/2">
+      <Button
+        data-testid="reports-previous-month"
+        v-if="previousMonthLink"
+        type="button"
+        variant="outline"
+        size="icon"
+        class="h-10 w-10 rounded-full border-border/70 bg-background/85 text-primary/80 shadow-sm backdrop-blur transition-all hover:bg-background hover:text-primary hover:shadow-md focus-visible:shadow-md supports-backdrop-filter:bg-background/70"
+        @click="navigateToPreviousMonth"
+      >
+        <ChevronLeft class="h-5 w-5" />
+      </Button>
     </div>
-    <ReportTableVue
-      :year="year"
-      :month="month"
-      v-model="sortByMap"
-      v-if="year && month"
-    />
-    <EtfTableVue :year="year" :month="month" v-if="year && month" />
+    <div class="fixed right-4 top-1/2 z-20 -translate-y-1/2">
+      <Button
+        data-testid="reports-next-month"
+        v-if="nextMonthLink"
+        type="button"
+        variant="outline"
+        size="icon"
+        class="h-10 w-10 rounded-full border-border/70 bg-background/85 text-primary/80 shadow-sm backdrop-blur transition-all hover:bg-background hover:text-primary hover:shadow-md focus-visible:shadow-md supports-backdrop-filter:bg-background/70"
+        @click="navigateToNextMonth"
+      >
+        <ChevronRight class="h-5 w-5" />
+      </Button>
+    </div>
+    <div
+      :class="{
+        'opacity-100 transition-opacity duration-200':
+          dataLoadedEtf && dataLoadedReport,
+        'opacity-0 pointer-events-none': !(dataLoadedEtf && dataLoadedReport),
+      }"
+    >
+      <ReportTableVue
+        :year="year"
+        :month="month"
+        v-model:sort-by="sortByMap"
+        v-model:data-loaded="dataLoadedReport"
+        v-if="year && month"
+      />
+      <EtfTableVue
+        :year="year"
+        :month="month"
+        v-if="year && month"
+        v-model="dataLoadedEtf"
+      />
+    </div>
   </div>
 </template>
 
@@ -105,7 +120,9 @@ import ReportTableVue from "./elements/ReportTable.vue";
 
 const serverErrors = ref(new Array<string>());
 
-const dataLoaded = ref(false);
+const dataLoadedMonth = ref(false);
+const dataLoadedEtf = ref(false);
+const dataLoadedReport = ref(false);
 const months = ref([] as number[] | undefined);
 const years = ref([] as string[] | undefined);
 const previousMonth = ref(0 as number | undefined);
@@ -148,7 +165,7 @@ onMounted(() => {
 const loadData = (year?: number, month?: number) => {
   serverErrors.value = new Array<string>();
 
-  dataLoaded.value = false;
+  dataLoadedMonth.value = false;
   ReportService.getAvailableMonth(year, month)
     .then((response) => {
       months.value = response.allMonth;
@@ -167,7 +184,7 @@ const loadData = (year?: number, month?: number) => {
       if (selectedYear.value != currentlyShownYear.value)
         currentlyShownYear.value = selectedYear.value;
 
-      dataLoaded.value = true;
+      dataLoadedMonth.value = true;
     })
     .catch((backendError) => {
       handleBackendError(backendError, serverErrors);
