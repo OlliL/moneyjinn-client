@@ -1,5 +1,5 @@
 <template>
-  <div class="mt-6" v-if="dataLoaded">
+  <div class="" v-if="dataLoaded">
     <DivError :server-errors="serverErrors" />
 
     <ReceiptModalVue ref="receiptModal" />
@@ -14,7 +14,7 @@
     />
     <ListMoneyflowModal ref="listModal" />
 
-    <div class="pt-4">
+    <div class="">
       <ReportTableMobile
         v-model:filter-capitalsource="filterCapitalsource"
         v-model:filter-comment="filterComment"

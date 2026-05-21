@@ -9,7 +9,7 @@
       </h4>
     </div>
 
-    <div class="mx-auto flex w-full max-w-4xl flex-col items-center gap-3">
+    <div class="mx-auto flex w-full max-w-6xl flex-col items-center gap-3">
       <div class="hidden md:flex w-full justify-center">
         <MonthYearNavigator
           v-show="dataLoadedMonth"
