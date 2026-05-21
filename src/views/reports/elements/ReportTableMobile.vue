@@ -1,5 +1,5 @@
 <template>
-  <div class="fixed bottom-6 right-6 z-50 md:hidden">
+  <div class="fixed bottom-12 right-6 z-50 md:hidden">
     <Sheet v-model:open="isSheetOpen">
       <SheetTrigger as-child>
         <Button

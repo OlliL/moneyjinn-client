@@ -9,7 +9,7 @@
         :key="flow.etfflowid"
         :value="`item-${flow.etfflowid}`"
         :data-testid="`etf-depot-mobile-row-${flow.etfflowid}`"
-        class="border rounded-lg bg-background shadow-sm px-3 pt-2 pb-2 text-left relative overflow-hidden"
+        class="not-last:border-b border rounded-lg bg-background shadow-sm px-3 pt-2 pb-3 text-left relative overflow-hidden"
       >
         <AccordionTrigger
           class="hover:no-underline pt-1 pb-0 [&>svg]:hidden w-full"
