@@ -365,7 +365,7 @@
 
 <script lang="ts" setup>
 import ButtonMobileCreate from "@/components/ButtonMobileCreate.vue";
-import { default as ButtonMobileDelete } from "@/components/ButtonMobileDelete.vue";
+import ButtonMobileDelete from "@/components/ButtonMobileDelete.vue";
 import ButtonMobileEdit from "@/components/ButtonMobileEdit.vue";
 import DivError from "@/components/DivError.vue";
 import MonthYearMobileNavigator from "@/components/navigation/MonthYearMobileNavigator.vue";
