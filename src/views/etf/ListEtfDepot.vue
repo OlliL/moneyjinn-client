@@ -15,8 +15,8 @@
 
     <div class="flex justify-center">
       <div class="w-full max-w-md">
-        <div class="grid grid-cols-1 gap-3 md:grid-cols-12 md:items-end">
-          <div class="col-span-1 md:col-span-8">
+        <div class="grid grid-cols-1 gap-3 md:grid-cols-24 md:items-end">
+          <div class="col-span-1 md:col-span-16">
             <SelectStandard
               v-model="selectedEtfId"
               :validation-schema="schema.etfId"
@@ -26,7 +26,7 @@
             />
           </div>
 
-          <div class="col-span-1 md:col-span-4 mt-3 md:mt-0 hidden md:block">
+          <div class="col-span-1 md:col-span-8 mt-3 md:mt-0 hidden md:block">
             <Button
               data-testid="etf-depot-create"
               type="button"

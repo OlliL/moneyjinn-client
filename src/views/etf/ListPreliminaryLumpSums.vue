@@ -91,7 +91,9 @@
       </h4>
     </div>
     <div class="flex justify-center">
-      <div class="w-full max-w-3xl flex flex-col items-center gap-6">
+      <div
+        class="w-full max-w-md md:max-w-3xl flex flex-col items-center gap-6"
+      >
         <div class="grid gap-3 md:grid-cols-24 items-end w-full">
           <div class="md:col-span-9">
             <SelectStandard
