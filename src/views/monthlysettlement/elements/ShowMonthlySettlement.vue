@@ -61,7 +61,7 @@
           <ChevronRight class="h-5 w-5" />
         </Button>
       </div>
-      <div class="p-4 px-15 md:px-0">
+      <div class="md:p-4 px-15 md:px-0">
         <div
           class="flex flex-col rounded-md border mb-4"
           v-if="monthlySettlementsNoCredit.length"
