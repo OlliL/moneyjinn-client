@@ -1,11 +1,37 @@
 <template>
   <DivError :server-errors="serverErrors" />
+  <div class="fixed left-4 top-1/2 z-20 -translate-y-1/2">
+    <Button
+      data-testid="reports-previous-month"
+      v-if="prevMonth && prevYear"
+      type="button"
+      variant="outline"
+      size="icon"
+      class="h-10 w-10 rounded-full border-border/70 bg-background/85 text-primary/80 shadow-sm backdrop-blur transition-all hover:bg-background hover:text-primary hover:shadow-md focus-visible:shadow-md supports-backdrop-filter:bg-background/70"
+      @click="navigateToPreviousMonth"
+    >
+      <ChevronLeft class="h-5 w-5" />
+    </Button>
+  </div>
+  <div class="fixed right-4 top-1/2 z-20 -translate-y-1/2">
+    <Button
+      data-testid="reports-next-month"
+      v-if="nextMonth && nextYear"
+      type="button"
+      variant="outline"
+      size="icon"
+      class="h-10 w-10 rounded-full border-border/70 bg-background/85 text-primary/80 shadow-sm backdrop-blur transition-all hover:bg-background hover:text-primary hover:shadow-md focus-visible:shadow-md supports-backdrop-filter:bg-background/70"
+      @click="navigateToNextMonth"
+    >
+      <ChevronRight class="h-5 w-5" />
+    </Button>
+  </div>
 
   <div class="flex justify-center" v-if="props.month">
     <div class="w-full max-w-md">
       <div
         v-if="showHeader"
-        class="flex items-center justify-between bg-background border-b p-3"
+        class="hidden md:flex items-center justify-between bg-background border-b p-3"
       >
         <Button
           variant="ghost"
@@ -35,7 +61,7 @@
           <ChevronRight class="h-5 w-5" />
         </Button>
       </div>
-      <div class="p-4">
+      <div class="p-4 px-15 md:px-0">
         <div
           class="flex flex-col rounded-md border mb-4"
           v-if="monthlySettlementsNoCredit.length"
@@ -118,10 +144,9 @@
 </template>
 
 <script lang="ts" setup>
-import { ChevronLeft, ChevronRight } from "lucide-vue-next";
-import { computed, onMounted, ref, watch } from "vue";
-
-import { Button } from "@/components/ui/button";
+import DivError from "@/components/DivError.vue";
+import SpanAmount from "@/components/SpanAmount.vue";
+import Button from "@/components/ui/button/Button.vue";
 import {
   Table,
   TableBody,
@@ -130,18 +155,14 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-
-import DivError from "@/components/DivError.vue";
-import SpanAmount from "@/components/SpanAmount.vue";
-
-import { handleBackendError } from "@/tools/views/HandleBackendError";
-
 import { CapitalsourceType } from "@/model/capitalsource/CapitalsourceType";
 import type { MonthlySettlement } from "@/model/monthlysettlement/MonthlySettlement";
-
 import router, { Routes } from "@/router";
 import MonthlySettlementService from "@/service/MonthlySettlementService";
+import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { getMonthName } from "@/tools/views/MonthName";
+import { ChevronLeft, ChevronRight } from "lucide-vue-next";
+import { computed, onMounted, ref, watch } from "vue";
 
 const serverErrors = ref(new Array<string>());
 

@@ -1,5 +1,5 @@
 <template>
-  <div class="fixed bottom-12 right-20 z-50 md:hidden">
+  <div class="fixed bottom-26 right-6 z-50 md:hidden">
     <Button
       :data-testid="dataTestid"
       type="button"
@@ -19,7 +19,5 @@ defineProps<{
   dataTestid: string;
 }>();
 
-const emit = defineEmits<{
-  click: [];
-}>();
+const emit = defineEmits(["click"]);
 </script>

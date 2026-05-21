@@ -1,4 +1,17 @@
 <template>
+  <ButtonMobileCreate
+    data-testid="monthly-settlement-mobile-new"
+    @click="emitCreate"
+  />
+  <ButtonMobileDelete
+    data-testid="monthly-settlement-mobile-delete"
+    @click="emitDelete"
+  />
+  <ButtonMobileEdit
+    data-testid="monthly-settlement-mobile-edit"
+    @click="emitEdit"
+  />
+
   <MobilePeriodSheetNavigator
     :data-loaded="dataLoaded"
     :years="years"
@@ -12,41 +25,14 @@
     select-label-key="General.select"
     @select-year="selectYear"
     @select-month="selectMonth"
-  >
-    <template #actions>
-      <div class="grid grid-cols-3 gap-2">
-        <Button
-          data-testid="monthly-settlement-mobile-new"
-          type="button"
-          @click="emitCreate"
-        >
-          {{ $t("General.new") }}
-        </Button>
-        <Button
-          data-testid="monthly-settlement-mobile-edit"
-          type="button"
-          :disabled="!canEditOrDelete"
-          @click="emitEdit"
-        >
-          {{ $t("General.edit") }}
-        </Button>
-        <Button
-          data-testid="monthly-settlement-mobile-delete"
-          type="button"
-          variant="destructive"
-          :disabled="!canEditOrDelete"
-          @click="emitDelete"
-        >
-          {{ $t("General.delete") }}
-        </Button>
-      </div>
-    </template>
-  </MobilePeriodSheetNavigator>
+  />
 </template>
 
 <script lang="ts" setup>
+import ButtonMobileCreate from "@/components/ButtonMobileCreate.vue";
+import ButtonMobileDelete from "@/components/ButtonMobileDelete.vue";
+import ButtonMobileEdit from "@/components/ButtonMobileEdit.vue";
 import MobilePeriodSheetNavigator from "@/components/navigation/MobilePeriodSheetNavigator.vue";
-import { Button } from "@/components/ui/button";
 
 defineProps<{
   dataLoaded: boolean;

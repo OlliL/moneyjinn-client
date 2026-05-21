@@ -1,5 +1,5 @@
 <template>
-  <ButtonCreate
+  <ButtonMobileCreate
     v-if="dataLoadedMonth && dataLoadedReport && dataLoadedEtf"
     data-testid="reports-mobile-create"
     @click="navigateToCreateMoneyflow"
@@ -101,7 +101,7 @@ import { onBeforeRouteUpdate, type RouteParamsGeneric } from "vue-router";
 
 import router, { Routes } from "@/router";
 
-import ButtonCreate from "@/components/ButtonCreate.vue";
+import ButtonMobileCreate from "@/components/ButtonMobileCreate.vue";
 import DivError from "@/components/DivError.vue";
 import MobilePeriodSheetNavigator from "@/components/navigation/MobilePeriodSheetNavigator.vue";
 import MonthYearNavigator from "@/components/navigation/MonthYearNavigator.vue";

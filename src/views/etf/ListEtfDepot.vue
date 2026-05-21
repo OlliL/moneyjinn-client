@@ -1,5 +1,5 @@
 <template>
-  <ButtonCreate data-testid="etf-flow-create" @click="createEtfFlow" />
+  <ButtonMobileCreate data-testid="etf-flow-create" @click="createEtfFlow" />
 
   <DeleteEtfFlowModalVue @etf-flow-deleted="etfFlowDeleted" ref="deleteModal" />
   <CreateEtfFlowModalVue
@@ -123,7 +123,7 @@
 </template>
 
 <script lang="ts" setup>
-import ButtonCreate from "@/components/ButtonCreate.vue";
+import ButtonMobileCreate from "@/components/ButtonMobileCreate.vue";
 import DivError from "@/components/DivError.vue";
 import SelectStandard from "@/components/SelectStandard.vue";
 import { Button } from "@/components/ui/button";

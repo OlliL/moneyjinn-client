@@ -1,6 +1,6 @@
 <template>
   <div class="fixed bottom-6 right-6 z-50 md:hidden">
-    <ButtonCreate
+    <ButtonMobileCreate
       data-testid="div-filter-mobile-create"
       @click="emitCreateClicked"
     />
@@ -134,7 +134,7 @@ import {
 import { Switch } from "@/components/ui/switch";
 import { Filter, Plus } from "lucide-vue-next";
 import { onBeforeUnmount, ref, watch } from "vue";
-import ButtonCreate from "./ButtonCreate.vue";
+import ButtonMobileCreate from "./ButtonMobileCreate.vue";
 
 const props = defineProps({
   placeholder: { type: String, default: "" },

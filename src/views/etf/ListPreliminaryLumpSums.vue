@@ -1,39 +1,58 @@
 <template>
   <div class="inline-block" ref="createButtonRef">
-    <ButtonCreate
-      data-testid="etf-preliminary-sump-sum-create"
+    <ButtonMobileCreate
+      data-testid="preliminary-lump-sum-mobile-create"
       v-if="selectedEtfId !== undefined"
       @click="showTypeSelection"
+    />
+    <ButtonMobileDelete
+      data-testid="preliminary-lump-sum-mobile-delete"
+      v-if="selectedEtfId !== undefined"
+      @click="showDeleteEtfPreliminaryLumpSumModal"
+    />
+    <ButtonMobileEdit
+      data-testid="preliminary-lump-sum-mobile-edit"
+      v-if="selectedEtfId !== undefined && etfPreliminaryLumpSum !== undefined"
+      @click="
+        showCreateEtfPreliminaryLumpSumModal(
+          selectedEtfId,
+          etfPreliminaryLumpSum.type,
+          etfPreliminaryLumpSum,
+        )
+      "
     />
 
     <div
       v-if="showTypeSelector"
       ref="typeSelectorRef"
-      class="fixed md:hidden right-20 bottom-[calc(3rem+3rem)] z-50 w-52 rounded-md border bg-popover text-popover-foreground shadow-md p-2"
+      class="fixed md:hidden right-20 bottom-26 z-50 w-52 rounded-md border bg-popover text-popover-foreground shadow-md p-2"
       data-testid="etf-preliminary-sump-sum-create-menu"
     >
       <div class="flex flex-col">
-        <button
+        <Button
           type="button"
+          data-testid="preliminary-lump-sum-mobile-create-type-piece"
           class="text-sm px-3 py-2 text-left hover:bg-muted rounded"
           @click="selectCreateType(EtfPreliminaryLumpSumType.AMOUNT_PER_MONTH)"
         >
           {{ $t("ETFPreliminaryLumpSum.newMonthly") }}
-        </button>
-        <button
+        </Button>
+        <Button
           type="button"
+          data-testid="preliminary-lump-sum-mobile-create-type-piece"
           class="text-sm px-3 py-2 text-left hover:bg-muted rounded"
           @click="selectCreateType(EtfPreliminaryLumpSumType.AMOUNT_PER_PIECE)"
         >
           {{ $t("ETFPreliminaryLumpSum.newPiece") }}
-        </button>
-        <button
+        </Button>
+        <Button
           type="button"
+          data-testid="preliminary-lump-sum-mobile-create-type-yearly"
           class="text-sm px-3 py-2 text-left hover:bg-muted rounded"
           @click="selectCreateType(EtfPreliminaryLumpSumType.AMOUNT_PER_YEAR)"
         >
           {{ $t("ETFPreliminaryLumpSum.newYearly") }}
-        </button>
+        </Button>
       </div>
     </div>
   </div>
@@ -231,12 +250,12 @@
           EtfPreliminaryLumpSumType.AMOUNT_PER_MONTH
       "
     >
-      <div class="flex justify-center pb-4">
+      <div class="flex justify-center pb-4 px-15 md:px-0">
         <div class="w-full max-w-md">
           <ShowEtfPreliminaryLumpSumMonthlyVue :mep="etfPreliminaryLumpSum" />
         </div>
       </div>
-      <div class="flex justify-center pb-4">
+      <div class="flex justify-center pb-4 hidden md:block">
         <div class="flex flex-wrap justify-center gap-2">
           <Button
             data-testid="preliminary-lump-sum-edit"
@@ -270,12 +289,12 @@
           EtfPreliminaryLumpSumType.AMOUNT_PER_PIECE
       "
     >
-      <div class="flex justify-center pb-4">
+      <div class="flex justify-center pb-4 px-15 md:px-0">
         <div class="w-full max-w-md">
           <ShowEtfPreliminaryLumpSumPieceVue :mep="etfPreliminaryLumpSum" />
         </div>
       </div>
-      <div class="flex justify-center pb-4">
+      <div class="flex justify-center pb-4 hidden md:block">
         <div class="flex flex-wrap justify-center gap-2">
           <Button
             data-testid="preliminary-lump-sum-edit"
@@ -308,12 +327,12 @@
         etfPreliminaryLumpSum?.type == EtfPreliminaryLumpSumType.AMOUNT_PER_YEAR
       "
     >
-      <div class="flex justify-center pb-4">
+      <div class="flex justify-center pb-4 px-15 md:px-0">
         <div class="w-full max-w-md">
           <ShowEtfPreliminaryLumpSumYearly :mep="etfPreliminaryLumpSum" />
         </div>
       </div>
-      <div class="flex justify-center pb-4">
+      <div class="flex justify-center pb-4 hidden md:block">
         <div class="flex flex-wrap justify-center gap-2">
           <Button
             data-testid="preliminary-lump-sum-edit"
@@ -344,7 +363,9 @@
 </template>
 
 <script lang="ts" setup>
-import ButtonCreate from "@/components/ButtonCreate.vue";
+import ButtonMobileCreate from "@/components/ButtonMobileCreate.vue";
+import { default as ButtonMobileDelete } from "@/components/ButtonMobileDelete.vue";
+import ButtonMobileEdit from "@/components/ButtonMobileEdit.vue";
 import DivError from "@/components/DivError.vue";
 import MobilePeriodSheetNavigator from "@/components/navigation/MobilePeriodSheetNavigator.vue";
 import SelectStandard from "@/components/SelectStandard.vue";
