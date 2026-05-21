@@ -1,0 +1,25 @@
+<template>
+  <div class="fixed bottom-12 right-20 z-50 md:hidden">
+    <Button
+      :data-testid="dataTestid"
+      type="button"
+      class="h-12 w-12 p-0 rounded-full shadow-lg flex items-center justify-center animate-in fade-in zoom-in duration-200"
+      @click="emit('click')"
+    >
+      <Plus class="h-6 w-6" />
+    </Button>
+  </div>
+</template>
+
+<script lang="ts" setup>
+import { Button } from "@/components/ui/button";
+import { Plus } from "lucide-vue-next";
+
+defineProps<{
+  dataTestid: string;
+}>();
+
+const emit = defineEmits<{
+  click: [];
+}>();
+</script>

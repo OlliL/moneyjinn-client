@@ -1,4 +1,9 @@
 <template>
+  <ButtonCreate
+    v-if="dataLoadedMonth && dataLoadedReport && dataLoadedEtf"
+    data-testid="reports-mobile-create"
+    @click="navigateToCreateMoneyflow"
+  />
   <div class="custom-container space-y-6">
     <div class="text-center">
       <h4 class="text-2xl font-bold hidden md:block">
@@ -35,17 +40,7 @@
         select-label-key="General.select"
         @select-year="handleYearSelect"
         @select-month="handleMonthSelect"
-      >
-        <template #actions>
-          <Button
-            data-testid="reports-mobile-create"
-            type="button"
-            @click="navigateToCreateMoneyflow"
-          >
-            {{ $t("General.new") }}
-          </Button>
-        </template>
-      </MobilePeriodSheetNavigator>
+      />
 
       <DivError :server-errors="serverErrors" />
     </div>
@@ -106,6 +101,7 @@ import { onBeforeRouteUpdate, type RouteParamsGeneric } from "vue-router";
 
 import router, { Routes } from "@/router";
 
+import ButtonCreate from "@/components/ButtonCreate.vue";
 import DivError from "@/components/DivError.vue";
 import MobilePeriodSheetNavigator from "@/components/navigation/MobilePeriodSheetNavigator.vue";
 import MonthYearNavigator from "@/components/navigation/MonthYearNavigator.vue";
