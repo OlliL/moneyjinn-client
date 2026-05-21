@@ -25,66 +25,31 @@
 
     <DivError :server-errors="serverErrors" />
 
-    <DivContentTable>
-      <TableHeader>
-        <TableRow>
-          <TableHead class="font-bold border-r text-foreground text-center">{{
-            $t("General.amount")
-          }}</TableHead>
-          <TableHead class="font-bold border-r text-foreground text-center">{{
-            $t("General.contractpartner")
-          }}</TableHead>
-          <TableHead class="font-bold border-r text-foreground text-center">{{
-            $t("General.comment")
-          }}</TableHead>
-          <TableHead class="font-bold border-r text-foreground text-center">{{
-            $t("General.postingAccount")
-          }}</TableHead>
-          <TableHead class="font-bold border-r text-foreground text-center">{{
-            $t("General.capitalsource")
-          }}</TableHead>
-          <TableHead class="font-bold border-r text-foreground text-center">{{
-            $t("PreDefMoneyflow.onceAMonthShort")
-          }}</TableHead>
-          <TableHead class="font-bold border-r text-foreground text-center">{{
-            $t("PreDefMoneyflow.createDate")
-          }}</TableHead>
-          <TableHead class="font-bold border-r text-foreground text-center">{{
-            $t("PreDefMoneyflow.lastUsed")
-          }}</TableHead>
-          <TableHead colspan="2"></TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        <ListPreDefMoneyflowRowVue
-          v-for="mpm in preDefMoneyflows"
-          :key="mpm.id"
-          :mpm="mpm"
-          @edit-pre-def-moneyflow="editPreDefMoneyflow"
-          @delete-pre-def-moneyflow="deletePreDefMoneyflow"
-        />
-      </TableBody>
-    </DivContentTable>
+    <ListPreDefMoneyflowsMobile
+      :pre-def-moneyflows="preDefMoneyflows"
+      @edit-pre-def-moneyflow="editPreDefMoneyflow"
+      @delete-pre-def-moneyflow="deletePreDefMoneyflow"
+    />
+
+    <ListPreDefMoneyflowsDesktop
+      :pre-def-moneyflows="preDefMoneyflows"
+      @edit-pre-def-moneyflow="editPreDefMoneyflow"
+      @delete-pre-def-moneyflow="deletePreDefMoneyflow"
+    />
   </div>
 </template>
 
 <script lang="ts" setup>
-import DivContentTable from "@/components/DivContentTable.vue";
 import DivError from "@/components/DivError.vue";
 import DivFilter from "@/components/DivFilter.vue";
 import CreatePreDefMoneyflowModalVue from "@/components/predefmoneyflow/CreatePreDefMoneyflowModal.vue";
-import DeletePreDefMoneyflowModalVue from "@/components/predefmoneyflow/DeletePreDefMoneyflowModal.vue";
-import ListPreDefMoneyflowRowVue from "@/components/predefmoneyflow/ListPreDefMoneyflowRow.vue";
-import {
-  TableBody,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
 import type { PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
 import PreDefMoneyflowService from "@/service/PreDefMoneyflowService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { onMounted, ref, useTemplateRef, watch } from "vue";
+import DeletePreDefMoneyflowModalVue from "./elements/DeletePreDefMoneyflowModal.vue";
+import ListPreDefMoneyflowsDesktop from "./elements/ListPreDefMoneyflowsDesktop.vue";
+import ListPreDefMoneyflowsMobile from "./elements/ListPreDefMoneyflowsMobile.vue";
 
 const serverErrors = ref(new Array<string>());
 

@@ -78,7 +78,7 @@ const expandFirstGroup = async () => {
 
 beforeEach(() => {
   setActivePinia(createPinia());
-  vi.clearAllMocks();
+  vi.restoreAllMocks();
   useUserSessionStore().setUserSession({ userId: 1 } as UserSession);
 
   MoneyflowServiceMocker.mockSearchMoneyflowsResolved([
@@ -87,11 +87,6 @@ beforeEach(() => {
     createMoneyflow(14, 2, true),
   ] as Array<Moneyflow>);
   MoneyflowServiceMocker.mockFetchMoneyflowById(createMoneyflow);
-  MoneyflowReceiptServiceMocker.mockFetchReceiptResolved({
-    moneyflowId: 14,
-    receiptType: MoneyflowReceiptType.JPEG,
-    receipt: "AA==",
-  });
 });
 
 test("SearchMoneyflows calls searchMoneyflows with form criteria", async () => {
@@ -149,6 +144,11 @@ test("SearchMoneyflows opens list modal from foreign row action", async () => {
 });
 
 test("SearchMoneyflows opens receipt modal from receipt icon", async () => {
+  MoneyflowReceiptServiceMocker.mockFetchReceiptResolved({
+    moneyflowId: 14,
+    receiptType: MoneyflowReceiptType.JPEG,
+    receipt: "AA==",
+  });
   renderView();
 
   await runSearch();

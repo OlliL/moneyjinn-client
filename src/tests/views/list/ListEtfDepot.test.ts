@@ -7,7 +7,14 @@ import {
   useUserSessionStore,
 } from "@/stores/UserSessionStore";
 import { assertHaveBeenCalledWith } from "@/tests/TestUtil";
-import { ButtonView, InputView, ModalView, TextView } from "@/tests/TestViews";
+import {
+  ButtonView,
+  InputView,
+  ModalView,
+  RowView,
+  SwitchView,
+  TextView,
+} from "@/tests/TestViews";
 import ListEtfDepot from "@/views/etf/ListEtfDepot.vue";
 import "@testing-library/jest-dom/vitest";
 import { render } from "@testing-library/vue";
@@ -25,6 +32,23 @@ class ListEtfDepotView {
   static readonly EtfInput = new InputView("etf");
   static readonly EtfIdInput = new InputView("etf-id");
   static readonly CreateButton = new ButtonView("etf-depot-create");
+  static readonly MobileFilterTrigger = new ButtonView(
+    "etf-depot-mobile-filter-trigger",
+  );
+  static readonly MobileFilterSheet = new RowView(
+    "etf-depot-mobile-filter-sheet",
+  );
+  static readonly MobileEffectiveSwitch = new SwitchView(
+    "etf-depot-mobile-effective-switch",
+  );
+  static readonly MobileRow101 = new RowView("etf-depot-mobile-row-101");
+  static readonly MobileRow102 = new RowView("etf-depot-mobile-row-102");
+  static readonly MobileEditButton = new ButtonView(
+    "etf-depot-mobile-edit-101",
+  );
+  static readonly MobileDeleteButton = new ButtonView(
+    "etf-depot-mobile-delete-101",
+  );
   static readonly EditButton = new ButtonView("etf-depot-edit-101");
   static readonly DeleteButton = new ButtonView("etf-depot-delete-101");
   static readonly CalculateSaleHeadline = new TextView("calculate sale");
@@ -132,5 +156,84 @@ test("ListEtfDepot opens delete modal from row action", async () => {
   render(ListEtfDepot, { props: { etfId: "1" } });
 
   await ListEtfDepotView.DeleteButton.click();
+  await ListEtfDepotView.Modal.assertOpen();
+});
+
+test("ListEtfDepot toggles mobile view mode via filter switch", async () => {
+  EtfServiceMocker.mockListEtfFlowsById({
+    calcEtfSalePieces: 0,
+    etfFlows: [
+      {
+        etfflowid: 101,
+        etfId: 1,
+        timestamp: new Date("2026-01-02T08:30:00Z"),
+        nanoseconds: 0,
+        amount: 1.5,
+        price: 100,
+        accumulatedPreliminaryLumpSum: 0,
+        preliminaryLumpSumPerYear: new Map<string, number>(),
+      },
+      {
+        etfflowid: 102,
+        etfId: 1,
+        timestamp: new Date("2026-02-02T08:30:00Z"),
+        nanoseconds: 0,
+        amount: 0.5,
+        price: 105,
+        accumulatedPreliminaryLumpSum: 0,
+        preliminaryLumpSumPerYear: new Map<string, number>(),
+      },
+    ],
+    etfEffectiveFlows: [
+      {
+        etfflowid: 102,
+        etfId: 1,
+        timestamp: new Date("2026-02-02T08:30:00Z"),
+        nanoseconds: 0,
+        amount: 0.5,
+        price: 105,
+        accumulatedPreliminaryLumpSum: 0,
+        preliminaryLumpSumPerYear: new Map<string, number>(),
+      },
+    ],
+    etfSummary: {
+      etfId: 1,
+      amount: 0.5,
+      spentValue: 52.5,
+    },
+  } as never);
+
+  await useEtfStore().initEtfStore();
+  render(ListEtfDepot, { props: { etfId: "1" } });
+
+  await ListEtfDepotView.MobileRow102.assertToBeVisible();
+  await ListEtfDepotView.MobileRow101.assertNotToBeInDocument();
+
+  await ListEtfDepotView.MobileFilterTrigger.click();
+  await ListEtfDepotView.MobileFilterSheet.assertToBeVisible();
+  await ListEtfDepotView.MobileEffectiveSwitch.assertChecked();
+
+  await ListEtfDepotView.MobileEffectiveSwitch.click();
+  await ListEtfDepotView.MobileEffectiveSwitch.assertUnchecked();
+
+  await ListEtfDepotView.MobileRow101.assertToBeVisible();
+  await ListEtfDepotView.MobileRow102.assertToBeVisible();
+});
+
+test("ListEtfDepot opens edit modal from mobile row action", async () => {
+  await useEtfStore().initEtfStore();
+  render(ListEtfDepot, { props: { etfId: "1" } });
+
+  await ListEtfDepotView.MobileRow101.assertToBeVisible();
+  await ListEtfDepotView.MobileEditButton.click();
+  await ListEtfDepotView.Modal.assertOpen();
+});
+
+test("ListEtfDepot opens delete modal from mobile row action", async () => {
+  await useEtfStore().initEtfStore();
+  render(ListEtfDepot, { props: { etfId: "1" } });
+
+  await ListEtfDepotView.MobileRow101.assertToBeVisible();
+  await ListEtfDepotView.MobileDeleteButton.click();
   await ListEtfDepotView.Modal.assertOpen();
 });

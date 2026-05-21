@@ -15,6 +15,18 @@ vi.mock("@/service/GroupService");
 class ListGroupsView {
   static readonly FilterInput = new InputView("div-filter-input");
   static readonly CreateButton = new ButtonView("div-filter-create");
+  static readonly MobileFilterTrigger = new ButtonView(
+    "div-filter-mobile-trigger",
+  );
+  static readonly MobileFilterSheet = new RowView("div-filter-mobile-sheet");
+  static readonly MobileFilterInput = new InputView("div-filter-mobile-input");
+  static readonly MobileAccordion = new RowView("group-mobile-accordion");
+  static readonly MobileRowOne = new RowView("group-mobile-row-1");
+  static readonly MobileRowTwo = new RowView("group-mobile-row-2");
+  static readonly MobileEditOneButton = new ButtonView("group-mobile-edit-1");
+  static readonly MobileDeleteOneButton = new ButtonView(
+    "group-mobile-delete-1",
+  );
   static readonly RowOne = new RowView("group-row-1");
   static readonly RowTwo = new RowView("group-row-2");
   static readonly EditOneButton = new ButtonView("group-edit-1");
@@ -68,5 +80,33 @@ test("ListGroups opens delete modal from row action", async () => {
 
   await ListGroupsView.RowOne.assertToBeVisible();
   await ListGroupsView.DeleteOneButton.click();
+  await ListGroupsView.Modal.assertOpen();
+});
+
+test("ListGroups filters via mobile sheet", async () => {
+  render(ListGroups);
+
+  await ListGroupsView.MobileAccordion.assertToBeVisible();
+  await ListGroupsView.MobileFilterTrigger.click();
+  await ListGroupsView.MobileFilterSheet.assertToBeVisible();
+  await ListGroupsView.MobileFilterInput.setValue("house");
+
+  await ListGroupsView.MobileRowTwo.assertToBeVisible();
+  await ListGroupsView.MobileRowOne.assertNotToBeInDocument();
+});
+
+test("ListGroups opens edit modal from mobile action", async () => {
+  render(ListGroups);
+
+  await ListGroupsView.MobileRowOne.assertToBeVisible();
+  await ListGroupsView.MobileEditOneButton.click();
+  await ListGroupsView.Modal.assertOpen();
+});
+
+test("ListGroups opens delete modal from mobile action", async () => {
+  render(ListGroups);
+
+  await ListGroupsView.MobileRowOne.assertToBeVisible();
+  await ListGroupsView.MobileDeleteOneButton.click();
   await ListGroupsView.Modal.assertOpen();
 });

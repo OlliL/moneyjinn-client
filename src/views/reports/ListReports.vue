@@ -1,15 +1,23 @@
 <template>
+  <ButtonMobileCreate
+    v-if="dataLoadedMonth && dataLoadedReport && dataLoadedEtf"
+    data-testid="reports-mobile-create"
+    @click="navigateToCreateMoneyflow"
+  />
   <div class="custom-container space-y-6">
     <div class="text-center">
-      <h4 class="text-2xl font-bold">
+      <h4 class="text-2xl font-bold hidden md:block">
         {{ $t("Reports.title.report", { month: monthName, year: year }) }}
+      </h4>
+      <h4 class="text-2xl font-bold md:hidden">
+        {{ $t("Reports.title.report") }}
       </h4>
     </div>
 
-    <div class="mx-auto flex w-full max-w-4xl flex-col items-center gap-3">
-      <div class="flex w-full justify-center">
-        <MonthYearNavigator
-          v-if="dataLoaded"
+    <div class="mx-auto flex w-full max-w-6xl flex-col items-center gap-3">
+      <div class="hidden md:flex w-full justify-center">
+        <MonthYearDesktopNavigator
+          v-show="dataLoadedMonth"
           :years="years ?? []"
           :months="months ?? []"
           :selected-year="selectedYear"
@@ -19,44 +27,71 @@
         />
       </div>
 
+      <MonthYearMobileNavigator
+        :data-loaded="dataLoadedMonth"
+        :years="years ?? []"
+        :months="months ?? []"
+        :selected-year="selectedYear"
+        :selected-month="Number(month)"
+        test-id-prefix="reports-mobile"
+        navigator-test-id-prefix="month-year-nav-mobile"
+        title-key="Reports.filterData"
+        label-key="General.month"
+        select-label-key="General.select"
+        @select-year="handleYearSelect"
+        @select-month="handleMonthSelect"
+      />
+
       <DivError :server-errors="serverErrors" />
     </div>
 
-    <div class="hidden md:block">
-      <div class="fixed left-4 top-1/2 z-20 -translate-y-1/2">
-        <Button
-          data-testid="reports-previous-month"
-          v-if="previousMonthLink"
-          type="button"
-          variant="outline"
-          size="icon"
-          class="h-10 w-10 rounded-full border-border/70 bg-background/85 text-primary/80 shadow-sm backdrop-blur transition-all hover:bg-background hover:text-primary hover:shadow-md focus-visible:shadow-md supports-backdrop-filter:bg-background/70"
-          @click="navigateToPreviousMonth"
-        >
-          <ChevronLeft class="h-5 w-5" />
-        </Button>
-      </div>
-      <div class="fixed right-4 top-1/2 z-20 -translate-y-1/2">
-        <Button
-          data-testid="reports-next-month"
-          v-if="nextMonthLink"
-          type="button"
-          variant="outline"
-          size="icon"
-          class="h-10 w-10 rounded-full border-border/70 bg-background/85 text-primary/80 shadow-sm backdrop-blur transition-all hover:bg-background hover:text-primary hover:shadow-md focus-visible:shadow-md supports-backdrop-filter:bg-background/70"
-          @click="navigateToNextMonth"
-        >
-          <ChevronRight class="h-5 w-5" />
-        </Button>
-      </div>
+    <div class="fixed left-4 top-1/2 z-20 -translate-y-1/2">
+      <Button
+        data-testid="reports-previous-month"
+        v-if="previousMonthLink"
+        type="button"
+        variant="outline"
+        size="icon"
+        class="h-10 w-10 rounded-full border-border/70 bg-background/85 text-primary/80 shadow-sm backdrop-blur transition-all hover:bg-background hover:text-primary hover:shadow-md focus-visible:shadow-md supports-backdrop-filter:bg-background/70"
+        @click="navigateToPreviousMonth"
+      >
+        <ChevronLeft class="h-5 w-5" />
+      </Button>
     </div>
-    <ReportTableVue
-      :year="year"
-      :month="month"
-      v-model="sortByMap"
-      v-if="year && month"
-    />
-    <EtfTableVue :year="year" :month="month" v-if="year && month" />
+    <div class="fixed right-4 top-1/2 z-20 -translate-y-1/2">
+      <Button
+        data-testid="reports-next-month"
+        v-if="nextMonthLink"
+        type="button"
+        variant="outline"
+        size="icon"
+        class="h-10 w-10 rounded-full border-border/70 bg-background/85 text-primary/80 shadow-sm backdrop-blur transition-all hover:bg-background hover:text-primary hover:shadow-md focus-visible:shadow-md supports-backdrop-filter:bg-background/70"
+        @click="navigateToNextMonth"
+      >
+        <ChevronRight class="h-5 w-5" />
+      </Button>
+    </div>
+    <div
+      :class="{
+        'opacity-100 transition-opacity duration-200':
+          dataLoadedEtf && dataLoadedReport,
+        'opacity-0 pointer-events-none': !(dataLoadedEtf && dataLoadedReport),
+      }"
+    >
+      <ReportTableVue
+        :year="year"
+        :month="month"
+        v-model:sort-by="sortByMap"
+        v-model:data-loaded="dataLoadedReport"
+        v-if="year && month"
+      />
+      <EtfTableVue
+        :year="year"
+        :month="month"
+        v-if="year && month"
+        v-model="dataLoadedEtf"
+      />
+    </div>
   </div>
 </template>
 
@@ -66,20 +101,24 @@ import { onBeforeRouteUpdate, type RouteParamsGeneric } from "vue-router";
 
 import router, { Routes } from "@/router";
 
+import ButtonMobileCreate from "@/components/ButtonMobileCreate.vue";
 import DivError from "@/components/DivError.vue";
-import MonthYearNavigator from "@/components/navigation/MonthYearNavigator.vue";
-import EtfTableVue from "@/components/reports/EtfTable.vue";
-import ReportTableVue from "@/components/reports/ReportTable.vue";
+import MonthYearDesktopNavigator from "@/components/navigation/MonthYearDesktopNavigator.vue";
+import MonthYearMobileNavigator from "@/components/navigation/MonthYearMobileNavigator.vue";
 import { Button } from "@/components/ui/button";
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 import ReportService from "@/service/ReportService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { getMonthName } from "@/tools/views/MonthName";
 import { ChevronLeft, ChevronRight } from "lucide-vue-next";
+import EtfTableVue from "./elements/EtfTable.vue";
+import ReportTableVue from "./elements/ReportTable.vue";
 
 const serverErrors = ref(new Array<string>());
 
-const dataLoaded = ref(false);
+const dataLoadedMonth = ref(false);
+const dataLoadedEtf = ref(false);
+const dataLoadedReport = ref(false);
 const months = ref([] as number[] | undefined);
 const years = ref([] as string[] | undefined);
 const previousMonth = ref(0 as number | undefined);
@@ -122,7 +161,7 @@ onMounted(() => {
 const loadData = (year?: number, month?: number) => {
   serverErrors.value = new Array<string>();
 
-  dataLoaded.value = false;
+  dataLoadedMonth.value = false;
   ReportService.getAvailableMonth(year, month)
     .then((response) => {
       months.value = response.allMonth;
@@ -141,7 +180,7 @@ const loadData = (year?: number, month?: number) => {
       if (selectedYear.value != currentlyShownYear.value)
         currentlyShownYear.value = selectedYear.value;
 
-      dataLoaded.value = true;
+      dataLoadedMonth.value = true;
     })
     .catch((backendError) => {
       handleBackendError(backendError, serverErrors);
@@ -154,6 +193,10 @@ const navigateToPreviousMonth = () => {
 
 const navigateToNextMonth = () => {
   selectMonth(nextYear.value + "", nextMonth.value + "");
+};
+
+const navigateToCreateMoneyflow = () => {
+  router.push({ name: Routes.CreateMoneyflow });
 };
 
 const handleYearSelect = (year: string) => {

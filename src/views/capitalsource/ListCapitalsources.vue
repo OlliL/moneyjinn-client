@@ -22,70 +22,33 @@
       @createClicked="showCreateCapitalsourceModal"
     />
 
-    <DivContentTable>
-      <TableHeader>
-        <TableRow>
-          <TableHead class="font-bold border-r text-foreground text-center">{{
-            $t("General.name")
-          }}</TableHead>
-          <TableHead class="font-bold border-r text-foreground text-center">{{
-            $t("Capitalsource.type")
-          }}</TableHead>
-          <TableHead class="font-bold border-r text-foreground text-center">{{
-            $t("Capitalsource.state")
-          }}</TableHead>
-          <TableHead class="font-bold border-r text-foreground text-center">{{
-            $t("General.iban")
-          }}</TableHead>
-          <TableHead class="font-bold border-r text-foreground text-center">{{
-            $t("General.bic")
-          }}</TableHead>
-          <TableHead class="font-bold border-r text-foreground text-center">{{
-            $t("General.validFrom")
-          }}</TableHead>
-          <TableHead class="font-bold border-r text-foreground text-center">{{
-            $t("General.validTil")
-          }}</TableHead>
-          <TableHead class="font-bold border-r text-foreground text-center">{{
-            $t("Capitalsource.groupUse")
-          }}</TableHead>
-          <TableHead class="font-bold border-r text-foreground text-center">{{
-            $t("Capitalsource.importAllowed")
-          }}</TableHead>
-          <TableHead colspan="2"></TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        <ListCapitalsourceRowVue
-          v-for="mcs in capitalsources"
-          :key="mcs.id"
-          :mcs="mcs"
-          :owner="mcs.userId === userId"
-          @delete-capitalsource="deleteCapitalsource"
-          @edit-capitalsource="editCapitalsource"
-        />
-      </TableBody>
-    </DivContentTable>
+    <ListCapitalsourcesMobile
+      :capitalsources="capitalsources"
+      :user-id="userId"
+      @delete-capitalsource="deleteCapitalsource"
+      @edit-capitalsource="editCapitalsource"
+    />
+
+    <ListCapitalsourcesDesktop
+      :capitalsources="capitalsources"
+      :user-id="userId"
+      @delete-capitalsource="deleteCapitalsource"
+      @edit-capitalsource="editCapitalsource"
+    />
   </div>
 </template>
 
 <script lang="ts" setup>
 import { onMounted, ref, useTemplateRef, watch } from "vue";
 
-import {
-  TableBody,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
 import { useCapitalsourceStore } from "@/stores/CapitalsourceStore";
 import { useUserSessionStore } from "@/stores/UserSessionStore";
 
-import DivContentTable from "@/components/DivContentTable.vue";
 import DivFilter from "@/components/DivFilter.vue";
 import CreateCapitalsourceModalVue from "@/components/capitalsource/CreateCapitalsourceModal.vue";
-import DeleteCapitalsourceModalVue from "@/components/capitalsource/DeleteCapitalsourceModal.vue";
-import ListCapitalsourceRowVue from "@/components/capitalsource/ListCapitalsourceRow.vue";
+import DeleteCapitalsourceModalVue from "./elements/DeleteCapitalsourceModal.vue";
+import ListCapitalsourcesDesktop from "./elements/ListCapitalsourcesDesktop.vue";
+import ListCapitalsourcesMobile from "./elements/ListCapitalsourcesMobile.vue";
 
 import type { Capitalsource } from "@/model/capitalsource/Capitalsource";
 import { storeToRefs } from "pinia";

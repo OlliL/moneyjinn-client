@@ -30,6 +30,28 @@ vi.mock("@/service/ContractpartnerAccountService");
 class ListContractpartnersView {
   static readonly FilterInput = new InputView("div-filter-input");
   static readonly ValidNowToggle = new SwitchView("div-filter-valid-now");
+  static readonly MobileFilterTrigger = new ButtonView(
+    "div-filter-mobile-trigger",
+  );
+  static readonly MobileFilterSheet = new RowView("div-filter-mobile-sheet");
+  static readonly MobileFilterInput = new InputView("div-filter-mobile-input");
+  static readonly MobileValidNowToggle = new SwitchView(
+    "div-filter-mobile-valid-now",
+  );
+  static readonly MobileAccordion = new RowView(
+    "contractpartner-mobile-accordion",
+  );
+  static readonly MobileRowOne = new RowView("contractpartner-mobile-row-1");
+  static readonly MobileRowTwo = new RowView("contractpartner-mobile-row-2");
+  static readonly MobileEditOneButton = new ButtonView(
+    "contractpartner-mobile-edit-1",
+  );
+  static readonly MobileDeleteOneButton = new ButtonView(
+    "contractpartner-mobile-delete-1",
+  );
+  static readonly MobileAccountsOneButton = new ButtonView(
+    "contractpartner-mobile-accounts-1",
+  );
   static readonly RowOne = new RowView("contractpartner-row-1");
   static readonly RowTwo = new RowView("contractpartner-row-2");
   static readonly EditOneButton = new ButtonView("contractpartner-edit-1");
@@ -117,5 +139,47 @@ test("ListContractpartners opens contractpartner accounts modal", async () => {
 
   await ListContractpartnersView.RowOne.assertToBeVisible();
   await ListContractpartnersView.AccountsOneButton.click();
+  await ListContractpartnersView.Modal.assertOpen();
+});
+
+test("ListContractpartners filters via mobile sheet", async () => {
+  await StoreService.getInstance().initAllStores();
+  render(ListContractpartners);
+
+  await ListContractpartnersView.MobileAccordion.assertToBeVisible();
+  await ListContractpartnersView.MobileFilterTrigger.click();
+  await ListContractpartnersView.MobileFilterSheet.assertToBeVisible();
+
+  await ListContractpartnersView.MobileValidNowToggle.click();
+  await ListContractpartnersView.MobileFilterInput.setValue("old");
+
+  await ListContractpartnersView.MobileRowTwo.assertToBeVisible();
+  await ListContractpartnersView.MobileRowOne.assertNotToBeInDocument();
+});
+
+test("ListContractpartners opens edit modal from mobile action", async () => {
+  await StoreService.getInstance().initAllStores();
+  render(ListContractpartners);
+
+  await ListContractpartnersView.MobileRowOne.assertToBeVisible();
+  await ListContractpartnersView.MobileEditOneButton.click();
+  await ListContractpartnersView.Modal.assertOpen();
+});
+
+test("ListContractpartners opens delete modal from mobile action", async () => {
+  await StoreService.getInstance().initAllStores();
+  render(ListContractpartners);
+
+  await ListContractpartnersView.MobileRowOne.assertToBeVisible();
+  await ListContractpartnersView.MobileDeleteOneButton.click();
+  await ListContractpartnersView.Modal.assertOpen();
+});
+
+test("ListContractpartners opens accounts modal from mobile action", async () => {
+  await StoreService.getInstance().initAllStores();
+  render(ListContractpartners);
+
+  await ListContractpartnersView.MobileRowOne.assertToBeVisible();
+  await ListContractpartnersView.MobileAccountsOneButton.click();
   await ListContractpartnersView.Modal.assertOpen();
 });

@@ -35,6 +35,18 @@
 - Type check: `npm run -s type-check`
 - Test suite: `npm run -s test:ci`
 
+## Frontend Structure
+
+- `src/components/`
+  - shared, reusable UI and feature components
+  - keep components here only when they are used across multiple view directories
+- `src/views/**/elements/`
+  - view-local components that belong to exactly one view directory
+  - this also includes components that are reused by multiple views inside the same `src/views/<feature>/` directory
+- practical rule:
+  - if the common target directory of all consumers is the same `src/views/<feature>/elements/`, move the component there
+  - if consumers live in different view directories, keep the component in `src/components/`
+
 ## Configure Application
 
 - open http://localhost/ in your favorite web browser (assuming you installed everything on your local machine)

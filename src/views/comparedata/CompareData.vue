@@ -153,7 +153,6 @@
 <script lang="ts" setup>
 import ButtonSubmit from "@/components/ButtonSubmit.vue";
 import SelectCapitalsource from "@/components/capitalsource/SelectCapitalsource.vue";
-import CompareDataResultGroupVue from "@/components/comparedata/CompareDataResultGroup.vue";
 import DivContentTable from "@/components/DivContentTable.vue";
 import DivError from "@/components/DivError.vue";
 import InputDate from "@/components/InputDate.vue";
@@ -183,6 +182,7 @@ import { useForm } from "vee-validate";
 import { computed, onMounted, ref, useTemplateRef } from "vue";
 import { useI18n } from "vue-i18n";
 import { any, array as arr, date, instanceof as instof, number } from "zod";
+import CompareDataResultGroupVue from "./elements/CompareDataResultGroup.vue";
 
 const { t } = useI18n();
 

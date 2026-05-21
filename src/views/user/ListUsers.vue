@@ -25,52 +25,29 @@
 
     <DivError :server-errors="serverErrors" />
 
-    <DivContentTable class="max-w-xl">
-      <TableHeader>
-        <TableRow>
-          <TableHead class="font-bold border-r text-foreground text-center">{{
-            $t("General.name")
-          }}</TableHead>
-          <TableHead class="font-bold border-r text-foreground text-center">{{
-            $t("General.group")
-          }}</TableHead>
-          <TableHead class="font-bold border-r text-foreground text-center">{{
-            $t("User.role")
-          }}</TableHead>
-          <TableHead class="font-bold border-r text-foreground text-center">{{
-            $t("User.new")
-          }}</TableHead>
-          <TableHead colspan="2"></TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        <ListUserRowVue
-          v-for="user in users"
-          :key="user.id"
-          :user="user"
-          @edit-user="editUser"
-          @delete-user="deleteUser"
-        />
-      </TableBody>
-    </DivContentTable>
+    <ListUsersMobile
+      :users="users"
+      @edit-user="editUser"
+      @delete-user="deleteUser"
+    />
+
+    <ListUsersDesktop
+      :users="users"
+      @edit-user="editUser"
+      @delete-user="deleteUser"
+    />
   </div>
 </template>
 
 <script lang="ts" setup>
 import { onMounted, ref, useTemplateRef, watch } from "vue";
 
-import DivContentTable from "@/components/DivContentTable.vue";
 import DivError from "@/components/DivError.vue";
 import DivFilter from "@/components/DivFilter.vue";
-import {
-  TableBody,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import CreateUserModalVue from "@/components/user/CreateUserModal.vue";
-import DeleteUserModalVue from "@/components/user/DeleteUserModal.vue";
-import ListUserRowVue from "@/components/user/ListUserRow.vue";
+import CreateUserModalVue from "./elements/CreateUserModal.vue";
+import DeleteUserModalVue from "./elements/DeleteUserModal.vue";
+import ListUsersDesktop from "./elements/ListUsersDesktop.vue";
+import ListUsersMobile from "./elements/ListUsersMobile.vue";
 
 import type { User } from "@/model/user/User";
 

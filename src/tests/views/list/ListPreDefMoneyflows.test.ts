@@ -21,6 +21,22 @@ vi.mock("@/service/PostingAccountService");
 class ListPreDefMoneyflowsView {
   static readonly FilterInput = new InputView("div-filter-input");
   static readonly CreateButton = new ButtonView("div-filter-create");
+  static readonly MobileFilterTrigger = new ButtonView(
+    "div-filter-mobile-trigger",
+  );
+  static readonly MobileFilterSheet = new RowView("div-filter-mobile-sheet");
+  static readonly MobileFilterInput = new InputView("div-filter-mobile-input");
+  static readonly MobileAccordion = new RowView(
+    "predef-moneyflow-mobile-accordion",
+  );
+  static readonly MobileRowOne = new RowView("predef-moneyflow-mobile-row-1");
+  static readonly MobileRowTwo = new RowView("predef-moneyflow-mobile-row-2");
+  static readonly MobileEditRowOneButton = new ButtonView(
+    "predef-moneyflow-mobile-edit-1",
+  );
+  static readonly MobileDeleteRowOneButton = new ButtonView(
+    "predef-moneyflow-mobile-delete-1",
+  );
   static readonly RowOne = new RowView("predef-moneyflow-row-1");
   static readonly RowTwo = new RowView("predef-moneyflow-row-2");
   static readonly EditRowOneButton = new ButtonView("predef-moneyflow-edit-1");
@@ -99,5 +115,33 @@ test("ListPreDefMoneyflows opens delete modal from row action", async () => {
 
   await ListPreDefMoneyflowsView.RowOne.assertToBeVisible();
   await ListPreDefMoneyflowsView.DeleteRowOneButton.click();
+  await ListPreDefMoneyflowsView.Modal.assertOpen();
+});
+
+test("ListPreDefMoneyflows filters via mobile sheet", async () => {
+  render(ListPreDefMoneyflows);
+
+  await ListPreDefMoneyflowsView.MobileAccordion.assertToBeVisible();
+  await ListPreDefMoneyflowsView.MobileFilterTrigger.click();
+  await ListPreDefMoneyflowsView.MobileFilterSheet.assertToBeVisible();
+  await ListPreDefMoneyflowsView.MobileFilterInput.setValue("energy");
+
+  await ListPreDefMoneyflowsView.MobileRowTwo.assertToBeVisible();
+  await ListPreDefMoneyflowsView.MobileRowOne.assertNotToBeInDocument();
+});
+
+test("ListPreDefMoneyflows opens edit modal from mobile action", async () => {
+  render(ListPreDefMoneyflows);
+
+  await ListPreDefMoneyflowsView.MobileRowOne.assertToBeVisible();
+  await ListPreDefMoneyflowsView.MobileEditRowOneButton.click();
+  await ListPreDefMoneyflowsView.Modal.assertOpen();
+});
+
+test("ListPreDefMoneyflows opens delete modal from mobile action", async () => {
+  render(ListPreDefMoneyflows);
+
+  await ListPreDefMoneyflowsView.MobileRowOne.assertToBeVisible();
+  await ListPreDefMoneyflowsView.MobileDeleteRowOneButton.click();
   await ListPreDefMoneyflowsView.Modal.assertOpen();
 });

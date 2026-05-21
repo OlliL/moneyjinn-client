@@ -1,11 +1,13 @@
 {
   "General": {
+    "copy": "kopieren...",
     "logout": "Abmelden",
     "profile": "Profil",
     "add": "Hinzufügen",
     "currency": "€",
     "etf": "ETF",
     "selectEtf": "ETF auswählen...",
+    "select": "auswählen",
     "etfs": "ETFs",
     "etfDepot": "ETF Depot",
     "preliminaryLumpSums": "ETF Vorabpauschalen",

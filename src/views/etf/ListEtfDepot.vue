@@ -1,4 +1,6 @@
 <template>
+  <ButtonMobileCreate data-testid="etf-flow-create" @click="createEtfFlow" />
+
   <DeleteEtfFlowModalVue @etf-flow-deleted="etfFlowDeleted" ref="deleteModal" />
   <CreateEtfFlowModalVue
     @etf-flow-created="etfFlowCreated"
@@ -13,8 +15,8 @@
 
     <div class="flex justify-center">
       <div class="w-full max-w-md">
-        <div class="grid gap-3 md:grid-cols-12 items-top">
-          <div class="md:col-span-8">
+        <div class="grid grid-cols-1 gap-3 md:grid-cols-24 md:items-end">
+          <div class="col-span-1 md:col-span-16">
             <SelectStandard
               v-model="selectedEtfId"
               :validation-schema="schema.etfId"
@@ -23,11 +25,13 @@
               :select-box-values="getAsSelectBoxValues()"
             />
           </div>
-          <div class="md:col-span-4 mt-5">
+
+          <div class="col-span-1 md:col-span-8 mt-3 md:mt-0 hidden md:block">
             <Button
               data-testid="etf-depot-create"
               type="button"
               @click="createEtfFlow"
+              class="w-full md:w-auto"
             >
               <Plus class="mr-2 h-4 w-4" />
               {{ $t("ETFFlow.newBooking") }}
@@ -36,185 +40,72 @@
         </div>
       </div>
     </div>
+
+    <div
+      class="fixed bottom-6 right-6 z-50 md:hidden"
+      v-if="dataLoaded && etfFlows.length"
+    >
+      <Sheet v-model:open="isMobileFilterOpen">
+        <SheetTrigger as-child>
+          <Button
+            data-testid="etf-depot-mobile-filter-trigger"
+            class="h-12 w-12 p-0 rounded-full shadow-lg"
+          >
+            <Filter class="h-5 w-5" />
+          </Button>
+        </SheetTrigger>
+
+        <SheetContent
+          data-testid="etf-depot-mobile-filter-sheet"
+          side="bottom"
+          class="h-[40vh] rounded-t-xl p-6 flex flex-col"
+        >
+          <SheetHeader class="text-left pb-4 border-b shrink-0">
+            <SheetTitle>{{ $t("Reports.filterData") }}</SheetTitle>
+            <SheetDescription class="sr-only">
+              {{ $t("Reports.filterData") }}
+            </SheetDescription>
+          </SheetHeader>
+
+          <div class="flex-1 overflow-y-auto space-y-4 py-4">
+            <div class="flex items-center gap-3 pb-1.5">
+              <Switch
+                data-testid="etf-depot-mobile-effective-switch"
+                id="etfDepotEffectiveMobile"
+                :modelValue="isMobileEffectiveOnly"
+                @update:model-value="setMobileEffectiveOnly"
+              />
+              <Label
+                for="etfDepotEffectiveMobile"
+                class="cursor-pointer text-sm font-medium select-none whitespace-nowrap"
+              >
+                {{ $t("ETFFlow.effective") }}
+              </Label>
+            </div>
+          </div>
+        </SheetContent>
+      </Sheet>
+    </div>
+
     <div class="flex justify-center" v-if="dataLoaded && etfFlows.length">
-      <div class="w-full max-w-3xl">
-        <Tabs v-model="currentTab" class="w-full">
-          <TabsList
-            class="flex bg-muted h-10 p-1 justify-start rounded-sm w-full border"
-          >
-            <TabsTrigger
-              v-if="etfEffectiveFlows.length > 0"
-              value="effective"
-              class="px-4 py-1.5 h-full bg-transparent transition-all font-medium text-sm text-muted-foreground data-[state=active]:text-foreground data-[state=active]:bg-background first:rounded-l-sm last:rounded-r-sm cursor-pointer"
-            >
-              {{ $t("ETFFlow.effective") }}
-            </TabsTrigger>
+      <ListEtfDepotMobile
+        :flows="mobileFlows"
+        :etf-name="selectedEtf.name"
+        :partial="partial"
+        :show-lump-sum="isMobileEffectiveOnly"
+        @delete-etf-flow="deleteEtfFlow"
+        @edit-etf-flow="editEtfFlow"
+      />
 
-            <TabsTrigger
-              value="all"
-              class="px-4 py-1.5 h-full bg-transparent transition-all font-medium text-sm text-muted-foreground data-[state=active]:text-foreground data-[state=active]:bg-background first:rounded-l-sm last:rounded-r-sm cursor-pointer"
-            >
-              {{ $t("General.all") }}
-            </TabsTrigger>
-          </TabsList>
-
-          <TabsContent
-            value="effective"
-            class="focus-visible:outline-none focus-visible:ring-0"
-          >
-            <div class="rounded-sm border bg-card overflow-hidden">
-              <Table
-                class="[&_tr:nth-child(even)]:bg-muted [&_td]:!py-1 [&_th]:!py-1"
-              >
-                <TableHeader>
-                  <TableRow>
-                    <TableHead scope="col" class="w-30/100 text-center">
-                      {{ $t("ETFFlow.bookingtime") }}
-                    </TableHead>
-                    <TableHead
-                      scope="col"
-                      class="w-16/100 border-l text-center"
-                    >
-                      {{ $t("ETFFlow.amount") }}
-                    </TableHead>
-                    <TableHead
-                      scope="col"
-                      class="w-16/100 border-l text-center"
-                    >
-                      {{ $t("ETFFlow.price") }}
-                    </TableHead>
-                    <TableHead
-                      scope="col"
-                      class="w-16/100 border-l text-center"
-                    >
-                      {{ $t("ETFFlow.sumprice") }}
-                    </TableHead>
-                    <TableHead
-                      scope="col"
-                      class="w-12/100 border-l text-center"
-                    >
-                      {{ $t("ETFFlow.preliminaryLumpSum") }}
-                    </TableHead>
-                    <TableHead
-                      scope="col"
-                      class="w-10/100 border-l p-2 text-center"
-                      colspan="2"
-                    ></TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  <ListEtfDepotRowVue
-                    v-for="etfFlow in etfEffectiveFlows"
-                    :key="etfFlow.etfflowid"
-                    :flow="etfFlow"
-                    :etfName="selectedEtf.name"
-                    :show-lump-sum="true"
-                    @delete-etf-flow="deleteEtfFlow"
-                    @edit-etf-flow="editEtfFlow"
-                  />
-                  <TableRow class="border-t">
-                    <TableCell class="p-2 text-right">&sum;</TableCell>
-                    <TableCell class="p-2 text-right">
-                      <u>{{ etfEffectiveFlowAmountSumString }}</u>
-                    </TableCell>
-                    <TableCell class="p-2 text-right">
-                      <u
-                        ><SpanAmount
-                          :amount="etfEffectiveFlowPriceAvg"
-                          :decimal-places="4"
-                      /></u>
-                    </TableCell>
-                    <TableCell class="p-2 text-right">
-                      <u
-                        ><SpanAmount :amount="etfEffectiveFlowAmountPriceSum"
-                      /></u>
-                    </TableCell>
-                    <TableCell class="p-2 text-right">
-                      <u
-                        ><SpanAmount
-                          :amount="
-                            etfEffectiveFlowAccumulatedPreliminaryLumpSum
-                          "
-                          :decimal-places="3"
-                      /></u>
-                    </TableCell>
-                    <TableCell colspan="2"></TableCell>
-                  </TableRow>
-                </TableBody>
-              </Table>
-            </div>
-          </TabsContent>
-          <TabsContent
-            value="all"
-            class="focus-visible:outline-none focus-visible:ring-0"
-          >
-            <div class="rounded-sm border bg-card overflow-hidden">
-              <Table
-                class="[&_tr:nth-child(even)]:bg-muted [&_td]:!py-1 [&_th]:!py-1"
-              >
-                <TableHeader>
-                  <TableRow>
-                    <TableHead scope="col" class="w-30/100 text-center">
-                      {{ $t("ETFFlow.bookingtime") }}
-                    </TableHead>
-                    <TableHead
-                      scope="col"
-                      class="w-20/100 border-l text-center"
-                    >
-                      {{ $t("ETFFlow.amount") }}
-                    </TableHead>
-                    <TableHead
-                      scope="col"
-                      class="w-20/100 border-l text-center"
-                    >
-                      {{ $t("ETFFlow.price") }}
-                    </TableHead>
-                    <TableHead
-                      scope="col"
-                      class="w-20/100 border-l text-center"
-                    >
-                      {{ $t("ETFFlow.sumprice") }}
-                    </TableHead>
-                    <TableHead
-                      scope="col"
-                      class="w-10/100 border-l p-2 text-center"
-                      colspan="2"
-                    ></TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  <ListEtfDepotRowVue
-                    v-for="etfFlow in etfFlows"
-                    :key="etfFlow.etfflowid"
-                    :flow="etfFlow"
-                    :etfName="selectedEtf.name"
-                    :show-lump-sum="false"
-                    @delete-etf-flow="deleteEtfFlow"
-                    @edit-etf-flow="editEtfFlow"
-                  />
-                  <TableRow class="border-t">
-                    <TableCell class="p-2 text-right">&sum;</TableCell>
-                    <TableCell class="p-2 text-right">
-                      <u>{{ etfFlowAmountSumString }}</u>
-                    </TableCell>
-                    <TableCell class="p-2 text-right">
-                      <u
-                        ><SpanAmount
-                          :amount="etfFlowPriceAvg"
-                          :decimal-places="4"
-                      /></u>
-                    </TableCell>
-                    <TableCell class="p-2 text-right">
-                      <u><SpanAmount :amount="etfFlowAmountPriceSum" /></u>
-                    </TableCell>
-                    <TableCell colspan="2"></TableCell>
-                  </TableRow>
-                </TableBody>
-              </Table>
-            </div>
-          </TabsContent>
-        </Tabs>
-      </div>
+      <ListEtfDepotDesktop
+        :current-tab="currentTab"
+        :etf-flows="etfFlows"
+        :etf-effective-flows="etfEffectiveFlows"
+        :selected-etf-id="selectedEtf.id"
+        @update:current-tab="setCurrentTab"
+        @delete-etf-flow="deleteEtfFlow"
+        @edit-etf-flow="editEtfFlow"
+      />
     </div>
 
     <ListEtfDepotSummary
@@ -232,24 +123,20 @@
 </template>
 
 <script lang="ts" setup>
+import ButtonMobileCreate from "@/components/ButtonMobileCreate.vue";
 import DivError from "@/components/DivError.vue";
-import CalcEtfSaleForm from "@/components/etf/CalcEtfSaleForm.vue";
-import CreateEtfFlowModalVue from "@/components/etf/CreateEtfFlowModal.vue";
-import DeleteEtfFlowModalVue from "@/components/etf/DeleteEtfFlowModal.vue";
-import ListEtfDepotRowVue from "@/components/etf/ListEtfDepotRow.vue";
-import ListEtfDepotSummary from "@/components/etf/ListEtfDepotSummary.vue";
 import SelectStandard from "@/components/SelectStandard.vue";
-import SpanAmount from "@/components/SpanAmount.vue";
 import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+import { Switch } from "@/components/ui/switch";
 import type { Etf } from "@/model/etf/Etf";
 import type { EtfDepot } from "@/model/etf/EtfDepot";
 import type { EtfFlow } from "@/model/etf/EtfFlow";
@@ -260,10 +147,16 @@ import { useEtfStore } from "@/stores/EtfStore";
 import { formatNumber } from "@/tools/views/FormatNumber";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { globErr } from "@/tools/views/ZodUtil";
-import { Plus } from "lucide-vue-next";
+import { Filter, Plus } from "lucide-vue-next";
 import { computed, onMounted, ref, useTemplateRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { number } from "zod";
+import CalcEtfSaleForm from "./elements/CalcEtfSaleForm.vue";
+import CreateEtfFlowModalVue from "./elements/CreateEtfFlowModal.vue";
+import DeleteEtfFlowModalVue from "./elements/DeleteEtfFlowModal.vue";
+import ListEtfDepotDesktop from "./elements/ListEtfDepotDesktop.vue";
+import ListEtfDepotMobile from "./elements/ListEtfDepotMobile.vue";
+import ListEtfDepotSummary from "./elements/ListEtfDepotSummary.vue";
 
 const { t } = useI18n();
 
@@ -281,6 +174,7 @@ const selectedEtfId = ref(undefined as number | undefined);
 
 const calcEtfSalePieces = ref(0 as number | undefined);
 const currentTab = ref<"effective" | "all">("all");
+const isMobileFilterOpen = ref(false);
 const deleteModal = useTemplateRef<typeof DeleteEtfFlowModalVue>("deleteModal");
 const createModal = useTemplateRef<typeof CreateEtfFlowModalVue>("createModal");
 
@@ -371,6 +265,26 @@ const etfFlowPriceAvg = computed(() => {
   return etfFlowBuyAmountPriceSum.value / etfFlowBuyAmountSum.value;
 });
 
+const isMobileEffectiveOnly = computed(() => {
+  return currentTab.value === "effective";
+});
+
+const mobileFlows = computed(() => {
+  return isMobileEffectiveOnly.value ? etfEffectiveFlows.value : etfFlows.value;
+});
+
+const setMobileEffectiveOnly = (value: boolean) => {
+  if (value && etfEffectiveFlows.value.length > 0) {
+    currentTab.value = "effective";
+    return;
+  }
+  currentTab.value = "all";
+};
+
+const setCurrentTab = (value: "effective" | "all") => {
+  currentTab.value = value;
+};
+
 const loadData = (etfId: number) => {
   serverErrors.value = new Array<string>();
   dataLoaded.value = false;
@@ -408,8 +322,8 @@ const handleServerResponse = (etfDepot: EtfDepot, etfId: number) => {
   dataLoaded.value = true;
 };
 
-const deleteEtfFlow = (etfFlow: EtfFlow, etfName: string) => {
-  deleteModal.value?._show(etfFlow, etfName);
+const deleteEtfFlow = (etfFlow: EtfFlow) => {
+  deleteModal.value?._show(etfFlow, selectedEtf.value.name);
 };
 const etfFlowDeleted = (etfFlow: EtfFlow) => {
   loadData(etfFlow.etfId);

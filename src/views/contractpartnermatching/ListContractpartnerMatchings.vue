@@ -31,56 +31,41 @@
             :field-label="$t('General.contractpartner')"
           />
         </div> </template
+      ><template #mobile-right>
+        <div class="w-full">
+          <SelectContractpartner
+            v-model="searchContractpartnerId"
+            id-suffix="ContractpartnerMatching-mobile-searchContractpartner"
+            :field-label="$t('General.contractpartner')"
+          />
+        </div> </template
     ></DivFilter>
 
     <DivError :server-errors="serverErrors" />
 
-    <DivContentTable class="max-w-5xl">
-      <TableHeader>
-        <TableRow>
-          <TableHead class="font-bold border-r text-foreground text-center">{{
-            $t("ContractpartnerMatching.matchingText")
-          }}</TableHead>
-          <TableHead class="font-bold border-r text-foreground text-center">{{
-            $t("General.contractpartner")
-          }}</TableHead>
-          <TableHead class="font-bold border-r text-foreground text-center">{{
-            $t("Contractpartner.moneyflowComment")
-          }}</TableHead>
-          <TableHead class="font-bold border-r text-foreground text-center">{{
-            $t("General.postingAccount")
-          }}</TableHead>
-          <TableHead colspan="2"></TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        <ListContractpartnerMatchingRowVue
-          v-for="mcm in contractpartnerMatchings"
-          :key="mcm.id"
-          :mcm="mcm"
-          @edit-contractpartner-matching="editContractpartnerMatching"
-          @delete-contractpartner-matching="deleteContractpartnerMatching"
-        />
-      </TableBody>
-    </DivContentTable>
+    <ListContractpartnerMatchingsMobile
+      :contractpartner-matchings="contractpartnerMatchings"
+      @edit-contractpartner-matching="editContractpartnerMatching"
+      @delete-contractpartner-matching="deleteContractpartnerMatching"
+    />
+
+    <ListContractpartnerMatchingsDesktop
+      :contractpartner-matchings="contractpartnerMatchings"
+      @edit-contractpartner-matching="editContractpartnerMatching"
+      @delete-contractpartner-matching="deleteContractpartnerMatching"
+    />
   </div>
 </template>
 
 <script lang="ts" setup>
 import { onMounted, ref, useTemplateRef, watch } from "vue";
 
-import DivContentTable from "@/components/DivContentTable.vue";
 import DivError from "@/components/DivError.vue";
 import DivFilter from "@/components/DivFilter.vue";
-import CreateContractpartnerMatchingModalVue from "@/components/contractpartnermatching/CreateContractpartnerMatchingModal.vue";
-import DeleteContractpartnerMatchingModalVue from "@/components/contractpartnermatching/DeleteContractpartnerMatchingModal.vue";
-import ListContractpartnerMatchingRowVue from "@/components/contractpartnermatching/ListContractpartnerMatchingRow.vue";
-import {
-  TableBody,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+import CreateContractpartnerMatchingModalVue from "./elements/CreateContractpartnerMatchingModal.vue";
+import DeleteContractpartnerMatchingModalVue from "./elements/DeleteContractpartnerMatchingModal.vue";
+import ListContractpartnerMatchingsDesktop from "./elements/ListContractpartnerMatchingsDesktop.vue";
+import ListContractpartnerMatchingsMobile from "./elements/ListContractpartnerMatchingsMobile.vue";
 
 import type { ContractpartnerMatching } from "@/model/contractpartnermatching/ContractpartnerMatching";
 

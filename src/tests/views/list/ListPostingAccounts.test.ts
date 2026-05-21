@@ -22,6 +22,22 @@ vi.mock("@/service/CrudEtfService");
 class ListPostingAccountsView {
   static readonly FilterInput = new InputView("div-filter-input");
   static readonly CreateButton = new ButtonView("div-filter-create");
+  static readonly MobileFilterTrigger = new ButtonView(
+    "div-filter-mobile-trigger",
+  );
+  static readonly MobileFilterSheet = new RowView("div-filter-mobile-sheet");
+  static readonly MobileFilterInput = new InputView("div-filter-mobile-input");
+  static readonly MobileAccordion = new RowView(
+    "posting-account-mobile-accordion",
+  );
+  static readonly MobileRowOne = new RowView("posting-account-mobile-row-1");
+  static readonly MobileRowTwo = new RowView("posting-account-mobile-row-2");
+  static readonly MobileEditOneButton = new ButtonView(
+    "posting-account-mobile-edit-1",
+  );
+  static readonly MobileDeleteOneButton = new ButtonView(
+    "posting-account-mobile-delete-1",
+  );
   static readonly RowOne = new RowView("posting-account-row-1");
   static readonly RowTwo = new RowView("posting-account-row-2");
   static readonly EditOneButton = new ButtonView("posting-account-edit-1");
@@ -83,5 +99,36 @@ test("ListPostingAccounts opens delete modal from row action", async () => {
 
   await ListPostingAccountsView.RowOne.assertToBeVisible();
   await ListPostingAccountsView.DeleteOneButton.click();
+  await ListPostingAccountsView.Modal.assertOpen();
+});
+
+test("ListPostingAccounts filters via mobile sheet", async () => {
+  await StoreService.getInstance().initAllStores();
+  render(ListPostingAccounts);
+
+  await ListPostingAccountsView.MobileAccordion.assertToBeVisible();
+  await ListPostingAccountsView.MobileFilterTrigger.click();
+  await ListPostingAccountsView.MobileFilterSheet.assertToBeVisible();
+  await ListPostingAccountsView.MobileFilterInput.setValue("savings");
+
+  await ListPostingAccountsView.MobileRowTwo.assertToBeVisible();
+  await ListPostingAccountsView.MobileRowOne.assertNotToBeInDocument();
+});
+
+test("ListPostingAccounts opens edit modal from mobile action", async () => {
+  await StoreService.getInstance().initAllStores();
+  render(ListPostingAccounts);
+
+  await ListPostingAccountsView.MobileRowOne.assertToBeVisible();
+  await ListPostingAccountsView.MobileEditOneButton.click();
+  await ListPostingAccountsView.Modal.assertOpen();
+});
+
+test("ListPostingAccounts opens delete modal from mobile action", async () => {
+  await StoreService.getInstance().initAllStores();
+  render(ListPostingAccounts);
+
+  await ListPostingAccountsView.MobileRowOne.assertToBeVisible();
+  await ListPostingAccountsView.MobileDeleteOneButton.click();
   await ListPostingAccountsView.Modal.assertOpen();
 });

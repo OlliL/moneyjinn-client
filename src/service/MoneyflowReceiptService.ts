@@ -1,4 +1,5 @@
 import { MoneyflowReceiptControllerApi } from "@/api";
+import { BackendError, BackendErrorType } from "@/model/BackendError";
 import { ErrorCode, getErrorMessage } from "@/model/ErrorCode";
 import type { MoneyflowReceipt } from "@/model/moneyflow/MoneyflowReceipt";
 import { MoneyflowReceiptType } from "@/model/moneyflow/MoneyflowReceiptType";
@@ -15,7 +16,8 @@ class MoneyflowReceiptService extends AbstractService {
 
   async fetchReceipt(moneyflowId: number): Promise<MoneyflowReceipt> {
     const response = await this.api.showMoneyflowReceipt(moneyflowId);
-
+    console.error(moneyflowId);
+    console.trace();
     const showMoneyflowReceiptResponse = response.data;
 
     let receiptType: MoneyflowReceiptType;
@@ -29,7 +31,11 @@ class MoneyflowReceiptService extends AbstractService {
         break;
       }
       default: {
-        throw new Error(getErrorMessage(ErrorCode.MEDIA_TYPE_UNKNOWN));
+        throw new BackendError(
+          BackendErrorType.ERROR,
+          ErrorCode.MEDIA_TYPE_UNKNOWN,
+          getErrorMessage(ErrorCode.MEDIA_TYPE_UNKNOWN),
+        );
       }
     }
 

@@ -1,11 +1,13 @@
 {
   "General": {
+    "copy": "copy...",
     "logout": "logout",
     "profile": "profile",
     "add": "add",
     "currency": "€",
     "etf": "ETF",
     "selectEtf": "select ETF...",
+    "select": "select",
     "etfs": "ETFs",
     "etfDepot": "ETF depot",
     "preliminaryLumpSums": "preliminary lump sums",

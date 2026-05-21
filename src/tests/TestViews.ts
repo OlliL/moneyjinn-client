@@ -243,6 +243,14 @@ export class InputView extends AbstractView {
       expect(document.activeElement).toBe(input);
     });
   }
+
+  async pressEnter(): Promise<void> {
+    const testId = this.getRequiredTestId("pressEnter");
+    const input = await this.findByTestId<HTMLInputElement>(testId);
+    const user = this.createUser();
+    await user.click(input);
+    await user.keyboard("{Enter}");
+  }
 }
 
 export class TextView {
