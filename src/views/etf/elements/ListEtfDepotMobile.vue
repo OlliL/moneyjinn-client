@@ -100,10 +100,6 @@ const props = defineProps({
     type: Array as PropType<EtfFlow[]>,
     required: true,
   },
-  etfName: {
-    type: String,
-    required: true,
-  },
   partial: {
     type: Number,
     required: true,
@@ -133,7 +129,7 @@ const timestampString = (flow: EtfFlow): string => {
 };
 
 const deleteEtfFlow = (flow: EtfFlow) => {
-  emit("deleteEtfFlow", flow, props.etfName);
+  emit("deleteEtfFlow", flow);
 };
 
 const editEtfFlow = (flow: EtfFlow) => {

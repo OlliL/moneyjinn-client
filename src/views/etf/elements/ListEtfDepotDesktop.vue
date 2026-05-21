@@ -134,7 +134,6 @@
                 v-for="etfFlow in etfFlows"
                 :key="etfFlow.etfflowid"
                 :flow="etfFlow"
-                :etfName="selectedEtfName"
                 :show-lump-sum="false"
                 @delete-etf-flow="deleteEtfFlow"
                 @edit-etf-flow="editEtfFlow"
@@ -174,10 +173,12 @@ import {
 } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import type { EtfFlow } from "@/model/etf/EtfFlow";
-import type { PropType } from "vue";
+import { useEtfStore } from "@/stores/EtfStore";
+import { formatNumber } from "@/tools/views/FormatNumber";
+import { computed, type PropType } from "vue";
 import ListEtfDepotRowVue from "./ListEtfDepotRow.vue";
 
-defineProps({
+const props = defineProps({
   currentTab: {
     type: String as PropType<"effective" | "all">,
     required: true,
@@ -190,40 +191,13 @@ defineProps({
     type: Array as PropType<EtfFlow[]>,
     required: true,
   },
-  selectedEtfName: {
-    type: String,
-    required: true,
-  },
-  etfEffectiveFlowAmountSumString: {
-    type: String,
-    required: true,
-  },
-  etfEffectiveFlowPriceAvg: {
-    type: Number,
-    required: true,
-  },
-  etfEffectiveFlowAmountPriceSum: {
-    type: Number,
-    required: true,
-  },
-  etfEffectiveFlowAccumulatedPreliminaryLumpSum: {
-    type: Number,
-    required: true,
-  },
-  etfFlowAmountSumString: {
-    type: String,
-    required: true,
-  },
-  etfFlowPriceAvg: {
-    type: Number,
-    required: true,
-  },
-  etfFlowAmountPriceSum: {
+  selectedEtfId: {
     type: Number,
     required: true,
   },
 });
 
+const { getEtf } = useEtfStore();
 const emit = defineEmits(["update:currentTab", "deleteEtfFlow", "editEtfFlow"]);
 
 const updateTab = (value: string | number) => {
@@ -232,11 +206,83 @@ const updateTab = (value: string | number) => {
   }
 };
 
-const deleteEtfFlow = (etfFlow: EtfFlow, etfName: string) => {
-  emit("deleteEtfFlow", etfFlow, etfName);
+const deleteEtfFlow = (etfFlow: EtfFlow) => {
+  emit("deleteEtfFlow", etfFlow);
 };
 
 const editEtfFlow = (etfFlow: EtfFlow) => {
   emit("editEtfFlow", etfFlow);
 };
+
+const selectedEtfName = computed(
+  () => getEtf(Number(props.selectedEtfId))?.name,
+);
+
+const etfEffectiveFlowAmountSum = computed(() => {
+  return props.etfEffectiveFlows.reduce((a, b) => a + (b["amount"] || 0), 0);
+});
+
+const partial = computed(() => {
+  return (
+    100 -
+    (props.selectedEtfId
+      ? (getEtf(Number(props.selectedEtfId))?.partialTaxExemption ?? 0)
+      : 0)
+  );
+});
+const etfEffectiveFlowAccumulatedPreliminaryLumpSum = computed(() => {
+  return props.etfEffectiveFlows.reduce(
+    (a, b) =>
+      a + ((b["accumulatedPreliminaryLumpSum"] * partial.value) / 100 || 0),
+    0,
+  );
+});
+
+const etfEffectiveFlowAmountPriceSum = computed(() => {
+  return props.etfEffectiveFlows.reduce(
+    (a, b) => a + (b["amount"] * b["price"] || 0),
+    0,
+  );
+});
+
+const etfEffectiveFlowAmountSumString = computed(() => {
+  return formatNumber(etfEffectiveFlowAmountSum.value, 6);
+});
+
+const etfEffectiveFlowPriceAvg = computed(() => {
+  return etfEffectiveFlowAmountPriceSum.value / etfEffectiveFlowAmountSum.value;
+});
+
+const etfFlowAmountSum = computed(() => {
+  return props.etfFlows.reduce((a, b) => a + (b["amount"] || 0), 0);
+});
+
+const etfFlowBuyAmountSum = computed(() => {
+  return props.etfFlows.reduce(
+    (a, b) => a + (b["amount"] > 0 ? b["amount"] || 0 : 0),
+    0,
+  );
+});
+
+const etfFlowAmountPriceSum = computed(() => {
+  return props.etfFlows.reduce(
+    (a, b) => a + (b["amount"] * b["price"] || 0),
+    0,
+  );
+});
+
+const etfFlowBuyAmountPriceSum = computed(() => {
+  return props.etfFlows.reduce(
+    (a, b) => a + (b["amount"] > 0 ? b["amount"] * b["price"] || 0 : 0),
+    0,
+  );
+});
+
+const etfFlowAmountSumString = computed(() => {
+  return formatNumber(etfFlowAmountSum.value, 6);
+});
+
+const etfFlowPriceAvg = computed(() => {
+  return etfFlowBuyAmountPriceSum.value / etfFlowBuyAmountSum.value;
+});
 </script>

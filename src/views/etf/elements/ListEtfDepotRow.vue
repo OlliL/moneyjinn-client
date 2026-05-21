@@ -127,10 +127,6 @@ import { Pencil, Trash2 } from "lucide-vue-next";
 import { computed, type PropType } from "vue";
 
 const props = defineProps({
-  etfName: {
-    type: String,
-    required: true,
-  },
   flow: {
     type: Object as PropType<EtfFlow>,
     required: true,
@@ -163,7 +159,7 @@ const timestampString = computed(() => {
 });
 
 const deleteEtfFlow = () => {
-  emit("deleteEtfFlow", props.flow, props.etfName);
+  emit("deleteEtfFlow", props.flow);
 };
 const editEtfFlow = () => {
   emit("editEtfFlow", props.flow);

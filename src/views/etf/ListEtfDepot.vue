@@ -97,16 +97,7 @@
         :current-tab="currentTab"
         :etf-flows="etfFlows"
         :etf-effective-flows="etfEffectiveFlows"
-        :selected-etf-name="selectedEtf.name"
-        :etf-effective-flow-amount-sum-string="etfEffectiveFlowAmountSumString"
-        :etf-effective-flow-price-avg="etfEffectiveFlowPriceAvg"
-        :etf-effective-flow-amount-price-sum="etfEffectiveFlowAmountPriceSum"
-        :etf-effective-flow-accumulated-preliminary-lump-sum="
-          etfEffectiveFlowAccumulatedPreliminaryLumpSum
-        "
-        :etf-flow-amount-sum-string="etfFlowAmountSumString"
-        :etf-flow-price-avg="etfFlowPriceAvg"
-        :etf-flow-amount-price-sum="etfFlowAmountPriceSum"
+        :selected-etf-id="selectedEtf.id"
         @update:current-tab="setCurrentTab"
         @delete-etf-flow="deleteEtfFlow"
         @edit-etf-flow="editEtfFlow"
@@ -326,8 +317,8 @@ const handleServerResponse = (etfDepot: EtfDepot, etfId: number) => {
   dataLoaded.value = true;
 };
 
-const deleteEtfFlow = (etfFlow: EtfFlow, etfName: string) => {
-  deleteModal.value?._show(etfFlow, etfName);
+const deleteEtfFlow = (etfFlow: EtfFlow) => {
+  deleteModal.value?._show(etfFlow, selectedEtf.value.name);
 };
 const etfFlowDeleted = (etfFlow: EtfFlow) => {
   loadData(etfFlow.etfId);

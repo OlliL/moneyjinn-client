@@ -23,15 +23,6 @@
         </SheetHeader>
 
         <div class="flex-1 overflow-y-auto space-y-4 py-4">
-          <Button
-            data-testid="div-filter-mobile-create"
-            @click="emitCreateClicked"
-            class="w-full"
-          >
-            <Plus class="mr-2 h-4 w-4" />
-            {{ $t("General.new") }}
-          </Button>
-
           <div class="flex w-full items-center">
             <Button
               data-testid="div-filter-mobile-all"
@@ -85,7 +76,7 @@
         {{ $t("General.new") }}
       </Button>
 
-      <div class="flex w-full md:w-80 items-center">
+      <div class="flex w-full md:w-80 items-center hidden md:block">
         <Button
           data-testid="div-filter-all"
           variant="secondary"
@@ -104,7 +95,10 @@
         />
       </div>
 
-      <div v-if="showValidToggle" class="flex items-center gap-3 pb-1.5">
+      <div
+        v-if="showValidToggle"
+        class="flex items-center gap-3 pb-1.5 hidden md:block"
+      >
         <Switch
           data-testid="div-filter-valid-now"
           id="validInput"

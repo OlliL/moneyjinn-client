@@ -1,5 +1,6 @@
 {
   "General": {
+    "copy": "copy...",
     "logout": "logout",
     "profile": "profile",
     "add": "add",
