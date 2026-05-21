@@ -306,6 +306,14 @@
     </Accordion>
 
     <div
+      v-if="filteredMoneyflows.length === 0"
+      data-testid="report-table-empty-mobile"
+      class="p-4 border rounded-lg bg-muted/40 flex justify-center items-center text-sm font-bold shadow-sm text-muted-foreground"
+    >
+      {{ $t('General.noEntries') }}
+    </div>
+    <div
+      v-else
       class="p-4 border rounded-lg bg-muted/40 flex justify-between items-center text-sm font-bold shadow-sm"
     >
       <span>{{ $t("Reports.overallSums") }}</span>

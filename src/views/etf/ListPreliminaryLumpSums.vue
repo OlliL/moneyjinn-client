@@ -226,7 +226,7 @@
       </div>
     </div>
     <div
-      v-if="
+      v-else-if="
         selectedYear &&
         selectedEtfId !== undefined &&
         etfPreliminaryLumpSum?.type ==
@@ -265,7 +265,7 @@
       </div>
     </div>
     <div
-      v-if="
+      v-else-if="
         selectedYear &&
         selectedEtfId !== undefined &&
         etfPreliminaryLumpSum?.type == EtfPreliminaryLumpSumType.AMOUNT_PER_YEAR
@@ -302,6 +302,14 @@
         </div>
       </div>
     </div>
+    <!-- Empty State -->
+    <div
+      v-else
+      class="flex flex-col items-center justify-center py-10"
+      data-testid="preliminary-lump-sum-empty"
+    >
+      <span class="text-muted-foreground text-center">{{$t('General.noEntries')}}</span>
+    </div>
     <!---->
   </div>
   <div class="inline-block" ref="createButtonRef">
@@ -336,7 +344,7 @@
       <div class="flex flex-col">
         <Button
           type="button"
-          data-testid="preliminary-lump-sum-mobile-create-type-piece"
+          data-testid="preliminary-lump-sum-mobile-create-type-month"
           class="text-sm px-3 py-2 text-left hover:bg-muted rounded"
           @click="selectCreateType(EtfPreliminaryLumpSumType.AMOUNT_PER_MONTH)"
         >
@@ -365,7 +373,7 @@
 
 <script lang="ts" setup>
 import ButtonMobileCreate from "@/components/ButtonMobileCreate.vue";
-import { default as ButtonMobileDelete } from "@/components/ButtonMobileDelete.vue";
+import ButtonMobileDelete from "@/components/ButtonMobileDelete.vue";
 import ButtonMobileEdit from "@/components/ButtonMobileEdit.vue";
 import DivError from "@/components/DivError.vue";
 import MonthYearMobileNavigator from "@/components/navigation/MonthYearMobileNavigator.vue";

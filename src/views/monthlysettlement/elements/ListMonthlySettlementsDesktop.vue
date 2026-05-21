@@ -42,6 +42,9 @@
           {{ $t("General.delete") }}
         </Button>
       </div>
+      <div v-if="years.length === 0 || months.length === 0" data-testid="monthly-settlement-empty-desktop" class="w-full text-center text-muted-foreground mt-4">
+        {{ $t('General.noEntries') }}
+      </div>
     </div>
   </div>
 </template>

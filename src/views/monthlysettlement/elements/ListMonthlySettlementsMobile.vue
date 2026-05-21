@@ -26,6 +26,9 @@
     @select-year="selectYear"
     @select-month="selectMonth"
   />
+  <div v-if="years.length === 0 || months.length === 0" data-testid="monthly-settlement-empty-mobile" class="w-full text-center text-muted-foreground mt-4">
+    {{ $t('General.noEntries') }}
+  </div>
 </template>
 
 <script lang="ts" setup>

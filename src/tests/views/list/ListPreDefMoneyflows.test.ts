@@ -44,6 +44,8 @@ class ListPreDefMoneyflowsView {
     "predef-moneyflow-delete-1",
   );
   static readonly Modal = new ModalView("app-modal");
+  static readonly EmptyRowDesktop = new RowView("predef-moneyflow-empty-desktop");
+  static readonly EmptyRowMobile = new RowView("predef-moneyflow-empty-mobile");
 }
 
 beforeEach(() => {
@@ -144,4 +146,11 @@ test("ListPreDefMoneyflows opens delete modal from mobile action", async () => {
   await ListPreDefMoneyflowsView.MobileRowOne.assertToBeVisible();
   await ListPreDefMoneyflowsView.MobileDeleteRowOneButton.click();
   await ListPreDefMoneyflowsView.Modal.assertOpen();
+});
+
+test("ListPreDefMoneyflows shows empty state for empty list (Desktop and Mobile)", async () => {
+  PreDefMoneyflowServiceMocker.mockFetchAllPreDefMoneyflow([]);
+  render(ListPreDefMoneyflows);
+  await ListPreDefMoneyflowsView.EmptyRowDesktop.assertToBeVisible();
+  await ListPreDefMoneyflowsView.EmptyRowMobile.assertToBeVisible();
 });

@@ -9,7 +9,7 @@ import {
   useUserSessionStore,
 } from "@/stores/UserSessionStore";
 import { assertHaveBeenCalledWith } from "@/tests/TestUtil";
-import { ButtonView, InputView, ModalView } from "@/tests/TestViews";
+import { ButtonView, InputView, ModalView, RadioView, RowView } from "@/tests/TestViews";
 import SearchMoneyflows from "@/views/moneyflow/SearchMoneyflows.vue";
 import "@testing-library/jest-dom/vitest";
 import { render } from "@testing-library/vue";
@@ -30,6 +30,11 @@ class SearchMoneyflowsView {
   static readonly ListButton = new ButtonView("search-moneyflow-list-13");
   static readonly ReceiptButton = new ButtonView("search-moneyflow-receipt-14");
   static readonly Modal = new ModalView("app-modal");
+  static readonly EmptyRow = new RowView("search-moneyflows-empty");
+  // Example for radio buttons for moneyflow selection
+  static readonly MoneyflowRadio12 = new RadioView("moneyflow-radio-12");
+  static readonly MoneyflowRadio13 = new RadioView("moneyflow-radio-13");
+  static readonly MoneyflowRadio14 = new RadioView("moneyflow-radio-14");
 }
 
 const createMoneyflow = (
@@ -157,4 +162,22 @@ test("SearchMoneyflows opens receipt modal from receipt icon", async () => {
 
   await assertHaveBeenCalledWith(MoneyflowReceiptService.fetchReceipt, 14);
   await SearchMoneyflowsView.Modal.assertOpen();
+});
+
+test("SearchMoneyflows shows empty state for empty search", async () => {
+  MoneyflowServiceMocker.mockSearchMoneyflowsResolved([]);
+  renderView();
+  await runSearch();
+  await SearchMoneyflowsView.EmptyRow.assertToBeVisible();
+});
+
+test("Moneyflow selection: radio buttons correctly selected", async () => {
+  renderView();
+  await runSearch();
+  await expandFirstGroup();
+
+  // Assume Moneyflow 12 is selected, the others are not
+  await SearchMoneyflowsView.MoneyflowRadio12.assertChecked();
+  await SearchMoneyflowsView.MoneyflowRadio13.assertUnchecked();
+  await SearchMoneyflowsView.MoneyflowRadio14.assertUnchecked();
 });

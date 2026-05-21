@@ -10,6 +10,12 @@
         </TableRow>
       </TableHeader>
       <TableBody>
+        <!-- Show empty state if no groups -->
+        <TableRow v-if="groups.length === 0" data-testid="group-empty-desktop">
+          <TableCell colspan="3" class="text-center text-muted-foreground">
+            {{ $t('General.noEntries') }}
+          </TableCell>
+        </TableRow>
         <ListGroupRowVue
           v-for="group in groups"
           :key="group.id"
@@ -26,6 +32,7 @@
 import DivContentTable from "@/components/DivContentTable.vue";
 import {
   TableBody,
+  TableCell,
   TableHead,
   TableHeader,
   TableRow,

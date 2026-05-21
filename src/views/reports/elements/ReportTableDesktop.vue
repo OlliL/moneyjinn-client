@@ -238,6 +238,11 @@
             @edit-moneyflow="editMoneyflow"
             @list-moneyflow="listMoneyflow"
           />
+          <TableRow v-if="sortedMoneyflows.length === 0" data-testid="report-table-empty-desktop">
+            <TableCell colspan="10" class="text-center text-muted-foreground">
+              {{ $t('General.noEntries') }}
+            </TableCell>
+          </TableRow>
           <TableRow>
             <TableCell colspan="3" class="text-end block md:table-cell">
               &sum;

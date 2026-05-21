@@ -58,6 +58,9 @@ class ListMonthlySettlementsView {
   );
   static readonly Month2Button = new ButtonView("month-year-nav-month-2");
   static readonly Modal = new ModalView("app-modal");
+  static readonly EmptyRow = new RowView("monthly-settlement-empty");
+  static readonly EmptyRowDesktop = new RowView("monthly-settlement-empty-desktop");
+  static readonly EmptyRowMobile = new RowView("monthly-settlement-empty-mobile");
 }
 
 beforeEach(() => {
@@ -192,4 +195,22 @@ test("ListMonthlySettlements selects another month via mobile period sheet", asy
       params: expect.objectContaining({ year: "2026", month: 2 }),
     }),
   );
+});
+
+test("ListMonthlySettlements shows empty state for empty list (Desktop and Mobile)", async () => {
+  // Arrange: Mock for empty years and months
+  MonthlySettlementServiceMocker.mockGetAvailableMonth({
+    allMonth: [],
+    allYears: [],
+    month: 0,
+    year: 0,
+  } as never);
+  MonthlySettlementServiceMocker.mockGetMonthlySettlementList([]);
+
+  // Act
+  render(ListMonthlySettlements, { props: { year: undefined, month: undefined } });
+
+  // Assert: Empty state visible
+  await ListMonthlySettlementsView.EmptyRowDesktop.assertToBeVisible();
+  await ListMonthlySettlementsView.EmptyRowMobile.assertToBeVisible();
 });

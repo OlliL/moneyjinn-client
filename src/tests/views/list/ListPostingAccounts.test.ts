@@ -43,6 +43,8 @@ class ListPostingAccountsView {
   static readonly EditOneButton = new ButtonView("posting-account-edit-1");
   static readonly DeleteOneButton = new ButtonView("posting-account-delete-1");
   static readonly Modal = new ModalView("app-modal");
+  static readonly EmptyRowDesktop = new RowView("posting-account-empty-desktop");
+  static readonly EmptyRowMobile = new RowView("posting-account-empty-mobile");
 }
 
 beforeEach(() => {
@@ -131,4 +133,16 @@ test("ListPostingAccounts opens delete modal from mobile action", async () => {
   await ListPostingAccountsView.MobileRowOne.assertToBeVisible();
   await ListPostingAccountsView.MobileDeleteOneButton.click();
   await ListPostingAccountsView.Modal.assertOpen();
+});
+
+test("ListPostingAccounts shows empty state for empty list (Desktop and Mobile)", async () => {
+  // Arrange: Mock for empty PostingAccounts
+  PostingAccountServiceMocker.mockFetchAllPostingAccount([]);
+  CapitalsourceServiceMocker.mockFetchAllCapitalsource([]);
+  ContractpartnerServiceMocker.mockFetchAllContractpartner([]);
+  CrudEtfServiceMocker.mockFetchAllEtf([]);
+  await StoreService.getInstance().initAllStores();
+  render(ListPostingAccounts);
+  await ListPostingAccountsView.EmptyRowDesktop.assertToBeVisible();
+  await ListPostingAccountsView.EmptyRowMobile.assertToBeVisible();
 });

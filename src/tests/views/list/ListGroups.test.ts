@@ -32,6 +32,8 @@ class ListGroupsView {
   static readonly EditOneButton = new ButtonView("group-edit-1");
   static readonly DeleteOneButton = new ButtonView("group-delete-1");
   static readonly Modal = new ModalView("app-modal");
+  static readonly EmptyRowDesktop = new RowView("group-empty-desktop");
+  static readonly EmptyRowMobile = new RowView("group-empty-mobile");
 }
 
 beforeEach(() => {
@@ -109,4 +111,16 @@ test("ListGroups opens delete modal from mobile action", async () => {
   await ListGroupsView.MobileRowOne.assertToBeVisible();
   await ListGroupsView.MobileDeleteOneButton.click();
   await ListGroupsView.Modal.assertOpen();
+});
+
+test("ListGroups shows empty state for desktop and mobile if list is empty", async () => {
+  // Arrange: Mock empty group list
+  GroupServiceMocker.mockFetchAllGroup([]);
+
+  // Act
+  render(ListGroups);
+
+  // Assert: Both empty states are visible
+  await ListGroupsView.EmptyRowDesktop.assertToBeVisible();
+  await ListGroupsView.EmptyRowMobile.assertToBeVisible();
 });

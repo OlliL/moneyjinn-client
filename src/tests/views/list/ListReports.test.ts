@@ -12,7 +12,7 @@ import { assertHaveBeenCalledWith } from "@/tests/TestUtil";
 import { ButtonView, InputView, ModalView, RowView } from "@/tests/TestViews";
 import ListReports from "@/views/reports/ListReports.vue";
 import "@testing-library/jest-dom/vitest";
-import { render } from "@testing-library/vue";
+import { render, screen } from "@testing-library/vue";
 import { createPinia, setActivePinia } from "pinia";
 import { beforeEach, expect, test, vi } from "vitest";
 
@@ -428,4 +428,77 @@ test("ListReports navigates to create moneyflow via mobile action", async () => 
       name: Routes.CreateMoneyflow,
     }),
   );
+});
+
+test("ListReports shows empty state for empty list (Desktop)", async () => {
+  ReportServiceMocker.mockListReports({
+    year: 2026,
+    month: 2,
+    moneyflows: [],
+    reportTurnoverCapitalsources: [],
+  } as never);
+  EtfServiceMocker.mockListEtfOverview([]);
+
+  render(ListReports, { props: { year: "2026", month: "2" } });
+  await new RowView("report-table-empty-desktop").assertToBeVisible();
+});
+
+test("ListReports shows empty state for empty list (Mobile)", async () => {
+  ReportServiceMocker.mockListReports({
+    year: 2026,
+    month: 2,
+    moneyflows: [],
+    reportTurnoverCapitalsources: [],
+  } as never);
+  EtfServiceMocker.mockListEtfOverview([]);
+
+  render(ListReports, { props: { year: "2026", month: "2" } });
+  await new RowView("report-table-empty-mobile").assertToBeVisible();
+});
+
+test("ListReports zeigt Summe/Turnover an", async () => {
+  ReportServiceMocker.mockListReports({
+    year: 2026,
+    month: 2,
+    moneyflows: [
+      {
+        id: 1,
+        userId: 1,
+        bookingDate: new Date("2026-02-05"),
+        invoiceDate: new Date("2026-02-04"),
+        amount: 120,
+        capitalsourceId: 1,
+        capitalsourceComment: "Main account",
+        contractpartnerId: 1,
+        contractpartnerName: "Landlord",
+        comment: "Own flow",
+        private: false,
+        postingAccountId: 1,
+        postingAccountName: "Rent",
+        hasReceipt: true,
+      },
+      {
+        id: 2,
+        userId: 2,
+        bookingDate: new Date("2026-02-10"),
+        invoiceDate: new Date("2026-02-10"),
+        amount: 50,
+        capitalsourceId: 1,
+        capitalsourceComment: "Main account",
+        contractpartnerId: 2,
+        contractpartnerName: "Friend",
+        comment: "Shared flow",
+        private: false,
+        postingAccountId: 2,
+        postingAccountName: "Shared",
+        hasReceipt: false,
+      },
+    ],
+    reportTurnoverCapitalsources: [],
+  } as never);
+  EtfServiceMocker.mockListEtfOverview([]);
+
+  render(ListReports, { props: { year: "2026", month: "2" } });
+
+  await new RowView("report-table-empty").assertNotToBeInDocument();
 });

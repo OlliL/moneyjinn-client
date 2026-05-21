@@ -60,6 +60,8 @@ class ListCapitalsourcesView {
   static readonly EditCashButton = new ButtonView("capitalsource-edit-1");
   static readonly DeleteCashButton = new ButtonView("capitalsource-delete-1");
   static readonly Modal = new ModalView("app-modal");
+  static readonly EmptyRowDesktop = new RowView("capitalsource-empty-desktop");
+  static readonly EmptyRowMobile = new RowView("capitalsource-empty-mobile");
 }
 
 beforeEach(() => {
@@ -172,4 +174,17 @@ test("ListCapitalsources opens delete modal from mobile action", async () => {
   await ListCapitalsourcesView.MobileRowCashTrigger.click();
   await ListCapitalsourcesView.DeleteCashMobileButton.click();
   await ListCapitalsourcesView.Modal.assertOpen();
+});
+
+test("ListCapitalsources shows empty state for desktop and mobile if list is empty", async () => {
+  // Arrange: Mock empty capitalsource list
+  CapitalsourceServiceMocker.mockFetchAllCapitalsource([]);
+  await StoreService.getInstance().initAllStores();
+
+  // Act
+  render(ListCapitalsources);
+
+  // Assert: Both empty states are visible
+  await ListCapitalsourcesView.EmptyRowDesktop.assertToBeVisible();
+  await ListCapitalsourcesView.EmptyRowMobile.assertToBeVisible();
 });

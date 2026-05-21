@@ -8,33 +8,36 @@
     </div>
     <div class="flex justify-center">
       <div class="w-full max-w-md">
-        <DivError :server-errors="serverErrors" />
-        <form
-          @submit.prevent="uploadReceipts"
-          id="uploadReceiptsForm"
-          ref="uploadReceiptsForm"
-          class="space-y-3"
-        >
-          <div class="flex items-center gap-2">
-            <InputFile v-model="files" id="fileUpload" />
-            <ButtonSubmit
-              :button-label="$t('Receipt.upload')"
-              form-id="uploadReceiptsForm"
-            >
-              <template #icon><Upload class="h-4 w-4" /> </template>
-            </ButtonSubmit>
-          </div>
-        </form>
+         <DivError :server-errors="serverErrors" test-id-prefix="importReceipts-error" />
+         <form
+           @submit.prevent="uploadReceipts"
+           id="uploadReceiptsForm"
+           ref="uploadReceiptsForm"
+           class="space-y-3"
+           data-testid="importReceipts-upload-form"
+         >
+           <div class="flex items-center gap-2">
+             <InputFile v-model="files" id="fileUpload" data-testid="importReceipts-file-input" />
+             <ButtonSubmit
+               :button-label="$t('Receipt.upload')"
+               form-id="uploadReceiptsForm"
+               data-testid="importReceipts-upload-button"
+             >
+               <template #icon><Upload class="h-4 w-4" /> </template>
+             </ButtonSubmit>
+           </div>
+         </form>
       </div>
     </div>
-    <ImportReceiptsRowVue
-      v-for="receipt in importedMoneyflowReceipts"
-      :key="receipt.id"
-      :receipt="receipt"
-      @delete-moneyflow="deleteMoneyflow"
-      @edit-moneyflow="editMoneyflow"
-      @remove-receipt-from-view="removeReceiptFromView"
-    />
+     <ImportReceiptsRowVue
+       v-for="receipt in importedMoneyflowReceipts"
+       :key="receipt.id"
+       :receipt="receipt"
+       @delete-moneyflow="deleteMoneyflow"
+       @edit-moneyflow="editMoneyflow"
+       @remove-receipt-from-view="removeReceiptFromView"
+       :data-testid="`importReceipts-row-${receipt.id}`"
+     />
   </div>
 </template>
 

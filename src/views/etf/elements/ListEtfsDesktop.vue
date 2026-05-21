@@ -76,13 +76,22 @@
         </TableRow>
       </TableHeader>
       <TableBody>
-        <ListEtfRowVue
-          v-for="etf in etfs"
-          :key="etf.id"
-          :etf="etf"
-          @edit-etf="editEtf"
-          @delete-etf="deleteEtf"
-        />
+        <template v-if="etfs.length === 0">
+          <tr data-testid="etf-empty-desktop">
+            <td :colspan="12" class="text-center text-muted-foreground py-8">
+              {{ $t('General.noEntries') }}
+            </td>
+          </tr>
+        </template>
+        <template v-else>
+          <ListEtfRowVue
+            v-for="etf in etfs"
+            :key="etf.id"
+            :etf="etf"
+            @edit-etf="editEtf"
+            @delete-etf="deleteEtf"
+          />
+        </template>
       </TableBody>
     </DivContentTable>
   </div>

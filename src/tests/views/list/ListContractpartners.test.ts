@@ -60,6 +60,8 @@ class ListContractpartnersView {
     "contractpartner-accounts-1",
   );
   static readonly Modal = new ModalView("app-modal");
+  static readonly EmptyRowDesktop = new RowView("contractpartner-empty-desktop");
+  static readonly EmptyRowMobile = new RowView("contractpartner-empty-mobile");
 }
 
 beforeEach(() => {
@@ -182,4 +184,17 @@ test("ListContractpartners opens accounts modal from mobile action", async () =>
   await ListContractpartnersView.MobileRowOne.assertToBeVisible();
   await ListContractpartnersView.MobileAccountsOneButton.click();
   await ListContractpartnersView.Modal.assertOpen();
+});
+
+test("ListContractpartners shows empty state for empty list (Desktop and Mobile)", async () => {
+  // Arrange: Mock for empty contract partners
+  ContractpartnerServiceMocker.mockFetchAllContractpartner([]);
+  PostingAccountServiceMocker.mockFetchAllPostingAccount([]);
+  CrudEtfServiceMocker.mockFetchAllEtf([]);
+  CapitalsourceServiceMocker.mockFetchAllCapitalsource([]);
+  ContractpartnerAccountServiceMocker.mockFetchAllContractpartnerAccount([]);
+  await StoreService.getInstance().initAllStores();
+  render(ListContractpartners);
+  await ListContractpartnersView.EmptyRowDesktop.assertToBeVisible();
+  await ListContractpartnersView.EmptyRowMobile.assertToBeVisible();
 });
