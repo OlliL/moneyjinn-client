@@ -16,7 +16,7 @@
 
     <div class="mx-auto flex w-full max-w-6xl flex-col items-center gap-3">
       <div class="hidden md:flex w-full justify-center">
-        <MonthYearNavigator
+        <MonthYearDesktopNavigator
           v-show="dataLoadedMonth"
           :years="years ?? []"
           :months="months ?? []"
@@ -27,7 +27,7 @@
         />
       </div>
 
-      <MobilePeriodSheetNavigator
+      <MonthYearMobileNavigator
         :data-loaded="dataLoadedMonth"
         :years="years ?? []"
         :months="months ?? []"
@@ -103,8 +103,8 @@ import router, { Routes } from "@/router";
 
 import ButtonMobileCreate from "@/components/ButtonMobileCreate.vue";
 import DivError from "@/components/DivError.vue";
-import MobilePeriodSheetNavigator from "@/components/navigation/MobilePeriodSheetNavigator.vue";
-import MonthYearNavigator from "@/components/navigation/MonthYearNavigator.vue";
+import MonthYearDesktopNavigator from "@/components/navigation/MonthYearDesktopNavigator.vue";
+import MonthYearMobileNavigator from "@/components/navigation/MonthYearMobileNavigator.vue";
 import { Button } from "@/components/ui/button";
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 import ReportService from "@/service/ReportService";

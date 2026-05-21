@@ -159,7 +159,7 @@
           </div>
         </div>
 
-        <MobilePeriodSheetNavigator
+        <MonthYearMobileNavigator
           v-if="selectedEtfId !== undefined"
           :data-loaded="yearsLoaded"
           :years="years"
@@ -369,7 +369,7 @@ import ButtonMobileCreate from "@/components/ButtonMobileCreate.vue";
 import { default as ButtonMobileDelete } from "@/components/ButtonMobileDelete.vue";
 import ButtonMobileEdit from "@/components/ButtonMobileEdit.vue";
 import DivError from "@/components/DivError.vue";
-import MobilePeriodSheetNavigator from "@/components/navigation/MobilePeriodSheetNavigator.vue";
+import MonthYearMobileNavigator from "@/components/navigation/MonthYearMobileNavigator.vue";
 import SelectStandard from "@/components/SelectStandard.vue";
 import { Button } from "@/components/ui/button";
 import {

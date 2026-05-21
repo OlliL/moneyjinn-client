@@ -5,7 +5,7 @@
   >
     <div class="mx-auto flex w-full max-w-5xl flex-col items-center gap-3">
       <div class="flex w-full justify-center">
-        <MonthYearNavigator
+        <MonthYearDesktopNavigator
           v-if="dataLoaded"
           :years="years"
           :months="months"
@@ -47,7 +47,7 @@
 </template>
 
 <script lang="ts" setup>
-import MonthYearNavigator from "@/components/navigation/MonthYearNavigator.vue";
+import MonthYearDesktopNavigator from "@/components/navigation/MonthYearDesktopNavigator.vue";
 import { Button } from "@/components/ui/button";
 
 defineProps<{

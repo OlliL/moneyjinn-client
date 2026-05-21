@@ -45,7 +45,7 @@
         </SheetHeader>
 
         <div class="flex-1 overflow-y-auto py-4">
-          <MonthYearNavigator
+          <MonthYearDesktopNavigator
             v-if="dataLoaded"
             :years="years"
             :months="months"
@@ -62,7 +62,7 @@
 </template>
 
 <script lang="ts" setup>
-import MonthYearNavigator from "@/components/navigation/MonthYearNavigator.vue";
+import MonthYearDesktopNavigator from "@/components/navigation/MonthYearDesktopNavigator.vue";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,

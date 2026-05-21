@@ -12,7 +12,7 @@
     @click="emitEdit"
   />
 
-  <MobilePeriodSheetNavigator
+  <MonthYearMobileNavigator
     :data-loaded="dataLoaded"
     :years="years"
     :months="months"
@@ -32,7 +32,7 @@
 import ButtonMobileCreate from "@/components/ButtonMobileCreate.vue";
 import ButtonMobileDelete from "@/components/ButtonMobileDelete.vue";
 import ButtonMobileEdit from "@/components/ButtonMobileEdit.vue";
-import MobilePeriodSheetNavigator from "@/components/navigation/MobilePeriodSheetNavigator.vue";
+import MonthYearMobileNavigator from "@/components/navigation/MonthYearMobileNavigator.vue";
 
 defineProps<{
   dataLoaded: boolean;
