@@ -1,62 +1,4 @@
 <template>
-  <div class="inline-block" ref="createButtonRef">
-    <ButtonMobileCreate
-      data-testid="preliminary-lump-sum-mobile-create"
-      v-if="selectedEtfId !== undefined"
-      @click="showTypeSelection"
-    />
-    <ButtonMobileDelete
-      data-testid="preliminary-lump-sum-mobile-delete"
-      v-if="selectedEtfId !== undefined"
-      @click="showDeleteEtfPreliminaryLumpSumModal"
-    />
-    <ButtonMobileEdit
-      data-testid="preliminary-lump-sum-mobile-edit"
-      v-if="selectedEtfId !== undefined && etfPreliminaryLumpSum !== undefined"
-      @click="
-        showCreateEtfPreliminaryLumpSumModal(
-          selectedEtfId,
-          etfPreliminaryLumpSum.type,
-          etfPreliminaryLumpSum,
-        )
-      "
-    />
-
-    <div
-      v-if="showTypeSelector"
-      ref="typeSelectorRef"
-      class="fixed md:hidden right-20 bottom-26 z-50 w-52 rounded-md border bg-popover text-popover-foreground shadow-md p-2"
-      data-testid="etf-preliminary-sump-sum-create-menu"
-    >
-      <div class="flex flex-col">
-        <Button
-          type="button"
-          data-testid="preliminary-lump-sum-mobile-create-type-piece"
-          class="text-sm px-3 py-2 text-left hover:bg-muted rounded"
-          @click="selectCreateType(EtfPreliminaryLumpSumType.AMOUNT_PER_MONTH)"
-        >
-          {{ $t("ETFPreliminaryLumpSum.newMonthly") }}
-        </Button>
-        <Button
-          type="button"
-          data-testid="preliminary-lump-sum-mobile-create-type-piece"
-          class="text-sm px-3 py-2 text-left hover:bg-muted rounded"
-          @click="selectCreateType(EtfPreliminaryLumpSumType.AMOUNT_PER_PIECE)"
-        >
-          {{ $t("ETFPreliminaryLumpSum.newPiece") }}
-        </Button>
-        <Button
-          type="button"
-          data-testid="preliminary-lump-sum-mobile-create-type-yearly"
-          class="text-sm px-3 py-2 text-left hover:bg-muted rounded"
-          @click="selectCreateType(EtfPreliminaryLumpSumType.AMOUNT_PER_YEAR)"
-        >
-          {{ $t("ETFPreliminaryLumpSum.newYearly") }}
-        </Button>
-      </div>
-    </div>
-  </div>
-
   <CreateEtfPreliminaryLumpSumModalMonthlyVue
     ref="createModalMonthly"
     @etf-preliminary-lump-sum-created="reloadView"
@@ -361,6 +303,63 @@
       </div>
     </div>
     <!---->
+  </div>
+  <div class="inline-block" ref="createButtonRef">
+    <ButtonMobileCreate
+      data-testid="preliminary-lump-sum-mobile-create"
+      v-if="selectedEtfId !== undefined"
+      @click="showTypeSelection"
+    />
+    <ButtonMobileDelete
+      data-testid="preliminary-lump-sum-mobile-delete"
+      v-if="selectedEtfId !== undefined"
+      @click="showDeleteEtfPreliminaryLumpSumModal"
+    />
+    <ButtonMobileEdit
+      data-testid="preliminary-lump-sum-mobile-edit"
+      v-if="selectedEtfId !== undefined && etfPreliminaryLumpSum !== undefined"
+      @click="
+        showCreateEtfPreliminaryLumpSumModal(
+          selectedEtfId,
+          etfPreliminaryLumpSum.type,
+          etfPreliminaryLumpSum,
+        )
+      "
+    />
+
+    <div
+      v-if="showTypeSelector"
+      ref="typeSelectorRef"
+      class="fixed md:hidden right-20 bottom-26 z-50 w-52 rounded-md border bg-popover text-popover-foreground shadow-md p-2"
+      data-testid="etf-preliminary-sump-sum-create-menu"
+    >
+      <div class="flex flex-col">
+        <Button
+          type="button"
+          data-testid="preliminary-lump-sum-mobile-create-type-piece"
+          class="text-sm px-3 py-2 text-left hover:bg-muted rounded"
+          @click="selectCreateType(EtfPreliminaryLumpSumType.AMOUNT_PER_MONTH)"
+        >
+          {{ $t("ETFPreliminaryLumpSum.newMonthly") }}
+        </Button>
+        <Button
+          type="button"
+          data-testid="preliminary-lump-sum-mobile-create-type-piece"
+          class="text-sm px-3 py-2 text-left hover:bg-muted rounded"
+          @click="selectCreateType(EtfPreliminaryLumpSumType.AMOUNT_PER_PIECE)"
+        >
+          {{ $t("ETFPreliminaryLumpSum.newPiece") }}
+        </Button>
+        <Button
+          type="button"
+          data-testid="preliminary-lump-sum-mobile-create-type-yearly"
+          class="text-sm px-3 py-2 text-left hover:bg-muted rounded"
+          @click="selectCreateType(EtfPreliminaryLumpSumType.AMOUNT_PER_YEAR)"
+        >
+          {{ $t("ETFPreliminaryLumpSum.newYearly") }}
+        </Button>
+      </div>
+    </div>
   </div>
 </template>
 
