@@ -1,4 +1,6 @@
 <template>
+  <ButtonCreate data-testid="etf-flow-create" @click="createEtfFlow" />
+
   <DeleteEtfFlowModalVue @etf-flow-deleted="etfFlowDeleted" ref="deleteModal" />
   <CreateEtfFlowModalVue
     @etf-flow-created="etfFlowCreated"
@@ -24,7 +26,7 @@
             />
           </div>
 
-          <div class="col-span-1 md:col-span-4 mt-3 md:mt-0">
+          <div class="col-span-1 md:col-span-4 mt-3 md:mt-0 hidden md:block">
             <Button
               data-testid="etf-depot-create"
               type="button"
@@ -121,6 +123,7 @@
 </template>
 
 <script lang="ts" setup>
+import ButtonCreate from "@/components/ButtonCreate.vue";
 import DivError from "@/components/DivError.vue";
 import SelectStandard from "@/components/SelectStandard.vue";
 import { Button } from "@/components/ui/button";

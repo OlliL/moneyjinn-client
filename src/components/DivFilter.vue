@@ -1,5 +1,9 @@
 <template>
   <div class="fixed bottom-6 right-6 z-50 md:hidden">
+    <ButtonCreate
+      data-testid="div-filter-mobile-create"
+      @click="emitCreateClicked"
+    />
     <Sheet v-model:open="isMobileSheetOpen">
       <SheetTrigger as-child>
         <Button
@@ -63,7 +67,7 @@
     </Sheet>
   </div>
 
-  <div class="flex justify-center w-full mb-6">
+  <div class="hidden md:flex justify-center w-full mb-6">
     <div
       class="flex flex-col items-center gap-4 bg-background p-2 w-full max-w-2xl md:flex-row md:justify-center md:items-end"
     >
@@ -76,7 +80,7 @@
         {{ $t("General.new") }}
       </Button>
 
-      <div class="flex w-full md:w-80 items-center hidden md:block">
+      <div class="flex w-full md:w-80 items-center">
         <Button
           data-testid="div-filter-all"
           variant="secondary"
@@ -95,10 +99,7 @@
         />
       </div>
 
-      <div
-        v-if="showValidToggle"
-        class="flex items-center gap-3 pb-1.5 hidden md:block"
-      >
+      <div v-if="showValidToggle" class="flex items-center gap-3 pb-1.5">
         <Switch
           data-testid="div-filter-valid-now"
           id="validInput"
@@ -133,6 +134,7 @@ import {
 import { Switch } from "@/components/ui/switch";
 import { Filter, Plus } from "lucide-vue-next";
 import { onBeforeUnmount, ref, watch } from "vue";
+import ButtonCreate from "./ButtonCreate.vue";
 
 const props = defineProps({
   placeholder: { type: String, default: "" },

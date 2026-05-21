@@ -44,7 +44,10 @@
                 :select-box-values="getAsSelectBoxValues()"
               />
             </div>
-            <div class="md:col-span-5" v-if="selectedEtfId !== undefined">
+            <div
+              class="md:col-span-5 hidden md:block"
+              v-if="selectedEtfId !== undefined"
+            >
               <Button
                 data-testid="preliminary-lump-sum-create"
                 type="button"
@@ -467,7 +470,7 @@ const showCreateEtfPreliminaryLumpSumModal = (
   }
 };
 
-const updateCreateType = (value?: string) => {
+const updateCreateType = (value?: any) => {
   if (!value) {
     return;
   }
