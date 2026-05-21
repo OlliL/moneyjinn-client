@@ -46,8 +46,13 @@
           </div>
         </AccordionTrigger>
 
-        <AccordionContent :data-testid="`etf-mobile-content-${etf.id}`" class="pt-2">
-          <div class="grid grid-cols-1 gap-2 text-sm bg-muted/40 p-3 rounded-md">
+        <AccordionContent
+          :data-testid="`etf-mobile-content-${etf.id}`"
+          class="pt-2"
+        >
+          <div
+            class="grid grid-cols-1 gap-2 text-sm bg-muted/40 p-3 rounded-md"
+          >
             <div class="flex justify-between gap-2">
               <span class="text-muted-foreground">{{ $t("ETF.wkn") }}</span>
               <span class="text-right">{{ etf.wkn }}</span>
@@ -57,20 +62,32 @@
               <span class="text-right">{{ etf.ticker }}</span>
             </div>
             <div class="flex justify-between gap-2">
-              <span class="text-muted-foreground">{{ $t("ETFFlow.transactionCostsAbsolute") }}</span>
+              <span class="text-muted-foreground">{{
+                $t("ETFFlow.transactionCostsAbsolute")
+              }}</span>
               <SpanAmount :amount="etf.transactionCostsAbsolute" />
             </div>
             <div class="flex justify-between gap-2">
-              <span class="text-muted-foreground">{{ $t("ETFFlow.transactionCostsRelative") }}</span>
-              <span class="text-right">{{ relativeString(etf.transactionCostsRelative) }}</span>
+              <span class="text-muted-foreground">{{
+                $t("ETFFlow.transactionCostsRelative")
+              }}</span>
+              <span class="text-right">{{
+                relativeString(etf.transactionCostsRelative)
+              }}</span>
             </div>
             <div class="flex justify-between gap-2">
-              <span class="text-muted-foreground">{{ $t("ETFFlow.transactionCostsMaximum") }}</span>
+              <span class="text-muted-foreground">{{
+                $t("ETFFlow.transactionCostsMaximum")
+              }}</span>
               <SpanAmount :amount="etf.transactionCostsMaximum" />
             </div>
             <div class="flex justify-between gap-2">
-              <span class="text-muted-foreground">{{ $t("ETF.partialTaxExemption") }}</span>
-              <span class="text-right">{{ relativeString(etf.partialTaxExemption) }}</span>
+              <span class="text-muted-foreground">{{
+                $t("ETF.partialTaxExemption")
+              }}</span>
+              <span class="text-right">{{
+                relativeString(etf.partialTaxExemption)
+              }}</span>
             </div>
           </div>
         </AccordionContent>
@@ -117,4 +134,3 @@ const deleteEtf = (etf: Etf) => {
   emit("deleteEtf", etf);
 };
 </script>
-

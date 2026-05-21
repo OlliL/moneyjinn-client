@@ -38,8 +38,7 @@
             id-suffix="ContractpartnerMatching-mobile-searchContractpartner"
             :field-label="$t('General.contractpartner')"
           />
-        </div>
-      </template
+        </div> </template
     ></DivFilter>
 
     <DivError :server-errors="serverErrors" />

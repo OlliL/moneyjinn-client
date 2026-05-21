@@ -42,15 +42,15 @@
 </template>
 
 <script lang="ts" setup>
-import type { PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
-import PreDefMoneyflowService from "@/service/PreDefMoneyflowService";
-import { handleBackendError } from "@/tools/views/HandleBackendError";
-import { ref, useTemplateRef } from "vue";
 import ModalDelete from "@/components/ModalDelete.vue";
 import ModalDeleteRow from "@/components/ModalDeleteRow.vue";
 import SpanAmount from "@/components/SpanAmount.vue";
 import SpanBoolean from "@/components/SpanBoolean.vue";
 import SpanDate from "@/components/SpanDate.vue";
+import type { PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
+import PreDefMoneyflowService from "@/service/PreDefMoneyflowService";
+import { handleBackendError } from "@/tools/views/HandleBackendError";
+import { ref, useTemplateRef } from "vue";
 
 const serverErrors = ref(new Array<string>());
 

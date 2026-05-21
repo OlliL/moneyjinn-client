@@ -30,6 +30,7 @@
 </template>
 
 <script lang="ts" setup>
+import SpanAmount from "@/components/SpanAmount.vue";
 import {
   Table,
   TableBody,
@@ -41,7 +42,6 @@ import {
 import type { EtfPreliminaryLumpSum } from "@/model/etf/EtfPreliminaryLumpSum";
 import { getMonthName } from "@/tools/views/MonthName";
 import { computed, type PropType } from "vue";
-import SpanAmount from "@/components/SpanAmount.vue";
 
 const props = defineProps({
   mep: {

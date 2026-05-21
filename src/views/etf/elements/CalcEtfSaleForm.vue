@@ -116,6 +116,9 @@
 </template>
 
 <script lang="ts" setup>
+import ButtonSubmit from "@/components/ButtonSubmit.vue";
+import DivError from "@/components/DivError.vue";
+import InputStandard from "@/components/InputStandard.vue";
 import type { Etf } from "@/model/etf/Etf";
 import type { EtfSalesCalculation } from "@/model/etf/EtfSalesCalculation";
 import type { EtfSummary } from "@/model/etf/EtfSummary";
@@ -126,9 +129,6 @@ import { Euro, Percent } from "lucide-vue-next";
 import { useForm } from "vee-validate";
 import { ref, watch, type PropType } from "vue";
 import { useI18n } from "vue-i18n";
-import ButtonSubmit from "@/components/ButtonSubmit.vue";
-import DivError from "@/components/DivError.vue";
-import InputStandard from "@/components/InputStandard.vue";
 import CalcEtfSaleResult from "./CalcEtfSaleResult.vue";
 
 const props = defineProps({

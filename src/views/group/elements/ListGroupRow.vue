@@ -18,11 +18,11 @@
   </TableRow>
 </template>
 <script lang="ts" setup>
+import ButtonTableIcon from "@/components/ButtonTableIcon.vue";
 import { TableCell, TableRow } from "@/components/ui/table";
 import type { Group } from "@/model/group/Group";
 import { Pencil, Trash2 } from "lucide-vue-next";
 import type { PropType } from "vue";
-import ButtonTableIcon from "@/components/ButtonTableIcon.vue";
 
 const props = defineProps({
   group: {

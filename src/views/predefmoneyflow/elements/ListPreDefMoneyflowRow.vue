@@ -42,14 +42,14 @@
   </TableRow>
 </template>
 <script lang="ts" setup>
-import { TableCell, TableRow } from "@/components/ui/table";
-import type { PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
-import { Pencil, Trash2 } from "lucide-vue-next";
-import type { PropType } from "vue";
 import ButtonTableIcon from "@/components/ButtonTableIcon.vue";
 import SpanAmount from "@/components/SpanAmount.vue";
 import SpanBoolean from "@/components/SpanBoolean.vue";
 import SpanDate from "@/components/SpanDate.vue";
+import { TableCell, TableRow } from "@/components/ui/table";
+import type { PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
+import { Pencil, Trash2 } from "lucide-vue-next";
+import type { PropType } from "vue";
 
 const props = defineProps({
   mpm: {

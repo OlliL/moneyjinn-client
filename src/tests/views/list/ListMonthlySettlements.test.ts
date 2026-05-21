@@ -31,8 +31,12 @@ class ListMonthlySettlementsView {
   static readonly MobilePeriodSheet = new RowView(
     "monthly-settlement-mobile-period-sheet",
   );
-  static readonly MobileNewButton = new ButtonView("monthly-settlement-mobile-new");
-  static readonly MobileEditButton = new ButtonView("monthly-settlement-mobile-edit");
+  static readonly MobileNewButton = new ButtonView(
+    "monthly-settlement-mobile-new",
+  );
+  static readonly MobileEditButton = new ButtonView(
+    "monthly-settlement-mobile-edit",
+  );
   static readonly MobileDeleteButton = new ButtonView(
     "monthly-settlement-mobile-delete",
   );
@@ -189,4 +193,3 @@ test("ListMonthlySettlements selects another month via mobile period sheet", asy
     }),
   );
 });
-

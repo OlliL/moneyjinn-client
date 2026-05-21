@@ -30,7 +30,9 @@ class ListEtfsView {
   static readonly CreateButton = new ButtonView("div-filter-create");
   static readonly AllButton = new ButtonView("div-filter-all");
   static readonly ValidNowToggle = new SwitchView("div-filter-valid-now");
-  static readonly MobileFilterTrigger = new ButtonView("div-filter-mobile-trigger");
+  static readonly MobileFilterTrigger = new ButtonView(
+    "div-filter-mobile-trigger",
+  );
   static readonly MobileFilterSheet = new RowView("div-filter-mobile-sheet");
   static readonly MobileFilterInput = new InputView("div-filter-mobile-input");
   static readonly MobileAccordion = new RowView("etf-mobile-accordion");
@@ -39,9 +41,13 @@ class ListEtfsView {
   static readonly MobileTriggerEtf1 = new ButtonView("etf-mobile-trigger-1");
   static readonly MobileContentEtf1 = new RowView("etf-mobile-content-1");
   static readonly MobileEditEtf1Button = new ButtonView("etf-mobile-edit-1");
-  static readonly MobileDeleteEtf1Button = new ButtonView("etf-mobile-delete-1");
+  static readonly MobileDeleteEtf1Button = new ButtonView(
+    "etf-mobile-delete-1",
+  );
   static readonly MobileFavoriteEtf1 = new RowView("etf-mobile-favorite-1");
-  static readonly MobileFavoriteGlobalEtf = new RowView("etf-mobile-favorite-2");
+  static readonly MobileFavoriteGlobalEtf = new RowView(
+    "etf-mobile-favorite-2",
+  );
   static readonly RowEtf1 = new RowView("etf-row-1");
   static readonly RowGlobalEtf = new RowView("etf-row-2");
   static readonly EditEtf1Button = new ButtonView("etf-edit-1");
@@ -186,4 +192,3 @@ test("ListEtfs shows favorite indicator only for favorite ETF on mobile", async 
   await ListEtfsView.MobileFavoriteEtf1.assertToBeVisible();
   await ListEtfsView.MobileFavoriteGlobalEtf.assertNotToBeInDocument();
 });
-

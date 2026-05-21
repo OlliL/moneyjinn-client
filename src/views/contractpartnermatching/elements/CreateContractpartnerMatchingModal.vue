@@ -72,6 +72,12 @@
 </template>
 
 <script lang="ts" setup>
+import ButtonSubmit from "@/components/ButtonSubmit.vue";
+import SelectContractpartner from "@/components/contractpartner/SelectContractpartner.vue";
+import DivError from "@/components/DivError.vue";
+import InputStandard from "@/components/InputStandard.vue";
+import ModalVue from "@/components/Modal.vue";
+import SelectPostingAccount from "@/components/postingaccount/SelectPostingAccount.vue";
 import { Button } from "@/components/ui/button";
 import type { ContractpartnerMatching } from "@/model/contractpartnermatching/ContractpartnerMatching";
 import ContractpartnerMatchingService from "@/service/ContractpartnerMatchingService";
@@ -82,12 +88,6 @@ import { useForm } from "vee-validate";
 import { computed, ref, toRaw, useTemplateRef } from "vue";
 import { useI18n } from "vue-i18n";
 import { number, string, ZodType } from "zod";
-import ButtonSubmit from "@/components/ButtonSubmit.vue";
-import SelectContractpartner from "@/components/contractpartner/SelectContractpartner.vue";
-import DivError from "@/components/DivError.vue";
-import InputStandard from "@/components/InputStandard.vue";
-import ModalVue from "@/components/Modal.vue";
-import SelectPostingAccount from "@/components/postingaccount/SelectPostingAccount.vue";
 
 const { t } = useI18n();
 

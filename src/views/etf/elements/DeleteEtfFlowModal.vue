@@ -26,15 +26,15 @@
 </template>
 
 <script lang="ts" setup>
+import ModalDelete from "@/components/ModalDelete.vue";
+import ModalDeleteRow from "@/components/ModalDeleteRow.vue";
+import SpanAmount from "@/components/SpanAmount.vue";
 import type { EtfFlow } from "@/model/etf/EtfFlow";
 import CrudEtfFlowService from "@/service/CrudEtfFlowService";
 import { formatDateWithTime } from "@/tools/views/FormatDate";
 import { formatNumber, redIfNegative } from "@/tools/views/FormatNumber";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { computed, ref, useTemplateRef } from "vue";
-import ModalDelete from "@/components/ModalDelete.vue";
-import ModalDeleteRow from "@/components/ModalDeleteRow.vue";
-import SpanAmount from "@/components/SpanAmount.vue";
 
 const serverErrors = ref(new Array<string>());
 

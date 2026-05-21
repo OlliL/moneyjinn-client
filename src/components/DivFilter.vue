@@ -2,7 +2,10 @@
   <div class="fixed bottom-6 right-6 z-50 md:hidden">
     <Sheet v-model:open="isMobileSheetOpen">
       <SheetTrigger as-child>
-        <Button data-testid="div-filter-mobile-trigger" class="h-12 w-12 p-0 rounded-full shadow-lg">
+        <Button
+          data-testid="div-filter-mobile-trigger"
+          class="h-12 w-12 p-0 rounded-full shadow-lg"
+        >
           <Filter class="h-5 w-5" />
         </Button>
       </SheetTrigger>
@@ -20,7 +23,11 @@
         </SheetHeader>
 
         <div class="flex-1 overflow-y-auto space-y-4 py-4">
-          <Button data-testid="div-filter-mobile-create" @click="emitCreateClicked" class="w-full">
+          <Button
+            data-testid="div-filter-mobile-create"
+            @click="emitCreateClicked"
+            class="w-full"
+          >
             <Plus class="mr-2 h-4 w-4" />
             {{ $t("General.new") }}
           </Button>

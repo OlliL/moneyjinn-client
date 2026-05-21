@@ -30,11 +30,15 @@ class ListReportsView {
   static readonly RowOwn = new RowView("report-moneyflow-row-1");
   static readonly RowForeign = new RowView("report-moneyflow-row-2");
   static readonly RowOwnMobile = new RowView("report-mobile-moneyflow-row-1");
-  static readonly RowForeignMobile = new RowView("report-mobile-moneyflow-row-2");
+  static readonly RowForeignMobile = new RowView(
+    "report-mobile-moneyflow-row-2",
+  );
   static readonly EditOwnButton = new ButtonView("report-moneyflow-edit-1");
   static readonly DeleteOwnButton = new ButtonView("report-moneyflow-delete-1");
   static readonly ListForeignButton = new ButtonView("report-moneyflow-list-2");
-  static readonly EditOwnMobileButton = new ButtonView("report-mobile-moneyflow-edit-1");
+  static readonly EditOwnMobileButton = new ButtonView(
+    "report-mobile-moneyflow-edit-1",
+  );
   static readonly DeleteOwnMobileButton = new ButtonView(
     "report-mobile-moneyflow-delete-1",
   );
@@ -47,7 +51,9 @@ class ListReportsView {
   static readonly MobileFilterTrigger = new ButtonView(
     "report-table-mobile-filter-trigger",
   );
-  static readonly MobileFilterSheet = new RowView("report-table-mobile-filter-sheet");
+  static readonly MobileFilterSheet = new RowView(
+    "report-table-mobile-filter-sheet",
+  );
   static readonly MobileContractpartnerFilter = new InputView(
     "report-table-mobile-filter-contractpartner",
   );
@@ -55,13 +61,17 @@ class ListReportsView {
     "report-table-mobile-filter-contractpartner-reset",
   );
   static readonly EtfDesktopTable = new RowView("report-etf-desktop-table");
-  static readonly EtfMobileAccordion = new RowView("report-etf-mobile-accordion");
+  static readonly EtfMobileAccordion = new RowView(
+    "report-etf-mobile-accordion",
+  );
   static readonly EtfDesktopRowOne = new RowView("report-etf-desktop-row-100");
   static readonly EtfMobileItemOne = new RowView("report-etf-mobile-item-100");
   static readonly EtfMobileTriggerOne = new ButtonView(
     "report-etf-mobile-trigger-100",
   );
-  static readonly EtfMobileContentOne = new RowView("report-etf-mobile-content-100");
+  static readonly EtfMobileContentOne = new RowView(
+    "report-etf-mobile-content-100",
+  );
   static readonly EtfMobileChartLinkOne = new RowView(
     "report-etf-mobile-chart-link-100",
   );
@@ -77,7 +87,9 @@ class ListReportsView {
   static readonly MobileOpenPeriodSheetButton = new ButtonView(
     "reports-mobile-open-period-sheet",
   );
-  static readonly MobilePeriodSheet = new RowView("reports-mobile-period-sheet");
+  static readonly MobilePeriodSheet = new RowView(
+    "reports-mobile-period-sheet",
+  );
   static readonly MobileYearTrigger = new ButtonView(
     "month-year-nav-mobile-year-trigger",
   );
@@ -389,4 +401,3 @@ test("ListReports navigates to create moneyflow via mobile action", async () => 
     }),
   );
 });
-

@@ -1,5 +1,8 @@
 <template>
-  <div data-testid="user-mobile-accordion" class="md:hidden w-full max-w-md mx-auto px-2 mb-6 space-y-3">
+  <div
+    data-testid="user-mobile-accordion"
+    class="md:hidden w-full max-w-md mx-auto px-2 mb-6 space-y-3"
+  >
     <Accordion type="multiple" class="space-y-2">
       <AccordionItem
         v-for="user in users"
@@ -8,11 +11,18 @@
         :data-testid="`user-mobile-row-${user.id}`"
         class="border rounded-lg bg-background shadow-sm px-3 py-2"
       >
-        <AccordionTrigger :data-testid="`user-mobile-trigger-${user.id}`" class="hover:no-underline">
+        <AccordionTrigger
+          :data-testid="`user-mobile-trigger-${user.id}`"
+          class="hover:no-underline"
+        >
           <div class="flex items-center justify-between w-full gap-2">
             <div class="flex flex-col items-start text-left min-w-0">
-              <span class="font-bold text-sm truncate">{{ user.userName }}</span>
-              <span class="text-xs text-muted-foreground">{{ user.groupName }}</span>
+              <span class="font-bold text-sm truncate">{{
+                user.userName
+              }}</span>
+              <span class="text-xs text-muted-foreground">{{
+                user.groupName
+              }}</span>
             </div>
             <div class="flex items-center gap-1 pr-2">
               <Button
@@ -36,7 +46,9 @@
         </AccordionTrigger>
 
         <AccordionContent class="pt-2">
-          <div class="grid grid-cols-1 gap-2 text-sm bg-muted/40 p-3 rounded-md">
+          <div
+            class="grid grid-cols-1 gap-2 text-sm bg-muted/40 p-3 rounded-md"
+          >
             <div class="flex justify-between gap-2">
               <span class="text-muted-foreground">{{ $t("User.role") }}</span>
               <span>{{ roleString(user) }}</span>
@@ -87,4 +99,3 @@ const roleString = (user: User): string => {
   return userRoleNames[user.role];
 };
 </script>
-

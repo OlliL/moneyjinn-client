@@ -104,6 +104,8 @@
   </TableRow>
 </template>
 <script lang="ts" setup>
+import ButtonTableIcon from "@/components/ButtonTableIcon.vue";
+import SpanAmount from "@/components/SpanAmount.vue";
 import {
   HoverCard,
   HoverCardContent,
@@ -123,8 +125,6 @@ import { formatDateWithTime } from "@/tools/views/FormatDate";
 import { formatNumber, redIfNegative } from "@/tools/views/FormatNumber";
 import { Pencil, Trash2 } from "lucide-vue-next";
 import { computed, type PropType } from "vue";
-import ButtonTableIcon from "@/components/ButtonTableIcon.vue";
-import SpanAmount from "@/components/SpanAmount.vue";
 
 const props = defineProps({
   etfName: {

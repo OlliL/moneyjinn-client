@@ -31,19 +31,27 @@ vi.mock("@/service/CrudEtfService");
 class ListCapitalsourcesView {
   static readonly FilterInput = new InputView("div-filter-input");
   static readonly ValidNowToggle = new SwitchView("div-filter-valid-now");
-  static readonly MobileFilterTrigger = new ButtonView("div-filter-mobile-trigger");
+  static readonly MobileFilterTrigger = new ButtonView(
+    "div-filter-mobile-trigger",
+  );
   static readonly MobileFilterInput = new InputView("div-filter-mobile-input");
   static readonly MobileValidNowToggle = new SwitchView(
     "div-filter-mobile-valid-now",
   );
   static readonly MobileFilterSheet = new RowView("div-filter-mobile-sheet");
-  static readonly MobileAccordion = new RowView("capitalsource-mobile-accordion");
+  static readonly MobileAccordion = new RowView(
+    "capitalsource-mobile-accordion",
+  );
   static readonly MobileRowCash = new RowView("capitalsource-mobile-row-1");
-  static readonly MobileRowOldAccount = new RowView("capitalsource-mobile-row-2");
+  static readonly MobileRowOldAccount = new RowView(
+    "capitalsource-mobile-row-2",
+  );
   static readonly MobileRowCashTrigger = new ButtonView(
     "capitalsource-mobile-trigger-1",
   );
-  static readonly EditCashMobileButton = new ButtonView("capitalsource-mobile-edit-1");
+  static readonly EditCashMobileButton = new ButtonView(
+    "capitalsource-mobile-edit-1",
+  );
   static readonly DeleteCashMobileButton = new ButtonView(
     "capitalsource-mobile-delete-1",
   );
@@ -165,4 +173,3 @@ test("ListCapitalsources opens delete modal from mobile action", async () => {
   await ListCapitalsourcesView.DeleteCashMobileButton.click();
   await ListCapitalsourcesView.Modal.assertOpen();
 });
-

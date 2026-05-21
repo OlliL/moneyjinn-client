@@ -64,6 +64,7 @@
   </div>
 </template>
 <script lang="ts" setup>
+import EtfTableRow from "@/components/reports/EtfTableRow.vue";
 import {
   Table,
   TableBody,
@@ -73,7 +74,6 @@ import {
 } from "@/components/ui/table";
 import type { EtfSummary } from "@/model/etf/EtfSummary";
 import type { PropType } from "vue";
-import EtfTableRow from "@/components/reports/EtfTableRow.vue";
 
 defineProps({
   etfSummary: {

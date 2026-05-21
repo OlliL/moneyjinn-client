@@ -31,6 +31,7 @@
 </template>
 
 <script lang="ts" setup>
+import SpanAmount from "@/components/SpanAmount.vue";
 import { TableCell, TableRow } from "@/components/ui/table";
 import {
   CapitalsourceState,
@@ -43,7 +44,6 @@ import {
 import { formatDateWithTime } from "@/tools/views/FormatDate";
 import { computed, type PropType } from "vue";
 import { useI18n } from "vue-i18n";
-import SpanAmount from "@/components/SpanAmount.vue";
 
 const { t } = useI18n();
 

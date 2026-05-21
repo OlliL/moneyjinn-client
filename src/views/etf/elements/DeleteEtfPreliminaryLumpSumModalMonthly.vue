@@ -52,6 +52,9 @@
 </template>
 
 <script lang="ts" setup>
+import ModalDelete from "@/components/ModalDelete.vue";
+import ModalDeleteRow from "@/components/ModalDeleteRow.vue";
+import SpanAmount from "@/components/SpanAmount.vue";
 import { Table, TableBody } from "@/components/ui/table";
 import type { EtfPreliminaryLumpSum } from "@/model/etf/EtfPreliminaryLumpSum";
 import CrudEtfPreliminaryLumpSumService from "@/service/CrudEtfPreliminaryLumpSumService";
@@ -59,9 +62,6 @@ import { useEtfStore } from "@/stores/EtfStore";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { getMonthName } from "@/tools/views/MonthName";
 import { computed, ref, useTemplateRef } from "vue";
-import ModalDelete from "@/components/ModalDelete.vue";
-import ModalDeleteRow from "@/components/ModalDeleteRow.vue";
-import SpanAmount from "@/components/SpanAmount.vue";
 
 type RowData = {
   month: string;

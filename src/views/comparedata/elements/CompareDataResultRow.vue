@@ -111,9 +111,9 @@ import SpanDate from "@/components/SpanDate.vue";
 
 import { useUserSessionStore } from "@/stores/UserSessionStore";
 
+import SpanImportComment from "@/components/SpanImportComment.vue";
 import type { CompareDataDataset } from "@/model/comparedata/CompareDataDataset";
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
-import SpanImportComment from "@/components/SpanImportComment.vue";
 
 const props = defineProps({
   mmf: {

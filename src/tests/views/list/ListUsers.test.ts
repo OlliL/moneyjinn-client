@@ -17,7 +17,9 @@ vi.mock("@/service/GroupService");
 class ListUsersView {
   static readonly FilterInput = new InputView("div-filter-input");
   static readonly CreateButton = new ButtonView("div-filter-create");
-  static readonly MobileFilterTrigger = new ButtonView("div-filter-mobile-trigger");
+  static readonly MobileFilterTrigger = new ButtonView(
+    "div-filter-mobile-trigger",
+  );
   static readonly MobileFilterSheet = new RowView("div-filter-mobile-sheet");
   static readonly MobileFilterInput = new InputView("div-filter-mobile-input");
   static readonly MobileAccordion = new RowView("user-mobile-accordion");
@@ -122,4 +124,3 @@ test("ListUsers opens delete modal from mobile action", async () => {
   await ListUsersView.MobileDeleteAdminButton.click();
   await ListUsersView.Modal.assertOpen();
 });
-

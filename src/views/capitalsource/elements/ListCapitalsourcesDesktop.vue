@@ -49,7 +49,6 @@
 
 <script lang="ts" setup>
 import DivContentTable from "@/components/DivContentTable.vue";
-import ListCapitalsourceRowVue from "./ListCapitalsourceRow.vue";
 import {
   TableBody,
   TableHead,
@@ -58,6 +57,7 @@ import {
 } from "@/components/ui/table";
 import type { Capitalsource } from "@/model/capitalsource/Capitalsource";
 import type { PropType } from "vue";
+import ListCapitalsourceRowVue from "./ListCapitalsourceRow.vue";
 
 defineProps({
   capitalsources: {
@@ -80,5 +80,3 @@ const editCapitalsource = (mcs: Capitalsource) => {
   emit("editCapitalsource", mcs);
 };
 </script>
-
-

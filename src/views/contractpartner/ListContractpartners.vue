@@ -49,9 +49,9 @@ import { useContractpartnerStore } from "@/stores/ContractpartnerStore";
 import DivFilter from "@/components/DivFilter.vue";
 import CreateContractpartnerModalVue from "@/components/contractpartner/CreateContractpartnerModal.vue";
 import DeleteContractpartnerModalVue from "./elements/DeleteContractpartnerModal.vue";
+import ListContractpartnerAccountsModal from "./elements/ListContractpartnerAccountsModal.vue";
 import ListContractpartnersDesktop from "./elements/ListContractpartnersDesktop.vue";
 import ListContractpartnersMobile from "./elements/ListContractpartnersMobile.vue";
-import ListContractpartnerAccountsModal from "./elements/ListContractpartnerAccountsModal.vue";
 
 import type { Contractpartner } from "@/model/contractpartner/Contractpartner";
 

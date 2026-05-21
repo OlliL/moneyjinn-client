@@ -316,6 +316,7 @@
   </div>
 </template>
 <script lang="ts" setup>
+import InputStandard from "@/components/InputStandard.vue";
 import SpanAmount from "@/components/SpanAmount.vue";
 import SpanDate from "@/components/SpanDate.vue";
 import {
@@ -348,7 +349,6 @@ import {
 } from "lucide-vue-next";
 import { ref } from "vue";
 import { useI18n } from "vue-i18n";
-import InputStandard from "@/components/InputStandard.vue";
 
 const { t } = useI18n();
 

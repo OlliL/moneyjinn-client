@@ -24,7 +24,6 @@
 
 <script lang="ts" setup>
 import DivContentTable from "@/components/DivContentTable.vue";
-import ListGroupRowVue from "./ListGroupRow.vue";
 import {
   TableBody,
   TableHead,
@@ -33,6 +32,7 @@ import {
 } from "@/components/ui/table";
 import type { Group } from "@/model/group/Group";
 import type { PropType } from "vue";
+import ListGroupRowVue from "./ListGroupRow.vue";
 
 defineProps({
   groups: {
@@ -51,4 +51,3 @@ const editGroup = (group: Group) => {
   emit("editGroup", group);
 };
 </script>
-

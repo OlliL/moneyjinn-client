@@ -192,6 +192,7 @@
 import { Accordion } from "@/components/ui/accordion";
 import CapitalsourceTableMobileRow from "./CapitalsourceTableMobileRow.vue";
 
+import SpanAmount from "@/components/SpanAmount.vue";
 import {
   Table,
   TableBody,
@@ -202,7 +203,6 @@ import {
 } from "@/components/ui/table";
 import type { ReportTurnoverCapitalsource } from "@/model/report/ReportTurnoverCapitalsource";
 import { computed } from "vue";
-import SpanAmount from "@/components/SpanAmount.vue";
 import CapitalsourceTableDesktopRow from "./CapitalsourceTableDesktopRow.vue";
 
 const props = defineProps({

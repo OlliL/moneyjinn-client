@@ -254,7 +254,6 @@
 </template>
 <script lang="ts" setup>
 import SpanAmount from "@/components/SpanAmount.vue";
-import ReportTableDesktopRow from "./ReportTableDesktopRow.vue";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -269,6 +268,7 @@ import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 import { useUserSessionStore } from "@/stores/UserSessionStore";
 import { ArrowDown, ArrowUp, ArrowUpDown, X } from "lucide-vue-next";
 import { computed, onMounted, type PropType } from "vue";
+import ReportTableDesktopRow from "./ReportTableDesktopRow.vue";
 
 const props = defineProps<{
   filteredMoneyflows: Moneyflow[];

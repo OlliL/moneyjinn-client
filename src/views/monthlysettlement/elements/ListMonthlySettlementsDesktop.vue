@@ -1,5 +1,8 @@
 <template>
-  <div data-testid="monthly-settlement-desktop-controls" class="hidden md:block w-full">
+  <div
+    data-testid="monthly-settlement-desktop-controls"
+    class="hidden md:block w-full"
+  >
     <div class="mx-auto flex w-full max-w-5xl flex-col items-center gap-3">
       <div class="flex w-full justify-center">
         <MonthYearNavigator
@@ -70,4 +73,3 @@ const emitCreate = () => emit("create");
 const emitEdit = () => emit("edit");
 const emitDelete = () => emit("delete");
 </script>
-

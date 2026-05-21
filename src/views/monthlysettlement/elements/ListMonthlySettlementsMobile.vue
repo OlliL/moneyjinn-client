@@ -71,5 +71,3 @@ const emitCreate = () => emit("create");
 const emitEdit = () => emit("edit");
 const emitDelete = () => emit("delete");
 </script>
-
-

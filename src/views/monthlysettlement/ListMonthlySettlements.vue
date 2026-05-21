@@ -22,7 +22,9 @@
       @select-year="selectYear"
       @select-month="selectMonth"
       @create="showEditMonthlySettlementModal()"
-      @edit="showEditMonthlySettlementModal(Number(selectedYear), selectedMonth)"
+      @edit="
+        showEditMonthlySettlementModal(Number(selectedYear), selectedMonth)
+      "
       @delete="showDeleteMonthlySettlementModal"
     />
 
@@ -36,7 +38,9 @@
       @select-year="selectYear"
       @select-month="selectMonth"
       @create="showEditMonthlySettlementModal()"
-      @edit="showEditMonthlySettlementModal(Number(selectedYear), selectedMonth)"
+      @edit="
+        showEditMonthlySettlementModal(Number(selectedYear), selectedMonth)
+      "
       @delete="showDeleteMonthlySettlementModal"
     />
 
@@ -55,8 +59,8 @@ import { computed, onMounted, ref, useTemplateRef } from "vue";
 import { onBeforeRouteUpdate } from "vue-router";
 
 import DivError from "@/components/DivError.vue";
-import DeleteMonthlySettlementModalVue from "./elements/DeleteMonthlySettlementModal.vue";
 import EditMonthlySettlementModalVue from "@/components/monthlysettlement/EditMonthlySettlementModal.vue";
+import DeleteMonthlySettlementModalVue from "./elements/DeleteMonthlySettlementModal.vue";
 import ListMonthlySettlementsDesktop from "./elements/ListMonthlySettlementsDesktop.vue";
 import ListMonthlySettlementsMobile from "./elements/ListMonthlySettlementsMobile.vue";
 import ShowMontlySettlementVue from "./elements/ShowMonthlySettlement.vue";

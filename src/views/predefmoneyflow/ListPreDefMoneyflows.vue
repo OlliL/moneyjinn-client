@@ -43,13 +43,13 @@
 import DivError from "@/components/DivError.vue";
 import DivFilter from "@/components/DivFilter.vue";
 import CreatePreDefMoneyflowModalVue from "@/components/predefmoneyflow/CreatePreDefMoneyflowModal.vue";
-import DeletePreDefMoneyflowModalVue from "./elements/DeletePreDefMoneyflowModal.vue";
-import ListPreDefMoneyflowsDesktop from "./elements/ListPreDefMoneyflowsDesktop.vue";
-import ListPreDefMoneyflowsMobile from "./elements/ListPreDefMoneyflowsMobile.vue";
 import type { PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
 import PreDefMoneyflowService from "@/service/PreDefMoneyflowService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { onMounted, ref, useTemplateRef, watch } from "vue";
+import DeletePreDefMoneyflowModalVue from "./elements/DeletePreDefMoneyflowModal.vue";
+import ListPreDefMoneyflowsDesktop from "./elements/ListPreDefMoneyflowsDesktop.vue";
+import ListPreDefMoneyflowsMobile from "./elements/ListPreDefMoneyflowsMobile.vue";
 
 const serverErrors = ref(new Array<string>());
 

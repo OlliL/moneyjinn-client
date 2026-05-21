@@ -37,10 +37,16 @@
       </div>
     </div>
 
-    <div class="fixed bottom-6 right-6 z-50 md:hidden" v-if="dataLoaded && etfFlows.length">
+    <div
+      class="fixed bottom-6 right-6 z-50 md:hidden"
+      v-if="dataLoaded && etfFlows.length"
+    >
       <Sheet v-model:open="isMobileFilterOpen">
         <SheetTrigger as-child>
-          <Button data-testid="etf-depot-mobile-filter-trigger" class="h-12 w-12 p-0 rounded-full shadow-lg">
+          <Button
+            data-testid="etf-depot-mobile-filter-trigger"
+            class="h-12 w-12 p-0 rounded-full shadow-lg"
+          >
             <Filter class="h-5 w-5" />
           </Button>
         </SheetTrigger>
@@ -95,7 +101,9 @@
         :etf-effective-flow-amount-sum-string="etfEffectiveFlowAmountSumString"
         :etf-effective-flow-price-avg="etfEffectiveFlowPriceAvg"
         :etf-effective-flow-amount-price-sum="etfEffectiveFlowAmountPriceSum"
-        :etf-effective-flow-accumulated-preliminary-lump-sum="etfEffectiveFlowAccumulatedPreliminaryLumpSum"
+        :etf-effective-flow-accumulated-preliminary-lump-sum="
+          etfEffectiveFlowAccumulatedPreliminaryLumpSum
+        "
         :etf-flow-amount-sum-string="etfFlowAmountSumString"
         :etf-flow-price-avg="etfFlowPriceAvg"
         :etf-flow-amount-price-sum="etfFlowAmountPriceSum"
@@ -121,12 +129,6 @@
 
 <script lang="ts" setup>
 import DivError from "@/components/DivError.vue";
-import CalcEtfSaleForm from "./elements/CalcEtfSaleForm.vue";
-import CreateEtfFlowModalVue from "./elements/CreateEtfFlowModal.vue";
-import DeleteEtfFlowModalVue from "./elements/DeleteEtfFlowModal.vue";
-import ListEtfDepotDesktop from "./elements/ListEtfDepotDesktop.vue";
-import ListEtfDepotMobile from "./elements/ListEtfDepotMobile.vue";
-import ListEtfDepotSummary from "./elements/ListEtfDepotSummary.vue";
 import SelectStandard from "@/components/SelectStandard.vue";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -153,6 +155,12 @@ import { Filter, Plus } from "lucide-vue-next";
 import { computed, onMounted, ref, useTemplateRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { number } from "zod";
+import CalcEtfSaleForm from "./elements/CalcEtfSaleForm.vue";
+import CreateEtfFlowModalVue from "./elements/CreateEtfFlowModal.vue";
+import DeleteEtfFlowModalVue from "./elements/DeleteEtfFlowModal.vue";
+import ListEtfDepotDesktop from "./elements/ListEtfDepotDesktop.vue";
+import ListEtfDepotMobile from "./elements/ListEtfDepotMobile.vue";
+import ListEtfDepotSummary from "./elements/ListEtfDepotSummary.vue";
 
 const { t } = useI18n();
 

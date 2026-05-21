@@ -35,13 +35,17 @@ class ListEtfDepotView {
   static readonly MobileFilterTrigger = new ButtonView(
     "etf-depot-mobile-filter-trigger",
   );
-  static readonly MobileFilterSheet = new RowView("etf-depot-mobile-filter-sheet");
+  static readonly MobileFilterSheet = new RowView(
+    "etf-depot-mobile-filter-sheet",
+  );
   static readonly MobileEffectiveSwitch = new SwitchView(
     "etf-depot-mobile-effective-switch",
   );
   static readonly MobileRow101 = new RowView("etf-depot-mobile-row-101");
   static readonly MobileRow102 = new RowView("etf-depot-mobile-row-102");
-  static readonly MobileEditButton = new ButtonView("etf-depot-mobile-edit-101");
+  static readonly MobileEditButton = new ButtonView(
+    "etf-depot-mobile-edit-101",
+  );
   static readonly MobileDeleteButton = new ButtonView(
     "etf-depot-mobile-delete-101",
   );
@@ -233,4 +237,3 @@ test("ListEtfDepot opens delete modal from mobile row action", async () => {
   await ListEtfDepotView.MobileDeleteButton.click();
   await ListEtfDepotView.Modal.assertOpen();
 });
-

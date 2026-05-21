@@ -22,14 +22,14 @@
 </template>
 
 <script lang="ts" setup>
+import ModalDelete from "@/components/ModalDelete.vue";
+import ModalDeleteRow from "@/components/ModalDeleteRow.vue";
+import SpanAmount from "@/components/SpanAmount.vue";
 import type { EtfPreliminaryLumpSum } from "@/model/etf/EtfPreliminaryLumpSum";
 import CrudEtfPreliminaryLumpSumService from "@/service/CrudEtfPreliminaryLumpSumService";
 import { useEtfStore } from "@/stores/EtfStore";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { computed, ref, useTemplateRef } from "vue";
-import ModalDelete from "@/components/ModalDelete.vue";
-import ModalDeleteRow from "@/components/ModalDeleteRow.vue";
-import SpanAmount from "@/components/SpanAmount.vue";
 
 const serverErrors = ref(new Array<string>());
 

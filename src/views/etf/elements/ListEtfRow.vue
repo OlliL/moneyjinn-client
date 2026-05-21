@@ -35,13 +35,13 @@
   </TableRow>
 </template>
 <script lang="ts" setup>
+import ButtonTableIcon from "@/components/ButtonTableIcon.vue";
+import SpanAmount from "@/components/SpanAmount.vue";
 import { TableCell, TableRow } from "@/components/ui/table";
 import type { Etf } from "@/model/etf/Etf";
 import { formatNumber } from "@/tools/views/FormatNumber";
 import { Pencil, Star, Trash2 } from "lucide-vue-next";
 import { computed, type PropType } from "vue";
-import ButtonTableIcon from "@/components/ButtonTableIcon.vue";
-import SpanAmount from "@/components/SpanAmount.vue";
 
 const props = defineProps({
   etf: {

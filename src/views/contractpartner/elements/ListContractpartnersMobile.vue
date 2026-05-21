@@ -1,5 +1,8 @@
 <template>
-  <div data-testid="contractpartner-mobile-accordion" class="md:hidden w-full max-w-md mx-auto px-2 mb-6 space-y-3">
+  <div
+    data-testid="contractpartner-mobile-accordion"
+    class="md:hidden w-full max-w-md mx-auto px-2 mb-6 space-y-3"
+  >
     <Accordion type="multiple" class="space-y-2">
       <AccordionItem
         v-for="mcp in contractpartners"
@@ -8,7 +11,10 @@
         :data-testid="`contractpartner-mobile-row-${mcp.id}`"
         class="border rounded-lg bg-background shadow-sm px-3 py-2"
       >
-        <AccordionTrigger :data-testid="`contractpartner-mobile-trigger-${mcp.id}`" class="hover:no-underline">
+        <AccordionTrigger
+          :data-testid="`contractpartner-mobile-trigger-${mcp.id}`"
+          class="hover:no-underline"
+        >
           <div class="flex items-center justify-between w-full gap-2">
             <div class="flex flex-col items-start text-left min-w-0">
               <span class="font-bold text-sm truncate">{{ mcp.name }}</span>
@@ -46,21 +52,31 @@
         </AccordionTrigger>
 
         <AccordionContent class="pt-2">
-          <div class="grid grid-cols-1 gap-2 text-sm bg-muted/40 p-3 rounded-md">
+          <div
+            class="grid grid-cols-1 gap-2 text-sm bg-muted/40 p-3 rounded-md"
+          >
             <div class="flex justify-between gap-2">
-              <span class="text-muted-foreground">{{ $t("General.validFrom") }}</span>
+              <span class="text-muted-foreground">{{
+                $t("General.validFrom")
+              }}</span>
               <SpanDate :date="mcp.validFrom" />
             </div>
             <div class="flex justify-between gap-2">
-              <span class="text-muted-foreground">{{ $t("General.validTil") }}</span>
+              <span class="text-muted-foreground">{{
+                $t("General.validTil")
+              }}</span>
               <SpanDate :date="mcp.validTil" />
             </div>
             <div class="flex justify-between gap-2">
-              <span class="text-muted-foreground">{{ $t("Contractpartner.moneyflowComment") }}</span>
+              <span class="text-muted-foreground">{{
+                $t("Contractpartner.moneyflowComment")
+              }}</span>
               <span class="text-right">{{ mcp.moneyflowComment }}</span>
             </div>
             <div class="flex justify-between gap-2">
-              <span class="text-muted-foreground">{{ $t("General.postingAccount") }}</span>
+              <span class="text-muted-foreground">{{
+                $t("General.postingAccount")
+              }}</span>
               <span class="text-right">{{ mcp.postingAccountName }}</span>
             </div>
           </div>
@@ -108,4 +124,3 @@ const listContractpartnerAccounts = (mcp: Contractpartner) => {
   emit("listContractpartnerAccounts", mcp);
 };
 </script>
-

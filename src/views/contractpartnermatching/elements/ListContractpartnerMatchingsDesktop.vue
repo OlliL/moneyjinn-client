@@ -1,5 +1,8 @@
 <template>
-  <div data-testid="contractpartner-matching-desktop-table" class="hidden md:block">
+  <div
+    data-testid="contractpartner-matching-desktop-table"
+    class="hidden md:block"
+  >
     <DivContentTable class="max-w-5xl">
       <TableHeader>
         <TableRow>
@@ -33,7 +36,6 @@
 
 <script lang="ts" setup>
 import DivContentTable from "@/components/DivContentTable.vue";
-import ListContractpartnerMatchingRowVue from "./ListContractpartnerMatchingRow.vue";
 import {
   TableBody,
   TableHead,
@@ -42,6 +44,7 @@ import {
 } from "@/components/ui/table";
 import type { ContractpartnerMatching } from "@/model/contractpartnermatching/ContractpartnerMatching";
 import type { PropType } from "vue";
+import ListContractpartnerMatchingRowVue from "./ListContractpartnerMatchingRow.vue";
 
 defineProps({
   contractpartnerMatchings: {
@@ -63,4 +66,3 @@ const deleteContractpartnerMatching = (mcm: ContractpartnerMatching) => {
   emit("deleteContractpartnerMatching", mcm);
 };
 </script>
-

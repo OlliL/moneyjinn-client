@@ -24,95 +24,95 @@
 
           <div class="hidden md:block overflow-x-auto text-center">
             <div data-testid="report-etf-desktop-table">
-            <div class="flex flex-col rounded-md border">
-              <Table class="[&_tbody_tr:nth-child(even)]:bg-muted text-sm">
-                <TableHeader>
-                  <TableRow>
-                    <TableHead
-                      class="font-bold border-r text-foreground text-center"
-                      rowspan="2"
-                      id="thEtf"
-                    >
-                      {{ $t("General.etf") }}
-                    </TableHead>
-                    <TableHead
-                      class="font-bold border-r text-foreground text-center"
-                      rowspan="2"
-                      id="thShares"
-                    >
-                      {{ $t("ETFFlow.shares") }}
-                    </TableHead>
-                    <TableHead
-                      class="text-center hidden md:table-cell"
-                      colspan="3"
-                      id="thAmount"
-                    >
-                      {{ $t("ETFFlow.amount") }}
-                    </TableHead>
-                    <TableHead
-                      class="font-bold border-r text-foreground text-center"
-                      colspan="3"
-                      id="thOverall"
-                    >
-                      {{ $t("ETFFlow.overall") }}
-                    </TableHead>
-                    <TableHead
-                      class="text-center hidden md:table-cell"
-                      rowspan="2"
-                      id="thState"
-                    >
-                      {{ $t("Reports.state") }}
-                    </TableHead>
-                  </TableRow>
-                  <TableRow>
-                    <TableHead
-                      class="text-center hidden md:table-cell"
-                      id="thAmountPayed"
-                    >
-                      {{ $t("ETFFlow.payed") }} &#8709;
-                    </TableHead>
-                    <TableHead
-                      class="text-center hidden md:table-cell"
-                      id="thAmountBid"
-                    >
-                      {{ $t("ETFFlow.bid") }}
-                    </TableHead>
-                    <TableHead
-                      class="text-center hidden md:table-cell"
-                      id="thAmountAsk"
-                    >
-                      {{ $t("ETFFlow.ask") }}
-                    </TableHead>
-                    <TableHead
-                      class="font-bold border text-foreground text-center"
-                      id="thOverallPayed"
-                    >
-                      {{ $t("ETFFlow.payed") }}
-                    </TableHead>
-                    <TableHead
-                      class="font-bold border text-foreground text-center"
-                      id="thOverallBid"
-                    >
-                      {{ $t("ETFFlow.bid") }}
-                    </TableHead>
-                    <TableHead
-                      class="font-bold border text-foreground text-center"
-                      id="thOverallProfit"
-                    >
-                      {{ $t("ETFFlow.profit") }}
-                    </TableHead>
-                  </TableRow>
-                </TableHeader>
+              <div class="flex flex-col rounded-md border">
+                <Table class="[&_tbody_tr:nth-child(even)]:bg-muted text-sm">
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead
+                        class="font-bold border-r text-foreground text-center"
+                        rowspan="2"
+                        id="thEtf"
+                      >
+                        {{ $t("General.etf") }}
+                      </TableHead>
+                      <TableHead
+                        class="font-bold border-r text-foreground text-center"
+                        rowspan="2"
+                        id="thShares"
+                      >
+                        {{ $t("ETFFlow.shares") }}
+                      </TableHead>
+                      <TableHead
+                        class="text-center hidden md:table-cell"
+                        colspan="3"
+                        id="thAmount"
+                      >
+                        {{ $t("ETFFlow.amount") }}
+                      </TableHead>
+                      <TableHead
+                        class="font-bold border-r text-foreground text-center"
+                        colspan="3"
+                        id="thOverall"
+                      >
+                        {{ $t("ETFFlow.overall") }}
+                      </TableHead>
+                      <TableHead
+                        class="text-center hidden md:table-cell"
+                        rowspan="2"
+                        id="thState"
+                      >
+                        {{ $t("Reports.state") }}
+                      </TableHead>
+                    </TableRow>
+                    <TableRow>
+                      <TableHead
+                        class="text-center hidden md:table-cell"
+                        id="thAmountPayed"
+                      >
+                        {{ $t("ETFFlow.payed") }} &#8709;
+                      </TableHead>
+                      <TableHead
+                        class="text-center hidden md:table-cell"
+                        id="thAmountBid"
+                      >
+                        {{ $t("ETFFlow.bid") }}
+                      </TableHead>
+                      <TableHead
+                        class="text-center hidden md:table-cell"
+                        id="thAmountAsk"
+                      >
+                        {{ $t("ETFFlow.ask") }}
+                      </TableHead>
+                      <TableHead
+                        class="font-bold border text-foreground text-center"
+                        id="thOverallPayed"
+                      >
+                        {{ $t("ETFFlow.payed") }}
+                      </TableHead>
+                      <TableHead
+                        class="font-bold border text-foreground text-center"
+                        id="thOverallBid"
+                      >
+                        {{ $t("ETFFlow.bid") }}
+                      </TableHead>
+                      <TableHead
+                        class="font-bold border text-foreground text-center"
+                        id="thOverallProfit"
+                      >
+                        {{ $t("ETFFlow.profit") }}
+                      </TableHead>
+                    </TableRow>
+                  </TableHeader>
 
-                <TableBody>
-                  <EtfTableRowVue
-                    v-for="etfData in etfSummaryArray"
-                    :key="'desktop-' + etfData.etfId"
-                    v-bind="etfData"
-                  />
-                </TableBody>
-              </Table>
-            </div>
+                  <TableBody>
+                    <EtfTableRowVue
+                      v-for="etfData in etfSummaryArray"
+                      :key="'desktop-' + etfData.etfId"
+                      v-bind="etfData"
+                    />
+                  </TableBody>
+                </Table>
+              </div>
             </div>
           </div>
         </div>
@@ -125,6 +125,8 @@
 import { Accordion } from "@/components/ui/accordion";
 import EtfMobileAccordionItem from "./EtfMobileAccordionItem.vue";
 
+import DivError from "@/components/DivError.vue";
+import EtfTableRowVue from "@/components/reports/EtfTableRow.vue";
 import {
   Table,
   TableBody,
@@ -136,8 +138,6 @@ import type { EtfSummary } from "@/model/etf/EtfSummary";
 import EtfService from "@/service/EtfService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { computed, onMounted, ref, watch } from "vue";
-import DivError from "@/components/DivError.vue";
-import EtfTableRowVue from "@/components/reports/EtfTableRow.vue";
 
 const serverErrors = ref(new Array<string>());
 

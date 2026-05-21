@@ -1,5 +1,8 @@
 <template>
-  <div data-testid="capitalsource-mobile-accordion" class="md:hidden w-full max-w-md mx-auto px-2 mb-6 space-y-3">
+  <div
+    data-testid="capitalsource-mobile-accordion"
+    class="md:hidden w-full max-w-md mx-auto px-2 mb-6 space-y-3"
+  >
     <Accordion type="multiple" class="space-y-2">
       <AccordionItem
         v-for="mcs in capitalsources"
@@ -8,13 +11,21 @@
         :data-testid="`capitalsource-mobile-row-${mcs.id}`"
         class="border rounded-lg bg-background shadow-sm px-3 py-2"
       >
-        <AccordionTrigger :data-testid="`capitalsource-mobile-trigger-${mcs.id}`" class="hover:no-underline">
+        <AccordionTrigger
+          :data-testid="`capitalsource-mobile-trigger-${mcs.id}`"
+          class="hover:no-underline"
+        >
           <div class="flex items-center justify-between w-full gap-2">
             <div class="flex flex-col items-start text-left min-w-0">
               <span class="font-bold text-sm truncate">{{ mcs.comment }}</span>
-              <span class="text-xs text-muted-foreground">{{ typeString(mcs) }} / {{ stateString(mcs) }}</span>
+              <span class="text-xs text-muted-foreground"
+                >{{ typeString(mcs) }} / {{ stateString(mcs) }}</span
+              >
             </div>
-            <div v-if="mcs.userId === userId" class="flex items-center gap-1 pr-2">
+            <div
+              v-if="mcs.userId === userId"
+              class="flex items-center gap-1 pr-2"
+            >
               <Button
                 variant="ghost"
                 size="icon"
@@ -36,9 +47,13 @@
         </AccordionTrigger>
 
         <AccordionContent class="pt-2">
-          <div class="grid grid-cols-1 gap-2 text-sm bg-muted/40 p-3 rounded-md">
+          <div
+            class="grid grid-cols-1 gap-2 text-sm bg-muted/40 p-3 rounded-md"
+          >
             <div class="flex justify-between gap-2">
-              <span class="text-muted-foreground">{{ $t("General.iban") }}</span>
+              <span class="text-muted-foreground">{{
+                $t("General.iban")
+              }}</span>
               <SpanIban :iban="mcs.accountNumber" />
             </div>
             <div class="flex justify-between gap-2">
@@ -46,23 +61,32 @@
               <span>{{ mcs.bankCode }}</span>
             </div>
             <div class="flex justify-between gap-2">
-              <span class="text-muted-foreground">{{ $t("General.validFrom") }}</span>
+              <span class="text-muted-foreground">{{
+                $t("General.validFrom")
+              }}</span>
               <SpanDate :date="mcs.validFrom" />
             </div>
             <div class="flex justify-between gap-2">
-              <span class="text-muted-foreground">{{ $t("General.validTil") }}</span>
+              <span class="text-muted-foreground">{{
+                $t("General.validTil")
+              }}</span>
               <SpanDate :date="mcs.validTil" />
             </div>
             <div class="flex justify-between gap-2">
-              <span class="text-muted-foreground">{{ $t("Capitalsource.groupUse") }}</span>
+              <span class="text-muted-foreground">{{
+                $t("Capitalsource.groupUse")
+              }}</span>
               <SpanBoolean :value="mcs.groupUse" />
             </div>
             <div class="flex justify-between gap-2">
-              <span class="text-muted-foreground">{{ $t("Capitalsource.importAllowed") }}</span>
-              <b :class="importAllowedColorClass(mcs)">{{ importAllowedString(mcs) }}</b>
+              <span class="text-muted-foreground">{{
+                $t("Capitalsource.importAllowed")
+              }}</span>
+              <b :class="importAllowedColorClass(mcs)">{{
+                importAllowedString(mcs)
+              }}</b>
             </div>
           </div>
-
         </AccordionContent>
       </AccordionItem>
     </Accordion>
@@ -73,7 +97,12 @@
 import SpanBoolean from "@/components/SpanBoolean.vue";
 import SpanDate from "@/components/SpanDate.vue";
 import SpanIban from "@/components/SpanIban.vue";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import type { Capitalsource } from "@/model/capitalsource/Capitalsource";
 import { capitalsourceImportNames } from "@/model/capitalsource/CapitalsourceImport";
@@ -119,5 +148,3 @@ const stateString = (mcs: Capitalsource): string => {
   return capitalsourceStateNames[mcs.state];
 };
 </script>
-
-

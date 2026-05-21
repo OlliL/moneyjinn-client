@@ -45,7 +45,6 @@
 
 <script lang="ts" setup>
 import DivContentTable from "@/components/DivContentTable.vue";
-import ListPreDefMoneyflowRowVue from "./ListPreDefMoneyflowRow.vue";
 import {
   TableBody,
   TableHead,
@@ -54,6 +53,7 @@ import {
 } from "@/components/ui/table";
 import type { PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
 import type { PropType } from "vue";
+import ListPreDefMoneyflowRowVue from "./ListPreDefMoneyflowRow.vue";
 
 defineProps({
   preDefMoneyflows: {
@@ -72,4 +72,3 @@ const deletePreDefMoneyflow = (mpm: PreDefMoneyflow) => {
   emit("deletePreDefMoneyflow", mpm);
 };
 </script>
-

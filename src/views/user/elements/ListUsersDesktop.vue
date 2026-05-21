@@ -39,9 +39,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import ListUserRowVue from "./ListUserRow.vue";
 import type { User } from "@/model/user/User";
 import type { PropType } from "vue";
+import ListUserRowVue from "./ListUserRow.vue";
 
 defineProps({
   users: {
@@ -60,4 +60,3 @@ const editUser = (user: User) => {
   emit("editUser", user);
 };
 </script>
-

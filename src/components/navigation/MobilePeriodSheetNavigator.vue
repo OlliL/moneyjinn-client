@@ -6,8 +6,13 @@
         class="rounded-lg border bg-card p-3 flex items-center justify-between gap-2"
       >
         <div>
-          <p class="text-xs text-muted-foreground">{{ $t(resolvedLabelKey) }}</p>
-          <p :data-testid="`${testIdPrefix}-period-label`" class="font-semibold">
+          <p class="text-xs text-muted-foreground">
+            {{ $t(resolvedLabelKey) }}
+          </p>
+          <p
+            :data-testid="`${testIdPrefix}-period-label`"
+            class="font-semibold"
+          >
             {{ periodLabel }}
           </p>
         </div>
@@ -113,5 +118,3 @@ const resolvedSelectLabelKey = computed(
 const selectYear = (year: string) => emit("selectYear", year);
 const selectMonth = (month: number) => emit("selectMonth", month);
 </script>
-
-

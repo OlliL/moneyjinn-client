@@ -3,7 +3,9 @@
     <DivContentTable class="max-w-sm">
       <TableHeader>
         <TableRow>
-          <TableHead class="font-bold border-r text-foreground text-center w-full">
+          <TableHead
+            class="font-bold border-r text-foreground text-center w-full"
+          >
             {{ $t("General.name") }}
           </TableHead>
           <TableHead colspan="2"></TableHead>
@@ -24,7 +26,6 @@
 
 <script lang="ts" setup>
 import DivContentTable from "@/components/DivContentTable.vue";
-import ListPostingAccountRowVue from "./ListPostingAccountRow.vue";
 import {
   TableBody,
   TableHead,
@@ -33,6 +34,7 @@ import {
 } from "@/components/ui/table";
 import type { PostingAccount } from "@/model/postingaccount/PostingAccount";
 import type { PropType } from "vue";
+import ListPostingAccountRowVue from "./ListPostingAccountRow.vue";
 
 defineProps({
   postingAccounts: {
@@ -51,4 +53,3 @@ const editPostingAccount = (mpa: PostingAccount) => {
   emit("editPostingAccount", mpa);
 };
 </script>
-

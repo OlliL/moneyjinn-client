@@ -1,5 +1,8 @@
 <template>
-  <div data-testid="posting-account-mobile-accordion" class="md:hidden w-full max-w-md mx-auto px-2 mb-6 space-y-3">
+  <div
+    data-testid="posting-account-mobile-accordion"
+    class="md:hidden w-full max-w-md mx-auto px-2 mb-6 space-y-3"
+  >
     <Accordion type="multiple" class="space-y-2">
       <AccordionItem
         v-for="mpa in postingAccounts"
@@ -67,4 +70,3 @@ const editPostingAccount = (mpa: PostingAccount) => {
   emit("editPostingAccount", mpa);
 };
 </script>
-

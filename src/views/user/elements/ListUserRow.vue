@@ -27,13 +27,13 @@
   </TableRow>
 </template>
 <script lang="ts" setup>
+import ButtonTableIcon from "@/components/ButtonTableIcon.vue";
+import SpanBoolean from "@/components/SpanBoolean.vue";
 import { TableCell, TableRow } from "@/components/ui/table";
 import type { User } from "@/model/user/User";
 import { userRoleNames } from "@/model/user/UserRole";
 import { Pencil, Trash2 } from "lucide-vue-next";
 import { computed, type PropType } from "vue";
-import ButtonTableIcon from "@/components/ButtonTableIcon.vue";
-import SpanBoolean from "@/components/SpanBoolean.vue";
 
 const props = defineProps({
   user: {

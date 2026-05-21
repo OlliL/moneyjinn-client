@@ -1,5 +1,8 @@
 <template>
-  <div data-testid="group-mobile-accordion" class="md:hidden w-full max-w-md mx-auto px-2 mb-6 space-y-3">
+  <div
+    data-testid="group-mobile-accordion"
+    class="md:hidden w-full max-w-md mx-auto px-2 mb-6 space-y-3"
+  >
     <Accordion type="multiple" class="space-y-2">
       <AccordionItem
         v-for="group in groups"
@@ -8,7 +11,10 @@
         :data-testid="`group-mobile-row-${group.id}`"
         class="border rounded-lg bg-background shadow-sm px-3 py-2"
       >
-        <AccordionTrigger :data-testid="`group-mobile-trigger-${group.id}`" class="hover:no-underline">
+        <AccordionTrigger
+          :data-testid="`group-mobile-trigger-${group.id}`"
+          class="hover:no-underline"
+        >
           <div class="flex items-center justify-between w-full gap-2">
             <span class="font-bold text-sm truncate">{{ group.name }}</span>
             <div class="flex items-center gap-1 pr-2">
@@ -64,4 +70,3 @@ const editGroup = (group: Group) => {
   emit("editGroup", group);
 };
 </script>
-

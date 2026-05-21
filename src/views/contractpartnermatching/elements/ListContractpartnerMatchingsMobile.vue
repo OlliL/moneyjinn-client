@@ -17,8 +17,12 @@
         >
           <div class="flex items-center justify-between w-full gap-2">
             <div class="flex flex-col items-start text-left min-w-0">
-              <span class="font-bold text-sm truncate">{{ mcm.matchingText }}</span>
-              <span class="text-xs text-muted-foreground">{{ mcm.contractpartnerName }}</span>
+              <span class="font-bold text-sm truncate">{{
+                mcm.matchingText
+              }}</span>
+              <span class="text-xs text-muted-foreground">{{
+                mcm.contractpartnerName
+              }}</span>
             </div>
             <div class="flex items-center gap-1 pr-2">
               <Button
@@ -42,13 +46,19 @@
         </AccordionTrigger>
 
         <AccordionContent class="pt-2">
-          <div class="grid grid-cols-1 gap-2 text-sm bg-muted/40 p-3 rounded-md">
+          <div
+            class="grid grid-cols-1 gap-2 text-sm bg-muted/40 p-3 rounded-md"
+          >
             <div class="flex justify-between gap-2">
-              <span class="text-muted-foreground">{{ $t("Contractpartner.moneyflowComment") }}</span>
+              <span class="text-muted-foreground">{{
+                $t("Contractpartner.moneyflowComment")
+              }}</span>
               <span class="text-right">{{ mcm.moneyflowComment }}</span>
             </div>
             <div class="flex justify-between gap-2">
-              <span class="text-muted-foreground">{{ $t("General.postingAccount") }}</span>
+              <span class="text-muted-foreground">{{
+                $t("General.postingAccount")
+              }}</span>
               <span class="text-right">{{ mcm.postingAccountName }}</span>
             </div>
           </div>
@@ -90,4 +100,3 @@ const deleteContractpartnerMatching = (mcm: ContractpartnerMatching) => {
   emit("deleteContractpartnerMatching", mcm);
 };
 </script>
-

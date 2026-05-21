@@ -22,10 +22,14 @@ vi.mock("@/service/CrudEtfService");
 class ListPostingAccountsView {
   static readonly FilterInput = new InputView("div-filter-input");
   static readonly CreateButton = new ButtonView("div-filter-create");
-  static readonly MobileFilterTrigger = new ButtonView("div-filter-mobile-trigger");
+  static readonly MobileFilterTrigger = new ButtonView(
+    "div-filter-mobile-trigger",
+  );
   static readonly MobileFilterSheet = new RowView("div-filter-mobile-sheet");
   static readonly MobileFilterInput = new InputView("div-filter-mobile-input");
-  static readonly MobileAccordion = new RowView("posting-account-mobile-accordion");
+  static readonly MobileAccordion = new RowView(
+    "posting-account-mobile-accordion",
+  );
   static readonly MobileRowOne = new RowView("posting-account-mobile-row-1");
   static readonly MobileRowTwo = new RowView("posting-account-mobile-row-2");
   static readonly MobileEditOneButton = new ButtonView(
@@ -128,4 +132,3 @@ test("ListPostingAccounts opens delete modal from mobile action", async () => {
   await ListPostingAccountsView.MobileDeleteOneButton.click();
   await ListPostingAccountsView.Modal.assertOpen();
 });
-

@@ -26,14 +26,14 @@
 </template>
 
 <script lang="ts" setup>
+import ModalDelete from "@/components/ModalDelete.vue";
+import ModalDeleteRow from "@/components/ModalDeleteRow.vue";
+import SpanBoolean from "@/components/SpanBoolean.vue";
 import type { User } from "@/model/user/User";
 import { userRoleNames } from "@/model/user/UserRole";
 import UserService from "@/service/UserService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { computed, ref, useTemplateRef } from "vue";
-import ModalDelete from "@/components/ModalDelete.vue";
-import ModalDeleteRow from "@/components/ModalDeleteRow.vue";
-import SpanBoolean from "@/components/SpanBoolean.vue";
 
 const user = ref({} as User);
 const serverErrors = ref(new Array<string>());

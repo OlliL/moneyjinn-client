@@ -120,6 +120,11 @@
 </template>
 
 <script lang="ts" setup>
+import DivError from "@/components/DivError.vue";
+import DeleteMoneyflowModalVue from "@/components/moneyflow/DeleteMoneyflowModal.vue";
+import EditMoneyflowModalVue from "@/components/moneyflow/EditMoneyflowModal.vue";
+import ListMoneyflowModal from "@/components/moneyflow/ListMoneyflowModal.vue";
+import ReceiptModalVue from "@/components/reports/ReceiptModal.vue";
 import { CapitalsourceType } from "@/model/capitalsource/CapitalsourceType";
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 import type { Report } from "@/model/report/Report";
@@ -136,13 +141,8 @@ import {
   type PropType,
 } from "vue";
 import { useI18n } from "vue-i18n";
-import DivError from "@/components/DivError.vue";
-import DeleteMoneyflowModalVue from "@/components/moneyflow/DeleteMoneyflowModal.vue";
-import EditMoneyflowModalVue from "@/components/moneyflow/EditMoneyflowModal.vue";
-import ListMoneyflowModal from "@/components/moneyflow/ListMoneyflowModal.vue";
 import CapitalsourceSummary from "./CapitalsourceSummary.vue";
 import CapitalsourceTableVue from "./CapitalsourceTable.vue";
-import ReceiptModalVue from "@/components/reports/ReceiptModal.vue";
 import ReportTableDesktop from "./ReportTableDesktop.vue";
 import ReportTableMobile from "./ReportTableMobile.vue";
 const serverErrors = ref(new Array<string>());

@@ -21,10 +21,14 @@ vi.mock("@/service/PostingAccountService");
 class ListPreDefMoneyflowsView {
   static readonly FilterInput = new InputView("div-filter-input");
   static readonly CreateButton = new ButtonView("div-filter-create");
-  static readonly MobileFilterTrigger = new ButtonView("div-filter-mobile-trigger");
+  static readonly MobileFilterTrigger = new ButtonView(
+    "div-filter-mobile-trigger",
+  );
   static readonly MobileFilterSheet = new RowView("div-filter-mobile-sheet");
   static readonly MobileFilterInput = new InputView("div-filter-mobile-input");
-  static readonly MobileAccordion = new RowView("predef-moneyflow-mobile-accordion");
+  static readonly MobileAccordion = new RowView(
+    "predef-moneyflow-mobile-accordion",
+  );
   static readonly MobileRowOne = new RowView("predef-moneyflow-mobile-row-1");
   static readonly MobileRowTwo = new RowView("predef-moneyflow-mobile-row-2");
   static readonly MobileEditRowOneButton = new ButtonView(
@@ -141,4 +145,3 @@ test("ListPreDefMoneyflows opens delete modal from mobile action", async () => {
   await ListPreDefMoneyflowsView.MobileDeleteRowOneButton.click();
   await ListPreDefMoneyflowsView.Modal.assertOpen();
 });
-

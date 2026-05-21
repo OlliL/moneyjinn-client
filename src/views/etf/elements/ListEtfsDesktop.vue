@@ -55,13 +55,22 @@
           <TableHead rowspan="2" colspan="2" id="editDelete"></TableHead>
         </TableRow>
         <TableRow>
-          <TableHead class="font-bold border text-foreground text-center" id="abs">
+          <TableHead
+            class="font-bold border text-foreground text-center"
+            id="abs"
+          >
             {{ $t("ETFFlow.transactionCostsAbsolute") }}
           </TableHead>
-          <TableHead class="font-bold border text-foreground text-center" id="rel">
+          <TableHead
+            class="font-bold border text-foreground text-center"
+            id="rel"
+          >
             {{ $t("ETFFlow.transactionCostsRelative") }}
           </TableHead>
-          <TableHead class="font-bold border text-foreground text-center" id="max">
+          <TableHead
+            class="font-bold border text-foreground text-center"
+            id="max"
+          >
             {{ $t("ETFFlow.transactionCostsMaximum") }}
           </TableHead>
         </TableRow>
@@ -81,7 +90,6 @@
 
 <script lang="ts" setup>
 import DivContentTable from "@/components/DivContentTable.vue";
-import ListEtfRowVue from "./ListEtfRow.vue";
 import {
   TableBody,
   TableHead,
@@ -91,6 +99,7 @@ import {
 import type { Etf } from "@/model/etf/Etf";
 import { Star } from "lucide-vue-next";
 import type { PropType } from "vue";
+import ListEtfRowVue from "./ListEtfRow.vue";
 
 defineProps({
   etfs: {
@@ -109,4 +118,3 @@ const editEtf = (etf: Etf) => {
   emit("editEtf", etf);
 };
 </script>
-

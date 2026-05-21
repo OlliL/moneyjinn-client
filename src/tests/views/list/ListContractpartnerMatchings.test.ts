@@ -27,7 +27,9 @@ vi.mock("@/service/PostingAccountService");
 
 class ListContractpartnerMatchingsView {
   static readonly FilterInput = new InputView("div-filter-input");
-  static readonly MobileFilterTrigger = new ButtonView("div-filter-mobile-trigger");
+  static readonly MobileFilterTrigger = new ButtonView(
+    "div-filter-mobile-trigger",
+  );
   static readonly MobileFilterSheet = new RowView("div-filter-mobile-sheet");
   static readonly MobileFilterInput = new InputView("div-filter-mobile-input");
   static readonly ContractpartnerFilterCombobox = new ComboboxView(
@@ -195,4 +197,3 @@ test("ListContractpartnerMatchings opens delete modal from mobile action", async
   await ListContractpartnerMatchingsView.MobileDeleteRentButton.click();
   await ListContractpartnerMatchingsView.Modal.assertOpen();
 });
-

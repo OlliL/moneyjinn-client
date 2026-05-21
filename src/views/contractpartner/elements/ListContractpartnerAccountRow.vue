@@ -27,9 +27,9 @@ import type { PropType } from "vue";
 
 import { TableCell, TableRow } from "@/components/ui/table";
 
-import type { ContractpartnerAccount } from "@/model/contractpartneraccount/ContractpartnerAccount";
 import ButtonTableIcon from "@/components/ButtonTableIcon.vue";
 import SpanIban from "@/components/SpanIban.vue";
+import type { ContractpartnerAccount } from "@/model/contractpartneraccount/ContractpartnerAccount";
 
 const props = defineProps({
   mca: {

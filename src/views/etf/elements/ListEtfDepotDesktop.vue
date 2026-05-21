@@ -1,6 +1,13 @@
 <template>
-  <div data-testid="etf-depot-desktop-table" class="hidden md:block w-full max-w-3xl">
-    <Tabs :model-value="currentTab" class="w-full" @update:model-value="updateTab">
+  <div
+    data-testid="etf-depot-desktop-table"
+    class="hidden md:block w-full max-w-3xl"
+  >
+    <Tabs
+      :model-value="currentTab"
+      class="w-full"
+      @update:model-value="updateTab"
+    >
       <TabsList
         class="flex bg-muted h-10 p-1 justify-start rounded-sm w-full border"
       >
@@ -35,28 +42,16 @@
                 <TableHead scope="col" class="w-30/100 text-center">
                   {{ $t("ETFFlow.bookingtime") }}
                 </TableHead>
-                <TableHead
-                  scope="col"
-                  class="w-16/100 border-l text-center"
-                >
+                <TableHead scope="col" class="w-16/100 border-l text-center">
                   {{ $t("ETFFlow.amount") }}
                 </TableHead>
-                <TableHead
-                  scope="col"
-                  class="w-16/100 border-l text-center"
-                >
+                <TableHead scope="col" class="w-16/100 border-l text-center">
                   {{ $t("ETFFlow.price") }}
                 </TableHead>
-                <TableHead
-                  scope="col"
-                  class="w-16/100 border-l text-center"
-                >
+                <TableHead scope="col" class="w-16/100 border-l text-center">
                   {{ $t("ETFFlow.sumprice") }}
                 </TableHead>
-                <TableHead
-                  scope="col"
-                  class="w-12/100 border-l text-center"
-                >
+                <TableHead scope="col" class="w-12/100 border-l text-center">
                   {{ $t("ETFFlow.preliminaryLumpSum") }}
                 </TableHead>
                 <TableHead
@@ -82,7 +77,11 @@
                   <u>{{ etfEffectiveFlowAmountSumString }}</u>
                 </TableCell>
                 <TableCell class="p-2 text-right">
-                  <u><SpanAmount :amount="etfEffectiveFlowPriceAvg" :decimal-places="4" /></u>
+                  <u
+                    ><SpanAmount
+                      :amount="etfEffectiveFlowPriceAvg"
+                      :decimal-places="4"
+                  /></u>
                 </TableCell>
                 <TableCell class="p-2 text-right">
                   <u><SpanAmount :amount="etfEffectiveFlowAmountPriceSum" /></u>
@@ -114,22 +113,13 @@
                 <TableHead scope="col" class="w-30/100 text-center">
                   {{ $t("ETFFlow.bookingtime") }}
                 </TableHead>
-                <TableHead
-                  scope="col"
-                  class="w-20/100 border-l text-center"
-                >
+                <TableHead scope="col" class="w-20/100 border-l text-center">
                   {{ $t("ETFFlow.amount") }}
                 </TableHead>
-                <TableHead
-                  scope="col"
-                  class="w-20/100 border-l text-center"
-                >
+                <TableHead scope="col" class="w-20/100 border-l text-center">
                   {{ $t("ETFFlow.price") }}
                 </TableHead>
-                <TableHead
-                  scope="col"
-                  class="w-20/100 border-l text-center"
-                >
+                <TableHead scope="col" class="w-20/100 border-l text-center">
                   {{ $t("ETFFlow.sumprice") }}
                 </TableHead>
                 <TableHead
@@ -155,7 +145,9 @@
                   <u>{{ etfFlowAmountSumString }}</u>
                 </TableCell>
                 <TableCell class="p-2 text-right">
-                  <u><SpanAmount :amount="etfFlowPriceAvg" :decimal-places="4" /></u>
+                  <u
+                    ><SpanAmount :amount="etfFlowPriceAvg" :decimal-places="4"
+                  /></u>
                 </TableCell>
                 <TableCell class="p-2 text-right">
                   <u><SpanAmount :amount="etfFlowAmountPriceSum" /></u>
@@ -171,7 +163,6 @@
 </template>
 
 <script lang="ts" setup>
-import ListEtfDepotRowVue from "./ListEtfDepotRow.vue";
 import SpanAmount from "@/components/SpanAmount.vue";
 import {
   Table,
@@ -184,6 +175,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import type { EtfFlow } from "@/model/etf/EtfFlow";
 import type { PropType } from "vue";
+import ListEtfDepotRowVue from "./ListEtfDepotRow.vue";
 
 defineProps({
   currentTab: {
@@ -232,11 +224,7 @@ defineProps({
   },
 });
 
-const emit = defineEmits([
-  "update:currentTab",
-  "deleteEtfFlow",
-  "editEtfFlow",
-]);
+const emit = defineEmits(["update:currentTab", "deleteEtfFlow", "editEtfFlow"]);
 
 const updateTab = (value: string | number) => {
   if (value === "effective" || value === "all") {
@@ -252,4 +240,3 @@ const editEtfFlow = (etfFlow: EtfFlow) => {
   emit("editEtfFlow", etfFlow);
 };
 </script>
-

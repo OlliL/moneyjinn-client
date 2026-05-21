@@ -94,14 +94,14 @@ import router, { Routes } from "@/router";
 import DivError from "@/components/DivError.vue";
 import MobilePeriodSheetNavigator from "@/components/navigation/MobilePeriodSheetNavigator.vue";
 import MonthYearNavigator from "@/components/navigation/MonthYearNavigator.vue";
-import EtfTableVue from "./elements/EtfTable.vue";
-import ReportTableVue from "./elements/ReportTable.vue";
 import { Button } from "@/components/ui/button";
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 import ReportService from "@/service/ReportService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { getMonthName } from "@/tools/views/MonthName";
 import { ChevronLeft, ChevronRight } from "lucide-vue-next";
+import EtfTableVue from "./elements/EtfTable.vue";
+import ReportTableVue from "./elements/ReportTable.vue";
 
 const serverErrors = ref(new Array<string>());
 

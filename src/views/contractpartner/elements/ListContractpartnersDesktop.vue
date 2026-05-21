@@ -38,7 +38,6 @@
 
 <script lang="ts" setup>
 import DivContentTable from "@/components/DivContentTable.vue";
-import ListContractpartnerRowVue from "./ListContractpartnerRow.vue";
 import {
   TableBody,
   TableHead,
@@ -47,6 +46,7 @@ import {
 } from "@/components/ui/table";
 import type { Contractpartner } from "@/model/contractpartner/Contractpartner";
 import type { PropType } from "vue";
+import ListContractpartnerRowVue from "./ListContractpartnerRow.vue";
 
 defineProps({
   contractpartners: {
@@ -73,4 +73,3 @@ const listContractpartnerAccounts = (mcp: Contractpartner) => {
   emit("listContractpartnerAccounts", mcp);
 };
 </script>
-

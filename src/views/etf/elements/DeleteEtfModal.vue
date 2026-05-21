@@ -26,12 +26,12 @@
 </template>
 
 <script lang="ts" setup>
+import ModalDelete from "@/components/ModalDelete.vue";
+import ModalDeleteRow from "@/components/ModalDeleteRow.vue";
 import type { Etf } from "@/model/etf/Etf";
 import CrudEtfService from "@/service/CrudEtfService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { ref, useTemplateRef } from "vue";
-import ModalDelete from "@/components/ModalDelete.vue";
-import ModalDeleteRow from "@/components/ModalDeleteRow.vue";
 
 const serverErrors = ref(new Array<string>());
 

@@ -55,6 +55,10 @@
 </template>
 
 <script lang="ts" setup>
+import ButtonSubmit from "@/components/ButtonSubmit.vue";
+import DivError from "@/components/DivError.vue";
+import InputStandard from "@/components/InputStandard.vue";
+import ModalVue from "@/components/Modal.vue";
 import { Button } from "@/components/ui/button";
 import type { ContractpartnerAccount } from "@/model/contractpartneraccount/ContractpartnerAccount";
 import ContractpartnerAccountService from "@/service/ContractpartnerAccountService";
@@ -65,10 +69,6 @@ import { useForm } from "vee-validate";
 import { computed, ref, toRaw, useTemplateRef } from "vue";
 import { useI18n } from "vue-i18n";
 import { string, ZodType } from "zod";
-import ButtonSubmit from "@/components/ButtonSubmit.vue";
-import DivError from "@/components/DivError.vue";
-import InputStandard from "@/components/InputStandard.vue";
-import ModalVue from "@/components/Modal.vue";
 
 const { t } = useI18n();
 

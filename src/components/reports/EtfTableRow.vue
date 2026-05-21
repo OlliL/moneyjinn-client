@@ -1,5 +1,7 @@
 <template>
-  <TableRow :data-testid="etfId ? `report-etf-desktop-row-${etfId}` : undefined">
+  <TableRow
+    :data-testid="etfId ? `report-etf-desktop-row-${etfId}` : undefined"
+  >
     <TableCell class="text-left border-r" v-if="name">
       <a :href="chartUrl">{{ name }}</a>
     </TableCell>

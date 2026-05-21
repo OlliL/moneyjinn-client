@@ -19,13 +19,13 @@
 </template>
 
 <script lang="ts" setup>
+import ModalDelete from "@/components/ModalDelete.vue";
+import ModalDeleteRow from "@/components/ModalDeleteRow.vue";
+import SpanIban from "@/components/SpanIban.vue";
 import type { ContractpartnerAccount } from "@/model/contractpartneraccount/ContractpartnerAccount";
 import ContractpartnerAccountService from "@/service/ContractpartnerAccountService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { ref, useTemplateRef } from "vue";
-import ModalDelete from "@/components/ModalDelete.vue";
-import ModalDeleteRow from "@/components/ModalDeleteRow.vue";
-import SpanIban from "@/components/SpanIban.vue";
 
 const serverErrors = ref(new Array<string>());
 const mca = ref({} as ContractpartnerAccount);

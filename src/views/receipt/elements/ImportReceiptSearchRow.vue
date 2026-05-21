@@ -41,6 +41,8 @@
   </TableRow>
 </template>
 <script lang="ts" setup>
+import SpanAmount from "@/components/SpanAmount.vue";
+import SpanDate from "@/components/SpanDate.vue";
 import { Button } from "@/components/ui/button";
 import { RadioGroupItem } from "@/components/ui/radio-group";
 import { TableCell, TableRow } from "@/components/ui/table";
@@ -48,8 +50,6 @@ import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 import { useUserSessionStore } from "@/stores/UserSessionStore";
 import { Pencil, Trash2 } from "lucide-vue-next";
 import { computed, type PropType } from "vue";
-import SpanAmount from "@/components/SpanAmount.vue";
-import SpanDate from "@/components/SpanDate.vue";
 const props = defineProps({
   mmf: {
     type: Object as PropType<Moneyflow>,

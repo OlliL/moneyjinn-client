@@ -1,5 +1,8 @@
 <template>
-  <AccordionItem :value="String(etfId)" :data-testid="`report-etf-mobile-item-${etfId}`">
+  <AccordionItem
+    :value="String(etfId)"
+    :data-testid="`report-etf-mobile-item-${etfId}`"
+  >
     <AccordionTrigger class="hover:no-underline py-3 px-2">
       <div
         :data-testid="`report-etf-mobile-trigger-${etfId}`"
@@ -90,6 +93,7 @@
 </template>
 
 <script lang="ts" setup>
+import SpanAmount from "@/components/SpanAmount.vue";
 import {
   AccordionContent,
   AccordionItem,
@@ -98,7 +102,6 @@ import {
 import { formatDateWithTime } from "@/tools/views/FormatDate";
 import { formatNumber } from "@/tools/views/FormatNumber";
 import { computed } from "vue";
-import SpanAmount from "@/components/SpanAmount.vue";
 
 const props = defineProps({
   etfId: {

@@ -1,5 +1,8 @@
 <template>
-  <div data-testid="predef-moneyflow-mobile-accordion" class="md:hidden w-full max-w-md mx-auto px-2 mb-6 space-y-3">
+  <div
+    data-testid="predef-moneyflow-mobile-accordion"
+    class="md:hidden w-full max-w-md mx-auto px-2 mb-6 space-y-3"
+  >
     <Accordion type="multiple" class="space-y-2">
       <AccordionItem
         v-for="mpm in preDefMoneyflows"
@@ -14,8 +17,12 @@
         >
           <div class="flex items-center justify-between w-full gap-2">
             <div class="flex flex-col items-start text-left min-w-0">
-              <span class="font-bold text-sm truncate">{{ mpm.contractpartnerName }}</span>
-              <span class="text-xs text-muted-foreground">{{ mpm.comment }}</span>
+              <span class="font-bold text-sm truncate">{{
+                mpm.contractpartnerName
+              }}</span>
+              <span class="text-xs text-muted-foreground">{{
+                mpm.comment
+              }}</span>
             </div>
             <div class="flex items-center gap-1 pr-2">
               <Button
@@ -39,29 +46,43 @@
         </AccordionTrigger>
 
         <AccordionContent class="pt-2">
-          <div class="grid grid-cols-1 gap-2 text-sm bg-muted/40 p-3 rounded-md">
+          <div
+            class="grid grid-cols-1 gap-2 text-sm bg-muted/40 p-3 rounded-md"
+          >
             <div class="flex justify-between gap-2">
-              <span class="text-muted-foreground">{{ $t("General.amount") }}</span>
+              <span class="text-muted-foreground">{{
+                $t("General.amount")
+              }}</span>
               <SpanAmount :amount="mpm.amount" />
             </div>
             <div class="flex justify-between gap-2">
-              <span class="text-muted-foreground">{{ $t("General.postingAccount") }}</span>
+              <span class="text-muted-foreground">{{
+                $t("General.postingAccount")
+              }}</span>
               <span class="text-right">{{ mpm.postingAccountName }}</span>
             </div>
             <div class="flex justify-between gap-2">
-              <span class="text-muted-foreground">{{ $t("General.capitalsource") }}</span>
+              <span class="text-muted-foreground">{{
+                $t("General.capitalsource")
+              }}</span>
               <span class="text-right">{{ mpm.capitalsourceComment }}</span>
             </div>
             <div class="flex justify-between gap-2">
-              <span class="text-muted-foreground">{{ $t("PreDefMoneyflow.onceAMonthShort") }}</span>
+              <span class="text-muted-foreground">{{
+                $t("PreDefMoneyflow.onceAMonthShort")
+              }}</span>
               <SpanBoolean :value="mpm.onceAMonth" />
             </div>
             <div class="flex justify-between gap-2">
-              <span class="text-muted-foreground">{{ $t("PreDefMoneyflow.createDate") }}</span>
+              <span class="text-muted-foreground">{{
+                $t("PreDefMoneyflow.createDate")
+              }}</span>
               <SpanDate :date="mpm.createDate" />
             </div>
             <div class="flex justify-between gap-2">
-              <span class="text-muted-foreground">{{ $t("PreDefMoneyflow.lastUsed") }}</span>
+              <span class="text-muted-foreground">{{
+                $t("PreDefMoneyflow.lastUsed")
+              }}</span>
               <SpanDate :date="mpm.lastUsed" />
             </div>
           </div>
@@ -103,4 +124,3 @@ const deletePreDefMoneyflow = (mpm: PreDefMoneyflow) => {
   emit("deletePreDefMoneyflow", mpm);
 };
 </script>
-
