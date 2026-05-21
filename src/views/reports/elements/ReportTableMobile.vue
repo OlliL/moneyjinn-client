@@ -25,7 +25,7 @@
         <form
           @submit.prevent="handleEnter"
           @keydown.enter.prevent="handleEnter"
-          class="flex-1 overflow-y-auto space-y-4 py-4 pb-8 px-0.5"
+          class="flex-1 overflow-y-auto space-y-4 pb-8 px-0.5"
         >
           <InputStandard
             v-model="filterCapitalsource"
@@ -133,92 +133,92 @@
         :key="'mobile-' + mmf.id"
         :value="'item-' + mmf.id"
         :data-testid="`report-mobile-moneyflow-row-${mmf.id}`"
-        class="border rounded-lg bg-background shadow-sm px-3 py-2 text-left relative overflow-hidden"
+        class="border rounded-lg bg-background shadow-sm px-3 pt-2 pb-3 text-left relative overflow-hidden"
         :class="{ 'border-destructive/30 bg-destructive/5': mmf.private }"
       >
-        <div
-          class="grid grid-cols-[1fr_auto] gap-2 items-center min-h-[48px] relative"
-        >
-          <div class="flex flex-col gap-0.5 min-w-0">
-            <div
-              class="flex items-center gap-1.5 text-xs text-muted-foreground flex-wrap"
-            >
-              <SpanDate :date="mmf.bookingDate" />
-              <span
-                v-if="mmf.private"
-                class="bg-destructive/20 text-destructive px-1 rounded text-[10px]"
-                >Privat</span
+        <AccordionTrigger class="hover:no-underline p-0 w-full [&>svg]:hidden">
+          <div
+            class="grid grid-cols-[1fr_auto] gap-2 items-start w-full text-left min-h-[40px]"
+          >
+            <div class="flex flex-col gap-0.5 min-w-0">
+              <div
+                class="flex items-center gap-1.5 text-xs text-muted-foreground flex-wrap font-normal"
               >
-              <span
-                v-if="mmf.moneyflowSplitEntries?.length"
-                class="bg-primary/20 text-primary px-1 rounded text-[10px]"
-                >{{ $t("Moneyflow.subbookings") }}</span
-              >
+                <SpanDate :date="mmf.bookingDate" />
+                <span
+                  v-if="mmf.private"
+                  class="bg-destructive/20 text-destructive px-1 rounded text-[10px]"
+                >
+                  {{ $t("Moneyflow.private") }}
+                </span>
+                <span
+                  v-if="mmf.moneyflowSplitEntries?.length"
+                  class="bg-primary/20 text-primary px-1 rounded text-[10px]"
+                >
+                  {{ $t("Moneyflow.subbookings") }}
+                </span>
+              </div>
+              <span class="font-bold text-sm text-foreground truncate">
+                {{ mmf.contractpartnerName || "-" }}
+              </span>
             </div>
-            <span class="font-bold text-sm text-foreground truncate">
-              {{ mmf.contractpartnerName || "-" }}
-            </span>
-          </div>
 
-          <div class="flex flex-col items-end gap-1 shrink-0 text-right z-10">
-            <span
-              class="font-extrabold text-sm"
-              :class="{
-                'border-b border-double border-foreground':
-                  mmf.moneyflowSplitEntries?.length,
-              }"
-            >
-              <SpanAmount :amount="mmf.amount" />
-            </span>
+            <div class="flex flex-col items-end gap-1.5 shrink-0 text-right">
+              <span
+                class="font-extrabold text-sm text-foreground"
+                :class="{
+                  'border-b border-double border-foreground':
+                    mmf.moneyflowSplitEntries?.length,
+                }"
+              >
+                <SpanAmount :amount="mmf.amount" />
+              </span>
 
-            <div class="flex gap-0.5">
-              <Button
-                v-if="mmf.hasReceipt"
-                :data-testid="`report-mobile-moneyflow-receipt-${mmf.id}`"
-                variant="ghost"
-                size="icon"
-                class="h-7 w-7"
-                @click.stop="showReceipt(mmf.id)"
-              >
-                <ReceiptText class="h-3.5 w-3.5" />
-              </Button>
-              <Button
-                v-if="mmf.userId === userSessionStore.getUserId"
-                :data-testid="`report-mobile-moneyflow-edit-${mmf.id}`"
-                variant="ghost"
-                size="icon"
-                class="h-7 w-7"
-                @click.stop="editMoneyflow(mmf)"
-              >
-                <Pencil class="h-3.5 w-3.5" />
-              </Button>
-              <Button
-                v-if="mmf.userId === userSessionStore.getUserId"
-                :data-testid="`report-mobile-moneyflow-delete-${mmf.id}`"
-                variant="ghost"
-                size="icon"
-                class="h-7 w-7 text-destructive"
-                @click.stop="deleteMoneyflow(mmf)"
-              >
-                <Trash2 class="h-3.5 w-3.5" />
-              </Button>
-              <Button
-                v-if="mmf.userId !== userSessionStore.getUserId"
-                :data-testid="`report-mobile-moneyflow-list-${mmf.id}`"
-                variant="ghost"
-                size="icon"
-                class="h-7 w-7"
-                @click.stop="listMoneyflow(mmf)"
-              >
-                <Eye class="h-3.5 w-3.5" />
-              </Button>
+              <div class="flex gap-0.5">
+                <Button
+                  v-if="mmf.hasReceipt"
+                  :data-testid="`report-mobile-moneyflow-receipt-${mmf.id}`"
+                  variant="ghost"
+                  size="icon"
+                  class="h-7 w-7"
+                  @click.stop="showReceipt(mmf.id)"
+                >
+                  <ReceiptText class="h-3.5 w-3.5" />
+                </Button>
+                <Button
+                  v-if="mmf.userId === userSessionStore.getUserId"
+                  :data-testid="`report-mobile-moneyflow-edit-${mmf.id}`"
+                  variant="ghost"
+                  size="icon"
+                  class="h-7 w-7"
+                  @click.stop="editMoneyflow(mmf)"
+                >
+                  <Pencil class="h-3.5 w-3.5" />
+                </Button>
+                <Button
+                  v-if="mmf.userId === userSessionStore.getUserId"
+                  :data-testid="`report-mobile-moneyflow-delete-${mmf.id}`"
+                  variant="ghost"
+                  size="icon"
+                  class="h-7 w-7 text-destructive"
+                  @click.stop="deleteMoneyflow(mmf)"
+                >
+                  <Trash2 class="h-3.5 w-3.5" />
+                </Button>
+                <Button
+                  v-if="mmf.userId !== userSessionStore.getUserId"
+                  :data-testid="`report-mobile-moneyflow-list-${mmf.id}`"
+                  variant="ghost"
+                  size="icon"
+                  class="h-7 w-7"
+                  @click.stop="listMoneyflow(mmf)"
+                >
+                  <Eye class="h-3.5 w-3.5" />
+                </Button>
+              </div>
             </div>
           </div>
-
-          <AccordionTrigger
-            class="absolute inset-0 h-full w-full opacity-0 p-0 m-0 [&>svg]:hidden"
-          />
-        </div>
+        </AccordionTrigger>
 
         <AccordionContent class="pt-3 pb-1 space-y-2 border-t mt-2">
           <div
@@ -315,6 +315,7 @@
     </div>
   </div>
 </template>
+
 <script lang="ts" setup>
 import InputStandard from "@/components/InputStandard.vue";
 import SpanAmount from "@/components/SpanAmount.vue";

@@ -13,8 +13,8 @@
 
     <div class="flex justify-center">
       <div class="w-full max-w-md">
-        <div class="grid gap-3 md:grid-cols-12 items-top">
-          <div class="md:col-span-8">
+        <div class="grid grid-cols-1 gap-3 md:grid-cols-12 md:items-end">
+          <div class="col-span-1 md:col-span-8">
             <SelectStandard
               v-model="selectedEtfId"
               :validation-schema="schema.etfId"
@@ -23,11 +23,13 @@
               :select-box-values="getAsSelectBoxValues()"
             />
           </div>
-          <div class="md:col-span-4 mt-5">
+
+          <div class="col-span-1 md:col-span-4 mt-3 md:mt-0">
             <Button
               data-testid="etf-depot-create"
               type="button"
               @click="createEtfFlow"
+              class="w-full md:w-auto"
             >
               <Plus class="mr-2 h-4 w-4" />
               {{ $t("ETFFlow.newBooking") }}

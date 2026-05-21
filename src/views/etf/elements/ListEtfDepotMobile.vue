@@ -9,60 +9,63 @@
         :key="flow.etfflowid"
         :value="`item-${flow.etfflowid}`"
         :data-testid="`etf-depot-mobile-row-${flow.etfflowid}`"
-        class="border rounded-lg bg-background shadow-sm px-3 py-2"
+        class="border rounded-lg bg-background shadow-sm px-3 pt-2 pb-2 text-left relative overflow-hidden"
       >
-        <AccordionTrigger class="hover:no-underline">
+        <AccordionTrigger
+          class="hover:no-underline pt-1 pb-0 [&>svg]:hidden w-full"
+        >
           <div
             :data-testid="`etf-depot-mobile-trigger-${flow.etfflowid}`"
-            class="flex items-center justify-between w-full gap-2"
+            class="grid grid-cols-[1fr_auto] gap-2 items-start min-h-[40px] w-full text-left"
           >
-            <div class="flex flex-col items-start text-left min-w-0">
-              <span class="font-bold text-sm truncate">{{
-                timestampString(flow)
-              }}</span>
-              <span :class="amountClass(flow)" class="text-xs">{{
-                amountString(flow)
-              }}</span>
+            <div class="flex flex-col gap-0.5 min-w-0">
+              <span class="text-xs text-muted-foreground font-normal truncate">
+                {{ timestampString(flow) }}
+              </span>
+              <span class="font-bold text-sm text-foreground truncate">
+                {{ amountString(flow) }} {{ $t("ETFFlow.amount") }}
+              </span>
             </div>
-            <div class="flex items-center gap-1 pr-2">
-              <Button
-                variant="ghost"
-                size="icon"
-                :data-testid="`etf-depot-mobile-edit-${flow.etfflowid}`"
-                @click.stop="editEtfFlow(flow)"
-              >
-                <Pencil class="h-4 w-4" />
-              </Button>
-              <Button
-                variant="ghost"
-                size="icon"
-                :data-testid="`etf-depot-mobile-delete-${flow.etfflowid}`"
-                @click.stop="deleteEtfFlow(flow)"
-              >
-                <Trash2 class="h-4 w-4" />
-              </Button>
+
+            <div class="flex flex-col items-end gap-1 shrink-0 text-right">
+              <span class="font-extrabold text-sm text-foreground">
+                <SpanAmount :amount="flow.amount * flow.price" />
+              </span>
+
+              <div class="flex gap-0.5 mt-0.5">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  class="h-7 w-7"
+                  :data-testid="`etf-depot-mobile-edit-${flow.etfflowid}`"
+                  @click.stop="editEtfFlow(flow)"
+                >
+                  <Pencil class="h-3.5 w-3.5" />
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  class="h-7 w-7 text-destructive"
+                  :data-testid="`etf-depot-mobile-delete-${flow.etfflowid}`"
+                  @click.stop="deleteEtfFlow(flow)"
+                >
+                  <Trash2 class="h-3.5 w-3.5" />
+                </Button>
+              </div>
             </div>
           </div>
         </AccordionTrigger>
 
         <AccordionContent
           :data-testid="`etf-depot-mobile-content-${flow.etfflowid}`"
-          class="pt-2"
+          class="pt-3 pb-1 border-t mt-2"
         >
-          <div
-            class="grid grid-cols-1 gap-2 text-sm bg-muted/40 p-3 rounded-md"
-          >
+          <div class="grid grid-cols-1 gap-2 text-xs bg-muted/40 p-2 rounded">
             <div class="flex justify-between gap-2">
               <span class="text-muted-foreground">{{
                 $t("ETFFlow.price")
               }}</span>
               <SpanAmount :amount="flow.price" :decimal-places="3" />
-            </div>
-            <div class="flex justify-between gap-2">
-              <span class="text-muted-foreground">{{
-                $t("ETFFlow.sumprice")
-              }}</span>
-              <SpanAmount :amount="flow.amount * flow.price" />
             </div>
             <div v-if="showLumpSum" class="flex justify-between gap-2">
               <span class="text-muted-foreground">{{

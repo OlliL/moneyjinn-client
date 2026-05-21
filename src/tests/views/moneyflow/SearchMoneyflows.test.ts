@@ -122,11 +122,6 @@ test("SearchMoneyflows opens delete modal from own row action", async () => {
 });
 
 test("SearchMoneyflows opens edit modal from own row action", async () => {
-  MoneyflowReceiptService.fetchReceipt = vi.fn().mockResolvedValue({
-    moneyflowId: 14,
-    receiptType: MoneyflowReceiptType.JPEG,
-    receipt: "AA==",
-  });
   renderView();
 
   await runSearch();
@@ -138,11 +133,6 @@ test("SearchMoneyflows opens edit modal from own row action", async () => {
 });
 
 test("SearchMoneyflows opens list modal from foreign row action", async () => {
-  MoneyflowReceiptServiceMocker.mockFetchReceiptResolved({
-    moneyflowId: 14,
-    receiptType: MoneyflowReceiptType.JPEG,
-    receipt: "AA==",
-  });
   renderView();
 
   await runSearch();

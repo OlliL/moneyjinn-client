@@ -1,5 +1,7 @@
+import { MoneyflowReceiptType } from "@/model/moneyflow/MoneyflowReceiptType";
 import router, { Routes } from "@/router";
 import EtfServiceMocker from "@/service/mocker/EtfServiceMocker";
+import MoneyflowReceiptServiceMocker from "@/service/mocker/MoneyflowReceiptServiceMocker";
 import ReportServiceMocker from "@/service/mocker/ReportServiceMocker";
 import ReportService from "@/service/ReportService";
 import {
@@ -15,6 +17,7 @@ import { createPinia, setActivePinia } from "pinia";
 import { beforeEach, expect, test, vi } from "vitest";
 
 vi.mock("@/service/ReportService");
+vi.mock("@/service/MoneyflowReceiptService");
 vi.mock("@/service/EtfService");
 vi.mock("@/router", async () => {
   const actual = await vi.importActual<typeof import("@/router")>("@/router");
@@ -211,6 +214,11 @@ test("ListReports expands mobile ETF accordion and shows chart link", async () =
 });
 
 test("ListReports opens edit modal from own moneyflow row", async () => {
+  MoneyflowReceiptServiceMocker.mockFetchReceiptResolved({
+    moneyflowId: 1,
+    receiptType: MoneyflowReceiptType.JPEG,
+    receipt: "AA==",
+  });
   render(ListReports, { props: { year: "2026", month: "2" } });
 
   await ListReportsView.RowOwn.assertToBeVisible();
@@ -219,6 +227,11 @@ test("ListReports opens edit modal from own moneyflow row", async () => {
 });
 
 test("ListReports opens delete modal from own moneyflow row", async () => {
+  MoneyflowReceiptServiceMocker.mockFetchReceiptResolved({
+    moneyflowId: 1,
+    receiptType: MoneyflowReceiptType.JPEG,
+    receipt: "AA==",
+  });
   render(ListReports, { props: { year: "2026", month: "2" } });
 
   await ListReportsView.RowOwn.assertToBeVisible();
@@ -235,6 +248,11 @@ test("ListReports opens list modal from foreign moneyflow row", async () => {
 });
 
 test("ListReports opens edit modal from own mobile moneyflow row", async () => {
+  MoneyflowReceiptServiceMocker.mockFetchReceiptResolved({
+    moneyflowId: 1,
+    receiptType: MoneyflowReceiptType.JPEG,
+    receipt: "AA==",
+  });
   render(ListReports, { props: { year: "2026", month: "2" } });
 
   await ListReportsView.RowOwnMobile.assertToBeVisible();
@@ -243,6 +261,11 @@ test("ListReports opens edit modal from own mobile moneyflow row", async () => {
 });
 
 test("ListReports opens delete modal from own mobile moneyflow row", async () => {
+  MoneyflowReceiptServiceMocker.mockFetchReceiptResolved({
+    moneyflowId: 1,
+    receiptType: MoneyflowReceiptType.JPEG,
+    receipt: "AA==",
+  });
   render(ListReports, { props: { year: "2026", month: "2" } });
 
   await ListReportsView.RowOwnMobile.assertToBeVisible();
@@ -259,6 +282,11 @@ test("ListReports opens list modal from foreign mobile moneyflow row", async () 
 });
 
 test("ListReports opens receipt modal from own mobile moneyflow row", async () => {
+  MoneyflowReceiptServiceMocker.mockFetchReceiptResolved({
+    moneyflowId: 1,
+    receiptType: MoneyflowReceiptType.JPEG,
+    receipt: "AA==",
+  });
   render(ListReports, { props: { year: "2026", month: "2" } });
 
   await ListReportsView.RowOwnMobile.assertToBeVisible();

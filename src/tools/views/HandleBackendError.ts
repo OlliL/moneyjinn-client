@@ -6,7 +6,6 @@ export function handleBackendError(
   backendError: BackendError,
   serverErrors: Ref<Array<string>>,
 ) {
-  console.log(backendError);
   const validationResult = backendError.getValidationResult();
   serverErrors.value = new Array<string>();
 
