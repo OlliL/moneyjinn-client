@@ -1,4 +1,9 @@
 <template>
+  <ButtonCreate
+    data-testid="etf-preliminary-sump-sum-create"
+    @click="showTypeSelection"
+  />
+
   <CreateEtfPreliminaryLumpSumModalMonthlyVue
     ref="createModalMonthly"
     @etf-preliminary-lump-sum-created="reloadView"
@@ -319,6 +324,7 @@
 </template>
 
 <script lang="ts" setup>
+import ButtonCreate from "@/components/ButtonCreate.vue";
 import DivError from "@/components/DivError.vue";
 import MobilePeriodSheetNavigator from "@/components/navigation/MobilePeriodSheetNavigator.vue";
 import SelectStandard from "@/components/SelectStandard.vue";
@@ -469,6 +475,8 @@ const showCreateEtfPreliminaryLumpSumModal = (
     )._show(etfId, mep);
   }
 };
+
+const showTypeSelection = () => {};
 
 const updateCreateType = (value?: any) => {
   if (!value) {
