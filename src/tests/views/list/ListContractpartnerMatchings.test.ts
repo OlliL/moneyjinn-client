@@ -12,6 +12,7 @@ import {
   ButtonView,
   ComboboxView,
   InputView,
+  MobilePopupMenu,
   ModalView,
   RowView,
 } from "@/tests/TestViews";
@@ -30,7 +31,9 @@ class ListContractpartnerMatchingsView {
   static readonly MobileFilterTrigger = new ButtonView(
     "div-filter-mobile-trigger",
   );
-  static readonly MobileFilterSheet = new RowView("div-filter-mobile-sheet");
+  static readonly MobileFilterSheet = new MobilePopupMenu(
+    "div-filter-mobile-sheet",
+  );
   static readonly MobileFilterInput = new InputView("div-filter-mobile-input");
   static readonly ContractpartnerFilterCombobox = new ComboboxView(
     "contractpartnerContractpartnerMatching-searchContractpartner",

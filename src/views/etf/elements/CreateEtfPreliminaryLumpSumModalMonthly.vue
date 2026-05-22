@@ -123,7 +123,7 @@ const schema: Partial<{ [key in keyof EtfPreliminaryLumpSum]: ZodType }> = {
   amountDecember: amountSchema(t("ETFPreliminaryLumpSum.validation.amount")),
 };
 
-// Deine originalen Month-Mappings für die Schleife
+// Original month mappings for the loop
 const months: Array<{
   id: number;
   property: keyof EtfPreliminaryLumpSum;

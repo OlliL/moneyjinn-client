@@ -7,11 +7,15 @@
         <div class="grid grid-cols-1 lg:grid-cols-5 min-h-full">
           <div
             class="lg:col-span-2 bg-muted/40 p-5 border-b lg:border-b-0 lg:border-r border-border/60 flex flex-col justify-center items-center"
+            :data-testid="`importReceipts-row-filebox-${receipt.id}`"
           >
             <div
               class="bg-background/60 p-2 rounded border border-border/40 backdrop-blur-sm w-full flex justify-center items-start h-[calc(100vh-420px)] max-h-[520px]"
               :class="isPdf ? 'overflow-hidden' : 'overflow-y-auto'"
             >
+              <span data-testid="importReceipts-row-filename">{{
+                receipt.filename
+              }}</span>
               <img
                 v-if="isJpeg"
                 :src="`data:image/png;base64,${receipt.receipt}`"
@@ -153,6 +157,7 @@
                 variant="destructive"
                 class="button-with-icon"
                 @click="deleteReceipt"
+                data-testid="importReceipts-row-delete"
               >
                 <Trash2 class="h-4 w-4" />
                 {{ $t("General.delete") }}
@@ -164,6 +169,7 @@
                 @click="importReceipt"
                 v-if="searchExecuted && searchSuccessful"
                 :disabled="!moneyflowSelected"
+                data-testid="importReceipts-row-apply"
               >
                 <Save class="h-4 w-4" />
                 {{ $t("Moneyflow.apply") }}

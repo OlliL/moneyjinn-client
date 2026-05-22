@@ -10,6 +10,7 @@ import {
 import {
   ButtonView,
   InputView,
+  MobilePopupMenu,
   ModalView,
   RowView,
   SwitchView,
@@ -33,7 +34,9 @@ class ListEtfsView {
   static readonly MobileFilterTrigger = new ButtonView(
     "div-filter-mobile-trigger",
   );
-  static readonly MobileFilterSheet = new RowView("div-filter-mobile-sheet");
+  static readonly MobileFilterSheet = new MobilePopupMenu(
+    "div-filter-mobile-sheet",
+  );
   static readonly MobileFilterInput = new InputView("div-filter-mobile-input");
   static readonly MobileAccordion = new RowView("etf-mobile-accordion");
   static readonly MobileRowEtf1 = new RowView("etf-mobile-row-1");
@@ -53,6 +56,8 @@ class ListEtfsView {
   static readonly EditEtf1Button = new ButtonView("etf-edit-1");
   static readonly DeleteEtf1Button = new ButtonView("etf-delete-1");
   static readonly Modal = new ModalView("app-modal");
+  static readonly EmptyRowDesktop = new RowView("etf-empty-desktop");
+  static readonly EmptyRowMobile = new RowView("etf-empty-mobile");
 }
 
 beforeEach(() => {
@@ -191,4 +196,18 @@ test("ListEtfs shows favorite indicator only for favorite ETF on mobile", async 
   await ListEtfsView.MobileRowEtf1.assertToBeVisible();
   await ListEtfsView.MobileFavoriteEtf1.assertToBeVisible();
   await ListEtfsView.MobileFavoriteGlobalEtf.assertNotToBeInDocument();
+});
+
+test("ListEtfs shows empty state for empty list (Desktop and Mobile)", async () => {
+  // Desktop test
+  await StoreService.getInstance().initAllStores();
+  CrudEtfServiceMocker.mockFetchAllEtf([]);
+  render(ListEtfs);
+  await ListEtfsView.EmptyRowDesktop.assertToBeVisible();
+
+  // Mobile test: Set viewport to mobile size and re-render
+  window.innerWidth = 375;
+  window.dispatchEvent(new Event("resize"));
+  render(ListEtfs);
+  await ListEtfsView.EmptyRowMobile.assertToBeVisible();
 });

@@ -3,7 +3,13 @@ import {
   type UserSession,
   useUserSessionStore,
 } from "@/stores/UserSessionStore";
-import { ButtonView, InputView, ModalView, RowView } from "@/tests/TestViews";
+import {
+  ButtonView,
+  InputView,
+  MobilePopupMenu,
+  ModalView,
+  RowView,
+} from "@/tests/TestViews";
 import ListGroups from "@/views/group/ListGroups.vue";
 import "@testing-library/jest-dom/vitest";
 import { render } from "@testing-library/vue";
@@ -18,7 +24,9 @@ class ListGroupsView {
   static readonly MobileFilterTrigger = new ButtonView(
     "div-filter-mobile-trigger",
   );
-  static readonly MobileFilterSheet = new RowView("div-filter-mobile-sheet");
+  static readonly MobileFilterSheet = new MobilePopupMenu(
+    "div-filter-mobile-sheet",
+  );
   static readonly MobileFilterInput = new InputView("div-filter-mobile-input");
   static readonly MobileAccordion = new RowView("group-mobile-accordion");
   static readonly MobileRowOne = new RowView("group-mobile-row-1");
@@ -32,6 +40,8 @@ class ListGroupsView {
   static readonly EditOneButton = new ButtonView("group-edit-1");
   static readonly DeleteOneButton = new ButtonView("group-delete-1");
   static readonly Modal = new ModalView("app-modal");
+  static readonly EmptyRowDesktop = new RowView("group-empty-desktop");
+  static readonly EmptyRowMobile = new RowView("group-empty-mobile");
 }
 
 beforeEach(() => {
@@ -109,4 +119,16 @@ test("ListGroups opens delete modal from mobile action", async () => {
   await ListGroupsView.MobileRowOne.assertToBeVisible();
   await ListGroupsView.MobileDeleteOneButton.click();
   await ListGroupsView.Modal.assertOpen();
+});
+
+test("ListGroups shows empty state for desktop and mobile if list is empty", async () => {
+  // Arrange: Mock empty group list
+  GroupServiceMocker.mockFetchAllGroup([]);
+
+  // Act
+  render(ListGroups);
+
+  // Assert: Both empty states are visible
+  await ListGroupsView.EmptyRowDesktop.assertToBeVisible();
+  await ListGroupsView.EmptyRowMobile.assertToBeVisible();
 });

@@ -30,7 +30,7 @@
       <SheetContent side="right" class="w-[300px] sm:w-[400px] overflow-y-auto">
         <SheetHeader> </SheetHeader>
         <div class="flex flex-col gap-2">
-          <!-- Hier deine Links vertikal untereinander -->
+          <!-- Place your links here, vertically stacked -->
           <router-link
             @click="isMenuOpen = false"
             class="flex items-center gap-2 p-1 hover:bg-accent rounded-md !text-foreground !no-underline"

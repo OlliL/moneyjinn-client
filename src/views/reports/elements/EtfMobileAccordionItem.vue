@@ -105,7 +105,7 @@ import { computed } from "vue";
 
 const props = defineProps({
   etfId: {
-    // Benötigt für das AccordionItem "value" Attribut
+    // Required for the AccordionItem "value" attribute
     type: [String, Number],
     required: true,
   },

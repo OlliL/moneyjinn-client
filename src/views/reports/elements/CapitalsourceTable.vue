@@ -188,7 +188,7 @@
 </template>
 
 <script lang="ts" setup>
-// Accordion imports hinzufügen
+// Add Accordion imports
 import { Accordion } from "@/components/ui/accordion";
 import CapitalsourceTableMobileRow from "./CapitalsourceTableMobileRow.vue";
 

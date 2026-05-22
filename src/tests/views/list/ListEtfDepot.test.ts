@@ -10,6 +10,7 @@ import { assertHaveBeenCalledWith } from "@/tests/TestUtil";
 import {
   ButtonView,
   InputView,
+  MobilePopupMenu,
   ModalView,
   RowView,
   SwitchView,
@@ -35,7 +36,7 @@ class ListEtfDepotView {
   static readonly MobileFilterTrigger = new ButtonView(
     "etf-depot-mobile-filter-trigger",
   );
-  static readonly MobileFilterSheet = new RowView(
+  static readonly MobileFilterSheet = new MobilePopupMenu(
     "etf-depot-mobile-filter-sheet",
   );
   static readonly MobileEffectiveSwitch = new SwitchView(

@@ -34,6 +34,15 @@
         </TableRow>
       </TableHeader>
       <TableBody>
+        <!-- Show empty state if no capitalsources -->
+        <TableRow
+          v-if="capitalsources.length === 0"
+          data-testid="capitalsource-empty-desktop"
+        >
+          <TableCell colspan="12" class="text-center text-muted-foreground">
+            {{ $t("General.noEntries") }}
+          </TableCell>
+        </TableRow>
         <ListCapitalsourceRowVue
           v-for="mcs in capitalsources"
           :key="mcs.id"
@@ -51,6 +60,7 @@
 import DivContentTable from "@/components/DivContentTable.vue";
 import {
   TableBody,
+  TableCell,
   TableHead,
   TableHeader,
   TableRow,

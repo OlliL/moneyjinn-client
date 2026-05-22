@@ -22,6 +22,14 @@
         </TableRow>
       </TableHeader>
       <TableBody>
+        <TableRow
+          v-if="contractpartners.length === 0"
+          data-testid="contractpartner-empty-desktop"
+        >
+          <TableCell colspan="8" class="text-center text-muted-foreground">
+            {{ $t("General.noEntries") }}
+          </TableCell>
+        </TableRow>
         <ListContractpartnerRowVue
           v-for="mcp in contractpartners"
           :key="mcp.id"
@@ -40,6 +48,7 @@
 import DivContentTable from "@/components/DivContentTable.vue";
 import {
   TableBody,
+  TableCell,
   TableHead,
   TableHeader,
   TableRow,

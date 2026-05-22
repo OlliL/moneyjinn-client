@@ -5,6 +5,7 @@
         <RadioGroupItem
           :id="'radio-' + props.mmf.id"
           :value="String(props.mmf.id)"
+          :data-testid="'moneyflow-radio-' + props.mmf.id"
           class="h-4 w-4 rounded-full border border-primary text-primary shadow focus:outline-none focus-visible:ring-1 focus-visible:ring-ring"
         />
       </div>

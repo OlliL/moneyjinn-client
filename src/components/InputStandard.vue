@@ -50,6 +50,7 @@
     <p
       v-if="isInvalid"
       class="text-[0.8rem] font-medium text-destructive mt-0.5 text-left ml-1"
+      :data-testid="id + '-error-item'"
     >
       {{ errorMessage }}
     </p>

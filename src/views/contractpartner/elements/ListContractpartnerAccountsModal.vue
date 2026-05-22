@@ -41,7 +41,10 @@
             </TableRow>
           </TableHeader>
           <TableBody>
-            <TableRow v-if="contractpartnerAccount.length === 0">
+            <TableRow
+              v-if="contractpartnerAccount.length === 0"
+              data-testid="contractpartner-account-empty"
+            >
               <TableCell
                 colspan="3"
                 class="text-center text-muted-foreground py-8"

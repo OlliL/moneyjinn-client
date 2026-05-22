@@ -11,7 +11,13 @@ import {
   useUserSessionStore,
 } from "@/stores/UserSessionStore";
 import { assertHaveBeenCalledWith } from "@/tests/TestUtil";
-import { ButtonView, InputView, ModalView } from "@/tests/TestViews";
+import {
+  ButtonView,
+  InputView,
+  MobilePopupMenu,
+  ModalView,
+  RowView,
+} from "@/tests/TestViews";
 import ListPreliminaryLumpSums from "@/views/etf/ListPreliminaryLumpSums.vue";
 import "@testing-library/jest-dom/vitest";
 import { render } from "@testing-library/vue";
@@ -49,6 +55,28 @@ class ListPreliminaryLumpSumsView {
   static readonly EditButton = new ButtonView("preliminary-lump-sum-edit");
   static readonly DeleteButton = new ButtonView("preliminary-lump-sum-delete");
   static readonly Modal = new ModalView("app-modal");
+  static readonly MobileCreateButton = new ButtonView(
+    "preliminary-lump-sum-mobile-create",
+  );
+  static readonly MobileDeleteButton = new ButtonView(
+    "preliminary-lump-sum-mobile-delete",
+  );
+  static readonly MobileEditButton = new ButtonView(
+    "preliminary-lump-sum-mobile-edit",
+  );
+  static readonly MobilePopupMenu = new MobilePopupMenu(
+    "etf-preliminary-sump-sum-create-menu",
+  );
+  static readonly MobileCreateTypePieceButton = new ButtonView(
+    "preliminary-lump-sum-mobile-create-type-piece",
+  );
+  static readonly MobileCreateTypeMonthButton = new ButtonView(
+    "preliminary-lump-sum-mobile-create-type-month",
+  );
+  static readonly MobileCreateTypeYearlyButton = new ButtonView(
+    "preliminary-lump-sum-mobile-create-type-yearly",
+  );
+  static readonly EmptyState = new RowView("preliminary-lump-sum-empty");
 }
 
 beforeEach(() => {
@@ -249,4 +277,82 @@ test("ListPreliminaryLumpSums opens delete action for yearly entry", async () =>
 
   await ListPreliminaryLumpSumsView.DeleteButton.click();
   await ListPreliminaryLumpSumsView.Modal.assertOpen();
+});
+
+test("ListPreliminaryLumpSums mobile: create menu opens and triggers modal (piece)", async () => {
+  await StoreService.getInstance().initAllStores();
+  render(ListPreliminaryLumpSums, { props: { etfId: "1" } });
+
+  await ListPreliminaryLumpSumsView.MobileCreateButton.click();
+  await ListPreliminaryLumpSumsView.MobilePopupMenu.assertToBeVisible();
+  await ListPreliminaryLumpSumsView.MobileCreateTypePieceButton.click();
+  await ListPreliminaryLumpSumsView.Modal.assertOpen();
+});
+
+test("ListPreliminaryLumpSums mobile: create menu opens and triggers modal (monthly)", async () => {
+  await StoreService.getInstance().initAllStores();
+  render(ListPreliminaryLumpSums, { props: { etfId: "1" } });
+
+  await ListPreliminaryLumpSumsView.MobileCreateButton.click();
+  await ListPreliminaryLumpSumsView.MobilePopupMenu.assertToBeVisible();
+  await ListPreliminaryLumpSumsView.MobileCreateTypeMonthButton.click();
+  await ListPreliminaryLumpSumsView.Modal.assertOpen();
+});
+
+test("ListPreliminaryLumpSums mobile: create menu opens and triggers modal (yearly)", async () => {
+  await StoreService.getInstance().initAllStores();
+  render(ListPreliminaryLumpSums, { props: { etfId: "1" } });
+
+  await ListPreliminaryLumpSumsView.MobileCreateButton.click();
+  await ListPreliminaryLumpSumsView.MobilePopupMenu.assertToBeVisible();
+  await ListPreliminaryLumpSumsView.MobileCreateTypeYearlyButton.click();
+  await ListPreliminaryLumpSumsView.Modal.assertOpen();
+});
+
+test("ListPreliminaryLumpSums mobile: edit button opens modal", async () => {
+  CrudEtfPreliminaryLumpSumServiceMocker.mockFetchAllEtfPreliminaryLumpSum([
+    {
+      id: 1,
+      etfId: 1,
+      year: 2025,
+      type: EtfPreliminaryLumpSumType.AMOUNT_PER_PIECE,
+    },
+  ] as never);
+  await StoreService.getInstance().initAllStores();
+  render(ListPreliminaryLumpSums);
+
+  await ListPreliminaryLumpSumsView.MobileEditButton.click();
+  await ListPreliminaryLumpSumsView.Modal.assertOpen();
+});
+
+test("ListPreliminaryLumpSums mobile: delete button opens modal", async () => {
+  CrudEtfPreliminaryLumpSumServiceMocker.mockFetchAllEtfPreliminaryLumpSum([
+    {
+      id: 1,
+      etfId: 1,
+      year: 2025,
+      type: EtfPreliminaryLumpSumType.AMOUNT_PER_PIECE,
+    },
+  ] as never);
+  await StoreService.getInstance().initAllStores();
+  render(ListPreliminaryLumpSums);
+
+  await ListPreliminaryLumpSumsView.MobileDeleteButton.click();
+  await ListPreliminaryLumpSumsView.Modal.assertOpen();
+});
+
+test("ListPreliminaryLumpSums shows empty state when no data is present", async () => {
+  // There exists an entry for 2024, but we select 2025
+  CrudEtfPreliminaryLumpSumServiceMocker.mockFetchAllEtfPreliminaryLumpSum([
+    {
+      id: 1,
+      etfId: 1,
+      year: 2024,
+      type: EtfPreliminaryLumpSumType.AMOUNT_PER_MONTH,
+    },
+  ] as never);
+  await StoreService.getInstance().initAllStores();
+  render(ListPreliminaryLumpSums, { props: { etfId: "1", year: "2025" } });
+
+  await ListPreliminaryLumpSumsView.EmptyState.assertToBeVisible();
 });

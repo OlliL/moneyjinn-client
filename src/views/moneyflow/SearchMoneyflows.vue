@@ -156,62 +156,72 @@
       </div>
     </div>
     <div class="flex justify-center w-full" v-if="dataLoaded">
-      <DivContentTable :alternate-row-background="false" class="w-full">
-        <TableHeader>
-          <TableRow>
-            <TableHead
-              class="font-bold border-r text-foreground text-center w-12"
-            ></TableHead>
+      <template v-if="moneyflowGroups.size === 0">
+        <div
+          data-testid="search-moneyflows-empty"
+          class="w-full text-center text-muted-foreground my-8"
+        >
+          {{ $t("General.noEntries") }}
+        </div>
+      </template>
+      <template v-else>
+        <DivContentTable :alternate-row-background="false" class="w-full">
+          <TableHeader>
+            <TableRow>
+              <TableHead
+                class="font-bold border-r text-foreground text-center w-12"
+              ></TableHead>
 
-            <TableHead
-              class="font-bold border-r text-foreground w-36"
-              v-if="colBookingMonth"
-            >
-              {{ $t("Moneyflow.bookingMonth") }}
-            </TableHead>
+              <TableHead
+                class="font-bold border-r text-foreground w-36"
+                v-if="colBookingMonth"
+              >
+                {{ $t("Moneyflow.bookingMonth") }}
+              </TableHead>
 
-            <TableHead
-              class="font-bold border-r text-foreground w-28"
-              v-if="colBookingYear"
-            >
-              {{ $t("Moneyflow.bookingYear") }}
-            </TableHead>
+              <TableHead
+                class="font-bold border-r text-foreground w-28"
+                v-if="colBookingYear"
+              >
+                {{ $t("Moneyflow.bookingYear") }}
+              </TableHead>
 
-            <TableHead
-              class="font-bold border-r text-foreground w-48 !whitespace-normal"
-              v-if="colContractpartner"
-            >
-              {{ $t("General.contractpartner") }}
-            </TableHead>
+              <TableHead
+                class="font-bold border-r text-foreground w-48 !whitespace-normal"
+                v-if="colContractpartner"
+              >
+                {{ $t("General.contractpartner") }}
+              </TableHead>
 
-            <TableHead
-              class="font-bold border-r text-foreground text-center w-28"
-            >
-              {{ $t("General.amount") }}
-            </TableHead>
+              <TableHead
+                class="font-bold border-r text-foreground text-center w-28"
+              >
+                {{ $t("General.amount") }}
+              </TableHead>
 
-            <TableHead
-              class="font-bold text-foreground text-center !whitespace-normal"
-            >
-              {{ $t("General.comment") }}
-            </TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          <SearchMoneyflowResultGroupVue
-            v-for="[index, moneyflowGroup] in moneyflowGroups"
-            :key="index.toString()"
-            :moneyflow-group="moneyflowGroup"
-            :col-booking-month="colBookingMonth"
-            :col-booking-year="colBookingYear"
-            :col-contractpartner="colContractpartner"
-            @delete-moneyflow="deleteMoneyflow"
-            @edit-moneyflow="editMoneyflow"
-            @list-moneyflow="listMoneyflow"
-            @show-receipt="showReceipt"
-          />
-        </TableBody>
-      </DivContentTable>
+              <TableHead
+                class="font-bold text-foreground text-center !whitespace-normal"
+              >
+                {{ $t("General.comment") }}
+              </TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            <SearchMoneyflowResultGroupVue
+              v-for="[index, moneyflowGroup] in moneyflowGroups"
+              :key="index.toString()"
+              :moneyflow-group="moneyflowGroup"
+              :col-booking-month="colBookingMonth"
+              :col-booking-year="colBookingYear"
+              :col-contractpartner="colContractpartner"
+              @delete-moneyflow="deleteMoneyflow"
+              @edit-moneyflow="editMoneyflow"
+              @list-moneyflow="listMoneyflow"
+              @show-receipt="showReceipt"
+            />
+          </TableBody>
+        </DivContentTable>
+      </template>
     </div>
   </div>
 </template>

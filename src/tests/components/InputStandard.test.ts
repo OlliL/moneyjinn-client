@@ -1,5 +1,5 @@
 import InputStandard from "@/components/InputStandard.vue";
-import { InputView, TextView } from "@/tests/TestViews";
+import { AlertView, InputView, TextView } from "@/tests/TestViews";
 import { globErr } from "@/tools/views/ZodUtil";
 import "@testing-library/jest-dom/vitest";
 import { render } from "@testing-library/vue";
@@ -9,7 +9,7 @@ import { string } from "zod";
 
 class InputStandardView {
   static readonly Input = new InputView("inputStandard");
-  static readonly ErrorText = new TextView("my error");
+  static readonly ErrorText = new AlertView("inputStandard-error-item");
   static readonly RegularLabelText = new TextView("regular label");
 }
 
@@ -23,7 +23,7 @@ test("error message and regular label get set correctly", async () => {
     },
   });
   await InputStandardView.Input.setValue("1234");
-  await InputStandardView.ErrorText.assertInDocument();
+  await InputStandardView.ErrorText.assertMessageContains("my error");
   await InputStandardView.Input.setValue("12345");
   await InputStandardView.RegularLabelText.assertInDocument();
 });
@@ -39,11 +39,11 @@ test("computed schema also works", async () => {
     },
   });
   await InputStandardView.Input.setValue("1234");
-  await InputStandardView.ErrorText.assertInDocument();
+  await InputStandardView.ErrorText.assertMessageContains("my error");
   await InputStandardView.Input.setValue("12345");
   await InputStandardView.RegularLabelText.assertInDocument();
   len.value = 6;
-  await InputStandardView.ErrorText.assertInDocument();
+  await InputStandardView.ErrorText.assertMessageContains("my error");
 });
 
 test("untouched field shows regular label", async () => {

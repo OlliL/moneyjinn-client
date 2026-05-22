@@ -7,7 +7,13 @@ import {
   type UserSession,
   useUserSessionStore,
 } from "@/stores/UserSessionStore";
-import { ButtonView, InputView, ModalView, RowView } from "@/tests/TestViews";
+import {
+  ButtonView,
+  InputView,
+  MobilePopupMenu,
+  ModalView,
+  RowView,
+} from "@/tests/TestViews";
 import ListPostingAccounts from "@/views/postingaccount/ListPostingAccounts.vue";
 import "@testing-library/jest-dom/vitest";
 import { render } from "@testing-library/vue";
@@ -25,7 +31,9 @@ class ListPostingAccountsView {
   static readonly MobileFilterTrigger = new ButtonView(
     "div-filter-mobile-trigger",
   );
-  static readonly MobileFilterSheet = new RowView("div-filter-mobile-sheet");
+  static readonly MobileFilterSheet = new MobilePopupMenu(
+    "div-filter-mobile-sheet",
+  );
   static readonly MobileFilterInput = new InputView("div-filter-mobile-input");
   static readonly MobileAccordion = new RowView(
     "posting-account-mobile-accordion",
@@ -43,6 +51,10 @@ class ListPostingAccountsView {
   static readonly EditOneButton = new ButtonView("posting-account-edit-1");
   static readonly DeleteOneButton = new ButtonView("posting-account-delete-1");
   static readonly Modal = new ModalView("app-modal");
+  static readonly EmptyRowDesktop = new RowView(
+    "posting-account-empty-desktop",
+  );
+  static readonly EmptyRowMobile = new RowView("posting-account-empty-mobile");
 }
 
 beforeEach(() => {
@@ -131,4 +143,16 @@ test("ListPostingAccounts opens delete modal from mobile action", async () => {
   await ListPostingAccountsView.MobileRowOne.assertToBeVisible();
   await ListPostingAccountsView.MobileDeleteOneButton.click();
   await ListPostingAccountsView.Modal.assertOpen();
+});
+
+test("ListPostingAccounts shows empty state for empty list (Desktop and Mobile)", async () => {
+  // Arrange: Mock for empty PostingAccounts
+  PostingAccountServiceMocker.mockFetchAllPostingAccount([]);
+  CapitalsourceServiceMocker.mockFetchAllCapitalsource([]);
+  ContractpartnerServiceMocker.mockFetchAllContractpartner([]);
+  CrudEtfServiceMocker.mockFetchAllEtf([]);
+  await StoreService.getInstance().initAllStores();
+  render(ListPostingAccounts);
+  await ListPostingAccountsView.EmptyRowDesktop.assertToBeVisible();
+  await ListPostingAccountsView.EmptyRowMobile.assertToBeVisible();
 });

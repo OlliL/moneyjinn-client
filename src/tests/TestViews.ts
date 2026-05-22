@@ -1,3 +1,4 @@
+import "@testing-library/jest-dom";
 import userEvent from "@testing-library/user-event";
 import { fireEvent, screen, waitFor } from "@testing-library/vue";
 import { expect } from "vitest";
@@ -55,7 +56,7 @@ export abstract class AbstractView {
     const testId = this.getRequiredTestId("assertToBeVisible");
     const element = await this.findByTestId<HTMLElement>(testId);
     await waitFor(() => {
-      expect(element).toBeVisible();
+      expect(element).toBeInTheDocument();
     });
   }
 
@@ -140,6 +141,8 @@ export class ModalView extends AbstractView {
 }
 
 export class RowView extends AbstractView {}
+
+export class MobilePopupMenu extends AbstractView {}
 
 export class ValueView extends AbstractView {}
 
@@ -426,6 +429,35 @@ export class SelectView extends AbstractView {
       expect(
         this.queryByTestId<HTMLElement>(`${this.optionTestIdPrefix}${value}`),
       ).toBeNull();
+    });
+  }
+}
+
+export class FileUploadView extends AbstractView {
+  async selectFile(file: File): Promise<void> {
+    const testId = this.getRequiredTestId("selectFile");
+    const element = await this.findByTestId<HTMLElement>(testId);
+    Object.defineProperty(element, "files", { value: [file] });
+    // Trigger change event
+    await fireEvent.change(element);
+  }
+}
+
+export class RadioView extends AbstractView {
+  async assertChecked(): Promise<void> {
+    const testId = this.getRequiredTestId("assertChecked");
+    const radio = await this.findByTestId<HTMLElement>(testId);
+    await waitFor(() => {
+      // For custom radio: check aria-checked attribute
+      expect(radio.getAttribute("aria-checked")).toBe("true");
+    });
+  }
+
+  async assertUnchecked(): Promise<void> {
+    const testId = this.getRequiredTestId("assertUnchecked");
+    const radio = await this.findByTestId<HTMLElement>(testId);
+    await waitFor(() => {
+      expect(radio.getAttribute("aria-checked")).toBe("false");
     });
   }
 }

@@ -31,13 +31,22 @@
         </TableRow>
       </TableHeader>
       <TableBody>
-        <ListPreDefMoneyflowRowVue
-          v-for="mpm in preDefMoneyflows"
-          :key="mpm.id"
-          :mpm="mpm"
-          @edit-pre-def-moneyflow="editPreDefMoneyflow"
-          @delete-pre-def-moneyflow="deletePreDefMoneyflow"
-        />
+        <template v-if="preDefMoneyflows.length === 0">
+          <tr data-testid="predef-moneyflow-empty-desktop">
+            <td :colspan="10" class="text-center text-muted-foreground py-8">
+              {{ $t("General.noEntries") }}
+            </td>
+          </tr>
+        </template>
+        <template v-else>
+          <ListPreDefMoneyflowRowVue
+            v-for="mpm in preDefMoneyflows"
+            :key="mpm.id"
+            :mpm="mpm"
+            @edit-pre-def-moneyflow="editPreDefMoneyflow"
+            @delete-pre-def-moneyflow="deletePreDefMoneyflow"
+          />
+        </template>
       </TableBody>
     </DivContentTable>
   </div>

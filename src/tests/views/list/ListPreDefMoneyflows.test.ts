@@ -6,7 +6,13 @@ import {
   type UserSession,
   useUserSessionStore,
 } from "@/stores/UserSessionStore";
-import { ButtonView, InputView, ModalView, RowView } from "@/tests/TestViews";
+import {
+  ButtonView,
+  InputView,
+  MobilePopupMenu,
+  ModalView,
+  RowView,
+} from "@/tests/TestViews";
 import ListPreDefMoneyflows from "@/views/predefmoneyflow/ListPreDefMoneyflows.vue";
 import "@testing-library/jest-dom/vitest";
 import { render } from "@testing-library/vue";
@@ -24,7 +30,9 @@ class ListPreDefMoneyflowsView {
   static readonly MobileFilterTrigger = new ButtonView(
     "div-filter-mobile-trigger",
   );
-  static readonly MobileFilterSheet = new RowView("div-filter-mobile-sheet");
+  static readonly MobileFilterSheet = new MobilePopupMenu(
+    "div-filter-mobile-sheet",
+  );
   static readonly MobileFilterInput = new InputView("div-filter-mobile-input");
   static readonly MobileAccordion = new RowView(
     "predef-moneyflow-mobile-accordion",
@@ -44,6 +52,10 @@ class ListPreDefMoneyflowsView {
     "predef-moneyflow-delete-1",
   );
   static readonly Modal = new ModalView("app-modal");
+  static readonly EmptyRowDesktop = new RowView(
+    "predef-moneyflow-empty-desktop",
+  );
+  static readonly EmptyRowMobile = new RowView("predef-moneyflow-empty-mobile");
 }
 
 beforeEach(() => {
@@ -144,4 +156,11 @@ test("ListPreDefMoneyflows opens delete modal from mobile action", async () => {
   await ListPreDefMoneyflowsView.MobileRowOne.assertToBeVisible();
   await ListPreDefMoneyflowsView.MobileDeleteRowOneButton.click();
   await ListPreDefMoneyflowsView.Modal.assertOpen();
+});
+
+test("ListPreDefMoneyflows shows empty state for empty list (Desktop and Mobile)", async () => {
+  PreDefMoneyflowServiceMocker.mockFetchAllPreDefMoneyflow([]);
+  render(ListPreDefMoneyflows);
+  await ListPreDefMoneyflowsView.EmptyRowDesktop.assertToBeVisible();
+  await ListPreDefMoneyflowsView.EmptyRowMobile.assertToBeVisible();
 });

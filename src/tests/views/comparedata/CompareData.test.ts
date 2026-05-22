@@ -262,7 +262,7 @@ test.each([
     },
   ],
 ] as const)(
-  "CompareData zeigt nur die erwartete Ergebnisgruppe fuer %s",
+  "CompareData only shows the expected result group for %s",
   async (groupKey, expectedVisible) => {
     CompareDataServiceMocker.mockCompareDataResolved(
       compareDataResultOnly(groupKey),
@@ -290,7 +290,7 @@ test.each([
   },
 );
 
-test("CompareData zeigt alle Gruppen-Toggles wenn alle Gruppen Eintraege haben", async () => {
+test("CompareData shows all group toggles when every group has entries", async () => {
   CompareDataServiceMocker.mockCompareDataResolved({
     compareDatasMatching: [{ moneyflow: ownMoneyflow(41), compareDataDataset }],
     compareDatasWrongCapitalsource: [
@@ -309,7 +309,7 @@ test("CompareData zeigt alle Gruppen-Toggles wenn alle Gruppen Eintraege haben",
   await CompareDataView.GroupNotInDatabaseToggle.assertToBeVisible();
 });
 
-test("CompareData zeigt keine Gruppen-Toggles wenn keine Daten gefunden wurden", async () => {
+test("CompareData shows no group toggles when no data was found", async () => {
   CompareDataServiceMocker.mockCompareDataResolved({
     compareDatasMatching: [],
     compareDatasWrongCapitalsource: [],
