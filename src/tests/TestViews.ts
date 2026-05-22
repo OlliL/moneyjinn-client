@@ -140,6 +140,16 @@ export class ModalView extends AbstractView {
   }
 }
 
+export class CommandView extends AbstractView {
+  async assertIsDisabled() {
+    await this.assertHasClass("pointer-events-none");
+  }
+
+  async assertIsEnabled() {
+    await this.assertNotHasClass("pointer-events-none");
+  }
+}
+
 export class RowView extends AbstractView {}
 
 export class MobilePopupMenu extends AbstractView {}
@@ -192,6 +202,28 @@ export class SwitchView extends AbstractView {
   }
 }
 
+export class CheckboxView extends AbstractView {
+  async click(): Promise<void> {
+    await this.clickByTestId("click");
+  }
+
+  async assertChecked(): Promise<void> {
+    const testId = this.getRequiredTestId("assertChecked");
+    const checkbox = await this.findByTestId<HTMLInputElement>(testId);
+    await waitFor(() => {
+      expect(checkbox).toBeChecked();
+    });
+  }
+
+  async assertUnchecked(): Promise<void> {
+    const testId = this.getRequiredTestId("assertUnchecked");
+    const checkbox = await this.findByTestId<HTMLInputElement>(testId);
+    await waitFor(() => {
+      expect(checkbox).not.toBeChecked();
+    });
+  }
+}
+
 export class InputView extends AbstractView {
   private async waitUntilInputValueEquals(
     input: HTMLInputElement,
@@ -228,7 +260,7 @@ export class InputView extends AbstractView {
     const input = await this.findByTestId<HTMLInputElement>(testId);
     const user = this.createUser();
     await user.clear(input);
-    await user.type(input, value);
+    if (value.length > 0) await user.type(input, value);
 
     try {
       await this.waitUntilInputValueEquals(input, value);
