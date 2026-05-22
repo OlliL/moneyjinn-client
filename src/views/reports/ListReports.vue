@@ -85,7 +85,7 @@
         v-model:data-loaded="dataLoadedReport"
         v-if="year && month"
       />
-      <EtfTableVue
+      <ReportEtfTable
         :year="year"
         :month="month"
         v-if="year && month"
@@ -111,7 +111,7 @@ import ReportService from "@/service/ReportService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { getMonthName } from "@/tools/views/MonthName";
 import { ChevronLeft, ChevronRight } from "lucide-vue-next";
-import EtfTableVue from "./elements/EtfTable.vue";
+import ReportEtfTable from "./elements/ReportEtfTable.vue";
 import ReportTableVue from "./elements/ReportTable.vue";
 
 const serverErrors = ref(new Array<string>());

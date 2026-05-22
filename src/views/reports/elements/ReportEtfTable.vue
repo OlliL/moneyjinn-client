@@ -7,7 +7,7 @@
           <h4 class="text-2xl font-bold">{{ $t("General.etf") }}</h4>
         </div>
         <div class="p-4">
-          <EtfTableContainer :etf-summary-array="etfSummaryArray" />
+          <EtfTable :etf-summary-array="etfSummaryArray" />
         </div>
       </div>
     </div>
@@ -16,10 +16,10 @@
 
 <script lang="ts" setup>
 import DivError from "@/components/DivError.vue";
+import EtfTable from "@/components/etf/EtfTable.vue";
 import type { EtfSummary } from "@/model/etf/EtfSummary";
 import EtfService from "@/service/EtfService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
-import EtfTableContainer from "@/views/etf/elements/EtfTableContainer.vue";
 import { computed, onMounted, ref, watch } from "vue";
 
 const serverErrors = ref(new Array<string>());

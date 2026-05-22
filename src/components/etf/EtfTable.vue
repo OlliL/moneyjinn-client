@@ -9,7 +9,7 @@
           class="w-full border rounded-md"
           data-testid="etf-mobile-accordion"
         >
-          <EtfMobileAccordionItem
+          <EtfTableRowMobile
             v-for="etfData in etfSummaryArray"
             :key="'mobile-' + etfData.etfId"
             v-bind="etfData"
@@ -103,7 +103,7 @@
             </TableHeader>
 
             <TableBody>
-              <EtfTableRow
+              <EtfTableRowDesktop
                 v-for="etfData in etfSummaryArray"
                 :key="'desktop-' + etfData.etfId"
                 v-bind="etfData"
@@ -117,7 +117,8 @@
 </template>
 
 <script lang="ts" setup>
-import EtfTableRow from "@/components/reports/EtfTableRow.vue";
+import EtfTableRowDesktop from "@/components/etf/EtfTableRowDesktop.vue";
+import EtfTableRowMobile from "@/components/etf/EtfTableRowMobile.vue";
 import { Accordion } from "@/components/ui/accordion";
 import {
   Table,
@@ -127,7 +128,6 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import type { EtfSummary } from "@/model/etf/EtfSummary";
-import EtfMobileAccordionItem from "@/views/reports/elements/EtfMobileAccordionItem.vue";
 import { computed, type PropType } from "vue";
 
 const props = defineProps({

@@ -108,7 +108,7 @@
       />
     </div>
 
-    <ListEtfDepotSummary
+    <ListEtfDepotEtfTable
       :etfSummary="etfSummary"
       v-if="etfEffectiveFlows.length > 0"
     />
@@ -155,8 +155,8 @@ import CalcEtfSaleForm from "./elements/CalcEtfSaleForm.vue";
 import CreateEtfFlowModalVue from "./elements/CreateEtfFlowModal.vue";
 import DeleteEtfFlowModalVue from "./elements/DeleteEtfFlowModal.vue";
 import ListEtfDepotDesktop from "./elements/ListEtfDepotDesktop.vue";
+import ListEtfDepotEtfTable from "./elements/ListEtfDepotEtfTable.vue";
 import ListEtfDepotMobile from "./elements/ListEtfDepotMobile.vue";
-import ListEtfDepotSummary from "./elements/ListEtfDepotSummary.vue";
 
 const { t } = useI18n();
 

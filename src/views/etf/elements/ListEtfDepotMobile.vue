@@ -116,7 +116,6 @@ const props = defineProps({
 const emit = defineEmits(["deleteEtfFlow", "editEtfFlow"]);
 
 const amountClass = (flow: EtfFlow): string => {
-  console.log("----------------------->", redIfNegative(flow.amount));
   return redIfNegative(flow.amount);
 };
 
