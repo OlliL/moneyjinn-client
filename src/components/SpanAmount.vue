@@ -1,5 +1,5 @@
 <template>
-  <span :class="`${amountClass} whitespace-nowrap`" data-testid="amountSpan">{{
+  <span :class="[amountClass, 'whitespace-nowrap']" data-testid="amountSpan">{{
     amountString
   }}</span>
 </template>

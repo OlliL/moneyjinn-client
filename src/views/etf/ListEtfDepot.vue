@@ -1,5 +1,9 @@
 <template>
-  <ButtonMobileCreate data-testid="etf-flow-create" @click="createEtfFlow" />
+  <ButtonMobileCreate
+    data-testid="etf-flow-create"
+    @click="createEtfFlow"
+    v-if="dataLoaded"
+  />
 
   <DeleteEtfFlowModalVue @etf-flow-deleted="etfFlowDeleted" ref="deleteModal" />
   <CreateEtfFlowModalVue
@@ -26,7 +30,10 @@
             />
           </div>
 
-          <div class="col-span-1 md:col-span-8 mt-3 md:mt-0 hidden md:block">
+          <div
+            class="col-span-1 md:col-span-8 mt-3 md:mt-0 hidden md:block"
+            v-if="dataLoaded"
+          >
             <Button
               data-testid="etf-depot-create"
               type="button"
@@ -41,84 +48,83 @@
       </div>
     </div>
 
-    <div
-      class="fixed bottom-6 right-6 z-50 md:hidden"
-      v-if="dataLoaded && etfFlows.length"
-    >
-      <Sheet v-model:open="isMobileFilterOpen">
-        <SheetTrigger as-child>
-          <Button
-            data-testid="etf-depot-mobile-filter-trigger"
-            class="h-12 w-12 p-0 rounded-full shadow-lg"
+    <span v-if="dataLoaded && etfFlows.length">
+      <div class="fixed bottom-6 right-6 z-50 md:hidden">
+        <Sheet v-model:open="isMobileFilterOpen">
+          <SheetTrigger as-child>
+            <Button
+              data-testid="etf-depot-mobile-filter-trigger"
+              class="h-12 w-12 p-0 rounded-full shadow-lg"
+            >
+              <Filter class="h-5 w-5" />
+            </Button>
+          </SheetTrigger>
+
+          <SheetContent
+            data-testid="etf-depot-mobile-filter-sheet"
+            side="bottom"
+            class="h-[40vh] rounded-t-xl p-6 flex flex-col"
           >
-            <Filter class="h-5 w-5" />
-          </Button>
-        </SheetTrigger>
+            <SheetHeader class="text-left pb-4 border-b shrink-0">
+              <SheetTitle>{{ $t("Reports.filterData") }}</SheetTitle>
+              <SheetDescription class="sr-only">
+                {{ $t("Reports.filterData") }}
+              </SheetDescription>
+            </SheetHeader>
 
-        <SheetContent
-          data-testid="etf-depot-mobile-filter-sheet"
-          side="bottom"
-          class="h-[40vh] rounded-t-xl p-6 flex flex-col"
-        >
-          <SheetHeader class="text-left pb-4 border-b shrink-0">
-            <SheetTitle>{{ $t("Reports.filterData") }}</SheetTitle>
-            <SheetDescription class="sr-only">
-              {{ $t("Reports.filterData") }}
-            </SheetDescription>
-          </SheetHeader>
-
-          <div class="flex-1 overflow-y-auto space-y-4 py-4">
-            <div class="flex items-center gap-3 pb-1.5">
-              <Switch
-                data-testid="etf-depot-mobile-effective-switch"
-                id="etfDepotEffectiveMobile"
-                :modelValue="isMobileEffectiveOnly"
-                @update:model-value="setMobileEffectiveOnly"
-              />
-              <Label
-                for="etfDepotEffectiveMobile"
-                class="cursor-pointer text-sm font-medium select-none whitespace-nowrap"
-              >
-                {{ $t("ETFFlow.effective") }}
-              </Label>
+            <div class="flex-1 overflow-y-auto space-y-4 py-4">
+              <div class="flex items-center gap-3 pb-1.5">
+                <Switch
+                  data-testid="etf-depot-mobile-effective-switch"
+                  id="etfDepotEffectiveMobile"
+                  :modelValue="isMobileEffectiveOnly"
+                  @update:model-value="setMobileEffectiveOnly"
+                />
+                <Label
+                  for="etfDepotEffectiveMobile"
+                  class="cursor-pointer text-sm font-medium select-none whitespace-nowrap"
+                >
+                  {{ $t("ETFFlow.effective") }}
+                </Label>
+              </div>
             </div>
-          </div>
-        </SheetContent>
-      </Sheet>
-    </div>
+          </SheetContent>
+        </Sheet>
+      </div>
 
-    <div class="flex justify-center" v-if="dataLoaded && etfFlows.length">
-      <ListEtfDepotMobile
-        :flows="mobileFlows"
-        :etf-name="selectedEtf.name"
-        :partial="partial"
-        :show-lump-sum="isMobileEffectiveOnly"
-        @delete-etf-flow="deleteEtfFlow"
-        @edit-etf-flow="editEtfFlow"
+      <div class="flex justify-center">
+        <ListEtfDepotMobile
+          :flows="mobileFlows"
+          :etf-name="selectedEtf.name"
+          :partial="partial"
+          :show-lump-sum="isMobileEffectiveOnly"
+          @delete-etf-flow="deleteEtfFlow"
+          @edit-etf-flow="editEtfFlow"
+        />
+
+        <ListEtfDepotDesktop
+          :current-tab="currentTab"
+          :etf-flows="etfFlows"
+          :etf-effective-flows="etfEffectiveFlows"
+          :selected-etf-id="selectedEtf.id"
+          @update:current-tab="setCurrentTab"
+          @delete-etf-flow="deleteEtfFlow"
+          @edit-etf-flow="editEtfFlow"
+        />
+      </div>
+
+      <ListEtfDepotEtfTable
+        :etfSummary="etfSummary"
+        v-if="etfEffectiveFlows.length > 0"
       />
 
-      <ListEtfDepotDesktop
-        :current-tab="currentTab"
-        :etf-flows="etfFlows"
-        :etf-effective-flows="etfEffectiveFlows"
-        :selected-etf-id="selectedEtf.id"
-        @update:current-tab="setCurrentTab"
-        @delete-etf-flow="deleteEtfFlow"
-        @edit-etf-flow="editEtfFlow"
+      <CalcEtfSaleForm
+        :etf="selectedEtf"
+        :etfSummary="etfSummary"
+        :pieces="calcEtfSalePieces"
+        v-if="etfEffectiveFlows.length > 0"
       />
-    </div>
-
-    <ListEtfDepotEtfTable
-      :etfSummary="etfSummary"
-      v-if="etfEffectiveFlows.length > 0"
-    />
-
-    <CalcEtfSaleForm
-      :etf="selectedEtf"
-      :etfSummary="etfSummary"
-      :pieces="calcEtfSalePieces"
-      v-if="etfEffectiveFlows.length > 0"
-    />
+    </span>
   </div>
 </template>
 
@@ -144,7 +150,6 @@ import type { EtfSummary } from "@/model/etf/EtfSummary";
 import router, { Routes } from "@/router";
 import EtfService from "@/service/EtfService";
 import { useEtfStore } from "@/stores/EtfStore";
-import { formatNumber } from "@/tools/views/FormatNumber";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { globErr } from "@/tools/views/ZodUtil";
 import { Filter, Plus } from "lucide-vue-next";
@@ -197,10 +202,6 @@ onMounted(() => {
   }
 });
 
-const etfEffectiveFlowAmountSum = computed(() => {
-  return etfEffectiveFlows.value.reduce((a, b) => a + (b["amount"] || 0), 0);
-});
-
 const partial = computed(() => {
   return (
     100 -
@@ -208,61 +209,6 @@ const partial = computed(() => {
       ? (getEtf(Number(selectedEtfId.value))?.partialTaxExemption ?? 0)
       : 0)
   );
-});
-const etfEffectiveFlowAccumulatedPreliminaryLumpSum = computed(() => {
-  return etfEffectiveFlows.value.reduce(
-    (a, b) =>
-      a + ((b["accumulatedPreliminaryLumpSum"] * partial.value) / 100 || 0),
-    0,
-  );
-});
-
-const etfEffectiveFlowAmountPriceSum = computed(() => {
-  return etfEffectiveFlows.value.reduce(
-    (a, b) => a + (b["amount"] * b["price"] || 0),
-    0,
-  );
-});
-
-const etfEffectiveFlowAmountSumString = computed(() => {
-  return formatNumber(etfEffectiveFlowAmountSum.value, 6);
-});
-
-const etfEffectiveFlowPriceAvg = computed(() => {
-  return etfEffectiveFlowAmountPriceSum.value / etfEffectiveFlowAmountSum.value;
-});
-
-const etfFlowAmountSum = computed(() => {
-  return etfFlows.value.reduce((a, b) => a + (b["amount"] || 0), 0);
-});
-
-const etfFlowBuyAmountSum = computed(() => {
-  return etfFlows.value.reduce(
-    (a, b) => a + (b["amount"] > 0 ? b["amount"] || 0 : 0),
-    0,
-  );
-});
-
-const etfFlowAmountPriceSum = computed(() => {
-  return etfFlows.value.reduce(
-    (a, b) => a + (b["amount"] * b["price"] || 0),
-    0,
-  );
-});
-
-const etfFlowBuyAmountPriceSum = computed(() => {
-  return etfFlows.value.reduce(
-    (a, b) => a + (b["amount"] > 0 ? b["amount"] * b["price"] || 0 : 0),
-    0,
-  );
-});
-
-const etfFlowAmountSumString = computed(() => {
-  return formatNumber(etfFlowAmountSum.value, 6);
-});
-
-const etfFlowPriceAvg = computed(() => {
-  return etfFlowBuyAmountPriceSum.value / etfFlowBuyAmountSum.value;
 });
 
 const isMobileEffectiveOnly = computed(() => {
@@ -345,9 +291,10 @@ const etfFlowUpdated = (etfFlow: EtfFlow) => {
 watch(
   selectedEtfId,
   (newVal, oldVal) => {
-    if (oldVal != selectedEtfId.value && newVal !== undefined) {
-      loadData(newVal);
-    }
+    console.log("watcher!", oldVal, newVal);
+    if (newVal === undefined) {
+      dataLoaded.value = false;
+    } else loadData(newVal);
   },
   { immediate: true },
 );

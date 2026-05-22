@@ -1,7 +1,5 @@
 <template>
-  <div v-if="etfSummary">
-    <EtfTable :etf-summary-array="[etfSummary]" />
-  </div>
+  <EtfTable :etf-summary-array="[etfSummary]" />
 </template>
 <script lang="ts" setup>
 import EtfTable from "@/components/etf/EtfTable.vue";
@@ -11,7 +9,7 @@ import type { PropType } from "vue";
 defineProps({
   etfSummary: {
     type: Object as PropType<EtfSummary>,
-    required: false,
+    required: true,
   },
 });
 </script>
