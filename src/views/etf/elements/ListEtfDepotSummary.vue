@@ -1,70 +1,88 @@
 <template>
   <div class="flex justify-center py-4" v-if="etfSummary">
     <div class="w-full max-w-5xl">
-      <div class="flex flex-col rounded-md border">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead
-                class="font-bold text-foreground text-center"
-                rowspan="2"
-              >
-                {{ $t("ETFFlow.shares") }}
-              </TableHead>
-              <TableHead
-                class="text-center border-l hidden md:table-cell"
-                colspan="3"
-              >
-                {{ $t("ETFFlow.amount") }}
-              </TableHead>
-              <TableHead
-                class="font-bold border-l border-r text-foreground text-center"
-                colspan="3"
-              >
-                {{ $t("ETFFlow.overall") }}
-              </TableHead>
-              <TableHead class="text-center hidden md:table-cell" rowspan="2">
-                {{ $t("Reports.state") }}
-              </TableHead>
-            </TableRow>
-            <TableRow>
-              <TableHead
-                class="font-bold border text-foreground text-center hidden md:table-cell"
-              >
-                {{ $t("ETFFlow.payed") }} &#8709;
-              </TableHead>
-              <TableHead
-                class="font-bold border text-foreground text-center hidden md:table-cell"
-              >
-                {{ $t("ETFFlow.bid") }}
-              </TableHead>
-              <TableHead
-                class="font-bold border text-foreground text-center hidden md:table-cell"
-              >
-                {{ $t("ETFFlow.ask") }}
-              </TableHead>
-              <TableHead class="font-bold border text-foreground text-center">
-                {{ $t("ETFFlow.payed") }}
-              </TableHead>
-              <TableHead class="font-bold border text-foreground text-center">
-                {{ $t("ETFFlow.bid") }}
-              </TableHead>
-              <TableHead class="font-bold border text-foreground text-center">
-                {{ $t("ETFFlow.profit") }}
-              </TableHead>
-            </TableRow>
-          </TableHeader>
+      <!-- Mobile View -->
+      <div class="block md:hidden">
+        <Accordion type="single" collapsible class="w-full border rounded-md">
+          <EtfMobileAccordionItem v-bind="etfSummary" />
+        </Accordion>
+      </div>
 
-          <TableBody v-if="etfSummary">
-            <EtfTableRow v-bind="etfSummary" />
-          </TableBody>
-        </Table>
+      <!-- Desktop View -->
+      <div class="hidden md:block">
+        <div class="flex flex-col rounded-md border">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead
+                  class="font-bold border-r text-foreground text-center"
+                  rowspan="2"
+                  id="thEtf"
+                >
+                  {{ $t("General.etf") }}
+                </TableHead>
+                <TableHead
+                  class="font-bold text-foreground text-center"
+                  rowspan="2"
+                >
+                  {{ $t("ETFFlow.shares") }}
+                </TableHead>
+                <TableHead
+                  class="text-center border-l hidden md:table-cell"
+                  colspan="3"
+                >
+                  {{ $t("ETFFlow.amount") }}
+                </TableHead>
+                <TableHead
+                  class="font-bold border-l border-r text-foreground text-center"
+                  colspan="3"
+                >
+                  {{ $t("ETFFlow.overall") }}
+                </TableHead>
+                <TableHead class="text-center hidden md:table-cell" rowspan="2">
+                  {{ $t("Reports.state") }}
+                </TableHead>
+              </TableRow>
+              <TableRow>
+                <TableHead
+                  class="font-bold border text-foreground text-center hidden md:table-cell"
+                >
+                  {{ $t("ETFFlow.payed") }} &#8709;
+                </TableHead>
+                <TableHead
+                  class="font-bold border text-foreground text-center hidden md:table-cell"
+                >
+                  {{ $t("ETFFlow.bid") }}
+                </TableHead>
+                <TableHead
+                  class="font-bold border text-foreground text-center hidden md:table-cell"
+                >
+                  {{ $t("ETFFlow.ask") }}
+                </TableHead>
+                <TableHead class="font-bold border text-foreground text-center">
+                  {{ $t("ETFFlow.payed") }}
+                </TableHead>
+                <TableHead class="font-bold border text-foreground text-center">
+                  {{ $t("ETFFlow.bid") }}
+                </TableHead>
+                <TableHead class="font-bold border text-foreground text-center">
+                  {{ $t("ETFFlow.profit") }}
+                </TableHead>
+              </TableRow>
+            </TableHeader>
+
+            <TableBody v-if="etfSummary">
+              <EtfTableRow v-bind="etfSummary" />
+            </TableBody>
+          </Table>
+        </div>
       </div>
     </div>
   </div>
 </template>
 <script lang="ts" setup>
 import EtfTableRow from "@/components/reports/EtfTableRow.vue";
+import { Accordion } from "@/components/ui/accordion";
 import {
   Table,
   TableBody,
@@ -73,6 +91,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import type { EtfSummary } from "@/model/etf/EtfSummary";
+import EtfMobileAccordionItem from "@/views/reports/elements/EtfMobileAccordionItem.vue";
 import type { PropType } from "vue";
 
 defineProps({

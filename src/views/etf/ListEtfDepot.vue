@@ -306,7 +306,6 @@ const handleServerResponse = (etfDepot: EtfDepot, etfId: number) => {
   selectedEtf.value = getEtf(etfId) ?? ({} as Etf);
 
   etfSummary.value = etfDepot.etfSummary ?? ({} as EtfSummary);
-  etfSummary.value.name = undefined;
 
   calcEtfSalePieces.value = etfDepot.calcEtfSalePieces;
 
