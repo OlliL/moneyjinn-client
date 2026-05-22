@@ -152,7 +152,6 @@ const redIfPrivate = computed(() =>
   props.mmf.private ? "bg-destructive/10" : "",
 );
 
-// NIE MEHR DOPPELTER CODE: Mappe die Zeilen zu einer einheitlichen Struktur
 const tableRows = computed(() => {
   if (hasSplits.value) {
     return props.mmf.moneyflowSplitEntries!.map((mse) => ({
@@ -163,7 +162,6 @@ const tableRows = computed(() => {
       postingAccountName: mse.postingAccountName,
     }));
   }
-  // Wenn keine Splits existieren, gibt es genau eine Zeile mit den Hauptdaten
   return [
     {
       isSplit: false,
