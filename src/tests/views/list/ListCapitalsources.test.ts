@@ -13,9 +13,9 @@ import {
 import {
   ButtonView,
   InputView,
+  MobilePopupMenu,
   ModalView,
   RowView,
-  MobilePopupMenu,
   SwitchView,
 } from "@/tests/TestViews";
 import ListCapitalsources from "@/views/capitalsource/ListCapitalsources.vue";
@@ -39,7 +39,9 @@ class ListCapitalsourcesView {
   static readonly MobileValidNowToggle = new SwitchView(
     "div-filter-mobile-valid-now",
   );
-  static readonly MobileFilterSheet = new MobilePopupMenu("div-filter-mobile-sheet");
+  static readonly MobileFilterSheet = new MobilePopupMenu(
+    "div-filter-mobile-sheet",
+  );
   static readonly MobileAccordion = new RowView(
     "capitalsource-mobile-accordion",
   );

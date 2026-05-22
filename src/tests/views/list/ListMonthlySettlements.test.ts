@@ -6,7 +6,12 @@ import {
   useUserSessionStore,
 } from "@/stores/UserSessionStore";
 import { assertHaveBeenCalledWith } from "@/tests/TestUtil";
-import { ButtonView, ModalView, RowView, MobilePopupMenu } from "@/tests/TestViews";
+import {
+  ButtonView,
+  MobilePopupMenu,
+  ModalView,
+  RowView,
+} from "@/tests/TestViews";
 import ListMonthlySettlements from "@/views/monthlysettlement/ListMonthlySettlements.vue";
 import "@testing-library/jest-dom/vitest";
 import { render } from "@testing-library/vue";

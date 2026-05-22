@@ -12,9 +12,9 @@ import {
   ButtonView,
   ComboboxView,
   InputView,
+  MobilePopupMenu,
   ModalView,
   RowView,
-  MobilePopupMenu,
 } from "@/tests/TestViews";
 import ListContractpartnerMatchings from "@/views/contractpartnermatching/ListContractpartnerMatchings.vue";
 import "@testing-library/jest-dom/vitest";
@@ -31,7 +31,9 @@ class ListContractpartnerMatchingsView {
   static readonly MobileFilterTrigger = new ButtonView(
     "div-filter-mobile-trigger",
   );
-  static readonly MobileFilterSheet = new MobilePopupMenu("div-filter-mobile-sheet");
+  static readonly MobileFilterSheet = new MobilePopupMenu(
+    "div-filter-mobile-sheet",
+  );
   static readonly MobileFilterInput = new InputView("div-filter-mobile-input");
   static readonly ContractpartnerFilterCombobox = new ComboboxView(
     "contractpartnerContractpartnerMatching-searchContractpartner",

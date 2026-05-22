@@ -10,9 +10,9 @@ import { assertHaveBeenCalledWith } from "@/tests/TestUtil";
 import {
   ButtonView,
   InputView,
+  MobilePopupMenu,
   ModalView,
   RowView,
-  MobilePopupMenu,
   SwitchView,
   TextView,
 } from "@/tests/TestViews";

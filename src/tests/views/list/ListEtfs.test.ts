@@ -10,9 +10,9 @@ import {
 import {
   ButtonView,
   InputView,
+  MobilePopupMenu,
   ModalView,
   RowView,
-  MobilePopupMenu,
   SwitchView,
 } from "@/tests/TestViews";
 import ListEtfs from "@/views/etf/ListEtfs.vue";
@@ -34,7 +34,9 @@ class ListEtfsView {
   static readonly MobileFilterTrigger = new ButtonView(
     "div-filter-mobile-trigger",
   );
-  static readonly MobileFilterSheet = new MobilePopupMenu("div-filter-mobile-sheet");
+  static readonly MobileFilterSheet = new MobilePopupMenu(
+    "div-filter-mobile-sheet",
+  );
   static readonly MobileFilterInput = new InputView("div-filter-mobile-input");
   static readonly MobileAccordion = new RowView("etf-mobile-accordion");
   static readonly MobileRowEtf1 = new RowView("etf-mobile-row-1");
