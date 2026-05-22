@@ -1,10 +1,10 @@
-import "@testing-library/jest-dom";
-import { RowView } from "@/tests/TestViews";
-import { render } from "@testing-library/vue";
-import { defineComponent, h, ref, nextTick } from "vue";
-import { test, vi } from "vitest";
-import ListContractpartnerAccountsModal from "@/views/contractpartner/elements/ListContractpartnerAccountsModal.vue";
 import ContractpartnerAccountServiceMocker from "@/service/mocker/ContractpartnerAccountServiceMocker";
+import { RowView } from "@/tests/TestViews";
+import ListContractpartnerAccountsModal from "@/views/contractpartner/elements/ListContractpartnerAccountsModal.vue";
+import "@testing-library/jest-dom";
+import { render } from "@testing-library/vue";
+import { test, vi } from "vitest";
+import { defineComponent, h, nextTick, ref } from "vue";
 
 class ListContractpartnerAccountsView {
   static readonly EmptyRow = new RowView("contractpartner-account-empty");

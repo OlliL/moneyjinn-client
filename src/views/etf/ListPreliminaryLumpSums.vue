@@ -308,7 +308,9 @@
       class="flex flex-col items-center justify-center py-10"
       data-testid="preliminary-lump-sum-empty"
     >
-      <span class="text-muted-foreground text-center">{{$t('General.noEntries')}}</span>
+      <span class="text-muted-foreground text-center">{{
+        $t("General.noEntries")
+      }}</span>
     </div>
     <!---->
   </div>

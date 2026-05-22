@@ -157,8 +157,11 @@
     </div>
     <div class="flex justify-center w-full" v-if="dataLoaded">
       <template v-if="moneyflowGroups.size === 0">
-        <div data-testid="search-moneyflows-empty" class="w-full text-center text-muted-foreground my-8">
-          {{ $t('General.noEntries') }}
+        <div
+          data-testid="search-moneyflows-empty"
+          class="w-full text-center text-muted-foreground my-8"
+        >
+          {{ $t("General.noEntries") }}
         </div>
       </template>
       <template v-else>

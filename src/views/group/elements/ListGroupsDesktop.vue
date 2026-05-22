@@ -13,7 +13,7 @@
         <!-- Show empty state if no groups -->
         <TableRow v-if="groups.length === 0" data-testid="group-empty-desktop">
           <TableCell colspan="3" class="text-center text-muted-foreground">
-            {{ $t('General.noEntries') }}
+            {{ $t("General.noEntries") }}
           </TableCell>
         </TableRow>
         <ListGroupRowVue

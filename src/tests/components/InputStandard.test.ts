@@ -1,5 +1,5 @@
 import InputStandard from "@/components/InputStandard.vue";
-import { InputView, AlertView, TextView } from "@/tests/TestViews";
+import { AlertView, InputView, TextView } from "@/tests/TestViews";
 import { globErr } from "@/tools/views/ZodUtil";
 import "@testing-library/jest-dom/vitest";
 import { render } from "@testing-library/vue";

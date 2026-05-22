@@ -43,7 +43,9 @@ class ListPostingAccountsView {
   static readonly EditOneButton = new ButtonView("posting-account-edit-1");
   static readonly DeleteOneButton = new ButtonView("posting-account-delete-1");
   static readonly Modal = new ModalView("app-modal");
-  static readonly EmptyRowDesktop = new RowView("posting-account-empty-desktop");
+  static readonly EmptyRowDesktop = new RowView(
+    "posting-account-empty-desktop",
+  );
   static readonly EmptyRowMobile = new RowView("posting-account-empty-mobile");
 }
 

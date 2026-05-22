@@ -59,8 +59,12 @@ class ListMonthlySettlementsView {
   static readonly Month2Button = new ButtonView("month-year-nav-month-2");
   static readonly Modal = new ModalView("app-modal");
   static readonly EmptyRow = new RowView("monthly-settlement-empty");
-  static readonly EmptyRowDesktop = new RowView("monthly-settlement-empty-desktop");
-  static readonly EmptyRowMobile = new RowView("monthly-settlement-empty-mobile");
+  static readonly EmptyRowDesktop = new RowView(
+    "monthly-settlement-empty-desktop",
+  );
+  static readonly EmptyRowMobile = new RowView(
+    "monthly-settlement-empty-mobile",
+  );
 }
 
 beforeEach(() => {
@@ -208,7 +212,9 @@ test("ListMonthlySettlements shows empty state for empty list (Desktop and Mobil
   MonthlySettlementServiceMocker.mockGetMonthlySettlementList([]);
 
   // Act
-  render(ListMonthlySettlements, { props: { year: undefined, month: undefined } });
+  render(ListMonthlySettlements, {
+    props: { year: undefined, month: undefined },
+  });
 
   // Assert: Empty state visible
   await ListMonthlySettlementsView.EmptyRowDesktop.assertToBeVisible();

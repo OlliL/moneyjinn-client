@@ -12,9 +12,12 @@
         </TableRow>
       </TableHeader>
       <TableBody>
-        <TableRow v-if="postingAccounts.length === 0" data-testid="posting-account-empty-desktop">
+        <TableRow
+          v-if="postingAccounts.length === 0"
+          data-testid="posting-account-empty-desktop"
+        >
           <TableCell colspan="3" class="text-center text-muted-foreground">
-            {{ $t('General.noEntries') }}
+            {{ $t("General.noEntries") }}
           </TableCell>
         </TableRow>
         <ListPostingAccountRowVue

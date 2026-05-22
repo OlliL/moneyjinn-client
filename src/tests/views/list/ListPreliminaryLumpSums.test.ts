@@ -14,9 +14,8 @@ import { assertHaveBeenCalledWith } from "@/tests/TestUtil";
 import {
   ButtonView,
   InputView,
-  ModalView,
   MobilePopupMenu,
-  AbstractView,
+  ModalView,
   RowView,
 } from "@/tests/TestViews";
 import ListPreliminaryLumpSums from "@/views/etf/ListPreliminaryLumpSums.vue";

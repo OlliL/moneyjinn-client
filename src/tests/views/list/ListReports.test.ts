@@ -12,7 +12,7 @@ import { assertHaveBeenCalledWith } from "@/tests/TestUtil";
 import { ButtonView, InputView, ModalView, RowView } from "@/tests/TestViews";
 import ListReports from "@/views/reports/ListReports.vue";
 import "@testing-library/jest-dom/vitest";
-import { render, screen } from "@testing-library/vue";
+import { render } from "@testing-library/vue";
 import { createPinia, setActivePinia } from "pinia";
 import { beforeEach, expect, test, vi } from "vitest";
 

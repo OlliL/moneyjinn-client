@@ -4,8 +4,11 @@
     class="md:hidden w-full max-w-md mx-auto px-2 mb-6 space-y-3"
   >
     <template v-if="preDefMoneyflows.length === 0">
-      <div data-testid="predef-moneyflow-empty-mobile" class="w-full text-center text-muted-foreground my-8">
-        {{ $t('General.noEntries') }}
+      <div
+        data-testid="predef-moneyflow-empty-mobile"
+        class="w-full text-center text-muted-foreground my-8"
+      >
+        {{ $t("General.noEntries") }}
       </div>
     </template>
     <template v-else>

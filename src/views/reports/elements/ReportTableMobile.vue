@@ -310,7 +310,7 @@
       data-testid="report-table-empty-mobile"
       class="p-4 border rounded-lg bg-muted/40 flex justify-center items-center text-sm font-bold shadow-sm text-muted-foreground"
     >
-      {{ $t('General.noEntries') }}
+      {{ $t("General.noEntries") }}
     </div>
     <div
       v-else

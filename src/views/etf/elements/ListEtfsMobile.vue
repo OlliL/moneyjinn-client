@@ -4,8 +4,11 @@
     class="md:hidden w-full max-w-md mx-auto px-2 mb-6 space-y-3"
   >
     <template v-if="etfs.length === 0">
-      <div data-testid="etf-empty-mobile" class="w-full text-center text-muted-foreground my-8">
-        {{ $t('General.noEntries') }}
+      <div
+        data-testid="etf-empty-mobile"
+        class="w-full text-center text-muted-foreground my-8"
+      >
+        {{ $t("General.noEntries") }}
       </div>
     </template>
     <template v-else>
@@ -24,7 +27,9 @@
             >
               <div class="flex flex-col items-start text-left min-w-0">
                 <span class="font-bold text-sm truncate">{{ etf.name }}</span>
-                <span class="text-xs text-muted-foreground">{{ etf.isin }}</span>
+                <span class="text-xs text-muted-foreground">{{
+                  etf.isin
+                }}</span>
               </div>
               <div class="flex items-center gap-1 pr-2">
                 <Star
@@ -64,7 +69,9 @@
                 <span class="text-right">{{ etf.wkn }}</span>
               </div>
               <div class="flex justify-between gap-2">
-                <span class="text-muted-foreground">{{ $t("ETF.ticker") }}</span>
+                <span class="text-muted-foreground">{{
+                  $t("ETF.ticker")
+                }}</span>
                 <span class="text-right">{{ etf.ticker }}</span>
               </div>
               <div class="flex justify-between gap-2">

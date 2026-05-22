@@ -1,14 +1,18 @@
 // Page object according to team convention
-import { render, waitFor } from "@testing-library/vue";
-import { beforeEach, test, vi, expect } from "vitest";
-import { createPinia, setActivePinia } from "pinia";
-import ImportReceipts from "@/views/receipt/ImportReceipts.vue";
-import { useUserSessionStore } from "@/stores/UserSessionStore";
-import MoneyflowServiceMocker from "@/service/mocker/MoneyflowServiceMocker";
-import ImportedMoneyflowReceiptServiceMocker from "@/service/mocker/ImportedMoneyflowReceiptServiceMocker";
-import ImportedMoneyflowReceiptService from "@/service/ImportedMoneyflowReceiptService";
-import { AlertView, ButtonView, FileUploadView, RadioView } from "@/tests/TestViews";
 import { BackendError, BackendErrorType } from "@/model/BackendError";
+import ImportedMoneyflowReceiptServiceMocker from "@/service/mocker/ImportedMoneyflowReceiptServiceMocker";
+import MoneyflowServiceMocker from "@/service/mocker/MoneyflowServiceMocker";
+import { useUserSessionStore } from "@/stores/UserSessionStore";
+import {
+  AlertView,
+  ButtonView,
+  FileUploadView,
+  RadioView,
+} from "@/tests/TestViews";
+import ImportReceipts from "@/views/receipt/ImportReceipts.vue";
+import { render, waitFor } from "@testing-library/vue";
+import { createPinia, setActivePinia } from "pinia";
+import { beforeEach, expect, test, vi } from "vitest";
 
 class ImportReceiptsView {
   static readonly UploadForm = new ButtonView("importReceipts-upload-form");
@@ -49,7 +53,9 @@ const mockReceipts = [
 beforeEach(async () => {
   setActivePinia(createPinia());
   vi.clearAllMocks();
-  ImportedMoneyflowReceiptServiceMocker.mockShowImportImportedMoneyflowReceipts([...mockReceipts]);
+  ImportedMoneyflowReceiptServiceMocker.mockShowImportImportedMoneyflowReceipts(
+    [...mockReceipts],
+  );
   MoneyflowServiceMocker.mockFetchMoneyflowById((id) => ({ id }) as any);
   useUserSessionStore().setUserSession({
     userId: 1,
@@ -89,7 +95,9 @@ test("shows error message on backend error", async () => {
     undefined,
     "Backend error",
   );
-  ImportedMoneyflowReceiptServiceMocker.mockShowImportImportedMoneyflowReceiptsReject(error);
+  ImportedMoneyflowReceiptServiceMocker.mockShowImportImportedMoneyflowReceiptsReject(
+    error,
+  );
   render(ImportReceipts);
   await ImportReceiptsView.ServerErrorItem.assertMessageContains(
     "Backend error",
@@ -104,14 +112,40 @@ test("shows search and auto-selects single matching moneyflow", async () => {
     mediaType: "application/pdf",
     receipt: "base64data3",
   };
-  ImportedMoneyflowReceiptServiceMocker.mockShowImportImportedMoneyflowReceipts([
-    receipt,
-  ]);
+  ImportedMoneyflowReceiptServiceMocker.mockShowImportImportedMoneyflowReceipts(
+    [receipt],
+  );
   MoneyflowServiceMocker.mockSearchMoneyflowsResolved([
-    { id: 42, amount: 12.34, contractpartnerName: "Test Partner", userId: 1, invoiceDate: undefined, comment: "", private: false, bookingDate: new Date(), capitalsourceId: 1, contractpartnerId: 1, postingAccountId: 1, hasReceipt: false } as any,
+    {
+      id: 42,
+      amount: 12.34,
+      contractpartnerName: "Test Partner",
+      userId: 1,
+      invoiceDate: undefined,
+      comment: "",
+      private: false,
+      bookingDate: new Date(),
+      capitalsourceId: 1,
+      contractpartnerId: 1,
+      postingAccountId: 1,
+      hasReceipt: false,
+    } as any,
   ]);
   MoneyflowServiceMocker.mockSearchMoneyflowsByAmountResolved([
-    { id: 42, amount: 12.34, contractpartnerName: "Test Partner", userId: 1, invoiceDate: undefined, comment: "", private: false, bookingDate: new Date(), capitalsourceId: 1, contractpartnerId: 1, postingAccountId: 1, hasReceipt: false } as any,
+    {
+      id: 42,
+      amount: 12.34,
+      contractpartnerName: "Test Partner",
+      userId: 1,
+      invoiceDate: undefined,
+      comment: "",
+      private: false,
+      bookingDate: new Date(),
+      capitalsourceId: 1,
+      contractpartnerId: 1,
+      postingAccountId: 1,
+      hasReceipt: false,
+    } as any,
   ]);
 
   render(ImportReceipts);
@@ -129,9 +163,9 @@ test("shows search and does not auto-select if multiple moneyflows", async () =>
     mediaType: "application/pdf",
     receipt: "base64data4",
   };
-  ImportedMoneyflowReceiptServiceMocker.mockShowImportImportedMoneyflowReceipts([
-    receipt,
-  ]);
+  ImportedMoneyflowReceiptServiceMocker.mockShowImportImportedMoneyflowReceipts(
+    [receipt],
+  );
   MoneyflowServiceMocker.mockSearchMoneyflowsResolved([
     { id: 1, amount: 56.78, contractpartnerName: "A" } as any,
     { id: 2, amount: 56.78, contractpartnerName: "B" } as any,
@@ -150,4 +184,3 @@ test("shows search and does not auto-select if multiple moneyflows", async () =>
 });
 
 // The following tests access the VM object and are no longer reasonably testable with Testing-Library.
-

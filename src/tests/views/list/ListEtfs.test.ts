@@ -204,7 +204,7 @@ test("ListEtfs shows empty state for empty list (Desktop and Mobile)", async () 
 
   // Mobile test: Set viewport to mobile size and re-render
   window.innerWidth = 375;
-  window.dispatchEvent(new Event('resize'));
+  window.dispatchEvent(new Event("resize"));
   render(ListEtfs);
   await ListEtfsView.EmptyRowMobile.assertToBeVisible();
 });

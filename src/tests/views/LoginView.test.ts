@@ -1,7 +1,7 @@
 import router, { Routes } from "@/router";
 import UserService from "@/service/UserService";
 import { assertHaveBeenCalledWith } from "@/tests/TestUtil";
-import { ButtonView, InputView, AlertView } from "@/tests/TestViews";
+import { AlertView, ButtonView, InputView } from "@/tests/TestViews";
 import LoginView from "@/views/LoginView.vue";
 import "@testing-library/jest-dom/vitest";
 import { render } from "@testing-library/vue";
@@ -53,5 +53,7 @@ test("LoginView shows provided login error", async () => {
     },
   });
 
-  await new AlertView("serverError-item").assertMessageContains("Session abgelaufen");
+  await new AlertView("serverError-item").assertMessageContains(
+    "Session abgelaufen",
+  );
 });

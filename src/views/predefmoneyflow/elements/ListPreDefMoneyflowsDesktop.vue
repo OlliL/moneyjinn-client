@@ -34,7 +34,7 @@
         <template v-if="preDefMoneyflows.length === 0">
           <tr data-testid="predef-moneyflow-empty-desktop">
             <td :colspan="10" class="text-center text-muted-foreground py-8">
-              {{ $t('General.noEntries') }}
+              {{ $t("General.noEntries") }}
             </td>
           </tr>
         </template>

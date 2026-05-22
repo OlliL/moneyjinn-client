@@ -22,9 +22,12 @@
         </TableRow>
       </TableHeader>
       <TableBody>
-        <TableRow v-if="contractpartners.length === 0" data-testid="contractpartner-empty-desktop">
+        <TableRow
+          v-if="contractpartners.length === 0"
+          data-testid="contractpartner-empty-desktop"
+        >
           <TableCell colspan="8" class="text-center text-muted-foreground">
-            {{ $t('General.noEntries') }}
+            {{ $t("General.noEntries") }}
           </TableCell>
         </TableRow>
         <ListContractpartnerRowVue

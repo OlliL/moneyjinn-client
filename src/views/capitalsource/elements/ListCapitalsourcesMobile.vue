@@ -3,8 +3,12 @@
     data-testid="capitalsource-mobile-accordion"
     class="md:hidden w-full max-w-md mx-auto px-2 mb-6 space-y-3"
   >
-    <div v-if="capitalsources.length === 0" data-testid="capitalsource-empty-mobile" class="w-full text-center text-muted-foreground mt-4">
-      {{ $t('General.noEntries') }}
+    <div
+      v-if="capitalsources.length === 0"
+      data-testid="capitalsource-empty-mobile"
+      class="w-full text-center text-muted-foreground mt-4"
+    >
+      {{ $t("General.noEntries") }}
     </div>
     <Accordion v-else type="multiple" class="space-y-2">
       <AccordionItem

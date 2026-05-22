@@ -60,7 +60,9 @@ class ListContractpartnersView {
     "contractpartner-accounts-1",
   );
   static readonly Modal = new ModalView("app-modal");
-  static readonly EmptyRowDesktop = new RowView("contractpartner-empty-desktop");
+  static readonly EmptyRowDesktop = new RowView(
+    "contractpartner-empty-desktop",
+  );
   static readonly EmptyRowMobile = new RowView("contractpartner-empty-mobile");
 }
 

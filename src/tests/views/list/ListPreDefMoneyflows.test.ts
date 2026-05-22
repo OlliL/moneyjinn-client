@@ -44,7 +44,9 @@ class ListPreDefMoneyflowsView {
     "predef-moneyflow-delete-1",
   );
   static readonly Modal = new ModalView("app-modal");
-  static readonly EmptyRowDesktop = new RowView("predef-moneyflow-empty-desktop");
+  static readonly EmptyRowDesktop = new RowView(
+    "predef-moneyflow-empty-desktop",
+  );
   static readonly EmptyRowMobile = new RowView("predef-moneyflow-empty-mobile");
 }
 

@@ -1,6 +1,6 @@
+import type { BackendError } from "@/model/BackendError.ts";
 import ImportedMoneyflowReceiptService from "@/service/ImportedMoneyflowReceiptService";
 import { vi } from "vitest";
-import type { BackendError } from "@/model/BackendError.ts";
 
 export default class ImportedMoneyflowReceiptServiceMocker {
   static mockShowImportImportedMoneyflowReceipts(receipts: any[]) {

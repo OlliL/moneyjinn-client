@@ -9,7 +9,13 @@ import {
   useUserSessionStore,
 } from "@/stores/UserSessionStore";
 import { assertHaveBeenCalledWith } from "@/tests/TestUtil";
-import { ButtonView, InputView, ModalView, RadioView, RowView } from "@/tests/TestViews";
+import {
+  ButtonView,
+  InputView,
+  ModalView,
+  RadioView,
+  RowView,
+} from "@/tests/TestViews";
 import SearchMoneyflows from "@/views/moneyflow/SearchMoneyflows.vue";
 import "@testing-library/jest-dom/vitest";
 import { render } from "@testing-library/vue";

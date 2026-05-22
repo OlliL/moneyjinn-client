@@ -5,33 +5,35 @@
         class="w-full rounded-sm border bg-card text-card-foreground overflow-hidden"
       >
         <div class="grid grid-cols-1 lg:grid-cols-5 min-h-full">
-           <div
-             class="lg:col-span-2 bg-muted/40 p-5 border-b lg:border-b-0 lg:border-r border-border/60 flex flex-col justify-center items-center"
-             :data-testid="`importReceipts-row-filebox-${receipt.id}`"
-           >
-             <div
-               class="bg-background/60 p-2 rounded border border-border/40 backdrop-blur-sm w-full flex justify-center items-start h-[calc(100vh-420px)] max-h-[520px]"
-               :class="isPdf ? 'overflow-hidden' : 'overflow-y-auto'"
-             >
-               <span data-testid="importReceipts-row-filename">{{ receipt.filename }}</span>
-               <img
-                 v-if="isJpeg"
-                 :src="`data:image/png;base64,${receipt.receipt}`"
-                 class="max-w-full h-auto rounded-sm"
-                 alt="receipt"
-               />
+          <div
+            class="lg:col-span-2 bg-muted/40 p-5 border-b lg:border-b-0 lg:border-r border-border/60 flex flex-col justify-center items-center"
+            :data-testid="`importReceipts-row-filebox-${receipt.id}`"
+          >
+            <div
+              class="bg-background/60 p-2 rounded border border-border/40 backdrop-blur-sm w-full flex justify-center items-start h-[calc(100vh-420px)] max-h-[520px]"
+              :class="isPdf ? 'overflow-hidden' : 'overflow-y-auto'"
+            >
+              <span data-testid="importReceipts-row-filename">{{
+                receipt.filename
+              }}</span>
+              <img
+                v-if="isJpeg"
+                :src="`data:image/png;base64,${receipt.receipt}`"
+                class="max-w-full h-auto rounded-sm"
+                alt="receipt"
+              />
 
-               <object
-                 class="h-full w-full min-h-[320px] block rounded-sm"
-                 v-if="isPdf"
-                 id="pdf"
-                 :data="`data:application/pdf;base64,${receipt.receipt}`"
-                 type="application/pdf"
-               >
-                 receipt
-               </object>
-             </div>
-           </div>
+              <object
+                class="h-full w-full min-h-[320px] block rounded-sm"
+                v-if="isPdf"
+                id="pdf"
+                :data="`data:application/pdf;base64,${receipt.receipt}`"
+                type="application/pdf"
+              >
+                receipt
+              </object>
+            </div>
+          </div>
 
           <div
             class="lg:col-span-3 p-6 space-y-6 flex flex-col justify-between"
@@ -150,28 +152,28 @@
             <div
               class="flex flex-wrap items-center justify-center gap-3 pt-4 border-t border-border/40"
             >
-               <Button
-                 type="button"
-                 variant="destructive"
-                 class="button-with-icon"
-                 @click="deleteReceipt"
-                 data-testid="importReceipts-row-delete"
-               >
-                 <Trash2 class="h-4 w-4" />
-                 {{ $t("General.delete") }}
-               </Button>
-               <Button
-                 type="button"
-                 variant="default"
-                 class="button-with-icon"
-                 @click="importReceipt"
-                 v-if="searchExecuted && searchSuccessful"
-                 :disabled="!moneyflowSelected"
-                 data-testid="importReceipts-row-apply"
-               >
-                 <Save class="h-4 w-4" />
-                 {{ $t("Moneyflow.apply") }}
-               </Button>
+              <Button
+                type="button"
+                variant="destructive"
+                class="button-with-icon"
+                @click="deleteReceipt"
+                data-testid="importReceipts-row-delete"
+              >
+                <Trash2 class="h-4 w-4" />
+                {{ $t("General.delete") }}
+              </Button>
+              <Button
+                type="button"
+                variant="default"
+                class="button-with-icon"
+                @click="importReceipt"
+                v-if="searchExecuted && searchSuccessful"
+                :disabled="!moneyflowSelected"
+                data-testid="importReceipts-row-apply"
+              >
+                <Save class="h-4 w-4" />
+                {{ $t("Moneyflow.apply") }}
+              </Button>
             </div>
           </div>
         </div>
