@@ -15,6 +15,7 @@ type ImportCommentLine = {
   label: string;
   value: string;
 };
+const { t } = useI18n();
 
 const props = defineProps({
   comment: {
@@ -45,7 +46,7 @@ const importDataCommentLines = computed(() => {
   const firstPart = parts[0].split("\n");
   for (let i = 0; i <= firstPart.length - 1; i++) {
     const lineParts = firstPart[i].split("+");
-    const { t } = useI18n();
+
     let label = lineParts[0];
     switch (lineParts[0]) {
       case "EREF":
@@ -68,7 +69,7 @@ const importDataCommentLines = computed(() => {
   // push the rest of the parts into resultArray
   for (let i = 1; i < parts.length; i++) {
     resultArray.push({
-      label: useI18n().t("General.importComment.purpose") as string,
+      label: t("General.importComment.purpose") as string,
       value: parts[i].replaceAll("\n", ""),
     });
   }
