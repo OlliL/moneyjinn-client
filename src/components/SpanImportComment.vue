@@ -9,6 +9,7 @@
 </template>
 <script lang="ts" setup>
 import { computed } from "vue";
+import { useI18n } from "vue-i18n";
 
 type ImportCommentLine = {
   label: string;
@@ -27,7 +28,7 @@ const importDataCommentLines = computed(() => {
 
   if (!props.comment) return resultArray;
 
-  // if comment does not contain \nSVWZ+ just return the comment as Verwendungszweck
+  // if comment does not contain \nSVWZ+ just return the comment as purpose
   if (
     !props.comment.includes("EREF+") &&
     !props.comment.includes("KREF+") &&
@@ -44,28 +45,30 @@ const importDataCommentLines = computed(() => {
   const firstPart = parts[0].split("\n");
   for (let i = 0; i <= firstPart.length - 1; i++) {
     const lineParts = firstPart[i].split("+");
+    const { t } = useI18n();
+    let label = lineParts[0];
     switch (lineParts[0]) {
       case "EREF":
-        lineParts[0] = "End-to-End-ID";
+        label = t("General.importComment.endToEndId");
         break;
       case "KREF":
-        lineParts[0] = "Kundenreferenz";
+        label = t("General.importComment.customerReference");
         break;
       case "MREF":
-        lineParts[0] = "Mandatsreferenz";
+        label = t("General.importComment.mandateReference");
         break;
       case "CRED":
-        lineParts[0] = "Gläubiger-ID";
+        label = t("General.importComment.creditorId");
         break;
     }
     if (lineParts.length === 2) {
-      resultArray.push({ label: lineParts[0], value: lineParts[1] });
+      resultArray.push({ label, value: lineParts[1] });
     }
   }
   // push the rest of the parts into resultArray
   for (let i = 1; i < parts.length; i++) {
     resultArray.push({
-      label: "Verwendungszweck",
+      label: useI18n().t("General.importComment.purpose") as string,
       value: parts[i].replaceAll("\n", ""),
     });
   }

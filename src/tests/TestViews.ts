@@ -435,7 +435,7 @@ export class SelectView extends AbstractView {
 
 export class FileUploadView extends AbstractView {
   async selectFile(file: File): Promise<void> {
-    const testId = this.getRequiredTestId("assertTextContains");
+    const testId = this.getRequiredTestId("selectFile");
     const element = await this.findByTestId<HTMLElement>(testId);
     Object.defineProperty(element, "files", { value: [file] });
     // Trigger change event
@@ -448,7 +448,7 @@ export class RadioView extends AbstractView {
     const testId = this.getRequiredTestId("assertChecked");
     const radio = await this.findByTestId<HTMLElement>(testId);
     await waitFor(() => {
-      // Für Custom-Radio: aria-checked prüfen
+      // For custom radio: check aria-checked attribute
       expect(radio.getAttribute("aria-checked")).toBe("true");
     });
   }

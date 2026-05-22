@@ -115,22 +115,6 @@ test("shows search and auto-selects single matching moneyflow", async () => {
   ImportedMoneyflowReceiptServiceMocker.mockShowImportImportedMoneyflowReceipts(
     [receipt],
   );
-  MoneyflowServiceMocker.mockSearchMoneyflowsResolved([
-    {
-      id: 42,
-      amount: 12.34,
-      contractpartnerName: "Test Partner",
-      userId: 1,
-      invoiceDate: undefined,
-      comment: "",
-      private: false,
-      bookingDate: new Date(),
-      capitalsourceId: 1,
-      contractpartnerId: 1,
-      postingAccountId: 1,
-      hasReceipt: false,
-    } as any,
-  ]);
   MoneyflowServiceMocker.mockSearchMoneyflowsByAmountResolved([
     {
       id: 42,
@@ -166,10 +150,6 @@ test("shows search and does not auto-select if multiple moneyflows", async () =>
   ImportedMoneyflowReceiptServiceMocker.mockShowImportImportedMoneyflowReceipts(
     [receipt],
   );
-  MoneyflowServiceMocker.mockSearchMoneyflowsResolved([
-    { id: 1, amount: 56.78, contractpartnerName: "A" } as any,
-    { id: 2, amount: 56.78, contractpartnerName: "B" } as any,
-  ]);
   MoneyflowServiceMocker.mockSearchMoneyflowsByAmountResolved([
     { id: 1, amount: 56.78, contractpartnerName: "A" } as any,
     { id: 2, amount: 56.78, contractpartnerName: "B" } as any,
@@ -178,7 +158,7 @@ test("shows search and does not auto-select if multiple moneyflows", async () =>
   render(ImportReceipts);
 
   await ImportReceiptsView.assertReceiptCount(1);
-  // Prüfe, dass beide Radio-Buttons nicht checked sind
+  // Verify that both radio buttons are not checked
   await new RadioView("moneyflow-radio-1").assertUnchecked();
   await new RadioView("moneyflow-radio-2").assertUnchecked();
 });

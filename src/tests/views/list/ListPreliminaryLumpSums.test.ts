@@ -309,7 +309,7 @@ test("ListPreliminaryLumpSums mobile: create menu opens and triggers modal (year
   await ListPreliminaryLumpSumsView.Modal.assertOpen();
 });
 
-test("ListPreliminaryLumpSums mobile: edit button öffnet Modal", async () => {
+test("ListPreliminaryLumpSums mobile: edit button opens modal", async () => {
   CrudEtfPreliminaryLumpSumServiceMocker.mockFetchAllEtfPreliminaryLumpSum([
     {
       id: 1,
@@ -325,7 +325,7 @@ test("ListPreliminaryLumpSums mobile: edit button öffnet Modal", async () => {
   await ListPreliminaryLumpSumsView.Modal.assertOpen();
 });
 
-test("ListPreliminaryLumpSums mobile: delete button öffnet Modal", async () => {
+test("ListPreliminaryLumpSums mobile: delete button opens modal", async () => {
   CrudEtfPreliminaryLumpSumServiceMocker.mockFetchAllEtfPreliminaryLumpSum([
     {
       id: 1,
@@ -341,8 +341,8 @@ test("ListPreliminaryLumpSums mobile: delete button öffnet Modal", async () => 
   await ListPreliminaryLumpSumsView.Modal.assertOpen();
 });
 
-test("ListPreliminaryLumpSums zeigt leeren Zustand, wenn keine Daten vorhanden sind", async () => {
-  // Es gibt einen Eintrag für 2024, aber wir wählen 2025 aus
+test("ListPreliminaryLumpSums shows empty state when no data is present", async () => {
+  // There exists an entry for 2024, but we select 2025
   CrudEtfPreliminaryLumpSumServiceMocker.mockFetchAllEtfPreliminaryLumpSum([
     {
       id: 1,

@@ -456,7 +456,7 @@ test("ListReports shows empty state for empty list (Mobile)", async () => {
   await new RowView("report-table-empty-mobile").assertToBeVisible();
 });
 
-test("ListReports zeigt Summe/Turnover an", async () => {
+test("ListReports shows sum/turnover", async () => {
   ReportServiceMocker.mockListReports({
     year: 2026,
     month: 2,

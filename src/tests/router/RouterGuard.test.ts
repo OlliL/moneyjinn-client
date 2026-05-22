@@ -4,7 +4,7 @@ import {
 } from "@/stores/UserSessionStore";
 import { assertHaveBeenCalledWith } from "@/tests/TestUtil";
 import { createPinia, setActivePinia } from "pinia";
-import { beforeEach, describe, expect, test, vi } from "vitest";
+import { beforeEach, expect, test, vi } from "vitest";
 
 const mockIsLoggedIn = vi.fn();
 const mockRouterGo = vi.fn();
@@ -26,99 +26,97 @@ vi.mock("vue-router", () => ({
   })),
 }));
 
-describe("router guards", () => {
-  beforeEach(async () => {
-    vi.resetModules();
-    setActivePinia(createPinia());
-    vi.clearAllMocks();
-    registeredGuard = undefined;
-    await import("@/router");
-  });
+beforeEach(async () => {
+  vi.resetModules();
+  setActivePinia(createPinia());
+  vi.clearAllMocks();
+  registeredGuard = undefined;
+  await import("@/router");
+});
 
-  test("redirects to login when route requires auth and user is not logged in", async () => {
-    const { Routes } = await import("@/router");
-    mockIsLoggedIn.mockResolvedValueOnce(false);
+test("redirects to login when route requires auth and user is not logged in", async () => {
+  const { Routes } = await import("@/router");
+  mockIsLoggedIn.mockResolvedValueOnce(false);
 
-    const result = await registeredGuard?.(
-      {
-        matched: [{ meta: {} }],
-        name: Routes.Home,
-        fullPath: "/app",
-      },
-      {
-        fullPath: "/login",
-      },
-    );
+  const result = await registeredGuard?.(
+    {
+      matched: [{ meta: {} }],
+      name: Routes.Home,
+      fullPath: "/app",
+    },
+    {
+      fullPath: "/login",
+    },
+  );
 
-    expect(result).toEqual({ name: Routes.Login });
-  });
+  expect(result).toEqual({ name: Routes.Login });
+});
 
-  test("allows change-password route directly", async () => {
-    const { Routes } = await import("@/router");
-    mockIsLoggedIn.mockResolvedValueOnce(true);
+test("allows change-password route directly", async () => {
+  const { Routes } = await import("@/router");
+  mockIsLoggedIn.mockResolvedValueOnce(true);
 
-    const result = await registeredGuard?.(
-      {
-        matched: [{ meta: {} }],
-        name: Routes.ChangePassword,
-        fullPath: "/app/changePassword",
-      },
-      {
-        fullPath: "/app",
-      },
-    );
+  const result = await registeredGuard?.(
+    {
+      matched: [{ meta: {} }],
+      name: Routes.ChangePassword,
+      fullPath: "/app/changePassword",
+    },
+    {
+      fullPath: "/app",
+    },
+  );
 
-    expect(result).toBe(true);
-  });
+  expect(result).toBe(true);
+});
 
-  test("redirects new users to change-password", async () => {
-    const { Routes } = await import("@/router");
-    mockIsLoggedIn.mockResolvedValueOnce(true);
-    useUserSessionStore().setUserSession({
-      userId: 1,
-      userName: "new-user",
-      userIsAdmin: false,
-      userCanLogin: true,
-      userIsNew: true,
-    } as UserSession);
+test("redirects new users to change-password", async () => {
+  const { Routes } = await import("@/router");
+  mockIsLoggedIn.mockResolvedValueOnce(true);
+  useUserSessionStore().setUserSession({
+    userId: 1,
+    userName: "new-user",
+    userIsAdmin: false,
+    userCanLogin: true,
+    userIsNew: true,
+  } as UserSession);
 
-    const result = await registeredGuard?.(
-      {
-        matched: [{ meta: {} }],
-        name: Routes.Home,
-        fullPath: "/app",
-      },
-      {
-        fullPath: "/login",
-      },
-    );
+  const result = await registeredGuard?.(
+    {
+      matched: [{ meta: {} }],
+      name: Routes.Home,
+      fullPath: "/app",
+    },
+    {
+      fullPath: "/login",
+    },
+  );
 
-    expect(result).toEqual({ name: Routes.ChangePassword });
-  });
+  expect(result).toEqual({ name: Routes.ChangePassword });
+});
 
-  test("reloads and cancels navigation when target equals source fullPath", async () => {
-    const { Routes } = await import("@/router");
-    mockIsLoggedIn.mockResolvedValueOnce(true);
-    useUserSessionStore().setUserSession({
-      userId: 1,
-      userName: "oliver",
-      userIsAdmin: true,
-      userCanLogin: true,
-      userIsNew: false,
-    } as UserSession);
+test("reloads and cancels navigation when target equals source fullPath", async () => {
+  const { Routes } = await import("@/router");
+  mockIsLoggedIn.mockResolvedValueOnce(true);
+  useUserSessionStore().setUserSession({
+    userId: 1,
+    userName: "oliver",
+    userIsAdmin: true,
+    userCanLogin: true,
+    userIsNew: false,
+  } as UserSession);
 
-    const result = await registeredGuard?.(
-      {
-        matched: [{ meta: {} }],
-        name: Routes.Home,
-        fullPath: "/app/listReports",
-      },
-      {
-        fullPath: "/app/listReports",
-      },
-    );
+  const result = await registeredGuard?.(
+    {
+      matched: [{ meta: {} }],
+      name: Routes.Home,
+      fullPath: "/app/listReports",
+    },
+    {
+      fullPath: "/app/listReports",
+    },
+  );
 
-    await assertHaveBeenCalledWith(mockRouterGo, 0);
-    expect(result).toBe(false);
-  });
+  await assertHaveBeenCalledWith(mockRouterGo, 0);
+  expect(result).toBe(false);
 });

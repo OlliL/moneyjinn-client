@@ -82,7 +82,7 @@
               for="toggles"
               class="text-left ml-1 text-sm font-medium text-foreground leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
             >
-              Optionen
+              {{ $t("Moneyflow.options") }}
             </Label>
 
             <div class="flex flex-wrap items-center gap-2 h-8" id="toggles">
@@ -193,7 +193,7 @@
               @click="onAddMoneyflowSplitEntryRow"
             >
               <Plus class="h-4 w-4 shrink-0" />
-              <span>Position hinzufügen</span>
+              <span>{{ $t("Moneyflow.addPosition") }}</span>
             </Button>
           </div>
         </div>

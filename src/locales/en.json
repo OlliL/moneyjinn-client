@@ -63,6 +63,13 @@
       "startDate": "Please specify a start date!",
       "endDate": "Please specify an end date!",
       "capitalsource": "Please specify a capitalsource!"
+    },
+    "importComment": {
+      "endToEndId": "End-to-end ID",
+      "customerReference": "Customer reference",
+      "mandateReference": "Mandate reference",
+      "creditorId": "Creditor ID",
+      "purpose": "Purpose"
     }
   },
   "Errors": {
@@ -299,12 +306,18 @@
     "welcome": "Welcome!",
     "enterYourData": "Please enter your user credentials and press „login“.",
     "login": "login",
-    "by": "by"
+    "by": "by",
+    "validation": {
+      "username": "Please enter your username!",
+      "password": "Please enter your password!"
+    }
   },
   "Modal": {
     "cancel": "cancel"
   },
   "Moneyflow": {
+    "options": "options",
+    "addPosition": "add position",
     "bookingdate": "bookingdate",
     "invoicedate": "invoicedate",
     "public": "public",

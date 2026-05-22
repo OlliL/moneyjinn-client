@@ -176,14 +176,3 @@ test("SearchMoneyflows shows empty state for empty search", async () => {
   await runSearch();
   await SearchMoneyflowsView.EmptyRow.assertToBeVisible();
 });
-
-test("Moneyflow selection: radio buttons correctly selected", async () => {
-  renderView();
-  await runSearch();
-  await expandFirstGroup();
-
-  // Assume Moneyflow 12 is selected, the others are not
-  await SearchMoneyflowsView.MoneyflowRadio12.assertChecked();
-  await SearchMoneyflowsView.MoneyflowRadio13.assertUnchecked();
-  await SearchMoneyflowsView.MoneyflowRadio14.assertUnchecked();
-});

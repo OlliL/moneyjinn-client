@@ -61,26 +61,25 @@
 </template>
 
 <script lang="ts" setup>
-import { useForm } from "vee-validate";
-import { onMounted, ref } from "vue";
-import { string } from "zod";
-
-import router, { Routes } from "@/router";
-import { version } from "../../package.json";
-
 import ButtonSubmit from "@/components/ButtonSubmit.vue";
 import DivError from "@/components/DivError.vue";
 import InputStandard from "@/components/InputStandard.vue";
-import { Lock, LogIn, User } from "lucide-vue-next";
-
+import router, { Routes } from "@/router";
 import UserService from "@/service/UserService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
+import { Lock, LogIn, User } from "lucide-vue-next";
+import { useForm } from "vee-validate";
+import { onMounted, ref } from "vue";
+import { useI18n } from "vue-i18n";
+import { string } from "zod";
+import { version } from "../../package.json";
 
 const serverErrors = ref(new Array<string>());
+const { t } = useI18n();
 
 const schema = {
-  username: string().min(1, "Bitte Benutzernamen angeben!"),
-  password: string().min(1, "Bitte Passwort angeben!"),
+  username: string().min(1, t("LoginView.validation.username")),
+  password: string().min(1, t("LoginView.validation.password")),
 };
 
 const props = defineProps({
