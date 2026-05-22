@@ -22,7 +22,7 @@
               <span class="text-xs text-muted-foreground font-normal truncate">
                 {{ timestampString(flow) }}
               </span>
-              <span class="font-bold text-sm text-foreground truncate">
+              <span :class="['font-bold text-sm truncate', amountClass(flow)]">
                 {{ amountString(flow) }} {{ $t("ETFFlow.amount") }}
               </span>
             </div>
@@ -116,6 +116,7 @@ const props = defineProps({
 const emit = defineEmits(["deleteEtfFlow", "editEtfFlow"]);
 
 const amountClass = (flow: EtfFlow): string => {
+  console.log("----------------------->", redIfNegative(flow.amount));
   return redIfNegative(flow.amount);
 };
 
