@@ -13,6 +13,7 @@ import {
   InputView,
   ModalView,
   RowView,
+  MobilePopupMenu,
   SwitchView,
 } from "@/tests/TestViews";
 import ListContractpartners from "@/views/contractpartner/ListContractpartners.vue";
@@ -33,7 +34,7 @@ class ListContractpartnersView {
   static readonly MobileFilterTrigger = new ButtonView(
     "div-filter-mobile-trigger",
   );
-  static readonly MobileFilterSheet = new RowView("div-filter-mobile-sheet");
+  static readonly MobileFilterSheet = new MobilePopupMenu("div-filter-mobile-sheet");
   static readonly MobileFilterInput = new InputView("div-filter-mobile-input");
   static readonly MobileValidNowToggle = new SwitchView(
     "div-filter-mobile-valid-now",

@@ -12,6 +12,7 @@ import {
   InputView,
   ModalView,
   RowView,
+  MobilePopupMenu,
   SwitchView,
   TextView,
 } from "@/tests/TestViews";
@@ -35,7 +36,7 @@ class ListEtfDepotView {
   static readonly MobileFilterTrigger = new ButtonView(
     "etf-depot-mobile-filter-trigger",
   );
-  static readonly MobileFilterSheet = new RowView(
+  static readonly MobileFilterSheet = new MobilePopupMenu(
     "etf-depot-mobile-filter-sheet",
   );
   static readonly MobileEffectiveSwitch = new SwitchView(

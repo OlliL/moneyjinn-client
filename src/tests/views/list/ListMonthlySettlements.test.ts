@@ -6,7 +6,7 @@ import {
   useUserSessionStore,
 } from "@/stores/UserSessionStore";
 import { assertHaveBeenCalledWith } from "@/tests/TestUtil";
-import { ButtonView, ModalView, RowView } from "@/tests/TestViews";
+import { ButtonView, ModalView, RowView, MobilePopupMenu } from "@/tests/TestViews";
 import ListMonthlySettlements from "@/views/monthlysettlement/ListMonthlySettlements.vue";
 import "@testing-library/jest-dom/vitest";
 import { render } from "@testing-library/vue";
@@ -28,7 +28,7 @@ class ListMonthlySettlementsView {
   static readonly MobileOpenPeriodSheetButton = new ButtonView(
     "monthly-settlement-mobile-open-period-sheet",
   );
-  static readonly MobilePeriodSheet = new RowView(
+  static readonly MobilePeriodSheet = new MobilePopupMenu(
     "monthly-settlement-mobile-period-sheet",
   );
   static readonly MobileNewButton = new ButtonView(

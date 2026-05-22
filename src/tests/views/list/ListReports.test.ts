@@ -9,7 +9,7 @@ import {
   useUserSessionStore,
 } from "@/stores/UserSessionStore";
 import { assertHaveBeenCalledWith } from "@/tests/TestUtil";
-import { ButtonView, InputView, ModalView, RowView } from "@/tests/TestViews";
+import { ButtonView, InputView, ModalView, RowView, MobilePopupMenu } from "@/tests/TestViews";
 import ListReports from "@/views/reports/ListReports.vue";
 import "@testing-library/jest-dom/vitest";
 import { render } from "@testing-library/vue";
@@ -54,7 +54,7 @@ class ListReportsView {
   static readonly MobileFilterTrigger = new ButtonView(
     "report-table-mobile-filter-trigger",
   );
-  static readonly MobileFilterSheet = new RowView(
+  static readonly MobileFilterSheet = new MobilePopupMenu(
     "report-table-mobile-filter-sheet",
   );
   static readonly MobileContractpartnerFilter = new InputView(
@@ -90,7 +90,7 @@ class ListReportsView {
   static readonly MobileOpenPeriodSheetButton = new ButtonView(
     "reports-mobile-open-period-sheet",
   );
-  static readonly MobilePeriodSheet = new RowView(
+  static readonly MobilePeriodSheet = new MobilePopupMenu(
     "reports-mobile-period-sheet",
   );
   static readonly MobileYearTrigger = new ButtonView(
