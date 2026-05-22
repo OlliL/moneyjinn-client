@@ -325,9 +325,9 @@
 </template>
 
 <script lang="ts" setup>
-import InputStandard from "@/components/InputStandard.vue";
-import SpanAmount from "@/components/SpanAmount.vue";
-import SpanDate from "@/components/SpanDate.vue";
+import InputStandard from "@/components/common/InputStandard.vue";
+import SpanAmount from "@/components/common/SpanAmount.vue";
+import SpanDate from "@/components/common/SpanDate.vue";
 import {
   Accordion,
   AccordionContent,

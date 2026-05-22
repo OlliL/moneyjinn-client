@@ -127,11 +127,11 @@ import { ref, useTemplateRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { date, ZodType } from "zod";
 
-import ButtonSubmit from "../ButtonSubmit.vue";
-import DivError from "../DivError.vue";
-import InputDate from "../InputDate.vue";
-import InputStandard from "../InputStandard.vue";
-import ModalVue from "../Modal.vue";
+import ButtonSubmit from "../common/ButtonSubmit.vue";
+import DivError from "../common/DivError.vue";
+import InputDate from "../common/InputDate.vue";
+import InputStandard from "../common/InputStandard.vue";
+import ModalVue from "../common/Modal.vue";
 
 import {
   Table,

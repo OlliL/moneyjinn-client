@@ -75,7 +75,7 @@
 </template>
 
 <script lang="ts" setup>
-import ButtonSubmit from "@/components/ButtonSubmit.vue";
+import ButtonSubmit from "@/components/common/ButtonSubmit.vue";
 import EditMoneyflowBase from "@/components/moneyflow/EditMoneyflowBase.vue";
 import { Button } from "@/components/ui/button";
 import type { ImportedMoneyflowReceipt } from "@/model/moneyflow/ImportedMoneyflowReceipt";
@@ -86,8 +86,8 @@ import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { Save, Trash2, Undo2 } from "lucide-vue-next";
 import { useForm } from "vee-validate";
 import { computed, ref, useTemplateRef } from "vue";
-import DivError from "../DivError.vue";
-import ModalVue from "../Modal.vue";
+import DivError from "../common/DivError.vue";
+import ModalVue from "../common/Modal.vue";
 
 const serverErrors = ref(new Array<string>());
 

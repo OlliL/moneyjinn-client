@@ -56,8 +56,8 @@ import { string, type ZodTypeAny } from "zod";
 
 import router, { Routes } from "@/router";
 
-import DivError from "@/components/DivError.vue";
-import InputStandard from "@/components/InputStandard.vue";
+import DivError from "@/components/common/DivError.vue";
+import InputStandard from "@/components/common/InputStandard.vue";
 import { Button } from "@/components/ui/button";
 
 import { useUserSessionStore } from "@/stores/UserSessionStore";

@@ -94,7 +94,7 @@
 </template>
 
 <script lang="ts" setup>
-import SpanDate from "@/components/SpanDate.vue";
+import SpanDate from "@/components/common/SpanDate.vue";
 import {
   Accordion,
   AccordionContent,

@@ -104,8 +104,8 @@
   </TableRow>
 </template>
 <script lang="ts" setup>
-import ButtonTableIcon from "@/components/ButtonTableIcon.vue";
-import SpanAmount from "@/components/SpanAmount.vue";
+import ButtonTableIcon from "@/components/common/ButtonTableIcon.vue";
+import SpanAmount from "@/components/common/SpanAmount.vue";
 import {
   HoverCard,
   HoverCardContent,

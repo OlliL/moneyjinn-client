@@ -119,8 +119,8 @@
 </template>
 
 <script lang="ts" setup>
-import SpanAmount from "@/components/SpanAmount.vue";
-import SpanDate from "@/components/SpanDate.vue";
+import SpanAmount from "@/components/common/SpanAmount.vue";
+import SpanDate from "@/components/common/SpanDate.vue";
 import { Button } from "@/components/ui/button";
 import { TableCell, TableRow } from "@/components/ui/table";
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";

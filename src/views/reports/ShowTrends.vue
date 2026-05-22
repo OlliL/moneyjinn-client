@@ -316,8 +316,8 @@ import { Line } from "vue-chartjs";
 import { useI18n } from "vue-i18n";
 import { date } from "zod";
 
-import DivError from "@/components/DivError.vue";
-import InputDate from "@/components/InputDate.vue";
+import DivError from "@/components/common/DivError.vue";
+import InputDate from "@/components/common/InputDate.vue";
 
 import { useCapitalsourceStore } from "@/stores/CapitalsourceStore";
 import { formatNumber } from "@/tools/views/FormatNumber";
@@ -326,7 +326,7 @@ import { globErr } from "@/tools/views/ZodUtil";
 import type { SelectBoxValue } from "@/model/SelectBoxValue";
 import type { TrendsParameter } from "@/model/report/TrendsParameter";
 
-import ButtonSubmit from "@/components/ButtonSubmit.vue";
+import ButtonSubmit from "@/components/common/ButtonSubmit.vue";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {

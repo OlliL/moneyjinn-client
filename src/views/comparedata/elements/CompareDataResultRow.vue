@@ -106,12 +106,12 @@ import { computed, type PropType } from "vue";
 import { Button } from "@/components/ui/button";
 import { TableCell, TableRow } from "@/components/ui/table";
 
-import SpanAmount from "@/components/SpanAmount.vue";
-import SpanDate from "@/components/SpanDate.vue";
+import SpanAmount from "@/components/common/SpanAmount.vue";
+import SpanDate from "@/components/common/SpanDate.vue";
 
 import { useUserSessionStore } from "@/stores/UserSessionStore";
 
-import SpanImportComment from "@/components/SpanImportComment.vue";
+import SpanImportComment from "@/components/common/SpanImportComment.vue";
 import type { CompareDataDataset } from "@/model/comparedata/CompareDataDataset";
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 

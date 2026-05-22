@@ -183,10 +183,10 @@
 </template>
 
 <script lang="ts" setup>
-import ButtonSubmit from "@/components/ButtonSubmit.vue";
-import DivError from "@/components/DivError.vue";
-import InputDate from "@/components/InputDate.vue";
-import InputStandard from "@/components/InputStandard.vue";
+import ButtonSubmit from "@/components/common/ButtonSubmit.vue";
+import DivError from "@/components/common/DivError.vue";
+import InputDate from "@/components/common/InputDate.vue";
+import InputStandard from "@/components/common/InputStandard.vue";
 import { Button } from "@/components/ui/button";
 import { RadioGroup } from "@/components/ui/radio-group";
 import {

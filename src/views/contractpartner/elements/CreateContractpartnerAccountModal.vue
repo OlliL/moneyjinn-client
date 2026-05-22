@@ -55,10 +55,10 @@
 </template>
 
 <script lang="ts" setup>
-import ButtonSubmit from "@/components/ButtonSubmit.vue";
-import DivError from "@/components/DivError.vue";
-import InputStandard from "@/components/InputStandard.vue";
-import ModalVue from "@/components/Modal.vue";
+import ButtonSubmit from "@/components/common/ButtonSubmit.vue";
+import DivError from "@/components/common/DivError.vue";
+import InputStandard from "@/components/common/InputStandard.vue";
+import ModalVue from "@/components/common/Modal.vue";
 import { Button } from "@/components/ui/button";
 import type { ContractpartnerAccount } from "@/model/contractpartneraccount/ContractpartnerAccount";
 import ContractpartnerAccountService from "@/service/ContractpartnerAccountService";

@@ -261,7 +261,7 @@
   </div>
 </template>
 <script lang="ts" setup>
-import SpanAmount from "@/components/SpanAmount.vue";
+import SpanAmount from "@/components/common/SpanAmount.vue";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {

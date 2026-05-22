@@ -84,7 +84,7 @@
 </template>
 
 <script lang="ts" setup>
-import SpanAmount from "@/components/SpanAmount.vue";
+import SpanAmount from "@/components/common/SpanAmount.vue";
 import {
   Accordion,
   AccordionContent,

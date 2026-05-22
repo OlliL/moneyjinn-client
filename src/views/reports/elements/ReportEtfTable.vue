@@ -15,7 +15,7 @@
 </template>
 
 <script lang="ts" setup>
-import DivError from "@/components/DivError.vue";
+import DivError from "@/components/common/DivError.vue";
 import EtfTable from "@/components/etf/EtfTable.vue";
 import type { EtfSummary } from "@/model/etf/EtfSummary";
 import EtfService from "@/service/EtfService";

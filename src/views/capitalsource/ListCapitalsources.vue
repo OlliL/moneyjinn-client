@@ -44,7 +44,7 @@ import { onMounted, ref, useTemplateRef, watch } from "vue";
 import { useCapitalsourceStore } from "@/stores/CapitalsourceStore";
 import { useUserSessionStore } from "@/stores/UserSessionStore";
 
-import DivFilter from "@/components/DivFilter.vue";
+import DivFilter from "@/components/common/DivFilter.vue";
 import CreateCapitalsourceModalVue from "@/components/capitalsource/CreateCapitalsourceModal.vue";
 import DeleteCapitalsourceModalVue from "./elements/DeleteCapitalsourceModal.vue";
 import ListCapitalsourcesDesktop from "./elements/ListCapitalsourcesDesktop.vue";

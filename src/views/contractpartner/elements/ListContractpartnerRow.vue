@@ -48,8 +48,8 @@ import type { PropType } from "vue";
 
 import { TableCell, TableRow } from "@/components/ui/table";
 
-import ButtonTableIcon from "@/components/ButtonTableIcon.vue";
-import SpanDate from "@/components/SpanDate.vue";
+import ButtonTableIcon from "@/components/common/ButtonTableIcon.vue";
+import SpanDate from "@/components/common/SpanDate.vue";
 import type { Contractpartner } from "@/model/contractpartner/Contractpartner";
 
 const props = defineProps({

@@ -43,11 +43,11 @@ import { computed, type PropType } from "vue";
 
 import { TableCell, TableRow } from "@/components/ui/table";
 
-import SpanDate from "@/components/SpanDate.vue";
+import SpanDate from "@/components/common/SpanDate.vue";
 
-import ButtonTableIcon from "@/components/ButtonTableIcon.vue";
-import SpanBoolean from "@/components/SpanBoolean.vue";
-import SpanIban from "@/components/SpanIban.vue";
+import ButtonTableIcon from "@/components/common/ButtonTableIcon.vue";
+import SpanBoolean from "@/components/common/SpanBoolean.vue";
+import SpanIban from "@/components/common/SpanIban.vue";
 import type { Capitalsource } from "@/model/capitalsource/Capitalsource";
 import { capitalsourceImportNames } from "@/model/capitalsource/CapitalsourceImport";
 import { capitalsourceStateNames } from "@/model/capitalsource/CapitalsourceState";

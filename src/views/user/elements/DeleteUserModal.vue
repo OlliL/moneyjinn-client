@@ -26,9 +26,9 @@
 </template>
 
 <script lang="ts" setup>
-import ModalDelete from "@/components/ModalDelete.vue";
-import ModalDeleteRow from "@/components/ModalDeleteRow.vue";
-import SpanBoolean from "@/components/SpanBoolean.vue";
+import ModalDelete from "@/components/common/ModalDelete.vue";
+import ModalDeleteRow from "@/components/common/ModalDeleteRow.vue";
+import SpanBoolean from "@/components/common/SpanBoolean.vue";
 import type { User } from "@/model/user/User";
 import { userRoleNames } from "@/model/user/UserRole";
 import UserService from "@/service/UserService";

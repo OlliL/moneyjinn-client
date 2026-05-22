@@ -101,9 +101,9 @@
 </template>
 
 <script lang="ts" setup>
-import SpanBoolean from "@/components/SpanBoolean.vue";
-import SpanDate from "@/components/SpanDate.vue";
-import SpanIban from "@/components/SpanIban.vue";
+import SpanBoolean from "@/components/common/SpanBoolean.vue";
+import SpanDate from "@/components/common/SpanDate.vue";
+import SpanIban from "@/components/common/SpanIban.vue";
 import {
   Accordion,
   AccordionContent,

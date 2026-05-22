@@ -39,7 +39,7 @@
 <script lang="ts" setup>
 import { onMounted, ref, useTemplateRef, watch } from "vue";
 
-import DivFilter from "@/components/DivFilter.vue";
+import DivFilter from "@/components/common/DivFilter.vue";
 import CreatePostingAccountModalVue from "@/components/postingaccount/CreatePostingAccountModal.vue";
 import type { PostingAccount } from "@/model/postingaccount/PostingAccount";
 import { usePostingAccountStore } from "@/stores/PostingAccountStore";

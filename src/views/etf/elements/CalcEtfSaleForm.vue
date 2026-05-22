@@ -116,9 +116,9 @@
 </template>
 
 <script lang="ts" setup>
-import ButtonSubmit from "@/components/ButtonSubmit.vue";
-import DivError from "@/components/DivError.vue";
-import InputStandard from "@/components/InputStandard.vue";
+import ButtonSubmit from "@/components/common/ButtonSubmit.vue";
+import DivError from "@/components/common/DivError.vue";
+import InputStandard from "@/components/common/InputStandard.vue";
 import type { Etf } from "@/model/etf/Etf";
 import type { EtfSalesCalculation } from "@/model/etf/EtfSalesCalculation";
 import type { EtfSummary } from "@/model/etf/EtfSummary";

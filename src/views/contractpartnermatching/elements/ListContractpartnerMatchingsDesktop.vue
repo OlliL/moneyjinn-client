@@ -35,7 +35,7 @@
 </template>
 
 <script lang="ts" setup>
-import DivContentTable from "@/components/DivContentTable.vue";
+import DivContentTable from "@/components/common/DivContentTable.vue";
 import {
   TableBody,
   TableHead,

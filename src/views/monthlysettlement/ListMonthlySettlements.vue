@@ -58,7 +58,7 @@
 import { computed, onMounted, ref, useTemplateRef } from "vue";
 import { onBeforeRouteUpdate } from "vue-router";
 
-import DivError from "@/components/DivError.vue";
+import DivError from "@/components/common/DivError.vue";
 import EditMonthlySettlementModalVue from "@/components/monthlysettlement/EditMonthlySettlementModal.vue";
 import DeleteMonthlySettlementModalVue from "./elements/DeleteMonthlySettlementModal.vue";
 import ListMonthlySettlementsDesktop from "./elements/ListMonthlySettlementsDesktop.vue";

@@ -42,10 +42,10 @@
   </TableRow>
 </template>
 <script lang="ts" setup>
-import ButtonTableIcon from "@/components/ButtonTableIcon.vue";
-import SpanAmount from "@/components/SpanAmount.vue";
-import SpanBoolean from "@/components/SpanBoolean.vue";
-import SpanDate from "@/components/SpanDate.vue";
+import ButtonTableIcon from "@/components/common/ButtonTableIcon.vue";
+import SpanAmount from "@/components/common/SpanAmount.vue";
+import SpanBoolean from "@/components/common/SpanBoolean.vue";
+import SpanDate from "@/components/common/SpanDate.vue";
 import { TableCell, TableRow } from "@/components/ui/table";
 import type { PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
 import { Pencil, Trash2 } from "lucide-vue-next";

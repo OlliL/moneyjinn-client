@@ -36,9 +36,9 @@
 </template>
 
 <script lang="ts" setup>
-import ButtonMobileCreate from "@/components/ButtonMobileCreate.vue";
-import ButtonMobileDelete from "@/components/ButtonMobileDelete.vue";
-import ButtonMobileEdit from "@/components/ButtonMobileEdit.vue";
+import ButtonMobileCreate from "@/components/common/ButtonMobileCreate.vue";
+import ButtonMobileDelete from "@/components/common/ButtonMobileDelete.vue";
+import ButtonMobileEdit from "@/components/common/ButtonMobileEdit.vue";
 import MonthYearMobileNavigator from "@/components/navigation/MonthYearMobileNavigator.vue";
 
 defineProps<{

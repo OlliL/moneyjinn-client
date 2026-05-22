@@ -112,8 +112,8 @@ import { computed, type PropType } from "vue";
 import { Button } from "@/components/ui/button";
 import { TableCell, TableRow } from "@/components/ui/table";
 
-import SpanAmount from "@/components/SpanAmount.vue";
-import SpanDate from "@/components/SpanDate.vue";
+import SpanAmount from "@/components/common/SpanAmount.vue";
+import SpanDate from "@/components/common/SpanDate.vue";
 
 import { useUserSessionStore } from "@/stores/UserSessionStore";
 

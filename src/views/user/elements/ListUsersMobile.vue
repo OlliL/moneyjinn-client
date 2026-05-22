@@ -65,7 +65,7 @@
 </template>
 
 <script lang="ts" setup>
-import SpanBoolean from "@/components/SpanBoolean.vue";
+import SpanBoolean from "@/components/common/SpanBoolean.vue";
 import {
   Accordion,
   AccordionContent,

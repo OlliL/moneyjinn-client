@@ -49,9 +49,9 @@
 </template>
 
 <script lang="ts" setup>
-import ButtonSubmit from "@/components/ButtonSubmit.vue";
-import DivError from "@/components/DivError.vue";
-import InputFile from "@/components/InputFile.vue";
+import ButtonSubmit from "@/components/common/ButtonSubmit.vue";
+import DivError from "@/components/common/DivError.vue";
+import InputFile from "@/components/common/InputFile.vue";
 import DeleteMoneyflowModalVue from "@/components/moneyflow/DeleteMoneyflowModal.vue";
 import EditMoneyflowModalVue from "@/components/moneyflow/EditMoneyflowModal.vue";
 import type { ImportedMoneyflowReceipt } from "@/model/moneyflow/ImportedMoneyflowReceipt";

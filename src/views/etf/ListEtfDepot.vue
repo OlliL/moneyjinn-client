@@ -129,9 +129,9 @@
 </template>
 
 <script lang="ts" setup>
-import ButtonMobileCreate from "@/components/ButtonMobileCreate.vue";
-import DivError from "@/components/DivError.vue";
-import SelectStandard from "@/components/SelectStandard.vue";
+import ButtonMobileCreate from "@/components/common/ButtonMobileCreate.vue";
+import DivError from "@/components/common/DivError.vue";
+import SelectStandard from "@/components/common/SelectStandard.vue";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import {

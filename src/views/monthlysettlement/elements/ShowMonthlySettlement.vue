@@ -144,8 +144,8 @@
 </template>
 
 <script lang="ts" setup>
-import DivError from "@/components/DivError.vue";
-import SpanAmount from "@/components/SpanAmount.vue";
+import DivError from "@/components/common/DivError.vue";
+import SpanAmount from "@/components/common/SpanAmount.vue";
 import Button from "@/components/ui/button/Button.vue";
 import {
   Table,

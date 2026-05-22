@@ -60,8 +60,8 @@
 <script lang="ts" setup>
 import { onMounted, ref, useTemplateRef, watch } from "vue";
 
-import DivError from "@/components/DivError.vue";
-import DivFilter from "@/components/DivFilter.vue";
+import DivError from "@/components/common/DivError.vue";
+import DivFilter from "@/components/common/DivFilter.vue";
 import CreateContractpartnerMatchingModalVue from "./elements/CreateContractpartnerMatchingModal.vue";
 import DeleteContractpartnerMatchingModalVue from "./elements/DeleteContractpartnerMatchingModal.vue";
 import ListContractpartnerMatchingsDesktop from "./elements/ListContractpartnerMatchingsDesktop.vue";

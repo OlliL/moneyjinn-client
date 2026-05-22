@@ -192,7 +192,7 @@
 import { Accordion } from "@/components/ui/accordion";
 import CapitalsourceTableMobileRow from "./CapitalsourceTableMobileRow.vue";
 
-import SpanAmount from "@/components/SpanAmount.vue";
+import SpanAmount from "@/components/common/SpanAmount.vue";
 import {
   Table,
   TableBody,

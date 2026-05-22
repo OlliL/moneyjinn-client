@@ -139,7 +139,7 @@ import {
 
 import { Routes } from "@/router";
 
-import SpanAmount from "@/components/SpanAmount.vue";
+import SpanAmount from "@/components/common/SpanAmount.vue";
 import SearchMoneyflowResultRowVue from "./SearchMoneyflowResultRow.vue";
 
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";

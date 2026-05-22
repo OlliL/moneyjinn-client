@@ -26,9 +26,9 @@
 </template>
 
 <script lang="ts" setup>
-import ModalDelete from "@/components/ModalDelete.vue";
-import ModalDeleteRow from "@/components/ModalDeleteRow.vue";
-import SpanAmount from "@/components/SpanAmount.vue";
+import ModalDelete from "@/components/common/ModalDelete.vue";
+import ModalDeleteRow from "@/components/common/ModalDeleteRow.vue";
+import SpanAmount from "@/components/common/SpanAmount.vue";
 import type { EtfFlow } from "@/model/etf/EtfFlow";
 import CrudEtfFlowService from "@/service/CrudEtfFlowService";
 import { formatDateWithTime } from "@/tools/views/FormatDate";

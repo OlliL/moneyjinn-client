@@ -61,9 +61,9 @@
 </template>
 
 <script lang="ts" setup>
-import ButtonSubmit from "@/components/ButtonSubmit.vue";
-import DivError from "@/components/DivError.vue";
-import InputStandard from "@/components/InputStandard.vue";
+import ButtonSubmit from "@/components/common/ButtonSubmit.vue";
+import DivError from "@/components/common/DivError.vue";
+import InputStandard from "@/components/common/InputStandard.vue";
 import router, { Routes } from "@/router";
 import UserService from "@/service/UserService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";

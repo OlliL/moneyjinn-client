@@ -29,9 +29,9 @@
 <script lang="ts" setup>
 import { ref, useTemplateRef } from "vue";
 
-import ButtonDelete from "@/components/ButtonDelete.vue";
-import DivError from "@/components/DivError.vue";
-import ModalVue from "@/components/Modal.vue";
+import ButtonDelete from "@/components/common/ButtonDelete.vue";
+import DivError from "@/components/common/DivError.vue";
+import ModalVue from "@/components/common/Modal.vue";
 import ShowMonthlySettlementVue from "./ShowMonthlySettlement.vue";
 
 import { handleBackendError } from "@/tools/views/HandleBackendError";

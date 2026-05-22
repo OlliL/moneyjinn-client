@@ -101,8 +101,8 @@ import { onBeforeRouteUpdate, type RouteParamsGeneric } from "vue-router";
 
 import router, { Routes } from "@/router";
 
-import ButtonMobileCreate from "@/components/ButtonMobileCreate.vue";
-import DivError from "@/components/DivError.vue";
+import ButtonMobileCreate from "@/components/common/ButtonMobileCreate.vue";
+import DivError from "@/components/common/DivError.vue";
 import MonthYearDesktopNavigator from "@/components/navigation/MonthYearDesktopNavigator.vue";
 import MonthYearMobileNavigator from "@/components/navigation/MonthYearMobileNavigator.vue";
 import { Button } from "@/components/ui/button";

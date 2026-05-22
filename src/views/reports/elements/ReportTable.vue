@@ -122,7 +122,7 @@
 </template>
 
 <script lang="ts" setup>
-import DivError from "@/components/DivError.vue";
+import DivError from "@/components/common/DivError.vue";
 import DeleteMoneyflowModalVue from "@/components/moneyflow/DeleteMoneyflowModal.vue";
 import EditMoneyflowModalVue from "@/components/moneyflow/EditMoneyflowModal.vue";
 import ListMoneyflowModal from "@/components/moneyflow/ListMoneyflowModal.vue";

@@ -19,7 +19,7 @@
 </template>
 
 <script lang="ts" setup>
-import ButtonTableIcon from "@/components/ButtonTableIcon.vue";
+import ButtonTableIcon from "@/components/common/ButtonTableIcon.vue";
 import { TableCell, TableRow } from "@/components/ui/table";
 import type { PostingAccount } from "@/model/postingaccount/PostingAccount";
 import { Pencil, Trash2 } from "lucide-vue-next";

@@ -231,16 +231,16 @@ import { onMounted, ref, useTemplateRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { any, date, type ZodTypeAny } from "zod";
 
-import ButtonSubmit from "@/components/ButtonSubmit.vue";
+import ButtonSubmit from "@/components/common/ButtonSubmit.vue";
 import SelectContractpartner from "@/components/contractpartner/SelectContractpartner.vue";
-import DivContentTable from "@/components/DivContentTable.vue";
-import DivError from "@/components/DivError.vue";
-import InputDate from "@/components/InputDate.vue";
-import InputStandard from "@/components/InputStandard.vue";
+import DivContentTable from "@/components/common/DivContentTable.vue";
+import DivError from "@/components/common/DivError.vue";
+import InputDate from "@/components/common/InputDate.vue";
+import InputStandard from "@/components/common/InputStandard.vue";
 import DeleteMoneyflowModalVue from "@/components/moneyflow/DeleteMoneyflowModal.vue";
 import EditMoneyflowModalVue from "@/components/moneyflow/EditMoneyflowModal.vue";
 import SelectPostingAccount from "@/components/postingaccount/SelectPostingAccount.vue";
-import SelectStandard from "@/components/SelectStandard.vue";
+import SelectStandard from "@/components/common/SelectStandard.vue";
 import SearchMoneyflowResultGroupVue from "./elements/SearchMoneyflowResultGroup.vue";
 
 import { toFixed } from "@/tools/math";

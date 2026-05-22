@@ -151,15 +151,15 @@
 </template>
 
 <script lang="ts" setup>
-import ButtonSubmit from "@/components/ButtonSubmit.vue";
+import ButtonSubmit from "@/components/common/ButtonSubmit.vue";
 import SelectCapitalsource from "@/components/capitalsource/SelectCapitalsource.vue";
-import DivContentTable from "@/components/DivContentTable.vue";
-import DivError from "@/components/DivError.vue";
-import InputDate from "@/components/InputDate.vue";
-import InputFile from "@/components/InputFile.vue";
+import DivContentTable from "@/components/common/DivContentTable.vue";
+import DivError from "@/components/common/DivError.vue";
+import InputDate from "@/components/common/InputDate.vue";
+import InputFile from "@/components/common/InputFile.vue";
 import DeleteMoneyflowModalVue from "@/components/moneyflow/DeleteMoneyflowModal.vue";
 import EditMoneyflowModalVue from "@/components/moneyflow/EditMoneyflowModal.vue";
-import SelectStandard from "@/components/SelectStandard.vue";
+import SelectStandard from "@/components/common/SelectStandard.vue";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import {

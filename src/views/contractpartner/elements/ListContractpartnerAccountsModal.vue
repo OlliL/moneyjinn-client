@@ -90,8 +90,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-import DivError from "@/components/DivError.vue";
-import ModalVue from "@/components/Modal.vue";
+import DivError from "@/components/common/DivError.vue";
+import ModalVue from "@/components/common/Modal.vue";
 import CreateContractpartnerAccountModalVue from "./CreateContractpartnerAccountModal.vue";
 import DeleteContractpartnerAccountModalVue from "./DeleteContractpartnerAccountModal.vue";
 import ListContractpartnerAccountRowVue from "./ListContractpartnerAccountRow.vue";

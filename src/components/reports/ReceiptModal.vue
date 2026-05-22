@@ -26,8 +26,8 @@ import { MoneyflowReceiptType } from "@/model/moneyflow/MoneyflowReceiptType";
 import MoneyflowReceiptService from "@/service/MoneyflowReceiptService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { ref, useTemplateRef } from "vue";
-import DivError from "../DivError.vue";
-import ModalVue from "../Modal.vue";
+import DivError from "../common/DivError.vue";
+import ModalVue from "../common/Modal.vue";
 
 const serverErrors = ref(new Array<string>());
 

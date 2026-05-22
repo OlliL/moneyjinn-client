@@ -109,14 +109,14 @@ import { useForm } from "vee-validate";
 import { computed, ref, toRaw, useTemplateRef } from "vue";
 import { useI18n } from "vue-i18n";
 import { boolean, number, string, ZodType } from "zod";
-import ButtonSubmit from "../ButtonSubmit.vue";
+import ButtonSubmit from "../common/ButtonSubmit.vue";
 import SelectCapitalsource from "../capitalsource/SelectCapitalsource.vue";
 import SelectContractpartner from "../contractpartner/SelectContractpartner.vue";
-import DivError from "../DivError.vue";
-import InputStandard from "../InputStandard.vue";
-import ModalVue from "../Modal.vue";
+import DivError from "../common/DivError.vue";
+import InputStandard from "../common/InputStandard.vue";
+import ModalVue from "../common/Modal.vue";
 import SelectPostingAccount from "../postingaccount/SelectPostingAccount.vue";
-import SelectStandard from "../SelectStandard.vue";
+import SelectStandard from "../common/SelectStandard.vue";
 
 const { t } = useI18n();
 

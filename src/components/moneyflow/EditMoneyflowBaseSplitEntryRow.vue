@@ -101,7 +101,7 @@ import { ArrowLeft, Euro, Trash2 } from "lucide-vue-next";
 import { computed, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { any, number, string } from "zod";
-import InputStandard from "../InputStandard.vue";
+import InputStandard from "../common/InputStandard.vue";
 import SelectPostingAccount from "../postingaccount/SelectPostingAccount.vue";
 import { Separator } from "../ui/separator";
 

@@ -1,4 +1,4 @@
-import SpanBoolean from "@/components/SpanBoolean.vue";
+import SpanBoolean from "@/components/common/SpanBoolean.vue";
 import { ValueView } from "@/tests/TestViews";
 import "@testing-library/jest-dom/vitest";
 import { render } from "@testing-library/vue";

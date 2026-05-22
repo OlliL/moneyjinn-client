@@ -40,10 +40,10 @@
 <script lang="ts" setup>
 import { ref, useTemplateRef } from "vue";
 
-import ModalDelete from "../ModalDelete.vue";
-import ModalDeleteRow from "../ModalDeleteRow.vue";
-import SpanAmount from "../SpanAmount.vue";
-import SpanDate from "../SpanDate.vue";
+import ModalDelete from "../common/ModalDelete.vue";
+import ModalDeleteRow from "../common/ModalDeleteRow.vue";
+import SpanAmount from "../common/SpanAmount.vue";
+import SpanDate from "../common/SpanDate.vue";
 
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 

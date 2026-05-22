@@ -1,4 +1,4 @@
-import SpanAmount from "@/components/SpanAmount.vue";
+import SpanAmount from "@/components/common/SpanAmount.vue";
 import { ValueView } from "@/tests/TestViews";
 import "@testing-library/jest-dom/vitest";
 import { render } from "@testing-library/vue";

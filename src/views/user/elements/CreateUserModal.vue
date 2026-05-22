@@ -171,13 +171,13 @@
 </template>
 
 <script lang="ts" setup>
-import ButtonSubmit from "@/components/ButtonSubmit.vue";
-import DivError from "@/components/DivError.vue";
-import InputDate from "@/components/InputDate.vue";
-import InputStandard from "@/components/InputStandard.vue";
-import ModalVue from "@/components/Modal.vue";
-import SelectStandard from "@/components/SelectStandard.vue";
-import SpanDate from "@/components/SpanDate.vue";
+import ButtonSubmit from "@/components/common/ButtonSubmit.vue";
+import DivError from "@/components/common/DivError.vue";
+import InputDate from "@/components/common/InputDate.vue";
+import InputStandard from "@/components/common/InputStandard.vue";
+import ModalVue from "@/components/common/Modal.vue";
+import SelectStandard from "@/components/common/SelectStandard.vue";
+import SpanDate from "@/components/common/SpanDate.vue";
 import { Button } from "@/components/ui/button";
 import {
   Table,

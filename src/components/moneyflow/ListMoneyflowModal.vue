@@ -143,8 +143,8 @@
 import { useForm } from "vee-validate";
 import { computed, ref, useTemplateRef } from "vue";
 
-import DivError from "../DivError.vue";
-import ModalVue from "../Modal.vue";
+import DivError from "../common/DivError.vue";
+import ModalVue from "../common/Modal.vue";
 
 import {
   Table,
@@ -159,8 +159,8 @@ import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 import { MoneyflowReceiptType } from "@/model/moneyflow/MoneyflowReceiptType";
 
 import MoneyflowReceiptService from "@/service/MoneyflowReceiptService";
-import SpanAmount from "../SpanAmount.vue";
-import SpanDate from "../SpanDate.vue";
+import SpanAmount from "../common/SpanAmount.vue";
+import SpanDate from "../common/SpanDate.vue";
 
 const serverErrors = ref(new Array<string>());
 
