@@ -9,11 +9,7 @@
       <DivError :server-errors="serverErrors" />
       <div class="flex justify-center mb-4" v-if="month">
         <div class="w-full">
-          <ShowMonthlySettlementVue
-            :year="year"
-            :month="month"
-            :show-header="false"
-          />
+          <ShowMonthlySettlementVue :year="year" :month="month" />
         </div>
       </div>
     </template>

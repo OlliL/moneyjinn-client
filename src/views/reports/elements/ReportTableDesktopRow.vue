@@ -7,7 +7,7 @@
     <template v-if="idx === 0">
       <TableCell
         :rowspan="rowspan"
-        :class="['border-r py-0 px-1', redIfPrivate, rowBgClass]"
+        :class="['border-r py-0 px-1', redIfPrivate || rowBgClass]"
       >
         <Button
           v-if="mmf.hasReceipt"
@@ -16,7 +16,7 @@
           @click="showReceipt"
           :title="$t('Receipt.receipt')"
           :aria-label="$t('Receipt.receipt')"
-          class="h-8 w-8 cursor-pointer"
+          class="action-icon-button"
         >
           <ReceiptText class="h-4 w-4" />
         </Button>
@@ -74,7 +74,7 @@
             :data-testid="`report-moneyflow-edit-${mmf.id}`"
             @click="editMoneyflow"
             :title="$t('General.edit')"
-            class="h-8 w-8 cursor-pointer"
+            class="action-icon-button"
           >
             <Pencil class="h-4 w-4" />
           </Button>
@@ -89,7 +89,7 @@
             :data-testid="`report-moneyflow-delete-${mmf.id}`"
             @click="deleteMoneyflow"
             :title="$t('General.delete')"
-            class="h-8 w-8 cursor-pointer"
+            class="action-icon-button"
           >
             <Trash2 class="h-4 w-4" />
           </Button>
@@ -107,7 +107,7 @@
             :data-testid="`report-moneyflow-list-${mmf.id}`"
             @click="listMoneyflow"
             :title="$t('General.moneyflow')"
-            class="h-8 w-8 cursor-pointer"
+            class="action-icon-button"
           >
             <Eye class="h-4 w-4" />
           </Button>

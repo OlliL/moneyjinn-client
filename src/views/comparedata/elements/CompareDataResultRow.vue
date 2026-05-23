@@ -30,7 +30,7 @@
         :data-testid="`compare-data-edit-${mmf.id}`"
         @click="editMoneyflow"
         :title="$t('General.edit')"
-        class="h-8 w-8 cursor-pointer"
+        class="action-icon-button"
       >
         <Pencil class="h-4 w-4" />
       </Button>
@@ -45,7 +45,7 @@
         :data-testid="`compare-data-delete-${mmf.id}`"
         @click="deleteMoneyflow"
         :title="$t('General.delete')"
-        class="h-8 w-8 cursor-pointer"
+        class="action-icon-button"
       >
         <Trash2 class="h-4 w-4" />
       </Button>
@@ -90,7 +90,7 @@
         :data-testid="`compare-data-create-${rowIndex}`"
         @click="createMoneyflow"
         :title="$t('General.new')"
-        class="h-8 w-8 cursor-pointer"
+        class="action-icon-button"
       >
         <Plus class="h-4 w-4" />
       </Button>

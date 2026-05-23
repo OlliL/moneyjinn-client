@@ -29,39 +29,7 @@
 
   <div class="flex justify-center" v-if="props.month">
     <div class="w-full max-w-md">
-      <div
-        v-if="showHeader"
-        class="hidden md:flex items-center justify-between bg-background border-b p-3"
-      >
-        <Button
-          variant="ghost"
-          size="sm"
-          @click="navigateToPreviousMonth"
-          :disabled="!(prevMonth && prevYear)"
-          class="h-8 w-8 cursor-pointer"
-        >
-          <ChevronLeft class="h-5 w-5" />
-        </Button>
-        <h5 class="text-xl flex-grow-1 text-center font-bold">
-          {{
-            $t("MonthlySettlement.headline", {
-              month: monthName,
-              year: year,
-            })
-          }}
-        </h5>
-        <Button
-          variant="ghost"
-          size="sm"
-          @click="navigateToNextMonth"
-          :disabled="!(nextMonth && nextYear)"
-          class="h-8 w-8 cursor-pointer"
-          border-r
-        >
-          <ChevronRight class="h-5 w-5" />
-        </Button>
-      </div>
-      <div class="md:p-4 px-15 md:px-0">
+      <div class="px-15 md:px-0">
         <div
           class="flex flex-col rounded-md border mb-4"
           v-if="monthlySettlementsNoCredit.length"
@@ -160,9 +128,8 @@ import type { MonthlySettlement } from "@/model/monthlysettlement/MonthlySettlem
 import router, { Routes } from "@/router";
 import MonthlySettlementService from "@/service/MonthlySettlementService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
-import { getMonthName } from "@/tools/views/MonthName";
 import { ChevronLeft, ChevronRight } from "lucide-vue-next";
-import { computed, onMounted, ref, watch } from "vue";
+import { onMounted, ref, watch } from "vue";
 
 const serverErrors = ref(new Array<string>());
 
@@ -175,10 +142,6 @@ const props = defineProps({
     type: Number,
     required: true,
   },
-  showHeader: {
-    type: Boolean,
-    default: true,
-  },
 });
 
 const dataLoaded = ref(false);
@@ -190,10 +153,6 @@ const prevMonth = ref(0);
 const prevYear = ref(0);
 const nextMonth = ref(0);
 const nextYear = ref(0);
-
-const monthName = computed(() => {
-  return getMonthName(props.month);
-});
 
 const loadMonthlySettlements = (year: number, month: number) => {
   serverErrors.value = new Array<string>();

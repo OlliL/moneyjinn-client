@@ -8,7 +8,7 @@
         @click="toggleCollapse"
         :title="isCollapsed ? 'Collapse details' : 'Expand details'"
         :aria-label="isCollapsed ? 'Collapse details' : 'Expand details'"
-        class="h-8 w-8 cursor-pointer"
+        class="action-icon-button"
       >
         <ChevronRight v-if="!isCollapsed" class="h-4 w-4" />
         <ChevronDown v-else class="h-4 w-4" />
