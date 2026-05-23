@@ -289,8 +289,6 @@ onMounted(() => {
   }
 });
 
- 
-
 const sortedMoneyflows = computed(() => {
   let result = [...props.filteredMoneyflows];
   if (sortBy.value.size > 0) {
