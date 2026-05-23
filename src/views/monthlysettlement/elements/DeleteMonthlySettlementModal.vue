@@ -9,11 +9,7 @@
       <DivError :server-errors="serverErrors" />
       <div class="flex justify-center mb-4" v-if="month">
         <div class="w-full">
-          <ShowMonthlySettlementVue
-            :year="year"
-            :month="month"
-            :show-header="false"
-          />
+          <ShowMonthlySettlementVue :year="year" :month="month" />
         </div>
       </div>
     </template>
@@ -29,9 +25,9 @@
 <script lang="ts" setup>
 import { ref, useTemplateRef } from "vue";
 
-import ButtonDelete from "@/components/ButtonDelete.vue";
-import DivError from "@/components/DivError.vue";
-import ModalVue from "@/components/Modal.vue";
+import ButtonDelete from "@/components/common/ButtonDelete.vue";
+import DivError from "@/components/common/DivError.vue";
+import ModalVue from "@/components/common/Modal.vue";
 import ShowMonthlySettlementVue from "./ShowMonthlySettlement.vue";
 
 import { handleBackendError } from "@/tools/views/HandleBackendError";

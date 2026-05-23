@@ -25,7 +25,7 @@
         class="button-with-icon"
         @click="resetForm"
       >
-        <Undo2 class="h-4 w-4" />
+        <Undo2 class="icon-small" />
         {{ $t("General.reset") }}
       </Button>
 
@@ -33,17 +33,17 @@
         :button-label="$t('General.save')"
         form-id="createGroupForm"
       >
-        <template #icon><Save class="h-4 w-4" /></template>
+        <template #icon><Save class="icon-small" /></template>
       </ButtonSubmit>
     </template>
   </ModalVue>
 </template>
 
 <script lang="ts" setup>
-import ButtonSubmit from "@/components/ButtonSubmit.vue";
-import DivError from "@/components/DivError.vue";
-import InputStandard from "@/components/InputStandard.vue";
-import ModalVue from "@/components/Modal.vue";
+import ButtonSubmit from "@/components/common/ButtonSubmit.vue";
+import DivError from "@/components/common/DivError.vue";
+import InputStandard from "@/components/common/InputStandard.vue";
+import ModalVue from "@/components/common/Modal.vue";
 import { Button } from "@/components/ui/button";
 import type { Group } from "@/model/group/Group";
 import GroupService from "@/service/GroupService";

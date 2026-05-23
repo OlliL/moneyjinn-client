@@ -22,7 +22,7 @@
               <span class="text-xs text-muted-foreground font-normal truncate">
                 {{ timestampString(flow) }}
               </span>
-              <span class="font-bold text-sm text-foreground truncate">
+              <span :class="['font-bold text-sm truncate', amountClass(flow)]">
                 {{ amountString(flow) }} {{ $t("ETFFlow.amount") }}
               </span>
             </div>
@@ -84,7 +84,7 @@
 </template>
 
 <script lang="ts" setup>
-import SpanAmount from "@/components/SpanAmount.vue";
+import SpanAmount from "@/components/common/SpanAmount.vue";
 import {
   Accordion,
   AccordionContent,

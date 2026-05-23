@@ -6,7 +6,7 @@
           :id="'radio-' + props.mmf.id"
           :value="String(props.mmf.id)"
           :data-testid="'moneyflow-radio-' + props.mmf.id"
-          class="h-4 w-4 rounded-full border border-primary text-primary shadow focus:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+          class="icon-small rounded-full border border-primary text-primary shadow focus:outline-none focus-visible:ring-1 focus-visible:ring-ring"
         />
       </div>
     </TableCell>
@@ -25,7 +25,7 @@
         @click="editMoneyflow"
         class="h-6 w-6"
       >
-        <Pencil class="h-4 w-4" />
+        <Pencil class="icon-small" />
       </Button>
     </TableCell>
     <TableCell class="text-center border-l" v-if="isOwnMoneyflow">
@@ -35,15 +35,15 @@
         @click="deleteMoneyflow"
         class="h-6 w-6"
       >
-        <Trash2 class="h-4 w-4" />
+        <Trash2 class="icon-small" />
       </Button>
     </TableCell>
     <TableCell v-if="!isOwnMoneyflow"></TableCell>
   </TableRow>
 </template>
 <script lang="ts" setup>
-import SpanAmount from "@/components/SpanAmount.vue";
-import SpanDate from "@/components/SpanDate.vue";
+import SpanAmount from "@/components/common/SpanAmount.vue";
+import SpanDate from "@/components/common/SpanDate.vue";
 import { Button } from "@/components/ui/button";
 import { RadioGroupItem } from "@/components/ui/radio-group";
 import { TableCell, TableRow } from "@/components/ui/table";

@@ -156,7 +156,7 @@
               @click="navigateToPreviousYear"
               :class="['mr-2', { invisible: !showPreviousYearLink }]"
             >
-              <ChevronLeft class="h-4 w-4" />
+              <ChevronLeft class="icon-small" />
             </Button>
 
             <Select v-model="selectedYear">
@@ -178,7 +178,7 @@
               @click="navigateToNextYear"
               :class="['ml-2', { invisible: !showNextYearLink }]"
             >
-              <ChevronRight class="h-4 w-4" />
+              <ChevronRight class="icon-small" />
             </Button>
           </div>
         </div>
@@ -199,7 +199,7 @@
           <ShowEtfPreliminaryLumpSumMonthlyVue :mep="etfPreliminaryLumpSum" />
         </div>
       </div>
-      <div class="flex justify-center pb-4 hidden md:block">
+      <div class="responsive-action-group">
         <div class="flex flex-wrap justify-center gap-2">
           <Button
             data-testid="preliminary-lump-sum-edit"
@@ -238,7 +238,7 @@
           <ShowEtfPreliminaryLumpSumPieceVue :mep="etfPreliminaryLumpSum" />
         </div>
       </div>
-      <div class="flex justify-center pb-4 hidden md:block">
+      <div class="responsive-action-group">
         <div class="flex flex-wrap justify-center gap-2">
           <Button
             data-testid="preliminary-lump-sum-edit"
@@ -276,7 +276,7 @@
           <ShowEtfPreliminaryLumpSumYearly :mep="etfPreliminaryLumpSum" />
         </div>
       </div>
-      <div class="flex justify-center pb-4 hidden md:block">
+      <div class="responsive-action-group">
         <div class="flex flex-wrap justify-center gap-2">
           <Button
             data-testid="preliminary-lump-sum-edit"
@@ -374,12 +374,12 @@
 </template>
 
 <script lang="ts" setup>
-import ButtonMobileCreate from "@/components/ButtonMobileCreate.vue";
-import ButtonMobileDelete from "@/components/ButtonMobileDelete.vue";
-import ButtonMobileEdit from "@/components/ButtonMobileEdit.vue";
-import DivError from "@/components/DivError.vue";
+import ButtonMobileCreate from "@/components/common/ButtonMobileCreate.vue";
+import ButtonMobileDelete from "@/components/common/ButtonMobileDelete.vue";
+import ButtonMobileEdit from "@/components/common/ButtonMobileEdit.vue";
+import DivError from "@/components/common/DivError.vue";
 import MonthYearMobileNavigator from "@/components/navigation/MonthYearMobileNavigator.vue";
-import SelectStandard from "@/components/SelectStandard.vue";
+import SelectStandard from "@/components/common/SelectStandard.vue";
 import { Button } from "@/components/ui/button";
 import {
   Select,

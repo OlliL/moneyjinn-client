@@ -13,7 +13,7 @@
         @click="deleteMoneyflowSplitEntryRow"
         :data-testid="'splitEntryRowDeleteButton' + idSuffix"
       >
-        <Trash2 class="h-4 w-4" />
+        <Trash2 class="icon-small" />
       </Button>
 
       <div class="flex-1 w-full">
@@ -26,7 +26,7 @@
           :field-label="$t('General.amount')"
         >
           <template #icon>
-            <Euro class="h-4 w-4" />
+            <Euro class="icon-small" />
           </template>
         </InputStandard>
       </div>
@@ -101,7 +101,7 @@ import { ArrowLeft, Euro, Trash2 } from "lucide-vue-next";
 import { computed, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { any, number, string } from "zod";
-import InputStandard from "../InputStandard.vue";
+import InputStandard from "../common/InputStandard.vue";
 import SelectPostingAccount from "../postingaccount/SelectPostingAccount.vue";
 import { Separator } from "../ui/separator";
 

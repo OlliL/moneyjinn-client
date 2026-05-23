@@ -35,36 +35,30 @@
                 <Table>
                   <TableHeader>
                     <TableRow>
+                      <TableHead class="table-head-cell">{{
+                        $t("Moneyflow.bookingdate")
+                      }}</TableHead>
+                      <TableHead class="table-head-cell">{{
+                        $t("Moneyflow.invoicedate")
+                      }}</TableHead>
                       <TableHead
-                        class="font-bold border text-foreground text-center"
-                        >{{ $t("Moneyflow.bookingdate") }}</TableHead
-                      >
-                      <TableHead
-                        class="font-bold border text-foreground text-center"
-                        >{{ $t("Moneyflow.invoicedate") }}</TableHead
-                      >
-                      <TableHead
-                        class="font-bold border text-foreground text-center"
+                        class="table-head-cell"
                         :colspan="rowspan > 1 ? 2 : 1"
                       >
                         {{ $t("General.amount") }}
                       </TableHead>
-                      <TableHead
-                        class="font-bold border text-foreground text-center"
-                        >{{ $t("General.contractpartner") }}</TableHead
-                      >
-                      <TableHead
-                        class="font-bold border text-foreground text-center"
-                        >{{ $t("General.comment") }}</TableHead
-                      >
-                      <TableHead
-                        class="font-bold border text-foreground text-center"
-                        >{{ $t("General.postingAccount") }}</TableHead
-                      >
-                      <TableHead
-                        class="font-bold border text-foreground text-center"
-                        >{{ $t("General.capitalsource") }}</TableHead
-                      >
+                      <TableHead class="table-head-cell">{{
+                        $t("General.contractpartner")
+                      }}</TableHead>
+                      <TableHead class="table-head-cell">{{
+                        $t("General.comment")
+                      }}</TableHead>
+                      <TableHead class="table-head-cell">{{
+                        $t("General.postingAccount")
+                      }}</TableHead>
+                      <TableHead class="table-head-cell">{{
+                        $t("General.capitalsource")
+                      }}</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -143,8 +137,8 @@
 import { useForm } from "vee-validate";
 import { computed, ref, useTemplateRef } from "vue";
 
-import DivError from "../DivError.vue";
-import ModalVue from "../Modal.vue";
+import DivError from "../common/DivError.vue";
+import ModalVue from "../common/Modal.vue";
 
 import {
   Table,
@@ -159,8 +153,8 @@ import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 import { MoneyflowReceiptType } from "@/model/moneyflow/MoneyflowReceiptType";
 
 import MoneyflowReceiptService from "@/service/MoneyflowReceiptService";
-import SpanAmount from "../SpanAmount.vue";
-import SpanDate from "../SpanDate.vue";
+import SpanAmount from "../common/SpanAmount.vue";
+import SpanDate from "../common/SpanDate.vue";
 
 const serverErrors = ref(new Array<string>());
 

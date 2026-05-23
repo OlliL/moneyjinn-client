@@ -6,19 +6,19 @@
       :test-id="`group-edit-${group.id}`"
       @click="editGroup"
     >
-      <Pencil class="h-4 w-4" />
+      <Pencil class="icon-small" />
     </ButtonTableIcon>
     <ButtonTableIcon
       :title="$t('General.delete')"
       :test-id="`group-delete-${group.id}`"
       @click="deleteGroup"
     >
-      <Trash2 class="h-4 w-4" />
+      <Trash2 class="icon-small" />
     </ButtonTableIcon>
   </TableRow>
 </template>
 <script lang="ts" setup>
-import ButtonTableIcon from "@/components/ButtonTableIcon.vue";
+import ButtonTableIcon from "@/components/common/ButtonTableIcon.vue";
 import { TableCell, TableRow } from "@/components/ui/table";
 import type { Group } from "@/model/group/Group";
 import { Pencil, Trash2 } from "lucide-vue-next";

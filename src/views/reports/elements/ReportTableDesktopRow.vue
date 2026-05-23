@@ -7,7 +7,7 @@
     <template v-if="idx === 0">
       <TableCell
         :rowspan="rowspan"
-        :class="['border-r py-0 px-1', redIfPrivate, rowBgClass]"
+        :class="['border-r py-0 px-1', redIfPrivate || rowBgClass]"
       >
         <Button
           v-if="mmf.hasReceipt"
@@ -16,9 +16,9 @@
           @click="showReceipt"
           :title="$t('Receipt.receipt')"
           :aria-label="$t('Receipt.receipt')"
-          class="h-8 w-8 cursor-pointer"
+          class="action-icon-button"
         >
-          <ReceiptText class="h-4 w-4" />
+          <ReceiptText class="icon-small" />
         </Button>
       </TableCell>
       <TableCell :rowspan="rowspan" :class="['border-r', rowBgClass]">
@@ -74,9 +74,9 @@
             :data-testid="`report-moneyflow-edit-${mmf.id}`"
             @click="editMoneyflow"
             :title="$t('General.edit')"
-            class="h-8 w-8 cursor-pointer"
+            class="action-icon-button"
           >
-            <Pencil class="h-4 w-4" />
+            <Pencil class="icon-small" />
           </Button>
         </TableCell>
         <TableCell
@@ -89,9 +89,9 @@
             :data-testid="`report-moneyflow-delete-${mmf.id}`"
             @click="deleteMoneyflow"
             :title="$t('General.delete')"
-            class="h-8 w-8 cursor-pointer"
+            class="action-icon-button"
           >
-            <Trash2 class="h-4 w-4" />
+            <Trash2 class="icon-small" />
           </Button>
         </TableCell>
       </template>
@@ -107,9 +107,9 @@
             :data-testid="`report-moneyflow-list-${mmf.id}`"
             @click="listMoneyflow"
             :title="$t('General.moneyflow')"
-            class="h-8 w-8 cursor-pointer"
+            class="action-icon-button"
           >
-            <Eye class="h-4 w-4" />
+            <Eye class="icon-small" />
           </Button>
         </TableCell>
         <TableCell :rowspan="rowspan" :class="rowBgClass" />
@@ -119,8 +119,8 @@
 </template>
 
 <script lang="ts" setup>
-import SpanAmount from "@/components/SpanAmount.vue";
-import SpanDate from "@/components/SpanDate.vue";
+import SpanAmount from "@/components/common/SpanAmount.vue";
+import SpanDate from "@/components/common/SpanDate.vue";
 import { Button } from "@/components/ui/button";
 import { TableCell, TableRow } from "@/components/ui/table";
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
@@ -152,7 +152,6 @@ const redIfPrivate = computed(() =>
   props.mmf.private ? "bg-destructive/10" : "",
 );
 
-// NIE MEHR DOPPELTER CODE: Mappe die Zeilen zu einer einheitlichen Struktur
 const tableRows = computed(() => {
   if (hasSplits.value) {
     return props.mmf.moneyflowSplitEntries!.map((mse) => ({
@@ -163,7 +162,6 @@ const tableRows = computed(() => {
       postingAccountName: mse.postingAccountName,
     }));
   }
-  // Wenn keine Splits existieren, gibt es genau eine Zeile mit den Hauptdaten
   return [
     {
       isSplit: false,

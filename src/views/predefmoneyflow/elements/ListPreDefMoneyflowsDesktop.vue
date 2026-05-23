@@ -3,28 +3,28 @@
     <DivContentTable>
       <TableHeader>
         <TableRow>
-          <TableHead class="font-bold border-r text-foreground text-center">{{
+          <TableHead class="table-head-cell">{{
             $t("General.amount")
           }}</TableHead>
-          <TableHead class="font-bold border-r text-foreground text-center">{{
+          <TableHead class="table-head-cell">{{
             $t("General.contractpartner")
           }}</TableHead>
-          <TableHead class="font-bold border-r text-foreground text-center">{{
+          <TableHead class="table-head-cell">{{
             $t("General.comment")
           }}</TableHead>
-          <TableHead class="font-bold border-r text-foreground text-center">{{
+          <TableHead class="table-head-cell">{{
             $t("General.postingAccount")
           }}</TableHead>
-          <TableHead class="font-bold border-r text-foreground text-center">{{
+          <TableHead class="table-head-cell">{{
             $t("General.capitalsource")
           }}</TableHead>
-          <TableHead class="font-bold border-r text-foreground text-center">{{
+          <TableHead class="table-head-cell">{{
             $t("PreDefMoneyflow.onceAMonthShort")
           }}</TableHead>
-          <TableHead class="font-bold border-r text-foreground text-center">{{
+          <TableHead class="table-head-cell">{{
             $t("PreDefMoneyflow.createDate")
           }}</TableHead>
-          <TableHead class="font-bold border-r text-foreground text-center">{{
+          <TableHead class="table-head-cell">{{
             $t("PreDefMoneyflow.lastUsed")
           }}</TableHead>
           <TableHead colspan="2"></TableHead>
@@ -53,7 +53,7 @@
 </template>
 
 <script lang="ts" setup>
-import DivContentTable from "@/components/DivContentTable.vue";
+import DivContentTable from "@/components/common/DivContentTable.vue";
 import {
   TableBody,
   TableHead,

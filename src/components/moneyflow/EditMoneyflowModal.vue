@@ -50,7 +50,7 @@
         @click="deleteMoneyflowReceipt"
         v-if="mmf.hasReceipt"
       >
-        <Trash2 class="h-4 w-4" />
+        <Trash2 class="icon-small" />
         {{ $t("Moneyflow.deleteReceipt") }}
       </Button>
 
@@ -60,7 +60,7 @@
         class="button-with-icon"
         @click="resetForm"
       >
-        <Undo2 class="h-4 w-4" />
+        <Undo2 class="icon-small" />
         {{ $t("General.reset") }}
       </Button>
 
@@ -68,14 +68,14 @@
         :button-label="$t('General.save')"
         form-id="updateMoneyflowForm"
       >
-        <template #icon><Save class="h-4 w-4" /></template>
+        <template #icon><Save class="icon-small" /></template>
       </ButtonSubmit>
     </template>
   </ModalVue>
 </template>
 
 <script lang="ts" setup>
-import ButtonSubmit from "@/components/ButtonSubmit.vue";
+import ButtonSubmit from "@/components/common/ButtonSubmit.vue";
 import EditMoneyflowBase from "@/components/moneyflow/EditMoneyflowBase.vue";
 import { Button } from "@/components/ui/button";
 import type { ImportedMoneyflowReceipt } from "@/model/moneyflow/ImportedMoneyflowReceipt";
@@ -86,8 +86,8 @@ import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { Save, Trash2, Undo2 } from "lucide-vue-next";
 import { useForm } from "vee-validate";
 import { computed, ref, useTemplateRef } from "vue";
-import DivError from "../DivError.vue";
-import ModalVue from "../Modal.vue";
+import DivError from "../common/DivError.vue";
+import ModalVue from "../common/Modal.vue";
 
 const serverErrors = ref(new Array<string>());
 

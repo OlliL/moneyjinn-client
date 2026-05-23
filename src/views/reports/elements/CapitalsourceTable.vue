@@ -25,7 +25,7 @@
           </div>
           <div class="grid grid-cols-2 gap-2">
             <div>
-              <span class="text-muted-foreground text-xs block">{{
+              <span class="text-xs-muted block">{{
                 $t("Reports.beginOfMonth")
               }}</span>
               <span class="font-semibold"
@@ -34,7 +34,7 @@
             </div>
 
             <div v-if="currentMonthIsSettled">
-              <span class="text-muted-foreground text-xs block">{{
+              <span class="text-xs-muted block">{{
                 $t("Reports.endOfMonthFixed")
               }}</span>
               <span class="font-semibold"
@@ -43,7 +43,7 @@
             </div>
 
             <div>
-              <span class="text-muted-foreground text-xs block">{{
+              <span class="text-xs-muted block">{{
                 $t("Reports.endOfMonthCalculated")
               }}</span>
               <span class="font-semibold"
@@ -52,7 +52,7 @@
             </div>
 
             <div v-if="currentMonthIsSettled">
-              <span class="text-muted-foreground text-xs block">{{
+              <span class="text-xs-muted block">{{
                 $t("Reports.difference")
               }}</span>
               <span class="font-semibold"
@@ -61,7 +61,7 @@
             </div>
 
             <div v-if="!currentMonthIsSettled">
-              <span class="text-muted-foreground text-xs block">{{
+              <span class="text-xs-muted block">{{
                 $t("Reports.currentAmount")
               }}</span>
               <span class="font-semibold"
@@ -79,34 +79,22 @@
           <Table class="[&_tr:nth-child(even)]:bg-muted text-xs md:text-sm">
             <TableHeader>
               <TableRow>
-                <TableHead
-                  class="font-bold border-r text-foreground text-center hidden md:table-cell"
-                >
+                <TableHead class="table-head-cell hidden md:table-cell">
                   {{ $t("Capitalsource.type") }}
                 </TableHead>
-                <TableHead
-                  class="font-bold border-r text-foreground text-center hidden md:table-cell"
-                >
+                <TableHead class="table-head-cell hidden md:table-cell">
                   {{ $t("Capitalsource.state") }}
                 </TableHead>
-                <TableHead
-                  class="font-bold border-r text-foreground text-center"
-                  >{{ $t("General.comment") }}</TableHead
-                >
-                <TableHead
-                  class="font-bold border-r text-foreground text-center"
-                >
+                <TableHead class="table-head-cell">{{
+                  $t("General.comment")
+                }}</TableHead>
+                <TableHead class="table-head-cell">
                   {{ $t("Reports.beginOfMonth") }}
                 </TableHead>
-                <TableHead
-                  class="font-bold border-r text-foreground text-center"
-                  v-if="currentMonthIsSettled"
-                >
+                <TableHead class="table-head-cell" v-if="currentMonthIsSettled">
                   {{ $t("Reports.endOfMonthFixed") }}
                 </TableHead>
-                <TableHead
-                  class="font-bold border-r text-foreground text-center hidden md:table-cell"
-                >
+                <TableHead class="table-head-cell hidden md:table-cell">
                   {{ $t("Reports.endOfMonthCalculated") }}
                 </TableHead>
                 <TableHead
@@ -192,7 +180,7 @@
 import { Accordion } from "@/components/ui/accordion";
 import CapitalsourceTableMobileRow from "./CapitalsourceTableMobileRow.vue";
 
-import SpanAmount from "@/components/SpanAmount.vue";
+import SpanAmount from "@/components/common/SpanAmount.vue";
 import {
   Table,
   TableBody,

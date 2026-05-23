@@ -9,7 +9,14 @@
   />
   <div class="custom-container space-y-6">
     <div class="text-center">
-      <h4 class="text-2xl font-bold">{{ $t("General.monthlysettlements") }}</h4>
+      <h4 class="text-2xl font-bold">
+        {{
+          $t("MonthlySettlement.headline", {
+            month: monthName,
+            year: year,
+          })
+        }}
+      </h4>
     </div>
 
     <ListMonthlySettlementsMobile
@@ -55,21 +62,18 @@
 </template>
 
 <script lang="ts" setup>
+import DivError from "@/components/common/DivError.vue";
+import EditMonthlySettlementModalVue from "@/components/monthlysettlement/EditMonthlySettlementModal.vue";
+import router, { Routes } from "@/router";
+import MonthlySettlementService from "@/service/MonthlySettlementService";
+import { handleBackendError } from "@/tools/views/HandleBackendError";
+import { getMonthName } from "@/tools/views/MonthName";
 import { computed, onMounted, ref, useTemplateRef } from "vue";
 import { onBeforeRouteUpdate } from "vue-router";
-
-import DivError from "@/components/DivError.vue";
-import EditMonthlySettlementModalVue from "@/components/monthlysettlement/EditMonthlySettlementModal.vue";
 import DeleteMonthlySettlementModalVue from "./elements/DeleteMonthlySettlementModal.vue";
 import ListMonthlySettlementsDesktop from "./elements/ListMonthlySettlementsDesktop.vue";
 import ListMonthlySettlementsMobile from "./elements/ListMonthlySettlementsMobile.vue";
 import ShowMontlySettlementVue from "./elements/ShowMonthlySettlement.vue";
-
-import router, { Routes } from "@/router";
-
-import { handleBackendError } from "@/tools/views/HandleBackendError";
-
-import MonthlySettlementService from "@/service/MonthlySettlementService";
 
 const serverErrors = ref(new Array<string>());
 
@@ -101,6 +105,10 @@ onMounted(() => {
   const year = props.year ? props.year : undefined;
   const month: number | undefined = props.month ? +props.month : undefined;
   loadMonth(year, month);
+});
+
+const monthName = computed(() => {
+  return props.month ? getMonthName(+props.month) : "";
 });
 
 const loadMonth = (year?: string, month?: number) => {

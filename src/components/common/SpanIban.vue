@@ -9,7 +9,7 @@
       :title="$t('General.copy') || 'Kopieren'"
       @click="copyToClipboard"
     >
-      <Copy class="h-4 w-4" />
+      <Copy class="icon-small" />
     </button>
   </span>
 </template>

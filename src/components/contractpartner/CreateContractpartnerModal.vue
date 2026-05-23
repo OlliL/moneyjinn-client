@@ -71,7 +71,7 @@
               </span>
             </div>
             <ChevronDown
-              class="h-4 w-4 text-muted-foreground transition-transform duration-200 group-data-[state=open]:rotate-180"
+              class="icon-small text-muted-foreground transition-transform duration-200 group-data-[state=open]:rotate-180"
             />
           </CollapsibleTrigger>
 
@@ -127,7 +127,7 @@
         class="button-with-icon"
         @click="resetForm"
       >
-        <Undo2 class="h-4 w-4" />
+        <Undo2 class="icon-small" />
         {{ $t("General.reset") }}
       </Button>
 
@@ -135,7 +135,7 @@
         :button-label="$t('General.save')"
         :form-id="'createContractpartnerForm' + idSuffix"
       >
-        <template #icon><Save class="h-4 w-4" /></template>
+        <template #icon><Save class="icon-small" /></template>
       </ButtonSubmit>
     </template>
   </ModalVue>
@@ -152,11 +152,11 @@ import { useForm } from "vee-validate";
 import { computed, ref, toRaw, useTemplateRef } from "vue";
 import { useI18n } from "vue-i18n";
 import { coerce, date, number, string, ZodType } from "zod";
-import ButtonSubmit from "../ButtonSubmit.vue";
-import DivError from "../DivError.vue";
-import InputDate from "../InputDate.vue";
-import InputStandard from "../InputStandard.vue";
-import ModalVue from "../Modal.vue";
+import ButtonSubmit from "../common/ButtonSubmit.vue";
+import DivError from "../common/DivError.vue";
+import InputDate from "../common/InputDate.vue";
+import InputStandard from "../common/InputStandard.vue";
+import ModalVue from "../common/Modal.vue";
 import SelectPostingAccount from "../postingaccount/SelectPostingAccount.vue";
 import Collapsible from "../ui/collapsible/Collapsible.vue";
 import CollapsibleContent from "../ui/collapsible/CollapsibleContent.vue";

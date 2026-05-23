@@ -105,11 +105,11 @@
                   class="flex items-center gap-2 px-6"
                   @click="deleteImportedMoneyflow(importedMoneyflow)"
                 >
-                  <Trash2 class="h-4 w-4" />
+                  <Trash2 class="icon-small" />
                   {{ $t("General.delete") }}
                 </Button>
                 <ButtonSubmit :button-label="$t('Moneyflow.apply')" class="px-6"
-                  ><template #icon><Save class="h-4 w-4" /></template
+                  ><template #icon><Save class="icon-small" /></template
                 ></ButtonSubmit>
               </div>
             </div>
@@ -122,14 +122,14 @@
 <script lang="ts" setup>
 import { onMounted, ref } from "vue";
 
-import ButtonSubmit from "@/components/ButtonSubmit.vue";
+import ButtonSubmit from "@/components/common/ButtonSubmit.vue";
 import EditMoneyflowBase from "@/components/moneyflow/EditMoneyflowBase.vue";
 
 import type { ImportedMoneyflow } from "@/model/moneyflow/ImportedMoneyflow";
 
-import DivError from "@/components/DivError.vue";
-import SpanIban from "@/components/SpanIban.vue";
-import SpanImportComment from "@/components/SpanImportComment.vue";
+import DivError from "@/components/common/DivError.vue";
+import SpanIban from "@/components/common/SpanIban.vue";
+import SpanImportComment from "@/components/common/SpanImportComment.vue";
 import Alert from "@/components/ui/alert/Alert.vue";
 import AlertDescription from "@/components/ui/alert/AlertDescription.vue";
 import AlertTitle from "@/components/ui/alert/AlertTitle.vue";

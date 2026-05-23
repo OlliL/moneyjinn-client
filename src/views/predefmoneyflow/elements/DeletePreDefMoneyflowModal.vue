@@ -42,11 +42,11 @@
 </template>
 
 <script lang="ts" setup>
-import ModalDelete from "@/components/ModalDelete.vue";
-import ModalDeleteRow from "@/components/ModalDeleteRow.vue";
-import SpanAmount from "@/components/SpanAmount.vue";
-import SpanBoolean from "@/components/SpanBoolean.vue";
-import SpanDate from "@/components/SpanDate.vue";
+import ModalDelete from "@/components/common/ModalDelete.vue";
+import ModalDeleteRow from "@/components/common/ModalDeleteRow.vue";
+import SpanAmount from "@/components/common/SpanAmount.vue";
+import SpanBoolean from "@/components/common/SpanBoolean.vue";
+import SpanDate from "@/components/common/SpanDate.vue";
 import type { PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
 import PreDefMoneyflowService from "@/service/PreDefMoneyflowService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";

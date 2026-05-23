@@ -3,10 +3,10 @@
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead class="font-bold border-r text-foreground text-center">{{
+          <TableHead class="table-head-cell">{{
             $t("General.month")
           }}</TableHead>
-          <TableHead class="font-bold text-foreground text-center">{{
+          <TableHead class="table-head-cell">{{
             $t("General.amount")
           }}</TableHead>
         </TableRow>
@@ -30,7 +30,7 @@
 </template>
 
 <script lang="ts" setup>
-import SpanAmount from "@/components/SpanAmount.vue";
+import SpanAmount from "@/components/common/SpanAmount.vue";
 import {
   Table,
   TableBody,

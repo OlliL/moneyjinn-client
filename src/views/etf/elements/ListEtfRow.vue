@@ -23,20 +23,20 @@
       :test-id="`etf-edit-${etf.id}`"
       @click="editEtf"
     >
-      <Pencil class="h-4 w-4" />
+      <Pencil class="icon-small" />
     </ButtonTableIcon>
     <ButtonTableIcon
       :title="$t('General.delete')"
       :test-id="`etf-delete-${etf.id}`"
       @click="deleteEtf"
     >
-      <Trash2 class="h-4 w-4" />
+      <Trash2 class="icon-small" />
     </ButtonTableIcon>
   </TableRow>
 </template>
 <script lang="ts" setup>
-import ButtonTableIcon from "@/components/ButtonTableIcon.vue";
-import SpanAmount from "@/components/SpanAmount.vue";
+import ButtonTableIcon from "@/components/common/ButtonTableIcon.vue";
+import SpanAmount from "@/components/common/SpanAmount.vue";
 import { TableCell, TableRow } from "@/components/ui/table";
 import type { Etf } from "@/model/etf/Etf";
 import { formatNumber } from "@/tools/views/FormatNumber";

@@ -42,8 +42,8 @@
 <script lang="ts" setup>
 import { onMounted, ref, useTemplateRef, watch } from "vue";
 
-import DivError from "@/components/DivError.vue";
-import DivFilter from "@/components/DivFilter.vue";
+import DivError from "@/components/common/DivError.vue";
+import DivFilter from "@/components/common/DivFilter.vue";
 import CreateUserModalVue from "./elements/CreateUserModal.vue";
 import DeleteUserModalVue from "./elements/DeleteUserModal.vue";
 import ListUsersDesktop from "./elements/ListUsersDesktop.vue";

@@ -43,8 +43,8 @@ import { onMounted, ref, useTemplateRef, watch } from "vue";
 
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 
-import DivError from "@/components/DivError.vue";
-import DivFilter from "@/components/DivFilter.vue";
+import DivError from "@/components/common/DivError.vue";
+import DivFilter from "@/components/common/DivFilter.vue";
 import CreateGroupModalVue from "./elements/CreateGroupModal.vue";
 import DeleteGroupModalVue from "./elements/DeleteGroupModal.vue";
 import ListGroupsDesktop from "./elements/ListGroupsDesktop.vue";

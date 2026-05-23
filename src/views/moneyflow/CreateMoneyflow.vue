@@ -48,7 +48,7 @@
     />
 
     <div
-      class="rounded-sm border bg-card text-card-foreground shadow bg-muted p-4"
+      class="rounded-sm border shadow card-panel p-4"
     >
       <form
         @submit.prevent="createMoneyflow"
@@ -68,14 +68,14 @@
             data-testid="createMoneyflowResetButton"
             @click="resetForm"
           >
-            <Undo2 class="h-4 w-4" />
+            <Undo2 class="icon-small" />
             {{ $t("General.reset") }}
           </Button>
           <ButtonSubmit
             :button-label="$t('General.save')"
             form-id="createMoneyflowForm"
             test-id="createMoneyflowSaveButton"
-            ><template #icon><Save class="h-4 w-4" /></template
+            ><template #icon><Save class="icon-small" /></template
           ></ButtonSubmit>
         </div>
       </form>
@@ -84,8 +84,8 @@
 </template>
 
 <script lang="ts" setup>
-import ButtonSubmit from "@/components/ButtonSubmit.vue";
-import DivError from "@/components/DivError.vue";
+import ButtonSubmit from "@/components/common/ButtonSubmit.vue";
+import DivError from "@/components/common/DivError.vue";
 import EditMoneyflowBase from "@/components/moneyflow/EditMoneyflowBase.vue";
 import { Button } from "@/components/ui/button";
 import {

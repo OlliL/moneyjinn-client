@@ -29,8 +29,8 @@
 </template>
 
 <script lang="ts" setup>
-import ModalDelete from "@/components/ModalDelete.vue";
-import ModalDeleteRow from "@/components/ModalDeleteRow.vue";
+import ModalDelete from "@/components/common/ModalDelete.vue";
+import ModalDeleteRow from "@/components/common/ModalDeleteRow.vue";
 import type { ContractpartnerMatching } from "@/model/contractpartnermatching/ContractpartnerMatching";
 import ContractpartnerMatchingService from "@/service/ContractpartnerMatchingService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";

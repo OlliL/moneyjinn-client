@@ -40,8 +40,8 @@
 </template>
 
 <script lang="ts" setup>
-import DivError from "@/components/DivError.vue";
-import DivFilter from "@/components/DivFilter.vue";
+import DivError from "@/components/common/DivError.vue";
+import DivFilter from "@/components/common/DivFilter.vue";
 import CreatePreDefMoneyflowModalVue from "@/components/predefmoneyflow/CreatePreDefMoneyflowModal.vue";
 import type { PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
 import PreDefMoneyflowService from "@/service/PreDefMoneyflowService";

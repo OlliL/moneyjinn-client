@@ -10,13 +10,13 @@
       :title="$t('General.edit')"
       @click="editContractpartnerAccount"
     >
-      <Pencil class="h-4 w-4" />
+      <Pencil class="icon-small" />
     </ButtonTableIcon>
     <ButtonTableIcon
       :title="$t('General.delete')"
       @click="deleteContractpartnerAccount"
     >
-      <Trash2 class="h-4 w-4" />
+      <Trash2 class="icon-small" />
     </ButtonTableIcon>
   </TableRow>
 </template>
@@ -27,8 +27,8 @@ import type { PropType } from "vue";
 
 import { TableCell, TableRow } from "@/components/ui/table";
 
-import ButtonTableIcon from "@/components/ButtonTableIcon.vue";
-import SpanIban from "@/components/SpanIban.vue";
+import ButtonTableIcon from "@/components/common/ButtonTableIcon.vue";
+import SpanIban from "@/components/common/SpanIban.vue";
 import type { ContractpartnerAccount } from "@/model/contractpartneraccount/ContractpartnerAccount";
 
 const props = defineProps({

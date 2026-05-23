@@ -39,7 +39,7 @@
                 :data-testid="`capitalsource-mobile-edit-${mcs.id}`"
                 @click.stop="editCapitalsource(mcs)"
               >
-                <Pencil class="h-4 w-4" />
+                <Pencil class="icon-small" />
               </Button>
               <Button
                 variant="ghost"
@@ -47,7 +47,7 @@
                 :data-testid="`capitalsource-mobile-delete-${mcs.id}`"
                 @click.stop="deleteCapitalsource(mcs)"
               >
-                <Trash2 class="h-4 w-4" />
+                <Trash2 class="icon-small" />
               </Button>
             </div>
           </div>
@@ -101,9 +101,9 @@
 </template>
 
 <script lang="ts" setup>
-import SpanBoolean from "@/components/SpanBoolean.vue";
-import SpanDate from "@/components/SpanDate.vue";
-import SpanIban from "@/components/SpanIban.vue";
+import SpanBoolean from "@/components/common/SpanBoolean.vue";
+import SpanDate from "@/components/common/SpanDate.vue";
+import SpanIban from "@/components/common/SpanIban.vue";
 import {
   Accordion,
   AccordionContent,

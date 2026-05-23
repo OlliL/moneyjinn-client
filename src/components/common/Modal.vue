@@ -25,7 +25,7 @@
       >
         <DialogClose as-child>
           <Button type="button" variant="outline" class="button-with-icon px-4">
-            <X class="h-4 w-4" />
+            <X class="icon-small" />
             {{ $t("Modal.cancel") }}
           </Button>
         </DialogClose>

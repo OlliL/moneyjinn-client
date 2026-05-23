@@ -3,7 +3,7 @@
     <DivContentTable class="max-w-sm">
       <TableHeader>
         <TableRow>
-          <TableHead class="font-bold border-r text-foreground text-center">{{
+          <TableHead class="table-head-cell">{{
             $t("General.name")
           }}</TableHead>
           <TableHead colspan="2"></TableHead>
@@ -29,7 +29,7 @@
 </template>
 
 <script lang="ts" setup>
-import DivContentTable from "@/components/DivContentTable.vue";
+import DivContentTable from "@/components/common/DivContentTable.vue";
 import {
   TableBody,
   TableCell,

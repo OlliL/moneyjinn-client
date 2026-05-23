@@ -21,11 +21,11 @@
           :id="id"
           :data-testid="id"
           :class="[
-            'bg-background z-10',
+            'z-10',
             $slots.icon ? 'rounded-r-none' : '',
             isInvalid
               ? '!border-destructive bg-destructive/[0.03] focus-visible:ring-destructive/15 !border-r-destructive'
-              : 'border-input focus-visible:ring-ring',
+              : 'bg-background border-input focus-visible:ring-ring',
           ]"
           @input="onInput"
           @keydown="onKeydownInput"
@@ -41,7 +41,7 @@
           @click="clearInput"
           :data-testid="id + '-clear'"
         >
-          <X class="h-4 w-4 stroke-[3px]" />
+          <X class="icon-small stroke-[3px]" />
         </button>
       </div>
 

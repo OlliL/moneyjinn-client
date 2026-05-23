@@ -15,9 +15,7 @@
       <h4 class="text-2xl font-bold">{{ $t("Moneyflow.title.search") }}</h4>
     </div>
     <div class="flex justify-center">
-      <div
-        class="w-full max-w-7xl rounded-sm border bg-card text-card-foreground bg-muted p-4"
-      >
+      <div class="w-full max-w-7xl card-panel p-4">
         <form @submit.prevent="searchMoneyflows" id="searchMoneyflowsForm">
           <div class="space-y-4">
             <DivError :server-errors="serverErrors" />
@@ -114,7 +112,7 @@
                   :button-label="$t('Moneyflow.search')"
                   form-id="searchMoneyflowsForm"
                   test-id="search-moneyflows-submit"
-                  ><template #icon><Search class="h-4 w-4" /></template
+                  ><template #icon><Search class="icon-small" /></template
                 ></ButtonSubmit>
                 <Button
                   type="button"
@@ -122,7 +120,7 @@
                   class="flex items-center gap-2 px-6"
                   @click="resetForm"
                 >
-                  <Undo2 class="h-4 w-4" />
+                  <Undo2 class="icon-small" />
                   {{ $t("General.reset") }}
                 </Button>
               </div>
@@ -168,34 +166,24 @@
         <DivContentTable :alternate-row-background="false" class="w-full">
           <TableHeader>
             <TableRow>
-              <TableHead
-                class="font-bold border-r text-foreground text-center w-12"
-              ></TableHead>
+              <TableHead class="table-head-cell w-12"></TableHead>
 
-              <TableHead
-                class="font-bold border-r text-foreground w-36"
-                v-if="colBookingMonth"
-              >
+              <TableHead class="table-head-cell w-36" v-if="colBookingMonth">
                 {{ $t("Moneyflow.bookingMonth") }}
               </TableHead>
 
-              <TableHead
-                class="font-bold border-r text-foreground w-28"
-                v-if="colBookingYear"
-              >
+              <TableHead class="table-head-cell w-28" v-if="colBookingYear">
                 {{ $t("Moneyflow.bookingYear") }}
               </TableHead>
 
               <TableHead
-                class="font-bold border-r text-foreground w-48 !whitespace-normal"
+                class="table-head-cell w-48 !whitespace-normal"
                 v-if="colContractpartner"
               >
                 {{ $t("General.contractpartner") }}
               </TableHead>
 
-              <TableHead
-                class="font-bold border-r text-foreground text-center w-28"
-              >
+              <TableHead class="table-head-cell w-28">
                 {{ $t("General.amount") }}
               </TableHead>
 
@@ -231,16 +219,16 @@ import { onMounted, ref, useTemplateRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { any, date, type ZodTypeAny } from "zod";
 
-import ButtonSubmit from "@/components/ButtonSubmit.vue";
+import ButtonSubmit from "@/components/common/ButtonSubmit.vue";
+import DivContentTable from "@/components/common/DivContentTable.vue";
+import DivError from "@/components/common/DivError.vue";
+import InputDate from "@/components/common/InputDate.vue";
+import InputStandard from "@/components/common/InputStandard.vue";
+import SelectStandard from "@/components/common/SelectStandard.vue";
 import SelectContractpartner from "@/components/contractpartner/SelectContractpartner.vue";
-import DivContentTable from "@/components/DivContentTable.vue";
-import DivError from "@/components/DivError.vue";
-import InputDate from "@/components/InputDate.vue";
-import InputStandard from "@/components/InputStandard.vue";
 import DeleteMoneyflowModalVue from "@/components/moneyflow/DeleteMoneyflowModal.vue";
 import EditMoneyflowModalVue from "@/components/moneyflow/EditMoneyflowModal.vue";
 import SelectPostingAccount from "@/components/postingaccount/SelectPostingAccount.vue";
-import SelectStandard from "@/components/SelectStandard.vue";
 import SearchMoneyflowResultGroupVue from "./elements/SearchMoneyflowResultGroup.vue";
 
 import { toFixed } from "@/tools/math";

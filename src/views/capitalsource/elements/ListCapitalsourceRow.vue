@@ -25,7 +25,7 @@
       :test-id="`capitalsource-edit-${mcs.id}`"
       @click="editCapitalsource"
     >
-      <Pencil class="h-4 w-4" />
+      <Pencil class="icon-small" />
     </ButtonTableIcon>
     <ButtonTableIcon
       v-if="owner"
@@ -33,7 +33,7 @@
       :test-id="`capitalsource-delete-${mcs.id}`"
       @click="deleteCapitalsource"
     >
-      <Trash2 class="h-4 w-4" />
+      <Trash2 class="icon-small" />
     </ButtonTableIcon>
   </TableRow>
 </template>
@@ -43,11 +43,11 @@ import { computed, type PropType } from "vue";
 
 import { TableCell, TableRow } from "@/components/ui/table";
 
-import SpanDate from "@/components/SpanDate.vue";
+import SpanDate from "@/components/common/SpanDate.vue";
 
-import ButtonTableIcon from "@/components/ButtonTableIcon.vue";
-import SpanBoolean from "@/components/SpanBoolean.vue";
-import SpanIban from "@/components/SpanIban.vue";
+import ButtonTableIcon from "@/components/common/ButtonTableIcon.vue";
+import SpanBoolean from "@/components/common/SpanBoolean.vue";
+import SpanIban from "@/components/common/SpanIban.vue";
 import type { Capitalsource } from "@/model/capitalsource/Capitalsource";
 import { capitalsourceImportNames } from "@/model/capitalsource/CapitalsourceImport";
 import { capitalsourceStateNames } from "@/model/capitalsource/CapitalsourceState";

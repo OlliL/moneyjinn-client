@@ -15,20 +15,20 @@
       :test-id="`user-edit-${user.id}`"
       @click="editUser"
     >
-      <Pencil class="h-4 w-4" />
+      <Pencil class="icon-small" />
     </ButtonTableIcon>
     <ButtonTableIcon
       :title="$t('General.delete')"
       :test-id="`user-delete-${user.id}`"
       @click="deleteUser"
     >
-      <Trash2 class="h-4 w-4" />
+      <Trash2 class="icon-small" />
     </ButtonTableIcon>
   </TableRow>
 </template>
 <script lang="ts" setup>
-import ButtonTableIcon from "@/components/ButtonTableIcon.vue";
-import SpanBoolean from "@/components/SpanBoolean.vue";
+import ButtonTableIcon from "@/components/common/ButtonTableIcon.vue";
+import SpanBoolean from "@/components/common/SpanBoolean.vue";
 import { TableCell, TableRow } from "@/components/ui/table";
 import type { User } from "@/model/user/User";
 import { userRoleNames } from "@/model/user/UserRole";

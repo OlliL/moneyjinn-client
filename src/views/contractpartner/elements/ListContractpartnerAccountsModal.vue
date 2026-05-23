@@ -26,16 +26,16 @@
         >
           <TableHeader>
             <TableRow>
-              <TableHead class="font-bold border text-foreground text-center">{{
+              <TableHead class="table-head-cell">{{
                 $t("General.iban")
               }}</TableHead>
-              <TableHead class="font-bold border text-foreground text-center">{{
+              <TableHead class="table-head-cell">{{
                 $t("General.bic")
               }}</TableHead>
-              <TableHead class="font-bold border text-foreground text-center"
+              <TableHead class="table-head-cell"
                 ><span class="sr-only">Edit</span></TableHead
               >
-              <TableHead class="font-bold border text-foreground text-center"
+              <TableHead class="table-head-cell"
                 ><span class="sr-only">Delete</span></TableHead
               >
             </TableRow>
@@ -69,7 +69,7 @@
         @click="showCreateContractpartnerAccountModal"
         class="flex items-center gap-2 rounded-md! px-6"
       >
-        <Plus class="h-4 w-4" />
+        <Plus class="icon-small" />
         {{ $t("General.new") }}
       </Button>
     </template>
@@ -90,8 +90,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-import DivError from "@/components/DivError.vue";
-import ModalVue from "@/components/Modal.vue";
+import DivError from "@/components/common/DivError.vue";
+import ModalVue from "@/components/common/Modal.vue";
 import CreateContractpartnerAccountModalVue from "./CreateContractpartnerAccountModal.vue";
 import DeleteContractpartnerAccountModalVue from "./DeleteContractpartnerAccountModal.vue";
 import ListContractpartnerAccountRowVue from "./ListContractpartnerAccountRow.vue";

@@ -12,7 +12,7 @@
     </div>
     <div class="flex justify-center">
       <div
-        class="w-full max-w-6xl rounded-sm border bg-card text-card-foreground bg-muted p-4"
+        class="w-full max-w-6xl card-panel p-4"
       >
         <form @submit.prevent="compareData" id="compareDataForm">
           <div class="space-y-4">
@@ -78,7 +78,7 @@
                 :button-label="$t('General.show')"
                 form-id="compareDataForm"
                 test-id="compare-data-submit"
-                ><template #icon><Eye class="h-4 w-4" /></template
+                ><template #icon><Eye class="icon-small" /></template
               ></ButtonSubmit>
             </div>
           </div>
@@ -151,15 +151,15 @@
 </template>
 
 <script lang="ts" setup>
-import ButtonSubmit from "@/components/ButtonSubmit.vue";
+import ButtonSubmit from "@/components/common/ButtonSubmit.vue";
 import SelectCapitalsource from "@/components/capitalsource/SelectCapitalsource.vue";
-import DivContentTable from "@/components/DivContentTable.vue";
-import DivError from "@/components/DivError.vue";
-import InputDate from "@/components/InputDate.vue";
-import InputFile from "@/components/InputFile.vue";
+import DivContentTable from "@/components/common/DivContentTable.vue";
+import DivError from "@/components/common/DivError.vue";
+import InputDate from "@/components/common/InputDate.vue";
+import InputFile from "@/components/common/InputFile.vue";
 import DeleteMoneyflowModalVue from "@/components/moneyflow/DeleteMoneyflowModal.vue";
 import EditMoneyflowModalVue from "@/components/moneyflow/EditMoneyflowModal.vue";
-import SelectStandard from "@/components/SelectStandard.vue";
+import SelectStandard from "@/components/common/SelectStandard.vue";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import {

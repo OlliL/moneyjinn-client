@@ -1,7 +1,8 @@
 import { toFixed } from "../math";
 
 export function redIfNegative(check?: number): string {
-  const cssClass = check != null && check < 0 ? " text-destructive" : "";
+  const cssClass =
+    check != null && check < 0 ? "text-destructive" : "text-foreground";
   return cssClass;
 }
 

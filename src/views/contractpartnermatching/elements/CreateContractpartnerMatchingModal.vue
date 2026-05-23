@@ -57,7 +57,7 @@
         class="button-with-icon"
         @click="resetForm"
       >
-        <Undo2 class="h-4 w-4" />
+        <Undo2 class="icon-small" />
         {{ $t("General.reset") }}
       </Button>
 
@@ -65,18 +65,18 @@
         :button-label="$t('General.save')"
         :form-id="'createContractpartnerMatchingForm' + idSuffix"
       >
-        <template #icon><Save class="h-4 w-4" /></template>
+        <template #icon><Save class="icon-small" /></template>
       </ButtonSubmit>
     </template>
   </ModalVue>
 </template>
 
 <script lang="ts" setup>
-import ButtonSubmit from "@/components/ButtonSubmit.vue";
+import ButtonSubmit from "@/components/common/ButtonSubmit.vue";
 import SelectContractpartner from "@/components/contractpartner/SelectContractpartner.vue";
-import DivError from "@/components/DivError.vue";
-import InputStandard from "@/components/InputStandard.vue";
-import ModalVue from "@/components/Modal.vue";
+import DivError from "@/components/common/DivError.vue";
+import InputStandard from "@/components/common/InputStandard.vue";
+import ModalVue from "@/components/common/Modal.vue";
 import SelectPostingAccount from "@/components/postingaccount/SelectPostingAccount.vue";
 import { Button } from "@/components/ui/button";
 import type { ContractpartnerMatching } from "@/model/contractpartnermatching/ContractpartnerMatching";

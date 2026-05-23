@@ -72,7 +72,7 @@
 </template>
 
 <script lang="ts" setup>
-import DivError from "@/components/DivError.vue";
+import DivError from "@/components/common/DivError.vue";
 import EditMonthlySettlementModalVue from "@/components/monthlysettlement/EditMonthlySettlementModal.vue";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";

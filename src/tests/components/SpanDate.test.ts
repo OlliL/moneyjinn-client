@@ -1,4 +1,4 @@
-import SpanDate from "@/components/SpanDate.vue";
+import SpanDate from "@/components/common/SpanDate.vue";
 import { ValueView } from "@/tests/TestViews";
 import "@testing-library/jest-dom/vitest";
 import { render } from "@testing-library/vue";

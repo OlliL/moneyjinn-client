@@ -36,9 +36,9 @@
 <script lang="ts" setup>
 import { ref, useTemplateRef } from "vue";
 
-import ModalDelete from "@/components/ModalDelete.vue";
-import ModalDeleteRow from "@/components/ModalDeleteRow.vue";
-import SpanDate from "@/components/SpanDate.vue";
+import ModalDelete from "@/components/common/ModalDelete.vue";
+import ModalDeleteRow from "@/components/common/ModalDeleteRow.vue";
+import SpanDate from "@/components/common/SpanDate.vue";
 
 import type { Contractpartner } from "@/model/contractpartner/Contractpartner";
 import ContractpartnerService from "@/service/ContractpartnerService";

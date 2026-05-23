@@ -1,16 +1,18 @@
 <template>
-  <ButtonMobileCreate
-    data-testid="monthly-settlement-mobile-new"
-    @click="emitCreate"
-  />
-  <ButtonMobileDelete
-    data-testid="monthly-settlement-mobile-delete"
-    @click="emitDelete"
-  />
-  <ButtonMobileEdit
-    data-testid="monthly-settlement-mobile-edit"
-    @click="emitEdit"
-  />
+  <div>
+    <ButtonMobileCreate
+      data-testid="monthly-settlement-mobile-new"
+      @click="emitCreate"
+    />
+    <ButtonMobileDelete
+      data-testid="monthly-settlement-mobile-delete"
+      @click="emitDelete"
+    />
+    <ButtonMobileEdit
+      data-testid="monthly-settlement-mobile-edit"
+      @click="emitEdit"
+    />
+  </div>
 
   <MonthYearMobileNavigator
     :data-loaded="dataLoaded"
@@ -36,9 +38,9 @@
 </template>
 
 <script lang="ts" setup>
-import ButtonMobileCreate from "@/components/ButtonMobileCreate.vue";
-import ButtonMobileDelete from "@/components/ButtonMobileDelete.vue";
-import ButtonMobileEdit from "@/components/ButtonMobileEdit.vue";
+import ButtonMobileCreate from "@/components/common/ButtonMobileCreate.vue";
+import ButtonMobileDelete from "@/components/common/ButtonMobileDelete.vue";
+import ButtonMobileEdit from "@/components/common/ButtonMobileEdit.vue";
 import MonthYearMobileNavigator from "@/components/navigation/MonthYearMobileNavigator.vue";
 
 defineProps<{

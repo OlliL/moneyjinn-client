@@ -1,5 +1,5 @@
 <template>
-  <div class="" v-if="dataLoaded">
+  <div v-if="dataLoaded">
     <DivError :server-errors="serverErrors" />
 
     <ReceiptModalVue ref="receiptModal" />
@@ -14,7 +14,7 @@
     />
     <ListMoneyflowModal ref="listModal" />
 
-    <div class="">
+    <div>
       <ReportTableMobile
         v-model:filter-capitalsource="filterCapitalsource"
         v-model:filter-comment="filterComment"
@@ -122,7 +122,7 @@
 </template>
 
 <script lang="ts" setup>
-import DivError from "@/components/DivError.vue";
+import DivError from "@/components/common/DivError.vue";
 import DeleteMoneyflowModalVue from "@/components/moneyflow/DeleteMoneyflowModal.vue";
 import EditMoneyflowModalVue from "@/components/moneyflow/EditMoneyflowModal.vue";
 import ListMoneyflowModal from "@/components/moneyflow/ListMoneyflowModal.vue";

@@ -39,7 +39,7 @@ import { TableCell, TableRow } from "@/components/ui/table";
 import { formatDateWithTime } from "@/tools/views/FormatDate";
 import { formatNumber } from "@/tools/views/FormatNumber";
 import { computed } from "vue";
-import SpanAmount from "../SpanAmount.vue";
+import SpanAmount from "../common/SpanAmount.vue";
 
 const props = defineProps({
   etfId: {

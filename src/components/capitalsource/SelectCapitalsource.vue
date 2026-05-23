@@ -13,9 +13,7 @@
     :select-box-values="selectBoxValues"
   >
     <template #icon
-      ><SquarePlus
-        @click="showCreateCapitalsourceModal"
-        class="h-4 w-4 cursor-pointer"
+      ><SquarePlus @click="showCreateCapitalsourceModal" class="icon-small"
     /></template>
   </SelectStandard>
 </template>
@@ -25,7 +23,7 @@ import { SquarePlus } from "lucide-vue-next";
 import { computed, useTemplateRef, type PropType } from "vue";
 import { any, type ZodType } from "zod";
 
-import SelectStandard from "../SelectStandard.vue";
+import SelectStandard from "../common/SelectStandard.vue";
 import CreateCapitalsourceModalVue from "./CreateCapitalsourceModal.vue";
 
 import { useCapitalsourceStore } from "@/stores/CapitalsourceStore";

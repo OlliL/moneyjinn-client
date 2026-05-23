@@ -23,7 +23,7 @@
                   step="0.01"
                   :field-label="$t('General.amount')"
                 >
-                  <template #icon><Euro class="h-4 w-4" /></template>
+                  <template #icon><Euro class="icon-small" /></template>
                 </InputStandard>
               </div>
               <div class="sm:col-span-8">
@@ -83,7 +83,7 @@
         class="button-with-icon"
         @click="resetForm"
       >
-        <Undo2 class="h-4 w-4" />
+        <Undo2 class="icon-small" />
         {{ $t("General.reset") }}
       </Button>
 
@@ -91,7 +91,7 @@
         :button-label="$t('General.save')"
         :form-id="'createPreDefMoneyflowForm' + idSuffix"
       >
-        <template #icon><Save class="h-4 w-4" /></template>
+        <template #icon><Save class="icon-small" /></template>
       </ButtonSubmit>
     </template>
   </ModalVue>
@@ -109,14 +109,14 @@ import { useForm } from "vee-validate";
 import { computed, ref, toRaw, useTemplateRef } from "vue";
 import { useI18n } from "vue-i18n";
 import { boolean, number, string, ZodType } from "zod";
-import ButtonSubmit from "../ButtonSubmit.vue";
 import SelectCapitalsource from "../capitalsource/SelectCapitalsource.vue";
+import ButtonSubmit from "../common/ButtonSubmit.vue";
+import DivError from "../common/DivError.vue";
+import InputStandard from "../common/InputStandard.vue";
+import ModalVue from "../common/Modal.vue";
+import SelectStandard from "../common/SelectStandard.vue";
 import SelectContractpartner from "../contractpartner/SelectContractpartner.vue";
-import DivError from "../DivError.vue";
-import InputStandard from "../InputStandard.vue";
-import ModalVue from "../Modal.vue";
 import SelectPostingAccount from "../postingaccount/SelectPostingAccount.vue";
-import SelectStandard from "../SelectStandard.vue";
 
 const { t } = useI18n();
 

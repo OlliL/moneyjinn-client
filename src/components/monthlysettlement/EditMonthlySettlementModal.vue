@@ -33,14 +33,12 @@
               <Table class="[&_td]:py-0.5! [&_th]:py-1!">
                 <TableHeader>
                   <TableRow>
-                    <TableHead
-                      class="w-7/12 font-bold border-r text-foreground text-center"
-                      >{{ $t("General.capitalsource") }}</TableHead
-                    >
-                    <TableHead
-                      class="w-5/12 font-bold borer text-foreground text-center"
-                      >{{ $t("General.amount") }}</TableHead
-                    >
+                    <TableHead class="table-head-cell w-7/12">{{
+                      $t("General.capitalsource")
+                    }}</TableHead>
+                    <TableHead class="table-head-cell w-5/12">{{
+                      $t("General.amount")
+                    }}</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -60,7 +58,7 @@
                         field-type="number"
                         step="0.01"
                       >
-                        <template #icon><Euro class="h-4 w-4" /></template>
+                        <template #icon><Euro class="icon-small" /></template>
                       </InputStandard>
                     </TableCell>
                   </TableRow>
@@ -74,14 +72,12 @@
               <Table>
                 <TableHeader v-if="monthlySettlementsNoCredit.length">
                   <TableRow>
-                    <TableHead
-                      class="w-7/12 font-bold border-r text-foreground text-center"
-                      >{{ $t("General.capitalsource") }}</TableHead
-                    >
-                    <TableHead
-                      class="w-5/12 font-bold text-foreground text-center"
-                      >{{ $t("General.amount") }}</TableHead
-                    >
+                    <TableHead class="table-head-cell w-7/12">{{
+                      $t("General.capitalsource")
+                    }}</TableHead>
+                    <TableHead class="table-head-cell w-5/12">{{
+                      $t("General.amount")
+                    }}</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -101,7 +97,7 @@
                         field-type="number"
                         step="0.01"
                       >
-                        <template #icon><Euro class="h-4 w-4" /></template>
+                        <template #icon><Euro class="icon-small" /></template>
                       </InputStandard>
                     </TableCell>
                   </TableRow>
@@ -127,11 +123,11 @@ import { ref, useTemplateRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { date, ZodType } from "zod";
 
-import ButtonSubmit from "../ButtonSubmit.vue";
-import DivError from "../DivError.vue";
-import InputDate from "../InputDate.vue";
-import InputStandard from "../InputStandard.vue";
-import ModalVue from "../Modal.vue";
+import ButtonSubmit from "../common/ButtonSubmit.vue";
+import DivError from "../common/DivError.vue";
+import InputDate from "../common/InputDate.vue";
+import InputStandard from "../common/InputStandard.vue";
+import ModalVue from "../common/Modal.vue";
 
 import {
   Table,

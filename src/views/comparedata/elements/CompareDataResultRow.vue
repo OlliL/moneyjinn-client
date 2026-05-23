@@ -30,9 +30,9 @@
         :data-testid="`compare-data-edit-${mmf.id}`"
         @click="editMoneyflow"
         :title="$t('General.edit')"
-        class="h-8 w-8 cursor-pointer"
+        class="action-icon-button"
       >
-        <Pencil class="h-4 w-4" />
+        <Pencil class="icon-small" />
       </Button>
     </TableCell>
     <TableCell
@@ -45,9 +45,9 @@
         :data-testid="`compare-data-delete-${mmf.id}`"
         @click="deleteMoneyflow"
         :title="$t('General.delete')"
-        class="h-8 w-8 cursor-pointer"
+        class="action-icon-button"
       >
-        <Trash2 class="h-4 w-4" />
+        <Trash2 class="icon-small" />
       </Button>
     </TableCell>
   </TableRow>
@@ -90,9 +90,9 @@
         :data-testid="`compare-data-create-${rowIndex}`"
         @click="createMoneyflow"
         :title="$t('General.new')"
-        class="h-8 w-8 cursor-pointer"
+        class="action-icon-button"
       >
-        <Plus class="h-4 w-4" />
+        <Plus class="icon-small" />
       </Button>
     </TableCell>
     <TableCell class="border-l"></TableCell>
@@ -106,12 +106,12 @@ import { computed, type PropType } from "vue";
 import { Button } from "@/components/ui/button";
 import { TableCell, TableRow } from "@/components/ui/table";
 
-import SpanAmount from "@/components/SpanAmount.vue";
-import SpanDate from "@/components/SpanDate.vue";
+import SpanAmount from "@/components/common/SpanAmount.vue";
+import SpanDate from "@/components/common/SpanDate.vue";
 
 import { useUserSessionStore } from "@/stores/UserSessionStore";
 
-import SpanImportComment from "@/components/SpanImportComment.vue";
+import SpanImportComment from "@/components/common/SpanImportComment.vue";
 import type { CompareDataDataset } from "@/model/comparedata/CompareDataDataset";
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 

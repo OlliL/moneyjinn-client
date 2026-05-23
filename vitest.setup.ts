@@ -1,5 +1,6 @@
 import { config } from "@vue/test-utils";
 import I18nSingleton from "./src/config/I18nSingleton";
+import "vitest-canvas-mock";
 
 config.global.plugins.push(I18nSingleton.getI18n());
 if (globalThis.HTMLElement !== undefined) {
@@ -78,3 +79,15 @@ globalThis.PointerEvent = class PointerEvent extends MouseEvent {
     this.pointerType = params.pointerType ?? "mouse";
   }
 } as unknown as typeof PointerEvent;
+
+globalThis.ResizeObserver = class ResizeObserver implements ResizeObserver {
+  observe(): void {
+    // Mock observe method
+  }
+  unobserve(): void {
+    // Mock unobserve method
+  }
+  disconnect(): void {
+    // Mock disconnect method
+  }
+};

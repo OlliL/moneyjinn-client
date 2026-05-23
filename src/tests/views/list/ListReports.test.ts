@@ -69,10 +69,8 @@ class ListReportsView {
   static readonly MobileContractpartnerFilterReset = new ButtonView(
     "report-table-mobile-filter-contractpartner-reset",
   );
-  static readonly EtfDesktopTable = new RowView("report-etf-desktop-table");
-  static readonly EtfMobileAccordion = new RowView(
-    "report-etf-mobile-accordion",
-  );
+  static readonly EtfDesktopTable = new RowView("etf-desktop-table");
+  static readonly EtfMobileAccordion = new RowView("etf-mobile-accordion");
   static readonly EtfDesktopRowOne = new RowView("report-etf-desktop-row-100");
   static readonly EtfMobileItemOne = new RowView("report-etf-mobile-item-100");
   static readonly EtfMobileTriggerOne = new ButtonView(

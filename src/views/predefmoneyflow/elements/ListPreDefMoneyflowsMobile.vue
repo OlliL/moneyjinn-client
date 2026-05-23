@@ -40,7 +40,7 @@
                   :data-testid="`predef-moneyflow-mobile-edit-${mpm.id}`"
                   @click.stop="editPreDefMoneyflow(mpm)"
                 >
-                  <Pencil class="h-4 w-4" />
+                  <Pencil class="icon-small" />
                 </Button>
                 <Button
                   variant="ghost"
@@ -48,7 +48,7 @@
                   :data-testid="`predef-moneyflow-mobile-delete-${mpm.id}`"
                   @click.stop="deletePreDefMoneyflow(mpm)"
                 >
-                  <Trash2 class="h-4 w-4" />
+                  <Trash2 class="icon-small" />
                 </Button>
               </div>
             </div>
@@ -103,9 +103,9 @@
 </template>
 
 <script lang="ts" setup>
-import SpanAmount from "@/components/SpanAmount.vue";
-import SpanBoolean from "@/components/SpanBoolean.vue";
-import SpanDate from "@/components/SpanDate.vue";
+import SpanAmount from "@/components/common/SpanAmount.vue";
+import SpanBoolean from "@/components/common/SpanBoolean.vue";
+import SpanDate from "@/components/common/SpanDate.vue";
 import {
   Accordion,
   AccordionContent,

@@ -9,10 +9,10 @@
         @click="toggleCollapse"
         :title="isCollapsed ? 'Collapse details' : 'Expand details'"
         :aria-label="isCollapsed ? 'Collapse details' : 'Expand details'"
-        class="h-8 w-8 cursor-pointer"
+        class="action-icon-button"
       >
-        <ChevronRight v-if="!isCollapsed" class="h-4 w-4" />
-        <ChevronDown v-else class="h-4 w-4" />
+        <ChevronRight v-if="!isCollapsed" class="icon-small" />
+        <ChevronDown v-else class="icon-small" />
       </Button>
     </TableCell>
     <TableCell class="align-middle font-bold" :class="amountClass">
@@ -29,54 +29,36 @@
           <Table class="w-full [&_td]:py-0.5! [&_th]:py-1!">
             <TableHeader>
               <TableRow>
-                <TableHead
-                  class="font-bold border-r border-b text-foreground text-center w-[120px]"
-                >
+                <TableHead class="table-head-cell w-[120px]">
                   <span class="sr-only">Status</span>
                 </TableHead>
 
-                <TableHead
-                  class="font-bold border-r border-b text-foreground text-center w-[140px]"
-                >
+                <TableHead class="table-head-cell w-[140px]">
                   {{ $t("Moneyflow.bookingdate") }}
                 </TableHead>
-                <TableHead
-                  class="font-bold border-r border-b text-foreground text-center w-[140px]"
-                >
+                <TableHead class="table-head-cell w-[140px]">
                   {{ $t("Moneyflow.invoicedate") }}
                 </TableHead>
 
-                <TableHead
-                  class="font-bold border-r border-b text-foreground text-center w-25"
-                >
+                <TableHead class="table-head-cell w-25">
                   {{ $t("General.amount") }}
                 </TableHead>
 
-                <TableHead
-                  class="font-bold border-r border-b text-foreground text-center w-[20%]"
-                >
+                <TableHead class="table-head-cell w-[20%]">
                   {{ $t("General.contractpartner") }}
                 </TableHead>
-                <TableHead
-                  class="font-bold border-r border-b text-foreground text-center w-[30%]"
-                >
+                <TableHead class="table-head-cell w-[30%]">
                   {{ $t("General.comment") }}
                 </TableHead>
 
-                <TableHead
-                  class="font-bold border-r border-b text-foreground text-center w-45"
-                >
+                <TableHead class="table-head-cell w-45">
                   {{ $t("General.capitalsource") }}
                 </TableHead>
 
-                <TableHead
-                  class="font-bold border-b text-foreground text-center w-11.25"
-                >
+                <TableHead class="table-head-cell w-11.25">
                   <span class="sr-only">Edit</span>
                 </TableHead>
-                <TableHead
-                  class="font-bold border-b text-foreground text-center w-11.25"
-                >
+                <TableHead class="table-head-cell w-11.25">
                   <span class="sr-only">Delete</span>
                 </TableHead>
               </TableRow>

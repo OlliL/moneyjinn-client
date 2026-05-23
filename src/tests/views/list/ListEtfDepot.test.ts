@@ -118,7 +118,18 @@ test("ListEtfDepot auto-selects favorite ETF when mounted without props", async 
 test("ListEtfDepot shows effective flows when available", async () => {
   EtfServiceMocker.mockListEtfFlowsById({
     calcEtfSalePieces: 0,
-    etfFlows: [],
+    etfFlows: [
+      {
+        etfflowid: 0,
+        etfId: 1,
+        timestamp: new Date("2026-01-01T00:00:00Z"),
+        nanoseconds: 0,
+        amount: 0,
+        price: 0,
+        accumulatedPreliminaryLumpSum: 0,
+        preliminaryLumpSumPerYear: new Map<string, number>(),
+      },
+    ],
     etfEffectiveFlows: [
       {
         etfflowid: 201,

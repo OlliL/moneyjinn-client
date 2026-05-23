@@ -39,19 +39,19 @@
           >
             <TableHeader>
               <TableRow>
-                <TableHead scope="col" class="w-30/100 text-center">
+                <TableHead class="table-head-cell w-30/100">
                   {{ $t("ETFFlow.bookingtime") }}
                 </TableHead>
-                <TableHead scope="col" class="w-16/100 border-l text-center">
+                <TableHead class="table-head-cell w-16/100">
                   {{ $t("ETFFlow.amount") }}
                 </TableHead>
-                <TableHead scope="col" class="w-16/100 border-l text-center">
+                <TableHead class="table-head-cell w-16/100">
                   {{ $t("ETFFlow.price") }}
                 </TableHead>
-                <TableHead scope="col" class="w-16/100 border-l text-center">
+                <TableHead class="table-head-cell w-16/100">
                   {{ $t("ETFFlow.sumprice") }}
                 </TableHead>
-                <TableHead scope="col" class="w-12/100 border-l text-center">
+                <TableHead class="table-head-cell w-12/100">
                   {{ $t("ETFFlow.preliminaryLumpSum") }}
                 </TableHead>
                 <TableHead
@@ -110,21 +110,20 @@
           >
             <TableHeader>
               <TableRow>
-                <TableHead scope="col" class="w-30/100 text-center">
+                <TableHead class="table-head-cell w-30/100">
                   {{ $t("ETFFlow.bookingtime") }}
                 </TableHead>
-                <TableHead scope="col" class="w-20/100 border-l text-center">
+                <TableHead class="table-head-cell w-20/100">
                   {{ $t("ETFFlow.amount") }}
                 </TableHead>
-                <TableHead scope="col" class="w-20/100 border-l text-center">
+                <TableHead class="table-head-cell w-20/100">
                   {{ $t("ETFFlow.price") }}
                 </TableHead>
-                <TableHead scope="col" class="w-20/100 border-l text-center">
+                <TableHead class="table-head-cell w-20/100">
                   {{ $t("ETFFlow.sumprice") }}
                 </TableHead>
                 <TableHead
-                  scope="col"
-                  class="w-10/100 border-l p-2 text-center"
+                  class="table-head-cell w-10/100"
                   colspan="2"
                 ></TableHead>
               </TableRow>
@@ -162,7 +161,7 @@
 </template>
 
 <script lang="ts" setup>
-import SpanAmount from "@/components/SpanAmount.vue";
+import SpanAmount from "@/components/common/SpanAmount.vue";
 import {
   Table,
   TableBody,

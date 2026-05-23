@@ -49,7 +49,7 @@
         :field-label="$t('General.amount')"
         :focus="true"
       >
-        <template #icon><Euro class="h-4 w-4" /></template>
+        <template #icon><Euro class="icon-small" /></template>
       </InputStandard>
     </div>
 
@@ -192,7 +192,7 @@
               class="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium text-muted-foreground hover:text-primary transition-colors h-9 px-3 gap-2"
               @click="onAddMoneyflowSplitEntryRow"
             >
-              <Plus class="h-4 w-4 shrink-0" />
+              <Plus class="icon-small shrink-0" />
               <span>{{ $t("Moneyflow.addPosition") }}</span>
             </Button>
           </div>
@@ -224,10 +224,10 @@ import { Euro, Plus } from "lucide-vue-next";
 import { computed, onMounted, ref, toRaw, watch, type PropType } from "vue";
 import { useI18n } from "vue-i18n";
 import { date, number, string } from "zod";
-import DivError from "../DivError.vue";
-import InputDate from "../InputDate.vue";
-import InputStandard from "../InputStandard.vue";
 import SelectCapitalsource from "../capitalsource/SelectCapitalsource.vue";
+import DivError from "../common/DivError.vue";
+import InputDate from "../common/InputDate.vue";
+import InputStandard from "../common/InputStandard.vue";
 import SelectContractpartner from "../contractpartner/SelectContractpartner.vue";
 import SelectPostingAccount from "../postingaccount/SelectPostingAccount.vue";
 

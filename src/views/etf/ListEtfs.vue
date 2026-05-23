@@ -34,8 +34,8 @@
 <script lang="ts" setup>
 import { onMounted, ref, useTemplateRef, watch } from "vue";
 
-import DivError from "@/components/DivError.vue";
-import DivFilter from "@/components/DivFilter.vue";
+import DivError from "@/components/common/DivError.vue";
+import DivFilter from "@/components/common/DivFilter.vue";
 import CreateEtfModalVue from "./elements/CreateEtfModal.vue";
 import DeleteEtfModalVue from "./elements/DeleteEtfModal.vue";
 import ListEtfsDesktop from "./elements/ListEtfsDesktop.vue";

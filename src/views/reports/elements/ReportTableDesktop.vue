@@ -4,14 +4,14 @@
       <Table class="w-full text-xs md:text-sm">
         <TableHeader>
           <TableRow>
-            <TableHead class="hidden md:table-cell align-top"></TableHead>
-            <TableHead class="border-r text-foreground text-center align-top">
+            <TableHead class="align-top"></TableHead>
+            <TableHead class="table-head-cell align-top">
               <span
                 class="hidden md:block items-center justify-center mt-1 font-bold"
                 >{{ $t("Moneyflow.bookingdate") }}
                 <component
                   :is="sortIcon('bookingDate')"
-                  class="inline h-4 w-4 text-primary cursor-pointer"
+                  class="inline icon-small text-primary cursor-pointer"
                   :title="$t('Moneyflow.bookingdate')"
                   :aria-label="$t('Moneyflow.bookingdate')"
                   @click="sortByColumn('bookingDate')"
@@ -20,40 +20,31 @@
               <span class="block md:hidden">
                 <component
                   :is="sortIcon('bookingDate')"
-                  class="inline h-4 w-4 text-primary cursor-pointer"
+                  class="inline icon-small text-primary cursor-pointer"
                   :title="$t('Moneyflow.bookingdate')"
                   :aria-label="$t('Moneyflow.bookingdate')"
                   @click="sortByColumn('bookingDate')"
                 />
               </span>
             </TableHead>
-            <TableHead
-              class="border-r text-foreground text-center align-top hidden md:table-cell"
-            >
-              <span
-                class="hidden md:flex items-center justify-center gap-1 mt-1 font-bold"
-              >
+            <TableHead class="table-head-cell align-top">
+              <span class="items-center justify-center gap-1 mt-1 font-bold">
                 {{ $t("Moneyflow.invoicedate") }}
                 <component
                   :is="sortIcon('invoiceDate')"
-                  class="inline h-4 w-4 text-primary cursor-pointer"
+                  class="inline icon-small text-primary cursor-pointer"
                   :title="$t('Moneyflow.invoicedate')"
                   :aria-label="$t('Moneyflow.invoicedate')"
                   @click="sortByColumn('invoiceDate')"
                 />
               </span>
             </TableHead>
-            <TableHead
-              class="border-r text-foreground text-center align-top"
-              colspan="2"
-            >
-              <span
-                class="hidden md:flex items-center justify-center gap-1 mt-1 font-bold"
-              >
+            <TableHead class="table-head-cell align-top" colspan="2">
+              <span class="items-center justify-center gap-1 mt-1 font-bold">
                 {{ $t("General.amount") }}
                 <component
                   :is="sortIcon('amount')"
-                  class="h-4 w-4 text-primary cursor-pointer shrink-0"
+                  class="icon-small text-primary cursor-pointer shrink-0"
                   :title="$t('General.amount')"
                   :aria-label="$t('General.amount')"
                   @click="sortByColumn('amount')"
@@ -63,23 +54,19 @@
               <span class="flex md:hidden items-center justify-center w-full">
                 <component
                   :is="sortIcon('amount')"
-                  class="h-4 w-4 text-primary cursor-pointer"
+                  class="icon-small text-primary cursor-pointer"
                   :title="$t('General.amount')"
                   :aria-label="$t('General.amount')"
                   @click="sortByColumn('amount')"
                 />
               </span>
             </TableHead>
-            <TableHead
-              class="border-r text-foreground text-center align-top hidden md:table-cell"
-            >
-              <span
-                class="hidden md:flex items-center justify-center gap-1 mt-1 font-bold"
-              >
+            <TableHead class="table-head-cell align-top">
+              <span class="items-center justify-center gap-1 mt-1 font-bold">
                 {{ $t("General.contractpartner") }}
                 <component
                   :is="sortIcon('contractpartnerName')"
-                  class="inline h-4 w-4 text-primary cursor-pointer"
+                  class="inline icon-small text-primary cursor-pointer"
                   :title="$t('General.contractpartner')"
                   :aria-label="$t('General.contractpartner')"
                   @click="sortByColumn('contractpartnerName')"
@@ -100,21 +87,19 @@
                   :title="$t('General.reset')"
                   :aria-label="$t('General.reset')"
                   @click="filterContractpartner = ''"
-                  class="h-8 w-8 rounded-l-none border-l"
+                  class="action-icon-button rounded-l-none border-l"
                 >
                   <X />
                 </Button>
               </div>
             </TableHead>
-            <TableHead class="border-r text-foreground text-center align-top">
+            <TableHead class="table-head-cell align-top">
               <div class="hidden md:block">
-                <span
-                  class="hidden md:flex items-center justify-center gap-1 mt-1 font-bold"
-                >
+                <span class="items-center justify-center gap-1 mt-1 font-bold">
                   {{ $t("General.comment") }}
                   <component
                     :is="sortIcon('comment')"
-                    class="inline h-4 w-4 text-primary cursor-pointer mb-1 ml-0.5"
+                    class="inline icon-small text-primary cursor-pointer mb-1 ml-0.5"
                     :title="$t('General.comment')"
                     :aria-label="$t('General.comment')"
                     @click="sortByColumn('comment')"
@@ -134,7 +119,7 @@
                     :title="$t('General.reset')"
                     :aria-label="$t('General.reset')"
                     @click="filterComment = ''"
-                    class="h-8 w-8 rounded-l-none border-l"
+                    class="action-icon-button rounded-l-none border-l"
                   >
                     <X />
                   </Button>
@@ -145,7 +130,7 @@
               >
                 <component
                   :is="sortIcon('comment')"
-                  class="inline h-4 w-4 text-primary cursor-pointer"
+                  class="inline icon-small text-primary cursor-pointer"
                   :title="$t('General.comment')"
                   :aria-label="$t('General.comment')"
                   @click="sortByColumn('comment')"
@@ -153,16 +138,12 @@
               </span>
             </TableHead>
 
-            <TableHead
-              class="border-r text-foreground text-center align-top hidden md:table-cell"
-            >
-              <span
-                class="hidden md:flex items-center justify-center gap-1 mt-1 font-bold"
-              >
+            <TableHead class="table-head-cell align-top">
+              <span class="items-center justify-center gap-1 mt-1 font-bold">
                 {{ $t("General.postingAccount") }}
                 <component
                   :is="sortIcon('postingAccountName')"
-                  class="inline h-4 w-4 text-primary cursor-pointer mb-1 ml-0.5"
+                  class="inline icon-small text-primary cursor-pointer mb-1 ml-0.5"
                   :title="$t('General.postingAccount')"
                   :aria-label="$t('General.postingAccount')"
                   @click="sortByColumn('postingAccountName')"
@@ -182,23 +163,19 @@
                   :title="$t('General.reset')"
                   :aria-label="$t('General.reset')"
                   @click="filterPostingAccount = ''"
-                  class="h-8 w-8 rounded-l-none border-l"
+                  class="action-icon-button rounded-l-none border-l"
                 >
                   <X />
                 </Button>
               </div>
             </TableHead>
 
-            <TableHead
-              class="border-r text-foreground text-center align-top hidden md:table-cell"
-            >
-              <span
-                class="hidden md:flex items-center justify-center gap-1 mt-1 font-bold"
-              >
+            <TableHead class="table-head-cell align-top">
+              <span class="items-center justify-center gap-1 mt-1 font-bold">
                 {{ $t("General.capitalsource") }}
                 <component
                   :is="sortIcon('capitalsourceComment')"
-                  class="inline h-4 w-4 text-primary cursor-pointer mb-1 ml-0.5"
+                  class="inline icon-small text-primary cursor-pointer mb-1 ml-0.5"
                   :title="$t('General.capitalsource')"
                   :aria-label="$t('General.capitalsource')"
                   @click="sortByColumn('capitalsourceComment')"
@@ -218,7 +195,7 @@
                   :title="$t('General.reset')"
                   :aria-label="$t('General.reset')"
                   @click="filterCapitalsource = ''"
-                  class="h-8 w-8 rounded-l-none border-l"
+                  class="action-icon-button rounded-l-none border-l"
                 >
                   <X />
                 </Button>
@@ -261,7 +238,7 @@
   </div>
 </template>
 <script lang="ts" setup>
-import SpanAmount from "@/components/SpanAmount.vue";
+import SpanAmount from "@/components/common/SpanAmount.vue";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {

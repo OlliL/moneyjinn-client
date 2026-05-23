@@ -112,18 +112,15 @@
                     <Table>
                       <TableHeader>
                         <TableRow>
-                          <TableHead
-                            class="font-bold border text-foreground text-center"
-                            >{{ $t("General.group") }}</TableHead
-                          >
-                          <TableHead
-                            class="font-bold border text-foreground text-center"
-                            >{{ $t("General.validFrom") }}</TableHead
-                          >
-                          <TableHead
-                            class="font-bold border text-foreground text-center"
-                            >{{ $t("General.validTil") }}</TableHead
-                          >
+                          <TableHead class="table-head-cell">{{
+                            $t("General.group")
+                          }}</TableHead>
+                          <TableHead class="table-head-cell">{{
+                            $t("General.validFrom")
+                          }}</TableHead>
+                          <TableHead class="table-head-cell">{{
+                            $t("General.validTil")
+                          }}</TableHead>
                         </TableRow>
                       </TableHeader>
                       <TableBody>
@@ -156,7 +153,7 @@
         class="button-with-icon"
         @click="resetForm"
       >
-        <Undo2 class="h-4 w-4" />
+        <Undo2 class="icon-small" />
         {{ $t("General.reset") }}
       </Button>
 
@@ -164,20 +161,20 @@
         :button-label="$t('General.save')"
         :form-id="'createUserForm' + idSuffix"
       >
-        <template #icon><Save class="h-4 w-4" /></template>
+        <template #icon><Save class="icon-small" /></template>
       </ButtonSubmit>
     </template>
   </ModalVue>
 </template>
 
 <script lang="ts" setup>
-import ButtonSubmit from "@/components/ButtonSubmit.vue";
-import DivError from "@/components/DivError.vue";
-import InputDate from "@/components/InputDate.vue";
-import InputStandard from "@/components/InputStandard.vue";
-import ModalVue from "@/components/Modal.vue";
-import SelectStandard from "@/components/SelectStandard.vue";
-import SpanDate from "@/components/SpanDate.vue";
+import ButtonSubmit from "@/components/common/ButtonSubmit.vue";
+import DivError from "@/components/common/DivError.vue";
+import InputDate from "@/components/common/InputDate.vue";
+import InputStandard from "@/components/common/InputStandard.vue";
+import ModalVue from "@/components/common/Modal.vue";
+import SelectStandard from "@/components/common/SelectStandard.vue";
+import SpanDate from "@/components/common/SpanDate.vue";
 import { Button } from "@/components/ui/button";
 import {
   Table,

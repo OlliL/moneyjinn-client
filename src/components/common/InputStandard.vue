@@ -39,7 +39,7 @@
       <div
         v-if="$slots.button"
         :class="[
-          'flex items-center justify-center px-2 border border-input rounded-r-md text-foreground transition-colors relative h-8 w-8 ',
+          'flex items-center justify-center px-2 border border-input rounded-r-md text-foreground transition-colors relative action-icon-button',
           isInvalid ? 'border-l-transparent' : '',
         ]"
       >

@@ -38,10 +38,10 @@
 </template>
 
 <script lang="ts" setup>
-import ModalDelete from "@/components/ModalDelete.vue";
-import ModalDeleteRow from "@/components/ModalDeleteRow.vue";
-import SpanDate from "@/components/SpanDate.vue";
-import SpanIban from "@/components/SpanIban.vue";
+import ModalDelete from "@/components/common/ModalDelete.vue";
+import ModalDeleteRow from "@/components/common/ModalDeleteRow.vue";
+import SpanDate from "@/components/common/SpanDate.vue";
+import SpanIban from "@/components/common/SpanIban.vue";
 import type { Capitalsource } from "@/model/capitalsource/Capitalsource";
 import { capitalsourceStateNames } from "@/model/capitalsource/CapitalsourceState";
 import { capitalsourceTypeNames } from "@/model/capitalsource/CapitalsourceType";

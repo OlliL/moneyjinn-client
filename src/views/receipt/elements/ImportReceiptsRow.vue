@@ -55,7 +55,7 @@
                       step="0.01"
                       :field-label="$t('General.amount')"
                     >
-                      <template #icon><Euro class="h-4 w-4" /></template>
+                      <template #icon><Euro class="icon-small" /></template>
                     </InputStandard>
                   </div>
                   <div class="flex-1 min-w-[140px]">
@@ -77,9 +77,9 @@
                   <div class="shrink-0">
                     <ButtonSubmit
                       :form-id="'searchReceipt' + receipt.id"
-                      class="h-8 w-8"
+                      class="action-icon-button"
                     >
-                      <template #icon><Search class="h-4 w-4" /></template>
+                      <template #icon><Search class="icon-small" /></template>
                     </ButtonSubmit>
                   </div>
                 </div>
@@ -102,24 +102,16 @@
                           <TableHead class="w-10 border-r">
                             <span class="sr-only">Selection</span>
                           </TableHead>
-                          <TableHead
-                            class="font-bold border-r text-foreground text-center px-3 py-2 text-xs"
-                          >
+                          <TableHead class="table-head-cell px-3 py-2 text-xs">
                             {{ $t("Moneyflow.invoicedate") }}
                           </TableHead>
-                          <TableHead
-                            class="font-bold border-r text-foreground text-center px-3 py-2 text-xs"
-                          >
+                          <TableHead class="table-head-cell px-3 py-2 text-xs">
                             {{ $t("General.amount") }}
                           </TableHead>
-                          <TableHead
-                            class="font-bold border-r text-foreground text-center px-3 py-2 text-xs"
-                          >
+                          <TableHead class="table-head-cell px-3 py-2 text-xs">
                             {{ $t("General.contractpartner") }}
                           </TableHead>
-                          <TableHead
-                            class="font-bold border-r text-foreground text-center px-3 py-2 text-xs"
-                          >
+                          <TableHead class="table-head-cell px-3 py-2 text-xs">
                             {{ $t("General.comment") }}
                           </TableHead>
                           <TableHead class="w-16" colspan="2"></TableHead>
@@ -159,7 +151,7 @@
                 @click="deleteReceipt"
                 data-testid="importReceipts-row-delete"
               >
-                <Trash2 class="h-4 w-4" />
+                <Trash2 class="icon-small" />
                 {{ $t("General.delete") }}
               </Button>
               <Button
@@ -171,7 +163,7 @@
                 :disabled="!moneyflowSelected"
                 data-testid="importReceipts-row-apply"
               >
-                <Save class="h-4 w-4" />
+                <Save class="icon-small" />
                 {{ $t("Moneyflow.apply") }}
               </Button>
             </div>
@@ -183,10 +175,10 @@
 </template>
 
 <script lang="ts" setup>
-import ButtonSubmit from "@/components/ButtonSubmit.vue";
-import DivError from "@/components/DivError.vue";
-import InputDate from "@/components/InputDate.vue";
-import InputStandard from "@/components/InputStandard.vue";
+import ButtonSubmit from "@/components/common/ButtonSubmit.vue";
+import DivError from "@/components/common/DivError.vue";
+import InputDate from "@/components/common/InputDate.vue";
+import InputStandard from "@/components/common/InputStandard.vue";
 import { Button } from "@/components/ui/button";
 import { RadioGroup } from "@/components/ui/radio-group";
 import {

@@ -7,7 +7,7 @@
 
     <div class="flex justify-center">
       <div
-        class="w-full max-w-3xl rounded-sm border bg-card text-card-foreground bg-muted p-6"
+        class="w-full max-w-3xl card-panel p-6"
       >
         <form @submit.prevent="showTrends">
           <div class="space-y-6">
@@ -34,252 +34,276 @@
 
             <div class="grid gap-4 md:grid-cols-2">
               <div class="grid">
-                <div
-                  class="mb-3 text-left rounded-sm border bg-background p-4 space-y-3 w-full"
-                >
-                  <div class="flex items-center justify-between pb-2 border-b">
-                    <div class="flex items-center gap-2">
-                      <Checkbox
-                        id="capitalsourcesActive"
-                        class="bg-background"
-                        v-model="capitalsourcesActive"
-                      />
-                      <Label
-                        for="capitalsourcesActive"
-                        class="cursor-pointer font-semibold text-sm"
-                      >
-                        {{ $t("General.capitalsources") }}
-                      </Label>
-                    </div>
-
-                    <div class="flex items-center gap-1 text-xs">
-                      <Button
-                        type="button"
-                        variant="link"
-                        size="sm"
-                        :class="[
-                          'h-auto p-0 text-muted-foreground hover:text-primary transition-colors font-normal no-underline hover:underline cursor-pointer',
-                          !capitalsourcesActive
-                            ? 'opacity-40 pointer-events-none select-none'
-                            : '',
-                        ]"
-                        @click="
-                          selectBoxValues.forEach(
-                            (v) => (capitalsourceIds[v.id] = true),
-                          )
-                        "
-                      >
-                        {{ $t("General.all") }}
-                      </Button>
-                      <span class="text-muted-foreground/30 px-0.5">|</span>
-                      <Button
-                        type="button"
-                        variant="link"
-                        size="sm"
-                        :class="[
-                          'h-auto p-0 text-muted-foreground hover:text-primary transition-colors font-normal no-underline hover:underline cursor-pointer',
-                          !capitalsourcesActive
-                            ? 'opacity-40 pointer-events-none select-none'
-                            : '',
-                        ]"
-                        @click="
-                          selectBoxValues.forEach(
-                            (v) => (capitalsourceIds[v.id] = false),
-                          )
-                        "
-                      >
-                        {{ $t("General.none") }}
-                      </Button>
-                    </div>
-                  </div>
-
-                  <Command
-                    :class="[
-                      'rounded-sm border border-input h-[180px] overflow-hidden flex flex-col transition-opacity bg-background',
-                      !capitalsourcesActive
-                        ? 'opacity-40 pointer-events-none select-none bg-muted/30'
-                        : '',
-                    ]"
-                  >
-                    <CommandInput
-                      :placeholder="$t('General.searchForCapitalsource')"
-                      class="h-9 text-xs w-full px-3"
-                    />
-
-                    <CommandEmpty
-                      class="py-6 text-xs text-muted-foreground w-full text-center block"
+                <div class="mb-3 rounded-sm border bg-background p-4 space-y-3">
+                  <div data-testid="capitalsources-section">
+                    <div
+                      class="flex items-center justify-between pb-2 border-b"
                     >
-                      {{ $t("General.noEntries") }}
-                    </CommandEmpty>
-
-                    <ScrollArea class="flex-1 w-full overflow-y-auto">
-                      <CommandGroup class="p-1.5">
-                        <CommandItem
-                          v-for="value of selectBoxValues"
-                          :key="value.id"
-                          :value="value.value"
-                          class="flex items-center space-x-2 py-1.5 px-2 cursor-pointer rounded-md transition-colors data-[selected='true']:bg-accent data-[selected='true']:text-accent-foreground"
+                      <div class="flex items-center gap-2">
+                        <Checkbox
+                          id="capitalsourcesActive"
+                          class="bg-background"
+                          data-testid="capitalsourcesActive"
+                          v-model="capitalsourcesActive"
+                        />
+                        <Label
+                          for="capitalsourcesActive"
+                          class="cursor-pointer font-semibold text-sm"
                         >
-                          <Checkbox
-                            :id="`capitalsource-${value.id}`"
-                            v-model="capitalsourceIds[value.id]"
-                            class="h-4 w-4"
-                          />
-                          <Label
-                            :for="`capitalsource-${value.id}`"
-                            class="text-xs font-medium cursor-pointer select-none truncate w-full pr-2"
-                          >
-                            {{ value.value }}
-                          </Label>
-                        </CommandItem>
-                      </CommandGroup>
-                    </ScrollArea>
-                  </Command>
+                          {{ $t("General.capitalsources") }}
+                        </Label>
+                      </div>
 
-                  <div
-                    :class="[
-                      'text-xs text-muted-foreground text-right pr-1 transition-opacity',
-                      !capitalsourcesActive
-                        ? 'opacity-0 pointer-events-none'
-                        : 'opacity-100',
-                    ]"
-                  >
-                    {{
-                      $t("General.xOfySelected", {
-                        selected:
-                          Object.values(capitalsourceIds).filter(Boolean)
-                            .length,
-                        total: selectBoxValues.length,
-                      })
-                    }}
+                      <div class="flex items-center gap-1 text-xs">
+                        <Button
+                          type="button"
+                          variant="link"
+                          size="sm"
+                          :class="[
+                            'h-auto p-0 text-muted-foreground hover:text-primary transition-colors font-normal no-underline hover:underline cursor-pointer',
+                            !capitalsourcesActive
+                              ? 'opacity-40 pointer-events-none select-none'
+                              : '',
+                          ]"
+                          data-testid="capitalsource-select-all-button"
+                          @click="
+                            selectBoxValues.forEach(
+                              (v) => (capitalsourceIds[v.id] = true),
+                            )
+                          "
+                        >
+                          {{ $t("General.all") }}
+                        </Button>
+                        <span class="text-muted-foreground/30 px-0.5">|</span>
+                        <Button
+                          type="button"
+                          variant="link"
+                          size="sm"
+                          :class="[
+                            'h-auto p-0 text-muted-foreground hover:text-primary transition-colors font-normal no-underline hover:underline cursor-pointer',
+                            !capitalsourcesActive
+                              ? 'opacity-40 pointer-events-none select-none'
+                              : '',
+                          ]"
+                          data-testid="capitalsource-select-none-button"
+                          @click="
+                            selectBoxValues.forEach(
+                              (v) => (capitalsourceIds[v.id] = false),
+                            )
+                          "
+                        >
+                          {{ $t("General.none") }}
+                        </Button>
+                      </div>
+                    </div>
+
+                    <Command
+                      data-testid="capitalsources-command"
+                      :class="[
+                        'rounded-sm border border-input h-[180px] overflow-hidden flex flex-col transition-opacity',
+                        !capitalsourcesActive
+                          ? 'opacity-40 pointer-events-none select-none bg-muted/30'
+                          : 'bg-background',
+                      ]"
+                    >
+                      <CommandInput
+                        data-testid="capitalsource-search-input"
+                        :placeholder="$t('General.searchForCapitalsource')"
+                        class="h-9 text-xs w-full px-3"
+                      />
+
+                      <CommandEmpty
+                        class="py-6 text-xs text-muted-foreground w-full text-center block"
+                      >
+                        {{ $t("General.noEntries") }}
+                      </CommandEmpty>
+
+                      <ScrollArea class="flex-1 w-full overflow-y-auto">
+                        <CommandGroup class="p-1.5">
+                          <CommandItem
+                            v-for="value of selectBoxValues"
+                            :key="value.id"
+                            :data-testid="`capitalsource-item-${value.id}`"
+                            :value="value.value"
+                            class="flex items-center space-x-2 py-1.5 px-2 cursor-pointer rounded-md transition-colors data-[selected='true']:bg-accent data-[selected='true']:text-accent-foreground"
+                          >
+                            <Checkbox
+                              :id="`capitalsource-${value.id}`"
+                              v-model="capitalsourceIds[value.id]"
+                              class="icon-small"
+                              :data-testid="`capitalsource-${value.id}`"
+                            />
+                            <Label
+                              :for="`capitalsource-${value.id}`"
+                              class="text-xs font-medium cursor-pointer select-none truncate w-full pr-2"
+                            >
+                              {{ value.value }}
+                            </Label>
+                          </CommandItem>
+                        </CommandGroup>
+                      </ScrollArea>
+                    </Command>
+
+                    <div
+                      :class="[
+                        'text-xs text-muted-foreground text-right pr-1 transition-opacity',
+                        !capitalsourcesActive
+                          ? 'opacity-0 pointer-events-none'
+                          : 'opacity-100',
+                      ]"
+                    >
+                      {{
+                        $t("General.xOfySelected", {
+                          selected:
+                            Object.values(capitalsourceIds).filter(Boolean)
+                              .length,
+                          total: selectBoxValues.length,
+                        })
+                      }}
+                    </div>
                   </div>
                 </div>
               </div>
 
               <div class="grid">
-                <div
-                  class="mb-3 text-left rounded-sm border bg-background p-4 space-y-3 w-full"
-                >
-                  <div class="flex items-center justify-between pb-2 border-b">
-                    <div class="flex items-center gap-2">
-                      <Checkbox
-                        id="etfs"
-                        class="bg-background"
-                        v-model="etfsActive"
-                      />
-                      <Label
-                        for="etfs"
-                        class="cursor-pointer font-semibold text-sm"
-                      >
-                        {{ $t("General.etfs") }}
-                      </Label>
-                    </div>
-
-                    <div class="flex items-center gap-1 text-xs">
-                      <Button
-                        type="button"
-                        variant="link"
-                        size="sm"
-                        :class="[
-                          'h-auto p-0 text-muted-foreground hover:text-primary transition-colors font-normal no-underline hover:underline cursor-pointer',
-                          !etfsActive
-                            ? 'opacity-40 pointer-events-none select-none'
-                            : '',
-                        ]"
-                        @click="
-                          etfSelectBoxValues.forEach(
-                            (v) => (etfIds[v.id] = true),
-                          )
-                        "
-                      >
-                        {{ $t("General.all") }}
-                      </Button>
-                      <span class="text-muted-foreground/30 px-0.5">|</span>
-                      <Button
-                        type="button"
-                        variant="link"
-                        size="sm"
-                        :class="[
-                          'h-auto p-0 text-muted-foreground hover:text-primary transition-colors font-normal no-underline hover:underline cursor-pointer',
-                          !etfsActive
-                            ? 'opacity-40 pointer-events-none select-none'
-                            : '',
-                        ]"
-                        @click="
-                          etfSelectBoxValues.forEach(
-                            (v) => (etfIds[v.id] = false),
-                          )
-                        "
-                      >
-                        {{ $t("General.none") }}
-                      </Button>
-                    </div>
-                  </div>
-
-                  <Command
-                    :class="[
-                      'rounded-sm border border-input h-[180px] overflow-hidden flex flex-col transition-opacity bg-background',
-                      !etfsActive
-                        ? 'opacity-40 pointer-events-none select-none bg-muted/30'
-                        : '',
-                    ]"
-                  >
-                    <CommandInput
-                      :placeholder="$t('General.searchForEtf')"
-                      class="h-9 text-xs w-full px-3"
-                    />
-
-                    <CommandEmpty
-                      class="py-6 text-xs text-muted-foreground w-full text-center block"
+                <div class="mb-3 rounded-sm border bg-background p-4 space-y-3">
+                  <div data-testid="etfs-section">
+                    <div
+                      class="flex items-center justify-between pb-2 border-b"
                     >
-                      {{ $t("General.noEntries") }}
-                    </CommandEmpty>
-
-                    <ScrollArea class="flex-1 w-full overflow-y-auto">
-                      <CommandGroup class="p-1.5">
-                        <CommandItem
-                          v-for="value of etfSelectBoxValues"
-                          :key="value.id"
-                          :value="value.value"
-                          class="flex items-center space-x-2 py-1.5 px-2 cursor-pointer rounded-md transition-colors data-[selected='true']:bg-accent data-[selected='true']:text-accent-foreground"
+                      <div class="flex items-center gap-2">
+                        <Checkbox
+                          id="etfs"
+                          class="bg-background"
+                          data-testid="etfs"
+                          v-model="etfsActive"
+                        />
+                        <Label
+                          for="etfs"
+                          class="cursor-pointer font-semibold text-sm"
                         >
-                          <Checkbox
-                            :id="`etf-${value.id}`"
-                            v-model="etfIds[value.id]"
-                            class="h-4 w-4"
-                          />
-                          <Label
-                            :for="`etf-${value.id}`"
-                            class="text-xs font-medium cursor-pointer select-none truncate w-full pr-2"
-                          >
-                            {{ value.value }}
-                          </Label>
-                        </CommandItem>
-                      </CommandGroup>
-                    </ScrollArea>
-                  </Command>
+                          {{ $t("General.etfs") }}
+                        </Label>
+                      </div>
 
-                  <div
-                    :class="[
-                      'text-xs text-muted-foreground text-right pr-1 transition-opacity',
-                      !etfsActive
-                        ? 'opacity-0 pointer-events-none'
-                        : 'opacity-100',
-                    ]"
-                  >
-                    {{
-                      $t("General.xOfySelected", {
-                        selected: Object.values(etfIds).filter(Boolean).length,
-                        total: etfSelectBoxValues.length,
-                      })
-                    }}
+                      <div class="flex items-center gap-1 text-xs">
+                        <Button
+                          type="button"
+                          variant="link"
+                          size="sm"
+                          :class="[
+                            'h-auto p-0 text-muted-foreground hover:text-primary transition-colors font-normal no-underline hover:underline cursor-pointer',
+                            !etfsActive
+                              ? 'opacity-40 pointer-events-none select-none'
+                              : '',
+                          ]"
+                          data-testid="etf-select-all-button"
+                          @click="
+                            etfSelectBoxValues.forEach(
+                              (v) => (etfIds[v.id] = true),
+                            )
+                          "
+                        >
+                          {{ $t("General.all") }}
+                        </Button>
+                        <span class="text-muted-foreground/30 px-0.5">|</span>
+                        <Button
+                          type="button"
+                          variant="link"
+                          size="sm"
+                          :class="[
+                            'h-auto p-0 text-muted-foreground hover:text-primary transition-colors font-normal no-underline hover:underline cursor-pointer',
+                            !etfsActive
+                              ? 'opacity-40 pointer-events-none select-none'
+                              : '',
+                          ]"
+                          data-testid="etf-select-none-button"
+                          @click="
+                            etfSelectBoxValues.forEach(
+                              (v) => (etfIds[v.id] = false),
+                            )
+                          "
+                        >
+                          {{ $t("General.none") }}
+                        </Button>
+                      </div>
+                    </div>
+
+                    <Command
+                      data-testid="etfs-command"
+                      :class="[
+                        'rounded-sm border border-input h-[180px] overflow-hidden flex flex-col transition-opacity',
+                        !etfsActive
+                          ? 'opacity-40 pointer-events-none select-none bg-muted/30'
+                          : 'bg-background',
+                      ]"
+                    >
+                      <CommandInput
+                        data-testid="etf-search-input"
+                        :placeholder="$t('General.searchForEtf')"
+                        class="h-9 text-xs w-full px-3"
+                      />
+
+                      <CommandEmpty
+                        class="py-6 text-xs text-muted-foreground w-full text-center block"
+                      >
+                        {{ $t("General.noEntries") }}
+                      </CommandEmpty>
+
+                      <ScrollArea class="flex-1 w-full overflow-y-auto">
+                        <CommandGroup class="p-1.5">
+                          <CommandItem
+                            v-for="value of etfSelectBoxValues"
+                            :key="value.id"
+                            :data-testid="`etf-item-${value.id}`"
+                            :value="value.value"
+                            class="flex items-center space-x-2 py-1.5 px-2 cursor-pointer rounded-md transition-colors data-[selected='true']:bg-accent data-[selected='true']:text-accent-foreground"
+                          >
+                            <Checkbox
+                              :id="`etf-${value.id}`"
+                              v-model="etfIds[value.id]"
+                              class="icon-small"
+                              :data-testid="`etf-${value.id}`"
+                            />
+                            <Label
+                              :for="`etf-${value.id}`"
+                              class="text-xs font-medium cursor-pointer select-none truncate w-full pr-2"
+                            >
+                              {{ value.value }}
+                            </Label>
+                          </CommandItem>
+                        </CommandGroup>
+                      </ScrollArea>
+                    </Command>
+
+                    <div
+                      :class="[
+                        'text-xs text-muted-foreground text-right pr-1 transition-opacity',
+                        !etfsActive
+                          ? 'opacity-0 pointer-events-none'
+                          : 'opacity-100',
+                      ]"
+                    >
+                      {{
+                        $t("General.xOfySelected", {
+                          selected:
+                            Object.values(etfIds).filter(Boolean).length,
+                          total: etfSelectBoxValues.length,
+                        })
+                      }}
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-            <div class="mt-3 flex justify-center">
-              <ButtonSubmit :button-label="$t('General.show')"
-                ><template #icon><Eye class="h-4 w-4" /></template
+            <div
+              class="mt-3 flex justify-center"
+              data-testid="show-trends-button-container"
+            >
+              <ButtonSubmit
+                :button-label="$t('General.show')"
+                test-id="show-trends-button"
+                ><template #icon><Eye class="icon-small" /></template
               ></ButtonSubmit>
             </div>
           </div>
@@ -291,6 +315,7 @@
         <Line
           :data="chartData"
           :options="chartOptions"
+          data-testid="trends-canvas"
           v-if="trendsGraphLoaded"
         />
       </div>
@@ -316,8 +341,8 @@ import { Line } from "vue-chartjs";
 import { useI18n } from "vue-i18n";
 import { date } from "zod";
 
-import DivError from "@/components/DivError.vue";
-import InputDate from "@/components/InputDate.vue";
+import DivError from "@/components/common/DivError.vue";
+import InputDate from "@/components/common/InputDate.vue";
 
 import { useCapitalsourceStore } from "@/stores/CapitalsourceStore";
 import { formatNumber } from "@/tools/views/FormatNumber";
@@ -326,7 +351,7 @@ import { globErr } from "@/tools/views/ZodUtil";
 import type { SelectBoxValue } from "@/model/SelectBoxValue";
 import type { TrendsParameter } from "@/model/report/TrendsParameter";
 
-import ButtonSubmit from "@/components/ButtonSubmit.vue";
+import ButtonSubmit from "@/components/common/ButtonSubmit.vue";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {

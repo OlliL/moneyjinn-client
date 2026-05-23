@@ -46,7 +46,7 @@ import { onMounted, ref, useTemplateRef, watch } from "vue";
 
 import { useContractpartnerStore } from "@/stores/ContractpartnerStore";
 
-import DivFilter from "@/components/DivFilter.vue";
+import DivFilter from "@/components/common/DivFilter.vue";
 import CreateContractpartnerModalVue from "@/components/contractpartner/CreateContractpartnerModal.vue";
 import DeleteContractpartnerModalVue from "./elements/DeleteContractpartnerModal.vue";
 import ListContractpartnerAccountsModal from "./elements/ListContractpartnerAccountsModal.vue";

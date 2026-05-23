@@ -6,20 +6,20 @@
       :test-id="`posting-account-edit-${mpa.id}`"
       @click="editPostingAccount"
     >
-      <Pencil class="h-4 w-4" />
+      <Pencil class="icon-small" />
     </ButtonTableIcon>
     <ButtonTableIcon
       :title="$t('General.delete')"
       :test-id="`posting-account-delete-${mpa.id}`"
       @click="deletePostingAccount"
     >
-      <Trash2 class="h-4 w-4" />
+      <Trash2 class="icon-small" />
     </ButtonTableIcon>
   </TableRow>
 </template>
 
 <script lang="ts" setup>
-import ButtonTableIcon from "@/components/ButtonTableIcon.vue";
+import ButtonTableIcon from "@/components/common/ButtonTableIcon.vue";
 import { TableCell, TableRow } from "@/components/ui/table";
 import type { PostingAccount } from "@/model/postingaccount/PostingAccount";
 import { Pencil, Trash2 } from "lucide-vue-next";

@@ -14,9 +14,7 @@
     :select-box-values="selectBoxValues"
   >
     <template #icon v-if="userIsAdmin"
-      ><SquarePlus
-        @click="showCreatePostingAccountModal"
-        class="h-4 w-4 cursor-pointer"
+      ><SquarePlus @click="showCreatePostingAccountModal" class="icon-small"
     /></template>
   </SelectStandard>
 </template>
@@ -27,7 +25,7 @@ import { useUserSessionStore } from "@/stores/UserSessionStore";
 import { SquarePlus } from "lucide-vue-next";
 import { computed, useTemplateRef, type PropType, type Ref } from "vue";
 import { any, type ZodType } from "zod";
-import SelectStandard from "../SelectStandard.vue";
+import SelectStandard from "../common/SelectStandard.vue";
 import CreatePostingAccountModalVue from "./CreatePostingAccountModal.vue";
 
 const postingAccountId = defineModel({ type: Number });

@@ -7,7 +7,9 @@
   >
     <template #body>
       <div class="space-y-4">
-        <div class="modal-detail-card">
+        <div
+          class="icon-smallflex flex-col rounded-xl border bg-card overflow-hidden"
+        >
           <Table>
             <TableBody>
               <ModalDeleteRow :label="$t('General.etf')">
@@ -52,9 +54,9 @@
 </template>
 
 <script lang="ts" setup>
-import ModalDelete from "@/components/ModalDelete.vue";
-import ModalDeleteRow from "@/components/ModalDeleteRow.vue";
-import SpanAmount from "@/components/SpanAmount.vue";
+import ModalDelete from "@/components/common/ModalDelete.vue";
+import ModalDeleteRow from "@/components/common/ModalDeleteRow.vue";
+import SpanAmount from "@/components/common/SpanAmount.vue";
 import { Table, TableBody } from "@/components/ui/table";
 import type { EtfPreliminaryLumpSum } from "@/model/etf/EtfPreliminaryLumpSum";
 import CrudEtfPreliminaryLumpSumService from "@/service/CrudEtfPreliminaryLumpSumService";

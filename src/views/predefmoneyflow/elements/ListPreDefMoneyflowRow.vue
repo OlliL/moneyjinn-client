@@ -30,22 +30,22 @@
       :test-id="`predef-moneyflow-edit-${mpm.id}`"
       @click="editPreDefMoneyflow"
     >
-      <Pencil class="h-4 w-4" />
+      <Pencil class="icon-small" />
     </ButtonTableIcon>
     <ButtonTableIcon
       :title="$t('General.delete')"
       :test-id="`predef-moneyflow-delete-${mpm.id}`"
       @click="deletePreDefMoneyflow"
     >
-      <Trash2 class="h-4 w-4" />
+      <Trash2 class="icon-small" />
     </ButtonTableIcon>
   </TableRow>
 </template>
 <script lang="ts" setup>
-import ButtonTableIcon from "@/components/ButtonTableIcon.vue";
-import SpanAmount from "@/components/SpanAmount.vue";
-import SpanBoolean from "@/components/SpanBoolean.vue";
-import SpanDate from "@/components/SpanDate.vue";
+import ButtonTableIcon from "@/components/common/ButtonTableIcon.vue";
+import SpanAmount from "@/components/common/SpanAmount.vue";
+import SpanBoolean from "@/components/common/SpanBoolean.vue";
+import SpanDate from "@/components/common/SpanDate.vue";
 import { TableCell, TableRow } from "@/components/ui/table";
 import type { PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
 import { Pencil, Trash2 } from "lucide-vue-next";

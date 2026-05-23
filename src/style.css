@@ -21,32 +21,40 @@
   @apply h-8 w-8 cursor-pointer;
 }
 
+@utility card-panel {
+  @apply rounded-sm border bg-muted text-card-foreground;
+}
+
+@utility table-head-cell {
+  @apply !text-center font-bold border-r border-b text-foreground;
+}
+
+@utility text-xs-muted {
+  @apply text-xs text-muted-foreground;
+}
+
+@utility nav-link {
+  @apply !text-foreground !no-underline transition-colors hover:text-primary;
+}
+
+@utility nav-link-button {
+  @apply !text-foreground !no-underline flex gap-2 hover:bg-accent items-center p-2 rounded-md text-sm;
+}
+
+@utility responsive-action-group {
+  @apply hidden md:flex justify-center pb-4;
+}
+
+@utility icon-small {
+  @apply h-4 w-4 cursor-pointer;
+}
+
 @utility form-section {
   @apply rounded-sm border bg-muted/30 p-4 shadow-sm;
 }
 
 @utility form-section-title {
   @apply text-xs font-bold uppercase tracking-wider text-muted-foreground block mb-0;
-}
-
-@utility modal-detail-card {
-  @apply flex flex-col rounded-xl border bg-card overflow-hidden;
-}
-
-@utility modal-detail-row {
-  @apply hover:bg-transparent border-b last:border-0;
-}
-
-@utility modal-detail-label {
-  @apply font-normal text-muted-foreground max-w-[11rem] w-44 pl-4 pr-2 py-3 whitespace-normal break-words;
-}
-
-@utility modal-detail-value {
-  @apply font-medium text-foreground pr-4 py-3;
-}
-
-@utility modal-detail-value-emphasis {
-  @apply font-semibold text-foreground pr-4 py-3 text-base;
 }
 
 @theme inline {

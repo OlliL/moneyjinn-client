@@ -3,10 +3,9 @@
     <Table>
       <TableBody>
         <TableRow>
-          <TableHead
-            class="font-bold border-r text-foreground text-center w-40"
-            >{{ $t("ETFPreliminaryLumpSum.price") }}</TableHead
-          >
+          <TableHead class="table-head-cell w-40">{{
+            $t("ETFPreliminaryLumpSum.price")
+          }}</TableHead>
           <TableCell class="text-right"
             ><SpanAmount :amount="mep.amountPerPiece" :decimal-places="8"
           /></TableCell>
@@ -17,7 +16,7 @@
 </template>
 
 <script lang="ts" setup>
-import SpanAmount from "@/components/SpanAmount.vue";
+import SpanAmount from "@/components/common/SpanAmount.vue";
 import {
   Table,
   TableBody,

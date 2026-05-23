@@ -36,7 +36,7 @@
                 :data-testid="`contractpartner-mobile-edit-${mcp.id}`"
                 @click.stop="editContractpartner(mcp)"
               >
-                <Pencil class="h-4 w-4" />
+                <Pencil class="icon-small" />
               </Button>
               <Button
                 variant="ghost"
@@ -44,7 +44,7 @@
                 :data-testid="`contractpartner-mobile-delete-${mcp.id}`"
                 @click.stop="deleteContractpartner(mcp)"
               >
-                <Trash2 class="h-4 w-4" />
+                <Trash2 class="icon-small" />
               </Button>
               <Button
                 variant="ghost"
@@ -52,7 +52,7 @@
                 :data-testid="`contractpartner-mobile-accounts-${mcp.id}`"
                 @click.stop="listContractpartnerAccounts(mcp)"
               >
-                <Banknote class="h-4 w-4" />
+                <Banknote class="icon-small" />
               </Button>
             </div>
           </div>
@@ -94,7 +94,7 @@
 </template>
 
 <script lang="ts" setup>
-import SpanDate from "@/components/SpanDate.vue";
+import SpanDate from "@/components/common/SpanDate.vue";
 import {
   Accordion,
   AccordionContent,

@@ -24,9 +24,9 @@
 <script lang="ts" setup>
 import { computed, ref, useTemplateRef } from "vue";
 
-import ModalDelete from "@/components/ModalDelete.vue";
-import ModalDeleteRow from "@/components/ModalDeleteRow.vue";
-import SpanAmount from "@/components/SpanAmount.vue";
+import ModalDelete from "@/components/common/ModalDelete.vue";
+import ModalDeleteRow from "@/components/common/ModalDeleteRow.vue";
+import SpanAmount from "@/components/common/SpanAmount.vue";
 
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 
