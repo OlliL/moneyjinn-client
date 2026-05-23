@@ -5,15 +5,15 @@
     class="max-w-full h-auto rounded-sm"
     alt="receipt"
   />
-  <SpanPdf :receipt-base64="receipt.receipt" v-if="isPdf" />
+  <span-pdf :receipt-base64="receipt.receipt" v-if="isPdf" />
 </template>
 
 <script lang="ts" setup>
 import type { MoneyflowReceipt } from "@/model/moneyflow/MoneyflowReceipt";
 import { MoneyflowReceiptType } from "@/model/moneyflow/MoneyflowReceiptType";
-import { computed, type PropType } from "vue";
-import SpanPdf from "./SpanPdf.vue";
+import { computed, defineAsyncComponent, type PropType } from "vue";
 
+const spanPdf = defineAsyncComponent(() => import("./SpanPdf.vue"));
 const props = defineProps({
   receipt: {
     type: Object as PropType<MoneyflowReceipt>,

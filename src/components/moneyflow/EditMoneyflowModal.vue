@@ -67,7 +67,7 @@ import { Button } from "@/components/ui/button";
 import type { ImportedMoneyflowReceipt } from "@/model/moneyflow/ImportedMoneyflowReceipt";
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 import type { MoneyflowReceipt } from "@/model/moneyflow/MoneyflowReceipt";
-import { MoneyflowReceiptType } from "@/model/moneyflow/MoneyflowReceiptType";
+import { mapImportedMoneyflowReceiptToMoneyflowReceipt } from "@/service/mapper/ImportedToMoneyflowReceiptMapper";
 import MoneyflowReceiptService from "@/service/MoneyflowReceiptService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { Save, Trash2, Undo2 } from "lucide-vue-next";
@@ -99,11 +99,13 @@ const modalWidth = computed(() => {
     ? "md:max-w-full w-full mx-auto"
     : "md:max-w-2xl lg:max-w-7xl w-full mx-auto";
 });
-const _show = (_mmf: Moneyflow, receipt?: ImportedMoneyflowReceipt) => {
+const _show = (_mmf: Moneyflow, importedReceipt?: ImportedMoneyflowReceipt) => {
   mmf.value = _mmf;
 
   if (mmf.value.hasReceipt) loadReceipt(mmf.value.id);
-  else if (receipt) processImportedReceipt(receipt);
+  else if (importedReceipt)
+    receipt.value =
+      mapImportedMoneyflowReceiptToMoneyflowReceipt(importedReceipt);
 
   modalComponent.value?._show();
   Object.keys(values).forEach((field) => setFieldTouched(field, false));
@@ -135,23 +137,6 @@ const loadReceipt = (id: number) => {
     .catch((backendError) => {
       handleBackendError(backendError, serverErrors);
     });
-};
-
-const processImportedReceipt = (importedReceipt: ImportedMoneyflowReceipt) => {
-  let mediaType = MoneyflowReceiptType.UNKNOWN;
-  switch (importedReceipt.mediaType) {
-    case "image/jpeg":
-      mediaType = MoneyflowReceiptType.JPEG;
-      break;
-    case "application/pdf":
-      mediaType = MoneyflowReceiptType.PDF;
-      break;
-  }
-  receipt.value = {
-    moneyflowId: -1,
-    receipt: importedReceipt.receipt,
-    receiptType: mediaType,
-  };
 };
 
 const deleteMoneyflowReceipt = () => {

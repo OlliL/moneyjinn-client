@@ -11,15 +11,9 @@
         <div class="flex gap-4">
           <div
             class="w-1/3 overflow-x-scroll whitespace-nowrap h-[600px] max-w-120"
-            v-if="receiptBase64"
+            v-if="mmf.hasReceipt"
           >
-            <img
-              v-if="isJpeg"
-              :src="`data:image/png;base64,${receiptBase64}`"
-              class="max-w-full h-auto rounded-sm"
-              alt="receipt"
-            />
-            <SpanPdf :receipt-base64="receiptBase64" v-if="isPdf" />
+            <SpanReceipt :receipt="receipt" />
           </div>
           <div class="flex-1">
             <div class="flex flex-col rounded-md border">
@@ -126,12 +120,6 @@
 </template>
 
 <script lang="ts" setup>
-import { useForm } from "vee-validate";
-import { computed, ref, useTemplateRef } from "vue";
-
-import DivError from "../common/DivError.vue";
-import ModalVue from "../common/Modal.vue";
-
 import {
   Table,
   TableBody,
@@ -140,30 +128,29 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
-import { MoneyflowReceiptType } from "@/model/moneyflow/MoneyflowReceiptType";
-
+import type { MoneyflowReceipt } from "@/model/moneyflow/MoneyflowReceipt";
 import MoneyflowReceiptService from "@/service/MoneyflowReceiptService";
+import { handleBackendError } from "@/tools/views/HandleBackendError";
+import { useForm } from "vee-validate";
+import { computed, ref, useTemplateRef } from "vue";
+import DivError from "../common/DivError.vue";
+import ModalVue from "../common/Modal.vue";
 import SpanAmount from "../common/SpanAmount.vue";
 import SpanDate from "../common/SpanDate.vue";
-import SpanPdf from "../common/SpanPdf.vue";
+import SpanReceipt from "../common/SpanReceipt.vue";
 
 const serverErrors = ref(new Array<string>());
-
 const mmf = ref({} as Moneyflow);
 const modalComponent = useTemplateRef<typeof ModalVue>("modalComponent");
-
-const receiptBase64 = ref("");
-const isJpeg = ref(false);
-const isPdf = ref(false);
+const receipt = ref({} as MoneyflowReceipt);
 
 const emit = defineEmits(["moneyflowUpdated", "moneyflowReceiptDeleted"]);
 
-const { handleSubmit, values, setFieldTouched } = useForm();
+const { values, setFieldTouched } = useForm();
 
 const modalWidth = computed(() => {
-  return receiptBase64.value
+  return mmf.value.hasReceipt
     ? "md:max-w-full w-full mx-auto"
     : "md:max-w-2xl lg:max-w-7xl w-full mx-auto";
 });
@@ -177,27 +164,16 @@ const rowspan = computed(() => {
 
 const _show = (_mmf: Moneyflow) => {
   mmf.value = _mmf;
-
-  receiptBase64.value = "";
-  isJpeg.value = false;
-  isPdf.value = false;
-
   if (mmf.value.hasReceipt) loadReceipt(mmf.value.id);
-
   modalComponent.value?._show();
   Object.keys(values).forEach((field) => setFieldTouched(field, false));
 };
 
 const loadReceipt = (id: number) => {
-  MoneyflowReceiptService.fetchReceipt(id).then((response) => {
-    processReceipt(response.receiptType, response.receipt);
-  });
+  MoneyflowReceiptService.fetchReceipt(id)
+    .then((response) => (receipt.value = response))
+    .catch((backendError) => handleBackendError(backendError, serverErrors));
 };
 
-const processReceipt = (receiptType: MoneyflowReceiptType, receipt: string) => {
-  receiptBase64.value = receipt;
-  isJpeg.value = receiptType === MoneyflowReceiptType.JPEG;
-  isPdf.value = receiptType === MoneyflowReceiptType.PDF;
-};
 defineExpose({ _show });
 </script>
