@@ -20,18 +20,20 @@
           :data-testid="`etf-mobile-row-${etf.id}`"
           class="border rounded-lg bg-background shadow-sm px-3 py-2"
         >
-          <AccordionTrigger class="hover:no-underline">
+          <AccordionTrigger class="hover:no-underline w-full min-w-0">
             <div
               :data-testid="`etf-mobile-trigger-${etf.id}`"
-              class="flex items-center justify-between w-full gap-2"
+              class="grid grid-cols-[1fr_auto] items-center w-full gap-2"
             >
-              <div class="flex flex-col items-start text-left min-w-0">
-                <span class="font-bold text-sm truncate">{{ etf.name }}</span>
+              <div class="flex flex-col items-start text-left overflow-hidden">
+                <span class="font-bold text-sm truncate w-full">{{
+                  etf.name
+                }}</span>
                 <span class="text-xs text-muted-foreground">{{
                   etf.isin
                 }}</span>
               </div>
-              <div class="flex items-center gap-1 pr-2">
+              <div class="flex items-center gap-1 pr-2 shrink-0">
                 <Star
                   v-if="etf.isFavorite"
                   class="icon-small fill-primary text-primary"

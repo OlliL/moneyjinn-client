@@ -1,5 +1,7 @@
 <template>
-  <span data-testid="dateSpan">{{ fullDateString }}</span>
+  <span data-testid="dateSpan" class="truncate min-w-0">{{
+    fullDateString
+  }}</span>
 </template>
 
 <script lang="ts" setup>

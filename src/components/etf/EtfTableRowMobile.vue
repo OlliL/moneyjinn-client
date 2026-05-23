@@ -2,16 +2,15 @@
   <AccordionItem
     :value="String(etfId)"
     :data-testid="`report-etf-mobile-item-${etfId}`"
+    class="border rounded-lg bg-background shadow-sm px-3 py-2"
   >
-    <AccordionTrigger class="hover:no-underline py-3 px-2">
+    <AccordionTrigger class="hover:no-underline w-full min-w-0">
       <div
         :data-testid="`report-etf-mobile-trigger-${etfId}`"
-        class="flex justify-between items-center w-full pr-4 text-left"
+        class="grid grid-cols-[1fr_auto] items-center w-full gap-2"
       >
-        <div class="flex flex-col items-start gap-1">
-          <span class="font-bold text-sm truncate max-w-[230px]">{{
-            name
-          }}</span>
+        <div class="flex flex-col items-start text-left overflow-hidden">
+          <span class="font-bold text-sm truncate w-full">{{ name }}</span>
           <span class="text-xs text-muted-foreground"
             >{{ etfFlowAmountSumString }} {{ $t("ETFFlow.shares") }}</span
           >
