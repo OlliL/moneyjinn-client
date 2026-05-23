@@ -11,13 +11,13 @@
         :data-testid="`user-mobile-row-${user.id}`"
         class="border rounded-lg bg-background shadow-sm px-3 py-2"
       >
-        <AccordionTrigger
-          :data-testid="`user-mobile-trigger-${user.id}`"
-          class="hover:no-underline"
-        >
-          <div class="flex items-center justify-between w-full gap-2">
-            <div class="flex flex-col items-start text-left min-w-0">
-              <span class="font-bold text-sm truncate">{{
+        <AccordionTrigger class="hover:no-underline w-full min-w-0">
+          <div
+            :data-testid="`user-mobile-trigger-${user.id}`"
+            class="grid grid-cols-[1fr_auto] items-center w-full gap-2"
+          >
+            <div class="flex flex-col items-start text-left overflow-hidden">
+              <span class="font-bold text-sm truncate w-full">{{
                 user.userName
               }}</span>
               <span class="text-xs text-muted-foreground">{{

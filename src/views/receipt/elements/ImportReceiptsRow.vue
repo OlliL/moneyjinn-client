@@ -11,27 +11,13 @@
           >
             <div
               class="bg-background/60 p-2 rounded border border-border/40 backdrop-blur-sm w-full flex justify-center items-start h-[calc(100vh-420px)] max-h-[520px]"
-              :class="isPdf ? 'overflow-hidden' : 'overflow-y-auto'"
+              :class="
+                moneyflowReceipt.receiptType === MoneyflowReceiptType.PDF
+                  ? 'overflow-hidden'
+                  : 'overflow-y-auto'
+              "
             >
-              <span data-testid="importReceipts-row-filename">{{
-                receipt.filename
-              }}</span>
-              <img
-                v-if="isJpeg"
-                :src="`data:image/png;base64,${receipt.receipt}`"
-                class="max-w-full h-auto rounded-sm"
-                alt="receipt"
-              />
-
-              <object
-                class="h-full w-full min-h-[320px] block rounded-sm"
-                v-if="isPdf"
-                id="pdf"
-                :data="`data:application/pdf;base64,${receipt.receipt}`"
-                type="application/pdf"
-              >
-                receipt
-              </object>
+              <SpanReceipt :receipt="moneyflowReceipt" />
             </div>
           </div>
 
@@ -119,7 +105,7 @@
                       </TableHeader>
                       <TableBody>
                         <ImportReceiptSearchRowVue
-                          v-for="(moneyflow, index) in moneyflows"
+                          v-for="moneyflow in moneyflows"
                           v-model="selectedMoneyflowId"
                           :key="moneyflow.id"
                           :mmf="moneyflow"
@@ -179,6 +165,7 @@ import ButtonSubmit from "@/components/common/ButtonSubmit.vue";
 import DivError from "@/components/common/DivError.vue";
 import InputDate from "@/components/common/InputDate.vue";
 import InputStandard from "@/components/common/InputStandard.vue";
+import SpanReceipt from "@/components/common/SpanReceipt.vue";
 import { Button } from "@/components/ui/button";
 import { RadioGroup } from "@/components/ui/radio-group";
 import {
@@ -190,7 +177,9 @@ import {
 } from "@/components/ui/table";
 import type { ImportedMoneyflowReceipt } from "@/model/moneyflow/ImportedMoneyflowReceipt";
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
+import { MoneyflowReceiptType } from "@/model/moneyflow/MoneyflowReceiptType";
 import ImportedMoneyflowReceiptService from "@/service/ImportedMoneyflowReceiptService";
+import { mapImportedMoneyflowReceiptToMoneyflowReceipt } from "@/service/mapper/ImportedToMoneyflowReceiptMapper";
 import MoneyflowService from "@/service/MoneyflowService";
 import { toFixed } from "@/tools/math";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
@@ -234,6 +223,9 @@ const props = defineProps({
 });
 
 const { handleSubmit } = useForm();
+const moneyflowReceipt = computed(() =>
+  mapImportedMoneyflowReceiptToMoneyflowReceipt(props.receipt),
+);
 
 const emitDeleteMoneyflow = (id: number) => {
   emit("deleteMoneyflow", id);
@@ -285,12 +277,6 @@ onMounted(() => {
   }
 });
 
-const isJpeg = computed(() => {
-  return props.receipt.mediaType === "image/jpeg";
-});
-const isPdf = computed(() => {
-  return props.receipt.mediaType === "application/pdf";
-});
 const moneyflowSelected = computed(() => {
   return selectedMoneyflowId.value > 0;
 });

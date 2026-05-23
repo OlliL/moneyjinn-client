@@ -5,7 +5,7 @@
         <Accordion
           type="single"
           collapsible
-          class="w-full border rounded-md bg-background"
+          class="w-full rounded-md bg-background space-y-3"
         >
           <CapitalsourceTableMobileRow
             v-for="data in capitalsourceData"

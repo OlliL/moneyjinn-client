@@ -28,7 +28,10 @@
         </Button>
       </SheetTrigger>
       <SheetContent side="right" class="w-[300px] sm:w-[400px] overflow-y-auto">
-        <SheetHeader> </SheetHeader>
+        <SheetHeader>
+          <SheetTitle class="hidden" />
+          <SheetDescription class="hidden" />
+        </SheetHeader>
         <div class="flex flex-col gap-2">
           <!-- Place your links here, vertically stacked -->
           <router-link
@@ -656,6 +659,8 @@ import {
   SheetHeader,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import SheetDescription from "@/components/ui/sheet/SheetDescription.vue";
+import SheetTitle from "@/components/ui/sheet/SheetTitle.vue";
 import { AxiosSingleton } from "@/config/AxiosSingleton";
 import { WebSocketSingleton } from "@/config/WebSocketSingleton";
 import router, { DropdownMenus, Routes } from "@/router";

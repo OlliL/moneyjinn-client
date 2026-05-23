@@ -18,13 +18,15 @@
         :data-testid="`capitalsource-mobile-row-${mcs.id}`"
         class="border rounded-lg bg-background shadow-sm px-3 py-2"
       >
-        <AccordionTrigger
-          :data-testid="`capitalsource-mobile-trigger-${mcs.id}`"
-          class="hover:no-underline"
-        >
-          <div class="flex items-center justify-between w-full gap-2">
-            <div class="flex flex-col items-start text-left min-w-0">
-              <span class="font-bold text-sm truncate">{{ mcs.comment }}</span>
+        <AccordionTrigger class="hover:no-underline w-full min-w-0">
+          <div
+            :data-testid="`capitalsource-mobile-trigger-${mcs.id}`"
+            class="grid grid-cols-[1fr_auto] items-center w-full gap-2"
+          >
+            <div class="flex flex-col items-start text-left overflow-hidden">
+              <span class="font-bold text-sm truncate w-full">{{
+                mcs.comment
+              }}</span>
               <span class="text-xs text-muted-foreground"
                 >{{ typeString(mcs) }} / {{ stateString(mcs) }}</span
               >

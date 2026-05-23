@@ -3,6 +3,15 @@
     data-testid="etf-depot-mobile-accordion"
     class="md:hidden w-full max-w-md mx-auto px-2 mb-6 space-y-3"
   >
+    <div
+      class="p-2 bg-muted/60 text-xs rounded-md text-center text-muted-foreground font-medium"
+    >
+      {{
+        isEffectiveOnly
+          ? $t("ETFFlow.effectiveTransactions")
+          : $t("ETFFlow.overallTransactions")
+      }}
+    </div>
     <Accordion type="multiple" class="space-y-2">
       <AccordionItem
         v-for="flow in flows"
@@ -67,7 +76,7 @@
               }}</span>
               <SpanAmount :amount="flow.price" :decimal-places="3" />
             </div>
-            <div v-if="showLumpSum" class="flex justify-between gap-2">
+            <div v-if="isEffectiveOnly" class="flex justify-between gap-2">
               <span class="text-muted-foreground">{{
                 $t("ETFFlow.preliminaryLumpSum")
               }}</span>
@@ -107,7 +116,7 @@ const props = defineProps({
     type: Number,
     required: true,
   },
-  showLumpSum: {
+  isEffectiveOnly: {
     type: Boolean,
     required: true,
   },

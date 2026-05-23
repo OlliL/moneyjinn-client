@@ -378,8 +378,8 @@ import ButtonMobileCreate from "@/components/common/ButtonMobileCreate.vue";
 import ButtonMobileDelete from "@/components/common/ButtonMobileDelete.vue";
 import ButtonMobileEdit from "@/components/common/ButtonMobileEdit.vue";
 import DivError from "@/components/common/DivError.vue";
-import MonthYearMobileNavigator from "@/components/navigation/MonthYearMobileNavigator.vue";
 import SelectStandard from "@/components/common/SelectStandard.vue";
+import MonthYearMobileNavigator from "@/components/navigation/MonthYearMobileNavigator.vue";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -567,13 +567,6 @@ const selectCreateType = (type: EtfPreliminaryLumpSumType) => {
   createType.value = type;
   showTypeSelector.value = false;
   createSelectedPreliminaryLumpSum();
-};
-
-const updateCreateType = (value?: any) => {
-  if (!value) {
-    return;
-  }
-  createType.value = Number(value) as EtfPreliminaryLumpSumType;
 };
 
 const createSelectedPreliminaryLumpSum = () => {
