@@ -331,6 +331,8 @@
     "subbooking": "Unterbuchung",
     "subbookings": "Unterbuchungen",
     "remainder": "Rest",
+    "viewReceipt": "Bon ansehen",
+    "viewReceiptTip": "Tippen zum Vergrößern & Zoomen",
     "deleteReceipt": "Bon löschen",
     "noMatchingMoneyflow": "Keine passenden Geldbewegungen gefunden!",
     "apply": "Übernehmen",
