@@ -1,38 +1,51 @@
 <template>
-  <Dialog v-model:open="isOpen">
-    <DialogContent
+  <component :is="Modal.Root" v-model:open="isOpen">
+    <component
+      :is="Modal.Content"
       data-testid="app-modal"
       :class="[
-        props.maxWidth ? props.maxWidth : 'max-w-[calc(100%-2rem)] sm:max-w-lg',
-        'max-h-[90vh]',
-        'flex flex-col gap-6 p-6 overflow-visible',
+        props.maxWidth
+          ? props.maxWidth
+          : 'w-full max-w-full wd:max-w-[calc(100%-2rem)]',
+        'wd:max-h-[90vh]',
+        'flex flex-col gap-4 p-3 md:p-6 overflow-visible',
       ]"
       :style="{ zIndex: props.zIndex }"
     >
-      <DialogHeader class="space-y-1.5 text-left">
-        <DialogTitle class="text-lg font-semibold leading-none tracking-tight">
+      <component :is="Modal.Header" class="space-y-1.5 text-left p-0!">
+        <component
+          :is="Modal.Title"
+          class="text-lg font-semibold leading-none tracking-tight"
+        >
           {{ title }}
-        </DialogTitle>
-        <DialogDescription class="sr-only">{{ title }}</DialogDescription>
-      </DialogHeader>
+        </component>
+        <component :is="Modal.Description" class="sr-only">{{
+          title
+        }}</component>
+      </component>
 
       <div class="overflow-y-auto flex-1 pr-1">
         <slot name="body" />
       </div>
 
-      <DialogFooter
-        class="flex flex-row justify-end gap-2 pt-4 border-t border-border/40"
+      <component
+        :is="Modal.Footer"
+        class="flex flex-col-reverse md:flex-row md:justify-end gap-2 md:pt-4 border-t border-border/40 p-0!"
       >
-        <DialogClose as-child>
-          <Button type="button" variant="outline" class="button-with-icon px-4">
+        <component :is="Modal.Close" as-child>
+          <Button
+            type="button"
+            variant="outline"
+            class="button-with-icon w-full md:w-auto px-4"
+          >
             <X class="icon-small" />
             {{ $t("Modal.cancel") }}
           </Button>
-        </DialogClose>
+        </component>
         <slot name="footer" />
-      </DialogFooter>
-    </DialogContent>
-  </Dialog>
+      </component>
+    </component>
+  </component>
 </template>
 
 <script lang="ts" setup>
@@ -45,15 +58,40 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
+  DialogTrigger,
 } from "@/components/ui/dialog";
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer";
+import { isDesktop } from "@/tools/views/IsDesktop";
 import { X } from "lucide-vue-next";
-import { ref } from "vue";
+import { computed, ref } from "vue";
 
 const props = defineProps({
   title: { type: String, default: "" },
   maxWidth: { type: String, default: "" },
   zIndex: { type: String, default: "2000" },
 });
+
+const isDesktopConst = isDesktop();
+
+const Modal = computed(() => ({
+  Root: isDesktopConst.value ? Dialog : Drawer,
+  Trigger: isDesktopConst.value ? DialogTrigger : DrawerTrigger,
+  Content: isDesktopConst.value ? DialogContent : DrawerContent,
+  Header: isDesktopConst.value ? DialogHeader : DrawerHeader,
+  Title: isDesktopConst.value ? DialogTitle : DrawerTitle,
+  Description: isDesktopConst.value ? DialogDescription : DrawerDescription,
+  Footer: isDesktopConst.value ? DialogFooter : DrawerFooter,
+  Close: isDesktopConst.value ? DialogClose : DrawerClose,
+}));
 
 const isOpen = ref(false);
 

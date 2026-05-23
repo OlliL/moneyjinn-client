@@ -339,7 +339,7 @@
     "newBooking": "Neue Buchung",
     "reference": "Verwendungszweck",
     "equal": "gleich",
-    "caseSensitivity": "Groß-, Kleinschreibung beachten",
+    "caseSensitivity": "Groß-, Kleinschreibung",
     "regexp": "regulärer Ausdruck",
     "onlyNegative": "nur negative Beträge",
     "search": "Suchen",

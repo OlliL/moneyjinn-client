@@ -8,7 +8,7 @@
     ref="editModal"
     @moneyflow-updated="searchMoneyflows"
   />
-  <ListMoneyflowModal ref="listModal" />
+  <ListMoneyflowModalDesktop ref="listModal" />
 
   <div class="custom-container space-y-6">
     <div class="text-center">
@@ -19,8 +19,11 @@
         <form @submit.prevent="searchMoneyflows" id="searchMoneyflowsForm">
           <div class="space-y-4">
             <DivError :server-errors="serverErrors" />
-            <div class="grid gap-3 md:grid-cols-12">
-              <div class="md:col-span-2">
+
+            <div
+              class="grid grid-cols-2 gap-3 md:grid-cols-24 items-start text-left"
+            >
+              <div class="col-span-1 md:col-span-3">
                 <InputDate
                   v-model="startDate"
                   :validation-schema="schema.startDate"
@@ -28,7 +31,7 @@
                   :field-label="$t('General.startDate')"
                 />
               </div>
-              <div class="md:col-span-2">
+              <div class="col-span-1 md:col-span-3">
                 <InputDate
                   v-model="endDate"
                   :validation-schema="schema.endDate"
@@ -36,25 +39,7 @@
                   :field-label="$t('General.endDate')"
                 />
               </div>
-              <div class="md:col-span-4">
-                <SelectContractpartner
-                  v-model="contractpartnerId"
-                  :validation-schema-ref="schema.searchCriteria"
-                  id-suffix="SearchMoneyflows"
-                  :field-label="$t('General.contractpartner')"
-                />
-              </div>
-              <div class="md:col-span-4">
-                <SelectPostingAccount
-                  v-model="postingAccountId"
-                  :validation-schema-ref="schema.searchCriteria"
-                  id-suffix="SearchMoneyflows"
-                  :field-label="$t('General.postingAccount')"
-                />
-              </div>
-            </div>
-            <div class="grid gap-3 md:grid-cols-12 items-start">
-              <div class="md:col-span-4">
+              <div class="col-span-2 md:col-span-6">
                 <InputStandard
                   v-model="comment"
                   :validation-schema-ref="schema.searchCriteria"
@@ -63,91 +48,165 @@
                   :focus="true"
                 />
               </div>
-              <div class="md:col-span-1 flex items-start gap-2 text-left mt-7">
-                <Checkbox
-                  id="featureEqual"
-                  class="bg-background"
-                  v-model:checked="featureEqual"
+              <div class="col-span-2 md:col-span-6">
+                <SelectContractpartner
+                  v-model="contractpartnerId"
+                  :validation-schema-ref="schema.searchCriteria"
+                  id-suffix="SearchMoneyflows"
+                  :field-label="$t('General.contractpartner')"
                 />
-                <Label for="featureEqual" class="cursor-pointer">
-                  {{ $t("Moneyflow.equal") }}
-                </Label>
               </div>
-              <div class="md:col-span-3 flex items-start gap-2 text-left mt-7">
-                <Checkbox
-                  id="featureCaseSensitive"
-                  class="bg-background"
-                  v-model:checked="featureCaseSensitive"
+              <div class="col-span-2 md:col-span-6">
+                <SelectPostingAccount
+                  v-model="postingAccountId"
+                  :validation-schema-ref="schema.searchCriteria"
+                  id-suffix="SearchMoneyflows"
+                  :field-label="$t('General.postingAccount')"
                 />
-                <Label for="featureCaseSensitive" class="cursor-pointer">
-                  {{ $t("Moneyflow.caseSensitivity") }}
-                </Label>
-              </div>
-              <div class="md:col-span-2 flex items-start gap-2 text-left mt-7">
-                <Checkbox
-                  id="featureRegexp"
-                  class="bg-background"
-                  v-model:checked="featureRegexp"
-                />
-                <Label for="featureRegexp" class="cursor-pointer">
-                  {{ $t("Moneyflow.regexp") }}
-                </Label>
-              </div>
-              <div class="md:col-span-2 flex items-start gap-2 text-left mt-7">
-                <Checkbox
-                  id="featureOnlyMinusAmounts"
-                  class="bg-background"
-                  v-model:checked="featureOnlyMinusAmounts"
-                />
-                <Label for="featureOnlyMinusAmounts" class="cursor-pointer">
-                  {{ $t("Moneyflow.onlyNegative") }}
-                </Label>
               </div>
             </div>
-            <div class="grid gap-3 md:grid-cols-12 items-end">
+
+            <div
+              @click="mobileOptionsOpen = !mobileOptionsOpen"
+              class="flex items-center justify-between p-3 cursor-pointer text-xs font-semibold text-muted-foreground md:hidden select-none border border-border rounded-xl bg-muted/20 hover:bg-muted/40 transition-colors"
+            >
+              <div class="flex items-center gap-2">
+                <SlidersHorizontal class="icon-small" />
+                <span>Anzeigeoptionen & Sortierung</span>
+              </div>
+              <ChevronDown
+                class="h-4 w-4 transition-transform duration-200"
+                :class="{ 'rotate-180': mobileOptionsOpen }"
+              />
+            </div>
+
+            <div
+              :class="{ block: mobileOptionsOpen, hidden: !mobileOptionsOpen }"
+              class="md:block text-left"
+            >
               <div
-                class="md:col-span-3 mx-auto flex items-center justify-center gap-2"
+                class="grid grid-cols-1 gap-4 md:grid-cols-24 items-end border border-border rounded-xl p-3 md:border-none md:p-0 bg-muted/10 md:bg-transparent"
               >
-                <ButtonSubmit
-                  :button-label="$t('Moneyflow.search')"
-                  form-id="searchMoneyflowsForm"
-                  test-id="search-moneyflows-submit"
-                  ><template #icon><Search class="icon-small" /></template
-                ></ButtonSubmit>
-                <Button
-                  type="button"
-                  variant="secondary"
-                  class="flex items-center gap-2 px-6"
-                  @click="resetForm"
+                <div class="hidden md:block md:col-span-6 space-y-3 w-full">
+                  <Button
+                    type="button"
+                    variant="secondary"
+                    class="flex items-center justify-center gap-2 w-full"
+                    @click="resetForm"
+                  >
+                    <Undo2 class="icon-small" />
+                    {{ $t("General.reset") }}
+                  </Button>
+                  <ButtonSubmit
+                    :button-label="$t('Moneyflow.search')"
+                    form-id="searchMoneyflowsForm"
+                    test-id="search-moneyflows-submit"
+                    class="flex w-full md:!w-full"
+                  >
+                    <template #icon><Search class="icon-small" /></template>
+                  </ButtonSubmit>
+                </div>
+
+                <div class="md:col-span-4">
+                  <SelectStandard
+                    v-model="groupByFirst"
+                    id="groupByFirst"
+                    :field-label="$t('Moneyflow.1stGroupingCriteria')"
+                    :select-box-values="groupValues"
+                  />
+                </div>
+
+                <div class="md:col-span-4">
+                  <SelectStandard
+                    v-model="groupBySecond"
+                    id="groupBySecond"
+                    :field-label="$t('Moneyflow.2ndGroupingCriteria')"
+                    :select-box-values="groupValues"
+                  />
+                </div>
+
+                <div class="md:col-span-4">
+                  <SelectStandard
+                    v-model="orderBy"
+                    id="orderBy"
+                    :field-label="$t('Moneyflow.orderBy')"
+                    :select-box-values="orderValues"
+                  />
+                </div>
+
+                <div
+                  class="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2.5 md:col-span-6 md:pb-1 text-xs"
                 >
-                  <Undo2 class="icon-small" />
-                  {{ $t("General.reset") }}
-                </Button>
+                  <div class="space-y-2.5">
+                    <div class="flex items-center gap-2">
+                      <Checkbox
+                        id="featureEqual"
+                        class="bg-background"
+                        v-model:checked="featureEqual"
+                      />
+                      <Label for="featureEqual" class="cursor-pointer">
+                        {{ $t("Moneyflow.equal") }}
+                      </Label>
+                    </div>
+                    <div class="flex items-center gap-2">
+                      <Checkbox
+                        id="featureCaseSensitive"
+                        class="bg-background"
+                        v-model:checked="featureCaseSensitive"
+                      />
+                      <Label for="featureCaseSensitive" class="cursor-pointer">
+                        {{ $t("Moneyflow.caseSensitivity") }}
+                      </Label>
+                    </div>
+                  </div>
+
+                  <div class="space-y-2.5">
+                    <div class="flex items-center gap-2">
+                      <Checkbox
+                        id="featureRegexp"
+                        class="bg-background"
+                        v-model:checked="featureRegexp"
+                      />
+                      <Label for="featureRegexp" class="cursor-pointer">
+                        {{ $t("Moneyflow.regexp") }}
+                      </Label>
+                    </div>
+                    <div class="flex items-center gap-2">
+                      <Checkbox
+                        id="featureOnlyMinusAmounts"
+                        class="bg-background"
+                        v-model:checked="featureOnlyMinusAmounts"
+                      />
+                      <Label
+                        for="featureOnlyMinusAmounts"
+                        class="cursor-pointer"
+                      >
+                        {{ $t("Moneyflow.onlyNegative") }}
+                      </Label>
+                    </div>
+                  </div>
+                </div>
               </div>
-              <div class="md:col-span-3">
-                <SelectStandard
-                  v-model="groupByFirst"
-                  id="groupByFirst"
-                  :field-label="$t('Moneyflow.1stGroupingCriteria')"
-                  :select-box-values="groupValues"
-                />
-              </div>
-              <div class="md:col-span-3">
-                <SelectStandard
-                  v-model="groupBySecond"
-                  id="groupBySecond"
-                  :field-label="$t('Moneyflow.2ndGroupingCriteria')"
-                  :select-box-values="groupValues"
-                />
-              </div>
-              <div class="md:col-span-3">
-                <SelectStandard
-                  v-model="orderBy"
-                  id="orderBy"
-                  :field-label="$t('Moneyflow.orderBy')"
-                  :select-box-values="orderValues"
-                />
-              </div>
+            </div>
+
+            <div class="grid grid-cols-1 gap-3 md:hidden pt-2">
+              <ButtonSubmit
+                :button-label="$t('Moneyflow.search')"
+                form-id="searchMoneyflowsForm"
+                test-id="search-moneyflows-mobile-submit"
+                class="flex w-full"
+              >
+                <template #icon><Search class="icon-small" /></template>
+              </ButtonSubmit>
+              <Button
+                type="button"
+                variant="secondary"
+                class="flex items-center justify-center gap-2 w-full"
+                @click="resetForm"
+              >
+                <Undo2 class="icon-small" />
+                {{ $t("General.reset") }}
+              </Button>
             </div>
           </div>
         </form>
@@ -240,7 +299,7 @@ import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 import type { MoneyflowSearchParams } from "@/model/moneyflow/MoneyflowSearchParams";
 import type { SelectBoxValue } from "@/model/SelectBoxValue";
 
-import ListMoneyflowModal from "@/components/moneyflow/ListMoneyflowModal.vue";
+import ListMoneyflowModalDesktop from "@/components/moneyflow/ListMoneyflowModalDesktop.vue";
 import ReceiptModal from "@/components/reports/ReceiptModal.vue";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -252,7 +311,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import MoneyflowService from "@/service/MoneyflowService";
-import { Search, Undo2 } from "lucide-vue-next";
+import { ChevronDown, Search, SlidersHorizontal, Undo2 } from "lucide-vue-next";
 
 const { t } = useI18n();
 
@@ -303,7 +362,8 @@ const receiptModal = useTemplateRef<typeof ReceiptModal>("receiptModal");
 const deleteModal =
   useTemplateRef<typeof DeleteMoneyflowModalVue>("deleteModal");
 const editModal = useTemplateRef<typeof EditMoneyflowModalVue>("editModal");
-const listModal = useTemplateRef<typeof ListMoneyflowModal>("listModal");
+const listModal = useTemplateRef<typeof ListMoneyflowModalDesktop>("listModal");
+const mobileOptionsOpen = ref(false);
 
 const schema = {
   startDate: date(globErr(t("General.validation.startDate"))),

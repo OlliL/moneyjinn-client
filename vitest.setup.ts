@@ -91,3 +91,18 @@ globalThis.ResizeObserver = class ResizeObserver implements ResizeObserver {
     // Mock disconnect method
   }
 };
+
+// for Modal.vue: force Dialog instead of Drawer because of timer issues in vitest
+Object.defineProperty(globalThis, "matchMedia", {
+  writable: true,
+  value: vi.fn().mockImplementation((query) => ({
+    matches: query.includes("min-width") || query.includes("640px"),
+    media: query,
+    onchange: null,
+    addListener: vi.fn(),
+    removeListener: vi.fn(),
+    addEventListener: vi.fn(),
+    removeEventListener: vi.fn(),
+    dispatchEvent: vi.fn(),
+  })),
+});

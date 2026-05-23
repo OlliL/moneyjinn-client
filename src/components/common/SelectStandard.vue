@@ -293,6 +293,10 @@ const onKeydownInput = async (event: KeyboardEvent) => {
     // Select first shown element from the Dropdown-Menu if the user presses ArrowDown in the input element
     event.preventDefault();
     getFirstDropdownAnchor()?.click();
+  } else if (event.key == "Escape") {
+    // Close Dropdown, pretend nothing happend....
+    event.preventDefault();
+    hideDropdown();
   } else if (event.key == "Tab") {
     // Select first shown element from the Dropdown-Menu if the user presses ArrowDown in the input element
     // For shift+tab just continue with regular event handler (focus previous element)

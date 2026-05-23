@@ -1,8 +1,8 @@
 <template>
   <DivError :server-errors="serverErrors" />
 
-  <div class="grid grid-cols-1 md:grid-cols-12 gap-4 mb-4">
-    <div class="md:col-span-2">
+  <div class="grid grid-cols-2 md:grid-cols-12 gap-4 mb-4">
+    <div class="col-span-1 md:col-span-2">
       <InputDate
         v-model="mmf.bookingDate"
         :validation-schema="schema.bookingDate"
@@ -10,7 +10,7 @@
         :field-label="$t('Moneyflow.bookingdate')"
       />
     </div>
-    <div class="md:col-span-2">
+    <div class="col-span-1 md:col-span-2">
       <InputDate
         v-model="mmf.invoiceDate"
         :validation-schema="schema.invoiceDate"
@@ -18,7 +18,7 @@
         :field-label="$t('Moneyflow.invoicedate')"
       />
     </div>
-    <div class="md:col-span-4">
+    <div class="col-span-2 md:col-span-4">
       <SelectContractpartner
         v-model="mmf.contractpartnerId"
         :validation-schema="schema.contractpartnerId"
@@ -27,7 +27,7 @@
         :validity-date="validityDate"
       />
     </div>
-    <div class="md:col-span-4">
+    <div class="col-span-2 md:col-span-4">
       <SelectCapitalsource
         v-model="mmf.capitalsourceId"
         :validation-schema="schema.capitalsourceId"
@@ -76,8 +76,8 @@
           />
         </div>
 
-        <div class="shrink-0">
-          <div class="grid gap-1.5 relative justify-items-start">
+        <div class="shrink-0 w-full md:w-auto">
+          <div class="grid gap-1.5 relative justify-items-start w-full">
             <Label
               for="toggles"
               class="text-left ml-1 text-sm font-medium text-foreground leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
@@ -85,10 +85,13 @@
               {{ $t("Moneyflow.options") }}
             </Label>
 
-            <div class="flex flex-wrap items-center gap-2 h-8" id="toggles">
+            <div
+              class="grid grid-cols-2 md:flex items-center gap-2 h-8 w-full md:w-auto"
+              id="toggles"
+            >
               <ToggleGroup
                 type="single"
-                class="border border-input bg-muted inline-flex h-8 rounded-md overflow-hidden p-0 items-stretch"
+                class="border border-input bg-muted inline-flex h-8 rounded-md overflow-hidden p-0 items-stretch w-full md:w-auto"
                 :model-value="mmf.private ? 'private' : 'public'"
                 @update:model-value="
                   (val: any) => val && (mmf.private = val === 'private')
@@ -96,13 +99,13 @@
               >
                 <ToggleGroupItem
                   value="public"
-                  class="text-xs font-medium h-full px-3 transition-all rounded-none data-[state=on]:bg-primary data-[state=on]:text-primary-foreground data-[state=on]:shadow-sm text-muted-foreground border-r border-input last:border-r-0"
+                  class="text-xs font-medium h-full px-3 flex-1 md:flex-initial transition-all rounded-none data-[state=on]:bg-primary data-[state=on]:text-primary-foreground data-[state=on]:shadow-sm text-muted-foreground border-r border-input last:border-r-0"
                 >
                   {{ $t("Moneyflow.public") }}
                 </ToggleGroupItem>
                 <ToggleGroupItem
                   value="private"
-                  class="text-xs font-medium h-full px-3 transition-all rounded-none data-[state=on]:bg-primary data-[state=on]:text-primary-foreground data-[state=on]:shadow-sm text-muted-foreground"
+                  class="text-xs font-medium h-full px-3 flex-1 md:flex-initial transition-all rounded-none data-[state=on]:bg-primary data-[state=on]:text-primary-foreground data-[state=on]:shadow-sm text-muted-foreground"
                 >
                   {{ $t("Moneyflow.private") }}
                 </ToggleGroupItem>
@@ -110,7 +113,7 @@
 
               <ToggleGroup
                 type="single"
-                class="border border-input bg-muted inline-flex h-8 rounded-md overflow-hidden p-0 items-stretch"
+                class="border border-input bg-muted inline-flex h-8 rounded-md overflow-hidden p-0 items-stretch w-full md:w-auto"
                 :model-value="saveAsPreDefMoneyflow ? 'favorite' : 'once'"
                 @update:model-value="
                   (val: any) =>
@@ -119,13 +122,13 @@
               >
                 <ToggleGroupItem
                   value="once"
-                  class="text-xs font-medium h-full px-3 transition-all rounded-none data-[state=on]:bg-primary data-[state=on]:text-primary-foreground data-[state=on]:shadow-sm text-muted-foreground border-r border-input last:border-r-0"
+                  class="text-xs font-medium h-full px-3 flex-1 md:flex-initial transition-all rounded-none data-[state=on]:bg-primary data-[state=on]:text-primary-foreground data-[state=on]:shadow-sm text-muted-foreground border-r border-input last:border-r-0"
                 >
                   {{ toggleTextOff }}
                 </ToggleGroupItem>
                 <ToggleGroupItem
                   value="favorite"
-                  class="text-xs font-medium h-full px-3 transition-all rounded-none data-[state=on]:bg-primary data-[state=on]:text-primary-foreground data-[state=on]:shadow-sm text-muted-foreground border-r border-input last:border-r-0"
+                  class="text-xs font-medium h-full px-3 flex-1 md:flex-initial transition-all rounded-none data-[state=on]:bg-primary data-[state=on]:text-primary-foreground data-[state=on]:shadow-sm text-muted-foreground border-r border-input last:border-r-0"
                 >
                   {{ toggleTextOn }}
                 </ToggleGroupItem>

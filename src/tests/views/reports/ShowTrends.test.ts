@@ -71,11 +71,11 @@ class ShowTrendsView {
   }
 
   static capitalsourceSelectedCount(selected: number, total: number): TextView {
-    return new TextView(`${selected} of ${total} selected`);
+    return new TextView(`${selected} of ${total} Selected`);
   }
 
   static etfSelectedCount(selected: number, total: number): TextView {
-    return new TextView(`${selected} of ${total} selected`);
+    return new TextView(`${selected} of ${total} Selected`);
   }
 }
 

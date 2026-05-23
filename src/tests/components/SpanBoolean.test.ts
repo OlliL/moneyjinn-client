@@ -10,12 +10,12 @@ class SpanBooleanView {
 
 test("test true", async () => {
   render(SpanBoolean, { props: { value: true } });
-  await SpanBooleanView.Boolean.assertTextEquals("yes");
+  await SpanBooleanView.Boolean.assertTextEquals("Yes");
   await SpanBooleanView.Boolean.assertHasClass("text-green-600");
 });
 
 test("test false", async () => {
   render(SpanBoolean, { props: { value: false } });
-  await SpanBooleanView.Boolean.assertTextEquals("no");
+  await SpanBooleanView.Boolean.assertTextEquals("No");
   await SpanBooleanView.Boolean.assertHasClass("text-red-600");
 });

@@ -157,7 +157,7 @@
                 </span>
               </div>
               <span class="font-bold text-sm text-foreground truncate w-full">
-                {{ mmf.contractpartnerName || "-" }}
+                {{ mmf.contractpartnerName }}
               </span>
             </div>
 
