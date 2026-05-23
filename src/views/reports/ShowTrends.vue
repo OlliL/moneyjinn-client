@@ -7,7 +7,7 @@
 
     <div class="flex justify-center">
       <div
-        class="w-full max-w-3xl rounded-sm border bg-card text-card-foreground p-6"
+        class="w-full max-w-3xl rounded-sm border bg-card text-card-foreground bg-muted p-6"
       >
         <form @submit.prevent="showTrends">
           <div class="space-y-6">
@@ -100,10 +100,10 @@
                     <Command
                       data-testid="capitalsources-command"
                       :class="[
-                        'rounded-sm border border-input h-[180px] overflow-hidden flex flex-col transition-opacity bg-background',
+                        'rounded-sm border border-input h-[180px] overflow-hidden flex flex-col transition-opacity',
                         !capitalsourcesActive
                           ? 'opacity-40 pointer-events-none select-none bg-muted/30'
-                          : '',
+                          : 'bg-background',
                       ]"
                     >
                       <CommandInput
@@ -232,10 +232,10 @@
                     <Command
                       data-testid="etfs-command"
                       :class="[
-                        'rounded-sm border border-input h-[180px] overflow-hidden flex flex-col transition-opacity bg-background',
+                        'rounded-sm border border-input h-[180px] overflow-hidden flex flex-col transition-opacity',
                         !etfsActive
                           ? 'opacity-40 pointer-events-none select-none bg-muted/30'
-                          : '',
+                          : 'bg-background',
                       ]"
                     >
                       <CommandInput

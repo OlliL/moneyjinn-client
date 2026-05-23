@@ -31,15 +31,13 @@
     <div class="w-full max-w-md">
       <div class="px-15 md:px-0">
         <div
-          class="flex flex-col rounded-md border mb-4"
+          class="rounded-md border mb-4"
           v-if="monthlySettlementsNoCredit.length"
         >
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead
-                  class="w-2/3 font-bold border-r text-foreground text-center"
-                >
+                <TableHead class="w-2/3 font-bold border-r text-center">
                   {{ $t("General.capitalsource") }}
                 </TableHead>
                 <TableHead class="w-1/3 font-bold text-foreground text-center">
@@ -67,21 +65,16 @@
             </TableBody>
           </Table>
         </div>
-        <div
-          class="flex flex-col rounded-md border"
-          v-if="monthlySettlementsCredit.length"
-        >
+        <div class="rounded-md border" v-if="monthlySettlementsCredit.length">
           <Table>
             <TableHeader v-if="monthlySettlementsNoCredit.length">
               <TableRow>
-                <TableHead
-                  class="w-2/3 font-bold border-r text-foreground text-center"
-                  >{{ $t("General.capitalsource") }}</TableHead
-                >
-                <TableHead
-                  class="w-1/3 font-bold text-foreground text-center"
-                  >{{ $t("General.amount") }}</TableHead
-                >
+                <TableHead class="w-2/3 font-bold border-r text-center">{{
+                  $t("General.capitalsource")
+                }}</TableHead>
+                <TableHead class="w-1/3 font-bold text-center">{{
+                  $t("General.amount")
+                }}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>

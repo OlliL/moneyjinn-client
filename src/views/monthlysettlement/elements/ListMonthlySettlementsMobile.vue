@@ -1,16 +1,18 @@
 <template>
-  <ButtonMobileCreate
-    data-testid="monthly-settlement-mobile-new"
-    @click="emitCreate"
-  />
-  <ButtonMobileDelete
-    data-testid="monthly-settlement-mobile-delete"
-    @click="emitDelete"
-  />
-  <ButtonMobileEdit
-    data-testid="monthly-settlement-mobile-edit"
-    @click="emitEdit"
-  />
+  <div>
+    <ButtonMobileCreate
+      data-testid="monthly-settlement-mobile-new"
+      @click="emitCreate"
+    />
+    <ButtonMobileDelete
+      data-testid="monthly-settlement-mobile-delete"
+      @click="emitDelete"
+    />
+    <ButtonMobileEdit
+      data-testid="monthly-settlement-mobile-edit"
+      @click="emitEdit"
+    />
+  </div>
 
   <MonthYearMobileNavigator
     :data-loaded="dataLoaded"
