@@ -18,12 +18,16 @@
         :data-testid="`posting-account-mobile-row-${mpa.id}`"
         class="border rounded-lg bg-background shadow-sm px-3 py-2"
       >
-        <AccordionTrigger
-          :data-testid="`posting-account-mobile-trigger-${mpa.id}`"
-          class="hover:no-underline"
-        >
-          <div class="flex items-center justify-between w-full gap-2">
-            <span class="font-bold text-sm truncate">{{ mpa.name }}</span>
+        <AccordionTrigger class="hover:no-underline w-full min-w-0">
+          <div
+            :data-testid="`posting-account-mobile-trigger-${mpa.id}`"
+            class="grid grid-cols-[1fr_auto] items-center w-full gap-2"
+          >
+            <div class="flex flex-col items-start text-left overflow-hidden">
+              <span class="font-bold text-sm truncate w-full">{{
+                mpa.name
+              }}</span>
+            </div>
             <div class="flex items-center gap-1 pr-2">
               <Button
                 variant="ghost"
