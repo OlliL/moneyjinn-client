@@ -35,36 +35,30 @@
                 <Table>
                   <TableHeader>
                     <TableRow>
+                      <TableHead class="table-head-cell">{{
+                        $t("Moneyflow.bookingdate")
+                      }}</TableHead>
+                      <TableHead class="table-head-cell">{{
+                        $t("Moneyflow.invoicedate")
+                      }}</TableHead>
                       <TableHead
-                        class="font-bold border text-foreground text-center"
-                        >{{ $t("Moneyflow.bookingdate") }}</TableHead
-                      >
-                      <TableHead
-                        class="font-bold border text-foreground text-center"
-                        >{{ $t("Moneyflow.invoicedate") }}</TableHead
-                      >
-                      <TableHead
-                        class="font-bold border text-foreground text-center"
+                        class="table-head-cell"
                         :colspan="rowspan > 1 ? 2 : 1"
                       >
                         {{ $t("General.amount") }}
                       </TableHead>
-                      <TableHead
-                        class="font-bold border text-foreground text-center"
-                        >{{ $t("General.contractpartner") }}</TableHead
-                      >
-                      <TableHead
-                        class="font-bold border text-foreground text-center"
-                        >{{ $t("General.comment") }}</TableHead
-                      >
-                      <TableHead
-                        class="font-bold border text-foreground text-center"
-                        >{{ $t("General.postingAccount") }}</TableHead
-                      >
-                      <TableHead
-                        class="font-bold border text-foreground text-center"
-                        >{{ $t("General.capitalsource") }}</TableHead
-                      >
+                      <TableHead class="table-head-cell">{{
+                        $t("General.contractpartner")
+                      }}</TableHead>
+                      <TableHead class="table-head-cell">{{
+                        $t("General.comment")
+                      }}</TableHead>
+                      <TableHead class="table-head-cell">{{
+                        $t("General.postingAccount")
+                      }}</TableHead>
+                      <TableHead class="table-head-cell">{{
+                        $t("General.capitalsource")
+                      }}</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>

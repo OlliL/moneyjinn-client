@@ -1,5 +1,5 @@
 <template>
-  <TableRow class="">
+  <TableRow>
     <TableCell class="text-left border-r">
       {{ capitalsourceTypeString }}
     </TableCell>

@@ -7,7 +7,9 @@
   >
     <template #body>
       <div class="space-y-4">
-        <div class="modal-detail-card">
+        <div
+          class="icon-smallflex flex-col rounded-xl border bg-card overflow-hidden"
+        >
           <Table>
             <TableBody>
               <ModalDeleteRow :label="$t('General.etf')">

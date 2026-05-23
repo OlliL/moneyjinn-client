@@ -8,7 +8,9 @@
     <template #body>
       <DivError :server-errors="serverErrors" />
       <slot name="body">
-        <div class="modal-detail-card">
+        <div
+          class="icon-smallflex flex-col rounded-xl border bg-card overflow-hidden"
+        >
           <Table>
             <TableBody>
               <slot name="details" />

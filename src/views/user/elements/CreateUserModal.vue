@@ -112,18 +112,15 @@
                     <Table>
                       <TableHeader>
                         <TableRow>
-                          <TableHead
-                            class="font-bold border text-foreground text-center"
-                            >{{ $t("General.group") }}</TableHead
-                          >
-                          <TableHead
-                            class="font-bold border text-foreground text-center"
-                            >{{ $t("General.validFrom") }}</TableHead
-                          >
-                          <TableHead
-                            class="font-bold border text-foreground text-center"
-                            >{{ $t("General.validTil") }}</TableHead
-                          >
+                          <TableHead class="table-head-cell">{{
+                            $t("General.group")
+                          }}</TableHead>
+                          <TableHead class="table-head-cell">{{
+                            $t("General.validFrom")
+                          }}</TableHead>
+                          <TableHead class="table-head-cell">{{
+                            $t("General.validTil")
+                          }}</TableHead>
                         </TableRow>
                       </TableHeader>
                       <TableBody>

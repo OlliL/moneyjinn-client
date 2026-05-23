@@ -3,10 +3,9 @@
     <Table>
       <TableBody>
         <TableRow>
-          <TableHead
-            class="font-bold border-r text-foreground text-center w-40"
-            >{{ $t("ETFPreliminaryLumpSum.yearlySum") }}</TableHead
-          >
+          <TableHead class="table-head-cell w-40">{{
+            $t("ETFPreliminaryLumpSum.yearlySum")
+          }}</TableHead>
           <TableCell class="text-right"
             ><SpanAmount :amount="mep.amountDecember" :decimal-places="2"
           /></TableCell>

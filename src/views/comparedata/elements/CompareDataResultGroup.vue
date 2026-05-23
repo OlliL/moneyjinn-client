@@ -29,54 +29,36 @@
           <Table class="w-full [&_td]:py-0.5! [&_th]:py-1!">
             <TableHeader>
               <TableRow>
-                <TableHead
-                  class="table-head-cell w-[120px]"
-                >
+                <TableHead class="table-head-cell w-[120px]">
                   <span class="sr-only">Status</span>
                 </TableHead>
 
-                <TableHead
-                  class="table-head-cell w-[140px]"
-                >
+                <TableHead class="table-head-cell w-[140px]">
                   {{ $t("Moneyflow.bookingdate") }}
                 </TableHead>
-                <TableHead
-                  class="table-head-cell w-[140px]"
-                >
+                <TableHead class="table-head-cell w-[140px]">
                   {{ $t("Moneyflow.invoicedate") }}
                 </TableHead>
 
-                <TableHead
-                  class="table-head-cell w-25"
-                >
+                <TableHead class="table-head-cell w-25">
                   {{ $t("General.amount") }}
                 </TableHead>
 
-                <TableHead
-                  class="table-head-cell w-[20%]"
-                >
+                <TableHead class="table-head-cell w-[20%]">
                   {{ $t("General.contractpartner") }}
                 </TableHead>
-                <TableHead
-                  class="table-head-cell w-[30%]"
-                >
+                <TableHead class="table-head-cell w-[30%]">
                   {{ $t("General.comment") }}
                 </TableHead>
 
-                <TableHead
-                  class="table-head-cell w-45"
-                >
+                <TableHead class="table-head-cell w-45">
                   {{ $t("General.capitalsource") }}
                 </TableHead>
 
-                <TableHead
-                  class="table-head-cell w-11.25"
-                >
+                <TableHead class="table-head-cell w-11.25">
                   <span class="sr-only">Edit</span>
                 </TableHead>
-                <TableHead
-                  class="table-head-cell w-11.25"
-                >
+                <TableHead class="table-head-cell w-11.25">
                   <span class="sr-only">Delete</span>
                 </TableHead>
               </TableRow>

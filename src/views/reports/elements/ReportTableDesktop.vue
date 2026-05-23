@@ -4,8 +4,8 @@
       <Table class="w-full text-xs md:text-sm">
         <TableHeader>
           <TableRow>
-            <TableHead class="hidden md:table-cell align-top"></TableHead>
-            <TableHead class="border-r text-foreground text-center align-top">
+            <TableHead class="align-top"></TableHead>
+            <TableHead class="table-head-cell align-top">
               <span
                 class="hidden md:block items-center justify-center mt-1 font-bold"
                 >{{ $t("Moneyflow.bookingdate") }}
@@ -27,12 +27,8 @@
                 />
               </span>
             </TableHead>
-            <TableHead
-              class="border-r text-foreground text-center align-top hidden md:table-cell"
-            >
-              <span
-                class="hidden md:flex items-center justify-center gap-1 mt-1 font-bold"
-              >
+            <TableHead class="table-head-cell align-top">
+              <span class="items-center justify-center gap-1 mt-1 font-bold">
                 {{ $t("Moneyflow.invoicedate") }}
                 <component
                   :is="sortIcon('invoiceDate')"
@@ -43,13 +39,8 @@
                 />
               </span>
             </TableHead>
-            <TableHead
-              class="border-r text-foreground text-center align-top"
-              colspan="2"
-            >
-              <span
-                class="hidden md:flex items-center justify-center gap-1 mt-1 font-bold"
-              >
+            <TableHead class="table-head-cell align-top" colspan="2">
+              <span class="items-center justify-center gap-1 mt-1 font-bold">
                 {{ $t("General.amount") }}
                 <component
                   :is="sortIcon('amount')"
@@ -70,12 +61,8 @@
                 />
               </span>
             </TableHead>
-            <TableHead
-              class="border-r text-foreground text-center align-top hidden md:table-cell"
-            >
-              <span
-                class="hidden md:flex items-center justify-center gap-1 mt-1 font-bold"
-              >
+            <TableHead class="table-head-cell align-top">
+              <span class="items-center justify-center gap-1 mt-1 font-bold">
                 {{ $t("General.contractpartner") }}
                 <component
                   :is="sortIcon('contractpartnerName')"
@@ -106,11 +93,9 @@
                 </Button>
               </div>
             </TableHead>
-            <TableHead class="border-r text-foreground text-center align-top">
+            <TableHead class="table-head-cell align-top">
               <div class="hidden md:block">
-                <span
-                  class="hidden md:flex items-center justify-center gap-1 mt-1 font-bold"
-                >
+                <span class="items-center justify-center gap-1 mt-1 font-bold">
                   {{ $t("General.comment") }}
                   <component
                     :is="sortIcon('comment')"
@@ -153,12 +138,8 @@
               </span>
             </TableHead>
 
-            <TableHead
-              class="border-r text-foreground text-center align-top hidden md:table-cell"
-            >
-              <span
-                class="hidden md:flex items-center justify-center gap-1 mt-1 font-bold"
-              >
+            <TableHead class="table-head-cell align-top">
+              <span class="items-center justify-center gap-1 mt-1 font-bold">
                 {{ $t("General.postingAccount") }}
                 <component
                   :is="sortIcon('postingAccountName')"
@@ -189,12 +170,8 @@
               </div>
             </TableHead>
 
-            <TableHead
-              class="border-r text-foreground text-center align-top hidden md:table-cell"
-            >
-              <span
-                class="hidden md:flex items-center justify-center gap-1 mt-1 font-bold"
-              >
+            <TableHead class="table-head-cell align-top">
+              <span class="items-center justify-center gap-1 mt-1 font-bold">
                 {{ $t("General.capitalsource") }}
                 <component
                   :is="sortIcon('capitalsourceComment')"

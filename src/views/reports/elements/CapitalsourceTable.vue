@@ -79,34 +79,22 @@
           <Table class="[&_tr:nth-child(even)]:bg-muted text-xs md:text-sm">
             <TableHeader>
               <TableRow>
-                <TableHead
-                  class="font-bold border-r text-foreground text-center hidden md:table-cell"
-                >
+                <TableHead class="table-head-cell hidden md:table-cell">
                   {{ $t("Capitalsource.type") }}
                 </TableHead>
-                <TableHead
-                  class="font-bold border-r text-foreground text-center hidden md:table-cell"
-                >
+                <TableHead class="table-head-cell hidden md:table-cell">
                   {{ $t("Capitalsource.state") }}
                 </TableHead>
-                <TableHead
-                  class="font-bold border-r text-foreground text-center"
-                  >{{ $t("General.comment") }}</TableHead
-                >
-                <TableHead
-                  class="font-bold border-r text-foreground text-center"
-                >
+                <TableHead class="table-head-cell">{{
+                  $t("General.comment")
+                }}</TableHead>
+                <TableHead class="table-head-cell">
                   {{ $t("Reports.beginOfMonth") }}
                 </TableHead>
-                <TableHead
-                  class="font-bold border-r text-foreground text-center"
-                  v-if="currentMonthIsSettled"
-                >
+                <TableHead class="table-head-cell" v-if="currentMonthIsSettled">
                   {{ $t("Reports.endOfMonthFixed") }}
                 </TableHead>
-                <TableHead
-                  class="font-bold border-r text-foreground text-center hidden md:table-cell"
-                >
+                <TableHead class="table-head-cell hidden md:table-cell">
                   {{ $t("Reports.endOfMonthCalculated") }}
                 </TableHead>
                 <TableHead

@@ -13,7 +13,7 @@
         @click="deleteMoneyflowSplitEntryRow"
         :data-testid="'splitEntryRowDeleteButton' + idSuffix"
       >
-        <Trash2 class="h-4 w-4" />
+        <Trash2 class="icon-small" />
       </Button>
 
       <div class="flex-1 w-full">
@@ -26,7 +26,7 @@
           :field-label="$t('General.amount')"
         >
           <template #icon>
-            <Euro class="h-4 w-4" />
+            <Euro class="icon-small" />
           </template>
         </InputStandard>
       </div>

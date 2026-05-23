@@ -1,6 +1,8 @@
 <template>
-  <TableRow class="modal-detail-row">
-    <TableCell class="modal-detail-label">
+  <TableRow class="hover:bg-transparent border-b last:border-0">
+    <TableCell
+      class="font-normal text-muted-foreground max-w-[11rem] w-44 pl-4 pr-2 py-3 whitespace-normal break-words"
+    >
       {{ label }}
     </TableCell>
     <TableCell :class="valueClassName">
@@ -28,7 +30,7 @@ const props = defineProps({
 
 const valueClassName = computed(() => {
   return props.highlightValue
-    ? "modal-detail-value-emphasis"
+    ? "font-semibold text-foreground pr-4 py-3 text-base"
     : "modal-detail-value";
 });
 </script>

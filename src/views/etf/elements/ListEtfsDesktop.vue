@@ -3,74 +3,41 @@
     <DivContentTable class="max-w-5xl">
       <TableHeader>
         <TableRow>
-          <TableHead
-            class="font-bold border-r text-foreground text-center"
-            rowspan="2"
-            id="name"
-          >
+          <TableHead class="table-head-cell" rowspan="2" id="name">
             {{ $t("General.name") }}
           </TableHead>
-          <TableHead
-            class="font-bold border-r text-foreground text-center"
-            rowspan="2"
-            id="isin"
-          >
+          <TableHead class="table-head-cell" rowspan="2" id="isin">
             {{ $t("ETF.isin") }}
           </TableHead>
-          <TableHead
-            class="font-bold border-r text-foreground text-center"
-            rowspan="2"
-            id="wkn"
-          >
+          <TableHead class="table-head-cell" rowspan="2" id="wkn">
             {{ $t("ETF.wkn") }}
           </TableHead>
-          <TableHead
-            class="font-bold border-r text-foreground text-center"
-            rowspan="2"
-            id="ticker"
-          >
+          <TableHead class="table-head-cell" rowspan="2" id="ticker">
             {{ $t("ETF.ticker") }}
           </TableHead>
-          <TableHead
-            class="font-bold border-r text-foreground text-center"
-            colspan="3"
-            id="transactionCosts"
-          >
+          <TableHead class="table-head-cell" colspan="3" id="transactionCosts">
             {{ $t("ETFFlow.transactionCosts") }}
           </TableHead>
           <TableHead
-            class="font-bold border-r text-foreground text-center"
+            class="table-head-cell"
             rowspan="2"
             id="partialTaxExemption"
           >
             {{ $t("ETF.partialTaxExemption") }}
           </TableHead>
-          <TableHead
-            class="font-bold border-r text-foreground text-center"
-            rowspan="2"
-            id="favorite"
-          >
+          <TableHead class="table-head-cell" rowspan="2" id="favorite">
             <Star class="h-5 w-5 transition-all text-muted-foreground" />
           </TableHead>
           <TableHead rowspan="2" colspan="2" id="editDelete"></TableHead>
         </TableRow>
         <TableRow>
-          <TableHead
-            class="font-bold border text-foreground text-center"
-            id="abs"
-          >
+          <TableHead class="table-head-cell" id="abs">
             {{ $t("ETFFlow.transactionCostsAbsolute") }}
           </TableHead>
-          <TableHead
-            class="font-bold border text-foreground text-center"
-            id="rel"
-          >
+          <TableHead class="table-head-cell" id="rel">
             {{ $t("ETFFlow.transactionCostsRelative") }}
           </TableHead>
-          <TableHead
-            class="font-bold border text-foreground text-center"
-            id="max"
-          >
+          <TableHead class="table-head-cell" id="max">
             {{ $t("ETFFlow.transactionCostsMaximum") }}
           </TableHead>
         </TableRow>

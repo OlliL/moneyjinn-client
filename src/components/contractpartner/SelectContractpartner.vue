@@ -14,9 +14,7 @@
     :select-box-values="selectBoxValues"
   >
     <template #icon
-      ><SquarePlus
-        @click="showCreateContractpartnerModal"
-        class="h-4 w-4 cursor-pointer"
+      ><SquarePlus @click="showCreateContractpartnerModal" class="icon-small"
     /></template>
   </SelectStandard>
 </template>

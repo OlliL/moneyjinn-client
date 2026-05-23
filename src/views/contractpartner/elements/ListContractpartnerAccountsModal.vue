@@ -26,16 +26,16 @@
         >
           <TableHeader>
             <TableRow>
-              <TableHead class="font-bold border text-foreground text-center">{{
+              <TableHead class="table-head-cell">{{
                 $t("General.iban")
               }}</TableHead>
-              <TableHead class="font-bold border text-foreground text-center">{{
+              <TableHead class="table-head-cell">{{
                 $t("General.bic")
               }}</TableHead>
-              <TableHead class="font-bold border text-foreground text-center"
+              <TableHead class="table-head-cell"
                 ><span class="sr-only">Edit</span></TableHead
               >
-              <TableHead class="font-bold border text-foreground text-center"
+              <TableHead class="table-head-cell"
                 ><span class="sr-only">Delete</span></TableHead
               >
             </TableRow>

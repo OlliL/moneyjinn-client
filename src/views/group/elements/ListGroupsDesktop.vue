@@ -3,7 +3,7 @@
     <DivContentTable class="max-w-sm">
       <TableHeader>
         <TableRow>
-          <TableHead class="font-bold border-r text-foreground text-center">{{
+          <TableHead class="table-head-cell">{{
             $t("General.name")
           }}</TableHead>
           <TableHead colspan="2"></TableHead>

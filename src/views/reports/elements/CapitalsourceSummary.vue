@@ -6,17 +6,17 @@
       <TableHeader>
         <TableRow>
           <TableHead id="thEmpty"></TableHead>
-          <TableHead id="thMonth" class="text-center border-l font-bold">
+          <TableHead id="thMonth" class="table-head-cell">
             {{ $t("General.month") }}
           </TableHead>
-          <TableHead id="thYear" class="text-center border-l font-bold">
+          <TableHead id="thYear" class="table-head-cell">
             {{ $t("General.year") }}
           </TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
         <TableRow v-if="currentMonthIsSettled">
-          <TableHead class="text-end font-bold border-r" id="thFixedProfit">
+          <TableHead class="table-head-cell" id="thFixedProfit">
             {{ $t("Reports.fixedProfit") }}
           </TableHead>
           <TableCell class="text-end border-r">
@@ -41,7 +41,7 @@
           </TableCell>
         </TableRow>
         <TableRow v-if="currentMonthIsSettled">
-          <TableHead class="text-end font-bold border-r" id="thDifference">
+          <TableHead class="table-head-cell" id="thDifference">
             {{ $t("Reports.difference") }}
           </TableHead>
           <TableCell class="text-end border-r">

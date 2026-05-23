@@ -166,34 +166,24 @@
         <DivContentTable :alternate-row-background="false" class="w-full">
           <TableHeader>
             <TableRow>
-              <TableHead
-                class="font-bold border-r text-foreground text-center w-12"
-              ></TableHead>
+              <TableHead class="table-head-cell w-12"></TableHead>
 
-              <TableHead
-                class="font-bold border-r text-foreground w-36"
-                v-if="colBookingMonth"
-              >
+              <TableHead class="table-head-cell w-36" v-if="colBookingMonth">
                 {{ $t("Moneyflow.bookingMonth") }}
               </TableHead>
 
-              <TableHead
-                class="font-bold border-r text-foreground w-28"
-                v-if="colBookingYear"
-              >
+              <TableHead class="table-head-cell w-28" v-if="colBookingYear">
                 {{ $t("Moneyflow.bookingYear") }}
               </TableHead>
 
               <TableHead
-                class="font-bold border-r text-foreground w-48 !whitespace-normal"
+                class="table-head-cell w-48 !whitespace-normal"
                 v-if="colContractpartner"
               >
                 {{ $t("General.contractpartner") }}
               </TableHead>
 
-              <TableHead
-                class="font-bold border-r text-foreground text-center w-28"
-              >
+              <TableHead class="table-head-cell w-28">
                 {{ $t("General.amount") }}
               </TableHead>
 
@@ -230,15 +220,15 @@ import { useI18n } from "vue-i18n";
 import { any, date, type ZodTypeAny } from "zod";
 
 import ButtonSubmit from "@/components/common/ButtonSubmit.vue";
-import SelectContractpartner from "@/components/contractpartner/SelectContractpartner.vue";
 import DivContentTable from "@/components/common/DivContentTable.vue";
 import DivError from "@/components/common/DivError.vue";
 import InputDate from "@/components/common/InputDate.vue";
 import InputStandard from "@/components/common/InputStandard.vue";
+import SelectStandard from "@/components/common/SelectStandard.vue";
+import SelectContractpartner from "@/components/contractpartner/SelectContractpartner.vue";
 import DeleteMoneyflowModalVue from "@/components/moneyflow/DeleteMoneyflowModal.vue";
 import EditMoneyflowModalVue from "@/components/moneyflow/EditMoneyflowModal.vue";
 import SelectPostingAccount from "@/components/postingaccount/SelectPostingAccount.vue";
-import SelectStandard from "@/components/common/SelectStandard.vue";
 import SearchMoneyflowResultGroupVue from "./elements/SearchMoneyflowResultGroup.vue";
 
 import { toFixed } from "@/tools/math";

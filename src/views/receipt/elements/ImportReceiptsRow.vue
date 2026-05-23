@@ -102,24 +102,16 @@
                           <TableHead class="w-10 border-r">
                             <span class="sr-only">Selection</span>
                           </TableHead>
-                          <TableHead
-                            class="font-bold border-r text-foreground text-center px-3 py-2 text-xs"
-                          >
+                          <TableHead class="table-head-cell px-3 py-2 text-xs">
                             {{ $t("Moneyflow.invoicedate") }}
                           </TableHead>
-                          <TableHead
-                            class="font-bold border-r text-foreground text-center px-3 py-2 text-xs"
-                          >
+                          <TableHead class="table-head-cell px-3 py-2 text-xs">
                             {{ $t("General.amount") }}
                           </TableHead>
-                          <TableHead
-                            class="font-bold border-r text-foreground text-center px-3 py-2 text-xs"
-                          >
+                          <TableHead class="table-head-cell px-3 py-2 text-xs">
                             {{ $t("General.contractpartner") }}
                           </TableHead>
-                          <TableHead
-                            class="font-bold border-r text-foreground text-center px-3 py-2 text-xs"
-                          >
+                          <TableHead class="table-head-cell px-3 py-2 text-xs">
                             {{ $t("General.comment") }}
                           </TableHead>
                           <TableHead class="w-16" colspan="2"></TableHead>

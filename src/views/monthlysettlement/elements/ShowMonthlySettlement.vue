@@ -37,10 +37,10 @@
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead class="w-2/3 font-bold border-r text-center">
+                <TableHead class="table-head-cell w-2/3">
                   {{ $t("General.capitalsource") }}
                 </TableHead>
-                <TableHead class="w-1/3 font-bold text-foreground text-center">
+                <TableHead class="table-head-cell w-1/3">
                   {{ $t("General.amount") }}
                 </TableHead>
               </TableRow>
@@ -69,10 +69,10 @@
           <Table>
             <TableHeader v-if="monthlySettlementsNoCredit.length">
               <TableRow>
-                <TableHead class="w-2/3 font-bold border-r text-center">{{
+                <TableHead class="table-head-cell w-2/3">{{
                   $t("General.capitalsource")
                 }}</TableHead>
-                <TableHead class="w-1/3 font-bold text-center">{{
+                <TableHead class="table-head-cell w-1/3">{{
                   $t("General.amount")
                 }}</TableHead>
               </TableRow>
