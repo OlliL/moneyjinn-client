@@ -27,7 +27,7 @@
         <template v-else>
           <AlertTriangle class="w-4 h-4 mr-2 animate-pulse" />
           <span class="animate-in fade-in zoom-in-95 duration-200">
-            Wirklich löschen? (Nochmal tippen)
+            {{ $t("Moneyflow.areYouSureDelete") }}
           </span>
 
           <div
@@ -88,24 +88,23 @@ let confirmationTimeout: ReturnType<typeof setTimeout> | null = null;
 
 const handleDeleteClick = () => {
   if (!isConfirming.value) {
-    // Phase 1: Erste Aktivierung -> Schalte um auf "Sicher?"
+    // Phase 1: First activation - switch to "are you sure?"
     isConfirming.value = true;
 
-    // Automatischer Reset nach 4 Sekunden, falls nichts passiert
+    // Automatic Reset after 4 seconds in case nothing happens
     confirmationTimeout = setTimeout(() => {
       isConfirming.value = false;
     }, 4000);
   } else {
-    // Phase 2: Zweiter Klick -> Aktion ausführen
+    // Phase 2: Second click - execute delete
     if (confirmationTimeout) clearTimeout(confirmationTimeout);
     isConfirming.value = false;
     deleteMoneyflowReceipt();
   }
 };
 
-// Hilfsfunktion zum Abbrechen der Bestätigung (optional)
 const cancelDelete = (e: Event) => {
-  e.stopPropagation(); // Verhindert, dass der Button-Klick ausgelöst wird
+  e.stopPropagation();
   if (confirmationTimeout) clearTimeout(confirmationTimeout);
   isConfirming.value = false;
 };

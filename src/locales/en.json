@@ -335,6 +335,7 @@
     "viewReceipt": "View Receipt",
     "viewReceiptTip": "Tap to Enlarge and Zoom",
     "deleteReceipt": "Delete Receipt",
+    "areYouSureDelete": "Really delete? (Tap again)",
     "noMatchingMoneyflow": "No Matching Transactions Found!",
     "apply": "Apply",
     "newBooking": "New Booking",

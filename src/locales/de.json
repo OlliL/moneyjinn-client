@@ -334,6 +334,7 @@
     "viewReceipt": "Bon ansehen",
     "viewReceiptTip": "Tippen zum Vergrößern & Zoomen",
     "deleteReceipt": "Bon löschen",
+    "areYouSureDelete": "Wirklich löschen? (Nochmal tippen)",
     "noMatchingMoneyflow": "Keine passenden Geldbewegungen gefunden!",
     "apply": "Übernehmen",
     "newBooking": "Neue Buchung",
