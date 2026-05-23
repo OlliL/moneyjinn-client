@@ -2,38 +2,23 @@
   <ModalVue :title="$t('Receipt.receipt')" ref="modalComponent">
     <template #body>
       <DivError :server-errors="serverErrors" />
-      <img
-        v-if="isJpeg"
-        :src="`data:image/png;base64,${receiptBase64}`"
-        class="max-w-full max-h-full"
-        alt="receipt"
-      />
-      <object
-        class="h-[75vh] w-full"
-        v-if="isPdf"
-        id="pdf"
-        :data="`data:application/pdf;base64,${receiptBase64}`"
-        type="application/pdf"
-      >
-        receipt
-      </object>
+      <SpanReceipt :receipt="receipt" />
     </template>
   </ModalVue>
 </template>
 
 <script lang="ts" setup>
-import { MoneyflowReceiptType } from "@/model/moneyflow/MoneyflowReceiptType";
+import type { MoneyflowReceipt } from "@/model/moneyflow/MoneyflowReceipt";
 import MoneyflowReceiptService from "@/service/MoneyflowReceiptService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { ref, useTemplateRef } from "vue";
 import DivError from "../common/DivError.vue";
 import ModalVue from "../common/Modal.vue";
+import SpanReceipt from "../common/SpanReceipt.vue";
 
 const serverErrors = ref(new Array<string>());
 
-const receiptBase64 = ref("");
-const isJpeg = ref(false);
-const isPdf = ref(false);
+const receipt = ref({} as MoneyflowReceipt);
 const modalComponent = useTemplateRef<typeof ModalVue>("modalComponent");
 
 const _show = (moneyflowId: number) => {
@@ -41,10 +26,7 @@ const _show = (moneyflowId: number) => {
 
   MoneyflowReceiptService.fetchReceipt(moneyflowId)
     .then((response) => {
-      receiptBase64.value = response.receipt;
-      isJpeg.value = response.receiptType === MoneyflowReceiptType.JPEG;
-      isPdf.value = response.receiptType === MoneyflowReceiptType.PDF;
-
+      receipt.value = response;
       modalComponent.value?._show();
     })
     .catch((backendError) => {

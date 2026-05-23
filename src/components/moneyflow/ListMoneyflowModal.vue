@@ -16,18 +16,10 @@
             <img
               v-if="isJpeg"
               :src="`data:image/png;base64,${receiptBase64}`"
-              class="max-w-full"
+              class="max-w-full h-auto rounded-sm"
               alt="receipt"
             />
-            <object
-              class="h-[75vh] w-full"
-              v-if="isPdf"
-              id="pdf"
-              :data="`data:application/pdf;base64,${receiptBase64}`"
-              type="application/pdf"
-            >
-              receipt
-            </object>
+            <SpanPdf :receipt-base64="receiptBase64" v-if="isPdf" />
           </div>
           <div class="flex-1">
             <div class="flex flex-col rounded-md border">
@@ -155,6 +147,7 @@ import { MoneyflowReceiptType } from "@/model/moneyflow/MoneyflowReceiptType";
 import MoneyflowReceiptService from "@/service/MoneyflowReceiptService";
 import SpanAmount from "../common/SpanAmount.vue";
 import SpanDate from "../common/SpanDate.vue";
+import SpanPdf from "../common/SpanPdf.vue";
 
 const serverErrors = ref(new Array<string>());
 

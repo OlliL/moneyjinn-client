@@ -13,9 +13,6 @@
               class="bg-background/60 p-2 rounded border border-border/40 backdrop-blur-sm w-full flex justify-center items-start h-[calc(100vh-420px)] max-h-[520px]"
               :class="isPdf ? 'overflow-hidden' : 'overflow-y-auto'"
             >
-              <span data-testid="importReceipts-row-filename">{{
-                receipt.filename
-              }}</span>
               <img
                 v-if="isJpeg"
                 :src="`data:image/png;base64,${receipt.receipt}`"
@@ -23,15 +20,7 @@
                 alt="receipt"
               />
 
-              <object
-                class="h-full w-full min-h-[320px] block rounded-sm"
-                v-if="isPdf"
-                id="pdf"
-                :data="`data:application/pdf;base64,${receipt.receipt}`"
-                type="application/pdf"
-              >
-                receipt
-              </object>
+              <SpanPdf :receipt-base64="receipt.receipt" v-if="isPdf" />
             </div>
           </div>
 
@@ -179,6 +168,7 @@ import ButtonSubmit from "@/components/common/ButtonSubmit.vue";
 import DivError from "@/components/common/DivError.vue";
 import InputDate from "@/components/common/InputDate.vue";
 import InputStandard from "@/components/common/InputStandard.vue";
+import SpanPdf from "@/components/common/SpanPdf.vue";
 import { Button } from "@/components/ui/button";
 import { RadioGroup } from "@/components/ui/radio-group";
 import {

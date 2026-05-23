@@ -16,8 +16,6 @@ class MoneyflowReceiptService extends AbstractService {
 
   async fetchReceipt(moneyflowId: number): Promise<MoneyflowReceipt> {
     const response = await this.api.showMoneyflowReceipt(moneyflowId);
-    console.error(moneyflowId);
-    console.trace();
     const showMoneyflowReceiptResponse = response.data;
 
     let receiptType: MoneyflowReceiptType;

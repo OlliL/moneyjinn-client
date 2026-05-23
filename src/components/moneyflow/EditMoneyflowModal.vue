@@ -17,23 +17,9 @@
           <div class="flex gap-4">
             <div
               class="w-1/3 overflow-x-scroll whitespace-nowrap h-[600px] max-w-120"
-              v-if="receiptBase64"
+              v-if="receipt.receipt"
             >
-              <img
-                v-if="isJpeg"
-                :src="`data:image/png;base64,${receiptBase64}`"
-                class="max-w-full"
-                alt="receipt"
-              />
-              <object
-                class="h-[75vh] w-full"
-                v-if="isPdf"
-                id="pdf"
-                :data="`data:application/pdf;base64,${receiptBase64}`"
-                type="application/pdf"
-              >
-                receipt
-              </object>
+              <SpanReceipt :receipt="receipt" />
             </div>
             <div class="flex-1">
               <EditMoneyflowBase :mmf-to-edit="mmf" ref="editMoneyflowVue" />
@@ -80,6 +66,7 @@ import EditMoneyflowBase from "@/components/moneyflow/EditMoneyflowBase.vue";
 import { Button } from "@/components/ui/button";
 import type { ImportedMoneyflowReceipt } from "@/model/moneyflow/ImportedMoneyflowReceipt";
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
+import type { MoneyflowReceipt } from "@/model/moneyflow/MoneyflowReceipt";
 import { MoneyflowReceiptType } from "@/model/moneyflow/MoneyflowReceiptType";
 import MoneyflowReceiptService from "@/service/MoneyflowReceiptService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
@@ -88,6 +75,7 @@ import { useForm } from "vee-validate";
 import { computed, ref, useTemplateRef } from "vue";
 import DivError from "../common/DivError.vue";
 import ModalVue from "../common/Modal.vue";
+import SpanReceipt from "../common/SpanReceipt.vue";
 
 const serverErrors = ref(new Array<string>());
 
@@ -96,9 +84,7 @@ const modalComponent = useTemplateRef<typeof ModalVue>("modalComponent");
 const editMoneyflowVue =
   useTemplateRef<typeof EditMoneyflowBase>("editMoneyflowVue");
 
-const receiptBase64 = ref("");
-const isJpeg = ref(false);
-const isPdf = ref(false);
+const receipt = ref({} as MoneyflowReceipt);
 
 const emit = defineEmits([
   "moneyflowCreated",
@@ -109,16 +95,12 @@ const emit = defineEmits([
 const { handleSubmit, values, setFieldTouched } = useForm();
 
 const modalWidth = computed(() => {
-  return receiptBase64.value
+  return receipt.value.receipt
     ? "md:max-w-full w-full mx-auto"
     : "md:max-w-2xl lg:max-w-7xl w-full mx-auto";
 });
 const _show = (_mmf: Moneyflow, receipt?: ImportedMoneyflowReceipt) => {
   mmf.value = _mmf;
-
-  receiptBase64.value = "";
-  isJpeg.value = false;
-  isPdf.value = false;
 
   if (mmf.value.hasReceipt) loadReceipt(mmf.value.id);
   else if (receipt) processImportedReceipt(receipt);
@@ -148,16 +130,16 @@ const createMoneyflow = handleSubmit(() => {
 const loadReceipt = (id: number) => {
   MoneyflowReceiptService.fetchReceipt(id)
     .then((response) => {
-      processReceipt(response.receiptType, response.receipt);
+      receipt.value = response;
     })
     .catch((backendError) => {
       handleBackendError(backendError, serverErrors);
     });
 };
 
-const processImportedReceipt = (receipt: ImportedMoneyflowReceipt) => {
+const processImportedReceipt = (importedReceipt: ImportedMoneyflowReceipt) => {
   let mediaType = MoneyflowReceiptType.UNKNOWN;
-  switch (receipt.mediaType) {
+  switch (importedReceipt.mediaType) {
     case "image/jpeg":
       mediaType = MoneyflowReceiptType.JPEG;
       break;
@@ -165,13 +147,11 @@ const processImportedReceipt = (receipt: ImportedMoneyflowReceipt) => {
       mediaType = MoneyflowReceiptType.PDF;
       break;
   }
-  processReceipt(mediaType, receipt.receipt);
-};
-
-const processReceipt = (receiptType: MoneyflowReceiptType, receipt: string) => {
-  receiptBase64.value = receipt;
-  isJpeg.value = receiptType === MoneyflowReceiptType.JPEG;
-  isPdf.value = receiptType === MoneyflowReceiptType.PDF;
+  receipt.value = {
+    moneyflowId: -1,
+    receipt: importedReceipt.receipt,
+    receiptType: mediaType,
+  };
 };
 
 const deleteMoneyflowReceipt = () => {
