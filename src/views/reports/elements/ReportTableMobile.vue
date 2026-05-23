@@ -43,7 +43,7 @@
                 @click="filterCapitalsource = ''"
                 class="rounded-l-none border-l"
               >
-                <X class="h-4 w-4" />
+                <X class="icon-small" />
               </Button>
             </template>
           </InputStandard>
@@ -64,7 +64,7 @@
                 @click="filterContractpartner = ''"
                 class="rounded-l-none border-l"
               >
-                <X class="h-4 w-4" />
+                <X class="icon-small" />
               </Button>
             </template>
           </InputStandard>
@@ -85,7 +85,7 @@
                 @click="filterComment = ''"
                 class="rounded-l-none border-l"
               >
-                <X class="h-4 w-4" />
+                <X class="icon-small" />
               </Button>
             </template>
           </InputStandard>
@@ -106,7 +106,7 @@
                 @click="filterPostingAccount = ''"
                 class="rounded-l-none border-l"
               >
-                <X class="h-4 w-4" />
+                <X class="icon-small" />
               </Button>
             </template>
           </InputStandard>
@@ -229,7 +229,7 @@
               v-if="!mmf.moneyflowSplitEntries?.length"
             >
               <MessageSquareMore
-                class="h-4 w-4 shrink-0 text-muted-foreground/80"
+                class="icon-small shrink-0 text-muted-foreground/80"
                 :title="$t('General.comment')"
               />
               <span class="text-foreground">{{ mmf.comment }}</span>
@@ -240,7 +240,7 @@
             >
               <div class="flex items-center gap-1 min-w-0 truncate">
                 <CreditCard
-                  class="h-4 w-4 shrink-0 text-muted-foreground/80"
+                  class="icon-small shrink-0 text-muted-foreground/80"
                   :title="$t('General.capitalsource')"
                 />
                 {{ mmf.capitalsourceComment }}
@@ -252,7 +252,7 @@
                 class="flex items-center gap-1 min-w-0 truncate"
               >
                 <Tag
-                  class="h-4 w-4 shrink-0 text-muted-foreground/80"
+                  class="icon-small shrink-0 text-muted-foreground/80"
                   :title="$t('General.postingAccount')"
                 />
                 {{ mmf.postingAccountName }}
@@ -289,7 +289,7 @@
                     class="h-3 w-3 shrink-0 text-muted-foreground/80"
                     :title="$t('General.postingAccount')"
                   />
-                  <span class="text-muted-foreground text-xs truncate">{{
+                  <span class="text-xs-muted truncate">{{
                     mse.postingAccountName
                   }}</span>
                 </div>

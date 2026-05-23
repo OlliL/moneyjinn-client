@@ -36,7 +36,7 @@
                     step="0.001"
                     :field-label="$t('ETFFlow.bid')"
                   >
-                    <template #icon><Euro class="h-4 w-4" /></template>
+                    <template #icon><Euro class="icon-small" /></template>
                   </InputStandard>
                 </div>
                 <div class="w-full">
@@ -48,7 +48,7 @@
                     step="0.001"
                     :field-label="$t('ETFFlow.ask')"
                   >
-                    <template #icon><Euro class="h-4 w-4" /></template>
+                    <template #icon><Euro class="icon-small" /></template>
                   </InputStandard>
                 </div>
               </div>
@@ -69,7 +69,7 @@
                     step="0.01"
                     :field-label="$t('ETFFlow.transactionCostsAbsolute')"
                   >
-                    <template #icon><Euro class="h-4 w-4" /></template>
+                    <template #icon><Euro class="icon-small" /></template>
                   </InputStandard>
                 </div>
                 <div class="w-full">
@@ -81,7 +81,7 @@
                     step="0.01"
                     :field-label="$t('ETFFlow.transactionCostsRelative')"
                   >
-                    <template #icon><Percent class="h-4 w-4" /></template>
+                    <template #icon><Percent class="icon-small" /></template>
                   </InputStandard>
                 </div>
                 <div class="w-full">
@@ -93,7 +93,7 @@
                     step="0.01"
                     :field-label="$t('ETFFlow.transactionCostsMaximum')"
                   >
-                    <template #icon><Euro class="h-4 w-4" /></template>
+                    <template #icon><Euro class="icon-small" /></template>
                   </InputStandard>
                 </div>
               </div>

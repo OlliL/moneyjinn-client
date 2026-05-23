@@ -69,7 +69,7 @@
         @click="showCreateContractpartnerAccountModal"
         class="flex items-center gap-2 rounded-md! px-6"
       >
-        <Plus class="h-4 w-4" />
+        <Plus class="icon-small" />
         {{ $t("General.new") }}
       </Button>
     </template>

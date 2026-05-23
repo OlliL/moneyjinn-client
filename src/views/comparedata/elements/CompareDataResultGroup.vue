@@ -11,8 +11,8 @@
         :aria-label="isCollapsed ? 'Collapse details' : 'Expand details'"
         class="action-icon-button"
       >
-        <ChevronRight v-if="!isCollapsed" class="h-4 w-4" />
-        <ChevronDown v-else class="h-4 w-4" />
+        <ChevronRight v-if="!isCollapsed" class="icon-small" />
+        <ChevronDown v-else class="icon-small" />
       </Button>
     </TableCell>
     <TableCell class="align-middle font-bold" :class="amountClass">
@@ -30,52 +30,52 @@
             <TableHeader>
               <TableRow>
                 <TableHead
-                  class="font-bold border-r border-b text-foreground text-center w-[120px]"
+                  class="table-head-cell w-[120px]"
                 >
                   <span class="sr-only">Status</span>
                 </TableHead>
 
                 <TableHead
-                  class="font-bold border-r border-b text-foreground text-center w-[140px]"
+                  class="table-head-cell w-[140px]"
                 >
                   {{ $t("Moneyflow.bookingdate") }}
                 </TableHead>
                 <TableHead
-                  class="font-bold border-r border-b text-foreground text-center w-[140px]"
+                  class="table-head-cell w-[140px]"
                 >
                   {{ $t("Moneyflow.invoicedate") }}
                 </TableHead>
 
                 <TableHead
-                  class="font-bold border-r border-b text-foreground text-center w-25"
+                  class="table-head-cell w-25"
                 >
                   {{ $t("General.amount") }}
                 </TableHead>
 
                 <TableHead
-                  class="font-bold border-r border-b text-foreground text-center w-[20%]"
+                  class="table-head-cell w-[20%]"
                 >
                   {{ $t("General.contractpartner") }}
                 </TableHead>
                 <TableHead
-                  class="font-bold border-r border-b text-foreground text-center w-[30%]"
+                  class="table-head-cell w-[30%]"
                 >
                   {{ $t("General.comment") }}
                 </TableHead>
 
                 <TableHead
-                  class="font-bold border-r border-b text-foreground text-center w-45"
+                  class="table-head-cell w-45"
                 >
                   {{ $t("General.capitalsource") }}
                 </TableHead>
 
                 <TableHead
-                  class="font-bold border-b text-foreground text-center w-11.25"
+                  class="table-head-cell w-11.25"
                 >
                   <span class="sr-only">Edit</span>
                 </TableHead>
                 <TableHead
-                  class="font-bold border-b text-foreground text-center w-11.25"
+                  class="table-head-cell w-11.25"
                 >
                   <span class="sr-only">Delete</span>
                 </TableHead>

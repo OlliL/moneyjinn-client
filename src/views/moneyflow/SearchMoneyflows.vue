@@ -15,9 +15,7 @@
       <h4 class="text-2xl font-bold">{{ $t("Moneyflow.title.search") }}</h4>
     </div>
     <div class="flex justify-center">
-      <div
-        class="w-full max-w-7xl rounded-sm border bg-card text-card-foreground bg-muted p-4"
-      >
+      <div class="w-full max-w-7xl card-panel p-4">
         <form @submit.prevent="searchMoneyflows" id="searchMoneyflowsForm">
           <div class="space-y-4">
             <DivError :server-errors="serverErrors" />
@@ -114,7 +112,7 @@
                   :button-label="$t('Moneyflow.search')"
                   form-id="searchMoneyflowsForm"
                   test-id="search-moneyflows-submit"
-                  ><template #icon><Search class="h-4 w-4" /></template
+                  ><template #icon><Search class="icon-small" /></template
                 ></ButtonSubmit>
                 <Button
                   type="button"
@@ -122,7 +120,7 @@
                   class="flex items-center gap-2 px-6"
                   @click="resetForm"
                 >
-                  <Undo2 class="h-4 w-4" />
+                  <Undo2 class="icon-small" />
                   {{ $t("General.reset") }}
                 </Button>
               </div>

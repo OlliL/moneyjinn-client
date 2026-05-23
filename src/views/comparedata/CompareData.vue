@@ -12,7 +12,7 @@
     </div>
     <div class="flex justify-center">
       <div
-        class="w-full max-w-6xl rounded-sm border bg-card text-card-foreground bg-muted p-4"
+        class="w-full max-w-6xl card-panel p-4"
       >
         <form @submit.prevent="compareData" id="compareDataForm">
           <div class="space-y-4">
@@ -78,7 +78,7 @@
                 :button-label="$t('General.show')"
                 form-id="compareDataForm"
                 test-id="compare-data-submit"
-                ><template #icon><Eye class="h-4 w-4" /></template
+                ><template #icon><Eye class="icon-small" /></template
               ></ButtonSubmit>
             </div>
           </div>

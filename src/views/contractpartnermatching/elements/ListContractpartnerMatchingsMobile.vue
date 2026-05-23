@@ -31,7 +31,7 @@
                 :data-testid="`contractpartner-matching-mobile-edit-${mcm.id}`"
                 @click.stop="editContractpartnerMatching(mcm)"
               >
-                <Pencil class="h-4 w-4" />
+                <Pencil class="icon-small" />
               </Button>
               <Button
                 variant="ghost"
@@ -39,7 +39,7 @@
                 :data-testid="`contractpartner-matching-mobile-delete-${mcm.id}`"
                 @click.stop="deleteContractpartnerMatching(mcm)"
               >
-                <Trash2 class="h-4 w-4" />
+                <Trash2 class="icon-small" />
               </Button>
             </div>
           </div>

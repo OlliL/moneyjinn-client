@@ -34,14 +34,14 @@
       <div class="grid grid-cols-2 gap-4 text-sm bg-muted/40 p-3 rounded-md">
         <div class="flex flex-col gap-2">
           <div>
-            <span class="text-muted-foreground text-xs block">
+            <span class="text-xs-muted block">
               {{ $t("Reports.beginOfMonth") }}
             </span>
             <SpanAmount :amount="amountBeginOfMonthFixed" />
           </div>
 
           <div>
-            <span class="text-muted-foreground text-xs block">
+            <span class="text-xs-muted block">
               {{ $t("Reports.endOfMonthCalculated") }}
             </span>
             <SpanAmount :amount="amountEndOfMonthCalculated" />
@@ -50,14 +50,14 @@
 
         <div class="flex flex-col gap-2">
           <div v-if="!currentMonthIsSettled">
-            <span class="text-muted-foreground text-xs block">
+            <span class="text-xs-muted block">
               {{ $t("Reports.state") }}
             </span>
             <span class="text-xs">{{ amountCurrentStateString }}</span>
           </div>
 
           <div v-if="currentMonthIsSettled">
-            <span class="text-muted-foreground text-xs block">
+            <span class="text-xs-muted block">
               {{ $t("Reports.difference") }}
             </span>
             <SpanAmount :amount="differenceFixedCalculated" />

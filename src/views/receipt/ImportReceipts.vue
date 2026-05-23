@@ -30,7 +30,7 @@
               form-id="uploadReceiptsForm"
               data-testid="importReceipts-upload-button"
             >
-              <template #icon><Upload class="h-4 w-4" /> </template>
+              <template #icon><Upload class="icon-small" /> </template>
             </ButtonSubmit>
           </div>
         </form>

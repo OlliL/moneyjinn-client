@@ -39,7 +39,7 @@
                   :field-label="$t('ETFPreliminaryLumpSum.price')"
                   :focus="true"
                 >
-                  <template #icon><Euro class="h-4 w-4" /></template>
+                  <template #icon><Euro class="icon-small" /></template>
                 </InputStandard>
               </div>
             </div>
@@ -54,7 +54,7 @@
         class="button-with-icon"
         @click="resetForm"
       >
-        <Undo2 class="h-4 w-4" />
+        <Undo2 class="icon-small" />
         {{ $t("General.reset") }}
       </Button>
 
@@ -62,7 +62,7 @@
         :button-label="$t('General.save')"
         form-id="createEtfPreliminaryLumpSumPieceForm"
       >
-        <template #icon><Save class="h-4 w-4" /></template>
+        <template #icon><Save class="icon-small" /></template>
       </ButtonSubmit>
     </template>
   </ModalVue>

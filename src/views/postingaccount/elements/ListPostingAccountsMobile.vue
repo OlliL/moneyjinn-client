@@ -31,7 +31,7 @@
                 :data-testid="`posting-account-mobile-edit-${mpa.id}`"
                 @click.stop="editPostingAccount(mpa)"
               >
-                <Pencil class="h-4 w-4" />
+                <Pencil class="icon-small" />
               </Button>
               <Button
                 variant="ghost"
@@ -39,7 +39,7 @@
                 :data-testid="`posting-account-mobile-delete-${mpa.id}`"
                 @click.stop="deletePostingAccount(mpa)"
               >
-                <Trash2 class="h-4 w-4" />
+                <Trash2 class="icon-small" />
               </Button>
             </div>
           </div>

@@ -10,8 +10,8 @@
         :aria-label="isCollapsed ? 'Collapse details' : 'Expand details'"
         class="action-icon-button"
       >
-        <ChevronRight v-if="!isCollapsed" class="h-4 w-4" />
-        <ChevronDown v-else class="h-4 w-4" />
+        <ChevronRight v-if="!isCollapsed" class="icon-small" />
+        <ChevronDown v-else class="icon-small" />
       </Button>
     </TableCell>
     <TableCell class="align-middle border-r" v-if="colBookingMonth">
@@ -70,27 +70,27 @@
                   ><span class="sr-only">Status</span></TableHead
                 >
                 <TableHead
-                  class="font-bold border-r border-b text-foreground text-center"
+                  class="table-head-cell"
                   >{{ $t("Moneyflow.bookingdate") }}</TableHead
                 >
                 <TableHead
-                  class="font-bold border-r border-b text-foreground text-center"
+                  class="table-head-cell"
                   >{{ $t("General.amount") }}</TableHead
                 >
                 <TableHead
-                  class="font-bold border-r border-b text-foreground text-center"
+                  class="table-head-cell"
                   >{{ $t("General.contractpartner") }}</TableHead
                 >
                 <TableHead
-                  class="font-bold border-r border-b text-foreground text-center"
+                  class="table-head-cell"
                   >{{ $t("General.comment") }}</TableHead
                 >
                 <TableHead
-                  class="font-bold border-r border-b text-foreground text-center"
+                  class="table-head-cell"
                   >{{ $t("General.postingAccount") }}</TableHead
                 >
                 <TableHead
-                  class="font-bold border-r border-b text-foreground text-center"
+                  class="table-head-cell"
                   >{{ $t("General.capitalsource") }}</TableHead
                 >
                 <TableHead

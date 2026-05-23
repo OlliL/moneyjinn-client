@@ -18,7 +18,7 @@
           :aria-label="$t('Receipt.receipt')"
           class="action-icon-button"
         >
-          <ReceiptText class="h-4 w-4" />
+          <ReceiptText class="icon-small" />
         </Button>
       </TableCell>
       <TableCell :rowspan="rowspan" :class="['border-r', rowBgClass]">
@@ -76,7 +76,7 @@
             :title="$t('General.edit')"
             class="action-icon-button"
           >
-            <Pencil class="h-4 w-4" />
+            <Pencil class="icon-small" />
           </Button>
         </TableCell>
         <TableCell
@@ -91,7 +91,7 @@
             :title="$t('General.delete')"
             class="action-icon-button"
           >
-            <Trash2 class="h-4 w-4" />
+            <Trash2 class="icon-small" />
           </Button>
         </TableCell>
       </template>
@@ -109,7 +109,7 @@
             :title="$t('General.moneyflow')"
             class="action-icon-button"
           >
-            <Eye class="h-4 w-4" />
+            <Eye class="icon-small" />
           </Button>
         </TableCell>
         <TableCell :rowspan="rowspan" :class="rowBgClass" />

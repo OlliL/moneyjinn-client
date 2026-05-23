@@ -9,7 +9,7 @@
 
     <div class="flex justify-center">
       <div
-        class="w-full max-w-xl rounded-sm border bg-card text-card-foreground bg-muted p-6"
+        class="w-full max-w-xl card-panel p-6"
       >
         <form @submit.prevent="showReportingGraph">
           <div class="space-y-6">
@@ -148,7 +148,7 @@
                         <Checkbox
                           :id="`postingaccount-${value.id}`"
                           v-model="selectedPostingAccountIds[value.id]"
-                          class="h-4 w-4"
+                          class="icon-small"
                         />
                         <Label
                           :for="`postingaccount-${value.id}`"
@@ -190,7 +190,7 @@
 
             <div class="pt-4 flex justify-center">
               <ButtonSubmit :button-label="$t('General.show')">
-                <template #icon><Eye class="h-4 w-4" /></template>
+                <template #icon><Eye class="icon-small" /></template>
               </ButtonSubmit>
             </div>
           </div>

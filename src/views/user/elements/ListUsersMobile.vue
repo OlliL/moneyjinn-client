@@ -31,7 +31,7 @@
                 :data-testid="`user-mobile-edit-${user.id}`"
                 @click.stop="editUser(user)"
               >
-                <Pencil class="h-4 w-4" />
+                <Pencil class="icon-small" />
               </Button>
               <Button
                 variant="ghost"
@@ -39,7 +39,7 @@
                 :data-testid="`user-mobile-delete-${user.id}`"
                 @click.stop="deleteUser(user)"
               >
-                <Trash2 class="h-4 w-4" />
+                <Trash2 class="icon-small" />
               </Button>
             </div>
           </div>

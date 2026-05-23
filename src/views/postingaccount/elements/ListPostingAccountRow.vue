@@ -6,14 +6,14 @@
       :test-id="`posting-account-edit-${mpa.id}`"
       @click="editPostingAccount"
     >
-      <Pencil class="h-4 w-4" />
+      <Pencil class="icon-small" />
     </ButtonTableIcon>
     <ButtonTableIcon
       :title="$t('General.delete')"
       :test-id="`posting-account-delete-${mpa.id}`"
       @click="deletePostingAccount"
     >
-      <Trash2 class="h-4 w-4" />
+      <Trash2 class="icon-small" />
     </ButtonTableIcon>
   </TableRow>
 </template>

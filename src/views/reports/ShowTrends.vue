@@ -7,7 +7,7 @@
 
     <div class="flex justify-center">
       <div
-        class="w-full max-w-3xl rounded-sm border bg-card text-card-foreground bg-muted p-6"
+        class="w-full max-w-3xl card-panel p-6"
       >
         <form @submit.prevent="showTrends">
           <div class="space-y-6">
@@ -130,7 +130,7 @@
                             <Checkbox
                               :id="`capitalsource-${value.id}`"
                               v-model="capitalsourceIds[value.id]"
-                              class="h-4 w-4"
+                              class="icon-small"
                               :data-testid="`capitalsource-${value.id}`"
                             />
                             <Label
@@ -262,7 +262,7 @@
                             <Checkbox
                               :id="`etf-${value.id}`"
                               v-model="etfIds[value.id]"
-                              class="h-4 w-4"
+                              class="icon-small"
                               :data-testid="`etf-${value.id}`"
                             />
                             <Label
@@ -303,7 +303,7 @@
               <ButtonSubmit
                 :button-label="$t('General.show')"
                 test-id="show-trends-button"
-                ><template #icon><Eye class="h-4 w-4" /></template
+                ><template #icon><Eye class="icon-small" /></template
               ></ButtonSubmit>
             </div>
           </div>

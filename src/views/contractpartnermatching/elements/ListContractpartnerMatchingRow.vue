@@ -17,14 +17,14 @@
       :test-id="`contractpartner-matching-edit-${mcm.id}`"
       @click="editContractpartnerMatching"
     >
-      <Pencil class="h-4 w-4" />
+      <Pencil class="icon-small" />
     </ButtonTableIcon>
     <ButtonTableIcon
       :title="$t('General.delete')"
       :test-id="`contractpartner-matching-delete-${mcm.id}`"
       @click="deleteContractpartnerMatching"
     >
-      <Trash2 class="h-4 w-4" />
+      <Trash2 class="icon-small" />
     </ButtonTableIcon>
   </TableRow>
 </template>

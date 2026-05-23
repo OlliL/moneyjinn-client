@@ -25,7 +25,7 @@
           </div>
           <div class="grid grid-cols-2 gap-2">
             <div>
-              <span class="text-muted-foreground text-xs block">{{
+              <span class="text-xs-muted block">{{
                 $t("Reports.beginOfMonth")
               }}</span>
               <span class="font-semibold"
@@ -34,7 +34,7 @@
             </div>
 
             <div v-if="currentMonthIsSettled">
-              <span class="text-muted-foreground text-xs block">{{
+              <span class="text-xs-muted block">{{
                 $t("Reports.endOfMonthFixed")
               }}</span>
               <span class="font-semibold"
@@ -43,7 +43,7 @@
             </div>
 
             <div>
-              <span class="text-muted-foreground text-xs block">{{
+              <span class="text-xs-muted block">{{
                 $t("Reports.endOfMonthCalculated")
               }}</span>
               <span class="font-semibold"
@@ -52,7 +52,7 @@
             </div>
 
             <div v-if="currentMonthIsSettled">
-              <span class="text-muted-foreground text-xs block">{{
+              <span class="text-xs-muted block">{{
                 $t("Reports.difference")
               }}</span>
               <span class="font-semibold"
@@ -61,7 +61,7 @@
             </div>
 
             <div v-if="!currentMonthIsSettled">
-              <span class="text-muted-foreground text-xs block">{{
+              <span class="text-xs-muted block">{{
                 $t("Reports.currentAmount")
               }}</span>
               <span class="font-semibold"

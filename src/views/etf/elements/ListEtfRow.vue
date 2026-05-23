@@ -23,14 +23,14 @@
       :test-id="`etf-edit-${etf.id}`"
       @click="editEtf"
     >
-      <Pencil class="h-4 w-4" />
+      <Pencil class="icon-small" />
     </ButtonTableIcon>
     <ButtonTableIcon
       :title="$t('General.delete')"
       :test-id="`etf-delete-${etf.id}`"
       @click="deleteEtf"
     >
-      <Trash2 class="h-4 w-4" />
+      <Trash2 class="icon-small" />
     </ButtonTableIcon>
   </TableRow>
 </template>

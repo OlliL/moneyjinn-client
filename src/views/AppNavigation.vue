@@ -82,7 +82,7 @@
                 </div>
 
                 <ChevronDown
-                  class="h-4 w-4 transition-transform duration-200 group-data-[state=open]:rotate-180 text-muted-foreground"
+                  class="icon-small transition-transform duration-200 group-data-[state=open]:rotate-180 text-muted-foreground"
                 />
               </div>
             </CollapsibleTrigger>
@@ -117,7 +117,7 @@
                 </div>
 
                 <ChevronDown
-                  class="h-4 w-4 transition-transform duration-200 group-data-[state=open]:rotate-180 text-muted-foreground"
+                  class="icon-small transition-transform duration-200 group-data-[state=open]:rotate-180 text-muted-foreground"
                 />
               </div>
             </CollapsibleTrigger>
@@ -165,7 +165,7 @@
                 </div>
 
                 <ChevronDown
-                  class="h-4 w-4 transition-transform duration-200 group-data-[state=open]:rotate-180 text-muted-foreground"
+                  class="icon-small transition-transform duration-200 group-data-[state=open]:rotate-180 text-muted-foreground"
                 />
               </div>
             </CollapsibleTrigger>
@@ -220,7 +220,7 @@
                 </div>
 
                 <ChevronDown
-                  class="h-4 w-4 transition-transform duration-200 group-data-[state=open]:rotate-180 text-muted-foreground"
+                  class="icon-small transition-transform duration-200 group-data-[state=open]:rotate-180 text-muted-foreground"
                 />
               </div>
             </CollapsibleTrigger>
@@ -261,7 +261,7 @@
                 </div>
 
                 <ChevronDown
-                  class="h-4 w-4 transition-transform duration-200 group-data-[state=open]:rotate-180 text-muted-foreground"
+                  class="icon-small transition-transform duration-200 group-data-[state=open]:rotate-180 text-muted-foreground"
                 />
               </div>
             </CollapsibleTrigger>

@@ -11,7 +11,7 @@
                 >{{ $t("Moneyflow.bookingdate") }}
                 <component
                   :is="sortIcon('bookingDate')"
-                  class="inline h-4 w-4 text-primary cursor-pointer"
+                  class="inline icon-small text-primary cursor-pointer"
                   :title="$t('Moneyflow.bookingdate')"
                   :aria-label="$t('Moneyflow.bookingdate')"
                   @click="sortByColumn('bookingDate')"
@@ -20,7 +20,7 @@
               <span class="block md:hidden">
                 <component
                   :is="sortIcon('bookingDate')"
-                  class="inline h-4 w-4 text-primary cursor-pointer"
+                  class="inline icon-small text-primary cursor-pointer"
                   :title="$t('Moneyflow.bookingdate')"
                   :aria-label="$t('Moneyflow.bookingdate')"
                   @click="sortByColumn('bookingDate')"
@@ -36,7 +36,7 @@
                 {{ $t("Moneyflow.invoicedate") }}
                 <component
                   :is="sortIcon('invoiceDate')"
-                  class="inline h-4 w-4 text-primary cursor-pointer"
+                  class="inline icon-small text-primary cursor-pointer"
                   :title="$t('Moneyflow.invoicedate')"
                   :aria-label="$t('Moneyflow.invoicedate')"
                   @click="sortByColumn('invoiceDate')"
@@ -53,7 +53,7 @@
                 {{ $t("General.amount") }}
                 <component
                   :is="sortIcon('amount')"
-                  class="h-4 w-4 text-primary cursor-pointer shrink-0"
+                  class="icon-small text-primary cursor-pointer shrink-0"
                   :title="$t('General.amount')"
                   :aria-label="$t('General.amount')"
                   @click="sortByColumn('amount')"
@@ -63,7 +63,7 @@
               <span class="flex md:hidden items-center justify-center w-full">
                 <component
                   :is="sortIcon('amount')"
-                  class="h-4 w-4 text-primary cursor-pointer"
+                  class="icon-small text-primary cursor-pointer"
                   :title="$t('General.amount')"
                   :aria-label="$t('General.amount')"
                   @click="sortByColumn('amount')"
@@ -79,7 +79,7 @@
                 {{ $t("General.contractpartner") }}
                 <component
                   :is="sortIcon('contractpartnerName')"
-                  class="inline h-4 w-4 text-primary cursor-pointer"
+                  class="inline icon-small text-primary cursor-pointer"
                   :title="$t('General.contractpartner')"
                   :aria-label="$t('General.contractpartner')"
                   @click="sortByColumn('contractpartnerName')"
@@ -114,7 +114,7 @@
                   {{ $t("General.comment") }}
                   <component
                     :is="sortIcon('comment')"
-                    class="inline h-4 w-4 text-primary cursor-pointer mb-1 ml-0.5"
+                    class="inline icon-small text-primary cursor-pointer mb-1 ml-0.5"
                     :title="$t('General.comment')"
                     :aria-label="$t('General.comment')"
                     @click="sortByColumn('comment')"
@@ -145,7 +145,7 @@
               >
                 <component
                   :is="sortIcon('comment')"
-                  class="inline h-4 w-4 text-primary cursor-pointer"
+                  class="inline icon-small text-primary cursor-pointer"
                   :title="$t('General.comment')"
                   :aria-label="$t('General.comment')"
                   @click="sortByColumn('comment')"
@@ -162,7 +162,7 @@
                 {{ $t("General.postingAccount") }}
                 <component
                   :is="sortIcon('postingAccountName')"
-                  class="inline h-4 w-4 text-primary cursor-pointer mb-1 ml-0.5"
+                  class="inline icon-small text-primary cursor-pointer mb-1 ml-0.5"
                   :title="$t('General.postingAccount')"
                   :aria-label="$t('General.postingAccount')"
                   @click="sortByColumn('postingAccountName')"
@@ -198,7 +198,7 @@
                 {{ $t("General.capitalsource") }}
                 <component
                   :is="sortIcon('capitalsourceComment')"
-                  class="inline h-4 w-4 text-primary cursor-pointer mb-1 ml-0.5"
+                  class="inline icon-small text-primary cursor-pointer mb-1 ml-0.5"
                   :title="$t('General.capitalsource')"
                   :aria-label="$t('General.capitalsource')"
                   @click="sortByColumn('capitalsourceComment')"

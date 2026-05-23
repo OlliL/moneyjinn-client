@@ -31,7 +31,7 @@
                 :data-testid="`group-mobile-edit-${group.id}`"
                 @click.stop="editGroup(group)"
               >
-                <Pencil class="h-4 w-4" />
+                <Pencil class="icon-small" />
               </Button>
               <Button
                 variant="ghost"
@@ -39,7 +39,7 @@
                 :data-testid="`group-mobile-delete-${group.id}`"
                 @click.stop="deleteGroup(group)"
               >
-                <Trash2 class="h-4 w-4" />
+                <Trash2 class="icon-small" />
               </Button>
             </div>
           </div>

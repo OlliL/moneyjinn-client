@@ -51,7 +51,7 @@
                   :field-label="getMonthName(month.id)"
                   :focus="month.id === 1"
                 >
-                  <template #icon><Euro class="h-4 w-4" /></template>
+                  <template #icon><Euro class="icon-small" /></template>
                 </InputStandard>
               </div>
             </div>
@@ -66,7 +66,7 @@
         class="button-with-icon"
         @click="resetForm"
       >
-        <Undo2 class="h-4 w-4" />
+        <Undo2 class="icon-small" />
         {{ $t("General.reset") }}
       </Button>
 
@@ -74,7 +74,7 @@
         :button-label="$t('General.save')"
         form-id="createEtfPreliminaryLumpSumForm"
       >
-        <template #icon><Save class="h-4 w-4" /></template>
+        <template #icon><Save class="icon-small" /></template>
       </ButtonSubmit>
     </template>
   </ModalVue>

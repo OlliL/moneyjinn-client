@@ -15,7 +15,7 @@
         :aria-label="$t('Receipt.receipt')"
         class="h-6 w-6"
       >
-        <Image class="h-4 w-4" />
+        <Image class="icon-small" />
       </Button>
     </TableCell>
     <TableCell
@@ -62,7 +62,7 @@
         :aria-label="$t('General.edit')"
         class="h-6 w-6"
       >
-        <Pencil class="h-4 w-4" />
+        <Pencil class="icon-small" />
       </Button>
     </TableCell>
     <TableCell
@@ -81,7 +81,7 @@
         :aria-label="$t('General.delete')"
         class="h-6 w-6"
       >
-        <Trash2 class="h-4 w-4" />
+        <Trash2 class="icon-small" />
       </Button>
     </TableCell>
     <TableCell
@@ -100,7 +100,7 @@
         :aria-label="$t('General.moneyflow')"
         class="h-6 w-6"
       >
-        <Eye class="h-4 w-4" />
+        <Eye class="icon-small" />
       </Button>
     </TableCell>
   </TableRow>

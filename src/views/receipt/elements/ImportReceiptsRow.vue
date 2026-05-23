@@ -55,7 +55,7 @@
                       step="0.01"
                       :field-label="$t('General.amount')"
                     >
-                      <template #icon><Euro class="h-4 w-4" /></template>
+                      <template #icon><Euro class="icon-small" /></template>
                     </InputStandard>
                   </div>
                   <div class="flex-1 min-w-[140px]">
@@ -79,7 +79,7 @@
                       :form-id="'searchReceipt' + receipt.id"
                       class="h-8 w-8"
                     >
-                      <template #icon><Search class="h-4 w-4" /></template>
+                      <template #icon><Search class="icon-small" /></template>
                     </ButtonSubmit>
                   </div>
                 </div>
@@ -159,7 +159,7 @@
                 @click="deleteReceipt"
                 data-testid="importReceipts-row-delete"
               >
-                <Trash2 class="h-4 w-4" />
+                <Trash2 class="icon-small" />
                 {{ $t("General.delete") }}
               </Button>
               <Button
@@ -171,7 +171,7 @@
                 :disabled="!moneyflowSelected"
                 data-testid="importReceipts-row-apply"
               >
-                <Save class="h-4 w-4" />
+                <Save class="icon-small" />
                 {{ $t("Moneyflow.apply") }}
               </Button>
             </div>

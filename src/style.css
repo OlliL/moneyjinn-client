@@ -21,6 +21,34 @@
   @apply h-8 w-8 cursor-pointer;
 }
 
+@utility card-panel {
+  @apply rounded-sm border bg-muted text-card-foreground;
+}
+
+@utility table-head-cell {
+  @apply font-bold border-r border-b text-foreground text-center;
+}
+
+@utility text-xs-muted {
+  @apply text-xs text-muted-foreground;
+}
+
+@utility nav-link {
+  @apply !text-foreground !no-underline transition-colors hover:text-primary;
+}
+
+@utility nav-link-button {
+  @apply !text-foreground !no-underline flex gap-2 hover:bg-accent items-center p-2 rounded-md text-sm;
+}
+
+@utility responsive-action-group {
+  @apply hidden md:flex justify-center pb-4;
+}
+
+@utility icon-small {
+  @apply h-4 w-4;
+}
+
 @utility form-section {
   @apply rounded-sm border bg-muted/30 p-4 shadow-sm;
 }
