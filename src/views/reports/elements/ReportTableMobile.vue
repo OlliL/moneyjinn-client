@@ -133,16 +133,14 @@
         :key="'mobile-' + mmf.id"
         :value="'item-' + mmf.id"
         :data-testid="`report-mobile-moneyflow-row-${mmf.id}`"
-        class="border rounded-lg bg-background shadow-sm px-3 pt-2 pb-3 text-left relative overflow-hidden"
+        class="border rounded-lg bg-background shadow-sm px-3 py-2"
         :class="{ 'border-destructive/30 bg-destructive/5': mmf.private }"
       >
-        <AccordionTrigger class="hover:no-underline p-0 w-full [&>svg]:hidden">
-          <div
-            class="grid grid-cols-[1fr_auto] gap-2 items-start w-full text-left min-h-[40px]"
-          >
-            <div class="flex flex-col gap-0.5 min-w-0">
+        <AccordionTrigger class="hover:no-underline w-full min-w-0">
+          <div class="grid grid-cols-[1fr_auto] items-center w-full gap-2">
+            <div class="flex flex-col items-start text-left overflow-hidden">
               <div
-                class="flex items-center gap-1.5 text-xs text-muted-foreground flex-wrap font-normal"
+                class="flex items-center gap-1.5 text-xs text-muted-foreground font-normal truncate w-full"
               >
                 <SpanDate :date="mmf.bookingDate" />
                 <span
@@ -158,7 +156,7 @@
                   {{ $t("Moneyflow.subbookings") }}
                 </span>
               </div>
-              <span class="font-bold text-sm text-foreground truncate">
+              <span class="font-bold text-sm text-foreground truncate w-full">
                 {{ mmf.contractpartnerName || "-" }}
               </span>
             </div>
