@@ -569,12 +569,7 @@ const selectCreateType = (type: EtfPreliminaryLumpSumType) => {
   createSelectedPreliminaryLumpSum();
 };
 
-const updateCreateType = (value?: any) => {
-  if (!value) {
-    return;
-  }
-  createType.value = Number(value) as EtfPreliminaryLumpSumType;
-};
+
 
 const createSelectedPreliminaryLumpSum = () => {
   showCreateEtfPreliminaryLumpSumModal(selectedEtfId.value, createType.value);

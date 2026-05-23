@@ -142,7 +142,6 @@ import {
   watch,
   type PropType,
 } from "vue";
-import { useI18n } from "vue-i18n";
 import CapitalsourceSummary from "./CapitalsourceSummary.vue";
 import CapitalsourceTableVue from "./CapitalsourceTable.vue";
 import ReportTableDesktop from "./ReportTableDesktop.vue";
@@ -166,7 +165,6 @@ const editModal = useTemplateRef<typeof EditMoneyflowModalVue>("editModal");
 const listModal = useTemplateRef<typeof ListMoneyflowModal>("listModal");
 
 const filteredMoneyflows = ref([] as Moneyflow[]);
-const { t } = useI18n();
 watch(
   () => report.value.moneyflows,
   () => {

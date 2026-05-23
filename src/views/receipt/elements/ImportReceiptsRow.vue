@@ -105,7 +105,7 @@
                       </TableHeader>
                       <TableBody>
                         <ImportReceiptSearchRowVue
-                          v-for="(moneyflow, index) in moneyflows"
+                          v-for="moneyflow in moneyflows"
                           v-model="selectedMoneyflowId"
                           :key="moneyflow.id"
                           :mmf="moneyflow"

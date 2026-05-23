@@ -57,7 +57,7 @@ export const useEtfStore = defineStore("etf", () => {
     }
   }
 
-  function getAsSelectBoxValues(validityDate?: Date): Array<SelectBoxValue> {
+  function getAsSelectBoxValues(): Array<SelectBoxValue> {
     return etf.value.map((mcs) => {
       return { id: mcs.id, value: mcs.name } as SelectBoxValue;
     });

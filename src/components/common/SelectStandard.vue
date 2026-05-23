@@ -215,7 +215,7 @@ const setFieldValue = () => {
   filterItemList();
 };
 
-const onBlur = (event: FocusEvent) => {
+const onBlur = () => {
   setTimeout(() => {
     const activeEl = document.activeElement;
     const isInsideDropdown =
@@ -233,7 +233,7 @@ const getInputElement = () => {
   return fieldRef.value?.$el as HTMLInputElement;
 };
 
-const onFocus = (event: Event) => {
+const onFocus = () => {
   showDropdown();
   getInputElement().select();
 

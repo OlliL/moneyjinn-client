@@ -291,7 +291,7 @@ const etfFlowUpdated = (etfFlow: EtfFlow) => {
 
 watch(
   selectedEtfId,
-  (newVal, oldVal) => {
+  (newVal) => {
     if (newVal === undefined) {
       dataLoaded.value = false;
     } else loadData(newVal);
