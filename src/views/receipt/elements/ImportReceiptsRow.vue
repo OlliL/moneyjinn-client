@@ -77,7 +77,7 @@
                   <div class="shrink-0">
                     <ButtonSubmit
                       :form-id="'searchReceipt' + receipt.id"
-                      class="h-8 w-8"
+                      class="action-icon-button"
                     >
                       <template #icon><Search class="icon-small" /></template>
                     </ButtonSubmit>

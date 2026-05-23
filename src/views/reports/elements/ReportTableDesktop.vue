@@ -87,7 +87,7 @@
                   :title="$t('General.reset')"
                   :aria-label="$t('General.reset')"
                   @click="filterContractpartner = ''"
-                  class="h-8 w-8 rounded-l-none border-l"
+                  class="action-icon-button rounded-l-none border-l"
                 >
                   <X />
                 </Button>
@@ -119,7 +119,7 @@
                     :title="$t('General.reset')"
                     :aria-label="$t('General.reset')"
                     @click="filterComment = ''"
-                    class="h-8 w-8 rounded-l-none border-l"
+                    class="action-icon-button rounded-l-none border-l"
                   >
                     <X />
                   </Button>
@@ -163,7 +163,7 @@
                   :title="$t('General.reset')"
                   :aria-label="$t('General.reset')"
                   @click="filterPostingAccount = ''"
-                  class="h-8 w-8 rounded-l-none border-l"
+                  class="action-icon-button rounded-l-none border-l"
                 >
                   <X />
                 </Button>
@@ -195,7 +195,7 @@
                   :title="$t('General.reset')"
                   :aria-label="$t('General.reset')"
                   @click="filterCapitalsource = ''"
-                  class="h-8 w-8 rounded-l-none border-l"
+                  class="action-icon-button rounded-l-none border-l"
                 >
                   <X />
                 </Button>
