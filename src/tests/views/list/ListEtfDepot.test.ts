@@ -52,7 +52,7 @@ class ListEtfDepotView {
   );
   static readonly EditButton = new ButtonView("etf-depot-edit-101");
   static readonly DeleteButton = new ButtonView("etf-depot-delete-101");
-  static readonly CalculateSaleHeadline = new TextView("calculate sale");
+  static readonly CalculateSaleHeadline = new TextView("Calculate Sale");
   static readonly Modal = new ModalView("app-modal");
 }
 

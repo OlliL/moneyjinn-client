@@ -4,7 +4,7 @@
     type="submit"
     :form="formId"
     :data-testid="testId"
-    class="button-with-icon"
+    class="button-with-icon w-full md:w-auto"
   >
     <slot name="icon"></slot>
     <slot>{{ buttonLabel }}</slot>

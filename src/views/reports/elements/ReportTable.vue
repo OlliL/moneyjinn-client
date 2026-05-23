@@ -2,7 +2,12 @@
   <div v-if="dataLoaded">
     <DivError :server-errors="serverErrors" />
 
-    <ReceiptModalVue ref="receiptModal" />
+    <ListMoneyflowModalMobile
+      ref="listModal"
+      @show-receipt="showReceipt"
+      v-if="!isDesktop().value"
+    />
+    <ListMoneyflowModalDesktop ref="listModal" v-if="isDesktop().value" />
     <DeleteMoneyflowModalVue
       ref="deleteModal"
       @moneyflow-deleted="moneyflowDeleted"
@@ -11,8 +16,10 @@
       ref="editModal"
       @moneyflow-updated="moneyflowUpdated"
       @moneyflow-receipt-deleted="moneyflowReceiptDeleted"
+      @show-receipt="showReceipt"
     />
-    <ListMoneyflowModal ref="listModal" />
+
+    <ReceiptModalVue ref="receiptModal" />
 
     <div>
       <ReportTableMobile
@@ -125,7 +132,8 @@
 import DivError from "@/components/common/DivError.vue";
 import DeleteMoneyflowModalVue from "@/components/moneyflow/DeleteMoneyflowModal.vue";
 import EditMoneyflowModalVue from "@/components/moneyflow/EditMoneyflowModal.vue";
-import ListMoneyflowModal from "@/components/moneyflow/ListMoneyflowModal.vue";
+import ListMoneyflowModalDesktop from "@/components/moneyflow/ListMoneyflowModalDesktop.vue";
+import ListMoneyflowModalMobile from "@/components/moneyflow/ListMoneyflowModalMobile.vue";
 import ReceiptModalVue from "@/components/reports/ReceiptModal.vue";
 import { CapitalsourceType } from "@/model/capitalsource/CapitalsourceType";
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
@@ -133,6 +141,7 @@ import type { Report } from "@/model/report/Report";
 import type { ReportTurnoverCapitalsource } from "@/model/report/ReportTurnoverCapitalsource";
 import ReportService from "@/service/ReportService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
+import { isDesktop } from "@/tools/views/IsDesktop";
 import {
   computed,
   onBeforeUnmount,
@@ -162,7 +171,7 @@ const receiptModal = useTemplateRef<typeof ReceiptModalVue>("receiptModal");
 const deleteModal =
   useTemplateRef<typeof DeleteMoneyflowModalVue>("deleteModal");
 const editModal = useTemplateRef<typeof EditMoneyflowModalVue>("editModal");
-const listModal = useTemplateRef<typeof ListMoneyflowModal>("listModal");
+const listModal = useTemplateRef<typeof ListMoneyflowModalDesktop>("listModal");
 
 const filteredMoneyflows = ref([] as Moneyflow[]);
 watch(

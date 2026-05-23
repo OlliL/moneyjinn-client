@@ -54,7 +54,7 @@
       <Button
         type="button"
         variant="secondary"
-        class="button-with-icon"
+        class="button-with-icon hidden md:flex"
         @click="resetForm"
       >
         <Undo2 class="icon-small" />
@@ -73,10 +73,10 @@
 
 <script lang="ts" setup>
 import ButtonSubmit from "@/components/common/ButtonSubmit.vue";
-import SelectContractpartner from "@/components/contractpartner/SelectContractpartner.vue";
 import DivError from "@/components/common/DivError.vue";
 import InputStandard from "@/components/common/InputStandard.vue";
 import ModalVue from "@/components/common/Modal.vue";
+import SelectContractpartner from "@/components/contractpartner/SelectContractpartner.vue";
 import SelectPostingAccount from "@/components/postingaccount/SelectPostingAccount.vue";
 import { Button } from "@/components/ui/button";
 import type { ContractpartnerMatching } from "@/model/contractpartnermatching/ContractpartnerMatching";

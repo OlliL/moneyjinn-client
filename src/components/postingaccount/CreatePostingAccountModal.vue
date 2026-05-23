@@ -22,7 +22,7 @@
       <Button
         type="button"
         variant="secondary"
-        class="button-with-icon"
+        class="button-with-icon hidden md:flex"
         @click="resetForm"
       >
         <Undo2 class="icon-small" />

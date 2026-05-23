@@ -14,12 +14,43 @@
         id="updateMoneyflowForm"
       >
         <div class="w-full">
-          <div class="flex gap-4">
+          <div class="md:flex gap-4">
             <div
               class="w-1/3 overflow-x-scroll whitespace-nowrap h-[600px] max-w-120"
-              v-if="receipt.receipt"
+              v-if="receipt.receipt && isDesktop().value"
             >
               <SpanReceipt :receipt="receipt" />
+            </div>
+            <div v-if="receipt.receipt && !isDesktop().value">
+              <div
+                @click="showReceipt"
+                class="flex items-center justify-between p-3 rounded-xl border border-dashed border-input bg-muted/40 hover:bg-muted/80 active:bg-muted transition-all cursor-pointer w-full group select-none mb-4"
+              >
+                <div class="flex items-center gap-3">
+                  <div
+                    class="p-2 bg-primary/10 text-primary rounded-lg group-hover:bg-primary/20 transition-colors"
+                  >
+                    <ReceiptText class="h-5 w-5" />
+                  </div>
+
+                  <div class="flex flex-col text-left">
+                    <span
+                      class="text-sm font-semibold tracking-tight text-foreground"
+                    >
+                      {{ $t("Moneyflow.viewReceipt") }}
+                    </span>
+                    <span class="text-xs text-muted-foreground mt-0.5">
+                      {{ $t("Moneyflow.viewReceiptTip") }}
+                    </span>
+                  </div>
+                </div>
+
+                <div class="flex items-center pr-1">
+                  <Eye
+                    class="h-5 w-5 text-muted-foreground/60 group-hover:text-primary transition-colors"
+                  />
+                </div>
+              </div>
             </div>
             <div class="flex-1">
               <EditMoneyflowBase :mmf-to-edit="mmf" ref="editMoneyflowVue" />
@@ -34,7 +65,7 @@
         type="button"
         variant="destructive"
         @click="deleteMoneyflowReceipt"
-        v-if="mmf.hasReceipt"
+        v-if="mmf.hasReceipt && isDesktop().value"
       >
         <Trash2 class="icon-small" />
         {{ $t("Moneyflow.deleteReceipt") }}
@@ -43,7 +74,7 @@
       <Button
         type="button"
         variant="secondary"
-        class="button-with-icon"
+        class="button-with-icon hidden md:flex"
         @click="resetForm"
       >
         <Undo2 class="icon-small" />
@@ -70,7 +101,8 @@ import type { MoneyflowReceipt } from "@/model/moneyflow/MoneyflowReceipt";
 import { mapImportedMoneyflowReceiptToMoneyflowReceipt } from "@/service/mapper/ImportedToMoneyflowReceiptMapper";
 import MoneyflowReceiptService from "@/service/MoneyflowReceiptService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
-import { Save, Trash2, Undo2 } from "lucide-vue-next";
+import { isDesktop } from "@/tools/views/IsDesktop";
+import { Eye, ReceiptText, Save, Trash2, Undo2 } from "lucide-vue-next";
 import { useForm } from "vee-validate";
 import { computed, ref, useTemplateRef } from "vue";
 import DivError from "../common/DivError.vue";
@@ -90,6 +122,7 @@ const emit = defineEmits([
   "moneyflowCreated",
   "moneyflowUpdated",
   "moneyflowReceiptDeleted",
+  "showReceipt",
 ]);
 
 const { handleSubmit, values, setFieldTouched } = useForm();
@@ -101,7 +134,6 @@ const modalWidth = computed(() => {
 });
 const _show = (_mmf: Moneyflow, importedReceipt?: ImportedMoneyflowReceipt) => {
   mmf.value = _mmf;
-
   if (mmf.value.hasReceipt) loadReceipt(mmf.value.id);
   else if (importedReceipt)
     receipt.value =
@@ -149,9 +181,15 @@ const deleteMoneyflowReceipt = () => {
       handleBackendError(backendError, serverErrors);
     });
 };
+
 const resetForm = () => {
   editMoneyflowVue.value?.resetForm();
   Object.keys(values).forEach((field) => setFieldTouched(field, false));
 };
+
+const showReceipt = () => {
+  emit("showReceipt", mmf.value.id);
+};
+
 defineExpose({ _show });
 </script>

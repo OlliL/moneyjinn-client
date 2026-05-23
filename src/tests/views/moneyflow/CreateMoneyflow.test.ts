@@ -85,12 +85,12 @@ class CreateMoneyflowView {
     "contractpartnerCreateMoneyflow",
   );
 
-  static readonly PublicToggle = new ToggleView("public");
-  static readonly PrivateToggle = new ToggleView("private");
-  static readonly OnceToggle = new ToggleView("once");
-  static readonly FavoriteToggle = new ToggleView("favorite");
-  static readonly KeepToggle = new ToggleView("keep");
-  static readonly RenewToggle = new ToggleView("renew");
+  static readonly PublicToggle = new ToggleView("Public");
+  static readonly PrivateToggle = new ToggleView("Private");
+  static readonly OnceToggle = new ToggleView("Once");
+  static readonly FavoriteToggle = new ToggleView("Favorite");
+  static readonly KeepToggle = new ToggleView("Keep");
+  static readonly RenewToggle = new ToggleView("Renew");
 
   static amountSplitEntryInput(rowId: number): InputView {
     return new InputView(`amountSplitEntry#${rowId}`);
@@ -346,7 +346,7 @@ test("select a PreDefMoneyflow - fill input fields", async () => {
 
   render(CreateMoneyflow);
 
-  await CreateMoneyflowView.SelectMoneyflow.waitForSelectedText("new booking");
+  await CreateMoneyflowView.SelectMoneyflow.waitForSelectedText("New Booking");
   await CreateMoneyflowView.SelectMoneyflow.selectOption(
     "1",
     "Contractpartner 1 | 20.40 € | PreDefMoneyflow Comment 1",
@@ -434,7 +434,7 @@ test("reset after PreDefMoneyflow selection restores once/favorite toggles", asy
 
   render(CreateMoneyflow);
 
-  await CreateMoneyflowView.SelectMoneyflow.waitForSelectedText("new booking");
+  await CreateMoneyflowView.SelectMoneyflow.waitForSelectedText("New Booking");
   await CreateMoneyflowView.SelectMoneyflow.selectOption(
     "1",
     "Contractpartner 1 | 20.40 € | PreDefMoneyflow Comment 1",
@@ -449,7 +449,7 @@ test("reset after PreDefMoneyflow selection restores once/favorite toggles", asy
   await CreateMoneyflowView.OnceToggle.assertChecked();
   await CreateMoneyflowView.FavoriteToggle.assertUnchecked();
 
-  await CreateMoneyflowView.SelectMoneyflow.waitForSelectedText("new booking");
+  await CreateMoneyflowView.SelectMoneyflow.waitForSelectedText("New Booking");
 });
 
 // Test 3: once-a-month PreDefMoneyflow already used this month is hidden
@@ -555,7 +555,7 @@ test("selecting PreDefMoneyflow changes toggle labels to keep/renew", async () =
   // before: once/favorite labels
   await CreateMoneyflowView.OnceToggle.assertChecked();
 
-  await CreateMoneyflowView.SelectMoneyflow.waitForSelectedText("new booking");
+  await CreateMoneyflowView.SelectMoneyflow.waitForSelectedText("New Booking");
   await CreateMoneyflowView.SelectMoneyflow.selectOption(
     "1",
     "Contractpartner 1 | 20.40 € | PreDefMoneyflow Comment 1",
@@ -665,7 +665,7 @@ test("choose a PreDefMoneyflow - comment field is filled from PreDefMoneyflow", 
 
   render(CreateMoneyflow);
 
-  await CreateMoneyflowView.SelectMoneyflow.waitForSelectedText("new booking");
+  await CreateMoneyflowView.SelectMoneyflow.waitForSelectedText("New Booking");
   await CreateMoneyflowView.SelectMoneyflow.selectOption(
     "1",
     "Contractpartner 1 | 20.40 € | PreDefMoneyflow Comment 1",
