@@ -83,7 +83,7 @@
               <ReceiptText class="h-3.5 w-3.5" />
             </Button>
             <Button
-              v-if="mmf.userId === userSessionStore.getUserId"
+              v-if="isOwnMoneyflow"
               :data-testid="`report-mobile-moneyflow-edit-${mmf.id}`"
               variant="ghost"
               size="icon"
@@ -93,7 +93,7 @@
               <Pencil class="h-3.5 w-3.5" />
             </Button>
             <Button
-              v-if="mmf.userId === userSessionStore.getUserId"
+              v-if="isOwnMoneyflow"
               :data-testid="`report-mobile-moneyflow-delete-${mmf.id}`"
               variant="ghost"
               size="icon"
@@ -103,7 +103,7 @@
               <Trash2 class="h-3.5 w-3.5" />
             </Button>
             <Button
-              v-if="mmf.userId !== userSessionStore.getUserId"
+              v-if="!isOwnMoneyflow"
               :data-testid="`report-mobile-moneyflow-list-${mmf.id}`"
               variant="ghost"
               size="icon"
@@ -239,6 +239,12 @@ defineEmits<{
 }>();
 
 const userSessionStore = useUserSessionStore();
+const today = new Date();
+today.setHours(0, 0, 0, 0);
+
+const isOwnMoneyflow = computed(
+  () => props.mmf.userId === userSessionStore.getUserId,
+);
 
 const isFuture = computed(() => {
   const today = new Date();

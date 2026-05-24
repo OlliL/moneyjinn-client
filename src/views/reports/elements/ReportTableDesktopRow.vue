@@ -3,15 +3,15 @@
     v-for="(row, idx) in tableRows"
     :key="row.isSplit ? row.mseId : 'main-' + mmf.id"
     :data-testid="idx === 0 ? `report-moneyflow-row-${mmf.id}` : undefined"
+    :class="[rowBgClass, lesserOpacityIfFuture]"
   >
     <template v-if="idx === 0">
       <TableCell
         :rowspan="rowspan"
-        :class="['border-r py-0 px-1', redIfPrivate || rowBgClass]"
+        :class="['border-r py-0 px-1', redIfPrivate]"
       >
         <Button
           v-if="mmf.hasReceipt"
-          :class="lesserOpacityIfFuture"
           variant="ghost"
           size="icon"
           @click="$emit('showReceipt', mmf.id)"
@@ -22,7 +22,7 @@
           <ReceiptText class="icon-small" />
         </Button>
       </TableCell>
-      <TableCell :rowspan="rowspan" :class="['border-r', rowBgClass]">
+      <TableCell :rowspan="rowspan" class="border-r">
         <div class="flex items-center justify-center gap-1">
           <Clock
             v-if="isFuture"
@@ -31,78 +31,48 @@
           />
           <SpanDate
             :date="mmf.bookingDate"
-            :class="[{ 'italic font-medium': isFuture }, lesserOpacityIfFuture]"
+            :class="{ 'italic font-medium': isFuture }"
           />
         </div>
       </TableCell>
-      <TableCell
-        :rowspan="rowspan"
-        :class="['border-r', rowBgClass, lesserOpacityIfFuture]"
-      >
+      <TableCell :rowspan="rowspan" class="border-r">
         <SpanDate :date="mmf.invoiceDate" />
       </TableCell>
       <TableCell
         :rowspan="rowspan"
         :colspan="!hasSplits ? 2 : 1"
-        :class="[
-          'text-right',
-          hasSplits ? 'border-r' : '',
-          rowBgClass,
-          lesserOpacityIfFuture,
-        ]"
+        :class="['text-right', { 'border-r': hasSplits }]"
       >
         <SpanAmount :amount="mmf.amount" />
       </TableCell>
     </template>
 
-    <TableCell
-      v-if="hasSplits"
-      :class="['text-right border-r', rowBgClass, lesserOpacityIfFuture]"
-    >
+    <TableCell v-if="hasSplits" class="text-right border-r">
       <SpanAmount v-if="row.isSplit" :amount="row.amount" />
     </TableCell>
 
     <template v-if="idx === 0">
-      <TableCell
-        :rowspan="rowspan"
-        :class="['text-left border-r', rowBgClass, lesserOpacityIfFuture]"
-      >
+      <TableCell :rowspan="rowspan" class="text-left border-r">
         {{ mmf.contractpartnerName }}
       </TableCell>
     </template>
 
     <TableCell
-      :class="[
-        'text-left border-r break-words whitespace-normal w-full min-w-0',
-        rowBgClass,
-        lesserOpacityIfFuture,
-      ]"
+      class="text-left border-r break-words whitespace-normal w-full min-w-0"
     >
       {{ row.comment }}
     </TableCell>
-    <TableCell
-      :class="['text-left border-r', rowBgClass, lesserOpacityIfFuture]"
-    >
+    <TableCell class="text-left border-r">
       {{ row.postingAccountName }}
     </TableCell>
 
     <template v-if="idx === 0">
-      <TableCell
-        :rowspan="rowspan"
-        :class="[
-          'text-left border-r',
-          rowBgClass,
-          isFuture ? 'opacity-60' : '',
-        ]"
-      >
+      <TableCell :rowspan="rowspan" class="text-left border-r">
         {{ mmf.capitalsourceComment }}
       </TableCell>
 
       <template v-if="isOwnMoneyflow">
-        <TableCell
-          :rowspan="rowspan"
-          :class="['text-center py-0 px-1', rowBgClass, lesserOpacityIfFuture]"
-        >
+        <TableCell :rowspan="rowspan" class="text-center py-0 px-1">
           <Button
             variant="ghost"
             size="icon"
@@ -114,14 +84,7 @@
             <Pencil class="icon-small" />
           </Button>
         </TableCell>
-        <TableCell
-          :rowspan="rowspan"
-          :class="[
-            'text-center border-l py-0 px-1',
-            rowBgClass,
-            lesserOpacityIfFuture,
-          ]"
-        >
+        <TableCell :rowspan="rowspan" class="text-center border-l py-0 px-1">
           <Button
             variant="ghost"
             size="icon"
@@ -136,14 +99,7 @@
       </template>
 
       <template v-else>
-        <TableCell
-          :rowspan="rowspan"
-          :class="[
-            'text-center border-r py-0 px-1',
-            rowBgClass,
-            lesserOpacityIfFuture,
-          ]"
-        >
+        <TableCell :rowspan="rowspan" class="text-center border-r py-0 px-1">
           <Button
             variant="ghost"
             size="icon"
@@ -155,10 +111,7 @@
             <Eye class="icon-small" />
           </Button>
         </TableCell>
-        <TableCell
-          :rowspan="rowspan"
-          :class="[rowBgClass, lesserOpacityIfFuture]"
-        />
+        <TableCell :rowspan="rowspan" />
       </template>
     </template>
   </TableRow>
@@ -186,11 +139,15 @@ defineEmits<{
   listMoneyflow: [moneyflow: Moneyflow];
 }>();
 
+const userSessionStore = useUserSessionStore();
+const today = new Date();
+today.setHours(0, 0, 0, 0);
+
 const rowBgClass = computed(() =>
   props.index % 2 === 0 ? "bg-muted" : "bg-background",
 );
 const isOwnMoneyflow = computed(
-  () => props.mmf.userId === useUserSessionStore().getUserId,
+  () => props.mmf.userId === userSessionStore.getUserId,
 );
 const rowspan = computed(() => props.mmf.moneyflowSplitEntries?.length || 1);
 const hasSplits = computed(() => !!props.mmf.moneyflowSplitEntries?.length);
@@ -199,8 +156,6 @@ const redIfPrivate = computed(() =>
 );
 
 const isFuture = computed(() => {
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
   const bookingDate = new Date(props.mmf.bookingDate);
   bookingDate.setHours(0, 0, 0, 0);
   return bookingDate > today;
