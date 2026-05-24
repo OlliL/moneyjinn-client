@@ -11,8 +11,8 @@
         :aria-label="isCollapsed ? 'Collapse details' : 'Expand details'"
         class="action-icon-button"
       >
-        <ChevronRight v-if="!isCollapsed" class="icon-small" />
-        <ChevronDown v-else class="icon-small" />
+        <ChevronRight v-if="!isCollapsed" class="icon-medium" />
+        <ChevronDown v-else class="icon-medium" />
       </Button>
     </TableCell>
     <TableCell class="align-middle font-bold" :class="amountClass">

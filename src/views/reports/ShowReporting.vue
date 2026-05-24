@@ -146,7 +146,7 @@
                         <Checkbox
                           :id="`postingaccount-${value.id}`"
                           v-model="selectedPostingAccountIds[value.id]"
-                          class="icon-small"
+                          class="icon-medium"
                         />
                         <Label
                           :for="`postingaccount-${value.id}`"
@@ -188,7 +188,7 @@
 
             <div class="flex justify-center">
               <ButtonSubmit :button-label="$t('General.show')">
-                <template #icon><Eye class="icon-small" /></template>
+                <template #icon><Eye class="icon-medium" /></template>
               </ButtonSubmit>
             </div>
           </div>

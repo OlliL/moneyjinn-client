@@ -78,7 +78,7 @@
                 :button-label="$t('General.show')"
                 form-id="compareDataForm"
                 test-id="compare-data-submit"
-                ><template #icon><Eye class="icon-small" /></template
+                ><template #icon><Eye class="icon-medium" /></template
               ></ButtonSubmit>
             </div>
           </div>

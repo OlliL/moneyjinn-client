@@ -45,8 +45,12 @@
   @apply hidden md:flex justify-center pb-4;
 }
 
-@utility icon-small {
+@utility icon-medium {
   @apply h-4 w-4 cursor-pointer;
+}
+
+@utility icon-small {
+  @apply h-3.5 w-3.5 cursor-pointer;
 }
 
 @utility icon-extra-small {

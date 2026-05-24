@@ -25,7 +25,7 @@
       :test-id="`capitalsource-edit-${mcs.id}`"
       @click="editCapitalsource"
     >
-      <Pencil class="icon-small" />
+      <Pencil class="icon-medium" />
     </ButtonTableIcon>
     <ButtonTableIcon
       v-if="owner"
@@ -33,7 +33,7 @@
       :test-id="`capitalsource-delete-${mcs.id}`"
       @click="deleteCapitalsource"
     >
-      <Trash2 class="icon-small" />
+      <Trash2 class="icon-medium" />
     </ButtonTableIcon>
   </TableRow>
 </template>

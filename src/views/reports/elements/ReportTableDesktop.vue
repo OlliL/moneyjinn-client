@@ -14,7 +14,7 @@
                 {{ $t("Moneyflow.bookingdate") }}
                 <component
                   :is="sortIcon('bookingDate')"
-                  class="icon-small text-primary cursor-pointer shrink-0 hover:text-primary/70 transition-colors"
+                  class="icon-medium text-primary cursor-pointer shrink-0 hover:text-primary/70 transition-colors"
                   :title="$t('Moneyflow.bookingdate')"
                   :aria-label="$t('Moneyflow.bookingdate')"
                   @click="$emit('sortByColumn', 'bookingDate')"
@@ -30,7 +30,7 @@
                 {{ $t("Moneyflow.invoicedate") }}
                 <component
                   :is="sortIcon('invoiceDate')"
-                  class="icon-small text-primary cursor-pointer shrink-0 hover:text-primary/70 transition-colors"
+                  class="icon-medium text-primary cursor-pointer shrink-0 hover:text-primary/70 transition-colors"
                   :title="$t('Moneyflow.invoicedate')"
                   :aria-label="$t('Moneyflow.invoicedate')"
                   @click="$emit('sortByColumn', 'invoiceDate')"
@@ -46,7 +46,7 @@
                 {{ $t("General.amount") }}
                 <component
                   :is="sortIcon('amount')"
-                  class="icon-small text-primary cursor-pointer shrink-0 hover:text-primary/70 transition-colors"
+                  class="icon-medium text-primary cursor-pointer shrink-0 hover:text-primary/70 transition-colors"
                   :title="$t('General.amount')"
                   :aria-label="$t('General.amount')"
                   @click="$emit('sortByColumn', 'amount')"
@@ -67,7 +67,7 @@
                   {{ $t("General.contractpartner") }}
                   <component
                     :is="sortIcon('contractpartnerName')"
-                    class="icon-small text-primary cursor-pointer shrink-0 hover:text-primary/70 transition-colors"
+                    class="icon-medium text-primary cursor-pointer shrink-0 hover:text-primary/70 transition-colors"
                     :title="$t('General.contractpartner')"
                     :aria-label="$t('General.contractpartner')"
                     @click="$emit('sortByColumn', 'contractpartnerName')"
@@ -106,7 +106,7 @@
                   {{ $t("General.comment") }}
                   <component
                     :is="sortIcon('comment')"
-                    class="icon-small text-primary cursor-pointer shrink-0 hover:text-primary/70 transition-colors"
+                    class="icon-medium text-primary cursor-pointer shrink-0 hover:text-primary/70 transition-colors"
                     :title="$t('General.comment')"
                     :aria-label="$t('General.comment')"
                     @click="$emit('sortByColumn', 'comment')"
@@ -147,7 +147,7 @@
                   {{ $t("General.postingAccount") }}
                   <component
                     :is="sortIcon('postingAccountName')"
-                    class="icon-small text-primary cursor-pointer shrink-0 hover:text-primary/70 transition-colors"
+                    class="icon-medium text-primary cursor-pointer shrink-0 hover:text-primary/70 transition-colors"
                     :title="$t('General.postingAccount')"
                     :aria-label="$t('General.postingAccount')"
                     @click="$emit('sortByColumn', 'postingAccountName')"
@@ -188,7 +188,7 @@
                   {{ $t("General.capitalsource") }}
                   <component
                     :is="sortIcon('capitalsourceComment')"
-                    class="icon-small text-primary cursor-pointer shrink-0 hover:text-primary/70 transition-colors"
+                    class="icon-medium text-primary cursor-pointer shrink-0 hover:text-primary/70 transition-colors"
                     :title="$t('General.capitalsource')"
                     :aria-label="$t('General.capitalsource')"
                     @click="$emit('sortByColumn', 'capitalsourceComment')"

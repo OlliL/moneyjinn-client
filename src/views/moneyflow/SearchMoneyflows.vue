@@ -71,11 +71,11 @@
               class="flex items-center justify-between p-3 cursor-pointer text-xs font-semibold text-muted-foreground md:hidden select-none border border-border rounded-xl bg-muted/20 hover:bg-muted/40 transition-colors"
             >
               <div class="flex items-center gap-2">
-                <SlidersHorizontal class="icon-small" />
+                <SlidersHorizontal class="icon-medium" />
                 <span>{{ $t("General.displayOptions") }}</span>
               </div>
               <ChevronDown
-                class="icon-small transition-transform duration-200"
+                class="icon-medium transition-transform duration-200"
                 :class="{ 'rotate-180': mobileOptionsOpen }"
               />
             </div>
@@ -94,7 +94,7 @@
                     class="flex items-center justify-center gap-2 w-full"
                     @click="resetForm"
                   >
-                    <Undo2 class="icon-small" />
+                    <Undo2 class="icon-medium" />
                     {{ $t("General.reset") }}
                   </Button>
                   <ButtonSubmit
@@ -103,7 +103,7 @@
                     test-id="search-moneyflows-submit"
                     class="flex w-full md:!w-full"
                   >
-                    <template #icon><Search class="icon-small" /></template>
+                    <template #icon><Search class="icon-medium" /></template>
                   </ButtonSubmit>
                 </div>
 
@@ -196,7 +196,7 @@
                 test-id="search-moneyflows-mobile-submit"
                 class="flex w-full"
               >
-                <template #icon><Search class="icon-small" /></template>
+                <template #icon><Search class="icon-medium" /></template>
               </ButtonSubmit>
               <Button
                 type="button"
@@ -204,7 +204,7 @@
                 class="flex items-center justify-center gap-2 w-full"
                 @click="resetForm"
               >
-                <Undo2 class="icon-small" />
+                <Undo2 class="icon-medium" />
                 {{ $t("General.reset") }}
               </Button>
             </div>

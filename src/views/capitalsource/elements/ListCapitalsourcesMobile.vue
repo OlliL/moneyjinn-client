@@ -41,7 +41,7 @@
                 :data-testid="`capitalsource-mobile-edit-${mcs.id}`"
                 @click.stop="editCapitalsource(mcs)"
               >
-                <Pencil class="icon-small" />
+                <Pencil class="icon-medium" />
               </Button>
               <Button
                 variant="ghost"
@@ -49,7 +49,7 @@
                 :data-testid="`capitalsource-mobile-delete-${mcs.id}`"
                 @click.stop="deleteCapitalsource(mcs)"
               >
-                <Trash2 class="icon-small" />
+                <Trash2 class="icon-medium" />
               </Button>
             </div>
           </div>

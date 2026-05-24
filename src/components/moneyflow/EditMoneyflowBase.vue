@@ -49,7 +49,7 @@
         :field-label="$t('General.amount')"
         :focus="isDesktop().value || !mmf.id"
       >
-        <template #icon><Euro class="icon-small" /></template>
+        <template #icon><Euro class="icon-medium" /></template>
       </InputStandard>
     </div>
 
@@ -195,7 +195,7 @@
               class="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium text-muted-foreground hover:text-primary transition-colors h-9 px-3 gap-2"
               @click="onAddMoneyflowSplitEntryRow"
             >
-              <Plus class="icon-small shrink-0" />
+              <Plus class="icon-medium shrink-0" />
               <span>{{ $t("Moneyflow.addPosition") }}</span>
             </Button>
           </div>

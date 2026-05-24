@@ -58,7 +58,7 @@
                         field-type="number"
                         step="0.01"
                       >
-                        <template #icon><Euro class="icon-small" /></template>
+                        <template #icon><Euro class="icon-medium" /></template>
                       </InputStandard>
                     </TableCell>
                   </TableRow>
@@ -97,7 +97,7 @@
                         field-type="number"
                         step="0.01"
                       >
-                        <template #icon><Euro class="icon-small" /></template>
+                        <template #icon><Euro class="icon-medium" /></template>
                       </InputStandard>
                     </TableCell>
                   </TableRow>

@@ -74,7 +74,7 @@
                 @click="filterCapitalsource = ''"
                 class="rounded-l-none border-l"
               >
-                <X class="icon-small" />
+                <X class="icon-medium" />
               </Button>
             </template>
           </InputStandard>
@@ -95,7 +95,7 @@
                 @click="filterContractpartner = ''"
                 class="rounded-l-none border-l"
               >
-                <X class="icon-small" />
+                <X class="icon-medium" />
               </Button>
             </template>
           </InputStandard>
@@ -116,7 +116,7 @@
                 @click="filterComment = ''"
                 class="rounded-l-none border-l"
               >
-                <X class="icon-small" />
+                <X class="icon-medium" />
               </Button>
             </template>
           </InputStandard>
@@ -137,7 +137,7 @@
                 @click="filterPostingAccount = ''"
                 class="rounded-l-none border-l"
               >
-                <X class="icon-small" />
+                <X class="icon-medium" />
               </Button>
             </template>
           </InputStandard>

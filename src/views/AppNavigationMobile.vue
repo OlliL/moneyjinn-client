@@ -79,7 +79,7 @@
                 </div>
 
                 <ChevronDown
-                  class="icon-small transition-transform duration-200 group-data-[state=open]:rotate-180 text-muted-foreground"
+                  class="icon-medium transition-transform duration-200 group-data-[state=open]:rotate-180 text-muted-foreground"
                 />
               </div>
             </CollapsibleTrigger>
@@ -121,7 +121,7 @@
                 </div>
 
                 <ChevronDown
-                  class="icon-small transition-transform duration-200 group-data-[state=open]:rotate-180 text-muted-foreground"
+                  class="icon-medium transition-transform duration-200 group-data-[state=open]:rotate-180 text-muted-foreground"
                 />
               </div>
             </CollapsibleTrigger>
@@ -182,7 +182,7 @@
                 </div>
 
                 <ChevronDown
-                  class="icon-small transition-transform duration-200 group-data-[state=open]:rotate-180 text-muted-foreground"
+                  class="icon-medium transition-transform duration-200 group-data-[state=open]:rotate-180 text-muted-foreground"
                 />
               </div>
             </CollapsibleTrigger>
@@ -247,7 +247,7 @@
                 </div>
 
                 <ChevronDown
-                  class="icon-small transition-transform duration-200 group-data-[state=open]:rotate-180 text-muted-foreground"
+                  class="icon-medium transition-transform duration-200 group-data-[state=open]:rotate-180 text-muted-foreground"
                 />
               </div>
             </CollapsibleTrigger>
@@ -296,7 +296,7 @@
                 </div>
 
                 <ChevronDown
-                  class="icon-small transition-transform duration-200 group-data-[state=open]:rotate-180 text-muted-foreground"
+                  class="icon-medium transition-transform duration-200 group-data-[state=open]:rotate-180 text-muted-foreground"
                 />
               </div>
             </CollapsibleTrigger>

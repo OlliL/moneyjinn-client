@@ -15,14 +15,14 @@
       :test-id="`user-edit-${user.id}`"
       @click="editUser"
     >
-      <Pencil class="icon-small" />
+      <Pencil class="icon-medium" />
     </ButtonTableIcon>
     <ButtonTableIcon
       :title="$t('General.delete')"
       :test-id="`user-delete-${user.id}`"
       @click="deleteUser"
     >
-      <Trash2 class="icon-small" />
+      <Trash2 class="icon-medium" />
     </ButtonTableIcon>
   </TableRow>
 </template>

@@ -25,7 +25,7 @@
         class="button-with-icon hidden md:flex"
         @click="resetForm"
       >
-        <Undo2 class="icon-small" />
+        <Undo2 class="icon-medium" />
         {{ $t("General.reset") }}
       </Button>
 
@@ -33,7 +33,7 @@
         :button-label="$t('General.save')"
         :form-id="'createPostingAccountForm' + idSuffix"
       >
-        <template #icon><Save class="icon-small" /></template>
+        <template #icon><Save class="icon-medium" /></template>
       </ButtonSubmit>
     </template>
   </ModalVue>

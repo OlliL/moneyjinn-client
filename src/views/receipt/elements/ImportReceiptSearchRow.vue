@@ -6,7 +6,7 @@
           :id="'radio-' + props.mmf.id"
           :value="String(props.mmf.id)"
           :data-testid="'moneyflow-radio-' + props.mmf.id"
-          class="icon-small rounded-full border border-primary text-primary shadow focus:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+          class="icon-medium rounded-full border border-primary text-primary shadow focus:outline-none focus-visible:ring-1 focus-visible:ring-ring"
         />
       </div>
     </TableCell>
@@ -25,7 +25,7 @@
         @click="editMoneyflow"
         class="action-icon-button"
       >
-        <Pencil class="icon-small" />
+        <Pencil class="icon-medium" />
       </Button>
     </TableCell>
     <TableCell class="text-center border-l" v-if="isOwnMoneyflow">
@@ -35,7 +35,7 @@
         @click="deleteMoneyflow"
         class="action-icon-button"
       >
-        <Trash2 class="icon-small" />
+        <Trash2 class="icon-medium" />
       </Button>
     </TableCell>
     <TableCell v-if="!isOwnMoneyflow">
@@ -45,7 +45,7 @@
         @click="listMoneyflow"
         class="action-icon-button"
       >
-        <Eye class="icon-small" />
+        <Eye class="icon-medium" />
       </Button>
     </TableCell>
   </TableRow>

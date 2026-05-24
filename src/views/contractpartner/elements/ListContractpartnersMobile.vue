@@ -38,7 +38,7 @@
                 :data-testid="`contractpartner-mobile-edit-${mcp.id}`"
                 @click.stop="editContractpartner(mcp)"
               >
-                <Pencil class="icon-small" />
+                <Pencil class="icon-medium" />
               </Button>
               <Button
                 variant="ghost"
@@ -46,7 +46,7 @@
                 :data-testid="`contractpartner-mobile-delete-${mcp.id}`"
                 @click.stop="deleteContractpartner(mcp)"
               >
-                <Trash2 class="icon-small" />
+                <Trash2 class="icon-medium" />
               </Button>
               <Button
                 variant="ghost"
@@ -54,7 +54,7 @@
                 :data-testid="`contractpartner-mobile-accounts-${mcp.id}`"
                 @click.stop="listContractpartnerAccounts(mcp)"
               >
-                <Banknote class="icon-small" />
+                <Banknote class="icon-medium" />
               </Button>
             </div>
           </div>

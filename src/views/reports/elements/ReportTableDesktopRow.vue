@@ -19,7 +19,7 @@
           :aria-label="$t('Receipt.receipt')"
           class="action-icon-button"
         >
-          <ReceiptText class="icon-small" />
+          <ReceiptText class="icon-medium" />
         </Button>
       </TableCell>
       <TableCell :rowspan="rowspan" class="border-r">
@@ -81,7 +81,7 @@
             :title="$t('General.edit')"
             class="action-icon-button"
           >
-            <Pencil class="icon-small" />
+            <Pencil class="icon-medium" />
           </Button>
         </TableCell>
         <TableCell :rowspan="rowspan" class="text-center border-l py-0 px-1">
@@ -93,7 +93,7 @@
             :title="$t('General.delete')"
             class="action-icon-button"
           >
-            <Trash2 class="icon-small" />
+            <Trash2 class="icon-medium" />
           </Button>
         </TableCell>
       </template>
@@ -108,7 +108,7 @@
             :title="$t('General.moneyflow')"
             class="action-icon-button"
           >
-            <Eye class="icon-small" />
+            <Eye class="icon-medium" />
           </Button>
         </TableCell>
         <TableCell :rowspan="rowspan" />

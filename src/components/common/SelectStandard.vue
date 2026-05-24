@@ -41,7 +41,7 @@
           @click="clearInput"
           :data-testid="id + '-clear'"
         >
-          <X class="icon-small stroke-[3px]" />
+          <X class="icon-medium stroke-[3px]" />
         </button>
       </div>
 

@@ -14,7 +14,7 @@
     :select-box-values="selectBoxValues"
   >
     <template #icon v-if="userIsAdmin"
-      ><SquarePlus @click="showCreatePostingAccountModal" class="icon-small"
+      ><SquarePlus @click="showCreatePostingAccountModal" class="icon-medium"
     /></template>
   </SelectStandard>
 </template>

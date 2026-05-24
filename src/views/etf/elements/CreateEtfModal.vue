@@ -45,7 +45,7 @@
                   step="0.01"
                   :field-label="$t('ETF.partialTaxExemption')"
                 >
-                  <template #icon><Percent class="icon-small" /></template>
+                  <template #icon><Percent class="icon-medium" /></template>
                 </InputStandard>
               </div>
               <div>
@@ -108,7 +108,7 @@
                   step="0.01"
                   :field-label="$t('ETFFlow.transactionCostsAbsolute')"
                 >
-                  <template #icon><Euro class="icon-small" /></template>
+                  <template #icon><Euro class="icon-medium" /></template>
                 </InputStandard>
               </div>
 
@@ -121,7 +121,7 @@
                   step="0.01"
                   :field-label="$t('ETFFlow.transactionCostsRelative')"
                 >
-                  <template #icon><Percent class="icon-small" /></template>
+                  <template #icon><Percent class="icon-medium" /></template>
                 </InputStandard>
               </div>
 
@@ -134,7 +134,7 @@
                   step="0.01"
                   :field-label="$t('ETFFlow.transactionCostsMaximum')"
                 >
-                  <template #icon><Euro class="icon-small" /></template>
+                  <template #icon><Euro class="icon-medium" /></template>
                 </InputStandard>
               </div>
             </div>
@@ -149,7 +149,7 @@
         class="button-with-icon hidden md:flex"
         @click="resetForm"
       >
-        <Undo2 class="icon-small" />
+        <Undo2 class="icon-medium" />
         {{ $t("General.reset") }}
       </Button>
 
@@ -157,7 +157,7 @@
         :button-label="$t('General.save')"
         :form-id="'createEtfForm' + idSuffix"
       >
-        <template #icon><Save class="icon-small" /></template>
+        <template #icon><Save class="icon-medium" /></template>
       </ButtonSubmit>
     </template>
   </ModalVue>

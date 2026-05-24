@@ -37,11 +37,11 @@
               class="flex items-center justify-between p-3 cursor-pointer text-xs font-semibold text-muted-foreground md:hidden select-none border border-border rounded-xl bg-muted/20 hover:bg-muted/40 transition-colors"
             >
               <div class="flex items-center gap-2">
-                <SlidersHorizontal class="icon-small" />
+                <SlidersHorizontal class="icon-medium" />
                 <span>{{ $t("General.displayOptions") }}</span>
               </div>
               <ChevronDown
-                class="icon-small transition-transform duration-200"
+                class="icon-medium transition-transform duration-200"
                 :class="{ 'rotate-180': mobileOptionsOpen }"
               />
             </div>
@@ -147,7 +147,7 @@
                           <Checkbox
                             :id="`capitalsource-${value.id}`"
                             v-model="capitalsourceIds[value.id]"
-                            class="icon-small"
+                            class="icon-medium"
                             :data-testid="`capitalsource-${value.id}`"
                           />
                           <Label
@@ -276,7 +276,7 @@
                           <Checkbox
                             :id="`etf-${value.id}`"
                             v-model="etfIds[value.id]"
-                            class="icon-small"
+                            class="icon-medium"
                             :data-testid="`etf-${value.id}`"
                           />
                           <Label
@@ -315,7 +315,7 @@
               <ButtonSubmit
                 :button-label="$t('General.show')"
                 test-id="show-trends-button"
-                ><template #icon><Eye class="icon-small" /></template
+                ><template #icon><Eye class="icon-medium" /></template
               ></ButtonSubmit>
             </div>
           </div>

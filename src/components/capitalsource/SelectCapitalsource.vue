@@ -13,7 +13,7 @@
     :select-box-values="selectBoxValues"
   >
     <template #icon
-      ><SquarePlus @click="showCreateCapitalsourceModal" class="icon-small"
+      ><SquarePlus @click="showCreateCapitalsourceModal" class="icon-medium"
     /></template>
   </SelectStandard>
 </template>

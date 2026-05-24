@@ -40,7 +40,7 @@
                   :data-testid="`predef-moneyflow-mobile-edit-${mpm.id}`"
                   @click.stop="editPreDefMoneyflow(mpm)"
                 >
-                  <Pencil class="icon-small" />
+                  <Pencil class="icon-medium" />
                 </Button>
                 <Button
                   variant="ghost"
@@ -48,7 +48,7 @@
                   :data-testid="`predef-moneyflow-mobile-delete-${mpm.id}`"
                   @click.stop="deletePreDefMoneyflow(mpm)"
                 >
-                  <Trash2 class="icon-small" />
+                  <Trash2 class="icon-medium" />
                 </Button>
               </div>
             </div>
