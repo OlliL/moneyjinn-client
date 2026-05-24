@@ -28,7 +28,7 @@
         v-model:filter-contractpartner="filterContractpartner"
         v-model:filter-posting-account="filterPostingAccount"
         :moneyflows-count="report.moneyflows?.length || 0"
-        :filtered-moneyflows="filteredMoneyflows"
+        :moneyflows="sortedMoneyflows"
         :amount-sum="amountSum"
         @delete-moneyflow="deleteMoneyflow"
         @edit-moneyflow="editMoneyflow"
@@ -41,9 +41,10 @@
         v-model:filter-comment="filterComment"
         v-model:filter-contractpartner="filterContractpartner"
         v-model:filter-posting-account="filterPostingAccount"
-        v-model:sort-by="sortBy"
-        :filtered-moneyflows="filteredMoneyflows"
+        :sort-by="sortBy"
+        :moneyflows="sortedMoneyflows"
         :amount-sum="amountSum"
+        @sort-by-column="sortByColumn"
         @delete-moneyflow="deleteMoneyflow"
         @edit-moneyflow="editMoneyflow"
         @list-moneyflow="listMoneyflow"
@@ -181,6 +182,50 @@ watch(
   },
   { deep: true },
 );
+
+const sortedMoneyflows = computed(() => {
+  const result = [...filteredMoneyflows.value];
+  if (sortBy.value.size > 0) {
+    const entry = sortBy.value.entries().next().value;
+    if (entry) {
+      const field = entry[0] as keyof Moneyflow;
+      const ascending = entry[1] === true;
+      result.sort((a, b) => {
+        const comparison = compareColumns(a, b, field);
+        return ascending ? comparison : -1 * comparison;
+      });
+    }
+  }
+  return result;
+});
+
+const compareColumns = (
+  a: Moneyflow,
+  b: Moneyflow,
+  field: keyof Moneyflow,
+): number => {
+  let aField = a[field];
+  let bField = b[field];
+  if (aField === undefined || bField === undefined) return 0;
+  if (typeof aField === "string" && typeof bField === "string") {
+    aField = aField.toLowerCase();
+    bField = bField.toLowerCase();
+  }
+  if (aField > bField) return 1;
+  else if (bField > aField) return -1;
+  return 0;
+};
+
+const sortByColumn = (field: keyof Moneyflow) => {
+  let sortByField = sortBy.value.get(field);
+  if (sortByField === undefined || !sortByField) {
+    sortByField = true;
+  } else {
+    sortByField = false;
+  }
+  sortBy.value.clear();
+  sortBy.value.set(field, sortByField);
+};
 
 const filterContractpartner = ref("");
 const filterComment = ref("");
@@ -391,5 +436,11 @@ watch(
 
 onMounted(() => {
   loadData(+props.year, +props.month);
+  if (sortBy.value.size > 0) {
+    const entry = sortBy.value.entries().next().value;
+    if (entry) {
+      sortByColumn(entry[0]);
+    }
+  }
 });
 </script>

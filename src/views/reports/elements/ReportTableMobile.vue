@@ -121,7 +121,7 @@
     >
       {{
         $t("Reports.howManyFlowsShownMessage", {
-          num: filteredMoneyflows.length,
+          num: moneyflows.length,
           all: moneyflowsCount || 0,
         })
       }}
@@ -129,7 +129,7 @@
 
     <Accordion type="multiple" class="space-y-2">
       <AccordionItem
-        v-for="mmf in filteredMoneyflows"
+        v-for="mmf in moneyflows"
         :key="'mobile-' + mmf.id"
         :value="'item-' + mmf.id"
         :data-testid="`report-mobile-moneyflow-row-${mmf.id}`"
@@ -316,7 +316,7 @@
     </Accordion>
 
     <div
-      v-if="filteredMoneyflows.length === 0"
+      v-if="moneyflows.length === 0"
       data-testid="report-table-empty-mobile"
       class="p-4 border rounded-lg bg-muted/40 flex justify-center items-center text-sm font-bold shadow-sm text-muted-foreground"
     >
@@ -374,7 +374,7 @@ import { useI18n } from "vue-i18n";
 const { t } = useI18n();
 
 const props = defineProps<{
-  filteredMoneyflows: Moneyflow[];
+  moneyflows: Moneyflow[];
   moneyflowsCount: number;
   amountSum: number;
 }>();

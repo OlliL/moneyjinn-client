@@ -16,7 +16,7 @@
                   class="icon-small text-primary cursor-pointer shrink-0"
                   :title="$t('Moneyflow.bookingdate')"
                   :aria-label="$t('Moneyflow.bookingdate')"
-                  @click="sortByColumn('bookingDate')"
+                  @click="$emit('sortByColumn', 'bookingDate')"
                 />
               </span>
             </TableHead>
@@ -31,7 +31,7 @@
                   class="icon-small text-primary cursor-pointer shrink-0"
                   :title="$t('Moneyflow.invoicedate')"
                   :aria-label="$t('Moneyflow.invoicedate')"
-                  @click="sortByColumn('invoiceDate')"
+                  @click="$emit('sortByColumn', 'invoiceDate')"
                 />
               </span>
             </TableHead>
@@ -46,7 +46,7 @@
                   class="icon-small text-primary cursor-pointer shrink-0"
                   :title="$t('General.amount')"
                   :aria-label="$t('General.amount')"
-                  @click="sortByColumn('amount')"
+                  @click="$emit('sortByColumn', 'amount')"
                 />
               </span>
             </TableHead>
@@ -64,7 +64,7 @@
                     class="icon-small text-primary cursor-pointer shrink-0"
                     :title="$t('General.contractpartner')"
                     :aria-label="$t('General.contractpartner')"
-                    @click="sortByColumn('contractpartnerName')"
+                    @click="$emit('sortByColumn', 'contractpartnerName')"
                   />
                 </span>
                 <div class="flex items-center w-full min-w-[120px]">
@@ -102,7 +102,7 @@
                     class="icon-small text-primary cursor-pointer shrink-0"
                     :title="$t('General.comment')"
                     :aria-label="$t('General.comment')"
-                    @click="sortByColumn('comment')"
+                    @click="$emit('sortByColumn', 'comment')"
                   />
                 </span>
                 <div class="flex items-center w-full min-w-[120px]">
@@ -140,7 +140,7 @@
                     class="icon-small text-primary cursor-pointer shrink-0"
                     :title="$t('General.postingAccount')"
                     :aria-label="$t('General.postingAccount')"
-                    @click="sortByColumn('postingAccountName')"
+                    @click="$emit('sortByColumn', 'postingAccountName')"
                   />
                 </span>
                 <div class="flex items-center w-full min-w-[120px]">
@@ -178,7 +178,7 @@
                     class="icon-small text-primary cursor-pointer shrink-0"
                     :title="$t('General.capitalsource')"
                     :aria-label="$t('General.capitalsource')"
-                    @click="sortByColumn('capitalsourceComment')"
+                    @click="$emit('sortByColumn', 'capitalsourceComment')"
                   />
                 </span>
                 <div class="flex items-center w-full min-w-[120px]">
@@ -207,7 +207,7 @@
         </TableHeader>
         <TableBody>
           <ReportTableDesktopRow
-            v-for="(mmf, index) in sortedMoneyflows"
+            v-for="(mmf, index) in moneyflows"
             :key="mmf.id"
             :mmf="mmf"
             :index="index"
@@ -217,7 +217,7 @@
             @list-moneyflow="listMoneyflow"
           />
           <TableRow
-            v-if="sortedMoneyflows.length === 0"
+            v-if="moneyflows.length === 0"
             data-testid="report-table-empty-desktop"
           >
             <TableCell colspan="10" class="text-center text-muted-foreground">
@@ -254,12 +254,12 @@ import {
 } from "@/components/ui/table";
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 import { ArrowDown, ArrowUp, ArrowUpDown, X } from "lucide-vue-next";
-import { computed, onMounted, type PropType } from "vue";
 import ReportTableDesktopRow from "./ReportTableDesktopRow.vue";
 
 const props = defineProps<{
-  filteredMoneyflows: Moneyflow[];
+  moneyflows: Moneyflow[];
   amountSum: number;
+  sortBy: Map<keyof Moneyflow, boolean>;
 }>();
 const filterContractpartner = defineModel<string>("filterContractpartner", {
   default: "",
@@ -271,75 +271,19 @@ const filterPostingAccount = defineModel<string>("filterPostingAccount", {
 const filterCapitalsource = defineModel<string>("filterCapitalsource", {
   default: "",
 });
-const sortBy = defineModel<Map<keyof Moneyflow, boolean>>("sortBy", {
-  type: Object as PropType<Map<keyof Moneyflow, boolean>>,
-  required: true,
-});
 
 const emit = defineEmits<{
+  sortByColumn: [field: keyof Moneyflow];
   showReceipt: [id: number];
   deleteMoneyflow: [moneyflow: Moneyflow];
   editMoneyflow: [moneyflow: Moneyflow];
   listMoneyflow: [moneyflow: Moneyflow];
 }>();
 
-onMounted(() => {
-  if (sortBy.value.size > 0) {
-    const entry = sortBy.value.entries().next().value;
-    if (entry) {
-      sortByColumn(entry[0]);
-    }
-  }
-});
-
-const sortedMoneyflows = computed(() => {
-  let result = [...props.filteredMoneyflows];
-  if (sortBy.value.size > 0) {
-    const entry = sortBy.value.entries().next().value;
-    if (entry) {
-      const field = entry[0];
-      const ascending = entry[1] === true;
-      result.sort((a, b) => {
-        const comparison = compareColumns(a, b, field);
-        return ascending ? comparison : -1 * comparison;
-      });
-    }
-  }
-  return result;
-});
-
-const compareColumns = (
-  a: Moneyflow,
-  b: Moneyflow,
-  field: keyof Moneyflow,
-): number => {
-  let aField = a[field];
-  let bField = b[field];
-  if (aField === undefined || bField === undefined) return 0;
-  if (typeof aField === "string" && typeof bField === "string") {
-    aField = aField.toLowerCase();
-    bField = bField.toLowerCase();
-  }
-  if (aField > bField) return 1;
-  else if (bField > aField) return -1;
-  return 0;
-};
-
-const sortByColumn = (field: keyof Moneyflow) => {
-  let sortByField = sortBy.value.get(field);
-  if (sortByField === undefined || !sortByField) {
-    sortByField = true;
-  } else {
-    sortByField = false;
-  }
-  sortBy.value.clear();
-  sortBy.value.set(field, sortByField);
-};
-
 const sortIcon = (sortedField: keyof Moneyflow) => {
-  if (sortBy.value.get(sortedField) === undefined) {
+  if (props.sortBy.get(sortedField) === undefined) {
     return ArrowUpDown;
-  } else if (sortBy.value.get(sortedField)) {
+  } else if (props.sortBy.get(sortedField)) {
     return ArrowUp;
   }
   return ArrowDown;
