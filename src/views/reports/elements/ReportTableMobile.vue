@@ -148,14 +148,23 @@
 
   <div class="md:hidden w-full max-w-md mx-auto px-2 mb-6 space-y-3">
     <div
-      class="p-2 bg-muted/60 text-xs rounded-md text-center text-muted-foreground font-medium"
+      class="p-2 bg-muted/60 text-xs rounded-md text-center text-muted-foreground font-medium flex items-center justify-center gap-1.5 flex-wrap"
     >
-      {{
-        $t("Reports.howManyFlowsShownMessage", {
-          num: moneyflows.length,
-          all: moneyflowsCount || 0,
-        })
-      }}
+      <span>
+        {{
+          $t("Reports.howManyFlowsShownMessage", {
+            num: moneyflows.length,
+            all: moneyflowsCount || 0,
+          })
+        }}
+      </span>
+      <template v-if="activeSort">
+        <span class="text-muted-foreground/30">•</span>
+        <div class="flex items-center gap-1 text-primary/80">
+          <span class="truncate">{{ $t(activeSort.label) }}</span>
+          <component :is="activeSort.icon" class="h-3 w-3 shrink-0" />
+        </div>
+      </template>
     </div>
 
     <Accordion type="multiple" class="space-y-2">
@@ -389,7 +398,6 @@ import { useUserSessionStore } from "@/stores/UserSessionStore";
 import {
   ArrowDown,
   ArrowUp,
-  ArrowUpDown,
   Calendar,
   CreditCard,
   Eye,
@@ -402,7 +410,7 @@ import {
   Trash2,
   X,
 } from "lucide-vue-next";
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
@@ -466,13 +474,26 @@ const sortOptions: { field: keyof Moneyflow; label: string }[] = [
   { field: "capitalsourceComment", label: "General.capitalsource" },
 ];
 
+const activeSort = computed(() => {
+  const entry = Array.from(props.sortBy.entries())[0];
+  if (!entry) return null;
+
+  const [field, direction] = entry;
+  const option = sortOptions.find((opt) => opt.field === field);
+
+  return {
+    label: option?.label || field,
+    icon: direction ? ArrowDown : ArrowUp,
+  };
+});
+
 const sortByColumn = (field: keyof Moneyflow) => {
   emit("sortByColumn", field);
 };
 
 const getSortIcon = (field: keyof Moneyflow) => {
   const direction = props.sortBy.get(field);
-  if (direction === undefined) return ArrowUpDown;
+  if (direction === undefined) return ArrowDown;
   return direction ? ArrowDown : ArrowUp;
 };
 </script>
