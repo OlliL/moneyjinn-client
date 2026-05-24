@@ -46,11 +46,12 @@
 
         <div class="flex-1 overflow-y-auto pt-2">
           <div
-            class="w-full max-w-[260px] p-3 border border-border rounded-xl bg-card shadow-sm mx-auto"
+            class="w-full max-w-[260px] p-3 border rounded-xl bg-card shadow-sm mx-auto"
             :data-testid="navigatorTestIdPrefix"
           >
             <div
-              class="flex items-center justify-between pb-2 mb-2 border-b border-border"
+              class="flex items-center justify-between"
+              :class="{ 'pb-2 mb-2 border-b': months.length > 0 }"
             >
               <Button
                 variant="ghost"
@@ -140,6 +141,13 @@
 <script lang="ts" setup>
 import { Button } from "@/components/ui/button";
 import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
   Sheet,
   SheetContent,
   SheetDescription,
@@ -149,11 +157,6 @@ import {
 import { getMonthName } from "@/tools/views/MonthName";
 import { CalendarDays, ChevronLeft, ChevronRight } from "lucide-vue-next";
 import { computed, ref } from "vue";
-import Select from "../ui/select/Select.vue";
-import SelectContent from "../ui/select/SelectContent.vue";
-import SelectItem from "../ui/select/SelectItem.vue";
-import SelectTrigger from "../ui/select/SelectTrigger.vue";
-import SelectValue from "../ui/select/SelectValue.vue";
 
 const props = withDefaults(
   defineProps<{

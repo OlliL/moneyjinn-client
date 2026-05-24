@@ -195,7 +195,7 @@
           EtfPreliminaryLumpSumType.AMOUNT_PER_MONTH
       "
     >
-      <div class="flex justify-center pb-4 px-15 md:px-0">
+      <div class="flex justify-center pb-4 px-14 md:px-0">
         <div class="w-full max-w-md">
           <ShowEtfPreliminaryLumpSumMonthlyVue :mep="etfPreliminaryLumpSum" />
         </div>
@@ -234,7 +234,7 @@
           EtfPreliminaryLumpSumType.AMOUNT_PER_PIECE
       "
     >
-      <div class="flex justify-center pb-4 px-15 md:px-0">
+      <div class="flex justify-center pb-4 px-14 md:px-0">
         <div class="w-full max-w-md">
           <ShowEtfPreliminaryLumpSumPieceVue :mep="etfPreliminaryLumpSum" />
         </div>
@@ -272,7 +272,7 @@
         etfPreliminaryLumpSum?.type == EtfPreliminaryLumpSumType.AMOUNT_PER_YEAR
       "
     >
-      <div class="flex justify-center pb-4 px-15 md:px-0">
+      <div class="flex justify-center pb-4 px-14 md:px-0">
         <div class="w-full max-w-md">
           <ShowEtfPreliminaryLumpSumYearly :mep="etfPreliminaryLumpSum" />
         </div>

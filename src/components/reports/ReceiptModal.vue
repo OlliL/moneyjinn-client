@@ -23,7 +23,7 @@ import { mapImportedMoneyflowReceiptToMoneyflowReceipt } from "@/service/mapper/
 import MoneyflowReceiptService from "@/service/MoneyflowReceiptService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { ref, useTemplateRef } from "vue";
-import { default as ButtonDeleteTwoTap } from "../common/ButtonDeleteTwoTap.vue";
+import ButtonDeleteTwoTap from "../common/ButtonDeleteTwoTap.vue";
 import DivError from "../common/DivError.vue";
 import ModalVue from "../common/Modal.vue";
 import SpanReceipt from "../common/SpanReceipt.vue";
