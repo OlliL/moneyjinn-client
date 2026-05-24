@@ -396,8 +396,9 @@ import {
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 import { useUserSessionStore } from "@/stores/UserSessionStore";
 import {
-  ArrowDown,
-  ArrowUp,
+  ArrowDownNarrowWide,
+  ArrowUpDown,
+  ArrowUpNarrowWide,
   Calendar,
   CreditCard,
   Eye,
@@ -483,7 +484,7 @@ const activeSort = computed(() => {
 
   return {
     label: option?.label || field,
-    icon: direction ? ArrowDown : ArrowUp,
+    icon: direction ? ArrowUpNarrowWide : ArrowDownNarrowWide,
   };
 });
 
@@ -493,7 +494,7 @@ const sortByColumn = (field: keyof Moneyflow) => {
 
 const getSortIcon = (field: keyof Moneyflow) => {
   const direction = props.sortBy.get(field);
-  if (direction === undefined) return ArrowDown;
-  return direction ? ArrowDown : ArrowUp;
+  if (direction === undefined) return ArrowUpDown;
+  return direction ? ArrowUpNarrowWide : ArrowDownNarrowWide;
 };
 </script>

@@ -253,7 +253,12 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
-import { ArrowDown, ArrowUp, ArrowUpDown, X } from "lucide-vue-next";
+import {
+  ArrowDownNarrowWide,
+  ArrowUpDown,
+  ArrowUpNarrowWide,
+  X,
+} from "lucide-vue-next";
 import ReportTableDesktopRow from "./ReportTableDesktopRow.vue";
 
 const props = defineProps<{
@@ -284,9 +289,9 @@ const sortIcon = (sortedField: keyof Moneyflow) => {
   if (props.sortBy.get(sortedField) === undefined) {
     return ArrowUpDown;
   } else if (props.sortBy.get(sortedField)) {
-    return ArrowUp;
+    return ArrowDownNarrowWide;
   }
-  return ArrowDown;
+  return ArrowUpNarrowWide;
 };
 
 const showReceipt = (id: number) => {
