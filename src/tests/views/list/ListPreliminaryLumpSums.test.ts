@@ -37,15 +37,7 @@ vi.mock("@/router", async () => {
 class ListPreliminaryLumpSumsView {
   static readonly EtfInput = new InputView("etf");
   static readonly EtfIdInput = new InputView("etf-id");
-  static readonly CreateMonthlyButton = new ButtonView(
-    "preliminary-lump-sum-create-monthly",
-  );
-  static readonly CreatePieceButton = new ButtonView(
-    "preliminary-lump-sum-create-piece",
-  );
-  static readonly CreateYearlyButton = new ButtonView(
-    "preliminary-lump-sum-create-yearly",
-  );
+  static readonly CreateButton = new ButtonView("preliminary-lump-sum-create");
   static readonly YearPreviousButton = new ButtonView(
     "preliminary-lump-sum-year-previous",
   );
@@ -109,7 +101,9 @@ test("ListPreliminaryLumpSums opens monthly create modal", async () => {
   render(ListPreliminaryLumpSums, { props: { etfId: "1" } });
 
   await ListPreliminaryLumpSumsView.EtfInput.assertToBeVisible();
-  await ListPreliminaryLumpSumsView.CreateMonthlyButton.click();
+  await ListPreliminaryLumpSumsView.CreateButton.click();
+  await ListPreliminaryLumpSumsView.MobilePopupMenu.assertToBeVisible();
+  await ListPreliminaryLumpSumsView.MobileCreateTypeMonthButton.click();
   await ListPreliminaryLumpSumsView.Modal.assertOpen();
 });
 
@@ -118,7 +112,9 @@ test("ListPreliminaryLumpSums opens piece create modal", async () => {
   render(ListPreliminaryLumpSums, { props: { etfId: "1" } });
 
   await ListPreliminaryLumpSumsView.EtfInput.assertToBeVisible();
-  await ListPreliminaryLumpSumsView.CreatePieceButton.click();
+  await ListPreliminaryLumpSumsView.CreateButton.click();
+  await ListPreliminaryLumpSumsView.MobilePopupMenu.assertToBeVisible();
+  await ListPreliminaryLumpSumsView.MobileCreateTypePieceButton.click();
   await ListPreliminaryLumpSumsView.Modal.assertOpen();
 });
 
@@ -127,7 +123,9 @@ test("ListPreliminaryLumpSums opens yearly create modal", async () => {
   render(ListPreliminaryLumpSums, { props: { etfId: "1" } });
 
   await ListPreliminaryLumpSumsView.EtfInput.assertToBeVisible();
-  await ListPreliminaryLumpSumsView.CreateYearlyButton.click();
+  await ListPreliminaryLumpSumsView.CreateButton.click();
+  await ListPreliminaryLumpSumsView.MobilePopupMenu.assertToBeVisible();
+  await ListPreliminaryLumpSumsView.MobileCreateTypeYearlyButton.click();
   await ListPreliminaryLumpSumsView.Modal.assertOpen();
 });
 

@@ -1,6 +1,6 @@
 <template>
   <div
-    class="flex w-full flex-col items-center justify-center gap-4 sm:flex-row sm:flex-nowrap sm:items-start"
+    class="hidden sm:flex w-full flex-col items-center justify-center gap-4 sm:flex-row sm:flex-nowrap sm:items-start"
   >
     <Select v-model="selectedYearModel">
       <SelectTrigger
