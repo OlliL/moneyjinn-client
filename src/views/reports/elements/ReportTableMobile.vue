@@ -478,16 +478,21 @@ const sortOptions: { field: keyof Moneyflow; label: string }[] = [
   { field: "capitalsourceComment", label: "General.capitalsource" },
 ];
 
+const getDirectionIcon = (direction: boolean | undefined) => {
+  if (direction === undefined) return ArrowUpDown;
+  return direction ? ArrowUpNarrowWide : ArrowDownWideNarrow;
+};
+
 const activeSort = computed(() => {
-  const entry = Array.from(props.sortBy.entries())[0];
+  const entry = props.sortBy.entries().next().value;
   if (!entry) return null;
 
-  const [field, direction] = entry;
+  const [field, direction] = entry as [keyof Moneyflow, boolean];
   const option = sortOptions.find((opt) => opt.field === field);
 
   return {
     label: option?.label || field,
-    icon: direction ? ArrowUpNarrowWide : ArrowDownWideNarrow,
+    icon: getDirectionIcon(direction),
     field,
   };
 });
@@ -497,8 +502,6 @@ const sortByColumn = (field: keyof Moneyflow) => {
 };
 
 const getSortIcon = (field: keyof Moneyflow) => {
-  const direction = props.sortBy.get(field);
-  if (direction === undefined) return ArrowUpDown;
-  return direction ? ArrowUpNarrowWide : ArrowDownWideNarrow;
+  return getDirectionIcon(props.sortBy.get(field));
 };
 </script>
