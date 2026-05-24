@@ -26,39 +26,35 @@
     @etf-preliminary-lump-sum-deleted="reloadView"
     ref="deleteModalYearly"
   />
-  <div class="custom-container space-y-6">
-    <div class="text-center">
-      <h4 class="text-2xl font-bold">
-        {{ $t("General.preliminaryLumpSums") }}
-      </h4>
-    </div>
 
-    <div class="fixed left-4 top-1/2 z-20 -translate-y-1/2">
-      <Button
-        data-testid="preliminary-lump-sum-year-previous"
-        v-if="showPreviousYearLink"
-        type="button"
-        variant="outline"
-        size="icon"
-        class="h-10 w-10 rounded-full border-border/70 bg-background/85 text-primary/80 shadow-sm backdrop-blur transition-all hover:bg-background hover:text-primary hover:shadow-md"
-        @click="navigateToPreviousYear"
-      >
-        <ChevronLeft class="h-5 w-5" />
-      </Button>
-    </div>
-    <div class="fixed right-4 top-1/2 z-20 -translate-y-1/2">
-      <Button
-        data-testid="preliminary-lump-sum-year-next"
-        v-if="showNextYearLink"
-        type="button"
-        variant="outline"
-        size="icon"
-        class="h-10 w-10 rounded-full border-border/70 bg-background/85 text-primary/80 shadow-sm backdrop-blur transition-all hover:bg-background hover:text-primary hover:shadow-md"
-        @click="navigateToNextYear"
-      >
-        <ChevronRight class="h-5 w-5" />
-      </Button>
-    </div>
+  <div class="custom-container space-y-6">
+    <h4 class="text-center text-2xl font-bold">
+      {{ $t("General.preliminaryLumpSums") }}
+    </h4>
+
+    <Button
+      data-testid="preliminary-lump-sum-year-previous"
+      v-if="showPreviousYearLink"
+      type="button"
+      variant="outline"
+      size="icon"
+      class="fixed left-4 top-1/2 z-20 -translate-y-1/2 h-10 w-10 rounded-full border-border/70 bg-background/85 text-primary/80 shadow-sm backdrop-blur transition-all hover:bg-background hover:text-primary hover:shadow-md"
+      @click="navigateToPreviousYear"
+    >
+      <ChevronLeft class="h-5 w-5" />
+    </Button>
+
+    <Button
+      data-testid="preliminary-lump-sum-year-next"
+      v-if="showNextYearLink"
+      type="button"
+      variant="outline"
+      size="icon"
+      class="fixed right-4 top-1/2 z-20 -translate-y-1/2 h-10 w-10 rounded-full border-border/70 bg-background/85 text-primary/80 shadow-sm backdrop-blur transition-all hover:bg-background hover:text-primary hover:shadow-md"
+      @click="navigateToNextYear"
+    >
+      <ChevronRight class="h-5 w-5" />
+    </Button>
 
     <ListPreliminaryLumpSumsDesktop
       class="hidden md:block"
@@ -81,7 +77,7 @@
     />
 
     <ListPreliminaryLumpSumsMobile
-      class="md:hidden"
+      class="block md:hidden"
       v-model:selectedEtfId="selectedEtfId"
       :years-loaded="yearsLoaded"
       :years="years"
@@ -105,53 +101,43 @@
 
     <div
       v-if="
-        selectedYear &&
-        selectedEtfId !== undefined &&
-        etfPreliminaryLumpSum?.type ==
-          EtfPreliminaryLumpSumType.AMOUNT_PER_MONTH
+        selectedYear && selectedEtfId !== undefined && etfPreliminaryLumpSum
       "
+      class="flex justify-center pb-4 px-14 md:px-0"
     >
-      <div class="flex justify-center pb-4 px-14 md:px-0">
-        <div class="w-full max-w-md">
-          <ShowEtfPreliminaryLumpSumMonthlyVue :mep="etfPreliminaryLumpSum" />
-        </div>
+      <div class="w-full max-w-md">
+        <ShowEtfPreliminaryLumpSumMonthlyVue
+          v-if="
+            etfPreliminaryLumpSum.type ===
+            EtfPreliminaryLumpSumType.AMOUNT_PER_MONTH
+          "
+          :mep="etfPreliminaryLumpSum"
+        />
+        <ShowEtfPreliminaryLumpSumPieceVue
+          v-else-if="
+            etfPreliminaryLumpSum.type ===
+            EtfPreliminaryLumpSumType.AMOUNT_PER_PIECE
+          "
+          :mep="etfPreliminaryLumpSum"
+        />
+        <ShowEtfPreliminaryLumpSumYearly
+          v-else-if="
+            etfPreliminaryLumpSum.type ===
+            EtfPreliminaryLumpSumType.AMOUNT_PER_YEAR
+          "
+          :mep="etfPreliminaryLumpSum"
+        />
       </div>
     </div>
-    <div
-      v-else-if="
-        selectedYear &&
-        selectedEtfId !== undefined &&
-        etfPreliminaryLumpSum?.type ==
-          EtfPreliminaryLumpSumType.AMOUNT_PER_PIECE
-      "
-    >
-      <div class="flex justify-center pb-4 px-14 md:px-0">
-        <div class="w-full max-w-md">
-          <ShowEtfPreliminaryLumpSumPieceVue :mep="etfPreliminaryLumpSum" />
-        </div>
-      </div>
-    </div>
-    <div
-      v-else-if="
-        selectedYear &&
-        selectedEtfId !== undefined &&
-        etfPreliminaryLumpSum?.type == EtfPreliminaryLumpSumType.AMOUNT_PER_YEAR
-      "
-    >
-      <div class="flex justify-center pb-4 px-14 md:px-0">
-        <div class="w-full max-w-md">
-          <ShowEtfPreliminaryLumpSumYearly :mep="etfPreliminaryLumpSum" />
-        </div>
-      </div>
-    </div>
+
     <div
       v-else
       class="flex flex-col items-center justify-center py-10"
       data-testid="preliminary-lump-sum-empty"
     >
-      <span class="text-muted-foreground text-center">{{
-        $t("General.noEntries")
-      }}</span>
+      <span class="text-muted-foreground text-center">
+        {{ $t("General.noEntries") }}
+      </span>
     </div>
   </div>
 </template>
@@ -167,7 +153,7 @@ import router, { Routes } from "@/router";
 import CrudEtfPreliminaryLumpSumService from "@/service/CrudEtfPreliminaryLumpSumService";
 import { useEtfStore } from "@/stores/EtfStore";
 import { ChevronLeft, ChevronRight } from "lucide-vue-next";
-import { computed, onMounted, ref, useTemplateRef, watch } from "vue";
+import { computed, ref, useTemplateRef, watch } from "vue";
 import CreateEtfPreliminaryLumpSumModalMonthlyVue from "./elements/CreateEtfPreliminaryLumpSumModalMonthly.vue";
 import CreateEtfPreliminaryLumpSumModalPieceVue from "./elements/CreateEtfPreliminaryLumpSumModalPiece.vue";
 import CreateEtfPreliminaryLumpSumModalYearly from "./elements/CreateEtfPreliminaryLumpSumModalYearly.vue";
@@ -180,16 +166,23 @@ import ShowEtfPreliminaryLumpSumMonthlyVue from "./elements/ShowEtfPreliminaryLu
 import ShowEtfPreliminaryLumpSumPieceVue from "./elements/ShowEtfPreliminaryLumpSumPiece.vue";
 import ShowEtfPreliminaryLumpSumYearly from "./elements/ShowEtfPreliminaryLumpSumYearly.vue";
 
-const serverErrors = ref(new Array<string>());
-const yearsLoaded = ref(false);
-const selectedYear = ref(undefined as string | undefined);
-const displayedYear = ref(undefined as string | undefined);
-const displayedEtf = ref(undefined as number | undefined);
-const years = ref([] as Array<string>);
-const selectedEtfId = ref(undefined as number | undefined);
+const props = defineProps({
+  etfId: { type: String, default: undefined },
+  year: { type: String, default: undefined },
+});
 
-const etfPreliminaryLumpSums = ref({} as Map<string, EtfPreliminaryLumpSum>);
-const etfPreliminaryLumpSum = ref({} as EtfPreliminaryLumpSum | undefined);
+const { getAsSelectBoxValues, getFavoriteEtf } = useEtfStore();
+
+const serverErrors = ref<string[]>([]);
+const yearsLoaded = ref(false);
+const selectedYear = ref<string | undefined>(props.year);
+const years = ref<string[]>([]);
+const selectedEtfId = ref<number | undefined>(undefined);
+
+const etfPreliminaryLumpSums = ref<Map<string, EtfPreliminaryLumpSum>>(
+  new Map(),
+);
+const etfPreliminaryLumpSum = ref<EtfPreliminaryLumpSum | undefined>(undefined);
 
 const createModalMonthly =
   useTemplateRef<typeof CreateEtfPreliminaryLumpSumModalMonthlyVue>(
@@ -216,63 +209,33 @@ const deleteModalYearly =
     "deleteModalYearly",
   );
 
-const { getAsSelectBoxValues, getFavoriteEtf } = useEtfStore();
-
-const props = defineProps({
-  etfId: { type: String, default: undefined },
-  year: { type: String, default: undefined },
-});
-
-onMounted(() => {
-  const year: string | undefined = props.year ? props.year : undefined;
-  selectedYear.value = year;
-});
-
-watch(
-  () => [getFavoriteEtf(), getAsSelectBoxValues()],
-  ([newFavoriteEtf, newSelectBoxValues]) => {
-    if (selectedEtfId.value === undefined) {
-      if (
-        props.etfId !== undefined &&
-        newSelectBoxValues !== undefined &&
-        (newSelectBoxValues as any as SelectBoxValue[]).length > 0
-      ) {
-        selectedEtfId.value = +props.etfId;
-      } else if (newFavoriteEtf !== undefined) {
-        selectedEtfId.value = (newFavoriteEtf as any as Etf).id;
-      }
-    }
-  },
-  { immediate: true },
-);
-
 const loadYears = (etfId: number, year?: string | undefined) => {
-  serverErrors.value = new Array<string>();
+  serverErrors.value = [];
   yearsLoaded.value = false;
   years.value = [];
-  etfPreliminaryLumpSums.value = new Map<string, EtfPreliminaryLumpSum>();
+  etfPreliminaryLumpSums.value.clear();
   selectedEtfId.value = etfId;
   selectedYear.value = undefined;
 
   CrudEtfPreliminaryLumpSumService.fetchAllEtfPreliminaryLumpSum(etfId)
     .then((response) => {
-      for (let _etfPreliminaryLumpSum of response) {
-        let _year = _etfPreliminaryLumpSum.year.toString();
+      for (const item of response) {
+        const _year = item.year.toString();
         years.value.push(_year);
-        etfPreliminaryLumpSums.value.set(_year, _etfPreliminaryLumpSum);
+        etfPreliminaryLumpSums.value.set(_year, item);
       }
 
-      if (year === undefined || !etfPreliminaryLumpSums.value.has(year)) {
-        const _year = Array.from(etfPreliminaryLumpSums.value.keys()).pop();
-        displayedYear.value = _year?.toString();
-        if (_year !== undefined)
-          etfPreliminaryLumpSum.value = etfPreliminaryLumpSums.value.get(_year);
-      } else {
-        displayedYear.value = year;
-        etfPreliminaryLumpSum.value = etfPreliminaryLumpSums.value.get(year);
+      let targetYear = year;
+      if (
+        targetYear === undefined ||
+        !etfPreliminaryLumpSums.value.has(targetYear)
+      ) {
+        targetYear = Array.from(etfPreliminaryLumpSums.value.keys())
+          .pop()
+          ?.toString();
       }
-      selectedYear.value = displayedYear.value;
-      routerPush();
+
+      selectedYear.value = targetYear;
       yearsLoaded.value = true;
     })
     .catch(() => {
@@ -280,35 +243,74 @@ const loadYears = (etfId: number, year?: string | undefined) => {
     });
 };
 
+watch(
+  () => [getFavoriteEtf(), getAsSelectBoxValues()] as const,
+  ([newFavoriteEtf, newSelectBoxValues]) => {
+    const optionsReady =
+      newSelectBoxValues !== undefined &&
+      (newSelectBoxValues as unknown as SelectBoxValue[]).length > 0;
+
+    if (selectedEtfId.value === undefined) {
+      if (props.etfId === undefined) {
+        if (optionsReady && newFavoriteEtf !== undefined) {
+          selectedEtfId.value = (newFavoriteEtf as unknown as Etf).id;
+        }
+      } else {
+        if (optionsReady) {
+          selectedEtfId.value = Number(props.etfId);
+        }
+      }
+    }
+  },
+  { immediate: true },
+);
+
+watch(
+  () => [props.etfId, props.year] as const,
+  ([newEtfId, newYear]) => {
+    if (newEtfId !== undefined) selectedEtfId.value = Number(newEtfId);
+    if (newYear !== undefined) selectedYear.value = newYear;
+  },
+);
+
+watch(
+  selectedEtfId,
+  (newVal) => {
+    if (newVal !== undefined) {
+      loadYears(newVal, selectedYear.value);
+    }
+  },
+  { immediate: true },
+);
+
+watch(selectedYear, (newVal) => {
+  if (newVal !== undefined) {
+    etfPreliminaryLumpSum.value = etfPreliminaryLumpSums.value.get(newVal);
+    routerPush();
+  }
+});
+
 const showCreateEtfPreliminaryLumpSumModal = (
   etfId: number | undefined,
   type: EtfPreliminaryLumpSumType,
   mep?: EtfPreliminaryLumpSum,
 ) => {
-  if (type == EtfPreliminaryLumpSumType.AMOUNT_PER_MONTH) {
+  if (type === EtfPreliminaryLumpSumType.AMOUNT_PER_MONTH) {
     createModalMonthly.value?._show(etfId, mep);
-  } else if (type == EtfPreliminaryLumpSumType.AMOUNT_PER_PIECE) {
+  } else if (type === EtfPreliminaryLumpSumType.AMOUNT_PER_PIECE) {
     createModalPiece.value?._show(etfId, mep);
-  } else if (type == EtfPreliminaryLumpSumType.AMOUNT_PER_YEAR) {
+  } else if (type === EtfPreliminaryLumpSumType.AMOUNT_PER_YEAR) {
     createModalYearly.value?._show(etfId, mep);
   }
 };
 
 const showDeleteEtfPreliminaryLumpSumModal = () => {
-  if (
-    etfPreliminaryLumpSum.value?.type ==
-    EtfPreliminaryLumpSumType.AMOUNT_PER_MONTH
-  ) {
+  const type = etfPreliminaryLumpSum.value?.type;
+  if (type === EtfPreliminaryLumpSumType.AMOUNT_PER_MONTH) {
     deleteModalMonthly.value?._show(etfPreliminaryLumpSum.value);
-  } else if (
-    etfPreliminaryLumpSum.value?.type ==
-    EtfPreliminaryLumpSumType.AMOUNT_PER_PIECE
-  ) {
+  } else if (type === EtfPreliminaryLumpSumType.AMOUNT_PER_PIECE) {
     deleteModalPiece.value?._show(etfPreliminaryLumpSum.value);
-  } else if (
-    etfPreliminaryLumpSum.value?.type ==
-    EtfPreliminaryLumpSumType.AMOUNT_PER_YEAR
-  ) {
+  } else if (type === EtfPreliminaryLumpSumType.AMOUNT_PER_YEAR) {
     deleteModalYearly.value?._show(etfPreliminaryLumpSum.value);
   }
 };
@@ -316,42 +318,19 @@ const showDeleteEtfPreliminaryLumpSumModal = () => {
 const selectYearMobile = (year: string) => {
   selectedYear.value = year;
 };
+
 const selectCurrentMonth = () => {
   selectedYear.value = years.value[years.value.length - 1];
 };
 
-watch(
-  selectedEtfId,
-  (newVal, oldVal) => {
-    if (
-      newVal != oldVal &&
-      newVal !== undefined &&
-      newVal != displayedEtf.value
-    ) {
-      displayedEtf.value = newVal;
-      loadYears(newVal, selectedYear.value);
-    }
-  },
-  { immediate: true },
-);
-
-watch(selectedYear, (newVal, oldVal) => {
-  if (
-    newVal != oldVal &&
-    newVal !== undefined &&
-    newVal !== displayedYear.value
-  ) {
-    displayedYear.value = newVal;
-    etfPreliminaryLumpSum.value = etfPreliminaryLumpSums.value.get(newVal);
-    routerPush();
-  }
-});
-
 const routerPush = () => {
-  if (
-    (selectedEtfId.value || "") != (props.etfId || "") ||
-    (selectedYear.value || "") != (props.year || "")
-  ) {
+  const currentEtfIdStr =
+    selectedEtfId.value === undefined ? "" : String(selectedEtfId.value);
+  const propEtfIdStr = props.etfId || "";
+  const currentYearStr = selectedYear.value || "";
+  const propYearStr = props.year || "";
+
+  if (currentEtfIdStr !== propEtfIdStr || currentYearStr !== propYearStr) {
     router.push({
       name: Routes.ListEtfPreliminaryLumpSums,
       params: { etfId: selectedEtfId.value, year: selectedYear.value },
@@ -359,10 +338,10 @@ const routerPush = () => {
   }
 };
 
-const reloadView = (etfPreliminaryLumpSum: EtfPreliminaryLumpSum) => {
-  if (etfPreliminaryLumpSum.etfId == selectedEtfId.value) {
+const reloadView = (lumpSum: EtfPreliminaryLumpSum) => {
+  if (lumpSum.etfId === selectedEtfId.value) {
     if (selectedYear.value === undefined) {
-      loadYears(selectedEtfId.value, etfPreliminaryLumpSum.year.toString());
+      loadYears(selectedEtfId.value, lumpSum.year.toString());
     } else {
       loadYears(selectedEtfId.value, selectedYear.value);
     }
@@ -377,19 +356,20 @@ const showNextYearLink = computed(() =>
 );
 
 const navigateToPreviousYear = () => {
-  selectedYear.value =
-    Math.max(
-      ...years.value
-        .map(Number)
-        .filter((year) => year < Number(selectedYear.value!)),
-    ).toString() || selectedYear.value;
+  if (!selectedYear.value) return;
+  const current = Number(selectedYear.value);
+  const filtered = years.value.map(Number).filter((year) => year < current);
+  if (filtered.length > 0) {
+    selectedYear.value = Math.max(...filtered).toString();
+  }
 };
+
 const navigateToNextYear = () => {
-  selectedYear.value =
-    Math.min(
-      ...years.value
-        .map(Number)
-        .filter((year) => year > Number(selectedYear.value!)),
-    ).toString() || selectedYear.value;
+  if (!selectedYear.value) return;
+  const current = Number(selectedYear.value);
+  const filtered = years.value.map(Number).filter((year) => year > current);
+  if (filtered.length > 0) {
+    selectedYear.value = Math.min(...filtered).toString();
+  }
 };
 </script>

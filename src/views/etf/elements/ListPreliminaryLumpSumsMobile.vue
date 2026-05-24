@@ -1,18 +1,16 @@
 <template>
   <div class="space-y-6">
-    <div class="flex justify-center">
-      <div class="w-full max-w-md items-center">
-        <SelectStandard
-          v-model="localSelectedEtfId"
-          id="etf-mobile"
-          :field-label="$t('General.selectEtf')"
-          :select-box-values="selectBoxValues"
-        />
-      </div>
+    <div class="mx-auto w-full max-w-md">
+      <SelectStandard
+        v-model="selectedEtfId"
+        id="etf-mobile"
+        :field-label="$t('General.selectEtf')"
+        :select-box-values="selectBoxValues"
+      />
     </div>
 
     <MonthYearMobileNavigator
-      v-if="localSelectedEtfId !== undefined"
+      v-if="selectedEtfId !== undefined"
       :data-loaded="yearsLoaded"
       :years="years"
       :months="[]"
@@ -28,13 +26,13 @@
     />
 
     <div
-      class="inline-block"
+      class="inline-block relative"
       ref="createButtonRef"
-      v-if="localSelectedEtfId !== undefined"
+      v-if="selectedEtfId !== undefined"
     >
       <ButtonMobileCreate
         data-testid="preliminary-lump-sum-mobile-create"
-        @click="showTypeSelection"
+        @click="toggleTypeSelector"
       />
       <ButtonMobileDelete
         data-testid="preliminary-lump-sum-mobile-delete"
@@ -49,40 +47,36 @@
 
       <div
         v-if="showTypeSelector"
-        ref="typeSelectorRef"
-        class="fixed right-20 bottom-26 z-50 w-52 rounded-md border bg-popover text-popover-foreground shadow-md p-2"
+        class="fixed right-20 bottom-26 z-50 flex w-52 flex-col gap-1 rounded-md border bg-popover text-popover-foreground shadow-md p-2"
         data-testid="etf-preliminary-sump-sum-create-menu"
       >
-        <div class="flex flex-col">
-          <Button
-            type="button"
-            data-testid="preliminary-lump-sum-mobile-create-type-month"
-            class="text-sm px-3 py-2 text-left hover:bg-muted rounded"
-            @click="
-              selectCreateType(EtfPreliminaryLumpSumType.AMOUNT_PER_MONTH)
-            "
-          >
-            {{ $t("ETFPreliminaryLumpSum.newMonthly") }}
-          </Button>
-          <Button
-            type="button"
-            data-testid="preliminary-lump-sum-mobile-create-type-piece"
-            class="text-sm px-3 py-2 text-left hover:bg-muted rounded"
-            @click="
-              selectCreateType(EtfPreliminaryLumpSumType.AMOUNT_PER_PIECE)
-            "
-          >
-            {{ $t("ETFPreliminaryLumpSum.newPiece") }}
-          </Button>
-          <Button
-            type="button"
-            data-testid="preliminary-lump-sum-mobile-create-type-yearly"
-            class="text-sm px-3 py-2 text-left hover:bg-muted rounded"
-            @click="selectCreateType(EtfPreliminaryLumpSumType.AMOUNT_PER_YEAR)"
-          >
-            {{ $t("ETFPreliminaryLumpSum.newYearly") }}
-          </Button>
-        </div>
+        <Button
+          type="button"
+          data-testid="preliminary-lump-sum-mobile-create-type-month"
+          variant="ghost"
+          class="w-full justify-start px-3 py-2 text-left text-sm"
+          @click="selectCreateType(EtfPreliminaryLumpSumType.AMOUNT_PER_MONTH)"
+        >
+          {{ $t("ETFPreliminaryLumpSum.newMonthly") }}
+        </Button>
+        <Button
+          type="button"
+          data-testid="preliminary-lump-sum-mobile-create-type-piece"
+          variant="ghost"
+          class="w-full justify-start px-3 py-2 text-left text-sm"
+          @click="selectCreateType(EtfPreliminaryLumpSumType.AMOUNT_PER_PIECE)"
+        >
+          {{ $t("ETFPreliminaryLumpSum.newPiece") }}
+        </Button>
+        <Button
+          type="button"
+          data-testid="preliminary-lump-sum-mobile-create-type-yearly"
+          variant="ghost"
+          class="w-full justify-start px-3 py-2 text-left text-sm"
+          @click="selectCreateType(EtfPreliminaryLumpSumType.AMOUNT_PER_YEAR)"
+        >
+          {{ $t("ETFPreliminaryLumpSum.newYearly") }}
+        </Button>
       </div>
     </div>
   </div>
@@ -97,19 +91,21 @@ import MonthYearMobileNavigator from "@/components/navigation/MonthYearMobileNav
 import { Button } from "@/components/ui/button";
 import type { EtfPreliminaryLumpSum } from "@/model/etf/EtfPreliminaryLumpSum";
 import { EtfPreliminaryLumpSumType } from "@/model/etf/EtfPreliminaryLumpSumType";
-import { computed, onBeforeUnmount, onMounted, ref } from "vue";
+import type { SelectBoxValue } from "@/model/SelectBoxValue";
+import { onClickOutside } from "@vueuse/core";
+import { ref } from "vue";
 
-const props = defineProps<{
-  selectedEtfId: number | undefined;
+const selectedEtfId = defineModel<number | undefined>("selectedEtfId");
+
+defineProps<{
   yearsLoaded: boolean;
   years: string[];
   selectedYear: string | undefined;
   etfPreliminaryLumpSum: EtfPreliminaryLumpSum | undefined;
-  selectBoxValues: any[];
+  selectBoxValues: SelectBoxValue[];
 }>();
 
 const emit = defineEmits<{
-  (e: "update:selectedEtfId", value: number | undefined): void;
   (e: "select-year", year: string): void;
   (e: "select-current-month"): void;
   (e: "open-create", type: EtfPreliminaryLumpSumType): void;
@@ -117,39 +113,19 @@ const emit = defineEmits<{
   (e: "open-delete"): void;
 }>();
 
-const localSelectedEtfId = computed({
-  get: () => props.selectedEtfId,
-  set: (val) => emit("update:selectedEtfId", val),
-});
-
 const showTypeSelector = ref(false);
-const typeSelectorRef = ref<HTMLElement | null>(null);
 const createButtonRef = ref<HTMLElement | null>(null);
 
-const showTypeSelection = () => {
+const toggleTypeSelector = () => {
   showTypeSelector.value = !showTypeSelector.value;
 };
+
 const selectCreateType = (type: EtfPreliminaryLumpSumType) => {
   showTypeSelector.value = false;
   emit("open-create", type);
 };
 
-const docClickHandler = (e: MouseEvent) => {
-  if (!showTypeSelector.value) return;
-  const target = e.target as Node | null;
-  if (!target) return;
-  if (
-    typeSelectorRef.value?.contains(target) ||
-    createButtonRef.value?.contains(target)
-  )
-    return;
+onClickOutside(createButtonRef, () => {
   showTypeSelector.value = false;
-};
-
-onMounted(() => {
-  document.addEventListener("click", docClickHandler);
-});
-onBeforeUnmount(() => {
-  document.removeEventListener("click", docClickHandler);
 });
 </script>
