@@ -80,17 +80,19 @@
           data-testid="etf-preliminary-sump-sum-create-menu"
         >
           <Button
-            v-for="opt in CREATE_OPTIONS"
-            :key="opt.type"
+            v-for="(config, type) in TYPE_CONFIG"
+            :key="type"
             variant="ghost"
             class="w-full justify-start text-sm px-3 py-2"
-            :data-testid="'preliminary-lump-sum-create-type-' + opt.id"
+            :data-testid="
+              'preliminary-lump-sum-desktop-create-type-' + config.id
+            "
             @click="
-              showCreateEtfPreliminaryLumpSumModal(selectedEtfId, opt.type);
+              showCreateEtfPreliminaryLumpSumModal(selectedEtfId, Number(type));
               closeMenu();
             "
           >
-            {{ $t(opt.label) }}
+            {{ $t(config.label) }}
           </Button>
         </div>
       </template>
@@ -121,17 +123,19 @@
           data-testid="etf-preliminary-sump-sum-create-menu"
         >
           <Button
-            v-for="opt in CREATE_OPTIONS"
-            :key="opt.type"
+            v-for="(config, type) in TYPE_CONFIG"
+            :key="type"
             variant="ghost"
             class="w-full justify-start px-3 py-2 text-left text-sm"
-            :data-testid="'preliminary-lump-sum-mobile-create-type-' + opt.id"
+            :data-testid="
+              'preliminary-lump-sum-mobile-create-type-' + config.id
+            "
             @click="
-              showCreateEtfPreliminaryLumpSumModal(selectedEtfId, opt.type);
+              showCreateEtfPreliminaryLumpSumModal(selectedEtfId, Number(type));
               closeMenu();
             "
           >
-            {{ $t(opt.label) }}
+            {{ $t(config.label) }}
           </Button>
         </div>
       </template>
@@ -229,6 +233,30 @@ const deleteModalYearly =
     "deleteModalYearly",
   );
 
+const TYPE_CONFIG: Partial<Record<EtfPreliminaryLumpSumType, any>> = {
+  [EtfPreliminaryLumpSumType.AMOUNT_PER_MONTH]: {
+    id: "month",
+    label: "ETFPreliminaryLumpSum.newMonthly",
+    create: createModalMonthly,
+    delete: deleteModalMonthly,
+    show: ShowEtfPreliminaryLumpSumMonthlyVue,
+  },
+  [EtfPreliminaryLumpSumType.AMOUNT_PER_PIECE]: {
+    id: "piece",
+    label: "ETFPreliminaryLumpSum.newPiece",
+    create: createModalPiece,
+    delete: deleteModalPiece,
+    show: ShowEtfPreliminaryLumpSumPieceVue,
+  },
+  [EtfPreliminaryLumpSumType.AMOUNT_PER_YEAR]: {
+    id: "yearly",
+    label: "ETFPreliminaryLumpSum.newYearly",
+    create: createModalYearly,
+    delete: deleteModalYearly,
+    show: ShowEtfPreliminaryLumpSumYearly,
+  },
+};
+
 const loadYears = (etfId: number, year?: string | undefined) => {
   serverErrors.value = [];
   yearsLoaded.value = false;
@@ -266,15 +294,13 @@ watch(
       newSelectBoxValues !== undefined &&
       (newSelectBoxValues as unknown as SelectBoxValue[]).length > 0;
 
-    if (selectedEtfId.value === undefined) {
+    if (selectedEtfId.value === undefined && optionsReady) {
       if (props.etfId === undefined) {
-        if (optionsReady && newFavoriteEtf !== undefined) {
+        if (newFavoriteEtf !== undefined) {
           selectedEtfId.value = (newFavoriteEtf as unknown as Etf).id;
         }
       } else {
-        if (optionsReady) {
-          selectedEtfId.value = Number(props.etfId);
-        }
+        selectedEtfId.value = Number(props.etfId);
       }
     }
   },
@@ -305,42 +331,6 @@ watch(selectedYear, (newVal) => {
     routerPush();
   }
 });
-
-const TYPE_CONFIG: Partial<Record<EtfPreliminaryLumpSumType, any>> = {
-  [EtfPreliminaryLumpSumType.AMOUNT_PER_MONTH]: {
-    create: createModalMonthly,
-    delete: deleteModalMonthly,
-    show: ShowEtfPreliminaryLumpSumMonthlyVue,
-  },
-  [EtfPreliminaryLumpSumType.AMOUNT_PER_PIECE]: {
-    create: createModalPiece,
-    delete: deleteModalPiece,
-    show: ShowEtfPreliminaryLumpSumPieceVue,
-  },
-  [EtfPreliminaryLumpSumType.AMOUNT_PER_YEAR]: {
-    create: createModalYearly,
-    delete: deleteModalYearly,
-    show: ShowEtfPreliminaryLumpSumYearly,
-  },
-};
-
-const CREATE_OPTIONS = [
-  {
-    type: EtfPreliminaryLumpSumType.AMOUNT_PER_MONTH,
-    label: "ETFPreliminaryLumpSum.newMonthly",
-    id: "month",
-  },
-  {
-    type: EtfPreliminaryLumpSumType.AMOUNT_PER_PIECE,
-    label: "ETFPreliminaryLumpSum.newPiece",
-    id: "piece",
-  },
-  {
-    type: EtfPreliminaryLumpSumType.AMOUNT_PER_YEAR,
-    label: "ETFPreliminaryLumpSum.newYearly",
-    id: "yearly",
-  },
-];
 
 const showCreateEtfPreliminaryLumpSumModal = (
   etfId: number | undefined,
