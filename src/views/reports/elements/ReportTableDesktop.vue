@@ -8,12 +8,13 @@
 
             <TableHead class="table-head-cell align-top py-2">
               <span
-                class="inline-flex items-center gap-1 font-bold whitespace-nowrap"
+                class="inline-flex items-center justify-center w-full gap-1 font-bold whitespace-nowrap transition-colors"
+                :class="{ 'text-primary': props.sortBy.has('bookingDate') }"
               >
                 {{ $t("Moneyflow.bookingdate") }}
                 <component
                   :is="sortIcon('bookingDate')"
-                  class="icon-small text-primary cursor-pointer shrink-0"
+                  class="icon-small text-primary cursor-pointer shrink-0 hover:text-primary/70 transition-colors"
                   :title="$t('Moneyflow.bookingdate')"
                   :aria-label="$t('Moneyflow.bookingdate')"
                   @click="$emit('sortByColumn', 'bookingDate')"
@@ -23,12 +24,13 @@
 
             <TableHead class="table-head-cell align-top py-2">
               <span
-                class="inline-flex items-center gap-1 font-bold whitespace-nowrap"
+                class="inline-flex items-center justify-center w-full gap-1 font-bold whitespace-nowrap transition-colors"
+                :class="{ 'text-primary': props.sortBy.has('invoiceDate') }"
               >
                 {{ $t("Moneyflow.invoicedate") }}
                 <component
                   :is="sortIcon('invoiceDate')"
-                  class="icon-small text-primary cursor-pointer shrink-0"
+                  class="icon-small text-primary cursor-pointer shrink-0 hover:text-primary/70 transition-colors"
                   :title="$t('Moneyflow.invoicedate')"
                   :aria-label="$t('Moneyflow.invoicedate')"
                   @click="$emit('sortByColumn', 'invoiceDate')"
@@ -38,12 +40,13 @@
 
             <TableHead class="table-head-cell align-top py-2" colspan="2">
               <span
-                class="inline-flex items-center gap-1 font-bold whitespace-nowrap"
+                class="inline-flex items-center justify-center w-full gap-1 font-bold whitespace-nowrap transition-colors"
+                :class="{ 'text-primary': props.sortBy.has('amount') }"
               >
                 {{ $t("General.amount") }}
                 <component
                   :is="sortIcon('amount')"
-                  class="icon-small text-primary cursor-pointer shrink-0"
+                  class="icon-small text-primary cursor-pointer shrink-0 hover:text-primary/70 transition-colors"
                   :title="$t('General.amount')"
                   :aria-label="$t('General.amount')"
                   @click="$emit('sortByColumn', 'amount')"
@@ -56,12 +59,15 @@
                 class="flex flex-col items-stretch text-center h-full justify-between gap-2"
               >
                 <span
-                  class="inline-flex items-center justify-center gap-1 font-bold whitespace-nowrap"
+                  class="inline-flex items-center justify-center gap-1 font-bold whitespace-nowrap transition-colors"
+                  :class="{
+                    'text-primary': props.sortBy.has('contractpartnerName'),
+                  }"
                 >
                   {{ $t("General.contractpartner") }}
                   <component
                     :is="sortIcon('contractpartnerName')"
-                    class="icon-small text-primary cursor-pointer shrink-0"
+                    class="icon-small text-primary cursor-pointer shrink-0 hover:text-primary/70 transition-colors"
                     :title="$t('General.contractpartner')"
                     :aria-label="$t('General.contractpartner')"
                     @click="$emit('sortByColumn', 'contractpartnerName')"
@@ -94,12 +100,13 @@
                 class="flex flex-col items-stretch text-center h-full justify-between gap-2"
               >
                 <span
-                  class="inline-flex items-center justify-center gap-1 font-bold whitespace-nowrap"
+                  class="inline-flex items-center justify-center gap-1 font-bold whitespace-nowrap transition-colors"
+                  :class="{ 'text-primary': props.sortBy.has('comment') }"
                 >
                   {{ $t("General.comment") }}
                   <component
                     :is="sortIcon('comment')"
-                    class="icon-small text-primary cursor-pointer shrink-0"
+                    class="icon-small text-primary cursor-pointer shrink-0 hover:text-primary/70 transition-colors"
                     :title="$t('General.comment')"
                     :aria-label="$t('General.comment')"
                     @click="$emit('sortByColumn', 'comment')"
@@ -132,12 +139,15 @@
                 class="flex flex-col items-stretch text-center h-full justify-between gap-2"
               >
                 <span
-                  class="inline-flex items-center justify-center gap-1 font-bold whitespace-nowrap"
+                  class="inline-flex items-center justify-center gap-1 font-bold whitespace-nowrap transition-colors"
+                  :class="{
+                    'text-primary': props.sortBy.has('postingAccountName'),
+                  }"
                 >
                   {{ $t("General.postingAccount") }}
                   <component
                     :is="sortIcon('postingAccountName')"
-                    class="icon-small text-primary cursor-pointer shrink-0"
+                    class="icon-small text-primary cursor-pointer shrink-0 hover:text-primary/70 transition-colors"
                     :title="$t('General.postingAccount')"
                     :aria-label="$t('General.postingAccount')"
                     @click="$emit('sortByColumn', 'postingAccountName')"
@@ -170,12 +180,15 @@
                 class="flex flex-col items-stretch text-center h-full justify-between gap-2"
               >
                 <span
-                  class="inline-flex items-center justify-center gap-1 font-bold whitespace-nowrap"
+                  class="inline-flex items-center justify-center gap-1 font-bold whitespace-nowrap transition-colors"
+                  :class="{
+                    'text-primary': props.sortBy.has('capitalsourceComment'),
+                  }"
                 >
                   {{ $t("General.capitalsource") }}
                   <component
                     :is="sortIcon('capitalsourceComment')"
-                    class="icon-small text-primary cursor-pointer shrink-0"
+                    class="icon-small text-primary cursor-pointer shrink-0 hover:text-primary/70 transition-colors"
                     :title="$t('General.capitalsource')"
                     :aria-label="$t('General.capitalsource')"
                     @click="$emit('sortByColumn', 'capitalsourceComment')"
@@ -211,10 +224,10 @@
             :key="mmf.id"
             :mmf="mmf"
             :index="index"
-            @show-receipt="showReceipt"
-            @delete-moneyflow="deleteMoneyflow"
-            @edit-moneyflow="editMoneyflow"
-            @list-moneyflow="listMoneyflow"
+            @show-receipt="$emit('showReceipt', $event)"
+            @delete-moneyflow="$emit('deleteMoneyflow', $event)"
+            @edit-moneyflow="$emit('editMoneyflow', $event)"
+            @list-moneyflow="$emit('listMoneyflow', $event)"
           />
           <TableRow
             v-if="moneyflows.length === 0"
@@ -286,27 +299,8 @@ const emit = defineEmits<{
 }>();
 
 const sortIcon = (sortedField: keyof Moneyflow) => {
-  if (props.sortBy.get(sortedField) === undefined) {
-    return ArrowUpDown;
-  } else if (props.sortBy.get(sortedField)) {
-    return ArrowUpNarrowWide;
-  }
-  return ArrowDownWideNarrow;
-};
-
-const showReceipt = (id: number) => {
-  emit("showReceipt", id);
-};
-
-const deleteMoneyflow = (moneyflow: Moneyflow) => {
-  emit("deleteMoneyflow", moneyflow);
-};
-
-const editMoneyflow = (moneyflow: Moneyflow) => {
-  emit("editMoneyflow", moneyflow);
-};
-
-const listMoneyflow = (moneyflow: Moneyflow) => {
-  emit("listMoneyflow", moneyflow);
+  const direction = props.sortBy.get(sortedField);
+  if (direction === undefined) return ArrowUpDown;
+  return direction ? ArrowUpNarrowWide : ArrowDownWideNarrow;
 };
 </script>
