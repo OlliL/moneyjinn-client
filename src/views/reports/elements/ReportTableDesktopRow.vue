@@ -3,6 +3,7 @@
     v-for="(row, idx) in tableRows"
     :key="row.isSplit ? row.mseId : 'main-' + mmf.id"
     :data-testid="idx === 0 ? `report-moneyflow-row-${mmf.id}` : undefined"
+    :class="[isFuture ? 'opacity-60' : '']"
   >
     <template v-if="idx === 0">
       <TableCell
@@ -22,7 +23,17 @@
         </Button>
       </TableCell>
       <TableCell :rowspan="rowspan" :class="['border-r', rowBgClass]">
-        <SpanDate :date="mmf.bookingDate" />
+        <div class="flex items-center justify-center gap-1">
+          <Clock
+            v-if="isFuture"
+            class="icon-extra-small text-muted-foreground"
+            :title="$t('Moneyflow.reserved')"
+          />
+          <SpanDate
+            :date="mmf.bookingDate"
+            :class="{ 'italic font-medium': isFuture }"
+          />
+        </div>
       </TableCell>
       <TableCell :rowspan="rowspan" :class="['border-r', rowBgClass]">
         <SpanDate :date="mmf.invoiceDate" />
@@ -125,7 +136,7 @@ import { Button } from "@/components/ui/button";
 import { TableCell, TableRow } from "@/components/ui/table";
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 import { useUserSessionStore } from "@/stores/UserSessionStore";
-import { Eye, Pencil, ReceiptText, Trash2 } from "lucide-vue-next";
+import { Clock, Eye, Pencil, ReceiptText, Trash2 } from "lucide-vue-next";
 import { computed, type PropType } from "vue";
 
 const props = defineProps({
@@ -151,6 +162,14 @@ const hasSplits = computed(() => !!props.mmf.moneyflowSplitEntries?.length);
 const redIfPrivate = computed(() =>
   props.mmf.private ? "bg-destructive/10" : "",
 );
+
+const isFuture = computed(() => {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const bookingDate = new Date(props.mmf.bookingDate);
+  bookingDate.setHours(0, 0, 0, 0);
+  return bookingDate > today;
+});
 
 const tableRows = computed(() => {
   if (hasSplits.value) {

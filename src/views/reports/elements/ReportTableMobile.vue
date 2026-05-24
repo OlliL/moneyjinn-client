@@ -176,8 +176,11 @@
         :key="'mobile-' + mmf.id"
         :value="'item-' + mmf.id"
         :data-testid="`report-mobile-moneyflow-row-${mmf.id}`"
-        class="border rounded-lg bg-background shadow-sm px-3 py-1"
-        :class="{ 'border-destructive/30 bg-destructive/5': mmf.private }"
+        class="border rounded-lg bg-background shadow-sm px-3 py-1 transition-opacity"
+        :class="{
+          'border-destructive/30 bg-destructive/5': mmf.private,
+          'opacity-60': isFutureDate(mmf.bookingDate),
+        }"
       >
         <AccordionTrigger class="hover:no-underline w-full min-w-0">
           <div class="grid grid-cols-[1fr_auto] items-center w-full gap-2">
@@ -201,6 +204,12 @@
                   class="bg-primary/20 text-primary px-1 rounded text-[10px]"
                 >
                   {{ $t("Moneyflow.subbookings") }}
+                </span>
+                <span
+                  v-if="isFutureDate(mmf.bookingDate)"
+                  class="bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300 px-1 rounded text-[10px] font-medium"
+                >
+                  {{ $t("Moneyflow.reserved") }}
                 </span>
               </div>
 
@@ -461,6 +470,14 @@ const deleteMoneyflow = (moneyflow: Moneyflow) => {
 
 const listMoneyflow = (moneyflow: Moneyflow) => {
   emit("listMoneyflow", moneyflow);
+};
+
+const isFutureDate = (date: Date) => {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const bookingDate = new Date(date);
+  bookingDate.setHours(0, 0, 0, 0);
+  return bookingDate > today;
 };
 
 const handleEnter = (event: Event): void => {

@@ -321,6 +321,7 @@
     "cancel": "Abbrechen"
   },
   "Moneyflow": {
+    "reserved": "geplant",
     "options": "Optionen",
     "addPosition": "Position hinzufügen",
     "bookingdate": "Buchungsdatum",
