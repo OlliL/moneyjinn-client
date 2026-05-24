@@ -62,7 +62,7 @@
       :years="years"
       :selected-year="selectedYear"
       :etf-preliminary-lump-sum="etfPreliminaryLumpSum"
-      :select-box-values="getAsSelectBoxValues()"
+      :select-box-values="etfOptions"
       @select-year="selectYearMobile"
       @select-current-month="selectCurrentMonth"
       @open-edit="
@@ -80,15 +80,15 @@
           data-testid="etf-preliminary-sump-sum-create-menu"
         >
           <Button
-            v-for="(config, type) in TYPE_CONFIG"
-            :key="type"
+            v-for="config in typeConfigs"
+            :key="config.type"
             variant="ghost"
             class="w-full justify-start text-sm px-3 py-2"
             :data-testid="
               'preliminary-lump-sum-desktop-create-type-' + config.id
             "
             @click="
-              showCreateEtfPreliminaryLumpSumModal(selectedEtfId, Number(type));
+              showCreateEtfPreliminaryLumpSumModal(selectedEtfId, config.type);
               closeMenu();
             "
           >
@@ -105,7 +105,7 @@
       :years="years"
       :selected-year="selectedYear"
       :etf-preliminary-lump-sum="etfPreliminaryLumpSum"
-      :select-box-values="getAsSelectBoxValues()"
+      :select-box-values="etfOptions"
       @select-year="selectYearMobile"
       @select-current-month="selectCurrentMonth"
       @open-edit="
@@ -123,15 +123,15 @@
           data-testid="etf-preliminary-sump-sum-create-menu"
         >
           <Button
-            v-for="(config, type) in TYPE_CONFIG"
-            :key="type"
+            v-for="config in typeConfigs"
+            :key="config.type"
             variant="ghost"
             class="w-full justify-start px-3 py-2 text-left text-sm"
             :data-testid="
               'preliminary-lump-sum-mobile-create-type-' + config.id
             "
             @click="
-              showCreateEtfPreliminaryLumpSumModal(selectedEtfId, Number(type));
+              showCreateEtfPreliminaryLumpSumModal(selectedEtfId, config.type);
               closeMenu();
             "
           >
@@ -177,7 +177,14 @@ import router, { Routes } from "@/router";
 import CrudEtfPreliminaryLumpSumService from "@/service/CrudEtfPreliminaryLumpSumService";
 import { useEtfStore } from "@/stores/EtfStore";
 import { ChevronLeft, ChevronRight } from "lucide-vue-next";
-import { computed, ref, useTemplateRef, watch } from "vue";
+import {
+  computed,
+  ref,
+  useTemplateRef,
+  watch,
+  type Component,
+  type ShallowRef,
+} from "vue";
 import CreateEtfPreliminaryLumpSumModalMonthlyVue from "./elements/CreateEtfPreliminaryLumpSumModalMonthly.vue";
 import CreateEtfPreliminaryLumpSumModalPieceVue from "./elements/CreateEtfPreliminaryLumpSumModalPiece.vue";
 import CreateEtfPreliminaryLumpSumModalYearly from "./elements/CreateEtfPreliminaryLumpSumModalYearly.vue";
@@ -208,54 +215,53 @@ const etfPreliminaryLumpSums = ref<Map<string, EtfPreliminaryLumpSum>>(
 );
 const etfPreliminaryLumpSum = ref<EtfPreliminaryLumpSum | undefined>(undefined);
 
-const createModalMonthly =
-  useTemplateRef<typeof CreateEtfPreliminaryLumpSumModalMonthlyVue>(
-    "createModalMonthly",
-  );
-const createModalPiece =
-  useTemplateRef<typeof CreateEtfPreliminaryLumpSumModalPieceVue>(
-    "createModalPiece",
-  );
-const createModalYearly =
-  useTemplateRef<typeof CreateEtfPreliminaryLumpSumModalYearly>(
-    "createModalYearly",
-  );
-const deleteModalMonthly =
-  useTemplateRef<typeof DeleteEtfPreliminaryLumpSumModalMonthlyVue>(
-    "deleteModalMonthly",
-  );
-const deleteModalPiece =
-  useTemplateRef<typeof DeleteEtfPreliminaryLumpSumModalPieceVue>(
-    "deleteModalPiece",
-  );
-const deleteModalYearly =
-  useTemplateRef<typeof DeleteEtfPreliminaryLumpSumModalYearly>(
-    "deleteModalYearly",
-  );
+interface CreateModalExpose {
+  _show: (etfId?: number, mep?: EtfPreliminaryLumpSum) => void;
+}
+interface DeleteModalExpose {
+  _show: (mep: EtfPreliminaryLumpSum) => void;
+}
+interface TypeConfigEntry {
+  id: string;
+  label: string;
+  create: Readonly<ShallowRef<CreateModalExpose | null>>;
+  delete: Readonly<ShallowRef<DeleteModalExpose | null>>;
+  show: Component;
+}
 
-const TYPE_CONFIG: Partial<Record<EtfPreliminaryLumpSumType, any>> = {
-  [EtfPreliminaryLumpSumType.AMOUNT_PER_MONTH]: {
-    id: "month",
-    label: "ETFPreliminaryLumpSum.newMonthly",
-    create: createModalMonthly,
-    delete: deleteModalMonthly,
-    show: ShowEtfPreliminaryLumpSumMonthlyVue,
-  },
-  [EtfPreliminaryLumpSumType.AMOUNT_PER_PIECE]: {
-    id: "piece",
-    label: "ETFPreliminaryLumpSum.newPiece",
-    create: createModalPiece,
-    delete: deleteModalPiece,
-    show: ShowEtfPreliminaryLumpSumPieceVue,
-  },
-  [EtfPreliminaryLumpSumType.AMOUNT_PER_YEAR]: {
-    id: "yearly",
-    label: "ETFPreliminaryLumpSum.newYearly",
-    create: createModalYearly,
-    delete: deleteModalYearly,
-    show: ShowEtfPreliminaryLumpSumYearly,
-  },
-};
+const etfOptions = computed(() => getAsSelectBoxValues());
+
+const TYPE_CONFIG: Partial<Record<EtfPreliminaryLumpSumType, TypeConfigEntry>> =
+  {
+    [EtfPreliminaryLumpSumType.AMOUNT_PER_MONTH]: {
+      id: "month",
+      label: "ETFPreliminaryLumpSum.newMonthly",
+      create: useTemplateRef<CreateModalExpose>("createModalMonthly"),
+      delete: useTemplateRef<DeleteModalExpose>("deleteModalMonthly"),
+      show: ShowEtfPreliminaryLumpSumMonthlyVue,
+    },
+    [EtfPreliminaryLumpSumType.AMOUNT_PER_PIECE]: {
+      id: "piece",
+      label: "ETFPreliminaryLumpSum.newPiece",
+      create: useTemplateRef<CreateModalExpose>("createModalPiece"),
+      delete: useTemplateRef<DeleteModalExpose>("deleteModalPiece"),
+      show: ShowEtfPreliminaryLumpSumPieceVue,
+    },
+    [EtfPreliminaryLumpSumType.AMOUNT_PER_YEAR]: {
+      id: "yearly",
+      label: "ETFPreliminaryLumpSum.newYearly",
+      create: useTemplateRef<CreateModalExpose>("createModalYearly"),
+      delete: useTemplateRef<DeleteModalExpose>("deleteModalYearly"),
+      show: ShowEtfPreliminaryLumpSumYearly,
+    },
+  };
+
+const typeConfigs = computed(() =>
+  Object.entries(TYPE_CONFIG).map(([type, config]) => ({
+    type: Number(type) as EtfPreliminaryLumpSumType,
+    ...(config as TypeConfigEntry),
+  })),
+);
 
 const loadYears = (etfId: number, year?: string | undefined) => {
   serverErrors.value = [];
@@ -341,9 +347,11 @@ const showCreateEtfPreliminaryLumpSumModal = (
 };
 
 const showDeleteEtfPreliminaryLumpSumModal = () => {
-  const type = etfPreliminaryLumpSum.value?.type;
-  if (type) {
-    TYPE_CONFIG[type]?.delete.value?._show(etfPreliminaryLumpSum.value);
+  if (etfPreliminaryLumpSum.value) {
+    const type = etfPreliminaryLumpSum.value.type;
+    if (type) {
+      TYPE_CONFIG[type]?.delete.value?._show(etfPreliminaryLumpSum.value);
+    }
   }
 };
 
