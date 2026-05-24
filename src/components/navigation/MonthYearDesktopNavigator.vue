@@ -1,7 +1,5 @@
 <template>
-  <div
-    class="flex w-full flex-col items-center justify-center gap-4 sm:flex-row sm:flex-nowrap sm:items-start"
-  >
+  <div class="flex items-center gap-4">
     <Select v-model="selectedYearModel">
       <SelectTrigger
         :data-testid="`${testIdPrefix}-year-trigger`"
@@ -54,15 +52,18 @@ import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { getMonthName } from "@/tools/views/MonthName";
 import { computed } from "vue";
 
-const props = defineProps<{
-  years: Array<number | string>;
-  months: number[];
-  selectedYear: number | string;
-  selectedMonth?: number | string;
-  testIdPrefix?: string;
-}>();
-
-const testIdPrefix = props.testIdPrefix ?? "month-year-nav";
+const props = withDefaults(
+  defineProps<{
+    years: Array<number | string>;
+    months: number[];
+    selectedYear: number | string;
+    selectedMonth?: number | string;
+    testIdPrefix?: string;
+  }>(),
+  {
+    testIdPrefix: "month-year-nav",
+  },
+);
 
 const emit = defineEmits<{
   selectYear: [year: string];
@@ -70,24 +71,15 @@ const emit = defineEmits<{
 }>();
 
 const selectedYearModel = computed({
-  get: () => String(props.selectedYear ?? ""),
-  set: (value: string) => {
-    emit("selectYear", value);
-  },
+  get: () => String(props.selectedYear),
+  set: (value) => emit("selectYear", value),
 });
 
-const selectedMonthModel = computed<string | undefined>({
-  get: () => {
-    if (props.selectedMonth === undefined) {
-      return undefined;
-    }
-    return String(props.selectedMonth);
-  },
+const selectedMonthModel = computed({
+  get: () =>
+    props.selectedMonth === undefined ? undefined : String(props.selectedMonth),
   set: (value) => {
-    if (!value) {
-      return;
-    }
-    emit("selectMonth", Number(value));
+    if (value) emit("selectMonth", Number(value));
   },
 });
 </script>
