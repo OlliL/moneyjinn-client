@@ -40,7 +40,7 @@
               </span>
             </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
               <div v-for="month in months" :key="month.id">
                 <InputStandard
                   v-model="mep[month.property]"

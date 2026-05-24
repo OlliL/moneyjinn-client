@@ -27,6 +27,7 @@
     select-label-key="General.select"
     @select-year="selectYear"
     @select-month="selectMonth"
+    @select-current-month="selectCurrentMonth"
   />
   <div
     v-if="years.length === 0 || months.length === 0"
@@ -55,11 +56,13 @@ defineProps<{
 const emit = defineEmits<{
   selectYear: [year: string];
   selectMonth: [month: number];
+  selectCurrentMonth: [];
   create: [];
   edit: [];
   delete: [];
 }>();
 
+const selectCurrentMonth = () => emit("selectCurrentMonth");
 const selectYear = (year: string) => emit("selectYear", year);
 const selectMonth = (month: number) => emit("selectMonth", month);
 const emitCreate = () => emit("create");

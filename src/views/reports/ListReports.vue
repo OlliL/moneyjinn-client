@@ -40,6 +40,7 @@
         select-label-key="General.select"
         @select-year="handleYearSelect"
         @select-month="handleMonthSelect"
+        @select-current-month="handleCurrentMonthSelect"
       />
 
       <DivError :server-errors="serverErrors" />
@@ -205,6 +206,14 @@ const handleYearSelect = (year: string) => {
 
 const handleMonthSelect = (selectedMonth: number) => {
   selectMonth(String(selectedYear.value), String(selectedMonth));
+};
+
+const handleCurrentMonthSelect = () => {
+  const today = new Date();
+  const currentYear = today.getFullYear();
+  const currentMonth = today.getMonth() + 1;
+
+  selectMonth(String(currentYear), String(currentMonth));
 };
 
 const updateSortByParams = (params: RouteParamsGeneric) => {
