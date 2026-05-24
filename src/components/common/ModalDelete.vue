@@ -20,7 +20,10 @@
       </slot>
     </template>
     <template #footer>
-      <ButtonDelete :button-label="t('General.delete')" @click="handleDelete" />
+      <ButtonDeleteTwoTap
+        :button-label="t('General.delete')"
+        @execute-delete="handleDelete"
+      />
     </template>
   </ModalVue>
 </template>
@@ -30,7 +33,7 @@ import { useTemplateRef } from "vue";
 import { useI18n } from "vue-i18n";
 
 import { Table, TableBody } from "@/components/ui/table";
-import ButtonDelete from "./ButtonDelete.vue";
+import ButtonDeleteTwoTap from "./ButtonDeleteTwoTap.vue";
 import DivError from "./DivError.vue";
 import ModalVue from "./Modal.vue";
 

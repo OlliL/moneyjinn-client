@@ -63,7 +63,7 @@
               <Calendar class="icon-small text-muted-foreground/60 shrink-0" />
               <span>{{ $t("Moneyflow.bookingdate") }}</span>
             </div>
-            <strong class="text-foreground font-semibold pl-2">
+            <strong class="text-foreground font-semibold pl-2 truncate">
               <SpanDate :date="mmf.bookingDate" />
             </strong>
           </div>
@@ -75,7 +75,7 @@
               />
               <span>{{ $t("Moneyflow.invoicedate") }}</span>
             </div>
-            <strong class="text-foreground font-semibold pl-2">
+            <strong class="text-foreground font-semibold pl-2 truncate">
               <SpanDate :date="mmf.invoiceDate" />
             </strong>
           </div>

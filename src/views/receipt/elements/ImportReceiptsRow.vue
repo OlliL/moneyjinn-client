@@ -75,7 +75,7 @@
 
               <div class="w-full">
                 <div
-                  class="flex flex-col rounded-md border overflow-hidden"
+                  class="flex flex-col md:rounded-md md:border overflow-hidden"
                   v-if="searchExecuted && searchSuccessful"
                 >
                   <RadioGroup
@@ -84,40 +84,63 @@
                       (val) => (selectedMoneyflowId = Number(val))
                     "
                   >
-                    <Table>
-                      <TableHeader class="bg-muted/30">
-                        <TableRow>
-                          <TableHead class="w-10 border-r">
-                            <span class="sr-only">Selection</span>
-                          </TableHead>
-                          <TableHead class="table-head-cell px-3 py-2 text-xs">
-                            {{ $t("Moneyflow.invoicedate") }}
-                          </TableHead>
-                          <TableHead class="table-head-cell px-3 py-2 text-xs">
-                            {{ $t("General.amount") }}
-                          </TableHead>
-                          <TableHead class="table-head-cell px-3 py-2 text-xs">
-                            {{ $t("General.contractpartner") }}
-                          </TableHead>
-                          <TableHead class="table-head-cell px-3 py-2 text-xs">
-                            {{ $t("General.comment") }}
-                          </TableHead>
-                          <TableHead class="w-16" colspan="2"></TableHead>
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                        <ImportReceiptSearchRowVue
-                          v-for="moneyflow in moneyflows"
-                          v-model="selectedMoneyflowId"
-                          :key="moneyflow.id"
-                          :mmf="moneyflow"
-                          :receipt-id="receipt.id"
-                          @delete-moneyflow="emitDeleteMoneyflow"
-                          @edit-moneyflow="emitEditMoneyflow"
-                          @list-moneyflow="emitListMoneyflow"
-                        />
-                      </TableBody>
-                    </Table>
+                    <div class="hidden md:block">
+                      <Table>
+                        <TableHeader class="bg-muted/30">
+                          <TableRow>
+                            <TableHead class="w-10 border-r">
+                              <span class="sr-only">Selection</span>
+                            </TableHead>
+                            <TableHead
+                              class="table-head-cell px-3 py-2 text-xs"
+                            >
+                              {{ $t("Moneyflow.invoicedate") }}
+                            </TableHead>
+                            <TableHead
+                              class="table-head-cell px-3 py-2 text-xs"
+                            >
+                              {{ $t("General.amount") }}
+                            </TableHead>
+                            <TableHead
+                              class="table-head-cell px-3 py-2 text-xs"
+                            >
+                              {{ $t("General.contractpartner") }}
+                            </TableHead>
+                            <TableHead
+                              class="table-head-cell px-3 py-2 text-xs"
+                            >
+                              {{ $t("General.comment") }}
+                            </TableHead>
+                            <TableHead class="w-16" colspan="2"></TableHead>
+                          </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                          <ImportReceiptSearchRowVue
+                            v-for="moneyflow in moneyflows"
+                            v-model="selectedMoneyflowId"
+                            :key="moneyflow.id"
+                            :mmf="moneyflow"
+                            :receipt-id="receipt.id"
+                            @delete-moneyflow="emitDeleteMoneyflow"
+                            @edit-moneyflow="emitEditMoneyflow"
+                            @list-moneyflow="emitListMoneyflow"
+                          />
+                        </TableBody>
+                      </Table>
+                    </div>
+
+                    <div class="grid grid-cols-1 gap-2 md:hidden">
+                      <ImportReceiptsRowMobile
+                        v-for="moneyflow in moneyflows"
+                        :key="'mobile-' + moneyflow.id"
+                        :mmf="moneyflow"
+                        :model-value="selectedMoneyflowId"
+                        @update:model-value="(id) => (selectedMoneyflowId = id)"
+                        @delete-moneyflow="emitDeleteMoneyflow"
+                        @edit-moneyflow="emitEditMoneyflow"
+                        @list-moneyflow="emitListMoneyflow"
+                      />
+                    </div>
                   </RadioGroup>
                 </div>
 
@@ -131,18 +154,12 @@
             </div>
 
             <div
-              class="flex flex-wrap items-center justify-center gap-3 pt-4 border-t border-border/40"
+              class="grid grid-cols-1 md:flex items-center justify-center gap-3 pt-0 border-t border-border/40"
             >
-              <Button
-                type="button"
-                variant="destructive"
-                class="button-with-icon"
-                @click="deleteReceipt"
-                data-testid="importReceipts-row-delete"
-              >
-                <Trash2 class="icon-small" />
-                {{ $t("General.delete") }}
-              </Button>
+              <ButtonDeleteTwoTap
+                :button-label="$t('Moneyflow.deleteReceipt')"
+                @execute-delete="deleteMoneyflowReceipt"
+              />
               <Button
                 type="button"
                 variant="default"
@@ -164,6 +181,7 @@
 </template>
 
 <script lang="ts" setup>
+import ButtonDeleteTwoTap from "@/components/common/ButtonDeleteTwoTap.vue";
 import ButtonSubmit from "@/components/common/ButtonSubmit.vue";
 import DivError from "@/components/common/DivError.vue";
 import InputDate from "@/components/common/InputDate.vue";
@@ -187,12 +205,13 @@ import MoneyflowService from "@/service/MoneyflowService";
 import { toFixed } from "@/tools/math";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { amountSchema, globErr } from "@/tools/views/ZodUtil";
-import { Euro, Save, Search, Trash2 } from "lucide-vue-next";
+import { Euro, Save, Search } from "lucide-vue-next";
 import { useForm } from "vee-validate";
 import { computed, nextTick, onMounted, ref, type PropType } from "vue";
 import { useI18n } from "vue-i18n";
 import { date } from "zod";
 import ImportReceiptSearchRowVue from "./ImportReceiptSearchRow.vue";
+import ImportReceiptsRowMobile from "./ImportReceiptsRowMobile.vue";
 
 const { t } = useI18n();
 
@@ -303,7 +322,7 @@ const importReceipt = () => {
     });
 };
 
-const deleteReceipt = () => {
+const deleteMoneyflowReceipt = () => {
   serverErrors.value = new Array<string>();
 
   ImportedMoneyflowReceiptService.deleteImportedMoneyflowReceiptById(
