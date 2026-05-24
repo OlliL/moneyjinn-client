@@ -37,6 +37,7 @@
             type="button"
             variant="outline"
             class="button-with-icon w-full md:w-auto px-4"
+            ref="cancelButton"
           >
             <X class="icon-small" />
             {{ $t("Modal.cancel") }}
@@ -72,7 +73,7 @@ import {
 } from "@/components/ui/drawer";
 import { isDesktop } from "@/tools/views/IsDesktop";
 import { X } from "lucide-vue-next";
-import { computed, ref } from "vue";
+import { computed, nextTick, ref, useTemplateRef, watch } from "vue";
 
 const props = defineProps({
   title: { type: String, default: "" },
@@ -94,6 +95,7 @@ const Modal = computed(() => ({
 }));
 
 const isOpen = ref(false);
+const cancelButton = useTemplateRef<typeof Button>("cancelButton");
 
 const _show = () => {
   isOpen.value = true;
@@ -102,6 +104,16 @@ const _show = () => {
 const _hide = () => {
   isOpen.value = false;
 };
+
+watch(isOpen, (newValue) => {
+  if (newValue === true)
+    nextTick(() => {
+      const el = cancelButton.value?.$el || cancelButton.value;
+      if (el && typeof el.focus === "function") {
+        el.focus();
+      }
+    });
+});
 
 defineExpose({
   _show,

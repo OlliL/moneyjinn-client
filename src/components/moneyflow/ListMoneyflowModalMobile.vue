@@ -9,7 +9,7 @@
       <DivError :server-errors="serverErrors" />
 
       <div class="w-full space-y-4 p-1 text-left">
-        <div v-if="mmf.hasReceipt && !isDesktop().value">
+        <div v-if="mmf.hasReceipt || receipt?.receipt">
           <div
             @click="showReceipt"
             class="flex items-center justify-between p-3 rounded-xl border border-dashed border-input bg-muted/40 hover:bg-muted/80 active:bg-muted transition-all cursor-pointer w-full group select-none mb-4"
@@ -63,7 +63,7 @@
               <Calendar class="icon-small text-muted-foreground/60 shrink-0" />
               <span>{{ $t("Moneyflow.bookingdate") }}</span>
             </div>
-            <strong class="text-foreground font-semibold pl-2">
+            <strong class="text-foreground font-semibold pl-2 truncate">
               <SpanDate :date="mmf.bookingDate" />
             </strong>
           </div>
@@ -75,7 +75,7 @@
               />
               <span>{{ $t("Moneyflow.invoicedate") }}</span>
             </div>
-            <strong class="text-foreground font-semibold pl-2">
+            <strong class="text-foreground font-semibold pl-2 truncate">
               <SpanDate :date="mmf.invoiceDate" />
             </strong>
           </div>
@@ -186,8 +186,8 @@ import {
 } from "lucide-vue-next";
 
 // Eigene bestehende Komponenten & Typen
+import type { ImportedMoneyflowReceipt } from "@/model/moneyflow/ImportedMoneyflowReceipt";
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
-import { isDesktop } from "@/tools/views/IsDesktop";
 import DivError from "../common/DivError.vue";
 import ModalVue from "../common/Modal.vue";
 import SpanAmount from "../common/SpanAmount.vue";
@@ -209,13 +209,16 @@ const rowspan = computed(() => {
   return 1;
 });
 
-const _show = (_mmf: Moneyflow) => {
+const receipt = ref({} as undefined | ImportedMoneyflowReceipt);
+
+const _show = (_mmf: Moneyflow, importedReceipt?: ImportedMoneyflowReceipt) => {
   mmf.value = _mmf;
+  receipt.value = importedReceipt;
   modalComponent.value?._show();
 };
 
 const showReceipt = () => {
-  emit("showReceipt", mmf.value.id);
+  emit("showReceipt", mmf.value.id, receipt.value);
 };
 
 defineExpose({ _show });

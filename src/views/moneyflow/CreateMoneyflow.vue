@@ -47,9 +47,7 @@
       test-id-prefix="createMoneyflowServerError"
     />
 
-    <div
-      class="rounded-sm border shadow card-panel p-4"
-    >
+    <div class="rounded-sm border shadow card-panel p-4">
       <form
         @submit.prevent="createMoneyflow"
         id="createMoneyflowForm"
@@ -64,7 +62,7 @@
           <Button
             type="button"
             variant="secondary"
-            class="flex items-center gap-2 px-6"
+            class="flex items-center gap-2 px-6 hidden md:flex"
             data-testid="createMoneyflowResetButton"
             @click="resetForm"
           >
