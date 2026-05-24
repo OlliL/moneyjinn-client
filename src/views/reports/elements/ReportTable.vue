@@ -193,8 +193,7 @@ const sortedMoneyflows = computed(() => {
       const field = entry[0] as keyof Moneyflow;
       const ascending = entry[1] === true;
       result.sort((a, b) => {
-        const comparison = compareColumns(a, b, field);
-        return ascending ? comparison : -1 * comparison;
+        return (ascending ? 1 : -1) * compareColumns(a, b, field);
       });
     }
   }
@@ -206,16 +205,21 @@ const compareColumns = (
   b: Moneyflow,
   field: keyof Moneyflow,
 ): number => {
-  let aField = a[field];
-  let bField = b[field];
-  if (aField === undefined || bField === undefined) return 0;
-  if (typeof aField === "string" && typeof bField === "string") {
-    aField = aField.toLowerCase();
-    bField = bField.toLowerCase();
+  const aVal = a[field];
+  const bVal = b[field];
+
+  if (aVal === bVal) return 0;
+  if (aVal === undefined || aVal === null) return 1;
+  if (bVal === undefined || bVal === null) return -1;
+
+  if (typeof aVal === "string" && typeof bVal === "string") {
+    return aVal.localeCompare(bVal, undefined, {
+      numeric: true,
+      sensitivity: "base",
+    });
   }
-  if (aField > bField) return 1;
-  else if (bField > aField) return -1;
-  return 0;
+
+  return aVal > bVal ? 1 : -1;
 };
 
 const sortByColumn = (field: keyof Moneyflow) => {
@@ -286,60 +290,50 @@ const capitalsourceHasMovement = (
   return (
     data.amountBeginOfMonthFixed != 0 ||
     data.amountEndOfMonthCalculated != 0 ||
-    (data.amountCurrent != undefined && data.amountCurrent != 0) ||
-    (data.amountEndOfMonthFixed != undefined && data.amountEndOfMonthFixed != 0)
+    !!data.amountCurrent ||
+    !!data.amountEndOfMonthFixed
   );
 };
-const assetsTurnoverCapitalsources = computed(() => {
-  if (dataLoaded.value) {
-    return report.value.reportTurnoverCapitalsources?.filter(
+
+const filterCapitalsourcesByTypes = (types: CapitalsourceType[]) => {
+  if (!dataLoaded.value) return [];
+  return (
+    report.value.reportTurnoverCapitalsources?.filter(
       (data) =>
-        (data.capitalsourceType === CapitalsourceType.CURRENT_ASSET ||
-          data.capitalsourceType === CapitalsourceType.LONG_TERM_ASSET) &&
+        types.includes(data.capitalsourceType) &&
         capitalsourceHasMovement(data),
-    );
-  }
-  return new Array<ReportTurnoverCapitalsource>();
-});
-const liabilitiesTurnoverCapitalsources = computed(() => {
-  if (dataLoaded.value) {
-    return report.value.reportTurnoverCapitalsources?.filter(
-      (data) =>
-        (data.capitalsourceType === CapitalsourceType.RESERVE_ASSET ||
-          data.capitalsourceType === CapitalsourceType.PROVISION_ASSET) &&
-        capitalsourceHasMovement(data),
-    );
-  }
-  return new Array<ReportTurnoverCapitalsource>();
-});
-const creditTurnoverCapitalsources = computed(() => {
-  if (dataLoaded.value) {
-    return report.value.reportTurnoverCapitalsources?.filter(
-      (data) =>
-        data.capitalsourceType === CapitalsourceType.CREDIT &&
-        capitalsourceHasMovement(data),
-    );
-  }
-  return new Array<ReportTurnoverCapitalsource>();
-});
+    ) ?? []
+  );
+};
+
+const assetsTurnoverCapitalsources = computed(() =>
+  filterCapitalsourcesByTypes([
+    CapitalsourceType.CURRENT_ASSET,
+    CapitalsourceType.LONG_TERM_ASSET,
+  ]),
+);
+const liabilitiesTurnoverCapitalsources = computed(() =>
+  filterCapitalsourcesByTypes([
+    CapitalsourceType.RESERVE_ASSET,
+    CapitalsourceType.PROVISION_ASSET,
+  ]),
+);
+const creditTurnoverCapitalsources = computed(() =>
+  filterCapitalsourcesByTypes([CapitalsourceType.CREDIT]),
+);
+
 const currentMonthIsSettled = computed(() => {
-  if (dataLoaded.value && report.value.reportTurnoverCapitalsources) {
-    for (let data of report.value.reportTurnoverCapitalsources) {
-      if (data.amountEndOfMonthFixed) {
-        return true;
-      }
-    }
-  }
-  return false;
+  return !!(
+    dataLoaded.value &&
+    report.value.reportTurnoverCapitalsources?.some(
+      (data) => !!data.amountEndOfMonthFixed,
+    )
+  );
 });
+
 const amountSum = computed(() => {
-  let sum = 0;
-  if (dataLoaded.value && filteredMoneyflows.value) {
-    for (const mmf of filteredMoneyflows.value) {
-      sum += mmf.amount;
-    }
-  }
-  return sum;
+  if (!dataLoaded.value || !filteredMoneyflows.value) return 0;
+  return filteredMoneyflows.value.reduce((sum, mmf) => sum + mmf.amount, 0);
 });
 
 const loadData = (year: number, month: number) => {
