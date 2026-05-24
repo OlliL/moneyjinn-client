@@ -32,141 +32,134 @@
       {{ $t("General.preliminaryLumpSums") }}
     </h4>
 
-    <Button
-      data-testid="preliminary-lump-sum-year-previous"
-      v-if="showPreviousYearLink"
-      type="button"
-      variant="outline"
-      size="icon"
-      class="fixed left-4 top-1/2 z-20 -translate-y-1/2 h-10 w-10 rounded-full border-border/70 bg-background/85 text-primary/80 shadow-sm backdrop-blur transition-all hover:bg-background hover:text-primary hover:shadow-md"
-      @click="navigateToPreviousYear"
-    >
-      <ChevronLeft class="h-5 w-5" />
-    </Button>
+    <ButtonChevrons
+      test-id-prefix="preliminary-lump-sum-year"
+      :show-previous-chevron="showPreviousYearLink"
+      :show-next-chevron="showNextYearLink"
+      @navigate-to-previous="navigateToPreviousYear"
+      @navigate-to-next="navigateToNextYear"
+    />
 
-    <Button
-      data-testid="preliminary-lump-sum-year-next"
-      v-if="showNextYearLink"
-      type="button"
-      variant="outline"
-      size="icon"
-      class="fixed right-4 top-1/2 z-20 -translate-y-1/2 h-10 w-10 rounded-full border-border/70 bg-background/85 text-primary/80 shadow-sm backdrop-blur transition-all hover:bg-background hover:text-primary hover:shadow-md"
-      @click="navigateToNextYear"
-    >
-      <ChevronRight class="h-5 w-5" />
-    </Button>
-
-    <ListPreliminaryLumpSumsDesktop
-      class="hidden md:block"
-      v-model:selectedEtfId="selectedEtfId"
-      :years="years"
-      :selected-year="selectedYear"
-      :etf-preliminary-lump-sum="etfPreliminaryLumpSum"
-      :select-box-values="etfOptions"
-      @select-year="selectYearMobile"
-      @select-current-month="selectCurrentMonth"
-      @open-edit="
-        showCreateEtfPreliminaryLumpSumModal(
-          selectedEtfId,
-          etfPreliminaryLumpSum!.type,
-          etfPreliminaryLumpSum,
-        )
-      "
-      @open-delete="showDeleteEtfPreliminaryLumpSumModal"
-    >
-      <template #create-menu="{ closeMenu }">
-        <div
-          class="absolute top-full left-1/2 -translate-x-1/2 mt-1 z-50 flex w-56 flex-col gap-0.5 rounded-xl border bg-background p-2 text-foreground shadow-lg"
-          data-testid="etf-preliminary-sump-sum-create-menu"
-        >
-          <Button
-            v-for="config in typeConfigs"
-            :key="config.type"
-            variant="ghost"
-            class="w-full justify-start text-sm px-3 py-2"
-            :data-testid="
-              'preliminary-lump-sum-desktop-create-type-' + config.id
-            "
-            @click="
-              showCreateEtfPreliminaryLumpSumModal(selectedEtfId, config.type);
-              closeMenu();
-            "
+    <div>
+      <ListPreliminaryLumpSumsDesktop
+        class="hidden md:block"
+        v-model:selectedEtfId="selectedEtfId"
+        :years="years"
+        :selected-year="selectedYear"
+        :etf-preliminary-lump-sum="etfPreliminaryLumpSum"
+        :select-box-values="etfOptions"
+        @select-year="selectYearMobile"
+        @select-current-month="selectCurrentMonth"
+        @open-edit="
+          showCreateEtfPreliminaryLumpSumModal(
+            selectedEtfId,
+            etfPreliminaryLumpSum!.type,
+            etfPreliminaryLumpSum,
+          )
+        "
+        @open-delete="showDeleteEtfPreliminaryLumpSumModal"
+      >
+        <template #create-menu="{ closeMenu }">
+          <div
+            class="absolute top-full left-1/2 -translate-x-1/2 mt-1 z-50 flex w-56 flex-col gap-0.5 rounded-xl border bg-background p-2 text-foreground shadow-lg"
+            data-testid="etf-preliminary-sump-sum-create-menu"
           >
-            {{ $t(config.label) }}
-          </Button>
-        </div>
-      </template>
-    </ListPreliminaryLumpSumsDesktop>
+            <Button
+              v-for="config in typeConfigs"
+              :key="config.type"
+              variant="ghost"
+              class="w-full justify-start text-sm px-3 py-2"
+              :data-testid="
+                'preliminary-lump-sum-desktop-create-type-' + config.id
+              "
+              @click="
+                showCreateEtfPreliminaryLumpSumModal(
+                  selectedEtfId,
+                  config.type,
+                );
+                closeMenu();
+              "
+            >
+              {{ $t(config.label) }}
+            </Button>
+          </div>
+        </template>
+      </ListPreliminaryLumpSumsDesktop>
 
-    <ListPreliminaryLumpSumsMobile
-      class="block md:hidden"
-      v-model:selectedEtfId="selectedEtfId"
-      :years-loaded="yearsLoaded"
-      :years="years"
-      :selected-year="selectedYear"
-      :etf-preliminary-lump-sum="etfPreliminaryLumpSum"
-      :select-box-values="etfOptions"
-      @select-year="selectYearMobile"
-      @select-current-month="selectCurrentMonth"
-      @open-edit="
-        showCreateEtfPreliminaryLumpSumModal(
-          selectedEtfId,
-          etfPreliminaryLumpSum!.type,
-          etfPreliminaryLumpSum,
-        )
-      "
-      @open-delete="showDeleteEtfPreliminaryLumpSumModal"
-    >
-      <template #create-menu="{ closeMenu }">
-        <div
-          class="fixed right-20 bottom-26 z-50 flex w-52 flex-col gap-1 rounded-md border bg-popover text-popover-foreground shadow-md p-2"
-          data-testid="etf-preliminary-sump-sum-create-menu"
-        >
-          <Button
-            v-for="config in typeConfigs"
-            :key="config.type"
-            variant="ghost"
-            class="w-full justify-start px-3 py-2 text-left text-sm"
-            :data-testid="
-              'preliminary-lump-sum-mobile-create-type-' + config.id
-            "
-            @click="
-              showCreateEtfPreliminaryLumpSumModal(selectedEtfId, config.type);
-              closeMenu();
-            "
+      <ListPreliminaryLumpSumsMobile
+        class="block md:hidden"
+        v-model:selectedEtfId="selectedEtfId"
+        :years-loaded="yearsLoaded"
+        :years="years"
+        :selected-year="selectedYear"
+        :etf-preliminary-lump-sum="etfPreliminaryLumpSum"
+        :select-box-values="etfOptions"
+        @select-year="selectYearMobile"
+        @select-current-month="selectCurrentMonth"
+        @open-edit="
+          showCreateEtfPreliminaryLumpSumModal(
+            selectedEtfId,
+            etfPreliminaryLumpSum!.type,
+            etfPreliminaryLumpSum,
+          )
+        "
+        @open-delete="showDeleteEtfPreliminaryLumpSumModal"
+      >
+        <template #create-menu="{ closeMenu }">
+          <div
+            class="fixed right-20 bottom-26 z-50 flex w-52 flex-col gap-1 rounded-md border bg-popover text-popover-foreground shadow-md p-2"
+            data-testid="etf-preliminary-sump-sum-create-menu"
           >
-            {{ $t(config.label) }}
-          </Button>
+            <Button
+              v-for="config in typeConfigs"
+              :key="config.type"
+              variant="ghost"
+              class="w-full justify-start px-3 py-2 text-left text-sm"
+              :data-testid="
+                'preliminary-lump-sum-mobile-create-type-' + config.id
+              "
+              @click="
+                showCreateEtfPreliminaryLumpSumModal(
+                  selectedEtfId,
+                  config.type,
+                );
+                closeMenu();
+              "
+            >
+              {{ $t(config.label) }}
+            </Button>
+          </div>
+        </template>
+      </ListPreliminaryLumpSumsMobile>
+
+      <DivError :server-errors="serverErrors" />
+
+      <div
+        v-if="
+          selectedYear && selectedEtfId !== undefined && etfPreliminaryLumpSum
+        "
+        class="flex justify-center pb-4 px-14 md:px-0"
+      >
+        <div class="w-full max-w-md">
+          <component :is="detailComponent" :mep="etfPreliminaryLumpSum" />
         </div>
-      </template>
-    </ListPreliminaryLumpSumsMobile>
-
-    <DivError :server-errors="serverErrors" />
-
-    <div
-      v-if="
-        selectedYear && selectedEtfId !== undefined && etfPreliminaryLumpSum
-      "
-      class="flex justify-center pb-4 px-14 md:px-0"
-    >
-      <div class="w-full max-w-md">
-        <component :is="detailComponent" :mep="etfPreliminaryLumpSum" />
       </div>
-    </div>
 
-    <div
-      v-else
-      class="flex flex-col items-center justify-center py-10"
-      data-testid="preliminary-lump-sum-empty"
-    >
-      <span class="text-muted-foreground text-center">
-        {{ $t("General.noEntries") }}
-      </span>
+      <div
+        v-else
+        class="flex flex-col items-center justify-center py-10"
+        data-testid="preliminary-lump-sum-empty"
+      >
+        <span class="text-muted-foreground text-center">
+          {{ $t("General.noEntries") }}
+        </span>
+      </div>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
+import ButtonChevrons from "@/components/common/ButtonChevrons.vue";
 import DivError from "@/components/common/DivError.vue";
 import { Button } from "@/components/ui/button";
 import type { SelectBoxValue } from "@/model/SelectBoxValue";
@@ -176,7 +169,6 @@ import { EtfPreliminaryLumpSumType } from "@/model/etf/EtfPreliminaryLumpSumType
 import router, { Routes } from "@/router";
 import CrudEtfPreliminaryLumpSumService from "@/service/CrudEtfPreliminaryLumpSumService";
 import { useEtfStore } from "@/stores/EtfStore";
-import { ChevronLeft, ChevronRight } from "lucide-vue-next";
 import {
   computed,
   ref,

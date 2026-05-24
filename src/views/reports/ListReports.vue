@@ -46,32 +46,14 @@
       <DivError :server-errors="serverErrors" />
     </div>
 
-    <div class="fixed left-4 top-1/2 z-20 -translate-y-1/2">
-      <Button
-        data-testid="reports-previous-month"
-        v-if="previousMonthLink"
-        type="button"
-        variant="outline"
-        size="icon"
-        class="h-10 w-10 rounded-full border-border/70 bg-background/85 text-primary/80 shadow-sm backdrop-blur transition-all hover:bg-background hover:text-primary hover:shadow-md focus-visible:shadow-md supports-backdrop-filter:bg-background/70"
-        @click="navigateToPreviousMonth"
-      >
-        <ChevronLeft class="h-5 w-5" />
-      </Button>
-    </div>
-    <div class="fixed right-4 top-1/2 z-20 -translate-y-1/2">
-      <Button
-        data-testid="reports-next-month"
-        v-if="nextMonthLink"
-        type="button"
-        variant="outline"
-        size="icon"
-        class="h-10 w-10 rounded-full border-border/70 bg-background/85 text-primary/80 shadow-sm backdrop-blur transition-all hover:bg-background hover:text-primary hover:shadow-md focus-visible:shadow-md supports-backdrop-filter:bg-background/70"
-        @click="navigateToNextMonth"
-      >
-        <ChevronRight class="h-5 w-5" />
-      </Button>
-    </div>
+    <ButtonChevrons
+      test-id-prefix="reports-month"
+      :show-previous-chevron="previousMonthLink"
+      :show-next-chevron="nextMonthLink"
+      @navigate-to-previous="navigateToPreviousMonth"
+      @navigate-to-next="navigateToNextMonth"
+    />
+
     <div
       :class="{
         'opacity-100 transition-opacity duration-200':
@@ -102,16 +84,15 @@ import { onBeforeRouteUpdate, type RouteParamsGeneric } from "vue-router";
 
 import router, { Routes } from "@/router";
 
+import ButtonChevrons from "@/components/common/ButtonChevrons.vue";
 import ButtonMobileCreate from "@/components/common/ButtonMobileCreate.vue";
 import DivError from "@/components/common/DivError.vue";
 import MonthYearDesktopNavigator from "@/components/navigation/MonthYearDesktopNavigator.vue";
 import MonthYearMobileNavigator from "@/components/navigation/MonthYearMobileNavigator.vue";
-import { Button } from "@/components/ui/button";
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 import ReportService from "@/service/ReportService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { getMonthName } from "@/tools/views/MonthName";
-import { ChevronLeft, ChevronRight } from "lucide-vue-next";
 import ReportEtfTable from "./elements/ReportEtfTable.vue";
 import ReportTableVue from "./elements/ReportTable.vue";
 

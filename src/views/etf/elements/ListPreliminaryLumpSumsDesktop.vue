@@ -1,6 +1,6 @@
 <template>
-  <div class="space-y-6">
-    <div class="mx-auto w-full max-w-md grid grid-cols-12 gap-3 items-end">
+  <div>
+    <div class="mx-auto w-full max-w-md grid grid-cols-12 gap-3 items-end pb-6">
       <div class="col-span-9">
         <SelectStandard
           v-model="selectedEtfId"
@@ -22,7 +22,7 @@
     </div>
 
     <div
-      class="flex flex-wrap items-center justify-center gap-3"
+      class="flex flex-wrap items-center justify-center gap-3 pb-6"
       ref="createButtonRefDesktop"
       v-if="selectedEtfId !== undefined"
     >

@@ -1,6 +1,6 @@
 <template>
-  <div class="space-y-6">
-    <div class="mx-auto w-full max-w-md">
+  <div>
+    <div class="mx-auto w-full max-w-md pb-6">
       <SelectStandard
         v-model="selectedEtfId"
         id="etf-mobile"

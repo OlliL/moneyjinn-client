@@ -1,31 +1,12 @@
 <template>
   <DivError :server-errors="serverErrors" />
-  <div class="fixed left-4 top-1/2 z-20 -translate-y-1/2">
-    <Button
-      data-testid="reports-previous-month"
-      v-if="prevMonth && prevYear"
-      type="button"
-      variant="outline"
-      size="icon"
-      class="h-10 w-10 rounded-full border-border/70 bg-background/85 text-primary/80 shadow-sm backdrop-blur transition-all hover:bg-background hover:text-primary hover:shadow-md focus-visible:shadow-md supports-backdrop-filter:bg-background/70"
-      @click="navigateToPreviousMonth"
-    >
-      <ChevronLeft class="h-5 w-5" />
-    </Button>
-  </div>
-  <div class="fixed right-4 top-1/2 z-20 -translate-y-1/2">
-    <Button
-      data-testid="reports-next-month"
-      v-if="nextMonth && nextYear"
-      type="button"
-      variant="outline"
-      size="icon"
-      class="h-10 w-10 rounded-full border-border/70 bg-background/85 text-primary/80 shadow-sm backdrop-blur transition-all hover:bg-background hover:text-primary hover:shadow-md focus-visible:shadow-md supports-backdrop-filter:bg-background/70"
-      @click="navigateToNextMonth"
-    >
-      <ChevronRight class="h-5 w-5" />
-    </Button>
-  </div>
+  <ButtonChevrons
+    test-id-prefix="show-monthlysettlement-month"
+    :show-previous-chevron="prevMonth > 0 && prevYear > 0"
+    :show-next-chevron="nextMonth > 0 && nextYear > 0"
+    @navigate-to-previous="navigateToPreviousMonth"
+    @navigate-to-next="navigateToNextMonth"
+  />
 
   <div class="flex justify-center" v-if="props.month">
     <div class="w-full max-w-md">
@@ -116,9 +97,9 @@
 </template>
 
 <script lang="ts" setup>
+import ButtonChevrons from "@/components/common/ButtonChevrons.vue";
 import DivError from "@/components/common/DivError.vue";
 import SpanAmount from "@/components/common/SpanAmount.vue";
-import Button from "@/components/ui/button/Button.vue";
 import {
   Table,
   TableBody,
@@ -132,7 +113,6 @@ import type { MonthlySettlement } from "@/model/monthlysettlement/MonthlySettlem
 import router, { Routes } from "@/router";
 import MonthlySettlementService from "@/service/MonthlySettlementService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
-import { ChevronLeft, ChevronRight } from "lucide-vue-next";
 import { onMounted, ref, watch } from "vue";
 
 const serverErrors = ref(new Array<string>());

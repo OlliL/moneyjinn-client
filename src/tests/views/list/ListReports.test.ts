@@ -83,9 +83,9 @@ class ListReportsView {
     "report-etf-mobile-chart-link-100",
   );
   static readonly PreviousMonthButton = new ButtonView(
-    "reports-previous-month",
+    "reports-month-previous",
   );
-  static readonly NextMonthButton = new ButtonView("reports-next-month");
+  static readonly NextMonthButton = new ButtonView("reports-month-next");
   static readonly YearTrigger = new ButtonView("month-year-nav-year-trigger");
   static readonly Year2025Item = new ButtonView(
     "month-year-nav-year-item-2025",

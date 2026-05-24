@@ -7,7 +7,7 @@
       >
         <div>
           <p class="text-xs text-muted-foreground">
-            {{ $t(resolvedLabelKey) }}
+            {{ $t(labelKey) }}
           </p>
           <p
             :data-testid="`${testIdPrefix}-period-label`"
@@ -22,7 +22,7 @@
           variant="outline"
           @click="isSheetOpen = true"
         >
-          {{ $t(resolvedSelectLabelKey) }}
+          {{ $t(selectLabelKey) }}
         </Button>
       </div>
 
@@ -38,9 +38,9 @@
         class="h-[65vh] rounded-t-xl p-6 flex flex-col"
       >
         <SheetHeader class="text-left pb-4 border-b shrink-0">
-          <SheetTitle>{{ $t(resolvedTitleKey) }}</SheetTitle>
+          <SheetTitle>{{ $t(titleKey) }}</SheetTitle>
           <SheetDescription class="sr-only">
-            {{ $t(resolvedTitleKey) }}
+            {{ $t(titleKey) }}
           </SheetDescription>
         </SheetHeader>
 
@@ -62,7 +62,7 @@
                 :disabled="currentYearIdx <= 0"
                 :data-testid="`${navigatorTestIdPrefix}-prev-year`"
               >
-                <ChevronLeft class="h-4 w-4" />
+                <ChevronLeft class="icon-small" />
               </Button>
 
               <Select v-model="selectedYearModel">
@@ -95,7 +95,7 @@
                 "
                 :data-testid="`${navigatorTestIdPrefix}-next-year`"
               >
-                <ChevronRight class="h-4 w-4" />
+                <ChevronRight class="icon-small" />
               </Button>
             </div>
 
@@ -107,8 +107,8 @@
                 variant="ghost"
                 class="h-9 text-xs px-1"
                 :class="{
-                  'bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground font-semibold':
-                    String(month) === String(selectedMonth),
+                  'bg-primary text-primary-foreground font-semibold':
+                    month === selectedMonth,
                 }"
                 @click="selectMonth(Number(month))"
                 :data-testid="`${navigatorTestIdPrefix}-month-${month}`"
@@ -188,24 +188,17 @@ const emit = defineEmits<{
 const isSheetOpen = ref(false);
 
 const periodLabel = computed(() => {
-  if (props.selectedMonth > 0) {
-    return `${getMonthName(props.selectedMonth)} ${props.selectedYear}`;
-  }
-  return String(props.selectedYear);
+  return props.selectedMonth > 0
+    ? `${getMonthName(props.selectedMonth)} ${props.selectedYear}`
+    : String(props.selectedYear);
 });
 
-const resolvedTitleKey = computed(() => props.titleKey ?? "General.month");
-const resolvedLabelKey = computed(() => props.labelKey ?? "General.month");
-const resolvedSelectLabelKey = computed(
-  () => props.selectLabelKey ?? "General.select",
-);
-
 const currentYearIdx = computed(() => {
-  return props.years.map(String).indexOf(String(props.selectedYear));
+  return props.years.findIndex((y) => String(y) === String(props.selectedYear));
 });
 
 const selectedYearModel = computed({
-  get: () => String(props.selectedYear ?? ""),
+  get: () => String(props.selectedYear),
   set: (value: string) => selectYear(value),
 });
 
