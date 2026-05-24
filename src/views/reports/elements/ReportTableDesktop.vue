@@ -254,7 +254,7 @@ import {
 } from "@/components/ui/table";
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 import {
-  ArrowDownNarrowWide,
+  ArrowDownWideNarrow,
   ArrowUpDown,
   ArrowUpNarrowWide,
   X,
@@ -289,9 +289,9 @@ const sortIcon = (sortedField: keyof Moneyflow) => {
   if (props.sortBy.get(sortedField) === undefined) {
     return ArrowUpDown;
   } else if (props.sortBy.get(sortedField)) {
-    return ArrowDownNarrowWide;
+    return ArrowUpNarrowWide;
   }
-  return ArrowUpNarrowWide;
+  return ArrowDownWideNarrow;
 };
 
 const showReceipt = (id: number) => {
