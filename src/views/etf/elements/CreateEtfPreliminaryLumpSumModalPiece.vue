@@ -9,8 +9,8 @@
           <DivError :server-errors="serverErrors" />
 
           <div class="form-section space-y-4">
-            <div class="grid grid-cols-1 sm:grid-cols-12 gap-4">
-              <div class="sm:col-span-9">
+            <div class="grid grid-cols-2 sm:grid-cols-12 gap-4">
+              <div class="col-span-2 sm:col-span-9">
                 <SelectStandard
                   v-model="mep.etfId"
                   :validation-schema="schema.etfId"

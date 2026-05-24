@@ -44,8 +44,8 @@
           </SheetDescription>
         </SheetHeader>
 
-        <div class="flex-1 overflow-y-auto py-4">
-          <MonthYearDesktopNavigator
+        <div class="flex-1 overflow-y-auto">
+          <MonthPicker
             v-if="dataLoaded"
             :years="years"
             :months="months"
@@ -62,7 +62,6 @@
 </template>
 
 <script lang="ts" setup>
-import MonthYearDesktopNavigator from "@/components/navigation/MonthYearDesktopNavigator.vue";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -73,6 +72,7 @@ import {
 } from "@/components/ui/sheet";
 import { getMonthName } from "@/tools/views/MonthName";
 import { computed, ref } from "vue";
+import MonthPicker from "./MonthPicker.vue";
 
 const props = withDefaults(
   defineProps<{
@@ -115,9 +115,20 @@ const resolvedSelectLabelKey = computed(
   () => props.selectLabelKey ?? "General.select",
 );
 
-const selectYear = (year: string) => emit("selectYear", year);
+const selectYear = (year: string) => {
+  if (props.months.length === 0) {
+    isSheetOpen.value = false;
+    setTimeout(() => {
+      emit("selectYear", year);
+    }, 100);
+  } else {
+    emit("selectYear", year);
+  }
+};
 const selectMonth = (month: number) => {
   isSheetOpen.value = false;
-  emit("selectMonth", month);
+  setTimeout(() => {
+    emit("selectMonth", month);
+  }, 100);
 };
 </script>
