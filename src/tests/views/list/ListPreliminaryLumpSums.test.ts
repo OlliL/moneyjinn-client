@@ -35,8 +35,8 @@ vi.mock("@/router", async () => {
 });
 
 class ListPreliminaryLumpSumsView {
-  static readonly EtfInput = new InputView("etf");
-  static readonly EtfIdInput = new InputView("etf-id");
+  static readonly EtfInput = new InputView("etf-desktop");
+  static readonly EtfIdInput = new InputView("etf-desktop-id");
   static readonly CreateButton = new ButtonView("preliminary-lump-sum-create");
   static readonly YearPreviousButton = new ButtonView(
     "preliminary-lump-sum-year-previous",
@@ -341,14 +341,9 @@ test("ListPreliminaryLumpSums mobile: delete button opens modal", async () => {
 
 test("ListPreliminaryLumpSums shows empty state when no data is present", async () => {
   // There exists an entry for 2024, but we select 2025
-  CrudEtfPreliminaryLumpSumServiceMocker.mockFetchAllEtfPreliminaryLumpSum([
-    {
-      id: 1,
-      etfId: 1,
-      year: 2024,
-      type: EtfPreliminaryLumpSumType.AMOUNT_PER_MONTH,
-    },
-  ] as never);
+  CrudEtfPreliminaryLumpSumServiceMocker.mockFetchAllEtfPreliminaryLumpSum(
+    [] as never,
+  );
   await StoreService.getInstance().initAllStores();
   render(ListPreliminaryLumpSums, { props: { etfId: "1", year: "2025" } });
 
