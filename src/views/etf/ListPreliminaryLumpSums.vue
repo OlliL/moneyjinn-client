@@ -114,6 +114,7 @@
           label-key="General.year"
           select-label-key="General.select"
           @select-year="selectYearMobile"
+          @select-current-month="selectCurrentMonth"
         />
 
         <div class="fixed left-4 top-1/2 z-20 -translate-y-1/2">
@@ -194,7 +195,7 @@
           EtfPreliminaryLumpSumType.AMOUNT_PER_MONTH
       "
     >
-      <div class="flex justify-center pb-4 px-15 md:px-0">
+      <div class="flex justify-center pb-4 px-14 md:px-0">
         <div class="w-full max-w-md">
           <ShowEtfPreliminaryLumpSumMonthlyVue :mep="etfPreliminaryLumpSum" />
         </div>
@@ -233,7 +234,7 @@
           EtfPreliminaryLumpSumType.AMOUNT_PER_PIECE
       "
     >
-      <div class="flex justify-center pb-4 px-15 md:px-0">
+      <div class="flex justify-center pb-4 px-14 md:px-0">
         <div class="w-full max-w-md">
           <ShowEtfPreliminaryLumpSumPieceVue :mep="etfPreliminaryLumpSum" />
         </div>
@@ -271,7 +272,7 @@
         etfPreliminaryLumpSum?.type == EtfPreliminaryLumpSumType.AMOUNT_PER_YEAR
       "
     >
-      <div class="flex justify-center pb-4 px-15 md:px-0">
+      <div class="flex justify-center pb-4 px-14 md:px-0">
         <div class="w-full max-w-md">
           <ShowEtfPreliminaryLumpSumYearly :mep="etfPreliminaryLumpSum" />
         </div>
@@ -575,6 +576,10 @@ const createSelectedPreliminaryLumpSum = () => {
 
 const selectYearMobile = (year: string) => {
   selectedYear.value = year;
+};
+
+const selectCurrentMonth = () => {
+  selectedYear.value = years.value[years.value.length - 1];
 };
 
 const showDeleteEtfPreliminaryLumpSumModal = () => {

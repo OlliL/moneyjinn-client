@@ -18,7 +18,7 @@
               </div>
             </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div class="grid grid-cols-2 sm:grid-cols-2 gap-4">
               <div>
                 <InputDate
                   v-model="bookingdate"
@@ -38,7 +38,7 @@
               </div>
             </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div class="grid grid-cols-2 sm:grid-cols-2 gap-4">
               <div>
                 <InputStandard
                   v-model="etfFlow.amount"

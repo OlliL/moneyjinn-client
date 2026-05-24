@@ -1,6 +1,8 @@
 {
   "General": {
     "displayOptions": "Display Options",
+    "currentMonth": "Current Month",
+    "currentYear": "Current Year",
     "copy": "Copy...",
     "logout": "Logout",
     "profile": "Profile",

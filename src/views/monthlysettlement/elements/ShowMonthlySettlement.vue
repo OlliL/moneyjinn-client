@@ -29,7 +29,7 @@
 
   <div class="flex justify-center" v-if="props.month">
     <div class="w-full max-w-md">
-      <div class="px-13 md:px-0">
+      <div class="px-14 md:px-0">
         <div
           class="rounded-md border mb-4"
           v-if="monthlySettlementsNoCredit.length"
