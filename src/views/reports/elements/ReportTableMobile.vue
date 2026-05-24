@@ -37,9 +37,9 @@
                 :key="option.field"
                 variant="outline"
                 size="sm"
-                class="justify-between px-3 h-9 font-normal text-xs"
+                class="justify-between px-3 h-9 font-normal text-xs transition-all"
                 :class="{
-                  'bg-primary/10 border-primary text-primary font-bold':
+                  'bg-primary/15 border-primary text-primary font-bold shadow-sm ring-1 ring-primary/20':
                     props.sortBy.has(option.field),
                 }"
                 @click="sortByColumn(option.field)"
@@ -161,7 +161,7 @@
       <template v-if="activeSort">
         <span class="text-muted-foreground/30">•</span>
         <div
-          class="flex items-center gap-1 text-primary/80 cursor-pointer active:opacity-60 transition-opacity"
+          class="flex items-center gap-1 text-primary/80 cursor-pointer active:opacity-60 transition-opacity whitespace-nowrap"
           @click="sortByColumn(activeSort.field)"
         >
           <span class="truncate">{{ $t(activeSort.label) }}</span>
