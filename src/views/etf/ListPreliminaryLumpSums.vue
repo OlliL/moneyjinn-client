@@ -114,6 +114,7 @@
           label-key="General.year"
           select-label-key="General.select"
           @select-year="selectYearMobile"
+          @select-current-month="selectCurrentMonth"
         />
 
         <div class="fixed left-4 top-1/2 z-20 -translate-y-1/2">
@@ -575,6 +576,10 @@ const createSelectedPreliminaryLumpSum = () => {
 
 const selectYearMobile = (year: string) => {
   selectedYear.value = year;
+};
+
+const selectCurrentMonth = () => {
+  selectedYear.value = years.value[years.value.length - 1];
 };
 
 const showDeleteEtfPreliminaryLumpSumModal = () => {

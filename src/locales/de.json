@@ -1,6 +1,8 @@
 {
   "General": {
     "displayOptions": "Anzeigeoptionen",
+    "currentMonth": "Aktueller Monat",
+    "currentYear": "Aktuelles Jahr",
     "copy": "kopieren...",
     "logout": "Abmelden",
     "profile": "Profil",

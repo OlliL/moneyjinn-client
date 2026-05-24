@@ -45,7 +45,6 @@ const _show = (
       else if (importedReceipt)
         receipt.value =
           mapImportedMoneyflowReceiptToMoneyflowReceipt(importedReceipt);
-      console.log(receipt.value, response);
       modalComponent.value?._show();
     })
     .catch((backendError) => {

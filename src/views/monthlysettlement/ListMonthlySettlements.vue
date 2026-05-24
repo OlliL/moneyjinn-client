@@ -28,6 +28,7 @@
       :can-edit-or-delete="canEditOrDelete"
       @select-year="selectYear"
       @select-month="selectMonth"
+      @select-current-month="selectCurrentMonth"
       @create="showEditMonthlySettlementModal()"
       @edit="
         showEditMonthlySettlementModal(Number(selectedYear), selectedMonth)
@@ -168,6 +169,17 @@ const selectMonth = (month: number) => {
   router.push({
     name: Routes.ListMonthlySettlements,
     params: { year: selectedYear.value, month },
+  });
+};
+
+const selectCurrentMonth = () => {
+  const today = new Date();
+  const currentYear = today.getFullYear();
+  const currentMonth = today.getMonth() + 1;
+
+  router.push({
+    name: Routes.ListMonthlySettlements,
+    params: { year: currentYear, currentMonth },
   });
 };
 
