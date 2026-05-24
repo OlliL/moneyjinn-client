@@ -171,213 +171,15 @@
     </div>
 
     <Accordion type="multiple" class="space-y-2">
-      <AccordionItem
+      <ReportTableMobileRow
         v-for="mmf in moneyflows"
         :key="'mobile-' + mmf.id"
-        :value="'item-' + mmf.id"
-        :data-testid="`report-mobile-moneyflow-row-${mmf.id}`"
-        class="border rounded-lg bg-background shadow-sm px-3 py-1"
-        :class="{
-          'border-destructive/30 bg-destructive/5': mmf.private,
-        }"
-      >
-        <AccordionTrigger class="hover:no-underline w-full min-w-0">
-          <div class="grid grid-cols-[1fr_auto] items-center w-full gap-2">
-            <div class="flex flex-col items-start text-left overflow-hidden">
-              <div
-                class="flex items-center gap-1.5 text-xs text-muted-foreground font-normal truncate w-full"
-              >
-                <div
-                  class="flex items-center gap-1.5 truncate transition-opacity"
-                  :class="lesserOpacityIfFuture(mmf.bookingDate)"
-                >
-                  <Calendar
-                    class="icon-extra-small text-muted-foreground/60 shrink-0"
-                  />
-                  <SpanDate :date="mmf.bookingDate" />
-
-                  <span
-                    v-if="mmf.private"
-                    class="bg-destructive/20 text-destructive px-1 rounded text-[10px]"
-                  >
-                    {{ $t("Moneyflow.private") }}
-                  </span>
-                  <span
-                    v-if="mmf.moneyflowSplitEntries?.length"
-                    class="bg-primary/20 text-primary px-1 rounded text-[10px]"
-                  >
-                    {{ $t("Moneyflow.subbookings") }}
-                  </span>
-                </div>
-                <span
-                  v-if="isFutureDate(mmf.bookingDate)"
-                  class="bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300 px-1 rounded text-[10px] font-medium"
-                >
-                  {{ $t("Moneyflow.reserved") }}
-                </span>
-              </div>
-
-              <div
-                class="flex items-center gap-1 min-w-0 truncate transition-opacity"
-                :class="lesserOpacityIfFuture(mmf.bookingDate)"
-              >
-                <Handshake
-                  class="icon-small shrink-0 text-foreground/80"
-                  :title="$t('General.contractpartner')"
-                />
-                <span
-                  class="font-bold text-base text-foreground truncate w-full"
-                  >{{ mmf.contractpartnerName }}</span
-                >
-              </div>
-            </div>
-
-            <div
-              class="flex flex-col items-end gap-1.5 shrink-0 text-right transition-opacity"
-              :class="lesserOpacityIfFuture(mmf.bookingDate)"
-            >
-              <span
-                class="font-extrabold text-sm text-foreground"
-                :class="{
-                  'border-b border-double border-foreground':
-                    mmf.moneyflowSplitEntries?.length,
-                }"
-              >
-                <SpanAmount :amount="mmf.amount" />
-              </span>
-
-              <div class="flex gap-0.5">
-                <Button
-                  v-if="mmf.hasReceipt"
-                  :data-testid="`report-mobile-moneyflow-receipt-${mmf.id}`"
-                  variant="ghost"
-                  size="icon"
-                  class="h-7 w-7"
-                  @click.stop="showReceipt(mmf.id)"
-                >
-                  <ReceiptText class="h-3.5 w-3.5" />
-                </Button>
-                <Button
-                  v-if="mmf.userId === userSessionStore.getUserId"
-                  :data-testid="`report-mobile-moneyflow-edit-${mmf.id}`"
-                  variant="ghost"
-                  size="icon"
-                  class="h-7 w-7"
-                  @click.stop="editMoneyflow(mmf)"
-                >
-                  <Pencil class="h-3.5 w-3.5" />
-                </Button>
-                <Button
-                  v-if="mmf.userId === userSessionStore.getUserId"
-                  :data-testid="`report-mobile-moneyflow-delete-${mmf.id}`"
-                  variant="ghost"
-                  size="icon"
-                  class="h-7 w-7 text-destructive"
-                  @click.stop="deleteMoneyflow(mmf)"
-                >
-                  <Trash2 class="h-3.5 w-3.5" />
-                </Button>
-                <Button
-                  v-if="mmf.userId !== userSessionStore.getUserId"
-                  :data-testid="`report-mobile-moneyflow-list-${mmf.id}`"
-                  variant="ghost"
-                  size="icon"
-                  class="h-7 w-7"
-                  @click.stop="listMoneyflow(mmf)"
-                >
-                  <Eye class="h-3.5 w-3.5" />
-                </Button>
-              </div>
-            </div>
-          </div>
-        </AccordionTrigger>
-
-        <AccordionContent
-          class="pt-3 pb-1 space-y-2 border-t mt-2 transition-opacity"
-          :class="lesserOpacityIfFuture(mmf.bookingDate)"
-        >
-          <div
-            class="text-xs text-muted-foreground bg-muted/40 p-2 rounded space-y-2"
-          >
-            <div
-              class="flex items-center gap-1.5 break-all w-full"
-              v-if="!mmf.moneyflowSplitEntries?.length"
-            >
-              <MessageSquareMore
-                class="icon-extra-small shrink-0 text-foreground"
-                :title="$t('General.comment')"
-              />
-              <span class="text-foreground">{{ mmf.comment }}</span>
-            </div>
-
-            <div
-              class="grid grid-cols-2 gap-2 text-xs text-muted-foreground/80 pt-0.5 border-t border-muted/60 mt-1"
-            >
-              <div class="flex items-center gap-1 min-w-0 truncate">
-                <CreditCard
-                  class="icon-extra-small shrink-0 text-muted-foreground/80"
-                  :title="$t('General.capitalsource')"
-                />
-                {{ mmf.capitalsourceComment }}
-              </div>
-              <div
-                v-if="
-                  mmf.postingAccountName && !mmf.moneyflowSplitEntries?.length
-                "
-                class="flex items-center gap-1 min-w-0 truncate"
-              >
-                <Tag
-                  class="icon-extra-small shrink-0 text-muted-foreground/80"
-                  :title="$t('General.postingAccount')"
-                />
-                {{ mmf.postingAccountName }}
-              </div>
-            </div>
-          </div>
-
-          <div
-            v-if="mmf.moneyflowSplitEntries?.length"
-            class="pl-3 border-l-2 border-primary/30 space-y-1.5 pt-0.5"
-          >
-            <div
-              class="text-[10px] font-bold uppercase tracking-wider text-muted-foreground/70 mb-1"
-            >
-              {{ $t("Moneyflow.subbookings") }}
-            </div>
-            <div
-              v-for="mse in mmf.moneyflowSplitEntries"
-              :key="mse.id"
-              class="flex justify-between items-start text-xs bg-muted/20 p-2 rounded gap-2"
-            >
-              <div class="flex flex-col min-w-0 text-left">
-                <div class="flex items-center gap-1 min-w-0 truncate">
-                  <MessageSquareMore
-                    class="icon-extra-small shrink-0 text-muted-foreground/80"
-                    :title="$t('General.comment')"
-                  />
-                  <span class="font-medium text-foreground text-xs truncate">{{
-                    mse.comment
-                  }}</span>
-                </div>
-                <div class="flex items-center gap-1 min-w-0 truncate">
-                  <Tag
-                    class="icon-extra-small shrink-0 text-muted-foreground/80"
-                    :title="$t('General.postingAccount')"
-                  />
-                  <span class="text-xs-muted truncate">{{
-                    mse.postingAccountName
-                  }}</span>
-                </div>
-              </div>
-              <span
-                class="font-semibold text-[11px] shrink-0 text-muted-foreground"
-              >
-                <SpanAmount :amount="mse.amount" />
-              </span>
-            </div>
-          </div>
-        </AccordionContent>
-      </AccordionItem>
+        :mmf="mmf"
+        @show-receipt="showReceipt"
+        @edit-moneyflow="editMoneyflow"
+        @delete-moneyflow="deleteMoneyflow"
+        @list-moneyflow="listMoneyflow"
+      />
     </Accordion>
 
     <div
@@ -402,13 +204,7 @@
 <script lang="ts" setup>
 import InputStandard from "@/components/common/InputStandard.vue";
 import SpanAmount from "@/components/common/SpanAmount.vue";
-import SpanDate from "@/components/common/SpanDate.vue";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
+import { Accordion } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -419,25 +215,16 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
-import { useUserSessionStore } from "@/stores/UserSessionStore";
 import {
   ArrowDownWideNarrow,
   ArrowUpDown,
   ArrowUpNarrowWide,
-  Calendar,
-  CreditCard,
-  Eye,
   Filter,
-  Handshake,
-  MessageSquareMore,
-  Pencil,
-  ReceiptText,
-  Tag,
-  Trash2,
   X,
 } from "lucide-vue-next";
 import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
+import ReportTableMobileRow from "./ReportTableMobileRow.vue";
 
 const { t } = useI18n();
 
@@ -466,7 +253,6 @@ const emit = defineEmits<{
   listMoneyflow: [moneyflow: Moneyflow];
 }>();
 
-const userSessionStore = useUserSessionStore();
 const isSheetOpen = ref(false);
 
 const showReceipt = (id: number) => {
@@ -483,18 +269,6 @@ const deleteMoneyflow = (moneyflow: Moneyflow) => {
 
 const listMoneyflow = (moneyflow: Moneyflow) => {
   emit("listMoneyflow", moneyflow);
-};
-
-const isFutureDate = (date: Date) => {
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-  const bookingDate = new Date(date);
-  bookingDate.setHours(0, 0, 0, 0);
-  return bookingDate > today;
-};
-
-const lesserOpacityIfFuture = (date: Date) => {
-  return isFutureDate(date) ? "opacity-60" : "";
 };
 
 const handleEnter = (event: Event): void => {

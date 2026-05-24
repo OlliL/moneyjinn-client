@@ -14,7 +14,7 @@
           :class="lesserOpacityIfFuture"
           variant="ghost"
           size="icon"
-          @click="showReceipt"
+          @click="$emit('showReceipt', mmf.id)"
           :title="$t('Receipt.receipt')"
           :aria-label="$t('Receipt.receipt')"
           class="action-icon-button"
@@ -107,7 +107,7 @@
             variant="ghost"
             size="icon"
             :data-testid="`report-moneyflow-edit-${mmf.id}`"
-            @click="editMoneyflow"
+            @click="$emit('editMoneyflow', mmf)"
             :title="$t('General.edit')"
             class="action-icon-button"
           >
@@ -126,7 +126,7 @@
             variant="ghost"
             size="icon"
             :data-testid="`report-moneyflow-delete-${mmf.id}`"
-            @click="deleteMoneyflow"
+            @click="$emit('deleteMoneyflow', mmf)"
             :title="$t('General.delete')"
             class="action-icon-button"
           >
@@ -148,7 +148,7 @@
             variant="ghost"
             size="icon"
             :data-testid="`report-moneyflow-list-${mmf.id}`"
-            @click="listMoneyflow"
+            @click="$emit('listMoneyflow', mmf)"
             :title="$t('General.moneyflow')"
             class="action-icon-button"
           >
@@ -179,12 +179,12 @@ const props = defineProps({
   index: { type: Number, required: true },
 });
 
-const emit = defineEmits([
-  "showReceipt",
-  "deleteMoneyflow",
-  "editMoneyflow",
-  "listMoneyflow",
-]);
+defineEmits<{
+  showReceipt: [id: number];
+  editMoneyflow: [moneyflow: Moneyflow];
+  deleteMoneyflow: [moneyflow: Moneyflow];
+  listMoneyflow: [moneyflow: Moneyflow];
+}>();
 
 const rowBgClass = computed(() =>
   props.index % 2 === 0 ? "bg-muted" : "bg-background",
@@ -207,7 +207,7 @@ const isFuture = computed(() => {
 });
 
 const lesserOpacityIfFuture = computed(() =>
-  isFuture.value ? "opacity-60" : "",
+  isFuture.value ? "opacity-50" : "",
 );
 
 const tableRows = computed(() => {
@@ -230,9 +230,4 @@ const tableRows = computed(() => {
     },
   ];
 });
-
-const showReceipt = () => emit("showReceipt", props.mmf.id);
-const deleteMoneyflow = () => emit("deleteMoneyflow", props.mmf);
-const editMoneyflow = () => emit("editMoneyflow", props.mmf);
-const listMoneyflow = () => emit("listMoneyflow", props.mmf);
 </script>
