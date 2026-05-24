@@ -18,7 +18,7 @@
           :key="etf.id"
           :value="`item-${etf.id}`"
           :data-testid="`etf-mobile-row-${etf.id}`"
-          class="border rounded-lg bg-background shadow-sm px-3 py-2"
+          class="border rounded-lg bg-background shadow-sm px-3 py-1"
         >
           <AccordionTrigger class="hover:no-underline w-full min-w-0">
             <div

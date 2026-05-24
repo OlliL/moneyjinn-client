@@ -116,5 +116,8 @@ const resolvedSelectLabelKey = computed(
 );
 
 const selectYear = (year: string) => emit("selectYear", year);
-const selectMonth = (month: number) => emit("selectMonth", month);
+const selectMonth = (month: number) => {
+  isSheetOpen.value = false;
+  emit("selectMonth", month);
+};
 </script>

@@ -133,7 +133,7 @@
         :key="'mobile-' + mmf.id"
         :value="'item-' + mmf.id"
         :data-testid="`report-mobile-moneyflow-row-${mmf.id}`"
-        class="border rounded-lg bg-background shadow-sm px-3 py-2"
+        class="border rounded-lg bg-background shadow-sm px-3 py-1"
         :class="{ 'border-destructive/30 bg-destructive/5': mmf.private }"
       >
         <AccordionTrigger class="hover:no-underline w-full min-w-0">
@@ -142,7 +142,11 @@
               <div
                 class="flex items-center gap-1.5 text-xs text-muted-foreground font-normal truncate w-full"
               >
+                <Calendar
+                  class="icon-extra-small text-muted-foreground/60 shrink-0"
+                />
                 <SpanDate :date="mmf.bookingDate" />
+
                 <span
                   v-if="mmf.private"
                   class="bg-destructive/20 text-destructive px-1 rounded text-[10px]"
@@ -156,9 +160,17 @@
                   {{ $t("Moneyflow.subbookings") }}
                 </span>
               </div>
-              <span class="font-bold text-sm text-foreground truncate w-full">
-                {{ mmf.contractpartnerName }}
-              </span>
+
+              <div class="flex items-center gap-1 min-w-0 truncate">
+                <Handshake
+                  class="icon-small shrink-0 text-foreground/80"
+                  :title="$t('General.contractpartner')"
+                />
+                <span
+                  class="font-bold text-base text-foreground truncate w-full"
+                  >{{ mmf.contractpartnerName }}</span
+                >
+              </div>
             </div>
 
             <div class="flex flex-col items-end gap-1.5 shrink-0 text-right">
@@ -227,7 +239,7 @@
               v-if="!mmf.moneyflowSplitEntries?.length"
             >
               <MessageSquareMore
-                class="icon-small shrink-0 text-muted-foreground/80"
+                class="icon-extra-small shrink-0 text-foreground"
                 :title="$t('General.comment')"
               />
               <span class="text-foreground">{{ mmf.comment }}</span>
@@ -238,7 +250,7 @@
             >
               <div class="flex items-center gap-1 min-w-0 truncate">
                 <CreditCard
-                  class="icon-small shrink-0 text-muted-foreground/80"
+                  class="icon-extra-small shrink-0 text-muted-foreground/80"
                   :title="$t('General.capitalsource')"
                 />
                 {{ mmf.capitalsourceComment }}
@@ -250,7 +262,7 @@
                 class="flex items-center gap-1 min-w-0 truncate"
               >
                 <Tag
-                  class="icon-small shrink-0 text-muted-foreground/80"
+                  class="icon-extra-small shrink-0 text-muted-foreground/80"
                   :title="$t('General.postingAccount')"
                 />
                 {{ mmf.postingAccountName }}
@@ -275,7 +287,7 @@
               <div class="flex flex-col min-w-0 text-left">
                 <div class="flex items-center gap-1 min-w-0 truncate">
                   <MessageSquareMore
-                    class="h-3 w-3 shrink-0 text-muted-foreground/80"
+                    class="icon-extra-small shrink-0 text-muted-foreground/80"
                     :title="$t('General.comment')"
                   />
                   <span class="font-medium text-foreground text-xs truncate">{{
@@ -284,7 +296,7 @@
                 </div>
                 <div class="flex items-center gap-1 min-w-0 truncate">
                   <Tag
-                    class="h-3 w-3 shrink-0 text-muted-foreground/80"
+                    class="icon-extra-small shrink-0 text-muted-foreground/80"
                     :title="$t('General.postingAccount')"
                   />
                   <span class="text-xs-muted truncate">{{
@@ -344,9 +356,11 @@ import {
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 import { useUserSessionStore } from "@/stores/UserSessionStore";
 import {
+  Calendar,
   CreditCard,
   Eye,
   Filter,
+  Handshake,
   MessageSquareMore,
   Pencil,
   ReceiptText,

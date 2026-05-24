@@ -1,7 +1,7 @@
 <template>
   <AccordionItem
     :value="capitalsourceComment"
-    class="border rounded-lg bg-background shadow-sm px-3 py-2"
+    class="border rounded-lg bg-background shadow-sm px-3 py-1"
   >
     <AccordionTrigger class="hover:no-underline w-full min-w-0">
       <div class="grid grid-cols-[1fr_auto] items-center w-full gap-2">

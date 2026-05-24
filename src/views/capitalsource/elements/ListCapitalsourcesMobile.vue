@@ -16,7 +16,7 @@
         :key="mcs.id"
         :value="`item-${mcs.id}`"
         :data-testid="`capitalsource-mobile-row-${mcs.id}`"
-        class="border rounded-lg bg-background shadow-sm px-3 py-2"
+        class="border rounded-lg bg-background shadow-sm px-3 py-1"
       >
         <AccordionTrigger class="hover:no-underline w-full min-w-0">
           <div

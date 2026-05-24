@@ -49,6 +49,10 @@
   @apply h-4 w-4 cursor-pointer;
 }
 
+@utility icon-extra-small {
+  @apply h-3 w-3;
+}
+
 @utility form-section {
   @apply rounded-sm border bg-muted/30 p-4 shadow-sm;
 }

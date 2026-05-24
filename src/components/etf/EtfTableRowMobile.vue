@@ -2,7 +2,7 @@
   <AccordionItem
     :value="String(etfId)"
     :data-testid="`report-etf-mobile-item-${etfId}`"
-    class="border rounded-lg bg-background shadow-sm px-3 py-2"
+    class="border rounded-lg bg-background shadow-sm px-3 py-1"
   >
     <AccordionTrigger class="hover:no-underline w-full min-w-0">
       <div

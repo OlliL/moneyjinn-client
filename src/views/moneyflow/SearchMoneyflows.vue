@@ -72,10 +72,10 @@
             >
               <div class="flex items-center gap-2">
                 <SlidersHorizontal class="icon-small" />
-                <span>Anzeigeoptionen & Sortierung</span>
+                <span>{{ $t("General.displayOptions") }}</span>
               </div>
               <ChevronDown
-                class="h-4 w-4 transition-transform duration-200"
+                class="icon-small transition-transform duration-200"
                 :class="{ 'rotate-180': mobileOptionsOpen }"
               />
             </div>

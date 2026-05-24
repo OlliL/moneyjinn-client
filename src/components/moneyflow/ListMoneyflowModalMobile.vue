@@ -45,12 +45,25 @@
           class="flex justify-between items-start pb-2 border-b border-border/40"
         >
           <div class="space-y-0.5">
-            <h3 class="text-base font-bold text-foreground tracking-tight">
-              {{ mmf.contractpartnerName }}
-            </h3>
-            <p v-if="mmf.comment" class="text-xs text-muted-foreground">
-              {{ mmf.comment }}
-            </p>
+            <div class="flex items-center gap-1 min-w-0 truncate">
+              <Handshake
+                class="icon-small shrink-0 text-foreground/80"
+                :title="$t('General.contractpartner')"
+              />
+              <h3 class="text-base font-bold text-foreground tracking-tight">
+                {{ mmf.contractpartnerName }}
+              </h3>
+            </div>
+
+            <div class="flex items-center gap-1.5 min-w-0 truncate">
+              <MessageSquareMore
+                class="icon-extra-small shrink-0 text-muted-foreground/80"
+                :title="$t('General.comment')"
+              />
+              <p v-if="mmf.comment" class="text-xs text-muted-foreground">
+                {{ mmf.comment }}
+              </p>
+            </div>
           </div>
           <span class="text-lg font-bold">
             <SpanAmount :amount="mmf.amount" />
@@ -59,8 +72,10 @@
 
         <div class="divide-y divide-border/40 text-xs text-muted-foreground">
           <div class="grid grid-cols-[auto_1fr] items-center gap-3 py-2.5">
-            <div class="flex items-center gap-2.5 w-32 shrink-0">
-              <Calendar class="icon-small text-muted-foreground/60 shrink-0" />
+            <div class="flex items-center gap-1 w-32 shrink-0">
+              <Calendar
+                class="icon-extra-small text-muted-foreground/60 shrink-0"
+              />
               <span>{{ $t("Moneyflow.bookingdate") }}</span>
             </div>
             <strong class="text-foreground font-semibold pl-2 truncate">
@@ -69,9 +84,9 @@
           </div>
 
           <div class="grid grid-cols-[auto_1fr] items-center gap-3 py-2.5">
-            <div class="flex items-center gap-2.5 w-32 shrink-0">
+            <div class="flex items-center gap-1 w-32 shrink-0">
               <CalendarDays
-                class="icon-small text-muted-foreground/60 shrink-0"
+                class="icon-extra-small text-muted-foreground/60 shrink-0"
               />
               <span>{{ $t("Moneyflow.invoicedate") }}</span>
             </div>
@@ -84,8 +99,8 @@
             v-if="rowspan === 1"
             class="grid grid-cols-[auto_1fr] items-center gap-3 py-2.5"
           >
-            <div class="flex items-center gap-2.5 w-32 shrink-0">
-              <Tag class="icon-small text-muted-foreground/60 shrink-0" />
+            <div class="flex items-center gap-1 w-32 shrink-0">
+              <Tag class="icon-extra-small text-muted-foreground/60 shrink-0" />
               <span>{{ $t("General.postingAccount") }}</span>
             </div>
             <strong class="text-foreground font-semibold pl-2 truncate">
@@ -94,9 +109,9 @@
           </div>
 
           <div class="grid grid-cols-[auto_1fr] items-center gap-3 py-2.5">
-            <div class="flex items-center gap-2.5 w-32 shrink-0">
+            <div class="flex items-center gap-1 w-32 shrink-0">
               <CreditCard
-                class="icon-small text-muted-foreground/60 shrink-0"
+                class="icon-extra-small text-muted-foreground/60 shrink-0"
               />
               <span>{{ $t("General.capitalsource") }}</span>
             </div>
@@ -138,7 +153,7 @@
               <div class="flex flex-col min-w-0 text-left">
                 <div class="flex items-center gap-1 min-w-0 truncate">
                   <MessageSquareMore
-                    class="h-3 w-3 shrink-0 text-muted-foreground/80"
+                    class="icon-extra-small shrink-0 text-muted-foreground/80"
                     :title="$t('General.comment')"
                   />
                   <span class="font-medium text-foreground text-xs truncate">{{
@@ -147,7 +162,7 @@
                 </div>
                 <div class="flex items-center gap-1 min-w-0 truncate">
                   <Tag
-                    class="h-3 w-3 shrink-0 text-muted-foreground/80"
+                    class="icon-extra-small shrink-0 text-muted-foreground/80"
                     :title="$t('General.postingAccount')"
                   />
                   <span class="text-xs-muted truncate">{{
@@ -180,6 +195,7 @@ import {
   CalendarDays,
   CreditCard,
   Eye,
+  Handshake,
   MessageSquareMore,
   ReceiptText,
   Tag,

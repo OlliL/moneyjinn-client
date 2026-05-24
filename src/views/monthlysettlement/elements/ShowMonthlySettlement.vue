@@ -29,68 +29,79 @@
 
   <div class="flex justify-center" v-if="props.month">
     <div class="w-full max-w-md">
-      <div class="px-15 md:px-0">
+      <div class="px-13 md:px-0">
         <div
           class="rounded-md border mb-4"
           v-if="monthlySettlementsNoCredit.length"
         >
-          <Table>
+          <Table class="table-fixed w-full">
             <TableHeader>
               <TableRow>
                 <TableHead class="table-head-cell w-2/3">
                   {{ $t("General.capitalsource") }}
                 </TableHead>
-                <TableHead class="table-head-cell w-1/3">
+                <TableHead
+                  class="table-head-cell w-1/3 whitespace-nowrap text-right"
+                >
                   {{ $t("General.amount") }}
                 </TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               <TableRow v-for="mms in monthlySettlementsNoCredit" :key="mms.id">
-                <TableCell class="border-r text-left">{{
-                  mms.capitalsourceComment
-                }}</TableCell>
-                <TableCell class="text-right"
-                  ><SpanAmount :amount="mms.amount"
-                /></TableCell>
+                <TableCell
+                  class="border-r text-left truncate"
+                  :title="mms.capitalsourceComment"
+                >
+                  {{ mms.capitalsourceComment }}
+                </TableCell>
+                <TableCell class="text-right whitespace-nowrap">
+                  <SpanAmount :amount="mms.amount" />
+                </TableCell>
               </TableRow>
               <TableRow>
                 <TableCell class="text-right border-r font-bold"
                   >&sum;</TableCell
                 >
-                <TableCell class="text-right">
+                <TableCell class="text-right whitespace-nowrap">
                   <u><SpanAmount :amount="monthlySettlementNoCreditSum" /></u>
                 </TableCell>
               </TableRow>
             </TableBody>
           </Table>
         </div>
+
         <div class="rounded-md border" v-if="monthlySettlementsCredit.length">
-          <Table>
+          <Table class="table-fixed w-full">
             <TableHeader v-if="monthlySettlementsNoCredit.length">
               <TableRow>
-                <TableHead class="table-head-cell w-2/3">{{
-                  $t("General.capitalsource")
-                }}</TableHead>
-                <TableHead class="table-head-cell w-1/3">{{
-                  $t("General.amount")
-                }}</TableHead>
+                <TableHead class="table-head-cell w-2/3">
+                  {{ $t("General.capitalsource") }}
+                </TableHead>
+                <TableHead
+                  class="table-head-cell w-1/3 whitespace-nowrap text-right"
+                >
+                  {{ $t("General.amount") }}
+                </TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               <TableRow v-for="mms in monthlySettlementsCredit" :key="mms.id">
-                <TableCell class="border-r text-left">{{
-                  mms.capitalsourceComment
-                }}</TableCell>
-                <TableCell class="text-right"
-                  ><SpanAmount :amount="mms.amount"
-                /></TableCell>
+                <TableCell
+                  class="border-r text-left truncate"
+                  :title="mms.capitalsourceComment"
+                >
+                  {{ mms.capitalsourceComment }}
+                </TableCell>
+                <TableCell class="text-right whitespace-nowrap">
+                  <SpanAmount :amount="mms.amount" />
+                </TableCell>
               </TableRow>
               <TableRow>
                 <TableCell class="text-right border-r font-bold"
                   >&sum;</TableCell
                 >
-                <TableCell class="text-right">
+                <TableCell class="text-right whitespace-nowrap">
                   <u>
                     <SpanAmount :amount="monthlySettlementCreditSum" />
                   </u>

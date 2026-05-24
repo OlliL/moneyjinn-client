@@ -8,55 +8,53 @@
     <DivError :server-errors="serverErrors" />
 
     <div class="flex justify-center">
-      <div
-        class="w-full max-w-xl card-panel p-6"
-      >
+      <div class="w-full max-w-xl card-panel p-4">
         <form @submit.prevent="showReportingGraph">
-          <div class="space-y-6">
+          <div class="space-y-4">
             <div
-              class="flex flex-wrap items-end justify-between gap-4 pb-4 border-b"
+              class="grid grid-cols-2 md:grid-cols-24 items-start justify-between gap-4 pb-4 border-b"
             >
-              <div class="flex flex-wrap items-end gap-4">
-                <div class="w-36" v-show="!groupByYear">
-                  <InputDate
-                    v-model="startDateMonth"
-                    :validation-schema-ref="schema.startDateMonth"
-                    id="startDateMonth"
-                    pickMode="month"
-                    :field-label="$t('General.startDate')"
-                  />
-                </div>
-                <div class="w-36" v-show="!groupByYear">
-                  <InputDate
-                    v-model="endDateMonth"
-                    :validation-schema-ref="schema.endDateMonth"
-                    id="endDateMonth"
-                    pickMode="month"
-                    :field-label="$t('General.endDate')"
-                  />
-                </div>
-
-                <div class="w-36" v-show="groupByYear">
-                  <InputDate
-                    v-model="startDateYear"
-                    :validation-schema-ref="schema.startDateYear"
-                    id="startDateYear"
-                    pickMode="year"
-                    :field-label="$t('General.startDate')"
-                  />
-                </div>
-                <div class="w-36" v-show="groupByYear">
-                  <InputDate
-                    v-model="endDateYear"
-                    :validation-schema-ref="schema.endDateYear"
-                    id="endDateYear"
-                    pickMode="year"
-                    :field-label="$t('General.endDate')"
-                  />
-                </div>
+              <div class="col-span-1 md:col-span-7" v-if="!groupByYear">
+                <InputDate
+                  v-model="startDateMonth"
+                  :validation-schema-ref="schema.startDateMonth"
+                  id="startDateMonth"
+                  pickMode="month"
+                  :field-label="$t('General.startDate')"
+                />
+              </div>
+              <div class="col-span-1 md:col-span-7" v-if="!groupByYear">
+                <InputDate
+                  v-model="endDateMonth"
+                  :validation-schema-ref="schema.endDateMonth"
+                  id="endDateMonth"
+                  pickMode="month"
+                  :field-label="$t('General.endDate')"
+                />
               </div>
 
-              <div class="space-y-2 text-left min-w-[200px] pt-2 md:pt-0">
+              <div class="col-span-1 md:col-span-7" v-if="groupByYear">
+                <InputDate
+                  v-model="startDateYear"
+                  :validation-schema-ref="schema.startDateYear"
+                  id="startDateYear"
+                  pickMode="year"
+                  :field-label="$t('General.startDate')"
+                />
+              </div>
+              <div class="col-span-1 md:col-span-7" v-if="groupByYear">
+                <InputDate
+                  v-model="endDateYear"
+                  :validation-schema-ref="schema.endDateYear"
+                  id="endDateYear"
+                  pickMode="year"
+                  :field-label="$t('General.endDate')"
+                />
+              </div>
+
+              <div
+                class="col-span-2 md:col-span-10 space-y-2 text-left md:pt-0"
+              >
                 <div class="flex items-center gap-2">
                   <Switch
                     id="showreppostingaccountmode"
@@ -82,7 +80,7 @@
             </div>
             <div>
               <div
-                class="mb-3 text-left rounded-sm border bg-background p-4 space-y-3 w-full"
+                class="text-left rounded-sm border bg-background p-4 space-y-3 w-full"
                 v-show="!singlePostingAccounts"
               >
                 <div class="flex items-center justify-between pb-2 border-b">
@@ -188,7 +186,7 @@
               </div>
             </div>
 
-            <div class="pt-4 flex justify-center">
+            <div class="flex justify-center">
               <ButtonSubmit :button-label="$t('General.show')">
                 <template #icon><Eye class="icon-small" /></template>
               </ButtonSubmit>

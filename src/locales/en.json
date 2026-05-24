@@ -1,5 +1,6 @@
 {
   "General": {
+    "displayOptions": "Display Options",
     "copy": "Copy...",
     "logout": "Logout",
     "profile": "Profile",

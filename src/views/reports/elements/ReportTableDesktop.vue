@@ -1,46 +1,45 @@
 <template>
-  <div class="hidden md:block overflow-x-auto text-center">
+  <div class="overflow-x-auto text-center">
     <div class="flex flex-col rounded-md border">
       <Table class="w-full text-xs md:text-sm">
         <TableHeader>
           <TableRow>
-            <TableHead class="align-top"></TableHead>
-            <TableHead class="table-head-cell align-top">
+            <TableHead class="table-head-cell"></TableHead>
+
+            <TableHead class="table-head-cell align-top py-2">
               <span
-                class="hidden md:block items-center justify-center mt-1 font-bold"
-                >{{ $t("Moneyflow.bookingdate") }}
+                class="inline-flex items-center gap-1 font-bold whitespace-nowrap"
+              >
+                {{ $t("Moneyflow.bookingdate") }}
                 <component
                   :is="sortIcon('bookingDate')"
-                  class="inline icon-small text-primary cursor-pointer"
-                  :title="$t('Moneyflow.bookingdate')"
-                  :aria-label="$t('Moneyflow.bookingdate')"
-                  @click="sortByColumn('bookingDate')"
-                />
-              </span>
-              <span class="block md:hidden">
-                <component
-                  :is="sortIcon('bookingDate')"
-                  class="inline icon-small text-primary cursor-pointer"
+                  class="icon-small text-primary cursor-pointer shrink-0"
                   :title="$t('Moneyflow.bookingdate')"
                   :aria-label="$t('Moneyflow.bookingdate')"
                   @click="sortByColumn('bookingDate')"
                 />
               </span>
             </TableHead>
-            <TableHead class="table-head-cell align-top">
-              <span class="items-center justify-center gap-1 mt-1 font-bold">
+
+            <TableHead class="table-head-cell align-top py-2">
+              <span
+                class="inline-flex items-center gap-1 font-bold whitespace-nowrap"
+              >
                 {{ $t("Moneyflow.invoicedate") }}
                 <component
                   :is="sortIcon('invoiceDate')"
-                  class="inline icon-small text-primary cursor-pointer"
+                  class="icon-small text-primary cursor-pointer shrink-0"
                   :title="$t('Moneyflow.invoicedate')"
                   :aria-label="$t('Moneyflow.invoicedate')"
                   @click="sortByColumn('invoiceDate')"
                 />
               </span>
             </TableHead>
-            <TableHead class="table-head-cell align-top" colspan="2">
-              <span class="items-center justify-center gap-1 mt-1 font-bold">
+
+            <TableHead class="table-head-cell align-top py-2" colspan="2">
+              <span
+                class="inline-flex items-center gap-1 font-bold whitespace-nowrap"
+              >
                 {{ $t("General.amount") }}
                 <component
                   :is="sortIcon('amount')"
@@ -50,67 +49,68 @@
                   @click="sortByColumn('amount')"
                 />
               </span>
-
-              <span class="flex md:hidden items-center justify-center w-full">
-                <component
-                  :is="sortIcon('amount')"
-                  class="icon-small text-primary cursor-pointer"
-                  :title="$t('General.amount')"
-                  :aria-label="$t('General.amount')"
-                  @click="sortByColumn('amount')"
-                />
-              </span>
             </TableHead>
-            <TableHead class="table-head-cell align-top">
-              <span class="items-center justify-center gap-1 mt-1 font-bold">
-                {{ $t("General.contractpartner") }}
-                <component
-                  :is="sortIcon('contractpartnerName')"
-                  class="inline icon-small text-primary cursor-pointer"
-                  :title="$t('General.contractpartner')"
-                  :aria-label="$t('General.contractpartner')"
-                  @click="sortByColumn('contractpartnerName')"
-                />
-              </span>
-              <div class="flex items-center w-full max-w-sm mt-1 mb-2">
-                <Input
-                  type="text"
-                  :placeholder="$t('General.enterFilter')"
-                  v-model="filterContractpartner"
-                  class="h-8 rounded-r-none focus-visible:ring-1 focus-visible:ring-offset-0 focus-visible:z-10"
-                />
 
-                <Button
-                  variant="outline"
-                  size="icon"
-                  type="button"
-                  :title="$t('General.reset')"
-                  :aria-label="$t('General.reset')"
-                  @click="filterContractpartner = ''"
-                  class="action-icon-button rounded-l-none border-l"
+            <TableHead class="table-head-cell align-top py-2">
+              <div
+                class="flex flex-col items-stretch text-center h-full justify-between gap-2"
+              >
+                <span
+                  class="inline-flex items-center justify-center gap-1 font-bold whitespace-nowrap"
                 >
-                  <X />
-                </Button>
+                  {{ $t("General.contractpartner") }}
+                  <component
+                    :is="sortIcon('contractpartnerName')"
+                    class="icon-small text-primary cursor-pointer shrink-0"
+                    :title="$t('General.contractpartner')"
+                    :aria-label="$t('General.contractpartner')"
+                    @click="sortByColumn('contractpartnerName')"
+                  />
+                </span>
+                <div class="flex items-center w-full min-w-[120px]">
+                  <Input
+                    type="text"
+                    :placeholder="$t('General.enterFilter')"
+                    v-model="filterContractpartner"
+                    class="h-8 w-full rounded-r-none focus-visible:ring-1 focus-visible:ring-offset-0 focus-visible:z-10"
+                  />
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    type="button"
+                    :title="$t('General.reset')"
+                    :aria-label="$t('General.reset')"
+                    @click="filterContractpartner = ''"
+                    class="action-icon-button rounded-l-none border-l shrink-0"
+                  >
+                    <X />
+                  </Button>
+                </div>
               </div>
             </TableHead>
-            <TableHead class="table-head-cell align-top">
-              <div class="hidden md:block">
-                <span class="items-center justify-center gap-1 mt-1 font-bold">
+
+            <TableHead class="table-head-cell align-top py-2">
+              <div
+                class="flex flex-col items-stretch text-center h-full justify-between gap-2"
+              >
+                <span
+                  class="inline-flex items-center justify-center gap-1 font-bold whitespace-nowrap"
+                >
                   {{ $t("General.comment") }}
                   <component
                     :is="sortIcon('comment')"
-                    class="inline icon-small text-primary cursor-pointer mb-1 ml-0.5"
+                    class="icon-small text-primary cursor-pointer shrink-0"
                     :title="$t('General.comment')"
                     :aria-label="$t('General.comment')"
                     @click="sortByColumn('comment')"
                   />
                 </span>
-                <div class="flex items-center w-full max-w-sm mt-1">
+                <div class="flex items-center w-full min-w-[120px]">
                   <Input
                     type="text"
                     :placeholder="$t('General.enterFilter')"
                     v-model="filterComment"
-                    class="h-8 rounded-r-none focus-visible:ring-1 focus-visible:ring-offset-0 focus-visible:z-10"
+                    class="h-8 w-full rounded-r-none focus-visible:ring-1 focus-visible:ring-offset-0 focus-visible:z-10"
                   />
                   <Button
                     variant="outline"
@@ -119,86 +119,87 @@
                     :title="$t('General.reset')"
                     :aria-label="$t('General.reset')"
                     @click="filterComment = ''"
-                    class="action-icon-button rounded-l-none border-l"
+                    class="action-icon-button rounded-l-none border-l shrink-0"
                   >
                     <X />
                   </Button>
                 </div>
               </div>
-              <span
-                class="flex md:hidden items-center justify-center min-w-0 break-words"
-              >
-                <component
-                  :is="sortIcon('comment')"
-                  class="inline icon-small text-primary cursor-pointer"
-                  :title="$t('General.comment')"
-                  :aria-label="$t('General.comment')"
-                  @click="sortByColumn('comment')"
-                />
-              </span>
             </TableHead>
 
-            <TableHead class="table-head-cell align-top">
-              <span class="items-center justify-center gap-1 mt-1 font-bold">
-                {{ $t("General.postingAccount") }}
-                <component
-                  :is="sortIcon('postingAccountName')"
-                  class="inline icon-small text-primary cursor-pointer mb-1 ml-0.5"
-                  :title="$t('General.postingAccount')"
-                  :aria-label="$t('General.postingAccount')"
-                  @click="sortByColumn('postingAccountName')"
-                />
-              </span>
-              <div class="flex items-center w-full max-w-sm mt-1">
-                <Input
-                  type="text"
-                  :placeholder="$t('General.enterFilter')"
-                  v-model="filterPostingAccount"
-                  class="h-8 rounded-r-none focus-visible:ring-1 focus-visible:ring-offset-0 focus-visible:z-10"
-                />
-                <Button
-                  variant="outline"
-                  size="icon"
-                  type="button"
-                  :title="$t('General.reset')"
-                  :aria-label="$t('General.reset')"
-                  @click="filterPostingAccount = ''"
-                  class="action-icon-button rounded-l-none border-l"
+            <TableHead class="table-head-cell align-top py-2">
+              <div
+                class="flex flex-col items-stretch text-center h-full justify-between gap-2"
+              >
+                <span
+                  class="inline-flex items-center justify-center gap-1 font-bold whitespace-nowrap"
                 >
-                  <X />
-                </Button>
+                  {{ $t("General.postingAccount") }}
+                  <component
+                    :is="sortIcon('postingAccountName')"
+                    class="icon-small text-primary cursor-pointer shrink-0"
+                    :title="$t('General.postingAccount')"
+                    :aria-label="$t('General.postingAccount')"
+                    @click="sortByColumn('postingAccountName')"
+                  />
+                </span>
+                <div class="flex items-center w-full min-w-[120px]">
+                  <Input
+                    type="text"
+                    :placeholder="$t('General.enterFilter')"
+                    v-model="filterPostingAccount"
+                    class="h-8 w-full rounded-r-none focus-visible:ring-1 focus-visible:ring-offset-0 focus-visible:z-10"
+                  />
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    type="button"
+                    :title="$t('General.reset')"
+                    :aria-label="$t('General.reset')"
+                    @click="filterPostingAccount = ''"
+                    class="action-icon-button rounded-l-none border-l shrink-0"
+                  >
+                    <X />
+                  </Button>
+                </div>
               </div>
             </TableHead>
 
-            <TableHead class="table-head-cell align-top">
-              <span class="items-center justify-center gap-1 mt-1 font-bold">
-                {{ $t("General.capitalsource") }}
-                <component
-                  :is="sortIcon('capitalsourceComment')"
-                  class="inline icon-small text-primary cursor-pointer mb-1 ml-0.5"
-                  :title="$t('General.capitalsource')"
-                  :aria-label="$t('General.capitalsource')"
-                  @click="sortByColumn('capitalsourceComment')"
-                />
-              </span>
-              <div class="flex items-center w-full max-w-sm mt-1">
-                <Input
-                  type="text"
-                  :placeholder="$t('General.enterFilter')"
-                  v-model="filterCapitalsource"
-                  class="h-8 rounded-r-none focus-visible:ring-1 focus-visible:ring-offset-0 focus-visible:z-10"
-                />
-                <Button
-                  variant="outline"
-                  size="icon"
-                  type="button"
-                  :title="$t('General.reset')"
-                  :aria-label="$t('General.reset')"
-                  @click="filterCapitalsource = ''"
-                  class="action-icon-button rounded-l-none border-l"
+            <TableHead class="table-head-cell align-top py-2">
+              <div
+                class="flex flex-col items-stretch text-center h-full justify-between gap-2"
+              >
+                <span
+                  class="inline-flex items-center justify-center gap-1 font-bold whitespace-nowrap"
                 >
-                  <X />
-                </Button>
+                  {{ $t("General.capitalsource") }}
+                  <component
+                    :is="sortIcon('capitalsourceComment')"
+                    class="icon-small text-primary cursor-pointer shrink-0"
+                    :title="$t('General.capitalsource')"
+                    :aria-label="$t('General.capitalsource')"
+                    @click="sortByColumn('capitalsourceComment')"
+                  />
+                </span>
+                <div class="flex items-center w-full min-w-[120px]">
+                  <Input
+                    type="text"
+                    :placeholder="$t('General.enterFilter')"
+                    v-model="filterCapitalsource"
+                    class="h-8 w-full rounded-r-none focus-visible:ring-1 focus-visible:ring-offset-0 focus-visible:z-10"
+                  />
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    type="button"
+                    :title="$t('General.reset')"
+                    :aria-label="$t('General.reset')"
+                    @click="filterCapitalsource = ''"
+                    class="action-icon-button rounded-l-none border-l shrink-0"
+                  >
+                    <X />
+                  </Button>
+                </div>
               </div>
             </TableHead>
             <TableHead colspan="2"></TableHead>
@@ -237,7 +238,9 @@
     </div>
   </div>
 </template>
+
 <script lang="ts" setup>
+// Script-Teil bleibt unverändert...
 import SpanAmount from "@/components/common/SpanAmount.vue";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";

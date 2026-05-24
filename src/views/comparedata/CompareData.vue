@@ -11,14 +11,12 @@
       <h4 class="text-2xl font-bold">{{ $t("CompareData.title") }}</h4>
     </div>
     <div class="flex justify-center">
-      <div
-        class="w-full max-w-6xl card-panel p-4"
-      >
+      <div class="w-full max-w-6xl card-panel p-4">
         <form @submit.prevent="compareData" id="compareDataForm">
           <div class="space-y-4">
             <DivError :server-errors="serverErrors" />
-            <div class="grid gap-3 md:grid-cols-12">
-              <div class="md:col-span-3">
+            <div class="grid gap-3 grid-cols-6 md:grid-cols-12">
+              <div class="col-span-3">
                 <InputDate
                   v-model="startDate"
                   :validation-schema="schema.startDate"
@@ -26,7 +24,7 @@
                   :field-label="$t('General.startDate')"
                 />
               </div>
-              <div class="md:col-span-3">
+              <div class="col-span-3">
                 <InputDate
                   v-model="endDate"
                   :validation-schema="schema.endDate"
@@ -34,7 +32,7 @@
                   :field-label="$t('General.endDate')"
                 />
               </div>
-              <div class="md:col-span-4">
+              <div class="col-span-6 md:col-span-4">
                 <SelectCapitalsource
                   v-model="capitalsourceId"
                   :validation-schema="schema.capitalsourceId"
@@ -44,7 +42,9 @@
                 />
               </div>
 
-              <div class="md:col-span-2 flex items-start gap-3 px-3 py-2 mt-5">
+              <div
+                class="md:col-span-2 flex items-start gap-3 md:px-3 md:py-2 md:mt-5"
+              >
                 <Switch id="sourceIsImport" v-model="sourceIsImport" />
                 <Label
                   for="sourceIsImport"
@@ -73,7 +73,7 @@
                 />
               </div>
             </div>
-            <div class="pt-2 flex justify-center">
+            <div class="md:pt-2 flex justify-center">
               <ButtonSubmit
                 :button-label="$t('General.show')"
                 form-id="compareDataForm"
@@ -151,15 +151,15 @@
 </template>
 
 <script lang="ts" setup>
-import ButtonSubmit from "@/components/common/ButtonSubmit.vue";
 import SelectCapitalsource from "@/components/capitalsource/SelectCapitalsource.vue";
+import ButtonSubmit from "@/components/common/ButtonSubmit.vue";
 import DivContentTable from "@/components/common/DivContentTable.vue";
 import DivError from "@/components/common/DivError.vue";
 import InputDate from "@/components/common/InputDate.vue";
 import InputFile from "@/components/common/InputFile.vue";
+import SelectStandard from "@/components/common/SelectStandard.vue";
 import DeleteMoneyflowModalVue from "@/components/moneyflow/DeleteMoneyflowModal.vue";
 import EditMoneyflowModalVue from "@/components/moneyflow/EditMoneyflowModal.vue";
-import SelectStandard from "@/components/common/SelectStandard.vue";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import {

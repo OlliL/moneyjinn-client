@@ -32,7 +32,7 @@
                 :id="'searchReceipt' + receipt.id"
               >
                 <div
-                  class="grid grid-cols-2 md:grid-cols-12 flex-wrap items-end gap-3 mb-6"
+                  class="grid grid-cols-2 md:grid-cols-12 flex-wrap items-start gap-3 mb-6"
                 >
                   <div class="md:col-span-3">
                     <InputDate
@@ -62,7 +62,7 @@
                       <template #icon><Euro class="icon-small" /></template>
                     </InputStandard>
                   </div>
-                  <div class="md:col-span-1">
+                  <div class="md:col-span-1 mt-5">
                     <ButtonSubmit
                       :form-id="'searchReceipt' + receipt.id"
                       class="!w-full"
