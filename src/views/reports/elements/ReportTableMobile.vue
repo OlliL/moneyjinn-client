@@ -176,10 +176,9 @@
         :key="'mobile-' + mmf.id"
         :value="'item-' + mmf.id"
         :data-testid="`report-mobile-moneyflow-row-${mmf.id}`"
-        class="border rounded-lg bg-background shadow-sm px-3 py-1 transition-opacity"
+        class="border rounded-lg bg-background shadow-sm px-3 py-1"
         :class="{
           'border-destructive/30 bg-destructive/5': mmf.private,
-          'opacity-60': isFutureDate(mmf.bookingDate),
         }"
       >
         <AccordionTrigger class="hover:no-underline w-full min-w-0">
@@ -188,23 +187,28 @@
               <div
                 class="flex items-center gap-1.5 text-xs text-muted-foreground font-normal truncate w-full"
               >
-                <Calendar
-                  class="icon-extra-small text-muted-foreground/60 shrink-0"
-                />
-                <SpanDate :date="mmf.bookingDate" />
+                <div
+                  class="flex items-center gap-1.5 truncate transition-opacity"
+                  :class="lesserOpacityIfFuture(mmf.bookingDate)"
+                >
+                  <Calendar
+                    class="icon-extra-small text-muted-foreground/60 shrink-0"
+                  />
+                  <SpanDate :date="mmf.bookingDate" />
 
-                <span
-                  v-if="mmf.private"
-                  class="bg-destructive/20 text-destructive px-1 rounded text-[10px]"
-                >
-                  {{ $t("Moneyflow.private") }}
-                </span>
-                <span
-                  v-if="mmf.moneyflowSplitEntries?.length"
-                  class="bg-primary/20 text-primary px-1 rounded text-[10px]"
-                >
-                  {{ $t("Moneyflow.subbookings") }}
-                </span>
+                  <span
+                    v-if="mmf.private"
+                    class="bg-destructive/20 text-destructive px-1 rounded text-[10px]"
+                  >
+                    {{ $t("Moneyflow.private") }}
+                  </span>
+                  <span
+                    v-if="mmf.moneyflowSplitEntries?.length"
+                    class="bg-primary/20 text-primary px-1 rounded text-[10px]"
+                  >
+                    {{ $t("Moneyflow.subbookings") }}
+                  </span>
+                </div>
                 <span
                   v-if="isFutureDate(mmf.bookingDate)"
                   class="bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300 px-1 rounded text-[10px] font-medium"
@@ -213,7 +217,10 @@
                 </span>
               </div>
 
-              <div class="flex items-center gap-1 min-w-0 truncate">
+              <div
+                class="flex items-center gap-1 min-w-0 truncate transition-opacity"
+                :class="lesserOpacityIfFuture(mmf.bookingDate)"
+              >
                 <Handshake
                   class="icon-small shrink-0 text-foreground/80"
                   :title="$t('General.contractpartner')"
@@ -225,7 +232,10 @@
               </div>
             </div>
 
-            <div class="flex flex-col items-end gap-1.5 shrink-0 text-right">
+            <div
+              class="flex flex-col items-end gap-1.5 shrink-0 text-right transition-opacity"
+              :class="lesserOpacityIfFuture(mmf.bookingDate)"
+            >
               <span
                 class="font-extrabold text-sm text-foreground"
                 :class="{
@@ -282,7 +292,10 @@
           </div>
         </AccordionTrigger>
 
-        <AccordionContent class="pt-3 pb-1 space-y-2 border-t mt-2">
+        <AccordionContent
+          class="pt-3 pb-1 space-y-2 border-t mt-2 transition-opacity"
+          :class="lesserOpacityIfFuture(mmf.bookingDate)"
+        >
           <div
             class="text-xs text-muted-foreground bg-muted/40 p-2 rounded space-y-2"
           >
@@ -478,6 +491,10 @@ const isFutureDate = (date: Date) => {
   const bookingDate = new Date(date);
   bookingDate.setHours(0, 0, 0, 0);
   return bookingDate > today;
+};
+
+const lesserOpacityIfFuture = (date: Date) => {
+  return isFutureDate(date) ? "opacity-60" : "";
 };
 
 const handleEnter = (event: Event): void => {

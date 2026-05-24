@@ -3,7 +3,6 @@
     v-for="(row, idx) in tableRows"
     :key="row.isSplit ? row.mseId : 'main-' + mmf.id"
     :data-testid="idx === 0 ? `report-moneyflow-row-${mmf.id}` : undefined"
-    :class="[isFuture ? 'opacity-60' : '']"
   >
     <template v-if="idx === 0">
       <TableCell
@@ -12,6 +11,7 @@
       >
         <Button
           v-if="mmf.hasReceipt"
+          :class="lesserOpacityIfFuture"
           variant="ghost"
           size="icon"
           @click="showReceipt"
@@ -31,28 +31,42 @@
           />
           <SpanDate
             :date="mmf.bookingDate"
-            :class="{ 'italic font-medium': isFuture }"
+            :class="[{ 'italic font-medium': isFuture }, lesserOpacityIfFuture]"
           />
         </div>
       </TableCell>
-      <TableCell :rowspan="rowspan" :class="['border-r', rowBgClass]">
+      <TableCell
+        :rowspan="rowspan"
+        :class="['border-r', rowBgClass, lesserOpacityIfFuture]"
+      >
         <SpanDate :date="mmf.invoiceDate" />
       </TableCell>
       <TableCell
         :rowspan="rowspan"
         :colspan="!hasSplits ? 2 : 1"
-        :class="['text-right', hasSplits ? 'border-r' : '', rowBgClass]"
+        :class="[
+          'text-right',
+          hasSplits ? 'border-r' : '',
+          rowBgClass,
+          lesserOpacityIfFuture,
+        ]"
       >
         <SpanAmount :amount="mmf.amount" />
       </TableCell>
     </template>
 
-    <TableCell v-if="hasSplits" :class="['text-right border-r', rowBgClass]">
+    <TableCell
+      v-if="hasSplits"
+      :class="['text-right border-r', rowBgClass, lesserOpacityIfFuture]"
+    >
       <SpanAmount v-if="row.isSplit" :amount="row.amount" />
     </TableCell>
 
     <template v-if="idx === 0">
-      <TableCell :rowspan="rowspan" :class="['text-left border-r', rowBgClass]">
+      <TableCell
+        :rowspan="rowspan"
+        :class="['text-left border-r', rowBgClass, lesserOpacityIfFuture]"
+      >
         {{ mmf.contractpartnerName }}
       </TableCell>
     </template>
@@ -61,23 +75,33 @@
       :class="[
         'text-left border-r break-words whitespace-normal w-full min-w-0',
         rowBgClass,
+        lesserOpacityIfFuture,
       ]"
     >
       {{ row.comment }}
     </TableCell>
-    <TableCell :class="['text-left border-r', rowBgClass]">
+    <TableCell
+      :class="['text-left border-r', rowBgClass, lesserOpacityIfFuture]"
+    >
       {{ row.postingAccountName }}
     </TableCell>
 
     <template v-if="idx === 0">
-      <TableCell :rowspan="rowspan" :class="['text-left border-r', rowBgClass]">
+      <TableCell
+        :rowspan="rowspan"
+        :class="[
+          'text-left border-r',
+          rowBgClass,
+          isFuture ? 'opacity-60' : '',
+        ]"
+      >
         {{ mmf.capitalsourceComment }}
       </TableCell>
 
       <template v-if="isOwnMoneyflow">
         <TableCell
           :rowspan="rowspan"
-          :class="['text-center py-0 px-1', rowBgClass]"
+          :class="['text-center py-0 px-1', rowBgClass, lesserOpacityIfFuture]"
         >
           <Button
             variant="ghost"
@@ -92,7 +116,11 @@
         </TableCell>
         <TableCell
           :rowspan="rowspan"
-          :class="['text-center border-l py-0 px-1', rowBgClass]"
+          :class="[
+            'text-center border-l py-0 px-1',
+            rowBgClass,
+            lesserOpacityIfFuture,
+          ]"
         >
           <Button
             variant="ghost"
@@ -110,7 +138,11 @@
       <template v-else>
         <TableCell
           :rowspan="rowspan"
-          :class="['text-center border-r py-0 px-1', rowBgClass]"
+          :class="[
+            'text-center border-r py-0 px-1',
+            rowBgClass,
+            lesserOpacityIfFuture,
+          ]"
         >
           <Button
             variant="ghost"
@@ -123,7 +155,10 @@
             <Eye class="icon-small" />
           </Button>
         </TableCell>
-        <TableCell :rowspan="rowspan" :class="rowBgClass" />
+        <TableCell
+          :rowspan="rowspan"
+          :class="[rowBgClass, lesserOpacityIfFuture]"
+        />
       </template>
     </template>
   </TableRow>
@@ -170,6 +205,10 @@ const isFuture = computed(() => {
   bookingDate.setHours(0, 0, 0, 0);
   return bookingDate > today;
 });
+
+const lesserOpacityIfFuture = computed(() =>
+  isFuture.value ? "opacity-60" : "",
+);
 
 const tableRows = computed(() => {
   if (hasSplits.value) {
