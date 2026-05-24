@@ -27,6 +27,37 @@
           @keydown.enter.prevent="handleEnter"
           class="flex-1 overflow-y-auto space-y-4 pb-8 px-0.5"
         >
+          <div class="space-y-2 border-b pb-4">
+            <p class="text-sm font-semibold px-0.5">
+              {{ $t("Moneyflow.orderBy") }}
+            </p>
+            <div class="grid grid-cols-2 gap-1.5">
+              <Button
+                v-for="option in sortOptions"
+                :key="option.field"
+                variant="outline"
+                size="sm"
+                class="justify-between px-3 h-9 font-normal text-xs"
+                :class="{
+                  'bg-primary/10 border-primary text-primary font-bold':
+                    props.sortBy.has(option.field),
+                }"
+                @click="sortByColumn(option.field)"
+              >
+                <span class="truncate mr-1">{{ $t(option.label) }}</span>
+                <component
+                  :is="getSortIcon(option.field)"
+                  class="h-3.5 w-3.5 shrink-0"
+                  :class="
+                    props.sortBy.has(option.field)
+                      ? 'text-primary'
+                      : 'text-muted-foreground/50'
+                  "
+                />
+              </Button>
+            </div>
+          </div>
+
           <InputStandard
             v-model="filterCapitalsource"
             id="report-table-mobile-filter-capitalsource"
@@ -356,6 +387,9 @@ import {
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 import { useUserSessionStore } from "@/stores/UserSessionStore";
 import {
+  ArrowDown,
+  ArrowUp,
+  ArrowUpDown,
   Calendar,
   CreditCard,
   Eye,
@@ -377,6 +411,7 @@ const props = defineProps<{
   moneyflows: Moneyflow[];
   moneyflowsCount: number;
   amountSum: number;
+  sortBy: Map<keyof Moneyflow, boolean>;
 }>();
 
 const filterContractpartner = defineModel<string>("filterContractpartner", {
@@ -390,6 +425,7 @@ const filterCapitalsource = defineModel<string>("filterCapitalsource", {
   default: "",
 });
 const emit = defineEmits<{
+  sortByColumn: [field: keyof Moneyflow];
   showReceipt: [id: number];
   editMoneyflow: [moneyflow: Moneyflow];
   deleteMoneyflow: [moneyflow: Moneyflow];
@@ -419,5 +455,24 @@ const handleEnter = (event: Event): void => {
   event.preventDefault();
   event.stopPropagation();
   isSheetOpen.value = false;
+};
+
+const sortOptions: { field: keyof Moneyflow; label: string }[] = [
+  { field: "bookingDate", label: "Moneyflow.bookingdate" },
+  { field: "amount", label: "General.amount" },
+  { field: "contractpartnerName", label: "General.contractpartner" },
+  { field: "comment", label: "General.comment" },
+  { field: "postingAccountName", label: "General.postingAccount" },
+  { field: "capitalsourceComment", label: "General.capitalsource" },
+];
+
+const sortByColumn = (field: keyof Moneyflow) => {
+  emit("sortByColumn", field);
+};
+
+const getSortIcon = (field: keyof Moneyflow) => {
+  const direction = props.sortBy.get(field);
+  if (direction === undefined) return ArrowUpDown;
+  return direction ? ArrowDown : ArrowUp;
 };
 </script>

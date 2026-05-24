@@ -205,7 +205,7 @@ const updateSortByParams = (params: RouteParamsGeneric) => {
       params.sortDirection === "asc",
     );
   } else {
-    sortByMap.value.set("bookingDate", false);
+    sortByMap.value.set("bookingDate", true);
   }
 };
 
