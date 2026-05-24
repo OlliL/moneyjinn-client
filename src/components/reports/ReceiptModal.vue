@@ -43,7 +43,9 @@
 </template>
 
 <script lang="ts" setup>
+import type { ImportedMoneyflowReceipt } from "@/model/moneyflow/ImportedMoneyflowReceipt";
 import type { MoneyflowReceipt } from "@/model/moneyflow/MoneyflowReceipt";
+import { mapImportedMoneyflowReceiptToMoneyflowReceipt } from "@/service/mapper/ImportedToMoneyflowReceiptMapper";
 import MoneyflowReceiptService from "@/service/MoneyflowReceiptService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { AlertTriangle, Trash2, X } from "lucide-vue-next";
@@ -58,12 +60,18 @@ const serverErrors = ref(new Array<string>());
 const receipt = ref({} as MoneyflowReceipt);
 const modalComponent = useTemplateRef<typeof ModalVue>("modalComponent");
 
-const _show = (moneyflowId: number) => {
+const _show = (
+  moneyflowId: number,
+  importedReceipt?: ImportedMoneyflowReceipt,
+) => {
   serverErrors.value = new Array<string>();
 
   MoneyflowReceiptService.fetchReceipt(moneyflowId)
     .then((response) => {
-      receipt.value = response;
+      if (response.receiptType) receipt.value = response;
+      else if (importedReceipt)
+        receipt.value =
+          mapImportedMoneyflowReceiptToMoneyflowReceipt(importedReceipt);
       modalComponent.value?._show();
     })
     .catch((backendError) => {

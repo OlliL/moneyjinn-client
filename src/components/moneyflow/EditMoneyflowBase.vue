@@ -47,7 +47,7 @@
         field-type="number"
         step="0.01"
         :field-label="$t('General.amount')"
-        :focus="true"
+        :focus="isDesktop().value || !mmf.id"
       >
         <template #icon><Euro class="icon-small" /></template>
       </InputStandard>
@@ -222,6 +222,7 @@ import { useCapitalsourceStore } from "@/stores/CapitalsourceStore";
 import { useContractpartnerStore } from "@/stores/ContractpartnerStore";
 import { toFixed } from "@/tools/math";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
+import { isDesktop } from "@/tools/views/IsDesktop";
 import { amountSchema, globErr } from "@/tools/views/ZodUtil";
 import { Euro, Plus } from "lucide-vue-next";
 import { computed, onMounted, ref, toRaw, watch, type PropType } from "vue";

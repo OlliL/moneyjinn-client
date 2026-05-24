@@ -11,7 +11,7 @@
         <div class="flex gap-4">
           <div
             class="w-1/3 overflow-x-scroll whitespace-nowrap h-[600px] max-w-120"
-            v-if="mmf.hasReceipt"
+            v-if="receipt.receipt"
           >
             <SpanReceipt :receipt="receipt" />
           </div>
@@ -128,8 +128,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import type { ImportedMoneyflowReceipt } from "@/model/moneyflow/ImportedMoneyflowReceipt";
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 import type { MoneyflowReceipt } from "@/model/moneyflow/MoneyflowReceipt";
+import { mapImportedMoneyflowReceiptToMoneyflowReceipt } from "@/service/mapper/ImportedToMoneyflowReceiptMapper";
 import MoneyflowReceiptService from "@/service/MoneyflowReceiptService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { useForm } from "vee-validate";
@@ -150,21 +152,27 @@ const emit = defineEmits(["moneyflowUpdated", "moneyflowReceiptDeleted"]);
 const { values, setFieldTouched } = useForm();
 
 const modalWidth = computed(() => {
-  return mmf.value.hasReceipt
+  return receipt.value.receipt
     ? "md:max-w-full w-full mx-auto"
     : "md:max-w-2xl lg:max-w-7xl w-full mx-auto";
 });
 
 const rowspan = computed(() => {
-  if (mmf.value.moneyflowSplitEntries != null) {
+  if (
+    mmf.value.moneyflowSplitEntries != null &&
+    mmf.value.moneyflowSplitEntries.length > 0
+  ) {
     return mmf.value.moneyflowSplitEntries.length;
   }
   return 1;
 });
 
-const _show = (_mmf: Moneyflow) => {
+const _show = (_mmf: Moneyflow, importedReceipt?: ImportedMoneyflowReceipt) => {
   mmf.value = _mmf;
   if (mmf.value.hasReceipt) loadReceipt(mmf.value.id);
+  else if (importedReceipt)
+    receipt.value =
+      mapImportedMoneyflowReceiptToMoneyflowReceipt(importedReceipt);
   modalComponent.value?._show();
   Object.keys(values).forEach((field) => setFieldTouched(field, false));
 };

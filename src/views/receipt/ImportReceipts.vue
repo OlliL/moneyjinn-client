@@ -1,6 +1,17 @@
 <template>
   <DeleteMoneyflowModalVue ref="deleteModal" />
-  <EditMoneyflowModalVue ref="editModal" />
+  <EditMoneyflowModalVue ref="editModal" @show-receipt="showReceipt" />
+  <ListMoneyflowModalDesktop
+    ref="listModal"
+    @show-receipt="showReceipt"
+    v-if="isDesktop().value"
+  />
+  <ListMoneyflowModalMobile
+    ref="listModal"
+    @show-receipt="showReceipt"
+    v-else
+  />
+  <ReceiptModal ref="receiptModal" />
 
   <div class="custom-container space-y-6">
     <div class="text-center">
@@ -19,13 +30,15 @@
           class="space-y-3"
           data-testid="importReceipts-upload-form"
         >
-          <div class="flex items-center gap-2">
+          <div class="grid items-center gap-2 grid-cols-1 md:grid-cols-12">
             <InputFile
+              class="md:col-span-8"
               v-model="files"
               id="fileUpload"
               data-testid="importReceipts-file-input"
             />
             <ButtonSubmit
+              class="md:col-span-4"
               :button-label="$t('Receipt.upload')"
               form-id="uploadReceiptsForm"
               data-testid="importReceipts-upload-button"
@@ -42,6 +55,7 @@
       :receipt="receipt"
       @delete-moneyflow="deleteMoneyflow"
       @edit-moneyflow="editMoneyflow"
+      @list-moneyflow="listMoneyflow"
       @remove-receipt-from-view="removeReceiptFromView"
       :data-testid="`importReceipts-row-${receipt.id}`"
     />
@@ -54,10 +68,14 @@ import DivError from "@/components/common/DivError.vue";
 import InputFile from "@/components/common/InputFile.vue";
 import DeleteMoneyflowModalVue from "@/components/moneyflow/DeleteMoneyflowModal.vue";
 import EditMoneyflowModalVue from "@/components/moneyflow/EditMoneyflowModal.vue";
+import ListMoneyflowModalDesktop from "@/components/moneyflow/ListMoneyflowModalDesktop.vue";
+import ListMoneyflowModalMobile from "@/components/moneyflow/ListMoneyflowModalMobile.vue";
+import ReceiptModal from "@/components/reports/ReceiptModal.vue";
 import type { ImportedMoneyflowReceipt } from "@/model/moneyflow/ImportedMoneyflowReceipt";
 import ImportedMoneyflowReceiptService from "@/service/ImportedMoneyflowReceiptService";
 import MoneyflowService from "@/service/MoneyflowService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
+import { isDesktop } from "@/tools/views/IsDesktop";
 import { Upload } from "lucide-vue-next";
 import { useForm } from "vee-validate";
 import { onMounted, ref, useTemplateRef } from "vue";
@@ -71,6 +89,8 @@ const files = ref<FileList | null>(null);
 const deleteModal =
   useTemplateRef<typeof DeleteMoneyflowModalVue>("deleteModal");
 const editModal = useTemplateRef<typeof EditMoneyflowModalVue>("editModal");
+const listModal = useTemplateRef<typeof ListMoneyflowModalDesktop>("listModal");
+const receiptModal = useTemplateRef<typeof ReceiptModal>("receiptModal");
 const uploadReceiptsForm =
   useTemplateRef<HTMLFormElement>("uploadReceiptsForm");
 
@@ -102,6 +122,19 @@ const editMoneyflow = (id: number, receipt: ImportedMoneyflowReceipt) => {
   MoneyflowService.fetchMoneyflow(id).then((mmf) => {
     editModal.value?._show(mmf, receipt);
   });
+};
+
+const listMoneyflow = (id: number, receipt: ImportedMoneyflowReceipt) => {
+  MoneyflowService.fetchMoneyflow(id).then((mmf) => {
+    listModal.value?._show(mmf, receipt);
+  });
+};
+
+const showReceipt = (
+  id: number,
+  importedReceipt?: ImportedMoneyflowReceipt,
+) => {
+  receiptModal.value?._show(id, importedReceipt);
 };
 
 const removeReceiptFromView = (id: number) => {

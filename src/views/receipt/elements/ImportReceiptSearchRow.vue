@@ -23,7 +23,7 @@
         variant="ghost"
         size="icon"
         @click="editMoneyflow"
-        class="h-6 w-6"
+        class="action-icon-button"
       >
         <Pencil class="icon-small" />
       </Button>
@@ -33,12 +33,21 @@
         variant="ghost"
         size="icon"
         @click="deleteMoneyflow"
-        class="h-6 w-6"
+        class="action-icon-button"
       >
         <Trash2 class="icon-small" />
       </Button>
     </TableCell>
-    <TableCell v-if="!isOwnMoneyflow"></TableCell>
+    <TableCell v-if="!isOwnMoneyflow">
+      <Button
+        variant="ghost"
+        size="icon"
+        @click="listMoneyflow"
+        class="action-icon-button"
+      >
+        <Eye class="icon-small" />
+      </Button>
+    </TableCell>
   </TableRow>
 </template>
 <script lang="ts" setup>
@@ -49,7 +58,7 @@ import { RadioGroupItem } from "@/components/ui/radio-group";
 import { TableCell, TableRow } from "@/components/ui/table";
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 import { useUserSessionStore } from "@/stores/UserSessionStore";
-import { Pencil, Trash2 } from "lucide-vue-next";
+import { Eye, Pencil, Trash2 } from "lucide-vue-next";
 import { computed, type PropType } from "vue";
 const props = defineProps({
   mmf: {
@@ -59,7 +68,7 @@ const props = defineProps({
 });
 
 const userSessionStore = useUserSessionStore();
-const emit = defineEmits(["deleteMoneyflow", "editMoneyflow"]);
+const emit = defineEmits(["deleteMoneyflow", "editMoneyflow", "listMoneyflow"]);
 
 const isOwnMoneyflow = computed(() => {
   return props.mmf.userId === userSessionStore.getUserId;
@@ -70,5 +79,8 @@ const deleteMoneyflow = () => {
 };
 const editMoneyflow = () => {
   emit("editMoneyflow", props.mmf.id);
+};
+const listMoneyflow = () => {
+  emit("listMoneyflow", props.mmf.id);
 };
 </script>

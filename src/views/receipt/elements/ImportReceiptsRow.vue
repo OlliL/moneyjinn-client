@@ -31,8 +31,26 @@
                 @submit.prevent="searchMoneyflows"
                 :id="'searchReceipt' + receipt.id"
               >
-                <div class="flex flex-wrap items-end gap-3 mb-6">
-                  <div class="flex-1 min-w-[180px]">
+                <div
+                  class="grid grid-cols-2 md:grid-cols-12 flex-wrap items-end gap-3 mb-6"
+                >
+                  <div class="md:col-span-3">
+                    <InputDate
+                      v-model="startDate"
+                      :validation-schema="schema.startDate"
+                      id="startDate"
+                      :field-label="$t('General.startDate')"
+                    />
+                  </div>
+                  <div class="md:col-span-3">
+                    <InputDate
+                      v-model="endDate"
+                      :validation-schema="schema.endDate"
+                      id="endDate"
+                      :field-label="$t('General.endDate')"
+                    />
+                  </div>
+                  <div class="md:col-span-3">
                     <InputStandard
                       v-model="amount"
                       :validation-schema="schema.amount"
@@ -44,26 +62,10 @@
                       <template #icon><Euro class="icon-small" /></template>
                     </InputStandard>
                   </div>
-                  <div class="flex-1 min-w-[140px]">
-                    <InputDate
-                      v-model="startDate"
-                      :validation-schema="schema.startDate"
-                      id="startDate"
-                      :field-label="$t('General.startDate')"
-                    />
-                  </div>
-                  <div class="flex-1 min-w-[140px]">
-                    <InputDate
-                      v-model="endDate"
-                      :validation-schema="schema.endDate"
-                      id="endDate"
-                      :field-label="$t('General.endDate')"
-                    />
-                  </div>
-                  <div class="shrink-0">
+                  <div class="md:col-span-1">
                     <ButtonSubmit
                       :form-id="'searchReceipt' + receipt.id"
-                      class="action-icon-button"
+                      class="!w-full"
                     >
                       <template #icon><Search class="icon-small" /></template>
                     </ButtonSubmit>
@@ -112,6 +114,7 @@
                           :receipt-id="receipt.id"
                           @delete-moneyflow="emitDeleteMoneyflow"
                           @edit-moneyflow="emitEditMoneyflow"
+                          @list-moneyflow="emitListMoneyflow"
                         />
                       </TableBody>
                     </Table>
@@ -212,6 +215,7 @@ const selectedMoneyflowId = ref(0);
 const emit = defineEmits([
   "deleteMoneyflow",
   "editMoneyflow",
+  "listMoneyflow",
   "removeReceiptFromView",
 ]);
 
@@ -232,6 +236,9 @@ const emitDeleteMoneyflow = (id: number) => {
 };
 const emitEditMoneyflow = (id: number) => {
   emit("editMoneyflow", id, props.receipt);
+};
+const emitListMoneyflow = (id: number) => {
+  emit("listMoneyflow", id, props.receipt);
 };
 
 const searchMoneyflows = handleSubmit(() => {
