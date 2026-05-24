@@ -28,8 +28,10 @@
         v-model:filter-contractpartner="filterContractpartner"
         v-model:filter-posting-account="filterPostingAccount"
         :moneyflows-count="report.moneyflows?.length || 0"
-        :filtered-moneyflows="filteredMoneyflows"
+        :sort-by="sortBy"
+        :moneyflows="sortedMoneyflows"
         :amount-sum="amountSum"
+        @sort-by-column="sortByColumn"
         @delete-moneyflow="deleteMoneyflow"
         @edit-moneyflow="editMoneyflow"
         @list-moneyflow="listMoneyflow"
@@ -41,9 +43,10 @@
         v-model:filter-comment="filterComment"
         v-model:filter-contractpartner="filterContractpartner"
         v-model:filter-posting-account="filterPostingAccount"
-        v-model:sort-by="sortBy"
-        :filtered-moneyflows="filteredMoneyflows"
+        :sort-by="sortBy"
+        :moneyflows="sortedMoneyflows"
         :amount-sum="amountSum"
+        @sort-by-column="sortByColumn"
         @delete-moneyflow="deleteMoneyflow"
         @edit-moneyflow="editMoneyflow"
         @list-moneyflow="listMoneyflow"
@@ -182,6 +185,54 @@ watch(
   { deep: true },
 );
 
+const sortedMoneyflows = computed(() => {
+  const result = [...filteredMoneyflows.value];
+  if (sortBy.value.size > 0) {
+    const entry = sortBy.value.entries().next().value;
+    if (entry) {
+      const field = entry[0] as keyof Moneyflow;
+      const ascending = entry[1] === true;
+      result.sort((a, b) => {
+        return (ascending ? 1 : -1) * compareColumns(a, b, field);
+      });
+    }
+  }
+  return result;
+});
+
+const compareColumns = (
+  a: Moneyflow,
+  b: Moneyflow,
+  field: keyof Moneyflow,
+): number => {
+  const aVal = a[field];
+  const bVal = b[field];
+
+  if (aVal === bVal) return 0;
+  if (aVal === undefined || aVal === null) return 1;
+  if (bVal === undefined || bVal === null) return -1;
+
+  if (typeof aVal === "string" && typeof bVal === "string") {
+    return aVal.localeCompare(bVal, undefined, {
+      numeric: true,
+      sensitivity: "base",
+    });
+  }
+
+  return aVal > bVal ? 1 : -1;
+};
+
+const sortByColumn = (field: keyof Moneyflow) => {
+  let sortByField = sortBy.value.get(field);
+  if (sortByField === undefined || !sortByField) {
+    sortByField = true;
+  } else {
+    sortByField = false;
+  }
+  sortBy.value.clear();
+  sortBy.value.set(field, sortByField);
+};
+
 const filterContractpartner = ref("");
 const filterComment = ref("");
 const filterPostingAccount = ref("");
@@ -239,60 +290,50 @@ const capitalsourceHasMovement = (
   return (
     data.amountBeginOfMonthFixed != 0 ||
     data.amountEndOfMonthCalculated != 0 ||
-    (data.amountCurrent != undefined && data.amountCurrent != 0) ||
-    (data.amountEndOfMonthFixed != undefined && data.amountEndOfMonthFixed != 0)
+    !!data.amountCurrent ||
+    !!data.amountEndOfMonthFixed
   );
 };
-const assetsTurnoverCapitalsources = computed(() => {
-  if (dataLoaded.value) {
-    return report.value.reportTurnoverCapitalsources?.filter(
+
+const filterCapitalsourcesByTypes = (types: CapitalsourceType[]) => {
+  if (!dataLoaded.value) return [];
+  return (
+    report.value.reportTurnoverCapitalsources?.filter(
       (data) =>
-        (data.capitalsourceType === CapitalsourceType.CURRENT_ASSET ||
-          data.capitalsourceType === CapitalsourceType.LONG_TERM_ASSET) &&
+        types.includes(data.capitalsourceType) &&
         capitalsourceHasMovement(data),
-    );
-  }
-  return new Array<ReportTurnoverCapitalsource>();
-});
-const liabilitiesTurnoverCapitalsources = computed(() => {
-  if (dataLoaded.value) {
-    return report.value.reportTurnoverCapitalsources?.filter(
-      (data) =>
-        (data.capitalsourceType === CapitalsourceType.RESERVE_ASSET ||
-          data.capitalsourceType === CapitalsourceType.PROVISION_ASSET) &&
-        capitalsourceHasMovement(data),
-    );
-  }
-  return new Array<ReportTurnoverCapitalsource>();
-});
-const creditTurnoverCapitalsources = computed(() => {
-  if (dataLoaded.value) {
-    return report.value.reportTurnoverCapitalsources?.filter(
-      (data) =>
-        data.capitalsourceType === CapitalsourceType.CREDIT &&
-        capitalsourceHasMovement(data),
-    );
-  }
-  return new Array<ReportTurnoverCapitalsource>();
-});
+    ) ?? []
+  );
+};
+
+const assetsTurnoverCapitalsources = computed(() =>
+  filterCapitalsourcesByTypes([
+    CapitalsourceType.CURRENT_ASSET,
+    CapitalsourceType.LONG_TERM_ASSET,
+  ]),
+);
+const liabilitiesTurnoverCapitalsources = computed(() =>
+  filterCapitalsourcesByTypes([
+    CapitalsourceType.RESERVE_ASSET,
+    CapitalsourceType.PROVISION_ASSET,
+  ]),
+);
+const creditTurnoverCapitalsources = computed(() =>
+  filterCapitalsourcesByTypes([CapitalsourceType.CREDIT]),
+);
+
 const currentMonthIsSettled = computed(() => {
-  if (dataLoaded.value && report.value.reportTurnoverCapitalsources) {
-    for (let data of report.value.reportTurnoverCapitalsources) {
-      if (data.amountEndOfMonthFixed) {
-        return true;
-      }
-    }
-  }
-  return false;
+  return !!(
+    dataLoaded.value &&
+    report.value.reportTurnoverCapitalsources?.some(
+      (data) => !!data.amountEndOfMonthFixed,
+    )
+  );
 });
+
 const amountSum = computed(() => {
-  let sum = 0;
-  if (dataLoaded.value && filteredMoneyflows.value) {
-    for (const mmf of filteredMoneyflows.value) {
-      sum += mmf.amount;
-    }
-  }
-  return sum;
+  if (!dataLoaded.value || !filteredMoneyflows.value) return 0;
+  return filteredMoneyflows.value.reduce((sum, mmf) => sum + mmf.amount, 0);
 });
 
 const loadData = (year: number, month: number) => {
@@ -391,5 +432,11 @@ watch(
 
 onMounted(() => {
   loadData(+props.year, +props.month);
+  if (sortBy.value.size > 0) {
+    const entry = sortBy.value.entries().next().value;
+    if (entry) {
+      sortByColumn(entry[0]);
+    }
+  }
 });
 </script>

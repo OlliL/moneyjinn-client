@@ -39,7 +39,7 @@
             class="button-with-icon w-full md:w-auto px-4"
             ref="cancelButton"
           >
-            <X class="icon-small" />
+            <X class="icon-medium" />
             {{ $t("Modal.cancel") }}
           </Button>
         </component>

@@ -1,6 +1,6 @@
 <template>
   <Button variant="destructive" class="button-with-icon" @click="emit('click')">
-    <Trash2 class="icon-small" />
+    <Trash2 class="icon-medium" />
     {{ buttonLabel }}
   </Button>
 </template>

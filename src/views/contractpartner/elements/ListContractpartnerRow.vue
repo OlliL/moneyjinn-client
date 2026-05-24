@@ -21,7 +21,7 @@
       :test-id="`contractpartner-edit-${mcp.id}`"
       @click="editContractpartner"
     >
-      <Pencil class="icon-small" />
+      <Pencil class="icon-medium" />
     </ButtonTableIcon>
 
     <ButtonTableIcon
@@ -29,7 +29,7 @@
       :test-id="`contractpartner-delete-${mcp.id}`"
       @click="deleteContractpartner"
     >
-      <Trash2 class="icon-small" />
+      <Trash2 class="icon-medium" />
     </ButtonTableIcon>
 
     <ButtonTableIcon
@@ -37,7 +37,7 @@
       :test-id="`contractpartner-accounts-${mcp.id}`"
       @click="listAccounts"
     >
-      <Banknote class="icon-small" />
+      <Banknote class="icon-medium" />
     </ButtonTableIcon>
   </TableRow>
 </template>

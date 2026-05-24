@@ -71,7 +71,7 @@
               </span>
             </div>
             <ChevronDown
-              class="icon-small text-muted-foreground transition-transform duration-200 group-data-[state=open]:rotate-180"
+              class="icon-medium text-muted-foreground transition-transform duration-200 group-data-[state=open]:rotate-180"
             />
           </CollapsibleTrigger>
 
@@ -127,7 +127,7 @@
         class="button-with-icon hidden md:flex"
         @click="resetForm"
       >
-        <Undo2 class="icon-small" />
+        <Undo2 class="icon-medium" />
         {{ $t("General.reset") }}
       </Button>
 
@@ -135,7 +135,7 @@
         :button-label="$t('General.save')"
         :form-id="'createContractpartnerForm' + idSuffix"
       >
-        <template #icon><Save class="icon-small" /></template>
+        <template #icon><Save class="icon-medium" /></template>
       </ButtonSubmit>
     </template>
   </ModalVue>

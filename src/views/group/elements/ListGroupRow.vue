@@ -6,14 +6,14 @@
       :test-id="`group-edit-${group.id}`"
       @click="editGroup"
     >
-      <Pencil class="icon-small" />
+      <Pencil class="icon-medium" />
     </ButtonTableIcon>
     <ButtonTableIcon
       :title="$t('General.delete')"
       :test-id="`group-delete-${group.id}`"
       @click="deleteGroup"
     >
-      <Trash2 class="icon-small" />
+      <Trash2 class="icon-medium" />
     </ButtonTableIcon>
   </TableRow>
 </template>

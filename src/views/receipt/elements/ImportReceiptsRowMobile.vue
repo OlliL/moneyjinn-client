@@ -15,7 +15,7 @@
             :id="'radio-mobile-' + props.mmf.id"
             :value="String(props.mmf.id)"
             :data-testid="'moneyflow-radio-mobile-' + props.mmf.id"
-            class="icon-small rounded-full border border-primary text-primary shadow focus:outline-none"
+            class="icon-medium rounded-full border border-primary text-primary shadow focus:outline-none"
           />
         </div>
 

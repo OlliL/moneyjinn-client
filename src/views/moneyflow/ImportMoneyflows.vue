@@ -105,11 +105,11 @@
                   class="flex items-center gap-2 px-6"
                   @click="deleteImportedMoneyflow(importedMoneyflow)"
                 >
-                  <Trash2 class="icon-small" />
+                  <Trash2 class="icon-medium" />
                   {{ $t("General.delete") }}
                 </Button>
                 <ButtonSubmit :button-label="$t('Moneyflow.apply')" class="px-6"
-                  ><template #icon><Save class="icon-small" /></template
+                  ><template #icon><Save class="icon-medium" /></template
                 ></ButtonSubmit>
               </div>
             </div>

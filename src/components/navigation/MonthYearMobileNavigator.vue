@@ -62,7 +62,7 @@
                 :disabled="currentYearIdx <= 0"
                 :data-testid="`${navigatorTestIdPrefix}-prev-year`"
               >
-                <ChevronLeft class="icon-small" />
+                <ChevronLeft class="icon-medium" />
               </Button>
 
               <Select v-model="selectedYearModel">
@@ -95,7 +95,7 @@
                 "
                 :data-testid="`${navigatorTestIdPrefix}-next-year`"
               >
-                <ChevronRight class="icon-small" />
+                <ChevronRight class="icon-medium" />
               </Button>
             </div>
 

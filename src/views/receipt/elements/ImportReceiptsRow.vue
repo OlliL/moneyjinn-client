@@ -59,7 +59,7 @@
                       step="0.01"
                       :field-label="$t('General.amount')"
                     >
-                      <template #icon><Euro class="icon-small" /></template>
+                      <template #icon><Euro class="icon-medium" /></template>
                     </InputStandard>
                   </div>
                   <div class="md:col-span-1 mt-5">
@@ -67,7 +67,7 @@
                       :form-id="'searchReceipt' + receipt.id"
                       class="!w-full"
                     >
-                      <template #icon><Search class="icon-small" /></template>
+                      <template #icon><Search class="icon-medium" /></template>
                     </ButtonSubmit>
                   </div>
                 </div>
@@ -169,7 +169,7 @@
                 :disabled="!moneyflowSelected"
                 data-testid="importReceipts-row-apply"
               >
-                <Save class="icon-small" />
+                <Save class="icon-medium" />
                 {{ $t("Moneyflow.apply") }}
               </Button>
             </div>

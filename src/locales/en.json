@@ -322,6 +322,7 @@
     "cancel": "Cancel"
   },
   "Moneyflow": {
+    "reserved": "Planned",
     "options": "Options",
     "addPosition": "Add Position",
     "bookingdate": "Posting Date",

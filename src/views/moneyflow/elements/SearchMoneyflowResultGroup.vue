@@ -10,8 +10,8 @@
         :aria-label="isCollapsed ? 'Collapse details' : 'Expand details'"
         class="action-icon-button"
       >
-        <ChevronRight v-if="!isCollapsed" class="icon-small" />
-        <ChevronDown v-else class="icon-small" />
+        <ChevronRight v-if="!isCollapsed" class="icon-medium" />
+        <ChevronDown v-else class="icon-medium" />
       </Button>
     </TableCell>
     <TableCell class="align-middle border-r" v-if="colBookingMonth">
@@ -69,30 +69,24 @@
                 <TableHead class="hidden border-r border-b md:table-cell"
                   ><span class="sr-only">Status</span></TableHead
                 >
-                <TableHead
-                  class="table-head-cell"
-                  >{{ $t("Moneyflow.bookingdate") }}</TableHead
-                >
-                <TableHead
-                  class="table-head-cell"
-                  >{{ $t("General.amount") }}</TableHead
-                >
-                <TableHead
-                  class="table-head-cell"
-                  >{{ $t("General.contractpartner") }}</TableHead
-                >
-                <TableHead
-                  class="table-head-cell"
-                  >{{ $t("General.comment") }}</TableHead
-                >
-                <TableHead
-                  class="table-head-cell"
-                  >{{ $t("General.postingAccount") }}</TableHead
-                >
-                <TableHead
-                  class="table-head-cell"
-                  >{{ $t("General.capitalsource") }}</TableHead
-                >
+                <TableHead class="table-head-cell">{{
+                  $t("Moneyflow.bookingdate")
+                }}</TableHead>
+                <TableHead class="table-head-cell">{{
+                  $t("General.amount")
+                }}</TableHead>
+                <TableHead class="table-head-cell">{{
+                  $t("General.contractpartner")
+                }}</TableHead>
+                <TableHead class="table-head-cell">{{
+                  $t("General.comment")
+                }}</TableHead>
+                <TableHead class="table-head-cell">{{
+                  $t("General.postingAccount")
+                }}</TableHead>
+                <TableHead class="table-head-cell">{{
+                  $t("General.capitalsource")
+                }}</TableHead>
                 <TableHead
                   class="font-bold border-b text-foreground text-center"
                   colspan="2"

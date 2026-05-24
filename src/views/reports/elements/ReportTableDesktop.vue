@@ -8,45 +8,48 @@
 
             <TableHead class="table-head-cell align-top py-2">
               <span
-                class="inline-flex items-center gap-1 font-bold whitespace-nowrap"
+                class="inline-flex items-center justify-center w-full gap-1 font-bold whitespace-nowrap transition-colors"
+                :class="{ 'text-primary': props.sortBy.has('bookingDate') }"
               >
                 {{ $t("Moneyflow.bookingdate") }}
                 <component
                   :is="sortIcon('bookingDate')"
-                  class="icon-small text-primary cursor-pointer shrink-0"
+                  class="icon-medium text-primary cursor-pointer shrink-0 hover:text-primary/70 transition-colors"
                   :title="$t('Moneyflow.bookingdate')"
                   :aria-label="$t('Moneyflow.bookingdate')"
-                  @click="sortByColumn('bookingDate')"
+                  @click="$emit('sortByColumn', 'bookingDate')"
                 />
               </span>
             </TableHead>
 
             <TableHead class="table-head-cell align-top py-2">
               <span
-                class="inline-flex items-center gap-1 font-bold whitespace-nowrap"
+                class="inline-flex items-center justify-center w-full gap-1 font-bold whitespace-nowrap transition-colors"
+                :class="{ 'text-primary': props.sortBy.has('invoiceDate') }"
               >
                 {{ $t("Moneyflow.invoicedate") }}
                 <component
                   :is="sortIcon('invoiceDate')"
-                  class="icon-small text-primary cursor-pointer shrink-0"
+                  class="icon-medium text-primary cursor-pointer shrink-0 hover:text-primary/70 transition-colors"
                   :title="$t('Moneyflow.invoicedate')"
                   :aria-label="$t('Moneyflow.invoicedate')"
-                  @click="sortByColumn('invoiceDate')"
+                  @click="$emit('sortByColumn', 'invoiceDate')"
                 />
               </span>
             </TableHead>
 
             <TableHead class="table-head-cell align-top py-2" colspan="2">
               <span
-                class="inline-flex items-center gap-1 font-bold whitespace-nowrap"
+                class="inline-flex items-center justify-center w-full gap-1 font-bold whitespace-nowrap transition-colors"
+                :class="{ 'text-primary': props.sortBy.has('amount') }"
               >
                 {{ $t("General.amount") }}
                 <component
                   :is="sortIcon('amount')"
-                  class="icon-small text-primary cursor-pointer shrink-0"
+                  class="icon-medium text-primary cursor-pointer shrink-0 hover:text-primary/70 transition-colors"
                   :title="$t('General.amount')"
                   :aria-label="$t('General.amount')"
-                  @click="sortByColumn('amount')"
+                  @click="$emit('sortByColumn', 'amount')"
                 />
               </span>
             </TableHead>
@@ -56,15 +59,18 @@
                 class="flex flex-col items-stretch text-center h-full justify-between gap-2"
               >
                 <span
-                  class="inline-flex items-center justify-center gap-1 font-bold whitespace-nowrap"
+                  class="inline-flex items-center justify-center gap-1 font-bold whitespace-nowrap transition-colors"
+                  :class="{
+                    'text-primary': props.sortBy.has('contractpartnerName'),
+                  }"
                 >
                   {{ $t("General.contractpartner") }}
                   <component
                     :is="sortIcon('contractpartnerName')"
-                    class="icon-small text-primary cursor-pointer shrink-0"
+                    class="icon-medium text-primary cursor-pointer shrink-0 hover:text-primary/70 transition-colors"
                     :title="$t('General.contractpartner')"
                     :aria-label="$t('General.contractpartner')"
-                    @click="sortByColumn('contractpartnerName')"
+                    @click="$emit('sortByColumn', 'contractpartnerName')"
                   />
                 </span>
                 <div class="flex items-center w-full min-w-[120px]">
@@ -94,15 +100,16 @@
                 class="flex flex-col items-stretch text-center h-full justify-between gap-2"
               >
                 <span
-                  class="inline-flex items-center justify-center gap-1 font-bold whitespace-nowrap"
+                  class="inline-flex items-center justify-center gap-1 font-bold whitespace-nowrap transition-colors"
+                  :class="{ 'text-primary': props.sortBy.has('comment') }"
                 >
                   {{ $t("General.comment") }}
                   <component
                     :is="sortIcon('comment')"
-                    class="icon-small text-primary cursor-pointer shrink-0"
+                    class="icon-medium text-primary cursor-pointer shrink-0 hover:text-primary/70 transition-colors"
                     :title="$t('General.comment')"
                     :aria-label="$t('General.comment')"
-                    @click="sortByColumn('comment')"
+                    @click="$emit('sortByColumn', 'comment')"
                   />
                 </span>
                 <div class="flex items-center w-full min-w-[120px]">
@@ -132,15 +139,18 @@
                 class="flex flex-col items-stretch text-center h-full justify-between gap-2"
               >
                 <span
-                  class="inline-flex items-center justify-center gap-1 font-bold whitespace-nowrap"
+                  class="inline-flex items-center justify-center gap-1 font-bold whitespace-nowrap transition-colors"
+                  :class="{
+                    'text-primary': props.sortBy.has('postingAccountName'),
+                  }"
                 >
                   {{ $t("General.postingAccount") }}
                   <component
                     :is="sortIcon('postingAccountName')"
-                    class="icon-small text-primary cursor-pointer shrink-0"
+                    class="icon-medium text-primary cursor-pointer shrink-0 hover:text-primary/70 transition-colors"
                     :title="$t('General.postingAccount')"
                     :aria-label="$t('General.postingAccount')"
-                    @click="sortByColumn('postingAccountName')"
+                    @click="$emit('sortByColumn', 'postingAccountName')"
                   />
                 </span>
                 <div class="flex items-center w-full min-w-[120px]">
@@ -170,15 +180,18 @@
                 class="flex flex-col items-stretch text-center h-full justify-between gap-2"
               >
                 <span
-                  class="inline-flex items-center justify-center gap-1 font-bold whitespace-nowrap"
+                  class="inline-flex items-center justify-center gap-1 font-bold whitespace-nowrap transition-colors"
+                  :class="{
+                    'text-primary': props.sortBy.has('capitalsourceComment'),
+                  }"
                 >
                   {{ $t("General.capitalsource") }}
                   <component
                     :is="sortIcon('capitalsourceComment')"
-                    class="icon-small text-primary cursor-pointer shrink-0"
+                    class="icon-medium text-primary cursor-pointer shrink-0 hover:text-primary/70 transition-colors"
                     :title="$t('General.capitalsource')"
                     :aria-label="$t('General.capitalsource')"
-                    @click="sortByColumn('capitalsourceComment')"
+                    @click="$emit('sortByColumn', 'capitalsourceComment')"
                   />
                 </span>
                 <div class="flex items-center w-full min-w-[120px]">
@@ -207,17 +220,17 @@
         </TableHeader>
         <TableBody>
           <ReportTableDesktopRow
-            v-for="(mmf, index) in sortedMoneyflows"
+            v-for="(mmf, index) in moneyflows"
             :key="mmf.id"
             :mmf="mmf"
             :index="index"
-            @show-receipt="showReceipt"
-            @delete-moneyflow="deleteMoneyflow"
-            @edit-moneyflow="editMoneyflow"
-            @list-moneyflow="listMoneyflow"
+            @show-receipt="$emit('showReceipt', $event)"
+            @delete-moneyflow="$emit('deleteMoneyflow', $event)"
+            @edit-moneyflow="$emit('editMoneyflow', $event)"
+            @list-moneyflow="$emit('listMoneyflow', $event)"
           />
           <TableRow
-            v-if="sortedMoneyflows.length === 0"
+            v-if="moneyflows.length === 0"
             data-testid="report-table-empty-desktop"
           >
             <TableCell colspan="10" class="text-center text-muted-foreground">
@@ -253,13 +266,18 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
-import { ArrowDown, ArrowUp, ArrowUpDown, X } from "lucide-vue-next";
-import { computed, onMounted, type PropType } from "vue";
+import {
+  ArrowDownWideNarrow,
+  ArrowUpDown,
+  ArrowUpNarrowWide,
+  X,
+} from "lucide-vue-next";
 import ReportTableDesktopRow from "./ReportTableDesktopRow.vue";
 
 const props = defineProps<{
-  filteredMoneyflows: Moneyflow[];
+  moneyflows: Moneyflow[];
   amountSum: number;
+  sortBy: Map<keyof Moneyflow, boolean>;
 }>();
 const filterContractpartner = defineModel<string>("filterContractpartner", {
   default: "",
@@ -271,93 +289,18 @@ const filterPostingAccount = defineModel<string>("filterPostingAccount", {
 const filterCapitalsource = defineModel<string>("filterCapitalsource", {
   default: "",
 });
-const sortBy = defineModel<Map<keyof Moneyflow, boolean>>("sortBy", {
-  type: Object as PropType<Map<keyof Moneyflow, boolean>>,
-  required: true,
-});
 
 const emit = defineEmits<{
+  sortByColumn: [field: keyof Moneyflow];
   showReceipt: [id: number];
   deleteMoneyflow: [moneyflow: Moneyflow];
   editMoneyflow: [moneyflow: Moneyflow];
   listMoneyflow: [moneyflow: Moneyflow];
 }>();
 
-onMounted(() => {
-  if (sortBy.value.size > 0) {
-    const entry = sortBy.value.entries().next().value;
-    if (entry) {
-      sortByColumn(entry[0]);
-    }
-  }
-});
-
-const sortedMoneyflows = computed(() => {
-  let result = [...props.filteredMoneyflows];
-  if (sortBy.value.size > 0) {
-    const entry = sortBy.value.entries().next().value;
-    if (entry) {
-      const field = entry[0];
-      const ascending = entry[1] === true;
-      result.sort((a, b) => {
-        const comparison = compareColumns(a, b, field);
-        return ascending ? comparison : -1 * comparison;
-      });
-    }
-  }
-  return result;
-});
-
-const compareColumns = (
-  a: Moneyflow,
-  b: Moneyflow,
-  field: keyof Moneyflow,
-): number => {
-  let aField = a[field];
-  let bField = b[field];
-  if (aField === undefined || bField === undefined) return 0;
-  if (typeof aField === "string" && typeof bField === "string") {
-    aField = aField.toLowerCase();
-    bField = bField.toLowerCase();
-  }
-  if (aField > bField) return 1;
-  else if (bField > aField) return -1;
-  return 0;
-};
-
-const sortByColumn = (field: keyof Moneyflow) => {
-  let sortByField = sortBy.value.get(field);
-  if (sortByField === undefined || !sortByField) {
-    sortByField = true;
-  } else {
-    sortByField = false;
-  }
-  sortBy.value.clear();
-  sortBy.value.set(field, sortByField);
-};
-
 const sortIcon = (sortedField: keyof Moneyflow) => {
-  if (sortBy.value.get(sortedField) === undefined) {
-    return ArrowUpDown;
-  } else if (sortBy.value.get(sortedField)) {
-    return ArrowUp;
-  }
-  return ArrowDown;
-};
-
-const showReceipt = (id: number) => {
-  emit("showReceipt", id);
-};
-
-const deleteMoneyflow = (moneyflow: Moneyflow) => {
-  emit("deleteMoneyflow", moneyflow);
-};
-
-const editMoneyflow = (moneyflow: Moneyflow) => {
-  emit("editMoneyflow", moneyflow);
-};
-
-const listMoneyflow = (moneyflow: Moneyflow) => {
-  emit("listMoneyflow", moneyflow);
+  const direction = props.sortBy.get(sortedField);
+  if (direction === undefined) return ArrowUpDown;
+  return direction ? ArrowUpNarrowWide : ArrowDownWideNarrow;
 };
 </script>

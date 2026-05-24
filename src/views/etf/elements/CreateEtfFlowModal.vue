@@ -58,7 +58,7 @@
                   field-type="number"
                   :field-label="$t('ETFFlow.price')"
                 >
-                  <template #icon><Euro class="icon-small" /></template>
+                  <template #icon><Euro class="icon-medium" /></template>
                 </InputStandard>
               </div>
             </div>
@@ -74,7 +74,7 @@
         class="button-with-icon hidden md:flex"
         @click="resetForm"
       >
-        <Undo2 class="icon-small" />
+        <Undo2 class="icon-medium" />
         {{ $t("General.reset") }}
       </Button>
 
@@ -82,7 +82,7 @@
         :button-label="$t('General.save')"
         form-id="createEtfFlowForm"
       >
-        <template #icon><Save class="icon-small" /></template>
+        <template #icon><Save class="icon-medium" /></template>
       </ButtonSubmit>
     </template>
   </ModalVue>

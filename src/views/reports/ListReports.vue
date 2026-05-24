@@ -202,10 +202,10 @@ const updateSortByParams = (params: RouteParamsGeneric) => {
   if (params.sortBy) {
     sortByMap.value.set(
       params.sortBy as keyof Moneyflow,
-      params.sortDirection === "desc",
+      params.sortDirection === "asc",
     );
   } else {
-    sortByMap.value.set("bookingDate", false);
+    sortByMap.value.set("bookingDate", true);
   }
 };
 

@@ -32,7 +32,7 @@
         :title="$t('General.edit')"
         class="action-icon-button"
       >
-        <Pencil class="icon-small" />
+        <Pencil class="icon-medium" />
       </Button>
     </TableCell>
     <TableCell
@@ -47,7 +47,7 @@
         :title="$t('General.delete')"
         class="action-icon-button"
       >
-        <Trash2 class="icon-small" />
+        <Trash2 class="icon-medium" />
       </Button>
     </TableCell>
   </TableRow>
@@ -92,7 +92,7 @@
         :title="$t('General.new')"
         class="action-icon-button"
       >
-        <Plus class="icon-small" />
+        <Plus class="icon-medium" />
       </Button>
     </TableCell>
     <TableCell class="border-l"></TableCell>

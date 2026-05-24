@@ -10,13 +10,13 @@
       :title="$t('General.edit')"
       @click="editContractpartnerAccount"
     >
-      <Pencil class="icon-small" />
+      <Pencil class="icon-medium" />
     </ButtonTableIcon>
     <ButtonTableIcon
       :title="$t('General.delete')"
       @click="deleteContractpartnerAccount"
     >
-      <Trash2 class="icon-small" />
+      <Trash2 class="icon-medium" />
     </ButtonTableIcon>
   </TableRow>
 </template>

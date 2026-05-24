@@ -40,7 +40,7 @@
               @click="createEtfFlow"
               class="w-full md:w-auto"
             >
-              <Plus class="mr-2 icon-small" />
+              <Plus class="mr-2 icon-medium" />
               {{ $t("ETFFlow.newBooking") }}
             </Button>
           </div>

@@ -36,7 +36,7 @@
               <div class="flex items-center gap-1 pr-2 shrink-0">
                 <Star
                   v-if="etf.isFavorite"
-                  class="icon-small fill-primary text-primary"
+                  class="icon-medium fill-primary text-primary"
                   :data-testid="`etf-mobile-favorite-${etf.id}`"
                 />
                 <Button
@@ -45,7 +45,7 @@
                   :data-testid="`etf-mobile-edit-${etf.id}`"
                   @click.stop="editEtf(etf)"
                 >
-                  <Pencil class="icon-small" />
+                  <Pencil class="icon-medium" />
                 </Button>
                 <Button
                   variant="ghost"
@@ -53,7 +53,7 @@
                   :data-testid="`etf-mobile-delete-${etf.id}`"
                   @click.stop="deleteEtf(etf)"
                 >
-                  <Trash2 class="icon-small" />
+                  <Trash2 class="icon-medium" />
                 </Button>
               </div>
             </div>

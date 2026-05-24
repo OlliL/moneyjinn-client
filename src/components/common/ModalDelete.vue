@@ -9,7 +9,7 @@
       <DivError :server-errors="serverErrors" />
       <slot name="body">
         <div
-          class="icon-smallflex flex-col rounded-xl border bg-card overflow-hidden"
+          class="icon-mediumflex flex-col rounded-xl border bg-card overflow-hidden"
         >
           <Table>
             <TableBody>

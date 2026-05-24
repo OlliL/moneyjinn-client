@@ -85,7 +85,7 @@
       button-class="h-6 w-6 cursor-pointer"
       @click="editEtfFlow"
     >
-      <Pencil class="icon-small" />
+      <Pencil class="icon-medium" />
     </ButtonTableIcon>
     <ButtonTableIcon
       :title="$t('General.delete')"
@@ -94,7 +94,7 @@
       button-class="h-6 w-6 cursor-pointer"
       @click="deleteEtfFlow"
     >
-      <Trash2 class="icon-small" />
+      <Trash2 class="icon-medium" />
     </ButtonTableIcon>
   </TableRow>
 </template>

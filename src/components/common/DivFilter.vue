@@ -76,7 +76,7 @@
         @click="emitCreateClicked"
         class="w-full md:w-auto"
       >
-        <Plus class="icon-small mr-2" />
+        <Plus class="icon-medium mr-2" />
         {{ $t("General.new") }}
       </Button>
 
