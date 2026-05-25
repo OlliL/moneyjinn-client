@@ -13,6 +13,12 @@
             <div class="flex items-center gap-1.5 truncate">
               <Calendar class="icon-extra-small shrink-0" />
               <SpanDate :date="displayDate" />
+              <template v-if="displayInvoiceDate">
+                <CalendarDays
+                  class="icon-extra-small shrink-0 ml-1 text-muted-foreground/60"
+                />
+                <SpanDate :date="displayInvoiceDate" />
+              </template>
               <div class="flex gap-1 ml-1">
                 <Database
                   v-if="mmf"
@@ -65,7 +71,7 @@
                 class="h-7 w-7"
                 @click.stop="editMoneyflow"
               >
-                <Pencil class="h-3.5 w-3.5" />
+                <Pencil class="icon-small" />
               </Button>
               <Button
                 variant="ghost"
@@ -73,7 +79,7 @@
                 class="h-7 w-7 text-destructive"
                 @click.stop="deleteMoneyflow"
               >
-                <Trash2 class="h-3.5 w-3.5" />
+                <Trash2 class="icon-small" />
               </Button>
             </template>
             <Button
@@ -83,7 +89,7 @@
               class="h-7 w-7 text-primary"
               @click.stop="createMoneyflow"
             >
-              <Plus class="h-3.5 w-3.5" />
+              <Plus class="icon-small" />
             </Button>
           </div>
         </div>
@@ -96,7 +102,7 @@
         <div
           class="flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400"
         >
-          <Database class="h-3 w-3" /> {{ $t("CompareData.database") }}
+          <Database class="icon-extra-small" /> {{ $t("CompareData.database") }}
         </div>
         <div
           class="bg-muted/40 p-2.5 rounded-md text-xs space-y-2 border border-blue-100 dark:border-blue-900/30"
@@ -145,14 +151,13 @@
               <MessageSquareMore class="icon-extra-small" />
               {{ $t("General.comment") }}
             </span>
-            <span class="italic whitespace-normal break-words">{{
-              mmf.comment
-            }}</span>
+            <span class="whitespace-normal break-words">{{ mmf.comment }}</span>
           </div>
           <div
             class="flex items-center gap-1.5 text-muted-foreground pt-1 border-t italic"
           >
-            <CreditCard class="h-3 w-3" /> {{ mmf.capitalsourceComment }}
+            <CreditCard class="icon-extra-small" />
+            {{ mmf.capitalsourceComment }}
           </div>
         </div>
       </div>
@@ -162,7 +167,7 @@
         <div
           class="flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider text-orange-600 dark:text-orange-400"
         >
-          <FileText class="h-3 w-3" /> {{ $t("CompareData.source") }}
+          <FileText class="icon-extra-small" /> {{ $t("CompareData.source") }}
         </div>
         <div
           class="bg-orange-50/50 dark:bg-orange-950/20 p-2.5 rounded-md text-xs space-y-2 border border-orange-100 dark:border-orange-900/30"
@@ -216,7 +221,7 @@
           <div
             class="flex items-center gap-1.5 text-muted-foreground pt-1 border-t italic"
           >
-            <CreditCard class="h-3 w-3" /> {{ capitalsourceComment }}
+            <CreditCard class="icon-extra-small" /> {{ capitalsourceComment }}
           </div>
         </div>
       </div>
@@ -271,6 +276,9 @@ const displayDate = computed(
 );
 const displayAmount = computed(
   () => props.mmf?.amount ?? props.importData?.amount,
+);
+const displayInvoiceDate = computed(
+  () => props.mmf?.invoiceDate || props.importData?.invoiceDate,
 );
 const isOwnMoneyflow = computed(() =>
   props.mmf ? props.mmf.userId === userSessionStore.getUserId : false,

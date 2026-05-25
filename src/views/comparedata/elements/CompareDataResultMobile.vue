@@ -2,10 +2,13 @@
   <div class="w-full space-y-4">
     <Tabs v-model="activeTab" class="w-full">
       <div
-        class="sticky top-0 z-10 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 pb-2"
+        class="sticky top-0 z-10 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60"
       >
-        <TabsList class="w-full grid grid-cols-4 h-12">
-          <TabsTrigger value="notInDb" class="flex flex-col gap-0.5 py-1">
+        <TabsList class="w-full grid grid-cols-4 h-12! p-1">
+          <TabsTrigger
+            value="notInDb"
+            class="flex flex-col justify-center gap-0.5 py-1"
+          >
             <span class="text-[10px] uppercase font-bold truncate">{{
               $t("CompareData.onlyImport")
             }}</span>
@@ -18,7 +21,10 @@
               {{ compareDatasNotInDatabase?.length || 0 }}
             </span>
           </TabsTrigger>
-          <TabsTrigger value="notInFile" class="flex flex-col gap-0.5 py-1">
+          <TabsTrigger
+            value="notInFile"
+            class="flex flex-col justify-center gap-0.5 py-1"
+          >
             <span class="text-[10px] uppercase font-bold truncate">{{
               $t("CompareData.onlyApp")
             }}</span>
@@ -31,7 +37,10 @@
               {{ compareDatasNotInFile?.length || 0 }}
             </span>
           </TabsTrigger>
-          <TabsTrigger value="wrongSource" class="flex flex-col gap-0.5 py-1">
+          <TabsTrigger
+            value="wrongSource"
+            class="flex flex-col justify-center gap-0.5 py-1"
+          >
             <span class="text-[10px] uppercase font-bold truncate">{{
               $t("CompareData.wrongAccount")
             }}</span>
@@ -44,7 +53,10 @@
               {{ compareDatasWrongCapitalsource?.length || 0 }}
             </span>
           </TabsTrigger>
-          <TabsTrigger value="matching" class="flex flex-col gap-0.5 py-1">
+          <TabsTrigger
+            value="matching"
+            class="flex flex-col justify-center gap-0.5 py-1"
+          >
             <span class="text-[10px] uppercase font-bold truncate">{{
               $t("CompareData.matching")
             }}</span>

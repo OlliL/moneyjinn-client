@@ -13,7 +13,7 @@
       </TableRow>
     </TableHeader>
     <TableBody>
-      <CompareDataResultGroupVue
+      <CompareDataResultDesktopGroupVue
         :comment="$t('CompareData.dataInSourceNotInDb')"
         :compare-data="compareDatasNotInDatabase"
         group-test-id="compare-data-group-not-in-database"
@@ -22,7 +22,7 @@
         :capitalsource-comment="capitalsourceComment"
         @create-moneyflow="$emit('createMoneyflow', $event)"
       />
-      <CompareDataResultGroupVue
+      <CompareDataResultDesktopGroupVue
         :comment="$t('CompareData.dataNotInSourceInDb')"
         :compare-data="compareDatasNotInFile"
         group-test-id="compare-data-group-not-in-file"
@@ -33,7 +33,7 @@
         @edit-moneyflow="$emit('editMoneyflow', $event)"
         @create-moneyflow="$emit('createMoneyflow', $event)"
       />
-      <CompareDataResultGroupVue
+      <CompareDataResultDesktopGroupVue
         :comment="$t('CompareData.dataMatchingButWrongCapitalsource')"
         :compare-data="compareDatasWrongCapitalsource"
         group-test-id="compare-data-group-wrong-capitalsource"
@@ -44,7 +44,7 @@
         @edit-moneyflow="$emit('editMoneyflow', $event)"
         @create-moneyflow="$emit('createMoneyflow', $event)"
       />
-      <CompareDataResultGroupVue
+      <CompareDataResultDesktopGroupVue
         :comment="$t('CompareData.dataMatching')"
         :compare-data="compareDatasMatching"
         group-test-id="compare-data-group-matching"
@@ -70,7 +70,7 @@ import {
 import type { CompareData } from "@/model/comparedata/CompareData";
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 import { type PropType } from "vue";
-import CompareDataResultGroupVue from "./CompareDataResultGroup.vue";
+import CompareDataResultDesktopGroupVue from "./CompareDataResultDesktopGroup.vue";
 
 defineProps({
   compareDatasMatching: {

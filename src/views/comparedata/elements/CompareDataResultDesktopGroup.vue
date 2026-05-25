@@ -64,7 +64,7 @@
               </TableRow>
             </TableHeader>
             <TableBody>
-              <CompareDataResultRowVue
+              <CompareDataResultDesktopRowVue
                 v-for="(data, idx) in compareData"
                 :key="idx"
                 :row-index="idx"
@@ -97,7 +97,7 @@ import type { CompareData } from "@/model/comparedata/CompareData";
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 import { ChevronDown, ChevronRight } from "lucide-vue-next";
 import { computed, ref, type PropType } from "vue";
-import CompareDataResultRowVue from "./CompareDataResultRow.vue";
+import CompareDataResultDesktopRowVue from "./CompareDataResultDesktopRow.vue";
 
 const props = defineProps({
   compareData: {

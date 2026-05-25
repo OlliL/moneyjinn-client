@@ -177,7 +177,7 @@ const schema = {
       : arr(instof(File), globErr(t("CompareData.validation.importfile"))),
   ),
 };
-
+const capitalsourceStore = useCapitalsourceStore();
 const dataCompared = ref(false);
 const startDate = ref(new Date() as Date | undefined);
 const endDate = ref(new Date() as Date | undefined);
@@ -265,7 +265,6 @@ const loadData = () => {
 
       capitalsourceId.value = compareDataParameter.selectedCapitalSourceId;
       if (capitalsourceId.value) {
-        const capitalsourceStore = useCapitalsourceStore();
         const capitalsource = capitalsourceStore.getCapitalsource(
           capitalsourceId.value,
         );
@@ -342,6 +341,12 @@ const compareData = handleSubmit(async () => {
             compareMoneyflowsByDate,
           );
 
+        const capitalsource = capitalsourceStore.getCapitalsource(
+          capitalsourceId.value,
+        );
+        if (capitalsource) {
+          capitalsourceComment.value = capitalsource.comment;
+        }
         dataCompared.value = true;
       })
       .catch((backendError) => {

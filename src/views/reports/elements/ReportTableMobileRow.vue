@@ -80,7 +80,7 @@
               class="h-7 w-7"
               @click.stop="$emit('showReceipt', mmf.id)"
             >
-              <ReceiptText class="h-3.5 w-3.5" />
+              <ReceiptText class="icon-small" />
             </Button>
             <Button
               v-if="isOwnMoneyflow"
@@ -90,7 +90,7 @@
               class="h-7 w-7"
               @click.stop="$emit('editMoneyflow', mmf)"
             >
-              <Pencil class="h-3.5 w-3.5" />
+              <Pencil class="icon-small" />
             </Button>
             <Button
               v-if="isOwnMoneyflow"
@@ -100,7 +100,7 @@
               class="h-7 w-7 text-destructive"
               @click.stop="$emit('deleteMoneyflow', mmf)"
             >
-              <Trash2 class="h-3.5 w-3.5" />
+              <Trash2 class="icon-small" />
             </Button>
             <Button
               v-if="!isOwnMoneyflow"
@@ -110,7 +110,7 @@
               class="h-7 w-7"
               @click.stop="$emit('listMoneyflow', mmf)"
             >
-              <Eye class="h-3.5 w-3.5" />
+              <Eye class="icon-small" />
             </Button>
           </div>
         </div>
