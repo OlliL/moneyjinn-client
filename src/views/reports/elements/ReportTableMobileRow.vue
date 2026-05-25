@@ -44,6 +44,7 @@
           </div>
 
           <div
+            v-if="!hideContractpartner"
             class="flex items-center gap-1 min-w-0 truncate transition-opacity"
             :class="lesserOpacityIfFuture"
           >
@@ -126,7 +127,7 @@
       >
         <div
           class="flex items-center gap-1.5 break-all w-full"
-          v-if="!mmf.moneyflowSplitEntries?.length"
+          v-if="!mmf.moneyflowSplitEntries?.length && !showCommentInTrigger"
         >
           <MessageSquareMore
             class="icon-extra-small shrink-0 text-foreground"
@@ -229,6 +230,8 @@ import { computed, type PropType } from "vue";
 
 const props = defineProps({
   mmf: { type: Object as PropType<Moneyflow>, required: true },
+  hideContractpartner: { type: Boolean, default: false },
+  showCommentInTrigger: { type: Boolean, default: false },
 });
 
 defineEmits<{

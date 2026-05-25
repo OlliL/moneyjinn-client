@@ -232,6 +232,7 @@
               :col-booking-month="colBookingMonth"
               :col-booking-year="colBookingYear"
               :col-contractpartner="colContractpartner"
+              :hide-contractpartner="contractpartnerId > 0"
               @delete-moneyflow="deleteMoneyflow"
               @edit-moneyflow="editMoneyflow"
               @list-moneyflow="listMoneyflow"

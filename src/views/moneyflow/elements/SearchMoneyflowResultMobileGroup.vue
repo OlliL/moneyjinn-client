@@ -29,6 +29,8 @@
           v-for="moneyflow in moneyflowGroup.moneyflows"
           :key="moneyflow.id"
           :mmf="moneyflow"
+          :hide-contractpartner="hideContractpartner || colContractpartner"
+          :show-comment-in-trigger="true"
           @delete-moneyflow="emitDeleteMoneyflow"
           @edit-moneyflow="emitEditMoneyflow"
           @list-moneyflow="emitListMoneyflow"
@@ -71,6 +73,10 @@ defineProps({
   colContractpartner: {
     type: Boolean,
     required: true,
+  },
+  hideContractpartner: {
+    type: Boolean,
+    default: false,
   },
 });
 
