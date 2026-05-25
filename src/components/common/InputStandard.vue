@@ -30,7 +30,8 @@
       <div
         v-if="$slots.icon"
         :class="[
-          'flex items-center justify-center px-2 border border-input rounded-r-md text-foreground transition-colors relative',
+          'flex items-center justify-center px-2 border border-input text-foreground transition-colors relative',
+          $slots.button ? '' : 'rounded-r-md',
           isInvalid ? 'border-l-transparent' : '',
         ]"
       >

@@ -82,10 +82,12 @@
           <InputStandard
             v-model="filterCapitalsource"
             id="report-table-mobile-filter-capitalsource"
-            :field-label="t('General.capitalsource')"
-            :placeholder="$t('General.enterFilter')"
+            :placeholder="
+              t('General.capitalsource') + ' ' + t('General.enterFilter')
+            "
             enterkeyhint="send"
           >
+            <template #icon><CreditCard class="icon-medium" /></template>
             <template #button>
               <Button
                 data-testid="report-table-mobile-filter-capitalsource-reset"
@@ -103,10 +105,12 @@
           <InputStandard
             v-model="filterContractpartner"
             id="report-table-mobile-filter-contractpartner"
-            :field-label="t('General.contractpartner')"
-            :placeholder="$t('General.enterFilter')"
+            :placeholder="
+              t('General.contractpartner') + ' ' + t('General.enterFilter')
+            "
             enterkeyhint="send"
           >
+            <template #icon><Handshake class="icon-medium" /></template>
             <template #button>
               <Button
                 data-testid="report-table-mobile-filter-contractpartner-reset"
@@ -124,10 +128,10 @@
           <InputStandard
             v-model="filterComment"
             id="report-table-mobile-filter-comment"
-            :field-label="t('General.comment')"
-            :placeholder="$t('General.enterFilter')"
+            :placeholder="t('General.comment') + ' ' + t('General.enterFilter')"
             enterkeyhint="send"
           >
+            <template #icon><MessageSquareMore class="icon-medium" /></template>
             <template #button>
               <Button
                 data-testid="report-table-mobile-filter-comment-reset"
@@ -145,10 +149,12 @@
           <InputStandard
             v-model="filterPostingAccount"
             id="report-table-mobile-filter-postingAccount"
-            :field-label="t('General.postingAccount')"
-            :placeholder="$t('General.enterFilter')"
+            :placeholder="
+              t('General.postingAccount') + ' ' + t('General.enterFilter')
+            "
             enterkeyhint="send"
           >
+            <template #icon><Tag class="icon-medium" /></template>
             <template #button>
               <Button
                 data-testid="report-table-mobile-filter-postingAccount-reset"
@@ -270,7 +276,11 @@ import {
   CalendarClock,
   ChevronDown,
   ChevronsDown,
+  CreditCard,
   Filter,
+  Handshake,
+  MessageSquareMore,
+  Tag,
   X,
 } from "lucide-vue-next";
 import { computed, ref } from "vue";
