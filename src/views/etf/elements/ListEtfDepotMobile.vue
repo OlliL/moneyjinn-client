@@ -49,7 +49,7 @@
                   :data-testid="`etf-depot-mobile-edit-${flow.etfflowid}`"
                   @click.stop="editEtfFlow(flow)"
                 >
-                  <Pencil class="h-3.5 w-3.5" />
+                  <Pencil class="icon-small" />
                 </Button>
                 <Button
                   variant="ghost"
@@ -58,7 +58,7 @@
                   :data-testid="`etf-depot-mobile-delete-${flow.etfflowid}`"
                   @click.stop="deleteEtfFlow(flow)"
                 >
-                  <Trash2 class="h-3.5 w-3.5" />
+                  <Trash2 class="icon-small" />
                 </Button>
               </div>
             </div>

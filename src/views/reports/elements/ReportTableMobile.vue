@@ -47,7 +47,7 @@
                 <span class="truncate mr-1">{{ $t(option.label) }}</span>
                 <component
                   :is="getSortIcon(option.field)"
-                  class="h-3.5 w-3.5 shrink-0"
+                  class="icon-small shrink-0"
                   :class="
                     props.sortBy.has(option.field)
                       ? 'text-primary'
@@ -165,7 +165,7 @@
           @click="sortByColumn(activeSort.field)"
         >
           <span class="truncate">{{ $t(activeSort.label) }}</span>
-          <component :is="activeSort.icon" class="h-3 w-3 shrink-0" />
+          <component :is="activeSort.icon" class="icon-extra-small shrink-0" />
         </div>
       </template>
     </div>

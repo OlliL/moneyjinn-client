@@ -1,6 +1,6 @@
 <template>
-  <DeleteMoneyflowModalVue ref="deleteModal" @moneyflow-deleted="compareData" />
-  <EditMoneyflowModalVue
+  <DeleteMoneyflowModal ref="deleteModal" @moneyflow-deleted="compareData" />
+  <EditMoneyflowModal
     ref="editModal"
     @moneyflow-updated="compareData"
     @moneyflow-created="compareData"
@@ -85,67 +85,47 @@
         </form>
       </div>
     </div>
-    <div class="flex justify-center pt-5" v-if="dataCompared">
-      <DivContentTable :alternateRowBackground="false" class="w-full">
-        <colgroup>
-          <col style="width: 5%" />
-          <col style="width: 5%" />
-          <col style="width: 90%" />
-        </colgroup>
-        <TableHeader>
-          <TableRow>
-            <TableHead
-              class="font-bold text-foreground text-center"
-              colspan="3"
-              >{{ $t("CompareData.result") }}</TableHead
-            >
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          <CompareDataResultGroupVue
-            :comment="$t('CompareData.dataInSourceNotInDb')"
-            :compare-data="compareDatasNotInDatabase"
-            group-test-id="compare-data-group-not-in-database"
-            :amount-class="compareDatasNotInDatabaseCountClass"
-            :capitalsource-id="capitalsourceId"
-            :capitalsource-comment="capitalsourceComment"
-            @create-moneyflow="createMoneyflow"
-          />
-          <CompareDataResultGroupVue
-            :comment="$t('CompareData.dataNotInSourceInDb')"
-            :compare-data="compareDatasNotInFile"
-            group-test-id="compare-data-group-not-in-file"
-            :amount-class="compareDatasNotInFileCountClass"
-            :capitalsource-id="capitalsourceId"
-            :capitalsource-comment="capitalsourceComment"
-            @delete-moneyflow="deleteMoneyflow"
-            @edit-moneyflow="editMoneyflow"
-            @create-moneyflow="createMoneyflow"
-          />
-          <CompareDataResultGroupVue
-            :comment="$t('CompareData.dataMatchingButWrongCapitalsource')"
-            :compare-data="compareDatasWrongCapitalsource"
-            group-test-id="compare-data-group-wrong-capitalsource"
-            :amount-class="compareDatasWrongCapitalsourceCountClass"
-            :capitalsource-id="capitalsourceId"
-            :capitalsource-comment="capitalsourceComment"
-            @delete-moneyflow="deleteMoneyflow"
-            @edit-moneyflow="editMoneyflow"
-            @create-moneyflow="createMoneyflow"
-          />
-          <CompareDataResultGroupVue
-            :comment="$t('CompareData.dataMatching')"
-            :compare-data="compareDatasMatching"
-            group-test-id="compare-data-group-matching"
-            :amount-class="compareDatasMatchingCountClass"
-            :capitalsource-id="capitalsourceId"
-            :capitalsource-comment="capitalsourceComment"
-            @delete-moneyflow="deleteMoneyflow"
-            @edit-moneyflow="editMoneyflow"
-            @create-moneyflow="createMoneyflow"
-          />
-        </TableBody>
-      </DivContentTable>
+    <div class="flex justify-center" v-if="dataCompared">
+      <CompareDataResultDesktop
+        class="hidden md:block"
+        :compare-datas-matching="compareDatasMatching"
+        :compare-datas-matching-count-class="compareDatasMatchingCountClass"
+        :compare-datas-wrong-capitalsource="compareDatasWrongCapitalsource"
+        :compare-datas-wrong-capitalsource-count-class="
+          compareDatasWrongCapitalsourceCountClass
+        "
+        :compare-datas-not-in-file="compareDatasNotInFile"
+        :compare-datas-not-in-file-count-class="compareDatasNotInFileCountClass"
+        :compare-datas-not-in-database="compareDatasNotInDatabase"
+        :compare-datas-not-in-database-count-class="
+          compareDatasNotInDatabaseCountClass
+        "
+        :capitalsource-id="capitalsourceId"
+        :capitalsource-comment="capitalsourceComment"
+        @delete-moneyflow="deleteMoneyflow"
+        @edit-moneyflow="editMoneyflow"
+        @create-moneyflow="createMoneyflow"
+      />
+      <CompareDataResultMobile
+        class="md:hidden"
+        :compare-datas-matching="compareDatasMatching"
+        :compare-datas-matching-count-class="compareDatasMatchingCountClass"
+        :compare-datas-wrong-capitalsource="compareDatasWrongCapitalsource"
+        :compare-datas-wrong-capitalsource-count-class="
+          compareDatasWrongCapitalsourceCountClass
+        "
+        :compare-datas-not-in-file="compareDatasNotInFile"
+        :compare-datas-not-in-file-count-class="compareDatasNotInFileCountClass"
+        :compare-datas-not-in-database="compareDatasNotInDatabase"
+        :compare-datas-not-in-database-count-class="
+          compareDatasNotInDatabaseCountClass
+        "
+        :capitalsource-id="capitalsourceId"
+        :capitalsource-comment="capitalsourceComment"
+        @delete-moneyflow="deleteMoneyflow"
+        @edit-moneyflow="editMoneyflow"
+        @create-moneyflow="createMoneyflow"
+      />
     </div>
   </div>
 </template>
@@ -153,21 +133,14 @@
 <script lang="ts" setup>
 import SelectCapitalsource from "@/components/capitalsource/SelectCapitalsource.vue";
 import ButtonSubmit from "@/components/common/ButtonSubmit.vue";
-import DivContentTable from "@/components/common/DivContentTable.vue";
 import DivError from "@/components/common/DivError.vue";
 import InputDate from "@/components/common/InputDate.vue";
 import InputFile from "@/components/common/InputFile.vue";
 import SelectStandard from "@/components/common/SelectStandard.vue";
-import DeleteMoneyflowModalVue from "@/components/moneyflow/DeleteMoneyflowModal.vue";
-import EditMoneyflowModalVue from "@/components/moneyflow/EditMoneyflowModal.vue";
+import DeleteMoneyflowModal from "@/components/moneyflow/DeleteMoneyflowModal.vue";
+import EditMoneyflowModal from "@/components/moneyflow/EditMoneyflowModal.vue";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
-import {
-  TableBody,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
 import type { CompareData } from "@/model/comparedata/CompareData";
 import type { CompareDataParameter } from "@/model/comparedata/CompareDataParameter";
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
@@ -182,7 +155,8 @@ import { useForm } from "vee-validate";
 import { computed, onMounted, ref, useTemplateRef } from "vue";
 import { useI18n } from "vue-i18n";
 import { any, array as arr, date, instanceof as instof, number } from "zod";
-import CompareDataResultGroupVue from "./elements/CompareDataResultGroup.vue";
+import CompareDataResultDesktop from "./elements/CompareDataResultDesktop.vue";
+import CompareDataResultMobile from "./elements/CompareDataResultMobile.vue";
 
 const { t } = useI18n();
 
@@ -203,7 +177,7 @@ const schema = {
       : arr(instof(File), globErr(t("CompareData.validation.importfile"))),
   ),
 };
-
+const capitalsourceStore = useCapitalsourceStore();
 const dataCompared = ref(false);
 const startDate = ref(new Date() as Date | undefined);
 const endDate = ref(new Date() as Date | undefined);
@@ -220,9 +194,8 @@ const compareDatasNotInFile = ref({} as Array<CompareData> | undefined);
 const compareDatasNotInDatabase = ref({} as Array<CompareData> | undefined);
 const files = ref({} as FileList);
 
-const deleteModal =
-  useTemplateRef<typeof DeleteMoneyflowModalVue>("deleteModal");
-const editModal = useTemplateRef<typeof EditMoneyflowModalVue>("editModal");
+const deleteModal = useTemplateRef<typeof DeleteMoneyflowModal>("deleteModal");
+const editModal = useTemplateRef<typeof EditMoneyflowModal>("editModal");
 
 const { handleSubmit, values, setFieldTouched } = useForm();
 
@@ -292,7 +265,6 @@ const loadData = () => {
 
       capitalsourceId.value = compareDataParameter.selectedCapitalSourceId;
       if (capitalsourceId.value) {
-        const capitalsourceStore = useCapitalsourceStore();
         const capitalsource = capitalsourceStore.getCapitalsource(
           capitalsourceId.value,
         );
@@ -369,6 +341,12 @@ const compareData = handleSubmit(async () => {
             compareMoneyflowsByDate,
           );
 
+        const capitalsource = capitalsourceStore.getCapitalsource(
+          capitalsourceId.value,
+        );
+        if (capitalsource) {
+          capitalsourceComment.value = capitalsource.comment;
+        }
         dataCompared.value = true;
       })
       .catch((backendError) => {

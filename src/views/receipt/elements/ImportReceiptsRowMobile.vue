@@ -68,7 +68,7 @@
               @click="editMoneyflow"
               class="h-7 w-7 rounded-md text-muted-foreground hover:text-foreground"
             >
-              <Pencil class="h-3.5 w-3.5" />
+              <Pencil class="icon-small" />
             </Button>
             <Button
               variant="ghost"
@@ -76,7 +76,7 @@
               @click="deleteMoneyflow"
               class="h-7 w-7 rounded-md text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
             >
-              <Trash2 class="h-3.5 w-3.5" />
+              <Trash2 class="icon-small" />
             </Button>
           </template>
           <template v-else>
@@ -86,7 +86,7 @@
               @click="listMoneyflow"
               class="h-7 w-7 rounded-md text-muted-foreground hover:text-foreground"
             >
-              <Eye class="h-3.5 w-3.5" />
+              <Eye class="icon-small" />
             </Button>
           </template>
         </div>

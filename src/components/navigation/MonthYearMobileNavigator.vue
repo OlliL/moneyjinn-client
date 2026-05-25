@@ -125,7 +125,7 @@
             @click="setToCurrentMonth"
             :data-testid="`${testIdPrefix}-current-month-btn`"
           >
-            <CalendarDays class="h-3.5 w-3.5 text-muted-foreground shrink-0" />
+            <CalendarDays class="icon-small text-muted-foreground shrink-0" />
             {{
               months.length === 0
                 ? $t("General.currentYear")

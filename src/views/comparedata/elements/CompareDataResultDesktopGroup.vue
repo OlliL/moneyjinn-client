@@ -64,7 +64,7 @@
               </TableRow>
             </TableHeader>
             <TableBody>
-              <CompareDataResultRowVue
+              <CompareDataResultDesktopRowVue
                 v-for="(data, idx) in compareData"
                 :key="idx"
                 :row-index="idx"
@@ -72,9 +72,9 @@
                 :import-data="data.compareDataDataset"
                 :capitalsource-id="capitalsourceId"
                 :capitalsource-comment="capitalsourceComment"
-                @delete-moneyflow="emitDeleteMoneyflow"
-                @edit-moneyflow="emitEditMoneyflow"
-                @create-moneyflow="emitCreateMoneyflow"
+                @delete-moneyflow="$emit('deleteMoneyflow', $event)"
+                @edit-moneyflow="$emit('editMoneyflow', $event)"
+                @create-moneyflow="$emit('createMoneyflow', $event)"
               />
             </TableBody>
           </Table>
@@ -97,7 +97,7 @@ import type { CompareData } from "@/model/comparedata/CompareData";
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 import { ChevronDown, ChevronRight } from "lucide-vue-next";
 import { computed, ref, type PropType } from "vue";
-import CompareDataResultRowVue from "./CompareDataResultRow.vue";
+import CompareDataResultDesktopRowVue from "./CompareDataResultDesktopRow.vue";
 
 const props = defineProps({
   compareData: {
@@ -127,23 +127,14 @@ const props = defineProps({
 });
 
 const isCollapsed = ref(false);
-const emit = defineEmits([
-  "deleteMoneyflow",
-  "editMoneyflow",
-  "createMoneyflow",
-]);
+defineEmits<{
+  deleteMoneyflow: [id: number];
+  editMoneyflow: [id: number];
+  createMoneyflow: [moneyflow: Moneyflow];
+}>();
 
 const toggleCollapse = () => {
   isCollapsed.value = !isCollapsed.value;
-};
-const emitDeleteMoneyflow = (id: number) => {
-  emit("deleteMoneyflow", id);
-};
-const emitEditMoneyflow = (id: number) => {
-  emit("editMoneyflow", id);
-};
-const emitCreateMoneyflow = (moneyflow: Moneyflow) => {
-  emit("createMoneyflow", moneyflow);
 };
 const compareDatasCount = computed(() => {
   return props.compareData ? props.compareData.length : 0;

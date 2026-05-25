@@ -188,6 +188,10 @@
     "dataNotInSourceInDb": "Datensätze die in der Datenbank, aber nicht in der Quelle, enthalten sind",
     "dataMatchingButWrongCapitalsource": "passende Datensätze jedoch mit falscher Kapitalquelle",
     "dataMatching": "passende Datensätze",
+    "onlyImport": "Neu",
+    "onlyApp": "Nur App",
+    "wrongAccount": "Falsche Quelle",
+    "matching": "Passend",
     "validation": {
       "compareDataFormat": "Bitte Format angeben!",
       "importfile": "Bitte die Importdatei angeben!"
