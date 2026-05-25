@@ -35,7 +35,7 @@
         :selected-month="Number(month)"
         test-id-prefix="reports-mobile"
         navigator-test-id-prefix="month-year-nav-mobile"
-        title-key="Reports.filterData"
+        title-key="General.displayOptions"
         label-key="General.month"
         select-label-key="General.select"
         @select-year="handleYearSelect"

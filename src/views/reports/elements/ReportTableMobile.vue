@@ -13,12 +13,12 @@
       <SheetContent
         data-testid="report-table-mobile-filter-sheet"
         side="bottom"
-        class="h-[75vh] rounded-t-xl p-6 flex flex-col"
+        class="h-[75vh] rounded-t-xl p-5 flex flex-col"
       >
-        <SheetHeader class="text-left pb-4 border-b shrink-0">
-          <SheetTitle>{{ $t("Reports.filterData") }}</SheetTitle>
+        <SheetHeader class="text-left !pb-2 border-b shrink-0">
+          <SheetTitle>{{ $t("General.displayOptions") }}</SheetTitle>
           <SheetDescription class="sr-only">
-            {{ $t("Reports.filterData") }}
+            {{ $t("General.displayOptions") }}
           </SheetDescription>
         </SheetHeader>
 
@@ -83,7 +83,7 @@
 
           <div class="space-y-2 pb-1">
             <p class="text-sm font-semibold px-0.5">
-              {{ $t("Reports.filterData") }}
+              {{ $t("General.filterData") }}
             </p>
             <InputStandard
               v-model="filterCapitalsource"

@@ -1,6 +1,7 @@
 {
   "General": {
     "displayOptions": "Display Options",
+    "filterData": "Filter Data",
     "currentMonth": "Current Month",
     "currentYear": "Current Year",
     "copy": "Copy...",
@@ -442,7 +443,6 @@
     },
     "show10More": "show 10 more",
     "showAll": "show all",
-    "filterData": "Filter Data",
     "howManyFlowsShownMessage": "Showing {num} of {all} Transactions",
     "overallSums": "Total (Σ)",
     "beginOfMonth": "Opening Balance",

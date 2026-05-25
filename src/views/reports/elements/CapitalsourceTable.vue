@@ -79,10 +79,10 @@
           <Table class="[&_tr:nth-child(even)]:bg-muted text-xs md:text-sm">
             <TableHeader>
               <TableRow>
-                <TableHead class="table-head-cell hidden md:table-cell">
+                <TableHead class="table-head-cell">
                   {{ $t("Capitalsource.type") }}
                 </TableHead>
-                <TableHead class="table-head-cell hidden md:table-cell">
+                <TableHead class="table-head-cell">
                   {{ $t("Capitalsource.state") }}
                 </TableHead>
                 <TableHead class="table-head-cell">{{
@@ -94,7 +94,7 @@
                 <TableHead class="table-head-cell" v-if="currentMonthIsSettled">
                   {{ $t("Reports.endOfMonthFixed") }}
                 </TableHead>
-                <TableHead class="table-head-cell hidden md:table-cell">
+                <TableHead class="table-head-cell">
                   {{ $t("Reports.endOfMonthCalculated") }}
                 </TableHead>
                 <TableHead
@@ -104,15 +104,12 @@
                   {{ $t("Reports.currentAmount") }}
                 </TableHead>
                 <TableHead
-                  class="text-center border-l hidden md:table-cell"
+                  class="text-center border-l"
                   v-if="!currentMonthIsSettled"
                 >
                   {{ $t("Reports.state") }}
                 </TableHead>
-                <TableHead
-                  class="text-center hidden md:table-cell"
-                  v-if="currentMonthIsSettled"
-                >
+                <TableHead class="text-center" v-if="currentMonthIsSettled">
                   {{ $t("Reports.difference") }}
                 </TableHead>
               </TableRow>
@@ -128,12 +125,7 @@
                 }"
               />
               <TableRow class="font-bold">
-                <TableCell
-                  class="text-right border-r hidden md:table-cell"
-                  colspan="3"
-                  >&sum;</TableCell
-                >
-                <TableCell class="text-right border-r block md:hidden"
+                <TableCell class="text-right border-r" colspan="3"
                   >&sum;</TableCell
                 >
                 <TableCell class="text-right border-r">
@@ -145,7 +137,7 @@
                 >
                   <u><SpanAmount :amount="amountEndOfMonthFixedSum" /></u>
                 </TableCell>
-                <TableCell class="text-right border-r hidden md:table-cell">
+                <TableCell class="text-right border-r">
                   <u><SpanAmount :amount="amountEndOfMonthCalculatedSum" /></u>
                 </TableCell>
                 <TableCell
@@ -154,16 +146,10 @@
                 >
                   <u><SpanAmount :amount="amountCurrentSum" /></u>
                 </TableCell>
-                <TableCell
-                  class="text-right hidden md:table-cell"
-                  v-if="currentMonthIsSettled"
-                >
+                <TableCell class="text-right" v-if="currentMonthIsSettled">
                   <u><SpanAmount :amount="differenceFixedCalculatedSum" /></u>
                 </TableCell>
-                <TableCell
-                  class="text-right hidden md:table-cell"
-                  v-if="!currentMonthIsSettled"
-                >
+                <TableCell class="text-right" v-if="!currentMonthIsSettled">
                   &nbsp;
                 </TableCell>
               </TableRow>
