@@ -786,5 +786,6 @@ defineExpose({
   resetForm,
   importImportedMoneyflow,
   deleteImportedMoneyflow,
+  mmf,
 });
 </script>
