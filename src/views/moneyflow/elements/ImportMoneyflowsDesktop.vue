@@ -2,7 +2,7 @@
   <div
     class="w-full rounded-sm border bg-card text-card-foreground overflow-hidden"
   >
-    <form @submit.prevent="$emit('import')">
+    <form @submit.prevent="importItem">
       <div class="grid grid-cols-1 lg:grid-cols-4 min-h-full">
         <div
           class="bg-muted/40 p-5 border-b lg:border-b-0 lg:border-r border-border/60 space-y-4 text-left"
@@ -75,7 +75,7 @@
               type="button"
               variant="destructive"
               class="flex items-center gap-2 px-6"
-              @click="$emit('delete')"
+              @click="deleteItem"
             >
               <Trash2 class="icon-medium" />
               {{ $t("General.delete") }}
@@ -110,14 +110,22 @@ const props = defineProps({
   },
 });
 
-defineEmits(["import", "delete"]);
+const emit = defineEmits(["itemRemoved"]);
 
 const editRef = ref();
 
-const deleteImportedMoneyflow = (id: number) =>
-  editRef.value?.deleteImportedMoneyflow(id);
-const importImportedMoneyflow = (mim: ImportedMoneyflow) =>
-  editRef.value?.importImportedMoneyflow(mim);
-
-defineExpose({ deleteImportedMoneyflow, importImportedMoneyflow });
+const importItem = () => {
+  editRef.value
+    ?.importImportedMoneyflow(props.importedMoneyflow)
+    .then((res: boolean) => {
+      if (res) emit("itemRemoved", props.importedMoneyflow.id);
+    });
+};
+const deleteItem = () => {
+  editRef.value
+    ?.deleteImportedMoneyflow(props.importedMoneyflow.id)
+    .then((res: boolean) => {
+      if (res) emit("itemRemoved", props.importedMoneyflow.id);
+    });
+};
 </script>

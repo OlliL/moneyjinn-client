@@ -148,7 +148,7 @@
                 : 'text-muted-foreground/40 cursor-not-allowed'
             "
             :disabled="!isReady"
-            @click.stop="$emit('import')"
+            @click.stop="importItem"
           >
             <Save class="icon-small mr-2" />
             {{ $t("Moneyflow.apply") }}
@@ -173,7 +173,7 @@
             variant="destructive"
             size="sm"
             class="flex items-center gap-2 px-6 shadow-sm"
-            @click="$emit('delete')"
+            @click="deleteItem"
           >
             <Trash2 class="icon-small" />
             {{ $t("General.delete") }}
@@ -217,7 +217,7 @@ const props = defineProps({
   isOpen: { type: Boolean, required: true },
 });
 
-defineEmits(["import", "delete"]);
+const emit = defineEmits(["itemRemoved"]);
 
 const editRef = ref();
 
@@ -243,10 +243,18 @@ const statusClass = (valid: boolean) =>
 const textStatusClass = (valid: boolean) =>
   valid ? "text-foreground font-medium" : "text-orange-400/70 italic";
 
-const deleteImportedMoneyflow = (id: number) =>
-  editRef.value?.deleteImportedMoneyflow(id);
-const importImportedMoneyflow = (mim: ImportedMoneyflow) =>
-  editRef.value?.importImportedMoneyflow(mim);
-
-defineExpose({ deleteImportedMoneyflow, importImportedMoneyflow });
+const importItem = () => {
+  editRef.value
+    ?.importImportedMoneyflow(props.importedMoneyflow)
+    .then((res: boolean) => {
+      if (res) emit("itemRemoved", props.importedMoneyflow.id);
+    });
+};
+const deleteItem = () => {
+  editRef.value
+    ?.deleteImportedMoneyflow(props.importedMoneyflow.id)
+    .then((res: boolean) => {
+      if (res) emit("itemRemoved", props.importedMoneyflow.id);
+    });
+};
 </script>

@@ -33,9 +33,7 @@
         >
           <ImportMoneyflowsDesktop
             :imported-moneyflow="importedMoneyflow"
-            :ref="(el) => editMoneyflowRefs.set(importedMoneyflow.id, el)"
-            @import="importImportedMoneyflow(importedMoneyflow)"
-            @delete="deleteImportedMoneyflow(importedMoneyflow)"
+            @item-removed="onItemRemoved"
           />
         </div>
       </template>
@@ -52,10 +50,8 @@
             v-for="importedMoneyflow in importMoneyflows"
             :key="'mobile-' + importedMoneyflow.externalid"
             :imported-moneyflow="importedMoneyflow"
-            :ref="(el) => editMoneyflowRefs.set(importedMoneyflow.id, el)"
-            @import="importImportedMoneyflow(importedMoneyflow)"
-            @delete="deleteImportedMoneyflow(importedMoneyflow)"
             :is-open="openAccordionItem === importedMoneyflow.externalid"
+            @item-removed="onItemRemoved"
           />
         </Accordion>
       </template>
@@ -82,7 +78,6 @@ import ImportMoneyflowsMobile from "./elements/ImportMoneyflowsMobile.vue";
 const serverErrors = ref(new Array<string>());
 
 const importMoneyflows = ref({} as Array<ImportedMoneyflow>);
-const editMoneyflowRefs = new Map<number, any>();
 const dataLoaded = ref(false);
 const desktop = isDesktop();
 const openAccordionItem = ref("");
@@ -99,28 +94,9 @@ onMounted(() => {
     });
 });
 
-const deleteImportedMoneyflow = (mim: ImportedMoneyflow) => {
-  editMoneyflowRefs
-    .get(mim.id)
-    .deleteImportedMoneyflow(mim.id)
-    .then((res: boolean) => {
-      if (res) {
-        importMoneyflows.value = importMoneyflows.value.filter(
-          (entry) => entry.id !== mim.id,
-        );
-      }
-    });
-};
-const importImportedMoneyflow = (mim: ImportedMoneyflow) => {
-  editMoneyflowRefs
-    .get(mim.id)
-    .importImportedMoneyflow(mim)
-    .then((res: boolean) => {
-      if (res) {
-        importMoneyflows.value = importMoneyflows.value.filter(
-          (entry) => entry.id !== mim.id,
-        );
-      }
-    });
+const onItemRemoved = (id: number) => {
+  importMoneyflows.value = importMoneyflows.value.filter(
+    (entry) => entry.id !== id,
+  );
 };
 </script>
