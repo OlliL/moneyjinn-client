@@ -250,18 +250,26 @@ const compareColumns = (
   const aVal = a[field];
   const bVal = b[field];
 
-  if (aVal === bVal) return 0;
-  if (aVal === undefined || aVal === null) return 1;
-  if (bVal === undefined || bVal === null) return -1;
-
-  if (typeof aVal === "string" && typeof bVal === "string") {
-    return aVal.localeCompare(bVal, undefined, {
+  let result = 0;
+  if (aVal === undefined || aVal === null) {
+    result = 1;
+  } else if (bVal === undefined || bVal === null) {
+    result = -1;
+  } else if (typeof aVal === "string" && typeof bVal === "string") {
+    result = aVal.localeCompare(bVal, undefined, {
       numeric: true,
       sensitivity: "base",
     });
+  } else if (aVal > bVal) {
+    result = 1;
+  } else if (aVal < bVal) {
+    result = -1;
   }
 
-  return aVal > bVal ? 1 : -1;
+  if (result === 0 && field !== "id") {
+    return a.id > b.id ? 1 : -1;
+  }
+  return result;
 };
 
 const sortByColumn = (field: keyof Moneyflow) => {

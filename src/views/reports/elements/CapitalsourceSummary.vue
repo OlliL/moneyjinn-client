@@ -5,18 +5,18 @@
     <Table class="[&_tr:nth-child(even)]:bg-muted [&_td]:!py-1 [&_th]:!py-1">
       <TableHeader>
         <TableRow>
-          <TableHead id="thEmpty"></TableHead>
-          <TableHead id="thMonth" class="table-head-cell">
+          <TableHead class="table-head-cell"> </TableHead>
+          <TableHead class="table-head-cell">
             {{ $t("General.month") }}
           </TableHead>
-          <TableHead id="thYear" class="table-head-cell">
+          <TableHead class="text-center">
             {{ $t("General.year") }}
           </TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
         <TableRow v-if="currentMonthIsSettled">
-          <TableHead class="table-head-cell" id="thFixedProfit">
+          <TableHead class="table-head-cell">
             {{ $t("Reports.fixedProfit") }}
           </TableHead>
           <TableCell class="text-end border-r">
@@ -27,7 +27,7 @@
           </TableCell>
         </TableRow>
         <TableRow>
-          <TableHead class="table-head-cell" id="thCalculatedProfit">
+          <TableHead class="table-head-cell">
             {{ $t("Reports.calculatedProfit") }}
           </TableHead>
           <TableCell class="text-end border-r">
@@ -38,7 +38,7 @@
           </TableCell>
         </TableRow>
         <TableRow v-if="currentMonthIsSettled">
-          <TableHead class="table-head-cell" id="thDifference">
+          <TableHead class="text-center border-r">
             {{ $t("Reports.difference") }}
           </TableHead>
           <TableCell class="text-end border-r">

@@ -1,4 +1,4 @@
-#!/bin/sh -e
+#!/bin/sh -ex
 rm -rf dist
 rm -rf dist
 npm run test:ci
