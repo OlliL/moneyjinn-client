@@ -85,7 +85,7 @@
         </form>
       </div>
     </div>
-    <div class="flex justify-center pt-5" v-if="dataCompared">
+    <div class="flex justify-center" v-if="dataCompared">
       <CompareDataResultDesktop
         class="hidden md:block"
         :compare-datas-matching="compareDatasMatching"
