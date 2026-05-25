@@ -346,8 +346,9 @@ watch(
       hiddenValue.value != undefined &&
       hiddenValue.value !== 0
     ) {
-      const foundElement = newVal.find((sbv) => sbv.id == hiddenValue.value);
-      if (!foundElement) {
+      if (newVal.some((sbv) => sbv.id == hiddenValue.value)) {
+        setFieldValue();
+      } else {
         hiddenValue.value = undefined;
         fieldValue.value = undefined;
       }
