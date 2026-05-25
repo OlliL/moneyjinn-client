@@ -75,7 +75,7 @@
 
           <!-- System Details (Adopted Data) -->
           <div
-            class="grid grid-cols-1 sm:grid-cols-2 gap-y-2 gap-x-4 pt-3 border-t border-border/40"
+            class="grid grid-cols-1 sm:grid-cols-2 gap-y-2 gap-x-4 border-t border-border/40"
           >
             <!-- Planned Comment -->
             <div
@@ -236,6 +236,8 @@ defineEmits(["import", "delete"]);
 const editRef = ref();
 
 const displayData = computed(() => {
+  // Return the reactive object from child or props directly.
+  // Vue handles reactivity for sub-properties in the template.
   return editRef.value?.mmf || props.importedMoneyflow;
 });
 
@@ -245,7 +247,8 @@ const isReady = computed(() => {
     mim.contractpartnerId > 0 &&
     mim.postingAccountId > 0 &&
     mim.capitalsourceId > 0 &&
-    (mim.comment?.length > 0 || mim.usage?.length > 0)
+    mim.comment?.length > 0 &&
+    mim.bookingDate
   );
 });
 
