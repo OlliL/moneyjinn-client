@@ -1,6 +1,6 @@
 <template>
-  <DeleteMoneyflowModalVue ref="deleteModal" @moneyflow-deleted="compareData" />
-  <EditMoneyflowModalVue
+  <DeleteMoneyflowModal ref="deleteModal" @moneyflow-deleted="compareData" />
+  <EditMoneyflowModal
     ref="editModal"
     @moneyflow-updated="compareData"
     @moneyflow-created="compareData"

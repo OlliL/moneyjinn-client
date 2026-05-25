@@ -4,43 +4,93 @@
     class="border rounded-lg bg-card shadow-sm px-3 py-1"
   >
     <AccordionTrigger class="hover:no-underline w-full min-w-0">
-      <div class="flex flex-col w-full gap-1 text-left min-w-0">
-        <!-- Meta Info & Amount Row -->
-        <div class="flex justify-between items-center w-full">
+      <div class="grid grid-cols-[1fr_auto] items-center w-full gap-2">
+        <div class="flex flex-col items-start text-left min-w-0 gap-1">
+          <!-- Meta Info -->
           <div
-            class="flex items-center gap-1.5 text-xs text-muted-foreground font-normal"
+            class="flex items-center gap-1.5 text-xs text-muted-foreground font-normal truncate w-full"
           >
-            <Calendar class="icon-extra-small shrink-0" />
-            <SpanDate :date="displayDate" />
-            <div class="flex gap-1 ml-1">
-              <Database v-if="mmf" class="icon-extra-small text-blue-500/70" />
-              <FileText
-                v-if="importData"
-                class="icon-extra-small text-orange-500/70"
-              />
+            <div class="flex items-center gap-1.5 truncate">
+              <Calendar class="icon-extra-small shrink-0" />
+              <SpanDate :date="displayDate" />
+              <div class="flex gap-1 ml-1">
+                <Database
+                  v-if="mmf"
+                  class="icon-extra-small text-blue-500/70"
+                />
+                <FileText
+                  v-if="importData"
+                  class="icon-extra-small text-orange-500/70"
+                />
+              </div>
             </div>
           </div>
-          <div class="text-right shrink-0">
-            <span class="font-extrabold text-sm">
-              <SpanAmount :amount="displayAmount" />
-            </span>
+
+          <!-- Hero Title (Partner or Multi-line Comment) -->
+          <div class="flex items-start gap-1.5 font-bold pr-4 min-w-0 w-full">
+            <Handshake v-if="!isHeroComment" class="icon-small shrink-0 mt-1" />
+            <MessageSquareMore
+              v-else
+              class="icon-small shrink-0 mt-1 text-muted-foreground/70"
+            />
+            <div
+              :class="[
+                isHeroComment
+                  ? 'line-clamp-3 text-sm leading-tight text-foreground/90 font-normal'
+                  : 'truncate text-base',
+                'min-w-0 flex-1',
+              ]"
+            >
+              {{ heroTitle }}
+            </div>
           </div>
         </div>
-        <!-- Hero Title (Partner or Multi-line Comment) -->
-        <div
-          :class="[
-            isHeroComment
-              ? 'line-clamp-3 text-sm leading-tight text-foreground/90'
-              : 'truncate text-base',
-            'font-bold pr-4',
-          ]"
-        >
-          {{ heroTitle }}
+
+        <!-- Amount & Actions -->
+        <div class="flex flex-col items-end gap-1.5 shrink-0 text-right">
+          <span
+            class="font-extrabold text-sm text-foreground"
+            :class="{
+              'border-b border-double border-foreground':
+                mmf?.moneyflowSplitEntries?.length,
+            }"
+          >
+            <SpanAmount :amount="displayAmount" />
+          </span>
+          <div class="flex gap-0.5">
+            <template v-if="mmf && isOwnMoneyflow">
+              <Button
+                variant="ghost"
+                size="icon"
+                class="h-7 w-7"
+                @click.stop="editMoneyflow"
+              >
+                <Pencil class="h-3.5 w-3.5" />
+              </Button>
+              <Button
+                variant="ghost"
+                size="icon"
+                class="h-7 w-7 text-destructive"
+                @click.stop="deleteMoneyflow"
+              >
+                <Trash2 class="h-3.5 w-3.5" />
+              </Button>
+            </template>
+            <Button
+              v-if="importData"
+              variant="ghost"
+              size="icon"
+              class="h-7 w-7 text-primary"
+              @click.stop="createMoneyflow"
+            >
+              <Plus class="h-3.5 w-3.5" />
+            </Button>
+          </div>
         </div>
       </div>
     </AccordionTrigger>
 
-    <AccordionContent class="pt-3 pb-2 space-y-4 border-t mt-2">
+    <AccordionContent class="pt-3 pb-1 space-y-4 border-t mt-2">
       <!-- Database Block -->
       <div v-if="mmf" class="space-y-1.5">
         <div
@@ -51,12 +101,35 @@
         <div
           class="bg-muted/40 p-2.5 rounded-md text-xs space-y-2 border border-blue-100 dark:border-blue-900/30"
         >
-          <div class="grid grid-cols-2 gap-x-4 gap-y-1">
+          <div class="grid grid-cols-2 gap-x-4 gap-y-2">
             <div class="flex flex-col">
-              <span class="text-[10px] text-muted-foreground">{{
-                $t("Moneyflow.bookingdate")
-              }}</span>
+              <span
+                class="text-[10px] text-muted-foreground flex items-center gap-1"
+              >
+                <Calendar class="icon-extra-small" />
+                {{ $t("Moneyflow.bookingdate") }}
+              </span>
               <SpanDate :date="mmf.bookingDate" />
+            </div>
+            <div class="flex flex-col text-right">
+              <span
+                class="text-[10px] text-muted-foreground flex items-center gap-1 justify-end"
+              >
+                <CalendarDays class="icon-extra-small" />
+                {{ $t("Moneyflow.invoicedate") }}
+              </span>
+              <SpanDate :date="mmf.invoiceDate" />
+            </div>
+            <div class="flex flex-col">
+              <span
+                class="text-[10px] text-muted-foreground flex items-center gap-1"
+              >
+                <Handshake class="icon-extra-small" />
+                {{ $t("General.contractpartner") }}
+              </span>
+              <span class="font-medium truncate">{{
+                mmf.contractpartnerName
+              }}</span>
             </div>
             <div class="flex flex-col text-right">
               <span class="text-[10px] text-muted-foreground">{{
@@ -65,17 +138,16 @@
               <SpanAmount :amount="mmf.amount" class="font-semibold" />
             </div>
           </div>
-          <div class="flex flex-col border-t pt-1.5">
-            <span class="text-[10px] text-muted-foreground">{{
-              $t("General.contractpartner")
+          <div v-if="mmf.comment" class="flex flex-col border-t pt-1.5">
+            <span
+              class="text-[10px] text-muted-foreground flex items-center gap-1"
+            >
+              <MessageSquareMore class="icon-extra-small" />
+              {{ $t("General.comment") }}
+            </span>
+            <span class="italic whitespace-normal break-words">{{
+              mmf.comment
             }}</span>
-            <span class="font-medium">{{ mmf.contractpartnerName }}</span>
-          </div>
-          <div v-if="mmf.comment" class="flex flex-col">
-            <span class="text-[10px] text-muted-foreground">{{
-              $t("General.comment")
-            }}</span>
-            <span class="italic">{{ mmf.comment }}</span>
           </div>
           <div
             class="flex items-center gap-1.5 text-muted-foreground pt-1 border-t italic"
@@ -95,12 +167,35 @@
         <div
           class="bg-orange-50/50 dark:bg-orange-950/20 p-2.5 rounded-md text-xs space-y-2 border border-orange-100 dark:border-orange-900/30"
         >
-          <div class="grid grid-cols-2 gap-x-4 gap-y-1">
+          <div class="grid grid-cols-2 gap-x-4 gap-y-2">
             <div class="flex flex-col">
-              <span class="text-[10px] text-muted-foreground">{{
-                $t("Moneyflow.bookingdate")
-              }}</span>
+              <span
+                class="text-[10px] text-muted-foreground flex items-center gap-1"
+              >
+                <Calendar class="icon-extra-small" />
+                {{ $t("Moneyflow.bookingdate") }}
+              </span>
               <SpanDate :date="importData.bookingDate" />
+            </div>
+            <div class="flex flex-col text-right">
+              <span
+                class="text-[10px] text-muted-foreground flex items-center gap-1 justify-end"
+              >
+                <CalendarDays class="icon-extra-small" />
+                {{ $t("Moneyflow.invoicedate") }}
+              </span>
+              <SpanDate :date="importData.invoiceDate" />
+            </div>
+            <div class="flex flex-col">
+              <span
+                class="text-[10px] text-muted-foreground flex items-center gap-1"
+              >
+                <Handshake class="icon-extra-small" />
+                {{ $t("General.contractpartner") }}
+              </span>
+              <span class="font-medium truncate">{{
+                importData.partner || importData.contractpartnerName
+              }}</span>
             </div>
             <div class="flex flex-col text-right">
               <span class="text-[10px] text-muted-foreground">{{
@@ -109,18 +204,13 @@
               <SpanAmount :amount="importData.amount" class="font-semibold" />
             </div>
           </div>
-          <div class="flex flex-col border-t pt-1.5">
-            <span class="text-[10px] text-muted-foreground">{{
-              $t("General.contractpartner")
-            }}</span>
-            <span class="font-medium">{{
-              importData.partner || importData.contractpartnerName
-            }}</span>
-          </div>
-          <div v-if="importData.comment" class="flex flex-col">
-            <span class="text-[10px] text-muted-foreground">{{
-              $t("General.comment")
-            }}</span>
+          <div v-if="importData.comment" class="flex flex-col border-t pt-1.5">
+            <span
+              class="text-[10px] text-muted-foreground flex items-center gap-1"
+            >
+              <MessageSquareMore class="icon-extra-small" />
+              {{ $t("General.comment") }}
+            </span>
             <SpanImportComment :comment="importData.comment" />
           </div>
           <div
@@ -129,37 +219,6 @@
             <CreditCard class="h-3 w-3" /> {{ capitalsourceComment }}
           </div>
         </div>
-      </div>
-
-      <!-- Actions -->
-      <div class="flex justify-end gap-2 pt-2">
-        <template v-if="mmf && isOwnMoneyflow">
-          <Button
-            variant="outline"
-            size="sm"
-            class="flex-1 gap-2"
-            @click="editMoneyflow"
-          >
-            <Pencil class="h-3.5 w-3.5" /> {{ $t("General.edit") }}
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            class="flex-1 gap-2 text-destructive hover:bg-destructive/10"
-            @click="deleteMoneyflow"
-          >
-            <Trash2 class="h-3.5 w-3.5" /> {{ $t("General.delete") }}
-          </Button>
-        </template>
-        <Button
-          v-if="importData"
-          variant="default"
-          size="sm"
-          :class="['gap-2', mmf ? 'flex-1' : 'w-full']"
-          @click="createMoneyflow"
-        >
-          <Plus class="h-3.5 w-3.5" /> {{ $t("General.new") }}
-        </Button>
       </div>
     </AccordionContent>
   </AccordionItem>
@@ -180,9 +239,12 @@ import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 import { useUserSessionStore } from "@/stores/UserSessionStore";
 import {
   Calendar,
+  CalendarDays,
   CreditCard,
   Database,
   FileText,
+  Handshake,
+  MessageSquareMore,
   Pencil,
   Plus,
   Trash2,
