@@ -135,7 +135,7 @@
           class="w-full space-y-3 pb-4"
           v-model="openAccordionItem"
         >
-          <ImportMoneyflowsAccordion
+          <ImportMoneyflowsMobile
             v-for="importedMoneyflow in importMoneyflows"
             :key="'mobile-' + importedMoneyflow.externalid"
             :imported-moneyflow="importedMoneyflow"
@@ -170,7 +170,7 @@ import ImportedMoneyflowService from "@/service/ImportedMoneyflowService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { isDesktop } from "@/tools/views/IsDesktop";
 import { CheckCircle2, Save, Trash2 } from "lucide-vue-next";
-import ImportMoneyflowsAccordion from "./ImportMoneyflowsAccordion.vue";
+import ImportMoneyflowsMobile from "./elements/ImportMoneyflowsMobile.vue";
 
 const serverErrors = ref(new Array<string>());
 

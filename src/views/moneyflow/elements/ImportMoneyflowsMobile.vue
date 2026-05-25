@@ -59,7 +59,7 @@
             </div>
           </div>
 
-          <!-- Row 3: Usage (Verwendungszweck) - Full Display -->
+          <!-- Row 3: Usage (imported transaction) - Full Display -->
           <div
             class="bg-muted/30 p-2.5 rounded border border-border/40 text-xs text-muted-foreground/90 leading-relaxed"
           >
@@ -86,11 +86,7 @@
               />
               <span
                 class="text-[10px] truncate"
-                :class="
-                  displayData.comment?.length > 0
-                    ? 'text-foreground font-medium'
-                    : 'text-orange-400/70 italic'
-                "
+                :class="textStatusClass(displayData.comment?.length > 0)"
               >
                 {{ displayData.comment || $t("General.comment") }}
               </span>
@@ -107,11 +103,7 @@
               />
               <span
                 class="text-[10px] truncate"
-                :class="
-                  displayData.postingAccountId > 0
-                    ? 'text-foreground font-medium'
-                    : 'text-orange-400/70 italic'
-                "
+                :class="textStatusClass(displayData.postingAccountId > 0)"
               >
                 {{
                   displayData.postingAccountName || $t("General.postingAccount")
@@ -128,11 +120,7 @@
               />
               <span
                 class="text-[10px] truncate"
-                :class="
-                  displayData.capitalsourceId > 0
-                    ? 'text-foreground font-medium'
-                    : 'text-orange-400/70 italic'
-                "
+                :class="textStatusClass(displayData.capitalsourceId > 0)"
               >
                 {{
                   displayData.capitalsourceComment ||
@@ -252,6 +240,8 @@ const isReady = computed(() => {
 
 const statusClass = (valid: boolean) =>
   valid ? "text-blue-500 dark:text-blue-400" : "text-orange-400/70";
+const textStatusClass = (valid: boolean) =>
+  valid ? "text-foreground font-medium" : "text-orange-400/70 italic";
 
 const deleteImportedMoneyflow = (id: number) =>
   editRef.value?.deleteImportedMoneyflow(id);
