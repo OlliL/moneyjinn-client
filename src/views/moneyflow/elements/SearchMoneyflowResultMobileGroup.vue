@@ -1,9 +1,11 @@
 <template>
   <AccordionItem :value="groupKey" class="border rounded-xl bg-muted/20 px-1">
     <AccordionTrigger class="hover:no-underline py-3 px-3">
-      <div class="flex items-center justify-between w-full text-left pr-4">
-        <div class="flex flex-col gap-0.5 overflow-hidden mr-2">
-          <div class="flex items-center gap-2 text-xs text-muted-foreground">
+      <div
+        class="grid grid-cols-[1fr_auto] items-center w-full text-left pr-4 gap-2"
+      >
+        <div class="flex flex-col gap-0.5 overflow-hidden min-w-0">
+          <div class="flex items-center gap-1.5 text-xs text-muted-foreground">
             <span v-if="colBookingMonth">
               {{ moneyflowGroup.monthString }} {{ moneyflowGroup.year }}
             </span>
@@ -18,7 +20,9 @@
             {{ moneyflowGroup.contractpartnerName }}
           </div>
         </div>
-        <div class="font-extrabold text-base whitespace-nowrap">
+        <div
+          class="font-extrabold text-base whitespace-nowrap shrink-0 text-right"
+        >
           <SpanAmount :amount="moneyflowGroup.amount" />
         </div>
       </div>
