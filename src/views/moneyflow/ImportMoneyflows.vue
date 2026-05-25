@@ -77,7 +77,7 @@ import ImportMoneyflowsMobile from "./elements/ImportMoneyflowsMobile.vue";
 
 const serverErrors = ref(new Array<string>());
 
-const importMoneyflows = ref({} as Array<ImportedMoneyflow>);
+const importMoneyflows = ref<ImportedMoneyflow[]>([]);
 const dataLoaded = ref(false);
 const desktop = isDesktop();
 const openAccordionItem = ref("");

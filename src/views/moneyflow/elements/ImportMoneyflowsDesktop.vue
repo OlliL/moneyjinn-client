@@ -5,9 +5,9 @@
     <form @submit.prevent="importItem">
       <div class="grid grid-cols-1 lg:grid-cols-4 min-h-full">
         <div
-          class="bg-muted/40 p-5 border-b lg:border-b-0 lg:border-r border-border/60 space-y-4 text-left"
+          class="bg-muted/40 p-5 border-b lg:border-b-0 lg:border-r border-border/60 space-y-2 text-left"
         >
-          <dl class="space-y-1">
+          <dl>
             <dt
               class="text-[10px] font-bold uppercase tracking-wider text-muted-foreground/80"
             >
@@ -20,7 +20,7 @@
             </dd>
           </dl>
 
-          <dl class="space-y-1">
+          <dl>
             <dt
               class="text-[10px] font-bold uppercase tracking-wider text-muted-foreground/80"
             >
@@ -33,7 +33,7 @@
             </dd>
           </dl>
 
-          <dl class="space-y-1">
+          <dl>
             <dt
               class="text-[10px] font-bold uppercase tracking-wider text-muted-foreground/80"
             >
@@ -46,7 +46,7 @@
             </dd>
           </dl>
 
-          <dl class="space-y-1 pt-2 border-t border-border/40">
+          <dl>
             <dt
               class="text-[10px] font-bold uppercase tracking-wider text-muted-foreground/80 mb-1"
             >

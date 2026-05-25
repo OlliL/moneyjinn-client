@@ -1,5 +1,5 @@
 <template>
-  <div class="overflow-x-auto text-center">
+  <div class="hidden md:block overflow-x-auto text-center">
     <div class="flex flex-col rounded-md border">
       <Table class="w-full text-xs md:text-sm">
         <TableHeader>
