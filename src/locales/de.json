@@ -445,6 +445,7 @@
     "plannedHiddenCount": "({num} geplante ausgeblendet)",
     "howManyFlowsShownMessage": "Zeige {num} von {all} Geldbewegungen",
     "overallSums": "Gesamtsummen (Σ)",
+    "sum": "Summe",
     "beginOfMonth": "Anfangsbetrag",
     "endOfMonthFixed": "Endbetrag (fix)",
     "endOfMonthCalculated": "Endbetrag (berechnet)",
