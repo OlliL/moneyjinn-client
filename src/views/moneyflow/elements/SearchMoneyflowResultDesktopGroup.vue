@@ -94,7 +94,7 @@
               </TableRow>
             </TableHeader>
             <TableBody>
-              <SearchMoneyflowResultRowVue
+              <SearchMoneyflowResultDesktopRow
                 v-for="(moneyflow, index) of moneyflowGroup.moneyflows"
                 :key="moneyflow.id"
                 :mmf="moneyflow"
@@ -134,7 +134,7 @@ import {
 import { Routes } from "@/router";
 
 import SpanAmount from "@/components/common/SpanAmount.vue";
-import SearchMoneyflowResultRowVue from "./SearchMoneyflowResultRow.vue";
+import SearchMoneyflowResultDesktopRow from "./SearchMoneyflowResultDesktopRow.vue";
 
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 
@@ -209,13 +209,13 @@ const toggleCollapse = () => {
 const emitShowReceipt = (id: number) => {
   emit("showReceipt", id);
 };
-const emitDeleteMoneyflow = (id: number) => {
-  emit("deleteMoneyflow", id);
+const emitDeleteMoneyflow = (mmf: Moneyflow) => {
+  emit("deleteMoneyflow", mmf);
 };
-const emitEditMoneyflow = (id: number) => {
-  emit("editMoneyflow", id);
+const emitEditMoneyflow = (mmf: Moneyflow) => {
+  emit("editMoneyflow", mmf);
 };
-const emitListMoneyflow = (id: number) => {
-  emit("listMoneyflow", id);
+const emitListMoneyflow = (mmf: Moneyflow) => {
+  emit("listMoneyflow", mmf);
 };
 </script>

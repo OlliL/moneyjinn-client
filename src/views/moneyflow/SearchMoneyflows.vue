@@ -222,52 +222,72 @@
         </div>
       </template>
       <template v-else>
-        <DivContentTable :alternate-row-background="false" class="w-full">
-          <TableHeader>
-            <TableRow>
-              <TableHead class="table-head-cell w-12"></TableHead>
-
-              <TableHead class="table-head-cell w-36" v-if="colBookingMonth">
-                {{ $t("Moneyflow.bookingMonth") }}
-              </TableHead>
-
-              <TableHead class="table-head-cell w-28" v-if="colBookingYear">
-                {{ $t("Moneyflow.bookingYear") }}
-              </TableHead>
-
-              <TableHead
-                class="table-head-cell w-48 !whitespace-normal"
-                v-if="colContractpartner"
-              >
-                {{ $t("General.contractpartner") }}
-              </TableHead>
-
-              <TableHead class="table-head-cell w-28">
-                {{ $t("General.amount") }}
-              </TableHead>
-
-              <TableHead
-                class="font-bold text-foreground text-center !whitespace-normal"
-              >
-                {{ $t("General.comment") }}
-              </TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            <SearchMoneyflowResultGroupVue
+        <div v-if="!desktop" class="w-full">
+          <Accordion type="multiple" class="space-y-4">
+            <SearchMoneyflowResultMobileGroup
               v-for="[index, moneyflowGroup] in moneyflowGroups"
               :key="index.toString()"
+              :group-key="index.toString()"
               :moneyflow-group="moneyflowGroup"
               :col-booking-month="colBookingMonth"
               :col-booking-year="colBookingYear"
               :col-contractpartner="colContractpartner"
+              :hide-contractpartner="searchContractpartnerId > 0"
               @delete-moneyflow="deleteMoneyflow"
               @edit-moneyflow="editMoneyflow"
               @list-moneyflow="listMoneyflow"
               @show-receipt="showReceipt"
             />
-          </TableBody>
-        </DivContentTable>
+          </Accordion>
+        </div>
+        <div v-else class="w-full">
+          <DivContentTable :alternate-row-background="false" class="w-full">
+            <TableHeader>
+              <TableRow>
+                <TableHead class="table-head-cell w-12"></TableHead>
+
+                <TableHead class="table-head-cell w-36" v-if="colBookingMonth">
+                  {{ $t("Moneyflow.bookingMonth") }}
+                </TableHead>
+
+                <TableHead class="table-head-cell w-28" v-if="colBookingYear">
+                  {{ $t("Moneyflow.bookingYear") }}
+                </TableHead>
+
+                <TableHead
+                  class="table-head-cell w-48 !whitespace-normal"
+                  v-if="colContractpartner"
+                >
+                  {{ $t("General.contractpartner") }}
+                </TableHead>
+
+                <TableHead class="table-head-cell w-28">
+                  {{ $t("General.amount") }}
+                </TableHead>
+
+                <TableHead
+                  class="font-bold text-foreground text-center !whitespace-normal"
+                >
+                  {{ $t("General.comment") }}
+                </TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              <SearchMoneyflowResultDesktopGroup
+                v-for="[index, moneyflowGroup] in moneyflowGroups"
+                :key="index.toString()"
+                :moneyflow-group="moneyflowGroup"
+                :col-booking-month="colBookingMonth"
+                :col-booking-year="colBookingYear"
+                :col-contractpartner="colContractpartner"
+                @delete-moneyflow="deleteMoneyflow"
+                @edit-moneyflow="editMoneyflow"
+                @list-moneyflow="listMoneyflow"
+                @show-receipt="showReceipt"
+              />
+            </TableBody>
+          </DivContentTable>
+        </div>
       </template>
     </div>
   </div>
@@ -288,7 +308,8 @@ import SelectContractpartner from "@/components/contractpartner/SelectContractpa
 import DeleteMoneyflowModalVue from "@/components/moneyflow/DeleteMoneyflowModal.vue";
 import EditMoneyflowModalVue from "@/components/moneyflow/EditMoneyflowModal.vue";
 import SelectPostingAccount from "@/components/postingaccount/SelectPostingAccount.vue";
-import SearchMoneyflowResultGroupVue from "./elements/SearchMoneyflowResultGroup.vue";
+import SearchMoneyflowResultDesktopGroup from "./elements/SearchMoneyflowResultDesktopGroup.vue";
+import SearchMoneyflowResultMobileGroup from "./elements/SearchMoneyflowResultMobileGroup.vue";
 
 import { toFixed } from "@/tools/math";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
@@ -301,6 +322,7 @@ import type { SelectBoxValue } from "@/model/SelectBoxValue";
 
 import ListMoneyflowModalDesktop from "@/components/moneyflow/ListMoneyflowModalDesktop.vue";
 import ReceiptModal from "@/components/reports/ReceiptModal.vue";
+import { Accordion } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
@@ -311,6 +333,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import MoneyflowService from "@/service/MoneyflowService";
+import { isDesktop } from "@/tools/views/IsDesktop";
 import { ChevronDown, Search, SlidersHorizontal, Undo2 } from "lucide-vue-next";
 
 const { t } = useI18n();
@@ -357,6 +380,7 @@ const colBookingMonth = ref(false);
 const colBookingYear = ref(false);
 const colContractpartner = ref(false);
 const dataLoaded = ref(false);
+const searchContractpartnerId = ref(0);
 
 const receiptModal = useTemplateRef<typeof ReceiptModal>("receiptModal");
 const deleteModal =
@@ -364,6 +388,7 @@ const deleteModal =
 const editModal = useTemplateRef<typeof EditMoneyflowModalVue>("editModal");
 const listModal = useTemplateRef<typeof ListMoneyflowModalDesktop>("listModal");
 const mobileOptionsOpen = ref(false);
+const desktop = isDesktop();
 
 const schema = {
   startDate: date(globErr(t("General.validation.startDate"))),
@@ -409,6 +434,7 @@ const resetForm = () => {
   startDate.value = beginOfYear;
   endDate.value = today;
   contractpartnerId.value = 0;
+  searchContractpartnerId.value = 0;
   postingAccountId.value = 0;
   comment.value = "";
   featureCaseSensitive.value = false;
@@ -484,6 +510,7 @@ const searchMoneyflows = handleSubmit(() => {
             }
           }
 
+          searchContractpartnerId.value = contractpartnerId.value;
           dataLoaded.value = true;
         }
       })
@@ -610,20 +637,20 @@ const getGroupByKey = (moneyflow: Moneyflow): string => {
 const showReceipt = (moneyflowId: number) => {
   receiptModal.value?._show(moneyflowId);
 };
-const deleteMoneyflow = (id: number) => {
-  MoneyflowService.fetchMoneyflow(id).then((mmf) => {
-    deleteModal.value?._show(mmf);
+const deleteMoneyflow = (mmf: Moneyflow) => {
+  MoneyflowService.fetchMoneyflow(mmf.id).then((freshMmf) => {
+    deleteModal.value?._show(freshMmf);
   });
 };
 
-const editMoneyflow = (id: number) => {
-  MoneyflowService.fetchMoneyflow(id).then((mmf) => {
-    editModal.value?._show(mmf);
+const editMoneyflow = (mmf: Moneyflow) => {
+  MoneyflowService.fetchMoneyflow(mmf.id).then((freshMmf) => {
+    editModal.value?._show(freshMmf);
   });
 };
-const listMoneyflow = (id: number) => {
-  MoneyflowService.fetchMoneyflow(id).then((mmf) => {
-    listModal.value?._show(mmf);
+const listMoneyflow = (mmf: Moneyflow) => {
+  MoneyflowService.fetchMoneyflow(mmf.id).then((freshMmf) => {
+    listModal.value?._show(freshMmf);
   });
 };
 </script>

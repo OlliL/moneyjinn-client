@@ -159,12 +159,12 @@ const showReceipt = () => {
   emit("showReceipt", props.mmf.id);
 };
 const deleteMoneyflow = () => {
-  emit("deleteMoneyflow", props.mmf.id);
+  emit("deleteMoneyflow", props.mmf);
 };
 const editMoneyflow = () => {
-  emit("editMoneyflow", props.mmf.id);
+  emit("editMoneyflow", props.mmf);
 };
 const listMoneyflow = () => {
-  emit("listMoneyflow", props.mmf.id);
+  emit("listMoneyflow", props.mmf);
 };
 </script>

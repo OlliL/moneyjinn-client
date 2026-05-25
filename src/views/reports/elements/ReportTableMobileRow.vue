@@ -44,6 +44,7 @@
           </div>
 
           <div
+            v-if="!hideContractpartner"
             class="flex items-center gap-1 min-w-0 truncate transition-opacity"
             :class="lesserOpacityIfFuture"
           >
@@ -53,6 +54,20 @@
             />
             <span class="font-bold text-base text-foreground truncate w-full">{{
               mmf.contractpartnerName
+            }}</span>
+          </div>
+
+          <div
+            v-if="showCommentInTrigger"
+            class="flex items-center gap-1 min-w-0 truncate transition-opacity"
+            :class="lesserOpacityIfFuture"
+          >
+            <MessageSquareMore
+              class="icon-small shrink-0 text-muted-foreground/80"
+              :title="$t('General.comment')"
+            />
+            <span class="text-sm text-muted-foreground truncate w-full">{{
+              mmf.comment
             }}</span>
           </div>
         </div>
@@ -126,7 +141,7 @@
       >
         <div
           class="flex items-center gap-1.5 break-all w-full"
-          v-if="!mmf.moneyflowSplitEntries?.length"
+          v-if="!mmf.moneyflowSplitEntries?.length && !showCommentInTrigger"
         >
           <MessageSquareMore
             class="icon-extra-small shrink-0 text-foreground"
@@ -229,6 +244,8 @@ import { computed, type PropType } from "vue";
 
 const props = defineProps({
   mmf: { type: Object as PropType<Moneyflow>, required: true },
+  hideContractpartner: { type: Boolean, default: false },
+  showCommentInTrigger: { type: Boolean, default: false },
 });
 
 defineEmits<{
