@@ -132,7 +132,7 @@
         <Accordion
           type="single"
           collapsible
-          class="w-full space-y-3"
+          class="w-full space-y-3 pb-4"
           v-model="openAccordionItem"
         >
           <ImportMoneyflowsAccordion

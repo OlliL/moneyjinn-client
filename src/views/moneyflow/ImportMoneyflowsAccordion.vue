@@ -11,9 +11,9 @@
     <AccordionTrigger class="p-0 hover:no-underline [&>svg]:hidden w-full">
       <div class="flex flex-col w-full text-left">
         <!-- Summary Area -->
-        <div class="p-4 flex flex-col gap-4 w-full min-w-0">
+        <div class="p-4 flex flex-col w-full min-w-0">
           <!-- Row 1: Date & Amount -->
-          <div class="flex justify-between items-center w-full">
+          <div class="flex justify-between items-center w-full pb-3">
             <div
               class="flex items-center gap-1.5 text-xs text-muted-foreground"
             >
@@ -33,7 +33,7 @@
           </div>
 
           <!-- Row 2: Contractpartner Comparison (Target vs Source) -->
-          <div class="flex items-start gap-3">
+          <div class="flex items-start gap-3 pb-3">
             <div
               class="p-2 rounded-full bg-muted/50 shrink-0"
               :class="statusClass(displayData.contractpartnerId > 0)"
@@ -74,9 +74,7 @@
           </div>
 
           <!-- System Details (Adopted Data) -->
-          <div
-            class="grid grid-cols-1 sm:grid-cols-2 gap-y-2 gap-x-4 border-t border-border/40"
-          >
+          <div class="grid grid-cols-1 pt-3 sm:grid-cols-2 gap-y-2 gap-x-4">
             <!-- Planned Comment -->
             <div
               class="flex items-center gap-2 min-w-0 sm:col-span-2"
@@ -158,7 +156,7 @@
             class="flex items-center justify-center py-2.5 text-xs font-bold transition-colors"
             :class="
               isReady
-                ? 'text-primary hover:bg-primary/10'
+                ? 'bg-primary text-primary-foreground hover:bg-primary/90'
                 : 'text-muted-foreground/40 cursor-not-allowed'
             "
             :disabled="!isReady"
