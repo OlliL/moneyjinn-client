@@ -29,6 +29,27 @@
         >
           <div class="space-y-2 border-b pb-4">
             <p class="text-sm font-semibold px-0.5">
+              {{ $t("General.options") }}
+            </p>
+            <div class="flex items-center gap-2 px-0.5">
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                class="w-full justify-start gap-2 h-10 px-3 font-normal"
+                :class="{
+                  'bg-primary/10 border-primary text-primary font-bold':
+                    showPlanned,
+                }"
+                @click="showPlanned = !showPlanned"
+              >
+                <CalendarClock class="icon-small" />
+                {{ $t("Moneyflow.reserved") }}
+              </Button>
+            </div>
+          </div>
+          <div class="space-y-2 border-b pb-4">
+            <p class="text-sm font-semibold px-0.5">
               {{ $t("Moneyflow.orderBy") }}
             </p>
             <div class="grid grid-cols-2 gap-1.5">
@@ -153,10 +174,16 @@
       <span>
         {{
           $t("Reports.howManyFlowsShownMessage", {
-            num: moneyflows.length,
+            num: visibleMoneyflows.length,
             all: moneyflowsCount || 0,
           })
         }}
+      </span>
+      <span
+        v-if="!showPlanned && hiddenPlannedCount > 0"
+        class="text-orange-500/80"
+      >
+        ({{ hiddenPlannedCount }} {{ $t("Moneyflow.reserved") }} ausgeblendet)
       </span>
       <template v-if="activeSort">
         <span class="text-muted-foreground/30">•</span>
@@ -172,7 +199,7 @@
 
     <Accordion type="multiple" class="space-y-2">
       <ReportTableMobileRow
-        v-for="mmf in moneyflows"
+        v-for="mmf in visibleMoneyflows"
         :key="'mobile-' + mmf.id"
         :mmf="mmf"
         @show-receipt="showReceipt"
@@ -182,8 +209,27 @@
       />
     </Accordion>
 
+    <div v-if="limit < filteredMoneyflows.length" class="flex gap-2">
+      <Button
+        variant="secondary"
+        size="sm"
+        class="w-1/2 text-xs h-9"
+        @click="limit += 10"
+      >
+        weitere 10 anzeigen
+      </Button>
+      <Button
+        variant="secondary"
+        size="sm"
+        class="w-1/2 text-xs h-9"
+        @click="limit = filteredMoneyflows.length"
+      >
+        alle anzeigen
+      </Button>
+    </div>
+
     <div
-      v-if="moneyflows.length === 0"
+      v-if="visibleMoneyflows.length === 0"
       data-testid="report-table-empty-mobile"
       class="p-4 border rounded-lg bg-muted/40 flex justify-center items-center text-sm font-bold shadow-sm text-muted-foreground"
     >
@@ -195,7 +241,7 @@
     >
       <span>{{ $t("Reports.overallSums") }}</span>
       <span class="underline decoration-double text-base">
-        <SpanAmount :amount="amountSum" />
+        <SpanAmount :amount="visibleAmountSum" />
       </span>
     </div>
   </div>
@@ -219,6 +265,7 @@ import {
   ArrowDownWideNarrow,
   ArrowUpDown,
   ArrowUpNarrowWide,
+  CalendarClock,
   Filter,
   X,
 } from "lucide-vue-next";
@@ -254,6 +301,33 @@ const emit = defineEmits<{
 }>();
 
 const isSheetOpen = ref(false);
+
+const showPlanned = ref(false);
+const limit = ref(5);
+
+const today = new Date();
+today.setHours(0, 0, 0, 0);
+
+const filteredMoneyflows = computed(() => {
+  if (showPlanned.value) return props.moneyflows;
+  return props.moneyflows.filter((mmf) => {
+    const bookingDate = new Date(mmf.bookingDate);
+    bookingDate.setHours(0, 0, 0, 0);
+    return bookingDate <= today;
+  });
+});
+
+const hiddenPlannedCount = computed(() => {
+  return props.moneyflows.length - filteredMoneyflows.value.length;
+});
+
+const visibleMoneyflows = computed(() => {
+  return filteredMoneyflows.value.slice(0, limit.value);
+});
+
+const visibleAmountSum = computed(() => {
+  return visibleMoneyflows.value.reduce((acc, mmf) => acc + mmf.amount, 0);
+});
 
 const showReceipt = (id: number) => {
   emit("showReceipt", id);
