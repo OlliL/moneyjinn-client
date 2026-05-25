@@ -56,7 +56,7 @@
 
             <TableHead class="table-head-cell align-top py-2">
               <div
-                class="flex flex-col items-stretch text-center h-full justify-between gap-2"
+                class="flex flex-col items-stretch text-center justify-between gap-2"
               >
                 <span
                   class="inline-flex items-center justify-center gap-1 font-bold whitespace-nowrap transition-colors"
@@ -97,7 +97,7 @@
 
             <TableHead class="table-head-cell align-top py-2">
               <div
-                class="flex flex-col items-stretch text-center h-full justify-between gap-2"
+                class="flex flex-col items-stretch text-center justify-between gap-2"
               >
                 <span
                   class="inline-flex items-center justify-center gap-1 font-bold whitespace-nowrap transition-colors"
@@ -136,7 +136,7 @@
 
             <TableHead class="table-head-cell align-top py-2">
               <div
-                class="flex flex-col items-stretch text-center h-full justify-between gap-2"
+                class="flex flex-col items-stretch text-center justify-between gap-2"
               >
                 <span
                   class="inline-flex items-center justify-center gap-1 font-bold whitespace-nowrap transition-colors"
@@ -177,7 +177,7 @@
 
             <TableHead class="table-head-cell align-top py-2">
               <div
-                class="flex flex-col items-stretch text-center h-full justify-between gap-2"
+                class="flex flex-col items-stretch text-center justify-between gap-2"
               >
                 <span
                   class="inline-flex items-center justify-center gap-1 font-bold whitespace-nowrap transition-colors"
