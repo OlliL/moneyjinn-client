@@ -11,7 +11,7 @@
     <AccordionTrigger class="p-0 hover:no-underline [&>svg]:hidden w-full">
       <div class="flex flex-col w-full text-left">
         <!-- Summary Area -->
-        <div class="p-4 flex flex-col w-full min-w-0">
+        <div class="p-3 flex flex-col w-full min-w-0">
           <!-- Row 1: Date & Amount -->
           <div class="flex justify-between items-center w-full pb-3">
             <div
@@ -74,10 +74,10 @@
           </div>
 
           <!-- System Details (Adopted Data) -->
-          <div class="grid grid-cols-1 pt-3 sm:grid-cols-2 gap-y-2 gap-x-4">
+          <div class="grid grid-cols-1 pt-3 gap-y-2 gap-x-4">
             <!-- Planned Comment -->
             <div
-              class="flex items-center gap-2 min-w-0 sm:col-span-2"
+              class="flex items-center gap-2 min-w-0"
               :title="$t('General.comment')"
             >
               <MessageSquareMore
@@ -160,7 +160,7 @@
     <!-- force-mount ensures logic in EditMoneyflowBase runs immediately. 
          v-show handles actual visual visibility based on accordion state. -->
     <AccordionContent class="p-0" force-mount>
-      <div class="px-4 pb-6 pt-2 border-t bg-muted/5 space-y-6" v-show="isOpen">
+      <div class="px-3 pb-4 pt-4 border-t bg-muted/5 space-y-6" v-show="isOpen">
         <EditMoneyflowBase
           ref="editRef"
           :mmf-to-edit="importedMoneyflow"
@@ -169,15 +169,10 @@
         />
 
         <div class="flex justify-center pt-2 border-t border-dashed">
-          <Button
-            variant="destructive"
-            size="sm"
-            class="flex items-center gap-2 px-6 shadow-sm"
-            @click="deleteItem"
-          >
-            <Trash2 class="icon-small" />
-            {{ $t("General.delete") }}
-          </Button>
+          <ButtonDeleteTwoTap
+            :button-label="$t('General.delete')"
+            @execute-delete="deleteItem"
+          />
         </div>
       </div>
     </AccordionContent>
@@ -185,6 +180,7 @@
 </template>
 
 <script lang="ts" setup>
+import ButtonDeleteTwoTap from "@/components/common/ButtonDeleteTwoTap.vue";
 import SpanAmount from "@/components/common/SpanAmount.vue";
 import SpanDate from "@/components/common/SpanDate.vue";
 import SpanImportComment from "@/components/common/SpanImportComment.vue";
@@ -194,7 +190,6 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Button } from "@/components/ui/button";
 import type { ImportedMoneyflow } from "@/model/moneyflow/ImportedMoneyflow";
 import {
   Calendar,
@@ -205,7 +200,6 @@ import {
   Pencil,
   Save,
   Tag,
-  Trash2,
 } from "lucide-vue-next";
 import { computed, ref, type PropType } from "vue";
 

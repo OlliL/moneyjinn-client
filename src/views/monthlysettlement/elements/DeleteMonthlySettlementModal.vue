@@ -14,7 +14,7 @@
       </div>
     </template>
     <template #footer>
-      <ButtonDelete
+      <ButtonDeleteTwoTap
         :button-label="$t('General.delete')"
         @click="deleteMonthlySettlement"
       />
@@ -25,7 +25,6 @@
 <script lang="ts" setup>
 import { ref, useTemplateRef } from "vue";
 
-import ButtonDelete from "@/components/common/ButtonDelete.vue";
 import DivError from "@/components/common/DivError.vue";
 import ModalVue from "@/components/common/Modal.vue";
 import ShowMonthlySettlementVue from "./ShowMonthlySettlement.vue";
@@ -33,6 +32,7 @@ import ShowMonthlySettlementVue from "./ShowMonthlySettlement.vue";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { getMonthName } from "@/tools/views/MonthName";
 
+import ButtonDeleteTwoTap from "@/components/common/ButtonDeleteTwoTap.vue";
 import MonthlySettlementService from "@/service/MonthlySettlementService";
 
 const serverErrors = ref(new Array<string>());

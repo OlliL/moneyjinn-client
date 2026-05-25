@@ -71,15 +71,10 @@
           <div
             class="flex flex-wrap items-center justify-center gap-3 pt-4 border-t border-border/40"
           >
-            <Button
-              type="button"
-              variant="destructive"
-              class="flex items-center gap-2 px-6"
-              @click="deleteItem"
-            >
-              <Trash2 class="icon-medium" />
-              {{ $t("General.delete") }}
-            </Button>
+            <ButtonDeleteTwoTap
+              :button-label="$t('General.delete')"
+              @execute-delete="deleteItem"
+            />
             <ButtonSubmit :button-label="$t('Moneyflow.apply')" class="px-6"
               ><template #icon><Save class="icon-medium" /></template
             ></ButtonSubmit>
@@ -100,8 +95,8 @@ import EditMoneyflowBase from "@/components/moneyflow/EditMoneyflowBase.vue";
 
 import type { ImportedMoneyflow } from "@/model/moneyflow/ImportedMoneyflow";
 
-import { Button } from "@/components/ui/button";
-import { Save, Trash2 } from "lucide-vue-next";
+import ButtonDeleteTwoTap from "@/components/common/ButtonDeleteTwoTap.vue";
+import { Save } from "lucide-vue-next";
 
 const props = defineProps({
   importedMoneyflow: {
