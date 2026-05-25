@@ -27,9 +27,9 @@
           @keydown.enter.prevent="handleEnter"
           class="flex-1 overflow-y-auto space-y-4 pb-8 px-0.5"
         >
-          <div class="space-y-2 border-b pb-4">
+          <div class="space-y-2 pb-0">
             <p class="text-sm font-semibold px-0.5">
-              {{ $t("General.options") }}
+              {{ $t("General.displayOptions") }}
             </p>
             <div class="flex items-center gap-2 px-0.5">
               <Button
@@ -48,7 +48,7 @@
               </Button>
             </div>
           </div>
-          <div class="space-y-2 border-b pb-4">
+          <div class="space-y-2 pb-1">
             <p class="text-sm font-semibold px-0.5">
               {{ $t("Moneyflow.orderBy") }}
             </p>
@@ -211,19 +211,21 @@
 
     <div v-if="limit < filteredMoneyflows.length" class="flex gap-2">
       <Button
-        variant="secondary"
+        variant="outline"
         size="sm"
-        class="w-1/2 text-xs h-9"
+        class="w-1/2 text-xs h-10 border-primary/30 text-primary/90 hover:bg-primary/5 hover:text-primary transition-all gap-2 shadow-sm"
         @click="limit += 10"
       >
+        <ChevronDown class="icon-small" />
         weitere 10 anzeigen
       </Button>
       <Button
-        variant="secondary"
+        variant="outline"
         size="sm"
-        class="w-1/2 text-xs h-9"
+        class="w-1/2 text-xs h-10 border-primary/30 text-primary/90 hover:bg-primary/5 hover:text-primary transition-all gap-2 shadow-sm"
         @click="limit = filteredMoneyflows.length"
       >
+        <ChevronsDown class="icon-small" />
         alle anzeigen
       </Button>
     </div>
@@ -266,6 +268,8 @@ import {
   ArrowUpDown,
   ArrowUpNarrowWide,
   CalendarClock,
+  ChevronDown,
+  ChevronsDown,
   Filter,
   X,
 } from "lucide-vue-next";
