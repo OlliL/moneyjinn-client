@@ -3,19 +3,19 @@
     :value="titleKey"
     class="border rounded-lg bg-card shadow-sm overflow-hidden"
   >
-    <AccordionTrigger class="hover:no-underline w-full min-w-0 p-4">
+    <AccordionTrigger class="hover:no-underline w-full min-w-0 py-2.5 px-3">
       <div class="flex justify-between items-center w-full gap-2">
-        <h4 class="text-lg font-bold text-foreground">
+        <h4 class="text-sm font-bold text-foreground">
           {{ $t(titleKey) }}
         </h4>
-        <span class="font-extrabold text-base">
+        <span class="font-extrabold text-sm">
           <SpanAmount :amount="displaySum" />
         </span>
       </div>
     </AccordionTrigger>
 
     <AccordionContent class="p-0">
-      <div class="px-4 pb-4 pt-2 border-t bg-muted/5">
+      <div class="px-3 pb-3 pt-1 border-t bg-muted/5">
         <CapitalsourceTable
           :capitalsource-data="capitalsourceData"
           :current-month-is-settled="currentMonthIsSettled"
