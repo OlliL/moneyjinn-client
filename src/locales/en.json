@@ -446,6 +446,7 @@
     "plannedHiddenCount": "({num} planned hidden)",
     "howManyFlowsShownMessage": "Showing {num} of {all} Transactions",
     "overallSums": "Total (Σ)",
+    "sum": "Total",
     "beginOfMonth": "Opening Balance",
     "endOfMonthFixed": "Closing Balance (Fixed)",
     "endOfMonthCalculated": "Closing Balance (Calculated)",

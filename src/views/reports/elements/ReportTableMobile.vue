@@ -255,10 +255,12 @@
     </div>
     <div
       v-else
-      class="p-4 border rounded-lg bg-muted/40 flex justify-between items-center text-sm font-bold shadow-sm"
+      class="flex justify-end items-center gap-1.5 px-2 text-muted-foreground pt-1"
     >
-      <span>{{ $t("Reports.overallSums") }}</span>
-      <span class="underline decoration-double text-base">
+      <span class="text-[10px] uppercase tracking-wider font-bold"
+        >{{ $t("Reports.sum") }}:</span
+      >
+      <span class="font-bold text-sm text-foreground">
         <SpanAmount :amount="visibleAmountSum" />
       </span>
     </div>
