@@ -56,78 +56,118 @@
   </div>
 
   <div v-if="report.reportTurnoverCapitalsources">
-    <div class="mt-10">
+    <div class="mt-10 hidden md:block">
       <div class="text-center">
         <h1 class="text-3xl">{{ $t("Reports.overview") }}</h1>
       </div>
     </div>
 
-    <div
-      class="flex justify-center py-4"
-      v-if="
-        assetsTurnoverCapitalsources && assetsTurnoverCapitalsources.length > 0
-      "
-    >
-      <div class="w-full max-w-7xl">
-        <div class="rounded-sm border">
-          <div class="border-b text-center p-3">
-            <h4 class="text-2xl font-bold">{{ $t("Reports.ownCapital") }}</h4>
+    <!-- Desktop View for Capitalsource Overview -->
+    <template v-if="isDesktop().value">
+      <div
+        class="flex justify-center py-4"
+        v-if="
+          assetsTurnoverCapitalsources &&
+          assetsTurnoverCapitalsources.length > 0
+        "
+      >
+        <div class="w-full max-w-7xl">
+          <div class="rounded-sm border">
+            <div class="border-b text-center p-3">
+              <h4 class="text-2xl font-bold">{{ $t("Reports.ownCapital") }}</h4>
+            </div>
+            <div class="p-4">
+              <CapitalsourceTableVue
+                :capitalsource-data="assetsTurnoverCapitalsources"
+                :current-month-is-settled="currentMonthIsSettled"
+              />
+            </div>
+            <CapitalsourceSummary :report="report" />
           </div>
-          <div class="p-4">
-            <CapitalsourceTableVue
-              :capitalsource-data="assetsTurnoverCapitalsources"
-              :current-month-is-settled="currentMonthIsSettled"
-            />
-          </div>
-          <CapitalsourceSummary :report="report" />
         </div>
       </div>
-    </div>
 
-    <div
-      class="flex justify-center py-4"
-      v-if="
-        liabilitiesTurnoverCapitalsources &&
-        liabilitiesTurnoverCapitalsources.length > 0
-      "
-    >
-      <div class="w-full max-w-7xl">
-        <div class="rounded-sm border">
-          <div class="border-b text-center p-3">
-            <h4 class="text-2xl font-bold">
-              {{ $t("Reports.debtCapital") }}
-            </h4>
-          </div>
-          <div class="p-4">
-            <CapitalsourceTableVue
-              :capitalsource-data="liabilitiesTurnoverCapitalsources"
-              :current-month-is-settled="currentMonthIsSettled"
-            />
+      <div
+        class="flex justify-center py-4"
+        v-if="
+          liabilitiesTurnoverCapitalsources &&
+          liabilitiesTurnoverCapitalsources.length > 0
+        "
+      >
+        <div class="w-full max-w-7xl">
+          <div class="rounded-sm border">
+            <div class="border-b text-center p-3">
+              <h4 class="text-2xl font-bold">
+                {{ $t("Reports.debtCapital") }}
+              </h4>
+            </div>
+            <div class="p-4">
+              <CapitalsourceTableVue
+                :capitalsource-data="liabilitiesTurnoverCapitalsources"
+                :current-month-is-settled="currentMonthIsSettled"
+              />
+            </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <div
-      class="flex justify-center py-4"
-      v-if="
-        creditTurnoverCapitalsources && creditTurnoverCapitalsources.length > 0
-      "
-    >
-      <div class="w-full max-w-7xl">
-        <div class="rounded-sm border">
-          <div class="border-b text-center p-3">
-            <h4 class="text-2xl font-bold">{{ $t("Reports.loans") }}</h4>
-          </div>
-          <div class="p-4">
-            <CapitalsourceTableVue
-              :capitalsource-data="creditTurnoverCapitalsources"
-              :current-month-is-settled="currentMonthIsSettled"
-            />
+      <div
+        class="flex justify-center py-4"
+        v-if="
+          creditTurnoverCapitalsources &&
+          creditTurnoverCapitalsources.length > 0
+        "
+      >
+        <div class="w-full max-w-7xl">
+          <div class="rounded-sm border">
+            <div class="border-b text-center p-3">
+              <h4 class="text-2xl font-bold">{{ $t("Reports.loans") }}</h4>
+            </div>
+            <div class="p-4">
+              <CapitalsourceTableVue
+                :capitalsource-data="creditTurnoverCapitalsources"
+                :current-month-is-settled="currentMonthIsSettled"
+              />
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </template>
+
+    <!-- Mobile View for Capitalsource Overview -->
+    <template v-else>
+      <div class="w-full max-w-md mx-auto px-2 mb-6 space-y-3">
+        <Accordion type="single" collapsible class="w-full space-y-3">
+          <ReportCapitalsourceAccordion
+            v-if="
+              assetsTurnoverCapitalsources &&
+              assetsTurnoverCapitalsources.length > 0
+            "
+            title-key="Reports.ownCapital"
+            :capitalsource-data="assetsTurnoverCapitalsources"
+            :current-month-is-settled="currentMonthIsSettled"
+          />
+          <ReportCapitalsourceAccordion
+            v-if="
+              liabilitiesTurnoverCapitalsources &&
+              liabilitiesTurnoverCapitalsources.length > 0
+            "
+            title-key="Reports.debtCapital"
+            :capitalsource-data="liabilitiesTurnoverCapitalsources"
+            :current-month-is-settled="currentMonthIsSettled"
+          />
+          <ReportCapitalsourceAccordion
+            v-if="
+              creditTurnoverCapitalsources &&
+              creditTurnoverCapitalsources.length > 0
+            "
+            title-key="Reports.loans"
+            :capitalsource-data="creditTurnoverCapitalsources"
+            :current-month-is-settled="currentMonthIsSettled"
+          />
+        </Accordion>
+      </div>
+    </template>
   </div>
 </template>
 
@@ -135,9 +175,10 @@
 import DivError from "@/components/common/DivError.vue";
 import DeleteMoneyflowModalVue from "@/components/moneyflow/DeleteMoneyflowModal.vue";
 import EditMoneyflowModalVue from "@/components/moneyflow/EditMoneyflowModal.vue";
-import ListMoneyflowModalDesktop from "@/components/moneyflow/ListMoneyflowModalDesktop.vue";
-import ListMoneyflowModalMobile from "@/components/moneyflow/ListMoneyflowModalMobile.vue";
+import ListMoneyflowModalDesktop from "@/components/moneyflow/ListMoneyflowModalDesktop.vue"; // Keep for desktop
+import ListMoneyflowModalMobile from "@/components/moneyflow/ListMoneyflowModalMobile.vue"; // Keep for mobile
 import ReceiptModalVue from "@/components/reports/ReceiptModal.vue";
+import { Accordion } from "@/components/ui/accordion"; // Import Accordion
 import { CapitalsourceType } from "@/model/capitalsource/CapitalsourceType";
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 import type { Report } from "@/model/report/Report";
@@ -156,6 +197,7 @@ import {
 } from "vue";
 import CapitalsourceSummary from "./CapitalsourceSummary.vue";
 import CapitalsourceTableVue from "./CapitalsourceTable.vue";
+import ReportCapitalsourceAccordion from "./ReportCapitalsourceAccordion.vue"; // Import new component
 import ReportTableDesktop from "./ReportTableDesktop.vue";
 import ReportTableMobile from "./ReportTableMobile.vue";
 const serverErrors = ref(new Array<string>());
