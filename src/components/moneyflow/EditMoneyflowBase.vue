@@ -220,6 +220,7 @@ import ImportedMoneyflowService from "@/service/ImportedMoneyflowService";
 import MoneyflowService from "@/service/MoneyflowService";
 import { useCapitalsourceStore } from "@/stores/CapitalsourceStore";
 import { useContractpartnerStore } from "@/stores/ContractpartnerStore";
+import { usePostingAccountStore } from "@/stores/PostingAccountStore";
 import { toFixed } from "@/tools/math";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { isDesktop } from "@/tools/views/IsDesktop";
@@ -278,6 +279,7 @@ const mseRemainderIsValid = ref(undefined as boolean | undefined);
 const showMoneyflowFields = ref(true);
 const originalMoneyflowSplitEntryIds = ref(new Array<number>());
 const contractpartnerStore = useContractpartnerStore();
+const postingAccountStore = usePostingAccountStore();
 const capitalsourceStore = useCapitalsourceStore();
 
 const props = defineProps({
@@ -314,6 +316,35 @@ watch(
   (newVal, oldVal) => {
     if (newVal !== oldVal) onContractpartnerSelected(newVal);
   },
+);
+
+watch(
+  [
+    () => mmf.value.postingAccountId,
+    () => postingAccountStore.getPostingAccount,
+  ],
+  ([newId, accounts]) => {
+    if (newId !== undefined && newId > 0 && accounts && accounts.length > 0) {
+      mmf.value.postingAccountName =
+        accounts.find((pa) => pa.id === newId)?.name ?? "";
+    } else {
+      mmf.value.postingAccountName = "";
+    }
+  },
+  { immediate: true },
+);
+
+watch(
+  [() => mmf.value.capitalsourceId, () => capitalsourceStore.capitalsource],
+  ([newId, sources]) => {
+    if (newId !== undefined && newId > 0 && sources && sources.length > 0) {
+      mmf.value.capitalsourceComment =
+        sources.find((cs) => cs.id === newId)?.comment ?? "";
+    } else {
+      mmf.value.capitalsourceComment = "";
+    }
+  },
+  { immediate: true },
 );
 
 const formIsValid = computed(() => {
@@ -373,6 +404,20 @@ const resetEditForm = () => {
   // set correct defaults for imported moneyflows
   if (mmf.value.comment === undefined) mmf.value.comment = "";
   if (mmf.value.postingAccountId === undefined) mmf.value.postingAccountId = 0;
+
+  // ensure names are resolved even if watch doesn't fire due to identical IDs
+  if (mmf.value.postingAccountId > 0) {
+    mmf.value.postingAccountName =
+      postingAccountStore.getPostingAccount.find(
+        (pa) => pa.id === mmf.value.postingAccountId,
+      )?.name ?? "";
+  }
+  if (mmf.value.capitalsourceId > 0) {
+    mmf.value.capitalsourceComment =
+      capitalsourceStore.capitalsource.find(
+        (cs) => cs.id === mmf.value.capitalsourceId,
+      )?.comment ?? "";
+  }
 
   originalMoneyflowSplitEntryIds.value = new Array<number>();
   if (props.fillContractpartnerDefaults && mmf.value.contractpartnerId > 0) {
@@ -586,6 +631,9 @@ const contractpartnerSelected = (contractpartner: Contractpartner) => {
       : 0;
 
     mmf.value.postingAccountId = mpaId;
+    mmf.value.postingAccountName =
+      postingAccountStore.getPostingAccount.find((pa) => pa.id === mpaId)
+        ?.name ?? "";
     previousPostingAccountSetByContractpartnerDefaults.value = mpaId;
   }
 };
@@ -602,6 +650,7 @@ const noContractpartnerSelected = () => {
     previousPostingAccountSetByContractpartnerDefaults.value
   ) {
     mmf.value.postingAccountId = 0;
+    mmf.value.postingAccountName = "";
     previousPostingAccountSetByContractpartnerDefaults.value = 0;
   }
 };
@@ -786,5 +835,6 @@ defineExpose({
   resetForm,
   importImportedMoneyflow,
   deleteImportedMoneyflow,
+  mmf,
 });
 </script>
