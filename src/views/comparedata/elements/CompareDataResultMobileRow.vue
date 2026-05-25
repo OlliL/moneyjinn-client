@@ -325,7 +325,6 @@ const createMoneyflow = () => {
 </script>
 
 <style scoped>
-/* Verhindert, dass das Accordion-Icon (Chevron) das Layout in der Trigger-Zeile verschiebt */
 :deep([data-radix-collection-item]) {
   display: flex;
   align-items: center;
