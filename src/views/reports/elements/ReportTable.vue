@@ -136,7 +136,7 @@
 
     <!-- Mobile View for Capitalsource Overview -->
     <template v-else>
-      <div class="w-full max-w-md mx-auto px-2 mb-6 space-y-3">
+      <div class="w-full max-w-md mx-auto px-2 space-y-3">
         <Accordion type="single" collapsible class="w-full space-y-3">
           <ReportCapitalsourceAccordion
             v-if="

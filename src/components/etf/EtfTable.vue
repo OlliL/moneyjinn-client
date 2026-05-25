@@ -1,5 +1,5 @@
 <template>
-  <div class="flex justify-center py-4">
+  <div class="flex justify-center py-0">
     <div class="w-full max-w-7xl">
       <!-- Mobile View -->
       <div class="block md:hidden">
