@@ -87,6 +87,27 @@
     </div>
     <div class="flex justify-center pt-5" v-if="dataCompared">
       <CompareDataResultDesktop
+        class="hidden md:block"
+        :compare-datas-matching="compareDatasMatching"
+        :compare-datas-matching-count-class="compareDatasMatchingCountClass"
+        :compare-datas-wrong-capitalsource="compareDatasWrongCapitalsource"
+        :compare-datas-wrong-capitalsource-count-class="
+          compareDatasWrongCapitalsourceCountClass
+        "
+        :compare-datas-not-in-file="compareDatasNotInFile"
+        :compare-datas-not-in-file-count-class="compareDatasNotInFileCountClass"
+        :compare-datas-not-in-database="compareDatasNotInDatabase"
+        :compare-datas-not-in-database-count-class="
+          compareDatasNotInDatabaseCountClass
+        "
+        :capitalsource-id="capitalsourceId"
+        :capitalsource-comment="capitalsourceComment"
+        @delete-moneyflow="deleteMoneyflow"
+        @edit-moneyflow="editMoneyflow"
+        @create-moneyflow="createMoneyflow"
+      />
+      <CompareDataResultMobile
+        class="md:hidden"
         :compare-datas-matching="compareDatasMatching"
         :compare-datas-matching-count-class="compareDatasMatchingCountClass"
         :compare-datas-wrong-capitalsource="compareDatasWrongCapitalsource"
@@ -135,6 +156,7 @@ import { computed, onMounted, ref, useTemplateRef } from "vue";
 import { useI18n } from "vue-i18n";
 import { any, array as arr, date, instanceof as instof, number } from "zod";
 import CompareDataResultDesktop from "./elements/CompareDataResultDesktop.vue";
+import CompareDataResultMobile from "./elements/CompareDataResultMobile.vue";
 
 const { t } = useI18n();
 
