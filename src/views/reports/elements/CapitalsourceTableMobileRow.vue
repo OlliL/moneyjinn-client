@@ -1,9 +1,9 @@
 <template>
   <AccordionItem
     :value="capitalsourceComment"
-    class="border rounded-lg bg-background shadow-sm px-3 py-1"
+    class="border rounded-lg bg-background shadow-sm overflow-hidden"
   >
-    <AccordionTrigger class="hover:no-underline w-full min-w-0">
+    <AccordionTrigger class="hover:no-underline w-full min-w-0 py-2 px-3">
       <div class="grid grid-cols-[1fr_auto] items-center w-full gap-2">
         <div class="flex flex-col items-start text-left overflow-hidden">
           <span class="font-bold text-sm truncate w-full">

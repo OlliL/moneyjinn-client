@@ -3,7 +3,7 @@
     <Accordion
       type="single"
       collapsible
-      class="w-full rounded-md bg-background space-y-3"
+      class="w-full rounded-md bg-background space-y-2"
     >
       <CapitalsourceTableMobileRow
         v-for="data in capitalsourceData"

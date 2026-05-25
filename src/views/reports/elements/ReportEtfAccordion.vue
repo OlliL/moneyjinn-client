@@ -1,7 +1,7 @@
 <template>
   <AccordionItem
     value="etf-overview"
-    class="border rounded-lg bg-background shadow-sm px-3 py-1"
+    class="border rounded-lg bg-card shadow-sm overflow-hidden"
   >
     <AccordionTrigger class="hover:no-underline w-full min-w-0 py-2.5 px-3">
       <div class="flex justify-between items-center w-full gap-2">

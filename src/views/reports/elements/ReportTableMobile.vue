@@ -196,22 +196,21 @@
           })
         }}
       </span>
+      <span class="text-muted-foreground/30">•</span>
       <span
         v-if="!showPlanned && hiddenPlannedCount > 0"
         class="text-orange-500/80"
       >
-        ({{ hiddenPlannedCount }} {{ $t("Moneyflow.reserved") }} ausgeblendet)
+        {{ $t("Reports.plannedHiddenCount", { num: hiddenPlannedCount }) }}
       </span>
-      <template v-if="activeSort">
-        <span class="text-muted-foreground/30">•</span>
-        <div
-          class="flex items-center gap-1 text-primary/80 cursor-pointer active:opacity-60 transition-opacity whitespace-nowrap"
-          @click="sortByColumn(activeSort.field)"
-        >
-          <span class="truncate">{{ $t(activeSort.label) }}</span>
-          <component :is="activeSort.icon" class="icon-extra-small shrink-0" />
-        </div>
-      </template>
+      <div
+        v-if="activeSort"
+        class="flex items-center gap-1 text-primary/80 cursor-pointer active:opacity-60 transition-opacity whitespace-nowrap"
+        @click="sortByColumn(activeSort.field)"
+      >
+        <span class="truncate">{{ $t(activeSort.label) }}</span>
+        <component :is="activeSort.icon" class="icon-extra-small shrink-0" />
+      </div>
     </div>
 
     <Accordion type="multiple" class="space-y-2">

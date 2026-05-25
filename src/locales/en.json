@@ -443,6 +443,7 @@
     },
     "show10More": "show 10 more",
     "showAll": "show all",
+    "plannedHiddenCount": "({num} planned hidden)",
     "howManyFlowsShownMessage": "Showing {num} of {all} Transactions",
     "overallSums": "Total (Σ)",
     "beginOfMonth": "Opening Balance",

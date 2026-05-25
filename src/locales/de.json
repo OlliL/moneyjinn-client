@@ -442,6 +442,7 @@
     },
     "show10More": "weitere 10 anzeigen",
     "showAll": "alle anzeigen",
+    "plannedHiddenCount": "({num} geplante ausgeblendet)",
     "howManyFlowsShownMessage": "Zeige {num} von {all} Geldbewegungen",
     "overallSums": "Gesamtsummen (Σ)",
     "beginOfMonth": "Anfangsbetrag",
