@@ -6,7 +6,7 @@
         <Accordion
           type="single"
           collapsible
-          class="w-full border rounded-md"
+          class="w-full space-y-2"
           data-testid="etf-mobile-accordion"
         >
           <EtfTableRowMobile
