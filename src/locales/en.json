@@ -327,6 +327,7 @@
   },
   "Moneyflow": {
     "reserved": "Planned",
+    "reservedShown": "Show planned Transactions",
     "options": "Options",
     "addPosition": "Add Position",
     "bookingdate": "Posting Date",
@@ -439,6 +440,8 @@
       "trendMonthYear": "Month / Year",
       "trendAmount": "Amount"
     },
+    "show10More": "show 10 more",
+    "showAll": "show all",
     "filterData": "Filter Data",
     "howManyFlowsShownMessage": "Showing {num} of {all} Transactions",
     "overallSums": "Total (Σ)",

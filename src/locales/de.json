@@ -326,6 +326,7 @@
   },
   "Moneyflow": {
     "reserved": "geplant",
+    "reservedShown": "geplante Bewegungen anzeigen",
     "options": "Optionen",
     "addPosition": "Position hinzufügen",
     "bookingdate": "Buchungsdatum",
@@ -438,6 +439,8 @@
       "trendMonthYear": "Monat / Jahr",
       "trendAmount": "Betrag"
     },
+    "show10More": "weitere 10 anzeigen",
+    "showAll": "alle anzeigen",
     "filterData": "Daten filtern",
     "howManyFlowsShownMessage": "Zeige {num} von {all} Geldbewegungen",
     "overallSums": "Gesamtsummen (Σ)",

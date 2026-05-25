@@ -44,7 +44,7 @@
                 @click="showPlanned = !showPlanned"
               >
                 <CalendarClock class="icon-small" />
-                {{ $t("Moneyflow.reserved") }}
+                {{ $t("Moneyflow.reservedShown") }}
               </Button>
             </div>
           </div>
@@ -52,15 +52,17 @@
             <p class="text-sm font-semibold px-0.5">
               {{ $t("Moneyflow.orderBy") }}
             </p>
-            <div class="grid grid-cols-2 gap-1.5">
+            <div
+              class="flex overflow-x-auto pb-2 gap-2 -mx-0.5 px-0.5 custom-scrollbar"
+            >
               <Button
                 v-for="option in sortOptions"
                 :key="option.field"
                 variant="outline"
                 size="sm"
-                class="justify-between px-3 h-9 font-normal text-xs transition-all"
+                class="flex-none rounded-full px-4 h-9 font-normal text-xs transition-all gap-1.5"
                 :class="{
-                  'bg-primary/15 border-primary text-primary font-bold shadow-sm ring-1 ring-primary/20':
+                  'bg-primary/15 border-primary text-primary font-bold shadow-sm ring-1 ring-primary/40':
                     props.sortBy.has(option.field),
                 }"
                 @click="sortByColumn(option.field)"
@@ -79,95 +81,104 @@
             </div>
           </div>
 
-          <InputStandard
-            v-model="filterCapitalsource"
-            id="report-table-mobile-filter-capitalsource"
-            :placeholder="
-              t('General.capitalsource') + ' ' + t('General.enterFilter')
-            "
-            enterkeyhint="send"
-          >
-            <template #icon><CreditCard class="icon-medium" /></template>
-            <template #button>
-              <Button
-                data-testid="report-table-mobile-filter-capitalsource-reset"
-                type="button"
-                variant="outline"
-                size="icon"
-                @click="filterCapitalsource = ''"
-                class="rounded-l-none border-l"
-              >
-                <X class="icon-medium" />
-              </Button>
-            </template>
-          </InputStandard>
+          <div class="space-y-2 pb-1">
+            <p class="text-sm font-semibold px-0.5">
+              {{ $t("Reports.filterData") }}
+            </p>
+            <InputStandard
+              v-model="filterCapitalsource"
+              id="report-table-mobile-filter-capitalsource"
+              :placeholder="
+                t('General.capitalsource') + ' ' + t('General.enterFilter')
+              "
+              enterkeyhint="send"
+            >
+              <template #icon><CreditCard class="icon-medium" /></template>
+              <template #button>
+                <Button
+                  data-testid="report-table-mobile-filter-capitalsource-reset"
+                  type="button"
+                  variant="outline"
+                  size="icon"
+                  @click="filterCapitalsource = ''"
+                  class="rounded-l-none border-l"
+                >
+                  <X class="icon-medium" />
+                </Button>
+              </template>
+            </InputStandard>
 
-          <InputStandard
-            v-model="filterContractpartner"
-            id="report-table-mobile-filter-contractpartner"
-            :placeholder="
-              t('General.contractpartner') + ' ' + t('General.enterFilter')
-            "
-            enterkeyhint="send"
-          >
-            <template #icon><Handshake class="icon-medium" /></template>
-            <template #button>
-              <Button
-                data-testid="report-table-mobile-filter-contractpartner-reset"
-                type="button"
-                variant="outline"
-                size="icon"
-                @click="filterContractpartner = ''"
-                class="rounded-l-none border-l"
-              >
-                <X class="icon-medium" />
-              </Button>
-            </template>
-          </InputStandard>
+            <InputStandard
+              v-model="filterContractpartner"
+              id="report-table-mobile-filter-contractpartner"
+              :placeholder="
+                t('General.contractpartner') + ' ' + t('General.enterFilter')
+              "
+              enterkeyhint="send"
+            >
+              <template #icon><Handshake class="icon-medium" /></template>
+              <template #button>
+                <Button
+                  data-testid="report-table-mobile-filter-contractpartner-reset"
+                  type="button"
+                  variant="outline"
+                  size="icon"
+                  @click="filterContractpartner = ''"
+                  class="rounded-l-none border-l"
+                >
+                  <X class="icon-medium" />
+                </Button>
+              </template>
+            </InputStandard>
 
-          <InputStandard
-            v-model="filterComment"
-            id="report-table-mobile-filter-comment"
-            :placeholder="t('General.comment') + ' ' + t('General.enterFilter')"
-            enterkeyhint="send"
-          >
-            <template #icon><MessageSquareMore class="icon-medium" /></template>
-            <template #button>
-              <Button
-                data-testid="report-table-mobile-filter-comment-reset"
-                type="button"
-                variant="outline"
-                size="icon"
-                @click="filterComment = ''"
-                class="rounded-l-none border-l"
-              >
-                <X class="icon-medium" />
-              </Button>
-            </template>
-          </InputStandard>
+            <InputStandard
+              v-model="filterComment"
+              id="report-table-mobile-filter-comment"
+              :placeholder="
+                t('General.comment') + ' ' + t('General.enterFilter')
+              "
+              enterkeyhint="send"
+            >
+              <template #icon
+                ><MessageSquareMore class="icon-medium"
+              /></template>
+              <template #button>
+                <Button
+                  data-testid="report-table-mobile-filter-comment-reset"
+                  type="button"
+                  variant="outline"
+                  size="icon"
+                  @click="filterComment = ''"
+                  class="rounded-l-none border-l"
+                >
+                  <X class="icon-medium" />
+                </Button>
+              </template>
+            </InputStandard>
 
-          <InputStandard
-            v-model="filterPostingAccount"
-            id="report-table-mobile-filter-postingAccount"
-            :placeholder="
-              t('General.postingAccount') + ' ' + t('General.enterFilter')
-            "
-            enterkeyhint="send"
-          >
-            <template #icon><Tag class="icon-medium" /></template>
-            <template #button>
-              <Button
-                data-testid="report-table-mobile-filter-postingAccount-reset"
-                type="button"
-                variant="outline"
-                size="icon"
-                @click="filterPostingAccount = ''"
-                class="rounded-l-none border-l"
-              >
-                <X class="icon-medium" />
-              </Button>
-            </template>
-          </InputStandard>
+            <InputStandard
+              v-model="filterPostingAccount"
+              id="report-table-mobile-filter-postingAccount"
+              :placeholder="
+                t('General.postingAccount') + ' ' + t('General.enterFilter')
+              "
+              enterkeyhint="send"
+            >
+              <template #icon><Tag class="icon-medium" /></template>
+              <template #button>
+                <Button
+                  data-testid="report-table-mobile-filter-postingAccount-reset"
+                  type="button"
+                  variant="outline"
+                  size="icon"
+                  @click="filterPostingAccount = ''"
+                  class="rounded-l-none border-l"
+                >
+                  <X class="icon-medium" />
+                </Button>
+              </template>
+            </InputStandard>
+          </div>
         </form>
       </SheetContent>
     </Sheet>
@@ -223,7 +234,7 @@
         @click="limit += 10"
       >
         <ChevronDown class="icon-small" />
-        weitere 10 anzeigen
+        {{ $t("Reports.show10More") }}
       </Button>
       <Button
         variant="outline"
@@ -232,7 +243,7 @@
         @click="limit = filteredMoneyflows.length"
       >
         <ChevronsDown class="icon-small" />
-        alle anzeigen
+        {{ $t("Reports.showAll") }}
       </Button>
     </div>
 
