@@ -171,8 +171,10 @@
       </div>
     </AccordionTrigger>
 
-    <AccordionContent class="px-4 pb-6 pt-2 border-t bg-muted/5">
-      <div class="space-y-6">
+    <!-- force-mount ensures logic in EditMoneyflowBase runs immediately. 
+         v-show handles actual visual visibility based on accordion state. -->
+    <AccordionContent class="p-0" force-mount>
+      <div class="px-4 pb-6 pt-2 border-t bg-muted/5 space-y-6" v-show="isOpen">
         <EditMoneyflowBase
           ref="editRef"
           :mmf-to-edit="importedMoneyflow"
@@ -226,6 +228,7 @@ const props = defineProps({
     type: Object as PropType<ImportedMoneyflow>,
     required: true,
   },
+  isOpen: { type: Boolean, required: true },
 });
 
 defineEmits(["import", "delete"]);

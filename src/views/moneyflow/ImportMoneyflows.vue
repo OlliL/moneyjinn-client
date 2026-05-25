@@ -129,7 +129,12 @@
 
       <!-- Mobile View -->
       <template v-else>
-        <Accordion type="single" collapsible class="w-full space-y-3">
+        <Accordion
+          type="single"
+          collapsible
+          class="w-full space-y-3"
+          v-model="openAccordionItem"
+        >
           <ImportMoneyflowsAccordion
             v-for="importedMoneyflow in importMoneyflows"
             :key="'mobile-' + importedMoneyflow.externalid"
@@ -137,6 +142,7 @@
             :ref="(el) => editMoneyflowRefs.set(importedMoneyflow.id, el)"
             @import="importImportedMoneyflow(importedMoneyflow)"
             @delete="deleteImportedMoneyflow(importedMoneyflow)"
+            :is-open="openAccordionItem === importedMoneyflow.externalid"
           />
         </Accordion>
       </template>
@@ -172,6 +178,7 @@ const importMoneyflows = ref({} as Array<ImportedMoneyflow>);
 const editMoneyflowRefs = new Map<number, any>();
 const dataLoaded = ref(false);
 const desktop = isDesktop();
+const openAccordionItem = ref("");
 
 onMounted(() => {
   dataLoaded.value = false;
