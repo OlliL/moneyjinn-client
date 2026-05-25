@@ -13,12 +13,12 @@
       <SheetContent
         data-testid="report-table-mobile-filter-sheet"
         side="bottom"
-        class="h-[75vh] rounded-t-xl p-6 flex flex-col"
+        class="h-[75vh] rounded-t-xl p-5 flex flex-col"
       >
-        <SheetHeader class="text-left pb-4 border-b shrink-0">
-          <SheetTitle>{{ $t("Reports.filterData") }}</SheetTitle>
+        <SheetHeader class="text-left !pb-2 border-b shrink-0">
+          <SheetTitle>{{ $t("General.displayOptions") }}</SheetTitle>
           <SheetDescription class="sr-only">
-            {{ $t("Reports.filterData") }}
+            {{ $t("General.displayOptions") }}
           </SheetDescription>
         </SheetHeader>
 
@@ -27,19 +27,42 @@
           @keydown.enter.prevent="handleEnter"
           class="flex-1 overflow-y-auto space-y-4 pb-8 px-0.5"
         >
-          <div class="space-y-2 border-b pb-4">
+          <div class="space-y-2 pb-0">
+            <p class="text-sm font-semibold px-0.5">
+              {{ $t("General.displayOptions") }}
+            </p>
+            <div class="flex items-center gap-2 px-0.5">
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                class="w-full justify-start gap-2 h-10 px-3 font-normal"
+                :class="{
+                  'bg-primary/10 border-primary text-primary font-bold':
+                    showPlanned,
+                }"
+                @click="showPlanned = !showPlanned"
+              >
+                <CalendarClock class="icon-small" />
+                {{ $t("Moneyflow.reservedShown") }}
+              </Button>
+            </div>
+          </div>
+          <div class="space-y-2 pb-1">
             <p class="text-sm font-semibold px-0.5">
               {{ $t("Moneyflow.orderBy") }}
             </p>
-            <div class="grid grid-cols-2 gap-1.5">
+            <div
+              class="flex overflow-x-auto pb-2 gap-2 -mx-0.5 px-0.5 custom-scrollbar"
+            >
               <Button
                 v-for="option in sortOptions"
                 :key="option.field"
                 variant="outline"
                 size="sm"
-                class="justify-between px-3 h-9 font-normal text-xs transition-all"
+                class="flex-none rounded-full px-4 h-9 font-normal text-xs transition-all gap-1.5"
                 :class="{
-                  'bg-primary/15 border-primary text-primary font-bold shadow-sm ring-1 ring-primary/20':
+                  'bg-primary/15 border-primary text-primary font-bold shadow-sm ring-1 ring-primary/40':
                     props.sortBy.has(option.field),
                 }"
                 @click="sortByColumn(option.field)"
@@ -58,89 +81,104 @@
             </div>
           </div>
 
-          <InputStandard
-            v-model="filterCapitalsource"
-            id="report-table-mobile-filter-capitalsource"
-            :field-label="t('General.capitalsource')"
-            :placeholder="$t('General.enterFilter')"
-            enterkeyhint="send"
-          >
-            <template #button>
-              <Button
-                data-testid="report-table-mobile-filter-capitalsource-reset"
-                type="button"
-                variant="outline"
-                size="icon"
-                @click="filterCapitalsource = ''"
-                class="rounded-l-none border-l"
-              >
-                <X class="icon-medium" />
-              </Button>
-            </template>
-          </InputStandard>
+          <div class="space-y-2 pb-1">
+            <p class="text-sm font-semibold px-0.5">
+              {{ $t("General.filterData") }}
+            </p>
+            <InputStandard
+              v-model="filterCapitalsource"
+              id="report-table-mobile-filter-capitalsource"
+              :placeholder="
+                t('General.capitalsource') + ' ' + t('General.enterFilter')
+              "
+              enterkeyhint="send"
+            >
+              <template #icon><CreditCard class="icon-medium" /></template>
+              <template #button>
+                <Button
+                  data-testid="report-table-mobile-filter-capitalsource-reset"
+                  type="button"
+                  variant="outline"
+                  size="icon"
+                  @click="filterCapitalsource = ''"
+                  class="rounded-l-none border-l"
+                >
+                  <X class="icon-medium" />
+                </Button>
+              </template>
+            </InputStandard>
 
-          <InputStandard
-            v-model="filterContractpartner"
-            id="report-table-mobile-filter-contractpartner"
-            :field-label="t('General.contractpartner')"
-            :placeholder="$t('General.enterFilter')"
-            enterkeyhint="send"
-          >
-            <template #button>
-              <Button
-                data-testid="report-table-mobile-filter-contractpartner-reset"
-                type="button"
-                variant="outline"
-                size="icon"
-                @click="filterContractpartner = ''"
-                class="rounded-l-none border-l"
-              >
-                <X class="icon-medium" />
-              </Button>
-            </template>
-          </InputStandard>
+            <InputStandard
+              v-model="filterContractpartner"
+              id="report-table-mobile-filter-contractpartner"
+              :placeholder="
+                t('General.contractpartner') + ' ' + t('General.enterFilter')
+              "
+              enterkeyhint="send"
+            >
+              <template #icon><Handshake class="icon-medium" /></template>
+              <template #button>
+                <Button
+                  data-testid="report-table-mobile-filter-contractpartner-reset"
+                  type="button"
+                  variant="outline"
+                  size="icon"
+                  @click="filterContractpartner = ''"
+                  class="rounded-l-none border-l"
+                >
+                  <X class="icon-medium" />
+                </Button>
+              </template>
+            </InputStandard>
 
-          <InputStandard
-            v-model="filterComment"
-            id="report-table-mobile-filter-comment"
-            :field-label="t('General.comment')"
-            :placeholder="$t('General.enterFilter')"
-            enterkeyhint="send"
-          >
-            <template #button>
-              <Button
-                data-testid="report-table-mobile-filter-comment-reset"
-                type="button"
-                variant="outline"
-                size="icon"
-                @click="filterComment = ''"
-                class="rounded-l-none border-l"
-              >
-                <X class="icon-medium" />
-              </Button>
-            </template>
-          </InputStandard>
+            <InputStandard
+              v-model="filterComment"
+              id="report-table-mobile-filter-comment"
+              :placeholder="
+                t('General.comment') + ' ' + t('General.enterFilter')
+              "
+              enterkeyhint="send"
+            >
+              <template #icon
+                ><MessageSquareMore class="icon-medium"
+              /></template>
+              <template #button>
+                <Button
+                  data-testid="report-table-mobile-filter-comment-reset"
+                  type="button"
+                  variant="outline"
+                  size="icon"
+                  @click="filterComment = ''"
+                  class="rounded-l-none border-l"
+                >
+                  <X class="icon-medium" />
+                </Button>
+              </template>
+            </InputStandard>
 
-          <InputStandard
-            v-model="filterPostingAccount"
-            id="report-table-mobile-filter-postingAccount"
-            :field-label="t('General.postingAccount')"
-            :placeholder="$t('General.enterFilter')"
-            enterkeyhint="send"
-          >
-            <template #button>
-              <Button
-                data-testid="report-table-mobile-filter-postingAccount-reset"
-                type="button"
-                variant="outline"
-                size="icon"
-                @click="filterPostingAccount = ''"
-                class="rounded-l-none border-l"
-              >
-                <X class="icon-medium" />
-              </Button>
-            </template>
-          </InputStandard>
+            <InputStandard
+              v-model="filterPostingAccount"
+              id="report-table-mobile-filter-postingAccount"
+              :placeholder="
+                t('General.postingAccount') + ' ' + t('General.enterFilter')
+              "
+              enterkeyhint="send"
+            >
+              <template #icon><Tag class="icon-medium" /></template>
+              <template #button>
+                <Button
+                  data-testid="report-table-mobile-filter-postingAccount-reset"
+                  type="button"
+                  variant="outline"
+                  size="icon"
+                  @click="filterPostingAccount = ''"
+                  class="rounded-l-none border-l"
+                >
+                  <X class="icon-medium" />
+                </Button>
+              </template>
+            </InputStandard>
+          </div>
         </form>
       </SheetContent>
     </Sheet>
@@ -153,26 +191,31 @@
       <span>
         {{
           $t("Reports.howManyFlowsShownMessage", {
-            num: moneyflows.length,
+            num: visibleMoneyflows.length,
             all: moneyflowsCount || 0,
           })
         }}
       </span>
-      <template v-if="activeSort">
-        <span class="text-muted-foreground/30">•</span>
-        <div
-          class="flex items-center gap-1 text-primary/80 cursor-pointer active:opacity-60 transition-opacity whitespace-nowrap"
-          @click="sortByColumn(activeSort.field)"
-        >
-          <span class="truncate">{{ $t(activeSort.label) }}</span>
-          <component :is="activeSort.icon" class="icon-extra-small shrink-0" />
-        </div>
-      </template>
+      <span class="text-muted-foreground/30">•</span>
+      <span
+        v-if="!showPlanned && hiddenPlannedCount > 0"
+        class="text-orange-500/80"
+      >
+        {{ $t("Reports.plannedHiddenCount", { num: hiddenPlannedCount }) }}
+      </span>
+      <div
+        v-if="activeSort"
+        class="flex items-center gap-1 text-primary/80 cursor-pointer active:opacity-60 transition-opacity whitespace-nowrap"
+        @click="sortByColumn(activeSort.field)"
+      >
+        <span class="truncate">{{ $t(activeSort.label) }}</span>
+        <component :is="activeSort.icon" class="icon-extra-small shrink-0" />
+      </div>
     </div>
 
     <Accordion type="multiple" class="space-y-2">
       <ReportTableMobileRow
-        v-for="mmf in moneyflows"
+        v-for="mmf in visibleMoneyflows"
         :key="'mobile-' + mmf.id"
         :mmf="mmf"
         @show-receipt="showReceipt"
@@ -182,8 +225,29 @@
       />
     </Accordion>
 
+    <div v-if="limit < filteredMoneyflows.length" class="flex gap-2">
+      <Button
+        variant="outline"
+        size="sm"
+        class="w-1/2 text-xs h-10 border-primary/30 text-primary/90 hover:bg-primary/5 hover:text-primary transition-all gap-2 shadow-sm"
+        @click="limit += 10"
+      >
+        <ChevronDown class="icon-small" />
+        {{ $t("Reports.show10More") }}
+      </Button>
+      <Button
+        variant="outline"
+        size="sm"
+        class="w-1/2 text-xs h-10 border-primary/30 text-primary/90 hover:bg-primary/5 hover:text-primary transition-all gap-2 shadow-sm"
+        @click="limit = filteredMoneyflows.length"
+      >
+        <ChevronsDown class="icon-small" />
+        {{ $t("Reports.showAll") }}
+      </Button>
+    </div>
+
     <div
-      v-if="moneyflows.length === 0"
+      v-if="visibleMoneyflows.length === 0"
       data-testid="report-table-empty-mobile"
       class="p-4 border rounded-lg bg-muted/40 flex justify-center items-center text-sm font-bold shadow-sm text-muted-foreground"
     >
@@ -191,11 +255,13 @@
     </div>
     <div
       v-else
-      class="p-4 border rounded-lg bg-muted/40 flex justify-between items-center text-sm font-bold shadow-sm"
+      class="flex justify-end items-center gap-1.5 px-2 text-muted-foreground pt-1"
     >
-      <span>{{ $t("Reports.overallSums") }}</span>
-      <span class="underline decoration-double text-base">
-        <SpanAmount :amount="amountSum" />
+      <span class="text-[10px] uppercase tracking-wider font-bold"
+        >{{ $t("Reports.sum") }}:</span
+      >
+      <span class="font-bold text-sm text-foreground">
+        <SpanAmount :amount="visibleAmountSum" />
       </span>
     </div>
   </div>
@@ -219,7 +285,14 @@ import {
   ArrowDownWideNarrow,
   ArrowUpDown,
   ArrowUpNarrowWide,
+  CalendarClock,
+  ChevronDown,
+  ChevronsDown,
+  CreditCard,
   Filter,
+  Handshake,
+  MessageSquareMore,
+  Tag,
   X,
 } from "lucide-vue-next";
 import { computed, ref } from "vue";
@@ -254,6 +327,33 @@ const emit = defineEmits<{
 }>();
 
 const isSheetOpen = ref(false);
+
+const showPlanned = ref(false);
+const limit = ref(5);
+
+const today = new Date();
+today.setHours(0, 0, 0, 0);
+
+const filteredMoneyflows = computed(() => {
+  if (showPlanned.value) return props.moneyflows;
+  return props.moneyflows.filter((mmf) => {
+    const bookingDate = new Date(mmf.bookingDate);
+    bookingDate.setHours(0, 0, 0, 0);
+    return bookingDate <= today;
+  });
+});
+
+const hiddenPlannedCount = computed(() => {
+  return props.moneyflows.length - filteredMoneyflows.value.length;
+});
+
+const visibleMoneyflows = computed(() => {
+  return filteredMoneyflows.value.slice(0, limit.value);
+});
+
+const visibleAmountSum = computed(() => {
+  return visibleMoneyflows.value.reduce((acc, mmf) => acc + mmf.amount, 0);
+});
 
 const showReceipt = (id: number) => {
   emit("showReceipt", id);

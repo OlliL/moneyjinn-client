@@ -341,9 +341,14 @@ watch(
   () => props.selectBoxValues,
   (newVal) => {
     // reset the fieldValue in case its not part of the select-box. But only do that if the hiddenValue is set at all.
-    if (hiddenValue.value != undefined && hiddenValue.value !== 0) {
-      const foundElement = newVal.find((sbv) => sbv.id == hiddenValue.value);
-      if (!foundElement) {
+    if (
+      newVal.length > 0 &&
+      hiddenValue.value != undefined &&
+      hiddenValue.value !== 0
+    ) {
+      if (newVal.some((sbv) => sbv.id == hiddenValue.value)) {
+        setFieldValue();
+      } else {
         hiddenValue.value = undefined;
         fieldValue.value = undefined;
       }

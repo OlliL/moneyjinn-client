@@ -2,7 +2,7 @@
   <div class="w-full space-y-4">
     <Tabs v-model="activeTab" class="w-full">
       <div
-        class="sticky top-[49px] z-10 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 pb-2 border-b shadow-sm"
+        class="sticky top-[45px] z-10 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 pb-2 border-b shadow-sm"
       >
         <TabsList class="w-full grid grid-cols-4 h-12! p-1">
           <TabsTrigger

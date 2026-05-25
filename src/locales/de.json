@@ -1,5 +1,6 @@
 {
   "General": {
+    "filterData": "Daten filtern",
     "displayOptions": "Anzeigeoptionen",
     "currentMonth": "Aktueller Monat",
     "currentYear": "Aktuelles Jahr",
@@ -326,6 +327,7 @@
   },
   "Moneyflow": {
     "reserved": "geplant",
+    "reservedShown": "geplante Bewegungen anzeigen",
     "options": "Optionen",
     "addPosition": "Position hinzufügen",
     "bookingdate": "Buchungsdatum",
@@ -438,9 +440,12 @@
       "trendMonthYear": "Monat / Jahr",
       "trendAmount": "Betrag"
     },
-    "filterData": "Daten filtern",
+    "show10More": "weitere 10 anzeigen",
+    "showAll": "alle anzeigen",
+    "plannedHiddenCount": "({num} geplante ausgeblendet)",
     "howManyFlowsShownMessage": "Zeige {num} von {all} Geldbewegungen",
     "overallSums": "Gesamtsummen (Σ)",
+    "sum": "Summe",
     "beginOfMonth": "Anfangsbetrag",
     "endOfMonthFixed": "Endbetrag (fix)",
     "endOfMonthCalculated": "Endbetrag (berechnet)",

@@ -27,10 +27,7 @@
           </TableCell>
         </TableRow>
         <TableRow>
-          <TableHead
-            class="text-end font-bold border-r"
-            id="thCalculatedProfit"
-          >
+          <TableHead class="table-head-cell" id="thCalculatedProfit">
             {{ $t("Reports.calculatedProfit") }}
           </TableHead>
           <TableCell class="text-end border-r">

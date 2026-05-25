@@ -2,9 +2,9 @@
   <AccordionItem
     :value="String(etfId)"
     :data-testid="`report-etf-mobile-item-${etfId}`"
-    class="border rounded-lg bg-background shadow-sm px-3 py-1"
+    class="border rounded-lg bg-background shadow-sm overflow-hidden"
   >
-    <AccordionTrigger class="hover:no-underline w-full min-w-0">
+    <AccordionTrigger class="hover:no-underline w-full min-w-0 py-2 px-3">
       <div
         :data-testid="`report-etf-mobile-trigger-${etfId}`"
         class="grid grid-cols-[1fr_auto] items-center w-full gap-2"

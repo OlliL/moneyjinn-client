@@ -19,31 +19,38 @@
         side="bottom"
         class="h-[70vh] rounded-t-xl p-6 flex flex-col"
       >
-        <SheetHeader class="text-left pb-4 border-b shrink-0">
-          <SheetTitle>{{ $t("Reports.filterData") }}</SheetTitle>
+        <SheetHeader class="text-left pb-3 border-b shrink-0">
+          <SheetTitle>{{ $t("General.displayOptions") }}</SheetTitle>
           <SheetDescription class="sr-only">
-            {{ $t("Reports.filterData") }}
+            {{ $t("General.displayOptions") }}
           </SheetDescription>
         </SheetHeader>
 
-        <div class="flex-1 overflow-y-auto space-y-4 py-4">
-          <div class="flex w-full items-center">
-            <Button
-              data-testid="div-filter-mobile-all"
-              variant="secondary"
-              class="rounded-r-none!"
-              @click="clearSearch"
-            >
-              {{ $t("General.all") }}
-            </Button>
-            <Input
-              data-testid="div-filter-mobile-input"
-              type="text"
-              :placeholder="placeholder"
+        <div class="flex-1 overflow-y-auto space-y-4 py-0">
+          <div class="space-y-2 pb-1">
+            <p class="text-sm font-semibold px-0.5">
+              {{ $t("General.filterData") }}
+            </p>
+            <InputStandard
               :model-value="modelValue"
-              class="rounded-l-none focus-visible:ring-1 w-full"
               @update:model-value="handleInput"
-            />
+              id="div-filter-mobile-input"
+              :placeholder="placeholder"
+              enterkeyhint="send"
+            >
+              <template #button>
+                <Button
+                  data-testid="div-filter-mobile-all"
+                  type="button"
+                  variant="outline"
+                  size="icon"
+                  @click="clearSearch"
+                  class="rounded-l-none border-l"
+                >
+                  <X class="icon-medium" />
+                </Button>
+              </template>
+            </InputStandard>
           </div>
 
           <div v-if="showValidToggle" class="flex items-center gap-3 pb-1.5">
@@ -132,9 +139,10 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { Switch } from "@/components/ui/switch";
-import { Filter, Plus } from "lucide-vue-next";
+import { Filter, Plus, X } from "lucide-vue-next";
 import { onBeforeUnmount, ref, watch } from "vue";
 import ButtonMobileCreate from "./ButtonMobileCreate.vue";
+import InputStandard from "./InputStandard.vue";
 
 const props = defineProps({
   placeholder: { type: String, default: "" },

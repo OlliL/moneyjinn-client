@@ -68,9 +68,9 @@
           class="h-[40vh] rounded-t-xl p-6 flex flex-col"
         >
           <SheetHeader class="text-left pb-4 border-b shrink-0">
-            <SheetTitle>{{ $t("Reports.filterData") }}</SheetTitle>
+            <SheetTitle>{{ $t("General.displayOptions") }}</SheetTitle>
             <SheetDescription class="sr-only">
-              {{ $t("Reports.filterData") }}
+              {{ $t("General.displayOptions") }}
             </SheetDescription>
           </SheetHeader>
 

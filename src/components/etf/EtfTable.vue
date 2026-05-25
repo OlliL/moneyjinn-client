@@ -1,12 +1,12 @@
 <template>
-  <div class="flex justify-center py-4">
+  <div class="flex justify-center py-0">
     <div class="w-full max-w-7xl">
       <!-- Mobile View -->
       <div class="block md:hidden">
         <Accordion
           type="single"
           collapsible
-          class="w-full border rounded-md"
+          class="w-full space-y-2"
           data-testid="etf-mobile-accordion"
         >
           <EtfTableRowMobile

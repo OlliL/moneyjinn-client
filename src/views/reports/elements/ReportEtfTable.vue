@@ -1,7 +1,8 @@
 <template>
   <DivError :server-errors="serverErrors" />
-  <div class="flex justify-center py-4" v-if="dataLoaded && etfSummaryReceived">
-    <div class="w-full max-w-7xl">
+  <div class="flex justify-center py-3" v-if="dataLoaded && etfSummaryReceived">
+    <!-- Desktop View -->
+    <div class="w-full max-w-7xl" v-if="isDesktop().value">
       <div class="rounded-sm border">
         <div class="border-b text-center p-3">
           <h4 class="text-2xl font-bold">{{ $t("General.etf") }}</h4>
@@ -11,16 +12,26 @@
         </div>
       </div>
     </div>
+
+    <!-- Mobile View -->
+    <div class="w-full max-w-md mx-auto px-2 mb-6" v-else>
+      <Accordion type="single" collapsible class="w-full">
+        <ReportEtfAccordion :etf-summary-array="etfSummaryArray" />
+      </Accordion>
+    </div>
   </div>
 </template>
 
 <script lang="ts" setup>
 import DivError from "@/components/common/DivError.vue";
 import EtfTable from "@/components/etf/EtfTable.vue";
+import { Accordion } from "@/components/ui/accordion";
 import type { EtfSummary } from "@/model/etf/EtfSummary";
 import EtfService from "@/service/EtfService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
+import { isDesktop } from "@/tools/views/IsDesktop";
 import { computed, onMounted, ref, watch } from "vue";
+import ReportEtfAccordion from "./ReportEtfAccordion.vue";
 
 const serverErrors = ref(new Array<string>());
 
