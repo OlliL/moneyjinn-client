@@ -6,9 +6,9 @@
       :class="[
         props.maxWidth
           ? props.maxWidth
-          : 'w-full max-w-full wd:max-w-[calc(100%-2rem)]',
-        'wd:max-h-[90vh]',
-        'flex flex-col gap-4 p-3 md:p-6 overflow-visible',
+          : 'w-full max-w-full md:max-w-[calc(100%-2rem)]',
+        'max-h-[95dvh] md:max-h-[90vh]',
+        'flex flex-col gap-4 p-3 md:p-6 overflow-hidden',
       ]"
       :style="{ zIndex: props.zIndex }"
     >
