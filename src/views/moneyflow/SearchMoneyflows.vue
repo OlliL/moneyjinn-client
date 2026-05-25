@@ -232,7 +232,7 @@
               :col-booking-month="colBookingMonth"
               :col-booking-year="colBookingYear"
               :col-contractpartner="colContractpartner"
-              :hide-contractpartner="contractpartnerId > 0"
+              :hide-contractpartner="searchContractpartnerId > 0"
               @delete-moneyflow="deleteMoneyflow"
               @edit-moneyflow="editMoneyflow"
               @list-moneyflow="listMoneyflow"
@@ -380,6 +380,7 @@ const colBookingMonth = ref(false);
 const colBookingYear = ref(false);
 const colContractpartner = ref(false);
 const dataLoaded = ref(false);
+const searchContractpartnerId = ref(0);
 
 const receiptModal = useTemplateRef<typeof ReceiptModal>("receiptModal");
 const deleteModal =
@@ -433,6 +434,7 @@ const resetForm = () => {
   startDate.value = beginOfYear;
   endDate.value = today;
   contractpartnerId.value = 0;
+  searchContractpartnerId.value = 0;
   postingAccountId.value = 0;
   comment.value = "";
   featureCaseSensitive.value = false;
@@ -508,6 +510,7 @@ const searchMoneyflows = handleSubmit(() => {
             }
           }
 
+          searchContractpartnerId.value = contractpartnerId.value;
           dataLoaded.value = true;
         }
       })
