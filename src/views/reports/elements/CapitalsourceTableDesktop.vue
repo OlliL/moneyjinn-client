@@ -92,15 +92,20 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import type { ReportTurnoverCapitalsource } from "@/model/report/ReportTurnoverCapitalsource";
+import { computed } from "vue";
 import CapitalsourceTableDesktopRow from "./CapitalsourceTableDesktopRow.vue";
+import { useCapitalsourceSums } from "./useCapitalsourceSums";
 
 const props = defineProps<{
   capitalsourceData: Array<ReportTurnoverCapitalsource>;
   currentMonthIsSettled: boolean;
-  amountBeginOfMonthFixedSum: number;
-  amountEndOfMonthCalculatedSum: number;
-  amountEndOfMonthFixedSum: number;
-  amountCurrentSum: number;
-  differenceFixedCalculatedSum: number;
 }>();
+
+const {
+  amountBeginOfMonthFixedSum,
+  amountEndOfMonthCalculatedSum,
+  amountEndOfMonthFixedSum,
+  amountCurrentSum,
+  differenceFixedCalculatedSum,
+} = useCapitalsourceSums(computed(() => props.capitalsourceData));
 </script>

@@ -77,7 +77,7 @@
               <h4 class="text-2xl font-bold">{{ $t("Reports.ownCapital") }}</h4>
             </div>
             <div class="p-4">
-              <CapitalsourceTableVue
+              <CapitalsourceTableDesktop
                 :capitalsource-data="assetsTurnoverCapitalsources"
                 :current-month-is-settled="currentMonthIsSettled"
               />
@@ -102,7 +102,7 @@
               </h4>
             </div>
             <div class="p-4">
-              <CapitalsourceTableVue
+              <CapitalsourceTableDesktop
                 :capitalsource-data="liabilitiesTurnoverCapitalsources"
                 :current-month-is-settled="currentMonthIsSettled"
               />
@@ -124,7 +124,7 @@
               <h4 class="text-2xl font-bold">{{ $t("Reports.loans") }}</h4>
             </div>
             <div class="p-4">
-              <CapitalsourceTableVue
+              <CapitalsourceTableDesktop
                 :capitalsource-data="creditTurnoverCapitalsources"
                 :current-month-is-settled="currentMonthIsSettled"
               />
@@ -138,7 +138,7 @@
     <template v-else>
       <div class="w-full max-w-md mx-auto px-2 space-y-3">
         <Accordion type="single" collapsible class="w-full space-y-3">
-          <ReportCapitalsourceAccordion
+          <CapitalsourceTableMobile
             v-if="
               assetsTurnoverCapitalsources &&
               assetsTurnoverCapitalsources.length > 0
@@ -147,7 +147,7 @@
             :capitalsource-data="assetsTurnoverCapitalsources"
             :current-month-is-settled="currentMonthIsSettled"
           />
-          <ReportCapitalsourceAccordion
+          <CapitalsourceTableMobile
             v-if="
               liabilitiesTurnoverCapitalsources &&
               liabilitiesTurnoverCapitalsources.length > 0
@@ -156,7 +156,7 @@
             :capitalsource-data="liabilitiesTurnoverCapitalsources"
             :current-month-is-settled="currentMonthIsSettled"
           />
-          <ReportCapitalsourceAccordion
+          <CapitalsourceTableMobile
             v-if="
               creditTurnoverCapitalsources &&
               creditTurnoverCapitalsources.length > 0
@@ -196,8 +196,8 @@ import {
   type PropType,
 } from "vue";
 import CapitalsourceSummary from "./CapitalsourceSummary.vue";
-import CapitalsourceTableVue from "./CapitalsourceTable.vue";
-import ReportCapitalsourceAccordion from "./ReportCapitalsourceAccordion.vue"; // Import new component
+import CapitalsourceTableDesktop from "./CapitalsourceTableDesktop.vue";
+import CapitalsourceTableMobile from "./CapitalsourceTableMobile.vue";
 import ReportTableDesktop from "./ReportTableDesktop.vue";
 import ReportTableMobile from "./ReportTableMobile.vue";
 const serverErrors = ref(new Array<string>());
