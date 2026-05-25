@@ -9,7 +9,7 @@
           {{ $t(titleKey) }}
         </h4>
         <span class="font-extrabold text-base">
-          <!--<SpanAmount :amount="displaySum" /> -->
+          <SpanAmount :amount="displaySum" />
         </span>
       </div>
     </AccordionTrigger>
@@ -26,14 +26,16 @@
 </template>
 
 <script lang="ts" setup>
+import SpanAmount from "@/components/common/SpanAmount.vue";
 import {
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import type { ReportTurnoverCapitalsource } from "@/model/report/ReportTurnoverCapitalsource";
-import { type PropType } from "vue";
+import { computed, type PropType } from "vue";
 import CapitalsourceTable from "./CapitalsourceTable.vue";
+import { useCapitalsourceSums } from "./useCapitalsourceSums";
 
 const props = defineProps({
   titleKey: {
@@ -49,11 +51,14 @@ const props = defineProps({
     required: true,
   },
 });
-/*
+
+const { amountEndOfMonthFixedSum, amountCurrentSum } = useCapitalsourceSums(
+  computed(() => props.capitalsourceData),
+);
+
 const displaySum = computed(() => {
   return props.currentMonthIsSettled
-    ? props.amountEndOfMonthFixedSum
-    : props.amountCurrentSum;
+    ? amountEndOfMonthFixedSum.value
+    : amountCurrentSum.value;
 });
-*/
 </script>

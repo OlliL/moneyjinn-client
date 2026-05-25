@@ -45,38 +45,13 @@ const props = defineProps({
   },
 });
 
-const amountBeginOfMonthFixedSum = computed(() => {
-  return props.capitalsourceData.reduce(
-    (acc, cur) => acc + cur.amountBeginOfMonthFixed,
-    0,
-  );
-});
-const amountEndOfMonthCalculatedSum = computed(() => {
-  return props.capitalsourceData.reduce(
-    (acc, cur) => acc + cur.amountEndOfMonthCalculated,
-    0,
-  );
-});
-const amountEndOfMonthFixedSum = computed(() => {
-  return props.capitalsourceData.reduce(
-    (acc, cur) =>
-      acc + (cur.amountEndOfMonthFixed ? cur.amountEndOfMonthFixed : 0),
-    0,
-  );
-});
-const amountCurrentSum = computed(() => {
-  return props.capitalsourceData.reduce(
-    (acc, cur) => acc + (cur.amountCurrent ? cur.amountCurrent : 0),
-    0,
-  );
-});
-const differenceFixedCalculatedSum = computed(() => {
-  return props.capitalsourceData.reduce(
-    (acc, cur) =>
-      acc +
-      ((cur.amountEndOfMonthFixed ? cur.amountEndOfMonthFixed : 0) -
-        cur.amountEndOfMonthCalculated),
-    0,
-  );
-});
+import { useCapitalsourceSums } from "./useCapitalsourceSums";
+
+const {
+  amountBeginOfMonthFixedSum,
+  amountEndOfMonthCalculatedSum,
+  amountEndOfMonthFixedSum,
+  amountCurrentSum,
+  differenceFixedCalculatedSum,
+} = useCapitalsourceSums(computed(() => props.capitalsourceData));
 </script>
