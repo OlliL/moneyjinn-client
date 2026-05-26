@@ -73,6 +73,9 @@
                   $t("Moneyflow.bookingdate")
                 }}</TableHead>
                 <TableHead class="table-head-cell">{{
+                  $t("Moneyflow.invoicedate")
+                }}</TableHead>
+                <TableHead class="table-head-cell" colspan="2">{{
                   $t("General.amount")
                 }}</TableHead>
                 <TableHead class="table-head-cell">{{
@@ -94,21 +97,15 @@
               </TableRow>
             </TableHeader>
             <TableBody>
-              <SearchMoneyflowResultDesktopRow
+              <DisplayMoneyflowRowDesktop
                 v-for="(moneyflow, index) of moneyflowGroup.moneyflows"
                 :key="moneyflow.id"
                 :mmf="moneyflow"
-                :rowspan="rowsPerMoneyflow.get(moneyflow.id) ?? 1"
-                :isFirstOfMultipleRowsForSameMoneyflow="
-                  firstIndexForMoneyflow.get(moneyflow.id) === index
-                "
-                :alternateRowBackground="
-                  alternateRowBackground.get(moneyflow.id)
-                "
-                @delete-moneyflow="emitDeleteMoneyflow"
-                @edit-moneyflow="emitEditMoneyflow"
-                @list-moneyflow="emitListMoneyflow"
-                @show-receipt="emitShowReceipt"
+                :index="index"
+                @delete-moneyflow="$emit('deleteMoneyflow', $event)"
+                @edit-moneyflow="$emit('editMoneyflow', $event)"
+                @list-moneyflow="$emit('listMoneyflow', $event)"
+                @show-receipt="$emit('showReceipt', $event)"
               />
             </TableBody>
           </Table>
@@ -119,7 +116,7 @@
 </template>
 <script lang="ts" setup>
 import { ChevronDown, ChevronRight } from "lucide-vue-next";
-import { ref, watch, type PropType } from "vue";
+import { ref, type PropType } from "vue";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -134,8 +131,8 @@ import {
 import { Routes } from "@/router";
 
 import SpanAmount from "@/components/common/SpanAmount.vue";
-import SearchMoneyflowResultDesktopRow from "./SearchMoneyflowResultDesktopRow.vue";
 
+import DisplayMoneyflowRowDesktop from "@/components/moneyflow/DisplayMoneyflowRowDesktop.vue";
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 
 type MoneyflowGroup = {
@@ -169,53 +166,14 @@ const props = defineProps({
 });
 
 const isCollapsed = ref(false);
-const emit = defineEmits([
-  "showReceipt",
-  "deleteMoneyflow",
-  "editMoneyflow",
-  "listMoneyflow",
-]);
-const rowsPerMoneyflow = ref(new Map<number, number>());
-const firstIndexForMoneyflow = ref(new Map<number, number>());
-const alternateRowBackground = ref(new Map<number, boolean>());
-
-watch(
-  () => props.moneyflowGroup.moneyflows,
-  (moneyflows) => {
-    rowsPerMoneyflow.value = new Map();
-    firstIndexForMoneyflow.value = new Map();
-    alternateRowBackground.value = new Map();
-    let i = 0;
-    moneyflows.forEach((mmf) => {
-      const curVal = rowsPerMoneyflow.value.get(mmf.id);
-      if (curVal === undefined) {
-        i++;
-        alternateRowBackground.value.set(mmf.id, i % 2 === 0);
-        rowsPerMoneyflow.value.set(mmf.id, 1);
-      } else {
-        rowsPerMoneyflow.value.set(mmf.id, curVal + 1);
-      }
-      if (!firstIndexForMoneyflow.value.has(mmf.id)) {
-        firstIndexForMoneyflow.value.set(mmf.id, moneyflows.indexOf(mmf));
-      }
-    });
-  },
-  { immediate: true },
-);
+defineEmits<{
+  showReceipt: [id: number];
+  editMoneyflow: [moneyflow: Moneyflow];
+  deleteMoneyflow: [moneyflow: Moneyflow];
+  listMoneyflow: [moneyflow: Moneyflow];
+}>();
 
 const toggleCollapse = () => {
   isCollapsed.value = !isCollapsed.value;
-};
-const emitShowReceipt = (id: number) => {
-  emit("showReceipt", id);
-};
-const emitDeleteMoneyflow = (mmf: Moneyflow) => {
-  emit("deleteMoneyflow", mmf);
-};
-const emitEditMoneyflow = (mmf: Moneyflow) => {
-  emit("editMoneyflow", mmf);
-};
-const emitListMoneyflow = (mmf: Moneyflow) => {
-  emit("listMoneyflow", mmf);
 };
 </script>

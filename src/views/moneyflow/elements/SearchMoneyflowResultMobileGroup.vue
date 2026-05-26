@@ -29,16 +29,16 @@
     </AccordionTrigger>
     <AccordionContent class="px-2 pb-3 pt-1">
       <Accordion type="multiple" class="space-y-2">
-        <ReportTableMobileRow
+        <DisplayMoneyflowRowMobile
           v-for="moneyflow in moneyflowGroup.moneyflows"
           :key="moneyflow.id"
           :mmf="moneyflow"
           :hide-contractpartner="hideContractpartner || colContractpartner"
           :show-comment-in-trigger="true"
-          @delete-moneyflow="emitDeleteMoneyflow"
-          @edit-moneyflow="emitEditMoneyflow"
-          @list-moneyflow="emitListMoneyflow"
-          @show-receipt="emitShowReceipt"
+          @delete-moneyflow="$emit('deleteMoneyflow', $event)"
+          @edit-moneyflow="$emit('editMoneyflow', $event)"
+          @list-moneyflow="$emit('listMoneyflow', $event)"
+          @show-receipt="$emit('showReceipt', $event)"
         />
       </Accordion>
     </AccordionContent>
@@ -47,14 +47,13 @@
 
 <script lang="ts" setup>
 import SpanAmount from "@/components/common/SpanAmount.vue";
+import DisplayMoneyflowRowMobile from "@/components/moneyflow/DisplayMoneyflowRowMobile.vue";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
-import ReportTableMobileRow from "@/views/reports/elements/ReportTableMobileRow.vue";
 import type { PropType } from "vue";
 
 defineProps({
@@ -84,15 +83,10 @@ defineProps({
   },
 });
 
-const emit = defineEmits([
+defineEmits([
   "showReceipt",
   "deleteMoneyflow",
   "editMoneyflow",
   "listMoneyflow",
 ]);
-
-const emitShowReceipt = (id: number) => emit("showReceipt", id);
-const emitDeleteMoneyflow = (mmf: Moneyflow) => emit("deleteMoneyflow", mmf);
-const emitEditMoneyflow = (mmf: Moneyflow) => emit("editMoneyflow", mmf);
-const emitListMoneyflow = (mmf: Moneyflow) => emit("listMoneyflow", mmf);
 </script>

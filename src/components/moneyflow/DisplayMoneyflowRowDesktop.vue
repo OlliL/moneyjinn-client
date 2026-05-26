@@ -18,6 +18,7 @@
           :title="$t('Receipt.receipt')"
           :aria-label="$t('Receipt.receipt')"
           class="action-icon-button"
+          :data-testid="`display-moneyflow-receipt-${mmf.id}`"
         >
           <ReceiptText class="icon-medium" />
         </Button>
@@ -76,7 +77,7 @@
           <Button
             variant="ghost"
             size="icon"
-            :data-testid="`report-moneyflow-edit-${mmf.id}`"
+            :data-testid="`display-moneyflow-edit-${mmf.id}`"
             @click="$emit('editMoneyflow', mmf)"
             :title="$t('General.edit')"
             class="action-icon-button"
@@ -88,7 +89,7 @@
           <Button
             variant="ghost"
             size="icon"
-            :data-testid="`report-moneyflow-delete-${mmf.id}`"
+            :data-testid="`display-moneyflow-delete-${mmf.id}`"
             @click="$emit('deleteMoneyflow', mmf)"
             :title="$t('General.delete')"
             class="action-icon-button"
@@ -103,7 +104,7 @@
           <Button
             variant="ghost"
             size="icon"
-            :data-testid="`report-moneyflow-list-${mmf.id}`"
+            :data-testid="`display-moneyflow-list-${mmf.id}`"
             @click="$emit('listMoneyflow', mmf)"
             :title="$t('General.moneyflow')"
             class="action-icon-button"

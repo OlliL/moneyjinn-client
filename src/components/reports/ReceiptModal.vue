@@ -1,5 +1,9 @@
 <template>
-  <ModalVue :title="$t('Receipt.receipt')" ref="modalComponent">
+  <ModalVue
+    :title="$t('Receipt.receipt')"
+    max-width="max-w-md"
+    ref="modalComponent"
+  >
     <template #body>
       <DivError :server-errors="serverErrors" />
       <div class="w-full md:max-h-[calc(100vh-240px)] overflow-y-auto pr-1">

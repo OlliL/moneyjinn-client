@@ -15,6 +15,7 @@
 
   <ModalVue
     :title="mcp.name + ': ' + $t('General.contractpartnerAccounts')"
+    max-width="max-w-md"
     ref="modalComponent"
   >
     <template #body>

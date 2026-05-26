@@ -31,10 +31,12 @@ class SearchMoneyflowsView {
   static readonly GroupExpandButton = new ButtonView(
     "search-moneyflow-group-expand",
   );
-  static readonly DeleteButton = new ButtonView("search-moneyflow-delete-12");
-  static readonly EditButton = new ButtonView("search-moneyflow-edit-12");
-  static readonly ListButton = new ButtonView("search-moneyflow-list-13");
-  static readonly ReceiptButton = new ButtonView("search-moneyflow-receipt-14");
+  static readonly DeleteButton = new ButtonView("display-moneyflow-delete-12");
+  static readonly EditButton = new ButtonView("display-moneyflow-edit-12");
+  static readonly ListButton = new ButtonView("display-moneyflow-list-13");
+  static readonly ReceiptButton = new ButtonView(
+    "display-moneyflow-receipt-14",
+  );
   static readonly Modal = new ModalView("app-modal");
   static readonly EmptyRow = new RowView("search-moneyflows-empty");
   // Example for radio buttons for moneyflow selection

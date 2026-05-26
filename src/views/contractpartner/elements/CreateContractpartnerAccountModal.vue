@@ -1,5 +1,10 @@
 <template>
-  <ModalVue :title="title" ref="modalComponent" :z-index="zIndex">
+  <ModalVue
+    :title="title"
+    max-width="max-w-md"
+    ref="modalComponent"
+    :z-index="zIndex"
+  >
     <template #body>
       <form
         @submit.prevent="createContractpartnerAccount"

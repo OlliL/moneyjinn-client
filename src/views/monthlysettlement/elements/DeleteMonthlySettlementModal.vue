@@ -3,6 +3,7 @@
     :title="
       $t('MonthlySettlement.title.delete', { month: monthName, year: year })
     "
+    max-width="max-w-md"
     ref="modalComponent"
   >
     <template #body>

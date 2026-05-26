@@ -5,6 +5,7 @@
         ? $t('MonthlySettlement.title.update')
         : $t('MonthlySettlement.title.create')
     "
+    max-width="max-w-md"
     ref="modalComponent"
   >
     <template #body>

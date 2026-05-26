@@ -1,7 +1,7 @@
 <template>
   <ModalVue
     :title="title"
-    :max-width="maxWidth"
+    max-width="max-w-md"
     :z-index="zIndex"
     ref="modalComponent"
   >

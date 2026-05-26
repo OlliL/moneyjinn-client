@@ -8,7 +8,17 @@
     ref="editModal"
     @moneyflow-updated="searchMoneyflows"
   />
-  <ListMoneyflowModalDesktop ref="listModal" />
+
+  <ListMoneyflowModalDesktop
+    ref="listModal"
+    @show-receipt="showReceipt"
+    v-if="desktop"
+  />
+  <ListMoneyflowModalMobile
+    ref="listModal"
+    @show-receipt="showReceipt"
+    v-else
+  />
 
   <div class="custom-container space-y-6">
     <div class="text-center">
@@ -321,6 +331,7 @@ import type { MoneyflowSearchParams } from "@/model/moneyflow/MoneyflowSearchPar
 import type { SelectBoxValue } from "@/model/SelectBoxValue";
 
 import ListMoneyflowModalDesktop from "@/components/moneyflow/ListMoneyflowModalDesktop.vue";
+import ListMoneyflowModalMobile from "@/components/moneyflow/ListMoneyflowModalMobile.vue";
 import ReceiptModal from "@/components/reports/ReceiptModal.vue";
 import { Accordion } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";

@@ -1,5 +1,5 @@
 <template>
-  <ModalVue :title="title" ref="modalComponent">
+  <ModalVue :title="title" max-width="max-w-md" ref="modalComponent">
     <template #body>
       <form
         @submit.prevent="createContractpartner"

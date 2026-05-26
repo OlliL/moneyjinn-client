@@ -214,7 +214,7 @@
     </div>
 
     <Accordion type="multiple" class="space-y-2">
-      <ReportTableMobileRow
+      <DisplayMoneyflowRowMobile
         v-for="mmf in visibleMoneyflows"
         :key="'mobile-' + mmf.id"
         :mmf="mmf"
@@ -270,6 +270,7 @@
 <script lang="ts" setup>
 import InputStandard from "@/components/common/InputStandard.vue";
 import SpanAmount from "@/components/common/SpanAmount.vue";
+import DisplayMoneyflowRowMobile from "@/components/moneyflow/DisplayMoneyflowRowMobile.vue";
 import { Accordion } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import {
@@ -297,7 +298,6 @@ import {
 } from "lucide-vue-next";
 import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
-import ReportTableMobileRow from "./ReportTableMobileRow.vue";
 
 const { t } = useI18n();
 

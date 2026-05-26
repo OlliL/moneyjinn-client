@@ -219,7 +219,7 @@
           </TableRow>
         </TableHeader>
         <TableBody>
-          <ReportTableDesktopRow
+          <DisplayMoneyflowRowDesktop
             v-for="(mmf, index) in moneyflows"
             :key="mmf.id"
             :mmf="mmf"
@@ -255,6 +255,7 @@
 <script lang="ts" setup>
 // Script-Teil bleibt unverändert...
 import SpanAmount from "@/components/common/SpanAmount.vue";
+import DisplayMoneyflowRowDesktop from "@/components/moneyflow/DisplayMoneyflowRowDesktop.vue";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -272,7 +273,6 @@ import {
   ArrowUpNarrowWide,
   X,
 } from "lucide-vue-next";
-import ReportTableDesktopRow from "./ReportTableDesktopRow.vue";
 
 const props = defineProps<{
   moneyflows: Moneyflow[];

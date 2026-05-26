@@ -42,9 +42,13 @@ class ListReportsView {
   static readonly RowForeignMobile = new RowView(
     "report-mobile-moneyflow-row-2",
   );
-  static readonly EditOwnButton = new ButtonView("report-moneyflow-edit-1");
-  static readonly DeleteOwnButton = new ButtonView("report-moneyflow-delete-1");
-  static readonly ListForeignButton = new ButtonView("report-moneyflow-list-2");
+  static readonly EditOwnButton = new ButtonView("display-moneyflow-edit-1");
+  static readonly DeleteOwnButton = new ButtonView(
+    "display-moneyflow-delete-1",
+  );
+  static readonly ListForeignButton = new ButtonView(
+    "display-moneyflow-list-2",
+  );
   static readonly EditOwnMobileButton = new ButtonView(
     "report-mobile-moneyflow-edit-1",
   );
