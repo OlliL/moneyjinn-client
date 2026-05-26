@@ -4,7 +4,7 @@
   <ListMoneyflowModalDesktop
     ref="listModal"
     @show-receipt="showReceipt"
-    v-if="isDesktop().value"
+    v-if="desktop"
   />
   <ListMoneyflowModalMobile
     ref="listModal"
@@ -82,6 +82,7 @@ import { onMounted, ref, useTemplateRef } from "vue";
 import ImportReceiptsRowVue from "./elements/ImportReceiptsRow.vue";
 
 const serverErrors = ref(new Array<string>());
+const desktop = isDesktop();
 
 const importedMoneyflowReceipts = ref(new Array<ImportedMoneyflowReceipt>());
 const files = ref<FileList | null>(null);

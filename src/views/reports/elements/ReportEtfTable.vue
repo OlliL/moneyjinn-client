@@ -2,7 +2,7 @@
   <DivError :server-errors="serverErrors" />
   <div class="flex justify-center py-3" v-if="dataLoaded && etfSummaryReceived">
     <!-- Desktop View -->
-    <div class="w-full max-w-7xl" v-if="isDesktop().value">
+    <div class="w-full max-w-7xl" v-if="desktop">
       <div class="rounded-sm border">
         <div class="border-b text-center p-3">
           <h4 class="text-2xl font-bold">{{ $t("General.etf") }}</h4>
@@ -55,7 +55,9 @@ import EtfService from "@/service/EtfService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { isDesktop } from "@/tools/views/IsDesktop";
 import { computed, onMounted, ref, watch } from "vue";
+
 const serverErrors = ref(new Array<string>());
+const desktop = isDesktop();
 
 const etfSummaryArray = ref(new Array<EtfSummary>());
 
