@@ -312,13 +312,6 @@ watch(
 );
 
 watch(
-  () => mmf.value.contractpartnerId,
-  (newVal, oldVal) => {
-    if (newVal !== oldVal) onContractpartnerSelected(newVal);
-  },
-);
-
-watch(
   [
     () => mmf.value.postingAccountId,
     () => postingAccountStore.getPostingAccount,
@@ -603,6 +596,8 @@ const validateMseRemainder = () => {
  */
 
 const onContractpartnerSelected = (contractpartnerId: number) => {
+  if (contractpartnerStore.contractpartner.length === 0) return;
+
   const contractpartner =
     contractpartnerStore.getContractpartner(contractpartnerId);
   if (contractpartner) {
@@ -654,6 +649,19 @@ const noContractpartnerSelected = () => {
     previousPostingAccountSetByContractpartnerDefaults.value = 0;
   }
 };
+
+watch(
+  [
+    () => mmf.value.contractpartnerId,
+    () => contractpartnerStore.contractpartner,
+  ],
+  ([newId, partner]) => {
+    if (partner && partner.length > 0) {
+      onContractpartnerSelected(newId);
+    }
+  },
+  { immediate: true },
+);
 
 const selectPreDefMoneyflow = (
   preDefMoneyflow: PreDefMoneyflow | undefined,
