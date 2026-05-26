@@ -17,11 +17,11 @@
           <div class="md:flex gap-4">
             <div
               class="w-1/3 overflow-x-scroll whitespace-nowrap h-[600px] max-w-120"
-              v-if="receipt.receipt && isDesktop().value"
+              v-if="receipt.receipt && desktop"
             >
               <SpanReceipt :receipt="receipt" />
             </div>
-            <div v-if="receipt.receipt && !isDesktop().value">
+            <div v-if="receipt.receipt && !desktop">
               <div
                 @click="showReceipt"
                 class="flex items-center justify-between p-3 rounded-xl border border-dashed border-input bg-muted/40 hover:bg-muted/80 active:bg-muted transition-all cursor-pointer w-full group select-none mb-4"
@@ -65,7 +65,7 @@
         type="button"
         variant="destructive"
         @click="deleteMoneyflowReceipt"
-        v-if="mmf.hasReceipt && isDesktop().value"
+        v-if="mmf.hasReceipt && desktop"
       >
         <Trash2 class="icon-medium" />
         {{ $t("Moneyflow.deleteReceipt") }}
@@ -110,6 +110,7 @@ import ModalVue from "../common/Modal.vue";
 import SpanReceipt from "../common/SpanReceipt.vue";
 
 const serverErrors = ref(new Array<string>());
+const desktop = isDesktop();
 
 const mmf = ref({} as Moneyflow);
 const modalComponent = useTemplateRef<typeof ModalVue>("modalComponent");

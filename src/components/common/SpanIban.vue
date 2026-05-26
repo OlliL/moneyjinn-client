@@ -42,12 +42,28 @@ const ibanFormatted = computed(() => {
 
 const copyToClipboard = () => {
   if (!props.iban) return;
-  if (!navigator.clipboard?.writeText) return;
 
   const cleanToCopy = props.iban.replaceAll(/\s/g, "");
 
-  navigator.clipboard.writeText(cleanToCopy).catch((err) => {
-    console.error(err);
-  });
+  // Try to use the modern Clipboard API first
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(cleanToCopy).catch((err) => {
+      console.error("Failed to copy using Clipboard API:", err);
+      // Fallback if Clipboard API fails (e.g., permissions)
+      fallbackCopyToClipboard(cleanToCopy);
+    });
+  } else {
+    // Fallback for browsers that don't support Clipboard API or in insecure contexts
+    fallbackCopyToClipboard(cleanToCopy);
+  }
+};
+
+const fallbackCopyToClipboard = (text: string) => {
+  const textarea = document.createElement("textarea");
+  textarea.value = text;
+  document.body.appendChild(textarea);
+  textarea.select();
+  document.execCommand("copy");
+  textarea.remove();
 };
 </script>

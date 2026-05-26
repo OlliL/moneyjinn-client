@@ -5,9 +5,9 @@
     <ListMoneyflowModalMobile
       ref="listModal"
       @show-receipt="showReceipt"
-      v-if="!isDesktop().value"
+      v-if="!desktop"
     />
-    <ListMoneyflowModalDesktop ref="listModal" v-if="isDesktop().value" />
+    <ListMoneyflowModalDesktop ref="listModal" v-if="desktop" />
     <DeleteMoneyflowModalVue
       ref="deleteModal"
       @moneyflow-deleted="moneyflowDeleted"
@@ -63,7 +63,7 @@
     </div>
 
     <!-- Desktop View for Capitalsource Overview -->
-    <template v-if="isDesktop().value">
+    <template v-if="desktop">
       <div
         class="flex justify-center py-4"
         v-if="
@@ -200,7 +200,9 @@ import CapitalsourceTableDesktop from "./CapitalsourceTableDesktop.vue";
 import CapitalsourceTableMobile from "./CapitalsourceTableMobile.vue";
 import ReportTableDesktop from "./ReportTableDesktop.vue";
 import ReportTableMobile from "./ReportTableMobile.vue";
+
 const serverErrors = ref(new Array<string>());
+const desktop = isDesktop();
 
 const report = ref({} as Report);
 const dataLoaded = defineModel("dataLoaded", {

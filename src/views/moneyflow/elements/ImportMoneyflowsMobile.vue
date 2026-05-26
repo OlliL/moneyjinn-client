@@ -41,10 +41,13 @@
               <Handshake class="icon-medium" />
             </div>
             <div class="flex flex-col min-w-0">
-              <div class="font-bold text-base leading-tight truncate">
+              <div
+                class="font-bold text-base leading-tight truncate"
+                :class="textStatusClass(displayData.contractpartnerId > 0)"
+              >
                 {{
                   displayData.contractpartnerName ||
-                  $t("General.select") + "..."
+                  $t("Moneyflow.validation.contractpartnerId")
                 }}
               </div>
               <div
@@ -88,7 +91,7 @@
                 class="text-[10px] truncate"
                 :class="textStatusClass(displayData.comment?.length > 0)"
               >
-                {{ displayData.comment || $t("General.comment") }}
+                {{ displayData.comment || $t("Moneyflow.validation.comment") }}
               </span>
             </div>
 
@@ -106,7 +109,8 @@
                 :class="textStatusClass(displayData.postingAccountId > 0)"
               >
                 {{
-                  displayData.postingAccountName || $t("General.postingAccount")
+                  displayData.postingAccountName ||
+                  $t("Moneyflow.validation.postingAccountId")
                 }}
               </span>
             </div>
@@ -124,7 +128,7 @@
               >
                 {{
                   displayData.capitalsourceComment ||
-                  $t("General.capitalsource")
+                  $t("General.validation.capitalsource")
                 }}
               </span>
             </div>

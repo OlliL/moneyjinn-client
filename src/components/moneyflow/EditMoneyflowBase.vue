@@ -47,7 +47,7 @@
         field-type="number"
         step="0.01"
         :field-label="$t('General.amount')"
-        :focus="isDesktop().value || !mmf.id"
+        :focus="desktop || !mmf.id"
       >
         <template #icon><Euro class="icon-medium" /></template>
       </InputStandard>
@@ -124,13 +124,13 @@
                   value="once"
                   class="text-xs font-medium h-full px-3 flex-1 md:flex-initial transition-all rounded-none data-[state=on]:bg-primary data-[state=on]:text-primary-foreground data-[state=on]:shadow-sm text-muted-foreground border-r border-input last:border-r-0"
                 >
-                  {{ toggleTextOff }}
+                  {{ toggleLabels.off }}
                 </ToggleGroupItem>
                 <ToggleGroupItem
                   value="favorite"
                   class="text-xs font-medium h-full px-3 flex-1 md:flex-initial transition-all rounded-none data-[state=on]:bg-primary data-[state=on]:text-primary-foreground data-[state=on]:shadow-sm text-muted-foreground border-r border-input last:border-r-0"
                 >
-                  {{ toggleTextOn }}
+                  {{ toggleLabels.on }}
                 </ToggleGroupItem>
               </ToggleGroup>
             </div>
@@ -269,12 +269,16 @@ const previousCommentSetByContractpartnerDefaults = ref("");
 const previousPostingAccountSetByContractpartnerDefaults = ref(0);
 const preDefMoneyflowId = ref(0);
 const saveAsPreDefMoneyflow = ref(false);
-const toggleTextOffNoPreDefMoneyflow = ref(t("Moneyflow.once"));
-const toggleTextOnNoPreDefMoneyflow = ref(t("Moneyflow.favorite"));
-const toggleTextOffPreDefMoneyflow = ref(t("Moneyflow.keep"));
-const toggleTextOnPreDefMoneyflow = ref(t("Moneyflow.renew"));
-const toggleTextOff = ref("");
-const toggleTextOn = ref("");
+
+const desktop = isDesktop();
+
+const toggleLabels = computed(() => {
+  if (preDefMoneyflowId.value > 0) {
+    return { off: t("Moneyflow.keep"), on: t("Moneyflow.renew") };
+  }
+  return { off: t("Moneyflow.once"), on: t("Moneyflow.favorite") };
+});
+
 const mseRemainderIsValid = ref(undefined as boolean | undefined);
 const showMoneyflowFields = ref(true);
 const originalMoneyflowSplitEntryIds = ref(new Array<number>());
@@ -308,13 +312,6 @@ watch(
   () => props.selectedPreDefMoneyflow,
   (newVal, oldVal) => {
     if (newVal !== oldVal) selectPreDefMoneyflow(newVal);
-  },
-);
-
-watch(
-  () => mmf.value.contractpartnerId,
-  (newVal, oldVal) => {
-    if (newVal !== oldVal) onContractpartnerSelected(newVal);
   },
 );
 
@@ -391,9 +388,6 @@ const resetForm = () => {
 
   saveAsPreDefMoneyflow.value = false;
   preDefMoneyflowId.value = 0;
-
-  toggleTextOff.value = toggleTextOffNoPreDefMoneyflow.value;
-  toggleTextOn.value = toggleTextOnNoPreDefMoneyflow.value;
 };
 
 const resetEditForm = () => {
@@ -404,20 +398,6 @@ const resetEditForm = () => {
   // set correct defaults for imported moneyflows
   if (mmf.value.comment === undefined) mmf.value.comment = "";
   if (mmf.value.postingAccountId === undefined) mmf.value.postingAccountId = 0;
-
-  // ensure names are resolved even if watch doesn't fire due to identical IDs
-  if (mmf.value.postingAccountId > 0) {
-    mmf.value.postingAccountName =
-      postingAccountStore.getPostingAccount.find(
-        (pa) => pa.id === mmf.value.postingAccountId,
-      )?.name ?? "";
-  }
-  if (mmf.value.capitalsourceId > 0) {
-    mmf.value.capitalsourceComment =
-      capitalsourceStore.capitalsource.find(
-        (cs) => cs.id === mmf.value.capitalsourceId,
-      )?.comment ?? "";
-  }
 
   originalMoneyflowSplitEntryIds.value = new Array<number>();
   if (props.fillContractpartnerDefaults && mmf.value.contractpartnerId > 0) {
@@ -452,27 +432,9 @@ const setCapitalsourceForCreateMode = (date: Date) => {
   const mcs = capitalsourceStore
     .getBookableValidCapitalsources(date)
     .find((mcs) => mcs.state === CapitalsourceState.CASH);
-  if (mcs) {
-    mmf.value.capitalsourceId = mcs.id;
-    mmf.value.capitalsourceComment = mcs.comment;
-  } else {
-    mmf.value.capitalsourceId = 0;
-    mmf.value.capitalsourceComment = "";
-  }
-};
 
-watch(
-  () => capitalsourceStore.capitalsource,
-  () => {
-    // watch because websocket driven stores might get initialized too late
-    // in this case, capitalsourceId is not set
-    if (!mmf.value.capitalsourceId) {
-      const bookingDate = new Date();
-      bookingDate.setHours(0, 0, 0, 0);
-      setCapitalsourceForCreateMode(bookingDate);
-    }
-  },
-);
+  mmf.value.capitalsourceId = mcs?.id ?? 0;
+};
 
 const resetCreateForm = () => {
   amount.value = undefined;
@@ -484,10 +446,21 @@ const resetCreateForm = () => {
   mmf.value.contractpartnerId = 0;
   mmf.value.contractpartnerName = "";
 
-  setCapitalsourceForCreateMode(bookingDate);
+  if (capitalsourceStore.capitalsource.length > 0) {
+    setCapitalsourceForCreateMode(bookingDate);
+  } else {
+    const stopWatcher = watch(
+      () => capitalsourceStore.capitalsource,
+      (sources) => {
+        if (sources.length > 0) {
+          setCapitalsourceForCreateMode(bookingDate);
+          stopWatcher();
+        }
+      },
+    );
+  }
 
   mmf.value.postingAccountId = 0;
-  mmf.value.postingAccountName = "";
   mmf.value.comment = "";
   mmf.value.private = false;
 
@@ -529,12 +502,15 @@ const onDeleteMoneyflowSplitEntryRow = (index: number) => {
       addNewMoneyflowSplitEntryRow();
     }
     mse.splice(index, 1);
-    validateMseRemainder();
-    toggleMoneyflowFieldsForMse();
+    onMseChanged();
   }
 };
 const onAddMoneyflowSplitEntryRow = () => {
   addNewMoneyflowSplitEntryRow();
+};
+const onMseChanged = () => {
+  validateMseRemainder();
+  toggleMoneyflowFieldsForMse();
 };
 const onMoneyflowSplitEntryRowAmountChanged = (
   index: number,
@@ -544,8 +520,7 @@ const onMoneyflowSplitEntryRowAmountChanged = (
   if (mse !== undefined && mse[index]) {
     mse[index]["amount"] = amount;
   }
-  validateMseRemainder();
-  toggleMoneyflowFieldsForMse();
+  onMseChanged();
 };
 const onMoneyflowSplitEntryRowCommentChanged = (
   index: number,
@@ -555,8 +530,7 @@ const onMoneyflowSplitEntryRowCommentChanged = (
   if (mse !== undefined && mse[index]) {
     mse[index]["comment"] = comment;
   }
-  validateMseRemainder();
-  toggleMoneyflowFieldsForMse();
+  onMseChanged();
 };
 const onMoneyflowSplitEntryRowPostingAccountIdChanged = (
   index: number,
@@ -568,8 +542,7 @@ const onMoneyflowSplitEntryRowPostingAccountIdChanged = (
     mse[index]["postingAccountId"] = postingAccountId;
     mse[index]["postingAccountName"] = postingAccountName;
   }
-  validateMseRemainder();
-  toggleMoneyflowFieldsForMse();
+  onMseChanged();
 };
 const toggleMoneyflowFieldsForMse = () => {
   showMoneyflowFields.value = allMseRowsAreEmpty();
@@ -603,6 +576,8 @@ const validateMseRemainder = () => {
  */
 
 const onContractpartnerSelected = (contractpartnerId: number) => {
+  if (contractpartnerStore.contractpartner.length === 0) return;
+
   const contractpartner =
     contractpartnerStore.getContractpartner(contractpartnerId);
   if (contractpartner) {
@@ -631,9 +606,6 @@ const contractpartnerSelected = (contractpartner: Contractpartner) => {
       : 0;
 
     mmf.value.postingAccountId = mpaId;
-    mmf.value.postingAccountName =
-      postingAccountStore.getPostingAccount.find((pa) => pa.id === mpaId)
-        ?.name ?? "";
     previousPostingAccountSetByContractpartnerDefaults.value = mpaId;
   }
 };
@@ -650,10 +622,22 @@ const noContractpartnerSelected = () => {
     previousPostingAccountSetByContractpartnerDefaults.value
   ) {
     mmf.value.postingAccountId = 0;
-    mmf.value.postingAccountName = "";
     previousPostingAccountSetByContractpartnerDefaults.value = 0;
   }
 };
+
+watch(
+  [
+    () => mmf.value.contractpartnerId,
+    () => contractpartnerStore.contractpartner,
+  ],
+  ([newId, partner]) => {
+    if (partner && partner.length > 0) {
+      onContractpartnerSelected(newId);
+    }
+  },
+  { immediate: true },
+);
 
 const selectPreDefMoneyflow = (
   preDefMoneyflow: PreDefMoneyflow | undefined,
@@ -680,8 +664,6 @@ const selectPreDefMoneyflow = (
     mmf.value.postingAccountId = preDefMoneyflow.postingAccountId;
     mmf.value.capitalsourceId = preDefMoneyflow.capitalsourceId;
 
-    toggleTextOff.value = toggleTextOffPreDefMoneyflow.value;
-    toggleTextOn.value = toggleTextOnPreDefMoneyflow.value;
     preDefMoneyflowId.value = preDefMoneyflow.id;
   }
 };
