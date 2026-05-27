@@ -112,6 +112,7 @@ import InputStandard from "@/components/common/InputStandard.vue";
 import Modal from "@/components/common/Modal.vue";
 import SpanDate from "@/components/common/SpanDate.vue";
 import SelectPostingAccount from "@/components/postingaccount/SelectPostingAccount.vue";
+import Button from "@/components/ui/button/Button.vue";
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 import { type PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
 import MoneyflowService from "@/service/MoneyflowService";
