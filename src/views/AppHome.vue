@@ -138,7 +138,10 @@ import EditMonthlySettlementModalVue from "@/components/monthlysettlement/EditMo
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
-import { type PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
+import {
+  preDefMoneyflowAlreadyUsedThisMonth,
+  type PreDefMoneyflow,
+} from "@/model/moneyflow/PreDefMoneyflow";
 import router, { Routes } from "@/router";
 import EventService from "@/service/EventService";
 import PreDefMoneyflowService from "@/service/PreDefMoneyflowService";
@@ -206,10 +209,16 @@ const loadData = () => {
       }),
     PreDefMoneyflowService.fetchAllPreDefMoneyflow()
       .then((mpm) => {
+        const today = new Date();
         if (mpm && mpm.length > 0) {
-          favoriteMoneyflows.value = mpm.filter((flow) => flow.isFavorite);
-          console.log(favoriteMoneyflows.value);
-          console.log(mpm);
+          favoriteMoneyflows.value = mpm
+            .filter((flow) => flow.isFavorite)
+            .filter((mpm) => {
+              return (
+                !mpm.onceAMonth ||
+                !preDefMoneyflowAlreadyUsedThisMonth(today, mpm)
+              );
+            });
         }
       })
       .catch((backendError) => {

@@ -13,43 +13,8 @@
           <DivError :server-errors="serverErrors" />
 
           <div class="form-section space-y-4">
-            <div class="grid grid-cols-1 sm:grid-cols-12 gap-4">
-              <div class="sm:col-span-2">
-                <InputStandard
-                  v-model="mpm.favoriteAbbreviation"
-                  :validation-schema="schema.favoriteAbbreviation"
-                  id="favoriteAbbreviation"
-                  :field-label="$t('PreDefMoneyflow.favoriteAbbreviation')"
-                  maxlength="2"
-                />
-              </div>
-              <div class="sm:col-span-3">
-                <InputStandard
-                  v-model="mpm.favoriteColor"
-                  :validation-schema="schema.favoriteColor"
-                  id="favoriteColor"
-                  :field-label="$t('PreDefMoneyflow.favoriteColor')"
-                />
-              </div>
-              <div class="sm:col-span-1 flex items-end pb-0.5">
-                <button
-                  type="button"
-                  @click="mpm.isFavorite = !mpm.isFavorite"
-                  class="flex items-center justify-center p-2 rounded-md border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 w-10 transition-colors"
-                  :title="$t('PreDefMoneyflow.markAsFav')"
-                >
-                  <Star
-                    class="h-5 w-5 transition-all"
-                    :class="
-                      mpm.isFavorite
-                        ? 'fill-primary text-primary'
-                        : 'text-muted-foreground'
-                    "
-                  />
-                </button>
-              </div>
-              <div class="sm:col-span-6"></div>
-              <div class="sm:col-span-4">
+            <div class="grid grid-cols-2 sm:grid-cols-12 gap-4">
+              <div class="col-span-1 sm:col-span-6">
                 <InputStandard
                   v-model="mpm.amount"
                   :validation-schema="schema.amount"
@@ -61,28 +26,7 @@
                   <template #icon><Euro class="icon-medium" /></template>
                 </InputStandard>
               </div>
-              <div class="sm:col-span-8">
-                <InputStandard
-                  v-model="mpm.comment"
-                  :validation-schema="schema.comment"
-                  :id="'comment' + idSuffix"
-                  :field-label="$t('General.comment')"
-                >
-                  <template #icon
-                    ><MessageSquareMore class="icon-medium"
-                  /></template>
-                </InputStandard>
-              </div>
-
-              <div class="sm:col-span-8">
-                <SelectContractpartner
-                  v-model="mpm.contractpartnerId"
-                  :validation-schema="schema.contractpartnerId"
-                  :id-suffix="'CreatePreDefMoneyflow' + idSuffix"
-                  :field-label="$t('General.contractpartner')"
-                />
-              </div>
-              <div class="sm:col-span-4">
+              <div class="col-span-1 sm:col-span-6">
                 <div class="grid gap-1.5 relative justify-items-start w-full">
                   <Label
                     for="onceAMonth"
@@ -92,7 +36,7 @@
                   </Label>
                   <ToggleGroup
                     type="single"
-                    class="border border-input bg-muted inline-flex h-10 rounded-md overflow-hidden p-0 items-stretch w-full"
+                    class="border border-input bg-muted inline-flex h-8 rounded-md overflow-hidden p-0 items-stretch w-full"
                     :model-value="mpm.onceAMonth ? 'yes' : 'no'"
                     @update:model-value="
                       (val: any) => val && (mpm.onceAMonth = val === 'yes')
@@ -114,8 +58,104 @@
                   </ToggleGroup>
                 </div>
               </div>
+              <div
+                class="col-span-2 sm:col-span-12 grid grid-cols-3 gap-2 items-end mt-2"
+              >
+                <button
+                  type="button"
+                  @click="mpm.isFavorite = !mpm.isFavorite"
+                  class="flex items-center justify-center p-2 rounded-md border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 w-full transition-colors col-span-1"
+                  :title="$t('PreDefMoneyflow.markAsFav')"
+                >
+                  <Star
+                    class="h-5 w-5 transition-all"
+                    :class="
+                      mpm.isFavorite
+                        ? 'fill-primary text-primary'
+                        : 'text-muted-foreground'
+                    "
+                  />
+                </button>
+                <div class="col-span-1">
+                  <div class="grid gap-1.5 relative">
+                    <div
+                      @click="showColorPicker = !showColorPicker"
+                      class="h-10 w-full rounded-md border cursor-pointer transition-all flex items-center justify-center overflow-hidden shadow-sm hover:opacity-90"
+                      :style="{
+                        backgroundColor: mpm.favoriteColor || '#ffffff',
+                      }"
+                      :class="[
+                        !mpm.favoriteColor ||
+                        mpm.favoriteColor.toLowerCase() === '#ffffff'
+                          ? 'border-input'
+                          : 'border-transparent',
+                        favoriteColorErrorMessage ? 'border-destructive!' : '',
+                      ]"
+                      :data-testid="'favoriteColorPicker' + idSuffix"
+                    ></div>
 
-              <div class="sm:col-span-6">
+                    <div
+                      v-if="showColorPicker"
+                      class="absolute z-50 top-full mt-2 right-0 w-40 p-2 bg-popover border rounded-md shadow-md animate-in fade-in zoom-in-95"
+                    >
+                      <div class="grid grid-cols-5 gap-1 mb-2">
+                        <div
+                          v-for="color in randomColors"
+                          :key="color"
+                          @click="selectColor(color)"
+                          class="h-6 w-6 rounded-sm cursor-pointer border border-input/50 hover:scale-110 transition-transform"
+                          :style="{ backgroundColor: color }"
+                        ></div>
+                      </div>
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="xs"
+                        class="w-full h-7 text-[10px] gap-1"
+                        @click.stop="updateRandomColors"
+                      >
+                        <RefreshCw class="icon-extra-small" />
+                        {{ $t("General.reset") }}
+                      </Button>
+                    </div>
+                    <p
+                      v-if="favoriteColorErrorMessage"
+                      class="text-[0.8rem] font-medium text-destructive mt-0.5 text-left ml-1"
+                    >
+                      {{ favoriteColorErrorMessage }}
+                    </p>
+                  </div>
+                </div>
+                <div class="col-span-1">
+                  <InputStandard
+                    v-model="mpm.favoriteColor"
+                    :validation-schema="schema.favoriteColor"
+                    id="favoriteColor"
+                    field-label=""
+                  />
+                </div>
+              </div>
+              <div class="col-span-2 sm:col-span-12">
+                <InputStandard
+                  v-model="mpm.comment"
+                  :validation-schema="schema.comment"
+                  :id="'comment' + idSuffix"
+                  :field-label="$t('General.comment')"
+                >
+                  <template #icon
+                    ><MessageSquareMore class="icon-medium"
+                  /></template>
+                </InputStandard>
+              </div>
+              <div class="col-span-2 sm:col-span-12">
+                <SelectContractpartner
+                  v-model="mpm.contractpartnerId"
+                  :validation-schema="schema.contractpartnerId"
+                  :id-suffix="'CreatePreDefMoneyflow' + idSuffix"
+                  :field-label="$t('General.contractpartner')"
+                />
+              </div>
+              <div class="col-span-2 sm:col-span-6">
                 <SelectCapitalsource
                   v-model="mpm.capitalsourceId"
                   :validation-schema="schema.capitalsourceId"
@@ -124,7 +164,7 @@
                   :validity-date="validityDate"
                 />
               </div>
-              <div class="sm:col-span-6">
+              <div class="col-span-2 sm:col-span-6">
                 <SelectPostingAccount
                   v-model="mpm.postingAccountId"
                   :validation-schema="schema.postingAccountId"
@@ -167,9 +207,9 @@ import type { PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
 import PreDefMoneyflowService from "@/service/PreDefMoneyflowService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { amountSchema, globErr } from "@/tools/views/ZodUtil";
-import { Euro, Save, Star, Undo2 } from "lucide-vue-next";
-import { useForm } from "vee-validate";
-import { computed, ref, toRaw, useTemplateRef } from "vue";
+import { Euro, RefreshCw, Save, Star, Undo2 } from "lucide-vue-next";
+import { useField, useForm } from "vee-validate";
+import { computed, ref, toRaw, useTemplateRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { boolean, number, string, type ZodType } from "zod";
 import SelectCapitalsource from "../capitalsource/SelectCapitalsource.vue";
@@ -222,6 +262,30 @@ const validityDate = new Date();
 validityDate.setHours(0, 0, 0, 0);
 const emit = defineEmits(["preDefMoneyflowCreated", "preDefMoneyflowUpdated"]);
 
+const showColorPicker = ref(false);
+const randomColors = ref<string[]>([]);
+
+const updateRandomColors = () => {
+  randomColors.value = Array.from(
+    { length: 10 },
+    () =>
+      "#" +
+      Math.floor(Math.random() * 16777215)
+        .toString(16)
+        .padStart(6, "0"),
+  );
+};
+
+const selectColor = (color: string) => {
+  mpm.value.favoriteColor = color;
+  showColorPicker.value = false;
+};
+
+const {
+  errorMessage: favoriteColorErrorMessage,
+  setValue: setFavoriteColorValue,
+} = useField<string>(() => "favoriteColor", schema.favoriteColor);
+
 const { handleSubmit, values, setFieldTouched } = useForm();
 
 const title = computed(() => {
@@ -229,6 +293,13 @@ const title = computed(() => {
     ? t("PreDefMoneyflow.title.create")
     : t("PreDefMoneyflow.title.update");
 });
+
+watch(
+  () => mpm.value.favoriteColor,
+  (newVal) => {
+    setFavoriteColorValue(newVal);
+  },
+);
 
 const resetForm = () => {
   if (origMpm.value) {
@@ -238,8 +309,10 @@ const resetForm = () => {
     mpm.value.isFavorite = false;
     mpm.value.onceAMonth = false;
     mpm.value.favoriteAbbreviation = "";
-    mpm.value.favoriteColor = "";
+    mpm.value.favoriteColor = "#ffffff";
   }
+  showColorPicker.value = false;
+  updateRandomColors();
   serverErrors.value = new Array<string>();
   Object.keys(values).forEach((field) => setFieldTouched(field, false));
 };
