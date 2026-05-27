@@ -173,7 +173,7 @@ const showSuccessToast = (mmf: Moneyflow) => {
 
   if (toastTimer) clearTimeout(toastTimer);
 
-  toastTimer = window.setTimeout(() => {
+  toastTimer = globalThis.setTimeout(() => {
     toast.value.show = false;
   }, 5000);
 };
