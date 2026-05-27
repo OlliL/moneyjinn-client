@@ -91,7 +91,7 @@
                     <!-- Rahmeninhalt (Eingeblendet wenn Favorit aktiv) -->
                     <div
                       v-if="mpm.isFavorite"
-                      class="flex items-center flex-1 min-h-10 border border-input rounded-r-md pl-3 pr-1 gap-3 bg-muted/5 animate-in slide-in-from-left-2 duration-200"
+                      class="flex items-center flex-1 min-h-10 border border-input rounded-r-md pl-3 md:pl-1 pr-1 gap-3 md:gap-1 bg-muted/5 animate-in slide-in-from-left-2 duration-200"
                     >
                       <!-- Kürzel ohne eigenen Rahmen -->
                       <div class="w-12">
@@ -108,7 +108,7 @@
 
                       <!-- Color Picker -->
                       <div
-                        class="shrink-0 border-l border-border/50 pl-3 h-6 flex items-center"
+                        class="shrink-0 border-l border-border/50 pl3 md:pl-1 h-6 flex items-center"
                       >
                         <div class="relative">
                           <div

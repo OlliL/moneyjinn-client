@@ -4,7 +4,7 @@
       <FavoriteIcon
         v-if="mpm.isFavorite"
         :text="mpm.favoriteAbbreviation"
-        :color="mpm.favoriteColor || '#ffffff'"
+        :color="mpm.favoriteColor"
         size="sm"
         class="mx-auto"
       />
