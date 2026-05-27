@@ -69,6 +69,23 @@
       </Alert>
     </div>
   </div>
+
+  <div
+    v-if="dataLoaded && favoriteMoneyflows.length > 0"
+    class="flex flex-wrap justify-center gap-4 py-6 max-w-3xl mx-auto"
+  >
+    <div
+      v-for="flow in favoriteMoneyflows"
+      :key="flow.id"
+      class="w-16 h-16 rounded-full flex items-center justify-center font-bold text-xl shadow-md transition-transform active:scale-90 cursor-pointer select-none"
+      :style="{
+        backgroundColor: flow.favoriteColor,
+        color: getContrastColor(flow.favoriteColor!),
+      }"
+    >
+      {{ flow.favoriteAbbreviation }}
+    </div>
+  </div>
 </template>
 
 <script lang="ts" setup>
@@ -157,4 +174,14 @@ const navigateImportMoneyflows = () => {
 onMounted(() => {
   loadData();
 });
+
+const getContrastColor = (hexColor: string) => {
+  if (!hexColor || hexColor.length < 7) return "white";
+
+  const r = parseInt(hexColor.slice(1, 3), 16);
+  const g = parseInt(hexColor.slice(3, 5), 16);
+  const b = parseInt(hexColor.slice(5, 7), 16);
+  const yiq = (r * 299 + g * 587 + b * 114) / 1000;
+  return yiq >= 128 ? "black" : "white";
+};
 </script>
