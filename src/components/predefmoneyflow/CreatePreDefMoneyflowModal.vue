@@ -14,7 +14,7 @@
 
           <div class="form-section space-y-4">
             <div class="grid grid-cols-2 sm:grid-cols-12 gap-4">
-              <div class="col-span-1 sm:col-span-4">
+              <div class="col-span-1 sm:col-span-4 sm:mt-1">
                 <InputStandard
                   v-model="mpm.amount"
                   :validation-schema="schema.amount"
@@ -26,7 +26,7 @@
                   <template #icon><Euro class="icon-medium" /></template>
                 </InputStandard>
               </div>
-              <div class="col-span-1 sm:col-span-3">
+              <div class="col-span-1 sm:col-span-3 sm:mt-1">
                 <div class="grid gap-1.5 relative justify-items-start w-full">
                   <Label
                     for="onceAMonth"
@@ -62,11 +62,11 @@
                 <div class="grid gap-1.5 relative justify-items-start w-full">
                   <Label
                     class="text-left ml-1 text-sm font-medium text-foreground leading-none"
+                    for="fav-div"
                   >
                     {{ $t("Moneyflow.favorite") }}
                   </Label>
-                  <div class="flex items-stretch w-full relative">
-                    <!-- Favorit Button (Linker Teil des Rahmens) -->
+                  <div class="flex items-stretch w-full relative" id="fav-div">
                     <button
                       type="button"
                       @click="mpm.isFavorite = !mpm.isFavorite"
@@ -88,12 +88,10 @@
                       />
                     </button>
 
-                    <!-- Rahmeninhalt (Eingeblendet wenn Favorit aktiv) -->
                     <div
                       v-if="mpm.isFavorite"
                       class="flex items-center flex-1 min-h-10 border border-input rounded-r-md pl-3 md:pl-1 pr-1 gap-3 md:gap-1 bg-muted/5 animate-in slide-in-from-left-2 duration-200"
                     >
-                      <!-- Kürzel ohne eigenen Rahmen -->
                       <div class="w-12">
                         <InputStandard
                           v-model="mpm.favoriteAbbreviation"
@@ -106,7 +104,6 @@
                         />
                       </div>
 
-                      <!-- Color Picker -->
                       <div
                         class="shrink-0 border-l border-border/50 pl3 md:pl-1 h-6 flex items-center"
                       >
@@ -128,7 +125,7 @@
 
                           <div
                             v-if="showColorPicker"
-                            class="absolute z-50 top-full mt-2 left-0 w-40 p-2 bg-popover border rounded-md shadow-md animate-in fade-in zoom-in-95"
+                            class="absolute z-50 top-full mt-2 left-[-67px] w-40 p-2 bg-popover border rounded-md shadow-md animate-in fade-in zoom-in-95"
                           >
                             <div class="grid grid-cols-5 gap-1 mb-2">
                               <div
@@ -159,7 +156,6 @@
                         >
                           Vorschau:
                         </span>
-                        <!-- Vorschau Icon -->
                         <div
                           class="border-l border-border/50 pl-1 h-6 flex items-center shrink-0"
                         >
@@ -172,7 +168,6 @@
                       </div>
                     </div>
 
-                    <!-- Absolute Positionierung der Fehlermeldung unter der Gruppe -->
                     <p
                       v-if="favoriteColorErrorMessage"
                       class="absolute top-full left-0 text-[10px] font-medium text-destructive mt-0.5 whitespace-nowrap"
