@@ -84,11 +84,11 @@
                     align="center"
                   />
                 </div>
-                <div class="w-10 shrink-0">
+                <div class="w-8 shrink-0">
                   <div class="relative">
                     <div
                       @click="toggleColorPicker"
-                      class="h-10 w-10 rounded-md border cursor-pointer transition-all flex items-center justify-center overflow-hidden shadow-sm hover:opacity-90"
+                      class="h-8 w-8 rounded-md border cursor-pointer transition-all flex items-center justify-center overflow-hidden shadow-sm hover:opacity-90"
                       :style="{
                         backgroundColor: mpm.favoriteColor || '#ffffff',
                       }"
@@ -136,7 +136,7 @@
                 </div>
                 <div
                   v-if="mpm.isFavorite"
-                  class="w-10 h-10 rounded-full flex items-center justify-center font-bold text-xs shadow-md select-none transition-colors ml-auto shrink-0"
+                  class="w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs shadow-md select-none transition-colors ml-auto shrink-0"
                   :style="{
                     backgroundColor: mpm.favoriteColor || '#ffffff',
                     color: getContrastColor(mpm.favoriteColor || '#ffffff'),
