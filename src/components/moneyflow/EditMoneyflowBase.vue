@@ -64,7 +64,9 @@
             :id="'comment' + idSuffix"
             :field-label="$t('General.comment')"
             name="comment"
-          />
+          >
+            <template #icon><MessageSquareMore class="icon-medium" /></template>
+          </InputStandard>
         </div>
 
         <div class="w-full md:w-4/12 shrink-0">
@@ -225,7 +227,7 @@ import { toFixed } from "@/tools/math";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { isDesktop } from "@/tools/views/IsDesktop";
 import { amountSchema, globErr } from "@/tools/views/ZodUtil";
-import { Euro, Plus } from "lucide-vue-next";
+import { Euro, MessageSquareMore, Plus } from "lucide-vue-next";
 import { computed, onMounted, ref, toRaw, watch, type PropType } from "vue";
 import { useI18n } from "vue-i18n";
 import { date, number, string } from "zod";

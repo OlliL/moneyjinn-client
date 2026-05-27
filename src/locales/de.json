@@ -410,15 +410,19 @@
     "onceAMonth": "nur 1x pro Monat",
     "onceAMonthShort": "1x",
     "lastUsed": "zuletzt verwendet",
+    "lastUsedShort": "zuletzt",
     "createDate": "angelegt",
     "searchBy": "Suchen nach Vertragspartner...",
+    "preview": "Vorschau",
+    "favorite": "Favorit",
     "title": {
       "create": "vordefinierte Geldbewegung hinzufügen",
       "update": "vordefinierte Geldbewegung bearbeiten",
       "delete": "vordefinierte Geldbewegung löschen"
     },
     "validation": {
-      "onceAMonth": "Bitte auswählen ob nur 1x im Monat!"
+      "onceAMonth": "Bitte auswählen ob nur 1x im Monat!",
+      "favoriteAbbreviation": "angeben!"
     }
   },
   "Receipt": {

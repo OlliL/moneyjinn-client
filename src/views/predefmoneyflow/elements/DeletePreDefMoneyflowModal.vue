@@ -37,11 +37,22 @@
       <ModalDeleteRow :label="$t('PreDefMoneyflow.lastUsed')">
         <SpanDate :date="mpm.lastUsed" />
       </ModalDeleteRow>
+
+      <ModalDeleteRow :label="$t('PreDefMoneyflow.favorite')">
+        <FavoriteIcon
+          v-if="mpm.isFavorite"
+          :text="mpm.favoriteAbbreviation"
+          :color="mpm.favoriteColor"
+          size="sm"
+        />
+        <span v-else>-</span>
+      </ModalDeleteRow>
     </template>
   </ModalDelete>
 </template>
 
 <script lang="ts" setup>
+import FavoriteIcon from "@/components/common/FavoriteIcon.vue";
 import ModalDelete from "@/components/common/ModalDelete.vue";
 import ModalDeleteRow from "@/components/common/ModalDeleteRow.vue";
 import SpanAmount from "@/components/common/SpanAmount.vue";

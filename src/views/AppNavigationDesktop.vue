@@ -7,9 +7,11 @@
     <MenubarMenu>
       <MenubarTrigger as-child>
         <router-link
-          class="text-foreground no-underline"
+          class="text-foreground no-underline flex gap-2"
           :to="{ name: Routes.Home, force: true }"
-          ><small>moneyjin {{ version }}</small></router-link
+          ><Home class="h-5 w-5" /><small
+            >moneyjin {{ version }}</small
+          ></router-link
         ></MenubarTrigger
       >
     </MenubarMenu>
@@ -329,6 +331,7 @@ import {
   ChartColumnIncreasing,
   ChevronDown,
   Euro,
+  Home,
   ListTodo,
   LogOut,
   Search,

@@ -3,6 +3,7 @@
     <DivContentTable>
       <TableHeader>
         <TableRow>
+          <TableHead class="table-head-cell"></TableHead>
           <TableHead class="table-head-cell">{{
             $t("General.amount")
           }}</TableHead>
@@ -33,7 +34,7 @@
       <TableBody>
         <template v-if="preDefMoneyflows.length === 0">
           <tr data-testid="predef-moneyflow-empty-desktop">
-            <td :colspan="10" class="text-center text-muted-foreground py-8">
+            <td :colspan="11" class="text-center text-muted-foreground py-8">
               {{ $t("General.noEntries") }}
             </td>
           </tr>

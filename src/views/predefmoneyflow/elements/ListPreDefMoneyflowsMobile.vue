@@ -34,6 +34,12 @@
                 }}</span>
               </div>
               <div class="flex items-center gap-1 pr-2">
+                <FavoriteIcon
+                  v-if="mpm.isFavorite"
+                  :text="mpm.favoriteAbbreviation"
+                  :color="mpm.favoriteColor"
+                  size="sm"
+                />
                 <Button
                   variant="ghost"
                   size="icon"
@@ -103,6 +109,7 @@
 </template>
 
 <script lang="ts" setup>
+import FavoriteIcon from "@/components/common/FavoriteIcon.vue";
 import SpanAmount from "@/components/common/SpanAmount.vue";
 import SpanBoolean from "@/components/common/SpanBoolean.vue";
 import SpanDate from "@/components/common/SpanDate.vue";

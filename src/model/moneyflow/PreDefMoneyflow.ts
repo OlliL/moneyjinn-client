@@ -12,6 +12,9 @@ export type PreDefMoneyflow = {
   lastUsed?: Date;
   postingAccountId: number;
   postingAccountName?: string;
+  isFavorite: boolean;
+  favoriteColor?: string;
+  favoriteAbbreviation?: string;
 };
 
 export function preDefMoneyflowAlreadyUsedThisMonth(

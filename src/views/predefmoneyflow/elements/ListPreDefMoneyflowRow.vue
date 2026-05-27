@@ -1,5 +1,14 @@
 <template>
   <TableRow :data-testid="`predef-moneyflow-row-${mpm.id}`">
+    <TableCell class="text-center border-r px-0">
+      <FavoriteIcon
+        v-if="mpm.isFavorite"
+        :text="mpm.favoriteAbbreviation"
+        :color="mpm.favoriteColor"
+        size="sm"
+        class="mx-auto"
+      />
+    </TableCell>
     <TableCell class="text-right border-r py-1 px-2">
       <SpanAmount :amount="mpm.amount" />
     </TableCell>
@@ -43,6 +52,7 @@
 </template>
 <script lang="ts" setup>
 import ButtonTableIcon from "@/components/common/ButtonTableIcon.vue";
+import FavoriteIcon from "@/components/common/FavoriteIcon.vue";
 import SpanAmount from "@/components/common/SpanAmount.vue";
 import SpanBoolean from "@/components/common/SpanBoolean.vue";
 import SpanDate from "@/components/common/SpanDate.vue";
