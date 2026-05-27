@@ -419,7 +419,8 @@
       "delete": "vordefinierte Geldbewegung löschen"
     },
     "validation": {
-      "onceAMonth": "Bitte auswählen ob nur 1x im Monat!"
+      "onceAMonth": "Bitte auswählen ob nur 1x im Monat!",
+      "favoriteAbbreviation": "angeben!"
     }
   },
   "Receipt": {

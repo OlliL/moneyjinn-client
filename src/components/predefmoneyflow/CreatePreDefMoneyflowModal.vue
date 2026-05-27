@@ -290,7 +290,7 @@ const schema: Partial<{ [key in keyof PreDefMoneyflow]: ZodType }> = {
     globErr(t("PreDefMoneyflow.validation.favoriteAbbreviation")),
   )
     .min(1)
-    .max(2, t("PreDefMoneyflow.validation.length.favoriteAbbreviation")),
+    .max(2),
   favoriteColor: string(
     globErr(t("PreDefMoneyflow.validation.favoriteColor")),
   ).length(7, t("PreDefMoneyflow.validation.length.favoriteColor")),
@@ -366,6 +366,7 @@ watch(
 );
 
 const resetForm = () => {
+  updateRandomColors();
   if (origMpm.value) {
     mpm.value = structuredClone(toRaw(origMpm.value))!;
   } else {
@@ -373,10 +374,9 @@ const resetForm = () => {
     mpm.value.isFavorite = false;
     mpm.value.onceAMonth = false;
     mpm.value.favoriteAbbreviation = "";
-    mpm.value.favoriteColor = "#ffffff";
+    mpm.value.favoriteColor = randomColors.value[0];
   }
   showColorPicker.value = false;
-  updateRandomColors();
   serverErrors.value = new Array<string>();
   Object.keys(values).forEach((field) => setFieldTouched(field, false));
 };
