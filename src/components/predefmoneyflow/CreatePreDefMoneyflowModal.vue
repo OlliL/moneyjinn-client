@@ -14,7 +14,7 @@
 
           <div class="form-section space-y-4">
             <div class="grid grid-cols-2 sm:grid-cols-12 gap-4">
-              <div class="col-span-1 sm:col-span-6">
+              <div class="col-span-1 sm:col-span-4">
                 <InputStandard
                   v-model="mpm.amount"
                   :validation-schema="schema.amount"
@@ -26,7 +26,7 @@
                   <template #icon><Euro class="icon-medium" /></template>
                 </InputStandard>
               </div>
-              <div class="col-span-1 sm:col-span-6">
+              <div class="col-span-1 sm:col-span-3">
                 <div class="grid gap-1.5 relative justify-items-start w-full">
                   <Label
                     for="onceAMonth"
@@ -58,13 +58,11 @@
                   </ToggleGroup>
                 </div>
               </div>
-              <div
-                class="col-span-2 sm:col-span-12 grid grid-cols-3 gap-2 items-end mt-2"
-              >
+              <div class="col-span-2 sm:col-span-5 flex items-end gap-3 mt-2">
                 <button
                   type="button"
                   @click="mpm.isFavorite = !mpm.isFavorite"
-                  class="flex items-center justify-center p-2 rounded-md border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 w-full transition-colors col-span-1"
+                  class="flex items-center justify-center p-2 rounded-md border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 w-10 shrink-0 transition-colors"
                   :title="$t('PreDefMoneyflow.markAsFav')"
                 >
                   <Star
@@ -76,20 +74,21 @@
                     "
                   />
                 </button>
-                <div class="col-span-1">
+                <div class="w-16 shrink-0">
                   <InputStandard
                     v-model="mpm.favoriteAbbreviation"
                     :validation-schema="schema.favoriteAbbreviation"
                     id="favoriteAbbreviation"
                     field-label=""
                     maxlength="2"
+                    align="center"
                   />
                 </div>
-                <div class="col-span-1">
-                  <div class="grid gap-1.5 relative">
+                <div class="w-10 shrink-0">
+                  <div class="relative">
                     <div
                       @click="toggleColorPicker"
-                      class="h-10 w-full rounded-md border cursor-pointer transition-all flex items-center justify-center overflow-hidden shadow-sm hover:opacity-90"
+                      class="h-10 w-10 rounded-md border cursor-pointer transition-all flex items-center justify-center overflow-hidden shadow-sm hover:opacity-90"
                       :style="{
                         backgroundColor: mpm.favoriteColor || '#ffffff',
                       }"
@@ -105,7 +104,7 @@
 
                     <div
                       v-if="showColorPicker"
-                      class="absolute z-50 top-full mt-2 right-0 w-40 p-2 bg-popover border rounded-md shadow-md animate-in fade-in zoom-in-95"
+                      class="absolute z-50 top-full mt-2 left-0 w-40 p-2 bg-popover border rounded-md shadow-md animate-in fade-in zoom-in-95"
                     >
                       <div class="grid grid-cols-5 gap-1 mb-2">
                         <div
@@ -129,14 +128,24 @@
                     </div>
                     <p
                       v-if="favoriteColorErrorMessage"
-                      class="text-[0.8rem] font-medium text-destructive mt-0.5 text-left ml-1"
+                      class="absolute top-full text-[10px] font-medium text-destructive mt-0.5 whitespace-nowrap"
                     >
                       {{ favoriteColorErrorMessage }}
                     </p>
                   </div>
                 </div>
+                <div
+                  v-if="mpm.isFavorite"
+                  class="w-10 h-10 rounded-full flex items-center justify-center font-bold text-xs shadow-md select-none transition-colors ml-auto shrink-0"
+                  :style="{
+                    backgroundColor: mpm.favoriteColor || '#ffffff',
+                    color: getContrastColor(mpm.favoriteColor || '#ffffff'),
+                  }"
+                >
+                  {{ mpm.favoriteAbbreviation }}
+                </div>
               </div>
-              <div class="col-span-2 sm:col-span-12">
+              <div class="col-span-2 sm:col-span-6">
                 <InputStandard
                   v-model="mpm.comment"
                   :validation-schema="schema.comment"
@@ -148,7 +157,7 @@
                   /></template>
                 </InputStandard>
               </div>
-              <div class="col-span-2 sm:col-span-12">
+              <div class="col-span-2 sm:col-span-6">
                 <SelectContractpartner
                   v-model="mpm.contractpartnerId"
                   :validation-schema="schema.contractpartnerId"
@@ -286,6 +295,15 @@ const toggleColorPicker = () => {
 const selectColor = (color: string) => {
   mpm.value.favoriteColor = color;
   showColorPicker.value = false;
+};
+
+const getContrastColor = (hexColor: string) => {
+  if (!hexColor || hexColor.length < 7) return "black";
+  const r = parseInt(hexColor.slice(1, 3), 16);
+  const g = parseInt(hexColor.slice(3, 5), 16);
+  const b = parseInt(hexColor.slice(5, 7), 16);
+  const yiq = (r * 299 + g * 587 + b * 114) / 1000;
+  return yiq >= 128 ? "black" : "white";
 };
 
 const {
