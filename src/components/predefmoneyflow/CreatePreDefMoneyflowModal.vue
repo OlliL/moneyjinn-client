@@ -170,6 +170,7 @@ const resetForm = () => {
     mpm.value = structuredClone(toRaw(origMpm.value))!;
   } else {
     mpm.value = {} as PreDefMoneyflow;
+    mpm.value.isFavorite = false;
   }
   serverErrors.value = new Array<string>();
   Object.keys(values).forEach((field) => setFieldTouched(field, false));

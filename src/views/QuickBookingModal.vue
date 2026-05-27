@@ -17,7 +17,7 @@
         </div>
 
         <!-- Eingabefelder -->
-        <div class="grid grid-cols-2 gap-3">
+        <div class="grid grid-cols-3 gap-3">
           <InputStandard
             v-model="amount"
             id="quickBookingAmount"
@@ -28,11 +28,30 @@
             <template #icon><Euro class="icon-medium" /></template>
           </InputStandard>
 
-          <InputDate
-            v-model="bookingDate"
-            id="quickBookingDate"
-            :field-label="$t('Moneyflow.bookingdate')"
-          />
+          <div class="flex items-end gap-0.5 col-span-2">
+            <InputDate
+              v-model="bookingDate"
+              id="quickBookingDate"
+              :field-label="$t('Moneyflow.bookingdate')"
+              class="flex-1 min-w-0"
+            />
+            <Button
+              variant="ghost"
+              size="icon"
+              class="h-9 w-8 shrink-0 mb-0.5"
+              @click="changeDate(-1)"
+            >
+              <ChevronLeft class="icon-medium" />
+            </Button>
+            <Button
+              variant="ghost"
+              size="icon"
+              class="h-9 w-8 shrink-0 mb-0.5"
+              @click="changeDate(1)"
+            >
+              <ChevronRight class="icon-medium" />
+            </Button>
+          </div>
         </div>
 
         <div class="space-y-3">
@@ -66,7 +85,13 @@ import Modal from "@/components/common/Modal.vue";
 import SelectPostingAccount from "@/components/postingaccount/SelectPostingAccount.vue";
 import { Button } from "@/components/ui/button";
 import { type PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
-import { CreditCard, Euro, MessageSquareMore } from "lucide-vue-next";
+import {
+  ChevronLeft,
+  ChevronRight,
+  CreditCard,
+  Euro,
+  MessageSquareMore,
+} from "lucide-vue-next";
 import { ref, useTemplateRef } from "vue";
 
 const modalComponent = useTemplateRef<typeof Modal>("modalComponent");
@@ -76,6 +101,12 @@ const amount = ref<number>();
 const comment = ref("");
 const bookingDate = ref(new Date());
 const postingAccountId = ref(0);
+
+const changeDate = (days: number) => {
+  const newDate = new Date(bookingDate.value);
+  newDate.setDate(newDate.getDate() + days);
+  bookingDate.value = newDate;
+};
 
 const _show = (flow: PreDefMoneyflow) => {
   preDef.value = flow;

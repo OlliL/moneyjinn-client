@@ -466,6 +466,7 @@ test("PreDefMoneyflow with onceAMonth used this month is not shown in select", a
     onceAMonth: true,
     lastUsed: new Date(now.getFullYear(), now.getMonth(), 1),
     postingAccountId: 1,
+    isFavorite: false,
   };
 
   PreDefMoneyflowServiceMocker.mockFetchAllPreDefMoneyflow([onceAMonthUsed]);
