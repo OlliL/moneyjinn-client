@@ -3,6 +3,7 @@
     ref="editModal"
     @monthly-settlement-upserted="monthlySettlementUpserted"
   />
+  <QuickBookingModal ref="quickBookingModal" />
   <div class="custom-container space-y-6">
     <div class="text-center">
       <h4 class="text-2xl font-bold">
@@ -78,6 +79,7 @@
       v-for="flow in favoriteMoneyflows"
       :key="flow.id"
       class="w-16 h-16 rounded-full flex items-center justify-center font-bold text-xl shadow-md transition-transform active:scale-90 cursor-pointer select-none"
+      @click="openQuickBooking(flow)"
       :style="{
         backgroundColor: flow.favoriteColor,
         color: getContrastColor(flow.favoriteColor!),
@@ -100,6 +102,7 @@ import PreDefMoneyflowService from "@/service/PreDefMoneyflowService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { CheckCircle2, ExternalLink } from "lucide-vue-next";
 import { onMounted, ref, useTemplateRef } from "vue";
+import QuickBookingModal from "./QuickBookingModal.vue";
 
 const serverErrors = ref(new Array<string>());
 
@@ -109,6 +112,8 @@ const monthlySettlementMonth = ref(0);
 const monthlySettlementYear = ref(0);
 const editModal =
   useTemplateRef<typeof EditMonthlySettlementModalVue>("editModal");
+const quickBookingModal =
+  useTemplateRef<typeof QuickBookingModal>("quickBookingModal");
 const dataLoaded = ref(false);
 const favoriteMoneyflows = ref<Array<PreDefMoneyflow>>([]);
 
@@ -171,6 +176,11 @@ const navigateImportMoneyflows = () => {
     name: Routes.ImportMoneyflows,
   });
 };
+
+const openQuickBooking = (flow: PreDefMoneyflow) => {
+  quickBookingModal.value?._show(flow);
+};
+
 onMounted(() => {
   loadData();
 });
