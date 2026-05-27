@@ -1,33 +1,20 @@
 <template>
   <Modal
-    :title="$t('Moneyflow.newBooking')"
+    :title="preDef.contractpartnerName || $t('Moneyflow.newBooking')"
     ref="modalComponent"
     max-width="md:max-w-md w-full"
   >
     <template #body>
-      <div class="space-y-6 pt-2">
-        <!-- Info-Bereich (Vertragspartner & Kapitalquelle) -->
-        <div class="bg-muted/30 p-3 rounded-lg border space-y-2">
-          <div class="flex items-center gap-2 text-foreground">
-            <Handshake class="icon-small shrink-0" />
-            <span class="font-bold text-sm truncate">{{
-              preDef.contractpartnerName
-            }}</span>
-          </div>
-          <div class="flex items-center gap-2 text-muted-foreground text-xs">
-            <CreditCard class="icon-extra-small shrink-0" />
-            <span class="truncate">{{ preDef.capitalsourceComment }}</span>
-          </div>
+      <div class="space-y-3 pt-0">
+        <!-- Kapitalquelle als dezenter Untertitel direkt unter dem Modal-Header -->
+        <div
+          class="text-[11px] text-muted-foreground font-bold uppercase tracking-wider px-1 -mt-2 mb-3"
+        >
+          {{ preDef.capitalsourceComment }}
         </div>
 
         <!-- Eingabefelder -->
-        <div class="space-y-4">
-          <InputDate
-            v-model="bookingDate"
-            id="quickBookingDate"
-            :field-label="$t('Moneyflow.bookingdate')"
-          />
-
+        <div class="grid grid-cols-2 gap-3">
           <InputStandard
             v-model="amount"
             id="quickBookingAmount"
@@ -38,6 +25,14 @@
             <template #icon><Euro class="icon-medium" /></template>
           </InputStandard>
 
+          <InputDate
+            v-model="bookingDate"
+            id="quickBookingDate"
+            :field-label="$t('Moneyflow.bookingdate')"
+          />
+        </div>
+
+        <div class="space-y-3">
           <InputStandard
             v-model="comment"
             id="quickBookingComment"
@@ -56,7 +51,7 @@
     </template>
 
     <template #footer>
-      <Button class="w-full md:w-auto px-8"> Buchen </Button>
+      <Button class="w-full px-8"> Buchen </Button>
     </template>
   </Modal>
 </template>
@@ -68,12 +63,7 @@ import Modal from "@/components/common/Modal.vue";
 import SelectPostingAccount from "@/components/postingaccount/SelectPostingAccount.vue";
 import { Button } from "@/components/ui/button";
 import { type PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
-import {
-  CreditCard,
-  Euro,
-  Handshake,
-  MessageSquareMore,
-} from "lucide-vue-next";
+import { Euro, MessageSquareMore } from "lucide-vue-next";
 import { ref, useTemplateRef } from "vue";
 
 const modalComponent = useTemplateRef<typeof Modal>("modalComponent");
