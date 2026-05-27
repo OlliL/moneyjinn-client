@@ -77,9 +77,18 @@
                   />
                 </button>
                 <div class="col-span-1">
+                  <InputStandard
+                    v-model="mpm.favoriteAbbreviation"
+                    :validation-schema="schema.favoriteAbbreviation"
+                    id="favoriteAbbreviation"
+                    field-label=""
+                    maxlength="2"
+                  />
+                </div>
+                <div class="col-span-1">
                   <div class="grid gap-1.5 relative">
                     <div
-                      @click="showColorPicker = !showColorPicker"
+                      @click="toggleColorPicker"
                       class="h-10 w-full rounded-md border cursor-pointer transition-all flex items-center justify-center overflow-hidden shadow-sm hover:opacity-90"
                       :style="{
                         backgroundColor: mpm.favoriteColor || '#ffffff',
@@ -125,14 +134,6 @@
                       {{ favoriteColorErrorMessage }}
                     </p>
                   </div>
-                </div>
-                <div class="col-span-1">
-                  <InputStandard
-                    v-model="mpm.favoriteColor"
-                    :validation-schema="schema.favoriteColor"
-                    id="favoriteColor"
-                    field-label=""
-                  />
                 </div>
               </div>
               <div class="col-span-2 sm:col-span-12">
@@ -207,6 +208,7 @@ import type { PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
 import PreDefMoneyflowService from "@/service/PreDefMoneyflowService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { amountSchema, globErr } from "@/tools/views/ZodUtil";
+import { toTypedSchema } from "@vee-validate/zod";
 import { Euro, RefreshCw, Save, Star, Undo2 } from "lucide-vue-next";
 import { useField, useForm } from "vee-validate";
 import { computed, ref, toRaw, useTemplateRef, watch } from "vue";
@@ -276,6 +278,11 @@ const updateRandomColors = () => {
   );
 };
 
+const toggleColorPicker = () => {
+  showColorPicker.value = !showColorPicker.value;
+  if (showColorPicker.value) updateRandomColors();
+};
+
 const selectColor = (color: string) => {
   mpm.value.favoriteColor = color;
   showColorPicker.value = false;
@@ -284,7 +291,10 @@ const selectColor = (color: string) => {
 const {
   errorMessage: favoriteColorErrorMessage,
   setValue: setFavoriteColorValue,
-} = useField<string>(() => "favoriteColor", schema.favoriteColor);
+} = useField<string>(
+  () => "favoriteColor",
+  toTypedSchema(schema.favoriteColor!),
+);
 
 const { handleSubmit, values, setFieldTouched } = useForm();
 
@@ -297,7 +307,7 @@ const title = computed(() => {
 watch(
   () => mpm.value.favoriteColor,
   (newVal) => {
-    setFavoriteColorValue(newVal);
+    setFavoriteColorValue(newVal ?? "");
   },
 );
 
