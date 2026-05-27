@@ -83,7 +83,7 @@
                   <!-- Rahmeninhalt (Eingeblendet wenn Favorit aktiv) -->
                   <div
                     v-if="mpm.isFavorite"
-                    class="flex items-center flex-1 h-10 border border-input rounded-r-md px-3 gap-3 bg-muted/5 animate-in slide-in-from-left-2 duration-200"
+                    class="flex items-center flex-1 h-10 border border-input rounded-r-md pl-3 pr-1 gap-3 bg-muted/5 animate-in slide-in-from-left-2 duration-200"
                   >
                     <!-- Kürzel ohne eigenen Rahmen -->
                     <div class="w-12">
@@ -155,10 +155,10 @@
                       </span>
                       <!-- Vorschau Icon -->
                       <div
-                        class="border-l border-border/50 pl-3 h-6 flex items-center shrink-0"
+                        class="border-l border-border/50 pl-1 h-6 flex items-center shrink-0"
                       >
                         <div
-                          class="w-7 h-7 rounded-full flex items-center justify-center font-bold text-[10px] shadow-sm select-none transition-colors"
+                          class="w-8 h-8 rounded-full flex items-center justify-center font-bold text-[10px] shadow-sm select-none transition-colors"
                           :style="{
                             backgroundColor: mpm.favoriteColor || '#ffffff',
                             color: getContrastColor(
