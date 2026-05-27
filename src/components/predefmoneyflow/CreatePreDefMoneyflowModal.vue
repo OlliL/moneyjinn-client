@@ -147,15 +147,28 @@
                       </div>
                     </div>
 
-                    <!-- Vorschau Icon -->
-                    <div
-                      class="w-9 h-9 rounded-full flex items-center justify-center font-bold text-[10px] shadow-sm select-none transition-colors ml-auto shrink-0"
-                      :style="{
-                        backgroundColor: mpm.favoriteColor || '#ffffff',
-                        color: getContrastColor(mpm.favoriteColor || '#ffffff'),
-                      }"
-                    >
-                      {{ mpm.favoriteAbbreviation }}
+                    <div class="ml-auto flex items-center gap-1.5">
+                      <span
+                        class="text-[10px] font-bold uppercase tracking-wider text-muted-foreground/70"
+                      >
+                        Vorschau:
+                      </span>
+                      <!-- Vorschau Icon -->
+                      <div
+                        class="border-l border-border/50 pl-3 h-6 flex items-center shrink-0"
+                      >
+                        <div
+                          class="w-7 h-7 rounded-full flex items-center justify-center font-bold text-[10px] shadow-sm select-none transition-colors"
+                          :style="{
+                            backgroundColor: mpm.favoriteColor || '#ffffff',
+                            color: getContrastColor(
+                              mpm.favoriteColor || '#ffffff',
+                            ),
+                          }"
+                        >
+                          {{ mpm.favoriteAbbreviation }}
+                        </div>
+                      </div>
                     </div>
                   </div>
 
