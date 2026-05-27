@@ -413,6 +413,8 @@
     "lastUsedShort": "zuletzt",
     "createDate": "angelegt",
     "searchBy": "Suchen nach Vertragspartner...",
+    "preview": "Vorschau",
+    "favorite": "Favorit",
     "title": {
       "create": "vordefinierte Geldbewegung hinzufügen",
       "update": "vordefinierte Geldbewegung bearbeiten",

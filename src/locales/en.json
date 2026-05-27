@@ -414,13 +414,16 @@
     "lastUsedShort": "Last",
     "createDate": "Created",
     "searchBy": "Search by Business Partner...",
+    "preview": "Preview",
+    "favorite": "Favorite",
     "title": {
       "create": "Create Template Transaction",
       "update": "Update Template Transaction",
       "delete": "Delete Template Transaction"
     },
     "validation": {
-      "onceAMonth": "Please specify if this applies only once per month!"
+      "onceAMonth": "Please specify if this applies only once per month!",
+      "favoriteAbbreviation": "enter!"
     }
   },
   "Receipt": {

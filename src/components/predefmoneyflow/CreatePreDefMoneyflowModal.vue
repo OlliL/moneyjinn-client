@@ -58,128 +58,131 @@
                   </ToggleGroup>
                 </div>
               </div>
-              <div class="col-span-2 sm:col-span-5 flex items-end mt-2">
-                <div class="flex items-stretch w-full relative">
-                  <!-- Favorit Button (Linker Teil des Rahmens) -->
-                  <button
-                    type="button"
-                    @click="mpm.isFavorite = !mpm.isFavorite"
-                    :class="[
-                      'flex items-center justify-center p-2 border border-input bg-background hover:bg-accent hover:text-accent-foreground min-h-10 w-10 shrink-0 transition-all z-20',
-                      mpm.isFavorite ? 'rounded-l-md border-r-0' : 'rounded-md',
-                    ]"
-                    :title="$t('PreDefMoneyflow.markAsFav')"
+              <div class="col-span-2 sm:col-span-5">
+                <div class="grid gap-1.5 relative justify-items-start w-full">
+                  <Label
+                    class="text-left ml-1 text-sm font-medium text-foreground leading-none"
                   >
-                    <Star
-                      class="h-5 w-5 transition-all"
-                      :class="
+                    {{ $t("Moneyflow.favorite") }}
+                  </Label>
+                  <div class="flex items-stretch w-full relative">
+                    <!-- Favorit Button (Linker Teil des Rahmens) -->
+                    <button
+                      type="button"
+                      @click="mpm.isFavorite = !mpm.isFavorite"
+                      :class="[
+                        'flex items-center justify-center p-2 border border-input bg-background hover:bg-accent hover:text-accent-foreground min-h-10 w-10 shrink-0 transition-all z-20',
                         mpm.isFavorite
-                          ? 'fill-primary text-primary'
-                          : 'text-muted-foreground'
-                      "
-                    />
-                  </button>
-
-                  <!-- Rahmeninhalt (Eingeblendet wenn Favorit aktiv) -->
-                  <div
-                    v-if="mpm.isFavorite"
-                    class="flex items-center flex-1 min-h-10 border border-input rounded-r-md pl-3 pr-1 gap-3 bg-muted/5 animate-in slide-in-from-left-2 duration-200"
-                  >
-                    <!-- Kürzel ohne eigenen Rahmen -->
-                    <div class="w-12">
-                      <InputStandard
-                        v-model="mpm.favoriteAbbreviation"
-                        :validation-schema="schema.favoriteAbbreviation"
-                        id="favoriteAbbreviation"
-                        field-label=""
-                        maxlength="3"
-                        align="center"
-                        class="[&_input]:border-0 [&_input]:focus-visible:ring-0 [&_input]:h-8 [&_input]:bg-transparent [&_input]:shadow-none [&_input]:p-0"
-                      />
-                    </div>
-
-                    <!-- Color Picker -->
-                    <div
-                      class="shrink-0 border-l border-border/50 pl-3 h-6 flex items-center"
+                          ? 'rounded-l-md border-r-0'
+                          : 'rounded-md',
+                      ]"
+                      :title="$t('PreDefMoneyflow.markAsFav')"
                     >
-                      <div class="relative">
-                        <div
-                          @click="toggleColorPicker"
-                          class="h-6 w-6 rounded-sm border cursor-pointer transition-all flex items-center justify-center shadow-sm hover:opacity-90"
-                          :style="{
-                            backgroundColor: mpm.favoriteColor || '#ffffff',
-                          }"
-                          :class="[
-                            !mpm.favoriteColor ||
-                            mpm.favoriteColor.toLowerCase() === '#ffffff'
-                              ? 'border-input'
-                              : 'border-transparent',
-                            favoriteColorErrorMessage
-                              ? 'border-destructive!'
-                              : '',
-                          ]"
-                          :data-testid="'favoriteColorPicker' + idSuffix"
-                        ></div>
+                      <Star
+                        class="h-5 w-5 transition-all"
+                        :class="
+                          mpm.isFavorite
+                            ? 'fill-primary text-primary'
+                            : 'text-muted-foreground'
+                        "
+                      />
+                    </button>
 
-                        <div
-                          v-if="showColorPicker"
-                          class="absolute z-50 top-full mt-2 left-0 w-40 p-2 bg-popover border rounded-md shadow-md animate-in fade-in zoom-in-95"
-                        >
-                          <div class="grid grid-cols-5 gap-1 mb-2">
-                            <div
-                              v-for="color in randomColors"
-                              :key="color"
-                              @click="selectColor(color)"
-                              class="h-6 w-6 rounded-sm cursor-pointer border border-input/50 hover:scale-110 transition-transform"
-                              :style="{ backgroundColor: color }"
-                            ></div>
-                          </div>
-                          <Button
-                            type="button"
-                            variant="ghost"
-                            size="xs"
-                            class="w-full h-7 text-[10px] gap-1"
-                            @click.stop="updateRandomColors"
-                          >
-                            <RefreshCw class="icon-extra-small" />
-                            {{ $t("General.reset") }}
-                          </Button>
-                        </div>
+                    <!-- Rahmeninhalt (Eingeblendet wenn Favorit aktiv) -->
+                    <div
+                      v-if="mpm.isFavorite"
+                      class="flex items-center flex-1 min-h-10 border border-input rounded-r-md pl-3 pr-1 gap-3 bg-muted/5 animate-in slide-in-from-left-2 duration-200"
+                    >
+                      <!-- Kürzel ohne eigenen Rahmen -->
+                      <div class="w-12">
+                        <InputStandard
+                          v-model="mpm.favoriteAbbreviation"
+                          :validation-schema="schema.favoriteAbbreviation"
+                          id="favoriteAbbreviation"
+                          field-label=""
+                          maxlength="3"
+                          align="center"
+                          class="[&_input]:border-0 [&_input]:focus-visible:ring-0 [&_input]:h-8 [&_input]:bg-transparent [&_input]:shadow-none [&_input]:p-0"
+                        />
                       </div>
-                    </div>
 
-                    <div class="ml-auto flex items-center gap-1.5">
-                      <span
-                        class="text-[10px] font-bold uppercase tracking-wider text-muted-foreground/70"
-                      >
-                        Vorschau:
-                      </span>
-                      <!-- Vorschau Icon -->
+                      <!-- Color Picker -->
                       <div
-                        class="border-l border-border/50 pl-1 h-6 flex items-center shrink-0"
+                        class="shrink-0 border-l border-border/50 pl-3 h-6 flex items-center"
                       >
-                        <div
-                          class="w-8 h-8 rounded-full flex items-center justify-center font-bold text-[10px] shadow-sm select-none transition-colors"
-                          :style="{
-                            backgroundColor: mpm.favoriteColor || '#ffffff',
-                            color: getContrastColor(
-                              mpm.favoriteColor || '#ffffff',
-                            ),
-                          }"
+                        <div class="relative">
+                          <div
+                            @click="toggleColorPicker"
+                            class="h-6 w-6 rounded-sm border cursor-pointer transition-all flex items-center justify-center shadow-sm hover:opacity-90"
+                            :style="{
+                              backgroundColor: mpm.favoriteColor || '#ffffff',
+                            }"
+                            :class="[
+                              !mpm.favoriteColor ||
+                              mpm.favoriteColor.toLowerCase() === '#ffffff'
+                                ? 'border-input'
+                                : 'border-transparent',
+                              favoriteColorErrorMessage
+                                ? 'border-destructive!'
+                                : '',
+                            ]"
+                            :data-testid="'favoriteColorPicker' + idSuffix"
+                          ></div>
+
+                          <div
+                            v-if="showColorPicker"
+                            class="absolute z-50 top-full mt-2 left-0 w-40 p-2 bg-popover border rounded-md shadow-md animate-in fade-in zoom-in-95"
+                          >
+                            <div class="grid grid-cols-5 gap-1 mb-2">
+                              <div
+                                v-for="color in randomColors"
+                                :key="color"
+                                @click="selectColor(color)"
+                                class="h-6 w-6 rounded-sm cursor-pointer border border-input/50 hover:scale-110 transition-transform"
+                                :style="{ backgroundColor: color }"
+                              ></div>
+                            </div>
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              size="xs"
+                              class="w-full h-7 text-[10px] gap-1"
+                              @click.stop="updateRandomColors"
+                            >
+                              <RefreshCw class="icon-extra-small" />
+                              {{ $t("General.reset") }}
+                            </Button>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="ml-auto flex items-center gap-1.5">
+                        <span
+                          class="text-[10px] font-bold uppercase tracking-wider text-muted-foreground/70"
                         >
-                          {{ mpm.favoriteAbbreviation }}
+                          Vorschau:
+                        </span>
+                        <!-- Vorschau Icon -->
+                        <div
+                          class="border-l border-border/50 pl-1 h-6 flex items-center shrink-0"
+                        >
+                          <FavoriteIcon
+                            :text="mpm.favoriteAbbreviation"
+                            :color="mpm.favoriteColor || '#ffffff'"
+                            size="sm"
+                          />
                         </div>
                       </div>
                     </div>
-                  </div>
 
-                  <!-- Absolute Positionierung der Fehlermeldung unter der Gruppe -->
-                  <p
-                    v-if="favoriteColorErrorMessage"
-                    class="absolute top-full left-0 text-[10px] font-medium text-destructive mt-0.5 whitespace-nowrap"
-                  >
-                    {{ favoriteColorErrorMessage }}
-                  </p>
+                    <!-- Absolute Positionierung der Fehlermeldung unter der Gruppe -->
+                    <p
+                      v-if="favoriteColorErrorMessage"
+                      class="absolute top-full left-0 text-[10px] font-medium text-destructive mt-0.5 whitespace-nowrap"
+                    >
+                      {{ favoriteColorErrorMessage }}
+                    </p>
+                  </div>
                 </div>
               </div>
               <div class="col-span-2 sm:col-span-6">
@@ -263,6 +266,7 @@ import { boolean, number, string, type ZodType } from "zod";
 import SelectCapitalsource from "../capitalsource/SelectCapitalsource.vue";
 import ButtonSubmit from "../common/ButtonSubmit.vue";
 import DivError from "../common/DivError.vue";
+import FavoriteIcon from "../common/FavoriteIcon.vue";
 import InputStandard from "../common/InputStandard.vue";
 import ModalVue from "../common/Modal.vue";
 import SelectContractpartner from "../contractpartner/SelectContractpartner.vue";
@@ -332,15 +336,6 @@ const toggleColorPicker = () => {
 const selectColor = (color: string) => {
   mpm.value.favoriteColor = color;
   showColorPicker.value = false;
-};
-
-const getContrastColor = (hexColor: string) => {
-  if (!hexColor || hexColor.length < 7) return "black";
-  const r = parseInt(hexColor.slice(1, 3), 16);
-  const g = parseInt(hexColor.slice(3, 5), 16);
-  const b = parseInt(hexColor.slice(5, 7), 16);
-  const yiq = (r * 299 + g * 587 + b * 114) / 1000;
-  return yiq >= 128 ? "black" : "white";
 };
 
 const {
