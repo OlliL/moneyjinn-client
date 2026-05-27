@@ -6,10 +6,13 @@
   >
     <template #body>
       <div class="space-y-3 pt-0">
-        <!-- Kapitalquelle als dezenter Untertitel direkt unter dem Modal-Header -->
         <div
-          class="text-[11px] text-muted-foreground font-bold uppercase tracking-wider px-1 -mt-2 mb-3"
+          class="flex items-center gap-1 text-[11px] text-muted-foreground font-bold uppercase tracking-wider px-1 mb-2"
         >
+          <CreditCard
+            class="icon-extra-small shrink-0 text-muted-foreground/80"
+            :title="$t('General.capitalsource')"
+          />
           {{ preDef.capitalsourceComment }}
         </div>
 
@@ -63,7 +66,7 @@ import Modal from "@/components/common/Modal.vue";
 import SelectPostingAccount from "@/components/postingaccount/SelectPostingAccount.vue";
 import { Button } from "@/components/ui/button";
 import { type PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
-import { Euro, MessageSquareMore } from "lucide-vue-next";
+import { CreditCard, Euro, MessageSquareMore } from "lucide-vue-next";
 import { ref, useTemplateRef } from "vue";
 
 const modalComponent = useTemplateRef<typeof Modal>("modalComponent");
