@@ -411,6 +411,7 @@
     "onceAMonth": "Only Once per Month",
     "onceAMonthShort": "1x",
     "lastUsed": "Last Used",
+    "lastUsedShort": "Last",
     "createDate": "Created",
     "searchBy": "Search by Business Partner...",
     "title": {
