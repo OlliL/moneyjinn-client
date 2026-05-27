@@ -115,13 +115,10 @@
                             @click="toggleColorPicker"
                             class="h-6 w-6 rounded-sm border cursor-pointer transition-all flex items-center justify-center shadow-sm hover:opacity-90"
                             :style="{
-                              backgroundColor: mpm.favoriteColor || '#ffffff',
+                              backgroundColor: mpm.favoriteColor,
                             }"
                             :class="[
-                              !mpm.favoriteColor ||
-                              mpm.favoriteColor.toLowerCase() === '#ffffff'
-                                ? 'border-input'
-                                : 'border-transparent',
+                              'border-transparent',
                               favoriteColorErrorMessage
                                 ? 'border-destructive!'
                                 : '',
@@ -168,7 +165,7 @@
                         >
                           <FavoriteIcon
                             :text="mpm.favoriteAbbreviation"
-                            :color="mpm.favoriteColor || '#ffffff'"
+                            :color="mpm.favoriteColor"
                             size="sm"
                           />
                         </div>

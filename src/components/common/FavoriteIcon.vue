@@ -5,7 +5,7 @@
       sizeClasses,
     ]"
     :style="{
-      backgroundColor: color || '#ffffff',
+      backgroundColor: color,
       color: contrastColor,
     }"
   >
@@ -18,7 +18,7 @@ import { computed } from "vue";
 
 const props = defineProps({
   text: { type: String },
-  color: { type: String, required: true },
+  color: { type: String },
   size: { type: String, default: "md" },
 });
 
