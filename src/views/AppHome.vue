@@ -76,8 +76,10 @@ import DivError from "@/components/common/DivError.vue";
 import EditMonthlySettlementModalVue from "@/components/monthlysettlement/EditMonthlySettlementModal.vue";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
+import { type PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
 import router, { Routes } from "@/router";
 import EventService from "@/service/EventService";
+import PreDefMoneyflowService from "@/service/PreDefMoneyflowService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { CheckCircle2, ExternalLink } from "lucide-vue-next";
 import { onMounted, ref, useTemplateRef } from "vue";
@@ -91,31 +93,52 @@ const monthlySettlementYear = ref(0);
 const editModal =
   useTemplateRef<typeof EditMonthlySettlementModalVue>("editModal");
 const dataLoaded = ref(false);
+const favoriteMoneyflows = ref<Array<PreDefMoneyflow>>([]);
 
 const loadData = () => {
   dataLoaded.value = false;
-  EventService.showEventList()
-    .then((events) => {
-      if (
-        events.numberOfImportedMoneyflows &&
-        events.numberOfImportedMoneyflows > 0
-      ) {
-        importedMoneyflows.value = true;
-      }
-      monthlySettlementMissing.value = events.monthlySettlementMissing
-        ? events.monthlySettlementMissing
-        : false;
-      monthlySettlementMonth.value = events.monthlySettlementMonth
-        ? events.monthlySettlementMonth
-        : 0;
-      monthlySettlementYear.value = events.monthlySettlementYear
-        ? events.monthlySettlementYear
-        : 0;
+  let error = false;
+
+  Promise.all([
+    EventService.showEventList()
+      .then((events) => {
+        if (
+          events.numberOfImportedMoneyflows &&
+          events.numberOfImportedMoneyflows > 0
+        ) {
+          importedMoneyflows.value = true;
+        }
+        monthlySettlementMissing.value = events.monthlySettlementMissing
+          ? events.monthlySettlementMissing
+          : false;
+        monthlySettlementMonth.value = events.monthlySettlementMonth
+          ? events.monthlySettlementMonth
+          : 0;
+        monthlySettlementYear.value = events.monthlySettlementYear
+          ? events.monthlySettlementYear
+          : 0;
+      })
+      .catch((backendError) => {
+        error = true;
+        handleBackendError(backendError, serverErrors);
+      }),
+    PreDefMoneyflowService.fetchAllPreDefMoneyflow()
+      .then((mpm) => {
+        if (mpm && mpm.length > 0) {
+          favoriteMoneyflows.value = mpm.filter((flow) => flow.isFavorite);
+          console.log(favoriteMoneyflows.value);
+          console.log(mpm);
+        }
+      })
+      .catch((backendError) => {
+        error = true;
+        handleBackendError(backendError, serverErrors);
+      }),
+  ]).then(() => {
+    if (!error) {
       dataLoaded.value = true;
-    })
-    .catch((backendError) => {
-      handleBackendError(backendError, serverErrors);
-    });
+    }
+  });
 };
 const showEditMonthlySettlementModal = () => {
   editModal.value?._show(

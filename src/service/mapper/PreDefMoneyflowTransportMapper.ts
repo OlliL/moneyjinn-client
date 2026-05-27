@@ -21,6 +21,9 @@ export function mapPreDefMoneyflowTransportToModel(
     lastUsed: transport.lastUsed ? new Date(transport.lastUsed) : undefined,
     postingAccountId: transport.postingaccountid,
     postingAccountName: transport.postingaccountname,
+    isFavorite: transport.isFavorite == 1,
+    favoriteColor: transport.favoriteColor,
+    favoriteAbbreviation: transport.favoriteAbbreviation,
   };
   model.createDate?.setHours(0, 0, 0, 0);
   model.lastUsed?.setHours(0, 0, 0, 0);
@@ -48,6 +51,9 @@ export function mapPreDefMoneyflowToTransport(
     lastUsed: model.lastUsed
       ? getISOStringDate(model.lastUsed)
       : getISOStringDate(new Date()),
+    isFavorite: model.isFavorite ? 1 : 0,
+    favoriteColor: model.favoriteColor,
+    favoriteAbbreviation: model.favoriteAbbreviation,
   };
   return transport;
 }
