@@ -415,6 +415,20 @@ const resetEditForm = () => {
     previousPostingAccountSetByContractpartnerDefaults.value = 0;
   }
 
+  // Ensure names are synced after cloning, as the watcher might not trigger if IDs remain unchanged
+  if (mmf.value.postingAccountId > 0) {
+    mmf.value.postingAccountName =
+      postingAccountStore.getPostingAccount.find(
+        (pa) => pa.id === mmf.value.postingAccountId,
+      )?.name ?? "";
+  }
+  if (mmf.value.capitalsourceId > 0) {
+    mmf.value.capitalsourceComment =
+      capitalsourceStore.capitalsource.find(
+        (cs) => cs.id === mmf.value.capitalsourceId,
+      )?.comment ?? "";
+  }
+
   if (mmf.value.moneyflowSplitEntries == undefined) {
     mmf.value.moneyflowSplitEntries = new Array<MoneyflowSplitEntry>();
     addNewMoneyflowSplitEntryRow();
