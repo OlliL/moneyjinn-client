@@ -31,6 +31,7 @@
                     : 'bg-background border-input focus-visible:ring-ring',
                 ]"
                 @input="onInput"
+                @click.stop="showDropdown"
                 @keydown="onKeydownInput"
                 @keyup="onKeyupInput"
                 @focus="onFocus"
@@ -250,15 +251,12 @@ const getInputElement = () => {
 };
 
 const onFocus = () => {
+  if (preventOnFocus.value) {
+    preventOnFocus.value = false;
+    return;
+  }
   showDropdown();
   getInputElement().select();
-
-  setTimeout(() => {
-    if (!preventOnFocus.value) {
-      preventOnFocus.value = false;
-      showDropdown();
-    }
-  }, 200);
 };
 
 const onClickAnchor = (selectBoxValue: SelectBoxValue) => {
