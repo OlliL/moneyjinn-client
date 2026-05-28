@@ -54,6 +54,7 @@
                 variant="ghost"
                 size="icon"
                 class="h-9 w-8 shrink-0 mb-0.5"
+                type="button"
                 @click="changeDate(-1)"
               >
                 <ChevronLeft class="icon-medium" />
@@ -62,6 +63,7 @@
                 variant="ghost"
                 size="icon"
                 class="h-9 w-8 shrink-0 mb-0.5"
+                type="button"
                 @click="changeDate(1)"
               >
                 <ChevronRight class="icon-medium" />
