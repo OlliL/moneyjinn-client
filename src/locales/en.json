@@ -1,5 +1,6 @@
 {
   "General": {
+    "close": "Close",
     "displayOptions": "Display Options",
     "filterData": "Filter Data",
     "currentMonth": "Current Month",

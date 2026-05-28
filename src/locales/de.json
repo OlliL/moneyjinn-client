@@ -1,5 +1,6 @@
 {
   "General": {
+    "close": "Schließen",
     "filterData": "Daten filtern",
     "displayOptions": "Anzeigeoptionen",
     "currentMonth": "Aktueller Monat",

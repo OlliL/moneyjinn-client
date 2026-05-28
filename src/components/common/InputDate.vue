@@ -8,6 +8,7 @@
       <Input
         :id="id"
         :data-testid="id"
+        autocomplete="off"
         type="text"
         :class="[
           'rounded-r-none bg-white z-10',
@@ -26,6 +27,7 @@
           'flex items-center justify-center px-2 border border-input rounded-r-md text-foreground transition-colors relative',
           isInvalid ? 'border-l-transparent' : '',
         ]"
+        @click="datepicker.show()"
       >
         <CalendarDays class="w-4 h-4" />
       </div>
@@ -59,6 +61,7 @@ import {
   type PropType,
   type Ref,
 } from "vue";
+import { useI18n } from "vue-i18n";
 import { date, preprocess, type ZodType } from "zod";
 
 const props = defineProps({
@@ -88,8 +91,11 @@ const props = defineProps({
     default: "day",
   },
 });
+
+const { t } = useI18n();
 const emit = defineEmits(["update:modelValue"]);
 const viewMounted = ref(false);
+const closeLabel = t("General.close");
 
 const schema = computed(() => {
   if (viewMounted.value) {
@@ -163,8 +169,8 @@ onMounted(() => {
       const clearBtn = datepicker.picker.element.querySelector(
         ".clear-btn",
       ) as HTMLButtonElement;
-      if (clearBtn && clearBtn.textContent !== "Schließen") {
-        clearBtn.textContent = "Schließen";
+      if (clearBtn && clearBtn.textContent !== closeLabel) {
+        clearBtn.textContent = closeLabel;
 
         const newClearBtn = clearBtn.cloneNode(true) as HTMLButtonElement;
         clearBtn.replaceWith(newClearBtn);
@@ -300,7 +306,7 @@ div.datepicker .datepicker-header .datepicker-controls {
 div.datepicker .datepicker-header .view-switch,
 div.datepicker .datepicker-header .prev-btn,
 div.datepicker .datepicker-header .next-btn {
-  @apply h-11 bg-transparent hover:bg-accent hover:text-accent-foreground text-foreground font-medium text-sm border-none rounded-none transition-colors shadow-none;
+  @apply h-8 bg-transparent hover:bg-accent hover:text-accent-foreground text-foreground font-medium text-sm border-none rounded-none transition-colors shadow-none;
 }
 
 div.datepicker .datepicker-header .prev-btn {
@@ -323,11 +329,11 @@ div.datepicker .datepicker-footer .datepicker-controls {
 
 div.datepicker .datepicker-footer .today-btn,
 div.datepicker .datepicker-footer .clear-btn {
-  @apply h-11 flex-1 text-sm font-medium transition-colors rounded-none border-none shadow-none bg-transparent m-0 p-0 cursor-pointer flex items-center justify-center;
+  @apply h-8 flex-1 text-sm font-medium transition-colors rounded-none border-none shadow-none bg-transparent m-0 p-0 cursor-pointer flex items-center justify-center;
 }
 
 div.datepicker .datepicker-footer .today-btn {
-  @apply bg-[#007a9b] text-white hover:bg-[#006682];
+  @apply bg-primary text-primary-foreground hover:bg-primary/90;
   border-bottom-left-radius: calc(var(--radius, 0.75rem) - 1px);
 }
 
@@ -337,11 +343,11 @@ div.datepicker .datepicker-footer .clear-btn {
 }
 
 div.datepicker .datepicker-cell {
-  @apply rounded-md text-foreground transition-colors;
+  @apply rounded-md text-foreground transition-colors h-8 leading-8 text-sm;
 }
 
 div.datepicker .datepicker-cell.selected {
-  @apply bg-[#007a9b] text-white hover:bg-[#006682];
+  @apply bg-primary text-primary-foreground hover:bg-primary/90;
 }
 
 div.datepicker .datepicker-cell.today:not(.selected) {
