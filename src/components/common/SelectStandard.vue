@@ -4,7 +4,7 @@
       {{ fieldLabel }}
     </Label>
 
-    <div class="flex -space-x-px relative">
+    <div class="flex -space-x-px relative w-full">
       <input
         type="hidden"
         :id="id"
@@ -14,8 +14,8 @@
       />
 
       <Popover v-model:open="isOpen" :modal="false">
-        <PopoverTrigger as-child>
-          <div class="relative flex-1 flex -space-x-px">
+        <PopoverTrigger as-child class="w-full">
+          <div class="relative flex-1 flex -space-x-px w-full">
             <div class="relative flex-1">
               <Input
                 autocomplete="off"
@@ -63,7 +63,12 @@
 
         <PopoverContent
           v-if="items.length > 0"
-          class="p-0 z-[3000] w-[--radix-popover-trigger-width] flex flex-col"
+          class="p-0 z-[2500] flex flex-col"
+          :style="{
+            width: 'var(--reka-popover-trigger-width)',
+            minWidth: 'var(--reka-popover-trigger-width)',
+            maxWidth: 'var(--reka-popover-trigger-width)',
+          }"
           align="start"
           @open-auto-focus="(e) => e.preventDefault()"
           @close-auto-focus="(e) => e.preventDefault()"
@@ -82,7 +87,7 @@
               @keydown="onKeydownAnchor"
               :data-testid="id + '-option'"
             >
-              {{ selectBoxValue.value }}
+              <span class="truncate min-w-0">{{ selectBoxValue.value }}</span>
             </a>
           </div>
         </PopoverContent>
