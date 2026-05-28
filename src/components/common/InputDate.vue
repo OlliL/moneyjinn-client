@@ -147,7 +147,8 @@ const getInputElement = () => {
 onMounted(() => {
   if (!(datepicker instanceof Datepicker) && fieldRef.value) {
     datepicker = new Datepicker(getInputElement(), {
-      buttonClass: "btn",
+      buttonClass:
+        "inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50",
       pickLevel: pickLevel,
       clearButton: true,
       todayButton: true,
@@ -157,6 +158,24 @@ onMounted(() => {
       format: format,
     });
     viewMounted.value = true;
+
+    getInputElement().addEventListener("show", () => {
+      const clearBtn = datepicker.picker.element.querySelector(
+        ".clear-btn",
+      ) as HTMLButtonElement;
+      if (clearBtn && clearBtn.textContent !== "Schließen") {
+        clearBtn.textContent = "Schließen";
+
+        const newClearBtn = clearBtn.cloneNode(true) as HTMLButtonElement;
+        clearBtn.replaceWith(newClearBtn);
+
+        newClearBtn.addEventListener("click", (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          datepicker.hide();
+        });
+      }
+    });
 
     if (props.modelValue) {
       setDate(props.modelValue);
@@ -261,24 +280,71 @@ watch(
 
 <style>
 @reference "@/style.css";
-
-.datepicker-footer .datepicker-controls {
-  @apply flex! w-full! gap-2! p-2! box-border! float-none! clear-both!;
+div.datepicker.datepicker-dropdown {
+  @apply bg-background border border-border shadow-lg overflow-hidden p-0;
+  border-radius: var(--radius, 0.75rem);
 }
 
-.datepicker-footer {
-  @apply w-full! p-0! float-none! clear-both!;
+div.datepicker .datepicker-main {
+  @apply p-3;
 }
 
-.datepicker-footer .btn {
-  @apply flex-1! w-1/2! min-w-0! max-w-none! inline-flex! items-center! justify-center! rounded-md! border! px-3! py-1.5! text-sm! font-medium! transition-colors! shadow-none! float-none!;
+div.datepicker .datepicker-header {
+  @apply p-0 flex bg-muted border-b border-border;
 }
 
-.datepicker-footer .today-btn {
-  @apply border-input! bg-background! text-foreground! hover:bg-accent! hover:text-accent-foreground!;
+div.datepicker .datepicker-header .datepicker-controls {
+  @apply w-full flex items-stretch;
 }
 
-.datepicker-footer .clear-btn {
-  @apply border-transparent! bg-transparent! text-muted-foreground! hover:bg-destructive/10! hover:text-destructive!;
+div.datepicker .datepicker-header .view-switch,
+div.datepicker .datepicker-header .prev-btn,
+div.datepicker .datepicker-header .next-btn {
+  @apply h-11 bg-transparent hover:bg-accent hover:text-accent-foreground text-foreground font-medium text-sm border-none rounded-none transition-colors shadow-none;
+}
+
+div.datepicker .datepicker-header .prev-btn {
+  @apply border-r border-border/60;
+}
+div.datepicker .datepicker-header .next-btn {
+  @apply border-l border-border/60;
+}
+div.datepicker .datepicker-header .view-switch {
+  @apply flex-1;
+}
+
+div.datepicker .datepicker-footer {
+  @apply p-0 border-t border-border mt-0 flex;
+}
+
+div.datepicker .datepicker-footer .datepicker-controls {
+  @apply w-full flex gap-0 m-0 p-0;
+}
+
+div.datepicker .datepicker-footer .today-btn,
+div.datepicker .datepicker-footer .clear-btn {
+  @apply h-11 flex-1 text-sm font-medium transition-colors rounded-none border-none shadow-none bg-transparent m-0 p-0 cursor-pointer flex items-center justify-center;
+}
+
+div.datepicker .datepicker-footer .today-btn {
+  @apply bg-[#007a9b] text-white hover:bg-[#006682];
+  border-bottom-left-radius: calc(var(--radius, 0.75rem) - 1px);
+}
+
+div.datepicker .datepicker-footer .clear-btn {
+  @apply bg-background text-foreground hover:bg-accent hover:text-accent-foreground border-l border-border;
+  border-bottom-right-radius: calc(var(--radius, 0.75rem) - 1px);
+}
+
+div.datepicker .datepicker-cell {
+  @apply rounded-md text-foreground transition-colors;
+}
+
+div.datepicker .datepicker-cell.selected {
+  @apply bg-[#007a9b] text-white hover:bg-[#006682];
+}
+
+div.datepicker .datepicker-cell.today:not(.selected) {
+  @apply bg-accent text-accent-foreground font-bold;
 }
 </style>
