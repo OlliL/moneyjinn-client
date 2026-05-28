@@ -157,7 +157,7 @@
                         <span
                           class="text-[10px] font-bold uppercase tracking-wider text-muted-foreground/70"
                         >
-                          Vorschau:
+                          {{ $t("PreDefMoneyflow.preview") }}:
                         </span>
                         <div
                           class="border-l border-border/50 pl-1 h-6 flex items-center shrink-0"
