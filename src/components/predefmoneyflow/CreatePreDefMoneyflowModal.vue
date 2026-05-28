@@ -66,111 +66,106 @@
                   >
                     {{ $t("Moneyflow.favorite") }}
                   </Label>
-                  <div class="flex items-stretch w-full relative" id="fav-div">
-                    <button
-                      type="button"
-                      @click="mpm.isFavorite = !mpm.isFavorite"
-                      :class="[
-                        'flex items-center justify-center p-2 border border-input bg-background hover:bg-accent hover:text-accent-foreground min-h-10 w-10 shrink-0 transition-all z-20',
-                        mpm.isFavorite
-                          ? 'rounded-l-md border-r-0'
-                          : 'rounded-md',
-                      ]"
-                      :title="$t('PreDefMoneyflow.markAsFav')"
-                    >
-                      <Star
-                        class="h-5 w-5 transition-all"
-                        :class="
+                  <div class="flex items-center w-full gap-3" id="fav-div">
+                    <div class="flex items-stretch relative">
+                      <button
+                        type="button"
+                        @click="mpm.isFavorite = !mpm.isFavorite"
+                        :class="[
+                          'flex items-center justify-center p-2 border border-input bg-background hover:bg-accent hover:text-accent-foreground min-h-10 w-10 shrink-0 transition-all z-20',
                           mpm.isFavorite
-                            ? 'fill-primary text-primary'
-                            : 'text-muted-foreground'
-                        "
-                      />
-                    </button>
-
-                    <div
-                      v-if="mpm.isFavorite"
-                      class="flex items-center flex-1 min-h-10 border border-input rounded-r-md pl-3 md:pl-1 pr-1 gap-3 md:gap-1 bg-muted/5 animate-in slide-in-from-left-2 duration-200"
-                    >
-                      <div class="w-12">
-                        <InputStandard
-                          v-model="mpm.favoriteAbbreviation"
-                          :validation-schema="schema.favoriteAbbreviation"
-                          id="favoriteAbbreviation"
-                          field-label=""
-                          maxlength="3"
-                          align="center"
-                          class="[&_input]:border-0 [&_input]:focus-visible:ring-0 [&_input]:h-8 [&_input]:bg-transparent [&_input]:shadow-none [&_input]:p-0"
+                            ? 'rounded-l-md border-r-0'
+                            : 'rounded-md',
+                        ]"
+                        :title="$t('PreDefMoneyflow.markAsFav')"
+                      >
+                        <Star
+                          class="h-5 w-5 transition-all"
+                          :class="
+                            mpm.isFavorite
+                              ? 'fill-primary text-primary'
+                              : 'text-muted-foreground'
+                          "
                         />
-                      </div>
+                      </button>
 
                       <div
-                        class="shrink-0 border-l border-border/50 pl3 md:pl-1 h-6 flex items-center"
+                        v-if="mpm.isFavorite"
+                        class="flex items-center min-h-10 border border-input rounded-r-md pl-2 md:pl-1 pr-2 gap-1 bg-muted/5 animate-in slide-in-from-left-2 duration-200"
                       >
-                        <Popover v-model:open="isPopoverOpen">
-                          <PopoverTrigger as-child>
-                            <div
-                              class="h-6 w-6 rounded-sm border cursor-pointer transition-all flex items-center justify-center shadow-sm hover:opacity-90 border-transparent"
-                              :style="{
-                                backgroundColor: mpm.favoriteColor,
-                              }"
-                              :data-testid="'favoriteColorPicker' + idSuffix"
-                            ></div>
-                          </PopoverTrigger>
-                          <PopoverContent
-                            class="w-40 p-2 bg-popover border rounded-md shadow-md z-[3000]"
-                            align="start"
-                          >
-                            <div class="flex justify-end mb-1">
-                              <button
-                                type="button"
-                                @click="isPopoverOpen = false"
-                                class="text-muted-foreground hover:text-foreground transition-colors"
-                              >
-                                <X class="icon-small" />
-                              </button>
-                            </div>
-                            <div class="grid grid-cols-5 gap-1 mb-2">
-                              <div
-                                v-for="color in randomColors"
-                                :key="color"
-                                @mouseenter="hoveredColor = color"
-                                @mouseleave="hoveredColor = null"
-                                @click="selectColor(color)"
-                                class="h-6 w-6 rounded-sm cursor-pointer border border-input/50 hover:scale-110 transition-transform"
-                                :style="{ backgroundColor: color }"
-                              ></div>
-                            </div>
-                            <Button
-                              type="button"
-                              variant="ghost"
-                              size="xs"
-                              class="w-full h-7 text-[10px] gap-1"
-                              @click="updateRandomColors"
-                            >
-                              <RefreshCw class="icon-extra-small" />
-                              {{ $t("General.reset") }}
-                            </Button>
-                          </PopoverContent>
-                        </Popover>
-                      </div>
-
-                      <div class="ml-auto flex items-center gap-1.5">
-                        <span
-                          class="text-[10px] font-bold uppercase tracking-wider text-muted-foreground/70"
-                        >
-                          {{ $t("PreDefMoneyflow.preview") }}:
-                        </span>
-                        <div
-                          class="border-l border-border/50 pl-1 h-6 flex items-center shrink-0"
-                        >
-                          <FavoriteIcon
-                            :text="mpm.favoriteAbbreviation"
-                            :color="previewColor"
-                            size="sm"
+                        <div class="w-12">
+                          <InputStandard
+                            v-model="mpm.favoriteAbbreviation"
+                            :validation-schema="schema.favoriteAbbreviation"
+                            id="favoriteAbbreviation"
+                            field-label=""
+                            maxlength="3"
+                            align="center"
+                            class="[&_input]:border-0 [&_input]:focus-visible:ring-0 [&_input]:h-8 [&_input]:bg-transparent [&_input]:shadow-none [&_input]:p-0"
                           />
                         </div>
+
+                        <div
+                          class="shrink-0 border-l border-border/50 pl-1 h-6 flex items-center"
+                        >
+                          <Popover v-model:open="isPopoverOpen">
+                            <PopoverTrigger as-child>
+                              <div
+                                class="h-7.5 w-7.5 rounded-sm border cursor-pointer transition-all flex items-center justify-center shadow-sm hover:opacity-90 border-transparent"
+                                :style="{
+                                  backgroundColor: mpm.favoriteColor,
+                                }"
+                                :data-testid="'favoriteColorPicker' + idSuffix"
+                              ></div>
+                            </PopoverTrigger>
+                            <PopoverContent
+                              class="w-40 p-2 bg-popover border rounded-md shadow-md z-[3000]"
+                              align="start"
+                            >
+                              <div class="flex justify-end mb-1">
+                                <button
+                                  type="button"
+                                  @click="isPopoverOpen = false"
+                                  class="text-muted-foreground hover:text-foreground transition-colors"
+                                >
+                                  <X class="icon-small" />
+                                </button>
+                              </div>
+                              <div class="grid grid-cols-5 gap-1 mb-2">
+                                <div
+                                  v-for="color in randomColors"
+                                  :key="color"
+                                  @mouseenter="hoveredColor = color"
+                                  @mouseleave="hoveredColor = null"
+                                  @click="selectColor(color)"
+                                  class="h-6 w-6 rounded-sm cursor-pointer border border-input/50 hover:scale-110 transition-transform"
+                                  :style="{ backgroundColor: color }"
+                                ></div>
+                              </div>
+                              <Button
+                                type="button"
+                                variant="ghost"
+                                size="xs"
+                                class="w-full h-7 text-[10px] gap-1"
+                                @click="updateRandomColors"
+                              >
+                                <RefreshCw class="icon-extra-small" />
+                                {{ $t("General.reset") }}
+                              </Button>
+                            </PopoverContent>
+                          </Popover>
+                        </div>
                       </div>
+                    </div>
+                    <div
+                      v-if="mpm.isFavorite"
+                      class="w-12 h-10 relative shrink-0 ml-auto"
+                    >
+                      <FavoriteIcon
+                        :text="mpm.favoriteAbbreviation"
+                        :color="previewColor"
+                        class="absolute top-1/2 -translate-y-1/2 left-0"
+                      />
                     </div>
                   </div>
                 </div>
