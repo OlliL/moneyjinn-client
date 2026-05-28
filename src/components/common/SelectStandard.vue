@@ -24,7 +24,6 @@
                 :id="id"
                 :data-testid="id"
                 :class="[
-                  'z-10',
                   $slots.icon ? 'rounded-r-none' : '',
                   isInvalid
                     ? '!border-destructive bg-destructive/[0.03] focus-visible:ring-destructive/15 !border-r-destructive'
@@ -317,9 +316,6 @@ const onKeydownInput = async (event: KeyboardEvent) => {
   } else if (event.key == "Tab") {
     // Select first shown element from the Dropdown-Menu if the user presses ArrowDown in the input element
     // For shift+tab just continue with regular event handler (focus previous element)
-    setTimeout(() => {
-      hideDropdown();
-    }, 200);
     if (!event.shiftKey) {
       event.preventDefault();
       getFirstDropdownAnchor()?.click();
