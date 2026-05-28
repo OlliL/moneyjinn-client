@@ -20,7 +20,7 @@
                 type="button"
                 @click="markAsFavorite = !markAsFavorite"
                 class="flex items-center justify-center p-2 rounded-md border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 w-10 transition-colors"
-                :title="$t('ETF.markAsFav')"
+                :title="$t('General.markAsFav')"
               >
                 <Star
                   class="h-5 w-5 transition-all"

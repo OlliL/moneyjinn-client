@@ -1,5 +1,6 @@
 {
   "General": {
+    "markAsFav": "Mark as Favorite",
     "close": "Close",
     "displayOptions": "Display Options",
     "filterData": "Filter Data",
@@ -205,7 +206,6 @@
     "ticker": "Ticker",
     "chartUrl": "Chart URL",
     "searchBy": "Search by name...",
-    "markAsFav": "Mark as Favorite",
     "partialTaxExemption": "Partial Tax Exemption",
     "title": {
       "create": "Create ETF",

@@ -1,5 +1,6 @@
 {
   "General": {
+    "markAsFav": "Als Favorit markieren",
     "close": "Schließen",
     "filterData": "Daten filtern",
     "displayOptions": "Anzeigeoptionen",
@@ -204,7 +205,6 @@
     "ticker": "Ticker",
     "chartUrl": "Chart URL",
     "searchBy": "Suchen nach Name...",
-    "markAsFav": "Als Favorit markieren",
     "partialTaxExemption": "Teilfreistellung",
     "title": {
       "create": "ETF hinzufügen",

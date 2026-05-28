@@ -77,7 +77,7 @@
                             ? 'rounded-l-md border-r-0'
                             : 'rounded-md',
                         ]"
-                        :title="$t('PreDefMoneyflow.markAsFav')"
+                        :title="$t('General.markAsFav')"
                       >
                         <Star
                           class="h-5 w-5 transition-all"
