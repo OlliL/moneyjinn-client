@@ -107,20 +107,29 @@
                       <div
                         class="shrink-0 border-l border-border/50 pl3 md:pl-1 h-6 flex items-center"
                       >
-                        <div class="relative">
-                          <div
-                            @click="toggleColorPicker"
-                            class="h-6 w-6 rounded-sm border cursor-pointer transition-all flex items-center justify-center shadow-sm hover:opacity-90 border-transparent"
-                            :style="{
-                              backgroundColor: mpm.favoriteColor,
-                            }"
-                            :data-testid="'favoriteColorPicker' + idSuffix"
-                          ></div>
-
-                          <div
-                            v-if="showColorPicker"
-                            class="absolute z-50 top-full mt-2 left-[-67px] w-40 p-2 bg-popover border rounded-md shadow-md animate-in fade-in zoom-in-95"
+                        <Popover v-model:open="isPopoverOpen">
+                          <PopoverTrigger as-child>
+                            <div
+                              class="h-6 w-6 rounded-sm border cursor-pointer transition-all flex items-center justify-center shadow-sm hover:opacity-90 border-transparent"
+                              :style="{
+                                backgroundColor: mpm.favoriteColor,
+                              }"
+                              :data-testid="'favoriteColorPicker' + idSuffix"
+                            ></div>
+                          </PopoverTrigger>
+                          <PopoverContent
+                            class="w-40 p-2 bg-popover border rounded-md shadow-md z-[3000]"
+                            align="start"
                           >
+                            <div class="flex justify-end mb-1">
+                              <button
+                                type="button"
+                                @click="isPopoverOpen = false"
+                                class="text-muted-foreground hover:text-foreground transition-colors"
+                              >
+                                <X class="icon-small" />
+                              </button>
+                            </div>
                             <div class="grid grid-cols-5 gap-1 mb-2">
                               <div
                                 v-for="color in randomColors"
@@ -135,13 +144,13 @@
                               variant="ghost"
                               size="xs"
                               class="w-full h-7 text-[10px] gap-1"
-                              @click.stop="updateRandomColors"
+                              @click="updateRandomColors"
                             >
                               <RefreshCw class="icon-extra-small" />
                               {{ $t("General.reset") }}
                             </Button>
-                          </div>
-                        </div>
+                          </PopoverContent>
+                        </Popover>
                       </div>
 
                       <div class="ml-auto flex items-center gap-1.5">
@@ -231,6 +240,11 @@
 <script lang="ts" setup>
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import type { PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
 import PreDefMoneyflowService from "@/service/PreDefMoneyflowService";
@@ -243,9 +257,10 @@ import {
   Save,
   Star,
   Undo2,
+  X,
 } from "lucide-vue-next";
 import { useForm } from "vee-validate";
-import { computed, ref, toRaw, useTemplateRef } from "vue";
+import { computed, ref, toRaw, useTemplateRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { boolean, number, string, type ZodType } from "zod";
 import SelectCapitalsource from "../capitalsource/SelectCapitalsource.vue";
@@ -296,7 +311,7 @@ const validityDate = new Date();
 validityDate.setHours(0, 0, 0, 0);
 const emit = defineEmits(["preDefMoneyflowCreated", "preDefMoneyflowUpdated"]);
 
-const showColorPicker = ref(false);
+const isPopoverOpen = ref(false);
 const randomColors = ref<string[]>([]);
 
 const updateRandomColors = () => {
@@ -310,14 +325,13 @@ const updateRandomColors = () => {
   );
 };
 
-const toggleColorPicker = () => {
-  showColorPicker.value = !showColorPicker.value;
-  if (showColorPicker.value) updateRandomColors();
-};
+watch(isPopoverOpen, (val) => {
+  if (val) updateRandomColors();
+});
 
 const selectColor = (color: string) => {
   mpm.value.favoriteColor = color;
-  showColorPicker.value = false;
+  isPopoverOpen.value = false;
 };
 
 const { handleSubmit, values, setFieldTouched } = useForm();
@@ -339,7 +353,7 @@ const resetForm = () => {
     mpm.value.favoriteAbbreviation = "";
     mpm.value.favoriteColor = randomColors.value[0];
   }
-  showColorPicker.value = false;
+  isPopoverOpen.value = false;
   serverErrors.value = new Array<string>();
   Object.keys(values).forEach((field) => setFieldTouched(field, false));
 };
