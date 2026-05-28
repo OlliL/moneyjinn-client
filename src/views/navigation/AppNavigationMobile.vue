@@ -392,7 +392,7 @@ import {
 } from "lucide-vue-next";
 import { ref } from "vue";
 import { useRoute } from "vue-router";
-import { version } from "../../package.json";
+import { version } from "../../../package.json";
 
 const isMenuOpen = ref(false);
 const year = new Date().getFullYear();

@@ -342,7 +342,7 @@ import {
   Wrench,
 } from "lucide-vue-next";
 import { useRoute } from "vue-router";
-import { version } from "../../package.json";
+import { version } from "../../../package.json";
 
 const year = new Date().getFullYear();
 const month = new Date().getMonth() + 1;

@@ -51,7 +51,7 @@ const router = createRouter({
     },
     {
       path: "/app",
-      component: () => import("@/views/AppNavigation.vue"),
+      component: () => import("@/views/navigation/AppNavigation.vue"),
       children: [
         {
           path: "",
@@ -188,7 +188,7 @@ const router = createRouter({
     },
     {
       path: "/:pathMatch(.*)*",
-      component: () => import("@/views/AppNavigation.vue"),
+      component: () => import("@/views/navigation/AppNavigation.vue"),
     },
   ],
 });

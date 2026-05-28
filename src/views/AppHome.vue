@@ -3,7 +3,7 @@
     ref="editModal"
     @monthly-settlement-upserted="monthlySettlementUpserted"
   />
-  <QuickBookingModal
+  <CreateMoneyflowQuickModal
     ref="quickBookingModal"
     @booking-finished="showSuccessToast"
   />
@@ -19,7 +19,7 @@
     <div class="max-w-3xl mx-auto space-y-2">
       <Alert
         v-if="importedMoneyflows"
-        class="border-orange-200 bg-orange-50 dark:bg-orange-950/20 dark:border-orange-900"
+        class="max-w-xl mx-auto border-orange-200 bg-orange-50 dark:bg-orange-950/20 dark:border-orange-900"
       >
         <AlertCircle class="h-4 w-4 text-orange-600" />
         <AlertTitle>{{ $t("AppHome.importableMoneyflows") }}</AlertTitle>
@@ -37,7 +37,7 @@
 
       <Alert
         v-if="monthlySettlementMissing"
-        class="border-orange-200 bg-orange-50 dark:bg-orange-950/20 dark:border-orange-900"
+        class="max-w-xl mx-auto border-orange-200 bg-orange-50 dark:bg-orange-950/20 dark:border-orange-900"
       >
         <AlertCircle class="h-4 w-4 text-orange-600" />
         <AlertTitle>{{ $t("AppHome.createSettlements") }}</AlertTitle>
@@ -55,7 +55,7 @@
 
       <Alert
         v-if="dataLoaded && !importedMoneyflows && !monthlySettlementMissing"
-        class="max-w-xl border-green-200 bg-green-50 dark:bg-green-950/20 dark:border-green-900"
+        class="max-w-xl mx-auto border-green-200 bg-green-50 dark:bg-green-950/20 dark:border-green-900"
       >
         <CheckCircle2 />
         <AlertTitle>
@@ -123,6 +123,7 @@
 import DivError from "@/components/common/DivError.vue";
 import FavoriteIcon from "@/components/common/FavoriteIcon.vue";
 import SpanAmount from "@/components/common/SpanAmount.vue";
+import CreateMoneyflowQuickModal from "@/components/moneyflow/CreateMoneyflowQuickModal.vue";
 import EditMonthlySettlementModalVue from "@/components/monthlysettlement/EditMonthlySettlementModal.vue";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
@@ -137,7 +138,6 @@ import PreDefMoneyflowService from "@/service/PreDefMoneyflowService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { AlertCircle, CheckCircle2, X } from "lucide-vue-next";
 import { onMounted, ref, useTemplateRef } from "vue";
-import QuickBookingModal from "./QuickBookingModal.vue";
 
 const serverErrors = ref(new Array<string>());
 
@@ -148,7 +148,7 @@ const monthlySettlementYear = ref(0);
 const editModal =
   useTemplateRef<typeof EditMonthlySettlementModalVue>("editModal");
 const quickBookingModal =
-  useTemplateRef<typeof QuickBookingModal>("quickBookingModal");
+  useTemplateRef<typeof CreateMoneyflowQuickModal>("quickBookingModal");
 const dataLoaded = ref(false);
 const favoriteMoneyflows = ref<Array<PreDefMoneyflow>>([]);
 

@@ -9,7 +9,7 @@ import {
   assertHaveBeenCalled,
   assertHaveBeenCalledWith,
 } from "@/tests/TestUtil";
-import AppNavigation from "@/views/AppNavigation.vue";
+import AppNavigation from "@/views/navigation/AppNavigation.vue";
 import "@testing-library/jest-dom/vitest";
 import userEvent from "@testing-library/user-event";
 import { render, screen } from "@testing-library/vue";
