@@ -13,8 +13,8 @@
           <DivError :server-errors="serverErrors" />
 
           <div class="form-section space-y-4">
-            <div class="grid grid-cols-2 sm:grid-cols-12 gap-4">
-              <div class="col-span-1 sm:col-span-4 sm:mt-1">
+            <div class="grid grid-cols-2 sm:grid-cols-24 gap-4">
+              <div class="col-span-1 sm:col-span-7">
                 <InputStandard
                   v-model="mpm.amount"
                   :validation-schema="schema.amount"
@@ -26,7 +26,7 @@
                   <template #icon><Euro class="icon-medium" /></template>
                 </InputStandard>
               </div>
-              <div class="col-span-1 sm:col-span-3 sm:mt-1">
+              <div class="col-span-1 sm:col-span-6">
                 <div class="grid gap-1.5 relative justify-items-start w-full">
                   <Label
                     for="onceAMonth"
@@ -36,7 +36,7 @@
                   </Label>
                   <ToggleGroup
                     type="single"
-                    class="border border-input bg-muted inline-flex h-8 rounded-md overflow-hidden p-0 items-stretch w-full"
+                    class="border border-input bg-muted inline-flex h-10 rounded-md overflow-hidden p-0 items-stretch w-full"
                     :model-value="mpm.onceAMonth ? 'yes' : 'no'"
                     @update:model-value="
                       (val: any) => val && (mpm.onceAMonth = val === 'yes')
@@ -58,7 +58,7 @@
                   </ToggleGroup>
                 </div>
               </div>
-              <div class="col-span-2 sm:col-span-5">
+              <div class="col-span-2 sm:col-span-11">
                 <div class="grid gap-1.5 relative justify-items-start w-full">
                   <Label
                     class="text-left ml-1 text-sm font-medium text-foreground leading-none"
@@ -159,18 +159,25 @@
                     </div>
                     <div
                       v-if="mpm.isFavorite"
-                      class="w-12 h-10 relative shrink-0 ml-auto"
+                      class="flex items-center gap-2 ml-auto shrink-0 h-10"
                     >
-                      <FavoriteIcon
-                        :text="mpm.favoriteAbbreviation"
-                        :color="previewColor"
-                        class="absolute top-1/2 -translate-y-1/2 left-0"
-                      />
+                      <span
+                        class="text-[10px] font-bold uppercase tracking-wider text-muted-foreground/70 text-right"
+                      >
+                        {{ $t("PreDefMoneyflow.preview") }}:
+                      </span>
+                      <div class="w-12 h-10 relative shrink-0">
+                        <FavoriteIcon
+                          :text="mpm.favoriteAbbreviation"
+                          :color="previewColor"
+                          class="absolute top-1/2 -translate-y-1/2 left-0"
+                        />
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-              <div class="col-span-2 sm:col-span-6">
+              <div class="col-span-2 sm:col-span-12">
                 <InputStandard
                   v-model="mpm.comment"
                   :validation-schema="schema.comment"
@@ -182,7 +189,7 @@
                   /></template>
                 </InputStandard>
               </div>
-              <div class="col-span-2 sm:col-span-6">
+              <div class="col-span-2 sm:col-span-12">
                 <SelectContractpartner
                   v-model="mpm.contractpartnerId"
                   :validation-schema="schema.contractpartnerId"
@@ -190,7 +197,7 @@
                   :field-label="$t('General.contractpartner')"
                 />
               </div>
-              <div class="col-span-2 sm:col-span-6">
+              <div class="col-span-2 sm:col-span-12">
                 <SelectCapitalsource
                   v-model="mpm.capitalsourceId"
                   :validation-schema="schema.capitalsourceId"
@@ -199,7 +206,7 @@
                   :validity-date="validityDate"
                 />
               </div>
-              <div class="col-span-2 sm:col-span-6">
+              <div class="col-span-2 sm:col-span-12">
                 <SelectPostingAccount
                   v-model="mpm.postingAccountId"
                   :validation-schema="schema.postingAccountId"
