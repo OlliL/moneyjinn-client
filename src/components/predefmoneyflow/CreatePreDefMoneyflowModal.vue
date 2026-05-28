@@ -134,6 +134,8 @@
                               <div
                                 v-for="color in randomColors"
                                 :key="color"
+                                @mouseenter="hoveredColor = color"
+                                @mouseleave="hoveredColor = null"
                                 @click="selectColor(color)"
                                 class="h-6 w-6 rounded-sm cursor-pointer border border-input/50 hover:scale-110 transition-transform"
                                 :style="{ backgroundColor: color }"
@@ -164,7 +166,7 @@
                         >
                           <FavoriteIcon
                             :text="mpm.favoriteAbbreviation"
-                            :color="mpm.favoriteColor"
+                            :color="previewColor"
                             size="sm"
                           />
                         </div>
@@ -313,6 +315,11 @@ const emit = defineEmits(["preDefMoneyflowCreated", "preDefMoneyflowUpdated"]);
 
 const isPopoverOpen = ref(false);
 const randomColors = ref<string[]>([]);
+const hoveredColor = ref<string | null>(null);
+
+const previewColor = computed(() => {
+  return hoveredColor.value ?? mpm.value.favoriteColor;
+});
 
 const updateRandomColors = () => {
   randomColors.value = Array.from(
@@ -326,7 +333,11 @@ const updateRandomColors = () => {
 };
 
 watch(isPopoverOpen, (val) => {
-  if (val) updateRandomColors();
+  if (val) {
+    updateRandomColors();
+  } else {
+    hoveredColor.value = null;
+  }
 });
 
 const selectColor = (color: string) => {
