@@ -166,7 +166,7 @@ const schema = computed(() => {
 });
 
 const items: Ref<Array<SelectBoxValue>> = ref([]);
-const fieldValue = ref(undefined as string | undefined);
+const fieldValue = ref<string | undefined>(undefined);
 const preventOnFocus = ref(false);
 const {
   value: hiddenValue,
@@ -180,10 +180,10 @@ const {
 });
 
 const filterItemList = () => {
-  const searchString = fieldValue.value;
+  const searchString = fieldValue.value?.toLocaleLowerCase();
   if (searchString)
     items.value = props.selectBoxValues.filter((sbv) =>
-      sbv.value.toLocaleLowerCase().includes(searchString.toLocaleLowerCase()),
+      sbv.value.toLocaleLowerCase().includes(searchString),
     );
   else items.value = props.selectBoxValues;
 };
@@ -194,9 +194,11 @@ const showDropdown = async () => {
 
   await nextTick();
 
-  if (getInputElement()) {
-    getInputElement().scrollIntoView({ behavior: "smooth", block: "nearest" });
+  const el = getInputElement();
+  if (el) {
+    el.scrollIntoView({ behavior: "smooth", block: "nearest" });
   }
+  // No need to set highlightedOptionId here, it's done by keyboard nav or onInput
 };
 
 const hideDropdown = () => {
@@ -204,19 +206,21 @@ const hideDropdown = () => {
 };
 
 const focusNextInputElement = () => {
-  const form = getInputElement().closest("form");
-  const inputElements = Array.prototype.filter.call(
-    form,
-    (i) => i instanceof HTMLInputElement && i.type != "hidden",
+  const el = getInputElement();
+  const form = el?.closest("form");
+  if (!form || !el) return;
+
+  const inputElements = Array.from(form.elements).filter(
+    (i): i is HTMLInputElement =>
+      i instanceof HTMLInputElement && i.type !== "hidden",
   );
-  const index = inputElements.indexOf(getInputElement());
+  const index = inputElements.indexOf(el);
   nextTick(() => {
-    inputElements[index + 1].focus();
+    inputElements[index + 1]?.focus();
   });
 };
 
 const getDropdownAnchors = () => {
-  // Findet alle Anker innerhalb des Dropdowns
   return dropdownRef.value?.querySelectorAll("a") || [];
 };
 
@@ -233,6 +237,7 @@ const setFieldValue = () => {
   fieldValue.value = props.selectBoxValues.find(
     (sbv) => sbv.id == hiddenValue.value,
   )?.value;
+  // filterItemList() is called by watch(props.modelValue) or onInput, which also resets highlight
   filterItemList();
 };
 
@@ -242,7 +247,8 @@ const onBlur = () => {
     const isInsideDropdown =
       dropdownRef.value?.contains(activeEl) || getInputElement() === activeEl;
 
-    if (!isInsideDropdown) {
+    if (!isInsideDropdown && !isOpen.value) {
+      // Only hide if not already open and focus is truly outside
       preventOnFocus.value = true;
       hideDropdown();
       setFieldValue();
@@ -251,16 +257,22 @@ const onBlur = () => {
 };
 
 const getInputElement = () => {
-  return fieldRef.value?.$el as HTMLInputElement;
+  const refValue = fieldRef.value as unknown as
+    | HTMLInputElement
+    | { $el?: HTMLInputElement }
+    | undefined;
+  if (!refValue) return undefined;
+  if ("$el" in refValue && refValue.$el) return refValue.$el;
+  return refValue as HTMLInputElement;
 };
 
 const onFocus = () => {
-  if (preventOnFocus.value) {
+  if (preventOnFocus.value || isOpen.value) {
     preventOnFocus.value = false;
     return;
   }
   showDropdown();
-  getInputElement().select();
+  getInputElement()?.select();
 };
 
 const onClickAnchor = (selectBoxValue: SelectBoxValue) => {
@@ -280,17 +292,17 @@ const onKeydownAnchor = (event: KeyboardEvent) => {
   } else if (event.key === "ArrowUp") {
     event.preventDefault();
     if (currentIndex === 0) {
-      getInputElement().focus();
+      getInputElement()?.focus();
     } else {
       const prevIndex = (currentIndex - 1 + anchors.length) % anchors.length;
       anchors[prevIndex]?.focus();
     }
-  } else if (event.key === "Tab" || event.key === "Enter") {
+  } else if (event.key === "Enter" || event.key === "Tab") {
     event.preventDefault();
     (event.target as HTMLAnchorElement).click();
   } else if (event.key === "Escape") {
     hideDropdown();
-    getInputElement().focus();
+    getInputElement()?.focus();
   }
 };
 
@@ -345,7 +357,7 @@ watch(
 onMounted(() => {
   if (props.focus) {
     nextTick(() => {
-      getInputElement().focus();
+      getInputElement()?.focus();
     });
   }
 });
