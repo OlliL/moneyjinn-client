@@ -4,7 +4,7 @@
       {{ fieldLabel }}
     </Label>
 
-    <div class="flex -space-x-px relative">
+    <div class="flex -space-x-px relative w-full">
       <input
         type="hidden"
         :id="id"
@@ -13,68 +13,84 @@
         v-model="hiddenValue"
       />
 
-      <div class="relative flex-1">
-        <Input
-          autocomplete="off"
-          v-model="fieldValue"
-          ref="fieldRef"
-          :id="id"
-          :data-testid="id"
-          :class="[
-            'z-10',
-            $slots.icon ? 'rounded-r-none' : '',
-            isInvalid
-              ? '!border-destructive bg-destructive/[0.03] focus-visible:ring-destructive/15 !border-r-destructive'
-              : 'bg-background border-input focus-visible:ring-ring',
-          ]"
-          @input="onInput"
-          @keydown="onKeydownInput"
-          @keyup="onKeyupInput"
-          @focus="onFocus"
-          @blur="onBlur"
-        />
+      <Popover v-model:open="isOpen" :modal="false">
+        <PopoverTrigger as-child class="w-full">
+          <div class="relative flex-1 flex -space-x-px w-full">
+            <div class="relative flex-1">
+              <Input
+                autocomplete="off"
+                v-model="fieldValue"
+                ref="fieldRef"
+                :id="id"
+                :data-testid="id"
+                :class="[
+                  $slots.icon ? 'rounded-r-none' : '',
+                  isInvalid
+                    ? '!border-destructive bg-destructive/[0.03] focus-visible:ring-destructive/15 !border-r-destructive'
+                    : 'bg-background border-input focus-visible:ring-ring',
+                ]"
+                @input="onInput"
+                @click.stop="showDropdown"
+                @keydown="onKeydownInput"
+                @keyup="onKeyupInput"
+                @focus="onFocus"
+                @blur="onBlur"
+              />
 
-        <button
-          v-if="fieldValue"
-          type="button"
-          class="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors p-1"
-          @click="clearInput"
-          :data-testid="id + '-clear'"
+              <button
+                v-if="fieldValue"
+                type="button"
+                class="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors p-1"
+                @click="clearInput"
+                :data-testid="id + '-clear'"
+              >
+                <X class="icon-medium stroke-[3px]" />
+              </button>
+            </div>
+
+            <div
+              v-if="$slots.icon"
+              :class="[
+                'flex items-center justify-center px-2 border border-input rounded-r-md text-foreground transition-colors relative',
+                isInvalid ? 'border-l-transparent' : '',
+              ]"
+            >
+              <slot name="icon"></slot>
+            </div>
+          </div>
+        </PopoverTrigger>
+
+        <PopoverContent
+          v-if="items.length > 0"
+          class="p-0 z-[2500] flex flex-col"
+          :style="{
+            width: 'var(--reka-popover-trigger-width)',
+            minWidth: 'var(--reka-popover-trigger-width)',
+            maxWidth: 'var(--reka-popover-trigger-width)',
+          }"
+          align="start"
+          @open-auto-focus="(e) => e.preventDefault()"
+          @close-auto-focus="(e) => e.preventDefault()"
         >
-          <X class="icon-medium stroke-[3px]" />
-        </button>
-      </div>
-
-      <div
-        v-if="$slots.icon"
-        :class="[
-          'flex items-center justify-center px-2 border border-input rounded-r-md text-foreground transition-colors relative',
-          isInvalid ? 'border-l-transparent' : '',
-        ]"
-      >
-        <slot name="icon"></slot>
-      </div>
-
-      <div
-        v-if="isOpen && items.length > 0"
-        ref="dropdownRef"
-        class="absolute z-50 top-[calc(100%+4px)] left-0 min-w-[8rem] w-full max-h-[300px] rounded-md border bg-popover text-popover-foreground shadow-md animate-in fade-in-0 zoom-in-95 flex flex-col"
-      >
-        <div class="p-1 overflow-y-auto overscroll-contain custom-scrollbar">
-          <a
-            v-for="selectBoxValue in items"
-            :key="selectBoxValue.id"
-            v-memo="[selectBoxValue.id]"
-            href="#"
-            class="relative flex w-full cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground !text-foreground !no-underline"
-            @click.prevent="onClickAnchor(selectBoxValue)"
-            @keydown="onKeydownAnchor"
-            :data-testid="id + '-option'"
+          <div
+            ref="dropdownRef"
+            class="p-1 overflow-y-auto max-h-[300px] overscroll-contain custom-scrollbar"
           >
-            {{ selectBoxValue.value }}
-          </a>
-        </div>
-      </div>
+            <a
+              v-for="selectBoxValue in items"
+              :key="selectBoxValue.id"
+              v-memo="[selectBoxValue.id]"
+              href="#"
+              class="relative flex w-full cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground !text-foreground !no-underline"
+              @click.prevent="onClickAnchor(selectBoxValue)"
+              @keydown="onKeydownAnchor"
+              :data-testid="id + '-option'"
+            >
+              <span class="truncate min-w-0">{{ selectBoxValue.value }}</span>
+            </a>
+          </div>
+        </PopoverContent>
+      </Popover>
     </div>
 
     <p
@@ -89,6 +105,11 @@
 <script lang="ts" setup>
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import type { SelectBoxValue } from "@/model/SelectBoxValue";
 import { toTypedSchema } from "@vee-validate/zod";
 import { X } from "lucide-vue-next";
@@ -145,7 +166,7 @@ const schema = computed(() => {
 });
 
 const items: Ref<Array<SelectBoxValue>> = ref([]);
-const fieldValue = ref(undefined as string | undefined);
+const fieldValue = ref<string | undefined>(undefined);
 const preventOnFocus = ref(false);
 const {
   value: hiddenValue,
@@ -159,10 +180,10 @@ const {
 });
 
 const filterItemList = () => {
-  const searchString = fieldValue.value;
+  const searchString = fieldValue.value?.toLocaleLowerCase();
   if (searchString)
     items.value = props.selectBoxValues.filter((sbv) =>
-      sbv.value.toLocaleLowerCase().includes(searchString.toLocaleLowerCase()),
+      sbv.value.toLocaleLowerCase().includes(searchString),
     );
   else items.value = props.selectBoxValues;
 };
@@ -173,9 +194,11 @@ const showDropdown = async () => {
 
   await nextTick();
 
-  if (getInputElement()) {
-    getInputElement().scrollIntoView({ behavior: "smooth", block: "nearest" });
+  const el = getInputElement();
+  if (el) {
+    el.scrollIntoView({ behavior: "smooth", block: "nearest" });
   }
+  // No need to set highlightedOptionId here, it's done by keyboard nav or onInput
 };
 
 const hideDropdown = () => {
@@ -183,19 +206,21 @@ const hideDropdown = () => {
 };
 
 const focusNextInputElement = () => {
-  const form = getInputElement().closest("form");
-  const inputElements = Array.prototype.filter.call(
-    form,
-    (i) => i instanceof HTMLInputElement && i.type != "hidden",
+  const el = getInputElement();
+  const form = el?.closest("form");
+  if (!form || !el) return;
+
+  const inputElements = Array.from(form.elements).filter(
+    (i): i is HTMLInputElement =>
+      i instanceof HTMLInputElement && i.type !== "hidden",
   );
-  const index = inputElements.indexOf(getInputElement());
+  const index = inputElements.indexOf(el);
   nextTick(() => {
-    inputElements[index + 1].focus();
+    inputElements[index + 1]?.focus();
   });
 };
 
 const getDropdownAnchors = () => {
-  // Findet alle Anker innerhalb des Dropdowns
   return dropdownRef.value?.querySelectorAll("a") || [];
 };
 
@@ -212,6 +237,7 @@ const setFieldValue = () => {
   fieldValue.value = props.selectBoxValues.find(
     (sbv) => sbv.id == hiddenValue.value,
   )?.value;
+  // filterItemList() is called by watch(props.modelValue) or onInput, which also resets highlight
   filterItemList();
 };
 
@@ -221,7 +247,8 @@ const onBlur = () => {
     const isInsideDropdown =
       dropdownRef.value?.contains(activeEl) || getInputElement() === activeEl;
 
-    if (!isInsideDropdown) {
+    if (!isInsideDropdown && !isOpen.value) {
+      // Only hide if not already open and focus is truly outside
       preventOnFocus.value = true;
       hideDropdown();
       setFieldValue();
@@ -230,19 +257,22 @@ const onBlur = () => {
 };
 
 const getInputElement = () => {
-  return fieldRef.value?.$el as HTMLInputElement;
+  const refValue = fieldRef.value as unknown as
+    | HTMLInputElement
+    | { $el?: HTMLInputElement }
+    | undefined;
+  if (!refValue) return undefined;
+  if ("$el" in refValue && refValue.$el) return refValue.$el;
+  return refValue as HTMLInputElement;
 };
 
 const onFocus = () => {
+  if (preventOnFocus.value || isOpen.value) {
+    preventOnFocus.value = false;
+    return;
+  }
   showDropdown();
-  getInputElement().select();
-
-  setTimeout(() => {
-    if (!preventOnFocus.value) {
-      preventOnFocus.value = false;
-      showDropdown();
-    }
-  }, 200);
+  getInputElement()?.select();
 };
 
 const onClickAnchor = (selectBoxValue: SelectBoxValue) => {
@@ -262,17 +292,17 @@ const onKeydownAnchor = (event: KeyboardEvent) => {
   } else if (event.key === "ArrowUp") {
     event.preventDefault();
     if (currentIndex === 0) {
-      getInputElement().focus();
+      getInputElement()?.focus();
     } else {
       const prevIndex = (currentIndex - 1 + anchors.length) % anchors.length;
       anchors[prevIndex]?.focus();
     }
-  } else if (event.key === "Tab" || event.key === "Enter") {
+  } else if (event.key === "Enter" || event.key === "Tab") {
     event.preventDefault();
     (event.target as HTMLAnchorElement).click();
   } else if (event.key === "Escape") {
     hideDropdown();
-    getInputElement().focus();
+    getInputElement()?.focus();
   }
 };
 
@@ -285,10 +315,8 @@ const onKeydownInput = async (event: KeyboardEvent) => {
   if (event.key == "ArrowDown") {
     // Enter Dropdown-Menu to navigate if the user presses ArrowDown in the input element
     event.preventDefault();
-    nextTick(() => {
-      showDropdown();
-      getFirstDropdownAnchor()?.focus();
-    });
+    await showDropdown();
+    getFirstDropdownAnchor()?.focus();
   } else if (event.key == "Enter") {
     // Select first shown element from the Dropdown-Menu if the user presses ArrowDown in the input element
     event.preventDefault();
@@ -300,9 +328,6 @@ const onKeydownInput = async (event: KeyboardEvent) => {
   } else if (event.key == "Tab") {
     // Select first shown element from the Dropdown-Menu if the user presses ArrowDown in the input element
     // For shift+tab just continue with regular event handler (focus previous element)
-    setTimeout(() => {
-      hideDropdown();
-    }, 200);
     if (!event.shiftKey) {
       event.preventDefault();
       getFirstDropdownAnchor()?.click();
@@ -332,7 +357,7 @@ watch(
 onMounted(() => {
   if (props.focus) {
     nextTick(() => {
-      getInputElement().focus();
+      getInputElement()?.focus();
     });
   }
 });
