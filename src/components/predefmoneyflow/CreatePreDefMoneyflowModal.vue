@@ -110,16 +110,10 @@
                         <div class="relative">
                           <div
                             @click="toggleColorPicker"
-                            class="h-6 w-6 rounded-sm border cursor-pointer transition-all flex items-center justify-center shadow-sm hover:opacity-90"
+                            class="h-6 w-6 rounded-sm border cursor-pointer transition-all flex items-center justify-center shadow-sm hover:opacity-90 border-transparent"
                             :style="{
                               backgroundColor: mpm.favoriteColor,
                             }"
-                            :class="[
-                              'border-transparent',
-                              favoriteColorErrorMessage
-                                ? 'border-destructive!'
-                                : '',
-                            ]"
                             :data-testid="'favoriteColorPicker' + idSuffix"
                           ></div>
 
@@ -167,13 +161,6 @@
                         </div>
                       </div>
                     </div>
-
-                    <p
-                      v-if="favoriteColorErrorMessage"
-                      class="absolute top-full left-0 text-[10px] font-medium text-destructive mt-0.5 whitespace-nowrap"
-                    >
-                      {{ favoriteColorErrorMessage }}
-                    </p>
                   </div>
                 </div>
               </div>
@@ -249,10 +236,16 @@ import type { PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
 import PreDefMoneyflowService from "@/service/PreDefMoneyflowService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { amountSchema, globErr } from "@/tools/views/ZodUtil";
-import { toTypedSchema } from "@vee-validate/zod";
-import { Euro, RefreshCw, Save, Star, Undo2 } from "lucide-vue-next";
-import { useField, useForm } from "vee-validate";
-import { computed, ref, toRaw, useTemplateRef, watch } from "vue";
+import {
+  Euro,
+  MessageSquareMore,
+  RefreshCw,
+  Save,
+  Star,
+  Undo2,
+} from "lucide-vue-next";
+import { useForm } from "vee-validate";
+import { computed, ref, toRaw, useTemplateRef } from "vue";
 import { useI18n } from "vue-i18n";
 import { boolean, number, string, type ZodType } from "zod";
 import SelectCapitalsource from "../capitalsource/SelectCapitalsource.vue";
@@ -288,9 +281,6 @@ const schema: Partial<{ [key in keyof PreDefMoneyflow]: ZodType }> = {
   )
     .min(1)
     .max(3),
-  favoriteColor: string(
-    globErr(t("PreDefMoneyflow.validation.favoriteColor")),
-  ).length(7, t("PreDefMoneyflow.validation.length.favoriteColor")),
   postingAccountId: number(
     globErr(t("Moneyflow.validation.postingAccountId")),
   ).gt(0),
@@ -330,14 +320,6 @@ const selectColor = (color: string) => {
   showColorPicker.value = false;
 };
 
-const {
-  errorMessage: favoriteColorErrorMessage,
-  setValue: setFavoriteColorValue,
-} = useField<string>(
-  () => "favoriteColor",
-  toTypedSchema(schema.favoriteColor!),
-);
-
 const { handleSubmit, values, setFieldTouched } = useForm();
 
 const title = computed(() => {
@@ -345,13 +327,6 @@ const title = computed(() => {
     ? t("PreDefMoneyflow.title.create")
     : t("PreDefMoneyflow.title.update");
 });
-
-watch(
-  () => mpm.value.favoriteColor,
-  (newVal) => {
-    setFavoriteColorValue(newVal ?? "");
-  },
-);
 
 const resetForm = () => {
   updateRandomColors();

@@ -84,8 +84,7 @@
     "taskList": "Task List",
     "importableMoneyflows": "There are transactions waiting to be imported!",
     "createSettlements": "No monthly statement exists for the previous month!",
-    "allDone": "It's All Done!",
-    "allDoneTitle": "Done!"
+    "allDone": "It's All Done!"
   },
   "Capitalsource": {
     "type": "Type",

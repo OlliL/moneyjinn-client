@@ -16,61 +16,67 @@
 
     <DivError :server-errors="serverErrors" />
 
-    <div class="max-w-3xl mx-auto space-y-4">
-      <div
+    <div class="max-w-3xl mx-auto space-y-2">
+      <Alert
         v-if="importedMoneyflows"
-        class="grid grid-cols-12 items-center gap-4 p-2"
+        class="border-orange-200 bg-orange-50 dark:bg-orange-950/20 dark:border-orange-900"
       >
-        <div class="col-span-4 sm:col-span-3 flex justify-end">
-          <Button
-            variant="default"
-            class="cursor-pointer"
+        <AlertCircle class="h-4 w-4 text-orange-600" />
+        <AlertTitle>{{ $t("AppHome.importableMoneyflows") }}</AlertTitle>
+        <AlertDescription>
+          <button
+            type="button"
+            class="text-sm font-medium underline underline-offset-4 hover:opacity-80 transition-opacity cursor-pointer"
             data-testid="app-home-import-moneyflows"
             @click="navigateImportMoneyflows"
           >
-            <ExternalLink />
             {{ $t("General.edit") }}
-          </Button>
-        </div>
-        <div class="col-span-8 sm:col-span-9">
-          {{ $t("AppHome.importableMoneyflows") }}
-        </div>
-      </div>
+          </button>
+        </AlertDescription>
+      </Alert>
 
-      <div
+      <Alert
         v-if="monthlySettlementMissing"
-        class="grid grid-cols-12 items-center gap-4 p-2"
+        class="border-orange-200 bg-orange-50 dark:bg-orange-950/20 dark:border-orange-900"
       >
-        <div class="col-span-4 sm:col-span-3 flex justify-end">
-          <Button
-            variant="default"
-            class="cursor-pointer"
+        <AlertCircle class="h-4 w-4 text-orange-600" />
+        <AlertTitle>{{ $t("AppHome.createSettlements") }}</AlertTitle>
+        <AlertDescription>
+          <button
+            type="button"
+            class="text-sm font-medium underline underline-offset-4 hover:opacity-80 transition-opacity cursor-pointer"
             data-testid="app-home-edit-monthly-settlement"
             @click="showEditMonthlySettlementModal"
           >
-            <ExternalLink />
             {{ $t("General.edit") }}
-          </Button>
-        </div>
-        <div class="col-span-8 sm:col-span-9">
-          {{ $t("AppHome.createSettlements") }}
-        </div>
-      </div>
-    </div>
+          </button>
+        </AlertDescription>
+      </Alert>
 
-    <div class="flex justify-center">
       <Alert
         v-if="dataLoaded && !importedMoneyflows && !monthlySettlementMissing"
         class="max-w-xl border-green-200 bg-green-50 dark:bg-green-950/20 dark:border-green-900"
       >
         <CheckCircle2 />
         <AlertTitle>
-          {{ $t("AppHome.allDoneTitle") }}
-        </AlertTitle>
-        <AlertDescription>
           {{ $t("AppHome.allDone") }}
-        </AlertDescription>
+        </AlertTitle>
       </Alert>
+    </div>
+
+    <div
+      v-if="dataLoaded && favoriteMoneyflows.length > 0"
+      class="flex flex-wrap justify-center gap-4 py-0 max-w-3xl mx-auto"
+    >
+      <FavoriteIcon
+        v-for="flow in favoriteMoneyflows"
+        :key="flow.id"
+        :text="flow.favoriteAbbreviation"
+        :color="flow.favoriteColor!"
+        size="lg"
+        class="transition-transform active:scale-90 cursor-pointer"
+        @click="openQuickBooking(flow)"
+      />
     </div>
   </div>
 
@@ -111,21 +117,6 @@
       </Alert>
     </div>
   </Transition>
-
-  <div
-    v-if="dataLoaded && favoriteMoneyflows.length > 0"
-    class="flex flex-wrap justify-center gap-4 py-6 max-w-3xl mx-auto"
-  >
-    <FavoriteIcon
-      v-for="flow in favoriteMoneyflows"
-      :key="flow.id"
-      :text="flow.favoriteAbbreviation"
-      :color="flow.favoriteColor!"
-      size="lg"
-      class="transition-transform active:scale-90 cursor-pointer"
-      @click="openQuickBooking(flow)"
-    />
-  </div>
 </template>
 
 <script lang="ts" setup>
@@ -144,7 +135,7 @@ import router, { Routes } from "@/router";
 import EventService from "@/service/EventService";
 import PreDefMoneyflowService from "@/service/PreDefMoneyflowService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
-import { CheckCircle2, ExternalLink, X } from "lucide-vue-next";
+import { AlertCircle, CheckCircle2, X } from "lucide-vue-next";
 import { onMounted, ref, useTemplateRef } from "vue";
 import QuickBookingModal from "./QuickBookingModal.vue";
 

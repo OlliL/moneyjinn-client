@@ -15,11 +15,8 @@
       >
         <CheckCircle2 />
         <AlertTitle>
-          {{ $t("AppHome.allDoneTitle") }}
-        </AlertTitle>
-        <AlertDescription>
           {{ $t("AppHome.allDone") }}
-        </AlertDescription>
+        </AlertTitle>
       </Alert>
     </div>
 
@@ -64,7 +61,6 @@ import { onMounted, ref } from "vue";
 
 import { Accordion } from "@/components/ui/accordion";
 import Alert from "@/components/ui/alert/Alert.vue";
-import AlertDescription from "@/components/ui/alert/AlertDescription.vue";
 import AlertTitle from "@/components/ui/alert/AlertTitle.vue";
 import ImportedMoneyflowService from "@/service/ImportedMoneyflowService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";

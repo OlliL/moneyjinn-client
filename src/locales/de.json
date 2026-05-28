@@ -83,8 +83,7 @@
     "taskList": "Aufgabenliste",
     "importableMoneyflows": "Es liegen noch nicht bearbeitete importierte Geldbewegungen vor!",
     "createSettlements": "Für den vergangenen Monat existiert kein Monatsabschluß!",
-    "allDone": "Alles erledigt!",
-    "allDoneTitle": "Erledigt!"
+    "allDone": "Alles erledigt!"
   },
   "Capitalsource": {
     "type": "Typ",
