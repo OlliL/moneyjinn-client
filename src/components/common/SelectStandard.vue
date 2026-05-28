@@ -13,68 +13,79 @@
         v-model="hiddenValue"
       />
 
-      <div class="relative flex-1">
-        <Input
-          autocomplete="off"
-          v-model="fieldValue"
-          ref="fieldRef"
-          :id="id"
-          :data-testid="id"
-          :class="[
-            'z-10',
-            $slots.icon ? 'rounded-r-none' : '',
-            isInvalid
-              ? '!border-destructive bg-destructive/[0.03] focus-visible:ring-destructive/15 !border-r-destructive'
-              : 'bg-background border-input focus-visible:ring-ring',
-          ]"
-          @input="onInput"
-          @keydown="onKeydownInput"
-          @keyup="onKeyupInput"
-          @focus="onFocus"
-          @blur="onBlur"
-        />
+      <Popover v-model:open="isOpen" :modal="false">
+        <PopoverTrigger as-child>
+          <div class="relative flex-1 flex -space-x-px">
+            <div class="relative flex-1">
+              <Input
+                autocomplete="off"
+                v-model="fieldValue"
+                ref="fieldRef"
+                :id="id"
+                :data-testid="id"
+                :class="[
+                  'z-10',
+                  $slots.icon ? 'rounded-r-none' : '',
+                  isInvalid
+                    ? '!border-destructive bg-destructive/[0.03] focus-visible:ring-destructive/15 !border-r-destructive'
+                    : 'bg-background border-input focus-visible:ring-ring',
+                ]"
+                @input="onInput"
+                @keydown="onKeydownInput"
+                @keyup="onKeyupInput"
+                @focus="onFocus"
+                @blur="onBlur"
+              />
 
-        <button
-          v-if="fieldValue"
-          type="button"
-          class="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors p-1"
-          @click="clearInput"
-          :data-testid="id + '-clear'"
+              <button
+                v-if="fieldValue"
+                type="button"
+                class="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors p-1"
+                @click="clearInput"
+                :data-testid="id + '-clear'"
+              >
+                <X class="icon-medium stroke-[3px]" />
+              </button>
+            </div>
+
+            <div
+              v-if="$slots.icon"
+              :class="[
+                'flex items-center justify-center px-2 border border-input rounded-r-md text-foreground transition-colors relative',
+                isInvalid ? 'border-l-transparent' : '',
+              ]"
+            >
+              <slot name="icon"></slot>
+            </div>
+          </div>
+        </PopoverTrigger>
+
+        <PopoverContent
+          v-if="items.length > 0"
+          class="p-0 z-[3000] w-[--radix-popover-trigger-width] flex flex-col"
+          align="start"
+          @open-auto-focus="(e) => e.preventDefault()"
+          @close-auto-focus="(e) => e.preventDefault()"
         >
-          <X class="icon-medium stroke-[3px]" />
-        </button>
-      </div>
-
-      <div
-        v-if="$slots.icon"
-        :class="[
-          'flex items-center justify-center px-2 border border-input rounded-r-md text-foreground transition-colors relative',
-          isInvalid ? 'border-l-transparent' : '',
-        ]"
-      >
-        <slot name="icon"></slot>
-      </div>
-
-      <div
-        v-if="isOpen && items.length > 0"
-        ref="dropdownRef"
-        class="absolute z-50 top-[calc(100%+4px)] left-0 min-w-[8rem] w-full max-h-[300px] rounded-md border bg-popover text-popover-foreground shadow-md animate-in fade-in-0 zoom-in-95 flex flex-col"
-      >
-        <div class="p-1 overflow-y-auto overscroll-contain custom-scrollbar">
-          <a
-            v-for="selectBoxValue in items"
-            :key="selectBoxValue.id"
-            v-memo="[selectBoxValue.id]"
-            href="#"
-            class="relative flex w-full cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground !text-foreground !no-underline"
-            @click.prevent="onClickAnchor(selectBoxValue)"
-            @keydown="onKeydownAnchor"
-            :data-testid="id + '-option'"
+          <div
+            ref="dropdownRef"
+            class="p-1 overflow-y-auto max-h-[300px] overscroll-contain custom-scrollbar"
           >
-            {{ selectBoxValue.value }}
-          </a>
-        </div>
-      </div>
+            <a
+              v-for="selectBoxValue in items"
+              :key="selectBoxValue.id"
+              v-memo="[selectBoxValue.id]"
+              href="#"
+              class="relative flex w-full cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground !text-foreground !no-underline"
+              @click.prevent="onClickAnchor(selectBoxValue)"
+              @keydown="onKeydownAnchor"
+              :data-testid="id + '-option'"
+            >
+              {{ selectBoxValue.value }}
+            </a>
+          </div>
+        </PopoverContent>
+      </Popover>
     </div>
 
     <p
@@ -89,6 +100,11 @@
 <script lang="ts" setup>
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import type { SelectBoxValue } from "@/model/SelectBoxValue";
 import { toTypedSchema } from "@vee-validate/zod";
 import { X } from "lucide-vue-next";
@@ -285,10 +301,8 @@ const onKeydownInput = async (event: KeyboardEvent) => {
   if (event.key == "ArrowDown") {
     // Enter Dropdown-Menu to navigate if the user presses ArrowDown in the input element
     event.preventDefault();
-    nextTick(() => {
-      showDropdown();
-      getFirstDropdownAnchor()?.focus();
-    });
+    await showDropdown();
+    getFirstDropdownAnchor()?.focus();
   } else if (event.key == "Enter") {
     // Select first shown element from the Dropdown-Menu if the user presses ArrowDown in the input element
     event.preventDefault();
