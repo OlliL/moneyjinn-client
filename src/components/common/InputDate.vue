@@ -266,35 +266,40 @@ const onTextInput = (event: Event) => {
 
 const setDate = (newVal?: Date) => {
   const inputEl = getInputElement();
-  if (inputEl)
+  if (inputEl) {
     inputEl.value = newVal
       ? Datepicker.formatDate(new Date(newVal), format, "de")
       : "";
+  }
 
-  if (datepicker instanceof Datepicker) {
-    if (newVal === undefined) {
-      if (datepicker.dates.length > 0)
-        datepicker.setDate({ clear: true, forceRefresh: true });
-    } else {
-      const normalizedDate = new Date(newVal);
+  if (!(datepicker instanceof Datepicker)) return;
 
-      if (props.pickMode === "month") {
-        normalizedDate.setDate(1);
-      } else if (props.pickMode === "year") {
-        normalizedDate.setDate(1);
-        normalizedDate.setMonth(0);
-      }
-      normalizedDate.setHours(0, 0, 0, 0);
-      if (
-        datepicker.dates.length === 0 ||
-        (datepicker.getDate() as Date).toISOString() !=
-          normalizedDate.toISOString()
-      ) {
-        datepicker.setDate(normalizedDate);
-      }
+  if (newVal === undefined) {
+    if (datepicker.dates.length > 0) {
+      datepicker.setDate({ clear: true, forceRefresh: true });
     }
+    return;
+  }
+
+  const normalizedDate = new Date(newVal);
+  if (props.pickMode === "month") {
+    normalizedDate.setDate(1);
+  } else if (props.pickMode === "year") {
+    normalizedDate.setDate(1);
+    normalizedDate.setMonth(0);
+  }
+  normalizedDate.setHours(0, 0, 0, 0);
+
+  const current = datepicker.getDate() as Date;
+  const needsUpdate =
+    datepicker.dates.length === 0 ||
+    current.toISOString() !== normalizedDate.toISOString();
+
+  if (needsUpdate) {
+    datepicker.setDate(normalizedDate);
   }
 };
+
 const onKeyboardInput = (event: KeyboardEvent) => {
   if (["Backspace", "Delete"].includes(event.key)) return;
   const el = event.target as HTMLInputElement;
