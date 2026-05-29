@@ -147,12 +147,9 @@ const {
 const parseInput = (v: any) => {
   if (v instanceof Date) return v;
   if (typeof v !== "string" || v.length !== format.length) return v;
-  const timestamp = Datepicker.parseDate(v, format, "de");
-  if (timestamp !== undefined) {
-    const d = new Date(timestamp);
-    if (Datepicker.formatDate(d, format, "de") === v) return d;
-  }
-  return v;
+  const ts = Datepicker.parseDate(v, format, "de");
+  const d = ts === undefined ? null : new Date(ts);
+  return d && Datepicker.formatDate(d, format, "de") === v ? d : v;
 };
 
 const schema = computed(() => {
@@ -242,21 +239,18 @@ onUnmounted(() => {
 
 const onTextInput = (event: Event) => {
   const v = (event.target as HTMLInputElement).value;
-  handleChange(event, false); // No validation while typing
+  handleChange(event, false);
 
-  // Nur wenn das Datum vollständig ist, den Picker aktualisieren und modelValue emittieren
   if (v.length === format.length) {
     const d = parseInput(v);
-    if (d instanceof Date && !Number.isNaN(d.getTime())) {
+    if (d instanceof Date && !isNaN(d.getTime())) {
       if (datepicker instanceof Datepicker) datepicker.setDate(d);
       if (d.getTime() !== props.modelValue?.getTime()) {
         emit("update:modelValue", d);
         setValue(d, false);
       }
     } else {
-      emit("update:modelValue", new Date(Number.NaN));
-      // Wir rufen hier kein setValue auf, damit der String im vee-validate State bleibt.
-      // Das Schema erhält so den String und nutzt die konfigurierte invalid_type_error Message.
+      emit("update:modelValue", new Date(NaN));
     }
   } else if (v === "" && props.modelValue !== undefined) {
     if (datepicker instanceof Datepicker) datepicker.setDate({ clear: true });
@@ -310,27 +304,20 @@ const onKeyboardInput = (event: KeyboardEvent) => {
 };
 
 const onInput = (event: Event) => {
-  if (datepicker.dates.length === 0) {
-    if (props.modelValue !== undefined) {
-      setState({ touched: true });
-      emit("update:modelValue", undefined);
-      setValue(undefined);
-      const el = getInputElement();
-      if (el) el.value = "";
-    }
-  } else {
-    const selectedDate = datepicker.getDate() as Date;
-    if (selectedDate.getTime() !== props.modelValue?.getTime()) {
-      setState({ touched: true });
-      emit("update:modelValue", selectedDate);
-      setValue(selectedDate);
-      const el = getInputElement();
-      if (el) el.value = Datepicker.formatDate(selectedDate, format, "de");
-    }
-
-    // Close popover after selection
-    isPopoverOpen.value = false;
+  const sel = datepicker.getDate() as Date | undefined;
+  const el = getInputElement();
+  if (!sel && props.modelValue !== undefined) {
+    setState({ touched: true });
+    emit("update:modelValue", undefined);
+    setValue(undefined);
+    if (el) el.value = "";
+  } else if (sel && sel.getTime() !== props.modelValue?.getTime()) {
+    setState({ touched: true });
+    emit("update:modelValue", sel);
+    setValue(sel);
+    if (el) el.value = Datepicker.formatDate(sel, format, "de");
   }
+  isPopoverOpen.value = false;
 };
 
 const isInvalid = computed(() => fieldMeta.touched && !!errorMessage.value);
@@ -345,8 +332,6 @@ watch(isPopoverOpen, async (val) => {
 watch(
   () => props.modelValue,
   (newVal) => {
-    // Wenn der Benutzer gerade tippt, ignorieren wir Änderungen von außen,
-    // um den Cursor-Sprung / Overwrite-Bug zu verhindern.
     const el = getInputElement();
     if (el && document.activeElement === el) return;
 
@@ -368,69 +353,59 @@ watch(
 div.datepicker {
   @apply bg-background border border-border shadow-lg overflow-hidden p-0;
   border-radius: var(--radius, 0.75rem);
-}
+  .datepicker-main {
+    @apply p-3;
+  }
 
-div.datepicker .datepicker-main {
-  @apply p-3;
-}
+  .datepicker-header {
+    @apply p-0 flex bg-muted border-b border-border;
+    .datepicker-controls {
+      @apply w-full flex items-stretch;
+    }
+    .view-switch,
+    .prev-btn,
+    .next-btn {
+      @apply h-8 bg-transparent hover:bg-accent hover:text-accent-foreground text-foreground font-medium text-sm border-none rounded-none transition-colors shadow-none;
+    }
+    .prev-btn {
+      @apply border-r border-border/60;
+    }
+    .next-btn {
+      @apply border-l border-border/60;
+    }
+    .view-switch {
+      @apply flex-1;
+    }
+  }
 
-div.datepicker .datepicker-header {
-  @apply p-0 flex bg-muted border-b border-border;
-}
+  .datepicker-footer {
+    @apply p-0 border-t border-border mt-0 flex;
+    .datepicker-controls {
+      @apply w-full flex gap-0 m-0 p-0;
+    }
+    .today-btn,
+    .clear-btn {
+      @apply h-8 flex-1 text-sm font-medium transition-colors rounded-none border-none shadow-none bg-transparent m-0 p-0 cursor-pointer flex items-center justify-center;
+    }
+    .today-btn {
+      @apply bg-primary text-primary-foreground hover:bg-primary/90;
+      border-bottom-left-radius: calc(var(--radius, 0.75rem) - 1px);
+    }
+    .clear-btn {
+      @apply bg-background text-foreground hover:bg-accent hover:text-accent-foreground border-l border-border;
+      border-bottom-right-radius: calc(var(--radius, 0.75rem) - 1px);
+    }
+  }
 
-div.datepicker .datepicker-header .datepicker-controls {
-  @apply w-full flex items-stretch;
-}
-
-div.datepicker .datepicker-header .view-switch,
-div.datepicker .datepicker-header .prev-btn,
-div.datepicker .datepicker-header .next-btn {
-  @apply h-8 bg-transparent hover:bg-accent hover:text-accent-foreground text-foreground font-medium text-sm border-none rounded-none transition-colors shadow-none;
-}
-
-div.datepicker .datepicker-header .prev-btn {
-  @apply border-r border-border/60;
-}
-div.datepicker .datepicker-header .next-btn {
-  @apply border-l border-border/60;
-}
-div.datepicker .datepicker-header .view-switch {
-  @apply flex-1;
-}
-
-div.datepicker .datepicker-footer {
-  @apply p-0 border-t border-border mt-0 flex;
-}
-
-div.datepicker .datepicker-footer .datepicker-controls {
-  @apply w-full flex gap-0 m-0 p-0;
-}
-
-div.datepicker .datepicker-footer .today-btn,
-div.datepicker .datepicker-footer .clear-btn {
-  @apply h-8 flex-1 text-sm font-medium transition-colors rounded-none border-none shadow-none bg-transparent m-0 p-0 cursor-pointer flex items-center justify-center;
-}
-
-div.datepicker .datepicker-footer .today-btn {
-  @apply bg-primary text-primary-foreground hover:bg-primary/90;
-  border-bottom-left-radius: calc(var(--radius, 0.75rem) - 1px);
-}
-
-div.datepicker .datepicker-footer .clear-btn {
-  @apply bg-background text-foreground hover:bg-accent hover:text-accent-foreground border-l border-border;
-  border-bottom-right-radius: calc(var(--radius, 0.75rem) - 1px);
-}
-
-div.datepicker .datepicker-cell {
-  @apply rounded-md text-foreground transition-colors h-8 leading-8 text-sm;
-}
-
-div.datepicker .datepicker-cell.selected {
-  @apply bg-primary text-primary-foreground hover:bg-primary/90;
-}
-
-div.datepicker .datepicker-cell.today:not(.selected) {
-  @apply bg-accent text-accent-foreground font-bold;
+  .datepicker-cell {
+    @apply rounded-md text-foreground transition-colors h-8 leading-8 text-sm;
+    &.selected {
+      @apply bg-primary text-primary-foreground hover:bg-primary/90;
+    }
+    &.today:not(.selected) {
+      @apply bg-accent text-accent-foreground font-bold;
+    }
+  }
 }
 
 .datepicker-inline-container div.datepicker {
