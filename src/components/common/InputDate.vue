@@ -144,22 +144,24 @@ const {
   dots: autoDots,
 } = CONFIG[props.pickMode as keyof typeof CONFIG] || CONFIG.day;
 
+const parseInput = (v: any) => {
+  if (v instanceof Date) return v;
+  if (typeof v !== "string" || v.length !== format.length) return v;
+  const d = new Date(Datepicker.parseDate(v, format, "de") ?? Number.NaN);
+  return !Number.isNaN(d.getTime()) &&
+    Datepicker.formatDate(d, format, "de") === v
+    ? d
+    : new Date(Number.NaN);
+};
+
 const schema = computed(() => {
   if (!viewMounted.value) return undefined;
-  const parse = (v: any) => {
-    if (v instanceof Date) return v;
-    // Nur parsen, wenn die Länge exakt dem Format entspricht (z.B. 10 für dd.mm.yyyy)
-    if (typeof v === "string" && v.length === format.length) {
-      const d = new Date(Datepicker.parseDate(v, format, "de") ?? NaN);
-      if (!isNaN(d.getTime()) && Datepicker.formatDate(d, format, "de") === v) {
-        return d;
-      }
-      return new Date(NaN);
-    }
-    return v;
-  };
-  const base = props.validationSchemaRef?.value ?? props.validationSchema;
-  return toTypedSchema(preprocess(parse, base));
+  return toTypedSchema(
+    preprocess(
+      parseInput,
+      props.validationSchemaRef?.value ?? props.validationSchema,
+    ),
+  );
 });
 
 const {
@@ -239,23 +241,21 @@ onUnmounted(() => {
 
 const onTextInput = (event: Event) => {
   const v = (event.target as HTMLInputElement).value;
-
-  // Raw-String an vee-validate geben, aber noch nicht validieren (vermeidet rotes Feld beim Tippen)
-  handleChange(event, false);
+  handleChange(event, false); // No validation while typing
 
   // Nur wenn das Datum vollständig ist, den Picker aktualisieren und modelValue emittieren
   if (v.length === format.length) {
-    const d = new Date(Datepicker.parseDate(v, format, "de") ?? NaN);
-    if (!isNaN(d.getTime()) && Datepicker.formatDate(d, format, "de") === v) {
+    const d = parseInput(v);
+    if (d instanceof Date && !Number.isNaN(d.getTime())) {
       if (datepicker instanceof Datepicker) datepicker.setDate(d);
       if (d.getTime() !== props.modelValue?.getTime()) {
         emit("update:modelValue", d);
         setValue(d, false);
       }
     } else {
-      const invalidDate = new Date(NaN);
-      emit("update:modelValue", invalidDate);
-      setValue(invalidDate, false);
+      const inv = new Date(Number.NaN);
+      emit("update:modelValue", inv);
+      setValue(inv, false);
     }
   } else if (v === "" && props.modelValue !== undefined) {
     if (datepicker instanceof Datepicker) datepicker.setDate({ clear: true });
@@ -266,16 +266,15 @@ const onTextInput = (event: Event) => {
 
 const setDate = (newVal?: Date) => {
   const inputEl = getInputElement();
-
   if (inputEl)
     inputEl.value = newVal
       ? Datepicker.formatDate(new Date(newVal), format, "de")
       : "";
+
   if (datepicker instanceof Datepicker) {
     if (newVal === undefined) {
-      if (datepicker.dates.length > 0) {
+      if (datepicker.dates.length > 0)
         datepicker.setDate({ clear: true, forceRefresh: true });
-      }
     } else {
       const normalizedDate = new Date(newVal);
 
@@ -286,7 +285,6 @@ const setDate = (newVal?: Date) => {
         normalizedDate.setMonth(0);
       }
       normalizedDate.setHours(0, 0, 0, 0);
-
       if (
         datepicker.dates.length === 0 ||
         (datepicker.getDate() as Date).toISOString() !=
