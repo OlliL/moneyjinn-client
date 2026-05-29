@@ -29,6 +29,7 @@
             @click.stop="isPopoverOpen = true"
             @pointerdown.stop="isPopoverOpen = true"
             @input="onTextInput"
+            @blur="onBlur"
           />
 
           <div
@@ -125,49 +126,40 @@ const emit = defineEmits(["update:modelValue"]);
 const viewMounted = ref(false);
 const closeLabel = t("General.close");
 const isPopoverOpen = ref(false);
-const popoverZIndex = ref(3500);
+const popoverZIndex = ref(3500); // Deine Z-Index Logik bleibt hier erhalten
 const datepickerContainer = useTemplateRef<HTMLDivElement>(
   "datepickerContainer",
 );
+const fieldRef = useTemplateRef<typeof Input>("fieldRef");
 
 Object.assign(Datepicker.locales, de);
-let pickLevel = 0;
-let format = "dd.mm.yyyy";
-
-switch (props.pickMode) {
-  case "day": {
-    pickLevel = 0;
-    format = "dd.mm.yyyy";
-    break;
-  }
-  case "month": {
-    pickLevel = 1;
-    format = "mm.yyyy";
-    break;
-  }
-  case "year": {
-    pickLevel = 2;
-    format = "yyyy";
-    break;
-  }
-}
+const CONFIG = {
+  day: { level: 0, format: "dd.mm.yyyy", dots: [2, 5] },
+  month: { level: 1, format: "mm.yyyy", dots: [2] },
+  year: { level: 2, format: "yyyy", dots: [] },
+} as const;
+const {
+  level: pickLevel,
+  format,
+  dots: autoDots,
+} = CONFIG[props.pickMode as keyof typeof CONFIG] || CONFIG.day;
 
 const schema = computed(() => {
-  const parse = (val: any) => {
-    if (val instanceof Date) return val;
-    if (typeof val === "string" && val.length > 0) {
-      return Datepicker.parseDate(val, format, "de");
+  if (!viewMounted.value) return undefined;
+  const parse = (v: any) => {
+    if (v instanceof Date) return v;
+    // Nur parsen, wenn die Länge exakt dem Format entspricht (z.B. 10 für dd.mm.yyyy)
+    if (typeof v === "string" && v.length === format.length) {
+      const d = new Date(Datepicker.parseDate(v, format, "de") ?? NaN);
+      if (!isNaN(d.getTime()) && Datepicker.formatDate(d, format, "de") === v) {
+        return d;
+      }
+      return new Date(NaN);
     }
-    return val;
+    return v;
   };
-
-  if (viewMounted.value) {
-    if (props.validationSchemaRef) {
-      return toTypedSchema(preprocess(parse, props.validationSchemaRef.value));
-    }
-    return toTypedSchema(preprocess(parse, props.validationSchema));
-  }
-  return undefined;
+  const base = props.validationSchemaRef?.value ?? props.validationSchema;
+  return toTypedSchema(preprocess(parse, base));
 });
 
 const {
@@ -175,17 +167,19 @@ const {
   errorMessage,
   setState,
   handleChange,
+  handleBlur,
+  validate,
   setValue,
 } = useField(props.id, schema, {
   initialValue: props.modelValue,
   syncVModel: false,
 });
-
-const fieldRef = useTemplateRef<typeof Input>("fieldRef");
 let datepicker = {} as Datepicker;
+const getInputElement = () => fieldRef.value?.$el as HTMLInputElement;
 
-const getInputElement = () => {
-  return fieldRef.value?.$el as HTMLInputElement;
+const onBlur = (event: FocusEvent) => {
+  handleBlur(event);
+  validate();
 };
 
 const initDatepicker = () => {
@@ -223,11 +217,11 @@ const initDatepicker = () => {
     });
   }
 
-  datepickerContainer.value.addEventListener("changeDate", onInput);
-
   if (props.modelValue) {
     datepicker.setDate(props.modelValue);
   }
+
+  datepickerContainer.value.addEventListener("changeDate", onInput);
 };
 
 onMounted(() => {
@@ -244,24 +238,39 @@ onUnmounted(() => {
 });
 
 const onTextInput = (event: Event) => {
-  const val = (event.target as HTMLInputElement).value;
-  // Simple check to see if we have a potentially valid date string before updating the picker
-  if (datepicker instanceof Datepicker && val.length >= format.length) {
-    datepicker.setDate(val);
+  const v = (event.target as HTMLInputElement).value;
+
+  // Raw-String an vee-validate geben, aber noch nicht validieren (vermeidet rotes Feld beim Tippen)
+  handleChange(event, false);
+
+  // Nur wenn das Datum vollständig ist, den Picker aktualisieren und modelValue emittieren
+  if (v.length === format.length) {
+    const d = new Date(Datepicker.parseDate(v, format, "de") ?? NaN);
+    if (!isNaN(d.getTime()) && Datepicker.formatDate(d, format, "de") === v) {
+      if (datepicker instanceof Datepicker) datepicker.setDate(d);
+      if (d.getTime() !== props.modelValue?.getTime()) {
+        emit("update:modelValue", d);
+        setValue(d, false);
+      }
+    } else {
+      const invalidDate = new Date(NaN);
+      emit("update:modelValue", invalidDate);
+      setValue(invalidDate, false);
+    }
+  } else if (v === "" && props.modelValue !== undefined) {
+    if (datepicker instanceof Datepicker) datepicker.setDate({ clear: true });
+    emit("update:modelValue", undefined);
+    setValue(undefined, false);
   }
-  // Sync vee-validate
-  handleChange(event);
 };
 
 const setDate = (newVal?: Date) => {
   const inputEl = getInputElement();
 
-  if (inputEl) {
+  if (inputEl)
     inputEl.value = newVal
       ? Datepicker.formatDate(new Date(newVal), format, "de")
       : "";
-  }
-
   if (datepicker instanceof Datepicker) {
     if (newVal === undefined) {
       if (datepicker.dates.length > 0) {
@@ -289,23 +298,10 @@ const setDate = (newVal?: Date) => {
   }
 };
 const onKeyboardInput = (event: KeyboardEvent) => {
-  if (["Backspace", "Delete"].includes(event.key)) {
-    return;
-  }
-  const input = event.target as HTMLInputElement;
-  switch (props.pickMode) {
-    case "day": {
-      if (input.value.length == 2 || input.value.length == 5) {
-        input.value = input.value + ".";
-      }
-      break;
-    }
-    case "month": {
-      if (input.value.length == 2) {
-        input.value = input.value + ".";
-      }
-      break;
-    }
+  if (["Backspace", "Delete"].includes(event.key)) return;
+  const el = event.target as HTMLInputElement;
+  if ((autoDots as readonly number[]).includes(el.value.length)) {
+    el.value += ".";
   }
 };
 
@@ -326,12 +322,10 @@ const onInput = (event: Event) => {
       setValue(selectedDate);
       const el = getInputElement();
       if (el) el.value = Datepicker.formatDate(selectedDate, format, "de");
-
-      // Close popover after selection if it's a day selection or we want it to close
-      if (props.pickMode === "day") {
-        isPopoverOpen.value = false;
-      }
     }
+
+    // Close popover after selection
+    isPopoverOpen.value = false;
   }
 };
 
@@ -347,6 +341,11 @@ watch(isPopoverOpen, async (val) => {
 watch(
   () => props.modelValue,
   (newVal) => {
+    // Wenn der Benutzer gerade tippt, ignorieren wir Änderungen von außen,
+    // um den Cursor-Sprung / Overwrite-Bug zu verhindern.
+    const el = getInputElement();
+    if (el && document.activeElement === el) return;
+
     const current =
       datepicker instanceof Datepicker
         ? (datepicker.getDate() as Date | undefined)
@@ -354,6 +353,7 @@ watch(
 
     if (newVal?.getTime() !== current?.getTime()) {
       setDate(newVal);
+      setValue(newVal, false);
     }
   },
 );
