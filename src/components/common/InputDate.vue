@@ -4,34 +4,56 @@
       {{ fieldLabel }}
     </Label>
 
-    <div class="flex -space-x-px relative">
-      <Input
-        :id="id"
-        :data-testid="id"
-        autocomplete="off"
-        type="text"
-        :class="[
-          'rounded-r-none bg-white z-10',
-          isInvalid
-            ? 'border-destructive! bg-destructive/3 focus-visible:ring-destructive/15 border-r-destructive!'
-            : 'border-input focus-visible:ring-ring',
-        ]"
-        ref="fieldRef"
-        @keyup="onKeyboardInput($event)"
-        @focus="(($event as FocusEvent)?.target as HTMLInputElement)?.select()"
-        @blur="onBlur"
-      />
+    <Popover v-model:open="isPopoverOpen">
+      <PopoverTrigger as-child>
+        <div class="flex -space-x-px relative">
+          <Input
+            :id="id"
+            :data-testid="id"
+            autocomplete="off"
+            type="text"
+            :class="[
+              'rounded-r-none bg-white z-10',
+              isInvalid
+                ? 'border-destructive! bg-destructive/3 focus-visible:ring-destructive/15 border-r-destructive!'
+                : 'border-input focus-visible:ring-ring',
+            ]"
+            ref="fieldRef"
+            @keyup="onKeyboardInput($event)"
+            @focus="
+              (e: FocusEvent) => {
+                (e.target as HTMLInputElement)?.select();
+                isPopoverOpen = true;
+              }
+            "
+            @click.stop="isPopoverOpen = true"
+            @pointerdown.stop="isPopoverOpen = true"
+            @input="onTextInput"
+          />
 
-      <div
-        :class="[
-          'cursor-pointer flex items-center justify-center px-2 border border-input rounded-r-md text-foreground transition-colors relative',
-          isInvalid ? 'border-l-transparent' : '',
-        ]"
-        @click="datepicker.show()"
+          <div
+            :class="[
+              'cursor-pointer flex items-center justify-center px-2 border border-input rounded-r-md text-foreground transition-colors relative',
+              isInvalid ? 'border-l-transparent' : '',
+            ]"
+          >
+            <CalendarDays class="w-4 h-4" />
+          </div>
+        </div>
+      </PopoverTrigger>
+
+      <PopoverContent
+        class="p-0 w-auto"
+        align="end"
+        :side-offset="5"
+        :style="{ zIndex: popoverZIndex }"
       >
-        <CalendarDays class="w-4 h-4" />
-      </div>
-    </div>
+        <div
+          ref="datepickerContainer"
+          class="datepicker-inline-container"
+        ></div>
+      </PopoverContent>
+    </Popover>
 
     <p
       v-if="isInvalid"
@@ -45,6 +67,11 @@
 <script lang="ts" setup>
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { toTypedSchema } from "@vee-validate/zod";
 import { CalendarDays } from "lucide-vue-next";
 import { Datepicker } from "vanillajs-datepicker";
@@ -53,6 +80,7 @@ import de from "vanillajs-datepicker/locales/de";
 import { useField } from "vee-validate";
 import {
   computed,
+  nextTick,
   onMounted,
   onUnmounted,
   ref,
@@ -96,30 +124,11 @@ const { t } = useI18n();
 const emit = defineEmits(["update:modelValue"]);
 const viewMounted = ref(false);
 const closeLabel = t("General.close");
-
-const schema = computed(() => {
-  if (viewMounted.value) {
-    if (props.validationSchemaRef) {
-      return toTypedSchema(
-        preprocess(() => datepicker.getDate(), props.validationSchemaRef.value),
-      );
-    }
-    return toTypedSchema(
-      preprocess(() => datepicker.getDate(), props.validationSchema),
-    );
-  }
-  return undefined;
-});
-
-const {
-  meta: fieldMeta,
-  errorMessage,
-  setState,
-  handleChange,
-} = useField(props.id, schema, {
-  initialValue: props.modelValue,
-  syncVModel: false,
-});
+const isPopoverOpen = ref(false);
+const popoverZIndex = ref(3500);
+const datepickerContainer = useTemplateRef<HTMLDivElement>(
+  "datepickerContainer",
+);
 
 Object.assign(Datepicker.locales, de);
 let pickLevel = 0;
@@ -143,6 +152,35 @@ switch (props.pickMode) {
   }
 }
 
+const schema = computed(() => {
+  const parse = (val: any) => {
+    if (val instanceof Date) return val;
+    if (typeof val === "string" && val.length > 0) {
+      return Datepicker.parseDate(val, format, "de");
+    }
+    return val;
+  };
+
+  if (viewMounted.value) {
+    if (props.validationSchemaRef) {
+      return toTypedSchema(preprocess(parse, props.validationSchemaRef.value));
+    }
+    return toTypedSchema(preprocess(parse, props.validationSchema));
+  }
+  return undefined;
+});
+
+const {
+  meta: fieldMeta,
+  errorMessage,
+  setState,
+  handleChange,
+  setValue,
+} = useField(props.id, schema, {
+  initialValue: props.modelValue,
+  syncVModel: false,
+});
+
 const fieldRef = useTemplateRef<typeof Input>("fieldRef");
 let datepicker = {} as Datepicker;
 
@@ -150,62 +188,80 @@ const getInputElement = () => {
   return fieldRef.value?.$el as HTMLInputElement;
 };
 
-onMounted(() => {
-  if (!(datepicker instanceof Datepicker) && fieldRef.value) {
-    datepicker = new Datepicker(getInputElement(), {
-      buttonClass:
-        "inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50",
-      pickLevel: pickLevel,
-      clearButton: true,
-      todayButton: true,
-      todayButtonMode: 1,
-      autohide: true,
-      language: navigator.language,
-      format: format,
-    });
-    viewMounted.value = true;
+const initDatepicker = () => {
+  if (!datepickerContainer.value) return;
 
-    getInputElement().addEventListener("show", () => {
-      const clearBtn = datepicker.picker.element.querySelector(
-        ".clear-btn",
-      ) as HTMLButtonElement;
-      if (clearBtn && clearBtn.textContent !== closeLabel) {
-        clearBtn.textContent = closeLabel;
-
-        const newClearBtn = clearBtn.cloneNode(true) as HTMLButtonElement;
-        clearBtn.replaceWith(newClearBtn);
-
-        newClearBtn.addEventListener("click", (e) => {
-          e.preventDefault();
-          e.stopPropagation();
-          datepicker.hide();
-        });
-      }
-    });
-
-    if (props.modelValue) {
-      setDate(props.modelValue);
-    }
+  if (datepicker instanceof Datepicker) {
+    datepicker.destroy();
   }
 
-  if (getInputElement()) {
-    getInputElement().addEventListener("changeDate", onInput);
+  datepicker = new Datepicker(datepickerContainer.value, {
+    buttonClass:
+      "inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50",
+    pickLevel: pickLevel,
+    clearButton: true,
+    todayButton: true,
+    todayButtonMode: 1,
+    autohide: true,
+    language: "de",
+    format: format,
+    container: datepickerContainer.value,
+  });
+
+  // Customize clear button to act as close button
+  const clearBtn = datepicker.picker.element.querySelector(
+    ".clear-btn",
+  ) as HTMLButtonElement;
+  if (clearBtn) {
+    clearBtn.textContent = closeLabel;
+    const newClearBtn = clearBtn.cloneNode(true) as HTMLButtonElement;
+    clearBtn.replaceWith(newClearBtn);
+    newClearBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      isPopoverOpen.value = false;
+    });
+  }
+
+  datepickerContainer.value.addEventListener("changeDate", onInput);
+
+  if (props.modelValue) {
+    datepicker.setDate(props.modelValue);
+  }
+};
+
+onMounted(() => {
+  viewMounted.value = true;
+  if (props.modelValue) {
+    setDate(props.modelValue);
   }
 });
 
 onUnmounted(() => {
-  if (getInputElement()) {
-    getInputElement().removeEventListener("changeDate", onInput);
+  if (datepickerContainer.value) {
+    datepickerContainer.value.removeEventListener("changeDate", onInput);
   }
 });
 
-const onBlur = () => {
-  if (datepicker && typeof datepicker.hide === "function") {
-    datepicker.hide();
+const onTextInput = (event: Event) => {
+  const val = (event.target as HTMLInputElement).value;
+  // Simple check to see if we have a potentially valid date string before updating the picker
+  if (datepicker instanceof Datepicker && val.length >= format.length) {
+    datepicker.setDate(val);
   }
+  // Sync vee-validate
+  handleChange(event);
 };
 
 const setDate = (newVal?: Date) => {
+  const inputEl = getInputElement();
+
+  if (inputEl) {
+    inputEl.value = newVal
+      ? Datepicker.formatDate(new Date(newVal), format, "de")
+      : "";
+  }
+
   if (datepicker instanceof Datepicker) {
     if (newVal === undefined) {
       if (datepicker.dates.length > 0) {
@@ -236,19 +292,17 @@ const onKeyboardInput = (event: KeyboardEvent) => {
   if (["Backspace", "Delete"].includes(event.key)) {
     return;
   }
+  const input = event.target as HTMLInputElement;
   switch (props.pickMode) {
     case "day": {
-      if (
-        datepicker.inputField.value.length == 2 ||
-        datepicker.inputField.value.length == 5
-      ) {
-        datepicker.inputField.value = datepicker.inputField.value + ".";
+      if (input.value.length == 2 || input.value.length == 5) {
+        input.value = input.value + ".";
       }
       break;
     }
     case "month": {
-      if (datepicker.inputField.value.length == 2) {
-        datepicker.inputField.value = datepicker.inputField.value + ".";
+      if (input.value.length == 2) {
+        input.value = input.value + ".";
       }
       break;
     }
@@ -256,37 +310,58 @@ const onKeyboardInput = (event: KeyboardEvent) => {
 };
 
 const onInput = (event: Event) => {
-  handleChange(event, true);
   if (datepicker.dates.length === 0) {
     if (props.modelValue !== undefined) {
       setState({ touched: true });
       emit("update:modelValue", undefined);
+      setValue(undefined);
+      const el = getInputElement();
+      if (el) el.value = "";
     }
-  } else if (
-    (datepicker.getDate() as Date).toISOString() !=
-    props.modelValue?.toISOString()
-  ) {
-    setState({ touched: true });
-    emit("update:modelValue", datepicker.getDate());
+  } else {
+    const selectedDate = datepicker.getDate() as Date;
+    if (selectedDate.toISOString() != props.modelValue?.toISOString()) {
+      setState({ touched: true });
+      emit("update:modelValue", selectedDate);
+      setValue(selectedDate);
+      const el = getInputElement();
+      if (el) el.value = Datepicker.formatDate(selectedDate, format, "de");
+
+      // Close popover after selection if it's a day selection or we want it to close
+      if (props.pickMode === "day") {
+        isPopoverOpen.value = false;
+      }
+    }
   }
 };
 
 const isInvalid = computed(() => fieldMeta.touched && !!errorMessage.value);
 
+watch(isPopoverOpen, async (val) => {
+  if (val) {
+    await nextTick();
+    initDatepicker();
+  }
+});
+
 watch(
   () => props.modelValue,
-  (newVal, oldVal) => {
-    if (newVal != oldVal) {
+  (newVal) => {
+    const current =
+      datepicker instanceof Datepicker
+        ? (datepicker.getDate() as Date | undefined)
+        : undefined;
+
+    if (newVal?.getTime() !== current?.getTime()) {
       setDate(newVal);
     }
   },
-  { immediate: true },
 );
 </script>
 
 <style>
 @reference "@/style.css";
-div.datepicker.datepicker-dropdown {
+div.datepicker {
   @apply bg-background border border-border shadow-lg overflow-hidden p-0;
   border-radius: var(--radius, 0.75rem);
 }
@@ -352,5 +427,9 @@ div.datepicker .datepicker-cell.selected {
 
 div.datepicker .datepicker-cell.today:not(.selected) {
   @apply bg-accent text-accent-foreground font-bold;
+}
+
+.datepicker-inline-container div.datepicker {
+  @apply border-none shadow-none;
 }
 </style>
