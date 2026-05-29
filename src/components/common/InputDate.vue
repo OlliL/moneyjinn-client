@@ -293,7 +293,7 @@ const setDate = (newVal?: Date) => {
   const current = datepicker.getDate() as Date;
   const needsUpdate =
     datepicker.dates.length === 0 ||
-    current.toISOString() !== normalizedDate.toISOString();
+    current.getTime() !== normalizedDate.getTime();
 
   if (needsUpdate) {
     datepicker.setDate(normalizedDate);
@@ -319,7 +319,7 @@ const onInput = (event: Event) => {
     }
   } else {
     const selectedDate = datepicker.getDate() as Date;
-    if (selectedDate.toISOString() != props.modelValue?.toISOString()) {
+    if (selectedDate.getTime() !== props.modelValue?.getTime()) {
       setState({ touched: true });
       emit("update:modelValue", selectedDate);
       setValue(selectedDate);
