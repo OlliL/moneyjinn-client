@@ -147,11 +147,12 @@ const {
 const parseInput = (v: any) => {
   if (v instanceof Date) return v;
   if (typeof v !== "string" || v.length !== format.length) return v;
-  const d = new Date(Datepicker.parseDate(v, format, "de") ?? Number.NaN);
-  return !Number.isNaN(d.getTime()) &&
-    Datepicker.formatDate(d, format, "de") === v
-    ? d
-    : new Date(Number.NaN);
+  const timestamp = Datepicker.parseDate(v, format, "de");
+  if (timestamp !== undefined) {
+    const d = new Date(timestamp);
+    if (Datepicker.formatDate(d, format, "de") === v) return d;
+  }
+  return v;
 };
 
 const schema = computed(() => {
@@ -253,9 +254,9 @@ const onTextInput = (event: Event) => {
         setValue(d, false);
       }
     } else {
-      const inv = new Date(Number.NaN);
-      emit("update:modelValue", inv);
-      setValue(inv, false);
+      emit("update:modelValue", new Date(Number.NaN));
+      // Wir rufen hier kein setValue auf, damit der String im vee-validate State bleibt.
+      // Das Schema erhält so den String und nutzt die konfigurierte invalid_type_error Message.
     }
   } else if (v === "" && props.modelValue !== undefined) {
     if (datepicker instanceof Datepicker) datepicker.setDate({ clear: true });
