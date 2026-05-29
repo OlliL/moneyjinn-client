@@ -54,6 +54,8 @@
                 'flex items-center justify-center px-2 border border-input rounded-r-md text-foreground transition-colors relative',
                 isInvalid ? 'border-l-transparent' : '',
               ]"
+              @click.stop
+              @pointerdown.stop
             >
               <slot name="icon"></slot>
             </div>
