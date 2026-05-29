@@ -24,7 +24,7 @@
 
       <div
         :class="[
-          'flex items-center justify-center px-2 border border-input rounded-r-md text-foreground transition-colors relative',
+          'cursor-pointer flex items-center justify-center px-2 border border-input rounded-r-md text-foreground transition-colors relative',
           isInvalid ? 'border-l-transparent' : '',
         ]"
         @click="datepicker.show()"

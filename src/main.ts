@@ -8,6 +8,7 @@ import router from "./router";
 
 import "vanillajs-datepicker/css/datepicker.min.css";
 
+import "vue-sonner/style.css";
 import "./style.css";
 
 import { AxiosSingleton } from "./config/AxiosSingleton";

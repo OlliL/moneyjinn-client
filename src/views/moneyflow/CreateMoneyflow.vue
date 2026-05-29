@@ -62,7 +62,7 @@
           <Button
             type="button"
             variant="secondary"
-            class="flex items-center gap-2 px-6 hidden md:flex"
+            class="button-with-icon hidden md:flex"
             data-testid="createMoneyflowResetButton"
             @click="resetForm"
           >

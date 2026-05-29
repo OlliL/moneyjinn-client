@@ -14,7 +14,7 @@
 }
 
 @utility button-with-icon {
-  @apply flex items-center gap-2 px-6;
+  @apply cursor-pointer flex items-center gap-2 px-6;
 }
 
 @utility action-icon-button {

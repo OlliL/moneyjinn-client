@@ -5,7 +5,7 @@
     type="button"
     variant="outline"
     size="icon"
-    class="fixed left-4 inset-y-0 z-20 my-auto h-10 w-10 rounded-full border-border/70 bg-background/85 text-primary/80 shadow-sm backdrop-blur transition-all hover:bg-background hover:text-primary hover:shadow-md"
+    class="cursor-pointer fixed left-4 inset-y-0 z-20 my-auto h-10 w-10 rounded-full border-border/70 bg-background/85 text-primary/80 shadow-sm backdrop-blur transition-all hover:bg-background hover:text-primary hover:shadow-md"
     @click="emit('navigate-to-previous')"
   >
     <ChevronLeft class="h-5 w-5" />

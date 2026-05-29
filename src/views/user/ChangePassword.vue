@@ -7,7 +7,7 @@
       <div
         class="w-full max-w-xl rounded-sm border bg-card text-card-foreground p-4"
       >
-        <form @submit.prevent="changePassword">
+        <form @submit.prevent="changePassword" id="changePasswordForm">
           <div class="space-y-4">
             <DivError :server-errors="serverErrors" />
             <div>
@@ -38,9 +38,13 @@
               />
             </div>
             <div class="flex justify-center">
-              <Button type="submit" data-testid="change-password-submit">
-                {{ $t("General.save") }}
-              </Button>
+              <ButtonSubmit
+                :button-label="$t('General.save')"
+                form-id="changePasswordForm"
+                data-testid="change-password-submit"
+              >
+                <template #icon><Save class="icon-medium" /></template>
+              </ButtonSubmit>
             </div>
           </div>
         </form>
@@ -58,7 +62,6 @@ import router, { Routes } from "@/router";
 
 import DivError from "@/components/common/DivError.vue";
 import InputStandard from "@/components/common/InputStandard.vue";
-import { Button } from "@/components/ui/button";
 
 import { useUserSessionStore } from "@/stores/UserSessionStore";
 
@@ -67,7 +70,9 @@ import { globErr } from "@/tools/views/ZodUtil";
 
 import { ErrorCode, getErrorMessage } from "@/model/ErrorCode";
 
+import ButtonSubmit from "@/components/common/ButtonSubmit.vue";
 import UserService from "@/service/UserService";
+import { Save } from "lucide-vue-next";
 import { useForm } from "vee-validate";
 
 const { t } = useI18n();

@@ -68,9 +68,9 @@
     <template #footer>
       <Button
         @click="showCreateContractpartnerAccountModal"
-        class="flex items-center gap-2 rounded-md! px-6"
+        class="button-with-icon gap-2 rounded-md! px-6"
       >
-        <Plus class="icon-medium" />
+        <PlusSquare class="icon-medium" />
         {{ $t("General.new") }}
       </Button>
     </template>
@@ -78,7 +78,7 @@
 </template>
 
 <script lang="ts" setup>
-import { Plus } from "lucide-vue-next";
+import { PlusSquare } from "lucide-vue-next";
 import { ref, useTemplateRef } from "vue";
 
 import { Button } from "@/components/ui/button";

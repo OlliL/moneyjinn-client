@@ -81,17 +81,17 @@
       <Button
         data-testid="div-filter-create"
         @click="emitCreateClicked"
-        class="w-full md:w-auto"
+        class="button-with-icon w-full md:w-auto"
       >
-        <Plus class="icon-medium mr-2" />
+        <PlusSquare class="icon-medium mr-2" />
         {{ $t("General.new") }}
       </Button>
 
       <div class="flex w-full md:w-80 items-center">
         <Button
           data-testid="div-filter-all"
-          variant="secondary"
-          class="rounded-r-none!"
+          :variant="allButtonVariant"
+          class="button-with-icon rounded-r-none!"
           @click="clearSearch"
         >
           {{ $t("General.all") }}
@@ -139,8 +139,8 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { Switch } from "@/components/ui/switch";
-import { Filter, Plus, X } from "lucide-vue-next";
-import { onBeforeUnmount, ref, watch } from "vue";
+import { Filter, PlusSquare, X } from "lucide-vue-next";
+import { computed, onBeforeUnmount, ref, watch } from "vue";
 import ButtonMobileCreate from "./ButtonMobileCreate.vue";
 import InputStandard from "./InputStandard.vue";
 
@@ -168,6 +168,10 @@ watch(
     validNow.value = newVal;
   },
 );
+
+const allButtonVariant = computed(() => {
+  return props.modelValue ? "default" : "secondary";
+});
 
 const handleInput = (val: string | number) => {
   globalThis.clearTimeout(debounceTimeout);
