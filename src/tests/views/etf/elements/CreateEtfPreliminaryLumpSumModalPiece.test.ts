@@ -7,8 +7,18 @@ import PostingAccountServiceMocker from "@/service/mocker/PostingAccountServiceM
 import PreDefMoneyflowServiceMocker from "@/service/mocker/PreDefMoneyflowServiceMocker";
 import { StoreService } from "@/stores/StoreService";
 import { useUserSessionStore } from "@/stores/UserSessionStore";
-import { assertHaveBeenCalledWith } from "@/tests/TestUtil";
-import { ButtonView, InputView, renderModalWithRef } from "@/tests/TestViews";
+import {
+  assertHaveBeenCalledWith,
+  assertNotHaveBeenCalled,
+} from "@/tests/TestUtil";
+import {
+  AlertView,
+  ButtonView,
+  ComboboxView,
+  InputView,
+  ModalView,
+  renderModalWithRef,
+} from "@/tests/TestViews";
 import CreateEtfPreliminaryLumpSumModalPiece from "@/views/etf/elements/CreateEtfPreliminaryLumpSumModalPiece.vue";
 import "@testing-library/jest-dom/vitest";
 import { createPinia, setActivePinia } from "pinia";
@@ -17,10 +27,17 @@ import { beforeEach, expect, test, vi } from "vitest";
 vi.mock("@/service/CrudEtfPreliminaryLumpSumService");
 
 class PieceLumpSumView {
+  static readonly Modal = new ModalView("app-modal");
+  static readonly EtfSelect = new ComboboxView("etf");
+  static readonly YearInput = new InputView("bookingdate");
   static readonly PieceInput = new InputView("amountPerPiece");
   static readonly SaveButton = new ButtonView(
     "createEtfPreliminaryLumpSumPieceSaveButton",
   );
+
+  static readonly EtfError = new AlertView("etf-error");
+  static readonly YearError = new AlertView("bookingdate-error");
+  static readonly PieceError = new AlertView("amountPerPiece-error-item");
 }
 
 beforeEach(async () => {
@@ -59,5 +76,31 @@ test("creates piece lump sum", async () => {
     expect.objectContaining({
       amountPerPiece: 0.12345678,
     }),
+  );
+});
+
+test("validation: mandatory fields are required", async () => {
+  const modalRef = renderModalWithRef<any>(
+    CreateEtfPreliminaryLumpSumModalPiece,
+  );
+  await modalRef.value._show(1);
+
+  await PieceLumpSumView.EtfSelect.clear();
+  await PieceLumpSumView.YearInput.setValue("");
+
+  await PieceLumpSumView.SaveButton.click();
+
+  await PieceLumpSumView.Modal.assertOpen();
+  await PieceLumpSumView.EtfError.assertMessageContains(
+    "Please select an ETF!",
+  );
+  await PieceLumpSumView.YearError.assertMessageContains(
+    "Please specify a year!",
+  );
+  await PieceLumpSumView.PieceError.assertMessageContains(
+    "Please specify an amount!",
+  );
+  await assertNotHaveBeenCalled(
+    CrudEtfPreliminarySumService.createEtfPreliminaryLumpSum,
   );
 });

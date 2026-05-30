@@ -7,8 +7,18 @@ import PostingAccountServiceMocker from "@/service/mocker/PostingAccountServiceM
 import PreDefMoneyflowServiceMocker from "@/service/mocker/PreDefMoneyflowServiceMocker";
 import { StoreService } from "@/stores/StoreService";
 import { useUserSessionStore } from "@/stores/UserSessionStore";
-import { assertHaveBeenCalledWith } from "@/tests/TestUtil";
-import { ButtonView, InputView, renderModalWithRef } from "@/tests/TestViews";
+import {
+  assertHaveBeenCalledWith,
+  assertNotHaveBeenCalled,
+} from "@/tests/TestUtil";
+import {
+  AlertView,
+  ButtonView,
+  ComboboxView,
+  InputView,
+  ModalView,
+  renderModalWithRef,
+} from "@/tests/TestViews";
 import CreateEtfPreliminaryLumpSumModalYearly from "@/views/etf/elements/CreateEtfPreliminaryLumpSumModalYearly.vue";
 import "@testing-library/jest-dom/vitest";
 import { createPinia, setActivePinia } from "pinia";
@@ -17,10 +27,17 @@ import { beforeEach, expect, test, vi } from "vitest";
 vi.mock("@/service/CrudEtfPreliminaryLumpSumService");
 
 class YearlyLumpSumView {
-  static readonly YearInput = new InputView("amountPerYear");
+  static readonly Modal = new ModalView("app-modal");
+  static readonly EtfSelect = new ComboboxView("etf");
+  static readonly YearInput = new InputView("bookingdate");
+  static readonly AmountYearlyInput = new InputView("amountPerYear");
   static readonly SaveButton = new ButtonView(
     "createEtfPreliminaryLumpSumYearlySaveButton",
   );
+
+  static readonly EtfError = new AlertView("etf-error");
+  static readonly YearError = new AlertView("bookingdate-error");
+  static readonly YearSumError = new AlertView("amountPerYear-error-item");
 }
 
 beforeEach(async () => {
@@ -51,7 +68,7 @@ test("creates yearly lump sum", async () => {
   );
   await modalRef.value._show(1);
 
-  await YearlyLumpSumView.YearInput.setValue("1200.50");
+  await YearlyLumpSumView.AmountYearlyInput.setValue("1200.50");
   await YearlyLumpSumView.SaveButton.click();
 
   await assertHaveBeenCalledWith(
@@ -59,5 +76,31 @@ test("creates yearly lump sum", async () => {
     expect.objectContaining({
       amountDecember: 1200.5,
     }),
+  );
+});
+
+test("validation: mandatory fields are required", async () => {
+  const modalRef = renderModalWithRef<any>(
+    CreateEtfPreliminaryLumpSumModalYearly,
+  );
+  await modalRef.value._show(1);
+
+  await YearlyLumpSumView.EtfSelect.clear();
+  await YearlyLumpSumView.YearInput.setValue("");
+
+  await YearlyLumpSumView.SaveButton.click();
+
+  await YearlyLumpSumView.Modal.assertOpen();
+  await YearlyLumpSumView.EtfError.assertMessageContains(
+    "Please select an ETF!",
+  );
+  await YearlyLumpSumView.YearError.assertMessageContains(
+    "Please specify a year!",
+  );
+  await YearlyLumpSumView.YearSumError.assertMessageContains(
+    "Please specify an amount!",
+  );
+  await assertNotHaveBeenCalled(
+    CrudEtfPreliminarySumService.createEtfPreliminaryLumpSum,
   );
 });

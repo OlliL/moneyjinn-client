@@ -7,9 +7,14 @@ import PostingAccountServiceMocker from "@/service/mocker/PostingAccountServiceM
 import PreDefMoneyflowServiceMocker from "@/service/mocker/PreDefMoneyflowServiceMocker";
 import { StoreService } from "@/stores/StoreService";
 import { useUserSessionStore } from "@/stores/UserSessionStore";
-import { assertHaveBeenCalledWith } from "@/tests/TestUtil";
 import {
+  assertHaveBeenCalledWith,
+  assertNotHaveBeenCalled,
+} from "@/tests/TestUtil";
+import {
+  AlertView,
   ButtonView,
+  ComboboxView,
   InputView,
   ModalView,
   renderModalWithRef,
@@ -27,6 +32,14 @@ class CreateEtfFlowModalView {
   static readonly AmountInput = new InputView("amount");
   static readonly PriceInput = new InputView("price");
   static readonly SaveButton = new ButtonView("createEtfFlowSaveButton");
+  static readonly EtfSelect = new ComboboxView("etf");
+  static readonly BookingDateInput = new InputView("bookingdate");
+
+  static readonly EtfError = new AlertView("etf-error");
+  static readonly BookingDateError = new AlertView("bookingdate-error");
+  static readonly TimeError = new AlertView("bookingtime-error-item");
+  static readonly AmountError = new AlertView("amount-error-item");
+  static readonly PriceError = new AlertView("price-error-item");
 }
 
 beforeEach(async () => {
@@ -69,4 +82,33 @@ test("creates a new etf flow with time formatting", async () => {
       nanoseconds: 123000000,
     }),
   );
+});
+
+test("validation: mandatory fields are required", async () => {
+  const modalRef = renderModalWithRef<any>(CreateEtfFlowModal);
+  await modalRef.value._show(undefined, 1);
+
+  // Clear pre-filled ETF and Date
+  await CreateEtfFlowModalView.EtfSelect.clear();
+  await CreateEtfFlowModalView.BookingDateInput.setValue("");
+
+  await CreateEtfFlowModalView.SaveButton.click();
+
+  await CreateEtfFlowModalView.Modal.assertOpen();
+  await CreateEtfFlowModalView.EtfError.assertMessageContains(
+    "Please select an ETF!",
+  );
+  await CreateEtfFlowModalView.BookingDateError.assertMessageContains(
+    "Please specify a booking time!",
+  );
+  await CreateEtfFlowModalView.TimeError.assertMessageContains(
+    "Booking time must be in the format HH:MM:SS:mmm!",
+  );
+  await CreateEtfFlowModalView.AmountError.assertMessageContains(
+    "Please specify a quantity!",
+  );
+  await CreateEtfFlowModalView.PriceError.assertMessageContains(
+    "Please specify a price per share!",
+  );
+  await assertNotHaveBeenCalled(CrudEtfFlowService.createEtfFlow);
 });

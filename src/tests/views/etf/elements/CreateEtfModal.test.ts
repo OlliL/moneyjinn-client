@@ -7,7 +7,10 @@ import CrudEtfServiceMocker from "@/service/mocker/CrudEtfServiceMocker";
 import PostingAccountServiceMocker from "@/service/mocker/PostingAccountServiceMocker";
 import { StoreService } from "@/stores/StoreService";
 import { useUserSessionStore } from "@/stores/UserSessionStore";
-import { assertHaveBeenCalledWith } from "@/tests/TestUtil";
+import {
+  assertHaveBeenCalledWith,
+  assertNotHaveBeenCalled,
+} from "@/tests/TestUtil";
 import {
   AlertView,
   ButtonView,
@@ -33,6 +36,9 @@ class CreateEtfModalView {
   static readonly ResetButton = new ButtonView("createEtfResetButton");
   static readonly ServerErrorItem = new AlertView("serverError-item");
   static readonly NameError = new AlertView("name-error-item");
+  static readonly IsinError = new AlertView("isin-error-item");
+  static readonly WknError = new AlertView("wkn-error-item");
+  static readonly TickerError = new AlertView("ticker-error-item");
 }
 
 beforeEach(async () => {
@@ -131,7 +137,38 @@ test("validation: mandatory fields", async () => {
   await modalRef.value._show();
 
   await CreateEtfModalView.SaveButton.click();
+
+  await CreateEtfModalView.Modal.assertOpen();
   await CreateEtfModalView.NameError.assertMessageContains(
     "Please specify a name!",
+  );
+  await CreateEtfModalView.IsinError.assertMessageContains(
+    "Please specify an ISIN!",
+  );
+  await CreateEtfModalView.WknError.assertMessageContains(
+    "Please specify a WKN!",
+  );
+  await CreateEtfModalView.TickerError.assertMessageContains(
+    "Please specify a Ticker!",
+  );
+  await assertNotHaveBeenCalled(CrudEtfService.createEtf);
+});
+
+test("validation: field lengths", async () => {
+  const modalRef = renderModalWithRef<any>(CreateEtfModal);
+  await modalRef.value._show();
+
+  await CreateEtfModalView.NameInput.setValue("a".repeat(61));
+  await CreateEtfModalView.IsinInput.setValue("a".repeat(31));
+  await CreateEtfModalView.WknInput.setValue("a".repeat(11));
+  await CreateEtfModalView.TickerInput.setValue("a".repeat(11));
+
+  await CreateEtfModalView.SaveButton.click();
+
+  await CreateEtfModalView.NameError.assertMessageContains("Name is too long!");
+  await CreateEtfModalView.IsinError.assertMessageContains("ISIN is too long!");
+  await CreateEtfModalView.WknError.assertMessageContains("WKN is too long!");
+  await CreateEtfModalView.TickerError.assertMessageContains(
+    "Ticker is too long!",
   );
 });
