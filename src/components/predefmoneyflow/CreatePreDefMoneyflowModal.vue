@@ -234,6 +234,7 @@
       <ButtonSubmit
         :button-label="$t('General.save')"
         :form-id="'createPreDefMoneyflowForm' + idSuffix"
+        :data-testid="'createPreDefMoneyflowSaveButton' + idSuffix"
       >
         <template #icon><Save class="icon-medium" /></template>
       </ButtonSubmit>

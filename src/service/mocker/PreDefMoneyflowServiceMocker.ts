@@ -10,4 +10,10 @@ export default class PreDefMoneyflowServiceMocker {
       .fn()
       .mockResolvedValue(preDefMoneyflows);
   }
+
+  static mockCreatePreDefMoneyflowResolved(): void {
+    PreDefMoneyflowService.createPreDefMoneyflow = vi
+      .fn()
+      .mockResolvedValue(undefined);
+  }
 }
