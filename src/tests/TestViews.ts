@@ -137,6 +137,12 @@ export class CollectionView extends AbstractView {
       expect(this.queryAllByTestId(testId).length).toBe(count);
     });
   }
+
+  async clickOption(index: number): Promise<void> {
+    const testId = this.getRequiredTestId("clickOption");
+    const options = screen.getAllByTestId(testId);
+    await this.clickElement(options[index]);
+  }
 }
 
 export class ButtonView extends AbstractView {

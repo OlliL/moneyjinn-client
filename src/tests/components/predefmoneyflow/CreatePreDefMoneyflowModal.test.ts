@@ -21,6 +21,7 @@ import {
 import {
   AlertView,
   ButtonView,
+  CollectionView,
   ComboboxView,
   InputView,
   ModalStub,
@@ -56,6 +57,13 @@ class CreatePreDefMoneyflowModalView {
   );
   static readonly FavoriteButton = new ButtonView(
     "createPreDefMoneyflowFavoriteButton",
+  );
+  static readonly FavoriteColorTrigger = new ButtonView("favoriteColorPicker");
+  static readonly FavoriteColorOptions = new CollectionView(
+    "favoriteColorOption",
+  );
+  static readonly ResetColorsButton = new ButtonView(
+    "createPreDefMoneyflowResetColorsButton",
   );
   static readonly ResetButton = new ButtonView(
     "createPreDefMoneyflowResetButton",
@@ -277,4 +285,36 @@ test("CreatePreDefMoneyflowModal handles favorite abbreviation visibility", asyn
   await CreatePreDefMoneyflowModalView.FavoriteButton.click();
 
   await CreatePreDefMoneyflowModalView.FavoriteAbbreviationInput.assertNotToBeInDocument();
+});
+
+test("CreatePreDefMoneyflowModal handles favorite color selection", async () => {
+  await StoreService.getInstance().initAllStores();
+
+  const modalRef = ref();
+  render(
+    defineComponent({
+      setup() {
+        return () => h(CreatePreDefMoneyflowModal, { ref: modalRef });
+      },
+    }),
+    {
+      global: {
+        stubs: { ModalVue: ModalStub },
+      },
+    },
+  );
+
+  await modalRef.value._show();
+
+  await CreatePreDefMoneyflowModalView.FavoriteButton.click();
+  await CreatePreDefMoneyflowModalView.FavoriteColorTrigger.click();
+
+  await CreatePreDefMoneyflowModalView.FavoriteColorOptions.assertCount(10);
+
+  await CreatePreDefMoneyflowModalView.ResetColorsButton.click();
+  await CreatePreDefMoneyflowModalView.FavoriteColorOptions.assertCount(10);
+
+  await CreatePreDefMoneyflowModalView.FavoriteColorOptions.clickOption(0);
+
+  await CreatePreDefMoneyflowModalView.FavoriteColorOptions.assertCount(0);
 });

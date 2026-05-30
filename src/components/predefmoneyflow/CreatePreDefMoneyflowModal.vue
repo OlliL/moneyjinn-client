@@ -140,6 +140,7 @@
                                   @mouseleave="hoveredColor = null"
                                   @click="selectColor(color)"
                                   class="h-6 w-6 rounded-sm cursor-pointer border border-input/50 hover:scale-110 transition-transform"
+                                  data-testid="favoriteColorOption"
                                   :style="{ backgroundColor: color }"
                                 ></div>
                               </div>
@@ -148,6 +149,7 @@
                                 variant="ghost"
                                 size="xs"
                                 class="w-full h-7 text-[10px] gap-1"
+                                data-testid="createPreDefMoneyflowResetColorsButton"
                                 @click="updateRandomColors"
                               >
                                 <RefreshCw class="icon-extra-small" />
