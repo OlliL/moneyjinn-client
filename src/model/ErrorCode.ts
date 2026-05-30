@@ -66,6 +66,8 @@ export const enum ErrorCode {
   ETF_PRELIMINARY_LUMP_SUM_MONTHLY_PRICES_MUST_BE_NULL = 390,
   CONTRACTPARTNER_MAPPING_DUPLICATE = 391,
   ETF_PRELIMINARY_LUMP_SUM_ONLY_YEARLY_PRICE_MUST_BE_SET = 392,
+  ABBREVIATION_INVALID = 393,
+  COLOR_INVALID = 394,
 }
 
 export const errorMessages = {
@@ -250,6 +252,10 @@ export const errorMessages = {
     I18nSingleton.t()(
       "ErrorMessage.ETF_PRELIMINARY_LUMP_SUM_ONLY_YEARLY_PRICE_MUST_BE_SET",
     ),
+  [ErrorCode.ABBREVIATION_INVALID]: I18nSingleton.t()(
+    "ErrorMessage.ABBREVIATION_INVALID",
+  ),
+  [ErrorCode.COLOR_INVALID]: I18nSingleton.t()("ErrorMessage.COLOR_INVALID"),
 };
 
 export function getErrorMessage(errorCode: number) {

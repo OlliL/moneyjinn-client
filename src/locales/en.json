@@ -570,6 +570,8 @@
     "ETF_PRELIMINARY_LUMP_SUM_PIECE_PRICE_MUST_BE_NULL": "A unit price must not be entered in monthly mode!",
     "ETF_PRELIMINARY_LUMP_SUM_MONTHLY_PRICES_MUST_BE_NULL": "Monthly prices must not be entered in unit price mode!",
     "CONTRACTPARTNER_MAPPING_DUPLICATE": "A business partner mapping with this partial text and business partner already exists!",
-    "ETF_PRELIMINARY_LUMP_SUM_ONLY_YEARLY_PRICE_MUST_BE_SET": "Only a yearly amount may be entered when recording a lump sum for the year!"
+    "ETF_PRELIMINARY_LUMP_SUM_ONLY_YEARLY_PRICE_MUST_BE_SET": "Only a yearly amount may be entered when recording a lump sum for the year!",
+    "ABBREVIATION_INVALID": "Invalid Abbreviation!",
+    "COLOR_INVALID": "Invalid Color!"
   }
 }
