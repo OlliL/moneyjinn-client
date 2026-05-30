@@ -1,4 +1,5 @@
 import EditMoneyflowBase from "@/components/moneyflow/EditMoneyflowBase.vue";
+import { BackendError, BackendErrorType } from "@/model/BackendError";
 import type { Capitalsource } from "@/model/capitalsource/Capitalsource";
 import { CapitalsourceImport } from "@/model/capitalsource/CapitalsourceImport";
 import { CapitalsourceState } from "@/model/capitalsource/CapitalsourceState";
@@ -115,6 +116,7 @@ class EditMoneyflowBaseView {
     "postingAccountCreateMoneyflow-error",
   );
   static readonly CommentError = new AlertView("comment-error-item");
+  static readonly ServerErrorItem = new AlertView("serverError-item");
 }
 
 const defaultPostingAccounts: PostingAccount[] = [
@@ -859,4 +861,102 @@ test("deleteImportedMoneyflow calls service and returns true", async () => {
     ImportedMoneyflowService.deleteImportedMoneyflow,
     123,
   );
+});
+
+test("createMoneyflow shows server errors on rejection", async () => {
+  const backendError = new BackendError(
+    BackendErrorType.ERROR,
+    undefined,
+    "Backend Error Message",
+  );
+  MoneyflowServiceMocker.mockCreateMoneyflowRejected(backendError);
+
+  const editRef = ref<any>();
+  const TestWrapper = defineComponent({
+    render() {
+      return h(EditMoneyflowBase, {
+        ref: editRef,
+        fillContractpartnerDefaults: true,
+      });
+    },
+  });
+  render(TestWrapper);
+  const editComponent = editRef.value;
+
+  await EditMoneyflowBaseView.AmountInput.setValue("10");
+  await EditMoneyflowBaseView.CommentInput.setValue("Test");
+  await EditMoneyflowBaseView.ContractpartnerCombobox.selectItem(
+    "Contractpartner 1",
+    1,
+  );
+  await EditMoneyflowBaseView.PostingAccountCombobox.selectItem(
+    "Posting Account 1",
+    1,
+  );
+
+  const result = await editComponent.createMoneyflow();
+
+  expect(result).toBe(false);
+  await EditMoneyflowBaseView.ServerErrorItem.assertMessageContains(
+    "Backend Error Message",
+  );
+});
+
+test("prepareServerCall fills main comment and posting account from split entries if empty", async () => {
+  MoneyflowServiceMocker.mockCreateMoneyflowResolved();
+
+  const editRef = ref<any>();
+  const TestWrapper = defineComponent({
+    render() {
+      return h(EditMoneyflowBase, {
+        ref: editRef,
+        fillContractpartnerDefaults: true,
+      });
+    },
+  });
+  render(TestWrapper);
+  const editComponent = editRef.value;
+
+  await EditMoneyflowBaseView.AmountInput.setValue("100.00");
+  await EditMoneyflowBaseView.ContractpartnerCombobox.selectItem(
+    "Contractpartner 1",
+    1,
+  );
+  // Explicitly clear main comment and posting account to test filling from split entries
+  await EditMoneyflowBaseView.CommentInput.setValue("");
+  await EditMoneyflowBaseView.PostingAccountCombobox.clear();
+
+  // Main comment and posting account are left EMPTY
+
+  await EditMoneyflowBaseView.SubbookingToggleButton.click();
+  await EditMoneyflowBaseView.amountSplitEntryInput(-1).setValue("100.00");
+  await EditMoneyflowBaseView.commentSplitEntryInput(-1).setValue(
+    "Split Comment",
+  );
+  await EditMoneyflowBaseView.postingAccountSplitEntryCombobox(-1).selectItem(
+    "Posting Account 2",
+    2,
+  );
+
+  await editComponent.createMoneyflow();
+
+  await assertHaveBeenCalledWith(
+    MoneyflowService.createMoneyflow,
+    expect.objectContaining({
+      comment: "Split Comment",
+      postingAccountId: 2,
+    }),
+    expect.any(Number),
+    expect.any(Boolean),
+  );
+});
+
+test("deleting a split entry row maintains at least 2 rows", async () => {
+  render(EditMoneyflowBase, { props: { fillContractpartnerDefaults: true } });
+
+  await EditMoneyflowBaseView.SubbookingToggleButton.click();
+  await EditMoneyflowBaseView.SplitEntryRows.assertCount(2);
+
+  await EditMoneyflowBaseView.splitEntryDeleteButton(-1).click();
+  await EditMoneyflowBaseView.SplitEntryRows.assertCount(2);
 });
