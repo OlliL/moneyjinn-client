@@ -55,6 +55,7 @@
         type="button"
         variant="secondary"
         class="button-with-icon hidden md:flex"
+        data-testid="createContractpartnerMatchingResetButton"
         @click="resetForm"
       >
         <Undo2 class="icon-medium" />
@@ -64,6 +65,7 @@
       <ButtonSubmit
         :button-label="$t('General.save')"
         :form-id="'createContractpartnerMatchingForm' + idSuffix"
+        test-id="createContractpartnerMatchingSaveButton"
       >
         <template #icon><Save class="icon-medium" /></template>
       </ButtonSubmit>
