@@ -63,7 +63,7 @@ beforeEach(() => {
       role: "ADMIN",
     } as never,
   ]);
-  UserServiceMocker.mockGetAllAccessRelations([]);
+  UserServiceMocker.mockGetAllAccessRelationsResolved([]);
 });
 
 test("ListUsers loads and renders users on mount", async () => {
