@@ -121,6 +121,7 @@ import {
   computed,
   nextTick,
   onMounted,
+  onUnmounted,
   ref,
   useTemplateRef,
   watch,
@@ -244,8 +245,12 @@ const setFieldValue = () => {
   filterItemList();
 };
 
+let blurTimeout: ReturnType<typeof setTimeout> | undefined;
+
 const onBlur = () => {
-  setTimeout(() => {
+  blurTimeout = setTimeout(() => {
+    if (typeof document === "undefined") return;
+
     const activeEl = document.activeElement;
     const isInsideDropdown =
       dropdownRef.value?.contains(activeEl) || getInputElement() === activeEl;
@@ -258,6 +263,10 @@ const onBlur = () => {
     }
   }, 100);
 };
+
+onUnmounted(() => {
+  if (blurTimeout) clearTimeout(blurTimeout);
+});
 
 const getInputElement = () => {
   const refValue = fieldRef.value as unknown as
