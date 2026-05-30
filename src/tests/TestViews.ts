@@ -2,6 +2,7 @@ import "@testing-library/jest-dom";
 import userEvent from "@testing-library/user-event";
 import { fireEvent, screen, waitFor } from "@testing-library/vue";
 import { expect } from "vitest";
+import { defineComponent } from "vue";
 
 async function waitForInputHasValue(item: HTMLInputElement, value: string) {
   await waitFor(() => {
@@ -114,6 +115,20 @@ export abstract class AbstractView {
     });
   }
 }
+
+export const ModalStub = defineComponent({
+  data: () => ({ isOpen: false }),
+  methods: {
+    _show() {
+      this.isOpen = true;
+    },
+    _hide() {
+      this.isOpen = false;
+    },
+  },
+  template:
+    '<div v-if="isOpen" data-testid="app-modal"><slot name="body" /><slot name="footer" /></div>',
+});
 
 export class CollectionView extends AbstractView {
   async assertCount(count: number): Promise<void> {

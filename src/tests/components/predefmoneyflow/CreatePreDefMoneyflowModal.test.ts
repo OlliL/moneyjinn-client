@@ -18,6 +18,7 @@ import {
   ButtonView,
   ComboboxView,
   InputView,
+  ModalStub,
   ModalView,
 } from "@/tests/TestViews";
 import "@testing-library/jest-dom/vitest";
@@ -89,22 +90,6 @@ test("CreatePreDefMoneyflowModal creates a new predefined moneyflow", async () =
   await StoreService.getInstance().initAllStores();
 
   const modalRef = ref();
-
-  // Stubbing ModalVue to prevent eager rendering of its slots in JSDOM.
-  // This ensures 'mpm' is initialized via _show() before the form is rendered.
-  const ModalStub = defineComponent({
-    data: () => ({ isOpen: false }),
-    methods: {
-      _show() {
-        (this as any).isOpen = true;
-      },
-      _hide() {
-        (this as any).isOpen = false;
-      },
-    },
-    template:
-      '<div v-if="isOpen" data-testid="app-modal"><slot name="body" /><slot name="footer" /></div>',
-  });
 
   render(
     defineComponent({
