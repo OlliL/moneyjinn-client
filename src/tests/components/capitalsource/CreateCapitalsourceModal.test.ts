@@ -29,7 +29,7 @@ import {
 } from "@/tests/TestViews";
 import "@testing-library/jest-dom/vitest";
 import { createPinia, setActivePinia } from "pinia";
-import { beforeEach, test, vi } from "vitest";
+import { beforeEach, expect, test, vi } from "vitest";
 
 vi.mock("@/service/CapitalsourceService");
 vi.mock("@/service/ContractpartnerService");
@@ -144,6 +144,55 @@ test("reset button clears form in create mode", async () => {
   await CreateCapitalsourceModalView.ResetButton.click();
 
   await CreateCapitalsourceModalView.CommentInput.assertValue("");
+});
+
+test("reset button reverts changes in edit mode", async () => {
+  const existingMcs = {
+    id: 1,
+    comment: "Original",
+    type: CapitalsourceType.CURRENT_ASSET,
+    state: CapitalsourceState.CASH,
+    validFrom: new Date("2024-01-01"),
+    validTil: new Date("2999-12-31"),
+    groupUse: true,
+    importAllowed: CapitalsourceImport.NOT_ALLOWED,
+  } as any;
+  const modalRef = renderModalWithRef<any>(CreateCapitalsourceModal);
+  await modalRef.value._show(existingMcs);
+
+  await CreateCapitalsourceModalView.CommentInput.setValue("Changed");
+  await CreateCapitalsourceModalView.ResetButton.click();
+
+  await CreateCapitalsourceModalView.CommentInput.assertValue("Original");
+});
+
+test("can save without optional account data", async () => {
+  const modalRef = renderModalWithRef<any>(CreateCapitalsourceModal);
+  await modalRef.value._show();
+
+  await CreateCapitalsourceModalView.CommentInput.setValue("Minimal Source");
+  await CreateCapitalsourceModalView.TypeSelect.selectItem(
+    "Current Asset",
+    CapitalsourceType.CURRENT_ASSET,
+  );
+  await CreateCapitalsourceModalView.StateSelect.selectItem(
+    "Cash",
+    CapitalsourceState.CASH,
+  );
+  await CreateCapitalsourceModalView.GroupUseSelect.selectItem("No", "false");
+  await CreateCapitalsourceModalView.ImportAllowedSelect.selectItem(
+    "No",
+    CapitalsourceImport.NOT_ALLOWED,
+  );
+
+  await CreateCapitalsourceModalView.SaveButton.click();
+
+  await assertHaveBeenCalledWith(
+    CapitalsourceService.createCapitalsource,
+    expect.objectContaining({
+      comment: "Minimal Source",
+    }),
+  );
 });
 
 test("shows server errors on failure", async () => {

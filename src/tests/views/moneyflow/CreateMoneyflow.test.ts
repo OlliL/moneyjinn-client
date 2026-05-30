@@ -113,11 +113,11 @@ const defaultPostingAccounts: PostingAccount[] = [
   {
     id: 1,
     name: "Posting Account 1",
-  } as PostingAccount,
+  },
   {
     id: 2,
     name: "Posting Account 2",
-  } as PostingAccount,
+  },
 ];
 
 const defaultContractpartners: Contractpartner[] = [
@@ -134,7 +134,7 @@ const defaultContractpartners: Contractpartner[] = [
     moneyflowComment: "Contractpartner Comment 1",
     postingAccountId: 1,
     postingAccountName: "Posting Account 1",
-  } as Contractpartner,
+  },
 ];
 
 const defaultCapitalsources: Capitalsource[] = [
@@ -148,7 +148,7 @@ const defaultCapitalsources: Capitalsource[] = [
     validFrom: new Date("2000-01-01"),
     groupUse: false,
     importAllowed: CapitalsourceImport.NOT_ALLOWED,
-  } as Capitalsource,
+  },
   {
     id: 2,
     userId: 1,
@@ -159,7 +159,7 @@ const defaultCapitalsources: Capitalsource[] = [
     validFrom: new Date("2000-01-01"),
     groupUse: false,
     importAllowed: CapitalsourceImport.NOT_ALLOWED,
-  } as Capitalsource,
+  },
 ];
 
 const defaultPreDefMoneyflows: PreDefMoneyflow[] = [
