@@ -344,6 +344,16 @@ watch(isPopoverOpen, async (val) => {
   if (val) {
     await nextTick();
     initDatepicker();
+
+    setTimeout(() => {
+      if (datepickerContainer.value) {
+        console.log("scroll");
+        datepickerContainer.value.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+      }
+    }, 250);
   }
 });
 
