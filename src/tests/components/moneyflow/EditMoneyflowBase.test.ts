@@ -89,8 +89,8 @@ class EditMoneyflowBaseView {
   static commentSplitEntryInput(rowId: number): InputView {
     return new InputView(`commentSplitEntry#${rowId}`);
   }
-  static postingAccountSplitEntryIdInput(rowId: number): InputView {
-    return new InputView(`postingAccountSplitEntry#${rowId}-id`);
+  static postingAccountSplitEntryCombobox(rowId: number): ComboboxView {
+    return new ComboboxView(`postingAccountSplitEntry#${rowId}`);
   }
   static splitEntryDeleteButton(rowId: number): ButtonView {
     return new ButtonView(`splitEntryRowDeleteButton#${rowId}`);
@@ -579,8 +579,9 @@ test("updateMoneyflow sends correct diff arrays for split entries", async () => 
   await EditMoneyflowBaseView.AddSplitEntryRowButton.click();
   await EditMoneyflowBaseView.amountSplitEntryInput(-13).setValue("-40");
   await EditMoneyflowBaseView.commentSplitEntryInput(-13).setValue("New Entry");
-  await EditMoneyflowBaseView.postingAccountSplitEntryIdInput(-13).setValue(
-    "1",
+  await EditMoneyflowBaseView.postingAccountSplitEntryCombobox(-13).selectItem(
+    "Posting Account 1",
+    1,
   );
 
   // 4. Adjust ID 11 amount so sum matches total (-100)
