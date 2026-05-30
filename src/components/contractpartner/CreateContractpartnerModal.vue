@@ -64,6 +64,7 @@
         <Collapsible class="rounded-sm border bg-muted/30 overflow-hidden">
           <CollapsibleTrigger
             class="flex items-center justify-between w-full p-4 hover:bg-muted/30 text-left transition-colors group"
+            data-testid="addressDataCollapsibleTrigger"
           >
             <div class="flex items-center space-x-2">
               <span class="form-section-title">
@@ -125,6 +126,7 @@
         type="button"
         variant="secondary"
         class="button-with-icon hidden md:flex"
+        data-testid="createContractpartnerResetButton"
         @click="resetForm"
       >
         <Undo2 class="icon-medium" />
@@ -134,6 +136,7 @@
       <ButtonSubmit
         :button-label="$t('General.save')"
         :form-id="'createContractpartnerForm' + idSuffix"
+        test-id="createContractpartnerSaveButton"
       >
         <template #icon><Save class="icon-medium" /></template>
       </ButtonSubmit>
