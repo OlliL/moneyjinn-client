@@ -1,8 +1,8 @@
 import "@testing-library/jest-dom";
 import userEvent from "@testing-library/user-event";
-import { fireEvent, screen, waitFor } from "@testing-library/vue";
+import { fireEvent, render, screen, waitFor } from "@testing-library/vue";
 import { expect } from "vitest";
-import { defineComponent } from "vue";
+import { defineComponent, h, ref } from "vue";
 
 async function waitForInputHasValue(item: HTMLInputElement, value: string) {
   await waitFor(() => {
@@ -129,6 +129,23 @@ export const ModalStub = defineComponent({
   template:
     '<div v-if="isOpen" data-testid="app-modal"><slot name="body" /><slot name="footer" /></div>',
 });
+
+export function renderModalWithRef<T = any>(component: any, props?: any) {
+  const modalRef = ref<T>();
+  render(
+    defineComponent({
+      setup() {
+        return () => h(component, { ...props, ref: modalRef });
+      },
+    }),
+    {
+      global: {
+        stubs: { ModalVue: ModalStub },
+      },
+    },
+  );
+  return modalRef;
+}
 
 export class CollectionView extends AbstractView {
   async assertCount(count: number): Promise<void> {
