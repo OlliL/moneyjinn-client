@@ -293,13 +293,22 @@ export class InputView extends AbstractView {
     await waitForInputHasValue(input, value);
   }
 
+  async setValueWithoutChecking(value: string): Promise<void> {
+    const testId = this.getRequiredTestId("setValue");
+    const input = await this.findByTestId<HTMLInputElement>(testId);
+    const user = this.createUser();
+
+    await user.clear(input);
+    if (value.length > 0) await user.type(input, value);
+  }
+
   async setValue(value: string): Promise<void> {
     const testId = this.getRequiredTestId("setValue");
     const input = await this.findByTestId<HTMLInputElement>(testId);
     const user = this.createUser();
 
+    await user.clear(input);
     try {
-      await user.clear(input);
       if (value.length > 0) await user.type(input, value);
       await this.waitUntilInputValueEquals(input, value);
     } catch {

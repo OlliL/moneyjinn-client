@@ -120,8 +120,8 @@ class EditMoneyflowBaseView {
 }
 
 const defaultPostingAccounts: PostingAccount[] = [
-  { id: 1, name: "Posting Account 1" } as PostingAccount,
-  { id: 2, name: "Posting Account 2" } as PostingAccount,
+  { id: 1, name: "Posting Account 1" },
+  { id: 2, name: "Posting Account 2" },
 ];
 const defaultContractpartners: Contractpartner[] = [
   {
@@ -132,7 +132,7 @@ const defaultContractpartners: Contractpartner[] = [
     validFrom: new Date("2000-01-01"),
     moneyflowComment: "Contractpartner Comment 1",
     postingAccountId: 1,
-  } as Contractpartner,
+  },
 ];
 const defaultCapitalsources: Capitalsource[] = [
   {
@@ -145,7 +145,7 @@ const defaultCapitalsources: Capitalsource[] = [
     validFrom: new Date("2000-01-01"),
     groupUse: false,
     importAllowed: CapitalsourceImport.NOT_ALLOWED,
-  } as Capitalsource,
+  },
 ];
 
 beforeEach(async () => {
@@ -254,7 +254,7 @@ test("no cash capitalsource available - no default capitalsource selected", asyn
     validFrom: new Date("2000-01-01"),
     groupUse: false,
     importAllowed: CapitalsourceImport.NOT_ALLOWED,
-  } as Capitalsource;
+  };
   CapitalsourceServiceMocker.mockFetchAllCapitalsource([noCash]);
   await StoreService.getInstance().initAllStores();
 
@@ -371,7 +371,7 @@ test("capitalsource defaults to CASH on mount", async () => {
     validTil: new Date("2999-12-31"),
     groupUse: false,
     importAllowed: CapitalsourceImport.NOT_ALLOWED,
-  } as Capitalsource;
+  };
   const bankSource: Capitalsource = {
     id: 2,
     userId: 1,
@@ -382,7 +382,7 @@ test("capitalsource defaults to CASH on mount", async () => {
     validTil: new Date("2999-12-31"),
     groupUse: false,
     importAllowed: CapitalsourceImport.NOT_ALLOWED,
-  } as Capitalsource;
+  };
 
   CapitalsourceServiceMocker.mockFetchAllCapitalsource([
     bankSource,
