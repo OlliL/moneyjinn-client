@@ -222,6 +222,22 @@ const initDatepicker = () => {
   }
 
   datepickerContainer.value.addEventListener("changeDate", onInput);
+  datepickerContainer.value.addEventListener("click", (e) => {
+    const target = e.target as HTMLElement;
+    const vCls =
+      props.pickMode === "month"
+        ? "month"
+        : props.pickMode === "year"
+          ? "year"
+          : "day";
+    if (
+      (target.classList.contains("datepicker-cell") &&
+        target.classList.contains(vCls)) ||
+      target.classList.contains("today-btn")
+    ) {
+      setTimeout(() => (isPopoverOpen.value = false), 10);
+    }
+  });
 };
 
 onMounted(() => {
@@ -243,14 +259,14 @@ const onTextInput = (event: Event) => {
 
   if (v.length === format.length) {
     const d = parseInput(v);
-    if (d instanceof Date && !isNaN(d.getTime())) {
+    if (d instanceof Date && !Number.isNaN(d.getTime())) {
       if (datepicker instanceof Datepicker) datepicker.setDate(d);
       if (d.getTime() !== props.modelValue?.getTime()) {
         emit("update:modelValue", d);
         setValue(d, false);
       }
     } else {
-      emit("update:modelValue", new Date(NaN));
+      emit("update:modelValue", new Date(Number.NaN));
     }
   } else if (v === "" && props.modelValue !== undefined) {
     if (datepicker instanceof Datepicker) datepicker.setDate({ clear: true });
@@ -303,15 +319,16 @@ const onKeyboardInput = (event: KeyboardEvent) => {
   }
 };
 
-const onInput = (event: Event) => {
+const onInput = () => {
   const sel = datepicker.getDate() as Date | undefined;
   const el = getInputElement();
+  const changed = sel?.getTime() !== props.modelValue?.getTime();
   if (!sel && props.modelValue !== undefined) {
     setState({ touched: true });
     emit("update:modelValue", undefined);
     setValue(undefined);
     if (el) el.value = "";
-  } else if (sel && sel.getTime() !== props.modelValue?.getTime()) {
+  } else if (sel && changed) {
     setState({ touched: true });
     emit("update:modelValue", sel);
     setValue(sel);
