@@ -4,12 +4,15 @@ import { CapitalsourceImport } from "@/model/capitalsource/CapitalsourceImport";
 import { CapitalsourceState } from "@/model/capitalsource/CapitalsourceState";
 import { CapitalsourceType } from "@/model/capitalsource/CapitalsourceType";
 import type { Contractpartner } from "@/model/contractpartner/Contractpartner";
+import type { ImportedMoneyflow } from "@/model/moneyflow/ImportedMoneyflow";
 import type { PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
 import type { PostingAccount } from "@/model/postingaccount/PostingAccount";
+import ImportedMoneyflowService from "@/service/ImportedMoneyflowService";
 import MoneyflowService from "@/service/MoneyflowService";
 import CapitalsourceServiceMocker from "@/service/mocker/CapitalsourceServiceMocker";
 import ContractpartnerServiceMocker from "@/service/mocker/ContractpartnerServiceMocker";
 import CrudEtfServiceMocker from "@/service/mocker/CrudEtfServiceMocker";
+import ImportedMoneyflowServiceMocker from "@/service/mocker/ImportedMoneyflowServiceMocker";
 import MoneyflowServiceMocker from "@/service/mocker/MoneyflowServiceMocker";
 import PostingAccountServiceMocker from "@/service/mocker/PostingAccountServiceMocker";
 import PreDefMoneyflowServiceMocker from "@/service/mocker/PreDefMoneyflowServiceMocker";
@@ -43,6 +46,7 @@ vi.mock("@/service/ContractpartnerService");
 vi.mock("@/service/CapitalsourceService");
 vi.mock("@/service/CrudEtfService");
 vi.mock("@/service/MoneyflowService");
+vi.mock("@/service/ImportedMoneyflowService");
 
 class EditMoneyflowBaseView {
   static readonly BookingDateInput = new InputView("bookingDate");
@@ -671,4 +675,188 @@ test("watchers synchronize names in mmf object when IDs change", async () => {
 
   await EditMoneyflowBaseView.CapitalsourceCombobox.selectItem("cash", 1);
   expect(editComponent.mmf.capitalsourceComment).toBe("cash");
+});
+
+test("importImportedMoneyflow maps fields and calls service", async () => {
+  const mimTechnicalFields: ImportedMoneyflow = {
+    accountNumber: "DE123",
+    bankCode: "BANK",
+    externalid: "EXT123",
+    name: "Imported Name",
+    usage: "Imported Usage",
+    accountNumberCapitalsource: "CSACC",
+    bankCodeCapitalsource: "CSBANK",
+  } as ImportedMoneyflow;
+  ImportedMoneyflowServiceMocker.mockImportImportedMoneyflowResolved();
+
+  const editRef = ref<any>();
+  const TestWrapper = defineComponent({
+    render() {
+      return h(EditMoneyflowBase, {
+        ref: editRef,
+        fillContractpartnerDefaults: true,
+      });
+    },
+  });
+  render(TestWrapper);
+  const editComponent = editRef.value;
+
+  // 1. Setup UI state (functional fields)
+  await EditMoneyflowBaseView.BookingDateInput.setValue("15.01.2024");
+  await EditMoneyflowBaseView.AmountInput.setValue("-123.45");
+  await EditMoneyflowBaseView.ContractpartnerCombobox.selectItem(
+    "Contractpartner 1",
+    1,
+  );
+
+  // 2. Setup Subbookings in UI (since importImportedMoneyflow takes them from UI state)
+  await EditMoneyflowBaseView.SubbookingToggleButton.click();
+  await EditMoneyflowBaseView.amountSplitEntryInput(-1).setValue("-50");
+  await EditMoneyflowBaseView.commentSplitEntryInput(-1).setValue("Split A");
+  await EditMoneyflowBaseView.postingAccountSplitEntryCombobox(-1).selectItem(
+    "Posting Account 1",
+    1,
+  );
+
+  await EditMoneyflowBaseView.amountSplitEntryInput(-2).setValue("-73.45");
+  await EditMoneyflowBaseView.commentSplitEntryInput(-2).setValue("Split B");
+  await EditMoneyflowBaseView.postingAccountSplitEntryCombobox(-2).selectItem(
+    "Posting Account 2",
+    2,
+  );
+
+  // 3. Trigger Import
+  const result =
+    await editComponent.importImportedMoneyflow(mimTechnicalFields);
+
+  expect(result).toBe(true);
+
+  // 4. Verify service call (merged model object)
+  await assertHaveBeenCalledWith(
+    ImportedMoneyflowService.importImportedMoneyflow,
+    expect.objectContaining({
+      amount: -123.45,
+      accountNumber: "DE123",
+      bankCode: "BANK",
+      externalid: "EXT123",
+      name: "Imported Name",
+      usage: "Imported Usage",
+      accountNumberCapitalsource: "CSACC",
+      bankCodeCapitalsource: "CSBANK",
+      moneyflowSplitEntries: expect.arrayContaining([
+        expect.objectContaining({ amount: -50, comment: "Split A" }),
+        expect.objectContaining({ amount: -73.45, comment: "Split B" }),
+      ]),
+    }),
+  );
+});
+
+test("createMoneyflow sends saveAsPreDefMoneyflow=true when Favorite toggle is active", async () => {
+  MoneyflowServiceMocker.mockCreateMoneyflowResolved();
+
+  const editRef = ref<any>();
+  const TestWrapper = defineComponent({
+    render() {
+      return h(EditMoneyflowBase, {
+        ref: editRef,
+        fillContractpartnerDefaults: true,
+      });
+    },
+  });
+  render(TestWrapper);
+  const editComponent = editRef.value;
+
+  // Setup basic valid data
+  await EditMoneyflowBaseView.AmountInput.setValue("100.00");
+  await EditMoneyflowBaseView.CommentInput.setValue("Favorite Moneyflow");
+  await EditMoneyflowBaseView.ContractpartnerCombobox.selectItem(
+    "Contractpartner 1",
+    1,
+  );
+  await EditMoneyflowBaseView.PostingAccountCombobox.selectItem(
+    "Posting Account 1",
+    1,
+  );
+
+  // Activate Favorite toggle
+  await EditMoneyflowBaseView.FavoriteToggle.click();
+  await EditMoneyflowBaseView.FavoriteToggle.assertChecked();
+
+  const result = await editComponent.createMoneyflow();
+
+  expect(result).toBe(true);
+  await assertHaveBeenCalledWith(
+    MoneyflowService.createMoneyflow,
+    expect.any(Object), // Moneyflow object
+    0, // usedPreDefMoneyflowId
+    true, // saveAsPreDefMoneyflow
+  );
+});
+
+test("createMoneyflow sends saveAsPreDefMoneyflow=true when Renew toggle is active (from PreDefMoneyflow)", async () => {
+  MoneyflowServiceMocker.mockCreateMoneyflowResolved();
+
+  const preDef: PreDefMoneyflow = {
+    id: 42,
+    amount: 50,
+    capitalsourceId: 1,
+    contractpartnerId: 1,
+    comment: "PreDef to Renew",
+    postingAccountId: 1,
+  } as PreDefMoneyflow;
+
+  const editRef = ref<any>();
+  const selectedPreDef = ref<PreDefMoneyflow | undefined>(undefined);
+  const TestWrapper = defineComponent({
+    render() {
+      return h(EditMoneyflowBase, {
+        ref: editRef,
+        selectedPreDefMoneyflow: selectedPreDef.value,
+        fillContractpartnerDefaults: true,
+      });
+    },
+  });
+  render(TestWrapper);
+  const editComponent = editRef.value;
+
+  // Trigger the non-immediate watcher in EditMoneyflowBase
+  selectedPreDef.value = preDef;
+
+  // The component should already be filled from preDef and Renew toggle should be active by default
+  await EditMoneyflowBaseView.KeepToggle.assertChecked(); // Default state when preDef is selected
+
+  // Click Renew toggle (which is the 'on' state for preDefMoneyflowId > 0)
+  await EditMoneyflowBaseView.RenewToggle.click();
+  await EditMoneyflowBaseView.RenewToggle.assertChecked();
+
+  const result = await editComponent.createMoneyflow();
+
+  expect(result).toBe(true);
+  await assertHaveBeenCalledWith(
+    MoneyflowService.createMoneyflow,
+    expect.any(Object), // Moneyflow object
+    42, // usedPreDefMoneyflowId
+    true, // saveAsPreDefMoneyflow
+  );
+});
+
+test("deleteImportedMoneyflow calls service and returns true", async () => {
+  ImportedMoneyflowServiceMocker.mockDeleteImportedMoneyflowByIdResolved();
+
+  const editRef = ref<any>();
+  const TestWrapper = defineComponent({
+    render() {
+      return h(EditMoneyflowBase, { ref: editRef });
+    },
+  });
+  render(TestWrapper);
+  const editComponent = editRef.value;
+
+  const result = await editComponent.deleteImportedMoneyflow(123);
+
+  expect(result).toBe(true);
+  await assertHaveBeenCalledWith(
+    ImportedMoneyflowService.deleteImportedMoneyflow,
+    123,
+  );
 });
