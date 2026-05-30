@@ -69,6 +69,7 @@
                   <div class="flex items-center w-full gap-3" id="fav-div">
                     <div class="flex items-stretch relative">
                       <button
+                        data-testid="createPreDefMoneyflowFavoriteButton"
                         type="button"
                         @click="mpm.isFavorite = !mpm.isFavorite"
                         :class="[
@@ -224,6 +225,7 @@
       <Button
         type="button"
         variant="secondary"
+        data-testid="createPreDefMoneyflowResetButton"
         class="button-with-icon hidden md:flex"
         @click="resetForm"
       >

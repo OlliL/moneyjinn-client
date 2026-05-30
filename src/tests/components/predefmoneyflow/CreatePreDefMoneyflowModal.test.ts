@@ -1,4 +1,5 @@
 import CreatePreDefMoneyflowModal from "@/components/predefmoneyflow/CreatePreDefMoneyflowModal.vue";
+import { BackendError, BackendErrorType } from "@/model/BackendError";
 import { CapitalsourceImport } from "@/model/capitalsource/CapitalsourceImport";
 import { CapitalsourceState } from "@/model/capitalsource/CapitalsourceState";
 import { CapitalsourceType } from "@/model/capitalsource/CapitalsourceType";
@@ -13,8 +14,12 @@ import {
   type UserSession,
   useUserSessionStore,
 } from "@/stores/UserSessionStore";
-import { assertHaveBeenCalledOnce } from "@/tests/TestUtil";
 import {
+  assertHaveBeenCalledOnce,
+  assertHaveBeenCalledWith,
+} from "@/tests/TestUtil";
+import {
+  AlertView,
   ButtonView,
   ComboboxView,
   InputView,
@@ -37,6 +42,9 @@ class CreatePreDefMoneyflowModalView {
   static readonly Modal = new ModalView("app-modal");
   static readonly AmountInput = new InputView("amount");
   static readonly CommentInput = new InputView("comment");
+  static readonly FavoriteAbbreviationInput = new InputView(
+    "favoriteAbbreviation",
+  );
   static readonly ContractpartnerCombobox = new ComboboxView(
     "contractpartnerCreatePreDefMoneyflow",
   );
@@ -46,9 +54,16 @@ class CreatePreDefMoneyflowModalView {
   static readonly PostingAccountCombobox = new ComboboxView(
     "postingAccountCreatePreDefMoneyflow",
   );
+  static readonly FavoriteButton = new ButtonView(
+    "createPreDefMoneyflowFavoriteButton",
+  );
+  static readonly ResetButton = new ButtonView(
+    "createPreDefMoneyflowResetButton",
+  );
   static readonly SaveButton = new ButtonView(
     "createPreDefMoneyflowSaveButton",
   );
+  static readonly ServerErrorItem = new AlertView("serverError-item");
 }
 
 beforeEach(() => {
@@ -128,4 +143,138 @@ test("CreatePreDefMoneyflowModal creates a new predefined moneyflow", async () =
 
   await assertHaveBeenCalledOnce(PreDefMoneyflowService.createPreDefMoneyflow);
   await CreatePreDefMoneyflowModalView.Modal.assertClosed();
+});
+
+test("CreatePreDefMoneyflowModal updates an existing predefined moneyflow", async () => {
+  await StoreService.getInstance().initAllStores();
+  const existingMpm = {
+    id: 42,
+    amount: 10,
+    comment: "Existing",
+    contractpartnerId: 1,
+    capitalsourceId: 1,
+    postingAccountId: 1,
+    isFavorite: false,
+  } as any;
+  PreDefMoneyflowServiceMocker.mockUpdatePreDefMoneyflowResolved();
+
+  const modalRef = ref();
+  render(
+    defineComponent({
+      setup() {
+        return () => h(CreatePreDefMoneyflowModal, { ref: modalRef });
+      },
+    }),
+    { global: { stubs: { ModalVue: ModalStub } } },
+  );
+
+  await modalRef.value._show(existingMpm);
+
+  await CreatePreDefMoneyflowModalView.CommentInput.setValue("Updated Comment");
+  await CreatePreDefMoneyflowModalView.SaveButton.click();
+
+  await assertHaveBeenCalledWith(PreDefMoneyflowService.updatePreDefMoneyflow, {
+    ...existingMpm,
+    comment: "Updated Comment",
+  });
+  await CreatePreDefMoneyflowModalView.Modal.assertClosed();
+});
+
+test("CreatePreDefMoneyflowModal shows server errors on failed save", async () => {
+  await StoreService.getInstance().initAllStores();
+  const backendError = new BackendError(
+    BackendErrorType.ERROR,
+    undefined,
+    "Server Error Message",
+  );
+  PreDefMoneyflowServiceMocker.mockCreatePreDefMoneyflowRejected(backendError);
+
+  const modalRef = ref();
+  render(
+    defineComponent({
+      setup() {
+        return () => h(CreatePreDefMoneyflowModal, { ref: modalRef });
+      },
+    }),
+    { global: { stubs: { ModalVue: ModalStub } } },
+  );
+
+  await modalRef.value._show();
+
+  await CreatePreDefMoneyflowModalView.AmountInput.setValue("10");
+  await CreatePreDefMoneyflowModalView.CommentInput.setValue("Test");
+  await CreatePreDefMoneyflowModalView.ContractpartnerCombobox.selectItem(
+    "Partner 1",
+    1,
+  );
+  await CreatePreDefMoneyflowModalView.CapitalsourceCombobox.selectItem(
+    "Cash",
+    1,
+  );
+  await CreatePreDefMoneyflowModalView.PostingAccountCombobox.selectItem(
+    "Account 1",
+    1,
+  );
+
+  await CreatePreDefMoneyflowModalView.SaveButton.click();
+
+  await CreatePreDefMoneyflowModalView.ServerErrorItem.assertMessageContains(
+    "Server Error Message",
+  );
+  await CreatePreDefMoneyflowModalView.Modal.assertOpen();
+});
+
+test("CreatePreDefMoneyflowModal reset button clears the form", async () => {
+  await StoreService.getInstance().initAllStores();
+
+  const modalRef = ref();
+  render(
+    defineComponent({
+      setup() {
+        return () => h(CreatePreDefMoneyflowModal, { ref: modalRef });
+      },
+    }),
+    { global: { stubs: { ModalVue: ModalStub } } },
+  );
+
+  await modalRef.value._show();
+
+  await CreatePreDefMoneyflowModalView.AmountInput.setValue("123.45");
+  await CreatePreDefMoneyflowModalView.CommentInput.setValue(
+    "Temporary Comment",
+  );
+
+  await CreatePreDefMoneyflowModalView.ResetButton.click();
+
+  await CreatePreDefMoneyflowModalView.AmountInput.assertValue("");
+  await CreatePreDefMoneyflowModalView.CommentInput.assertValue("");
+});
+
+test("CreatePreDefMoneyflowModal handles favorite abbreviation visibility", async () => {
+  await StoreService.getInstance().initAllStores();
+
+  const modalRef = ref();
+  render(
+    defineComponent({
+      setup() {
+        return () => h(CreatePreDefMoneyflowModal, { ref: modalRef });
+      },
+    }),
+    { global: { stubs: { ModalVue: ModalStub } } },
+  );
+
+  await modalRef.value._show();
+
+  await CreatePreDefMoneyflowModalView.FavoriteAbbreviationInput.assertNotToBeInDocument();
+
+  await CreatePreDefMoneyflowModalView.FavoriteButton.click();
+
+  await CreatePreDefMoneyflowModalView.FavoriteAbbreviationInput.assertToBeVisible();
+  await CreatePreDefMoneyflowModalView.FavoriteAbbreviationInput.setValue(
+    "ABC",
+  );
+
+  await CreatePreDefMoneyflowModalView.FavoriteButton.click();
+
+  await CreatePreDefMoneyflowModalView.FavoriteAbbreviationInput.assertNotToBeInDocument();
 });
