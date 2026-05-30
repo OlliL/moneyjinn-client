@@ -18,7 +18,10 @@ import {
   type UserSession,
   useUserSessionStore,
 } from "@/stores/UserSessionStore";
-import { assertHaveBeenCalledWith } from "@/tests/TestUtil";
+import {
+  assertHaveBeenCalledWith,
+  assertNotHaveBeenCalled,
+} from "@/tests/TestUtil";
 import {
   AlertView,
   ButtonView,
@@ -517,7 +520,7 @@ test("initializes correctly in edit mode", async () => {
     id: 123,
     bookingDate: new Date("2024-05-20"),
     invoiceDate: new Date("2024-05-21"),
-    amount: -50.0,
+    amount: -50,
     contractpartnerId: 1,
     contractpartnerName: "Contractpartner 1",
     capitalsourceId: 1,
@@ -526,8 +529,8 @@ test("initializes correctly in edit mode", async () => {
     postingAccountId: 1,
     postingAccountName: "Posting Account 1",
     moneyflowSplitEntries: [
-      { id: 10, amount: -20.0, comment: "Split 1", postingAccountId: 1 },
-      { id: 11, amount: -30.0, comment: "Split 2", postingAccountId: 2 },
+      { id: 10, amount: -20, comment: "Split 1", postingAccountId: 1 },
+      { id: 11, amount: -30, comment: "Split 2", postingAccountId: 2 },
     ],
   } as any;
 
@@ -546,14 +549,14 @@ test("updateMoneyflow sends correct diff arrays for split entries", async () => 
   const mmfToEdit = {
     id: 123,
     bookingDate: new Date("2024-05-20"),
-    amount: -100.0,
+    amount: -100,
     contractpartnerId: 1,
     capitalsourceId: 1,
     comment: "Old Main",
     postingAccountId: 1,
     moneyflowSplitEntries: [
-      { id: 10, amount: -40.0, comment: "Old 1", postingAccountId: 1 },
-      { id: 11, amount: -60.0, comment: "Old 2", postingAccountId: 1 },
+      { id: 10, amount: -40, comment: "Old 1", postingAccountId: 1 },
+      { id: 11, amount: -60, comment: "Old 2", postingAccountId: 1 },
     ],
   } as any;
 
@@ -603,4 +606,69 @@ test("updateMoneyflow sends correct diff arrays for split entries", async () => 
     [expect.objectContaining({ id: 11, comment: "Updated 2" })],
     [10], // Deleted ID
   );
+});
+
+test("createMoneyflow returns false and does not call service if remainder is invalid", async () => {
+  MoneyflowServiceMocker.mockCreateMoneyflowResolved();
+
+  const editRef = ref<any>();
+  const TestWrapper = defineComponent({
+    render() {
+      return h(EditMoneyflowBase, {
+        ref: editRef,
+        fillContractpartnerDefaults: true,
+      });
+    },
+  });
+  render(TestWrapper);
+  const editComponent = editRef.value;
+
+  // Setup basic valid data
+  await EditMoneyflowBaseView.AmountInput.setValue("100.00");
+  await EditMoneyflowBaseView.CommentInput.setValue("Main Comment");
+  await EditMoneyflowBaseView.ContractpartnerCombobox.selectItem(
+    "Contractpartner 1",
+    1,
+  );
+  await EditMoneyflowBaseView.PostingAccountCombobox.selectItem(
+    "Posting Account 1",
+    1,
+  );
+
+  // Add a split entry that creates a remainder (100 - 40 = 60)
+  await EditMoneyflowBaseView.SubbookingToggleButton.click();
+  await EditMoneyflowBaseView.amountSplitEntryInput(-1).setValue("40.00");
+  await EditMoneyflowBaseView.commentSplitEntryInput(-1).setValue("Split");
+  await EditMoneyflowBaseView.postingAccountSplitEntryCombobox(-1).selectItem(
+    "Posting Account 1",
+    1,
+  );
+
+  const result = await editComponent.createMoneyflow();
+
+  expect(result).toBe(false);
+  await assertNotHaveBeenCalled(MoneyflowService.createMoneyflow);
+});
+
+test("watchers synchronize names in mmf object when IDs change", async () => {
+  const editRef = ref<any>();
+  const TestWrapper = defineComponent({
+    render() {
+      return h(EditMoneyflowBase, {
+        ref: editRef,
+        fillContractpartnerDefaults: true,
+      });
+    },
+  });
+  render(TestWrapper);
+  const editComponent = editRef.value;
+
+  await EditMoneyflowBaseView.PostingAccountCombobox.selectItem(
+    "Posting Account 2",
+    2,
+  );
+  expect(editComponent.mmf.postingAccountName).toBe("Posting Account 2");
+
+  await EditMoneyflowBaseView.CapitalsourceCombobox.selectItem("cash", 1);
+  expect(editComponent.mmf.capitalsourceComment).toBe("cash");
 });
