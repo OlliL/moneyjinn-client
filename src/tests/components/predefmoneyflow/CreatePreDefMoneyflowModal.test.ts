@@ -70,6 +70,20 @@ class CreatePreDefMoneyflowModalView {
   static readonly SaveButton = new ButtonView(
     "createPreDefMoneyflowSaveButton",
   );
+  static readonly AmountError = new AlertView("amount-error-item");
+  static readonly CommentError = new AlertView("comment-error-item");
+  static readonly FavoriteAbbreviationError = new AlertView(
+    "favoriteAbbreviation-error-item",
+  );
+  static readonly ContractpartnerError = new AlertView(
+    "contractpartnerCreatePreDefMoneyflow-error",
+  );
+  static readonly CapitalsourceError = new AlertView(
+    "capitalsourceCreatePreDefMoneyflow-error",
+  );
+  static readonly PostingAccountError = new AlertView(
+    "postingAccountCreatePreDefMoneyflow-error",
+  );
   static readonly ServerErrorItem = new AlertView("serverError-item");
 }
 
@@ -261,6 +275,9 @@ test("CreatePreDefMoneyflowModal validation: amount is required", async () => {
 
   await assertNotHaveBeenCalled(PreDefMoneyflowService.createPreDefMoneyflow);
   await CreatePreDefMoneyflowModalView.Modal.assertOpen();
+  await CreatePreDefMoneyflowModalView.AmountError.assertMessageContains(
+    "Please specify an amount!",
+  );
 });
 
 test("CreatePreDefMoneyflowModal validation: comment is required", async () => {
@@ -272,6 +289,9 @@ test("CreatePreDefMoneyflowModal validation: comment is required", async () => {
 
   await assertNotHaveBeenCalled(PreDefMoneyflowService.createPreDefMoneyflow);
   await CreatePreDefMoneyflowModalView.Modal.assertOpen();
+  await CreatePreDefMoneyflowModalView.CommentError.assertMessageContains(
+    "Please specify a comment!",
+  );
 });
 
 test("CreatePreDefMoneyflowModal validation: comment maximum length", async () => {
@@ -284,6 +304,9 @@ test("CreatePreDefMoneyflowModal validation: comment maximum length", async () =
 
   await assertNotHaveBeenCalled(PreDefMoneyflowService.createPreDefMoneyflow);
   await CreatePreDefMoneyflowModalView.Modal.assertOpen();
+  await CreatePreDefMoneyflowModalView.CommentError.assertMessageContains(
+    "Comment is too long!",
+  );
 });
 
 test("CreatePreDefMoneyflowModal validation: contractpartner is required", async () => {
@@ -296,6 +319,9 @@ test("CreatePreDefMoneyflowModal validation: contractpartner is required", async
 
   await assertNotHaveBeenCalled(PreDefMoneyflowService.createPreDefMoneyflow);
   await CreatePreDefMoneyflowModalView.Modal.assertOpen();
+  await CreatePreDefMoneyflowModalView.ContractpartnerError.assertMessageContains(
+    "Please specify a business partner!",
+  );
 });
 
 test("CreatePreDefMoneyflowModal validation: capitalsource is required", async () => {
@@ -312,6 +338,9 @@ test("CreatePreDefMoneyflowModal validation: capitalsource is required", async (
 
   await assertNotHaveBeenCalled(PreDefMoneyflowService.createPreDefMoneyflow);
   await CreatePreDefMoneyflowModalView.Modal.assertOpen();
+  await CreatePreDefMoneyflowModalView.CapitalsourceError.assertMessageContains(
+    "Please specify an account!",
+  );
 });
 
 test("CreatePreDefMoneyflowModal validation: posting account is required", async () => {
@@ -332,6 +361,9 @@ test("CreatePreDefMoneyflowModal validation: posting account is required", async
 
   await assertNotHaveBeenCalled(PreDefMoneyflowService.createPreDefMoneyflow);
   await CreatePreDefMoneyflowModalView.Modal.assertOpen();
+  await CreatePreDefMoneyflowModalView.PostingAccountError.assertMessageContains(
+    "Please specify a posting account!",
+  );
 });
 
 test("CreatePreDefMoneyflowModal validation: favorite abbreviation is required when favorite active", async () => {
@@ -355,10 +387,12 @@ test("CreatePreDefMoneyflowModal validation: favorite abbreviation is required w
     1,
   );
 
-  // Abbreviation input is empty by default when favorite is toggled
   await CreatePreDefMoneyflowModalView.SaveButton.click();
 
   await assertNotHaveBeenCalled(PreDefMoneyflowService.createPreDefMoneyflow);
   await CreatePreDefMoneyflowModalView.Modal.assertOpen();
   await CreatePreDefMoneyflowModalView.FavoriteAbbreviationInput.assertToBeVisible();
+  await CreatePreDefMoneyflowModalView.FavoriteAbbreviationError.assertMessageContains(
+    "enter!",
+  );
 });

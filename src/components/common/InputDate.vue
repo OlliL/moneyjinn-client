@@ -58,6 +58,7 @@
 
     <p
       v-if="isInvalid"
+      :data-testid="id + '-error'"
       class="text-[0.8rem] font-medium text-destructive mt-0.5 text-left ml-1"
     >
       {{ errorMessage }}
