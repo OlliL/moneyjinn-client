@@ -13,7 +13,7 @@
         {{
           $t("MonthlySettlement.headline", {
             month: monthName,
-            year: year,
+            year: selectedYear,
           })
         }}
       </h4>
@@ -55,6 +55,7 @@
     <DivError :server-errors="serverErrors" />
 
     <ShowMontlySettlementVue
+      v-if="dataLoaded"
       :year="Number(selectedYear)"
       :month="selectedMonth"
     />
@@ -109,10 +110,11 @@ onMounted(() => {
 });
 
 const monthName = computed(() => {
-  return props.month ? getMonthName(+props.month) : "";
+  return props.month ? getMonthName(+selectedMonth.value) : "";
 });
 
 const loadMonth = (year?: string, month?: number) => {
+  dataLoaded.value = false;
   serverErrors.value = new Array<string>();
 
   MonthlySettlementService.getAvailableMonth(Number(year), month)
@@ -140,8 +142,7 @@ const loadMonth = (year?: string, month?: number) => {
 
 onBeforeRouteUpdate((to, from) => {
   const year = to.params.year ? to.params.year.toString() : undefined;
-  const fallbackMonth = from.params.month ? Number(from.params.month) : 0;
-  const month = to.params.month ? Number(to.params.month) : fallbackMonth;
+  const month = to.params.month ? Number(to.params.month) : 0;
   if (
     // only reload month when switching years, deleting a settlement or creating a new settlement
     currentlyShownYear.value != year ||
@@ -166,20 +167,31 @@ const selectYear = (year: string) => {
 };
 
 const selectMonth = (month: number) => {
+  const targetMonth = months.value.includes(month)
+    ? month
+    : months.value.at(-1);
   router.push({
     name: Routes.ListMonthlySettlements,
-    params: { year: selectedYear.value, month },
+    params: { year: selectedYear.value, month: targetMonth },
   });
 };
 
 const selectCurrentMonth = () => {
   const today = new Date();
-  const currentYear = today.getFullYear();
-  const currentMonth = today.getMonth() + 1;
+  const currentYear = String(today.getFullYear());
+  let currentMonth = today.getMonth() + 1;
+
+  if (
+    currentYear == selectedYear.value &&
+    months.value.length > 0 &&
+    !months.value.includes(currentMonth)
+  ) {
+    currentMonth = months.value.at(-1)!;
+  }
 
   router.push({
     name: Routes.ListMonthlySettlements,
-    params: { year: currentYear, currentMonth },
+    params: { year: currentYear, month: currentMonth },
   });
 };
 

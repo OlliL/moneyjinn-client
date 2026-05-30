@@ -49,7 +49,7 @@
         :field-label="$t('General.amount')"
         :focus="desktop || !mmf.id"
       >
-        <template #icon><Euro class="icon-medium" /></template>
+        <template #icon><Euro class="icon-medium !cursor-default" /></template>
       </InputStandard>
     </div>
 
@@ -65,7 +65,9 @@
             :field-label="$t('General.comment')"
             name="comment"
           >
-            <template #icon><MessageSquareMore class="icon-medium" /></template>
+            <template #icon
+              ><MessageSquareMore class="icon-medium !cursor-default"
+            /></template>
           </InputStandard>
         </div>
 

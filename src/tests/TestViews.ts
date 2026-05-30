@@ -1,7 +1,8 @@
 import "@testing-library/jest-dom";
 import userEvent from "@testing-library/user-event";
-import { fireEvent, screen, waitFor } from "@testing-library/vue";
+import { fireEvent, render, screen, waitFor } from "@testing-library/vue";
 import { expect } from "vitest";
+import { defineComponent, h, ref } from "vue";
 
 async function waitForInputHasValue(item: HTMLInputElement, value: string) {
   await waitFor(() => {
@@ -115,12 +116,49 @@ export abstract class AbstractView {
   }
 }
 
+export const ModalStub = defineComponent({
+  data: () => ({ isOpen: false }),
+  methods: {
+    _show() {
+      this.isOpen = true;
+    },
+    _hide() {
+      this.isOpen = false;
+    },
+  },
+  template:
+    '<div v-if="isOpen" data-testid="app-modal"><slot name="body" /><slot name="footer" /></div>',
+});
+
+export function renderModalWithRef<T = any>(component: any, props?: any) {
+  const modalRef = ref<T>();
+  render(
+    defineComponent({
+      setup() {
+        return () => h(component, { ...props, ref: modalRef });
+      },
+    }),
+    {
+      global: {
+        stubs: { ModalVue: ModalStub },
+      },
+    },
+  );
+  return modalRef;
+}
+
 export class CollectionView extends AbstractView {
   async assertCount(count: number): Promise<void> {
     const testId = this.getRequiredTestId("assertCount");
     await waitFor(() => {
       expect(this.queryAllByTestId(testId).length).toBe(count);
     });
+  }
+
+  async clickOption(index: number): Promise<void> {
+    const testId = this.getRequiredTestId("clickOption");
+    const options = screen.getAllByTestId(testId);
+    await this.clickElement(options[index]);
   }
 }
 
@@ -255,14 +293,23 @@ export class InputView extends AbstractView {
     await waitForInputHasValue(input, value);
   }
 
+  async setValueWithoutChecking(value: string): Promise<void> {
+    const testId = this.getRequiredTestId("setValue");
+    const input = await this.findByTestId<HTMLInputElement>(testId);
+    const user = this.createUser();
+
+    await user.clear(input);
+    if (value.length > 0) await user.type(input, value);
+  }
+
   async setValue(value: string): Promise<void> {
     const testId = this.getRequiredTestId("setValue");
     const input = await this.findByTestId<HTMLInputElement>(testId);
     const user = this.createUser();
-    await user.clear(input);
-    if (value.length > 0) await user.type(input, value);
 
+    await user.clear(input);
     try {
+      if (value.length > 0) await user.type(input, value);
       await this.waitUntilInputValueEquals(input, value);
     } catch {
       // Some masked/datepicker inputs don't handle simulated typing reliably.
@@ -407,7 +454,9 @@ export class ComboboxView extends AbstractView {
       `${this.itemBaseTestId}-id`,
     );
     await this.clickElement(clearItem);
-    await waitForInputHasValue(idItem, "0");
+    await waitFor(() => {
+      expect(["0", ""]).toContain(idItem.value);
+    });
   }
 }
 

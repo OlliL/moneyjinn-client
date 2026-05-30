@@ -52,6 +52,7 @@
         type="button"
         variant="secondary"
         class="button-with-icon hidden md:flex"
+        data-testid="createEtfPreliminaryLumpSumYearlyResetButton"
         @click="resetForm"
       >
         <Undo2 class="icon-medium" />
@@ -61,6 +62,7 @@
       <ButtonSubmit
         :button-label="$t('General.save')"
         form-id="createEtfPreliminaryLumpSumYearForm"
+        test-id="createEtfPreliminaryLumpSumYearlySaveButton"
       >
         <template #icon><Save class="icon-medium" /></template>
       </ButtonSubmit>

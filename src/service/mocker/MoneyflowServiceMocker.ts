@@ -1,3 +1,4 @@
+import type { BackendError } from "@/model/BackendError";
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 import MoneyflowService from "@/service/MoneyflowService";
 import { vi } from "vitest";
@@ -19,8 +20,12 @@ export default class MoneyflowServiceMocker {
     MoneyflowService.createMoneyflow = vi.fn().mockResolvedValue(undefined);
   }
 
-  static mockCreateMoneyflowRejected(error: unknown): void {
+  static mockCreateMoneyflowRejected(error: BackendError): void {
     MoneyflowService.createMoneyflow = vi.fn().mockRejectedValue(error);
+  }
+
+  static mockUpdateMoneyflowResolved(): void {
+    MoneyflowService.updateMoneyflow = vi.fn().mockResolvedValue(undefined);
   }
 
   static mockSearchMoneyflowsByAmountResolved(

@@ -6,7 +6,7 @@
       v-if="iban"
       type="button"
       class="text-muted-foreground/40 group-hover:text-muted-foreground hover:text-foreground! transition-colors p-0.5 rounded focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
-      :title="$t('General.copy') || 'Kopieren'"
+      :title="$t('General.copy')"
       @click="copyToClipboard"
     >
       <Copy class="icon-medium" />
@@ -17,6 +17,8 @@
 <script lang="ts" setup>
 import { Copy } from "lucide-vue-next";
 import { computed } from "vue";
+import { useI18n } from "vue-i18n";
+import { toast } from "vue-sonner";
 
 const props = defineProps({
   iban: {
@@ -24,6 +26,8 @@ const props = defineProps({
     required: false,
   },
 });
+
+const { t } = useI18n();
 
 const ibanFormatted = computed(() => {
   if (!props.iban) return "";
@@ -47,11 +51,15 @@ const copyToClipboard = () => {
 
   // Try to use the modern Clipboard API first
   if (navigator.clipboard && navigator.clipboard.writeText) {
-    navigator.clipboard.writeText(cleanToCopy).catch((err) => {
-      console.error("Failed to copy using Clipboard API:", err);
-      // Fallback if Clipboard API fails (e.g., permissions)
-      fallbackCopyToClipboard(cleanToCopy);
-    });
+    navigator.clipboard
+      .writeText(cleanToCopy)
+      .catch((err) => {
+        // Fallback if Clipboard API fails (e.g., permissions)
+        fallbackCopyToClipboard(cleanToCopy);
+      })
+      .then(() => {
+        toast.success("IBAN kopiert!");
+      });
   } else {
     // Fallback for browsers that don't support Clipboard API or in insecure contexts
     fallbackCopyToClipboard(cleanToCopy);
@@ -64,6 +72,7 @@ const fallbackCopyToClipboard = (text: string) => {
   document.body.appendChild(textarea);
   textarea.select();
   document.execCommand("copy");
+  toast.success(t("General.ibanCopied"));
   textarea.remove();
 };
 </script>

@@ -38,9 +38,9 @@
               data-testid="etf-depot-create"
               type="button"
               @click="createEtfFlow"
-              class="w-full md:w-auto"
+              class="button-with-icon w-full md:w-auto"
             >
-              <Plus class="mr-2 icon-medium" />
+              <PlusSquare class="mr-2 icon-medium" />
               {{ $t("ETFFlow.newBooking") }}
             </Button>
           </div>
@@ -153,7 +153,7 @@ import EtfService from "@/service/EtfService";
 import { useEtfStore } from "@/stores/EtfStore";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { globErr } from "@/tools/views/ZodUtil";
-import { Filter, Plus } from "lucide-vue-next";
+import { Filter, PlusSquare } from "lucide-vue-next";
 import { computed, onMounted, ref, useTemplateRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { number } from "zod";

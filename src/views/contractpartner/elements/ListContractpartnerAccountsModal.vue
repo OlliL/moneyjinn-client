@@ -21,7 +21,7 @@
     <template #body>
       <DivError :server-errors="serverErrors" />
 
-      <div class="flex flex-col rounded-md border">
+      <div class="hidden md:flex flex-col rounded-md border">
         <Table
           class="[&_tr:nth-child(even)]:bg-muted [&_td]:py-1! [&_th]:py-1!"
         >
@@ -33,12 +33,8 @@
               <TableHead class="table-head-cell">{{
                 $t("General.bic")
               }}</TableHead>
-              <TableHead class="table-head-cell"
-                ><span class="sr-only">Edit</span></TableHead
-              >
-              <TableHead class="table-head-cell"
-                ><span class="sr-only">Delete</span></TableHead
-              >
+              <TableHead class="table-head-cell"></TableHead>
+              <TableHead class="table-head-cell"></TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -63,14 +59,56 @@
           </TableBody>
         </Table>
       </div>
+
+      <div class="md:hidden space-y-2">
+        <div
+          v-if="contractpartnerAccount.length === 0"
+          class="text-center text-muted-foreground py-8 border rounded-lg"
+        >
+          {{ $t("ContractpartnerAccount.nothingFound") }}
+        </div>
+        <div
+          v-else
+          v-for="mca in contractpartnerAccount"
+          :key="mca.accountNumber"
+          class="border rounded-lg bg-background shadow-sm px-3 py-1"
+        >
+          <div class="grid grid-cols-[1fr_auto] items-center w-full gap-2">
+            <div class="flex flex-col items-start text-left overflow-hidden">
+              <span class="font-bold text-sm truncate w-full">
+                <SpanIban :iban="mca.accountNumber"
+              /></span>
+              <span class="text-xs text-muted-foreground">
+                {{ mca.bankCode }}
+              </span>
+            </div>
+            <div class="flex items-center gap-1">
+              <Button
+                variant="ghost"
+                size="icon"
+                @click="editContractpartnerAccount(mca)"
+              >
+                <Pencil class="icon-medium" />
+              </Button>
+              <Button
+                variant="ghost"
+                size="icon"
+                @click="deleteContractpartnerAccount(mca)"
+              >
+                <Trash2 class="icon-medium" />
+              </Button>
+            </div>
+          </div>
+        </div>
+      </div>
     </template>
 
     <template #footer>
       <Button
         @click="showCreateContractpartnerAccountModal"
-        class="flex items-center gap-2 rounded-md! px-6"
+        class="button-with-icon gap-2 rounded-md! px-6"
       >
-        <Plus class="icon-medium" />
+        <PlusSquare class="icon-medium" />
         {{ $t("General.new") }}
       </Button>
     </template>
@@ -78,7 +116,7 @@
 </template>
 
 <script lang="ts" setup>
-import { Plus } from "lucide-vue-next";
+import { Pencil, PlusSquare, Trash2 } from "lucide-vue-next";
 import { ref, useTemplateRef } from "vue";
 
 import { Button } from "@/components/ui/button";
@@ -101,6 +139,7 @@ import type { Contractpartner } from "@/model/contractpartner/Contractpartner";
 import type { ContractpartnerAccount } from "@/model/contractpartneraccount/ContractpartnerAccount";
 import ContractpartnerAccountService from "@/service/ContractpartnerAccountService";
 
+import SpanIban from "@/components/common/SpanIban.vue";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 
 const serverErrors = ref(new Array<string>());

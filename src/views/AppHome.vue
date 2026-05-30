@@ -79,44 +79,6 @@
       />
     </div>
   </div>
-
-  <!-- Success Toast -->
-  <Transition
-    enter-active-class="transition duration-300 ease-out"
-    enter-from-class="transform translate-y-10 opacity-0"
-    enter-to-class="transform translate-y-0 opacity-100"
-    leave-active-class="transition duration-200 ease-in"
-    leave-from-class="opacity-100"
-    leave-to-class="opacity-0"
-  >
-    <div
-      v-if="toast.show"
-      class="fixed bottom-6 left-1/2 -translate-x-1/2 z-[3000] w-[90%] max-w-sm"
-    >
-      <Alert
-        class="shadow-2xl border-green-200 bg-green-50 dark:bg-green-950 dark:border-green-900 flex items-center justify-between py-3"
-      >
-        <div class="flex items-center gap-3">
-          <CheckCircle2 class="h-5 w-5 text-green-600" />
-          <div
-            v-if="toast.mmf"
-            class="text-sm font-medium flex items-center gap-1"
-          >
-            <SpanAmount :amount="toast.mmf.amount" />
-            <span> • {{ toast.mmf.comment }}</span>
-          </div>
-        </div>
-        <Button
-          variant="ghost"
-          size="icon"
-          class="h-8 w-8 hover:bg-green-100 dark:hover:bg-green-900"
-          @click="toast.show = false"
-        >
-          <X class="h-4 w-4" />
-        </Button>
-      </Alert>
-    </div>
-  </Transition>
 </template>
 
 <script lang="ts" setup>
@@ -126,7 +88,6 @@ import SpanAmount from "@/components/common/SpanAmount.vue";
 import CreateMoneyflowQuickModal from "@/components/moneyflow/CreateMoneyflowQuickModal.vue";
 import EditMonthlySettlementModalVue from "@/components/monthlysettlement/EditMonthlySettlementModal.vue";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Button } from "@/components/ui/button";
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 import {
   preDefMoneyflowAlreadyUsedThisMonth,
@@ -136,8 +97,12 @@ import router, { Routes } from "@/router";
 import EventService from "@/service/EventService";
 import PreDefMoneyflowService from "@/service/PreDefMoneyflowService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
-import { AlertCircle, CheckCircle2, X } from "lucide-vue-next";
-import { onMounted, ref, useTemplateRef } from "vue";
+import { AlertCircle, CheckCircle2 } from "lucide-vue-next";
+import { h, onMounted, ref, useTemplateRef } from "vue";
+import { useI18n } from "vue-i18n";
+import { toast } from "vue-sonner";
+
+const { t } = useI18n();
 
 const serverErrors = ref(new Array<string>());
 
@@ -152,21 +117,13 @@ const quickBookingModal =
 const dataLoaded = ref(false);
 const favoriteMoneyflows = ref<Array<PreDefMoneyflow>>([]);
 
-const toast = ref({
-  show: false,
-  mmf: undefined as Moneyflow | undefined,
-});
-let toastTimer: number | undefined;
-
 const showSuccessToast = (mmf: Moneyflow) => {
-  toast.value.mmf = mmf;
-  toast.value.show = true;
-
-  if (toastTimer) clearTimeout(toastTimer);
-
-  toastTimer = globalThis.setTimeout(() => {
-    toast.value.show = false;
-  }, 5000);
+  toast.success(
+    h("div", { class: "flex items-center gap-1" }, [
+      h(SpanAmount, { amount: mmf.amount }),
+      h("span", " • " + mmf.comment),
+    ]),
+  );
 };
 
 const loadData = () => {

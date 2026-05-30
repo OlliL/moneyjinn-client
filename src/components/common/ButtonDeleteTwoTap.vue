@@ -3,7 +3,7 @@
     type="button"
     :variant="isConfirming ? 'destructive' : 'secondary'"
     @click="handleDeleteClick"
-    class="w-full md:w-auto transition-all duration-300 relative overflow-hidden"
+    class="button-with-icon w-full md:w-auto transition-all duration-300 relative overflow-hidden"
     :class="
       isConfirming
         ? 'bg-destructive text-destructive-foreground font-semibold shadow-inner'

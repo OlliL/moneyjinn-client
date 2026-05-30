@@ -14,6 +14,8 @@ Use this section as a fast-start summary before applying detailed rules below.
 - Preserve the page-object style used in `src/tests/**`.
 - Prefer semantic shared views from `src/tests/TestViews.ts` over generic abstractions.
 - Do not reintroduce `ElementView` or another generic fallback wrapper.
+- Do not wrap tests in `describe(...)` blocks; keep them top-level.
+- Tests should be self-documenting; avoid comments like `// Arrange`, `// Act`, or `// Assert`.
 - Choose view classes by UI semantics, not by convenience:
   - button/action -> `ButtonView`
   - switch -> `SwitchView`
@@ -26,6 +28,7 @@ Use this section as a fast-start summary before applying detailed rules below.
   - text-like input -> `InputView`
   - combobox -> `ComboboxView`
   - select/popover choice -> `SelectView`
+  - mobile popup/sheet -> `MobilePopupMenu`
   - repeated collection count -> `CollectionView`
   - intentionally text-driven assertion -> `TextView`
 - Prefer `data-testid`-based semantic views over text lookup whenever practical.
@@ -44,29 +47,33 @@ Use this section as a fast-start summary before applying detailed rules below.
    - Tests should interact with UI through local test view classes (page objects), not direct query calls.
    - Keep test intent readable: "what" over "how".
 
-2. **Locality over over-abstraction**
+2. **No Test Wrapping**
+   - Do not use `describe(...)` blocks to group tests.
+   - Keep `test(...)` calls at the top level of the file.
+
+3. **Locality over over-abstraction**
    - Keep feature-specific page objects in the corresponding test file.
    - Extract shared primitives into `src/tests/TestViews.ts` only when reused.
 
-3. **Semantic test views over generic element wrappers**
+4. **Semantic test views over generic element wrappers**
    - Model UI parts by role (`ButtonView`, `ModalView`, `RowView`, `SwitchView`, `AlertView`, ...), not by a generic catch-all element abstraction.
    - If a test primitive name does not communicate what kind of UI element it represents, it is probably too generic.
 
-4. **Stable selectors over visible text**
+5. **Stable selectors over visible text**
    - Prefer `data-testid` driven access via `TestViews` classes.
    - Avoid brittle text-based selectors for controls (especially localized labels).
 
-5. **Deterministic async flow**
+6. **Deterministic async flow**
    - Use sequential `await` calls in tests.
    - Do not use `Promise.all(...)` for user interaction/assertion steps.
 
-6. **Minimal assertion API**
+7. **Minimal assertion API**
    - Do not pass custom assertion messages from tests.
    - Test helper methods should use concise default assertions.
 
-7. **English-only test text**
+8. **English-only test text**
    - Test names (`test(...)`, `describe(...)`) must be written in English.
-   - Test comments should be written in English.
+   - Avoid comments inside test bodies; intent must be clear through Page Object naming.
    - Prefer consistent wording like `mounts`, `loads data`, `shows error`, `resets form`.
 
 ## Required Test Structure
@@ -125,6 +132,7 @@ src/tests/views/list/ListViews.test.ts   // contains tests for many list views
 - `CollapseView`
 - `SwitchView`
 - `ToggleView`
+- `MobilePopupMenu`
 - `ComboboxView`
 - `SelectView`
 - `TextView`

@@ -19,6 +19,7 @@
               <button
                 type="button"
                 @click="markAsFavorite = !markAsFavorite"
+                data-testid="createEtfFavoriteButton"
                 class="flex items-center justify-center p-2 rounded-md border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 w-10 transition-colors"
                 :title="$t('General.markAsFav')"
               >
@@ -147,6 +148,7 @@
         type="button"
         variant="secondary"
         class="button-with-icon hidden md:flex"
+        data-testid="createEtfResetButton"
         @click="resetForm"
       >
         <Undo2 class="icon-medium" />
@@ -156,6 +158,7 @@
       <ButtonSubmit
         :button-label="$t('General.save')"
         :form-id="'createEtfForm' + idSuffix"
+        test-id="createEtfSaveButton"
       >
         <template #icon><Save class="icon-medium" /></template>
       </ButtonSubmit>

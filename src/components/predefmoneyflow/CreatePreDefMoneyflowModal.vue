@@ -36,7 +36,7 @@
                   </Label>
                   <ToggleGroup
                     type="single"
-                    class="border border-input bg-muted inline-flex h-10 rounded-md overflow-hidden p-0 items-stretch w-full"
+                    class="border border-input bg-muted inline-flex h-8 rounded-md overflow-hidden p-0 items-stretch w-full"
                     :model-value="mpm.onceAMonth ? 'yes' : 'no'"
                     @update:model-value="
                       (val: any) => val && (mpm.onceAMonth = val === 'yes')
@@ -69,10 +69,11 @@
                   <div class="flex items-center w-full gap-3" id="fav-div">
                     <div class="flex items-stretch relative">
                       <button
+                        data-testid="createPreDefMoneyflowFavoriteButton"
                         type="button"
                         @click="mpm.isFavorite = !mpm.isFavorite"
                         :class="[
-                          'flex items-center justify-center p-2 border border-input bg-background hover:bg-accent hover:text-accent-foreground min-h-10 w-10 shrink-0 transition-all z-20',
+                          'flex items-center justify-center p-1 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-8 w-8 shrink-0 transition-all z-20',
                           mpm.isFavorite
                             ? 'rounded-l-md border-r-0'
                             : 'rounded-md',
@@ -91,7 +92,7 @@
 
                       <div
                         v-if="mpm.isFavorite"
-                        class="flex items-center min-h-10 border border-input rounded-r-md pl-2 md:pl-1 pr-2 gap-1 bg-muted/5 animate-in slide-in-from-left-2 duration-200"
+                        class="flex items-center h-8 border border-input rounded-r-md pl-2 md:pl-1 pr-2 gap-1 bg-muted/5 animate-in slide-in-from-left-2 duration-200"
                       >
                         <div class="w-12">
                           <InputStandard
@@ -139,6 +140,7 @@
                                   @mouseleave="hoveredColor = null"
                                   @click="selectColor(color)"
                                   class="h-6 w-6 rounded-sm cursor-pointer border border-input/50 hover:scale-110 transition-transform"
+                                  data-testid="favoriteColorOption"
                                   :style="{ backgroundColor: color }"
                                 ></div>
                               </div>
@@ -147,6 +149,7 @@
                                 variant="ghost"
                                 size="xs"
                                 class="w-full h-7 text-[10px] gap-1"
+                                data-testid="createPreDefMoneyflowResetColorsButton"
                                 @click="updateRandomColors"
                               >
                                 <RefreshCw class="icon-extra-small" />
@@ -159,14 +162,14 @@
                     </div>
                     <div
                       v-if="mpm.isFavorite"
-                      class="flex items-center gap-2 ml-auto shrink-0 h-10"
+                      class="flex items-center gap-2 ml-auto shrink-0 h-8"
                     >
                       <span
                         class="text-[10px] font-bold uppercase tracking-wider text-muted-foreground/70 text-right"
                       >
                         {{ $t("PreDefMoneyflow.preview") }}:
                       </span>
-                      <div class="w-12 h-10 relative shrink-0">
+                      <div class="w-12 h-8 relative shrink-0">
                         <FavoriteIcon
                           :text="mpm.favoriteAbbreviation"
                           :color="previewColor"
@@ -224,6 +227,7 @@
       <Button
         type="button"
         variant="secondary"
+        data-testid="createPreDefMoneyflowResetButton"
         class="button-with-icon hidden md:flex"
         @click="resetForm"
       >
@@ -234,6 +238,7 @@
       <ButtonSubmit
         :button-label="$t('General.save')"
         :form-id="'createPreDefMoneyflowForm' + idSuffix"
+        :data-testid="'createPreDefMoneyflowSaveButton' + idSuffix"
       >
         <template #icon><Save class="icon-medium" /></template>
       </ButtonSubmit>

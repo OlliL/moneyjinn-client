@@ -6,7 +6,7 @@
           <TableHead class="table-head-cell">{{
             $t("General.month")
           }}</TableHead>
-          <TableHead class="table-head-cell">{{
+          <TableHead class="table-head-cell border-r-0">{{
             $t("General.amount")
           }}</TableHead>
         </TableRow>

@@ -30,8 +30,10 @@
         <Button
           data-testid="preliminary-lump-sum-create"
           type="button"
+          class="button-with-icon"
           @click="toggleTypeSelector"
         >
+          <PlusSquare class="icon-medium mr-2" />
           {{ $t("General.new") }}
         </Button>
 
@@ -46,8 +48,10 @@
         v-if="etfPreliminaryLumpSum !== undefined"
         data-testid="preliminary-lump-sum-edit"
         type="button"
+        class="button-with-icon"
         @click="$emit('open-edit')"
       >
+        <SquarePen class="icon-medium" />
         {{ $t("General.edit") }}
       </Button>
       <Button
@@ -55,8 +59,10 @@
         data-testid="preliminary-lump-sum-delete"
         type="button"
         variant="destructive"
+        class="button-with-icon"
         @click="$emit('open-delete')"
       >
+        <Trash2 class="icon-medium" />
         {{ $t("General.delete") }}
       </Button>
     </div>
@@ -70,6 +76,7 @@ import { Button } from "@/components/ui/button";
 import type { EtfPreliminaryLumpSum } from "@/model/etf/EtfPreliminaryLumpSum";
 import type { SelectBoxValue } from "@/model/SelectBoxValue";
 import { onClickOutside } from "@vueuse/core";
+import { PlusSquare, SquarePen, Trash2 } from "lucide-vue-next";
 import { ref } from "vue";
 
 const selectedEtfId = defineModel<number | undefined>("selectedEtfId");

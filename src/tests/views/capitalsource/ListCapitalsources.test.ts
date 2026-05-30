@@ -12,6 +12,7 @@ import {
 } from "@/stores/UserSessionStore";
 import {
   ButtonView,
+  CollapseView,
   InputView,
   MobilePopupMenu,
   ModalView,
@@ -42,7 +43,7 @@ class ListCapitalsourcesView {
   static readonly MobileFilterSheet = new MobilePopupMenu(
     "div-filter-mobile-sheet",
   );
-  static readonly MobileAccordion = new RowView(
+  static readonly MobileAccordion = new CollapseView(
     "capitalsource-mobile-accordion",
   );
   static readonly MobileRowCash = new RowView("capitalsource-mobile-row-1");
@@ -180,14 +181,11 @@ test("ListCapitalsources opens delete modal from mobile action", async () => {
 });
 
 test("ListCapitalsources shows empty state for desktop and mobile if list is empty", async () => {
-  // Arrange: Mock empty capitalsource list
   CapitalsourceServiceMocker.mockFetchAllCapitalsource([]);
   await StoreService.getInstance().initAllStores();
 
-  // Act
   render(ListCapitalsources);
 
-  // Assert: Both empty states are visible
   await ListCapitalsourcesView.EmptyRowDesktop.assertToBeVisible();
   await ListCapitalsourcesView.EmptyRowMobile.assertToBeVisible();
 });

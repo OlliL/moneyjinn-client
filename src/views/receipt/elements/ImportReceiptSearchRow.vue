@@ -1,6 +1,6 @@
 <template>
   <TableRow>
-    <TableCell class="border-r">
+    <TableCell class="border-r py-1">
       <div class="flex items-center justify-center">
         <RadioGroupItem
           :id="'radio-' + props.mmf.id"
@@ -10,44 +10,58 @@
         />
       </div>
     </TableCell>
-    <TableCell class="border-r"><SpanDate :date="mmf.invoiceDate" /></TableCell>
-    <TableCell class="text-right border-r"
+    <TableCell class="text-center border-r py-1">
+      <SpanDate :date="mmf.invoiceDate" />
+    </TableCell>
+    <TableCell class="text-right border-r py-1"
       ><SpanAmount :amount="mmf.amount"
     /></TableCell>
-    <TableCell class="text-left border-r">{{
+    <TableCell class="text-left border-r py-1">{{
       mmf.contractpartnerName
     }}</TableCell>
-    <TableCell class="text-left border-r">{{ mmf.comment }}</TableCell>
-    <TableCell class="text-center" v-if="isOwnMoneyflow">
-      <Button
-        variant="ghost"
-        size="icon"
-        @click="editMoneyflow"
-        class="action-icon-button"
-      >
-        <Pencil class="icon-medium" />
-      </Button>
-    </TableCell>
-    <TableCell class="text-center border-l" v-if="isOwnMoneyflow">
-      <Button
-        variant="ghost"
-        size="icon"
-        @click="deleteMoneyflow"
-        class="action-icon-button"
-      >
-        <Trash2 class="icon-medium" />
-      </Button>
-    </TableCell>
-    <TableCell v-if="!isOwnMoneyflow">
-      <Button
-        variant="ghost"
-        size="icon"
-        @click="listMoneyflow"
-        class="action-icon-button"
-      >
-        <Eye class="icon-medium" />
-      </Button>
-    </TableCell>
+    <TableCell class="text-left border-r py-1">{{ mmf.comment }}</TableCell>
+    <template v-if="isOwnMoneyflow">
+      <TableCell class="text-center py-0 px-1">
+        <Button
+          variant="ghost"
+          size="icon"
+          :data-testid="`import-receipt-search-result-edit-${mmf.id}`"
+          @click="editMoneyflow"
+          :title="$t('General.edit')"
+          class="action-icon-button"
+        >
+          <Pencil class="icon-medium" />
+        </Button>
+      </TableCell>
+      <TableCell class="text-center border-l py-0 px-1">
+        <Button
+          variant="ghost"
+          size="icon"
+          :data-testid="`import-receipt-search-result-delete-${mmf.id}`"
+          @click="deleteMoneyflow"
+          :title="$t('General.delete')"
+          class="action-icon-button"
+        >
+          <Trash2 class="icon-medium" />
+        </Button>
+      </TableCell>
+    </template>
+
+    <template v-else>
+      <TableCell class="text-center border-r py-0 px-1">
+        <Button
+          variant="ghost"
+          size="icon"
+          :data-testid="`import-receipt-search-result-list-${mmf.id}`"
+          @click="listMoneyflow"
+          :title="$t('General.moneyflow')"
+          class="action-icon-button"
+        >
+          <Eye class="icon-medium" />
+        </Button>
+      </TableCell>
+      <TableCell />
+    </template>
   </TableRow>
 </template>
 <script lang="ts" setup>

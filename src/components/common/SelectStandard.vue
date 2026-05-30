@@ -54,6 +54,8 @@
                 'flex items-center justify-center px-2 border border-input rounded-r-md text-foreground transition-colors relative',
                 isInvalid ? 'border-l-transparent' : '',
               ]"
+              @click.stop
+              @pointerdown.stop
             >
               <slot name="icon"></slot>
             </div>
@@ -95,6 +97,7 @@
 
     <p
       v-if="isInvalid"
+      :data-testid="id + '-error'"
       class="text-[0.8rem] font-medium text-destructive mt-0.5 text-left ml-1"
     >
       {{ errorMessage }}
@@ -118,6 +121,7 @@ import {
   computed,
   nextTick,
   onMounted,
+  onUnmounted,
   ref,
   useTemplateRef,
   watch,
@@ -241,8 +245,12 @@ const setFieldValue = () => {
   filterItemList();
 };
 
+let blurTimeout: ReturnType<typeof setTimeout> | undefined;
+
 const onBlur = () => {
-  setTimeout(() => {
+  blurTimeout = setTimeout(() => {
+    if (typeof document === "undefined") return;
+
     const activeEl = document.activeElement;
     const isInsideDropdown =
       dropdownRef.value?.contains(activeEl) || getInputElement() === activeEl;
@@ -255,6 +263,10 @@ const onBlur = () => {
     }
   }, 100);
 };
+
+onUnmounted(() => {
+  if (blurTimeout) clearTimeout(blurTimeout);
+});
 
 const getInputElement = () => {
   const refValue = fieldRef.value as unknown as

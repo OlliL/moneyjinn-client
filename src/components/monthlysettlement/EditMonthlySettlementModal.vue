@@ -113,6 +113,7 @@
       <ButtonSubmit
         :button-label="$t('General.save')"
         form-id="upsertMonthlySettlementForm"
+        test-id="editMonthlySettlementSaveButton"
       />
     </template>
   </ModalVue>
@@ -257,8 +258,9 @@ watch(
   (newVal) => {
     if (
       newVal !== undefined &&
+      !Number.isNaN(newVal.getTime()) &&
       (loadedMonth.value === undefined ||
-        newVal.toISOString() !== loadedMonth.value?.toISOString())
+        newVal.toISOString() !== loadedMonth.value.toISOString())
     ) {
       const _year = newVal.getFullYear();
       const _month = newVal?.getMonth() + 1;

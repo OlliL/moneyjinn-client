@@ -3,7 +3,7 @@
     <Table>
       <TableBody>
         <TableRow>
-          <TableHead class="table-head-cell w-40">{{
+          <TableHead class="table-head-cell w-40 border-b-0">{{
             $t("ETFPreliminaryLumpSum.yearlySum")
           }}</TableHead>
           <TableCell class="text-right"

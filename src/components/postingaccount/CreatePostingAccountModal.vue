@@ -23,6 +23,7 @@
         type="button"
         variant="secondary"
         class="button-with-icon hidden md:flex"
+        data-testid="createPostingAccountResetButton"
         @click="resetForm"
       >
         <Undo2 class="icon-medium" />
@@ -32,6 +33,7 @@
       <ButtonSubmit
         :button-label="$t('General.save')"
         :form-id="'createPostingAccountForm' + idSuffix"
+        test-id="createPostingAccountSaveButton"
       >
         <template #icon><Save class="icon-medium" /></template>
       </ButtonSubmit>
