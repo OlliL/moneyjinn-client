@@ -5,6 +5,10 @@ import UserService from "@/service/UserService";
 import { vi } from "vitest";
 
 export default class UserServiceMocker {
+  static mockFetchAllUser(users: User[]): void {
+    UserService.fetchAllUser = vi.fn().mockResolvedValue(users);
+  }
+
   static mockCreateUserResolved(user: User): void {
     UserService.createUser = vi.fn().mockResolvedValue(user);
   }
