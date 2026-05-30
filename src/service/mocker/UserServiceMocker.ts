@@ -1,15 +1,27 @@
+import { BackendError } from "@/model/BackendError";
+import type { AccessRelation } from "@/model/user/AccessRelation";
 import type { User } from "@/model/user/User";
 import UserService from "@/service/UserService";
 import { vi } from "vitest";
 
 export default class UserServiceMocker {
-  static mockFetchAllUser(users: User[]): void {
-    UserService.fetchAllUser = vi.fn().mockResolvedValue(users);
+  static mockCreateUserResolved(user: User): void {
+    UserService.createUser = vi.fn().mockResolvedValue(user);
   }
 
-  static mockGetAllAccessRelations(accessRelations: unknown[]): void {
+  static mockUpdateUserResolved(): void {
+    UserService.updateUser = vi.fn().mockResolvedValue(undefined);
+  }
+
+  static mockGetAllAccessRelationsResolved(
+    accessRelations: AccessRelation[],
+  ): void {
     UserService.getAllAccessRelations = vi
       .fn()
-      .mockResolvedValue(accessRelations as never);
+      .mockResolvedValue(accessRelations);
+  }
+
+  static mockCreateUserRejected(error: BackendError): void {
+    UserService.createUser = vi.fn().mockRejectedValue(error);
   }
 }

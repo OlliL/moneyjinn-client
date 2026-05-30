@@ -1,3 +1,4 @@
+import { BackendError } from "@/model/BackendError";
 import type { AvailableMonth } from "@/model/monthlysettlement/AvailableMonth";
 import type { MonthlySettlement } from "@/model/monthlysettlement/MonthlySettlement";
 import type { MonthlySettlementEditTransporter } from "@/model/monthlysettlement/MonthlySettlementEditTransporter";
@@ -35,5 +36,24 @@ export default class MonthlySettlementServiceMocker {
     MonthlySettlementService.getMonthlySettlementForEdit = vi
       .fn()
       .mockResolvedValue(transporter);
+  }
+  static mockGetMonthlySettlementForEditResolved(
+    transporter: MonthlySettlementEditTransporter,
+  ): void {
+    MonthlySettlementService.getMonthlySettlementForEdit = vi
+      .fn()
+      .mockResolvedValue(transporter);
+  }
+
+  static mockUpsertMonthlySettlementResolved(): void {
+    MonthlySettlementService.upsertMonthlySettlement = vi
+      .fn()
+      .mockResolvedValue(undefined);
+  }
+
+  static mockUpsertMonthlySettlementRejected(error: BackendError): void {
+    MonthlySettlementService.upsertMonthlySettlement = vi
+      .fn()
+      .mockRejectedValue(error);
   }
 }
