@@ -17,6 +17,7 @@ import {
   useUserSessionStore,
 } from "@/stores/UserSessionStore";
 import {
+  AlertView,
   ButtonView,
   CollapseView,
   CollectionView,
@@ -36,6 +37,7 @@ vi.mock("@/service/CapitalsourceService");
 vi.mock("@/service/CrudEtfService");
 
 class EditMoneyflowBaseView {
+  static readonly BookingDateInput = new InputView("bookingDate");
   static readonly InvoiceDateInput = new InputView("invoiceDate");
   static readonly AmountInput = new InputView("amount");
   static readonly CommentInput = new InputView("comment");
@@ -65,6 +67,9 @@ class EditMoneyflowBaseView {
   static readonly ContractpartnerCombobox = new ComboboxView(
     "contractpartnerCreateMoneyflow",
   );
+  static readonly CapitalsourceCombobox = new ComboboxView(
+    "capitalsourceCreateMoneyflow",
+  );
 
   static readonly PublicToggle = new ToggleView("Public");
   static readonly PrivateToggle = new ToggleView("Private");
@@ -85,6 +90,19 @@ class EditMoneyflowBaseView {
   static splitEntryDeleteButton(rowId: number): ButtonView {
     return new ButtonView(`splitEntryRowDeleteButton#${rowId}`);
   }
+
+  static readonly AmountError = new AlertView("amount-error-item");
+  static readonly BookingDateError = new AlertView("bookingDate-error");
+  static readonly ContractpartnerError = new AlertView(
+    "contractpartnerCreateMoneyflow-error",
+  );
+  static readonly CapitalsourceError = new AlertView(
+    "capitalsourceCreateMoneyflow-error",
+  );
+  static readonly PostingAccountError = new AlertView(
+    "postingAccountCreateMoneyflow-error",
+  );
+  static readonly CommentError = new AlertView("comment-error-item");
 }
 
 const defaultPostingAccounts: PostingAccount[] = [
@@ -373,4 +391,118 @@ test("Toggle Labels change based on PreDefMoneyflow selection", async () => {
   await EditMoneyflowBaseView.OnceToggle.assertChecked();
   await rerender({ selectedPreDefMoneyflow: preDef });
   await EditMoneyflowBaseView.KeepToggle.assertChecked();
+});
+
+test("validation: amount is required", async () => {
+  render(EditMoneyflowBase, {
+    props: { fillContractpartnerDefaults: true },
+  });
+
+  await EditMoneyflowBaseView.AmountInput.setValue("10");
+  await EditMoneyflowBaseView.AmountInput.setValue("");
+  await EditMoneyflowBaseView.AmountInput.pressEnter();
+
+  await EditMoneyflowBaseView.AmountError.assertMessageContains(
+    "Please specify an amount!",
+  );
+});
+
+test("validation: bookingDate is required", async () => {
+  render(EditMoneyflowBase, {
+    props: { fillContractpartnerDefaults: true },
+  });
+
+  await EditMoneyflowBaseView.BookingDateInput.setValue("01.01.2025");
+  await EditMoneyflowBaseView.BookingDateInput.setValue("");
+  await EditMoneyflowBaseView.BookingDateInput.pressEnter();
+
+  await EditMoneyflowBaseView.BookingDateError.assertMessageContains(
+    "Please specify a posting date!",
+  );
+});
+
+test("validation: contractpartner is required", async () => {
+  render(EditMoneyflowBase, {
+    props: { fillContractpartnerDefaults: true },
+  });
+
+  await EditMoneyflowBaseView.ContractpartnerCombobox.selectItem(
+    "Contractpartner 1",
+    "1",
+  );
+  await EditMoneyflowBaseView.ContractpartnerCombobox.clear();
+
+  await EditMoneyflowBaseView.ContractpartnerError.assertMessageContains(
+    "Please specify a business partner!",
+  );
+});
+
+test("validation: capitalsource is required", async () => {
+  render(EditMoneyflowBase, {
+    props: { fillContractpartnerDefaults: true },
+  });
+
+  // Capitalsource defaults to 1 (Cash) on mount via resetForm
+  await EditMoneyflowBaseView.CapitalsourceIdInput.assertValue("1");
+
+  await EditMoneyflowBaseView.CapitalsourceCombobox.clear();
+
+  await EditMoneyflowBaseView.CapitalsourceError.assertMessageContains(
+    "Please specify an account!",
+  );
+});
+
+test("validation: comment is required", async () => {
+  render(EditMoneyflowBase, {
+    props: { fillContractpartnerDefaults: true },
+  });
+
+  await EditMoneyflowBaseView.CommentInput.setValue("trigger validation");
+  await EditMoneyflowBaseView.CommentInput.setValue("");
+  await EditMoneyflowBaseView.CommentInput.pressEnter();
+
+  await EditMoneyflowBaseView.CommentError.assertMessageContains(
+    "Please specify a comment!",
+  );
+});
+
+test("validation: comment maximum length", async () => {
+  render(EditMoneyflowBase, {
+    props: { fillContractpartnerDefaults: true },
+  });
+
+  await EditMoneyflowBaseView.CommentInput.setValue("a".repeat(101));
+  await EditMoneyflowBaseView.CommentInput.pressEnter();
+
+  await EditMoneyflowBaseView.CommentError.assertMessageContains(
+    "Comment is too long!",
+  );
+});
+
+test("validation: posting account is required", async () => {
+  render(EditMoneyflowBase, {
+    props: { fillContractpartnerDefaults: true },
+  });
+
+  await EditMoneyflowBaseView.PostingAccountCombobox.selectItem(
+    "Posting Account 1",
+    "1",
+  );
+  await EditMoneyflowBaseView.PostingAccountCombobox.clear();
+
+  await EditMoneyflowBaseView.PostingAccountError.assertMessageContains(
+    "Please specify a posting account!",
+  );
+});
+
+test("validation: comment and posting account optional when split entries present", async () => {
+  render(EditMoneyflowBase, {
+    props: { fillContractpartnerDefaults: true },
+  });
+
+  await EditMoneyflowBaseView.SubbookingToggleButton.click();
+  await EditMoneyflowBaseView.amountSplitEntryInput(-1).setValue("-10");
+
+  await EditMoneyflowBaseView.CommentError.assertNotToBeInDocument();
+  await EditMoneyflowBaseView.PostingAccountError.assertNotToBeInDocument();
 });

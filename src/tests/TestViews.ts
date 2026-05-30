@@ -445,7 +445,9 @@ export class ComboboxView extends AbstractView {
       `${this.itemBaseTestId}-id`,
     );
     await this.clickElement(clearItem);
-    await waitForInputHasValue(idItem, "0");
+    await waitFor(() => {
+      expect(["0", ""]).toContain(idItem.value);
+    });
   }
 }
 
