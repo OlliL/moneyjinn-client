@@ -6,9 +6,11 @@ import { CapitalsourceType } from "@/model/capitalsource/CapitalsourceType";
 import type { Contractpartner } from "@/model/contractpartner/Contractpartner";
 import type { PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
 import type { PostingAccount } from "@/model/postingaccount/PostingAccount";
+import MoneyflowService from "@/service/MoneyflowService";
 import CapitalsourceServiceMocker from "@/service/mocker/CapitalsourceServiceMocker";
 import ContractpartnerServiceMocker from "@/service/mocker/ContractpartnerServiceMocker";
 import CrudEtfServiceMocker from "@/service/mocker/CrudEtfServiceMocker";
+import MoneyflowServiceMocker from "@/service/mocker/MoneyflowServiceMocker";
 import PostingAccountServiceMocker from "@/service/mocker/PostingAccountServiceMocker";
 import PreDefMoneyflowServiceMocker from "@/service/mocker/PreDefMoneyflowServiceMocker";
 import { StoreService } from "@/stores/StoreService";
@@ -16,6 +18,7 @@ import {
   type UserSession,
   useUserSessionStore,
 } from "@/stores/UserSessionStore";
+import { assertHaveBeenCalledWith } from "@/tests/TestUtil";
 import {
   AlertView,
   ButtonView,
@@ -28,13 +31,15 @@ import {
 import "@testing-library/jest-dom/vitest";
 import { render } from "@testing-library/vue";
 import { createPinia, setActivePinia } from "pinia";
-import { beforeEach, test, vi } from "vitest";
+import { beforeEach, expect, test, vi } from "vitest";
+import { defineComponent, h, ref } from "vue";
 
 vi.mock("@/service/PreDefMoneyflowService");
 vi.mock("@/service/PostingAccountService");
 vi.mock("@/service/ContractpartnerService");
 vi.mock("@/service/CapitalsourceService");
 vi.mock("@/service/CrudEtfService");
+vi.mock("@/service/MoneyflowService");
 
 class EditMoneyflowBaseView {
   static readonly BookingDateInput = new InputView("bookingDate");
@@ -505,4 +510,96 @@ test("validation: comment and posting account optional when split entries presen
 
   await EditMoneyflowBaseView.CommentError.assertNotToBeInDocument();
   await EditMoneyflowBaseView.PostingAccountError.assertNotToBeInDocument();
+});
+
+test("initializes correctly in edit mode", async () => {
+  const mmfToEdit = {
+    id: 123,
+    bookingDate: new Date("2024-05-20"),
+    invoiceDate: new Date("2024-05-21"),
+    amount: -50.0,
+    contractpartnerId: 1,
+    contractpartnerName: "Contractpartner 1",
+    capitalsourceId: 1,
+    capitalsourceComment: "cash",
+    comment: "Main Comment",
+    postingAccountId: 1,
+    postingAccountName: "Posting Account 1",
+    moneyflowSplitEntries: [
+      { id: 10, amount: -20.0, comment: "Split 1", postingAccountId: 1 },
+      { id: 11, amount: -30.0, comment: "Split 2", postingAccountId: 2 },
+    ],
+  } as any;
+
+  render(EditMoneyflowBase, { props: { mmfToEdit } });
+
+  await EditMoneyflowBaseView.AmountInput.assertValue("-50");
+  // Main comment/posting account should be hidden when split entries exist
+  await EditMoneyflowBaseView.CommentInput.assertNotToBeVisible();
+  // 2 existing + 1 empty row added by resetEditForm logic
+  await EditMoneyflowBaseView.SplitEntryRows.assertCount(3);
+  await EditMoneyflowBaseView.amountSplitEntryInput(10).assertValue("-20");
+  await EditMoneyflowBaseView.amountSplitEntryInput(11).assertValue("-30");
+});
+
+test("updateMoneyflow sends correct diff arrays for split entries", async () => {
+  const mmfToEdit = {
+    id: 123,
+    bookingDate: new Date("2024-05-20"),
+    amount: -100.0,
+    contractpartnerId: 1,
+    capitalsourceId: 1,
+    comment: "Old Main",
+    postingAccountId: 1,
+    moneyflowSplitEntries: [
+      { id: 10, amount: -40.0, comment: "Old 1", postingAccountId: 1 },
+      { id: 11, amount: -60.0, comment: "Old 2", postingAccountId: 1 },
+    ],
+  } as any;
+
+  MoneyflowServiceMocker.mockUpdateMoneyflowResolved();
+
+  // Helper to access exposed methods
+  const editRef = ref<any>();
+  const TestWrapper = defineComponent({
+    render() {
+      return h(EditMoneyflowBase, { ref: editRef, mmfToEdit });
+    },
+  });
+  render(TestWrapper);
+  const editComponent = editRef.value;
+
+  // 1. Delete first entry (ID 10)
+  await EditMoneyflowBaseView.splitEntryDeleteButton(10).click();
+
+  // 2. Update second entry (ID 11)
+  await EditMoneyflowBaseView.commentSplitEntryInput(11).setValue("Updated 2");
+
+  // 3. Add new entry (resetEditForm added ID -12, so this one gets -13)
+  await EditMoneyflowBaseView.AddSplitEntryRowButton.click();
+  await EditMoneyflowBaseView.amountSplitEntryInput(-13).setValue("-40");
+  await EditMoneyflowBaseView.commentSplitEntryInput(-13).setValue("New Entry");
+  await EditMoneyflowBaseView.postingAccountSplitEntryIdInput(-13).setValue(
+    "1",
+  );
+
+  // 4. Adjust ID 11 amount so sum matches total (-100)
+  await EditMoneyflowBaseView.amountSplitEntryInput(11).setValue("-60");
+
+  // Trigger update logic
+  await editComponent.updateMoneyflow();
+
+  await assertHaveBeenCalledWith(
+    MoneyflowService.updateMoneyflow,
+    expect.objectContaining({ id: 123 }),
+    [
+      expect.objectContaining({
+        id: -13,
+        comment: "New Entry",
+        amount: -40,
+      }),
+    ],
+    [expect.objectContaining({ id: 11, comment: "Updated 2" })],
+    [10], // Deleted ID
+  );
 });

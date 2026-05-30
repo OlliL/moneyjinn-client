@@ -23,6 +23,10 @@ export default class MoneyflowServiceMocker {
     MoneyflowService.createMoneyflow = vi.fn().mockRejectedValue(error);
   }
 
+  static mockUpdateMoneyflowResolved(): void {
+    MoneyflowService.updateMoneyflow = vi.fn().mockResolvedValue(undefined);
+  }
+
   static mockSearchMoneyflowsByAmountResolved(
     moneyflows: Array<Moneyflow>,
   ): void {

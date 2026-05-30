@@ -297,10 +297,10 @@ export class InputView extends AbstractView {
     const testId = this.getRequiredTestId("setValue");
     const input = await this.findByTestId<HTMLInputElement>(testId);
     const user = this.createUser();
-    await user.clear(input);
-    if (value.length > 0) await user.type(input, value);
 
     try {
+      await user.clear(input);
+      if (value.length > 0) await user.type(input, value);
       await this.waitUntilInputValueEquals(input, value);
     } catch {
       // Some masked/datepicker inputs don't handle simulated typing reliably.
