@@ -16,4 +16,5 @@ export type Moneyflow = {
   postingAccountName?: string;
   moneyflowSplitEntries?: Array<MoneyflowSplitEntry>;
   hasReceipt: boolean;
+  contractpartnerMatchingId?: number;
 };

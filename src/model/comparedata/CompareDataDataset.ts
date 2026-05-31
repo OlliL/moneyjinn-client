@@ -9,4 +9,5 @@ export type CompareDataDataset = {
   moneyflowComment?: string;
   postingAccountName?: string;
   postingAccountId?: number;
+  contractpartnerMatchingId?: number;
 };

@@ -6,4 +6,5 @@ export type ContractpartnerMatching = {
   moneyflowComment?: string;
   postingAccountName?: string;
   postingAccountId?: number;
+  lastUsed?: Date;
 };

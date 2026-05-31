@@ -742,6 +742,7 @@ const importImportedMoneyflow = async (
       usage: mim.usage,
       accountNumberCapitalsource: mim.accountNumberCapitalsource,
       bankCodeCapitalsource: mim.bankCodeCapitalsource,
+      contractpartnerMatchingId: mim.contractpartnerMatchingId,
     };
 
     return ImportedMoneyflowService.importImportedMoneyflow(importedMoneyflow)

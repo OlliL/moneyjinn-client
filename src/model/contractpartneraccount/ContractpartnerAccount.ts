@@ -3,4 +3,5 @@ export type ContractpartnerAccount = {
   contractpartnerid: number;
   accountNumber: string;
   bankCode: string;
+  lastUsed?: Date;
 };

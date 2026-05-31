@@ -347,7 +347,6 @@ watch(isPopoverOpen, async (val) => {
 
     setTimeout(() => {
       if (datepickerContainer.value) {
-        console.log("scroll");
         datepickerContainer.value.scrollIntoView({
           behavior: "smooth",
           block: "start",

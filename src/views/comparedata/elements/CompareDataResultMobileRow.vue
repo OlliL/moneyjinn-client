@@ -319,6 +319,7 @@ const createMoneyflow = () => {
     contractpartnerName: props.importData.contractpartnerName,
     postingAccountId: props.importData.postingAccountId,
     postingAccountName: props.importData.postingAccountName,
+    contractpartnerMatchingId: props.importData?.contractpartnerMatchingId,
   } as Moneyflow;
   emit("createMoneyflow", moneyflowToCreate);
 };

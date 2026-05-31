@@ -17,6 +17,7 @@ export function mapCCompareDataDatasetTransportToModel(
     postingAccountId: transport.postingAccountId,
     postingAccountName: transport.postingAccountName,
     moneyflowComment: transport.moneyflowComment,
+    contractpartnerMatchingId: transport.contractpartnerMatchingId,
   };
   model.bookingDate.setHours(0, 0, 0, 0);
   model.invoiceDate?.setHours(0, 0, 0, 0);

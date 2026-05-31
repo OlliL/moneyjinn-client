@@ -12,6 +12,7 @@ export function mapContractpartnerMatchingTransportToModel(
     postingAccountId: transport.postingAccountId,
     postingAccountName: transport.postingAccountName,
     moneyflowComment: transport.moneyflowComment,
+    lastUsed: transport.lastUsed ? new Date(transport.lastUsed) : undefined,
   };
   return model;
 }
@@ -26,6 +27,7 @@ export function mapContractpartnerMatchingToTransport(
     postingAccountId: model.postingAccountId,
     postingAccountName: model.postingAccountName,
     moneyflowComment: model.moneyflowComment,
+    lastUsed: model.lastUsed ? model.lastUsed.toISOString() : undefined,
   };
   return transport;
 }

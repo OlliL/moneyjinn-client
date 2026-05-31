@@ -26,6 +26,7 @@ export function mapMoneyflowTransportToModel(
     moneyflowSplitEntries: splitEntries?.map((mse) => {
       return mapMoneyflowSplitEntryTransportToModel(mse);
     }),
+    contractpartnerMatchingId: transport.contractpartnerMatchingId,
   };
   model.bookingDate.setHours(0, 0, 0, 0);
   model.bookingDate.setHours(0, 0, 0, 0);
@@ -48,6 +49,7 @@ export function mapMoneyflowToTransport(model: Moneyflow): MoneyflowTransport {
     comment: model.comment,
     privat: model.private ? 1 : 0,
     postingaccountid: model.postingAccountId,
+    contractpartnerMatchingId: model.contractpartnerMatchingId,
   };
   return transport;
 }

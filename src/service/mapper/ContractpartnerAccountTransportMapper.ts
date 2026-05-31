@@ -9,6 +9,7 @@ export function mapContractpartnerAccountTransportToModel(
     contractpartnerid: transport.contractpartnerid,
     accountNumber: transport.accountNumber,
     bankCode: transport.bankCode,
+    lastUsed: transport.lastUsed ? new Date(transport.lastUsed) : undefined,
   };
   return model;
 }
@@ -21,6 +22,7 @@ export function mapContractpartnerAccountToTransport(
     contractpartnerid: model.contractpartnerid,
     accountNumber: model.accountNumber,
     bankCode: model.bankCode,
+    lastUsed: model.lastUsed ? model.lastUsed.toISOString() : undefined,
   };
   return transport;
 }
