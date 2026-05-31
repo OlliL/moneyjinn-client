@@ -12,6 +12,9 @@
     <TableCell class="text-left border-r py-1 px-2">
       {{ mcm.postingAccountName }}
     </TableCell>
+    <TableCell class="text-center border-r py-1 px-2">
+      <SpanDate :date="mcm.lastUsed" />
+    </TableCell>
     <ButtonTableIcon
       :title="$t('General.edit')"
       :test-id="`contractpartner-matching-edit-${mcm.id}`"
@@ -31,6 +34,7 @@
 
 <script lang="ts" setup>
 import ButtonTableIcon from "@/components/common/ButtonTableIcon.vue";
+import SpanDate from "@/components/common/SpanDate.vue";
 import { TableCell, TableRow } from "@/components/ui/table";
 import type { ContractpartnerMatching } from "@/model/contractpartnermatching/ContractpartnerMatching";
 import { Pencil, Trash2 } from "lucide-vue-next";

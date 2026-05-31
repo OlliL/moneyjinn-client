@@ -1,5 +1,7 @@
 {
   "General": {
+    "lastUsed": "Last Used",
+    "lastUsedShort": "Last",
     "markAsFav": "Mark as Favorite",
     "close": "Close",
     "displayOptions": "Display Options",
@@ -411,8 +413,6 @@
   "PreDefMoneyflow": {
     "onceAMonth": "Only Once per Month",
     "onceAMonthShort": "1x",
-    "lastUsed": "Last Used",
-    "lastUsedShort": "Last",
     "createDate": "Created",
     "searchBy": "Search by Business Partner...",
     "preview": "Preview",

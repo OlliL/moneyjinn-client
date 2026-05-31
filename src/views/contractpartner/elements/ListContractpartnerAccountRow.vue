@@ -6,6 +6,9 @@
     <TableCell class="text-left border">
       {{ mca.bankCode }}
     </TableCell>
+    <TableCell class="text-center border-r py-1 px-2">
+      <SpanDate :date="mca.lastUsed" />
+    </TableCell>
     <ButtonTableIcon
       :title="$t('General.edit')"
       @click="editContractpartnerAccount"
@@ -28,6 +31,7 @@ import type { PropType } from "vue";
 import { TableCell, TableRow } from "@/components/ui/table";
 
 import ButtonTableIcon from "@/components/common/ButtonTableIcon.vue";
+import SpanDate from "@/components/common/SpanDate.vue";
 import SpanIban from "@/components/common/SpanIban.vue";
 import type { ContractpartnerAccount } from "@/model/contractpartneraccount/ContractpartnerAccount";
 

@@ -18,6 +18,9 @@
           <TableHead class="table-head-cell">{{
             $t("General.postingAccount")
           }}</TableHead>
+          <TableHead class="table-head-cell">{{
+            $t("General.lastUsed")
+          }}</TableHead>
           <TableHead colspan="2"></TableHead>
         </TableRow>
       </TableHeader>

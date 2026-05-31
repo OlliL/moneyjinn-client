@@ -10,9 +10,11 @@
       <ModalDeleteRow :label="$t('General.iban')" highlight-value>
         <SpanIban :iban="mca.accountNumber" />
       </ModalDeleteRow>
-
       <ModalDeleteRow :label="$t('General.bic')">
         {{ mca.bankCode }}
+      </ModalDeleteRow>
+      <ModalDeleteRow :label="$t('General.lastUsed')">
+        <SpanDate :date="mca.lastUsed" />
       </ModalDeleteRow>
     </template>
   </ModalDelete>
@@ -21,6 +23,7 @@
 <script lang="ts" setup>
 import ModalDelete from "@/components/common/ModalDelete.vue";
 import ModalDeleteRow from "@/components/common/ModalDeleteRow.vue";
+import SpanDate from "@/components/common/SpanDate.vue";
 import SpanIban from "@/components/common/SpanIban.vue";
 import type { ContractpartnerAccount } from "@/model/contractpartneraccount/ContractpartnerAccount";
 import ContractpartnerAccountService from "@/service/ContractpartnerAccountService";

@@ -61,6 +61,12 @@
               }}</span>
               <span class="text-right">{{ mcm.postingAccountName }}</span>
             </div>
+            <div class="flex justify-between gap-2">
+              <span class="text-muted-foreground">{{
+                $t("General.lastUsed")
+              }}</span>
+              <span class="text-right"><SpanDate :date="mcm.lastUsed" /></span>
+            </div>
           </div>
         </AccordionContent>
       </AccordionItem>
@@ -69,6 +75,7 @@
 </template>
 
 <script lang="ts" setup>
+import SpanDate from "@/components/common/SpanDate.vue";
 import {
   Accordion,
   AccordionContent,

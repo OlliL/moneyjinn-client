@@ -35,6 +35,9 @@
               }}</TableHead>
               <TableHead class="table-head-cell"></TableHead>
               <TableHead class="table-head-cell"></TableHead>
+              <TableHead class="table-head-cell">{{
+                $t("General.lastUsed")
+              }}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -80,6 +83,9 @@
               /></span>
               <span class="text-xs text-muted-foreground">
                 {{ mca.bankCode }}
+              </span>
+              <span class="text-xs text-muted-foreground" v-if="mca.lastUsed">
+                {{ $t("General.lastUsed") }}: <SpanDate :date="mca.lastUsed" />
               </span>
             </div>
             <div class="flex items-center gap-1">
@@ -139,6 +145,7 @@ import type { Contractpartner } from "@/model/contractpartner/Contractpartner";
 import type { ContractpartnerAccount } from "@/model/contractpartneraccount/ContractpartnerAccount";
 import ContractpartnerAccountService from "@/service/ContractpartnerAccountService";
 
+import SpanDate from "@/components/common/SpanDate.vue";
 import SpanIban from "@/components/common/SpanIban.vue";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 

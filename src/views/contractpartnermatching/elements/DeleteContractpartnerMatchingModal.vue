@@ -24,6 +24,10 @@
       <ModalDeleteRow :label="$t('General.postingAccount')">
         {{ mcm.postingAccountName }}
       </ModalDeleteRow>
+
+      <ModalDeleteRow :label="$t('General.lastUsed')">
+        <SpanDate :date="mcm.lastUsed" />
+      </ModalDeleteRow>
     </template>
   </ModalDelete>
 </template>
@@ -31,6 +35,7 @@
 <script lang="ts" setup>
 import ModalDelete from "@/components/common/ModalDelete.vue";
 import ModalDeleteRow from "@/components/common/ModalDeleteRow.vue";
+import SpanDate from "@/components/common/SpanDate.vue";
 import type { ContractpartnerMatching } from "@/model/contractpartnermatching/ContractpartnerMatching";
 import ContractpartnerMatchingService from "@/service/ContractpartnerMatchingService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";

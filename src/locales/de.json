@@ -1,5 +1,7 @@
 {
   "General": {
+    "lastUsed": "zuletzt verwendet",
+    "lastUsedShort": "zuletzt",
     "markAsFav": "Als Favorit markieren",
     "close": "Schließen",
     "filterData": "Daten filtern",
@@ -410,8 +412,6 @@
   "PreDefMoneyflow": {
     "onceAMonth": "nur 1x pro Monat",
     "onceAMonthShort": "1x",
-    "lastUsed": "zuletzt verwendet",
-    "lastUsedShort": "zuletzt",
     "createDate": "angelegt",
     "searchBy": "Suchen nach Vertragspartner...",
     "preview": "Vorschau",
