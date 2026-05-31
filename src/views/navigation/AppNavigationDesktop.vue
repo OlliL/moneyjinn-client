@@ -70,7 +70,7 @@
           exact-active-class="bg-muted text-primary font-medium"
           :to="{ name: Routes.CompareData, force: true }"
           :title="$t('CompareData.title')"
-          ><ListTodo class="m-2 text-muted-foreground"
+          ><Scale class="m-2 text-muted-foreground"
         /></router-link>
       </MenubarTrigger>
     </MenubarMenu>
@@ -333,12 +333,13 @@ import {
   Euro,
   Home,
   Import,
-  ListTodo,
   LogOut,
-  Search, SquarePlus,
+  Scale,
+  Search,
+  SquarePlus,
   SquareUserRound,
   Table2,
-  Wrench
+  Wrench,
 } from "lucide-vue-next";
 import { useRoute } from "vue-router";
 import { version } from "../../../package.json";

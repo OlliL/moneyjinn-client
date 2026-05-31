@@ -62,7 +62,7 @@
             @click="isMenuOpen = false"
             class="flex items-center gap-2 p-1 hover:bg-accent rounded-md !text-foreground !no-underline"
             :to="{ name: Routes.CompareData, force: true }"
-            ><ListTodo :size="20" />{{ $t("CompareData.title") }}</router-link
+            ><Scale :size="20" />{{ $t("CompareData.title") }}</router-link
           >
 
           <Collapsible class="w-full space-y-1">
@@ -381,9 +381,9 @@ import {
   Euro,
   Home,
   Import,
-  ListTodo,
   LogOut,
   Menu,
+  Scale,
   Search,
   SquarePlus,
   SquareUserRound,
