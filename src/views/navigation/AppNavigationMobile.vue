@@ -54,7 +54,7 @@
             @click="isMenuOpen = false"
             class="flex items-center gap-2 p-1 hover:bg-accent rounded-md !text-foreground !no-underline"
             :to="{ name: Routes.ImportMoneyflows, force: true }"
-            ><SquareArrowRightEnter :size="20" />{{
+            ><Import :size="20" />{{
               $t("Moneyflow.title.import")
             }}</router-link
           >
@@ -380,11 +380,11 @@ import {
   ChevronDown,
   Euro,
   Home,
+  Import,
   ListTodo,
   LogOut,
   Menu,
   Search,
-  SquareArrowRightEnter,
   SquarePlus,
   SquareUserRound,
   Table2,

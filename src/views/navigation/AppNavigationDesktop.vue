@@ -59,7 +59,7 @@
           exact-active-class="bg-muted text-primary font-medium"
           :to="{ name: Routes.ImportMoneyflows, force: true }"
           :title="$t('Moneyflow.title.import')"
-          ><SquareArrowRightEnter class="m-2 text-muted-foreground"
+          ><Import class="m-2 text-muted-foreground"
         /></router-link>
       </MenubarTrigger>
     </MenubarMenu>
@@ -332,14 +332,13 @@ import {
   ChevronDown,
   Euro,
   Home,
+  Import,
   ListTodo,
   LogOut,
-  Search,
-  SquareArrowRightEnter,
-  SquarePlus,
+  Search, SquarePlus,
   SquareUserRound,
   Table2,
-  Wrench,
+  Wrench
 } from "lucide-vue-next";
 import { useRoute } from "vue-router";
 import { version } from "../../../package.json";
