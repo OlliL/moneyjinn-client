@@ -15,7 +15,7 @@
 
   <ModalVue
     :title="mcp.name + ': ' + $t('General.contractpartnerAccounts')"
-    max-width="max-w-md"
+    max-width="!max-w-xl"
     ref="modalComponent"
   >
     <template #body>
@@ -33,11 +33,11 @@
               <TableHead class="table-head-cell">{{
                 $t("General.bic")
               }}</TableHead>
-              <TableHead class="table-head-cell"></TableHead>
-              <TableHead class="table-head-cell"></TableHead>
               <TableHead class="table-head-cell">{{
-                $t("General.lastUsed")
+                $t("General.lastUsedShort")
               }}</TableHead>
+              <TableHead class="table-head-cell"></TableHead>
+              <TableHead class="table-head-cell"></TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
