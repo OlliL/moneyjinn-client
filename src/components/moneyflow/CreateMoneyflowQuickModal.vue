@@ -24,7 +24,7 @@
               <span class="truncate">{{ preDef.capitalsourceComment }}</span>
             </div>
             <div v-if="preDef.lastUsed" class="shrink-0 whitespace-nowrap">
-              {{ $t("PreDefMoneyflow.lastUsedShort") }}:
+              {{ $t("General.lastUsedShort") }}:
               <SpanDate :date="preDef.lastUsed" />
             </div>
           </div>
