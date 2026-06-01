@@ -26,6 +26,7 @@
                   id="bookingdate"
                   :field-label="$t('General.year')"
                   pick-mode="year"
+                  picker-side="top"
                 />
               </div>
 

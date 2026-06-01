@@ -40,6 +40,7 @@
                       :validation-schema="schema.startDate"
                       id="startDate"
                       :field-label="$t('General.startDate')"
+                      picker-side="top"
                     />
                   </div>
                   <div class="md:col-span-3">
@@ -48,6 +49,8 @@
                       :validation-schema="schema.endDate"
                       id="endDate"
                       :field-label="$t('General.endDate')"
+                      picker-side="top"
+                      picker-align="end"
                     />
                   </div>
                   <div class="md:col-span-3">

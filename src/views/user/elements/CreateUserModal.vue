@@ -84,6 +84,7 @@
                       :validation-schema="schema.validFrom"
                       :id="'validFrom' + idSuffix"
                       :field-label="$t('General.validFrom')"
+                      picker-side="top"
                     />
                   </div>
                   <div v-if="editMode">

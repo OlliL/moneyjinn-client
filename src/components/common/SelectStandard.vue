@@ -255,10 +255,10 @@ const onBlur = () => {
     const isInsideDropdown =
       dropdownRef.value?.contains(activeEl) || getInputElement() === activeEl;
 
-    if (!isInsideDropdown && !isOpen.value) {
-      // Only hide if not already open and focus is truly outside
-      preventOnFocus.value = true;
-      hideDropdown();
+    if (!isInsideDropdown) {
+      if (isOpen.value) {
+        hideDropdown();
+      }
       setFieldValue();
     }
   }, 100);

@@ -30,6 +30,7 @@
                   id="endDateMonth"
                   pickMode="month"
                   :field-label="$t('General.endDate')"
+                  picker-align="end"
                 />
               </div>
 
@@ -49,6 +50,7 @@
                   id="endDateYear"
                   pickMode="year"
                   :field-label="$t('General.endDate')"
+                  picker-align="end"
                 />
               </div>
 

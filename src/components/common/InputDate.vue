@@ -45,7 +45,9 @@
 
       <PopoverContent
         class="p-0 w-auto"
-        align="end"
+        :align="pickerAlign"
+        :avoid-collisions="false"
+        :side="pickerSide"
         :side-offset="5"
         :style="{ zIndex: popoverZIndex }"
       >
@@ -120,6 +122,14 @@ const props = defineProps({
     type: String,
     default: "day",
   },
+  pickerSide: {
+    type: String as PropType<"top" | "bottom">,
+    default: "bottom",
+  },
+  pickerAlign: {
+    type: String as PropType<"start" | "center" | "end">,
+    default: "start",
+  },
 });
 
 const { t } = useI18n();
@@ -176,7 +186,15 @@ const {
   syncVModel: false,
 });
 let datepicker = {} as Datepicker;
-const getInputElement = () => fieldRef.value?.$el as HTMLInputElement;
+const getInputElement = () => {
+  const refValue = fieldRef.value as unknown as
+    | HTMLInputElement
+    | { $el?: HTMLInputElement }
+    | undefined;
+  if (!refValue) return undefined;
+  if ("$el" in refValue && refValue.$el) return refValue.$el;
+  return refValue as HTMLInputElement;
+};
 
 const onBlur = (event: FocusEvent) => {
   handleBlur(event);
@@ -346,12 +364,10 @@ watch(isPopoverOpen, async (val) => {
     initDatepicker();
 
     setTimeout(() => {
-      if (datepickerContainer.value) {
-        datepickerContainer.value.scrollIntoView({
-          behavior: "smooth",
-          block: "start",
-        });
-      }
+      datepickerContainer.value?.scrollIntoView({
+        behavior: "smooth",
+        block: props.pickerSide === "top" ? "start" : "end",
+      });
     }, 250);
   }
 });

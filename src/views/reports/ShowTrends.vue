@@ -28,6 +28,7 @@
                   id="endDate"
                   pickMode="month"
                   :field-label="$t('General.endDate')"
+                  picker-align="end"
                 />
               </div>
             </div>

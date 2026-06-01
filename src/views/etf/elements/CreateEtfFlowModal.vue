@@ -25,6 +25,7 @@
                   :validation-schema="schema.timestamp"
                   id="bookingdate"
                   :field-label="$t('ETFFlow.bookingdate')"
+                  picker-side="top"
                 />
               </div>
               <div>

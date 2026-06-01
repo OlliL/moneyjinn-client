@@ -49,6 +49,8 @@
                 :validation-schema="schema.bookingDate"
                 :field-label="$t('Moneyflow.bookingdate')"
                 class="flex-1 min-w-0"
+                picker-side="top"
+                picker-align="center"
               />
               <Button
                 variant="ghost"

@@ -22,6 +22,7 @@
               id="selectedMonth"
               :field-label="$t('General.month')"
               pick-mode="month"
+              picker-align="center"
             />
           </div>
         </div>

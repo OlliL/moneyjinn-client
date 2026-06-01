@@ -1,5 +1,4 @@
 <template>
-  <ReceiptModal ref="receiptModal" />
   <DeleteMoneyflowModalVue
     ref="deleteModal"
     @moneyflow-deleted="searchMoneyflows"
@@ -7,6 +6,7 @@
   <EditMoneyflowModalVue
     ref="editModal"
     @moneyflow-updated="searchMoneyflows"
+    @show-receipt="showReceipt"
   />
 
   <ListMoneyflowModalDesktop
@@ -19,6 +19,8 @@
     @show-receipt="showReceipt"
     v-else
   />
+
+  <ReceiptModal ref="receiptModal" />
 
   <div class="custom-container space-y-6">
     <div class="text-center">
@@ -47,6 +49,7 @@
                   :validation-schema="schema.endDate"
                   id="endDate"
                   :field-label="$t('General.endDate')"
+                  picker-align="end"
                 />
               </div>
               <div class="col-span-2 md:col-span-6">

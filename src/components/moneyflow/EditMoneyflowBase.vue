@@ -16,6 +16,7 @@
         :validation-schema="schema.invoiceDate"
         :id="'invoiceDate' + idSuffix"
         :field-label="$t('Moneyflow.invoicedate')"
+        picker-align="end"
       />
     </div>
     <div class="col-span-2 md:col-span-4">

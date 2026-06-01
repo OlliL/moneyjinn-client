@@ -30,6 +30,7 @@
                   :validation-schema="schema.endDate"
                   id="endDate"
                   :field-label="$t('General.endDate')"
+                  picker-align="end"
                 />
               </div>
               <div class="col-span-6 md:col-span-4">
