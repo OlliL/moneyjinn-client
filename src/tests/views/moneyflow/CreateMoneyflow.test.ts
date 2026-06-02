@@ -198,11 +198,11 @@ beforeEach(() => {
   setActivePinia(createPinia());
   vi.clearAllMocks();
   applyDefaultMocks();
+  useUserSessionStore().setUserSession({ userId: 1 } as UserSession);
 });
 
 test("render - form initialized", async () => {
   await StoreService.getInstance().initAllStores();
-  useUserSessionStore().setUserSession({ userId: 1 } as UserSession);
 
   render(CreateMoneyflow);
 
@@ -236,7 +236,6 @@ test("render - form initialized", async () => {
 
 test("select a PreDefMoneyflow - fill input fields", async () => {
   await StoreService.getInstance().initAllStores();
-  useUserSessionStore().setUserSession({ userId: 1 } as UserSession);
 
   render(CreateMoneyflow);
 
@@ -260,7 +259,6 @@ test("select a PreDefMoneyflow - fill input fields", async () => {
 // Test 1: Reset button clears the form
 test("reset button clears all form fields", async () => {
   await StoreService.getInstance().initAllStores();
-  useUserSessionStore().setUserSession({ userId: 1 } as UserSession);
 
   render(CreateMoneyflow);
 
@@ -280,7 +278,6 @@ test("reset button clears all form fields", async () => {
 // Test 2: Select PreDefMoneyflow -> reset -> back to empty state
 test("reset after PreDefMoneyflow selection restores once/favorite toggles", async () => {
   await StoreService.getInstance().initAllStores();
-  useUserSessionStore().setUserSession({ userId: 1 } as UserSession);
 
   render(CreateMoneyflow);
 
@@ -322,7 +319,6 @@ test("PreDefMoneyflow with onceAMonth used this month is not shown in select", a
   PreDefMoneyflowServiceMocker.mockFetchAllPreDefMoneyflow([onceAMonthUsed]);
 
   await StoreService.getInstance().initAllStores();
-  useUserSessionStore().setUserSession({ userId: 1 } as UserSession);
 
   render(CreateMoneyflow);
 
@@ -335,7 +331,6 @@ test("PreDefMoneyflow with onceAMonth used this month is not shown in select", a
 // Test 9: Successful submit -> form resets
 test("successful submit resets the form", async () => {
   await StoreService.getInstance().initAllStores();
-  useUserSessionStore().setUserSession({ userId: 1 } as UserSession);
 
   MoneyflowServiceMocker.mockCreateMoneyflowResolved();
 
@@ -363,7 +358,6 @@ test("successful submit resets the form", async () => {
 // Test 10: Failed submit -> server error is shown
 test("failed submit shows server error message", async () => {
   await StoreService.getInstance().initAllStores();
-  useUserSessionStore().setUserSession({ userId: 1 } as UserSession);
 
   const backendError = new BackendError(
     BackendErrorType.ERROR,
@@ -390,4 +384,42 @@ test("failed submit shows server error message", async () => {
   await CreateMoneyflowView.ServerErrorItem.assertMessageContains(
     "Server not reachable",
   );
+});
+
+test("successful submit of onceAMonth PreDefMoneyflow removes it from list", async () => {
+  const mpm: PreDefMoneyflow = {
+    id: 10,
+    userId: 1,
+    amount: 10,
+    capitalsourceId: 2,
+    contractpartnerId: 1,
+    contractpartnerName: "Contractpartner 1",
+    comment: "onceAMonth test",
+    createDate: new Date("2010-01-01"),
+    onceAMonth: true,
+    postingAccountId: 1,
+  } as PreDefMoneyflow;
+
+  PreDefMoneyflowServiceMocker.mockFetchAllPreDefMoneyflow([mpm]);
+
+  await StoreService.getInstance().initAllStores();
+
+  render(CreateMoneyflow);
+
+  await CreateMoneyflowView.SelectMoneyflow.waitForSelectedText("New Booking");
+  await CreateMoneyflowView.SelectMoneyflow.selectOption(
+    "10",
+    "Contractpartner 1 | 10.00 € | onceAMonth test",
+  );
+
+  await CreateMoneyflowView.SaveButton.click();
+
+  await assertHaveBeenCalledOnce(MoneyflowService.createMoneyflow);
+
+  // Form should be reset (back to "New Booking")
+  await CreateMoneyflowView.SelectMoneyflow.waitForSelectedText("New Booking");
+
+  // The PreDefMoneyflow should be removed from the selection list
+  await CreateMoneyflowView.SelectMoneyflow.open();
+  await CreateMoneyflowView.SelectMoneyflow.assertOptionMissingByValue("10");
 });

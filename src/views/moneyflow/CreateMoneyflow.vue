@@ -149,7 +149,15 @@ const selectPreDefMoneyflow = () => {
 
 const createMoneyflow = handleSubmit(() => {
   editMoneyflowVue.value?.createMoneyflow().then((ret: boolean) => {
-    if (ret) resetForm();
+    if (ret) {
+      if (selectedPreDefMoneyflow.value?.onceAMonth) {
+        const idToRemove = selectedPreDefMoneyflow.value.id;
+        preDefMoneyflows.value = preDefMoneyflows.value.filter(
+          (mpm) => mpm.id !== idToRemove,
+        );
+      }
+      resetForm();
+    }
   });
 });
 
