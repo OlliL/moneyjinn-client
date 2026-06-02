@@ -117,14 +117,14 @@
 
     <ListEtfDepotEtfTable
       :etfSummary="etfSummary"
-      v-if="etfEffectiveFlows.length > 0"
+      v-if="dataLoaded && etfFlows.length"
     />
 
     <CalcEtfSaleForm
       :etf="selectedEtf"
       :etfSummary="etfSummary"
       :pieces="calcEtfSalePieces"
-      v-if="etfEffectiveFlows.length > 0"
+      v-if="dataLoaded && etfFlows.length"
     />
   </div>
 </template>

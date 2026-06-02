@@ -11,7 +11,7 @@
       <h4 class="text-2xl font-bold">{{ $t("CompareData.title") }}</h4>
     </div>
     <div class="flex justify-center">
-      <div class="w-full max-w-6xl card-panel p-4">
+      <div class="w-full max-w-4xl card-panel p-4">
         <form @submit.prevent="compareData" id="compareDataForm">
           <div class="space-y-4">
             <DivError :server-errors="serverErrors" />
