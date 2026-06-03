@@ -230,8 +230,8 @@ const setMobileEffectiveOnly = (value: boolean) => {
   currentTab.value = "all";
 };
 
-const setCurrentTab = (value: "effective" | "all") => {
-  currentTab.value = value;
+const setCurrentTab = (value: "effective" | "all" | undefined) => {
+  currentTab.value = value == "all" ? "all" : "effective";
 };
 
 const loadData = (etfId: number) => {
