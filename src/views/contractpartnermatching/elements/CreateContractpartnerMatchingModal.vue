@@ -93,12 +93,14 @@ import { number, string, ZodType } from "zod";
 
 const { t } = useI18n();
 
-defineProps({
-  idSuffix: {
-    type: String,
-    default: "",
+withDefaults(
+  defineProps<{
+    idSuffix?: string;
+  }>(),
+  {
+    idSuffix: "",
   },
-});
+);
 
 const serverErrors = ref(new Array<string>());
 
@@ -120,10 +122,14 @@ const schema: Partial<{ [key in keyof ContractpartnerMatching]: ZodType }> = {
 const mcm = ref({} as ContractpartnerMatching);
 const origMcm = ref({} as ContractpartnerMatching | undefined);
 const modalComponent = useTemplateRef<typeof ModalVue>("modalComponent");
-const emit = defineEmits([
-  "contractpartnerMatchingCreated",
-  "contractpartnerMatchingUpdated",
-]);
+const emit = defineEmits<{
+  contractpartnerMatchingCreated: [
+    contractpartnerMatching: ContractpartnerMatching,
+  ];
+  contractpartnerMatchingUpdated: [
+    contractpartnerMatching: ContractpartnerMatching,
+  ];
+}>();
 
 const { handleSubmit, values, setFieldTouched } = useForm();
 

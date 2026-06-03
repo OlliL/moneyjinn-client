@@ -41,7 +41,9 @@ const serverErrors = ref(new Array<string>());
 const etfFlow = ref({} as EtfFlow);
 const etfName = ref("");
 const modalComponent = useTemplateRef<typeof ModalDelete>("modalComponent");
-const emit = defineEmits(["etfFlowDeleted"]);
+const emit = defineEmits<{
+  etfFlowDeleted: [etfFlow: EtfFlow];
+}>();
 
 const amountClass = computed(() => {
   return redIfNegative(etfFlow.value.amount);

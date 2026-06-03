@@ -33,34 +33,22 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toTypedSchema } from "@vee-validate/zod";
 import { useField } from "vee-validate";
-import { computed, useTemplateRef, type PropType, type Ref } from "vue";
+import { computed, useTemplateRef, type Ref } from "vue";
 import { any, type ZodType } from "zod";
 
-const props = defineProps({
-  modelValue: {
-    type: undefined,
-    required: false,
+const props = withDefaults(
+  defineProps<{
+    validationSchema?: ZodType;
+    validationSchemaRef?: Ref<ZodType>;
+    id: string;
+    fieldLabel?: string;
+  }>(),
+  {
+    validationSchema: () => any().optional(),
   },
-  validationSchema: {
-    type: Object as PropType<ZodType>,
-    required: false,
-    default: any().optional(),
-  },
-  validationSchemaRef: {
-    type: Object as PropType<Ref<ZodType>>,
-    required: false,
-  },
-  id: {
-    type: String,
-    required: true,
-  },
-  fieldLabel: {
-    type: String,
-    required: false,
-  },
-});
+);
+const model = defineModel<FileList | null | undefined>();
 const fileUpload = useTemplateRef<HTMLInputElement>("fileUpload");
-const emit = defineEmits(["update:modelValue"]);
 
 const schema = computed(() => {
   if (props.validationSchemaRef) {
@@ -83,7 +71,7 @@ const onInput = (event: Event) => {
 
   setState({ touched: true });
   handleChange(event, true);
-  emit("update:modelValue", files);
+  model.value = files;
 };
 
 const isInvalid = computed(() => fieldMeta.touched && !!errorMessage.value);

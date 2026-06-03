@@ -41,14 +41,11 @@ import {
 } from "@/components/ui/table";
 import type { EtfPreliminaryLumpSum } from "@/model/etf/EtfPreliminaryLumpSum";
 import { getMonthName } from "@/tools/views/MonthName";
-import { computed, type PropType } from "vue";
+import { computed } from "vue";
 
-const props = defineProps({
-  mep: {
-    type: Object as PropType<EtfPreliminaryLumpSum>,
-    required: true,
-  },
-});
+const props = defineProps<{
+  mep: EtfPreliminaryLumpSum;
+}>();
 
 type RowData = {
   month: string;

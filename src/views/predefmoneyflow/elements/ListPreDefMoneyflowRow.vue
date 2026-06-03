@@ -59,15 +59,14 @@ import SpanDate from "@/components/common/SpanDate.vue";
 import { TableCell, TableRow } from "@/components/ui/table";
 import type { PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
 import { Pencil, Trash2 } from "lucide-vue-next";
-import type { PropType } from "vue";
 
-const props = defineProps({
-  mpm: {
-    type: Object as PropType<PreDefMoneyflow>,
-    required: true,
-  },
-});
-const emit = defineEmits(["deletePreDefMoneyflow", "editPreDefMoneyflow"]);
+const props = defineProps<{
+  mpm: PreDefMoneyflow;
+}>();
+const emit = defineEmits<{
+  deletePreDefMoneyflow: [preDefMoneyflow: PreDefMoneyflow];
+  editPreDefMoneyflow: [preDefMoneyflow: PreDefMoneyflow];
+}>();
 
 const deletePreDefMoneyflow = () => {
   emit("deletePreDefMoneyflow", props.mpm);

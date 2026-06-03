@@ -147,7 +147,10 @@ const mmf = ref({} as Moneyflow);
 const modalComponent = useTemplateRef<typeof ModalVue>("modalComponent");
 const receipt = ref({} as MoneyflowReceipt);
 
-const emit = defineEmits(["moneyflowUpdated", "moneyflowReceiptDeleted"]);
+const emit = defineEmits<{
+  moneyflowUpdated: [];
+  moneyflowReceiptDeleted: [];
+}>();
 
 const { values, setFieldTouched } = useForm();
 

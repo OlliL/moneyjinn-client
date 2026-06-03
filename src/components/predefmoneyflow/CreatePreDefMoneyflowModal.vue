@@ -283,12 +283,14 @@ import SelectPostingAccount from "../postingaccount/SelectPostingAccount.vue";
 
 const { t } = useI18n();
 
-defineProps({
-  idSuffix: {
-    type: String,
-    default: "",
+withDefaults(
+  defineProps<{
+    idSuffix?: string;
+  }>(),
+  {
+    idSuffix: "",
   },
-});
+);
 
 const serverErrors = ref(new Array<string>());
 
@@ -318,7 +320,10 @@ const origMpm = ref({} as PreDefMoneyflow | undefined);
 const modalComponent = useTemplateRef<typeof ModalVue>("modalComponent");
 const validityDate = new Date();
 validityDate.setHours(0, 0, 0, 0);
-const emit = defineEmits(["preDefMoneyflowCreated", "preDefMoneyflowUpdated"]);
+const emit = defineEmits<{
+  preDefMoneyflowCreated: [preDefMoneyflow: PreDefMoneyflow];
+  preDefMoneyflowUpdated: [preDefMoneyflow: PreDefMoneyflow];
+}>();
 
 const isPopoverOpen = ref(false);
 const randomColors = ref<string[]>([]);

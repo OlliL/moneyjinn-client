@@ -54,39 +54,27 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import type { PropType } from "vue";
+import type { Moneyflow } from "@/model/moneyflow/Moneyflow.ts";
+import type { MoneyflowGroup } from "../SearchMoneyflows.vue";
 
-defineProps({
-  moneyflowGroup: {
-    type: Object as PropType<any>,
-    required: true,
+withDefaults(
+  defineProps<{
+    moneyflowGroup: MoneyflowGroup;
+    groupKey: string;
+    colBookingMonth: boolean;
+    colBookingYear: boolean;
+    colContractpartner: boolean;
+    hideContractpartner?: boolean;
+  }>(),
+  {
+    hideContractpartner: false,
   },
-  groupKey: {
-    type: String,
-    required: true,
-  },
-  colBookingMonth: {
-    type: Boolean,
-    required: true,
-  },
-  colBookingYear: {
-    type: Boolean,
-    required: true,
-  },
-  colContractpartner: {
-    type: Boolean,
-    required: true,
-  },
-  hideContractpartner: {
-    type: Boolean,
-    default: false,
-  },
-});
+);
 
-defineEmits([
-  "showReceipt",
-  "deleteMoneyflow",
-  "editMoneyflow",
-  "listMoneyflow",
-]);
+defineEmits<{
+  showReceipt: [id: number];
+  editMoneyflow: [moneyflow: Moneyflow];
+  deleteMoneyflow: [moneyflow: Moneyflow];
+  listMoneyflow: [moneyflow: Moneyflow];
+}>();
 </script>

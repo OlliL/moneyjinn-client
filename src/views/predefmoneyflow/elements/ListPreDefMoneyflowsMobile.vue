@@ -96,7 +96,7 @@
               </div>
               <div class="flex justify-between gap-2">
                 <span class="text-muted-foreground">{{
-                  $t("PreDefMoneyflow.lastUsed")
+                  $t("General.lastUsed")
                 }}</span>
                 <SpanDate :date="mpm.lastUsed" />
               </div>
@@ -122,16 +122,15 @@ import {
 import { Button } from "@/components/ui/button";
 import type { PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
 import { Pencil, Trash2 } from "lucide-vue-next";
-import type { PropType } from "vue";
 
-defineProps({
-  preDefMoneyflows: {
-    type: Array as PropType<PreDefMoneyflow[]>,
-    required: true,
-  },
-});
+defineProps<{
+  preDefMoneyflows: PreDefMoneyflow[];
+}>();
 
-const emit = defineEmits(["editPreDefMoneyflow", "deletePreDefMoneyflow"]);
+const emit = defineEmits<{
+  deletePreDefMoneyflow: [preDefMoneyflow: PreDefMoneyflow];
+  editPreDefMoneyflow: [preDefMoneyflow: PreDefMoneyflow];
+}>();
 
 const editPreDefMoneyflow = (mpm: PreDefMoneyflow) => {
   emit("editPreDefMoneyflow", mpm);

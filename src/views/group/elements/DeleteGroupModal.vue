@@ -25,7 +25,9 @@ const serverErrors = ref(new Array<string>());
 
 const group = ref({} as Group);
 const modalComponent = useTemplateRef<typeof ModalDelete>("modalComponent");
-const emit = defineEmits(["groupDeleted"]);
+const emit = defineEmits<{
+  groupDeleted: [group: Group];
+}>();
 
 const _show = (_group: Group) => {
   group.value = _group;

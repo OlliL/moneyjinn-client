@@ -34,7 +34,7 @@
         <SpanDate :date="mpm.createDate" />
       </ModalDeleteRow>
 
-      <ModalDeleteRow :label="$t('PreDefMoneyflow.lastUsed')">
+      <ModalDeleteRow :label="$t('General.lastUsed')">
         <SpanDate :date="mpm.lastUsed" />
       </ModalDeleteRow>
 
@@ -67,7 +67,9 @@ const serverErrors = ref(new Array<string>());
 
 const mpm = ref({} as PreDefMoneyflow);
 const modalComponent = useTemplateRef<typeof ModalDelete>("modalComponent");
-const emit = defineEmits(["preDefMoneyflowDeleted"]);
+const emit = defineEmits<{
+  preDefMoneyflowDeleted: [preDefMoneyflow: PreDefMoneyflow];
+}>();
 
 const _show = (_mpm: PreDefMoneyflow) => {
   mpm.value = _mpm;

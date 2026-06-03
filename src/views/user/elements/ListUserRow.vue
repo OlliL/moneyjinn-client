@@ -33,20 +33,20 @@ import { TableCell, TableRow } from "@/components/ui/table";
 import type { User } from "@/model/user/User";
 import { userRoleNames } from "@/model/user/UserRole";
 import { Pencil, Trash2 } from "lucide-vue-next";
-import { computed, type PropType } from "vue";
+import { computed } from "vue";
 
-const props = defineProps({
-  user: {
-    type: Object as PropType<User>,
-    required: true,
-  },
-});
+const props = defineProps<{
+  user: User;
+}>();
 
 const role = computed(() => {
   return userRoleNames[props.user.role];
 });
 
-const emit = defineEmits(["deleteUser", "editUser"]);
+const emit = defineEmits<{
+  deleteUser: [user: User];
+  editUser: [user: User];
+}>();
 
 const deleteUser = () => {
   emit("deleteUser", props.user);

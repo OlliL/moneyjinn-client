@@ -38,19 +38,19 @@ import SpanDate from "@/components/common/SpanDate.vue";
 import { TableCell, TableRow } from "@/components/ui/table";
 import type { ContractpartnerMatching } from "@/model/contractpartnermatching/ContractpartnerMatching";
 import { Pencil, Trash2 } from "lucide-vue-next";
-import type { PropType } from "vue";
 
-const props = defineProps({
-  mcm: {
-    type: Object as PropType<ContractpartnerMatching>,
-    required: true,
-  },
-});
+const props = defineProps<{
+  mcm: ContractpartnerMatching;
+}>();
 
-const emit = defineEmits([
-  "deleteContractpartnerMatching",
-  "editContractpartnerMatching",
-]);
+const emit = defineEmits<{
+  deleteContractpartnerMatching: [
+    contractpartnerMatching: ContractpartnerMatching,
+  ];
+  editContractpartnerMatching: [
+    contractpartnerMatching: ContractpartnerMatching,
+  ];
+}>();
 
 const deleteContractpartnerMatching = () => {
   emit("deleteContractpartnerMatching", props.mcm);

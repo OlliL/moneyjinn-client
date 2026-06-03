@@ -64,21 +64,17 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import type { Capitalsource } from "@/model/capitalsource/Capitalsource";
-import type { PropType } from "vue";
 import ListCapitalsourceRowVue from "./ListCapitalsourceRow.vue";
 
-defineProps({
-  capitalsources: {
-    type: Array as PropType<Capitalsource[]>,
-    required: true,
-  },
-  userId: {
-    type: Number,
-    required: true,
-  },
-});
+defineProps<{
+  capitalsources: Capitalsource[];
+  userId: number;
+}>();
 
-const emit = defineEmits(["deleteCapitalsource", "editCapitalsource"]);
+const emit = defineEmits<{
+  deleteCapitalsource: [capitalsource: Capitalsource];
+  editCapitalsource: [capitalsource: Capitalsource];
+}>();
 
 const deleteCapitalsource = (mcs: Capitalsource) => {
   emit("deleteCapitalsource", mcs);

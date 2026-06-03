@@ -39,7 +39,7 @@
 </template>
 <script lang="ts" setup>
 import { Pencil, Trash2 } from "lucide-vue-next";
-import { computed, type PropType } from "vue";
+import { computed } from "vue";
 
 import { TableCell, TableRow } from "@/components/ui/table";
 
@@ -53,17 +53,14 @@ import { capitalsourceImportNames } from "@/model/capitalsource/CapitalsourceImp
 import { capitalsourceStateNames } from "@/model/capitalsource/CapitalsourceState";
 import { capitalsourceTypeNames } from "@/model/capitalsource/CapitalsourceType";
 
-const props = defineProps({
-  mcs: {
-    type: Object as PropType<Capitalsource>,
-    required: true,
-  },
-  owner: {
-    type: Boolean,
-    required: true,
-  },
-});
-const emit = defineEmits(["deleteCapitalsource", "editCapitalsource"]);
+const props = defineProps<{
+  mcs: Capitalsource;
+  owner: boolean;
+}>();
+const emit = defineEmits<{
+  deleteCapitalsource: [capitalsource: Capitalsource];
+  editCapitalsource: [capitalsource: Capitalsource];
+}>();
 
 const importAllowedColorClass = computed(() => {
   return props.mcs.importAllowed > 0 ? "text-green-600" : "text-red-600";

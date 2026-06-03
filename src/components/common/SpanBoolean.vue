@@ -10,12 +10,9 @@ import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
 
-const props = defineProps({
-  value: {
-    type: Boolean,
-    required: false,
-  },
-});
+const props = defineProps<{
+  value?: boolean;
+}>();
 
 const colorClass = computed(() => {
   return props.value ? "text-green-600" : "text-red-600";

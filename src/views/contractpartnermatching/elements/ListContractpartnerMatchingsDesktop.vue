@@ -46,20 +46,20 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import type { ContractpartnerMatching } from "@/model/contractpartnermatching/ContractpartnerMatching";
-import type { PropType } from "vue";
 import ListContractpartnerMatchingRowVue from "./ListContractpartnerMatchingRow.vue";
 
-defineProps({
-  contractpartnerMatchings: {
-    type: Array as PropType<ContractpartnerMatching[]>,
-    required: true,
-  },
-});
+defineProps<{
+  contractpartnerMatchings: ContractpartnerMatching[];
+}>();
 
-const emit = defineEmits([
-  "editContractpartnerMatching",
-  "deleteContractpartnerMatching",
-]);
+const emit = defineEmits<{
+  editContractpartnerMatching: [
+    contractpartnerMatching: ContractpartnerMatching,
+  ];
+  deleteContractpartnerMatching: [
+    contractpartnerMatching: ContractpartnerMatching,
+  ];
+}>();
 
 const editContractpartnerMatching = (mcm: ContractpartnerMatching) => {
   emit("editContractpartnerMatching", mcm);

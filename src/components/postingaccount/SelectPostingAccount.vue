@@ -23,32 +23,25 @@ import type { PostingAccount } from "@/model/postingaccount/PostingAccount";
 import { usePostingAccountStore } from "@/stores/PostingAccountStore";
 import { useUserSessionStore } from "@/stores/UserSessionStore";
 import { SquarePlus } from "lucide-vue-next";
-import { computed, useTemplateRef, type PropType, type Ref } from "vue";
+import { computed, useTemplateRef, type Ref } from "vue";
 import { any, type ZodType } from "zod";
 import SelectStandard from "../common/SelectStandard.vue";
 import CreatePostingAccountModalVue from "./CreatePostingAccountModal.vue";
 
 const postingAccountId = defineModel({ type: Number });
 
-const props = defineProps({
-  validationSchema: {
-    type: Object as PropType<ZodType>,
-    required: false,
-    default: any().optional(),
+const props = withDefaults(
+  defineProps<{
+    validationSchema?: ZodType;
+    validationSchemaRef?: Ref<ZodType>;
+    fieldLabel: string;
+    idSuffix?: string;
+  }>(),
+  {
+    validationSchema: () => any().optional(),
+    idSuffix: "",
   },
-  validationSchemaRef: {
-    type: Object as PropType<Ref<ZodType>>,
-    required: false,
-  },
-  fieldLabel: {
-    type: String,
-    required: true,
-  },
-  idSuffix: {
-    type: String,
-    default: "",
-  },
-});
+);
 
 const createPostingAccountModal = useTemplateRef<
   typeof CreatePostingAccountModalVue

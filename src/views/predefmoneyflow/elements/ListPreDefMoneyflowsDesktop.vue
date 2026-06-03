@@ -26,7 +26,7 @@
             $t("PreDefMoneyflow.createDate")
           }}</TableHead>
           <TableHead class="table-head-cell">{{
-            $t("PreDefMoneyflow.lastUsed")
+            $t("General.lastUsed")
           }}</TableHead>
           <TableHead colspan="2"></TableHead>
         </TableRow>
@@ -62,17 +62,16 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import type { PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
-import type { PropType } from "vue";
 import ListPreDefMoneyflowRowVue from "./ListPreDefMoneyflowRow.vue";
 
-defineProps({
-  preDefMoneyflows: {
-    type: Array as PropType<PreDefMoneyflow[]>,
-    required: true,
-  },
-});
+defineProps<{
+  preDefMoneyflows: PreDefMoneyflow[];
+}>();
 
-const emit = defineEmits(["editPreDefMoneyflow", "deletePreDefMoneyflow"]);
+const emit = defineEmits<{
+  deletePreDefMoneyflow: [preDefMoneyflow: PreDefMoneyflow];
+  editPreDefMoneyflow: [preDefMoneyflow: PreDefMoneyflow];
+}>();
 
 const editPreDefMoneyflow = (mpm: PreDefMoneyflow) => {
   emit("editPreDefMoneyflow", mpm);

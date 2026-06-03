@@ -21,8 +21,8 @@
       title-key="General.preliminaryLumpSums"
       label-key="General.year"
       select-label-key="General.select"
-      @select-year="$emit('select-year', $event)"
-      @select-current-month="$emit('select-current-month')"
+      @select-year="$emit('selectYear', $event)"
+      @select-current-month="$emit('selectCurrentMonth')"
     />
 
     <div
@@ -37,12 +37,12 @@
       <ButtonMobileDelete
         data-testid="preliminary-lump-sum-mobile-delete"
         v-if="etfPreliminaryLumpSum !== undefined"
-        @click="$emit('open-delete')"
+        @click="$emit('openDelete')"
       />
       <ButtonMobileEdit
         data-testid="preliminary-lump-sum-mobile-edit"
         v-if="etfPreliminaryLumpSum !== undefined"
-        @click="$emit('open-edit')"
+        @click="$emit('openEdit')"
       />
 
       <slot
@@ -76,10 +76,10 @@ defineProps<{
 }>();
 
 const emit = defineEmits<{
-  (e: "select-year", year: string): void;
-  (e: "select-current-month"): void;
-  (e: "open-edit"): void;
-  (e: "open-delete"): void;
+  selectYear: [year: string];
+  selectCurrentMonth: [];
+  openEdit: [];
+  openDelete: [];
 }>();
 
 const showTypeSelector = ref(false);

@@ -184,12 +184,14 @@ import { string, ZodType } from "zod";
 
 const { t } = useI18n();
 
-defineProps({
-  idSuffix: {
-    type: String,
-    default: "",
+withDefaults(
+  defineProps<{
+    idSuffix?: string;
+  }>(),
+  {
+    idSuffix: "",
   },
-});
+);
 
 const serverErrors = ref(new Array<string>());
 
@@ -224,7 +226,10 @@ const schema: Partial<{ [key in keyof Etf]: ZodType }> = {
 const met = ref({} as Etf);
 const origMet = ref({} as Etf | undefined);
 const modalComponent = useTemplateRef<typeof ModalVue>("modalComponent");
-const emit = defineEmits(["etfCreated", "etfUpdated"]);
+const emit = defineEmits<{
+  etfCreated: [etf: Etf];
+  etfUpdated: [etf: Etf];
+}>();
 const markAsFavorite = ref(false);
 
 const { handleSubmit, values, setFieldTouched } = useForm();

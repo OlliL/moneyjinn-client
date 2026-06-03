@@ -76,16 +76,15 @@ import { Button } from "@/components/ui/button";
 import type { User } from "@/model/user/User";
 import { userRoleNames } from "@/model/user/UserRole";
 import { Pencil, Trash2 } from "lucide-vue-next";
-import type { PropType } from "vue";
 
-defineProps({
-  users: {
-    type: Array as PropType<User[]>,
-    required: true,
-  },
-});
+defineProps<{
+  users: User[];
+}>();
 
-const emit = defineEmits(["deleteUser", "editUser"]);
+const emit = defineEmits<{
+  deleteUser: [user: User];
+  editUser: [user: User];
+}>();
 
 const deleteUser = (user: User) => {
   emit("deleteUser", user);

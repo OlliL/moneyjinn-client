@@ -156,19 +156,24 @@ import SelectStandard from "../common/SelectStandard.vue";
 
 const { t } = useI18n();
 
-const props = defineProps({
-  idSuffix: {
-    type: String,
-    default: "",
+const props = withDefaults(
+  defineProps<{
+    idSuffix?: string;
+  }>(),
+  {
+    idSuffix: "",
   },
-});
+);
 
 const serverErrors = ref(new Array<string>());
 const mcs = ref({} as Capitalsource);
 const origMcs = ref({} as Capitalsource | undefined);
 const modalComponent = useTemplateRef<typeof ModalVue>("modalComponent");
 
-const emit = defineEmits(["capitalsourceUpdated", "capitalsourceCreated"]);
+const emit = defineEmits<{
+  capitalsourceUpdated: [capitalsource: Capitalsource];
+  capitalsourceCreated: [capitalsource: Capitalsource];
+}>();
 
 const groupUseValues = [
   { id: undefined, value: "" },
@@ -239,10 +244,9 @@ const createCapitalsource = handleSubmit(() => {
       if (!isUpdate) mcs.value = result as Capitalsource;
 
       modalComponent.value?._hide();
-      emit(
-        isUpdate ? "capitalsourceUpdated" : "capitalsourceCreated",
-        mcs.value,
-      );
+      isUpdate
+        ? emit("capitalsourceUpdated", mcs.value)
+        : emit("capitalsourceCreated", mcs.value);
     })
     .catch((backendError) => {
       handleBackendError(backendError, serverErrors);

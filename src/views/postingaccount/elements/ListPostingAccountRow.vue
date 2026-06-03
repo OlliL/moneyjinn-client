@@ -23,16 +23,15 @@ import ButtonTableIcon from "@/components/common/ButtonTableIcon.vue";
 import { TableCell, TableRow } from "@/components/ui/table";
 import type { PostingAccount } from "@/model/postingaccount/PostingAccount";
 import { Pencil, Trash2 } from "lucide-vue-next";
-import type { PropType } from "vue";
 
-const props = defineProps({
-  mpa: {
-    type: Object as PropType<PostingAccount>,
-    required: true,
-  },
-});
+const props = defineProps<{
+  mpa: PostingAccount;
+}>();
 
-const emit = defineEmits(["deletePostingAccount", "editPostingAccount"]);
+const emit = defineEmits<{
+  deletePostingAccount: [postingAccount: PostingAccount];
+  editPostingAccount: [postingAccount: PostingAccount];
+}>();
 
 const deletePostingAccount = () => {
   emit("deletePostingAccount", props.mpa);

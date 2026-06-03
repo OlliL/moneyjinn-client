@@ -138,7 +138,9 @@ import { date, number, string } from "zod";
 const { t } = useI18n();
 const { handleSubmit } = useForm();
 
-const emit = defineEmits(["bookingFinished"]);
+const emit = defineEmits<{
+  bookingFinished: [moneyflow: Moneyflow];
+}>();
 
 const modalComponent = useTemplateRef<typeof Modal>("modalComponent");
 const preDef = ref({} as PreDefMoneyflow);

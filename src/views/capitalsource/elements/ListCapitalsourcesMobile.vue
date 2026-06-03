@@ -118,20 +118,16 @@ import { capitalsourceImportNames } from "@/model/capitalsource/CapitalsourceImp
 import { capitalsourceStateNames } from "@/model/capitalsource/CapitalsourceState";
 import { capitalsourceTypeNames } from "@/model/capitalsource/CapitalsourceType";
 import { Pencil, Trash2 } from "lucide-vue-next";
-import type { PropType } from "vue";
 
-defineProps({
-  capitalsources: {
-    type: Array as PropType<Capitalsource[]>,
-    required: true,
-  },
-  userId: {
-    type: Number,
-    required: true,
-  },
-});
+defineProps<{
+  capitalsources: Capitalsource[];
+  userId: number;
+}>();
 
-const emit = defineEmits(["deleteCapitalsource", "editCapitalsource"]);
+const emit = defineEmits<{
+  deleteCapitalsource: [capitalsource: Capitalsource];
+  editCapitalsource: [capitalsource: Capitalsource];
+}>();
 
 const deleteCapitalsource = (mcs: Capitalsource) => {
   emit("deleteCapitalsource", mcs);

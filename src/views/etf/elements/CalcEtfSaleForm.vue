@@ -127,24 +127,15 @@ import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { amountSchema } from "@/tools/views/ZodUtil";
 import { Euro, Percent } from "lucide-vue-next";
 import { useForm } from "vee-validate";
-import { ref, watch, type PropType } from "vue";
+import { ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import CalcEtfSaleResult from "./CalcEtfSaleResult.vue";
 
-const props = defineProps({
-  etf: {
-    type: Object as PropType<Etf>,
-    required: true,
-  },
-  etfSummary: {
-    type: Object as PropType<EtfSummary>,
-    required: true,
-  },
-  pieces: {
-    type: Number,
-    required: false,
-  },
-});
+const props = defineProps<{
+  etf: Etf;
+  etfSummary: EtfSummary;
+  pieces?: number;
+}>();
 
 const { t } = useI18n();
 

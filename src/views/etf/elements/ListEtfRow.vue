@@ -41,15 +41,15 @@ import { TableCell, TableRow } from "@/components/ui/table";
 import type { Etf } from "@/model/etf/Etf";
 import { formatNumber } from "@/tools/views/FormatNumber";
 import { Pencil, Star, Trash2 } from "lucide-vue-next";
-import { computed, type PropType } from "vue";
+import { computed } from "vue";
 
-const props = defineProps({
-  etf: {
-    type: Object as PropType<Etf>,
-    required: true,
-  },
-});
-const emit = defineEmits(["deleteEtf", "editEtf"]);
+const props = defineProps<{
+  etf: Etf;
+}>();
+const emit = defineEmits<{
+  deleteEtf: [etf: Etf];
+  editEtf: [etf: Etf];
+}>();
 
 const relativeString = computed(() => {
   if (props.etf.transactionCostsRelative === undefined) {

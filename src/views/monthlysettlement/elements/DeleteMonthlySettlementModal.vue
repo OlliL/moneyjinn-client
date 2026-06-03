@@ -42,7 +42,9 @@ const month = ref(0);
 const monthName = ref("");
 const year = ref(0);
 const modalComponent = useTemplateRef<typeof ModalVue>("modalComponent");
-const emit = defineEmits(["monthlySettlementDeleted"]);
+const emit = defineEmits<{
+  monthlySettlementDeleted: [year: number, month: number];
+}>();
 
 const _show = (_year: number, _month: number) => {
   year.value = _year;

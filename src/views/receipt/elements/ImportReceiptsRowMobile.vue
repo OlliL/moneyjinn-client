@@ -1,9 +1,9 @@
 <template>
   <Card
-    @click="$emit('update:modelValue', props.mmf.id)"
+    @click="model = props.mmf.id"
     class="border rounded-xl bg-card transition-all cursor-pointer active:scale-[0.99] !py-0"
     :class="
-      modelValue === props.mmf.id
+      model === props.mmf.id
         ? 'border-primary bg-primary/5 shadow-sm'
         : 'border-border bg-muted/10 hover:bg-muted/20'
     "
@@ -111,26 +111,19 @@ import {
   Pencil,
   Trash2,
 } from "lucide-vue-next";
-import { computed, type PropType } from "vue";
+import { computed } from "vue";
 
-const props = defineProps({
-  mmf: {
-    type: Object as PropType<Moneyflow>,
-    required: true,
-  },
-  modelValue: {
-    type: Number,
-    required: true,
-  },
-});
+const props = defineProps<{
+  mmf: Moneyflow;
+}>();
 
+const model = defineModel<number>();
 const userSessionStore = useUserSessionStore();
-const emit = defineEmits([
-  "deleteMoneyflow",
-  "editMoneyflow",
-  "listMoneyflow",
-  "update:modelValue",
-]);
+const emit = defineEmits<{
+  deleteMoneyflow: [id: number];
+  editMoneyflow: [id: number];
+  listMoneyflow: [id: number];
+}>();
 
 const isOwnMoneyflow = computed(() => {
   return props.mmf.userId === userSessionStore.getUserId;

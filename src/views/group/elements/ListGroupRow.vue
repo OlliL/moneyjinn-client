@@ -22,16 +22,15 @@ import ButtonTableIcon from "@/components/common/ButtonTableIcon.vue";
 import { TableCell, TableRow } from "@/components/ui/table";
 import type { Group } from "@/model/group/Group";
 import { Pencil, Trash2 } from "lucide-vue-next";
-import type { PropType } from "vue";
 
-const props = defineProps({
-  group: {
-    type: Object as PropType<Group>,
-    required: true,
-  },
-});
+const props = defineProps<{
+  group: Group;
+}>();
 
-const emit = defineEmits(["deleteGroup", "editGroup"]);
+const emit = defineEmits<{
+  deleteGroup: [group: Group];
+  editGroup: [group: Group];
+}>();
 
 const deleteGroup = () => {
   emit("deleteGroup", props.group);

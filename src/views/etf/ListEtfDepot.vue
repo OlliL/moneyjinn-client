@@ -186,12 +186,14 @@ const createModal = useTemplateRef<typeof CreateEtfFlowModalVue>("createModal");
 
 const { getAsSelectBoxValues, getFavoriteEtf, getEtf } = useEtfStore();
 
-const props = defineProps({
-  etfId: {
-    type: String,
-    default: undefined,
+const props = withDefaults(
+  defineProps<{
+    etfId?: string;
+  }>(),
+  {
+    etfId: undefined,
   },
-});
+);
 
 onMounted(() => {
   const etfId: number | undefined = props.etfId ? +props.etfId : undefined;
@@ -228,8 +230,8 @@ const setMobileEffectiveOnly = (value: boolean) => {
   currentTab.value = "all";
 };
 
-const setCurrentTab = (value: "effective" | "all") => {
-  currentTab.value = value;
+const setCurrentTab = (value: "effective" | "all" | undefined) => {
+  currentTab.value = value == "all" ? "all" : "effective";
 };
 
 const loadData = (etfId: number) => {

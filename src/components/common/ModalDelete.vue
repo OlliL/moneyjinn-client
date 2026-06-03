@@ -52,7 +52,9 @@ const props = withDefaults(
   },
 );
 
-const emit = defineEmits(["confirm"]);
+const emit = defineEmits<{
+  confirm: [];
+}>();
 
 const modalComponent = useTemplateRef<typeof ModalVue>("modalComponent");
 

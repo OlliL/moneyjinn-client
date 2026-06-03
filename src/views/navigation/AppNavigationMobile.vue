@@ -401,12 +401,12 @@ const month = new Date().getMonth() + 1;
 const { isAdmin } = useUserSessionStore();
 const route = useRoute();
 
-const emit = defineEmits([
-  "logout",
-  "showCreateContractpartnerModal",
-  "showCreateCapitalsourceModal",
-  "showPreDefMoneyflowModal",
-]);
+const emit = defineEmits<{
+  logout: [];
+  showCreateContractpartnerModal: [];
+  showCreateCapitalsourceModal: [];
+  showPreDefMoneyflowModal: [];
+}>();
 
 const isMenuActve = (menu: DropdownMenus) => {
   return route.meta?.activeMenu === menu ? "router-link-active" : "";

@@ -20,7 +20,7 @@
 </template>
 <script lang="ts" setup>
 import { SquarePlus } from "lucide-vue-next";
-import { computed, useTemplateRef, type PropType, type Ref } from "vue";
+import { computed, useTemplateRef, type Ref } from "vue";
 import { any, type ZodType } from "zod";
 
 import SelectStandard from "../common/SelectStandard.vue";
@@ -32,29 +32,19 @@ import type { Contractpartner } from "@/model/contractpartner/Contractpartner";
 
 const contractpartnerId = defineModel({ type: Number });
 
-const props = defineProps({
-  validityDate: {
-    type: Date,
-    required: false,
+const props = withDefaults(
+  defineProps<{
+    validityDate?: Date;
+    validationSchema?: ZodType;
+    validationSchemaRef?: Ref<ZodType>;
+    fieldLabel: string;
+    idSuffix?: string;
+  }>(),
+  {
+    validationSchema: () => any().optional(),
+    idSuffix: "",
   },
-  validationSchema: {
-    type: Object as PropType<ZodType>,
-    required: false,
-    default: any().optional(),
-  },
-  validationSchemaRef: {
-    type: Object as PropType<Ref<ZodType>>,
-    required: false,
-  },
-  fieldLabel: {
-    type: String,
-    required: true,
-  },
-  idSuffix: {
-    type: String,
-    default: "",
-  },
-});
+);
 
 const createContractpartnerModal = useTemplateRef<
   typeof CreateContractpartnerModalVue

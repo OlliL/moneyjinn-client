@@ -16,11 +16,16 @@
 <script lang="ts" setup>
 import { computed } from "vue";
 
-const props = defineProps({
-  text: { type: String },
-  color: { type: String },
-  size: { type: String, default: "md" },
-});
+const props = withDefaults(
+  defineProps<{
+    text?: string;
+    color?: string;
+    size?: string;
+  }>(),
+  {
+    size: "md",
+  },
+);
 
 const contrastColor = computed(() => {
   const hexColor = props.color;

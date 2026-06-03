@@ -59,19 +59,24 @@ import ModalVue from "../common/Modal.vue";
 
 const { t } = useI18n();
 
-defineProps({
-  idSuffix: {
-    type: String,
-    default: "",
+withDefaults(
+  defineProps<{
+    idSuffix?: string;
+  }>(),
+  {
+    idSuffix: "",
   },
-});
+);
 
 const serverErrors = ref(new Array<string>());
 const mpa = ref({} as PostingAccount);
 const origMpa = ref({} as PostingAccount | undefined);
 const modalComponent = useTemplateRef<typeof ModalVue>("modalComponent");
 
-const emit = defineEmits(["postingAccountCreated", "postingAccountUpdated"]);
+const emit = defineEmits<{
+  postingAccountCreated: [postingAccount: PostingAccount];
+  postingAccountUpdated: [postingAccount: PostingAccount];
+}>();
 
 const { handleSubmit, values, setFieldTouched } = useForm();
 
@@ -117,10 +122,9 @@ const createPostingAccount = handleSubmit(() => {
       if (!isUpdate) mpa.value = result as PostingAccount;
 
       modalComponent.value?._hide();
-      emit(
-        isUpdate ? "postingAccountUpdated" : "postingAccountCreated",
-        mpa.value,
-      );
+      isUpdate
+        ? emit("postingAccountUpdated", mpa.value)
+        : emit("postingAccountCreated", mpa.value);
     })
     .catch((backendError) => {
       handleBackendError(backendError, serverErrors);

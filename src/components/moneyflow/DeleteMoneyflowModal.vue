@@ -54,7 +54,9 @@ const serverErrors = ref(new Array<string>());
 
 const mmf = ref({} as Moneyflow);
 const modalComponent = useTemplateRef<typeof ModalDelete>("modalComponent");
-const emit = defineEmits(["moneyflowDeleted"]);
+const emit = defineEmits<{
+  moneyflowDeleted: [moneyflow: Moneyflow];
+}>();
 
 const _show = (_mmf: Moneyflow) => {
   mmf.value = _mmf;

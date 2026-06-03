@@ -69,67 +69,34 @@ import {
   onMounted,
   useTemplateRef,
   watch,
-  type PropType,
   type Ref,
 } from "vue";
 import { any, type ZodType } from "zod";
 defineOptions({
   inheritAttrs: false,
 });
-const props = defineProps({
-  modelValue: {
-    type: undefined,
-    required: false,
+const props = withDefaults(
+  defineProps<{
+    validationSchema?: ZodType;
+    validationSchemaRef?: Ref<ZodType>;
+    id: string;
+    name?: string;
+    fieldLabel?: string;
+    fieldType?: string;
+    focus?: boolean;
+    align?: string;
+    disabled?: boolean;
+    step?: string;
+    placeholder?: string;
+  }>(),
+  {
+    validationSchema: () => any().optional(),
+    fieldType: "text",
+    focus: false,
+    disabled: false,
   },
-  validationSchema: {
-    type: Object as PropType<ZodType>,
-    required: false,
-    default: any().optional(),
-  },
-  validationSchemaRef: {
-    type: Object as PropType<Ref<ZodType>>,
-    required: false,
-  },
-  id: {
-    type: String,
-    required: true,
-  },
-  name: {
-    type: String,
-    required: false,
-  },
-  fieldLabel: {
-    type: String,
-    required: false,
-  },
-  fieldType: {
-    type: String,
-    default: "text",
-  },
-  focus: {
-    type: Boolean,
-    required: false,
-    default: false,
-  },
-  align: {
-    type: String,
-    required: false,
-  },
-  disabled: {
-    type: Boolean,
-    required: false,
-    default: false,
-  },
-  step: {
-    type: String,
-    required: false,
-  },
-  placeholder: {
-    type: String,
-    required: false,
-  },
-});
-const emit = defineEmits(["update:modelValue"]);
+);
+const model = defineModel<any>();
 
 const schema = computed(() => {
   if (props.validationSchemaRef) {
@@ -152,7 +119,7 @@ const {
 const onInput = (event: Event) => {
   setState({ touched: true });
   handleChange(event, true);
-  emit("update:modelValue", fieldValue.value);
+  model.value = fieldValue.value;
 };
 
 const isInvalid = computed(() => fieldMeta.touched && !!errorMessage.value);
@@ -181,7 +148,7 @@ onMounted(() => {
 });
 
 watch(
-  () => props.modelValue,
+  () => model.value,
   (newValue) => {
     setValue(newValue, false);
     // The shadcn Input uses useVModel with passive:true, which means it does not

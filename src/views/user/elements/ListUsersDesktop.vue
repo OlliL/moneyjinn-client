@@ -36,17 +36,16 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import type { User } from "@/model/user/User";
-import type { PropType } from "vue";
 import ListUserRowVue from "./ListUserRow.vue";
 
-defineProps({
-  users: {
-    type: Array as PropType<User[]>,
-    required: true,
-  },
-});
+defineProps<{
+  users: User[];
+}>();
 
-const emit = defineEmits(["deleteUser", "editUser"]);
+const emit = defineEmits<{
+  deleteUser: [user: User];
+  editUser: [user: User];
+}>();
 
 const deleteUser = (user: User) => {
   emit("deleteUser", user);

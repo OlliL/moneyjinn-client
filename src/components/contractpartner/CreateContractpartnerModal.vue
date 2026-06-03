@@ -170,12 +170,14 @@ import CollapsibleTrigger from "../ui/collapsible/CollapsibleTrigger.vue";
 
 const { t } = useI18n();
 
-const props = defineProps({
-  idSuffix: {
-    type: String,
-    default: "",
+const props = withDefaults(
+  defineProps<{
+    idSuffix?: string;
+  }>(),
+  {
+    idSuffix: "",
   },
-});
+);
 
 const serverErrors = ref(new Array<string>());
 
@@ -206,7 +208,10 @@ const schema: Partial<{ [key in keyof Contractpartner]: ZodType }> = {
 const mcp = ref({} as Contractpartner);
 const origMcp = ref({} as Contractpartner | undefined);
 const modalComponent = useTemplateRef<typeof ModalVue>("modalComponent");
-const emit = defineEmits(["contractpartnerCreated", "contractpartnerUpdated"]);
+const emit = defineEmits<{
+  contractpartnerCreated: [contractpartner: Contractpartner];
+  contractpartnerUpdated: [contractpartner: Contractpartner];
+}>();
 
 const { handleSubmit, values, setFieldTouched } = useForm();
 
@@ -253,10 +258,9 @@ const createContractpartner = handleSubmit(() => {
       if (!isUpdate) mcp.value = result as Contractpartner;
 
       modalComponent.value?._hide();
-      emit(
-        isUpdate ? "contractpartnerUpdated" : "contractpartnerCreated",
-        mcp.value,
-      );
+      isUpdate
+        ? emit("contractpartnerUpdated", mcp.value)
+        : emit("contractpartnerCreated", mcp.value);
     })
     .catch((backendError) => {
       handleBackendError(backendError, serverErrors);

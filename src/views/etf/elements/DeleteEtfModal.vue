@@ -37,7 +37,9 @@ const serverErrors = ref(new Array<string>());
 
 const etf = ref({} as Etf);
 const modalComponent = useTemplateRef<typeof ModalDelete>("modalComponent");
-const emit = defineEmits(["etfDeleted"]);
+const emit = defineEmits<{
+  etfDeleted: [etf: Etf];
+}>();
 
 const _show = (_etf: Etf) => {
   etf.value = _etf;
