@@ -1,9 +1,12 @@
 <template>
-  <DeleteMoneyflowModal ref="deleteModal" @moneyflow-deleted="compareData" />
+  <DeleteMoneyflowModal
+    ref="deleteModal"
+    @moneyflow-deleted="restartComparison"
+  />
   <EditMoneyflowModal
     ref="editModal"
-    @moneyflow-updated="compareData"
-    @moneyflow-created="compareData"
+    @moneyflow-updated="restartComparison"
+    @moneyflow-created="restartComparison"
   />
 
   <div class="custom-container space-y-6">
@@ -301,6 +304,9 @@ const compareCompareDataDatasetByDate = (
   dataA.compareDataDataset!.bookingDate.getTime()! -
   dataB.compareDataDataset!.bookingDate?.getTime();
 
+const restartComparison = () => {
+  compareData();
+};
 const compareData = handleSubmit(async () => {
   dataCompared.value = false;
   serverErrors.value = new Array<string>();

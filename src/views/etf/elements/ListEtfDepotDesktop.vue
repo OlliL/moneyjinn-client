@@ -186,7 +186,7 @@ const props = defineProps<{
 
 const { getEtf } = useEtfStore();
 const emit = defineEmits<{
-  "update:currentTab": [tab: string];
+  "update:currentTab": [tab: "effective" | "all"];
   deleteEtfFlow: [etfFlow: EtfFlow];
   editEtfFlow: [etfFlow: EtfFlow];
 }>();

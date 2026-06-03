@@ -15,8 +15,8 @@
           :years="years"
           :months="[]"
           :selected-year="selectedYear ?? ''"
-          @select-year="$emit('select-year', $event)"
-          @select-current-month="$emit('select-current-month')"
+          @select-year="$emit('selectYear', $event)"
+          @select-current-month="$emit('selectCurrentMonth')"
         />
       </div>
     </div>
@@ -49,7 +49,7 @@
         data-testid="preliminary-lump-sum-edit"
         type="button"
         class="button-with-icon"
-        @click="$emit('open-edit')"
+        @click="$emit('openEdit')"
       >
         <SquarePen class="icon-medium" />
         {{ $t("General.edit") }}
@@ -60,7 +60,7 @@
         type="button"
         variant="destructive"
         class="button-with-icon"
-        @click="$emit('open-delete')"
+        @click="$emit('openDelete')"
       >
         <Trash2 class="icon-medium" />
         {{ $t("General.delete") }}
@@ -89,10 +89,10 @@ defineProps<{
 }>();
 
 const emit = defineEmits<{
-  (e: "select-year", year: string): void;
-  (e: "select-current-month"): void;
-  (e: "open-edit"): void;
-  (e: "open-delete"): void;
+  selectYear: [year: string];
+  selectCurrentMonth: [];
+  openEdit: [];
+  openDelete: [];
 }>();
 
 const showTypeSelector = ref(false);

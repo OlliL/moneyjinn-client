@@ -1,11 +1,11 @@
 <template>
   <DeleteMoneyflowModalVue
     ref="deleteModal"
-    @moneyflow-deleted="searchMoneyflows"
+    @moneyflow-deleted="restartSearch"
   />
   <EditMoneyflowModalVue
     ref="editModal"
-    @moneyflow-updated="searchMoneyflows"
+    @moneyflow-updated="restartSearch"
     @show-receipt="showReceipt"
   />
 
@@ -464,6 +464,10 @@ const resetForm = () => {
   dataLoaded.value = false;
   serverErrors.value = new Array<string>();
   Object.keys(values).forEach((field) => setFieldTouched(field, false));
+};
+
+const restartSearch = () => {
+  searchMoneyflows();
 };
 
 const searchMoneyflows = handleSubmit(() => {
