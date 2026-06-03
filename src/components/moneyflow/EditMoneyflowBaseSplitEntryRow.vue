@@ -130,19 +130,24 @@ const schema = {
 };
 
 const mseAmount = ref(undefined as number | undefined);
-const mseComment = ref(undefined as string | undefined);
+const mseComment = ref("");
 const msePostingAccountId = ref(0);
 const msePostingAccountName = ref(undefined as string | undefined);
 
-const emit = defineEmits([
-  "deleteMoneyflowSplitEntryRow",
-  "addMoneyflowSplitEntryRow",
-  "amountChanged",
-  "commentChanged",
-  "postingAccountIdChanged",
-]);
+const emit = defineEmits<{
+  deleteMoneyflowSplitEntryRow: [index: number];
+  addMoneyflowSplitEntryRow: [];
+  amountChanged: [index: number, amount: number];
+  commentChanged: [index: number, comment: string];
+  postingAccountIdChanged: [
+    index: number,
+    postingAccountId: number,
+    postingAccountName: string,
+  ];
+}>();
 
-const props = withDefaults(defineProps<{
+const props = withDefaults(
+  defineProps<{
     amount?: number;
     comment?: string;
     postingAccountId?: number;
@@ -153,9 +158,11 @@ const props = withDefaults(defineProps<{
     moneyflowComment?: string;
     moneyflowPostingAccountId?: number;
     idSuffix?: string;
-}>(), {
-  idSuffix: ""
-});
+  }>(),
+  {
+    idSuffix: "",
+  },
+);
 
 const showRemainder = computed(() => props.isLastRow && props.remainder != 0);
 const rowEmpty = computed(
@@ -175,8 +182,8 @@ watch(
 
 watch(
   () => props.comment,
-  (newVal, oldVal) => {
-    if (newVal != oldVal) mseComment.value = newVal;
+  (newVal) => {
+    mseComment.value = newVal ?? "";
   },
   { immediate: true },
 );
@@ -219,7 +226,7 @@ const postingaccountChanged = () => {
     "postingAccountIdChanged",
     props.index,
     msePostingAccountId.value,
-    msePostingAccountName.value,
+    msePostingAccountName.value ?? "",
   );
   if (props.isLastRow && msePostingAccountId.value) addMoneyflowSplitEntryRow();
 };

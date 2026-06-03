@@ -204,11 +204,14 @@ import { boolean, date, number, string, type ZodTypeAny } from "zod";
 
 const { t } = useI18n();
 
-withDefaults(defineProps<{
+withDefaults(
+  defineProps<{
     idSuffix?: string;
-}>(), {
-  idSuffix: ""
-});
+  }>(),
+  {
+    idSuffix: "",
+  },
+);
 
 type UserGroup = AccessRelation & {
   group?: Group;
@@ -239,7 +242,10 @@ const yesNoValues = [
   { id: true, value: t("General.yes") },
 ] as Array<SelectBoxValue>;
 const modalComponent = useTemplateRef<typeof ModalVue>("modalComponent");
-const emit = defineEmits(["userCreated", "userUpdated"]);
+const emit = defineEmits<{
+  userCreated: [user: User];
+  userUpdated: [user: User];
+}>();
 
 const { handleSubmit, values, setFieldTouched } = useForm();
 

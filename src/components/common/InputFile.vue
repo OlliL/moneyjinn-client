@@ -33,20 +33,25 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toTypedSchema } from "@vee-validate/zod";
 import { useField } from "vee-validate";
-import { computed, useTemplateRef, type PropType, type Ref } from "vue";
+import { computed, useTemplateRef, type Ref } from "vue";
 import { any, type ZodType } from "zod";
 
-const props = withDefaults(defineProps<{
+const props = withDefaults(
+  defineProps<{
     modelValue?: any;
     validationSchema?: ZodType;
     validationSchemaRef?: Ref<ZodType>;
     id: string;
     fieldLabel?: string;
-}>(), {
-  validationSchema: () => any().optional()
-});
+  }>(),
+  {
+    validationSchema: () => any().optional(),
+  },
+);
 const fileUpload = useTemplateRef<HTMLInputElement>("fileUpload");
-const emit = defineEmits(["update:modelValue"]);
+const emit = defineEmits<{
+  "update:modelValue": [value: FileList | null | undefined];
+}>();
 
 const schema = computed(() => {
   if (props.validationSchemaRef) {

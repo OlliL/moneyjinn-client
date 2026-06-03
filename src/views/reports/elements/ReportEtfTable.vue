@@ -62,8 +62,8 @@ const desktop = isDesktop();
 const etfSummaryArray = ref(new Array<EtfSummary>());
 
 const props = defineProps<{
-    year: string;
-    month: string;
+  year: string;
+  month: string;
 }>();
 const dataLoaded = defineModel({
   type: Boolean,

@@ -107,10 +107,10 @@ const mep = ref({} as EtfPreliminaryLumpSum);
 const origMep = ref({} as EtfPreliminaryLumpSum | undefined);
 const defaultEtfId = ref(0 as number | undefined);
 const modalComponent = useTemplateRef<typeof ModalVue>("modalComponent");
-const emit = defineEmits([
-  "etfPreliminaryLumpSumCreated",
-  "etfPreliminaryLumpSumUpdated",
-]);
+const emit = defineEmits<{
+  etfPreliminaryLumpSumCreated: [etfPreliminaryLumpSum: EtfPreliminaryLumpSum];
+  etfPreliminaryLumpSumUpdated: [etfPreliminaryLumpSum: EtfPreliminaryLumpSum];
+}>();
 const year = ref(new Date());
 const etfStore = useEtfStore();
 

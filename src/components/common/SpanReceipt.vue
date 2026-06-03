@@ -11,11 +11,11 @@
 <script lang="ts" setup>
 import type { MoneyflowReceipt } from "@/model/moneyflow/MoneyflowReceipt";
 import { MoneyflowReceiptType } from "@/model/moneyflow/MoneyflowReceiptType";
-import { computed, defineAsyncComponent, type PropType } from "vue";
+import { computed, defineAsyncComponent } from "vue";
 
 const spanPdf = defineAsyncComponent(() => import("./SpanPdf.vue"));
 const props = defineProps<{
-    receipt: MoneyflowReceipt;
+  receipt: MoneyflowReceipt;
 }>();
 
 const isJpeg = computed(

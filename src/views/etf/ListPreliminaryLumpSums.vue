@@ -189,13 +189,16 @@ import ShowEtfPreliminaryLumpSumMonthlyVue from "./elements/ShowEtfPreliminaryLu
 import ShowEtfPreliminaryLumpSumPieceVue from "./elements/ShowEtfPreliminaryLumpSumPiece.vue";
 import ShowEtfPreliminaryLumpSumYearly from "./elements/ShowEtfPreliminaryLumpSumYearly.vue";
 
-const props = withDefaults(defineProps<{
+const props = withDefaults(
+  defineProps<{
     etfId?: string;
     year?: string;
-}>(), {
-  etfId: undefined,
-  year: undefined
-});
+  }>(),
+  {
+    etfId: undefined,
+    year: undefined,
+  },
+);
 
 const { getAsSelectBoxValues, getFavoriteEtf } = useEtfStore();
 

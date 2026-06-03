@@ -122,13 +122,15 @@ import {
 import { Button } from "@/components/ui/button";
 import type { PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
 import { Pencil, Trash2 } from "lucide-vue-next";
-import type { PropType } from "vue";
 
 defineProps<{
-    preDefMoneyflows: PreDefMoneyflow[];
+  preDefMoneyflows: PreDefMoneyflow[];
 }>();
 
-const emit = defineEmits(["editPreDefMoneyflow", "deletePreDefMoneyflow"]);
+const emit = defineEmits<{
+  deletePreDefMoneyflow: [preDefMoneyflow: PreDefMoneyflow];
+  editPreDefMoneyflow: [preDefMoneyflow: PreDefMoneyflow];
+}>();
 
 const editPreDefMoneyflow = (mpm: PreDefMoneyflow) => {
   emit("editPreDefMoneyflow", mpm);

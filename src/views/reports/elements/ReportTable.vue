@@ -326,8 +326,8 @@ watch(
 );
 
 const props = defineProps<{
-    year: string;
-    month: string;
+  year: string;
+  month: string;
 }>();
 
 const capitalsourceHasMovement = (

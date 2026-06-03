@@ -103,14 +103,14 @@ import { formatNumber } from "@/tools/views/FormatNumber";
 import { computed } from "vue";
 
 const props = defineProps<{
-    etfId: string | number;
-    name?: string;
-    chartUrl?: string;
-    amount: number;
-    spentValue: number;
-    buyPrice?: number;
-    sellPrice?: number;
-    pricesTimestamp?: Date;
+  etfId: string | number;
+  name?: string;
+  chartUrl?: string;
+  amount: number;
+  spentValue: number;
+  buyPrice?: number;
+  sellPrice?: number;
+  pricesTimestamp?: Date;
 }>();
 
 const sumSellPrice = computed(() => {

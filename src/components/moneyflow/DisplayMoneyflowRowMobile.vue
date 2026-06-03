@@ -240,16 +240,19 @@ import {
   Tag,
   Trash2,
 } from "lucide-vue-next";
-import { computed, type PropType } from "vue";
+import { computed } from "vue";
 
-const props = withDefaults(defineProps<{
+const props = withDefaults(
+  defineProps<{
     mmf: Moneyflow;
     hideContractpartner?: boolean;
     showCommentInTrigger?: boolean;
-}>(), {
-  hideContractpartner: false,
-  showCommentInTrigger: false
-});
+  }>(),
+  {
+    hideContractpartner: false,
+    showCommentInTrigger: false,
+  },
+);
 
 defineEmits<{
   showReceipt: [id: number];

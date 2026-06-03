@@ -45,7 +45,11 @@ const serverErrors = ref(new Array<string>());
 
 const mcm = ref({} as ContractpartnerMatching);
 const modalComponent = useTemplateRef<typeof ModalDelete>("modalComponent");
-const emit = defineEmits(["contractpartnerMatchingDeleted"]);
+const emit = defineEmits<{
+  contractpartnerMatchingDeleted: [
+    contractpartnerMatching: ContractpartnerMatching,
+  ];
+}>();
 
 const _show = (_mcm: ContractpartnerMatching) => {
   mcm.value = _mcm;

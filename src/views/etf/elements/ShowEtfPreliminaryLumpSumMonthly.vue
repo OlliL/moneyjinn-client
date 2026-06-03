@@ -41,10 +41,10 @@ import {
 } from "@/components/ui/table";
 import type { EtfPreliminaryLumpSum } from "@/model/etf/EtfPreliminaryLumpSum";
 import { getMonthName } from "@/tools/views/MonthName";
-import { computed, type PropType } from "vue";
+import { computed } from "vue";
 
 const props = defineProps<{
-    mep: EtfPreliminaryLumpSum;
+  mep: EtfPreliminaryLumpSum;
 }>();
 
 type RowData = {

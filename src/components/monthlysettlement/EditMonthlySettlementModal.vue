@@ -166,7 +166,9 @@ const loadedMonth = ref(undefined as Date | undefined);
 const monthlySettlementsNoCredit = ref(new Array<MonthlySettlementFormData>());
 const monthlySettlementsCredit = ref(new Array<MonthlySettlementFormData>());
 const modalComponent = useTemplateRef<typeof ModalVue>("modalComponent");
-const emit = defineEmits(["monthlySettlementUpserted"]);
+const emit = defineEmits<{
+  monthlySettlementUpserted: [year: number, month: number];
+}>();
 
 const { handleSubmit, values, setFieldTouched } = useForm();
 

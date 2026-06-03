@@ -54,6 +54,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import type { Moneyflow } from "@/model/moneyflow/Moneyflow.ts";
 import type { MoneyflowGroup } from "../SearchMoneyflows.vue";
 
 withDefaults(
@@ -70,10 +71,10 @@ withDefaults(
   },
 );
 
-defineEmits([
-  "showReceipt",
-  "deleteMoneyflow",
-  "editMoneyflow",
-  "listMoneyflow",
-]);
+defineEmits<{
+  showReceipt: [id: number];
+  editMoneyflow: [moneyflow: Moneyflow];
+  deleteMoneyflow: [moneyflow: Moneyflow];
+  listMoneyflow: [moneyflow: Moneyflow];
+}>();
 </script>

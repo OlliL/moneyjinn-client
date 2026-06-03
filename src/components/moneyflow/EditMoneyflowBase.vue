@@ -231,7 +231,7 @@ import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { isDesktop } from "@/tools/views/IsDesktop";
 import { amountSchema, globErr } from "@/tools/views/ZodUtil";
 import { Euro, MessageSquareMore, Plus } from "lucide-vue-next";
-import { computed, onMounted, ref, toRaw, watch, type PropType } from "vue";
+import { computed, onMounted, ref, toRaw, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { date, number, string } from "zod";
 import SelectCapitalsource from "../capitalsource/SelectCapitalsource.vue";
@@ -291,15 +291,18 @@ const contractpartnerStore = useContractpartnerStore();
 const postingAccountStore = usePostingAccountStore();
 const capitalsourceStore = useCapitalsourceStore();
 
-const props = withDefaults(defineProps<{
+const props = withDefaults(
+  defineProps<{
     mmfToEdit?: Moneyflow;
     selectedPreDefMoneyflow?: PreDefMoneyflow;
     idSuffix?: string;
     fillContractpartnerDefaults?: boolean;
-}>(), {
-  idSuffix: "",
-  fillContractpartnerDefaults: false
-});
+  }>(),
+  {
+    idSuffix: "",
+    fillContractpartnerDefaults: false,
+  },
+);
 onMounted(() => {
   if (props.fillContractpartnerDefaults) resetForm();
 });

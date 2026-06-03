@@ -10,11 +10,14 @@
 import { Table } from "@/components/ui/table";
 import { computed } from "vue";
 
-const props = withDefaults(defineProps<{
+const props = withDefaults(
+  defineProps<{
     alternateRowBackground?: boolean;
-}>(), {
-  alternateRowBackground: true
-});
+  }>(),
+  {
+    alternateRowBackground: true,
+  },
+);
 
 defineOptions({
   inheritAttrs: false,

@@ -42,14 +42,14 @@ import { computed } from "vue";
 import SpanAmount from "../common/SpanAmount.vue";
 
 const props = defineProps<{
-    etfId?: number;
-    name?: string;
-    chartUrl?: string;
-    amount: number;
-    spentValue: number;
-    buyPrice?: number;
-    sellPrice?: number;
-    pricesTimestamp?: Date;
+  etfId?: number;
+  name?: string;
+  chartUrl?: string;
+  amount: number;
+  spentValue: number;
+  buyPrice?: number;
+  sellPrice?: number;
+  pricesTimestamp?: Date;
 }>();
 
 const sumSellPrice = computed(() => {

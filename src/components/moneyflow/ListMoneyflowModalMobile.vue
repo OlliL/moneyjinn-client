@@ -213,7 +213,9 @@ const serverErrors = ref(new Array<string>());
 const mmf = ref({} as Moneyflow);
 const modalComponent = useTemplateRef<typeof ModalVue>("modalComponent");
 
-const emit = defineEmits(["showReceipt"]);
+const emit = defineEmits<{
+  showReceipt: [id: number, receipt: ImportedMoneyflowReceipt | undefined];
+}>();
 
 // Schmaleres, fokussiertes Layout für Mobile & Desktop-Details
 const modalWidth = computed(() => "md:max-w-md w-full mx-auto");

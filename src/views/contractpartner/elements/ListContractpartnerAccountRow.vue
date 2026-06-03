@@ -26,7 +26,6 @@
 
 <script lang="ts" setup>
 import { Pencil, Trash2 } from "lucide-vue-next";
-import type { PropType } from "vue";
 
 import { TableCell, TableRow } from "@/components/ui/table";
 
@@ -36,13 +35,15 @@ import SpanIban from "@/components/common/SpanIban.vue";
 import type { ContractpartnerAccount } from "@/model/contractpartneraccount/ContractpartnerAccount";
 
 const props = defineProps<{
-    mca: ContractpartnerAccount;
+  mca: ContractpartnerAccount;
 }>();
 
-const emit = defineEmits([
-  "deleteContractpartnerAccount",
-  "editContractpartnerAccount",
-]);
+const emit = defineEmits<{
+  deleteContractpartnerAccount: [
+    contractpartnerAccount: ContractpartnerAccount,
+  ];
+  editContractpartnerAccount: [contractpartnerAccount: ContractpartnerAccount];
+}>();
 
 const deleteContractpartnerAccount = () => {
   emit("deleteContractpartnerAccount", props.mca);

@@ -69,14 +69,14 @@ import {
   onMounted,
   useTemplateRef,
   watch,
-  type PropType,
   type Ref,
 } from "vue";
 import { any, type ZodType } from "zod";
 defineOptions({
   inheritAttrs: false,
 });
-const props = withDefaults(defineProps<{
+const props = withDefaults(
+  defineProps<{
     modelValue?: any;
     validationSchema?: ZodType;
     validationSchemaRef?: Ref<ZodType>;
@@ -89,13 +89,17 @@ const props = withDefaults(defineProps<{
     disabled?: boolean;
     step?: string;
     placeholder?: string;
-}>(), {
-  validationSchema: () => any().optional(),
-  fieldType: "text",
-  focus: false,
-  disabled: false
-});
-const emit = defineEmits(["update:modelValue"]);
+  }>(),
+  {
+    validationSchema: () => any().optional(),
+    fieldType: "text",
+    focus: false,
+    disabled: false,
+  },
+);
+const emit = defineEmits<{
+  "update:modelValue": [value: any];
+}>();
 
 const schema = computed(() => {
   if (props.validationSchemaRef) {

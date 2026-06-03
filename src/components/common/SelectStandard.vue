@@ -125,12 +125,12 @@ import {
   ref,
   useTemplateRef,
   watch,
-  type PropType,
   type Ref,
 } from "vue";
 import { any, type ZodType } from "zod";
 
-const props = withDefaults(defineProps<{
+const props = withDefaults(
+  defineProps<{
     modelValue?: any;
     selectBoxValues: Array<SelectBoxValue>;
     validationSchema?: ZodType;
@@ -138,10 +138,12 @@ const props = withDefaults(defineProps<{
     id: string;
     fieldLabel: string;
     focus?: boolean;
-}>(), {
-  validationSchema: () => any().optional(),
-  focus: false
-});
+  }>(),
+  {
+    validationSchema: () => any().optional(),
+    focus: false,
+  },
+);
 const schema = computed(() => {
   if (props.validationSchemaRef) {
     return toTypedSchema(props.validationSchemaRef.value);

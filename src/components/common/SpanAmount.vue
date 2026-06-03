@@ -12,12 +12,15 @@ import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
 
-const props = withDefaults(defineProps<{
+const props = withDefaults(
+  defineProps<{
     amount?: number;
     decimalPlaces?: number;
-}>(), {
-  decimalPlaces: 2
-});
+  }>(),
+  {
+    decimalPlaces: 2,
+  },
+);
 
 const amountClass = computed(() => {
   return redIfNegative(toFixed(props.amount ?? 0, props.decimalPlaces));

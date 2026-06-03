@@ -36,10 +36,12 @@ import { ref } from "vue";
 import Button from "../ui/button/Button.vue";
 
 defineProps<{
-    buttonLabel: string;
+  buttonLabel: string;
 }>();
 
-const emit = defineEmits(["executeDelete"]);
+const emit = defineEmits<{
+  executeDelete: [];
+}>();
 const isConfirming = ref(false);
 let confirmationTimeout: ReturnType<typeof setTimeout> | null = null;
 

@@ -64,7 +64,10 @@ const group = ref({} as Group);
 const origGroup = ref({} as Group | undefined);
 const modalComponent = useTemplateRef<typeof ModalVue>("modalComponent");
 
-const emit = defineEmits(["groupUpdated", "groupCreated"]);
+const emit = defineEmits<{
+  groupUpdated: [group: Group];
+  groupCreated: [group: Group];
+}>();
 
 const { handleSubmit, values, setFieldTouched } = useForm();
 
@@ -108,7 +111,9 @@ const createGroup = handleSubmit(() => {
       if (!isUpdate) group.value = result as Group;
 
       modalComponent.value?._hide();
-      emit(isUpdate ? "groupUpdated" : "groupCreated", group.value);
+      isUpdate
+        ? emit("groupUpdated", group.value)
+        : emit("groupCreated", group.value);
     })
     .catch((backendError) => {
       handleBackendError(backendError, serverErrors);

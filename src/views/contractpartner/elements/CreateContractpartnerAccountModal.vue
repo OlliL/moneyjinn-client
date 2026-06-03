@@ -77,24 +77,31 @@ import { string, ZodType } from "zod";
 
 const { t } = useI18n();
 
-const props = withDefaults(defineProps<{
+const props = withDefaults(
+  defineProps<{
     idSuffix?: string;
     contractpartnerId: number;
     zIndex?: string;
-}>(), {
-  idSuffix: "",
-  zIndex: "2001"
-});
+  }>(),
+  {
+    idSuffix: "",
+    zIndex: "2001",
+  },
+);
 
 const serverErrors = ref(new Array<string>());
 const mca = ref({} as ContractpartnerAccount);
 const origMca = ref({} as ContractpartnerAccount | undefined);
 const modalComponent = useTemplateRef<typeof ModalVue>("modalComponent");
 
-const emit = defineEmits([
-  "contractpartnerAccountCreated",
-  "contractpartnerAccountUpdated",
-]);
+const emit = defineEmits<{
+  contractpartnerAccountCreated: [
+    contractpartnerAccount: ContractpartnerAccount,
+  ];
+  contractpartnerAccountUpdated: [
+    contractpartnerAccount: ContractpartnerAccount,
+  ];
+}>();
 
 const { handleSubmit, values, setFieldTouched } = useForm();
 
@@ -147,12 +154,9 @@ const createContractpartnerAccount = handleSubmit(() => {
       if (!isUpdate) mca.value = result as ContractpartnerAccount;
 
       modalComponent.value?._hide();
-      emit(
-        isUpdate
-          ? "contractpartnerAccountUpdated"
-          : "contractpartnerAccountCreated",
-        mca.value,
-      );
+      isUpdate
+        ? emit("contractpartnerAccountUpdated", mca.value)
+        : emit("contractpartnerAccountCreated", mca.value);
     })
     .catch((backendError) => {
       handleBackendError(backendError, serverErrors);

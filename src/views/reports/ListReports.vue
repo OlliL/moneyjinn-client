@@ -112,17 +112,20 @@ const nextMonthLink = ref(false);
 const selectedYear = ref(0);
 const currentlyShownYear = ref(0);
 
-const props = withDefaults(defineProps<{
+const props = withDefaults(
+  defineProps<{
     year?: string;
     month?: string;
     sortBy?: string;
     sortDirection?: string;
-}>(), {
-  year: "",
-  month: "",
-  sortBy: "",
-  sortDirection: ""
-});
+  }>(),
+  {
+    year: "",
+    month: "",
+    sortBy: "",
+    sortDirection: "",
+  },
+);
 
 const sortByMap = ref(new Map<keyof Moneyflow, boolean>());
 

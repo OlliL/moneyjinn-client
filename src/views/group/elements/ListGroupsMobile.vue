@@ -53,13 +53,15 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import type { Group } from "@/model/group/Group";
 import { Pencil, Trash2 } from "lucide-vue-next";
-import type { PropType } from "vue";
 
 defineProps<{
-    groups: Group[];
+  groups: Group[];
 }>();
 
-const emit = defineEmits(["deleteGroup", "editGroup"]);
+const emit = defineEmits<{
+  deleteGroup: [group: Group];
+  editGroup: [group: Group];
+}>();
 
 const deleteGroup = (group: Group) => {
   emit("deleteGroup", group);

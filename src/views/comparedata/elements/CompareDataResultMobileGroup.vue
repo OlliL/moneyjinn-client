@@ -25,13 +25,12 @@
 import { Accordion } from "@/components/ui/accordion";
 import type { CompareData } from "@/model/comparedata/CompareData";
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
-import { type PropType } from "vue";
 import CompareDataResultMobileRow from "./CompareDataResultMobileRow.vue";
 
 defineProps<{
-    compareData?: CompareData[];
-    capitalsourceId: number;
-    capitalsourceComment: string;
+  compareData?: CompareData[];
+  capitalsourceId: number;
+  capitalsourceComment: string;
 }>();
 
 defineEmits<{

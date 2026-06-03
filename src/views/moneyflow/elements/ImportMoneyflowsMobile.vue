@@ -205,14 +205,16 @@ import {
   Save,
   Tag,
 } from "lucide-vue-next";
-import { computed, ref, type PropType } from "vue";
+import { computed, ref } from "vue";
 
 const props = defineProps<{
-    importedMoneyflow: ImportedMoneyflow;
-    isOpen: boolean;
+  importedMoneyflow: ImportedMoneyflow;
+  isOpen: boolean;
 }>();
 
-const emit = defineEmits(["itemRemoved"]);
+const emit = defineEmits<{
+  itemRemoved: [importedMoneyflowId: number];
+}>();
 
 const editRef = ref();
 

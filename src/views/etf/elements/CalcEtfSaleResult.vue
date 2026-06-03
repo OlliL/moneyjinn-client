@@ -177,9 +177,8 @@
 import SpanAmount from "@/components/common/SpanAmount.vue";
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import type { EtfSalesCalculation } from "@/model/etf/EtfSalesCalculation";
-import type { PropType } from "vue";
 
 defineProps<{
-    calcResults: EtfSalesCalculation;
+  calcResults: EtfSalesCalculation;
 }>();
 </script>

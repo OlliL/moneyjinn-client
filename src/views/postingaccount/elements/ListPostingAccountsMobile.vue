@@ -53,13 +53,15 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import type { PostingAccount } from "@/model/postingaccount/PostingAccount";
 import { Pencil, Trash2 } from "lucide-vue-next";
-import type { PropType } from "vue";
 
 defineProps<{
-    postingAccounts: PostingAccount[];
+  postingAccounts: PostingAccount[];
 }>();
 
-const emit = defineEmits(["deletePostingAccount", "editPostingAccount"]);
+const emit = defineEmits<{
+  deletePostingAccount: [postingAccount: PostingAccount];
+  editPostingAccount: [postingAccount: PostingAccount];
+}>();
 
 const deletePostingAccount = (mpa: PostingAccount) => {
   emit("deletePostingAccount", mpa);

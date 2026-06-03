@@ -144,23 +144,26 @@ import { computed, onBeforeUnmount, ref, watch } from "vue";
 import ButtonMobileCreate from "./ButtonMobileCreate.vue";
 import InputStandard from "./InputStandard.vue";
 
-const props = withDefaults(defineProps<{
+const props = withDefaults(
+  defineProps<{
     placeholder?: string;
     modelValue: string;
     showValidToggle?: boolean;
     validNow?: boolean;
-}>(), {
-  placeholder: "",
-  showValidToggle: true,
-  validNow: true
-});
+  }>(),
+  {
+    placeholder: "",
+    showValidToggle: true,
+    validNow: true,
+  },
+);
 
-const emit = defineEmits([
-  "update:modelValue",
-  "update:validNow",
-  "validNowToggled",
-  "createClicked",
-]);
+const emit = defineEmits<{
+  "update:modelValue": [value: string];
+  "update:validNow": [validNow: boolean];
+  validNowToggled: [validNowToggled: boolean];
+  createClicked: [];
+}>();
 
 const validNow = ref(props.validNow);
 const isMobileSheetOpen = ref(false);

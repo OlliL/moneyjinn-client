@@ -21,7 +21,7 @@ import { useI18n } from "vue-i18n";
 import { toast } from "vue-sonner";
 
 const props = defineProps<{
-    iban?: string;
+  iban?: string;
 }>();
 
 const { t } = useI18n();

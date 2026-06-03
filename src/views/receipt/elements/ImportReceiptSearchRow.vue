@@ -73,13 +73,17 @@ import { TableCell, TableRow } from "@/components/ui/table";
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 import { useUserSessionStore } from "@/stores/UserSessionStore";
 import { Eye, Pencil, Trash2 } from "lucide-vue-next";
-import { computed, type PropType } from "vue";
+import { computed } from "vue";
 const props = defineProps<{
-    mmf: Moneyflow;
+  mmf: Moneyflow;
 }>();
 
 const userSessionStore = useUserSessionStore();
-const emit = defineEmits(["deleteMoneyflow", "editMoneyflow", "listMoneyflow"]);
+const emit = defineEmits<{
+  deleteMoneyflow: [id: number];
+  editMoneyflow: [id: number];
+  listMoneyflow: [id: number];
+}>();
 
 const isOwnMoneyflow = computed(() => {
   return props.mmf.userId === userSessionStore.getUserId;

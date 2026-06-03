@@ -53,7 +53,9 @@ const serverErrors = ref(new Array<string>());
 
 const mcs = ref({} as Capitalsource);
 const modalComponent = useTemplateRef<typeof ModalDelete>("modalComponent");
-const emit = defineEmits(["capitalsourceDeleted"]);
+const emit = defineEmits<{
+  capitalsourceDeleted: [capitalsource: Capitalsource];
+}>();
 
 const typeString = computed(() => {
   return capitalsourceTypeNames[mcs.value.type];

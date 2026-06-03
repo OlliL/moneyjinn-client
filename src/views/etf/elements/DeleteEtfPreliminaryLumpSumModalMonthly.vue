@@ -77,7 +77,9 @@ const etfName = computed(() => {
   return etfStore.getEtf(etfPreliminaryLumpSum.value.etfId)?.name ?? "";
 });
 const modalComponent = useTemplateRef<typeof ModalDelete>("modalComponent");
-const emit = defineEmits(["etfPreliminaryLumpSumDeleted"]);
+const emit = defineEmits<{
+  etfPreliminaryLumpSumDeleted: [etfPreliminaryLumpSum: EtfPreliminaryLumpSum];
+}>();
 const dataArray = ref([] as Array<RowData>);
 const etfStore = useEtfStore();
 

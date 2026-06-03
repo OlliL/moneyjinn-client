@@ -116,7 +116,7 @@
 </template>
 <script lang="ts" setup>
 import { ChevronDown, ChevronRight } from "lucide-vue-next";
-import { ref, type PropType } from "vue";
+import { ref } from "vue";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -147,10 +147,10 @@ type MoneyflowGroup = {
 };
 
 const props = defineProps<{
-    moneyflowGroup: MoneyflowGroup;
-    colBookingMonth: boolean;
-    colBookingYear: boolean;
-    colContractpartner: boolean;
+  moneyflowGroup: MoneyflowGroup;
+  colBookingMonth: boolean;
+  colBookingYear: boolean;
+  colContractpartner: boolean;
 }>();
 
 const isCollapsed = ref(false);

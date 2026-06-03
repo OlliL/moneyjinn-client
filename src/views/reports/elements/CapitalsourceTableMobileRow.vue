@@ -87,21 +87,21 @@ import {
   capitalsourceTypeNames,
 } from "@/model/capitalsource/CapitalsourceType";
 import { formatDateWithTime } from "@/tools/views/FormatDate";
-import { computed, type PropType } from "vue";
+import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
 
 const props = defineProps<{
-    capitalsourceType: CapitalsourceType;
-    capitalsourceState: CapitalsourceState;
-    capitalsourceComment: string;
-    amountBeginOfMonthFixed: number;
-    amountEndOfMonthFixed?: number;
-    amountEndOfMonthCalculated: number;
-    amountCurrent?: number;
-    amountCurrentState?: Date;
-    currentMonthIsSettled: boolean;
+  capitalsourceType: CapitalsourceType;
+  capitalsourceState: CapitalsourceState;
+  capitalsourceComment: string;
+  amountBeginOfMonthFixed: number;
+  amountEndOfMonthFixed?: number;
+  amountEndOfMonthCalculated: number;
+  amountCurrent?: number;
+  amountCurrentState?: Date;
+  currentMonthIsSettled: boolean;
 }>();
 
 const capitalsourceTypeString = computed(() => {

@@ -74,14 +74,16 @@ import {
 } from "@/components/ui/table";
 import type { Etf } from "@/model/etf/Etf";
 import { Star } from "lucide-vue-next";
-import type { PropType } from "vue";
 import ListEtfRowVue from "./ListEtfRow.vue";
 
 defineProps<{
-    etfs: Etf[];
+  etfs: Etf[];
 }>();
 
-const emit = defineEmits(["deleteEtf", "editEtf"]);
+const emit = defineEmits<{
+  deleteEtf: [etf: Etf];
+  editEtf: [etf: Etf];
+}>();
 
 const deleteEtf = (etf: Etf) => {
   emit("deleteEtf", etf);

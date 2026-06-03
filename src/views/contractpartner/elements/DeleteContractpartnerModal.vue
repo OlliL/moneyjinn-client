@@ -47,7 +47,9 @@ import { handleBackendError } from "@/tools/views/HandleBackendError";
 const serverErrors = ref(new Array<string>());
 const mcp = ref({} as Contractpartner);
 const modalComponent = useTemplateRef<typeof ModalDelete>("modalComponent");
-const emit = defineEmits(["contractpartnerDeleted"]);
+const emit = defineEmits<{
+  contractpartnerDeleted: [contractpartner: Contractpartner];
+}>();
 
 const _show = (_mcp: Contractpartner) => {
   mcp.value = _mcp;

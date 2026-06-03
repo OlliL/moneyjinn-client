@@ -101,7 +101,7 @@
 </template>
 <script lang="ts" setup>
 import { Pencil, Plus, Trash2 } from "lucide-vue-next";
-import { computed, type PropType } from "vue";
+import { computed } from "vue";
 
 import { Button } from "@/components/ui/button";
 import { TableCell, TableRow } from "@/components/ui/table";
@@ -116,19 +116,19 @@ import type { CompareDataDataset } from "@/model/comparedata/CompareDataDataset"
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 
 const props = defineProps<{
-    mmf?: Moneyflow;
-    importData?: CompareDataDataset;
-    capitalsourceId: number;
-    capitalsourceComment: string;
-    rowIndex: number;
+  mmf?: Moneyflow;
+  importData?: CompareDataDataset;
+  capitalsourceId: number;
+  capitalsourceComment: string;
+  rowIndex: number;
 }>();
 
 const userSessionStore = useUserSessionStore();
-const emit = defineEmits([
-  "deleteMoneyflow",
-  "editMoneyflow",
-  "createMoneyflow",
-]);
+const emit = defineEmits<{
+  deleteMoneyflow: [id: number];
+  editMoneyflow: [id: number];
+  createMoneyflow: [moneyflow: Moneyflow];
+}>();
 
 const isOwnMoneyflow = computed(() => {
   return props.mmf ? props.mmf.userId === userSessionStore.getUserId : false;

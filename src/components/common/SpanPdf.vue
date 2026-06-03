@@ -9,7 +9,7 @@ import { computed } from "vue";
 import VuePdfEmbed from "vue-pdf-embed";
 
 const props = defineProps<{
-    receiptBase64: string;
+  receiptBase64: string;
 }>();
 
 const pdfSource = computed(() => {

@@ -118,8 +118,8 @@ import { onMounted, ref, watch } from "vue";
 const serverErrors = ref(new Array<string>());
 
 const props = defineProps<{
-    year: number;
-    month: number;
+  year: number;
+  month: number;
 }>();
 
 const dataLoaded = ref(false);

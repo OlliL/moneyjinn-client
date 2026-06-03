@@ -133,7 +133,10 @@ const origEtfFlow = ref({} as EtfFlow | undefined);
 const bookingdate = ref(new Date());
 const bookingtime = ref("");
 const modalComponent = useTemplateRef<typeof ModalVue>("modalComponent");
-const emit = defineEmits(["etfFlowCreated", "etfFlowUpdated"]);
+const emit = defineEmits<{
+  etfFlowCreated: [etfFlow: EtfFlow];
+  etfFlowUpdated: [etfFlow: EtfFlow];
+}>();
 
 const etfStore = useEtfStore();
 

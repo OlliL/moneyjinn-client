@@ -25,7 +25,9 @@ const serverErrors = ref(new Array<string>());
 
 const mpa = ref({} as PostingAccount);
 const modalComponent = useTemplateRef<typeof ModalDelete>("modalComponent");
-const emit = defineEmits(["postingAccountDeleted"]);
+const emit = defineEmits<{
+  postingAccountDeleted: [postingAccount: PostingAccount];
+}>();
 
 const _show = (_mpa: PostingAccount) => {
   mpa.value = _mpa;

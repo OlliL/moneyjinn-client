@@ -85,16 +85,19 @@ import {
 import { Button } from "@/components/ui/button";
 import type { ContractpartnerMatching } from "@/model/contractpartnermatching/ContractpartnerMatching";
 import { Pencil, Trash2 } from "lucide-vue-next";
-import type { PropType } from "vue";
 
 defineProps<{
-    contractpartnerMatchings: ContractpartnerMatching[];
+  contractpartnerMatchings: ContractpartnerMatching[];
 }>();
 
-const emit = defineEmits([
-  "editContractpartnerMatching",
-  "deleteContractpartnerMatching",
-]);
+const emit = defineEmits<{
+  editContractpartnerMatching: [
+    contractpartnerMatching: ContractpartnerMatching,
+  ];
+  deleteContractpartnerMatching: [
+    contractpartnerMatching: ContractpartnerMatching,
+  ];
+}>();
 
 const editContractpartnerMatching = (mcm: ContractpartnerMatching) => {
   emit("editContractpartnerMatching", mcm);

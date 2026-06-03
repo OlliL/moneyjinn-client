@@ -38,14 +38,16 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import type { Group } from "@/model/group/Group";
-import type { PropType } from "vue";
 import ListGroupRowVue from "./ListGroupRow.vue";
 
 defineProps<{
-    groups: Group[];
+  groups: Group[];
 }>();
 
-const emit = defineEmits(["deleteGroup", "editGroup"]);
+const emit = defineEmits<{
+  deleteGroup: [group: Group];
+  editGroup: [group: Group];
+}>();
 
 const deleteGroup = (group: Group) => {
   emit("deleteGroup", group);

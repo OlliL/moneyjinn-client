@@ -186,11 +186,14 @@ const createModal = useTemplateRef<typeof CreateEtfFlowModalVue>("createModal");
 
 const { getAsSelectBoxValues, getFavoriteEtf, getEtf } = useEtfStore();
 
-const props = withDefaults(defineProps<{
+const props = withDefaults(
+  defineProps<{
     etfId?: string;
-}>(), {
-  etfId: undefined
-});
+  }>(),
+  {
+    etfId: undefined,
+  },
+);
 
 onMounted(() => {
   const etfId: number | undefined = props.etfId ? +props.etfId : undefined;

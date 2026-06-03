@@ -15,8 +15,8 @@
 import { Button } from "@/components/ui/button";
 
 defineProps<{
-    buttonLabel?: string;
-    formId?: string;
-    testId?: string;
+  buttonLabel?: string;
+  formId?: string;
+  testId?: string;
 }>();
 </script>

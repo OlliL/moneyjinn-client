@@ -120,20 +120,20 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import type { CompareData } from "@/model/comparedata/CompareData";
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
-import { ref, type PropType } from "vue";
+import { ref } from "vue";
 import CompareDataResultMobileGroup from "./CompareDataResultMobileGroup.vue";
 
 defineProps<{
-    compareDatasMatching?: CompareData[];
-    compareDatasMatchingCountClass: string;
-    compareDatasWrongCapitalsource?: CompareData[];
-    compareDatasWrongCapitalsourceCountClass: string;
-    compareDatasNotInFile?: CompareData[];
-    compareDatasNotInFileCountClass: string;
-    compareDatasNotInDatabase?: CompareData[];
-    compareDatasNotInDatabaseCountClass: string;
-    capitalsourceId: number;
-    capitalsourceComment: string;
+  compareDatasMatching?: CompareData[];
+  compareDatasMatchingCountClass: string;
+  compareDatasWrongCapitalsource?: CompareData[];
+  compareDatasWrongCapitalsourceCountClass: string;
+  compareDatasNotInFile?: CompareData[];
+  compareDatasNotInFileCountClass: string;
+  compareDatasNotInDatabase?: CompareData[];
+  compareDatasNotInDatabaseCountClass: string;
+  capitalsourceId: number;
+  capitalsourceComment: string;
 }>();
 
 defineEmits<{

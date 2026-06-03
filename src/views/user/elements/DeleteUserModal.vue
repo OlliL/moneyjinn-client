@@ -38,7 +38,9 @@ import { computed, ref, useTemplateRef } from "vue";
 const user = ref({} as User);
 const serverErrors = ref(new Array<string>());
 const modalComponent = useTemplateRef<typeof ModalDelete>("modalComponent");
-const emit = defineEmits(["userDeleted"]);
+const emit = defineEmits<{
+  userDeleted: [user: User];
+}>();
 
 const _show = (_user: User) => {
   user.value = _user;

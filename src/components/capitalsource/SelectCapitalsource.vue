@@ -20,7 +20,7 @@
 
 <script lang="ts" setup>
 import { SquarePlus } from "lucide-vue-next";
-import { computed, useTemplateRef, type PropType } from "vue";
+import { computed, useTemplateRef } from "vue";
 import { any, type ZodType } from "zod";
 
 import SelectStandard from "../common/SelectStandard.vue";
@@ -32,15 +32,18 @@ import type { Capitalsource } from "@/model/capitalsource/Capitalsource";
 
 const capitalsourceId = defineModel({ type: Number });
 
-const props = withDefaults(defineProps<{
+const props = withDefaults(
+  defineProps<{
     validityDate: Date;
     validationSchema?: ZodType;
     fieldLabel: string;
     idSuffix?: string;
-}>(), {
-  validationSchema: () => any().optional(),
-  idSuffix: ""
-});
+  }>(),
+  {
+    validationSchema: () => any().optional(),
+    idSuffix: "",
+  },
+);
 
 const createCapitalsourceModal = useTemplateRef<
   typeof CreateCapitalsourceModalVue

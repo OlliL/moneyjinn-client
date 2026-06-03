@@ -40,14 +40,16 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import type { PostingAccount } from "@/model/postingaccount/PostingAccount";
-import type { PropType } from "vue";
 import ListPostingAccountRowVue from "./ListPostingAccountRow.vue";
 
 defineProps<{
-    postingAccounts: PostingAccount[];
+  postingAccounts: PostingAccount[];
 }>();
 
-const emit = defineEmits(["deletePostingAccount", "editPostingAccount"]);
+const emit = defineEmits<{
+  deletePostingAccount: [postingAccount: PostingAccount];
+  editPostingAccount: [postingAccount: PostingAccount];
+}>();
 
 const deletePostingAccount = (mpa: PostingAccount) => {
   emit("deletePostingAccount", mpa);

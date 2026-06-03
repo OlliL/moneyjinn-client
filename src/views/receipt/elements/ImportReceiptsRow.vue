@@ -210,7 +210,7 @@ import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { amountSchema, globErr } from "@/tools/views/ZodUtil";
 import { Euro, Save, Search } from "lucide-vue-next";
 import { useForm } from "vee-validate";
-import { computed, nextTick, onMounted, ref, type PropType } from "vue";
+import { computed, nextTick, onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { date } from "zod";
 import ImportReceiptSearchRowVue from "./ImportReceiptSearchRow.vue";
@@ -234,15 +234,15 @@ const searchExecuted = ref(false);
 const searchSuccessful = ref(false);
 const selectedMoneyflowId = ref(0);
 
-const emit = defineEmits([
-  "deleteMoneyflow",
-  "editMoneyflow",
-  "listMoneyflow",
-  "removeReceiptFromView",
-]);
+const emit = defineEmits<{
+  deleteMoneyflow: [id: number];
+  editMoneyflow: [id: number, receipt: ImportedMoneyflowReceipt];
+  listMoneyflow: [id: number, receipt: ImportedMoneyflowReceipt];
+  removeReceiptFromView: [id: number];
+}>();
 
 const props = defineProps<{
-    receipt: ImportedMoneyflowReceipt;
+  receipt: ImportedMoneyflowReceipt;
 }>();
 
 const { handleSubmit } = useForm();

@@ -111,20 +111,20 @@ import {
   Pencil,
   Trash2,
 } from "lucide-vue-next";
-import { computed, type PropType } from "vue";
+import { computed } from "vue";
 
 const props = defineProps<{
-    mmf: Moneyflow;
-    modelValue: number;
+  mmf: Moneyflow;
+  modelValue: number;
 }>();
 
 const userSessionStore = useUserSessionStore();
-const emit = defineEmits([
-  "deleteMoneyflow",
-  "editMoneyflow",
-  "listMoneyflow",
-  "update:modelValue",
-]);
+const emit = defineEmits<{
+  deleteMoneyflow: [id: number];
+  editMoneyflow: [id: number];
+  listMoneyflow: [id: number];
+  "update:modelValue": [id: number];
+}>();
 
 const isOwnMoneyflow = computed(() => {
   return props.mmf.userId === userSessionStore.getUserId;

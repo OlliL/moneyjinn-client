@@ -92,13 +92,16 @@ const deleteModal =
 const editModal =
   useTemplateRef<typeof EditMonthlySettlementModalVue>("editModal");
 
-const props = withDefaults(defineProps<{
+const props = withDefaults(
+  defineProps<{
     year?: string;
     month?: string;
-}>(), {
-  year: undefined,
-  month: undefined
-});
+  }>(),
+  {
+    year: undefined,
+    month: undefined,
+  },
+);
 
 onMounted(() => {
   const year = props.year ? props.year : undefined;
@@ -192,7 +195,7 @@ const selectCurrentMonth = () => {
   });
 };
 
-const monthlySettlementUpserted = (year: string, month: number) => {
+const monthlySettlementUpserted = (year: number, month: number) => {
   selectedMonth.value = 0;
   router.push({
     name: Routes.ListMonthlySettlements,
@@ -205,7 +208,7 @@ const showDeleteMonthlySettlementModal = () => {
   deleteModal.value?._show(Number(selectedYear.value), selectedMonth.value);
 };
 
-const monthlySettlementDeleted = (year: string) => {
+const monthlySettlementDeleted = (year: number) => {
   if (months.value.length > 1) {
     router.push({
       name: Routes.ListMonthlySettlements,

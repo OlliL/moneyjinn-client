@@ -254,21 +254,21 @@ import {
   Plus,
   Trash2,
 } from "lucide-vue-next";
-import { computed, type PropType } from "vue";
+import { computed } from "vue";
 
 const props = defineProps<{
-    mmf?: Moneyflow;
-    importData?: CompareDataDataset;
-    capitalsourceId: number;
-    capitalsourceComment: string;
-    rowIndex: number;
+  mmf?: Moneyflow;
+  importData?: CompareDataDataset;
+  capitalsourceId: number;
+  capitalsourceComment: string;
+  rowIndex: number;
 }>();
 
-const emit = defineEmits([
-  "deleteMoneyflow",
-  "editMoneyflow",
-  "createMoneyflow",
-]);
+const emit = defineEmits<{
+  deleteMoneyflow: [id: number];
+  editMoneyflow: [id: number];
+  createMoneyflow: [moneyflow: Moneyflow];
+}>();
 const userSessionStore = useUserSessionStore();
 
 const displayDate = computed(

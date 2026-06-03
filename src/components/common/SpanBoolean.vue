@@ -11,7 +11,7 @@ import { useI18n } from "vue-i18n";
 const { t } = useI18n();
 
 const props = defineProps<{
-    value?: boolean;
+  value?: boolean;
 }>();
 
 const colorClass = computed(() => {

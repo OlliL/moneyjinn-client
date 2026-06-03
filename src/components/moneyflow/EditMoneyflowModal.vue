@@ -119,12 +119,12 @@ const editMoneyflowVue =
 
 const receipt = ref({} as MoneyflowReceipt);
 
-const emit = defineEmits([
-  "moneyflowCreated",
-  "moneyflowUpdated",
-  "moneyflowReceiptDeleted",
-  "showReceipt",
-]);
+const emit = defineEmits<{
+  moneyflowCreated: [moneyflow: Moneyflow];
+  moneyflowUpdated: [moneyflow: Moneyflow];
+  moneyflowReceiptDeleted: [moneyflowId: number];
+  showReceipt: [moneyflowId: number];
+}>();
 
 const { handleSubmit, values, setFieldTouched } = useForm();
 

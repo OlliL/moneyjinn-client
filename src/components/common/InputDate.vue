@@ -90,13 +90,13 @@ import {
   ref,
   useTemplateRef,
   watch,
-  type PropType,
   type Ref,
 } from "vue";
 import { useI18n } from "vue-i18n";
 import { date, preprocess, type ZodType } from "zod";
 
-const props = withDefaults(defineProps<{
+const props = withDefaults(
+  defineProps<{
     validationSchema?: ZodType;
     validationSchemaRef?: Ref<ZodType>;
     id: string;
@@ -105,15 +105,19 @@ const props = withDefaults(defineProps<{
     pickMode?: string;
     pickerSide?: "top" | "bottom";
     pickerAlign?: "start" | "center" | "end";
-}>(), {
-  validationSchema: () => date().optional(),
-  pickMode: "day",
-  pickerSide: "bottom",
-  pickerAlign: "start"
-});
+  }>(),
+  {
+    validationSchema: () => date().optional(),
+    pickMode: "day",
+    pickerSide: "bottom",
+    pickerAlign: "start",
+  },
+);
 
 const { t } = useI18n();
-const emit = defineEmits(["update:modelValue"]);
+const emit = defineEmits<{
+  "update:modelValue": [value: Date | undefined];
+}>();
 const viewMounted = ref(false);
 const closeLabel = t("General.close");
 const isPopoverOpen = ref(false);

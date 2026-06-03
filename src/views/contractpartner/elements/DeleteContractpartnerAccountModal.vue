@@ -33,7 +33,11 @@ import { ref, useTemplateRef } from "vue";
 const serverErrors = ref(new Array<string>());
 const mca = ref({} as ContractpartnerAccount);
 const modalComponent = useTemplateRef<typeof ModalDelete>("modalComponent");
-const emit = defineEmits(["contractpartnerAccountDeleted"]);
+const emit = defineEmits<{
+  contractpartnerAccountDeleted: [
+    contractpartnerAccount: ContractpartnerAccount,
+  ];
+}>();
 
 const _show = (_mca: ContractpartnerAccount) => {
   mca.value = _mca;

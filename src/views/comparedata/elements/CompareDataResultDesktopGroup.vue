@@ -96,16 +96,16 @@ import {
 import type { CompareData } from "@/model/comparedata/CompareData";
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 import { ChevronDown, ChevronRight } from "lucide-vue-next";
-import { computed, ref, type PropType } from "vue";
+import { computed, ref } from "vue";
 import CompareDataResultDesktopRowVue from "./CompareDataResultDesktopRow.vue";
 
 const props = defineProps<{
-    compareData?: Array<CompareData>;
-    comment: string;
-    amountClass: string;
-    capitalsourceId: number;
-    capitalsourceComment: string;
-    groupTestId: string;
+  compareData?: Array<CompareData>;
+  comment: string;
+  amountClass: string;
+  capitalsourceId: number;
+  capitalsourceComment: string;
+  groupTestId: string;
 }>();
 
 const isCollapsed = ref(false);

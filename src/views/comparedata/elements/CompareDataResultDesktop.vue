@@ -69,20 +69,19 @@ import {
 } from "@/components/ui/table";
 import type { CompareData } from "@/model/comparedata/CompareData";
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
-import { type PropType } from "vue";
 import CompareDataResultDesktopGroupVue from "./CompareDataResultDesktopGroup.vue";
 
 defineProps<{
-    compareDatasMatching?: CompareData[];
-    compareDatasMatchingCountClass: string;
-    compareDatasWrongCapitalsource?: CompareData[];
-    compareDatasWrongCapitalsourceCountClass: string;
-    compareDatasNotInFile?: CompareData[];
-    compareDatasNotInFileCountClass: string;
-    compareDatasNotInDatabase?: CompareData[];
-    compareDatasNotInDatabaseCountClass: string;
-    capitalsourceId: number;
-    capitalsourceComment: string;
+  compareDatasMatching?: CompareData[];
+  compareDatasMatchingCountClass: string;
+  compareDatasWrongCapitalsource?: CompareData[];
+  compareDatasWrongCapitalsourceCountClass: string;
+  compareDatasNotInFile?: CompareData[];
+  compareDatasNotInFileCountClass: string;
+  compareDatasNotInDatabase?: CompareData[];
+  compareDatasNotInDatabaseCountClass: string;
+  capitalsourceId: number;
+  capitalsourceComment: string;
 }>();
 
 defineEmits<{
