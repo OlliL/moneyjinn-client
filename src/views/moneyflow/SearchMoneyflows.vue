@@ -421,7 +421,7 @@ watch(
   { immediate: true },
 );
 
-type MoneyflowGroup = {
+export type MoneyflowGroup = {
   sortString: string;
   month: number;
   monthString: string;

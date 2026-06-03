@@ -32,24 +32,14 @@ import type { Capitalsource } from "@/model/capitalsource/Capitalsource";
 
 const capitalsourceId = defineModel({ type: Number });
 
-const props = defineProps({
-  validityDate: {
-    type: Date,
-    required: true,
-  },
-  validationSchema: {
-    type: Object as PropType<ZodType>,
-    required: false,
-    default: any().optional(),
-  },
-  fieldLabel: {
-    type: String,
-    required: true,
-  },
-  idSuffix: {
-    type: String,
-    default: "",
-  },
+const props = withDefaults(defineProps<{
+    validityDate: Date;
+    validationSchema?: ZodType;
+    fieldLabel: string;
+    idSuffix?: string;
+}>(), {
+  validationSchema: () => any().optional(),
+  idSuffix: ""
 });
 
 const createCapitalsourceModal = useTemplateRef<

@@ -126,12 +126,9 @@ import { formatNumber } from "@/tools/views/FormatNumber";
 import { Pencil, Star, Trash2 } from "lucide-vue-next";
 import type { PropType } from "vue";
 
-defineProps({
-  etfs: {
-    type: Array as PropType<Etf[]>,
-    required: true,
-  },
-});
+defineProps<{
+    etfs: Etf[];
+}>();
 
 const emit = defineEmits(["deleteEtf", "editEtf"]);
 

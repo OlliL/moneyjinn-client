@@ -98,12 +98,9 @@ import type { ImportedMoneyflow } from "@/model/moneyflow/ImportedMoneyflow";
 import ButtonDeleteTwoTap from "@/components/common/ButtonDeleteTwoTap.vue";
 import { Save } from "lucide-vue-next";
 
-const props = defineProps({
-  importedMoneyflow: {
-    type: Object as PropType<ImportedMoneyflow>,
-    required: true,
-  },
-});
+const props = defineProps<{
+    importedMoneyflow: ImportedMoneyflow;
+}>();
 
 const emit = defineEmits(["itemRemoved"]);
 

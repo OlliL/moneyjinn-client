@@ -76,58 +76,24 @@ import { any, type ZodType } from "zod";
 defineOptions({
   inheritAttrs: false,
 });
-const props = defineProps({
-  modelValue: {
-    type: undefined,
-    required: false,
-  },
-  validationSchema: {
-    type: Object as PropType<ZodType>,
-    required: false,
-    default: any().optional(),
-  },
-  validationSchemaRef: {
-    type: Object as PropType<Ref<ZodType>>,
-    required: false,
-  },
-  id: {
-    type: String,
-    required: true,
-  },
-  name: {
-    type: String,
-    required: false,
-  },
-  fieldLabel: {
-    type: String,
-    required: false,
-  },
-  fieldType: {
-    type: String,
-    default: "text",
-  },
-  focus: {
-    type: Boolean,
-    required: false,
-    default: false,
-  },
-  align: {
-    type: String,
-    required: false,
-  },
-  disabled: {
-    type: Boolean,
-    required: false,
-    default: false,
-  },
-  step: {
-    type: String,
-    required: false,
-  },
-  placeholder: {
-    type: String,
-    required: false,
-  },
+const props = withDefaults(defineProps<{
+    modelValue?: any;
+    validationSchema?: ZodType;
+    validationSchemaRef?: Ref<ZodType>;
+    id: string;
+    name?: string;
+    fieldLabel?: string;
+    fieldType?: string;
+    focus?: boolean;
+    align?: string;
+    disabled?: boolean;
+    step?: string;
+    placeholder?: string;
+}>(), {
+  validationSchema: () => any().optional(),
+  fieldType: "text",
+  focus: false,
+  disabled: false
 });
 const emit = defineEmits(["update:modelValue"]);
 

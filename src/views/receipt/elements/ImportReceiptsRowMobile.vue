@@ -113,16 +113,10 @@ import {
 } from "lucide-vue-next";
 import { computed, type PropType } from "vue";
 
-const props = defineProps({
-  mmf: {
-    type: Object as PropType<Moneyflow>,
-    required: true,
-  },
-  modelValue: {
-    type: Number,
-    required: true,
-  },
-});
+const props = defineProps<{
+    mmf: Moneyflow;
+    modelValue: number;
+}>();
 
 const userSessionStore = useUserSessionStore();
 const emit = defineEmits([

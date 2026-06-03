@@ -24,12 +24,9 @@ import type { Group } from "@/model/group/Group";
 import { Pencil, Trash2 } from "lucide-vue-next";
 import type { PropType } from "vue";
 
-const props = defineProps({
-  group: {
-    type: Object as PropType<Group>,
-    required: true,
-  },
-});
+const props = defineProps<{
+    group: Group;
+}>();
 
 const emit = defineEmits(["deleteGroup", "editGroup"]);
 

@@ -43,12 +43,9 @@ import type { PostingAccount } from "@/model/postingaccount/PostingAccount";
 import type { PropType } from "vue";
 import ListPostingAccountRowVue from "./ListPostingAccountRow.vue";
 
-defineProps({
-  postingAccounts: {
-    type: Array as PropType<PostingAccount[]>,
-    required: true,
-  },
-});
+defineProps<{
+    postingAccounts: PostingAccount[];
+}>();
 
 const emit = defineEmits(["deletePostingAccount", "editPostingAccount"]);
 

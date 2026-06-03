@@ -124,12 +124,9 @@ import type { PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
 import { Pencil, Trash2 } from "lucide-vue-next";
 import type { PropType } from "vue";
 
-defineProps({
-  preDefMoneyflows: {
-    type: Array as PropType<PreDefMoneyflow[]>,
-    required: true,
-  },
-});
+defineProps<{
+    preDefMoneyflows: PreDefMoneyflow[];
+}>();
 
 const emit = defineEmits(["editPreDefMoneyflow", "deletePreDefMoneyflow"]);
 

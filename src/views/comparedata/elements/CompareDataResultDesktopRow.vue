@@ -115,28 +115,13 @@ import SpanImportComment from "@/components/common/SpanImportComment.vue";
 import type { CompareDataDataset } from "@/model/comparedata/CompareDataDataset";
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 
-const props = defineProps({
-  mmf: {
-    type: Object as PropType<Moneyflow>,
-    required: false,
-  },
-  importData: {
-    type: Object as PropType<CompareDataDataset>,
-    required: false,
-  },
-  capitalsourceId: {
-    type: Number,
-    required: true,
-  },
-  capitalsourceComment: {
-    type: String,
-    required: true,
-  },
-  rowIndex: {
-    type: Number,
-    required: true,
-  },
-});
+const props = defineProps<{
+    mmf?: Moneyflow;
+    importData?: CompareDataDataset;
+    capitalsourceId: number;
+    capitalsourceComment: string;
+    rowIndex: number;
+}>();
 
 const userSessionStore = useUserSessionStore();
 const emit = defineEmits([

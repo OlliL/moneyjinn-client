@@ -28,20 +28,11 @@ import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 import { type PropType } from "vue";
 import CompareDataResultMobileRow from "./CompareDataResultMobileRow.vue";
 
-defineProps({
-  compareData: {
-    type: Array as PropType<CompareData[]>,
-    required: false,
-  },
-  capitalsourceId: {
-    type: Number,
-    required: true,
-  },
-  capitalsourceComment: {
-    type: String,
-    required: true,
-  },
-});
+defineProps<{
+    compareData?: CompareData[];
+    capitalsourceId: number;
+    capitalsourceComment: string;
+}>();
 
 defineEmits<{
   deleteMoneyflow: [id: number];

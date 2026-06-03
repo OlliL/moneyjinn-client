@@ -142,17 +142,19 @@ const emit = defineEmits([
   "postingAccountIdChanged",
 ]);
 
-const props = defineProps({
-  amount: { type: Number, required: false },
-  comment: { type: String, required: false },
-  postingAccountId: { type: Number, required: false },
-  isLastRow: { type: Boolean, required: true },
-  index: { type: Number, required: true },
-  remainder: { type: Number, required: true },
-  remainderIsValid: { type: Boolean, required: false },
-  moneyflowComment: { type: String, required: false },
-  moneyflowPostingAccountId: { type: Number, required: false },
-  idSuffix: { type: String, default: "" },
+const props = withDefaults(defineProps<{
+    amount?: number;
+    comment?: string;
+    postingAccountId?: number;
+    isLastRow: boolean;
+    index: number;
+    remainder: number;
+    remainderIsValid?: boolean;
+    moneyflowComment?: string;
+    moneyflowPostingAccountId?: number;
+    idSuffix?: string;
+}>(), {
+  idSuffix: ""
 });
 
 const showRemainder = computed(() => props.isLastRow && props.remainder != 0);

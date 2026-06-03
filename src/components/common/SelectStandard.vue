@@ -130,37 +130,17 @@ import {
 } from "vue";
 import { any, type ZodType } from "zod";
 
-const props = defineProps({
-  modelValue: {
-    type: undefined,
-    required: false,
-  },
-  selectBoxValues: {
-    type: Array<SelectBoxValue>,
-    required: true,
-  },
-  validationSchema: {
-    type: Object as PropType<ZodType>,
-    required: false,
-    default: any().optional(),
-  },
-  validationSchemaRef: {
-    type: Object as PropType<Ref<ZodType>>,
-    required: false,
-  },
-  id: {
-    type: String,
-    required: true,
-  },
-  fieldLabel: {
-    type: String,
-    required: true,
-  },
-  focus: {
-    type: Boolean,
-    required: false,
-    default: false,
-  },
+const props = withDefaults(defineProps<{
+    modelValue?: any;
+    selectBoxValues: Array<SelectBoxValue>;
+    validationSchema?: ZodType;
+    validationSchemaRef?: Ref<ZodType>;
+    id: string;
+    fieldLabel: string;
+    focus?: boolean;
+}>(), {
+  validationSchema: () => any().optional(),
+  focus: false
 });
 const schema = computed(() => {
   if (props.validationSchemaRef) {

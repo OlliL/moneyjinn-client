@@ -35,12 +35,9 @@ import SpanDate from "@/components/common/SpanDate.vue";
 import SpanIban from "@/components/common/SpanIban.vue";
 import type { ContractpartnerAccount } from "@/model/contractpartneraccount/ContractpartnerAccount";
 
-const props = defineProps({
-  mca: {
-    type: Object as PropType<ContractpartnerAccount>,
-    required: true,
-  },
-});
+const props = defineProps<{
+    mca: ContractpartnerAccount;
+}>();
 
 const emit = defineEmits([
   "deleteContractpartnerAccount",

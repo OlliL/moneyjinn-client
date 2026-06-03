@@ -99,32 +99,14 @@ import { ChevronDown, ChevronRight } from "lucide-vue-next";
 import { computed, ref, type PropType } from "vue";
 import CompareDataResultDesktopRowVue from "./CompareDataResultDesktopRow.vue";
 
-const props = defineProps({
-  compareData: {
-    type: Object as PropType<Array<CompareData>>,
-    required: false,
-  },
-  comment: {
-    type: String,
-    required: true,
-  },
-  amountClass: {
-    type: String,
-    required: true,
-  },
-  capitalsourceId: {
-    type: Number,
-    required: true,
-  },
-  capitalsourceComment: {
-    type: String,
-    required: true,
-  },
-  groupTestId: {
-    type: String,
-    required: true,
-  },
-});
+const props = defineProps<{
+    compareData?: Array<CompareData>;
+    comment: string;
+    amountClass: string;
+    capitalsourceId: number;
+    capitalsourceComment: string;
+    groupTestId: string;
+}>();
 
 const isCollapsed = ref(false);
 defineEmits<{

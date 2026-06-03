@@ -144,11 +144,15 @@ import { computed, onBeforeUnmount, ref, watch } from "vue";
 import ButtonMobileCreate from "./ButtonMobileCreate.vue";
 import InputStandard from "./InputStandard.vue";
 
-const props = defineProps({
-  placeholder: { type: String, default: "" },
-  modelValue: { type: String, required: true },
-  showValidToggle: { type: Boolean, default: true },
-  validNow: { type: Boolean, default: true },
+const props = withDefaults(defineProps<{
+    placeholder?: string;
+    modelValue: string;
+    showValidToggle?: boolean;
+    validNow?: boolean;
+}>(), {
+  placeholder: "",
+  showValidToggle: true,
+  validNow: true
 });
 
 const emit = defineEmits([

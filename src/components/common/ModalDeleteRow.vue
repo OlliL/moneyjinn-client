@@ -16,16 +16,11 @@ import { computed } from "vue";
 
 import { TableCell, TableRow } from "@/components/ui/table";
 
-const props = defineProps({
-  label: {
-    type: String,
-    required: true,
-  },
-  highlightValue: {
-    type: Boolean,
-    required: false,
-    default: false,
-  },
+const props = withDefaults(defineProps<{
+    label: string;
+    highlightValue?: boolean;
+}>(), {
+  highlightValue: false
 });
 
 const valueClassName = computed(() => {

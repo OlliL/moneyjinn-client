@@ -74,12 +74,9 @@ import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 import { useUserSessionStore } from "@/stores/UserSessionStore";
 import { Eye, Pencil, Trash2 } from "lucide-vue-next";
 import { computed, type PropType } from "vue";
-const props = defineProps({
-  mmf: {
-    type: Object as PropType<Moneyflow>,
-    required: true,
-  },
-});
+const props = defineProps<{
+    mmf: Moneyflow;
+}>();
 
 const userSessionStore = useUserSessionStore();
 const emit = defineEmits(["deleteMoneyflow", "editMoneyflow", "listMoneyflow"]);

@@ -12,14 +12,11 @@ import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
 
-const props = defineProps({
-  amount: {
-    type: Number,
-  },
-  decimalPlaces: {
-    type: Number,
-    default: 2,
-  },
+const props = withDefaults(defineProps<{
+    amount?: number;
+    decimalPlaces?: number;
+}>(), {
+  decimalPlaces: 2
 });
 
 const amountClass = computed(() => {

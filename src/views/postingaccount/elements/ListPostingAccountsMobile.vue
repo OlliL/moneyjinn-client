@@ -55,12 +55,9 @@ import type { PostingAccount } from "@/model/postingaccount/PostingAccount";
 import { Pencil, Trash2 } from "lucide-vue-next";
 import type { PropType } from "vue";
 
-defineProps({
-  postingAccounts: {
-    type: Array as PropType<PostingAccount[]>,
-    required: true,
-  },
-});
+defineProps<{
+    postingAccounts: PostingAccount[];
+}>();
 
 const emit = defineEmits(["deletePostingAccount", "editPostingAccount"]);
 

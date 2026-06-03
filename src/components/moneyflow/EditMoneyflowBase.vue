@@ -291,23 +291,14 @@ const contractpartnerStore = useContractpartnerStore();
 const postingAccountStore = usePostingAccountStore();
 const capitalsourceStore = useCapitalsourceStore();
 
-const props = defineProps({
-  mmfToEdit: {
-    type: Object as PropType<Moneyflow>,
-    required: false,
-  },
-  selectedPreDefMoneyflow: {
-    type: Object as PropType<PreDefMoneyflow>,
-    required: false,
-  },
-  idSuffix: {
-    type: String,
-    default: "",
-  },
-  fillContractpartnerDefaults: {
-    type: Boolean,
-    default: false,
-  },
+const props = withDefaults(defineProps<{
+    mmfToEdit?: Moneyflow;
+    selectedPreDefMoneyflow?: PreDefMoneyflow;
+    idSuffix?: string;
+    fillContractpartnerDefaults?: boolean;
+}>(), {
+  idSuffix: "",
+  fillContractpartnerDefaults: false
 });
 onMounted(() => {
   if (props.fillContractpartnerDefaults) resetForm();

@@ -35,12 +35,9 @@ import { userRoleNames } from "@/model/user/UserRole";
 import { Pencil, Trash2 } from "lucide-vue-next";
 import { computed, type PropType } from "vue";
 
-const props = defineProps({
-  user: {
-    type: Object as PropType<User>,
-    required: true,
-  },
-});
+const props = defineProps<{
+    user: User;
+}>();
 
 const role = computed(() => {
   return userRoleNames[props.user.role];

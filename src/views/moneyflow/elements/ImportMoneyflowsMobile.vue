@@ -207,13 +207,10 @@ import {
 } from "lucide-vue-next";
 import { computed, ref, type PropType } from "vue";
 
-const props = defineProps({
-  importedMoneyflow: {
-    type: Object as PropType<ImportedMoneyflow>,
-    required: true,
-  },
-  isOpen: { type: Boolean, required: true },
-});
+const props = defineProps<{
+    importedMoneyflow: ImportedMoneyflow;
+    isOpen: boolean;
+}>();
 
 const emit = defineEmits(["itemRemoved"]);
 

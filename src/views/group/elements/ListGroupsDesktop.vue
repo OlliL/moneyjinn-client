@@ -41,12 +41,9 @@ import type { Group } from "@/model/group/Group";
 import type { PropType } from "vue";
 import ListGroupRowVue from "./ListGroupRow.vue";
 
-defineProps({
-  groups: {
-    type: Array as PropType<Group[]>,
-    required: true,
-  },
-});
+defineProps<{
+    groups: Group[];
+}>();
 
 const emit = defineEmits(["deleteGroup", "editGroup"]);
 

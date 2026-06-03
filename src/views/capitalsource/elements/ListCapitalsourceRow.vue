@@ -53,16 +53,10 @@ import { capitalsourceImportNames } from "@/model/capitalsource/CapitalsourceImp
 import { capitalsourceStateNames } from "@/model/capitalsource/CapitalsourceState";
 import { capitalsourceTypeNames } from "@/model/capitalsource/CapitalsourceType";
 
-const props = defineProps({
-  mcs: {
-    type: Object as PropType<Capitalsource>,
-    required: true,
-  },
-  owner: {
-    type: Boolean,
-    required: true,
-  },
-});
+const props = defineProps<{
+    mcs: Capitalsource;
+    owner: boolean;
+}>();
 const emit = defineEmits(["deleteCapitalsource", "editCapitalsource"]);
 
 const importAllowedColorClass = computed(() => {

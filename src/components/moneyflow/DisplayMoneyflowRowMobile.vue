@@ -242,10 +242,13 @@ import {
 } from "lucide-vue-next";
 import { computed, type PropType } from "vue";
 
-const props = defineProps({
-  mmf: { type: Object as PropType<Moneyflow>, required: true },
-  hideContractpartner: { type: Boolean, default: false },
-  showCommentInTrigger: { type: Boolean, default: false },
+const props = withDefaults(defineProps<{
+    mmf: Moneyflow;
+    hideContractpartner?: boolean;
+    showCommentInTrigger?: boolean;
+}>(), {
+  hideContractpartner: false,
+  showCommentInTrigger: false
 });
 
 defineEmits<{

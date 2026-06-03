@@ -121,16 +121,10 @@ import { formatNumber, redIfNegative } from "@/tools/views/FormatNumber";
 import { Pencil, Trash2 } from "lucide-vue-next";
 import { computed, type PropType } from "vue";
 
-const props = defineProps({
-  flow: {
-    type: Object as PropType<EtfFlow>,
-    required: true,
-  },
-  showLumpSum: {
-    type: Boolean,
-    required: true,
-  },
-});
+const props = defineProps<{
+    flow: EtfFlow;
+    showLumpSum: boolean;
+}>();
 
 const emit = defineEmits(["deleteEtfFlow", "editEtfFlow"]);
 const etfStore = useEtfStore();

@@ -179,10 +179,7 @@ import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import type { EtfSalesCalculation } from "@/model/etf/EtfSalesCalculation";
 import type { PropType } from "vue";
 
-defineProps({
-  calcResults: {
-    type: Object as PropType<EtfSalesCalculation>,
-    required: true,
-  },
-});
+defineProps<{
+    calcResults: EtfSalesCalculation;
+}>();
 </script>

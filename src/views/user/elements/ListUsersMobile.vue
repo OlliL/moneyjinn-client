@@ -78,12 +78,9 @@ import { userRoleNames } from "@/model/user/UserRole";
 import { Pencil, Trash2 } from "lucide-vue-next";
 import type { PropType } from "vue";
 
-defineProps({
-  users: {
-    type: Array as PropType<User[]>,
-    required: true,
-  },
-});
+defineProps<{
+    users: User[];
+}>();
 
 const emit = defineEmits(["deleteUser", "editUser"]);
 

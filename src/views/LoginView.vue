@@ -82,11 +82,10 @@ const schema = {
   password: string().min(1, t("LoginView.validation.password")),
 };
 
-const props = defineProps({
-  error: {
-    type: String,
-    default: "",
-  },
+const props = withDefaults(defineProps<{
+    error?: string;
+}>(), {
+  error: ""
 });
 
 onMounted(() => {

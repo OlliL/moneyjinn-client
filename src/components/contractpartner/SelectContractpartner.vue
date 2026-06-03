@@ -32,28 +32,15 @@ import type { Contractpartner } from "@/model/contractpartner/Contractpartner";
 
 const contractpartnerId = defineModel({ type: Number });
 
-const props = defineProps({
-  validityDate: {
-    type: Date,
-    required: false,
-  },
-  validationSchema: {
-    type: Object as PropType<ZodType>,
-    required: false,
-    default: any().optional(),
-  },
-  validationSchemaRef: {
-    type: Object as PropType<Ref<ZodType>>,
-    required: false,
-  },
-  fieldLabel: {
-    type: String,
-    required: true,
-  },
-  idSuffix: {
-    type: String,
-    default: "",
-  },
+const props = withDefaults(defineProps<{
+    validityDate?: Date;
+    validationSchema?: ZodType;
+    validationSchemaRef?: Ref<ZodType>;
+    fieldLabel: string;
+    idSuffix?: string;
+}>(), {
+  validationSchema: () => any().optional(),
+  idSuffix: ""
 });
 
 const createContractpartnerModal = useTemplateRef<

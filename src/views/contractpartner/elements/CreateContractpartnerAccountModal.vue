@@ -77,19 +77,13 @@ import { string, ZodType } from "zod";
 
 const { t } = useI18n();
 
-const props = defineProps({
-  idSuffix: {
-    type: String,
-    default: "",
-  },
-  contractpartnerId: {
-    type: Number,
-    required: true,
-  },
-  zIndex: {
-    type: String,
-    default: "2001",
-  },
+const props = withDefaults(defineProps<{
+    idSuffix?: string;
+    contractpartnerId: number;
+    zIndex?: string;
+}>(), {
+  idSuffix: "",
+  zIndex: "2001"
 });
 
 const serverErrors = ref(new Array<string>());

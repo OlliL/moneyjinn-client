@@ -9,12 +9,9 @@
 import { Button } from "@/components/ui/button";
 import { Trash2 } from "lucide-vue-next";
 
-defineProps({
-  buttonLabel: {
-    type: String,
-    required: true,
-  },
-});
+defineProps<{
+    buttonLabel: string;
+}>();
 
 const emit = defineEmits(["click"]);
 </script>

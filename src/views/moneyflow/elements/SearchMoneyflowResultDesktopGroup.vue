@@ -146,24 +146,12 @@ type MoneyflowGroup = {
   moneyflows: Array<Moneyflow>;
 };
 
-const props = defineProps({
-  moneyflowGroup: {
-    type: Object as PropType<MoneyflowGroup>,
-    required: true,
-  },
-  colBookingMonth: {
-    type: Boolean,
-    required: true,
-  },
-  colBookingYear: {
-    type: Boolean,
-    required: true,
-  },
-  colContractpartner: {
-    type: Boolean,
-    required: true,
-  },
-});
+const props = defineProps<{
+    moneyflowGroup: MoneyflowGroup;
+    colBookingMonth: boolean;
+    colBookingYear: boolean;
+    colContractpartner: boolean;
+}>();
 
 const isCollapsed = ref(false);
 defineEmits<{

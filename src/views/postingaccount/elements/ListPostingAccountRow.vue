@@ -25,12 +25,9 @@ import type { PostingAccount } from "@/model/postingaccount/PostingAccount";
 import { Pencil, Trash2 } from "lucide-vue-next";
 import type { PropType } from "vue";
 
-const props = defineProps({
-  mpa: {
-    type: Object as PropType<PostingAccount>,
-    required: true,
-  },
-});
+const props = defineProps<{
+    mpa: PostingAccount;
+}>();
 
 const emit = defineEmits(["deletePostingAccount", "editPostingAccount"]);
 

@@ -177,24 +177,12 @@ import { formatNumber } from "@/tools/views/FormatNumber";
 import { computed, type PropType } from "vue";
 import ListEtfDepotRowVue from "./ListEtfDepotRow.vue";
 
-const props = defineProps({
-  currentTab: {
-    type: String as PropType<"effective" | "all">,
-    required: true,
-  },
-  etfFlows: {
-    type: Array as PropType<EtfFlow[]>,
-    required: true,
-  },
-  etfEffectiveFlows: {
-    type: Array as PropType<EtfFlow[]>,
-    required: true,
-  },
-  selectedEtfId: {
-    type: Number,
-    required: true,
-  },
-});
+const props = defineProps<{
+    currentTab: "effective" | "all";
+    etfFlows: EtfFlow[];
+    etfEffectiveFlows: EtfFlow[];
+    selectedEtfId: number;
+}>();
 
 const { getEtf } = useEtfStore();
 const emit = defineEmits(["update:currentTab", "deleteEtfFlow", "editEtfFlow"]);

@@ -49,12 +49,9 @@ import type { ContractpartnerMatching } from "@/model/contractpartnermatching/Co
 import type { PropType } from "vue";
 import ListContractpartnerMatchingRowVue from "./ListContractpartnerMatchingRow.vue";
 
-defineProps({
-  contractpartnerMatchings: {
-    type: Array as PropType<ContractpartnerMatching[]>,
-    required: true,
-  },
-});
+defineProps<{
+    contractpartnerMatchings: ContractpartnerMatching[];
+}>();
 
 const emit = defineEmits([
   "editContractpartnerMatching",

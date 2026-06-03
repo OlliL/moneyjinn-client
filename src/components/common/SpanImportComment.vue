@@ -17,12 +17,9 @@ type ImportCommentLine = {
 };
 const { t } = useI18n();
 
-const props = defineProps({
-  comment: {
-    type: String,
-    required: false,
-  },
-});
+const props = defineProps<{
+    comment?: string;
+}>();
 
 const importDataCommentLines = computed(() => {
   const resultArray: Array<ImportCommentLine> = [];

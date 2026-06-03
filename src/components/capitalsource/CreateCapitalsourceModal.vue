@@ -156,11 +156,10 @@ import SelectStandard from "../common/SelectStandard.vue";
 
 const { t } = useI18n();
 
-const props = defineProps({
-  idSuffix: {
-    type: String,
-    default: "",
-  },
+const props = withDefaults(defineProps<{
+    idSuffix?: string;
+}>(), {
+  idSuffix: ""
 });
 
 const serverErrors = ref(new Array<string>());

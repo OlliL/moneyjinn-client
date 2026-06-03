@@ -30,24 +30,14 @@ import CreatePostingAccountModalVue from "./CreatePostingAccountModal.vue";
 
 const postingAccountId = defineModel({ type: Number });
 
-const props = defineProps({
-  validationSchema: {
-    type: Object as PropType<ZodType>,
-    required: false,
-    default: any().optional(),
-  },
-  validationSchemaRef: {
-    type: Object as PropType<Ref<ZodType>>,
-    required: false,
-  },
-  fieldLabel: {
-    type: String,
-    required: true,
-  },
-  idSuffix: {
-    type: String,
-    default: "",
-  },
+const props = withDefaults(defineProps<{
+    validationSchema?: ZodType;
+    validationSchemaRef?: Ref<ZodType>;
+    fieldLabel: string;
+    idSuffix?: string;
+}>(), {
+  validationSchema: () => any().optional(),
+  idSuffix: ""
 });
 
 const createPostingAccountModal = useTemplateRef<

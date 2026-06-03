@@ -65,12 +65,9 @@ import type { PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
 import type { PropType } from "vue";
 import ListPreDefMoneyflowRowVue from "./ListPreDefMoneyflowRow.vue";
 
-defineProps({
-  preDefMoneyflows: {
-    type: Array as PropType<PreDefMoneyflow[]>,
-    required: true,
-  },
-});
+defineProps<{
+    preDefMoneyflows: PreDefMoneyflow[];
+}>();
 
 const emit = defineEmits(["editPreDefMoneyflow", "deletePreDefMoneyflow"]);
 

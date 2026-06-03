@@ -43,12 +43,9 @@ import { formatNumber } from "@/tools/views/FormatNumber";
 import { Pencil, Star, Trash2 } from "lucide-vue-next";
 import { computed, type PropType } from "vue";
 
-const props = defineProps({
-  etf: {
-    type: Object as PropType<Etf>,
-    required: true,
-  },
-});
+const props = defineProps<{
+    etf: Etf;
+}>();
 const emit = defineEmits(["deleteEtf", "editEtf"]);
 
 const relativeString = computed(() => {

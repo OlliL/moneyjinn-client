@@ -325,16 +325,10 @@ watch(
   },
 );
 
-const props = defineProps({
-  year: {
-    type: String,
-    required: true,
-  },
-  month: {
-    type: String,
-    required: true,
-  },
-});
+const props = defineProps<{
+    year: string;
+    month: string;
+}>();
 
 const capitalsourceHasMovement = (
   data: ReportTurnoverCapitalsource,

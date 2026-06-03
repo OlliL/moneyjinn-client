@@ -40,12 +40,9 @@ import type { ContractpartnerMatching } from "@/model/contractpartnermatching/Co
 import { Pencil, Trash2 } from "lucide-vue-next";
 import type { PropType } from "vue";
 
-const props = defineProps({
-  mcm: {
-    type: Object as PropType<ContractpartnerMatching>,
-    required: true,
-  },
-});
+const props = defineProps<{
+    mcm: ContractpartnerMatching;
+}>();
 
 const emit = defineEmits([
   "deleteContractpartnerMatching",

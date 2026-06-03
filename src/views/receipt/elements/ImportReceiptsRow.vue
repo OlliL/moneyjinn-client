@@ -241,12 +241,9 @@ const emit = defineEmits([
   "removeReceiptFromView",
 ]);
 
-const props = defineProps({
-  receipt: {
-    type: Object as PropType<ImportedMoneyflowReceipt>,
-    required: true,
-  },
-});
+const props = defineProps<{
+    receipt: ImportedMoneyflowReceipt;
+}>();
 
 const { handleSubmit } = useForm();
 const moneyflowReceipt = computed(() =>

@@ -128,10 +128,10 @@ import { useUserSessionStore } from "@/stores/UserSessionStore";
 import { Clock, Eye, Pencil, ReceiptText, Trash2 } from "lucide-vue-next";
 import { computed, type PropType } from "vue";
 
-const props = defineProps({
-  mmf: { type: Object as PropType<Moneyflow>, required: true },
-  index: { type: Number, required: true },
-});
+const props = defineProps<{
+    mmf: Moneyflow;
+    index: number;
+}>();
 
 defineEmits<{
   showReceipt: [id: number];

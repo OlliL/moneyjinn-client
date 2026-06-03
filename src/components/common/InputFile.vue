@@ -36,28 +36,14 @@ import { useField } from "vee-validate";
 import { computed, useTemplateRef, type PropType, type Ref } from "vue";
 import { any, type ZodType } from "zod";
 
-const props = defineProps({
-  modelValue: {
-    type: undefined,
-    required: false,
-  },
-  validationSchema: {
-    type: Object as PropType<ZodType>,
-    required: false,
-    default: any().optional(),
-  },
-  validationSchemaRef: {
-    type: Object as PropType<Ref<ZodType>>,
-    required: false,
-  },
-  id: {
-    type: String,
-    required: true,
-  },
-  fieldLabel: {
-    type: String,
-    required: false,
-  },
+const props = withDefaults(defineProps<{
+    modelValue?: any;
+    validationSchema?: ZodType;
+    validationSchemaRef?: Ref<ZodType>;
+    id: string;
+    fieldLabel?: string;
+}>(), {
+  validationSchema: () => any().optional()
 });
 const fileUpload = useTemplateRef<HTMLInputElement>("fileUpload");
 const emit = defineEmits(["update:modelValue"]);

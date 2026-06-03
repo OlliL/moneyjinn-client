@@ -75,10 +75,14 @@ import { isDesktop } from "@/tools/views/IsDesktop";
 import { X } from "lucide-vue-next";
 import { computed, nextTick, ref, useTemplateRef, watch } from "vue";
 
-const props = defineProps({
-  title: { type: String, default: "" },
-  maxWidth: { type: String, default: "" },
-  zIndex: { type: String, default: "2000" },
+const props = withDefaults(defineProps<{
+    title?: string;
+    maxWidth?: string;
+    zIndex?: string;
+}>(), {
+  title: "",
+  maxWidth: "",
+  zIndex: "2000"
 });
 
 const isDesktopConst = isDesktop();

@@ -27,10 +27,7 @@ import {
 import type { EtfPreliminaryLumpSum } from "@/model/etf/EtfPreliminaryLumpSum";
 import { type PropType } from "vue";
 
-const props = defineProps({
-  mep: {
-    type: Object as PropType<EtfPreliminaryLumpSum>,
-    required: true,
-  },
-});
+const props = defineProps<{
+    mep: EtfPreliminaryLumpSum;
+}>();
 </script>

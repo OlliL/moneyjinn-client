@@ -256,13 +256,13 @@ import {
 } from "lucide-vue-next";
 import { computed, type PropType } from "vue";
 
-const props = defineProps({
-  mmf: { type: Object as PropType<Moneyflow>, required: false },
-  importData: { type: Object as PropType<CompareDataDataset>, required: false },
-  capitalsourceId: { type: Number, required: true },
-  capitalsourceComment: { type: String, required: true },
-  rowIndex: { type: Number, required: true },
-});
+const props = defineProps<{
+    mmf?: Moneyflow;
+    importData?: CompareDataDataset;
+    capitalsourceId: number;
+    capitalsourceComment: string;
+    rowIndex: number;
+}>();
 
 const emit = defineEmits([
   "deleteMoneyflow",

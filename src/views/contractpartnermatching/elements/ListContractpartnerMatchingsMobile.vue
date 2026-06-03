@@ -87,12 +87,9 @@ import type { ContractpartnerMatching } from "@/model/contractpartnermatching/Co
 import { Pencil, Trash2 } from "lucide-vue-next";
 import type { PropType } from "vue";
 
-defineProps({
-  contractpartnerMatchings: {
-    type: Array as PropType<ContractpartnerMatching[]>,
-    required: true,
-  },
-});
+defineProps<{
+    contractpartnerMatchings: ContractpartnerMatching[];
+}>();
 
 const emit = defineEmits([
   "editContractpartnerMatching",

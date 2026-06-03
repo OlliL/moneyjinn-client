@@ -204,11 +204,10 @@ import { boolean, date, number, string, type ZodTypeAny } from "zod";
 
 const { t } = useI18n();
 
-defineProps({
-  idSuffix: {
-    type: String,
-    default: "",
-  },
+withDefaults(defineProps<{
+    idSuffix?: string;
+}>(), {
+  idSuffix: ""
 });
 
 type UserGroup = AccessRelation & {

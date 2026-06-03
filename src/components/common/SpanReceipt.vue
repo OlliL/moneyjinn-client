@@ -14,12 +14,9 @@ import { MoneyflowReceiptType } from "@/model/moneyflow/MoneyflowReceiptType";
 import { computed, defineAsyncComponent, type PropType } from "vue";
 
 const spanPdf = defineAsyncComponent(() => import("./SpanPdf.vue"));
-const props = defineProps({
-  receipt: {
-    type: Object as PropType<MoneyflowReceipt>,
-    required: true,
-  },
-});
+const props = defineProps<{
+    receipt: MoneyflowReceipt;
+}>();
 
 const isJpeg = computed(
   () => props.receipt.receiptType === MoneyflowReceiptType.JPEG,

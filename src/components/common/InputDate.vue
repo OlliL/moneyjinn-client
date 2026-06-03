@@ -96,40 +96,20 @@ import {
 import { useI18n } from "vue-i18n";
 import { date, preprocess, type ZodType } from "zod";
 
-const props = defineProps({
-  validationSchema: {
-    type: Object as PropType<ZodType>,
-    required: false,
-    default: date().optional(),
-  },
-  validationSchemaRef: {
-    type: Object as PropType<Ref<ZodType>>,
-    required: false,
-  },
-  id: {
-    type: String,
-    required: true,
-  },
-  fieldLabel: {
-    type: String,
-    required: true,
-  },
-  modelValue: {
-    type: Date,
-    required: false,
-  },
-  pickMode: {
-    type: String,
-    default: "day",
-  },
-  pickerSide: {
-    type: String as PropType<"top" | "bottom">,
-    default: "bottom",
-  },
-  pickerAlign: {
-    type: String as PropType<"start" | "center" | "end">,
-    default: "start",
-  },
+const props = withDefaults(defineProps<{
+    validationSchema?: ZodType;
+    validationSchemaRef?: Ref<ZodType>;
+    id: string;
+    fieldLabel: string;
+    modelValue?: Date;
+    pickMode?: string;
+    pickerSide?: "top" | "bottom";
+    pickerAlign?: "start" | "center" | "end";
+}>(), {
+  validationSchema: () => date().optional(),
+  pickMode: "day",
+  pickerSide: "bottom",
+  pickerAlign: "start"
 });
 
 const { t } = useI18n();

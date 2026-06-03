@@ -92,12 +92,9 @@ import {
 import type { EtfSummary } from "@/model/etf/EtfSummary";
 import { computed, type PropType } from "vue";
 
-const props = defineProps({
-  etfSummaryArray: {
-    type: Array as PropType<EtfSummary[]>,
-    required: true,
-  },
-});
+const props = defineProps<{
+    etfSummaryArray: EtfSummary[];
+}>();
 
 const etfSummaryArray = computed(() => props.etfSummaryArray);
 </script>

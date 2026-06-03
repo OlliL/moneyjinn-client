@@ -184,11 +184,10 @@ import { string, ZodType } from "zod";
 
 const { t } = useI18n();
 
-defineProps({
-  idSuffix: {
-    type: String,
-    default: "",
-  },
+withDefaults(defineProps<{
+    idSuffix?: string;
+}>(), {
+  idSuffix: ""
 });
 
 const serverErrors = ref(new Array<string>());

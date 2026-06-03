@@ -35,12 +35,9 @@ import { AlertTriangle, Trash2, X } from "lucide-vue-next";
 import { ref } from "vue";
 import Button from "../ui/button/Button.vue";
 
-defineProps({
-  buttonLabel: {
-    type: String,
-    required: true,
-  },
-});
+defineProps<{
+    buttonLabel: string;
+}>();
 
 const emit = defineEmits(["executeDelete"]);
 const isConfirming = ref(false);

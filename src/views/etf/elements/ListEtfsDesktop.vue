@@ -77,12 +77,9 @@ import { Star } from "lucide-vue-next";
 import type { PropType } from "vue";
 import ListEtfRowVue from "./ListEtfRow.vue";
 
-defineProps({
-  etfs: {
-    type: Array as PropType<Etf[]>,
-    required: true,
-  },
-});
+defineProps<{
+    etfs: Etf[];
+}>();
 
 const emit = defineEmits(["deleteEtf", "editEtf"]);
 
