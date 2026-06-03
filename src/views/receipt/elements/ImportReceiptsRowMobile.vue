@@ -1,9 +1,9 @@
 <template>
   <Card
-    @click="$emit('update:modelValue', props.mmf.id)"
+    @click="model = props.mmf.id"
     class="border rounded-xl bg-card transition-all cursor-pointer active:scale-[0.99] !py-0"
     :class="
-      modelValue === props.mmf.id
+      model === props.mmf.id
         ? 'border-primary bg-primary/5 shadow-sm'
         : 'border-border bg-muted/10 hover:bg-muted/20'
     "
@@ -115,15 +115,14 @@ import { computed } from "vue";
 
 const props = defineProps<{
   mmf: Moneyflow;
-  modelValue: number;
 }>();
 
+const model = defineModel<number>();
 const userSessionStore = useUserSessionStore();
 const emit = defineEmits<{
   deleteMoneyflow: [id: number];
   editMoneyflow: [id: number];
   listMoneyflow: [id: number];
-  "update:modelValue": [id: number];
 }>();
 
 const isOwnMoneyflow = computed(() => {

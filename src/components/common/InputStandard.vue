@@ -77,7 +77,6 @@ defineOptions({
 });
 const props = withDefaults(
   defineProps<{
-    modelValue?: any;
     validationSchema?: ZodType;
     validationSchemaRef?: Ref<ZodType>;
     id: string;
@@ -97,9 +96,7 @@ const props = withDefaults(
     disabled: false,
   },
 );
-const emit = defineEmits<{
-  "update:modelValue": [value: any];
-}>();
+const model = defineModel<any>();
 
 const schema = computed(() => {
   if (props.validationSchemaRef) {
@@ -122,7 +119,7 @@ const {
 const onInput = (event: Event) => {
   setState({ touched: true });
   handleChange(event, true);
-  emit("update:modelValue", fieldValue.value);
+  model.value = fieldValue.value;
 };
 
 const isInvalid = computed(() => fieldMeta.touched && !!errorMessage.value);
@@ -151,7 +148,7 @@ onMounted(() => {
 });
 
 watch(
-  () => props.modelValue,
+  () => model.value,
   (newValue) => {
     setValue(newValue, false);
     // The shadcn Input uses useVModel with passive:true, which means it does not

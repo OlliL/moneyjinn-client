@@ -34,7 +34,7 @@
         <SpanDate :date="mpm.createDate" />
       </ModalDeleteRow>
 
-      <ModalDeleteRow :label="$t('PreDefMoneyflow.lastUsed')">
+      <ModalDeleteRow :label="$t('General.lastUsed')">
         <SpanDate :date="mpm.lastUsed" />
       </ModalDeleteRow>
 

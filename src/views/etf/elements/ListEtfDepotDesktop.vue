@@ -178,22 +178,21 @@ import { computed } from "vue";
 import ListEtfDepotRowVue from "./ListEtfDepotRow.vue";
 
 const props = defineProps<{
-  currentTab: "effective" | "all";
   etfFlows: EtfFlow[];
   etfEffectiveFlows: EtfFlow[];
   selectedEtfId: number;
 }>();
 
+const currentTab = defineModel<"effective" | "all">("currentTab");
 const { getEtf } = useEtfStore();
 const emit = defineEmits<{
-  "update:currentTab": [tab: "effective" | "all"];
   deleteEtfFlow: [etfFlow: EtfFlow];
   editEtfFlow: [etfFlow: EtfFlow];
 }>();
 
 const updateTab = (value: string | number) => {
   if (value === "effective" || value === "all") {
-    emit("update:currentTab", value);
+    currentTab.value = value;
   }
 };
 

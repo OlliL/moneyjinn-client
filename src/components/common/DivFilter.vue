@@ -140,56 +140,44 @@ import {
 } from "@/components/ui/sheet";
 import { Switch } from "@/components/ui/switch";
 import { Filter, PlusSquare, X } from "lucide-vue-next";
-import { computed, onBeforeUnmount, ref, watch } from "vue";
+import { computed, onBeforeUnmount, ref } from "vue";
 import ButtonMobileCreate from "./ButtonMobileCreate.vue";
 import InputStandard from "./InputStandard.vue";
 
 const props = withDefaults(
   defineProps<{
     placeholder?: string;
-    modelValue: string;
     showValidToggle?: boolean;
-    validNow?: boolean;
   }>(),
   {
     placeholder: "",
     showValidToggle: true,
-    validNow: true,
   },
 );
 
+const model = defineModel<string>();
+const validNow = ref(true);
 const emit = defineEmits<{
-  "update:modelValue": [value: string];
-  "update:validNow": [validNow: boolean];
   validNowToggled: [validNowToggled: boolean];
   createClicked: [];
 }>();
-
-const validNow = ref(props.validNow);
 const isMobileSheetOpen = ref(false);
 let debounceTimeout: ReturnType<typeof setTimeout> | undefined;
 
-watch(
-  () => props.validNow,
-  (newVal) => {
-    validNow.value = newVal;
-  },
-);
-
 const allButtonVariant = computed(() => {
-  return props.modelValue ? "default" : "secondary";
+  return model.value ? "default" : "secondary";
 });
 
 const handleInput = (val: string | number) => {
   globalThis.clearTimeout(debounceTimeout);
   debounceTimeout = globalThis.setTimeout(() => {
-    emit("update:modelValue", String(val));
+    model.value = String(val);
   }, 300);
 };
 
 const clearSearch = () => {
   globalThis.clearTimeout(debounceTimeout);
-  emit("update:modelValue", "");
+  model.value = "";
 };
 
 const emitCreateClicked = () => {
@@ -198,7 +186,6 @@ const emitCreateClicked = () => {
 
 const handleToggle = (val: boolean) => {
   validNow.value = val;
-  emit("update:validNow", val);
   emit("validNowToggled", val);
 };
 

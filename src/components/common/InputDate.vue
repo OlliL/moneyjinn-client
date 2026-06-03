@@ -101,7 +101,6 @@ const props = withDefaults(
     validationSchemaRef?: Ref<ZodType>;
     id: string;
     fieldLabel: string;
-    modelValue?: Date;
     pickMode?: string;
     pickerSide?: "top" | "bottom";
     pickerAlign?: "start" | "center" | "end";
@@ -115,9 +114,7 @@ const props = withDefaults(
 );
 
 const { t } = useI18n();
-const emit = defineEmits<{
-  "update:modelValue": [value: Date | undefined];
-}>();
+const model = defineModel<Date | undefined>();
 const viewMounted = ref(false);
 const closeLabel = t("General.close");
 const isPopoverOpen = ref(false);
@@ -166,7 +163,7 @@ const {
   validate,
   setValue,
 } = useField(props.id, schema, {
-  initialValue: props.modelValue,
+  initialValue: model.value,
   syncVModel: false,
 });
 let datepicker = {} as Datepicker;
@@ -220,8 +217,8 @@ const initDatepicker = () => {
     });
   }
 
-  if (props.modelValue) {
-    datepicker.setDate(props.modelValue);
+  if (model.value) {
+    datepicker.setDate(model.value);
   }
 
   datepickerContainer.value.addEventListener("changeDate", onInput);
@@ -245,8 +242,8 @@ const initDatepicker = () => {
 
 onMounted(() => {
   viewMounted.value = true;
-  if (props.modelValue) {
-    setDate(props.modelValue);
+  if (model.value) {
+    setDate(model.value);
   }
 });
 
@@ -264,16 +261,16 @@ const onTextInput = (event: Event) => {
     const d = parseInput(v);
     if (d instanceof Date && !Number.isNaN(d.getTime())) {
       if (datepicker instanceof Datepicker) datepicker.setDate(d);
-      if (d.getTime() !== props.modelValue?.getTime()) {
-        emit("update:modelValue", d);
+      if (d.getTime() !== model.value?.getTime()) {
+        model.value = d;
         setValue(d, false);
       }
     } else {
-      emit("update:modelValue", new Date(Number.NaN));
+      model.value = new Date(Number.NaN);
     }
-  } else if (v === "" && props.modelValue !== undefined) {
+  } else if (v === "" && model.value !== undefined) {
     if (datepicker instanceof Datepicker) datepicker.setDate({ clear: true });
-    emit("update:modelValue", undefined);
+    model.value = undefined;
     setValue(undefined, false);
   }
 };
@@ -325,15 +322,15 @@ const onKeyboardInput = (event: KeyboardEvent) => {
 const onInput = () => {
   const sel = datepicker.getDate() as Date | undefined;
   const el = getInputElement();
-  const changed = sel?.getTime() !== props.modelValue?.getTime();
-  if (!sel && props.modelValue !== undefined) {
+  const changed = sel?.getTime() !== model.value?.getTime();
+  if (!sel && model.value !== undefined) {
     setState({ touched: true });
-    emit("update:modelValue", undefined);
+    model.value = undefined;
     setValue(undefined);
     if (el) el.value = "";
   } else if (sel && changed) {
     setState({ touched: true });
-    emit("update:modelValue", sel);
+    model.value = sel;
     setValue(sel);
     if (el) el.value = Datepicker.formatDate(sel, format, "de");
   }
@@ -357,7 +354,7 @@ watch(isPopoverOpen, async (val) => {
 });
 
 watch(
-  () => props.modelValue,
+  () => model.value,
   (newVal) => {
     const el = getInputElement();
     if (el && document.activeElement === el) return;

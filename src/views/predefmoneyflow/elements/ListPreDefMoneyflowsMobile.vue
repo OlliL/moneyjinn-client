@@ -96,7 +96,7 @@
               </div>
               <div class="flex justify-between gap-2">
                 <span class="text-muted-foreground">{{
-                  $t("PreDefMoneyflow.lastUsed")
+                  $t("General.lastUsed")
                 }}</span>
                 <SpanDate :date="mpm.lastUsed" />
               </div>

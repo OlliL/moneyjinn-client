@@ -38,7 +38,6 @@ import { any, type ZodType } from "zod";
 
 const props = withDefaults(
   defineProps<{
-    modelValue?: any;
     validationSchema?: ZodType;
     validationSchemaRef?: Ref<ZodType>;
     id: string;
@@ -48,10 +47,8 @@ const props = withDefaults(
     validationSchema: () => any().optional(),
   },
 );
+const model = defineModel<FileList | null | undefined>();
 const fileUpload = useTemplateRef<HTMLInputElement>("fileUpload");
-const emit = defineEmits<{
-  "update:modelValue": [value: FileList | null | undefined];
-}>();
 
 const schema = computed(() => {
   if (props.validationSchemaRef) {
@@ -74,7 +71,7 @@ const onInput = (event: Event) => {
 
   setState({ touched: true });
   handleChange(event, true);
-  emit("update:modelValue", files);
+  model.value = files;
 };
 
 const isInvalid = computed(() => fieldMeta.touched && !!errorMessage.value);

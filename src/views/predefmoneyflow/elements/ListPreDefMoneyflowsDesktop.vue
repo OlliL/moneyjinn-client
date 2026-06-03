@@ -26,7 +26,7 @@
             $t("PreDefMoneyflow.createDate")
           }}</TableHead>
           <TableHead class="table-head-cell">{{
-            $t("PreDefMoneyflow.lastUsed")
+            $t("General.lastUsed")
           }}</TableHead>
           <TableHead colspan="2"></TableHead>
         </TableRow>
