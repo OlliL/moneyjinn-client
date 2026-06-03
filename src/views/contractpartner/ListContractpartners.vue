@@ -42,7 +42,14 @@
 
 <script lang="ts" setup>
 import { storeToRefs } from "pinia";
-import { onMounted, ref, useTemplateRef, watch } from "vue";
+import {
+  onMounted,
+  onUnmounted,
+  ref,
+  shallowRef,
+  useTemplateRef,
+  watch,
+} from "vue";
 
 import { useContractpartnerStore } from "@/stores/ContractpartnerStore";
 
@@ -56,8 +63,13 @@ import ListContractpartnersMobile from "./elements/ListContractpartnersMobile.vu
 import type { Contractpartner } from "@/model/contractpartner/Contractpartner";
 
 const validNow = ref(true);
-const contractpartners = ref(new Array<Contractpartner>());
+const contractpartners = shallowRef(new Array<Contractpartner>());
 const searchString = ref("");
+
+const INITIAL_CHUNK_SIZE = 50;
+const CHUNK_SIZE = 200;
+let renderAnimationFrameId: number | undefined;
+let currentSearchId = 0;
 
 const createContractpartnerModalList = useTemplateRef<
   typeof CreateContractpartnerModalVue
@@ -103,15 +115,80 @@ const searchAllContent = () => {
 };
 
 const searchContent = () => {
-  searchContractpartners(searchString.value, validNow.value).then(
-    (_contractpartners) => {
-      contractpartners.value = _contractpartners;
-    },
-  );
+  const searchId = ++currentSearchId;
+
+  if (renderAnimationFrameId) {
+    cancelAnimationFrame(renderAnimationFrameId);
+    renderAnimationFrameId = undefined;
+  }
+
+  searchContractpartners(searchString.value).then((allContractpartners) => {
+    if (searchId !== currentSearchId) return;
+
+    contractpartners.value = []; // Clear the list immediately
+    processAndRenderChunked(allContractpartners, 0, searchId);
+  });
+};
+
+const processAndRenderChunked = (
+  allData: Contractpartner[],
+  startIndex: number,
+  searchId: number,
+) => {
+  if (searchId !== currentSearchId) return;
+
+  const currentChunkSize =
+    contractpartners.value.length === 0 ? INITIAL_CHUNK_SIZE : CHUNK_SIZE;
+  const nextIndex = startIndex + currentChunkSize;
+  const rawChunk = allData.slice(startIndex, nextIndex);
+
+  // Apply validNow filter to the current chunk
+  const filteredChunk = validNow.value
+    ? rawChunk.filter((mcp) => {
+        const date = new Date();
+        date.setHours(0, 0, 0, 0);
+        return date >= mcp.validFrom && date <= mcp.validTil;
+      })
+    : rawChunk;
+
+  contractpartners.value = [...contractpartners.value, ...filteredChunk];
+
+  if (nextIndex < allData.length) {
+    renderAnimationFrameId = globalThis.requestAnimationFrame(() =>
+      processAndRenderChunked(allData, nextIndex, searchId),
+    );
+  } else {
+    renderAnimationFrameId = undefined;
+  }
+};
+
+const renderChunk = (
+  allData: Contractpartner[],
+  startIndex: number,
+  searchId: number,
+) => {
+  if (searchId !== currentSearchId) return;
+
+  const nextIndex = startIndex + CHUNK_SIZE;
+  const chunk = allData.slice(startIndex, nextIndex);
+
+  contractpartners.value = [...contractpartners.value, ...chunk];
+
+  if (nextIndex < allData.length) {
+    renderAnimationFrameId = globalThis.requestAnimationFrame(() =>
+      renderChunk(allData, nextIndex, searchId),
+    );
+  } else {
+    renderAnimationFrameId = undefined;
+  }
 };
 
 onMounted(() => {
   searchAllContent();
+});
+
+onUnmounted(() => {
+  if (renderAnimationFrameId) cancelAnimationFrame(renderAnimationFrameId);
 });
 
 const listContractpartnerAccounts = (mcp: Contractpartner) => {

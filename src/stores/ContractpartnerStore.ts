@@ -73,7 +73,7 @@ export const useContractpartnerStore = defineStore("contractpartner", () => {
           : true;
       })
       .map((mcs) => {
-        return { id: mcs.id, value: mcs.name } as SelectBoxValue;
+        return { id: mcs.id, value: mcs.name };
       });
   }
 
@@ -84,24 +84,18 @@ export const useContractpartnerStore = defineStore("contractpartner", () => {
   }
 
   async function searchContractpartners(
-    comment: string,
-    validNow?: boolean,
+    comment: string, // Removed validNow parameter
   ): Promise<Array<Contractpartner>> {
-    let mcp = contractpartner.value;
-    if (validNow) {
-      const date = new Date();
-      date.setHours(0, 0, 0, 0);
-      mcp = getValidContractpartner(date);
-    }
-
     if (comment === "") {
-      return mcp;
+      return contractpartner.value;
     }
 
-    const commentUpper = comment.toUpperCase();
-    return mcp.filter((entry) =>
-      entry.name.toUpperCase().includes(commentUpper),
+    const escapedSearch = comment.replace(
+      /[.*+?^${}()|[\]\\]/g,
+      String.raw`\$&`,
     );
+    const regex = new RegExp(escapedSearch, "i");
+    return contractpartner.value.filter((entry) => regex.test(entry.name));
   }
 
   function getContractpartner(id: number): Contractpartner | undefined {

@@ -14,6 +14,7 @@
       <AccordionItem
         v-for="mcp in contractpartners"
         :key="mcp.id"
+        v-memo="[mcp.id]"
         :value="`item-${mcp.id}`"
         :data-testid="`contractpartner-mobile-row-${mcp.id}`"
         class="border rounded-lg bg-background shadow-sm px-3 py-1"
@@ -106,20 +107,16 @@ import {
 import { Button } from "@/components/ui/button";
 import type { Contractpartner } from "@/model/contractpartner/Contractpartner";
 import { Banknote, Pencil, Trash2 } from "lucide-vue-next";
-import type { PropType } from "vue";
 
-defineProps({
-  contractpartners: {
-    type: Array as PropType<Contractpartner[]>,
-    required: true,
-  },
-});
+defineProps<{
+  contractpartners: readonly Contractpartner[];
+}>();
 
-const emit = defineEmits([
-  "deleteContractpartner",
-  "editContractpartner",
-  "listContractpartnerAccounts",
-]);
+const emit = defineEmits<{
+  deleteContractpartner: [mcp: Contractpartner];
+  editContractpartner: [mcp: Contractpartner];
+  listContractpartnerAccounts: [mcp: Contractpartner];
+}>();
 
 const deleteContractpartner = (mcp: Contractpartner) => {
   emit("deleteContractpartner", mcp);

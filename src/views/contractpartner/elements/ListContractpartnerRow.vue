@@ -44,7 +44,6 @@
 
 <script lang="ts" setup>
 import { Banknote, Pencil, Trash2 } from "lucide-vue-next";
-import type { PropType } from "vue";
 
 import { TableCell, TableRow } from "@/components/ui/table";
 
@@ -52,18 +51,15 @@ import ButtonTableIcon from "@/components/common/ButtonTableIcon.vue";
 import SpanDate from "@/components/common/SpanDate.vue";
 import type { Contractpartner } from "@/model/contractpartner/Contractpartner";
 
-const props = defineProps({
-  mcp: {
-    type: Object as PropType<Contractpartner>,
-    required: true,
-  },
-});
+const props = defineProps<{
+  mcp: Contractpartner;
+}>();
 
-const emit = defineEmits([
-  "deleteContractpartner",
-  "editContractpartner",
-  "listContractpartnerAccounts",
-]);
+const emit = defineEmits<{
+  deleteContractpartner: [mcp: Contractpartner];
+  editContractpartner: [mcp: Contractpartner];
+  listContractpartnerAccounts: [mcp: Contractpartner];
+}>();
 
 const deleteContractpartner = () => {
   emit("deleteContractpartner", props.mcp);

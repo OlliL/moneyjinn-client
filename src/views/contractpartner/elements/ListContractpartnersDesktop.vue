@@ -54,21 +54,17 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import type { Contractpartner } from "@/model/contractpartner/Contractpartner";
-import type { PropType } from "vue";
 import ListContractpartnerRowVue from "./ListContractpartnerRow.vue";
 
-defineProps({
-  contractpartners: {
-    type: Array as PropType<Contractpartner[]>,
-    required: true,
-  },
-});
+defineProps<{
+  contractpartners: readonly Contractpartner[];
+}>();
 
-const emit = defineEmits([
-  "deleteContractpartner",
-  "editContractpartner",
-  "listContractpartnerAccounts",
-]);
+const emit = defineEmits<{
+  deleteContractpartner: [mcp: Contractpartner];
+  editContractpartner: [mcp: Contractpartner];
+  listContractpartnerAccounts: [mcp: Contractpartner];
+}>();
 
 const deleteContractpartner = (mcp: Contractpartner) => {
   emit("deleteContractpartner", mcp);
