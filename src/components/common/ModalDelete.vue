@@ -3,7 +3,8 @@
     :title="title"
     max-width="max-w-md"
     :z-index="zIndex"
-    ref="modalComponent"
+    v-model:open="isOpen"
+    :id-suffix="idSuffix"
   >
     <template #body>
       <DivError :server-errors="serverErrors" />
@@ -29,7 +30,6 @@
 </template>
 
 <script lang="ts" setup>
-import { useTemplateRef } from "vue";
 import { useI18n } from "vue-i18n";
 
 import { Table, TableBody } from "@/components/ui/table";
@@ -45,6 +45,7 @@ const props = withDefaults(
     serverErrors: Array<string>;
     maxWidth?: string;
     zIndex?: string;
+    idSuffix: string;
   }>(),
   {
     maxWidth: "",
@@ -52,24 +53,13 @@ const props = withDefaults(
   },
 );
 
-const emit = defineEmits(["confirm"]);
+const emit = defineEmits<{
+  confirm: [];
+}>();
 
-const modalComponent = useTemplateRef<typeof ModalVue>("modalComponent");
+const isOpen = defineModel<boolean>("open", { default: false });
 
 const handleDelete = () => {
   emit("confirm");
 };
-
-const _show = () => {
-  modalComponent.value?._show();
-};
-
-const _hide = () => {
-  modalComponent.value?._hide();
-};
-
-defineExpose({
-  _show,
-  _hide,
-});
 </script>

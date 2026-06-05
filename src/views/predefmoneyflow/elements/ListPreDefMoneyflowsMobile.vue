@@ -96,7 +96,7 @@
               </div>
               <div class="flex justify-between gap-2">
                 <span class="text-muted-foreground">{{
-                  $t("PreDefMoneyflow.lastUsed")
+                  $t("General.lastUsed")
                 }}</span>
                 <SpanDate :date="mpm.lastUsed" />
               </div>
@@ -113,6 +113,7 @@ import FavoriteIcon from "@/components/common/FavoriteIcon.vue";
 import SpanAmount from "@/components/common/SpanAmount.vue";
 import SpanBoolean from "@/components/common/SpanBoolean.vue";
 import SpanDate from "@/components/common/SpanDate.vue";
+import { PreDefMoneyflowActionsKey } from "@/model/CrudActions";
 import {
   Accordion,
   AccordionContent,
@@ -122,22 +123,19 @@ import {
 import { Button } from "@/components/ui/button";
 import type { PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
 import { Pencil, Trash2 } from "lucide-vue-next";
-import type { PropType } from "vue";
+import { inject } from "vue";
 
-defineProps({
-  preDefMoneyflows: {
-    type: Array as PropType<PreDefMoneyflow[]>,
-    required: true,
-  },
-});
+defineProps<{
+  preDefMoneyflows: PreDefMoneyflow[];
+}>();
 
-const emit = defineEmits(["editPreDefMoneyflow", "deletePreDefMoneyflow"]);
+const actions = inject(PreDefMoneyflowActionsKey)!;
 
 const editPreDefMoneyflow = (mpm: PreDefMoneyflow) => {
-  emit("editPreDefMoneyflow", mpm);
+  actions.edit(mpm);
 };
 
 const deletePreDefMoneyflow = (mpm: PreDefMoneyflow) => {
-  emit("deletePreDefMoneyflow", mpm);
+  actions.delete(mpm);
 };
 </script>

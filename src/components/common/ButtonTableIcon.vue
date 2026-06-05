@@ -18,16 +18,17 @@
 import { Button } from "@/components/ui/button";
 import { TableCell } from "@/components/ui/table";
 
-defineProps({
-  title: {
-    type: String,
-    required: true,
+withDefaults(
+  defineProps<{
+    title: string;
+    testId?: string;
+  }>(),
+  {
+    testId: "",
   },
-  testId: {
-    type: String,
-    default: "",
-  },
-});
+);
 
-const emit = defineEmits(["click"]);
+const emit = defineEmits<{
+  click: [];
+}>();
 </script>

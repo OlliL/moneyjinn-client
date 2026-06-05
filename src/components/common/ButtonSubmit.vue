@@ -14,18 +14,9 @@
 <script lang="ts" setup>
 import { Button } from "@/components/ui/button";
 
-defineProps({
-  buttonLabel: {
-    type: String,
-    required: false,
-  },
-  formId: {
-    type: String,
-    required: false,
-  },
-  testId: {
-    type: String,
-    required: false,
-  },
-});
+defineProps<{
+  buttonLabel?: string;
+  formId?: string;
+  testId?: string;
+}>();
 </script>

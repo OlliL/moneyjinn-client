@@ -17,8 +17,9 @@ import {
   ComboboxView,
   InputView,
   ModalView,
-  renderModalWithRef,
+  renderDeclarativeModal,
 } from "@/tests/TestViews";
+import { useCreateEtfFlowModalStore } from "@/views/etf/elements/CreateEtfFlowModal.store";
 import CreateEtfFlowModal from "@/views/etf/elements/CreateEtfFlowModal.vue";
 import "@testing-library/jest-dom/vitest";
 import { createPinia, setActivePinia } from "pinia";
@@ -27,7 +28,7 @@ import { beforeEach, expect, test, vi } from "vitest";
 vi.mock("@/service/CrudEtfFlowService");
 
 class CreateEtfFlowModalView {
-  static readonly Modal = new ModalView("app-modal");
+  static readonly Modal = new ModalView("app-modal-CreateEtfFlow");
   static readonly TimeInput = new InputView("bookingtime");
   static readonly AmountInput = new InputView("amount");
   static readonly PriceInput = new InputView("price");
@@ -63,8 +64,11 @@ beforeEach(async () => {
 
 test("creates a new etf flow with time formatting", async () => {
   CrudEtfFlowServiceMocker.mockCreateEtfFlowResolved({ etfflowid: 1 } as any);
-  const modalRef = renderModalWithRef<any>(CreateEtfFlowModal);
-  await modalRef.value._show(undefined, 1);
+  renderDeclarativeModal(CreateEtfFlowModal);
+  const modalStore = useCreateEtfFlowModalStore();
+  modalStore.openCreateEtfFlow({ defaultEtfId: 1 });
+
+  await CreateEtfFlowModalView.Modal.assertOpen();
 
   await CreateEtfFlowModalView.TimeInput.setValueWithoutChecking("120000123");
   await CreateEtfFlowModalView.TimeInput.assertValue("12:00:00:123");
@@ -85,8 +89,11 @@ test("creates a new etf flow with time formatting", async () => {
 });
 
 test("validation: mandatory fields are required", async () => {
-  const modalRef = renderModalWithRef<any>(CreateEtfFlowModal);
-  await modalRef.value._show(undefined, 1);
+  renderDeclarativeModal(CreateEtfFlowModal);
+  const modalStore = useCreateEtfFlowModalStore();
+  modalStore.openCreateEtfFlow({ defaultEtfId: 1 });
+
+  await CreateEtfFlowModalView.Modal.assertOpen();
 
   // Clear pre-filled ETF and Date
   await CreateEtfFlowModalView.EtfSelect.clear();

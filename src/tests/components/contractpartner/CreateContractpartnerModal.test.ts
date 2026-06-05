@@ -1,4 +1,5 @@
 import CreateContractpartnerModal from "@/components/contractpartner/CreateContractpartnerModal.vue";
+import { useCreateContractpartnerModalStore } from "@/components/contractpartner/CreateContractpartnerModal.store";
 import { BackendError, BackendErrorType } from "@/model/BackendError";
 import type { Contractpartner } from "@/model/contractpartner/Contractpartner";
 import ContractpartnerService from "@/service/ContractpartnerService";
@@ -23,7 +24,7 @@ import {
   ComboboxView,
   InputView,
   ModalView,
-  renderModalWithRef,
+  renderDeclarativeModal,
 } from "@/tests/TestViews";
 import "@testing-library/jest-dom/vitest";
 import { createPinia, setActivePinia } from "pinia";
@@ -36,24 +37,32 @@ vi.mock("@/service/PreDefMoneyflowService");
 vi.mock("@/service/CrudEtfService");
 
 class CreateContractpartnerModalView {
-  static readonly Modal = new ModalView("app-modal");
-  static readonly NameInput = new InputView("name");
-  static readonly MoneyflowCommentInput = new InputView("moneyflowComment");
+  static readonly Modal = new ModalView("app-modal-CreateContractpartner");
+  static readonly NameInput = new InputView("name-CreateContractpartner");
+  static readonly MoneyflowCommentInput = new InputView(
+    "moneyflowComment-CreateContractpartner",
+  );
   static readonly PostingAccountCombobox = new ComboboxView(
-    "postingAccountCreateContractpartner",
+    "postingAccount-CreateContractpartner",
   );
   static readonly PostingAccountIdInput = new InputView(
-    "postingAccountCreateContractpartner-id",
+    "postingAccount-CreateContractpartner-id",
   );
-  static readonly ValidFromInput = new InputView("validFrom");
-  static readonly ValidTilInput = new InputView("validTil");
+  static readonly ValidFromInput = new InputView(
+    "validFrom-CreateContractpartner",
+  );
+  static readonly ValidTilInput = new InputView(
+    "validTil-CreateContractpartner",
+  );
   static readonly AddressDataCollapsibleTrigger = new ButtonView(
-    "addressDataCollapsibleTrigger",
+    "addressDataCollapsibleTrigger-CreateContractpartner",
   );
-  static readonly StreetInput = new InputView("street");
-  static readonly PostcodeInput = new InputView("postcode");
-  static readonly TownInput = new InputView("town");
-  static readonly CountryInput = new InputView("country");
+  static readonly StreetInput = new InputView("street-CreateContractpartner");
+  static readonly PostcodeInput = new InputView(
+    "postcode-CreateContractpartner",
+  );
+  static readonly TownInput = new InputView("town-CreateContractpartner");
+  static readonly CountryInput = new InputView("country-CreateContractpartner");
 
   static readonly SaveButton = new ButtonView(
     "createContractpartnerSaveButton",
@@ -62,19 +71,33 @@ class CreateContractpartnerModalView {
     "createContractpartnerResetButton",
   );
 
-  static readonly NameError = new AlertView("name-error-item");
+  static readonly NameError = new AlertView(
+    "name-CreateContractpartner-error-item",
+  );
   static readonly MoneyflowCommentError = new AlertView(
-    "moneyflowComment-error-item",
+    "moneyflowComment-CreateContractpartner-error-item",
   );
   static readonly PostingAccountError = new AlertView(
-    "postingAccountCreateContractpartner-error",
+    "postingAccountCreateContractpartner-CreateContractpartner-error",
   );
-  static readonly ValidFromError = new AlertView("validFrom-error");
-  static readonly ValidTilError = new AlertView("validTil-error");
-  static readonly StreetError = new AlertView("street-error-item");
-  static readonly PostcodeError = new AlertView("postcode-error-item");
-  static readonly TownError = new AlertView("town-error-item");
-  static readonly CountryError = new AlertView("country-error-item");
+  static readonly ValidFromError = new AlertView(
+    "validFrom-CreateContractpartner-error",
+  );
+  static readonly ValidTilError = new AlertView(
+    "validTil-CreateContractpartner-error",
+  );
+  static readonly StreetError = new AlertView(
+    "street-CreateContractpartner-error-item",
+  );
+  static readonly PostcodeError = new AlertView(
+    "postcode-CreateContractpartner-error-item",
+  );
+  static readonly TownError = new AlertView(
+    "town-CreateContractpartner-error-item",
+  );
+  static readonly CountryError = new AlertView(
+    "country-CreateContractpartner-error-item",
+  );
   static readonly ServerErrorItem = new AlertView("serverError-item");
 }
 
@@ -102,9 +125,9 @@ beforeEach(async () => {
 });
 
 test("creates a new contractpartner", async () => {
-  const modalRef = renderModalWithRef<any>(CreateContractpartnerModal);
-  await modalRef.value._show();
-
+  renderDeclarativeModal(CreateContractpartnerModal);
+  const modalStore = useCreateContractpartnerModalStore();
+  modalStore.openCreateContractpartner();
   await CreateContractpartnerModalView.Modal.assertOpen();
 
   await CreateContractpartnerModalView.NameInput.setValue("New Partner");
@@ -125,8 +148,10 @@ test("updates an existing contractpartner", async () => {
     validTil: new Date("2999-12-31"),
   } as Contractpartner;
 
-  const modalRef = renderModalWithRef<any>(CreateContractpartnerModal);
-  await modalRef.value._show(existingMcp);
+  renderDeclarativeModal(CreateContractpartnerModal);
+  const modalStore = useCreateContractpartnerModalStore();
+  modalStore.openEditContractpartner(existingMcp);
+  await CreateContractpartnerModalView.Modal.assertOpen();
 
   await CreateContractpartnerModalView.NameInput.setValue("Updated Partner");
   await CreateContractpartnerModalView.SaveButton.click();
@@ -139,8 +164,10 @@ test("updates an existing contractpartner", async () => {
 });
 
 test("reset button clears form in create mode", async () => {
-  const modalRef = renderModalWithRef<any>(CreateContractpartnerModal);
-  await modalRef.value._show();
+  renderDeclarativeModal(CreateContractpartnerModal);
+  const modalStore = useCreateContractpartnerModalStore();
+  modalStore.openCreateContractpartner();
+  await CreateContractpartnerModalView.Modal.assertOpen();
 
   await CreateContractpartnerModalView.NameInput.setValue("To be cleared");
   await CreateContractpartnerModalView.ResetButton.click();
@@ -155,8 +182,10 @@ test("reset button reverts changes in edit mode", async () => {
     validFrom: new Date("2024-01-01"),
     validTil: new Date("2999-12-31"),
   } as Contractpartner;
-  const modalRef = renderModalWithRef<any>(CreateContractpartnerModal);
-  await modalRef.value._show(existingMcp);
+  renderDeclarativeModal(CreateContractpartnerModal);
+  const modalStore = useCreateContractpartnerModalStore();
+  modalStore.openEditContractpartner(existingMcp);
+  await CreateContractpartnerModalView.Modal.assertOpen();
 
   await CreateContractpartnerModalView.NameInput.setValue("Changed Partner");
   await CreateContractpartnerModalView.ResetButton.click();
@@ -174,8 +203,10 @@ test("shows server errors on failure", async () => {
   );
   ContractpartnerServiceMocker.mockCreateContractpartnerRejected(backendError);
 
-  const modalRef = renderModalWithRef<any>(CreateContractpartnerModal);
-  await modalRef.value._show();
+  renderDeclarativeModal(CreateContractpartnerModal);
+  const modalStore = useCreateContractpartnerModalStore();
+  modalStore.openCreateContractpartner();
+  await CreateContractpartnerModalView.Modal.assertOpen();
 
   await CreateContractpartnerModalView.NameInput.setValue("Valid Name");
   await CreateContractpartnerModalView.ValidFromInput.setValue("01.01.2024");
@@ -189,8 +220,10 @@ test("shows server errors on failure", async () => {
 });
 
 test("validation: name is required", async () => {
-  const modalRef = renderModalWithRef<any>(CreateContractpartnerModal);
-  await modalRef.value._show();
+  renderDeclarativeModal(CreateContractpartnerModal);
+  const modalStore = useCreateContractpartnerModalStore();
+  modalStore.openCreateContractpartner();
+  await CreateContractpartnerModalView.Modal.assertOpen();
 
   await CreateContractpartnerModalView.NameInput.setValue("");
   await CreateContractpartnerModalView.SaveButton.click();
@@ -203,8 +236,10 @@ test("validation: name is required", async () => {
 });
 
 test("validation: name maximum length", async () => {
-  const modalRef = renderModalWithRef<any>(CreateContractpartnerModal);
-  await modalRef.value._show();
+  renderDeclarativeModal(CreateContractpartnerModal);
+  const modalStore = useCreateContractpartnerModalStore();
+  modalStore.openCreateContractpartner();
+  await CreateContractpartnerModalView.Modal.assertOpen();
 
   await CreateContractpartnerModalView.NameInput.setValue("a".repeat(101));
   await CreateContractpartnerModalView.SaveButton.click();
@@ -217,8 +252,10 @@ test("validation: name maximum length", async () => {
 });
 
 test("validation: moneyflowComment maximum length", async () => {
-  const modalRef = renderModalWithRef<any>(CreateContractpartnerModal);
-  await modalRef.value._show();
+  renderDeclarativeModal(CreateContractpartnerModal);
+  const modalStore = useCreateContractpartnerModalStore();
+  modalStore.openCreateContractpartner();
+  await CreateContractpartnerModalView.Modal.assertOpen();
 
   await CreateContractpartnerModalView.MoneyflowCommentInput.setValue(
     "a".repeat(101),
@@ -233,8 +270,10 @@ test("validation: moneyflowComment maximum length", async () => {
 });
 
 test("validation: validFrom and validTil are required", async () => {
-  const modalRef = renderModalWithRef<any>(CreateContractpartnerModal);
-  await modalRef.value._show();
+  renderDeclarativeModal(CreateContractpartnerModal);
+  const modalStore = useCreateContractpartnerModalStore();
+  modalStore.openCreateContractpartner();
+  await CreateContractpartnerModalView.Modal.assertOpen();
 
   await CreateContractpartnerModalView.ValidFromInput.setValue("");
   await CreateContractpartnerModalView.ValidTilInput.setValue("");
@@ -252,8 +291,10 @@ test("validation: validFrom and validTil are required", async () => {
 });
 
 test("address data fields are optional", async () => {
-  const modalRef = renderModalWithRef<any>(CreateContractpartnerModal);
-  await modalRef.value._show();
+  renderDeclarativeModal(CreateContractpartnerModal);
+  const modalStore = useCreateContractpartnerModalStore();
+  modalStore.openCreateContractpartner();
+  await CreateContractpartnerModalView.Modal.assertOpen();
 
   await CreateContractpartnerModalView.NameInput.setValue(
     "Partner with Address",
@@ -296,8 +337,10 @@ test("address data fields are optional", async () => {
 });
 
 test("date inputs initialized with defaults", async () => {
-  const modalRef = renderModalWithRef<any>(CreateContractpartnerModal);
-  await modalRef.value._show();
+  renderDeclarativeModal(CreateContractpartnerModal);
+  const modalStore = useCreateContractpartnerModalStore();
+  modalStore.openCreateContractpartner();
+  await CreateContractpartnerModalView.Modal.assertOpen();
 
   const today = new Date();
   const beginningOfPreviousMonth = new Date(
@@ -331,8 +374,10 @@ test("edit mode pre-fills data", async () => {
     country: "Test Country",
   } as Contractpartner;
 
-  const modalRef = renderModalWithRef<any>(CreateContractpartnerModal);
-  await modalRef.value._show(mcp);
+  renderDeclarativeModal(CreateContractpartnerModal);
+  const modalStore = useCreateContractpartnerModalStore();
+  modalStore.openEditContractpartner(mcp);
+  await CreateContractpartnerModalView.Modal.assertOpen();
 
   await CreateContractpartnerModalView.NameInput.assertValue("Test Partner");
   await CreateContractpartnerModalView.MoneyflowCommentInput.assertValue(

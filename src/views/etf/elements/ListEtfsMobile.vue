@@ -43,7 +43,7 @@
                   variant="ghost"
                   size="icon"
                   :data-testid="`etf-mobile-edit-${etf.id}`"
-                  @click.stop="editEtf(etf)"
+                  @click.stop="actions.edit(etf)"
                 >
                   <Pencil class="icon-medium" />
                 </Button>
@@ -51,7 +51,7 @@
                   variant="ghost"
                   size="icon"
                   :data-testid="`etf-mobile-delete-${etf.id}`"
-                  @click.stop="deleteEtf(etf)"
+                  @click.stop="actions.delete(etf)"
                 >
                   <Trash2 class="icon-medium" />
                 </Button>
@@ -121,19 +121,15 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
+import { EtfActionsKey } from "@/model/CrudActions";
 import type { Etf } from "@/model/etf/Etf";
 import { formatNumber } from "@/tools/views/FormatNumber";
 import { Pencil, Star, Trash2 } from "lucide-vue-next";
-import type { PropType } from "vue";
+import { inject } from "vue";
 
-defineProps({
-  etfs: {
-    type: Array as PropType<Etf[]>,
-    required: true,
-  },
-});
-
-const emit = defineEmits(["deleteEtf", "editEtf"]);
+defineProps<{
+  etfs: Etf[];
+}>();
 
 const relativeString = (value: number | undefined): string => {
   if (value === undefined) {
@@ -142,11 +138,5 @@ const relativeString = (value: number | undefined): string => {
   return `${formatNumber(value, 2)} %`;
 };
 
-const editEtf = (etf: Etf) => {
-  emit("editEtf", etf);
-};
-
-const deleteEtf = (etf: Etf) => {
-  emit("deleteEtf", etf);
-};
+const actions = inject(EtfActionsKey)!;
 </script>

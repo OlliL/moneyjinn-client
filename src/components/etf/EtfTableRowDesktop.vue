@@ -41,40 +41,16 @@ import { formatNumber } from "@/tools/views/FormatNumber";
 import { computed } from "vue";
 import SpanAmount from "../common/SpanAmount.vue";
 
-const props = defineProps({
-  etfId: {
-    type: Number,
-    required: false,
-  },
-  name: {
-    type: String,
-    required: false,
-  },
-  chartUrl: {
-    type: String,
-    required: false,
-  },
-  amount: {
-    type: Number,
-    required: true,
-  },
-  spentValue: {
-    type: Number,
-    required: true,
-  },
-  buyPrice: {
-    type: Number,
-    required: false,
-  },
-  sellPrice: {
-    type: Number,
-    required: false,
-  },
-  pricesTimestamp: {
-    type: Date,
-    required: false,
-  },
-});
+const props = defineProps<{
+  etfId?: number;
+  name?: string;
+  chartUrl?: string;
+  amount: number;
+  spentValue: number;
+  buyPrice?: number;
+  sellPrice?: number;
+  pricesTimestamp?: Date;
+}>();
 
 const sumSellPrice = computed(() => {
   return props.sellPrice ? props.amount * props.sellPrice : undefined;

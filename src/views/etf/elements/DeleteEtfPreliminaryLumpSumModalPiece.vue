@@ -2,7 +2,8 @@
   <ModalDelete
     :title="$t('ETFPreliminaryLumpSum.title.delete')"
     :server-errors="serverErrors"
-    ref="modalComponent"
+    v-model:open="open"
+    id-suffix="DeleteEtfPreliminaryLumpSumPiece"
     @confirm="deleteEtfPreliminaryLumpSum"
   >
     <template #details>
@@ -25,27 +26,32 @@
 import ModalDelete from "@/components/common/ModalDelete.vue";
 import ModalDeleteRow from "@/components/common/ModalDeleteRow.vue";
 import SpanAmount from "@/components/common/SpanAmount.vue";
-import type { EtfPreliminaryLumpSum } from "@/model/etf/EtfPreliminaryLumpSum";
 import CrudEtfPreliminaryLumpSumService from "@/service/CrudEtfPreliminaryLumpSumService";
 import { useEtfStore } from "@/stores/EtfStore";
+import useDeleteEtfPreliminaryLumpSumModalPieceStore from "./DeleteEtfPreliminaryLumpSumModalPiece.store";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
-import { computed, ref, useTemplateRef } from "vue";
+import { storeToRefs } from "pinia";
+import { computed, ref, watch } from "vue";
 
 const serverErrors = ref(new Array<string>());
-
-const etfPreliminaryLumpSum = ref({} as EtfPreliminaryLumpSum);
-const etfName = computed(() => {
-  return etfStore.getEtf(etfPreliminaryLumpSum.value.etfId)?.name ?? "";
-});
-const modalComponent = useTemplateRef<typeof ModalDelete>("modalComponent");
-const emit = defineEmits(["etfPreliminaryLumpSumDeleted"]);
 const etfStore = useEtfStore();
 
-const _show = (_mep: EtfPreliminaryLumpSum) => {
-  serverErrors.value = new Array<string>();
-  etfPreliminaryLumpSum.value = _mep;
-  modalComponent.value?._show();
-};
+const etfName = computed(
+  () => etfStore.getEtf(etfPreliminaryLumpSum.value.etfId)?.name ?? "",
+);
+
+const {
+  open,
+  lumpSum: etfPreliminaryLumpSum,
+  onDone,
+} = storeToRefs(useDeleteEtfPreliminaryLumpSumModalPieceStore());
+
+watch(open, (newVal) => {
+  if (newVal) {
+    serverErrors.value = new Array<string>();
+  }
+});
+
 const deleteEtfPreliminaryLumpSum = () => {
   serverErrors.value = new Array<string>();
 
@@ -53,13 +59,11 @@ const deleteEtfPreliminaryLumpSum = () => {
     etfPreliminaryLumpSum.value.id,
   )
     .then(() => {
-      modalComponent.value?._hide();
-      emit("etfPreliminaryLumpSumDeleted", etfPreliminaryLumpSum.value);
+      open.value = false;
+      onDone.value?.(etfPreliminaryLumpSum.value);
     })
     .catch((backendError) => {
       handleBackendError(backendError, serverErrors);
     });
 };
-
-defineExpose({ _show });
 </script>

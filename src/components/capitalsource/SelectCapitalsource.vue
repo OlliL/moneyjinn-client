@@ -1,10 +1,4 @@
 <template>
-  <CreateCapitalsourceModalVue
-    ref="createCapitalsourceModal"
-    :id-suffix="idSuffix"
-    @capitalsource-created="capitalsourceCreated"
-  />
-
   <SelectStandard
     v-model="capitalsourceId"
     :validation-schema="validationSchema"
@@ -20,52 +14,38 @@
 
 <script lang="ts" setup>
 import { SquarePlus } from "lucide-vue-next";
-import { computed, useTemplateRef, type PropType } from "vue";
+import { computed } from "vue";
 import { any, type ZodType } from "zod";
 
 import SelectStandard from "../common/SelectStandard.vue";
-import CreateCapitalsourceModalVue from "./CreateCapitalsourceModal.vue";
 
+import { useCreateCapitalsourceModalStore } from "./CreateCapitalsourceModal.store";
 import { useCapitalsourceStore } from "@/stores/CapitalsourceStore";
-
-import type { Capitalsource } from "@/model/capitalsource/Capitalsource";
 
 const capitalsourceId = defineModel({ type: Number });
 
-const props = defineProps({
-  validityDate: {
-    type: Date,
-    required: true,
+const props = withDefaults(
+  defineProps<{
+    validityDate: Date;
+    validationSchema?: ZodType;
+    fieldLabel: string;
+    idSuffix?: string;
+  }>(),
+  {
+    validationSchema: () => any().optional(),
+    idSuffix: "",
   },
-  validationSchema: {
-    type: Object as PropType<ZodType>,
-    required: false,
-    default: any().optional(),
-  },
-  fieldLabel: {
-    type: String,
-    required: true,
-  },
-  idSuffix: {
-    type: String,
-    default: "",
-  },
-});
-
-const createCapitalsourceModal = useTemplateRef<
-  typeof CreateCapitalsourceModalVue
->("createCapitalsourceModal");
-const capitalsourceStore = useCapitalsourceStore();
-
-const selectBoxValues = computed(() =>
-  capitalsourceStore.getAsSelectBoxValues(props.validityDate),
 );
 
-const showCreateCapitalsourceModal = () => {
-  createCapitalsourceModal.value?._show();
-};
+const { openCreateCapitalsource } = useCreateCapitalsourceModalStore();
+const { getAsSelectBoxValues } = useCapitalsourceStore();
 
-const capitalsourceCreated = (mcs: Capitalsource) => {
-  capitalsourceId.value = mcs.id;
-};
+const selectBoxValues = computed(() =>
+  getAsSelectBoxValues(props.validityDate),
+);
+
+const showCreateCapitalsourceModal = () =>
+  openCreateCapitalsource(
+    (capitalsourceEntry) => (capitalsourceId.value = capitalsourceEntry.id),
+  );
 </script>

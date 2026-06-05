@@ -2,7 +2,8 @@
   <ModalDelete
     :title="$t('ETFPreliminaryLumpSum.title.delete')"
     :server-errors="serverErrors"
-    ref="modalComponent"
+    v-model:open="open"
+    id-suffix="DeleteEtfPreliminaryLumpSumMonthly"
     @confirm="deleteEtfPreliminaryLumpSum"
   >
     <template #body>
@@ -58,12 +59,13 @@ import ModalDelete from "@/components/common/ModalDelete.vue";
 import ModalDeleteRow from "@/components/common/ModalDeleteRow.vue";
 import SpanAmount from "@/components/common/SpanAmount.vue";
 import { Table, TableBody } from "@/components/ui/table";
-import type { EtfPreliminaryLumpSum } from "@/model/etf/EtfPreliminaryLumpSum";
 import CrudEtfPreliminaryLumpSumService from "@/service/CrudEtfPreliminaryLumpSumService";
 import { useEtfStore } from "@/stores/EtfStore";
+import useDeleteEtfPreliminaryLumpSumModalMonthlyStore from "./DeleteEtfPreliminaryLumpSumModalMonthly.store";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { getMonthName } from "@/tools/views/MonthName";
-import { computed, ref, useTemplateRef } from "vue";
+import { storeToRefs } from "pinia";
+import { computed, ref, watch } from "vue";
 
 type RowData = {
   month: string;
@@ -72,39 +74,42 @@ type RowData = {
 
 const serverErrors = ref(new Array<string>());
 
-const etfPreliminaryLumpSum = ref({} as EtfPreliminaryLumpSum);
-const etfName = computed(() => {
-  return etfStore.getEtf(etfPreliminaryLumpSum.value.etfId)?.name ?? "";
-});
-const modalComponent = useTemplateRef<typeof ModalDelete>("modalComponent");
-const emit = defineEmits(["etfPreliminaryLumpSumDeleted"]);
+const etfName = computed(
+  () => etfStore.getEtf(etfPreliminaryLumpSum.value.etfId)?.name ?? "",
+);
+
+const {
+  open,
+  lumpSum: etfPreliminaryLumpSum,
+  onDone,
+} = storeToRefs(useDeleteEtfPreliminaryLumpSumModalMonthlyStore());
+
 const dataArray = ref([] as Array<RowData>);
 const etfStore = useEtfStore();
 
-const _show = (_mep: EtfPreliminaryLumpSum) => {
-  serverErrors.value = new Array<string>();
+watch(open, (newVal) => {
+  if (newVal) {
+    serverErrors.value = new Array<string>();
 
-  etfPreliminaryLumpSum.value = _mep;
-  const amounts = [
-    etfPreliminaryLumpSum.value.amountJanuary,
-    etfPreliminaryLumpSum.value.amountFebruary,
-    etfPreliminaryLumpSum.value.amountMarch,
-    etfPreliminaryLumpSum.value.amountApril,
-    etfPreliminaryLumpSum.value.amountMay,
-    etfPreliminaryLumpSum.value.amountJune,
-    etfPreliminaryLumpSum.value.amountJuly,
-    etfPreliminaryLumpSum.value.amountAugust,
-    etfPreliminaryLumpSum.value.amountSeptember,
-    etfPreliminaryLumpSum.value.amountOctober,
-    etfPreliminaryLumpSum.value.amountNovember,
-    etfPreliminaryLumpSum.value.amountDecember,
-  ];
-  dataArray.value = amounts.map((amount, i) => {
-    return { month: getMonthName(i + 1), amount: amount } as RowData;
-  });
-
-  modalComponent.value?._show();
-};
+    const amounts = [
+      etfPreliminaryLumpSum.value.amountJanuary,
+      etfPreliminaryLumpSum.value.amountFebruary,
+      etfPreliminaryLumpSum.value.amountMarch,
+      etfPreliminaryLumpSum.value.amountApril,
+      etfPreliminaryLumpSum.value.amountMay,
+      etfPreliminaryLumpSum.value.amountJune,
+      etfPreliminaryLumpSum.value.amountJuly,
+      etfPreliminaryLumpSum.value.amountAugust,
+      etfPreliminaryLumpSum.value.amountSeptember,
+      etfPreliminaryLumpSum.value.amountOctober,
+      etfPreliminaryLumpSum.value.amountNovember,
+      etfPreliminaryLumpSum.value.amountDecember,
+    ];
+    dataArray.value = amounts.map((amount, i) => {
+      return { month: getMonthName(i + 1), amount: amount } as RowData;
+    });
+  }
+});
 
 const deleteEtfPreliminaryLumpSum = () => {
   serverErrors.value = new Array<string>();
@@ -113,13 +118,11 @@ const deleteEtfPreliminaryLumpSum = () => {
     etfPreliminaryLumpSum.value.id,
   )
     .then(() => {
-      modalComponent.value?._hide();
-      emit("etfPreliminaryLumpSumDeleted", etfPreliminaryLumpSum.value);
+      open.value = false;
+      onDone.value?.(etfPreliminaryLumpSum.value);
     })
     .catch((backendError) => {
       handleBackendError(backendError, serverErrors);
     });
 };
-
-defineExpose({ _show });
 </script>

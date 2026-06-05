@@ -1,9 +1,14 @@
 <template>
-  <ModalVue :title="title" max-width="max-w-md" ref="modalComponent">
+  <ModalVue
+    :title="title"
+    max-width="max-w-md"
+    id-suffix="CreateCapitalsource"
+    v-model:open="open"
+  >
     <template #body>
       <form
         @submit.prevent="createCapitalsource"
-        :id="'createCapitalsourceForm' + idSuffix"
+        id="createCapitalsourceForm-CreateCapitalsource"
         class="space-y-6"
       >
         <DivError :server-errors="serverErrors" />
@@ -13,7 +18,7 @@
             <InputStandard
               v-model="mcs.comment"
               :validation-schema="schema.comment"
-              :id="'comment' + idSuffix"
+              id="comment-CreateCapitalsource"
               :field-label="$t('General.name')"
             />
           </div>
@@ -21,14 +26,14 @@
             <SelectStandard
               v-model="mcs.type"
               :validation-schema="schema.type"
-              :id="'type' + idSuffix"
+              id="type-CreateCapitalsource"
               :field-label="$t('Capitalsource.type')"
               :select-box-values="capitalsourceTypeValues"
             />
             <SelectStandard
               v-model="mcs.state"
               :validation-schema="schema.state"
-              :id="'state' + idSuffix"
+              id="state-CreateCapitalsource"
               :field-label="$t('Capitalsource.state')"
               :select-box-values="capitalsourceStateValues"
             />
@@ -46,14 +51,14 @@
               <InputDate
                 v-model="mcs.validFrom"
                 :validation-schema="schema.validFrom"
-                :id="'validFrom' + idSuffix"
+                id="validFrom-CreateCapitalsource"
                 :field-label="$t('General.validFrom')"
                 picker-side="top"
               />
               <InputDate
                 v-model="mcs.validTil"
                 :validation-schema="schema.validTil"
-                :id="'validTil' + idSuffix"
+                id="validTil-CreateCapitalsource"
                 :field-label="$t('General.validTil')"
                 picker-side="top"
               />
@@ -70,14 +75,14 @@
               <SelectStandard
                 v-model="mcs.groupUse"
                 :validation-schema="schema.groupUse"
-                :id="'groupUse' + idSuffix"
+                id="groupUse-CreateCapitalsource"
                 :field-label="$t('Capitalsource.groupUse')"
                 :select-box-values="groupUseValues"
               />
               <SelectStandard
                 v-model="mcs.importAllowed"
                 :validation-schema="schema.importAllowed"
-                :id="'importAllowed' + idSuffix"
+                id="importAllowed-CreateCapitalsource"
                 :field-label="$t('Capitalsource.importAllowed')"
                 :select-box-values="capitalsourceImportValues"
               />
@@ -95,13 +100,13 @@
             <InputStandard
               v-model="mcs.accountNumber"
               :validation-schema="schema.accountNumber"
-              :id="'accountNumber' + idSuffix"
+              id="accountNumber-CreateCapitalsource"
               :field-label="$t('General.iban')"
             />
             <InputStandard
               v-model="mcs.bankCode"
               :validation-schema="schema.bankCode"
-              :id="'bankCode' + idSuffix"
+              id="bankCode-CreateCapitalsource"
               :field-label="$t('General.bic')"
             />
           </div>
@@ -123,7 +128,7 @@
 
       <ButtonSubmit
         :button-label="$t('General.save')"
-        :form-id="'createCapitalsourceForm' + idSuffix"
+        form-id="createCapitalsourceForm-CreateCapitalsource"
         test-id="createCapitalsourceSaveButton"
       >
         <template #icon><Save class="icon-medium" /></template>
@@ -140,11 +145,13 @@ import { capitalsourceStateValues } from "@/model/capitalsource/CapitalsourceSta
 import { capitalsourceTypeValues } from "@/model/capitalsource/CapitalsourceType";
 import type { SelectBoxValue } from "@/model/SelectBoxValue";
 import CapitalsourceService from "@/service/CapitalsourceService";
+import { useCreateCapitalsourceModalStore } from "./CreateCapitalsourceModal.store";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { globErr } from "@/tools/views/ZodUtil";
 import { Save, Undo2 } from "lucide-vue-next";
+import { storeToRefs } from "pinia";
 import { useForm } from "vee-validate";
-import { computed, ref, toRaw, useTemplateRef } from "vue";
+import { computed, ref, toRaw, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { boolean, date, number, string, ZodType } from "zod";
 import ButtonSubmit from "../common/ButtonSubmit.vue";
@@ -156,19 +163,17 @@ import SelectStandard from "../common/SelectStandard.vue";
 
 const { t } = useI18n();
 
-const props = defineProps({
-  idSuffix: {
-    type: String,
-    default: "",
-  },
-});
-
 const serverErrors = ref(new Array<string>());
 const mcs = ref({} as Capitalsource);
-const origMcs = ref({} as Capitalsource | undefined);
-const modalComponent = useTemplateRef<typeof ModalVue>("modalComponent");
+const origMcs = ref<Capitalsource | undefined>(undefined);
+const { open, capitalsource, onDone } = storeToRefs(
+  useCreateCapitalsourceModalStore(),
+);
 
-const emit = defineEmits(["capitalsourceUpdated", "capitalsourceCreated"]);
+const emit = defineEmits<{
+  capitalsourceUpdated: [capitalsource: Capitalsource];
+  capitalsourceCreated: [capitalsource: Capitalsource];
+}>();
 
 const groupUseValues = [
   { id: undefined, value: "" },
@@ -219,11 +224,17 @@ const resetForm = () => {
   Object.keys(values).forEach((field) => setFieldTouched(field, false));
 };
 
-const _show = (_mcs?: Capitalsource) => {
-  origMcs.value = _mcs ?? undefined;
-  resetForm();
-  modalComponent.value?._show();
-};
+// Combined watcher for open and capitalsource state
+watch(
+  [open, capitalsource],
+  ([isVisible, entry]) => {
+    if (isVisible) {
+      origMcs.value = entry;
+      resetForm();
+    }
+  },
+  { immediate: true },
+);
 
 const createCapitalsource = handleSubmit(() => {
   serverErrors.value = new Array<string>();
@@ -237,17 +248,11 @@ const createCapitalsource = handleSubmit(() => {
     .then((result) => {
       const isUpdate = mcs.value.id > 0;
       if (!isUpdate) mcs.value = result as Capitalsource;
-
-      modalComponent.value?._hide();
-      emit(
-        isUpdate ? "capitalsourceUpdated" : "capitalsourceCreated",
-        mcs.value,
-      );
+      open.value = false;
+      onDone.value?.(mcs.value);
     })
     .catch((backendError) => {
       handleBackendError(backendError, serverErrors);
     });
 });
-
-defineExpose({ _show });
 </script>

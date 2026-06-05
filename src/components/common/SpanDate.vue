@@ -8,12 +8,9 @@
 import { formatDate } from "@/tools/views/FormatDate";
 import { computed } from "vue";
 
-const props = defineProps({
-  date: {
-    type: Date,
-    required: false,
-  },
-});
+const props = defineProps<{
+  date?: Date;
+}>();
 
 const fullDateString = computed(() =>
   props.date ? formatDate(props.date) : "",

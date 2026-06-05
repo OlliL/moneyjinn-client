@@ -2,25 +2,6 @@
   <div v-if="dataLoaded">
     <DivError :server-errors="serverErrors" />
 
-    <ListMoneyflowModalMobile
-      ref="listModal"
-      @show-receipt="showReceipt"
-      v-if="!desktop"
-    />
-    <ListMoneyflowModalDesktop ref="listModal" v-if="desktop" />
-    <DeleteMoneyflowModalVue
-      ref="deleteModal"
-      @moneyflow-deleted="moneyflowDeleted"
-    />
-    <EditMoneyflowModalVue
-      ref="editModal"
-      @moneyflow-updated="moneyflowUpdated"
-      @moneyflow-receipt-deleted="moneyflowReceiptDeleted"
-      @show-receipt="showReceipt"
-    />
-
-    <ReceiptModalVue ref="receiptModal" />
-
     <div>
       <ReportTableMobile
         v-model:filter-capitalsource="filterCapitalsource"
@@ -173,17 +154,16 @@
 
 <script lang="ts" setup>
 import DivError from "@/components/common/DivError.vue";
-import DeleteMoneyflowModalVue from "@/components/moneyflow/DeleteMoneyflowModal.vue";
-import EditMoneyflowModalVue from "@/components/moneyflow/EditMoneyflowModal.vue";
-import ListMoneyflowModalDesktop from "@/components/moneyflow/ListMoneyflowModalDesktop.vue"; // Keep for desktop
-import ListMoneyflowModalMobile from "@/components/moneyflow/ListMoneyflowModalMobile.vue"; // Keep for mobile
-import ReceiptModalVue from "@/components/reports/ReceiptModal.vue";
 import { Accordion } from "@/components/ui/accordion"; // Import Accordion
 import { CapitalsourceType } from "@/model/capitalsource/CapitalsourceType";
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 import type { Report } from "@/model/report/Report";
 import type { ReportTurnoverCapitalsource } from "@/model/report/ReportTurnoverCapitalsource";
 import ReportService from "@/service/ReportService";
+import useDeleteMoneyflowModalStore from "@/components/moneyflow/DeleteMoneyflowModal.store";
+import useEditMoneyflowModalStore from "@/components/moneyflow/EditMoneyflowModal.store";
+import useListMoneyflowModalStore from "@/components/moneyflow/ListMoneyflowModal.store";
+import useReceiptModalStore from "@/components/reports/ReceiptModal.store";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { isDesktop } from "@/tools/views/IsDesktop";
 import {
@@ -191,7 +171,6 @@ import {
   onBeforeUnmount,
   onMounted,
   ref,
-  useTemplateRef,
   watch,
   type PropType,
 } from "vue";
@@ -214,11 +193,10 @@ const sortBy = defineModel<Map<keyof Moneyflow, boolean>>("sortBy", {
   type: Object as PropType<Map<keyof Moneyflow, boolean>>,
   required: true,
 });
-const receiptModal = useTemplateRef<typeof ReceiptModalVue>("receiptModal");
-const deleteModal =
-  useTemplateRef<typeof DeleteMoneyflowModalVue>("deleteModal");
-const editModal = useTemplateRef<typeof EditMoneyflowModalVue>("editModal");
-const listModal = useTemplateRef<typeof ListMoneyflowModalDesktop>("listModal");
+const { openDeleteMoneyflow } = useDeleteMoneyflowModalStore();
+const { openEditMoneyflow } = useEditMoneyflowModalStore();
+const { openListMoneyflow } = useListMoneyflowModalStore();
+const { openListReceipt } = useReceiptModalStore();
 
 const filteredMoneyflows = ref([] as Moneyflow[]);
 watch(
@@ -276,11 +254,7 @@ const compareColumns = (
 
 const sortByColumn = (field: keyof Moneyflow) => {
   let sortByField = sortBy.value.get(field);
-  if (sortByField === undefined || !sortByField) {
-    sortByField = true;
-  } else {
-    sortByField = false;
-  }
+  sortByField = sortByField === undefined || !sortByField;
   sortBy.value.clear();
   sortBy.value.set(field, sortByField);
 };
@@ -325,16 +299,10 @@ watch(
   },
 );
 
-const props = defineProps({
-  year: {
-    type: String,
-    required: true,
-  },
-  month: {
-    type: String,
-    required: true,
-  },
-});
+const props = defineProps<{
+  year: string;
+  month: string;
+}>();
 
 const capitalsourceHasMovement = (
   data: ReportTurnoverCapitalsource,
@@ -401,16 +369,21 @@ const loadData = (year: number, month: number) => {
     });
 };
 const showReceipt = (moneyflowId: number) => {
-  receiptModal.value?._show(moneyflowId);
+  openListReceipt(moneyflowId);
 };
 const deleteMoneyflow = (mmf: Moneyflow) => {
-  deleteModal.value?._show(mmf);
+  openDeleteMoneyflow(mmf, moneyflowDeleted);
 };
 const editMoneyflow = (mmf: Moneyflow) => {
-  editModal.value?._show(mmf);
+  openEditMoneyflow(
+    mmf,
+    undefined,
+    () => loadData(+props.year, +props.month),
+    showReceipt,
+  );
 };
 const listMoneyflow = (mmf: Moneyflow) => {
-  listModal.value?._show(mmf);
+  openListMoneyflow(mmf, undefined, showReceipt);
 };
 /**
  * Recalculate end-of-month amounts (matching capitalsource and overall)
@@ -448,12 +421,6 @@ const moneyflowDeleted = (mmf: Moneyflow) => {
   report.value.moneyflows = report.value.moneyflows.filter((originalMmf) => {
     return mmf.id !== originalMmf.id;
   });
-};
-const moneyflowReceiptDeleted = (mmfId: number) => {
-  const oldMmf = report.value.moneyflows.find(
-    (originalMmf) => mmfId === originalMmf.id,
-  );
-  if (oldMmf) oldMmf.hasReceipt = false;
 };
 const moneyflowUpdated = (mmf: Moneyflow) => {
   const oldMmf = report.value.moneyflows.find(

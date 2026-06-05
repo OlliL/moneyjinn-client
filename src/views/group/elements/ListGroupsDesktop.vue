@@ -20,8 +20,6 @@
           v-for="group in groups"
           :key="group.id"
           :group="group"
-          @edit-group="editGroup"
-          @delete-group="deleteGroup"
         />
       </TableBody>
     </DivContentTable>
@@ -38,23 +36,9 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import type { Group } from "@/model/group/Group";
-import type { PropType } from "vue";
 import ListGroupRowVue from "./ListGroupRow.vue";
 
-defineProps({
-  groups: {
-    type: Array as PropType<Group[]>,
-    required: true,
-  },
-});
-
-const emit = defineEmits(["deleteGroup", "editGroup"]);
-
-const deleteGroup = (group: Group) => {
-  emit("deleteGroup", group);
-};
-
-const editGroup = (group: Group) => {
-  emit("editGroup", group);
-};
+defineProps<{
+  groups: Group[];
+}>();
 </script>

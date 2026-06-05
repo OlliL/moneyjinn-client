@@ -2,7 +2,8 @@
   <ModalDelete
     :title="$t('ContractpartnerMatching.title.delete')"
     :server-errors="serverErrors"
-    ref="modalComponent"
+    id-suffix="DeleteContractpartnerMatching"
+    v-model:open="open"
     @confirm="deleteContractpartnerMatching"
   >
     <template #details>
@@ -10,23 +11,23 @@
         :label="$t('ContractpartnerMatching.matchingText')"
         highlight-value
       >
-        {{ mcm.matchingText }}
+        {{ mcmData.matchingText }}
       </ModalDeleteRow>
 
       <ModalDeleteRow :label="$t('General.contractpartner')">
-        {{ mcm.contractpartnerName }}
+        {{ mcmData.contractpartnerName }}
       </ModalDeleteRow>
 
       <ModalDeleteRow :label="$t('Contractpartner.moneyflowComment')">
-        {{ mcm.moneyflowComment }}
+        {{ mcmData.moneyflowComment }}
       </ModalDeleteRow>
 
       <ModalDeleteRow :label="$t('General.postingAccount')">
-        {{ mcm.postingAccountName }}
+        {{ mcmData.postingAccountName }}
       </ModalDeleteRow>
 
       <ModalDeleteRow :label="$t('General.lastUsed')">
-        <SpanDate :date="mcm.lastUsed" />
+        <SpanDate :date="mcmData.lastUsed" />
       </ModalDeleteRow>
     </template>
   </ModalDelete>
@@ -38,33 +39,43 @@ import ModalDeleteRow from "@/components/common/ModalDeleteRow.vue";
 import SpanDate from "@/components/common/SpanDate.vue";
 import type { ContractpartnerMatching } from "@/model/contractpartnermatching/ContractpartnerMatching";
 import ContractpartnerMatchingService from "@/service/ContractpartnerMatchingService";
+import useDeleteContractpartnerMatchingModalStore from "./DeleteContractpartnerMatchingModal.store";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
-import { ref, useTemplateRef } from "vue";
+import { storeToRefs } from "pinia";
+import { ref, watch } from "vue";
 
 const serverErrors = ref(new Array<string>());
+const { open, matching: selectedForDelete, onDone } = storeToRefs(
+  useDeleteContractpartnerMatchingModalStore(),
+);
+const mcmData = ref({} as ContractpartnerMatching);
 
-const mcm = ref({} as ContractpartnerMatching);
-const modalComponent = useTemplateRef<typeof ModalDelete>("modalComponent");
-const emit = defineEmits(["contractpartnerMatchingDeleted"]);
+watch(
+  selectedForDelete,
+  (entry) => {
+    if (entry) {
+      mcmData.value = entry;
+    }
+  },
+  { immediate: true },
+);
 
-const _show = (_mcm: ContractpartnerMatching) => {
-  mcm.value = _mcm;
-  serverErrors.value = new Array<string>();
-  modalComponent.value?._show();
-};
+watch(open, (newVal) => {
+  if (newVal) {
+    serverErrors.value = new Array<string>();
+  }
+});
 
 const deleteContractpartnerMatching = () => {
   serverErrors.value = new Array<string>();
 
-  ContractpartnerMatchingService.deleteContractpartnerMatching(mcm.value.id)
+  ContractpartnerMatchingService.deleteContractpartnerMatching(mcmData.value.id)
     .then(() => {
-      modalComponent.value?._hide();
-      emit("contractpartnerMatchingDeleted", mcm.value);
+      open.value = false;
+      onDone.value?.();
     })
     .catch((backendError) => {
       handleBackendError(backendError, serverErrors);
     });
 };
-
-defineExpose({ _show });
 </script>

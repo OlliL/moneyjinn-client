@@ -1,9 +1,10 @@
 <template>
   <ModalVue
     :title="$t('General.moneyflow')"
-    ref="modalComponent"
+    id-suffix="ListMoneyflowMobile"
     :max-width="modalWidth"
     v-if="mmf"
+    v-model:open="open"
   >
     <template #body>
       <DivError :server-errors="serverErrors" />
@@ -184,7 +185,9 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref, useTemplateRef } from "vue";
+import useListMoneyflowModalStore from "./ListMoneyflowModal.store";
+import { storeToRefs } from "pinia";
+import { computed, ref, toRaw, watch } from "vue";
 
 // shadcn/ui Komponenten
 import { Badge } from "@/components/ui/badge";
@@ -211,9 +214,9 @@ import SpanDate from "../common/SpanDate.vue";
 
 const serverErrors = ref(new Array<string>());
 const mmf = ref({} as Moneyflow);
-const modalComponent = useTemplateRef<typeof ModalVue>("modalComponent");
-
-const emit = defineEmits(["showReceipt"]);
+const { open, moneyflow, importedReceipt, onShowReceipt } = storeToRefs(
+  useListMoneyflowModalStore(),
+);
 
 // Schmaleres, fokussiertes Layout für Mobile & Desktop-Details
 const modalWidth = computed(() => "md:max-w-md w-full mx-auto");
@@ -227,15 +230,19 @@ const rowspan = computed(() => {
 
 const receipt = ref({} as undefined | ImportedMoneyflowReceipt);
 
-const _show = (_mmf: Moneyflow, importedReceipt?: ImportedMoneyflowReceipt) => {
-  mmf.value = _mmf;
-  receipt.value = importedReceipt;
-  modalComponent.value?._show();
-};
+watch(
+  [open, moneyflow, importedReceipt],
+  ([isVisible, entry, importedReceipt]) => {
+    if (!isVisible || !entry) return;
+
+    mmf.value = structuredClone(toRaw(entry));
+    receipt.value = importedReceipt;
+    serverErrors.value = new Array<string>();
+  },
+  { immediate: true },
+);
 
 const showReceipt = () => {
-  emit("showReceipt", mmf.value.id, receipt.value);
+  onShowReceipt.value?.(mmf.value.id);
 };
-
-defineExpose({ _show });
 </script>

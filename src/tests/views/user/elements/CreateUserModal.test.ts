@@ -27,8 +27,9 @@ import {
   ComboboxView,
   InputView,
   ModalView,
-  renderModalWithRef,
+  renderDeclarativeModal,
 } from "@/tests/TestViews";
+import { useCreateUserModalStore } from "@/views/user/elements/CreateUserModal.store";
 import CreateUserModal from "@/views/user/elements/CreateUserModal.vue";
 import "@testing-library/jest-dom/vitest";
 import { createPinia, setActivePinia } from "pinia";
@@ -43,27 +44,33 @@ vi.mock("@/service/PreDefMoneyflowService");
 vi.mock("@/service/CrudEtfService");
 
 class CreateUserModalView {
-  static readonly Modal = new ModalView("app-modal");
-  static readonly NameInput = new InputView("name");
-  static readonly Password1Input = new InputView("password1");
-  static readonly Password2Input = new InputView("password2");
-  static readonly RoleSelect = new ComboboxView("role");
-  static readonly RoleInput = new InputView("role");
-  static readonly GroupSelect = new ComboboxView("groupId");
-  static readonly GroupInput = new InputView("groupId");
-  static readonly ValidFromInput = new InputView("validFrom");
-  static readonly UserIsNewSelect = new ComboboxView("userIsNew");
-  static readonly UserIsNewInput = new InputView("userIsNew");
+  static readonly Modal = new ModalView("app-modal-CreateUser");
+  static readonly NameInput = new InputView("name-CreateUser");
+  static readonly Password1Input = new InputView("password1-CreateUser");
+  static readonly Password2Input = new InputView("password2-CreateUser");
+  static readonly RoleSelect = new ComboboxView("role-CreateUser");
+  static readonly RoleInput = new InputView("role-CreateUser");
+  static readonly GroupSelect = new ComboboxView("groupId-CreateUser");
+  static readonly GroupInput = new InputView("groupId-CreateUser");
+  static readonly ValidFromInput = new InputView("validFrom-CreateUser");
+  static readonly UserIsNewSelect = new ComboboxView("userIsNew-CreateUser");
+  static readonly UserIsNewInput = new InputView("userIsNew-CreateUser");
 
   static readonly SaveButton = new ButtonView("createUserSaveButton");
   static readonly ResetButton = new ButtonView("createUserResetButton");
 
-  static readonly NameError = new AlertView("name-error-item");
-  static readonly GroupError = new AlertView("groupId-error");
-  static readonly RoleError = new AlertView("role-error");
-  static readonly PasswordError = new AlertView("password1-error-item");
-  static readonly ValidFromError = new AlertView("validFrom-error");
-  static readonly UserIsNewError = new AlertView("userIsNew-error");
+  static readonly NameError = new AlertView("name-CreateUser-error-item");
+  static readonly GroupError = new AlertView("groupId-CreateUser-error");
+  static readonly RoleError = new AlertView("role-CreateUser-error-item");
+  static readonly PasswordError = new AlertView(
+    "password1-CreateUser-error-item",
+  );
+  static readonly ValidFromError = new AlertView(
+    "validFrom-CreateUser-error-item",
+  );
+  static readonly UserIsNewError = new AlertView(
+    "userIsNew-CreateUser-error-item",
+  );
   static readonly ServerErrorItem = new AlertView("serverError-item");
 }
 
@@ -98,8 +105,8 @@ test("creates a new user", async () => {
   } as User;
   UserServiceMocker.mockCreateUserResolved(newUser);
 
-  const modalRef = renderModalWithRef<any>(CreateUserModal);
-  await modalRef.value._show();
+  useCreateUserModalStore().openCreateUser();
+  renderDeclarativeModal(CreateUserModal);
 
   await CreateUserModalView.Modal.assertOpen();
 
@@ -128,8 +135,8 @@ test("updates an existing user", async () => {
   } as User;
   UserServiceMocker.mockUpdateUserResolved();
 
-  const modalRef = renderModalWithRef<any>(CreateUserModal);
-  await modalRef.value._show(existingUser);
+  useCreateUserModalStore().openEditUser(existingUser);
+  renderDeclarativeModal(CreateUserModal);
 
   await CreateUserModalView.NameInput.setValue("updated");
   await CreateUserModalView.SaveButton.click();
@@ -143,8 +150,8 @@ test("updates an existing user", async () => {
 });
 
 test("reset button clears form in create mode", async () => {
-  const modalRef = renderModalWithRef<any>(CreateUserModal);
-  await modalRef.value._show();
+  useCreateUserModalStore().openCreateUser();
+  renderDeclarativeModal(CreateUserModal);
 
   await CreateUserModalView.NameInput.setValue("to be cleared");
   await CreateUserModalView.ResetButton.click();
@@ -160,8 +167,8 @@ test("reset button reverts changes in edit mode", async () => {
     groupId: 1,
     userIsNew: false,
   } as User;
-  const modalRef = renderModalWithRef<any>(CreateUserModal);
-  await modalRef.value._show(existingUser);
+  useCreateUserModalStore().openEditUser(existingUser);
+  renderDeclarativeModal(CreateUserModal);
 
   await CreateUserModalView.NameInput.setValue("changed");
   await CreateUserModalView.ResetButton.click();
@@ -177,8 +184,8 @@ test("shows server errors on failure", async () => {
   );
   UserServiceMocker.mockCreateUserRejected(backendError);
 
-  const modalRef = renderModalWithRef<any>(CreateUserModal);
-  await modalRef.value._show();
+  useCreateUserModalStore().openCreateUser();
+  renderDeclarativeModal(CreateUserModal);
 
   await CreateUserModalView.NameInput.setValue("valid");
   await CreateUserModalView.Password1Input.setValue("abcABC123!");
@@ -198,8 +205,8 @@ test("shows server errors on failure", async () => {
 });
 
 test("validation: mandatory fields in create mode", async () => {
-  const modalRef = renderModalWithRef<any>(CreateUserModal);
-  await modalRef.value._show();
+  useCreateUserModalStore().openCreateUser();
+  renderDeclarativeModal(CreateUserModal);
 
   await CreateUserModalView.SaveButton.click();
 
@@ -217,8 +224,8 @@ test("validation: mandatory fields in create mode", async () => {
 });
 
 test("validation: password mismatch", async () => {
-  const modalRef = renderModalWithRef<any>(CreateUserModal);
-  await modalRef.value._show();
+  useCreateUserModalStore().openCreateUser();
+  renderDeclarativeModal(CreateUserModal);
 
   await CreateUserModalView.Password1Input.setValue("password123");
   await CreateUserModalView.Password2Input.setValue("different");
@@ -230,8 +237,8 @@ test("validation: password mismatch", async () => {
 });
 
 test("validation: field lengths", async () => {
-  const modalRef = renderModalWithRef<any>(CreateUserModal);
-  await modalRef.value._show();
+  useCreateUserModalStore().openCreateUser();
+  renderDeclarativeModal(CreateUserModal);
 
   await CreateUserModalView.NameInput.setValue("a".repeat(21));
   await CreateUserModalView.SaveButton.click();
@@ -259,8 +266,8 @@ test("edit mode pre-fills data and shows history", async () => {
   ];
   UserServiceMocker.mockGetAllAccessRelationsResolved(accessRelations);
 
-  const modalRef = renderModalWithRef<any>(CreateUserModal);
-  await modalRef.value._show(existingUser);
+  useCreateUserModalStore().openEditUser(existingUser);
+  renderDeclarativeModal(CreateUserModal);
 
   await CreateUserModalView.NameInput.assertValue("prefilled");
   await CreateUserModalView.GroupInput.assertValue("Group 2");

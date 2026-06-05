@@ -1,0 +1,74 @@
+import type { InjectionKey } from "vue";
+import type { Capitalsource } from "./capitalsource/Capitalsource";
+import type { Contractpartner } from "./contractpartner/Contractpartner";
+import type { ContractpartnerAccount } from "./contractpartneraccount/ContractpartnerAccount";
+import type { ContractpartnerMatching } from "./contractpartnermatching/ContractpartnerMatching";
+import type { Etf } from "./etf/Etf";
+import type { EtfFlow } from "./etf/EtfFlow";
+import type { Group } from "./group/Group";
+import type { PreDefMoneyflow } from "./moneyflow/PreDefMoneyflow";
+import type { PostingAccount } from "./postingaccount/PostingAccount";
+import type { User } from "./user/User";
+
+export interface CrudActions<T> {
+  create: () => void;
+  edit: (item: T) => void;
+  delete: (item: T) => void;
+}
+
+// Einheitlicher Typ für lokale Domain-Modal-Aktionen.
+export interface LocalCrudModalActions<T> extends CrudActions<T> {}
+
+export type OpenContractpartnerAccountsAction = (item: Contractpartner) => void;
+
+export interface MonthlySettlementModalActions {
+  create: () => void;
+  edit: () => void;
+  delete: () => void;
+}
+
+// Domänen-spezifische Keys
+export const CapitalsourceActionsKey: InjectionKey<
+  LocalCrudModalActions<Capitalsource>
+> = Symbol("CapitalsourceActions");
+
+export const ContractpartnerActionsKey: InjectionKey<
+  LocalCrudModalActions<Contractpartner>
+> = Symbol("ContractpartnerActions");
+
+export const OpenContractpartnerAccountsActionKey: InjectionKey<
+  OpenContractpartnerAccountsAction
+> = Symbol("OpenContractpartnerAccountsAction");
+
+export const ContractpartnerAccountActionsKey: InjectionKey<
+  LocalCrudModalActions<ContractpartnerAccount>
+> = Symbol("ContractpartnerAccountActions");
+
+export const PostingAccountActionsKey: InjectionKey<
+  LocalCrudModalActions<PostingAccount>
+> = Symbol("PostingAccountActions");
+
+export const UserActionsKey: InjectionKey<LocalCrudModalActions<User>> =
+  Symbol("UserActions");
+
+export const GroupActionsKey: InjectionKey<LocalCrudModalActions<Group>> =
+  Symbol("GroupActions");
+
+export const EtfActionsKey: InjectionKey<LocalCrudModalActions<Etf>> =
+  Symbol("EtfActions");
+
+export const EtfFlowActionsKey: InjectionKey<LocalCrudModalActions<EtfFlow>> =
+  Symbol("EtfFlowActions");
+
+export const PreDefMoneyflowActionsKey: InjectionKey<
+  LocalCrudModalActions<PreDefMoneyflow>
+> = Symbol("PreDefMoneyflowActions");
+
+export const ContractpartnerMatchingActionsKey: InjectionKey<
+  LocalCrudModalActions<ContractpartnerMatching>
+> = Symbol("ContractpartnerMatchingActions");
+
+export const MonthlySettlementModalActionsKey: InjectionKey<
+  MonthlySettlementModalActions
+> = Symbol("MonthlySettlementModalActions");
+

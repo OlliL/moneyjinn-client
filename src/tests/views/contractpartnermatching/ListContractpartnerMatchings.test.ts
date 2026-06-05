@@ -65,7 +65,12 @@ class ListContractpartnerMatchingsView {
   static readonly DeleteRentButton = new ButtonView(
     "contractpartner-matching-delete-1",
   );
-  static readonly Modal = new ModalView("app-modal");
+  static readonly CreateModal = new ModalView(
+    "app-modal-CreateContractpartnerMatching",
+  );
+  static readonly DeleteModal = new ModalView(
+    "app-modal-DeleteContractpartnerMatching",
+  );
 }
 
 beforeEach(async () => {
@@ -154,7 +159,7 @@ test("ListContractpartnerMatchings opens create modal", async () => {
 
   await ListContractpartnerMatchingsView.RowRent.assertToBeVisible();
   await ListContractpartnerMatchingsView.CreateButton.click();
-  await ListContractpartnerMatchingsView.Modal.assertOpen();
+  await ListContractpartnerMatchingsView.CreateModal.assertOpen();
 });
 
 test("ListContractpartnerMatchings opens edit modal from row action", async () => {
@@ -162,7 +167,7 @@ test("ListContractpartnerMatchings opens edit modal from row action", async () =
 
   await ListContractpartnerMatchingsView.RowRent.assertToBeVisible();
   await ListContractpartnerMatchingsView.EditRentButton.click();
-  await ListContractpartnerMatchingsView.Modal.assertOpen();
+  await ListContractpartnerMatchingsView.CreateModal.assertOpen();
 });
 
 test("ListContractpartnerMatchings opens delete modal from row action", async () => {
@@ -170,7 +175,7 @@ test("ListContractpartnerMatchings opens delete modal from row action", async ()
 
   await ListContractpartnerMatchingsView.RowRent.assertToBeVisible();
   await ListContractpartnerMatchingsView.DeleteRentButton.click();
-  await ListContractpartnerMatchingsView.Modal.assertOpen();
+  await ListContractpartnerMatchingsView.DeleteModal.assertOpen();
 });
 
 test("ListContractpartnerMatchings filters via mobile sheet", async () => {
@@ -190,7 +195,7 @@ test("ListContractpartnerMatchings opens edit modal from mobile action", async (
 
   await ListContractpartnerMatchingsView.MobileRowRent.assertToBeVisible();
   await ListContractpartnerMatchingsView.MobileEditRentButton.click();
-  await ListContractpartnerMatchingsView.Modal.assertOpen();
+  await ListContractpartnerMatchingsView.CreateModal.assertOpen();
 });
 
 test("ListContractpartnerMatchings opens delete modal from mobile action", async () => {
@@ -198,5 +203,5 @@ test("ListContractpartnerMatchings opens delete modal from mobile action", async
 
   await ListContractpartnerMatchingsView.MobileRowRent.assertToBeVisible();
   await ListContractpartnerMatchingsView.MobileDeleteRentButton.click();
-  await ListContractpartnerMatchingsView.Modal.assertOpen();
+  await ListContractpartnerMatchingsView.DeleteModal.assertOpen();
 });

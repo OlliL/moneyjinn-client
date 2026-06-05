@@ -174,34 +174,25 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import type { EtfFlow } from "@/model/etf/EtfFlow";
 import { useEtfStore } from "@/stores/EtfStore";
 import { formatNumber } from "@/tools/views/FormatNumber";
-import { computed, type PropType } from "vue";
+import { computed } from "vue";
 import ListEtfDepotRowVue from "./ListEtfDepotRow.vue";
 
-const props = defineProps({
-  currentTab: {
-    type: String as PropType<"effective" | "all">,
-    required: true,
-  },
-  etfFlows: {
-    type: Array as PropType<EtfFlow[]>,
-    required: true,
-  },
-  etfEffectiveFlows: {
-    type: Array as PropType<EtfFlow[]>,
-    required: true,
-  },
-  selectedEtfId: {
-    type: Number,
-    required: true,
-  },
-});
+const props = defineProps<{
+  etfFlows: EtfFlow[];
+  etfEffectiveFlows: EtfFlow[];
+  selectedEtfId: number;
+}>();
 
+const currentTab = defineModel<"effective" | "all">("currentTab");
 const { getEtf } = useEtfStore();
-const emit = defineEmits(["update:currentTab", "deleteEtfFlow", "editEtfFlow"]);
+const emit = defineEmits<{
+  deleteEtfFlow: [etfFlow: EtfFlow];
+  editEtfFlow: [etfFlow: EtfFlow];
+}>();
 
 const updateTab = (value: string | number) => {
   if (value === "effective" || value === "all") {
-    emit("update:currentTab", value);
+    currentTab.value = value;
   }
 };
 

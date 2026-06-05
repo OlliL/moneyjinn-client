@@ -1,11 +1,4 @@
 <template>
-  <DeleteMoneyflowModal ref="deleteModal" @moneyflow-deleted="compareData" />
-  <EditMoneyflowModal
-    ref="editModal"
-    @moneyflow-updated="compareData"
-    @moneyflow-created="compareData"
-  />
-
   <div class="custom-container space-y-6">
     <div class="text-center">
       <h4 class="text-2xl font-bold">{{ $t("CompareData.title") }}</h4>
@@ -138,8 +131,6 @@ import DivError from "@/components/common/DivError.vue";
 import InputDate from "@/components/common/InputDate.vue";
 import InputFile from "@/components/common/InputFile.vue";
 import SelectStandard from "@/components/common/SelectStandard.vue";
-import DeleteMoneyflowModal from "@/components/moneyflow/DeleteMoneyflowModal.vue";
-import EditMoneyflowModal from "@/components/moneyflow/EditMoneyflowModal.vue";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import type { CompareData } from "@/model/comparedata/CompareData";
@@ -149,11 +140,13 @@ import type { SelectBoxValue } from "@/model/SelectBoxValue";
 import CompareDataService from "@/service/CompareDataService";
 import MoneyflowService from "@/service/MoneyflowService";
 import { useCapitalsourceStore } from "@/stores/CapitalsourceStore";
+import useDeleteMoneyflowModalStore from "@/components/moneyflow/DeleteMoneyflowModal.store";
+import useEditMoneyflowModalStore from "@/components/moneyflow/EditMoneyflowModal.store";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { globErr } from "@/tools/views/ZodUtil";
 import { Eye } from "lucide-vue-next";
 import { useForm } from "vee-validate";
-import { computed, onMounted, ref, useTemplateRef } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { any, array as arr, date, instanceof as instof, number } from "zod";
 import CompareDataResultDesktop from "./elements/CompareDataResultDesktop.vue";
@@ -194,9 +187,8 @@ const compareDatasWrongCapitalsource = ref(
 const compareDatasNotInFile = ref({} as Array<CompareData> | undefined);
 const compareDatasNotInDatabase = ref({} as Array<CompareData> | undefined);
 const files = ref({} as FileList);
-
-const deleteModal = useTemplateRef<typeof DeleteMoneyflowModal>("deleteModal");
-const editModal = useTemplateRef<typeof EditMoneyflowModal>("editModal");
+const { openDeleteMoneyflow } = useDeleteMoneyflowModalStore();
+const { openEditMoneyflow } = useEditMoneyflowModalStore();
 
 const { handleSubmit, values, setFieldTouched } = useForm();
 
@@ -301,6 +293,9 @@ const compareCompareDataDatasetByDate = (
   dataA.compareDataDataset!.bookingDate.getTime()! -
   dataB.compareDataDataset!.bookingDate?.getTime();
 
+const restartComparison = () => {
+  compareData();
+};
 const compareData = handleSubmit(async () => {
   dataCompared.value = false;
   serverErrors.value = new Array<string>();
@@ -358,15 +353,15 @@ const compareData = handleSubmit(async () => {
 
 const deleteMoneyflow = (id: number) => {
   MoneyflowService.fetchMoneyflow(id).then((mmf) => {
-    deleteModal.value?._show(mmf);
+    openDeleteMoneyflow(mmf, restartComparison);
   });
 };
 const editMoneyflow = (id: number) => {
   MoneyflowService.fetchMoneyflow(id).then((mmf) => {
-    editModal.value?._show(mmf);
+    openEditMoneyflow(mmf, undefined, restartComparison);
   });
 };
 const createMoneyflow = (moneyflow: Moneyflow) => {
-  editModal.value?._show(moneyflow);
+  openEditMoneyflow(moneyflow, undefined, restartComparison);
 };
 </script>

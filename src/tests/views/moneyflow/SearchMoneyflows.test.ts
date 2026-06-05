@@ -1,19 +1,18 @@
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
-import { MoneyflowReceiptType } from "@/model/moneyflow/MoneyflowReceiptType";
-import MoneyflowReceiptServiceMocker from "@/service/mocker/MoneyflowReceiptServiceMocker";
 import MoneyflowServiceMocker from "@/service/mocker/MoneyflowServiceMocker";
-import MoneyflowReceiptService from "@/service/MoneyflowReceiptService";
 import MoneyflowService from "@/service/MoneyflowService";
 import {
   type UserSession,
   useUserSessionStore,
 } from "@/stores/UserSessionStore";
+import useDeleteMoneyflowModalStore from "@/components/moneyflow/DeleteMoneyflowModal.store";
+import useEditMoneyflowModalStore from "@/components/moneyflow/EditMoneyflowModal.store";
+import useListMoneyflowModalStore from "@/components/moneyflow/ListMoneyflowModal.store";
+import useReceiptModalStore from "@/components/reports/ReceiptModal.store";
 import { assertHaveBeenCalledWith } from "@/tests/TestUtil";
 import {
   ButtonView,
   InputView,
-  ModalView,
-  RadioView,
   RowView,
 } from "@/tests/TestViews";
 import SearchMoneyflows from "@/views/moneyflow/SearchMoneyflows.vue";
@@ -21,9 +20,9 @@ import "@testing-library/jest-dom/vitest";
 import { render } from "@testing-library/vue";
 import { createPinia, setActivePinia } from "pinia";
 import { beforeEach, expect, test, vi } from "vitest";
+import { defineComponent } from "vue";
 
 vi.mock("@/service/MoneyflowService");
-vi.mock("@/service/MoneyflowReceiptService");
 
 class SearchMoneyflowsView {
   static readonly CommentInput = new InputView("comment");
@@ -37,12 +36,7 @@ class SearchMoneyflowsView {
   static readonly ReceiptButton = new ButtonView(
     "display-moneyflow-receipt-14",
   );
-  static readonly Modal = new ModalView("app-modal");
   static readonly EmptyRow = new RowView("search-moneyflows-empty");
-  // Example for radio buttons for moneyflow selection
-  static readonly MoneyflowRadio12 = new RadioView("moneyflow-radio-12");
-  static readonly MoneyflowRadio13 = new RadioView("moneyflow-radio-13");
-  static readonly MoneyflowRadio14 = new RadioView("moneyflow-radio-14");
 }
 
 const createMoneyflow = (
@@ -73,8 +67,16 @@ const runSearch = async () => {
   await SearchMoneyflowsView.SubmitButton.click();
 };
 
-const renderView = () => {
-  return render(SearchMoneyflows, {
+const renderView = (props: Record<string, unknown> = {}) => {
+  return render(
+    defineComponent({
+      setup() {
+        return { props };
+      },
+      template: '<SearchMoneyflows v-bind="props" />',
+      components: { SearchMoneyflows },
+    }),
+    {
     global: {
       stubs: {
         "router-link": {
@@ -82,7 +84,8 @@ const renderView = () => {
         },
       },
     },
-  });
+    },
+  );
 };
 
 const expandFirstGroup = async () => {
@@ -131,7 +134,8 @@ test("SearchMoneyflows opens delete modal from own row action", async () => {
   await SearchMoneyflowsView.DeleteButton.click();
 
   await assertHaveBeenCalledWith(MoneyflowService.fetchMoneyflow, 12);
-  await SearchMoneyflowsView.Modal.assertOpen();
+  expect(useDeleteMoneyflowModalStore().open).toBe(true);
+  expect(useDeleteMoneyflowModalStore().moneyflow?.id).toBe(12);
 });
 
 test("SearchMoneyflows opens edit modal from own row action", async () => {
@@ -142,7 +146,8 @@ test("SearchMoneyflows opens edit modal from own row action", async () => {
   await SearchMoneyflowsView.EditButton.click();
 
   await assertHaveBeenCalledWith(MoneyflowService.fetchMoneyflow, 12);
-  await SearchMoneyflowsView.Modal.assertOpen();
+  expect(useEditMoneyflowModalStore().open).toBe(true);
+  expect(useEditMoneyflowModalStore().moneyflow?.id).toBe(12);
 });
 
 test("SearchMoneyflows opens list modal from foreign row action", async () => {
@@ -153,23 +158,19 @@ test("SearchMoneyflows opens list modal from foreign row action", async () => {
   await SearchMoneyflowsView.ListButton.click();
 
   await assertHaveBeenCalledWith(MoneyflowService.fetchMoneyflow, 13);
-  await SearchMoneyflowsView.Modal.assertOpen();
+  expect(useListMoneyflowModalStore().open).toBe(true);
+  expect(useListMoneyflowModalStore().moneyflow?.id).toBe(13);
 });
 
 test("SearchMoneyflows opens receipt modal from receipt icon", async () => {
-  MoneyflowReceiptServiceMocker.mockFetchReceiptResolved({
-    moneyflowId: 14,
-    receiptType: MoneyflowReceiptType.JPEG,
-    receipt: "AA==",
-  });
   renderView();
 
   await runSearch();
   await expandFirstGroup();
   await SearchMoneyflowsView.ReceiptButton.click();
 
-  await assertHaveBeenCalledWith(MoneyflowReceiptService.fetchReceipt, 14);
-  await SearchMoneyflowsView.Modal.assertOpen();
+  expect(useReceiptModalStore().open).toBe(true);
+  expect(useReceiptModalStore().moneyflowId).toBe(14);
 });
 
 test("SearchMoneyflows shows empty state for empty search", async () => {

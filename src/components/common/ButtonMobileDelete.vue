@@ -20,5 +20,7 @@ defineProps<{
   dataTestid: string;
 }>();
 
-const emit = defineEmits(["click"]);
+const emit = defineEmits<{
+  click: [];
+}>();
 </script>

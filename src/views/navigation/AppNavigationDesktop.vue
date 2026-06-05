@@ -135,18 +135,14 @@
         </MenubarItem>
         <MenubarSeparator />
         <MenubarItem as-child>
-          <span
-            class="cursor-pointer"
-            @click="emit('showCreateCapitalsourceModal')"
-            >{{ $t("General.capitalsource") }}</span
-          >
+          <span class="cursor-pointer" @click="openCreateCapitalsource()">{{
+            $t("General.capitalsource")
+          }}</span>
         </MenubarItem>
         <MenubarItem as-child>
-          <span
-            class="cursor-pointer"
-            @click="emit('showCreateContractpartnerModal')"
-            >{{ $t("General.contractpartner") }}</span
-          >
+          <span class="cursor-pointer" @click="openCreateContractpartner()">{{
+            $t("General.contractpartner")
+          }}</span>
         </MenubarItem>
         <MenubarItem as-child>
           <span
@@ -324,7 +320,9 @@ import {
   MenubarSeparator,
   MenubarTrigger,
 } from "@/components/ui/menubar";
+import { useCreateCapitalsourceModalStore } from "@/components/capitalsource/CreateCapitalsourceModal.store";
 import { DropdownMenus, Routes } from "@/router";
+import { useCreateContractpartnerModalStore } from "@/components/contractpartner/CreateContractpartnerModal.store";
 import { useUserSessionStore } from "@/stores/UserSessionStore";
 import {
   ChartCandlestick,
@@ -350,16 +348,17 @@ const month = new Date().getMonth() + 1;
 const { isAdmin } = useUserSessionStore();
 const route = useRoute();
 
-const emit = defineEmits([
-  "logout",
-  "showCreateContractpartnerModal",
-  "showCreateCapitalsourceModal",
-  "showPreDefMoneyflowModal",
-]);
+const emit = defineEmits<{
+  logout: [];
+  showPreDefMoneyflowModal: [];
+}>();
 
 const isMenuActve = (menu: DropdownMenus) => {
   return route.meta?.activeMenu === menu ? "router-link-active" : "";
 };
+
+const { openCreateCapitalsource } = useCreateCapitalsourceModalStore();
+const { openCreateContractpartner } = useCreateContractpartnerModalStore();
 </script>
 
 <style scoped>

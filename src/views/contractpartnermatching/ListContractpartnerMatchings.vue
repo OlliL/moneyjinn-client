@@ -1,15 +1,6 @@
 <template>
-  <CreateContractpartnerMatchingModalVue
-    ref="createContractpartnerMatchingModalList"
-    id-suffix="List"
-    @contractpartner-matching-created="reloadView"
-    @contractpartner-matching-updated="reloadView"
-  />
-  <DeleteContractpartnerMatchingModalVue
-    ref="deleteModal"
-    id-suffix="List"
-    @contractpartner-matching-deleted="reloadView"
-  />
+  <CreateContractpartnerMatchingModal />
+  <DeleteContractpartnerMatchingModal />
 
   <div class="custom-container space-y-6">
     <div class="text-center">
@@ -22,7 +13,7 @@
       v-model="searchString"
       :showValidToggle="false"
       :placeholder="$t('ContractpartnerMatching.searchBy')"
-      @createClicked="showCreateContractpartnerMatchingModal"
+      @createClicked="actions.create"
       ><template #right>
         <div class="w-full md:w-auto">
           <SelectContractpartner
@@ -45,25 +36,27 @@
 
     <ListContractpartnerMatchingsMobile
       :contractpartner-matchings="contractpartnerMatchings"
-      @edit-contractpartner-matching="editContractpartnerMatching"
-      @delete-contractpartner-matching="deleteContractpartnerMatching"
     />
 
     <ListContractpartnerMatchingsDesktop
       :contractpartner-matchings="contractpartnerMatchings"
-      @edit-contractpartner-matching="editContractpartnerMatching"
-      @delete-contractpartner-matching="deleteContractpartnerMatching"
     />
   </div>
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref, useTemplateRef, watch } from "vue";
+import { onMounted, provide, ref, watch } from "vue";
 
 import DivError from "@/components/common/DivError.vue";
 import DivFilter from "@/components/common/DivFilter.vue";
-import CreateContractpartnerMatchingModalVue from "./elements/CreateContractpartnerMatchingModal.vue";
-import DeleteContractpartnerMatchingModalVue from "./elements/DeleteContractpartnerMatchingModal.vue";
+import {
+  ContractpartnerMatchingActionsKey,
+  type CrudActions,
+} from "@/model/CrudActions";
+import useCreateContractpartnerMatchingModalStore from "./elements/CreateContractpartnerMatchingModal.store";
+import useDeleteContractpartnerMatchingModalStore from "./elements/DeleteContractpartnerMatchingModal.store";
+import CreateContractpartnerMatchingModal from "./elements/CreateContractpartnerMatchingModal.vue";
+import DeleteContractpartnerMatchingModal from "./elements/DeleteContractpartnerMatchingModal.vue";
 import ListContractpartnerMatchingsDesktop from "./elements/ListContractpartnerMatchingsDesktop.vue";
 import ListContractpartnerMatchingsMobile from "./elements/ListContractpartnerMatchingsMobile.vue";
 
@@ -79,24 +72,23 @@ const contractpartnerMatchings = ref(new Array<ContractpartnerMatching>());
 const allContractpartnerMatchings = ref(new Array<ContractpartnerMatching>());
 const searchString = ref("");
 const searchContractpartnerId = ref<number | undefined>(undefined);
+const {
+  openCreateContractpartnerMatching,
+  openEditContractpartnerMatching,
+} = useCreateContractpartnerMatchingModalStore();
+const { openDeleteContractpartnerMatching } =
+  useDeleteContractpartnerMatchingModalStore();
 
-const createContractpartnerMatchingModalList = useTemplateRef<
-  typeof CreateContractpartnerMatchingModalVue
->("createContractpartnerMatchingModalList");
-const deleteModal =
-  useTemplateRef<typeof DeleteContractpartnerMatchingModalVue>("deleteModal");
-
-const showCreateContractpartnerMatchingModal = () => {
-  createContractpartnerMatchingModalList.value?._show();
+const actions: CrudActions<ContractpartnerMatching> = {
+  create: () =>
+    openCreateContractpartnerMatching(reloadView),
+  edit: (matchingEntry) =>
+    openEditContractpartnerMatching(matchingEntry, reloadView),
+  delete: (matchingEntry) =>
+    openDeleteContractpartnerMatching(matchingEntry, reloadView),
 };
 
-const deleteContractpartnerMatching = (mcs: ContractpartnerMatching) => {
-  deleteModal.value?._show(mcs);
-};
-
-const editContractpartnerMatching = (mcs: ContractpartnerMatching) => {
-  createContractpartnerMatchingModalList.value?._show(mcs);
-};
+provide(ContractpartnerMatchingActionsKey, actions);
 
 watch(searchString, () => {
   searchContent();

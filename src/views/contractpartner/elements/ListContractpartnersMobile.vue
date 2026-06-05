@@ -37,7 +37,7 @@
                 variant="ghost"
                 size="icon"
                 :data-testid="`contractpartner-mobile-edit-${mcp.id}`"
-                @click.stop="editContractpartner(mcp)"
+                @click.stop="actions.edit(mcp)"
               >
                 <Pencil class="icon-medium" />
               </Button>
@@ -45,7 +45,7 @@
                 variant="ghost"
                 size="icon"
                 :data-testid="`contractpartner-mobile-delete-${mcp.id}`"
-                @click.stop="deleteContractpartner(mcp)"
+                @click.stop="actions.delete(mcp)"
               >
                 <Trash2 class="icon-medium" />
               </Button>
@@ -105,28 +105,18 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
+import {
+  ContractpartnerActionsKey,
+  OpenContractpartnerAccountsActionKey,
+} from "@/model/CrudActions";
 import type { Contractpartner } from "@/model/contractpartner/Contractpartner";
 import { Banknote, Pencil, Trash2 } from "lucide-vue-next";
+import { inject } from "vue";
 
 defineProps<{
   contractpartners: readonly Contractpartner[];
 }>();
 
-const emit = defineEmits<{
-  deleteContractpartner: [mcp: Contractpartner];
-  editContractpartner: [mcp: Contractpartner];
-  listContractpartnerAccounts: [mcp: Contractpartner];
-}>();
-
-const deleteContractpartner = (mcp: Contractpartner) => {
-  emit("deleteContractpartner", mcp);
-};
-
-const editContractpartner = (mcp: Contractpartner) => {
-  emit("editContractpartner", mcp);
-};
-
-const listContractpartnerAccounts = (mcp: Contractpartner) => {
-  emit("listContractpartnerAccounts", mcp);
-};
+const actions = inject(ContractpartnerActionsKey)!;
+const listContractpartnerAccounts = inject(OpenContractpartnerAccountsActionKey)!;
 </script>

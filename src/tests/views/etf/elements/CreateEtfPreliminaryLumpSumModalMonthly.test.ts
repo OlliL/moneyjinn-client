@@ -17,8 +17,9 @@ import {
   ComboboxView,
   InputView,
   ModalView,
-  renderModalWithRef,
+  renderDeclarativeModal,
 } from "@/tests/TestViews";
+import { useCreateEtfPreliminaryLumpSumModalMonthlyStore } from "@/views/etf/elements/CreateEtfPreliminaryLumpSumModalMonthly.store";
 import CreateEtfPreliminaryLumpSumModalMonthly from "@/views/etf/elements/CreateEtfPreliminaryLumpSumModalMonthly.vue";
 import { createPinia, setActivePinia } from "pinia";
 import { beforeEach, expect, test, vi } from "vitest";
@@ -26,7 +27,9 @@ import { beforeEach, expect, test, vi } from "vitest";
 vi.mock("@/service/CrudEtfPreliminaryLumpSumService");
 
 class MonthlyLumpSumView {
-  static readonly Modal = new ModalView("app-modal");
+  static readonly Modal = new ModalView(
+    "app-modal-CreateEtfPreliminaryLumpSumMonthly",
+  );
   static readonly JanInput = new InputView("amountJanuary");
   static readonly FebInput = new InputView("amountFebruary");
   static readonly MarInput = new InputView("amountMarch");
@@ -84,10 +87,10 @@ test("creates monthly lump sum", async () => {
   CrudEtfPreliminaryLumpSumServiceMocker.mockCreateEtfPreliminaryLumpSumResolved(
     { id: 1 } as any,
   );
-  const modalRef = renderModalWithRef<any>(
-    CreateEtfPreliminaryLumpSumModalMonthly,
+  renderDeclarativeModal(CreateEtfPreliminaryLumpSumModalMonthly);
+  useCreateEtfPreliminaryLumpSumModalMonthlyStore().openCreateEtfPreliminaryLumpSumMonthly(
+    1,
   );
-  await modalRef.value._show(1);
 
   await MonthlyLumpSumView.JanInput.setValue("50.25");
   await MonthlyLumpSumView.FebInput.setValue("0");
@@ -125,10 +128,12 @@ test("creates monthly lump sum", async () => {
 });
 
 test("validation: all mandatory fields are required", async () => {
-  const modalRef = renderModalWithRef<any>(
-    CreateEtfPreliminaryLumpSumModalMonthly,
+  renderDeclarativeModal(CreateEtfPreliminaryLumpSumModalMonthly);
+  useCreateEtfPreliminaryLumpSumModalMonthlyStore().openCreateEtfPreliminaryLumpSumMonthly(
+    1,
   );
-  await modalRef.value._show(1);
+
+  await MonthlyLumpSumView.Modal.assertOpen();
 
   await MonthlyLumpSumView.EtfSelect.clear();
   await MonthlyLumpSumView.YearInput.setValue("");

@@ -1,5 +1,10 @@
 <template>
-  <ModalVue :title="title" max-width="max-w-md" ref="modalComponent">
+  <ModalVue
+    :title="title"
+    max-width="max-w-md"
+    id-suffix="CreateEtfFlow"
+    v-model:open="open"
+  >
     <template #body>
       <form @submit.prevent="createEtfFlow" id="createEtfFlowForm">
         <div class="space-y-4">
@@ -9,7 +14,7 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div class="sm:col-span-2">
                 <SelectStandard
-                  v-model="defaultEtfId"
+                  v-model="selectedEtfId"
                   :validation-schema="schema.etfId"
                   id="etf"
                   :field-label="$t('General.etf')"
@@ -103,19 +108,25 @@ import type { EtfFlow } from "@/model/etf/EtfFlow";
 import type { SelectBoxValue } from "@/model/SelectBoxValue";
 import CrudEtfFlowService from "@/service/CrudEtfFlowService";
 import { useEtfStore } from "@/stores/EtfStore";
+import useCreateEtfFlowModalStore from "./CreateEtfFlowModal.store";
 import { formatTime } from "@/tools/views/FormatDate";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { amountSchema, globErr } from "@/tools/views/ZodUtil";
 import { Euro, Save, Undo2 } from "lucide-vue-next";
+import { storeToRefs } from "pinia";
 import { useForm } from "vee-validate";
-import { computed, ref, toRaw, useTemplateRef, watch } from "vue";
+import { computed, ref, toRaw, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { date, number, string, type ZodType } from "zod";
 
 const { t } = useI18n();
 
+const { open, flow, defaultEtfId, onDone } = storeToRefs(
+  useCreateEtfFlowModalStore(),
+);
+
 const serverErrors = ref(new Array<string>());
-const defaultEtfId = ref(0);
+const selectedEtfId = ref(0);
 
 const schema: Partial<{ [key in keyof EtfFlow]: ZodType }> = {
   etfId: number(globErr(t("ETFFlow.validation.etfId"))).gt(0),
@@ -132,8 +143,6 @@ const etfFlow = ref({} as EtfFlow);
 const origEtfFlow = ref({} as EtfFlow | undefined);
 const bookingdate = ref(new Date());
 const bookingtime = ref("");
-const modalComponent = useTemplateRef<typeof ModalVue>("modalComponent");
-const emit = defineEmits(["etfFlowCreated", "etfFlowUpdated"]);
 
 const etfStore = useEtfStore();
 
@@ -157,7 +166,7 @@ const resetForm = () => {
       String(origEtfFlow.value.nanoseconds + 1000000000).substring(1, 4);
   } else {
     etfFlow.value = {
-      etfId: defaultEtfId.value,
+      etfId: selectedEtfId.value,
     } as EtfFlow;
 
     const today = new Date();
@@ -169,18 +178,18 @@ const resetForm = () => {
   Object.keys(values).forEach((field) => setFieldTouched(field, false));
 };
 
-const _show = (_etfFlow?: EtfFlow, _etfId?: number) => {
-  etfs.value = etfStore.getAsSelectBoxValues();
-  if (_etfFlow) {
-    origEtfFlow.value = _etfFlow;
-    defaultEtfId.value = _etfFlow.etfId;
-  } else {
-    origEtfFlow.value = undefined;
-    defaultEtfId.value = _etfId ?? 0;
-  }
-  resetForm();
-  modalComponent.value?._show();
-};
+watch(
+  open,
+  (val) => {
+    if (val) {
+      etfs.value = etfStore.getAsSelectBoxValues();
+      origEtfFlow.value = flow.value;
+      selectedEtfId.value = flow.value?.etfId ?? (defaultEtfId.value ?? 0);
+      resetForm();
+    }
+  },
+  { immediate: true },
+);
 
 const createEtfFlow = handleSubmit(() => {
   serverErrors.value = new Array<string>();
@@ -191,13 +200,13 @@ const createEtfFlow = handleSubmit(() => {
     etfFlow.value.timestamp = bookingDate;
     etfFlow.value.timestamp.setHours(+times[0], +times[1], +times[2], 0);
     etfFlow.value.nanoseconds = +times[3] * 1000000;
-    etfFlow.value.etfId = defaultEtfId.value;
+    etfFlow.value.etfId = selectedEtfId.value;
 
     if (etfFlow.value.etfflowid > 0) {
       CrudEtfFlowService.updateEtfFlow(etfFlow.value)
         .then(() => {
-          modalComponent.value?._hide();
-          emit("etfFlowUpdated", etfFlow.value);
+          open.value = false;
+          onDone.value?.(etfFlow.value);
         })
         .catch((backendError) => {
           handleBackendError(backendError, serverErrors);
@@ -206,8 +215,8 @@ const createEtfFlow = handleSubmit(() => {
       CrudEtfFlowService.createEtfFlow(etfFlow.value)
         .then((_etfFlow) => {
           etfFlow.value = _etfFlow;
-          modalComponent.value?._hide();
-          emit("etfFlowCreated", etfFlow.value);
+          open.value = false;
+          onDone.value?.(etfFlow.value);
         })
         .catch((backendError) => {
           handleBackendError(backendError, serverErrors);
@@ -227,6 +236,4 @@ watch(bookingtime, (newVal, oldVal) => {
     }
   }
 });
-
-defineExpose({ _show });
 </script>

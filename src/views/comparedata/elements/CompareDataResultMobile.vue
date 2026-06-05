@@ -120,33 +120,21 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import type { CompareData } from "@/model/comparedata/CompareData";
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
-import { ref, type PropType } from "vue";
+import { ref } from "vue";
 import CompareDataResultMobileGroup from "./CompareDataResultMobileGroup.vue";
 
-defineProps({
-  compareDatasMatching: {
-    type: Array as PropType<CompareData[]>,
-    required: false,
-  },
-  compareDatasMatchingCountClass: { type: String, required: true },
-  compareDatasWrongCapitalsource: {
-    type: Array as PropType<CompareData[]>,
-    required: false,
-  },
-  compareDatasWrongCapitalsourceCountClass: { type: String, required: true },
-  compareDatasNotInFile: {
-    type: Array as PropType<CompareData[]>,
-    required: false,
-  },
-  compareDatasNotInFileCountClass: { type: String, required: true },
-  compareDatasNotInDatabase: {
-    type: Array as PropType<CompareData[]>,
-    required: false,
-  },
-  compareDatasNotInDatabaseCountClass: { type: String, required: true },
-  capitalsourceId: { type: Number, required: true },
-  capitalsourceComment: { type: String, required: true },
-});
+defineProps<{
+  compareDatasMatching?: CompareData[];
+  compareDatasMatchingCountClass: string;
+  compareDatasWrongCapitalsource?: CompareData[];
+  compareDatasWrongCapitalsourceCountClass: string;
+  compareDatasNotInFile?: CompareData[];
+  compareDatasNotInFileCountClass: string;
+  compareDatasNotInDatabase?: CompareData[];
+  compareDatasNotInDatabaseCountClass: string;
+  capitalsourceId: number;
+  capitalsourceComment: string;
+}>();
 
 defineEmits<{
   deleteMoneyflow: [id: number];

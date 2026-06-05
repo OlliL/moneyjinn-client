@@ -1,3 +1,4 @@
+import GlobalModals from "@/components/common/GlobalModals.vue";
 import type { CompareDataDataset } from "@/model/comparedata/CompareDataDataset";
 import type { CompareDataParameter } from "@/model/comparedata/CompareDataParameter";
 import type { CompareDataResult } from "@/model/comparedata/CompareDataResult";
@@ -16,12 +17,18 @@ import {
   assertHaveBeenCalled,
   assertHaveBeenCalledWith,
 } from "@/tests/TestUtil";
-import { ButtonView, InputView, ModalView } from "@/tests/TestViews";
+import {
+  ButtonView,
+  DeclarativeModalStub,
+  InputView,
+  ModalView,
+} from "@/tests/TestViews";
 import CompareData from "@/views/comparedata/CompareData.vue";
 import "@testing-library/jest-dom/vitest";
 import { render } from "@testing-library/vue";
 import { createPinia, setActivePinia } from "pinia";
 import { beforeEach, expect, test, vi } from "vitest";
+import { defineComponent } from "vue";
 
 vi.mock("@/service/CompareDataService");
 vi.mock("@/service/MoneyflowService");
@@ -47,8 +54,24 @@ class CompareDataView {
   static readonly EditButton = new ButtonView("compare-data-edit-21");
   static readonly DeleteButton = new ButtonView("compare-data-delete-21");
   static readonly CreateButton = new ButtonView("compare-data-create-0");
-  static readonly Modal = new ModalView("app-modal");
+  static readonly EditModal = new ModalView("app-modal-EditMoneyflow");
+  static readonly DeleteModal = new ModalView("app-modal-DeleteMoneyflow");
 }
+
+const renderCompareDataView = (props: Record<string, unknown> = {}) => {
+  return render(
+    defineComponent({
+      setup() {
+        return { props };
+      },
+      template: '<div><CompareData v-bind="props" /><GlobalModals /></div>',
+      components: { CompareData, GlobalModals },
+    }),
+    {
+      global: { stubs: { ModalVue: DeclarativeModalStub } },
+    },
+  );
+};
 
 const compareDataDataset: CompareDataDataset = {
   bookingDate: new Date("2026-02-05"),
@@ -171,13 +194,13 @@ beforeEach(async () => {
 });
 
 test("CompareData calls showCompareDataForm on mount", async () => {
-  render(CompareData);
+  renderCompareDataView();
 
   await assertHaveBeenCalled(CompareDataService.showCompareDataForm);
 });
 
 test("CompareData submits compare request", async () => {
-  render(CompareData);
+  renderCompareDataView();
 
   await runCompare();
 
@@ -193,35 +216,35 @@ test("CompareData submits compare request", async () => {
 });
 
 test("CompareData opens edit modal from not-in-file row", async () => {
-  render(CompareData);
+  renderCompareDataView();
 
   await runCompare();
   await CompareDataView.GroupNotInFileToggle.click();
   await CompareDataView.EditButton.click();
 
   await assertHaveBeenCalledWith(MoneyflowService.fetchMoneyflow, 21);
-  await CompareDataView.Modal.assertOpen();
+  await CompareDataView.EditModal.assertOpen();
 });
 
 test("CompareData opens delete modal from not-in-file row", async () => {
-  render(CompareData);
+  renderCompareDataView();
 
   await runCompare();
   await CompareDataView.GroupNotInFileToggle.click();
   await CompareDataView.DeleteButton.click();
 
   await assertHaveBeenCalledWith(MoneyflowService.fetchMoneyflow, 21);
-  await CompareDataView.Modal.assertOpen();
+  await CompareDataView.DeleteModal.assertOpen();
 });
 
 test("CompareData opens create modal from source-only row", async () => {
-  render(CompareData);
+  renderCompareDataView();
 
   await runCompare();
   await CompareDataView.GroupNotInDatabaseToggle.click();
   await CompareDataView.CreateButton.click();
 
-  await CompareDataView.Modal.assertOpen();
+  await CompareDataView.EditModal.assertOpen();
 });
 
 test.each([
@@ -267,7 +290,7 @@ test.each([
     CompareDataServiceMocker.mockCompareDataResolved(
       compareDataResultOnly(groupKey),
     );
-    render(CompareData);
+    renderCompareDataView();
 
     await runCompare();
 
@@ -299,7 +322,7 @@ test("CompareData shows all group toggles when every group has entries", async (
     compareDatasNotInFile: [{ moneyflow: ownMoneyflow(43) }],
     compareDatasNotInDatabase: [{ compareDataDataset }],
   });
-  render(CompareData);
+  renderCompareDataView();
 
   await runCompare();
 
@@ -316,7 +339,7 @@ test("CompareData shows no group toggles when no data was found", async () => {
     compareDatasNotInFile: [],
     compareDatasNotInDatabase: [],
   });
-  render(CompareData);
+  renderCompareDataView();
 
   await runCompare();
 

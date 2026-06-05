@@ -23,9 +23,10 @@ import {
   ComboboxView,
   InputView,
   ModalView,
-  renderModalWithRef,
+  renderDeclarativeModal,
 } from "@/tests/TestViews";
 import CreateContractpartnerMatchingModal from "@/views/contractpartnermatching/elements/CreateContractpartnerMatchingModal.vue";
+import { useCreateContractpartnerMatchingModalStore } from "@/views/contractpartnermatching/elements/CreateContractpartnerMatchingModal.store";
 import "@testing-library/jest-dom/vitest";
 import { createPinia, setActivePinia } from "pinia";
 import { beforeEach, expect, test, vi } from "vitest";
@@ -38,7 +39,9 @@ vi.mock("@/service/PreDefMoneyflowService");
 vi.mock("@/service/CrudEtfService");
 
 class CreateContractpartnerMatchingModalView {
-  static readonly Modal = new ModalView("app-modal");
+  static readonly Modal = new ModalView(
+    "app-modal-CreateContractpartnerMatching",
+  );
   static readonly MatchingTextInput = new InputView("name");
   static readonly ContractpartnerSelect = new ComboboxView(
     "contractpartnerCreateContractpartnerMatching",
@@ -89,8 +92,8 @@ beforeEach(async () => {
 });
 
 test("creates a new matching", async () => {
-  const modalRef = renderModalWithRef<any>(CreateContractpartnerMatchingModal);
-  await modalRef.value._show();
+  renderDeclarativeModal(CreateContractpartnerMatchingModal);
+  useCreateContractpartnerMatchingModalStore().openCreateContractpartnerMatching();
 
   await CreateContractpartnerMatchingModalView.MatchingTextInput.setValue(
     "Match text",
@@ -114,8 +117,10 @@ test("updates an existing matching", async () => {
     contractpartnerId: 1,
   } as ContractpartnerMatching;
 
-  const modalRef = renderModalWithRef<any>(CreateContractpartnerMatchingModal);
-  await modalRef.value._show(existing);
+  renderDeclarativeModal(CreateContractpartnerMatchingModal);
+  useCreateContractpartnerMatchingModalStore().openEditContractpartnerMatching(
+    existing,
+  );
 
   await CreateContractpartnerMatchingModalView.MatchingTextInput.setValue(
     "New text",
@@ -130,8 +135,8 @@ test("updates an existing matching", async () => {
 });
 
 test("reset button clears form in create mode", async () => {
-  const modalRef = renderModalWithRef<any>(CreateContractpartnerMatchingModal);
-  await modalRef.value._show();
+  renderDeclarativeModal(CreateContractpartnerMatchingModal);
+  useCreateContractpartnerMatchingModalStore().openCreateContractpartnerMatching();
 
   await CreateContractpartnerMatchingModalView.MatchingTextInput.setValue(
     "Something",
@@ -149,8 +154,10 @@ test("reset button reverts changes in edit mode", async () => {
     matchingText: "Original",
     contractpartnerId: 1,
   } as ContractpartnerMatching;
-  const modalRef = renderModalWithRef<any>(CreateContractpartnerMatchingModal);
-  await modalRef.value._show(existing);
+  renderDeclarativeModal(CreateContractpartnerMatchingModal);
+  useCreateContractpartnerMatchingModalStore().openEditContractpartnerMatching(
+    existing,
+  );
 
   await CreateContractpartnerMatchingModalView.MatchingTextInput.setValue(
     "Changed",
@@ -168,19 +175,23 @@ test("shows server errors on failure", async () => {
     undefined,
     "Backend Error Message",
   );
-  ContractpartnerMatchingServiceMocker.mockCreateContractpartnerMatchingRejected(
-    backendError,
-  );
+  ContractpartnerMatchingService.updateContractpartnerMatching = vi
+    .fn()
+    .mockRejectedValue(backendError);
 
-  const modalRef = renderModalWithRef<any>(CreateContractpartnerMatchingModal);
-  await modalRef.value._show();
+  const existing = {
+    id: 1,
+    matchingText: "Old text",
+    contractpartnerId: 1,
+  } as ContractpartnerMatching;
+
+  renderDeclarativeModal(CreateContractpartnerMatchingModal);
+  useCreateContractpartnerMatchingModalStore().openEditContractpartnerMatching(
+    existing,
+  );
 
   await CreateContractpartnerMatchingModalView.MatchingTextInput.setValue(
     "valid",
-  );
-  await CreateContractpartnerMatchingModalView.ContractpartnerSelect.selectItem(
-    "Partner 1",
-    1,
   );
   await CreateContractpartnerMatchingModalView.SaveButton.click();
 
@@ -191,8 +202,8 @@ test("shows server errors on failure", async () => {
 });
 
 test("validation: mandatory fields are required", async () => {
-  const modalRef = renderModalWithRef<any>(CreateContractpartnerMatchingModal);
-  await modalRef.value._show();
+  renderDeclarativeModal(CreateContractpartnerMatchingModal);
+  useCreateContractpartnerMatchingModalStore().openCreateContractpartnerMatching();
 
   await CreateContractpartnerMatchingModalView.SaveButton.click();
 
@@ -209,8 +220,8 @@ test("validation: mandatory fields are required", async () => {
 });
 
 test("validation: matchingText maximum length", async () => {
-  const modalRef = renderModalWithRef<any>(CreateContractpartnerMatchingModal);
-  await modalRef.value._show();
+  renderDeclarativeModal(CreateContractpartnerMatchingModal);
+  useCreateContractpartnerMatchingModalStore().openCreateContractpartnerMatching();
 
   await CreateContractpartnerMatchingModalView.MatchingTextInput.setValue(
     "a".repeat(51),
@@ -223,8 +234,8 @@ test("validation: matchingText maximum length", async () => {
 });
 
 test("validation: moneyflowComment maximum length", async () => {
-  const modalRef = renderModalWithRef<any>(CreateContractpartnerMatchingModal);
-  await modalRef.value._show();
+  renderDeclarativeModal(CreateContractpartnerMatchingModal);
+  useCreateContractpartnerMatchingModalStore().openCreateContractpartnerMatching();
 
   await CreateContractpartnerMatchingModalView.MoneyflowCommentInput.setValue(
     "a".repeat(101),

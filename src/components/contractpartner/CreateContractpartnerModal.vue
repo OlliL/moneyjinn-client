@@ -1,9 +1,14 @@
 <template>
-  <ModalVue :title="title" max-width="max-w-md" ref="modalComponent">
+  <ModalVue
+    :title="title"
+    max-width="max-w-md"
+    id-suffix="CreateContractpartner"
+    v-model:open="open"
+  >
     <template #body>
       <form
         @submit.prevent="createContractpartner"
-        :id="'createContractpartnerForm' + idSuffix"
+        id="createContractpartnerForm"
         class="space-y-6"
       >
         <DivError :server-errors="serverErrors" />
@@ -12,7 +17,7 @@
           <InputStandard
             v-model="mcp.name"
             :validation-schema="schema.name"
-            :id="'name' + idSuffix"
+            id="name-CreateContractpartner"
             :field-label="$t('General.name')"
           />
         </div>
@@ -27,13 +32,13 @@
           <InputStandard
             v-model="mcp.moneyflowComment"
             :validation-schema="schema.moneyflowComment"
-            :id="'moneyflowComment' + idSuffix"
+            id="moneyflowComment-CreateContractpartner"
             :field-label="$t('General.comment')"
           />
           <SelectPostingAccount
             v-model="mcp.postingAccountId"
             :validation-schema="schema.postingAccountId"
-            :id-suffix="idSuffix + 'CreateContractpartner'"
+            id-suffix="-CreateContractpartner"
             :field-label="$t('General.postingAccount')"
           />
         </div>
@@ -48,14 +53,14 @@
               <InputDate
                 v-model="mcp.validFrom"
                 :validation-schema="schema.validFrom"
-                :id="'validFrom' + idSuffix"
+                id="validFrom-CreateContractpartner"
                 :field-label="$t('General.validFrom')"
                 picker-side="top"
               />
               <InputDate
                 v-model="mcp.validTil"
                 :validation-schema="schema.validTil"
-                :id="'validTil' + idSuffix"
+                id="validTil-CreateContractpartner"
                 :field-label="$t('General.validTil')"
                 picker-side="top"
                 picker-align="end"
@@ -67,7 +72,7 @@
         <Collapsible class="rounded-sm border bg-muted/30 overflow-hidden">
           <CollapsibleTrigger
             class="flex items-center justify-between w-full p-4 hover:bg-muted/30 text-left transition-colors group"
-            data-testid="addressDataCollapsibleTrigger"
+            data-testid="addressDataCollapsibleTrigger-CreateContractpartner"
           >
             <div class="flex items-center space-x-2">
               <span class="form-section-title">
@@ -87,7 +92,7 @@
                 <InputStandard
                   v-model="mcp.street"
                   :validation-schema="schema.street"
-                  :id="'street' + idSuffix"
+                  id="street-CreateContractpartner"
                   :field-label="$t('Contractpartner.street')"
                 />
               </div>
@@ -95,7 +100,7 @@
                 <InputStandard
                   v-model="mcp.country"
                   :validation-schema="schema.country"
-                  :id="'country' + idSuffix"
+                  id="country-CreateContractpartner"
                   :field-label="$t('Contractpartner.country')"
                 />
               </div>
@@ -106,7 +111,7 @@
                 <InputStandard
                   v-model="mcp.postcode"
                   :validation-schema="schema.postcode"
-                  :id="'postcode' + idSuffix"
+                  id="postcode-CreateContractpartner"
                   :field-label="$t('Contractpartner.postcode')"
                 />
               </div>
@@ -114,7 +119,7 @@
                 <InputStandard
                   v-model="mcp.town"
                   :validation-schema="schema.town"
-                  :id="'town' + idSuffix"
+                  id="town-CreateContractpartner"
                   :field-label="$t('Contractpartner.town')"
                 />
               </div>
@@ -138,7 +143,7 @@
 
       <ButtonSubmit
         :button-label="$t('General.save')"
-        :form-id="'createContractpartnerForm' + idSuffix"
+        form-id="createContractpartnerForm"
         test-id="createContractpartnerSaveButton"
       >
         <template #icon><Save class="icon-medium" /></template>
@@ -151,11 +156,13 @@
 import { Button } from "@/components/ui/button";
 import type { Contractpartner } from "@/model/contractpartner/Contractpartner";
 import ContractpartnerService from "@/service/ContractpartnerService";
+import { useCreateContractpartnerModalStore } from "./CreateContractpartnerModal.store";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { globErr } from "@/tools/views/ZodUtil";
 import { ChevronDown, Save, Undo2 } from "lucide-vue-next";
+import { storeToRefs } from "pinia";
 import { useForm } from "vee-validate";
-import { computed, ref, toRaw, useTemplateRef } from "vue";
+import { computed, ref, toRaw, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { coerce, date, number, string, ZodType } from "zod";
 import ButtonSubmit from "../common/ButtonSubmit.vue";
@@ -169,13 +176,6 @@ import CollapsibleContent from "../ui/collapsible/CollapsibleContent.vue";
 import CollapsibleTrigger from "../ui/collapsible/CollapsibleTrigger.vue";
 
 const { t } = useI18n();
-
-const props = defineProps({
-  idSuffix: {
-    type: String,
-    default: "",
-  },
-});
 
 const serverErrors = ref(new Array<string>());
 
@@ -205,8 +205,14 @@ const schema: Partial<{ [key in keyof Contractpartner]: ZodType }> = {
 
 const mcp = ref({} as Contractpartner);
 const origMcp = ref({} as Contractpartner | undefined);
-const modalComponent = useTemplateRef<typeof ModalVue>("modalComponent");
-const emit = defineEmits(["contractpartnerCreated", "contractpartnerUpdated"]);
+const { open, contractpartner, onDone } = storeToRefs(
+  useCreateContractpartnerModalStore(),
+);
+
+const emit = defineEmits<{
+  contractpartnerCreated: [contractpartner: Contractpartner];
+  contractpartnerUpdated: [contractpartner: Contractpartner];
+}>();
 
 const { handleSubmit, values, setFieldTouched } = useForm();
 
@@ -233,11 +239,16 @@ const resetForm = () => {
   Object.keys(values).forEach((field) => setFieldTouched(field, false));
 };
 
-const _show = (_mcp?: Contractpartner) => {
-  origMcp.value = _mcp ?? undefined;
-  resetForm();
-  modalComponent.value?._show();
-};
+watch(
+  [open, contractpartner],
+  ([isVisible, entry]) => {
+    if (isVisible) {
+      origMcp.value = entry;
+      resetForm();
+    }
+  },
+  { immediate: true },
+);
 
 const createContractpartner = handleSubmit(() => {
   serverErrors.value = new Array<string>();
@@ -252,16 +263,14 @@ const createContractpartner = handleSubmit(() => {
       const isUpdate = mcp.value.id > 0;
       if (!isUpdate) mcp.value = result as Contractpartner;
 
-      modalComponent.value?._hide();
-      emit(
-        isUpdate ? "contractpartnerUpdated" : "contractpartnerCreated",
-        mcp.value,
-      );
+      open.value = false;
+      onDone.value?.(mcp.value);
+      isUpdate
+        ? emit("contractpartnerUpdated", mcp.value)
+        : emit("contractpartnerCreated", mcp.value);
     })
     .catch((backendError) => {
       handleBackendError(backendError, serverErrors);
     });
 });
-
-defineExpose({ _show });
 </script>

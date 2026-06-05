@@ -1,27 +1,4 @@
 <template>
-  <DeleteMoneyflowModalVue
-    ref="deleteModal"
-    @moneyflow-deleted="searchMoneyflows"
-  />
-  <EditMoneyflowModalVue
-    ref="editModal"
-    @moneyflow-updated="searchMoneyflows"
-    @show-receipt="showReceipt"
-  />
-
-  <ListMoneyflowModalDesktop
-    ref="listModal"
-    @show-receipt="showReceipt"
-    v-if="desktop"
-  />
-  <ListMoneyflowModalMobile
-    ref="listModal"
-    @show-receipt="showReceipt"
-    v-else
-  />
-
-  <ReceiptModal ref="receiptModal" />
-
   <div class="custom-container space-y-6">
     <div class="text-center">
       <h4 class="text-2xl font-bold">{{ $t("Moneyflow.title.search") }}</h4>
@@ -307,7 +284,7 @@
 </template>
 <script lang="ts" setup>
 import { useForm } from "vee-validate";
-import { onMounted, ref, useTemplateRef, watch } from "vue";
+import { onMounted, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { any, date, type ZodTypeAny } from "zod";
 
@@ -318,8 +295,6 @@ import InputDate from "@/components/common/InputDate.vue";
 import InputStandard from "@/components/common/InputStandard.vue";
 import SelectStandard from "@/components/common/SelectStandard.vue";
 import SelectContractpartner from "@/components/contractpartner/SelectContractpartner.vue";
-import DeleteMoneyflowModalVue from "@/components/moneyflow/DeleteMoneyflowModal.vue";
-import EditMoneyflowModalVue from "@/components/moneyflow/EditMoneyflowModal.vue";
 import SelectPostingAccount from "@/components/postingaccount/SelectPostingAccount.vue";
 import SearchMoneyflowResultDesktopGroup from "./elements/SearchMoneyflowResultDesktopGroup.vue";
 import SearchMoneyflowResultMobileGroup from "./elements/SearchMoneyflowResultMobileGroup.vue";
@@ -333,9 +308,6 @@ import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 import type { MoneyflowSearchParams } from "@/model/moneyflow/MoneyflowSearchParams";
 import type { SelectBoxValue } from "@/model/SelectBoxValue";
 
-import ListMoneyflowModalDesktop from "@/components/moneyflow/ListMoneyflowModalDesktop.vue";
-import ListMoneyflowModalMobile from "@/components/moneyflow/ListMoneyflowModalMobile.vue";
-import ReceiptModal from "@/components/reports/ReceiptModal.vue";
 import { Accordion } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -347,6 +319,10 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import MoneyflowService from "@/service/MoneyflowService";
+import useDeleteMoneyflowModalStore from "@/components/moneyflow/DeleteMoneyflowModal.store";
+import useEditMoneyflowModalStore from "@/components/moneyflow/EditMoneyflowModal.store";
+import useListMoneyflowModalStore from "@/components/moneyflow/ListMoneyflowModal.store";
+import useReceiptModalStore from "@/components/reports/ReceiptModal.store";
 import { isDesktop } from "@/tools/views/IsDesktop";
 import { ChevronDown, Search, SlidersHorizontal, Undo2 } from "lucide-vue-next";
 
@@ -396,13 +372,12 @@ const colContractpartner = ref(false);
 const dataLoaded = ref(false);
 const searchContractpartnerId = ref(0);
 
-const receiptModal = useTemplateRef<typeof ReceiptModal>("receiptModal");
-const deleteModal =
-  useTemplateRef<typeof DeleteMoneyflowModalVue>("deleteModal");
-const editModal = useTemplateRef<typeof EditMoneyflowModalVue>("editModal");
-const listModal = useTemplateRef<typeof ListMoneyflowModalDesktop>("listModal");
 const mobileOptionsOpen = ref(false);
 const desktop = isDesktop();
+const { openDeleteMoneyflow } = useDeleteMoneyflowModalStore();
+const { openEditMoneyflow } = useEditMoneyflowModalStore();
+const { openListMoneyflow } = useListMoneyflowModalStore();
+const { openListReceipt } = useReceiptModalStore();
 
 const schema = {
   startDate: date(globErr(t("General.validation.startDate"))),
@@ -421,7 +396,7 @@ watch(
   { immediate: true },
 );
 
-type MoneyflowGroup = {
+export type MoneyflowGroup = {
   sortString: string;
   month: number;
   monthString: string;
@@ -464,6 +439,10 @@ const resetForm = () => {
   dataLoaded.value = false;
   serverErrors.value = new Array<string>();
   Object.keys(values).forEach((field) => setFieldTouched(field, false));
+};
+
+const restartSearch = () => {
+  searchMoneyflows();
 };
 
 const searchMoneyflows = handleSubmit(() => {
@@ -649,22 +628,22 @@ const getGroupByKey = (moneyflow: Moneyflow): string => {
   return groupByKey;
 };
 const showReceipt = (moneyflowId: number) => {
-  receiptModal.value?._show(moneyflowId);
+  openListReceipt(moneyflowId);
 };
 const deleteMoneyflow = (mmf: Moneyflow) => {
   MoneyflowService.fetchMoneyflow(mmf.id).then((freshMmf) => {
-    deleteModal.value?._show(freshMmf);
+    openDeleteMoneyflow(freshMmf, restartSearch);
   });
 };
 
 const editMoneyflow = (mmf: Moneyflow) => {
   MoneyflowService.fetchMoneyflow(mmf.id).then((freshMmf) => {
-    editModal.value?._show(freshMmf);
+    openEditMoneyflow(freshMmf, undefined, restartSearch, showReceipt);
   });
 };
 const listMoneyflow = (mmf: Moneyflow) => {
   MoneyflowService.fetchMoneyflow(mmf.id).then((freshMmf) => {
-    listModal.value?._show(freshMmf);
+    openListMoneyflow(freshMmf, undefined, showReceipt);
   });
 };
 </script>

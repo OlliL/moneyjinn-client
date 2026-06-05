@@ -2,7 +2,8 @@
   <ModalDelete
     :title="$t('Moneyflow.title.delete')"
     :server-errors="serverErrors"
-    ref="modalComponent"
+    id-suffix="DeleteMoneyflow"
+    v-model:open="open"
     @confirm="deleteMoneyflow"
   >
     <template #details>
@@ -38,7 +39,9 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, useTemplateRef } from "vue";
+import useDeleteMoneyflowModalStore from "./DeleteMoneyflowModal.store";
+import { storeToRefs } from "pinia";
+import { ref, watch } from "vue";
 
 import ModalDelete from "../common/ModalDelete.vue";
 import ModalDeleteRow from "../common/ModalDeleteRow.vue";
@@ -53,26 +56,30 @@ import { handleBackendError } from "@/tools/views/HandleBackendError";
 const serverErrors = ref(new Array<string>());
 
 const mmf = ref({} as Moneyflow);
-const modalComponent = useTemplateRef<typeof ModalDelete>("modalComponent");
-const emit = defineEmits(["moneyflowDeleted"]);
+const { open, moneyflow, onDone } = storeToRefs(
+  useDeleteMoneyflowModalStore(),
+);
 
-const _show = (_mmf: Moneyflow) => {
-  mmf.value = _mmf;
-  serverErrors.value = new Array<string>();
-  modalComponent.value?._show();
-};
+watch(
+  [open, moneyflow],
+  ([isVisible, entry]) => {
+    if (!isVisible || !entry) return;
+    mmf.value = entry;
+    serverErrors.value = new Array<string>();
+  },
+  { immediate: true },
+);
 
 const deleteMoneyflow = () => {
   serverErrors.value = new Array<string>();
 
   MoneyflowService.deleteMoneyflow(mmf.value.id)
     .then(() => {
-      modalComponent.value?._hide();
-      emit("moneyflowDeleted", mmf.value);
+      open.value = false;
+      onDone.value?.(mmf.value);
     })
     .catch((backendError) => {
       handleBackendError(backendError, serverErrors);
     });
 };
-defineExpose({ _show });
 </script>

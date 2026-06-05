@@ -1,5 +1,10 @@
 <template>
-  <ModalVue :title="title" max-width="max-w-md" ref="modalComponent">
+  <ModalVue
+    :title="title"
+    max-width="max-w-md"
+    id-suffix="CreateContractpartnerMatching"
+    v-model:open="open"
+  >
     <template #body>
       <form
         @submit.prevent="createContractpartnerMatching"
@@ -83,22 +88,24 @@ import SelectPostingAccount from "@/components/postingaccount/SelectPostingAccou
 import { Button } from "@/components/ui/button";
 import type { ContractpartnerMatching } from "@/model/contractpartnermatching/ContractpartnerMatching";
 import ContractpartnerMatchingService from "@/service/ContractpartnerMatchingService";
+import useCreateContractpartnerMatchingModalStore from "./CreateContractpartnerMatchingModal.store";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { globErr } from "@/tools/views/ZodUtil";
 import { Save, Undo2 } from "lucide-vue-next";
+import { storeToRefs } from "pinia";
 import { useForm } from "vee-validate";
-import { computed, ref, toRaw, useTemplateRef } from "vue";
+import { computed, ref, toRaw, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { number, string, ZodType } from "zod";
 
 const { t } = useI18n();
 
-defineProps({
-  idSuffix: {
-    type: String,
-    default: "",
-  },
-});
+const idSuffix = "";
+const {
+  open,
+  matching,
+  onDone,
+} = storeToRefs(useCreateContractpartnerMatchingModalStore());
 
 const serverErrors = ref(new Array<string>());
 
@@ -119,11 +126,6 @@ const schema: Partial<{ [key in keyof ContractpartnerMatching]: ZodType }> = {
 
 const mcm = ref({} as ContractpartnerMatching);
 const origMcm = ref({} as ContractpartnerMatching | undefined);
-const modalComponent = useTemplateRef<typeof ModalVue>("modalComponent");
-const emit = defineEmits([
-  "contractpartnerMatchingCreated",
-  "contractpartnerMatchingUpdated",
-]);
 
 const { handleSubmit, values, setFieldTouched } = useForm();
 
@@ -143,11 +145,22 @@ const resetForm = () => {
   Object.keys(values).forEach((field) => setFieldTouched(field, false));
 };
 
-const _show = (_mcm?: ContractpartnerMatching) => {
-  origMcm.value = _mcm ?? undefined;
-  resetForm();
-  modalComponent.value?._show();
-};
+watch(
+  [open, matching],
+  ([isOpen, entry]) => {
+    if (!isOpen) {
+      origMcm.value = undefined;
+      return;
+    }
+    if (entry !== undefined) {
+      origMcm.value = structuredClone(toRaw(entry));
+    } else {
+      origMcm.value = undefined;
+    }
+    resetForm();
+  },
+  { immediate: true },
+);
 
 const createContractpartnerMatching = handleSubmit(() => {
   serverErrors.value = new Array<string>();
@@ -156,8 +169,8 @@ const createContractpartnerMatching = handleSubmit(() => {
     //update
     ContractpartnerMatchingService.updateContractpartnerMatching(mcm.value)
       .then(() => {
-        modalComponent.value?._hide();
-        emit("contractpartnerMatchingUpdated", mcm.value);
+        open.value = false;
+        onDone.value?.();
       })
       .catch((backendError) => {
         handleBackendError(backendError, serverErrors);
@@ -167,13 +180,14 @@ const createContractpartnerMatching = handleSubmit(() => {
     ContractpartnerMatchingService.createContractpartnerMatching(mcm.value)
       .then((_mcm) => {
         mcm.value = _mcm;
-        modalComponent.value?._hide();
-        emit("contractpartnerMatchingCreated", mcm.value);
+        open.value = false;
+        onDone.value?.();
       })
       .catch((backendError) => {
         handleBackendError(backendError, serverErrors);
       });
   }
 });
-defineExpose({ _show });
+
+
 </script>

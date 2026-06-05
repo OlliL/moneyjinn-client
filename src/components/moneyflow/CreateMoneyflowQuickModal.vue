@@ -1,8 +1,9 @@
 <template>
   <Modal
     :title="preDef.contractpartnerName || $t('Moneyflow.newBooking')"
-    ref="modalComponent"
     max-width="md:max-w-md w-full"
+    id-suffix="Quick"
+    v-model:open="open"
   >
     <template #body>
       <form
@@ -120,6 +121,8 @@ import { Button } from "@/components/ui/button";
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 import { type PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
 import MoneyflowService from "@/service/MoneyflowService";
+import useCreateMoneyflowQuickModalStore from "./CreateMoneyflowQuickModal.store";
+import { storeToRefs } from "pinia";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { amountSchema, globErr } from "@/tools/views/ZodUtil";
 import {
@@ -131,16 +134,21 @@ import {
   Save,
 } from "lucide-vue-next";
 import { useForm } from "vee-validate";
-import { ref, useTemplateRef } from "vue";
+import { watch, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { date, number, string } from "zod";
 
 const { t } = useI18n();
 const { handleSubmit } = useForm();
+const { close } = useCreateMoneyflowQuickModalStore();
+const { open, preDefMoneyflow, onDone } = storeToRefs(
+  useCreateMoneyflowQuickModalStore(),
+);
 
-const emit = defineEmits(["bookingFinished"]);
+const emit = defineEmits<{
+  bookingFinished: [moneyflow: Moneyflow];
+}>();
 
-const modalComponent = useTemplateRef<typeof Modal>("modalComponent");
 const preDef = ref({} as PreDefMoneyflow);
 const serverErrors = ref(new Array<string>());
 
@@ -159,6 +167,25 @@ const schema = {
     globErr(t("Moneyflow.validation.postingAccountId")),
   ).gt(0),
 };
+
+watch(
+  () => open.value,
+  (visible) => {
+    if (visible && preDefMoneyflow.value) {
+      const flow = preDefMoneyflow.value as PreDefMoneyflow;
+      serverErrors.value = new Array<string>();
+      preDef.value = flow;
+
+      amount.value = flow.amount;
+      comment.value = flow.comment;
+      postingAccountId.value = flow.postingAccountId;
+
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      bookingDate.value = today;
+    }
+  },
+);
 
 const changeDate = (days: number) => {
   const newDate = new Date(bookingDate.value);
@@ -182,25 +209,10 @@ const book = handleSubmit(() => {
   MoneyflowService.createMoneyflow(mmf, preDef.value.id, false)
     .then(() => {
       emit("bookingFinished", mmf);
-      modalComponent.value?._hide();
+      close();
+      (onDone.value as any)?.(mmf);
     })
     .catch((error) => handleBackendError(error, serverErrors));
 });
 
-const _show = (flow: PreDefMoneyflow) => {
-  serverErrors.value = new Array<string>();
-  preDef.value = flow;
-
-  amount.value = flow.amount;
-  comment.value = flow.comment;
-  postingAccountId.value = flow.postingAccountId;
-
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-  bookingDate.value = today;
-
-  modalComponent.value?._show();
-};
-
-defineExpose({ _show });
 </script>

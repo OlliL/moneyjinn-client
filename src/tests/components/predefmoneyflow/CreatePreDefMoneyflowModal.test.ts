@@ -1,4 +1,5 @@
 import CreatePreDefMoneyflowModal from "@/components/predefmoneyflow/CreatePreDefMoneyflowModal.vue";
+import { useCreatePreDefMoneyflowModalStore } from "@/components/predefmoneyflow/CreatePreDefMoneyflowModal.store";
 import { BackendError, BackendErrorType } from "@/model/BackendError";
 import { CapitalsourceImport } from "@/model/capitalsource/CapitalsourceImport";
 import { CapitalsourceState } from "@/model/capitalsource/CapitalsourceState";
@@ -26,7 +27,7 @@ import {
   ComboboxView,
   InputView,
   ModalView,
-  renderModalWithRef,
+  renderDeclarativeModal,
 } from "@/tests/TestViews";
 import "@testing-library/jest-dom/vitest";
 import { createPinia, setActivePinia } from "pinia";
@@ -39,7 +40,7 @@ vi.mock("@/service/CapitalsourceService");
 vi.mock("@/service/CrudEtfService");
 
 class CreatePreDefMoneyflowModalView {
-  static readonly Modal = new ModalView("app-modal");
+  static readonly Modal = new ModalView("app-modal-CreatePreDefMoneyflow");
   static readonly AmountInput = new InputView("amount");
   static readonly CommentInput = new InputView("comment");
   static readonly FavoriteAbbreviationInput = new InputView(
@@ -125,9 +126,8 @@ beforeEach(async () => {
 });
 
 test("CreatePreDefMoneyflowModal creates a new predefined moneyflow", async () => {
-  const modalRef = renderModalWithRef<any>(CreatePreDefMoneyflowModal);
-
-  await modalRef.value._show();
+  renderDeclarativeModal(CreatePreDefMoneyflowModal);
+  useCreatePreDefMoneyflowModalStore().openCreatePreDefMoneyflow();
 
   await CreatePreDefMoneyflowModalView.Modal.assertOpen();
 
@@ -165,9 +165,8 @@ test("CreatePreDefMoneyflowModal updates an existing predefined moneyflow", asyn
   } as any;
   PreDefMoneyflowServiceMocker.mockUpdatePreDefMoneyflowResolved();
 
-  const modalRef = renderModalWithRef<any>(CreatePreDefMoneyflowModal);
-
-  await modalRef.value._show(existingMpm);
+  renderDeclarativeModal(CreatePreDefMoneyflowModal);
+  useCreatePreDefMoneyflowModalStore().openCreatePreDefMoneyflow(existingMpm);
 
   await CreatePreDefMoneyflowModalView.CommentInput.setValue("Updated Comment");
   await CreatePreDefMoneyflowModalView.SaveButton.click();
@@ -187,9 +186,8 @@ test("CreatePreDefMoneyflowModal shows server errors on failed save", async () =
   );
   PreDefMoneyflowServiceMocker.mockCreatePreDefMoneyflowRejected(backendError);
 
-  const modalRef = renderModalWithRef<any>(CreatePreDefMoneyflowModal);
-
-  await modalRef.value._show();
+  renderDeclarativeModal(CreatePreDefMoneyflowModal);
+  useCreatePreDefMoneyflowModalStore().openCreatePreDefMoneyflow();
 
   await CreatePreDefMoneyflowModalView.AmountInput.setValue("10");
   await CreatePreDefMoneyflowModalView.CommentInput.setValue("Test");
@@ -215,9 +213,8 @@ test("CreatePreDefMoneyflowModal shows server errors on failed save", async () =
 });
 
 test("CreatePreDefMoneyflowModal reset button clears the form", async () => {
-  const modalRef = renderModalWithRef<any>(CreatePreDefMoneyflowModal);
-
-  await modalRef.value._show();
+  renderDeclarativeModal(CreatePreDefMoneyflowModal);
+  useCreatePreDefMoneyflowModalStore().openCreatePreDefMoneyflow();
 
   await CreatePreDefMoneyflowModalView.AmountInput.setValue("123.45");
   await CreatePreDefMoneyflowModalView.CommentInput.setValue(
@@ -231,9 +228,8 @@ test("CreatePreDefMoneyflowModal reset button clears the form", async () => {
 });
 
 test("CreatePreDefMoneyflowModal handles favorite abbreviation visibility", async () => {
-  const modalRef = renderModalWithRef<any>(CreatePreDefMoneyflowModal);
-
-  await modalRef.value._show();
+  renderDeclarativeModal(CreatePreDefMoneyflowModal);
+  useCreatePreDefMoneyflowModalStore().openCreatePreDefMoneyflow();
 
   await CreatePreDefMoneyflowModalView.FavoriteAbbreviationInput.assertNotToBeInDocument();
 
@@ -250,9 +246,8 @@ test("CreatePreDefMoneyflowModal handles favorite abbreviation visibility", asyn
 });
 
 test("CreatePreDefMoneyflowModal handles favorite color selection", async () => {
-  const modalRef = renderModalWithRef<any>(CreatePreDefMoneyflowModal);
-
-  await modalRef.value._show();
+  renderDeclarativeModal(CreatePreDefMoneyflowModal);
+  useCreatePreDefMoneyflowModalStore().openCreatePreDefMoneyflow();
 
   await CreatePreDefMoneyflowModalView.FavoriteButton.click();
   await CreatePreDefMoneyflowModalView.FavoriteColorTrigger.click();
@@ -268,8 +263,8 @@ test("CreatePreDefMoneyflowModal handles favorite color selection", async () => 
 });
 
 test("CreatePreDefMoneyflowModal validation: amount is required", async () => {
-  const modalRef = renderModalWithRef<any>(CreatePreDefMoneyflowModal);
-  await modalRef.value._show();
+  renderDeclarativeModal(CreatePreDefMoneyflowModal);
+  useCreatePreDefMoneyflowModalStore().openCreatePreDefMoneyflow();
 
   await CreatePreDefMoneyflowModalView.SaveButton.click();
 
@@ -281,8 +276,8 @@ test("CreatePreDefMoneyflowModal validation: amount is required", async () => {
 });
 
 test("CreatePreDefMoneyflowModal validation: comment is required", async () => {
-  const modalRef = renderModalWithRef<any>(CreatePreDefMoneyflowModal);
-  await modalRef.value._show();
+  renderDeclarativeModal(CreatePreDefMoneyflowModal);
+  useCreatePreDefMoneyflowModalStore().openCreatePreDefMoneyflow();
 
   await CreatePreDefMoneyflowModalView.AmountInput.setValue("10");
   await CreatePreDefMoneyflowModalView.SaveButton.click();
@@ -295,8 +290,8 @@ test("CreatePreDefMoneyflowModal validation: comment is required", async () => {
 });
 
 test("CreatePreDefMoneyflowModal validation: comment maximum length", async () => {
-  const modalRef = renderModalWithRef<any>(CreatePreDefMoneyflowModal);
-  await modalRef.value._show();
+  renderDeclarativeModal(CreatePreDefMoneyflowModal);
+  useCreatePreDefMoneyflowModalStore().openCreatePreDefMoneyflow();
 
   await CreatePreDefMoneyflowModalView.AmountInput.setValue("10");
   await CreatePreDefMoneyflowModalView.CommentInput.setValue("a".repeat(101));
@@ -310,8 +305,8 @@ test("CreatePreDefMoneyflowModal validation: comment maximum length", async () =
 });
 
 test("CreatePreDefMoneyflowModal validation: contractpartner is required", async () => {
-  const modalRef = renderModalWithRef<any>(CreatePreDefMoneyflowModal);
-  await modalRef.value._show();
+  renderDeclarativeModal(CreatePreDefMoneyflowModal);
+  useCreatePreDefMoneyflowModalStore().openCreatePreDefMoneyflow();
 
   await CreatePreDefMoneyflowModalView.AmountInput.setValue("10");
   await CreatePreDefMoneyflowModalView.CommentInput.setValue("Test");
@@ -325,8 +320,8 @@ test("CreatePreDefMoneyflowModal validation: contractpartner is required", async
 });
 
 test("CreatePreDefMoneyflowModal validation: capitalsource is required", async () => {
-  const modalRef = renderModalWithRef<any>(CreatePreDefMoneyflowModal);
-  await modalRef.value._show();
+  renderDeclarativeModal(CreatePreDefMoneyflowModal);
+  useCreatePreDefMoneyflowModalStore().openCreatePreDefMoneyflow();
 
   await CreatePreDefMoneyflowModalView.AmountInput.setValue("10");
   await CreatePreDefMoneyflowModalView.CommentInput.setValue("Test");
@@ -344,8 +339,8 @@ test("CreatePreDefMoneyflowModal validation: capitalsource is required", async (
 });
 
 test("CreatePreDefMoneyflowModal validation: posting account is required", async () => {
-  const modalRef = renderModalWithRef<any>(CreatePreDefMoneyflowModal);
-  await modalRef.value._show();
+  renderDeclarativeModal(CreatePreDefMoneyflowModal);
+  useCreatePreDefMoneyflowModalStore().openCreatePreDefMoneyflow();
 
   await CreatePreDefMoneyflowModalView.AmountInput.setValue("10");
   await CreatePreDefMoneyflowModalView.CommentInput.setValue("Test");
@@ -367,8 +362,8 @@ test("CreatePreDefMoneyflowModal validation: posting account is required", async
 });
 
 test("CreatePreDefMoneyflowModal validation: favorite abbreviation is required when favorite active", async () => {
-  const modalRef = renderModalWithRef<any>(CreatePreDefMoneyflowModal);
-  await modalRef.value._show();
+  renderDeclarativeModal(CreatePreDefMoneyflowModal);
+  useCreatePreDefMoneyflowModalStore().openCreatePreDefMoneyflow();
 
   await CreatePreDefMoneyflowModalView.FavoriteButton.click();
 

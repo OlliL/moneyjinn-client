@@ -46,8 +46,6 @@
           :key="mcs.id"
           :mcs="mcs"
           :owner="mcs.userId === userId"
-          @delete-capitalsource="deleteCapitalsource"
-          @edit-capitalsource="editCapitalsource"
         />
       </TableBody>
     </DivContentTable>
@@ -64,27 +62,10 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import type { Capitalsource } from "@/model/capitalsource/Capitalsource";
-import type { PropType } from "vue";
 import ListCapitalsourceRowVue from "./ListCapitalsourceRow.vue";
 
-defineProps({
-  capitalsources: {
-    type: Array as PropType<Capitalsource[]>,
-    required: true,
-  },
-  userId: {
-    type: Number,
-    required: true,
-  },
-});
-
-const emit = defineEmits(["deleteCapitalsource", "editCapitalsource"]);
-
-const deleteCapitalsource = (mcs: Capitalsource) => {
-  emit("deleteCapitalsource", mcs);
-};
-
-const editCapitalsource = (mcs: Capitalsource) => {
-  emit("editCapitalsource", mcs);
-};
+defineProps<{
+  capitalsources: Capitalsource[];
+  userId: number;
+}>();
 </script>

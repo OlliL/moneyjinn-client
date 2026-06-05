@@ -17,8 +17,9 @@ import {
   ComboboxView,
   InputView,
   ModalView,
-  renderModalWithRef,
+  renderDeclarativeModal,
 } from "@/tests/TestViews";
+import { useCreateEtfPreliminaryLumpSumModalPieceStore } from "@/views/etf/elements/CreateEtfPreliminaryLumpSumModalPiece.store";
 import CreateEtfPreliminaryLumpSumModalPiece from "@/views/etf/elements/CreateEtfPreliminaryLumpSumModalPiece.vue";
 import "@testing-library/jest-dom/vitest";
 import { createPinia, setActivePinia } from "pinia";
@@ -27,7 +28,9 @@ import { beforeEach, expect, test, vi } from "vitest";
 vi.mock("@/service/CrudEtfPreliminaryLumpSumService");
 
 class PieceLumpSumView {
-  static readonly Modal = new ModalView("app-modal");
+  static readonly Modal = new ModalView(
+    "app-modal-CreateEtfPreliminaryLumpSumPiece",
+  );
   static readonly EtfSelect = new ComboboxView("etf");
   static readonly YearInput = new InputView("bookingdate");
   static readonly PieceInput = new InputView("amountPerPiece");
@@ -63,10 +66,10 @@ test("creates piece lump sum", async () => {
   CrudEtfPreliminaryLumpSumServiceMocker.mockCreateEtfPreliminaryLumpSumResolved(
     { id: 1 } as any,
   );
-  const modalRef = renderModalWithRef<any>(
-    CreateEtfPreliminaryLumpSumModalPiece,
+  renderDeclarativeModal(CreateEtfPreliminaryLumpSumModalPiece);
+  useCreateEtfPreliminaryLumpSumModalPieceStore().openCreateEtfPreliminaryLumpSumPiece(
+    1,
   );
-  await modalRef.value._show(1);
 
   await PieceLumpSumView.PieceInput.setValue("0.12345678");
   await PieceLumpSumView.SaveButton.click();
@@ -80,10 +83,12 @@ test("creates piece lump sum", async () => {
 });
 
 test("validation: mandatory fields are required", async () => {
-  const modalRef = renderModalWithRef<any>(
-    CreateEtfPreliminaryLumpSumModalPiece,
+  renderDeclarativeModal(CreateEtfPreliminaryLumpSumModalPiece);
+  useCreateEtfPreliminaryLumpSumModalPieceStore().openCreateEtfPreliminaryLumpSumPiece(
+    1,
   );
-  await modalRef.value._show(1);
+
+  await PieceLumpSumView.Modal.assertOpen();
 
   await PieceLumpSumView.EtfSelect.clear();
   await PieceLumpSumView.YearInput.setValue("");

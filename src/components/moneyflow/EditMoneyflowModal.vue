@@ -3,9 +3,10 @@
     :title="
       mmf.id == 0 ? $t('Moneyflow.title.create') : $t('Moneyflow.title.update')
     "
-    ref="modalComponent"
+    id-suffix="EditMoneyflow"
     :max-width="modalWidth"
     v-if="mmf"
+    v-model:open="open"
   >
     <template #body>
       <DivError :server-errors="serverErrors" />
@@ -95,16 +96,17 @@
 import ButtonSubmit from "@/components/common/ButtonSubmit.vue";
 import EditMoneyflowBase from "@/components/moneyflow/EditMoneyflowBase.vue";
 import { Button } from "@/components/ui/button";
-import type { ImportedMoneyflowReceipt } from "@/model/moneyflow/ImportedMoneyflowReceipt";
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 import type { MoneyflowReceipt } from "@/model/moneyflow/MoneyflowReceipt";
 import { mapImportedMoneyflowReceiptToMoneyflowReceipt } from "@/service/mapper/ImportedToMoneyflowReceiptMapper";
 import MoneyflowReceiptService from "@/service/MoneyflowReceiptService";
+import useEditMoneyflowModalStore from "./EditMoneyflowModal.store";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { isDesktop } from "@/tools/views/IsDesktop";
 import { Eye, ReceiptText, Save, Trash2, Undo2 } from "lucide-vue-next";
+import { storeToRefs } from "pinia";
 import { useForm } from "vee-validate";
-import { computed, ref, useTemplateRef } from "vue";
+import { computed, ref, toRaw, useTemplateRef, watch } from "vue";
 import DivError from "../common/DivError.vue";
 import ModalVue from "../common/Modal.vue";
 import SpanReceipt from "../common/SpanReceipt.vue";
@@ -113,18 +115,13 @@ const serverErrors = ref(new Array<string>());
 const desktop = isDesktop();
 
 const mmf = ref({} as Moneyflow);
-const modalComponent = useTemplateRef<typeof ModalVue>("modalComponent");
 const editMoneyflowVue =
   useTemplateRef<typeof EditMoneyflowBase>("editMoneyflowVue");
+const { open, moneyflow, importedReceipt, onDone, onShowReceipt } = storeToRefs(
+  useEditMoneyflowModalStore(),
+);
 
 const receipt = ref({} as MoneyflowReceipt);
-
-const emit = defineEmits([
-  "moneyflowCreated",
-  "moneyflowUpdated",
-  "moneyflowReceiptDeleted",
-  "showReceipt",
-]);
 
 const { handleSubmit, values, setFieldTouched } = useForm();
 
@@ -133,22 +130,31 @@ const modalWidth = computed(() => {
     ? "md:max-w-full w-full mx-auto"
     : "md:max-w-2xl lg:max-w-7xl w-full mx-auto";
 });
-const _show = (_mmf: Moneyflow, importedReceipt?: ImportedMoneyflowReceipt) => {
-  mmf.value = _mmf;
-  if (mmf.value.hasReceipt) loadReceipt(mmf.value.id);
-  else if (importedReceipt)
-    receipt.value =
-      mapImportedMoneyflowReceiptToMoneyflowReceipt(importedReceipt);
 
-  modalComponent.value?._show();
-  Object.keys(values).forEach((field) => setFieldTouched(field, false));
-};
+watch(
+  [open, moneyflow, importedReceipt],
+  ([isVisible, entry, importedReceipt]) => {
+    if (!isVisible || !entry) return;
+
+    mmf.value = structuredClone(toRaw(entry));
+    receipt.value = {} as MoneyflowReceipt;
+    if (mmf.value.hasReceipt) loadReceipt(mmf.value.id);
+    else if (importedReceipt) {
+      receipt.value =
+        mapImportedMoneyflowReceiptToMoneyflowReceipt(importedReceipt);
+    }
+
+    serverErrors.value = new Array<string>();
+    Object.keys(values).forEach((field) => setFieldTouched(field, false));
+  },
+  { immediate: true },
+);
 
 const updateMoneyflow = handleSubmit(() => {
   editMoneyflowVue.value?.updateMoneyflow().then((mmf: Moneyflow) => {
     if (mmf !== undefined) {
-      emit("moneyflowUpdated", mmf);
-      modalComponent.value?._hide();
+      open.value = false;
+      onDone.value?.();
     }
   });
 });
@@ -156,8 +162,8 @@ const updateMoneyflow = handleSubmit(() => {
 const createMoneyflow = handleSubmit(() => {
   editMoneyflowVue.value?.createMoneyflow().then((result: boolean) => {
     if (result) {
-      emit("moneyflowCreated", mmf.value);
-      modalComponent.value?._hide();
+      open.value = false;
+      onDone.value?.();
     }
   });
 });
@@ -175,8 +181,8 @@ const loadReceipt = (id: number) => {
 const deleteMoneyflowReceipt = () => {
   MoneyflowReceiptService.deleteMoneyflowReceipt(mmf.value.id)
     .then(() => {
-      emit("moneyflowReceiptDeleted", mmf.value.id);
-      modalComponent.value?._hide();
+      open.value = false;
+      onDone.value?.();
     })
     .catch((backendError) => {
       handleBackendError(backendError, serverErrors);
@@ -189,8 +195,6 @@ const resetForm = () => {
 };
 
 const showReceipt = () => {
-  emit("showReceipt", mmf.value.id);
+  onShowReceipt.value?.(mmf.value.id);
 };
-
-defineExpose({ _show });
 </script>

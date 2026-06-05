@@ -2,7 +2,8 @@
   <ModalVue
     :title="title"
     maxWidth="max-w-[calc(100%-2rem)] md:max-w-2xl lg:max-w-2xl w-full mx-auto"
-    ref="modalComponent"
+    id-suffix="CreatePreDefMoneyflow"
+    v-model:open="open"
   >
     <template #body>
       <form
@@ -120,7 +121,7 @@
                               ></div>
                             </PopoverTrigger>
                             <PopoverContent
-                              class="w-40 p-2 bg-popover border rounded-md shadow-md z-[3000]"
+                              class="w-40 p-2 bg-popover border rounded-md shadow-md z-3000"
                               align="start"
                             >
                               <div class="flex justify-end mb-1">
@@ -257,6 +258,8 @@ import {
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import type { PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
 import PreDefMoneyflowService from "@/service/PreDefMoneyflowService";
+import useCreatePreDefMoneyflowModalStore from "./CreatePreDefMoneyflowModal.store";
+import { storeToRefs } from "pinia";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { amountSchema, globErr } from "@/tools/views/ZodUtil";
 import {
@@ -269,7 +272,7 @@ import {
   X,
 } from "lucide-vue-next";
 import { useForm } from "vee-validate";
-import { computed, ref, toRaw, useTemplateRef, watch } from "vue";
+import { computed, ref, toRaw, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { boolean, number, string, type ZodType } from "zod";
 import SelectCapitalsource from "../capitalsource/SelectCapitalsource.vue";
@@ -282,13 +285,19 @@ import SelectContractpartner from "../contractpartner/SelectContractpartner.vue"
 import SelectPostingAccount from "../postingaccount/SelectPostingAccount.vue";
 
 const { t } = useI18n();
+const { close } = useCreatePreDefMoneyflowModalStore();
+const { open, preDefMoneyflow, onDone } = storeToRefs(
+  useCreatePreDefMoneyflowModalStore(),
+);
 
-defineProps({
-  idSuffix: {
-    type: String,
-    default: "",
+withDefaults(
+  defineProps<{
+    idSuffix?: string;
+  }>(),
+  {
+    idSuffix: "",
   },
-});
+);
 
 const serverErrors = ref(new Array<string>());
 
@@ -315,10 +324,12 @@ const schema: Partial<{ [key in keyof PreDefMoneyflow]: ZodType }> = {
 
 const mpm = ref({} as PreDefMoneyflow);
 const origMpm = ref({} as PreDefMoneyflow | undefined);
-const modalComponent = useTemplateRef<typeof ModalVue>("modalComponent");
 const validityDate = new Date();
 validityDate.setHours(0, 0, 0, 0);
-const emit = defineEmits(["preDefMoneyflowCreated", "preDefMoneyflowUpdated"]);
+const emit = defineEmits<{
+  preDefMoneyflowCreated: [preDefMoneyflow: PreDefMoneyflow];
+  preDefMoneyflowUpdated: [preDefMoneyflow: PreDefMoneyflow];
+}>();
 
 const isPopoverOpen = ref(false);
 const randomColors = ref<string[]>([]);
@@ -346,6 +357,16 @@ watch(isPopoverOpen, (val) => {
     hoveredColor.value = null;
   }
 });
+
+watch(
+  () => open.value,
+  (visible) => {
+    if (visible) {
+      origMpm.value = (preDefMoneyflow.value as any) ?? undefined;
+      resetForm();
+    }
+  },
+);
 
 const selectColor = (color: string) => {
   mpm.value.favoriteColor = color;
@@ -376,12 +397,6 @@ const resetForm = () => {
   Object.keys(values).forEach((field) => setFieldTouched(field, false));
 };
 
-const _show = async (_mpm?: PreDefMoneyflow) => {
-  origMpm.value = _mpm ?? undefined;
-  resetForm();
-  modalComponent.value?._show();
-};
-
 const createPreDefMoneyflow = handleSubmit(() => {
   serverErrors.value = new Array<string>();
 
@@ -389,8 +404,9 @@ const createPreDefMoneyflow = handleSubmit(() => {
     //update
     PreDefMoneyflowService.updatePreDefMoneyflow(mpm.value)
       .then(() => {
-        modalComponent.value?._hide();
+        close();
         emit("preDefMoneyflowUpdated", mpm.value);
+        (onDone.value as any)?.(mpm.value);
       })
       .catch((backendError) => {
         handleBackendError(backendError, serverErrors);
@@ -400,13 +416,14 @@ const createPreDefMoneyflow = handleSubmit(() => {
     PreDefMoneyflowService.createPreDefMoneyflow(mpm.value)
       .then((_mpm) => {
         mpm.value = _mpm;
-        modalComponent.value?._hide();
+        close();
         emit("preDefMoneyflowCreated", mpm.value);
+        (onDone.value as any)?.(mpm.value);
       })
       .catch((backendError) => {
         handleBackendError(backendError, serverErrors);
       });
   }
 });
-defineExpose({ _show });
+
 </script>

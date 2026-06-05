@@ -13,6 +13,7 @@ import {
 import { assertHaveBeenCalledWith } from "@/tests/TestUtil";
 import {
   ButtonView,
+  DeclarativeModalStub,
   InputView,
   MobilePopupMenu,
   ModalView,
@@ -23,6 +24,7 @@ import "@testing-library/jest-dom/vitest";
 import { render } from "@testing-library/vue";
 import { createPinia, setActivePinia } from "pinia";
 import { beforeEach, expect, test, vi } from "vitest";
+import { defineComponent } from "vue";
 
 vi.mock("@/service/CrudEtfPreliminaryLumpSumService");
 vi.mock("@/service/CrudEtfService");
@@ -46,7 +48,24 @@ class ListPreliminaryLumpSumsView {
   );
   static readonly EditButton = new ButtonView("preliminary-lump-sum-edit");
   static readonly DeleteButton = new ButtonView("preliminary-lump-sum-delete");
-  static readonly Modal = new ModalView("app-modal");
+  static readonly CreateYearlyModal = new ModalView(
+    "app-modal-CreateEtfPreliminaryLumpSumYearly",
+  );
+  static readonly DeleteYearlyModal = new ModalView(
+    "app-modal-DeleteEtfPreliminaryLumpSumYearly",
+  );
+  static readonly CreateMonthlyModal = new ModalView(
+    "app-modal-CreateEtfPreliminaryLumpSumMonthly",
+  );
+  static readonly DeleteMonthlyModal = new ModalView(
+    "app-modal-DeleteEtfPreliminaryLumpSumMonthly",
+  );
+  static readonly CreatePieceModal = new ModalView(
+    "app-modal-CreateEtfPreliminaryLumpSumPiece",
+  );
+  static readonly DeletePieceModal = new ModalView(
+    "app-modal-DeleteEtfPreliminaryLumpSumPiece",
+  );
   static readonly MobileCreateButton = new ButtonView(
     "preliminary-lump-sum-mobile-create",
   );
@@ -80,6 +99,24 @@ class ListPreliminaryLumpSumsView {
   static readonly EmptyState = new RowView("preliminary-lump-sum-empty");
 }
 
+const renderListPreliminaryLumpSumsView = (props: {
+  etfId?: string;
+  year?: string;
+} = {}) => {
+  return render(
+    defineComponent({
+      setup() {
+        return { props };
+      },
+      template: '<div><ListPreliminaryLumpSums v-bind="props" /></div>',
+      components: { ListPreliminaryLumpSums },
+    }),
+    {
+      global: { stubs: { ModalVue: DeclarativeModalStub } },
+    },
+  );
+};
+
 beforeEach(() => {
   setActivePinia(createPinia());
   vi.clearAllMocks();
@@ -100,47 +137,47 @@ beforeEach(() => {
 
 test("ListPreliminaryLumpSums renders ETF select on mount", async () => {
   await StoreService.getInstance().initAllStores();
-  render(ListPreliminaryLumpSums, { props: { etfId: "1" } });
+  renderListPreliminaryLumpSumsView({ etfId: "1" });
 
   await ListPreliminaryLumpSumsView.EtfInput.assertToBeVisible();
 });
 
 test("ListPreliminaryLumpSums opens monthly create modal", async () => {
   await StoreService.getInstance().initAllStores();
-  render(ListPreliminaryLumpSums, { props: { etfId: "1" } });
+  renderListPreliminaryLumpSumsView({ etfId: "1" });
 
   await ListPreliminaryLumpSumsView.EtfInput.assertToBeVisible();
   await ListPreliminaryLumpSumsView.CreateButton.click();
   await ListPreliminaryLumpSumsView.PopupMenu.assertToBeVisible();
   await ListPreliminaryLumpSumsView.DesktopCreateTypeMonthButton.click();
-  await ListPreliminaryLumpSumsView.Modal.assertOpen();
+  await ListPreliminaryLumpSumsView.CreateMonthlyModal.assertOpen();
 });
 
 test("ListPreliminaryLumpSums opens piece create modal", async () => {
   await StoreService.getInstance().initAllStores();
-  render(ListPreliminaryLumpSums, { props: { etfId: "1" } });
+  renderListPreliminaryLumpSumsView({ etfId: "1" });
 
   await ListPreliminaryLumpSumsView.EtfInput.assertToBeVisible();
   await ListPreliminaryLumpSumsView.CreateButton.click();
   await ListPreliminaryLumpSumsView.PopupMenu.assertToBeVisible();
   await ListPreliminaryLumpSumsView.DesktopCreateTypePieceButton.click();
-  await ListPreliminaryLumpSumsView.Modal.assertOpen();
+  await ListPreliminaryLumpSumsView.CreatePieceModal.assertOpen();
 });
 
 test("ListPreliminaryLumpSums opens yearly create modal", async () => {
   await StoreService.getInstance().initAllStores();
-  render(ListPreliminaryLumpSums, { props: { etfId: "1" } });
+  renderListPreliminaryLumpSumsView({ etfId: "1" });
 
   await ListPreliminaryLumpSumsView.EtfInput.assertToBeVisible();
   await ListPreliminaryLumpSumsView.CreateButton.click();
   await ListPreliminaryLumpSumsView.PopupMenu.assertToBeVisible();
   await ListPreliminaryLumpSumsView.DesktopCreateTypeYearlyButton.click();
-  await ListPreliminaryLumpSumsView.Modal.assertOpen();
+  await ListPreliminaryLumpSumsView.CreateYearlyModal.assertOpen();
 });
 
 test("ListPreliminaryLumpSums auto-selects favorite ETF when mounted without props", async () => {
   await StoreService.getInstance().initAllStores();
-  render(ListPreliminaryLumpSums);
+  renderListPreliminaryLumpSumsView({ etfId: "1" });
 
   await ListPreliminaryLumpSumsView.EtfInput.assertValue("ETF 1");
   await ListPreliminaryLumpSumsView.EtfIdInput.assertValue("1");
@@ -163,7 +200,7 @@ test("ListPreliminaryLumpSums navigates to previous and next year", async () => 
   ] as never);
 
   await StoreService.getInstance().initAllStores();
-  render(ListPreliminaryLumpSums);
+  renderListPreliminaryLumpSumsView({ etfId: "1" });
 
   await ListPreliminaryLumpSumsView.YearPreviousButton.click();
   await ListPreliminaryLumpSumsView.YearNextButton.click();
@@ -195,10 +232,10 @@ test("ListPreliminaryLumpSums opens edit action for monthly entry", async () => 
   ] as never);
 
   await StoreService.getInstance().initAllStores();
-  render(ListPreliminaryLumpSums);
+  renderListPreliminaryLumpSumsView({ etfId: "1" });
 
   await ListPreliminaryLumpSumsView.EditButton.click();
-  await ListPreliminaryLumpSumsView.Modal.assertOpen();
+  await ListPreliminaryLumpSumsView.CreateMonthlyModal.assertOpen();
 });
 
 test("ListPreliminaryLumpSums opens delete action for monthly entry", async () => {
@@ -212,10 +249,10 @@ test("ListPreliminaryLumpSums opens delete action for monthly entry", async () =
   ] as never);
 
   await StoreService.getInstance().initAllStores();
-  render(ListPreliminaryLumpSums);
+  renderListPreliminaryLumpSumsView({ etfId: "1" });
 
   await ListPreliminaryLumpSumsView.DeleteButton.click();
-  await ListPreliminaryLumpSumsView.Modal.assertOpen();
+  await ListPreliminaryLumpSumsView.DeleteMonthlyModal.assertOpen();
 });
 
 test("ListPreliminaryLumpSums opens edit action for piece entry", async () => {
@@ -229,10 +266,10 @@ test("ListPreliminaryLumpSums opens edit action for piece entry", async () => {
   ] as never);
 
   await StoreService.getInstance().initAllStores();
-  render(ListPreliminaryLumpSums);
+  renderListPreliminaryLumpSumsView({ etfId: "1" });
 
   await ListPreliminaryLumpSumsView.EditButton.click();
-  await ListPreliminaryLumpSumsView.Modal.assertOpen();
+  await ListPreliminaryLumpSumsView.CreatePieceModal.assertOpen();
 });
 
 test("ListPreliminaryLumpSums opens delete action for piece entry", async () => {
@@ -246,10 +283,10 @@ test("ListPreliminaryLumpSums opens delete action for piece entry", async () => 
   ] as never);
 
   await StoreService.getInstance().initAllStores();
-  render(ListPreliminaryLumpSums);
+  renderListPreliminaryLumpSumsView({ etfId: "1" });
 
   await ListPreliminaryLumpSumsView.DeleteButton.click();
-  await ListPreliminaryLumpSumsView.Modal.assertOpen();
+  await ListPreliminaryLumpSumsView.DeletePieceModal.assertOpen();
 });
 
 test("ListPreliminaryLumpSums opens edit action for yearly entry", async () => {
@@ -263,10 +300,10 @@ test("ListPreliminaryLumpSums opens edit action for yearly entry", async () => {
   ] as never);
 
   await StoreService.getInstance().initAllStores();
-  render(ListPreliminaryLumpSums);
+  renderListPreliminaryLumpSumsView({ etfId: "1" });
 
   await ListPreliminaryLumpSumsView.EditButton.click();
-  await ListPreliminaryLumpSumsView.Modal.assertOpen();
+  await ListPreliminaryLumpSumsView.CreateYearlyModal.assertOpen();
 });
 
 test("ListPreliminaryLumpSums opens delete action for yearly entry", async () => {
@@ -280,40 +317,40 @@ test("ListPreliminaryLumpSums opens delete action for yearly entry", async () =>
   ] as never);
 
   await StoreService.getInstance().initAllStores();
-  render(ListPreliminaryLumpSums);
+  renderListPreliminaryLumpSumsView({ etfId: "1" });
 
   await ListPreliminaryLumpSumsView.DeleteButton.click();
-  await ListPreliminaryLumpSumsView.Modal.assertOpen();
+  await ListPreliminaryLumpSumsView.DeleteYearlyModal.assertOpen();
 });
 
 test("ListPreliminaryLumpSums mobile: create menu opens and triggers modal (piece)", async () => {
   await StoreService.getInstance().initAllStores();
-  render(ListPreliminaryLumpSums, { props: { etfId: "1" } });
+  renderListPreliminaryLumpSumsView({ etfId: "1" });
 
   await ListPreliminaryLumpSumsView.MobileCreateButton.click();
   await ListPreliminaryLumpSumsView.PopupMenu.assertToBeVisible();
   await ListPreliminaryLumpSumsView.MobileCreateTypePieceButton.click();
-  await ListPreliminaryLumpSumsView.Modal.assertOpen();
+  await ListPreliminaryLumpSumsView.CreatePieceModal.assertOpen();
 });
 
 test("ListPreliminaryLumpSums mobile: create menu opens and triggers modal (monthly)", async () => {
   await StoreService.getInstance().initAllStores();
-  render(ListPreliminaryLumpSums, { props: { etfId: "1" } });
+  renderListPreliminaryLumpSumsView({ etfId: "1" });
 
   await ListPreliminaryLumpSumsView.MobileCreateButton.click();
   await ListPreliminaryLumpSumsView.PopupMenu.assertToBeVisible();
   await ListPreliminaryLumpSumsView.MobileCreateTypeMonthButton.click();
-  await ListPreliminaryLumpSumsView.Modal.assertOpen();
+  await ListPreliminaryLumpSumsView.CreateMonthlyModal.assertOpen();
 });
 
 test("ListPreliminaryLumpSums mobile: create menu opens and triggers modal (yearly)", async () => {
   await StoreService.getInstance().initAllStores();
-  render(ListPreliminaryLumpSums, { props: { etfId: "1" } });
+  renderListPreliminaryLumpSumsView({ etfId: "1" });
 
   await ListPreliminaryLumpSumsView.MobileCreateButton.click();
   await ListPreliminaryLumpSumsView.PopupMenu.assertToBeVisible();
   await ListPreliminaryLumpSumsView.MobileCreateTypeYearlyButton.click();
-  await ListPreliminaryLumpSumsView.Modal.assertOpen();
+  await ListPreliminaryLumpSumsView.CreateYearlyModal.assertOpen();
 });
 
 test("ListPreliminaryLumpSums mobile: edit button opens modal", async () => {
@@ -326,10 +363,10 @@ test("ListPreliminaryLumpSums mobile: edit button opens modal", async () => {
     },
   ] as never);
   await StoreService.getInstance().initAllStores();
-  render(ListPreliminaryLumpSums);
+  renderListPreliminaryLumpSumsView({ etfId: "1" });
 
   await ListPreliminaryLumpSumsView.MobileEditButton.click();
-  await ListPreliminaryLumpSumsView.Modal.assertOpen();
+  await ListPreliminaryLumpSumsView.CreatePieceModal.assertOpen();
 });
 
 test("ListPreliminaryLumpSums mobile: delete button opens modal", async () => {
@@ -342,10 +379,10 @@ test("ListPreliminaryLumpSums mobile: delete button opens modal", async () => {
     },
   ] as never);
   await StoreService.getInstance().initAllStores();
-  render(ListPreliminaryLumpSums);
+  renderListPreliminaryLumpSumsView({ etfId: "1" });
 
   await ListPreliminaryLumpSumsView.MobileDeleteButton.click();
-  await ListPreliminaryLumpSumsView.Modal.assertOpen();
+  await ListPreliminaryLumpSumsView.DeletePieceModal.assertOpen();
 });
 
 test("ListPreliminaryLumpSums shows empty state when no data is present", async () => {
@@ -354,7 +391,7 @@ test("ListPreliminaryLumpSums shows empty state when no data is present", async 
     [] as never,
   );
   await StoreService.getInstance().initAllStores();
-  render(ListPreliminaryLumpSums, { props: { etfId: "1", year: "2025" } });
+  renderListPreliminaryLumpSumsView({ etfId: "1", year: "2025" });
 
   await ListPreliminaryLumpSumsView.EmptyState.assertToBeVisible();
 });

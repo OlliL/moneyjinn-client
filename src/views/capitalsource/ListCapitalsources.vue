@@ -1,14 +1,5 @@
 <template>
-  <CreateCapitalsourceModalVue
-    ref="createCapitalsourceModalList"
-    id-suffix="List"
-    @capitalsource-created="searchContent"
-    @capitalsource-updated="searchContent"
-  />
-  <DeleteCapitalsourceModalVue
-    ref="deleteModal"
-    @capitalsource-deleted="searchContent"
-  />
+  <DeleteCapitalsourceModal />
 
   <div class="custom-container space-y-6">
     <div class="text-center">
@@ -19,72 +10,45 @@
       v-model="searchString"
       :placeholder="$t('Capitalsource.searchBy')"
       @validNowToggled="validNowToggled"
-      @createClicked="showCreateCapitalsourceModal"
+      @createClicked="actions.create"
     />
 
     <ListCapitalsourcesMobile
       :capitalsources="capitalsources"
       :user-id="userId"
-      @delete-capitalsource="deleteCapitalsource"
-      @edit-capitalsource="editCapitalsource"
     />
 
     <ListCapitalsourcesDesktop
       :capitalsources="capitalsources"
       :user-id="userId"
-      @delete-capitalsource="deleteCapitalsource"
-      @edit-capitalsource="editCapitalsource"
     />
   </div>
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref, useTemplateRef, watch } from "vue";
-
+import DivFilter from "@/components/common/DivFilter.vue";
+import type { Capitalsource } from "@/model/capitalsource/Capitalsource";
+import { CapitalsourceActionsKey, type CrudActions } from "@/model/CrudActions";
+import { useDeleteCapitalsourceModalStore } from "./elements/DeleteCapitalsourceModal.store";
+import { useCreateCapitalsourceModalStore } from "@/components/capitalsource/CreateCapitalsourceModal.store";
 import { useCapitalsourceStore } from "@/stores/CapitalsourceStore";
 import { useUserSessionStore } from "@/stores/UserSessionStore";
-
-import DivFilter from "@/components/common/DivFilter.vue";
-import CreateCapitalsourceModalVue from "@/components/capitalsource/CreateCapitalsourceModal.vue";
-import DeleteCapitalsourceModalVue from "./elements/DeleteCapitalsourceModal.vue";
+import { onMounted, provide, ref, watch } from "vue";
+import DeleteCapitalsourceModal from "./elements/DeleteCapitalsourceModal.vue";
 import ListCapitalsourcesDesktop from "./elements/ListCapitalsourcesDesktop.vue";
 import ListCapitalsourcesMobile from "./elements/ListCapitalsourcesMobile.vue";
-
-import type { Capitalsource } from "@/model/capitalsource/Capitalsource";
-import { storeToRefs } from "pinia";
 
 const validNow = ref(true);
 const capitalsources = ref(new Array<Capitalsource>());
 const searchString = ref("");
 
-const createCapitalsourceModalList = useTemplateRef<
-  typeof CreateCapitalsourceModalVue
->("createCapitalsourceModalList");
-const deleteModal =
-  useTemplateRef<typeof DeleteCapitalsourceModalVue>("deleteModal");
-
 const userId = useUserSessionStore().getUserId;
 
 const capitalsourceStore = useCapitalsourceStore();
 const searchCapitalsources = capitalsourceStore.searchCapitalsources;
-const { capitalsource } = storeToRefs(capitalsourceStore);
-
-const showCreateCapitalsourceModal = () => {
-  createCapitalsourceModalList.value?._show();
-};
-
-const deleteCapitalsource = (mcs: Capitalsource) => {
-  deleteModal.value?._show(mcs);
-};
-
-const editCapitalsource = (mcs: Capitalsource) => {
-  createCapitalsourceModalList.value?._show(mcs);
-};
-
-watch(capitalsource, () => {
-  searchContent();
-  if (capitalsource.value.length == 0) searchAllContent();
-});
+const { openDeleteCapitalsource } = useDeleteCapitalsourceModalStore();
+const { openCreateCapitalsource, openEditCapitalsource } =
+  useCreateCapitalsourceModalStore();
 
 watch(searchString, () => {
   searchContent();
@@ -102,11 +66,24 @@ const searchAllContent = () => {
 
 const searchContent = () => {
   searchCapitalsources(searchString.value, validNow.value).then(
-    (_capitalsources) => {
-      capitalsources.value = _capitalsources;
+    (capitalsourceEntries) => {
+      capitalsources.value = capitalsourceEntries;
     },
   );
 };
+
+const actions: CrudActions<Capitalsource> = {
+  create: () => {
+    openCreateCapitalsource(searchContent);
+  },
+  edit: (capitalsourceEntry) => {
+    openEditCapitalsource(capitalsourceEntry, searchContent);
+  },
+  delete: (capitalsourceEntry) =>
+    openDeleteCapitalsource(capitalsourceEntry, searchContent),
+};
+
+provide(CapitalsourceActionsKey, actions);
 
 onMounted(() => {
   searchAllContent();

@@ -43,6 +43,8 @@ import ButtonMobileCreate from "@/components/common/ButtonMobileCreate.vue";
 import ButtonMobileDelete from "@/components/common/ButtonMobileDelete.vue";
 import ButtonMobileEdit from "@/components/common/ButtonMobileEdit.vue";
 import MonthYearMobileNavigator from "@/components/navigation/MonthYearMobileNavigator.vue";
+import { MonthlySettlementModalActionsKey } from "@/model/CrudActions";
+import { inject } from "vue";
 
 defineProps<{
   dataLoaded: boolean;
@@ -57,15 +59,14 @@ const emit = defineEmits<{
   selectYear: [year: string];
   selectMonth: [month: number];
   selectCurrentMonth: [];
-  create: [];
-  edit: [];
-  delete: [];
 }>();
+
+const actions = inject(MonthlySettlementModalActionsKey)!;
 
 const selectCurrentMonth = () => emit("selectCurrentMonth");
 const selectYear = (year: string) => emit("selectYear", year);
 const selectMonth = (month: number) => emit("selectMonth", month);
-const emitCreate = () => emit("create");
-const emitEdit = () => emit("edit");
-const emitDelete = () => emit("delete");
+const emitCreate = () => actions.create();
+const emitEdit = () => actions.edit();
+const emitDelete = () => actions.delete();
 </script>

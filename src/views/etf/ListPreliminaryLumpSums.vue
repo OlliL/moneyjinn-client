@@ -1,31 +1,10 @@
 <template>
-  <CreateEtfPreliminaryLumpSumModalMonthlyVue
-    ref="createModalMonthly"
-    @etf-preliminary-lump-sum-created="reloadView"
-    @etf-preliminary-lump-sum-updated="reloadView"
-  />
-  <CreateEtfPreliminaryLumpSumModalPieceVue
-    ref="createModalPiece"
-    @etf-preliminary-lump-sum-created="reloadView"
-    @etf-preliminary-lump-sum-updated="reloadView"
-  />
-  <CreateEtfPreliminaryLumpSumModalYearly
-    ref="createModalYearly"
-    @etf-preliminary-lump-sum-created="reloadView"
-    @etf-preliminary-lump-sum-updated="reloadView"
-  />
-  <DeleteEtfPreliminaryLumpSumModalMonthlyVue
-    @etf-preliminary-lump-sum-deleted="reloadView"
-    ref="deleteModalMonthly"
-  />
-  <DeleteEtfPreliminaryLumpSumModalPieceVue
-    @etf-preliminary-lump-sum-deleted="reloadView"
-    ref="deleteModalPiece"
-  />
-  <DeleteEtfPreliminaryLumpSumModalYearly
-    @etf-preliminary-lump-sum-deleted="reloadView"
-    ref="deleteModalYearly"
-  />
+  <CreateEtfPreliminaryLumpSumModalMonthly />
+  <CreateEtfPreliminaryLumpSumModalPiece />
+  <CreateEtfPreliminaryLumpSumModalYearly />
+  <DeleteEtfPreliminaryLumpSumModalMonthly />
+  <DeleteEtfPreliminaryLumpSumModalPiece />
+  <DeleteEtfPreliminaryLumpSumModalYearly />
 
   <div class="custom-container space-y-6">
     <h4 class="text-center text-2xl font-bold">
@@ -169,19 +148,19 @@ import { EtfPreliminaryLumpSumType } from "@/model/etf/EtfPreliminaryLumpSumType
 import router, { Routes } from "@/router";
 import CrudEtfPreliminaryLumpSumService from "@/service/CrudEtfPreliminaryLumpSumService";
 import { useEtfStore } from "@/stores/EtfStore";
-import {
-  computed,
-  ref,
-  useTemplateRef,
-  watch,
-  type Component,
-  type ShallowRef,
-} from "vue";
-import CreateEtfPreliminaryLumpSumModalMonthlyVue from "./elements/CreateEtfPreliminaryLumpSumModalMonthly.vue";
-import CreateEtfPreliminaryLumpSumModalPieceVue from "./elements/CreateEtfPreliminaryLumpSumModalPiece.vue";
+import useCreateEtfPreliminaryLumpSumModalMonthlyStore from "./elements/CreateEtfPreliminaryLumpSumModalMonthly.store";
+import useCreateEtfPreliminaryLumpSumModalPieceStore from "./elements/CreateEtfPreliminaryLumpSumModalPiece.store";
+import useCreateEtfPreliminaryLumpSumModalYearlyStore from "./elements/CreateEtfPreliminaryLumpSumModalYearly.store";
+import useDeleteEtfPreliminaryLumpSumModalMonthlyStore from "./elements/DeleteEtfPreliminaryLumpSumModalMonthly.store";
+import useDeleteEtfPreliminaryLumpSumModalPieceStore from "./elements/DeleteEtfPreliminaryLumpSumModalPiece.store";
+import useDeleteEtfPreliminaryLumpSumModalYearlyStore from "./elements/DeleteEtfPreliminaryLumpSumModalYearly.store";
+import { storeToRefs } from "pinia";
+import { computed, ref, watch, type Component, type Ref } from "vue";
+import CreateEtfPreliminaryLumpSumModalMonthly from "./elements/CreateEtfPreliminaryLumpSumModalMonthly.vue";
+import CreateEtfPreliminaryLumpSumModalPiece from "./elements/CreateEtfPreliminaryLumpSumModalPiece.vue";
 import CreateEtfPreliminaryLumpSumModalYearly from "./elements/CreateEtfPreliminaryLumpSumModalYearly.vue";
-import DeleteEtfPreliminaryLumpSumModalMonthlyVue from "./elements/DeleteEtfPreliminaryLumpSumModalMonthly.vue";
-import DeleteEtfPreliminaryLumpSumModalPieceVue from "./elements/DeleteEtfPreliminaryLumpSumModalPiece.vue";
+import DeleteEtfPreliminaryLumpSumModalMonthly from "./elements/DeleteEtfPreliminaryLumpSumModalMonthly.vue";
+import DeleteEtfPreliminaryLumpSumModalPiece from "./elements/DeleteEtfPreliminaryLumpSumModalPiece.vue";
 import DeleteEtfPreliminaryLumpSumModalYearly from "./elements/DeleteEtfPreliminaryLumpSumModalYearly.vue";
 import ListPreliminaryLumpSumsDesktop from "./elements/ListPreliminaryLumpSumsDesktop.vue";
 import ListPreliminaryLumpSumsMobile from "./elements/ListPreliminaryLumpSumsMobile.vue";
@@ -189,10 +168,16 @@ import ShowEtfPreliminaryLumpSumMonthlyVue from "./elements/ShowEtfPreliminaryLu
 import ShowEtfPreliminaryLumpSumPieceVue from "./elements/ShowEtfPreliminaryLumpSumPiece.vue";
 import ShowEtfPreliminaryLumpSumYearly from "./elements/ShowEtfPreliminaryLumpSumYearly.vue";
 
-const props = defineProps({
-  etfId: { type: String, default: undefined },
-  year: { type: String, default: undefined },
-});
+const props = withDefaults(
+  defineProps<{
+    etfId?: string;
+    year?: string;
+  }>(),
+  {
+    etfId: undefined,
+    year: undefined,
+  },
+);
 
 const { getAsSelectBoxValues, getFavoriteEtf } = useEtfStore();
 
@@ -206,18 +191,42 @@ const etfPreliminaryLumpSums = ref<Map<string, EtfPreliminaryLumpSum>>(
   new Map(),
 );
 const etfPreliminaryLumpSum = ref<EtfPreliminaryLumpSum | undefined>(undefined);
+const { openCreateEtfPreliminaryLumpSumMonthly } =
+  useCreateEtfPreliminaryLumpSumModalMonthlyStore();
+const { openCreateEtfPreliminaryLumpSumPiece } =
+  useCreateEtfPreliminaryLumpSumModalPieceStore();
+const { openCreateEtfPreliminaryLumpSumYearly } =
+  useCreateEtfPreliminaryLumpSumModalYearlyStore();
+const { openDeleteEtfPreliminaryLumpSumMonthly } =
+  useDeleteEtfPreliminaryLumpSumModalMonthlyStore();
+const { openDeleteEtfPreliminaryLumpSumPiece } =
+  useDeleteEtfPreliminaryLumpSumModalPieceStore();
+const { openDeleteEtfPreliminaryLumpSumYearly } =
+  useDeleteEtfPreliminaryLumpSumModalYearlyStore();
+const {
+  open: createMonthlyModalVisible,
+} = storeToRefs(useCreateEtfPreliminaryLumpSumModalMonthlyStore());
+const {
+  open: createPieceModalVisible,
+} = storeToRefs(useCreateEtfPreliminaryLumpSumModalPieceStore());
+const {
+  open: createYearlyModalVisible,
+} = storeToRefs(useCreateEtfPreliminaryLumpSumModalYearlyStore());
+const {
+  open: deleteMonthlyModalVisible,
+} = storeToRefs(useDeleteEtfPreliminaryLumpSumModalMonthlyStore());
+const {
+  open: deletePieceModalVisible,
+} = storeToRefs(useDeleteEtfPreliminaryLumpSumModalPieceStore());
+const {
+  open: deleteYearlyModalVisible,
+} = storeToRefs(useDeleteEtfPreliminaryLumpSumModalYearlyStore());
 
-interface CreateModalExpose {
-  _show: (etfId?: number, mep?: EtfPreliminaryLumpSum) => void;
-}
-interface DeleteModalExpose {
-  _show: (mep: EtfPreliminaryLumpSum) => void;
-}
 interface TypeConfigEntry {
   id: string;
   label: string;
-  create: Readonly<ShallowRef<CreateModalExpose | null>>;
-  delete: Readonly<ShallowRef<DeleteModalExpose | null>>;
+  createVisible: Ref<boolean>;
+  deleteVisible: Ref<boolean>;
   show: Component;
 }
 
@@ -225,25 +234,26 @@ const etfOptions = computed(() => getAsSelectBoxValues());
 
 const TYPE_CONFIG: Partial<Record<EtfPreliminaryLumpSumType, TypeConfigEntry>> =
   {
+    // Changed to use local refs for visibility
     [EtfPreliminaryLumpSumType.AMOUNT_PER_MONTH]: {
       id: "month",
       label: "ETFPreliminaryLumpSum.newMonthly",
-      create: useTemplateRef<CreateModalExpose>("createModalMonthly"),
-      delete: useTemplateRef<DeleteModalExpose>("deleteModalMonthly"),
+      createVisible: createMonthlyModalVisible,
+      deleteVisible: deleteMonthlyModalVisible,
       show: ShowEtfPreliminaryLumpSumMonthlyVue,
     },
     [EtfPreliminaryLumpSumType.AMOUNT_PER_PIECE]: {
       id: "piece",
       label: "ETFPreliminaryLumpSum.newPiece",
-      create: useTemplateRef<CreateModalExpose>("createModalPiece"),
-      delete: useTemplateRef<DeleteModalExpose>("deleteModalPiece"),
+      createVisible: createPieceModalVisible,
+      deleteVisible: deletePieceModalVisible,
       show: ShowEtfPreliminaryLumpSumPieceVue,
     },
     [EtfPreliminaryLumpSumType.AMOUNT_PER_YEAR]: {
       id: "yearly",
       label: "ETFPreliminaryLumpSum.newYearly",
-      create: useTemplateRef<CreateModalExpose>("createModalYearly"),
-      delete: useTemplateRef<DeleteModalExpose>("deleteModalYearly"),
+      createVisible: createYearlyModalVisible,
+      deleteVisible: deleteYearlyModalVisible,
       show: ShowEtfPreliminaryLumpSumYearly,
     },
   };
@@ -335,14 +345,44 @@ const showCreateEtfPreliminaryLumpSumModal = (
   type: EtfPreliminaryLumpSumType,
   mep?: EtfPreliminaryLumpSum,
 ) => {
-  TYPE_CONFIG[type]?.create.value?._show(etfId, mep);
+  if (type === EtfPreliminaryLumpSumType.AMOUNT_PER_MONTH) {
+    openCreateEtfPreliminaryLumpSumMonthly(
+      etfId,
+      mep,
+      reloadView,
+    );
+  } else if (type === EtfPreliminaryLumpSumType.AMOUNT_PER_PIECE) {
+    openCreateEtfPreliminaryLumpSumPiece(
+      etfId,
+      mep,
+      reloadView,
+    );
+  } else {
+    openCreateEtfPreliminaryLumpSumYearly(
+      etfId,
+      mep,
+      reloadView,
+    );
+  }
 };
 
 const showDeleteEtfPreliminaryLumpSumModal = () => {
   if (etfPreliminaryLumpSum.value) {
-    const type = etfPreliminaryLumpSum.value.type;
-    if (type) {
-      TYPE_CONFIG[type]?.delete.value?._show(etfPreliminaryLumpSum.value);
+    if (etfPreliminaryLumpSum.value.type === EtfPreliminaryLumpSumType.AMOUNT_PER_MONTH) {
+      openDeleteEtfPreliminaryLumpSumMonthly(
+        etfPreliminaryLumpSum.value,
+        reloadView,
+      );
+    } else if (etfPreliminaryLumpSum.value.type === EtfPreliminaryLumpSumType.AMOUNT_PER_PIECE) {
+      openDeleteEtfPreliminaryLumpSumPiece(
+        etfPreliminaryLumpSum.value,
+        reloadView,
+      );
+    } else {
+      openDeleteEtfPreliminaryLumpSumYearly(
+        etfPreliminaryLumpSum.value,
+        reloadView,
+      );
     }
   }
 };

@@ -11,6 +11,7 @@ import "@testing-library/jest-dom/vitest";
 import { render } from "@testing-library/vue";
 import { createPinia, setActivePinia } from "pinia";
 import { beforeEach, test, vi } from "vitest";
+import { defineComponent } from "vue";
 
 const { mockRouterPush } = vi.hoisted(() => ({
   mockRouterPush: vi.fn(),
@@ -35,8 +36,16 @@ class AppHomeView {
   );
 }
 
-const renderView = () => {
-  render(AppHome);
+const renderView = (props: Record<string, unknown> = {}) => {
+  render(
+    defineComponent({
+      setup() {
+        return { props };
+      },
+      template: '<AppHome v-bind="props" />',
+      components: { AppHome },
+    }),
+  );
 };
 
 beforeEach(() => {

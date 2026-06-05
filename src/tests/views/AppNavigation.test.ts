@@ -15,6 +15,7 @@ import userEvent from "@testing-library/user-event";
 import { render, screen } from "@testing-library/vue";
 import { createPinia, setActivePinia } from "pinia";
 import { beforeEach, expect, test, vi } from "vitest";
+import { defineComponent } from "vue";
 
 const {
   mockRouterPush,
@@ -105,8 +106,14 @@ beforeEach(() => {
   } as UserSession);
 });
 
-const renderView = () => {
-  render(AppNavigation, {
+const renderView = (props: Record<string, unknown> = {}) => {
+  render(defineComponent({
+    setup() {
+      return { props };
+    },
+    template: '<AppNavigation v-bind="props" />',
+    components: { AppNavigation },
+  }), {
     global: {
       stubs: {
         "router-link": {

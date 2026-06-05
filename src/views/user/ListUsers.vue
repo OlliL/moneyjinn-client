@@ -1,15 +1,6 @@
 <template>
-  <CreateUserModalVue
-    ref="createUserModalList"
-    id-suffix="List"
-    @user-created="reloadView"
-    @user-updated="reloadView"
-  />
-  <DeleteUserModalVue
-    ref="deleteModal"
-    id-suffix="List"
-    @user-deleted="reloadView"
-  />
+  <CreateUserModal />
+  <DeleteUserModal />
 
   <div class="custom-container space-y-6">
     <div class="text-center">
@@ -20,35 +11,30 @@
       v-model="searchString"
       :showValidToggle="false"
       :placeholder="$t('User.searchBy')"
-      @createClicked="showCreateUserModal"
+      @createClicked="actions.create"
     />
 
     <DivError :server-errors="serverErrors" />
 
-    <ListUsersMobile
-      :users="users"
-      @edit-user="editUser"
-      @delete-user="deleteUser"
-    />
+    <ListUsersMobile :users="users" />
 
-    <ListUsersDesktop
-      :users="users"
-      @edit-user="editUser"
-      @delete-user="deleteUser"
-    />
+    <ListUsersDesktop :users="users" />
   </div>
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref, useTemplateRef, watch } from "vue";
+import { onMounted, provide, ref, watch } from "vue";
 
 import DivError from "@/components/common/DivError.vue";
 import DivFilter from "@/components/common/DivFilter.vue";
-import CreateUserModalVue from "./elements/CreateUserModal.vue";
-import DeleteUserModalVue from "./elements/DeleteUserModal.vue";
+import useCreateUserModalStore from "./elements/CreateUserModal.store";
+import useDeleteUserModalStore from "./elements/DeleteUserModal.store";
+import CreateUserModal from "./elements/CreateUserModal.vue";
+import DeleteUserModal from "./elements/DeleteUserModal.vue";
 import ListUsersDesktop from "./elements/ListUsersDesktop.vue";
 import ListUsersMobile from "./elements/ListUsersMobile.vue";
 
+import { UserActionsKey, type CrudActions } from "@/model/CrudActions";
 import type { User } from "@/model/user/User";
 
 import UserService from "@/service/UserService";
@@ -59,27 +45,18 @@ const serverErrors = ref(new Array<string>());
 const users = ref(new Array<User>());
 const allUsers = ref(new Array<User>());
 const searchString = ref("");
+const { openCreateUser, openEditUser } = useCreateUserModalStore();
+const { openDeleteUser } = useDeleteUserModalStore();
 
-const createUserModalList = useTemplateRef<typeof CreateUserModalVue>(
-  "createUserModalList",
-);
-const deleteModal = useTemplateRef<typeof DeleteUserModalVue>("deleteModal");
-
-const showCreateUserModal = () => {
-  createUserModalList.value?._show();
+const actions: CrudActions<User> = {
+  create: () => openCreateUser(reloadView),
+  edit: (userEntry) => openEditUser(userEntry, reloadView),
+  delete: (userEntry) => openDeleteUser(userEntry, reloadView),
 };
 
-const deleteUser = (mcs: User) => {
-  deleteModal.value?._show(mcs);
-};
+provide(UserActionsKey, actions);
 
-const editUser = (mcs: User) => {
-  createUserModalList.value?._show(mcs);
-};
-
-watch(searchString, () => {
-  searchContent();
-});
+watch(searchString, () => searchContent());
 
 const searchContent = () => {
   if (searchString.value === "") {

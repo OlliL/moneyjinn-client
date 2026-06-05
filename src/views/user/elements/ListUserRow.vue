@@ -13,14 +13,14 @@
     <ButtonTableIcon
       :title="$t('General.edit')"
       :test-id="`user-edit-${user.id}`"
-      @click="editUser"
+      @click="actions.edit(user)"
     >
       <Pencil class="icon-medium" />
     </ButtonTableIcon>
     <ButtonTableIcon
       :title="$t('General.delete')"
       :test-id="`user-delete-${user.id}`"
-      @click="deleteUser"
+      @click="actions.delete(user)"
     >
       <Trash2 class="icon-medium" />
     </ButtonTableIcon>
@@ -30,28 +30,19 @@
 import ButtonTableIcon from "@/components/common/ButtonTableIcon.vue";
 import SpanBoolean from "@/components/common/SpanBoolean.vue";
 import { TableCell, TableRow } from "@/components/ui/table";
+import { UserActionsKey } from "@/model/CrudActions";
 import type { User } from "@/model/user/User";
 import { userRoleNames } from "@/model/user/UserRole";
 import { Pencil, Trash2 } from "lucide-vue-next";
-import { computed, type PropType } from "vue";
+import { computed, inject } from "vue";
 
-const props = defineProps({
-  user: {
-    type: Object as PropType<User>,
-    required: true,
-  },
-});
+const props = defineProps<{
+  user: User;
+}>();
+
+const actions = inject(UserActionsKey)!;
 
 const role = computed(() => {
   return userRoleNames[props.user.role];
 });
-
-const emit = defineEmits(["deleteUser", "editUser"]);
-
-const deleteUser = () => {
-  emit("deleteUser", props.user);
-};
-const editUser = () => {
-  emit("editUser", props.user);
-};
 </script>

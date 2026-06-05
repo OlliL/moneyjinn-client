@@ -1,10 +1,4 @@
 <template>
-  <CreateContractpartnerModalVue
-    ref="createContractpartnerModal"
-    :id-suffix="idSuffix"
-    @contractpartner-created="contractpartnerCreated"
-  />
-
   <SelectStandard
     v-model="contractpartnerId"
     :validation-schema="validationSchema"
@@ -20,56 +14,39 @@
 </template>
 <script lang="ts" setup>
 import { SquarePlus } from "lucide-vue-next";
-import { computed, useTemplateRef, type PropType, type Ref } from "vue";
+import { computed, type Ref } from "vue";
 import { any, type ZodType } from "zod";
 
 import SelectStandard from "../common/SelectStandard.vue";
-import CreateContractpartnerModalVue from "./CreateContractpartnerModal.vue";
 
+import { useCreateContractpartnerModalStore } from "./CreateContractpartnerModal.store";
 import { useContractpartnerStore } from "@/stores/ContractpartnerStore";
-
-import type { Contractpartner } from "@/model/contractpartner/Contractpartner";
 
 const contractpartnerId = defineModel({ type: Number });
 
-const props = defineProps({
-  validityDate: {
-    type: Date,
-    required: false,
+const props = withDefaults(
+  defineProps<{
+    validityDate?: Date;
+    validationSchema?: ZodType;
+    validationSchemaRef?: Ref<ZodType>;
+    fieldLabel: string;
+    idSuffix?: string;
+  }>(),
+  {
+    validationSchema: () => any().optional(),
+    idSuffix: "",
   },
-  validationSchema: {
-    type: Object as PropType<ZodType>,
-    required: false,
-    default: any().optional(),
-  },
-  validationSchemaRef: {
-    type: Object as PropType<Ref<ZodType>>,
-    required: false,
-  },
-  fieldLabel: {
-    type: String,
-    required: true,
-  },
-  idSuffix: {
-    type: String,
-    default: "",
-  },
-});
-
-const createContractpartnerModal = useTemplateRef<
-  typeof CreateContractpartnerModalVue
->("createContractpartnerModal");
-const contractpartnerStore = useContractpartnerStore();
-
-const selectBoxValues = computed(() =>
-  contractpartnerStore.getAsSelectBoxValues(props.validityDate),
 );
 
-const showCreateContractpartnerModal = () => {
-  createContractpartnerModal.value?._show();
-};
+const { getAsSelectBoxValues } = useContractpartnerStore();
+const { openCreateContractpartner } = useCreateContractpartnerModalStore();
 
-const contractpartnerCreated = (mcp: Contractpartner) => {
-  contractpartnerId.value = mcp.id;
-};
+const selectBoxValues = computed(() =>
+  getAsSelectBoxValues(props.validityDate),
+);
+
+const showCreateContractpartnerModal = () =>
+  openCreateContractpartner(
+    (contractpartnerEntry) => (contractpartnerId.value = contractpartnerEntry.id),
+  );
 </script>

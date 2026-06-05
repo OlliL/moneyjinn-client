@@ -29,7 +29,7 @@
                 variant="ghost"
                 size="icon"
                 :data-testid="`user-mobile-edit-${user.id}`"
-                @click.stop="editUser(user)"
+                @click.stop="actions.edit(user)"
               >
                 <Pencil class="icon-medium" />
               </Button>
@@ -37,7 +37,7 @@
                 variant="ghost"
                 size="icon"
                 :data-testid="`user-mobile-delete-${user.id}`"
-                @click.stop="deleteUser(user)"
+                @click.stop="actions.delete(user)"
               >
                 <Trash2 class="icon-medium" />
               </Button>
@@ -73,27 +73,17 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
+import { UserActionsKey } from "@/model/CrudActions";
 import type { User } from "@/model/user/User";
 import { userRoleNames } from "@/model/user/UserRole";
 import { Pencil, Trash2 } from "lucide-vue-next";
-import type { PropType } from "vue";
+import { inject } from "vue";
 
-defineProps({
-  users: {
-    type: Array as PropType<User[]>,
-    required: true,
-  },
-});
+defineProps<{
+  users: User[];
+}>();
 
-const emit = defineEmits(["deleteUser", "editUser"]);
-
-const deleteUser = (user: User) => {
-  emit("deleteUser", user);
-};
-
-const editUser = (user: User) => {
-  emit("editUser", user);
-};
+const actions = inject(UserActionsKey)!;
 
 const roleString = (user: User): string => {
   return userRoleNames[user.role];

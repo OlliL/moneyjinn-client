@@ -76,6 +76,7 @@
 
 <script lang="ts" setup>
 import SpanDate from "@/components/common/SpanDate.vue";
+import { ContractpartnerMatchingActionsKey } from "@/model/CrudActions";
 import {
   Accordion,
   AccordionContent,
@@ -85,25 +86,19 @@ import {
 import { Button } from "@/components/ui/button";
 import type { ContractpartnerMatching } from "@/model/contractpartnermatching/ContractpartnerMatching";
 import { Pencil, Trash2 } from "lucide-vue-next";
-import type { PropType } from "vue";
+import { inject } from "vue";
 
-defineProps({
-  contractpartnerMatchings: {
-    type: Array as PropType<ContractpartnerMatching[]>,
-    required: true,
-  },
-});
+defineProps<{
+  contractpartnerMatchings: ContractpartnerMatching[];
+}>();
 
-const emit = defineEmits([
-  "editContractpartnerMatching",
-  "deleteContractpartnerMatching",
-]);
+const actions = inject(ContractpartnerMatchingActionsKey)!;
 
 const editContractpartnerMatching = (mcm: ContractpartnerMatching) => {
-  emit("editContractpartnerMatching", mcm);
+  actions.edit(mcm);
 };
 
 const deleteContractpartnerMatching = (mcm: ContractpartnerMatching) => {
-  emit("deleteContractpartnerMatching", mcm);
+  actions.delete(mcm);
 };
 </script>

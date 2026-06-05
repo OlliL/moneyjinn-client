@@ -23,15 +23,13 @@
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { AlertCircleIcon } from "lucide-vue-next";
 
-defineProps({
-  serverErrors: {
-    type: Array<string>,
-    required: false,
+withDefaults(
+  defineProps<{
+    serverErrors?: Array<string>;
+    testIdPrefix?: string;
+  }>(),
+  {
+    testIdPrefix: "serverError",
   },
-  testIdPrefix: {
-    type: String,
-    required: false,
-    default: "serverError",
-  },
-});
+);
 </script>

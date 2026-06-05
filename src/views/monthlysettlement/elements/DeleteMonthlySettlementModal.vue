@@ -4,7 +4,8 @@
       $t('MonthlySettlement.title.delete', { month: monthName, year: year })
     "
     max-width="max-w-md"
-    ref="modalComponent"
+    id-suffix="DeleteMonthlySettlement"
+    v-model:open="open"
   >
     <template #body>
       <DivError :server-errors="serverErrors" />
@@ -24,7 +25,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, useTemplateRef } from "vue";
+import { ref, watch } from "vue";
 
 import DivError from "@/components/common/DivError.vue";
 import ModalVue from "@/components/common/Modal.vue";
@@ -35,35 +36,47 @@ import { getMonthName } from "@/tools/views/MonthName";
 
 import ButtonDeleteTwoTap from "@/components/common/ButtonDeleteTwoTap.vue";
 import MonthlySettlementService from "@/service/MonthlySettlementService";
+import useDeleteMonthlySettlementModalStore from "./DeleteMonthlySettlementModal.store";
+import { storeToRefs } from "pinia";
 
 const serverErrors = ref(new Array<string>());
+const {
+  open,
+  year,
+  month,
+  onDone,
+} = storeToRefs(useDeleteMonthlySettlementModalStore());
 
-const month = ref(0);
+const selectedMonth = ref(0);
 const monthName = ref("");
-const year = ref(0);
-const modalComponent = useTemplateRef<typeof ModalVue>("modalComponent");
-const emit = defineEmits(["monthlySettlementDeleted"]);
+const selectedYear = ref(0);
 
-const _show = (_year: number, _month: number) => {
-  year.value = _year;
-  month.value = _month;
-  monthName.value = getMonthName(month.value);
-  serverErrors.value = new Array<string>();
-  modalComponent.value?._show();
-};
+watch(
+  () => [year.value, month.value],
+  ([nextYear, nextMonth]) => {
+    if (!nextYear || !nextMonth) return;
+    selectedYear.value = nextYear;
+    selectedMonth.value = nextMonth;
+    monthName.value = getMonthName(selectedMonth.value);
+    serverErrors.value = new Array<string>();
+  },
+  { immediate: true },
+);
 
 const deleteMonthlySettlement = () => {
   serverErrors.value = new Array<string>();
 
-  MonthlySettlementService.deleteMonthlySettlement(year.value, month.value)
+  MonthlySettlementService.deleteMonthlySettlement(
+    selectedYear.value,
+    selectedMonth.value,
+  )
     .then(() => {
-      modalComponent.value?._hide();
-      emit("monthlySettlementDeleted", year.value, month.value);
+      open.value = false;
+      onDone.value?.(selectedYear.value);
     })
     .catch((backendError) => {
       handleBackendError(backendError, serverErrors);
     });
 };
 
-defineExpose({ _show });
 </script>

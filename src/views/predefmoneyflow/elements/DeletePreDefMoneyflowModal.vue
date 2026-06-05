@@ -2,7 +2,8 @@
   <ModalDelete
     :title="$t('PreDefMoneyflow.title.delete')"
     :server-errors="serverErrors"
-    ref="modalComponent"
+    id-suffix="DeletePreDefMoneyflow"
+    v-model:open="open"
     @confirm="deletePreDefMoneyflow"
   >
     <template #details>
@@ -34,7 +35,7 @@
         <SpanDate :date="mpm.createDate" />
       </ModalDeleteRow>
 
-      <ModalDeleteRow :label="$t('PreDefMoneyflow.lastUsed')">
+      <ModalDeleteRow :label="$t('General.lastUsed')">
         <SpanDate :date="mpm.lastUsed" />
       </ModalDeleteRow>
 
@@ -60,33 +61,34 @@ import SpanBoolean from "@/components/common/SpanBoolean.vue";
 import SpanDate from "@/components/common/SpanDate.vue";
 import type { PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
 import PreDefMoneyflowService from "@/service/PreDefMoneyflowService";
+import useDeletePreDefMoneyflowModalStore from "./DeletePreDefMoneyflowModal.store";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
-import { ref, useTemplateRef } from "vue";
+import { storeToRefs } from "pinia";
+import { computed, ref, watch } from "vue";
 
 const serverErrors = ref(new Array<string>());
+const { open, preDefMoneyflow: selectedForDelete, onDone } = storeToRefs(
+  useDeletePreDefMoneyflowModalStore(),
+);
+const mpm = computed(() => selectedForDelete.value as PreDefMoneyflow);
 
-const mpm = ref({} as PreDefMoneyflow);
-const modalComponent = useTemplateRef<typeof ModalDelete>("modalComponent");
-const emit = defineEmits(["preDefMoneyflowDeleted"]);
-
-const _show = (_mpm: PreDefMoneyflow) => {
-  mpm.value = _mpm;
-  serverErrors.value = new Array<string>();
-  modalComponent.value?._show();
-};
+watch(open, (newVal) => {
+  if (newVal) {
+    serverErrors.value = new Array<string>();
+  }
+});
 
 const deletePreDefMoneyflow = () => {
   serverErrors.value = new Array<string>();
 
   PreDefMoneyflowService.deletePreDefMoneyflow(mpm.value.id)
     .then(() => {
-      modalComponent.value?._hide();
-      emit("preDefMoneyflowDeleted", mpm.value);
+      open.value = false;
+      onDone.value?.();
     })
     .catch((backendError) => {
       handleBackendError(backendError, serverErrors);
     });
 };
 
-defineExpose({ _show });
 </script>

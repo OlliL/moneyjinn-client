@@ -130,30 +130,39 @@ const schema = {
 };
 
 const mseAmount = ref(undefined as number | undefined);
-const mseComment = ref(undefined as string | undefined);
+const mseComment = ref("");
 const msePostingAccountId = ref(0);
 const msePostingAccountName = ref(undefined as string | undefined);
 
-const emit = defineEmits([
-  "deleteMoneyflowSplitEntryRow",
-  "addMoneyflowSplitEntryRow",
-  "amountChanged",
-  "commentChanged",
-  "postingAccountIdChanged",
-]);
+const emit = defineEmits<{
+  deleteMoneyflowSplitEntryRow: [index: number];
+  addMoneyflowSplitEntryRow: [];
+  amountChanged: [index: number, amount: number];
+  commentChanged: [index: number, comment: string];
+  postingAccountIdChanged: [
+    index: number,
+    postingAccountId: number,
+    postingAccountName: string,
+  ];
+}>();
 
-const props = defineProps({
-  amount: { type: Number, required: false },
-  comment: { type: String, required: false },
-  postingAccountId: { type: Number, required: false },
-  isLastRow: { type: Boolean, required: true },
-  index: { type: Number, required: true },
-  remainder: { type: Number, required: true },
-  remainderIsValid: { type: Boolean, required: false },
-  moneyflowComment: { type: String, required: false },
-  moneyflowPostingAccountId: { type: Number, required: false },
-  idSuffix: { type: String, default: "" },
-});
+const props = withDefaults(
+  defineProps<{
+    amount?: number;
+    comment?: string;
+    postingAccountId?: number;
+    isLastRow: boolean;
+    index: number;
+    remainder: number;
+    remainderIsValid?: boolean;
+    moneyflowComment?: string;
+    moneyflowPostingAccountId?: number;
+    idSuffix?: string;
+  }>(),
+  {
+    idSuffix: "",
+  },
+);
 
 const showRemainder = computed(() => props.isLastRow && props.remainder != 0);
 const rowEmpty = computed(
@@ -173,8 +182,8 @@ watch(
 
 watch(
   () => props.comment,
-  (newVal, oldVal) => {
-    if (newVal != oldVal) mseComment.value = newVal;
+  (newVal) => {
+    mseComment.value = newVal ?? "";
   },
   { immediate: true },
 );
@@ -217,7 +226,7 @@ const postingaccountChanged = () => {
     "postingAccountIdChanged",
     props.index,
     msePostingAccountId.value,
-    msePostingAccountName.value,
+    msePostingAccountName.value ?? "",
   );
   if (props.isLastRow && msePostingAccountId.value) addMoneyflowSplitEntryRow();
 };

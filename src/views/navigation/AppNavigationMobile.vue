@@ -149,13 +149,13 @@
               <Separator />
               <div
                 class="cursor-pointer flex items-center gap-2 p-2 text-sm hover:bg-accent rounded-md"
-                @click="emit('showCreateCapitalsourceModal')"
+                @click="openCreateCapitalsource()"
               >
                 {{ $t("General.capitalsource") }}
               </div>
               <div
                 class="cursor-pointer flex items-center gap-2 p-2 text-sm hover:bg-accent rounded-md"
-                @click="emit('showCreateContractpartnerModal')"
+                @click="openCreateContractpartner()"
               >
                 {{ $t("General.contractpartner") }}
               </div>
@@ -373,6 +373,8 @@ import {
 import SheetDescription from "@/components/ui/sheet/SheetDescription.vue";
 import SheetTitle from "@/components/ui/sheet/SheetTitle.vue";
 import { DropdownMenus, Routes } from "@/router";
+import { useCreateCapitalsourceModalStore } from "@/components/capitalsource/CreateCapitalsourceModal.store";
+import { useCreateContractpartnerModalStore } from "@/components/contractpartner/CreateContractpartnerModal.store";
 import { useUserSessionStore } from "@/stores/UserSessionStore";
 import {
   ChartCandlestick,
@@ -401,16 +403,17 @@ const month = new Date().getMonth() + 1;
 const { isAdmin } = useUserSessionStore();
 const route = useRoute();
 
-const emit = defineEmits([
-  "logout",
-  "showCreateContractpartnerModal",
-  "showCreateCapitalsourceModal",
-  "showPreDefMoneyflowModal",
-]);
+const emit = defineEmits<{
+  logout: [];
+  showPreDefMoneyflowModal: [];
+}>();
 
 const isMenuActve = (menu: DropdownMenus) => {
   return route.meta?.activeMenu === menu ? "router-link-active" : "";
 };
+
+const { openCreateCapitalsource } = useCreateCapitalsourceModalStore();
+const { openCreateContractpartner } = useCreateContractpartnerModalStore();
 </script>
 
 <style scoped>
