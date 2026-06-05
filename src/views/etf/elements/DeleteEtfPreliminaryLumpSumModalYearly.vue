@@ -12,51 +12,43 @@
       </ModalDeleteRow>
 
       <ModalDeleteRow :label="$t('General.year')" highlight-value>
-        {{ etfPreliminaryLumpSum.year }}
+        {{ lumpSum.year }}
       </ModalDeleteRow>
 
       <ModalDeleteRow :label="$t('ETFPreliminaryLumpSum.yearlySum')">
-        <SpanAmount :amount="etfPreliminaryLumpSum.amountDecember" />
+        <SpanAmount :amount="lumpSum.amountDecember" />
       </ModalDeleteRow>
     </template>
   </ModalDelete>
 </template>
 
 <script lang="ts" setup>
-import { computed, ref, watch } from "vue";
-
 import ModalDelete from "@/components/common/ModalDelete.vue";
 import ModalDeleteRow from "@/components/common/ModalDeleteRow.vue";
 import SpanAmount from "@/components/common/SpanAmount.vue";
-
-import { handleBackendError } from "@/tools/views/HandleBackendError";
-
 import CrudEtfPreliminaryLumpSumService from "@/service/CrudEtfPreliminaryLumpSumService";
 import { useEtfStore } from "@/stores/EtfStore";
+import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { storeToRefs } from "pinia";
+import { computed, ref, watch } from "vue";
 import useDeleteEtfPreliminaryLumpSumModalYearlyStore from "./DeleteEtfPreliminaryLumpSumModalYearly.store";
 
-const serverErrors = ref(new Array<string>());
+const { getEtf } = useEtfStore();
 
-const {
-  open,
-  lumpSum: etfPreliminaryLumpSum,
-  onDone,
-} = storeToRefs(useDeleteEtfPreliminaryLumpSumModalYearlyStore());
-const etfName = computed(
-  () => etfStore.getEtf(etfPreliminaryLumpSum.value.etfId)?.name ?? "",
+const serverErrors = ref(new Array<string>());
+const etfName = computed(() => getEtf(lumpSum.value.etfId)?.name ?? "");
+
+const { open, lumpSum, onDone } = storeToRefs(
+  useDeleteEtfPreliminaryLumpSumModalYearlyStore(),
 );
-const etfStore = useEtfStore();
 
 const deleteEtfPreliminaryLumpSum = () => {
   serverErrors.value = new Array<string>();
 
-  CrudEtfPreliminaryLumpSumService.deleteEtfPreliminaryLumpSum(
-    etfPreliminaryLumpSum.value.id,
-  )
+  CrudEtfPreliminaryLumpSumService.deleteEtfPreliminaryLumpSum(lumpSum.value.id)
     .then(() => {
       open.value = false;
-      onDone.value?.(etfPreliminaryLumpSum.value);
+      onDone.value?.(lumpSum.value);
     })
     .catch((backendError) => {
       handleBackendError(backendError, serverErrors);

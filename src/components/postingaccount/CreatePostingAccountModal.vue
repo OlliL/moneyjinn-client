@@ -102,7 +102,6 @@ const resetForm = () => {
   Object.keys(values).forEach((field) => setFieldTouched(field, false));
 };
 
-// Combined watcher for open and postingAccount state
 watch(
   [open, postingAccount],
   ([isVisible, entry]) => {

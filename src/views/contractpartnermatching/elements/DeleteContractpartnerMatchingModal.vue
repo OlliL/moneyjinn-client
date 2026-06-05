@@ -11,23 +11,23 @@
         :label="$t('ContractpartnerMatching.matchingText')"
         highlight-value
       >
-        {{ mcmData.matchingText }}
+        {{ matching.matchingText }}
       </ModalDeleteRow>
 
       <ModalDeleteRow :label="$t('General.contractpartner')">
-        {{ mcmData.contractpartnerName }}
+        {{ matching.contractpartnerName }}
       </ModalDeleteRow>
 
       <ModalDeleteRow :label="$t('Contractpartner.moneyflowComment')">
-        {{ mcmData.moneyflowComment }}
+        {{ matching.moneyflowComment }}
       </ModalDeleteRow>
 
       <ModalDeleteRow :label="$t('General.postingAccount')">
-        {{ mcmData.postingAccountName }}
+        {{ matching.postingAccountName }}
       </ModalDeleteRow>
 
       <ModalDeleteRow :label="$t('General.lastUsed')">
-        <SpanDate :date="mcmData.lastUsed" />
+        <SpanDate :date="matching.lastUsed" />
       </ModalDeleteRow>
     </template>
   </ModalDelete>
@@ -37,7 +37,6 @@
 import ModalDelete from "@/components/common/ModalDelete.vue";
 import ModalDeleteRow from "@/components/common/ModalDeleteRow.vue";
 import SpanDate from "@/components/common/SpanDate.vue";
-import type { ContractpartnerMatching } from "@/model/contractpartnermatching/ContractpartnerMatching";
 import ContractpartnerMatchingService from "@/service/ContractpartnerMatchingService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { storeToRefs } from "pinia";
@@ -45,21 +44,8 @@ import { ref, watch } from "vue";
 import useDeleteContractpartnerMatchingModalStore from "./DeleteContractpartnerMatchingModal.store";
 
 const serverErrors = ref(new Array<string>());
-const {
-  open,
-  matching: selectedForDelete,
-  onDone,
-} = storeToRefs(useDeleteContractpartnerMatchingModalStore());
-const mcmData = ref({} as ContractpartnerMatching);
-
-watch(
-  selectedForDelete,
-  (entry) => {
-    if (entry) {
-      mcmData.value = entry;
-    }
-  },
-  { immediate: true },
+const { open, matching, onDone } = storeToRefs(
+  useDeleteContractpartnerMatchingModalStore(),
 );
 
 watch(open, (newVal) => {
@@ -71,7 +57,9 @@ watch(open, (newVal) => {
 const deleteContractpartnerMatching = () => {
   serverErrors.value = new Array<string>();
 
-  ContractpartnerMatchingService.deleteContractpartnerMatching(mcmData.value.id)
+  ContractpartnerMatchingService.deleteContractpartnerMatching(
+    matching.value.id,
+  )
     .then(() => {
       open.value = false;
       onDone.value?.();

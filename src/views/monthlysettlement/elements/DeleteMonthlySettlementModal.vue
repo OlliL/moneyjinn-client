@@ -25,19 +25,16 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, watch } from "vue";
-
+import ButtonDeleteTwoTap from "@/components/common/ButtonDeleteTwoTap.vue";
 import DivError from "@/components/common/DivError.vue";
 import ModalVue from "@/components/common/Modal.vue";
-import ShowMonthlySettlementVue from "./ShowMonthlySettlement.vue";
-
+import MonthlySettlementService from "@/service/MonthlySettlementService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { getMonthName } from "@/tools/views/MonthName";
-
-import ButtonDeleteTwoTap from "@/components/common/ButtonDeleteTwoTap.vue";
-import MonthlySettlementService from "@/service/MonthlySettlementService";
 import { storeToRefs } from "pinia";
+import { computed, ref, watch } from "vue";
 import useDeleteMonthlySettlementModalStore from "./DeleteMonthlySettlementModal.store";
+import ShowMonthlySettlementVue from "./ShowMonthlySettlement.vue";
 
 const serverErrors = ref(new Array<string>());
 const { open, year, month, onDone } = storeToRefs(
@@ -45,8 +42,8 @@ const { open, year, month, onDone } = storeToRefs(
 );
 
 const selectedMonth = ref(0);
-const monthName = ref("");
 const selectedYear = ref(0);
+const monthName = computed(() => getMonthName(selectedMonth.value));
 
 watch(
   () => [year.value, month.value],
@@ -54,7 +51,6 @@ watch(
     if (!nextYear || !nextMonth) return;
     selectedYear.value = nextYear;
     selectedMonth.value = nextMonth;
-    monthName.value = getMonthName(selectedMonth.value);
     serverErrors.value = new Array<string>();
   },
   { immediate: true },

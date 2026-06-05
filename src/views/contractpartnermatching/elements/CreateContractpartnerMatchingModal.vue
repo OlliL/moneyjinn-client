@@ -149,10 +149,10 @@ watch(
       origMcm.value = undefined;
       return;
     }
-    if (entry !== undefined) {
-      origMcm.value = structuredClone(toRaw(entry));
-    } else {
+    if (entry === undefined) {
       origMcm.value = undefined;
+    } else {
+      origMcm.value = structuredClone(toRaw(entry));
     }
     resetForm();
   },

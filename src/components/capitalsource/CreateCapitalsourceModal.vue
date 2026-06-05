@@ -224,7 +224,6 @@ const resetForm = () => {
   Object.keys(values).forEach((field) => setFieldTouched(field, false));
 };
 
-// Combined watcher for open and capitalsource state
 watch(
   [open, capitalsource],
   ([isVisible, entry]) => {

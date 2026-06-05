@@ -18,7 +18,7 @@
               </ModalDeleteRow>
 
               <ModalDeleteRow :label="$t('General.year')" highlight-value>
-                {{ etfPreliminaryLumpSum.year }}
+                {{ lumpSum.year }}
               </ModalDeleteRow>
             </TableBody>
           </Table>
@@ -72,38 +72,33 @@ type RowData = {
   amount: number | undefined;
 };
 
-const serverErrors = ref(new Array<string>());
-
-const etfName = computed(
-  () => etfStore.getEtf(etfPreliminaryLumpSum.value.etfId)?.name ?? "",
-);
-
-const {
-  open,
-  lumpSum: etfPreliminaryLumpSum,
-  onDone,
-} = storeToRefs(useDeleteEtfPreliminaryLumpSumModalMonthlyStore());
+const { getEtf } = useEtfStore();
 
 const dataArray = ref([] as Array<RowData>);
-const etfStore = useEtfStore();
+const serverErrors = ref(new Array<string>());
+const etfName = computed(() => getEtf(lumpSum.value.etfId)?.name ?? "");
+
+const { open, lumpSum, onDone } = storeToRefs(
+  useDeleteEtfPreliminaryLumpSumModalMonthlyStore(),
+);
 
 watch(open, (newVal) => {
   if (newVal) {
     serverErrors.value = new Array<string>();
 
     const amounts = [
-      etfPreliminaryLumpSum.value.amountJanuary,
-      etfPreliminaryLumpSum.value.amountFebruary,
-      etfPreliminaryLumpSum.value.amountMarch,
-      etfPreliminaryLumpSum.value.amountApril,
-      etfPreliminaryLumpSum.value.amountMay,
-      etfPreliminaryLumpSum.value.amountJune,
-      etfPreliminaryLumpSum.value.amountJuly,
-      etfPreliminaryLumpSum.value.amountAugust,
-      etfPreliminaryLumpSum.value.amountSeptember,
-      etfPreliminaryLumpSum.value.amountOctober,
-      etfPreliminaryLumpSum.value.amountNovember,
-      etfPreliminaryLumpSum.value.amountDecember,
+      lumpSum.value.amountJanuary,
+      lumpSum.value.amountFebruary,
+      lumpSum.value.amountMarch,
+      lumpSum.value.amountApril,
+      lumpSum.value.amountMay,
+      lumpSum.value.amountJune,
+      lumpSum.value.amountJuly,
+      lumpSum.value.amountAugust,
+      lumpSum.value.amountSeptember,
+      lumpSum.value.amountOctober,
+      lumpSum.value.amountNovember,
+      lumpSum.value.amountDecember,
     ];
     dataArray.value = amounts.map((amount, i) => {
       return { month: getMonthName(i + 1), amount: amount } as RowData;
@@ -114,12 +109,10 @@ watch(open, (newVal) => {
 const deleteEtfPreliminaryLumpSum = () => {
   serverErrors.value = new Array<string>();
 
-  CrudEtfPreliminaryLumpSumService.deleteEtfPreliminaryLumpSum(
-    etfPreliminaryLumpSum.value.id,
-  )
+  CrudEtfPreliminaryLumpSumService.deleteEtfPreliminaryLumpSum(lumpSum.value.id)
     .then(() => {
       open.value = false;
-      onDone.value?.(etfPreliminaryLumpSum.value);
+      onDone.value?.(lumpSum.value);
     })
     .catch((backendError) => {
       handleBackendError(backendError, serverErrors);

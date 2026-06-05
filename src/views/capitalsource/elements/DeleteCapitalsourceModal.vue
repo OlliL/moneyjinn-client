@@ -69,7 +69,6 @@ const stateString = computed(() => {
     : capitalsourceStateNames[capitalsource.value.state];
 });
 
-// Combined watcher for open state and clearing errors
 watch(open, (newVal) => {
   if (newVal) serverErrors.value = new Array<string>();
 });

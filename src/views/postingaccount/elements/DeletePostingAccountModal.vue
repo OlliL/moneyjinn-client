@@ -30,7 +30,6 @@ const { open, postingAccount, onDone } = storeToRefs(
   useDeletePostingAccountModalStore(),
 );
 
-// Combined watcher for open state
 watch(open, (newVal) => {
   if (newVal) {
     serverErrors.value = new Array<string>();

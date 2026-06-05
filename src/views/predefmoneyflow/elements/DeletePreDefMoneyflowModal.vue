@@ -8,42 +8,42 @@
   >
     <template #details>
       <ModalDeleteRow :label="$t('General.amount')" highlight-value>
-        <SpanAmount :amount="mpm.amount" />
+        <SpanAmount :amount="preDefMoneyflow.amount" />
       </ModalDeleteRow>
 
       <ModalDeleteRow :label="$t('General.contractpartner')">
-        {{ mpm.contractpartnerName }}
+        {{ preDefMoneyflow.contractpartnerName }}
       </ModalDeleteRow>
 
       <ModalDeleteRow :label="$t('General.comment')">
-        {{ mpm.comment }}
+        {{ preDefMoneyflow.comment }}
       </ModalDeleteRow>
 
       <ModalDeleteRow :label="$t('General.postingAccount')">
-        {{ mpm.postingAccountName }}
+        {{ preDefMoneyflow.postingAccountName }}
       </ModalDeleteRow>
 
       <ModalDeleteRow :label="$t('General.capitalsource')">
-        {{ mpm.capitalsourceComment }}
+        {{ preDefMoneyflow.capitalsourceComment }}
       </ModalDeleteRow>
 
       <ModalDeleteRow :label="$t('PreDefMoneyflow.onceAMonth')">
-        <SpanBoolean :value="mpm.onceAMonth" />
+        <SpanBoolean :value="preDefMoneyflow.onceAMonth" />
       </ModalDeleteRow>
 
       <ModalDeleteRow :label="$t('PreDefMoneyflow.createDate')">
-        <SpanDate :date="mpm.createDate" />
+        <SpanDate :date="preDefMoneyflow.createDate" />
       </ModalDeleteRow>
 
       <ModalDeleteRow :label="$t('General.lastUsed')">
-        <SpanDate :date="mpm.lastUsed" />
+        <SpanDate :date="preDefMoneyflow.lastUsed" />
       </ModalDeleteRow>
 
       <ModalDeleteRow :label="$t('PreDefMoneyflow.favorite')">
         <FavoriteIcon
-          v-if="mpm.isFavorite"
-          :text="mpm.favoriteAbbreviation"
-          :color="mpm.favoriteColor"
+          v-if="preDefMoneyflow.isFavorite"
+          :text="preDefMoneyflow.favoriteAbbreviation"
+          :color="preDefMoneyflow.favoriteColor"
           size="sm"
         />
         <span v-else>-</span>
@@ -59,20 +59,16 @@ import ModalDeleteRow from "@/components/common/ModalDeleteRow.vue";
 import SpanAmount from "@/components/common/SpanAmount.vue";
 import SpanBoolean from "@/components/common/SpanBoolean.vue";
 import SpanDate from "@/components/common/SpanDate.vue";
-import type { PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
 import PreDefMoneyflowService from "@/service/PreDefMoneyflowService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { storeToRefs } from "pinia";
-import { computed, ref, watch } from "vue";
+import { ref, watch } from "vue";
 import useDeletePreDefMoneyflowModalStore from "./DeletePreDefMoneyflowModal.store";
 
 const serverErrors = ref(new Array<string>());
-const {
-  open,
-  preDefMoneyflow: selectedForDelete,
-  onDone,
-} = storeToRefs(useDeletePreDefMoneyflowModalStore());
-const mpm = computed(() => selectedForDelete.value as PreDefMoneyflow);
+const { open, preDefMoneyflow, onDone } = storeToRefs(
+  useDeletePreDefMoneyflowModalStore(),
+);
 
 watch(open, (newVal) => {
   if (newVal) {
@@ -83,7 +79,7 @@ watch(open, (newVal) => {
 const deletePreDefMoneyflow = () => {
   serverErrors.value = new Array<string>();
 
-  PreDefMoneyflowService.deletePreDefMoneyflow(mpm.value.id)
+  PreDefMoneyflowService.deletePreDefMoneyflow(preDefMoneyflow.value.id)
     .then(() => {
       open.value = false;
       onDone.value?.();

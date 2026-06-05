@@ -13,7 +13,6 @@ export const useListContractpartnerAccountsModalStore = defineStore(
       open.value = true;
     };
 
-    // Combined watcher: reset when modal closes
     watch(open, (newOpen) => {
       if (!newOpen) {
         contractpartner.value = undefined;

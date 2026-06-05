@@ -12,11 +12,11 @@
       </ModalDeleteRow>
 
       <ModalDeleteRow :label="$t('General.year')" highlight-value>
-        {{ etfPreliminaryLumpSum.year }}
+        {{ lumpSum.year }}
       </ModalDeleteRow>
 
       <ModalDeleteRow :label="$t('ETFPreliminaryLumpSum.price')">
-        <SpanAmount :amount="etfPreliminaryLumpSum.amountPerPiece" />
+        <SpanAmount :amount="lumpSum.amountPerPiece" />
       </ModalDeleteRow>
     </template>
   </ModalDelete>
@@ -33,18 +33,14 @@ import { storeToRefs } from "pinia";
 import { computed, ref, watch } from "vue";
 import useDeleteEtfPreliminaryLumpSumModalPieceStore from "./DeleteEtfPreliminaryLumpSumModalPiece.store";
 
+const { getEtf } = useEtfStore();
+
 const serverErrors = ref(new Array<string>());
-const etfStore = useEtfStore();
+const etfName = computed(() => getEtf(lumpSum.value.etfId)?.name ?? "");
 
-const etfName = computed(
-  () => etfStore.getEtf(etfPreliminaryLumpSum.value.etfId)?.name ?? "",
+const { open, lumpSum, onDone } = storeToRefs(
+  useDeleteEtfPreliminaryLumpSumModalPieceStore(),
 );
-
-const {
-  open,
-  lumpSum: etfPreliminaryLumpSum,
-  onDone,
-} = storeToRefs(useDeleteEtfPreliminaryLumpSumModalPieceStore());
 
 watch(open, (newVal) => {
   if (newVal) {
@@ -55,12 +51,10 @@ watch(open, (newVal) => {
 const deleteEtfPreliminaryLumpSum = () => {
   serverErrors.value = new Array<string>();
 
-  CrudEtfPreliminaryLumpSumService.deleteEtfPreliminaryLumpSum(
-    etfPreliminaryLumpSum.value.id,
-  )
+  CrudEtfPreliminaryLumpSumService.deleteEtfPreliminaryLumpSum(lumpSum.value.id)
     .then(() => {
       open.value = false;
-      onDone.value?.(etfPreliminaryLumpSum.value);
+      onDone.value?.(lumpSum.value);
     })
     .catch((backendError) => {
       handleBackendError(backendError, serverErrors);
