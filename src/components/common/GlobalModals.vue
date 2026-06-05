@@ -14,12 +14,12 @@ import ReceiptModal from "@/components/reports/ReceiptModal.vue";
 <template>
   <CreateCapitalsourceModal />
   <CreateContractpartnerModal />
-  <EditMonthlySettlementModal />
-  <DeleteMoneyflowModal />
-  <EditMoneyflowModal />
-  <ListMoneyflowModal />
   <CreatePostingAccountModal />
   <CreatePreDefMoneyflowModal />
-  <ReceiptModal />
   <CreateMoneyflowQuickModal />
+  <EditMonthlySettlementModal />
+  <EditMoneyflowModal />
+  <DeleteMoneyflowModal />
+  <ListMoneyflowModal />
+  <ReceiptModal />
 </template>
