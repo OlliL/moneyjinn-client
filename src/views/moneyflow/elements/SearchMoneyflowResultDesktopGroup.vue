@@ -102,10 +102,6 @@
                 :key="moneyflow.id"
                 :mmf="moneyflow"
                 :index="index"
-                @delete-moneyflow="$emit('deleteMoneyflow', $event)"
-                @edit-moneyflow="$emit('editMoneyflow', $event)"
-                @list-moneyflow="$emit('listMoneyflow', $event)"
-                @show-receipt="$emit('showReceipt', $event)"
               />
             </TableBody>
           </Table>
@@ -154,14 +150,5 @@ const props = defineProps<{
 }>();
 
 const isCollapsed = ref(false);
-defineEmits<{
-  showReceipt: [id: number];
-  editMoneyflow: [moneyflow: Moneyflow];
-  deleteMoneyflow: [moneyflow: Moneyflow];
-  listMoneyflow: [moneyflow: Moneyflow];
-}>();
-
-const toggleCollapse = () => {
-  isCollapsed.value = !isCollapsed.value;
-};
+const toggleCollapse = () => (isCollapsed.value = !isCollapsed.value);
 </script>

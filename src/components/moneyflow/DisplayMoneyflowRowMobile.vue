@@ -93,7 +93,7 @@
               variant="ghost"
               size="icon"
               class="h-7 w-7"
-              @click.stop="$emit('showReceipt', mmf.id)"
+              @click.stop="moneyflowActions?.receipt(mmf.id)"
             >
               <ReceiptText class="icon-small" />
             </Button>
@@ -103,7 +103,7 @@
               variant="ghost"
               size="icon"
               class="h-7 w-7"
-              @click.stop="$emit('editMoneyflow', mmf)"
+              @click.stop="moneyflowActions?.edit(mmf)"
             >
               <Pencil class="icon-small" />
             </Button>
@@ -113,7 +113,7 @@
               variant="ghost"
               size="icon"
               class="h-7 w-7 text-destructive"
-              @click.stop="$emit('deleteMoneyflow', mmf)"
+              @click.stop="moneyflowActions?.delete(mmf)"
             >
               <Trash2 class="icon-small" />
             </Button>
@@ -123,7 +123,7 @@
               variant="ghost"
               size="icon"
               class="h-7 w-7"
-              @click.stop="$emit('listMoneyflow', mmf)"
+              @click.stop="moneyflowActions?.list(mmf)"
             >
               <Eye class="icon-small" />
             </Button>
@@ -227,6 +227,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
+import { MoneyflowRowActionsKey } from "@/model/CrudActions";
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 import { useUserSessionStore } from "@/stores/UserSessionStore";
 import {
@@ -240,7 +241,7 @@ import {
   Tag,
   Trash2,
 } from "lucide-vue-next";
-import { computed } from "vue";
+import { computed, inject } from "vue";
 
 const props = withDefaults(
   defineProps<{
@@ -253,13 +254,6 @@ const props = withDefaults(
     showCommentInTrigger: false,
   },
 );
-
-defineEmits<{
-  showReceipt: [id: number];
-  editMoneyflow: [moneyflow: Moneyflow];
-  deleteMoneyflow: [moneyflow: Moneyflow];
-  listMoneyflow: [moneyflow: Moneyflow];
-}>();
 
 const userSessionStore = useUserSessionStore();
 const today = new Date();
@@ -280,4 +274,5 @@ const isFuture = computed(() => {
 const lesserOpacityIfFuture = computed(() =>
   isFuture.value ? "opacity-50" : "",
 );
+const moneyflowActions = inject(MoneyflowRowActionsKey);
 </script>

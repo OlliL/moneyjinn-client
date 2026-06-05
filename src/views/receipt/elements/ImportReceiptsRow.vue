@@ -198,6 +198,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { ImportReceiptRowActionsKey } from "@/model/CrudActions.ts";
 import type { ImportedMoneyflowReceipt } from "@/model/moneyflow/ImportedMoneyflowReceipt";
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 import { MoneyflowReceiptType } from "@/model/moneyflow/MoneyflowReceiptType";
@@ -209,7 +210,7 @@ import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { amountSchema, globErr } from "@/tools/views/ZodUtil";
 import { Euro, Save, Search } from "lucide-vue-next";
 import { useForm } from "vee-validate";
-import { computed, nextTick, onMounted, ref } from "vue";
+import { computed, inject, nextTick, onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { date } from "zod";
 import ImportReceiptSearchRowVue from "./ImportReceiptSearchRow.vue";
@@ -250,13 +251,13 @@ const moneyflowReceipt = computed(() =>
 );
 
 const emitDeleteMoneyflow = (id: number) => {
-  emit("deleteMoneyflow", id);
+  importReceiptActions?.delete(id);
 };
 const emitEditMoneyflow = (id: number) => {
-  emit("editMoneyflow", id, props.receipt);
+  importReceiptActions?.edit(id, props.receipt);
 };
 const emitListMoneyflow = (id: number) => {
-  emit("listMoneyflow", id, props.receipt);
+  importReceiptActions?.list(id, props.receipt);
 };
 
 const searchMoneyflows = handleSubmit(() => {
@@ -321,6 +322,8 @@ const importReceipt = () => {
     });
 };
 
+const importReceiptActions = inject(ImportReceiptRowActionsKey);
+
 const deleteMoneyflowReceipt = () => {
   serverErrors.value = new Array<string>();
 
@@ -328,7 +331,7 @@ const deleteMoneyflowReceipt = () => {
     props.receipt.id,
   )
     .then(() => {
-      emit("removeReceiptFromView", props.receipt.id);
+      importReceiptActions?.removeReceipt(props.receipt.id);
     })
     .catch((backendError) => {
       handleBackendError(backendError, serverErrors);

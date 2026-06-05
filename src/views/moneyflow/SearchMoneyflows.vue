@@ -223,10 +223,6 @@
               :col-booking-year="colBookingYear"
               :col-contractpartner="colContractpartner"
               :hide-contractpartner="searchContractpartnerId > 0"
-              @delete-moneyflow="deleteMoneyflow"
-              @edit-moneyflow="editMoneyflow"
-              @list-moneyflow="listMoneyflow"
-              @show-receipt="showReceipt"
             />
           </Accordion>
         </div>
@@ -270,10 +266,6 @@
                 :col-booking-month="colBookingMonth"
                 :col-booking-year="colBookingYear"
                 :col-contractpartner="colContractpartner"
-                @delete-moneyflow="deleteMoneyflow"
-                @edit-moneyflow="editMoneyflow"
-                @list-moneyflow="listMoneyflow"
-                @show-receipt="showReceipt"
               />
             </TableBody>
           </DivContentTable>
@@ -284,7 +276,7 @@
 </template>
 <script lang="ts" setup>
 import { useForm } from "vee-validate";
-import { onMounted, ref, watch } from "vue";
+import { onMounted, provide, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { any, date, type ZodTypeAny } from "zod";
 
@@ -322,6 +314,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  MoneyflowRowActionsKey,
+  type MoneyflowRowActions,
+} from "@/model/CrudActions.ts";
 import MoneyflowService from "@/service/MoneyflowService";
 import { isDesktop } from "@/tools/views/IsDesktop";
 import { ChevronDown, Search, SlidersHorizontal, Undo2 } from "lucide-vue-next";
@@ -627,23 +623,22 @@ const getGroupByKey = (moneyflow: Moneyflow): string => {
   }
   return groupByKey;
 };
-const showReceipt = (moneyflowId: number) => {
-  openListReceipt(moneyflowId);
-};
-const deleteMoneyflow = (mmf: Moneyflow) => {
-  MoneyflowService.fetchMoneyflow(mmf.id).then((freshMmf) => {
-    openDeleteMoneyflow(freshMmf, restartSearch);
-  });
+
+const actions: MoneyflowRowActions = {
+  list: (mmf: Moneyflow) =>
+    MoneyflowService.fetchMoneyflow(mmf.id).then((freshMmf) => {
+      openListMoneyflow(freshMmf, undefined, openListReceipt);
+    }),
+  edit: (mmf: Moneyflow) =>
+    MoneyflowService.fetchMoneyflow(mmf.id).then((freshMmf) => {
+      openEditMoneyflow(freshMmf, undefined, restartSearch, openListReceipt);
+    }),
+  delete: (mmf: Moneyflow) =>
+    MoneyflowService.fetchMoneyflow(mmf.id).then((freshMmf) => {
+      openDeleteMoneyflow(freshMmf, restartSearch);
+    }),
+  receipt: (id: number) => openListReceipt(id),
 };
 
-const editMoneyflow = (mmf: Moneyflow) => {
-  MoneyflowService.fetchMoneyflow(mmf.id).then((freshMmf) => {
-    openEditMoneyflow(freshMmf, undefined, restartSearch, showReceipt);
-  });
-};
-const listMoneyflow = (mmf: Moneyflow) => {
-  MoneyflowService.fetchMoneyflow(mmf.id).then((freshMmf) => {
-    openListMoneyflow(freshMmf, undefined, showReceipt);
-  });
-};
+provide(MoneyflowRowActionsKey, actions);
 </script>

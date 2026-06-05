@@ -6,6 +6,7 @@ import type { ContractpartnerMatching } from "./contractpartnermatching/Contract
 import type { Etf } from "./etf/Etf";
 import type { EtfFlow } from "./etf/EtfFlow";
 import type { Group } from "./group/Group";
+import type { ImportedMoneyflowReceipt } from "./moneyflow/ImportedMoneyflowReceipt";
 import type { Moneyflow } from "./moneyflow/Moneyflow";
 import type { PreDefMoneyflow } from "./moneyflow/PreDefMoneyflow";
 import type { PostingAccount } from "./postingaccount/PostingAccount";
@@ -71,10 +72,29 @@ export const ContractpartnerMatchingActionsKey: InjectionKey<
 export const MonthlySettlementModalActionsKey: InjectionKey<MonthlySettlementModalActions> =
   Symbol("MonthlySettlementModalActions");
 
-export type CompareDataActions = {
-  create: (mmf: Moneyflow) => void; // bzw. was openEditMoneyflow zurückgibt
+export interface CompareDataActions {
+  create: (mmf: Moneyflow) => void;
   edit: (id: number) => Promise<void>;
   delete: (id: number) => Promise<void>;
-};
+}
 export const CompareDataActionsKey: InjectionKey<CompareDataActions> =
   Symbol("CompareDataActions");
+
+export interface MoneyflowRowActions {
+  list: (mmf: Moneyflow) => void; // bzw. was openEditMoneyflow zurückgibt
+  edit: (mmf: Moneyflow) => void;
+  delete: (mmf: Moneyflow) => void;
+  receipt: (id: number) => void;
+}
+export const MoneyflowRowActionsKey: InjectionKey<MoneyflowRowActions> = Symbol(
+  "MoneyflowRowActions",
+);
+
+export interface ImportReceiptRowActions {
+  list: (id: number, receipt: ImportedMoneyflowReceipt) => void; // bzw. was openEditMoneyflow zurückgibt
+  edit: (id: number, receipt: ImportedMoneyflowReceipt) => void;
+  delete: (id: number) => void;
+  removeReceipt: (id: number) => void;
+}
+export const ImportReceiptRowActionsKey: InjectionKey<ImportReceiptRowActions> =
+  Symbol("ImportReceiptRowActions");

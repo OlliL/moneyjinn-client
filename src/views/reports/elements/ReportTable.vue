@@ -13,10 +13,6 @@
         :moneyflows="sortedMoneyflows"
         :amount-sum="amountSum"
         @sort-by-column="sortByColumn"
-        @delete-moneyflow="deleteMoneyflow"
-        @edit-moneyflow="editMoneyflow"
-        @list-moneyflow="listMoneyflow"
-        @show-receipt="showReceipt"
       />
 
       <ReportTableDesktop
@@ -28,10 +24,6 @@
         :moneyflows="sortedMoneyflows"
         :amount-sum="amountSum"
         @sort-by-column="sortByColumn"
-        @delete-moneyflow="deleteMoneyflow"
-        @edit-moneyflow="editMoneyflow"
-        @list-moneyflow="listMoneyflow"
-        @show-receipt="showReceipt"
       />
     </div>
   </div>
@@ -160,13 +152,17 @@ import useListMoneyflowModalStore from "@/components/moneyflow/ListMoneyflowModa
 import useReceiptModalStore from "@/components/reports/ReceiptModal.store";
 import { Accordion } from "@/components/ui/accordion"; // Import Accordion
 import { CapitalsourceType } from "@/model/capitalsource/CapitalsourceType";
+import {
+  MoneyflowRowActionsKey,
+  type MoneyflowRowActions,
+} from "@/model/CrudActions.ts";
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 import type { Report } from "@/model/report/Report";
 import type { ReportTurnoverCapitalsource } from "@/model/report/ReportTurnoverCapitalsource";
 import ReportService from "@/service/ReportService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { isDesktop } from "@/tools/views/IsDesktop";
-import { computed, onBeforeUnmount, onMounted, ref, watch } from "vue";
+import { computed, onBeforeUnmount, onMounted, provide, ref, watch } from "vue";
 import CapitalsourceSummary from "./CapitalsourceSummary.vue";
 import CapitalsourceTableDesktop from "./CapitalsourceTableDesktop.vue";
 import CapitalsourceTableMobile from "./CapitalsourceTableMobile.vue";
@@ -360,23 +356,7 @@ const loadData = (year: number, month: number) => {
       handleBackendError(backendError, serverErrors);
     });
 };
-const showReceipt = (moneyflowId: number) => {
-  openListReceipt(moneyflowId);
-};
-const deleteMoneyflow = (mmf: Moneyflow) => {
-  openDeleteMoneyflow(mmf, moneyflowDeleted);
-};
-const editMoneyflow = (mmf: Moneyflow) => {
-  openEditMoneyflow(
-    mmf,
-    undefined,
-    () => loadData(+props.year, +props.month),
-    showReceipt,
-  );
-};
-const listMoneyflow = (mmf: Moneyflow) => {
-  openListMoneyflow(mmf, undefined, showReceipt);
-};
+
 /**
  * Recalculate end-of-month amounts (matching capitalsource and overall)
  * and end-of-year amount when a moneyflow is added/removed.
@@ -450,4 +430,19 @@ onMounted(() => {
     }
   }
 });
+
+const actions: MoneyflowRowActions = {
+  list: (mmf: Moneyflow) => openListMoneyflow(mmf, undefined, openListReceipt),
+  edit: (mmf: Moneyflow) =>
+    openEditMoneyflow(
+      mmf,
+      undefined,
+      () => loadData(+props.year, +props.month),
+      openListReceipt,
+    ),
+  delete: (mmf: Moneyflow) => openDeleteMoneyflow(mmf, moneyflowDeleted),
+  receipt: (id: number) => openListReceipt(id),
+};
+
+provide(MoneyflowRowActionsKey, actions);
 </script>

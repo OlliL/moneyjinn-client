@@ -39,10 +39,6 @@
       v-for="receipt in importedMoneyflowReceipts"
       :key="receipt.id"
       :receipt="receipt"
-      @delete-moneyflow="deleteMoneyflow"
-      @edit-moneyflow="editMoneyflow"
-      @list-moneyflow="listMoneyflow"
-      @remove-receipt-from-view="removeReceiptFromView"
       :data-testid="`importReceipts-row-${receipt.id}`"
     />
   </div>
@@ -56,13 +52,17 @@ import useDeleteMoneyflowModalStore from "@/components/moneyflow/DeleteMoneyflow
 import useEditMoneyflowModalStore from "@/components/moneyflow/EditMoneyflowModal.store";
 import useListMoneyflowModalStore from "@/components/moneyflow/ListMoneyflowModal.store";
 import useReceiptModalStore from "@/components/reports/ReceiptModal.store";
+import {
+  ImportReceiptRowActionsKey,
+  type ImportReceiptRowActions,
+} from "@/model/CrudActions.ts";
 import type { ImportedMoneyflowReceipt } from "@/model/moneyflow/ImportedMoneyflowReceipt";
 import ImportedMoneyflowReceiptService from "@/service/ImportedMoneyflowReceiptService";
 import MoneyflowService from "@/service/MoneyflowService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { Upload } from "lucide-vue-next";
 import { useForm } from "vee-validate";
-import { onMounted, ref, useTemplateRef } from "vue";
+import { onMounted, provide, ref, useTemplateRef } from "vue";
 import ImportReceiptsRowVue from "./elements/ImportReceiptsRow.vue";
 
 const serverErrors = ref(new Array<string>());
@@ -95,38 +95,29 @@ const loadData = () => {
   Object.keys(values).forEach((field) => setFieldTouched(field, false));
 };
 
-const deleteMoneyflow = (id: number) => {
-  MoneyflowService.fetchMoneyflow(id).then((mmf) => {
-    openDeleteMoneyflow(mmf);
-  });
+const actions: ImportReceiptRowActions = {
+  list: (id: number, receipt: ImportedMoneyflowReceipt) =>
+    MoneyflowService.fetchMoneyflow(id).then((mmf) => {
+      openListMoneyflow(mmf, receipt, openListReceipt);
+    }),
+  edit: (id: number, receipt: ImportedMoneyflowReceipt) =>
+    MoneyflowService.fetchMoneyflow(id).then((mmf) => {
+      openEditMoneyflow(mmf, receipt, undefined, openListReceipt);
+    }),
+  delete: (id: number) =>
+    MoneyflowService.fetchMoneyflow(id).then((mmf) => {
+      openDeleteMoneyflow(mmf);
+    }),
+  removeReceipt: (id: number) => {
+    importedMoneyflowReceipts.value = importedMoneyflowReceipts.value.filter(
+      (receipt) => {
+        return receipt.id !== id;
+      },
+    );
+  },
 };
 
-const editMoneyflow = (id: number, receipt: ImportedMoneyflowReceipt) => {
-  MoneyflowService.fetchMoneyflow(id).then((mmf) => {
-    openEditMoneyflow(mmf, receipt, undefined, showReceipt);
-  });
-};
-
-const listMoneyflow = (id: number, receipt: ImportedMoneyflowReceipt) => {
-  MoneyflowService.fetchMoneyflow(id).then((mmf) => {
-    openListMoneyflow(mmf, receipt, showReceipt);
-  });
-};
-
-const showReceipt = (
-  id: number,
-  importedReceipt?: ImportedMoneyflowReceipt,
-) => {
-  openListReceipt(id, importedReceipt);
-};
-
-const removeReceiptFromView = (id: number) => {
-  importedMoneyflowReceipts.value = importedMoneyflowReceipts.value.filter(
-    (receipt) => {
-      return receipt.id !== id;
-    },
-  );
-};
+provide(ImportReceiptRowActionsKey, actions);
 
 const uploadReceipts = handleSubmit(async () => {
   serverErrors.value = new Array<string>();

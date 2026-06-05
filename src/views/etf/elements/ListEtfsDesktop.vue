@@ -51,13 +51,7 @@
           </tr>
         </template>
         <template v-else>
-          <ListEtfRowVue
-            v-for="etf in etfs"
-            :key="etf.id"
-            :etf="etf"
-            @edit-etf="editEtf"
-            @delete-etf="deleteEtf"
-          />
+          <ListEtfRowVue v-for="etf in etfs" :key="etf.id" :etf="etf" />
         </template>
       </TableBody>
     </DivContentTable>
@@ -79,17 +73,4 @@ import ListEtfRowVue from "./ListEtfRow.vue";
 defineProps<{
   etfs: Etf[];
 }>();
-
-const emit = defineEmits<{
-  deleteEtf: [etf: Etf];
-  editEtf: [etf: Etf];
-}>();
-
-const deleteEtf = (etf: Etf) => {
-  emit("deleteEtf", etf);
-};
-
-const editEtf = (etf: Etf) => {
-  emit("editEtf", etf);
-};
 </script>
