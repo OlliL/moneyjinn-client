@@ -8,7 +8,7 @@
     <template #body>
       <form
         @submit.prevent="createContractpartnerMatching"
-        :id="'createContractpartnerMatchingForm' + idSuffix"
+        id="createContractpartnerMatchingForm"
       >
         <div class="space-y-4">
           <DivError :server-errors="serverErrors" />
@@ -18,13 +18,13 @@
               <InputStandard
                 v-model="mcm.matchingText"
                 :validation-schema="schema.matchingText"
-                :id="'name' + idSuffix"
+                id="name"
                 :field-label="$t('ContractpartnerMatching.matchingText')"
               />
               <SelectContractpartner
                 v-model="mcm.contractpartnerId"
                 :validation-schema="schema.contractpartnerId"
-                :id-suffix="'CreateContractpartnerMatching' + idSuffix"
+                id-suffix="CreateContractpartnerMatching"
                 :field-label="$t('General.contractpartner')"
               />
             </div>
@@ -41,13 +41,13 @@
             <InputStandard
               v-model="mcm.moneyflowComment"
               :validation-schema="schema.moneyflowComment"
-              :id="'moneyflowComment' + idSuffix"
+              id="moneyflowComment"
               :field-label="$t('General.comment')"
             />
             <SelectPostingAccount
               v-model="mcm.postingAccountId"
               :validation-schema="schema.postingAccountId"
-              :id-suffix="idSuffix + 'CreateContractpartner'"
+              id-suffix="CreateContractpartnerMatchingModal"
               :field-label="$t('General.postingAccount')"
             />
           </div>
@@ -69,7 +69,7 @@
 
       <ButtonSubmit
         :button-label="$t('General.save')"
-        :form-id="'createContractpartnerMatchingForm' + idSuffix"
+        form-id="createContractpartnerMatchingForm"
         test-id="createContractpartnerMatchingSaveButton"
       >
         <template #icon><Save class="icon-medium" /></template>
@@ -100,7 +100,6 @@ import useCreateContractpartnerMatchingModalStore from "./CreateContractpartnerM
 
 const { t } = useI18n();
 
-const idSuffix = "";
 const { open, matching, onDone } = storeToRefs(
   useCreateContractpartnerMatchingModalStore(),
 );

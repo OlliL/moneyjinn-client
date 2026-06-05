@@ -8,7 +8,7 @@
     <template #body>
       <form
         @submit.prevent="createPreDefMoneyflow"
-        :id="'createPreDefMoneyflowForm' + idSuffix"
+        id="createPreDefMoneyflowForm"
       >
         <div class="space-y-4">
           <DivError :server-errors="serverErrors" />
@@ -117,7 +117,7 @@
                                 :style="{
                                   backgroundColor: mpm.favoriteColor,
                                 }"
-                                :data-testid="'favoriteColorPicker' + idSuffix"
+                                data-testid="favoriteColorPicker"
                               ></div>
                             </PopoverTrigger>
                             <PopoverContent
@@ -185,7 +185,7 @@
                 <InputStandard
                   v-model="mpm.comment"
                   :validation-schema="schema.comment"
-                  :id="'comment' + idSuffix"
+                  id="comment"
                   :field-label="$t('General.comment')"
                 >
                   <template #icon
@@ -197,7 +197,7 @@
                 <SelectContractpartner
                   v-model="mpm.contractpartnerId"
                   :validation-schema="schema.contractpartnerId"
-                  :id-suffix="'CreatePreDefMoneyflow' + idSuffix"
+                  id-suffix="CreatePreDefMoneyflow"
                   :field-label="$t('General.contractpartner')"
                 />
               </div>
@@ -205,7 +205,7 @@
                 <SelectCapitalsource
                   v-model="mpm.capitalsourceId"
                   :validation-schema="schema.capitalsourceId"
-                  :id-suffix="'CreatePreDefMoneyflow' + idSuffix"
+                  id-suffix="CreatePreDefMoneyflow"
                   :field-label="$t('General.capitalsource')"
                   :validity-date="validityDate"
                 />
@@ -214,7 +214,7 @@
                 <SelectPostingAccount
                   v-model="mpm.postingAccountId"
                   :validation-schema="schema.postingAccountId"
-                  :id-suffix="'CreatePreDefMoneyflow' + idSuffix"
+                  id-suffix="CreatePreDefMoneyflow"
                   :field-label="$t('General.postingAccount')"
                 />
               </div>
@@ -238,8 +238,8 @@
 
       <ButtonSubmit
         :button-label="$t('General.save')"
-        :form-id="'createPreDefMoneyflowForm' + idSuffix"
-        :data-testid="'createPreDefMoneyflowSaveButton' + idSuffix"
+        form-id="createPreDefMoneyflowForm"
+        data-testid="createPreDefMoneyflowSaveButton"
       >
         <template #icon><Save class="icon-medium" /></template>
       </ButtonSubmit>
@@ -288,15 +288,6 @@ const { t } = useI18n();
 const { close } = useCreatePreDefMoneyflowModalStore();
 const { open, preDefMoneyflow, onDone } = storeToRefs(
   useCreatePreDefMoneyflowModalStore(),
-);
-
-withDefaults(
-  defineProps<{
-    idSuffix?: string;
-  }>(),
-  {
-    idSuffix: "",
-  },
 );
 
 const serverErrors = ref(new Array<string>());
