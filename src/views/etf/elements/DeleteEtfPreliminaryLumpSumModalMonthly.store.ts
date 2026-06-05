@@ -7,8 +7,9 @@ export const useDeleteEtfPreliminaryLumpSumModalMonthlyStore = defineStore(
   () => {
     const open = ref(false);
     const lumpSum = ref({} as EtfPreliminaryLumpSum);
-    const onDone =
-      ref<((lumpSum: EtfPreliminaryLumpSum) => void) | undefined>(undefined);
+    const onDone = ref<((lumpSum: EtfPreliminaryLumpSum) => void) | undefined>(
+      undefined,
+    );
 
     const openDeleteEtfPreliminaryLumpSumMonthly = (
       entry: EtfPreliminaryLumpSum,
@@ -35,4 +36,3 @@ export const useDeleteEtfPreliminaryLumpSumModalMonthlyStore = defineStore(
 );
 
 export default useDeleteEtfPreliminaryLumpSumModalMonthlyStore;
-

@@ -14,14 +14,11 @@ export const useListContractpartnerAccountsModalStore = defineStore(
     };
 
     // Combined watcher: reset when modal closes
-    watch(
-      open,
-      (newOpen) => {
-        if (!newOpen) {
-          contractpartner.value = undefined;
-        }
-      },
-    );
+    watch(open, (newOpen) => {
+      if (!newOpen) {
+        contractpartner.value = undefined;
+      }
+    });
 
     return {
       open,
@@ -30,4 +27,3 @@ export const useListContractpartnerAccountsModalStore = defineStore(
     };
   },
 );
-

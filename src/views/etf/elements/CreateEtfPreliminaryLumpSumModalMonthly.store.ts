@@ -8,8 +8,9 @@ export const useCreateEtfPreliminaryLumpSumModalMonthlyStore = defineStore(
     const open = ref(false);
     const lumpSum = ref<EtfPreliminaryLumpSum | undefined>(undefined);
     const defaultEtfId = ref<number | undefined>(undefined);
-    const onDone =
-      ref<((lumpSum: EtfPreliminaryLumpSum) => void) | undefined>(undefined);
+    const onDone = ref<((lumpSum: EtfPreliminaryLumpSum) => void) | undefined>(
+      undefined,
+    );
 
     const openCreateEtfPreliminaryLumpSumMonthly = (
       etfId: number | undefined,
@@ -39,4 +40,3 @@ export const useCreateEtfPreliminaryLumpSumModalMonthlyStore = defineStore(
 );
 
 export default useCreateEtfPreliminaryLumpSumModalMonthlyStore;
-

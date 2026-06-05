@@ -107,24 +107,27 @@ beforeEach(() => {
 });
 
 const renderView = (props: Record<string, unknown> = {}) => {
-  render(defineComponent({
-    setup() {
-      return { props };
-    },
-    template: '<AppNavigation v-bind="props" />',
-    components: { AppNavigation },
-  }), {
-    global: {
-      stubs: {
-        "router-link": {
-          template: "<a><slot /></a>",
-        },
-        "router-view": {
-          template: "<div />",
+  render(
+    defineComponent({
+      setup() {
+        return { props };
+      },
+      template: '<AppNavigation v-bind="props" />',
+      components: { AppNavigation },
+    }),
+    {
+      global: {
+        stubs: {
+          "router-link": {
+            template: "<a><slot /></a>",
+          },
+          "router-view": {
+            template: "<div />",
+          },
         },
       },
     },
-  });
+  );
 };
 
 test("AppNavigation initializes websocket and stores on mount", async () => {

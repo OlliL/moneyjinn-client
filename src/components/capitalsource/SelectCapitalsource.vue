@@ -19,8 +19,8 @@ import { any, type ZodType } from "zod";
 
 import SelectStandard from "../common/SelectStandard.vue";
 
-import { useCreateCapitalsourceModalStore } from "./CreateCapitalsourceModal.store";
 import { useCapitalsourceStore } from "@/stores/CapitalsourceStore";
+import { useCreateCapitalsourceModalStore } from "./CreateCapitalsourceModal.store";
 
 const capitalsourceId = defineModel({ type: Number });
 

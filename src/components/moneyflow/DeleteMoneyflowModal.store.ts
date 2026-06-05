@@ -34,4 +34,3 @@ export const useDeleteMoneyflowModalStore = defineStore(
 );
 
 export default useDeleteMoneyflowModalStore;
-

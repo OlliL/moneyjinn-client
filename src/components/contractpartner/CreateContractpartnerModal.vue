@@ -156,7 +156,6 @@
 import { Button } from "@/components/ui/button";
 import type { Contractpartner } from "@/model/contractpartner/Contractpartner";
 import ContractpartnerService from "@/service/ContractpartnerService";
-import { useCreateContractpartnerModalStore } from "./CreateContractpartnerModal.store";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { globErr } from "@/tools/views/ZodUtil";
 import { ChevronDown, Save, Undo2 } from "lucide-vue-next";
@@ -174,6 +173,7 @@ import SelectPostingAccount from "../postingaccount/SelectPostingAccount.vue";
 import Collapsible from "../ui/collapsible/Collapsible.vue";
 import CollapsibleContent from "../ui/collapsible/CollapsibleContent.vue";
 import CollapsibleTrigger from "../ui/collapsible/CollapsibleTrigger.vue";
+import { useCreateContractpartnerModalStore } from "./CreateContractpartnerModal.store";
 
 const { t } = useI18n();
 

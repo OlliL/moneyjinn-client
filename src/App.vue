@@ -1,7 +1,7 @@
 <script lang="ts" setup>
+import GlobalModals from "@/components/common/GlobalModals.vue";
 import { Toaster } from "@/components/ui/sonner";
 import { RouterView } from "vue-router";
-import GlobalModals from "@/components/common/GlobalModals.vue";
 </script>
 
 <template>

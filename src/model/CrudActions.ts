@@ -36,9 +36,8 @@ export const ContractpartnerActionsKey: InjectionKey<
   LocalCrudModalActions<Contractpartner>
 > = Symbol("ContractpartnerActions");
 
-export const OpenContractpartnerAccountsActionKey: InjectionKey<
-  OpenContractpartnerAccountsAction
-> = Symbol("OpenContractpartnerAccountsAction");
+export const OpenContractpartnerAccountsActionKey: InjectionKey<OpenContractpartnerAccountsAction> =
+  Symbol("OpenContractpartnerAccountsAction");
 
 export const ContractpartnerAccountActionsKey: InjectionKey<
   LocalCrudModalActions<ContractpartnerAccount>
@@ -68,7 +67,5 @@ export const ContractpartnerMatchingActionsKey: InjectionKey<
   LocalCrudModalActions<ContractpartnerMatching>
 > = Symbol("ContractpartnerMatchingActions");
 
-export const MonthlySettlementModalActionsKey: InjectionKey<
-  MonthlySettlementModalActions
-> = Symbol("MonthlySettlementModalActions");
-
+export const MonthlySettlementModalActionsKey: InjectionKey<MonthlySettlementModalActions> =
+  Symbol("MonthlySettlementModalActions");

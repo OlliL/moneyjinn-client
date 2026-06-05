@@ -38,4 +38,3 @@ export const useDeleteMonthlySettlementModalStore = defineStore(
 );
 
 export default useDeleteMonthlySettlementModalStore;
-

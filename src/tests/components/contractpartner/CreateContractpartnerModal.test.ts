@@ -1,5 +1,5 @@
-import CreateContractpartnerModal from "@/components/contractpartner/CreateContractpartnerModal.vue";
 import { useCreateContractpartnerModalStore } from "@/components/contractpartner/CreateContractpartnerModal.store";
+import CreateContractpartnerModal from "@/components/contractpartner/CreateContractpartnerModal.vue";
 import { BackendError, BackendErrorType } from "@/model/BackendError";
 import type { Contractpartner } from "@/model/contractpartner/Contractpartner";
 import ContractpartnerService from "@/service/ContractpartnerService";

@@ -41,4 +41,3 @@ export const useCreateContractpartnerMatchingModalStore = defineStore(
 );
 
 export default useCreateContractpartnerMatchingModalStore;
-

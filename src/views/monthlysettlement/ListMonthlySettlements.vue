@@ -48,15 +48,15 @@
 
 <script lang="ts" setup>
 import DivError from "@/components/common/DivError.vue";
+import { useEditMonthlySettlementModalStore } from "@/components/monthlysettlement/EditMonthlySettlementModal.store";
 import { MonthlySettlementModalActionsKey } from "@/model/CrudActions";
 import router, { Routes } from "@/router";
 import MonthlySettlementService from "@/service/MonthlySettlementService";
-import { useEditMonthlySettlementModalStore } from "@/components/monthlysettlement/EditMonthlySettlementModal.store";
-import useDeleteMonthlySettlementModalStore from "./elements/DeleteMonthlySettlementModal.store";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { getMonthName } from "@/tools/views/MonthName";
 import { computed, onMounted, provide, ref } from "vue";
 import { onBeforeRouteUpdate } from "vue-router";
+import useDeleteMonthlySettlementModalStore from "./elements/DeleteMonthlySettlementModal.store";
 import DeleteMonthlySettlementModal from "./elements/DeleteMonthlySettlementModal.vue";
 import ListMonthlySettlementsDesktop from "./elements/ListMonthlySettlementsDesktop.vue";
 import ListMonthlySettlementsMobile from "./elements/ListMonthlySettlementsMobile.vue";
@@ -79,7 +79,10 @@ const { openCreateMonthlySettlement, openEditMonthlySettlement } =
 provide(MonthlySettlementModalActionsKey, {
   create: () => showEditMonthlySettlementModal(),
   edit: () =>
-    showEditMonthlySettlementModal(Number(selectedYear.value), selectedMonth.value),
+    showEditMonthlySettlementModal(
+      Number(selectedYear.value),
+      selectedMonth.value,
+    ),
   delete: () => showDeleteMonthlySettlementModal(),
 });
 

@@ -99,10 +99,12 @@ class ListPreliminaryLumpSumsView {
   static readonly EmptyState = new RowView("preliminary-lump-sum-empty");
 }
 
-const renderListPreliminaryLumpSumsView = (props: {
-  etfId?: string;
-  year?: string;
-} = {}) => {
+const renderListPreliminaryLumpSumsView = (
+  props: {
+    etfId?: string;
+    year?: string;
+  } = {},
+) => {
   return render(
     defineComponent({
       setup() {

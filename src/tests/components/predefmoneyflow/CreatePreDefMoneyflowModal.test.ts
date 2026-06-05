@@ -1,5 +1,5 @@
-import CreatePreDefMoneyflowModal from "@/components/predefmoneyflow/CreatePreDefMoneyflowModal.vue";
 import { useCreatePreDefMoneyflowModalStore } from "@/components/predefmoneyflow/CreatePreDefMoneyflowModal.store";
+import CreatePreDefMoneyflowModal from "@/components/predefmoneyflow/CreatePreDefMoneyflowModal.vue";
 import { BackendError, BackendErrorType } from "@/model/BackendError";
 import { CapitalsourceImport } from "@/model/capitalsource/CapitalsourceImport";
 import { CapitalsourceState } from "@/model/capitalsource/CapitalsourceState";

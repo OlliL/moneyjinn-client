@@ -28,10 +28,10 @@ import ModalDeleteRow from "@/components/common/ModalDeleteRow.vue";
 import SpanAmount from "@/components/common/SpanAmount.vue";
 import CrudEtfPreliminaryLumpSumService from "@/service/CrudEtfPreliminaryLumpSumService";
 import { useEtfStore } from "@/stores/EtfStore";
-import useDeleteEtfPreliminaryLumpSumModalPieceStore from "./DeleteEtfPreliminaryLumpSumModalPiece.store";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { storeToRefs } from "pinia";
 import { computed, ref, watch } from "vue";
+import useDeleteEtfPreliminaryLumpSumModalPieceStore from "./DeleteEtfPreliminaryLumpSumModalPiece.store";
 
 const serverErrors = ref(new Array<string>());
 const etfStore = useEtfStore();

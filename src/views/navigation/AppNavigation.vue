@@ -24,11 +24,11 @@
 
 <script lang="ts" setup>
 import { LogoutApi } from "@/api";
+import { useCreateContractpartnerModalStore } from "@/components/contractpartner/CreateContractpartnerModal.store";
+import { useCreatePreDefMoneyflowModalStore } from "@/components/predefmoneyflow/CreatePreDefMoneyflowModal.store";
 import { AxiosSingleton } from "@/config/AxiosSingleton";
 import { WebSocketSingleton } from "@/config/WebSocketSingleton";
 import router, { Routes } from "@/router";
-import { useCreateContractpartnerModalStore } from "@/components/contractpartner/CreateContractpartnerModal.store";
-import { useCreatePreDefMoneyflowModalStore } from "@/components/predefmoneyflow/CreatePreDefMoneyflowModal.store";
 import { StoreService } from "@/stores/StoreService";
 import { useUserSessionStore } from "@/stores/UserSessionStore";
 import { clearAuthTokens } from "axios-jwt";

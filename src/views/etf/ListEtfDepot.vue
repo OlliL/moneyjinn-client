@@ -144,8 +144,6 @@ import type { EtfSummary } from "@/model/etf/EtfSummary";
 import router, { Routes } from "@/router";
 import EtfService from "@/service/EtfService";
 import { useEtfStore } from "@/stores/EtfStore";
-import useCreateEtfFlowModalStore from "./elements/CreateEtfFlowModal.store";
-import useDeleteEtfFlowModalStore from "./elements/DeleteEtfFlowModal.store";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { globErr } from "@/tools/views/ZodUtil";
 import { Filter, PlusSquare } from "lucide-vue-next";
@@ -153,7 +151,9 @@ import { computed, onMounted, provide, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { number } from "zod";
 import CalcEtfSaleForm from "./elements/CalcEtfSaleForm.vue";
+import useCreateEtfFlowModalStore from "./elements/CreateEtfFlowModal.store";
 import CreateEtfFlowModal from "./elements/CreateEtfFlowModal.vue";
+import useDeleteEtfFlowModalStore from "./elements/DeleteEtfFlowModal.store";
 import DeleteEtfFlowModal from "./elements/DeleteEtfFlowModal.vue";
 import ListEtfDepotDesktop from "./elements/ListEtfDepotDesktop.vue";
 import ListEtfDepotEtfTable from "./elements/ListEtfDepotEtfTable.vue";
@@ -286,7 +286,6 @@ const createEtfFlow = () => {
 };
 
 const etfFlowDone = (etfFlow: EtfFlow) => loadData(etfFlow.etfId);
-
 
 watch(
   selectedEtfId,

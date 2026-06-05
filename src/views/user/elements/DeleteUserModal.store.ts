@@ -28,4 +28,3 @@ export const useDeleteUserModalStore = defineStore("deleteUserModal", () => {
 });
 
 export default useDeleteUserModalStore;
-

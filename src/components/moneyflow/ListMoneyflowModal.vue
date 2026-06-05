@@ -10,4 +10,3 @@ const desktop = isDesktop();
   <ListMoneyflowModalDesktop v-if="desktop" />
   <ListMoneyflowModalMobile v-else />
 </template>
-

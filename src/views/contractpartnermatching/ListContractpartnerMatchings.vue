@@ -54,8 +54,8 @@ import {
   type CrudActions,
 } from "@/model/CrudActions";
 import useCreateContractpartnerMatchingModalStore from "./elements/CreateContractpartnerMatchingModal.store";
-import useDeleteContractpartnerMatchingModalStore from "./elements/DeleteContractpartnerMatchingModal.store";
 import CreateContractpartnerMatchingModal from "./elements/CreateContractpartnerMatchingModal.vue";
+import useDeleteContractpartnerMatchingModalStore from "./elements/DeleteContractpartnerMatchingModal.store";
 import DeleteContractpartnerMatchingModal from "./elements/DeleteContractpartnerMatchingModal.vue";
 import ListContractpartnerMatchingsDesktop from "./elements/ListContractpartnerMatchingsDesktop.vue";
 import ListContractpartnerMatchingsMobile from "./elements/ListContractpartnerMatchingsMobile.vue";
@@ -72,16 +72,13 @@ const contractpartnerMatchings = ref(new Array<ContractpartnerMatching>());
 const allContractpartnerMatchings = ref(new Array<ContractpartnerMatching>());
 const searchString = ref("");
 const searchContractpartnerId = ref<number | undefined>(undefined);
-const {
-  openCreateContractpartnerMatching,
-  openEditContractpartnerMatching,
-} = useCreateContractpartnerMatchingModalStore();
+const { openCreateContractpartnerMatching, openEditContractpartnerMatching } =
+  useCreateContractpartnerMatchingModalStore();
 const { openDeleteContractpartnerMatching } =
   useDeleteContractpartnerMatchingModalStore();
 
 const actions: CrudActions<ContractpartnerMatching> = {
-  create: () =>
-    openCreateContractpartnerMatching(reloadView),
+  create: () => openCreateContractpartnerMatching(reloadView),
   edit: (matchingEntry) =>
     openEditContractpartnerMatching(matchingEntry, reloadView),
   delete: (matchingEntry) =>

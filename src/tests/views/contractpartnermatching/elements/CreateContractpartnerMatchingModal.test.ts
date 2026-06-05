@@ -25,8 +25,8 @@ import {
   ModalView,
   renderDeclarativeModal,
 } from "@/tests/TestViews";
-import CreateContractpartnerMatchingModal from "@/views/contractpartnermatching/elements/CreateContractpartnerMatchingModal.vue";
 import { useCreateContractpartnerMatchingModalStore } from "@/views/contractpartnermatching/elements/CreateContractpartnerMatchingModal.store";
+import CreateContractpartnerMatchingModal from "@/views/contractpartnermatching/elements/CreateContractpartnerMatchingModal.vue";
 import "@testing-library/jest-dom/vitest";
 import { createPinia, setActivePinia } from "pinia";
 import { beforeEach, expect, test, vi } from "vitest";

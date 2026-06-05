@@ -41,4 +41,3 @@ export const useCreatePreDefMoneyflowModalStore = defineStore(
 );
 
 export default useCreatePreDefMoneyflowModalStore;
-

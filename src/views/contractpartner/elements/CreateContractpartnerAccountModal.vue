@@ -68,7 +68,6 @@ import ModalVue from "@/components/common/Modal.vue";
 import { Button } from "@/components/ui/button";
 import type { ContractpartnerAccount } from "@/model/contractpartneraccount/ContractpartnerAccount";
 import ContractpartnerAccountService from "@/service/ContractpartnerAccountService";
-import useCreateContractpartnerAccountModalStore from "./CreateContractpartnerAccountModal.store";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { globErr } from "@/tools/views/ZodUtil";
 import { Save, Undo2 } from "lucide-vue-next";
@@ -77,14 +76,13 @@ import { useForm } from "vee-validate";
 import { computed, ref, toRaw, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { string, ZodType } from "zod";
+import useCreateContractpartnerAccountModalStore from "./CreateContractpartnerAccountModal.store";
 
 const { t } = useI18n();
 
-const {
-  open,
-  account,
-  onDone,
-} = storeToRefs(useCreateContractpartnerAccountModalStore());
+const { open, account, onDone } = storeToRefs(
+  useCreateContractpartnerAccountModalStore(),
+);
 
 const props = withDefaults(
   defineProps<{
@@ -140,8 +138,12 @@ const createContractpartnerAccount = handleSubmit(() => {
 
   const serviceCall =
     account.value.id > 0
-      ? ContractpartnerAccountService.updateContractpartnerAccount(account.value)
-      : ContractpartnerAccountService.createContractpartnerAccount(account.value);
+      ? ContractpartnerAccountService.updateContractpartnerAccount(
+          account.value,
+        )
+      : ContractpartnerAccountService.createContractpartnerAccount(
+          account.value,
+        );
 
   serviceCall
     .then((result) => {

@@ -89,7 +89,6 @@ import { EtfPreliminaryLumpSumType } from "@/model/etf/EtfPreliminaryLumpSumType
 import type { SelectBoxValue } from "@/model/SelectBoxValue";
 import CrudEtfPreliminaryLumpSumService from "@/service/CrudEtfPreliminaryLumpSumService";
 import { useEtfStore } from "@/stores/EtfStore";
-import useCreateEtfPreliminaryLumpSumModalYearlyStore from "./CreateEtfPreliminaryLumpSumModalYearly.store";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { amountSchema, globErr } from "@/tools/views/ZodUtil";
 import { Euro, Save, Undo2 } from "lucide-vue-next";
@@ -98,6 +97,7 @@ import { useForm } from "vee-validate";
 import { computed, ref, toRaw, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { date, number, type ZodType } from "zod";
+import useCreateEtfPreliminaryLumpSumModalYearlyStore from "./CreateEtfPreliminaryLumpSumModalYearly.store";
 
 const { t } = useI18n();
 

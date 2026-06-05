@@ -35,4 +35,3 @@ export const useCreateEtfModalStore = defineStore("createEtfModal", () => {
 });
 
 export default useCreateEtfModalStore;
-

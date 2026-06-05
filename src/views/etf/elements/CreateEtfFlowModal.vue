@@ -108,7 +108,6 @@ import type { EtfFlow } from "@/model/etf/EtfFlow";
 import type { SelectBoxValue } from "@/model/SelectBoxValue";
 import CrudEtfFlowService from "@/service/CrudEtfFlowService";
 import { useEtfStore } from "@/stores/EtfStore";
-import useCreateEtfFlowModalStore from "./CreateEtfFlowModal.store";
 import { formatTime } from "@/tools/views/FormatDate";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { amountSchema, globErr } from "@/tools/views/ZodUtil";
@@ -118,6 +117,7 @@ import { useForm } from "vee-validate";
 import { computed, ref, toRaw, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { date, number, string, type ZodType } from "zod";
+import useCreateEtfFlowModalStore from "./CreateEtfFlowModal.store";
 
 const { t } = useI18n();
 
@@ -184,7 +184,7 @@ watch(
     if (val) {
       etfs.value = etfStore.getAsSelectBoxValues();
       origEtfFlow.value = flow.value;
-      selectedEtfId.value = flow.value?.etfId ?? (defaultEtfId.value ?? 0);
+      selectedEtfId.value = flow.value?.etfId ?? defaultEtfId.value ?? 0;
       resetForm();
     }
   },

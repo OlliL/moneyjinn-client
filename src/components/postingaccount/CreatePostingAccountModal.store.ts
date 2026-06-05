@@ -7,7 +7,9 @@ export const useCreatePostingAccountModalStore = defineStore(
   () => {
     const open = ref(false);
     const postingAccount = ref<PostingAccount | undefined>(undefined);
-    const onDone = ref<((entry: PostingAccount) => void) | undefined>(undefined);
+    const onDone = ref<((entry: PostingAccount) => void) | undefined>(
+      undefined,
+    );
 
     const openCreatePostingAccount = (cb?: (entry: PostingAccount) => void) => {
       postingAccount.value = undefined;
@@ -39,4 +41,3 @@ export const useCreatePostingAccountModalStore = defineStore(
     };
   },
 );
-

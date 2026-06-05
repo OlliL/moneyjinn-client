@@ -1,5 +1,5 @@
-import CreateCapitalsourceModal from "@/components/capitalsource/CreateCapitalsourceModal.vue";
 import { useCreateCapitalsourceModalStore } from "@/components/capitalsource/CreateCapitalsourceModal.store";
+import CreateCapitalsourceModal from "@/components/capitalsource/CreateCapitalsourceModal.vue";
 import { BackendError, BackendErrorType } from "@/model/BackendError";
 import { CapitalsourceImport } from "@/model/capitalsource/CapitalsourceImport";
 import { CapitalsourceState } from "@/model/capitalsource/CapitalsourceState";

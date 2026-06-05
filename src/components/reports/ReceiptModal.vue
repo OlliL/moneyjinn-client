@@ -26,14 +26,14 @@ import type { ImportedMoneyflowReceipt } from "@/model/moneyflow/ImportedMoneyfl
 import type { MoneyflowReceipt } from "@/model/moneyflow/MoneyflowReceipt";
 import { mapImportedMoneyflowReceiptToMoneyflowReceipt } from "@/service/mapper/ImportedToMoneyflowReceiptMapper";
 import MoneyflowReceiptService from "@/service/MoneyflowReceiptService";
-import useReceiptModalStore from "./ReceiptModal.store";
-import { storeToRefs } from "pinia";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
-import { watch, ref } from "vue";
+import { storeToRefs } from "pinia";
+import { ref, watch } from "vue";
 import ButtonDeleteTwoTap from "../common/ButtonDeleteTwoTap.vue";
 import DivError from "../common/DivError.vue";
 import ModalVue from "../common/Modal.vue";
 import SpanReceipt from "../common/SpanReceipt.vue";
+import useReceiptModalStore from "./ReceiptModal.store";
 
 const serverErrors = ref(new Array<string>());
 const { close } = useReceiptModalStore();
@@ -57,8 +57,9 @@ watch(
         .then((response) => {
           if (response.receiptType !== undefined) receipt.value = response;
           else if (targetImportedReceipt)
-            receipt.value =
-              mapImportedMoneyflowReceiptToMoneyflowReceipt(targetImportedReceipt);
+            receipt.value = mapImportedMoneyflowReceiptToMoneyflowReceipt(
+              targetImportedReceipt,
+            );
         })
         .catch((backendError) => {
           handleBackendError(backendError, serverErrors);
@@ -66,7 +67,6 @@ watch(
     }
   },
 );
-
 
 const deleteMoneyflowReceipt = () => {
   MoneyflowReceiptService.deleteMoneyflowReceipt(receipt.value.moneyflowId)

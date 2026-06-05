@@ -84,7 +84,8 @@ const renderListCapitalsourcesView = (props: Record<string, unknown> = {}) => {
       setup() {
         return { props };
       },
-      template: '<div><ListCapitalsources v-bind="props" /><GlobalModals /></div>',
+      template:
+        '<div><ListCapitalsources v-bind="props" /><GlobalModals /></div>',
       components: { ListCapitalsources, GlobalModals },
     }),
     {

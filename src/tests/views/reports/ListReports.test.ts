@@ -120,7 +120,9 @@ class ListReportsView {
   static readonly ReceiptModal = new ModalView("app-modal-Receipt");
 }
 
-const renderListReportsView = (props: { year?: string; month?: string } = {}) => {
+const renderListReportsView = (
+  props: { year?: string; month?: string } = {},
+) => {
   return render(
     defineComponent({
       setup() {

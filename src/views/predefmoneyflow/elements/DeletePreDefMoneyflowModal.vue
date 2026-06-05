@@ -61,15 +61,17 @@ import SpanBoolean from "@/components/common/SpanBoolean.vue";
 import SpanDate from "@/components/common/SpanDate.vue";
 import type { PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
 import PreDefMoneyflowService from "@/service/PreDefMoneyflowService";
-import useDeletePreDefMoneyflowModalStore from "./DeletePreDefMoneyflowModal.store";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { storeToRefs } from "pinia";
 import { computed, ref, watch } from "vue";
+import useDeletePreDefMoneyflowModalStore from "./DeletePreDefMoneyflowModal.store";
 
 const serverErrors = ref(new Array<string>());
-const { open, preDefMoneyflow: selectedForDelete, onDone } = storeToRefs(
-  useDeletePreDefMoneyflowModalStore(),
-);
+const {
+  open,
+  preDefMoneyflow: selectedForDelete,
+  onDone,
+} = storeToRefs(useDeletePreDefMoneyflowModalStore());
 const mpm = computed(() => selectedForDelete.value as PreDefMoneyflow);
 
 watch(open, (newVal) => {
@@ -90,5 +92,4 @@ const deletePreDefMoneyflow = () => {
       handleBackendError(backendError, serverErrors);
     });
 };
-
 </script>

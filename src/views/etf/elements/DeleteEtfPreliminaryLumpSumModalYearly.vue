@@ -33,8 +33,8 @@ import { handleBackendError } from "@/tools/views/HandleBackendError";
 
 import CrudEtfPreliminaryLumpSumService from "@/service/CrudEtfPreliminaryLumpSumService";
 import { useEtfStore } from "@/stores/EtfStore";
-import useDeleteEtfPreliminaryLumpSumModalYearlyStore from "./DeleteEtfPreliminaryLumpSumModalYearly.store";
 import { storeToRefs } from "pinia";
+import useDeleteEtfPreliminaryLumpSumModalYearlyStore from "./DeleteEtfPreliminaryLumpSumModalYearly.store";
 
 const serverErrors = ref(new Array<string>());
 

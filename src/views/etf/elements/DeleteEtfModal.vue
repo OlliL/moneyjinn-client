@@ -30,10 +30,10 @@
 import ModalDelete from "@/components/common/ModalDelete.vue";
 import ModalDeleteRow from "@/components/common/ModalDeleteRow.vue";
 import CrudEtfService from "@/service/CrudEtfService";
-import useDeleteEtfModalStore from "./DeleteEtfModal.store";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { storeToRefs } from "pinia";
 import { ref, watch } from "vue";
+import useDeleteEtfModalStore from "./DeleteEtfModal.store";
 
 const { open, etf, onDone } = storeToRefs(useDeleteEtfModalStore());
 

@@ -46,13 +46,14 @@ import SpanIban from "@/components/common/SpanIban.vue";
 import { capitalsourceStateNames } from "@/model/capitalsource/CapitalsourceState";
 import { capitalsourceTypeNames } from "@/model/capitalsource/CapitalsourceType";
 import CapitalsourceService from "@/service/CapitalsourceService";
-import { useDeleteCapitalsourceModalStore } from "./DeleteCapitalsourceModal.store";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { storeToRefs } from "pinia";
 import { computed, ref, watch } from "vue";
+import { useDeleteCapitalsourceModalStore } from "./DeleteCapitalsourceModal.store";
 
-const { open, capitalsource, onDone } =
-  storeToRefs(useDeleteCapitalsourceModalStore());
+const { open, capitalsource, onDone } = storeToRefs(
+  useDeleteCapitalsourceModalStore(),
+);
 
 const serverErrors = ref(new Array<string>());
 

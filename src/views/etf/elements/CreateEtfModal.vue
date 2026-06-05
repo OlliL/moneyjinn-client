@@ -179,7 +179,6 @@ import ModalVue from "@/components/common/Modal.vue";
 import { Button } from "@/components/ui/button";
 import type { Etf } from "@/model/etf/Etf";
 import CrudEtfService from "@/service/CrudEtfService";
-import useCreateEtfModalStore from "./CreateEtfModal.store";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { amountSchema, globErr } from "@/tools/views/ZodUtil";
 import { Euro, Percent, Save, Star, Undo2 } from "lucide-vue-next";
@@ -188,6 +187,7 @@ import { useForm } from "vee-validate";
 import { computed, ref, toRaw, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { string, ZodType } from "zod";
+import useCreateEtfModalStore from "./CreateEtfModal.store";
 
 const { t } = useI18n();
 

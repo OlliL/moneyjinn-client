@@ -40,4 +40,3 @@ export const useCreateMoneyflowQuickModalStore = defineStore(
 );
 
 export default useCreateMoneyflowQuickModalStore;
-

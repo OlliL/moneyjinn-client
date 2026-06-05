@@ -76,7 +76,6 @@
 
 <script lang="ts" setup>
 import SpanDate from "@/components/common/SpanDate.vue";
-import { ContractpartnerMatchingActionsKey } from "@/model/CrudActions";
 import {
   Accordion,
   AccordionContent,
@@ -85,6 +84,7 @@ import {
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import type { ContractpartnerMatching } from "@/model/contractpartnermatching/ContractpartnerMatching";
+import { ContractpartnerMatchingActionsKey } from "@/model/CrudActions";
 import { Pencil, Trash2 } from "lucide-vue-next";
 import { inject } from "vue";
 

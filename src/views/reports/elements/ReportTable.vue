@@ -154,16 +154,16 @@
 
 <script lang="ts" setup>
 import DivError from "@/components/common/DivError.vue";
+import useDeleteMoneyflowModalStore from "@/components/moneyflow/DeleteMoneyflowModal.store";
+import useEditMoneyflowModalStore from "@/components/moneyflow/EditMoneyflowModal.store";
+import useListMoneyflowModalStore from "@/components/moneyflow/ListMoneyflowModal.store";
+import useReceiptModalStore from "@/components/reports/ReceiptModal.store";
 import { Accordion } from "@/components/ui/accordion"; // Import Accordion
 import { CapitalsourceType } from "@/model/capitalsource/CapitalsourceType";
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 import type { Report } from "@/model/report/Report";
 import type { ReportTurnoverCapitalsource } from "@/model/report/ReportTurnoverCapitalsource";
 import ReportService from "@/service/ReportService";
-import useDeleteMoneyflowModalStore from "@/components/moneyflow/DeleteMoneyflowModal.store";
-import useEditMoneyflowModalStore from "@/components/moneyflow/EditMoneyflowModal.store";
-import useListMoneyflowModalStore from "@/components/moneyflow/ListMoneyflowModal.store";
-import useReceiptModalStore from "@/components/reports/ReceiptModal.store";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { isDesktop } from "@/tools/views/IsDesktop";
 import {

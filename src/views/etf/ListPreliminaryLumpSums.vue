@@ -148,19 +148,19 @@ import { EtfPreliminaryLumpSumType } from "@/model/etf/EtfPreliminaryLumpSumType
 import router, { Routes } from "@/router";
 import CrudEtfPreliminaryLumpSumService from "@/service/CrudEtfPreliminaryLumpSumService";
 import { useEtfStore } from "@/stores/EtfStore";
-import useCreateEtfPreliminaryLumpSumModalMonthlyStore from "./elements/CreateEtfPreliminaryLumpSumModalMonthly.store";
-import useCreateEtfPreliminaryLumpSumModalPieceStore from "./elements/CreateEtfPreliminaryLumpSumModalPiece.store";
-import useCreateEtfPreliminaryLumpSumModalYearlyStore from "./elements/CreateEtfPreliminaryLumpSumModalYearly.store";
-import useDeleteEtfPreliminaryLumpSumModalMonthlyStore from "./elements/DeleteEtfPreliminaryLumpSumModalMonthly.store";
-import useDeleteEtfPreliminaryLumpSumModalPieceStore from "./elements/DeleteEtfPreliminaryLumpSumModalPiece.store";
-import useDeleteEtfPreliminaryLumpSumModalYearlyStore from "./elements/DeleteEtfPreliminaryLumpSumModalYearly.store";
 import { storeToRefs } from "pinia";
 import { computed, ref, watch, type Component, type Ref } from "vue";
+import useCreateEtfPreliminaryLumpSumModalMonthlyStore from "./elements/CreateEtfPreliminaryLumpSumModalMonthly.store";
 import CreateEtfPreliminaryLumpSumModalMonthly from "./elements/CreateEtfPreliminaryLumpSumModalMonthly.vue";
+import useCreateEtfPreliminaryLumpSumModalPieceStore from "./elements/CreateEtfPreliminaryLumpSumModalPiece.store";
 import CreateEtfPreliminaryLumpSumModalPiece from "./elements/CreateEtfPreliminaryLumpSumModalPiece.vue";
+import useCreateEtfPreliminaryLumpSumModalYearlyStore from "./elements/CreateEtfPreliminaryLumpSumModalYearly.store";
 import CreateEtfPreliminaryLumpSumModalYearly from "./elements/CreateEtfPreliminaryLumpSumModalYearly.vue";
+import useDeleteEtfPreliminaryLumpSumModalMonthlyStore from "./elements/DeleteEtfPreliminaryLumpSumModalMonthly.store";
 import DeleteEtfPreliminaryLumpSumModalMonthly from "./elements/DeleteEtfPreliminaryLumpSumModalMonthly.vue";
+import useDeleteEtfPreliminaryLumpSumModalPieceStore from "./elements/DeleteEtfPreliminaryLumpSumModalPiece.store";
 import DeleteEtfPreliminaryLumpSumModalPiece from "./elements/DeleteEtfPreliminaryLumpSumModalPiece.vue";
+import useDeleteEtfPreliminaryLumpSumModalYearlyStore from "./elements/DeleteEtfPreliminaryLumpSumModalYearly.store";
 import DeleteEtfPreliminaryLumpSumModalYearly from "./elements/DeleteEtfPreliminaryLumpSumModalYearly.vue";
 import ListPreliminaryLumpSumsDesktop from "./elements/ListPreliminaryLumpSumsDesktop.vue";
 import ListPreliminaryLumpSumsMobile from "./elements/ListPreliminaryLumpSumsMobile.vue";
@@ -203,24 +203,24 @@ const { openDeleteEtfPreliminaryLumpSumPiece } =
   useDeleteEtfPreliminaryLumpSumModalPieceStore();
 const { openDeleteEtfPreliminaryLumpSumYearly } =
   useDeleteEtfPreliminaryLumpSumModalYearlyStore();
-const {
-  open: createMonthlyModalVisible,
-} = storeToRefs(useCreateEtfPreliminaryLumpSumModalMonthlyStore());
-const {
-  open: createPieceModalVisible,
-} = storeToRefs(useCreateEtfPreliminaryLumpSumModalPieceStore());
-const {
-  open: createYearlyModalVisible,
-} = storeToRefs(useCreateEtfPreliminaryLumpSumModalYearlyStore());
-const {
-  open: deleteMonthlyModalVisible,
-} = storeToRefs(useDeleteEtfPreliminaryLumpSumModalMonthlyStore());
-const {
-  open: deletePieceModalVisible,
-} = storeToRefs(useDeleteEtfPreliminaryLumpSumModalPieceStore());
-const {
-  open: deleteYearlyModalVisible,
-} = storeToRefs(useDeleteEtfPreliminaryLumpSumModalYearlyStore());
+const { open: createMonthlyModalVisible } = storeToRefs(
+  useCreateEtfPreliminaryLumpSumModalMonthlyStore(),
+);
+const { open: createPieceModalVisible } = storeToRefs(
+  useCreateEtfPreliminaryLumpSumModalPieceStore(),
+);
+const { open: createYearlyModalVisible } = storeToRefs(
+  useCreateEtfPreliminaryLumpSumModalYearlyStore(),
+);
+const { open: deleteMonthlyModalVisible } = storeToRefs(
+  useDeleteEtfPreliminaryLumpSumModalMonthlyStore(),
+);
+const { open: deletePieceModalVisible } = storeToRefs(
+  useDeleteEtfPreliminaryLumpSumModalPieceStore(),
+);
+const { open: deleteYearlyModalVisible } = storeToRefs(
+  useDeleteEtfPreliminaryLumpSumModalYearlyStore(),
+);
 
 interface TypeConfigEntry {
   id: string;
@@ -346,34 +346,28 @@ const showCreateEtfPreliminaryLumpSumModal = (
   mep?: EtfPreliminaryLumpSum,
 ) => {
   if (type === EtfPreliminaryLumpSumType.AMOUNT_PER_MONTH) {
-    openCreateEtfPreliminaryLumpSumMonthly(
-      etfId,
-      mep,
-      reloadView,
-    );
+    openCreateEtfPreliminaryLumpSumMonthly(etfId, mep, reloadView);
   } else if (type === EtfPreliminaryLumpSumType.AMOUNT_PER_PIECE) {
-    openCreateEtfPreliminaryLumpSumPiece(
-      etfId,
-      mep,
-      reloadView,
-    );
+    openCreateEtfPreliminaryLumpSumPiece(etfId, mep, reloadView);
   } else {
-    openCreateEtfPreliminaryLumpSumYearly(
-      etfId,
-      mep,
-      reloadView,
-    );
+    openCreateEtfPreliminaryLumpSumYearly(etfId, mep, reloadView);
   }
 };
 
 const showDeleteEtfPreliminaryLumpSumModal = () => {
   if (etfPreliminaryLumpSum.value) {
-    if (etfPreliminaryLumpSum.value.type === EtfPreliminaryLumpSumType.AMOUNT_PER_MONTH) {
+    if (
+      etfPreliminaryLumpSum.value.type ===
+      EtfPreliminaryLumpSumType.AMOUNT_PER_MONTH
+    ) {
       openDeleteEtfPreliminaryLumpSumMonthly(
         etfPreliminaryLumpSum.value,
         reloadView,
       );
-    } else if (etfPreliminaryLumpSum.value.type === EtfPreliminaryLumpSumType.AMOUNT_PER_PIECE) {
+    } else if (
+      etfPreliminaryLumpSum.value.type ===
+      EtfPreliminaryLumpSumType.AMOUNT_PER_PIECE
+    ) {
       openDeleteEtfPreliminaryLumpSumPiece(
         etfPreliminaryLumpSum.value,
         reloadView,

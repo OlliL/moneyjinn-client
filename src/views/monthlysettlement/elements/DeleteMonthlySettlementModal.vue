@@ -36,16 +36,13 @@ import { getMonthName } from "@/tools/views/MonthName";
 
 import ButtonDeleteTwoTap from "@/components/common/ButtonDeleteTwoTap.vue";
 import MonthlySettlementService from "@/service/MonthlySettlementService";
-import useDeleteMonthlySettlementModalStore from "./DeleteMonthlySettlementModal.store";
 import { storeToRefs } from "pinia";
+import useDeleteMonthlySettlementModalStore from "./DeleteMonthlySettlementModal.store";
 
 const serverErrors = ref(new Array<string>());
-const {
-  open,
-  year,
-  month,
-  onDone,
-} = storeToRefs(useDeleteMonthlySettlementModalStore());
+const { open, year, month, onDone } = storeToRefs(
+  useDeleteMonthlySettlementModalStore(),
+);
 
 const selectedMonth = ref(0);
 const monthName = ref("");
@@ -78,5 +75,4 @@ const deleteMonthlySettlement = () => {
       handleBackendError(backendError, serverErrors);
     });
 };
-
 </script>

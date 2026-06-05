@@ -133,7 +133,6 @@ import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 import type { MoneyflowReceipt } from "@/model/moneyflow/MoneyflowReceipt";
 import { mapImportedMoneyflowReceiptToMoneyflowReceipt } from "@/service/mapper/ImportedToMoneyflowReceiptMapper";
 import MoneyflowReceiptService from "@/service/MoneyflowReceiptService";
-import useListMoneyflowModalStore from "./ListMoneyflowModal.store";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { storeToRefs } from "pinia";
 import { computed, ref, toRaw, watch } from "vue";
@@ -142,6 +141,7 @@ import ModalVue from "../common/Modal.vue";
 import SpanAmount from "../common/SpanAmount.vue";
 import SpanDate from "../common/SpanDate.vue";
 import SpanReceipt from "../common/SpanReceipt.vue";
+import useListMoneyflowModalStore from "./ListMoneyflowModal.store";
 
 const serverErrors = ref(new Array<string>());
 const mmf = ref({} as Moneyflow);

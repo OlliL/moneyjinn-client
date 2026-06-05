@@ -28,4 +28,3 @@ export const useDeleteGroupModalStore = defineStore("deleteGroupModal", () => {
 });
 
 export default useDeleteGroupModalStore;
-

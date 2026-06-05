@@ -1,7 +1,7 @@
+import { parse } from "@vue/compiler-sfc";
 import fs from "node:fs";
 import path from "node:path";
 import ts from "typescript";
-import { parse } from "@vue/compiler-sfc";
 
 const root = process.cwd();
 

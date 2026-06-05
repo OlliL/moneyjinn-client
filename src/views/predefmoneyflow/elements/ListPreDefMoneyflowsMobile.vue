@@ -113,7 +113,6 @@ import FavoriteIcon from "@/components/common/FavoriteIcon.vue";
 import SpanAmount from "@/components/common/SpanAmount.vue";
 import SpanBoolean from "@/components/common/SpanBoolean.vue";
 import SpanDate from "@/components/common/SpanDate.vue";
-import { PreDefMoneyflowActionsKey } from "@/model/CrudActions";
 import {
   Accordion,
   AccordionContent,
@@ -121,6 +120,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
+import { PreDefMoneyflowActionsKey } from "@/model/CrudActions";
 import type { PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
 import { Pencil, Trash2 } from "lucide-vue-next";
 import { inject } from "vue";

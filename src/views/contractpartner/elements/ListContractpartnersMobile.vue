@@ -118,5 +118,7 @@ defineProps<{
 }>();
 
 const actions = inject(ContractpartnerActionsKey)!;
-const listContractpartnerAccounts = inject(OpenContractpartnerAccountsActionKey)!;
+const listContractpartnerAccounts = inject(
+  OpenContractpartnerAccountsActionKey,
+)!;
 </script>

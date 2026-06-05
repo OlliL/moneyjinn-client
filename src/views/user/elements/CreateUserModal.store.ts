@@ -35,4 +35,3 @@ export const useCreateUserModalStore = defineStore("createUserModal", () => {
 });
 
 export default useCreateUserModalStore;
-

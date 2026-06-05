@@ -35,4 +35,3 @@ export const useCreateGroupModalStore = defineStore("createGroupModal", () => {
 });
 
 export default useCreateGroupModalStore;
-

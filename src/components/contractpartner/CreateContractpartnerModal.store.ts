@@ -7,9 +7,13 @@ export const useCreateContractpartnerModalStore = defineStore(
   () => {
     const open = ref(false);
     const contractpartner = ref<Contractpartner | undefined>(undefined);
-    const onDone = ref<((entry: Contractpartner) => void) | undefined>(undefined);
+    const onDone = ref<((entry: Contractpartner) => void) | undefined>(
+      undefined,
+    );
 
-    const openCreateContractpartner = (cb?: (entry: Contractpartner) => void) => {
+    const openCreateContractpartner = (
+      cb?: (entry: Contractpartner) => void,
+    ) => {
       contractpartner.value = undefined;
       onDone.value = cb;
       open.value = true;
@@ -25,14 +29,11 @@ export const useCreateContractpartnerModalStore = defineStore(
     };
 
     // Combined watcher: reset when modal closes
-    watch(
-      open,
-      (newOpen) => {
-        if (!newOpen) {
-          contractpartner.value = undefined;
-        }
-      },
-    );
+    watch(open, (newOpen) => {
+      if (!newOpen) {
+        contractpartner.value = undefined;
+      }
+    });
 
     return {
       open,
@@ -43,4 +44,3 @@ export const useCreateContractpartnerModalStore = defineStore(
     };
   },
 );
-

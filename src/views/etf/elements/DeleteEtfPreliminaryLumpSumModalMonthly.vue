@@ -61,11 +61,11 @@ import SpanAmount from "@/components/common/SpanAmount.vue";
 import { Table, TableBody } from "@/components/ui/table";
 import CrudEtfPreliminaryLumpSumService from "@/service/CrudEtfPreliminaryLumpSumService";
 import { useEtfStore } from "@/stores/EtfStore";
-import useDeleteEtfPreliminaryLumpSumModalMonthlyStore from "./DeleteEtfPreliminaryLumpSumModalMonthly.store";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { getMonthName } from "@/tools/views/MonthName";
 import { storeToRefs } from "pinia";
 import { computed, ref, watch } from "vue";
+import useDeleteEtfPreliminaryLumpSumModalMonthlyStore from "./DeleteEtfPreliminaryLumpSumModalMonthly.store";
 
 type RowData = {
   month: string;

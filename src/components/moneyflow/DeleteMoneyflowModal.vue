@@ -39,9 +39,9 @@
 </template>
 
 <script lang="ts" setup>
-import useDeleteMoneyflowModalStore from "./DeleteMoneyflowModal.store";
 import { storeToRefs } from "pinia";
 import { ref, watch } from "vue";
+import useDeleteMoneyflowModalStore from "./DeleteMoneyflowModal.store";
 
 import ModalDelete from "../common/ModalDelete.vue";
 import ModalDeleteRow from "../common/ModalDeleteRow.vue";
@@ -56,9 +56,7 @@ import { handleBackendError } from "@/tools/views/HandleBackendError";
 const serverErrors = ref(new Array<string>());
 
 const mmf = ref({} as Moneyflow);
-const { open, moneyflow, onDone } = storeToRefs(
-  useDeleteMoneyflowModalStore(),
-);
+const { open, moneyflow, onDone } = storeToRefs(useDeleteMoneyflowModalStore());
 
 watch(
   [open, moneyflow],

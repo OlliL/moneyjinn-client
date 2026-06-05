@@ -1,3 +1,7 @@
+import useDeleteMoneyflowModalStore from "@/components/moneyflow/DeleteMoneyflowModal.store";
+import useEditMoneyflowModalStore from "@/components/moneyflow/EditMoneyflowModal.store";
+import useListMoneyflowModalStore from "@/components/moneyflow/ListMoneyflowModal.store";
+import useReceiptModalStore from "@/components/reports/ReceiptModal.store";
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 import MoneyflowServiceMocker from "@/service/mocker/MoneyflowServiceMocker";
 import MoneyflowService from "@/service/MoneyflowService";
@@ -5,16 +9,8 @@ import {
   type UserSession,
   useUserSessionStore,
 } from "@/stores/UserSessionStore";
-import useDeleteMoneyflowModalStore from "@/components/moneyflow/DeleteMoneyflowModal.store";
-import useEditMoneyflowModalStore from "@/components/moneyflow/EditMoneyflowModal.store";
-import useListMoneyflowModalStore from "@/components/moneyflow/ListMoneyflowModal.store";
-import useReceiptModalStore from "@/components/reports/ReceiptModal.store";
 import { assertHaveBeenCalledWith } from "@/tests/TestUtil";
-import {
-  ButtonView,
-  InputView,
-  RowView,
-} from "@/tests/TestViews";
+import { ButtonView, InputView, RowView } from "@/tests/TestViews";
 import SearchMoneyflows from "@/views/moneyflow/SearchMoneyflows.vue";
 import "@testing-library/jest-dom/vitest";
 import { render } from "@testing-library/vue";
@@ -77,13 +73,13 @@ const renderView = (props: Record<string, unknown> = {}) => {
       components: { SearchMoneyflows },
     }),
     {
-    global: {
-      stubs: {
-        "router-link": {
-          template: "<a><slot /></a>",
+      global: {
+        stubs: {
+          "router-link": {
+            template: "<a><slot /></a>",
+          },
         },
       },
-    },
     },
   );
 };

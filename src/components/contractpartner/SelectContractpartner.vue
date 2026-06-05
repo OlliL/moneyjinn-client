@@ -19,8 +19,8 @@ import { any, type ZodType } from "zod";
 
 import SelectStandard from "../common/SelectStandard.vue";
 
-import { useCreateContractpartnerModalStore } from "./CreateContractpartnerModal.store";
 import { useContractpartnerStore } from "@/stores/ContractpartnerStore";
+import { useCreateContractpartnerModalStore } from "./CreateContractpartnerModal.store";
 
 const contractpartnerId = defineModel({ type: Number });
 
@@ -47,6 +47,7 @@ const selectBoxValues = computed(() =>
 
 const showCreateContractpartnerModal = () =>
   openCreateContractpartner(
-    (contractpartnerEntry) => (contractpartnerId.value = contractpartnerEntry.id),
+    (contractpartnerEntry) =>
+      (contractpartnerId.value = contractpartnerEntry.id),
   );
 </script>

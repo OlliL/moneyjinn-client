@@ -24,8 +24,8 @@
 import { storeToRefs } from "pinia";
 import { onMounted, onUnmounted, provide, ref, shallowRef, watch } from "vue";
 
-import { useContractpartnerStore } from "@/stores/ContractpartnerStore";
 import { useCreateContractpartnerModalStore } from "@/components/contractpartner/CreateContractpartnerModal.store";
+import { useContractpartnerStore } from "@/stores/ContractpartnerStore";
 import useDeleteContractpartnerModalStore from "./elements/DeleteContractpartnerModal.store";
 import { useListContractpartnerAccountsModalStore } from "./elements/ListContractpartnerAccountsModal.store";
 

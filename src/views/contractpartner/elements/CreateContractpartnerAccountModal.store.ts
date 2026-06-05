@@ -27,14 +27,11 @@ export const useCreateContractpartnerAccountModalStore = defineStore(
     };
 
     // Combined watcher: reset when modal closes
-    watch(
-      open,
-      (newOpen) => {
-        if (!newOpen) {
-          account.value = {} as ContractpartnerAccount;
-        }
-      },
-    );
+    watch(open, (newOpen) => {
+      if (!newOpen) {
+        account.value = {} as ContractpartnerAccount;
+      }
+    });
 
     return {
       open,
@@ -47,5 +44,3 @@ export const useCreateContractpartnerAccountModalStore = defineStore(
 );
 
 export default useCreateContractpartnerAccountModalStore;
-
-

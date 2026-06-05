@@ -121,12 +121,12 @@ import {
   ContractpartnerAccountActionsKey,
   type CrudActions,
 } from "@/model/CrudActions";
-import { useListContractpartnerAccountsModalStore } from "./ListContractpartnerAccountsModal.store";
 import useCreateContractpartnerAccountModalStore from "./CreateContractpartnerAccountModal.store";
-import useDeleteContractpartnerAccountModalStore from "./DeleteContractpartnerAccountModal.store";
 import CreateContractpartnerAccountModal from "./CreateContractpartnerAccountModal.vue";
+import useDeleteContractpartnerAccountModalStore from "./DeleteContractpartnerAccountModal.store";
 import DeleteContractpartnerAccountModal from "./DeleteContractpartnerAccountModal.vue";
 import ListContractpartnerAccountRowVue from "./ListContractpartnerAccountRow.vue";
+import { useListContractpartnerAccountsModalStore } from "./ListContractpartnerAccountsModal.store";
 
 import type { ContractpartnerAccount } from "@/model/contractpartneraccount/ContractpartnerAccount";
 import ContractpartnerAccountService from "@/service/ContractpartnerAccountService";
@@ -151,15 +151,9 @@ const dataLoaded = ref(false);
 const actions: CrudActions<ContractpartnerAccount> = {
   create: () => createContractpartnerAccount(),
   edit: (contractpartnerAccount) =>
-    openEditContractpartnerAccount(
-      contractpartnerAccount,
-      loadData,
-    ),
+    openEditContractpartnerAccount(contractpartnerAccount, loadData),
   delete: (contractpartnerAccount) =>
-    openDeleteContractpartnerAccount(
-      contractpartnerAccount,
-      loadData,
-    ),
+    openDeleteContractpartnerAccount(contractpartnerAccount, loadData),
 };
 
 provide(ContractpartnerAccountActionsKey, actions);

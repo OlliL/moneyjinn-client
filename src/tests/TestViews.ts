@@ -126,7 +126,6 @@ export const DeclarativeModalStub = defineComponent({
     '<div v-if="open" :data-testid="\'app-modal-\' + idSuffix"><slot name="body" /><slot name="footer" /></div>',
 });
 
-
 export function renderDeclarativeModal(component: any, props?: any) {
   render(
     defineComponent({

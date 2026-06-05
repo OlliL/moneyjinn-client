@@ -18,10 +18,10 @@
 import ModalDelete from "@/components/common/ModalDelete.vue";
 import ModalDeleteRow from "@/components/common/ModalDeleteRow.vue";
 import GroupService from "@/service/GroupService";
-import useDeleteGroupModalStore from "./DeleteGroupModal.store";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { storeToRefs } from "pinia";
 import { ref, watch } from "vue";
+import useDeleteGroupModalStore from "./DeleteGroupModal.store";
 
 const { open, group, onDone } = storeToRefs(useDeleteGroupModalStore());
 

@@ -185,9 +185,9 @@
 </template>
 
 <script lang="ts" setup>
-import useListMoneyflowModalStore from "./ListMoneyflowModal.store";
 import { storeToRefs } from "pinia";
 import { computed, ref, toRaw, watch } from "vue";
+import useListMoneyflowModalStore from "./ListMoneyflowModal.store";
 
 // shadcn/ui Komponenten
 import { Badge } from "@/components/ui/badge";

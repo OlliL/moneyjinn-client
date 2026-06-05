@@ -31,19 +31,16 @@ import ModalDelete from "@/components/common/ModalDelete.vue";
 import ModalDeleteRow from "@/components/common/ModalDeleteRow.vue";
 import SpanAmount from "@/components/common/SpanAmount.vue";
 import CrudEtfFlowService from "@/service/CrudEtfFlowService";
-import useDeleteEtfFlowModalStore from "./DeleteEtfFlowModal.store";
 import { formatDateWithTime } from "@/tools/views/FormatDate";
 import { formatNumber, redIfNegative } from "@/tools/views/FormatNumber";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { storeToRefs } from "pinia";
 import { computed, ref, watch } from "vue";
+import useDeleteEtfFlowModalStore from "./DeleteEtfFlowModal.store";
 
-const {
-  open,
-  flow,
-  etfName,
-  onDone,
-} = storeToRefs(useDeleteEtfFlowModalStore());
+const { open, flow, etfName, onDone } = storeToRefs(
+  useDeleteEtfFlowModalStore(),
+);
 
 const serverErrors = ref(new Array<string>());
 

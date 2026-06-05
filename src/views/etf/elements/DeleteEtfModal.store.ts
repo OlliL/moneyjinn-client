@@ -28,4 +28,3 @@ export const useDeleteEtfModalStore = defineStore("deleteEtfModal", () => {
 });
 
 export default useDeleteEtfModalStore;
-

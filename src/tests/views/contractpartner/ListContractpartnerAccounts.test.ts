@@ -1,6 +1,6 @@
 import ContractpartnerAccountServiceMocker from "@/service/mocker/ContractpartnerAccountServiceMocker";
-import { useListContractpartnerAccountsModalStore } from "@/views/contractpartner/elements/ListContractpartnerAccountsModal.store";
 import { ModalView, renderDeclarativeModal, RowView } from "@/tests/TestViews";
+import { useListContractpartnerAccountsModalStore } from "@/views/contractpartner/elements/ListContractpartnerAccountsModal.store";
 import ListContractpartnerAccountsModal from "@/views/contractpartner/elements/ListContractpartnerAccountsModal.vue";
 import "@testing-library/jest-dom";
 import { createPinia, setActivePinia } from "pinia";

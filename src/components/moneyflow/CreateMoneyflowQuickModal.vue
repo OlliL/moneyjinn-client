@@ -121,8 +121,6 @@ import { Button } from "@/components/ui/button";
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 import { type PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
 import MoneyflowService from "@/service/MoneyflowService";
-import useCreateMoneyflowQuickModalStore from "./CreateMoneyflowQuickModal.store";
-import { storeToRefs } from "pinia";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { amountSchema, globErr } from "@/tools/views/ZodUtil";
 import {
@@ -133,10 +131,12 @@ import {
   MessageSquareMore,
   Save,
 } from "lucide-vue-next";
+import { storeToRefs } from "pinia";
 import { useForm } from "vee-validate";
-import { watch, ref } from "vue";
+import { ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { date, number, string } from "zod";
+import useCreateMoneyflowQuickModalStore from "./CreateMoneyflowQuickModal.store";
 
 const { t } = useI18n();
 const { handleSubmit } = useForm();
@@ -214,5 +214,4 @@ const book = handleSubmit(() => {
     })
     .catch((error) => handleBackendError(error, serverErrors));
 });
-
 </script>

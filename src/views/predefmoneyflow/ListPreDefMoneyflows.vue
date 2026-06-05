@@ -24,16 +24,16 @@
 <script lang="ts" setup>
 import DivError from "@/components/common/DivError.vue";
 import DivFilter from "@/components/common/DivFilter.vue";
+import { useCreatePreDefMoneyflowModalStore } from "@/components/predefmoneyflow/CreatePreDefMoneyflowModal.store";
 import {
   PreDefMoneyflowActionsKey,
   type CrudActions,
 } from "@/model/CrudActions";
 import type { PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
 import PreDefMoneyflowService from "@/service/PreDefMoneyflowService";
-import { useCreatePreDefMoneyflowModalStore } from "@/components/predefmoneyflow/CreatePreDefMoneyflowModal.store";
-import useDeletePreDefMoneyflowModalStore from "./elements/DeletePreDefMoneyflowModal.store";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { onMounted, provide, ref, watch } from "vue";
+import useDeletePreDefMoneyflowModalStore from "./elements/DeletePreDefMoneyflowModal.store";
 import DeletePreDefMoneyflowModal from "./elements/DeletePreDefMoneyflowModal.vue";
 import ListPreDefMoneyflowsDesktop from "./elements/ListPreDefMoneyflowsDesktop.vue";
 import ListPreDefMoneyflowsMobile from "./elements/ListPreDefMoneyflowsMobile.vue";
@@ -49,14 +49,13 @@ const { openDeletePreDefMoneyflow } = useDeletePreDefMoneyflowModalStore();
 
 const actions: CrudActions<PreDefMoneyflow> = {
   create: () => openCreatePreDefMoneyflow(undefined, reloadView),
-  edit: (preDefMoneyflow) => openCreatePreDefMoneyflow(preDefMoneyflow, reloadView),
+  edit: (preDefMoneyflow) =>
+    openCreatePreDefMoneyflow(preDefMoneyflow, reloadView),
   delete: (preDefMoneyflow) =>
     openDeletePreDefMoneyflow(preDefMoneyflow, reloadView),
 };
 
 provide(PreDefMoneyflowActionsKey, actions);
-
-
 
 watch(searchString, () => {
   searchContent();

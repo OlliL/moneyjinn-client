@@ -40,4 +40,3 @@ export const useDeleteEtfFlowModalStore = defineStore(
 );
 
 export default useDeleteEtfFlowModalStore;
-

@@ -34,4 +34,3 @@ export const useDeleteContractpartnerMatchingModalStore = defineStore(
 );
 
 export default useDeleteContractpartnerMatchingModalStore;
-

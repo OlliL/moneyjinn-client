@@ -32,14 +32,12 @@ import ModalDeleteRow from "@/components/common/ModalDeleteRow.vue";
 import SpanBoolean from "@/components/common/SpanBoolean.vue";
 import { userRoleNames } from "@/model/user/UserRole";
 import UserService from "@/service/UserService";
-import useDeleteUserModalStore from "./DeleteUserModal.store";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { storeToRefs } from "pinia";
 import { computed, ref, watch } from "vue";
+import useDeleteUserModalStore from "./DeleteUserModal.store";
 
-const { open, user, onDone } = storeToRefs(
-  useDeleteUserModalStore(),
-);
+const { open, user, onDone } = storeToRefs(useDeleteUserModalStore());
 
 const serverErrors = ref(new Array<string>());
 

@@ -78,10 +78,12 @@ class ListMonthlySettlementsView {
   );
 }
 
-const renderListMonthlySettlementsView = (props: {
-  year?: string;
-  month?: string;
-} = {}) => {
+const renderListMonthlySettlementsView = (
+  props: {
+    year?: string;
+    month?: string;
+  } = {},
+) => {
   return render(
     defineComponent({
       setup() {

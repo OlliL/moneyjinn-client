@@ -37,4 +37,3 @@ export const useReceiptModalStore = defineStore("receiptModal", () => {
 });
 
 export default useReceiptModalStore;
-

@@ -100,7 +100,6 @@ import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 import type { MoneyflowReceipt } from "@/model/moneyflow/MoneyflowReceipt";
 import { mapImportedMoneyflowReceiptToMoneyflowReceipt } from "@/service/mapper/ImportedToMoneyflowReceiptMapper";
 import MoneyflowReceiptService from "@/service/MoneyflowReceiptService";
-import useEditMoneyflowModalStore from "./EditMoneyflowModal.store";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { isDesktop } from "@/tools/views/IsDesktop";
 import { Eye, ReceiptText, Save, Trash2, Undo2 } from "lucide-vue-next";
@@ -110,6 +109,7 @@ import { computed, ref, toRaw, useTemplateRef, watch } from "vue";
 import DivError from "../common/DivError.vue";
 import ModalVue from "../common/Modal.vue";
 import SpanReceipt from "../common/SpanReceipt.vue";
+import useEditMoneyflowModalStore from "./EditMoneyflowModal.store";
 
 const serverErrors = ref(new Array<string>());
 const desktop = isDesktop();

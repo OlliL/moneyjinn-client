@@ -27,16 +27,14 @@ import ModalDeleteRow from "@/components/common/ModalDeleteRow.vue";
 import SpanDate from "@/components/common/SpanDate.vue";
 import SpanIban from "@/components/common/SpanIban.vue";
 import ContractpartnerAccountService from "@/service/ContractpartnerAccountService";
-import useDeleteContractpartnerAccountModalStore from "./DeleteContractpartnerAccountModal.store";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { storeToRefs } from "pinia";
 import { ref, watch } from "vue";
+import useDeleteContractpartnerAccountModalStore from "./DeleteContractpartnerAccountModal.store";
 
-const {
-  open,
-  account,
-  onDone,
-} = storeToRefs(useDeleteContractpartnerAccountModalStore());
+const { open, account, onDone } = storeToRefs(
+  useDeleteContractpartnerAccountModalStore(),
+);
 
 const serverErrors = ref(new Array<string>());
 

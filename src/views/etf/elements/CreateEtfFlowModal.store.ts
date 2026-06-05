@@ -51,4 +51,3 @@ export const useCreateEtfFlowModalStore = defineStore(
 );
 
 export default useCreateEtfFlowModalStore;
-

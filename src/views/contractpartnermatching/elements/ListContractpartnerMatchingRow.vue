@@ -35,9 +35,9 @@
 <script lang="ts" setup>
 import ButtonTableIcon from "@/components/common/ButtonTableIcon.vue";
 import SpanDate from "@/components/common/SpanDate.vue";
-import { ContractpartnerMatchingActionsKey } from "@/model/CrudActions";
 import { TableCell, TableRow } from "@/components/ui/table";
 import type { ContractpartnerMatching } from "@/model/contractpartnermatching/ContractpartnerMatching";
+import { ContractpartnerMatchingActionsKey } from "@/model/CrudActions";
 import { Pencil, Trash2 } from "lucide-vue-next";
 import { inject } from "vue";
 

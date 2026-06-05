@@ -1,5 +1,5 @@
-import CreatePostingAccountModal from "@/components/postingaccount/CreatePostingAccountModal.vue";
 import { useCreatePostingAccountModalStore } from "@/components/postingaccount/CreatePostingAccountModal.store";
+import CreatePostingAccountModal from "@/components/postingaccount/CreatePostingAccountModal.vue";
 import { BackendError, BackendErrorType } from "@/model/BackendError";
 import type { PostingAccount } from "@/model/postingaccount/PostingAccount";
 import PostingAccountService from "@/service/PostingAccountService";

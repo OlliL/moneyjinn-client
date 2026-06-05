@@ -88,7 +88,6 @@ import SelectPostingAccount from "@/components/postingaccount/SelectPostingAccou
 import { Button } from "@/components/ui/button";
 import type { ContractpartnerMatching } from "@/model/contractpartnermatching/ContractpartnerMatching";
 import ContractpartnerMatchingService from "@/service/ContractpartnerMatchingService";
-import useCreateContractpartnerMatchingModalStore from "./CreateContractpartnerMatchingModal.store";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { globErr } from "@/tools/views/ZodUtil";
 import { Save, Undo2 } from "lucide-vue-next";
@@ -97,15 +96,14 @@ import { useForm } from "vee-validate";
 import { computed, ref, toRaw, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { number, string, ZodType } from "zod";
+import useCreateContractpartnerMatchingModalStore from "./CreateContractpartnerMatchingModal.store";
 
 const { t } = useI18n();
 
 const idSuffix = "";
-const {
-  open,
-  matching,
-  onDone,
-} = storeToRefs(useCreateContractpartnerMatchingModalStore());
+const { open, matching, onDone } = storeToRefs(
+  useCreateContractpartnerMatchingModalStore(),
+);
 
 const serverErrors = ref(new Array<string>());
 
@@ -188,6 +186,4 @@ const createContractpartnerMatching = handleSubmit(() => {
       });
   }
 });
-
-
 </script>

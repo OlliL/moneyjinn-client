@@ -199,7 +199,6 @@ import type { User } from "@/model/user/User";
 import { UserRole, userRoleValues } from "@/model/user/UserRole";
 import GroupService from "@/service/GroupService";
 import UserService from "@/service/UserService";
-import useCreateUserModalStore from "./CreateUserModal.store";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { globErr } from "@/tools/views/ZodUtil";
 import { Save, Undo2 } from "lucide-vue-next";
@@ -208,6 +207,7 @@ import { useForm } from "vee-validate";
 import { computed, ref, toRaw, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { boolean, date, number, string, type ZodTypeAny } from "zod";
+import useCreateUserModalStore from "./CreateUserModal.store";
 
 const { t } = useI18n();
 

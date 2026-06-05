@@ -23,18 +23,18 @@
 import { onMounted, provide, ref, watch } from "vue";
 
 import DivFilter from "@/components/common/DivFilter.vue";
+import { useCreatePostingAccountModalStore } from "@/components/postingaccount/CreatePostingAccountModal.store";
 import {
   PostingAccountActionsKey,
   type CrudActions,
 } from "@/model/CrudActions";
 import type { PostingAccount } from "@/model/postingaccount/PostingAccount";
-import { useDeletePostingAccountModalStore } from "./elements/DeletePostingAccountModal.store";
-import { useCreatePostingAccountModalStore } from "@/components/postingaccount/CreatePostingAccountModal.store";
 import { usePostingAccountStore } from "@/stores/PostingAccountStore";
 import { storeToRefs } from "pinia";
+import { useDeletePostingAccountModalStore } from "./elements/DeletePostingAccountModal.store";
+import DeletePostingAccountModal from "./elements/DeletePostingAccountModal.vue";
 import ListPostingAccountsDesktop from "./elements/ListPostingAccountsDesktop.vue";
 import ListPostingAccountsMobile from "./elements/ListPostingAccountsMobile.vue";
-import DeletePostingAccountModal from "./elements/DeletePostingAccountModal.vue";
 
 const postingAccounts = ref(new Array<PostingAccount>());
 const searchString = ref("");

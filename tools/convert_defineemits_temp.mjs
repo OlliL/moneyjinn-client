@@ -1,6 +1,6 @@
+import { parse } from "@vue/compiler-sfc";
 import fs from "node:fs";
 import path from "node:path";
-import { parse } from "@vue/compiler-sfc";
 
 function collectEmitArgs(script) {
   const map = new Map();

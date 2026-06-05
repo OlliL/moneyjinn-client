@@ -258,8 +258,6 @@ import {
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import type { PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
 import PreDefMoneyflowService from "@/service/PreDefMoneyflowService";
-import useCreatePreDefMoneyflowModalStore from "./CreatePreDefMoneyflowModal.store";
-import { storeToRefs } from "pinia";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { amountSchema, globErr } from "@/tools/views/ZodUtil";
 import {
@@ -271,6 +269,7 @@ import {
   Undo2,
   X,
 } from "lucide-vue-next";
+import { storeToRefs } from "pinia";
 import { useForm } from "vee-validate";
 import { computed, ref, toRaw, watch } from "vue";
 import { useI18n } from "vue-i18n";
@@ -283,6 +282,7 @@ import InputStandard from "../common/InputStandard.vue";
 import ModalVue from "../common/Modal.vue";
 import SelectContractpartner from "../contractpartner/SelectContractpartner.vue";
 import SelectPostingAccount from "../postingaccount/SelectPostingAccount.vue";
+import useCreatePreDefMoneyflowModalStore from "./CreatePreDefMoneyflowModal.store";
 
 const { t } = useI18n();
 const { close } = useCreatePreDefMoneyflowModalStore();
@@ -425,5 +425,4 @@ const createPreDefMoneyflow = handleSubmit(() => {
       });
   }
 });
-
 </script>

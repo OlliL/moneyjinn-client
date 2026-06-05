@@ -19,14 +19,11 @@ export const useDeleteContractpartnerModalStore = defineStore(
     };
 
     // Combined watcher: reset when modal closes
-    watch(
-      open,
-      (newOpen) => {
-        if (!newOpen) {
-          contractpartner.value = {} as Contractpartner;
-        }
-      },
-    );
+    watch(open, (newOpen) => {
+      if (!newOpen) {
+        contractpartner.value = {} as Contractpartner;
+      }
+    });
 
     return {
       open,
@@ -38,5 +35,3 @@ export const useDeleteContractpartnerModalStore = defineStore(
 );
 
 export default useDeleteContractpartnerModalStore;
-
-

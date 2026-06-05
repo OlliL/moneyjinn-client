@@ -50,7 +50,6 @@
 import { Button } from "@/components/ui/button";
 import type { PostingAccount } from "@/model/postingaccount/PostingAccount";
 import PostingAccountService from "@/service/PostingAccountService";
-import { useCreatePostingAccountModalStore } from "./CreatePostingAccountModal.store";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { globErr } from "@/tools/views/ZodUtil";
 import { Save, Undo2 } from "lucide-vue-next";
@@ -63,6 +62,7 @@ import ButtonSubmit from "../common/ButtonSubmit.vue";
 import DivError from "../common/DivError.vue";
 import InputStandard from "../common/InputStandard.vue";
 import ModalVue from "../common/Modal.vue";
+import { useCreatePostingAccountModalStore } from "./CreatePostingAccountModal.store";
 
 const { t } = useI18n();
 

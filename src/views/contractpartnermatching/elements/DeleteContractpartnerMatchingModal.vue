@@ -39,15 +39,17 @@ import ModalDeleteRow from "@/components/common/ModalDeleteRow.vue";
 import SpanDate from "@/components/common/SpanDate.vue";
 import type { ContractpartnerMatching } from "@/model/contractpartnermatching/ContractpartnerMatching";
 import ContractpartnerMatchingService from "@/service/ContractpartnerMatchingService";
-import useDeleteContractpartnerMatchingModalStore from "./DeleteContractpartnerMatchingModal.store";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { storeToRefs } from "pinia";
 import { ref, watch } from "vue";
+import useDeleteContractpartnerMatchingModalStore from "./DeleteContractpartnerMatchingModal.store";
 
 const serverErrors = ref(new Array<string>());
-const { open, matching: selectedForDelete, onDone } = storeToRefs(
-  useDeleteContractpartnerMatchingModalStore(),
-);
+const {
+  open,
+  matching: selectedForDelete,
+  onDone,
+} = storeToRefs(useDeleteContractpartnerMatchingModalStore());
 const mcmData = ref({} as ContractpartnerMatching);
 
 watch(
