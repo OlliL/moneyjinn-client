@@ -37,25 +37,19 @@ import ButtonTableIcon from "@/components/common/ButtonTableIcon.vue";
 import SpanDate from "@/components/common/SpanDate.vue";
 import { TableCell, TableRow } from "@/components/ui/table";
 import type { ContractpartnerMatching } from "@/model/contractpartnermatching/ContractpartnerMatching";
+import { ContractpartnerMatchingActionsKey } from "@/model/CrudActions";
 import { Pencil, Trash2 } from "lucide-vue-next";
+import { inject } from "vue";
 
 const props = defineProps<{
   mcm: ContractpartnerMatching;
 }>();
-
-const emit = defineEmits<{
-  deleteContractpartnerMatching: [
-    contractpartnerMatching: ContractpartnerMatching,
-  ];
-  editContractpartnerMatching: [
-    contractpartnerMatching: ContractpartnerMatching,
-  ];
-}>();
+const actions = inject(ContractpartnerMatchingActionsKey)!;
 
 const deleteContractpartnerMatching = () => {
-  emit("deleteContractpartnerMatching", props.mcm);
+  actions.delete(props.mcm);
 };
 const editContractpartnerMatching = () => {
-  emit("editContractpartnerMatching", props.mcm);
+  actions.edit(props.mcm);
 };
 </script>

@@ -1,80 +1,53 @@
 <template>
   <ModalDelete
     :title="$t('Moneyflow.title.delete')"
-    :server-errors="serverErrors"
-    ref="modalComponent"
-    @confirm="deleteMoneyflow"
+    id-suffix="DeleteMoneyflow"
+    v-model:open="open"
+    :delete-action="() => MoneyflowService.deleteMoneyflow(moneyflow.id)"
+    :delete-success-action="() => onDone?.(moneyflow)"
   >
     <template #details>
       <ModalDeleteRow :label="$t('General.amount')" highlight-value>
-        <SpanAmount :amount="mmf.amount" />
+        <SpanAmount :amount="moneyflow.amount" />
       </ModalDeleteRow>
 
       <ModalDeleteRow :label="$t('Moneyflow.bookingdate')">
-        <SpanDate :date="mmf.bookingDate" />
+        <SpanDate :date="moneyflow.bookingDate" />
       </ModalDeleteRow>
 
       <ModalDeleteRow :label="$t('Moneyflow.invoicedate')">
-        <SpanDate :date="mmf.invoiceDate" />
+        <SpanDate :date="moneyflow.invoiceDate" />
       </ModalDeleteRow>
 
       <ModalDeleteRow :label="$t('General.contractpartner')">
-        {{ mmf.contractpartnerName }}
+        {{ moneyflow.contractpartnerName }}
       </ModalDeleteRow>
 
       <ModalDeleteRow :label="$t('General.capitalsource')">
-        {{ mmf.capitalsourceComment }}
+        {{ moneyflow.capitalsourceComment }}
       </ModalDeleteRow>
 
       <ModalDeleteRow :label="$t('General.comment')">
-        {{ mmf.comment }}
+        {{ moneyflow.comment }}
       </ModalDeleteRow>
 
       <ModalDeleteRow :label="$t('General.postingAccount')">
-        {{ mmf.postingAccountName }}
+        {{ moneyflow.postingAccountName }}
       </ModalDeleteRow>
     </template>
   </ModalDelete>
 </template>
 
 <script lang="ts" setup>
-import { ref, useTemplateRef } from "vue";
+import { storeToRefs } from "pinia";
+import useDeleteMoneyflowModalStore from "./DeleteMoneyflowModal.store";
 
 import ModalDelete from "../common/ModalDelete.vue";
 import ModalDeleteRow from "../common/ModalDeleteRow.vue";
 import SpanAmount from "../common/SpanAmount.vue";
 import SpanDate from "../common/SpanDate.vue";
 
-import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
-
 import MoneyflowService from "@/service/MoneyflowService";
-import { handleBackendError } from "@/tools/views/HandleBackendError";
 
-const serverErrors = ref(new Array<string>());
-
-const mmf = ref({} as Moneyflow);
-const modalComponent = useTemplateRef<typeof ModalDelete>("modalComponent");
-const emit = defineEmits<{
-  moneyflowDeleted: [moneyflow: Moneyflow];
-}>();
-
-const _show = (_mmf: Moneyflow) => {
-  mmf.value = _mmf;
-  serverErrors.value = new Array<string>();
-  modalComponent.value?._show();
-};
-
-const deleteMoneyflow = () => {
-  serverErrors.value = new Array<string>();
-
-  MoneyflowService.deleteMoneyflow(mmf.value.id)
-    .then(() => {
-      modalComponent.value?._hide();
-      emit("moneyflowDeleted", mmf.value);
-    })
-    .catch((backendError) => {
-      handleBackendError(backendError, serverErrors);
-    });
-};
-defineExpose({ _show });
+const { open, moneyflow, onDone } = storeToRefs(useDeleteMoneyflowModalStore());
 </script>

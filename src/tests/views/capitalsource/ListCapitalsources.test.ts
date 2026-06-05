@@ -1,3 +1,4 @@
+import GlobalModals from "@/components/common/GlobalModals.vue";
 import { CapitalsourceImport } from "@/model/capitalsource/CapitalsourceImport";
 import { CapitalsourceState } from "@/model/capitalsource/CapitalsourceState";
 import { CapitalsourceType } from "@/model/capitalsource/CapitalsourceType";
@@ -13,6 +14,7 @@ import {
 import {
   ButtonView,
   CollapseView,
+  DeclarativeModalStub,
   InputView,
   MobilePopupMenu,
   ModalView,
@@ -24,6 +26,7 @@ import "@testing-library/jest-dom/vitest";
 import { render } from "@testing-library/vue";
 import { createPinia, setActivePinia } from "pinia";
 import { beforeEach, test, vi } from "vitest";
+import { defineComponent } from "vue";
 
 vi.mock("@/service/CapitalsourceService");
 vi.mock("@/service/ContractpartnerService");
@@ -63,10 +66,33 @@ class ListCapitalsourcesView {
   static readonly RowOldAccount = new RowView("capitalsource-row-2");
   static readonly EditCashButton = new ButtonView("capitalsource-edit-1");
   static readonly DeleteCashButton = new ButtonView("capitalsource-delete-1");
-  static readonly Modal = new ModalView("app-modal");
+  static readonly DeleteModal = new ModalView("app-modal-DeleteCapitalsource");
+  static readonly CreateEditModal = new ModalView(
+    "app-modal-CreateCapitalsource",
+  );
   static readonly EmptyRowDesktop = new RowView("capitalsource-empty-desktop");
   static readonly EmptyRowMobile = new RowView("capitalsource-empty-mobile");
 }
+
+/**
+ * Helper function to render ListCapitalsources together with GlobalModals.
+ * This ensures that the Create/Edit modals are present in the DOM.
+ */
+const renderListCapitalsourcesView = (props: Record<string, unknown> = {}) => {
+  return render(
+    defineComponent({
+      setup() {
+        return { props };
+      },
+      template:
+        '<div><ListCapitalsources v-bind="props" /><GlobalModals /></div>',
+      components: { ListCapitalsources, GlobalModals },
+    }),
+    {
+      global: { stubs: { ModalVue: DeclarativeModalStub } },
+    },
+  );
+};
 
 beforeEach(() => {
   setActivePinia(createPinia());
@@ -103,7 +129,7 @@ beforeEach(() => {
 
 test("ListCapitalsources renders capitalsource rows", async () => {
   await StoreService.getInstance().initAllStores();
-  render(ListCapitalsources);
+  renderListCapitalsourcesView();
 
   await ListCapitalsourcesView.RowCash.assertToBeVisible();
   await ListCapitalsourcesView.RowOldAccount.assertNotToBeInDocument();
@@ -111,7 +137,7 @@ test("ListCapitalsources renders capitalsource rows", async () => {
 
 test("ListCapitalsources toggles valid-now filter", async () => {
   await StoreService.getInstance().initAllStores();
-  render(ListCapitalsources);
+  renderListCapitalsourcesView();
 
   await ListCapitalsourcesView.ValidNowToggle.click();
 
@@ -120,7 +146,7 @@ test("ListCapitalsources toggles valid-now filter", async () => {
 
 test("ListCapitalsources filters by search input", async () => {
   await StoreService.getInstance().initAllStores();
-  render(ListCapitalsources);
+  renderListCapitalsourcesView();
 
   await ListCapitalsourcesView.ValidNowToggle.click();
   await ListCapitalsourcesView.FilterInput.setValue("old");
@@ -131,23 +157,23 @@ test("ListCapitalsources filters by search input", async () => {
 
 test("ListCapitalsources opens edit modal from row action", async () => {
   await StoreService.getInstance().initAllStores();
-  render(ListCapitalsources);
+  renderListCapitalsourcesView();
 
   await ListCapitalsourcesView.EditCashButton.click();
-  await ListCapitalsourcesView.Modal.assertOpen();
+  await ListCapitalsourcesView.CreateEditModal.assertOpen(); // Use specific modal
 });
 
 test("ListCapitalsources opens delete modal from row action", async () => {
   await StoreService.getInstance().initAllStores();
-  render(ListCapitalsources);
+  renderListCapitalsourcesView();
 
   await ListCapitalsourcesView.DeleteCashButton.click();
-  await ListCapitalsourcesView.Modal.assertOpen();
+  await ListCapitalsourcesView.DeleteModal.assertOpen(); // Use specific modal
 });
 
 test("ListCapitalsources filters via mobile sheet", async () => {
   await StoreService.getInstance().initAllStores();
-  render(ListCapitalsources);
+  renderListCapitalsourcesView();
 
   await ListCapitalsourcesView.MobileAccordion.assertToBeVisible();
   await ListCapitalsourcesView.MobileFilterTrigger.click();
@@ -162,29 +188,29 @@ test("ListCapitalsources filters via mobile sheet", async () => {
 
 test("ListCapitalsources opens edit modal from mobile action", async () => {
   await StoreService.getInstance().initAllStores();
-  render(ListCapitalsources);
+  renderListCapitalsourcesView();
 
   await ListCapitalsourcesView.MobileRowCash.assertToBeVisible();
   await ListCapitalsourcesView.MobileRowCashTrigger.click();
   await ListCapitalsourcesView.EditCashMobileButton.click();
-  await ListCapitalsourcesView.Modal.assertOpen();
+  await ListCapitalsourcesView.CreateEditModal.assertOpen(); // Use specific modal
 });
 
 test("ListCapitalsources opens delete modal from mobile action", async () => {
   await StoreService.getInstance().initAllStores();
-  render(ListCapitalsources);
+  renderListCapitalsourcesView();
 
   await ListCapitalsourcesView.MobileRowCash.assertToBeVisible();
   await ListCapitalsourcesView.MobileRowCashTrigger.click();
   await ListCapitalsourcesView.DeleteCashMobileButton.click();
-  await ListCapitalsourcesView.Modal.assertOpen();
+  await ListCapitalsourcesView.DeleteModal.assertOpen(); // Use specific test ID for delete modal
 });
 
 test("ListCapitalsources shows empty state for desktop and mobile if list is empty", async () => {
   CapitalsourceServiceMocker.mockFetchAllCapitalsource([]);
   await StoreService.getInstance().initAllStores();
 
-  render(ListCapitalsources);
+  renderListCapitalsourcesView();
 
   await ListCapitalsourcesView.EmptyRowDesktop.assertToBeVisible();
   await ListCapitalsourcesView.EmptyRowMobile.assertToBeVisible();

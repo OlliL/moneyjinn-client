@@ -9,6 +9,7 @@ import {
 } from "@/stores/UserSessionStore";
 import {
   ButtonView,
+  DeclarativeModalStub,
   InputView,
   MobilePopupMenu,
   ModalView,
@@ -20,6 +21,7 @@ import "@testing-library/jest-dom/vitest";
 import { render } from "@testing-library/vue";
 import { createPinia, setActivePinia } from "pinia";
 import { beforeEach, test, vi } from "vitest";
+import { defineComponent } from "vue";
 
 vi.mock("@/service/CrudEtfService");
 vi.mock("@/service/CapitalsourceService");
@@ -55,7 +57,8 @@ class ListEtfsView {
   static readonly RowGlobalEtf = new RowView("etf-row-2");
   static readonly EditEtf1Button = new ButtonView("etf-edit-1");
   static readonly DeleteEtf1Button = new ButtonView("etf-delete-1");
-  static readonly Modal = new ModalView("app-modal");
+  static readonly CreateModal = new ModalView("app-modal-CreateEtf");
+  static readonly DeleteModal = new ModalView("app-modal-DeleteEtf");
   static readonly EmptyRowDesktop = new RowView("etf-empty-desktop");
   static readonly EmptyRowMobile = new RowView("etf-empty-mobile");
 }
@@ -83,16 +86,31 @@ beforeEach(() => {
   PostingAccountServiceMocker.mockFetchAllPostingAccount([]);
 });
 
+const renderListEtfsView = (props: Record<string, unknown> = {}) => {
+  return render(
+    defineComponent({
+      setup() {
+        return { props };
+      },
+      template: '<div><ListEtfs v-bind="props" /></div>',
+      components: { ListEtfs },
+    }),
+    {
+      global: { stubs: { ModalVue: DeclarativeModalStub } },
+    },
+  );
+};
+
 test("ListEtfs loads and renders ETF rows on mount", async () => {
   await StoreService.getInstance().initAllStores();
-  render(ListEtfs);
+  renderListEtfsView();
 
   await ListEtfsView.RowEtf1.assertToBeVisible();
 });
 
 test("ListEtfs hides valid-now toggle in filter", async () => {
   await StoreService.getInstance().initAllStores();
-  render(ListEtfs);
+  renderListEtfsView();
 
   await ListEtfsView.RowEtf1.assertToBeVisible();
   await ListEtfsView.ValidNowToggle.assertNotToBeInDocument();
@@ -100,7 +118,7 @@ test("ListEtfs hides valid-now toggle in filter", async () => {
 
 test("ListEtfs filters rows by search input", async () => {
   await StoreService.getInstance().initAllStores();
-  render(ListEtfs);
+  renderListEtfsView();
 
   await ListEtfsView.RowEtf1.assertToBeVisible();
   await ListEtfsView.FilterInput.setValue("global");
@@ -110,7 +128,7 @@ test("ListEtfs filters rows by search input", async () => {
 
 test("ListEtfs clears search filter via all button", async () => {
   await StoreService.getInstance().initAllStores();
-  render(ListEtfs);
+  renderListEtfsView();
 
   await ListEtfsView.RowEtf1.assertToBeVisible();
   await ListEtfsView.FilterInput.setValue("global");
@@ -124,34 +142,34 @@ test("ListEtfs clears search filter via all button", async () => {
 
 test("ListEtfs opens create modal", async () => {
   await StoreService.getInstance().initAllStores();
-  render(ListEtfs);
+  renderListEtfsView();
 
   await ListEtfsView.RowEtf1.assertToBeVisible();
   await ListEtfsView.CreateButton.click();
-  await ListEtfsView.Modal.assertOpen();
+  await ListEtfsView.CreateModal.assertOpen();
 });
 
 test("ListEtfs opens edit modal from row action", async () => {
   await StoreService.getInstance().initAllStores();
-  render(ListEtfs);
+  renderListEtfsView();
 
   await ListEtfsView.RowEtf1.assertToBeVisible();
   await ListEtfsView.EditEtf1Button.click();
-  await ListEtfsView.Modal.assertOpen();
+  await ListEtfsView.CreateModal.assertOpen();
 });
 
 test("ListEtfs opens delete modal from row action", async () => {
   await StoreService.getInstance().initAllStores();
-  render(ListEtfs);
+  renderListEtfsView();
 
   await ListEtfsView.RowEtf1.assertToBeVisible();
   await ListEtfsView.DeleteEtf1Button.click();
-  await ListEtfsView.Modal.assertOpen();
+  await ListEtfsView.DeleteModal.assertOpen();
 });
 
 test("ListEtfs filters rows via mobile sheet", async () => {
   await StoreService.getInstance().initAllStores();
-  render(ListEtfs);
+  renderListEtfsView();
 
   await ListEtfsView.MobileAccordion.assertToBeVisible();
   await ListEtfsView.MobileFilterTrigger.click();
@@ -164,7 +182,7 @@ test("ListEtfs filters rows via mobile sheet", async () => {
 
 test("ListEtfs expands mobile accordion row", async () => {
   await StoreService.getInstance().initAllStores();
-  render(ListEtfs);
+  renderListEtfsView();
 
   await ListEtfsView.MobileRowEtf1.assertToBeVisible();
   await ListEtfsView.MobileTriggerEtf1.click();
@@ -173,25 +191,25 @@ test("ListEtfs expands mobile accordion row", async () => {
 
 test("ListEtfs opens edit modal from mobile action", async () => {
   await StoreService.getInstance().initAllStores();
-  render(ListEtfs);
+  renderListEtfsView();
 
   await ListEtfsView.MobileRowEtf1.assertToBeVisible();
   await ListEtfsView.MobileEditEtf1Button.click();
-  await ListEtfsView.Modal.assertOpen();
+  await ListEtfsView.CreateModal.assertOpen();
 });
 
 test("ListEtfs opens delete modal from mobile action", async () => {
   await StoreService.getInstance().initAllStores();
-  render(ListEtfs);
+  renderListEtfsView();
 
   await ListEtfsView.MobileRowEtf1.assertToBeVisible();
   await ListEtfsView.MobileDeleteEtf1Button.click();
-  await ListEtfsView.Modal.assertOpen();
+  await ListEtfsView.DeleteModal.assertOpen();
 });
 
 test("ListEtfs shows favorite indicator only for favorite ETF on mobile", async () => {
   await StoreService.getInstance().initAllStores();
-  render(ListEtfs);
+  renderListEtfsView();
 
   await ListEtfsView.MobileRowEtf1.assertToBeVisible();
   await ListEtfsView.MobileFavoriteEtf1.assertToBeVisible();
@@ -202,12 +220,12 @@ test("ListEtfs shows empty state for empty list (Desktop and Mobile)", async () 
   // Desktop test
   await StoreService.getInstance().initAllStores();
   CrudEtfServiceMocker.mockFetchAllEtf([]);
-  render(ListEtfs);
+  renderListEtfsView();
   await ListEtfsView.EmptyRowDesktop.assertToBeVisible();
 
   // Mobile test: Set viewport to mobile size and re-render
   window.innerWidth = 375;
   window.dispatchEvent(new Event("resize"));
-  render(ListEtfs);
+  renderListEtfsView();
   await ListEtfsView.EmptyRowMobile.assertToBeVisible();
 });

@@ -1,10 +1,4 @@
 <template>
-  <CreateCapitalsourceModalVue
-    ref="createCapitalsourceModal"
-    :id-suffix="idSuffix"
-    @capitalsource-created="capitalsourceCreated"
-  />
-
   <SelectStandard
     v-model="capitalsourceId"
     :validation-schema="validationSchema"
@@ -20,15 +14,13 @@
 
 <script lang="ts" setup>
 import { SquarePlus } from "lucide-vue-next";
-import { computed, useTemplateRef } from "vue";
+import { computed } from "vue";
 import { any, type ZodType } from "zod";
 
 import SelectStandard from "../common/SelectStandard.vue";
-import CreateCapitalsourceModalVue from "./CreateCapitalsourceModal.vue";
 
 import { useCapitalsourceStore } from "@/stores/CapitalsourceStore";
-
-import type { Capitalsource } from "@/model/capitalsource/Capitalsource";
+import { useCreateCapitalsourceModalStore } from "./CreateCapitalsourceModal.store";
 
 const capitalsourceId = defineModel({ type: Number });
 
@@ -45,20 +37,15 @@ const props = withDefaults(
   },
 );
 
-const createCapitalsourceModal = useTemplateRef<
-  typeof CreateCapitalsourceModalVue
->("createCapitalsourceModal");
-const capitalsourceStore = useCapitalsourceStore();
+const { openCreateCapitalsource } = useCreateCapitalsourceModalStore();
+const { getAsSelectBoxValues } = useCapitalsourceStore();
 
 const selectBoxValues = computed(() =>
-  capitalsourceStore.getAsSelectBoxValues(props.validityDate),
+  getAsSelectBoxValues(props.validityDate),
 );
 
-const showCreateCapitalsourceModal = () => {
-  createCapitalsourceModal.value?._show();
-};
-
-const capitalsourceCreated = (mcs: Capitalsource) => {
-  capitalsourceId.value = mcs.id;
-};
+const showCreateCapitalsourceModal = () =>
+  openCreateCapitalsource(
+    (capitalsourceEntry) => (capitalsourceId.value = capitalsourceEntry.id),
+  );
 </script>

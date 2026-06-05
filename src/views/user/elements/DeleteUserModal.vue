@@ -1,9 +1,10 @@
 <template>
   <ModalDelete
     :title="$t('User.title.delete')"
-    :server-errors="serverErrors"
-    ref="modalComponent"
-    @confirm="deleteUser"
+    id-suffix="DeleteUser"
+    v-model:open="open"
+    :delete-action="() => UserService.deleteUser(user.id)"
+    :delete-success-action="onDone"
   >
     <template #details>
       <ModalDeleteRow :label="$t('General.name')" highlight-value>
@@ -29,41 +30,13 @@
 import ModalDelete from "@/components/common/ModalDelete.vue";
 import ModalDeleteRow from "@/components/common/ModalDeleteRow.vue";
 import SpanBoolean from "@/components/common/SpanBoolean.vue";
-import type { User } from "@/model/user/User";
 import { userRoleNames } from "@/model/user/UserRole";
 import UserService from "@/service/UserService";
-import { handleBackendError } from "@/tools/views/HandleBackendError";
-import { computed, ref, useTemplateRef } from "vue";
+import { storeToRefs } from "pinia";
+import { computed } from "vue";
+import useDeleteUserModalStore from "./DeleteUserModal.store";
 
-const user = ref({} as User);
-const serverErrors = ref(new Array<string>());
-const modalComponent = useTemplateRef<typeof ModalDelete>("modalComponent");
-const emit = defineEmits<{
-  userDeleted: [user: User];
-}>();
+const { open, user, onDone } = storeToRefs(useDeleteUserModalStore());
 
-const _show = (_user: User) => {
-  user.value = _user;
-  serverErrors.value = new Array<string>();
-  modalComponent.value?._show();
-};
-
-const role = computed(() => {
-  return userRoleNames[user.value.role];
-});
-
-const deleteUser = () => {
-  serverErrors.value = new Array<string>();
-
-  UserService.deleteUser(user.value.id)
-    .then(() => {
-      modalComponent.value?._hide();
-      emit("userDeleted", user.value);
-    })
-    .catch((backendError) => {
-      handleBackendError(backendError, serverErrors);
-    });
-};
-
-defineExpose({ _show });
+const role = computed(() => userRoleNames[user.value.role]);
 </script>

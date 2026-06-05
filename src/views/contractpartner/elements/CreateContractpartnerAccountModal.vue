@@ -2,13 +2,14 @@
   <ModalVue
     :title="title"
     max-width="max-w-md"
-    ref="modalComponent"
+    id-suffix="CreateContractpartnerAccount"
+    v-model:open="open"
     :z-index="zIndex"
   >
     <template #body>
       <form
         @submit.prevent="createContractpartnerAccount"
-        :id="'createContractpartnerAccountForm' + idSuffix"
+        id="createContractpartnerAccountFormCreateContractpartnerAccount"
       >
         <div class="space-y-4">
           <DivError :server-errors="serverErrors" />
@@ -17,18 +18,18 @@
             <div class="grid grid-cols-1 sm:grid-cols-12 gap-4">
               <div class="sm:col-span-8">
                 <InputStandard
-                  v-model="mca.accountNumber"
+                  v-model="account.accountNumber"
                   :validation-schema="schema.accountNumber"
-                  :id="'accountNumber' + idSuffix"
+                  id="accountNumber-CreateContractpartnerAccount"
                   :field-label="$t('General.iban')"
                 />
               </div>
 
               <div class="sm:col-span-4">
                 <InputStandard
-                  v-model="mca.bankCode"
+                  v-model="account.bankCode"
                   :validation-schema="schema.bankCode"
-                  :id="'bankCode' + idSuffix"
+                  id="bankCode-CreateContractpartnerAccount"
                   :field-label="$t('General.bic')"
                 />
               </div>
@@ -51,7 +52,7 @@
 
       <ButtonSubmit
         :button-label="$t('General.save')"
-        :form-id="'createContractpartnerAccountForm' + idSuffix"
+        form-id="createContractpartnerAccountFormCreateContractpartnerAccount"
       >
         <template #icon><Save class="icon-medium" /></template>
       </ButtonSubmit>
@@ -70,38 +71,30 @@ import ContractpartnerAccountService from "@/service/ContractpartnerAccountServi
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { globErr } from "@/tools/views/ZodUtil";
 import { Save, Undo2 } from "lucide-vue-next";
+import { storeToRefs } from "pinia";
 import { useForm } from "vee-validate";
-import { computed, ref, toRaw, useTemplateRef } from "vue";
+import { computed, ref, toRaw, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { string, ZodType } from "zod";
+import useCreateContractpartnerAccountModalStore from "./CreateContractpartnerAccountModal.store";
 
 const { t } = useI18n();
 
+const { open, account, onDone } = storeToRefs(
+  useCreateContractpartnerAccountModalStore(),
+);
+
 const props = withDefaults(
   defineProps<{
-    idSuffix?: string;
-    contractpartnerId: number;
     zIndex?: string;
   }>(),
   {
-    idSuffix: "",
     zIndex: "2001",
   },
 );
 
 const serverErrors = ref(new Array<string>());
-const mca = ref({} as ContractpartnerAccount);
 const origMca = ref({} as ContractpartnerAccount | undefined);
-const modalComponent = useTemplateRef<typeof ModalVue>("modalComponent");
-
-const emit = defineEmits<{
-  contractpartnerAccountCreated: [
-    contractpartnerAccount: ContractpartnerAccount,
-  ];
-  contractpartnerAccountUpdated: [
-    contractpartnerAccount: ContractpartnerAccount,
-  ];
-}>();
 
 const { handleSubmit, values, setFieldTouched } = useForm();
 
@@ -123,45 +116,45 @@ const title = computed(() => {
 });
 
 const resetForm = () => {
-  if (origMca.value) {
-    mca.value = structuredClone(toRaw(origMca.value))!;
-  } else {
-    mca.value = {
-      contractpartnerid: props.contractpartnerId,
-    } as ContractpartnerAccount;
-  }
+  account.value = origMca.value
+    ? structuredClone(toRaw(origMca.value))!
+    : ({
+        contractpartnerid: account.value.contractpartnerid,
+      } as ContractpartnerAccount);
+
   serverErrors.value = new Array<string>();
   Object.keys(values).forEach((field) => setFieldTouched(field, false));
 };
 
-const _show = (_mca?: ContractpartnerAccount) => {
-  origMca.value = _mca ?? undefined;
-  resetForm();
-  modalComponent.value?._show();
-};
+watch(open, (newVal) => {
+  if (newVal) {
+    origMca.value = account.value.id > 0 ? account.value : undefined;
+    resetForm();
+  }
+});
 
 const createContractpartnerAccount = handleSubmit(() => {
   serverErrors.value = new Array<string>();
 
   const serviceCall =
-    mca.value.id > 0
-      ? ContractpartnerAccountService.updateContractpartnerAccount(mca.value)
-      : ContractpartnerAccountService.createContractpartnerAccount(mca.value);
+    account.value.id > 0
+      ? ContractpartnerAccountService.updateContractpartnerAccount(
+          account.value,
+        )
+      : ContractpartnerAccountService.createContractpartnerAccount(
+          account.value,
+        );
 
   serviceCall
     .then((result) => {
-      const isUpdate = mca.value.id > 0;
-      if (!isUpdate) mca.value = result as ContractpartnerAccount;
+      const isUpdate = account.value.id > 0;
+      if (!isUpdate) account.value = result as ContractpartnerAccount;
 
-      modalComponent.value?._hide();
-      isUpdate
-        ? emit("contractpartnerAccountUpdated", mca.value)
-        : emit("contractpartnerAccountCreated", mca.value);
+      open.value = false;
+      onDone.value?.();
     })
     .catch((backendError) => {
       handleBackendError(backendError, serverErrors);
     });
 });
-
-defineExpose({ _show });
 </script>

@@ -1,22 +1,12 @@
 <template>
-  <CreateContractpartnerAccountModalVue
-    v-if="dataLoaded"
-    ref="createContractpartnerAccountModal"
-    id-suffix="listAccounts"
-    :contractpartner-id="mcp.id"
-    @contractpartner-account-created="loadData"
-    @contractpartner-account-updated="loadData"
-  />
-  <DeleteContractpartnerAccountModalVue
-    v-if="dataLoaded"
-    ref="deleteModal"
-    @contractpartner-account-deleted="loadData"
-  />
+  <CreateContractpartnerAccountModal />
+  <DeleteContractpartnerAccountModal />
 
   <ModalVue
-    :title="mcp.name + ': ' + $t('General.contractpartnerAccounts')"
+    :title="(mcp?.name ?? '') + ': ' + $t('General.contractpartnerAccounts')"
     max-width="!max-w-xl"
-    ref="modalComponent"
+    id-suffix="ListContractpartnerAccounts"
+    v-model:open="open"
   >
     <template #body>
       <DivError :server-errors="serverErrors" />
@@ -56,8 +46,6 @@
               v-for="mca in contractpartnerAccount"
               :key="mca.accountNumber"
               :mca="mca"
-              @delete-contractpartner-account="deleteContractpartnerAccount"
-              @edit-contractpartner-account="editContractpartnerAccount"
             />
           </TableBody>
         </Table>
@@ -89,18 +77,10 @@
               </span>
             </div>
             <div class="flex items-center gap-1">
-              <Button
-                variant="ghost"
-                size="icon"
-                @click="editContractpartnerAccount(mca)"
-              >
+              <Button variant="ghost" size="icon" @click="actions.edit(mca)">
                 <Pencil class="icon-medium" />
               </Button>
-              <Button
-                variant="ghost"
-                size="icon"
-                @click="deleteContractpartnerAccount(mca)"
-              >
+              <Button variant="ghost" size="icon" @click="actions.delete(mca)">
                 <Trash2 class="icon-medium" />
               </Button>
             </div>
@@ -111,7 +91,7 @@
 
     <template #footer>
       <Button
-        @click="showCreateContractpartnerAccountModal"
+        @click="createContractpartnerAccount"
         class="button-with-icon gap-2 rounded-md! px-6"
       >
         <PlusSquare class="icon-medium" />
@@ -123,7 +103,7 @@
 
 <script lang="ts" setup>
 import { Pencil, PlusSquare, Trash2 } from "lucide-vue-next";
-import { ref, useTemplateRef } from "vue";
+import { provide, ref, watch } from "vue";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -137,34 +117,54 @@ import {
 
 import DivError from "@/components/common/DivError.vue";
 import ModalVue from "@/components/common/Modal.vue";
-import CreateContractpartnerAccountModalVue from "./CreateContractpartnerAccountModal.vue";
-import DeleteContractpartnerAccountModalVue from "./DeleteContractpartnerAccountModal.vue";
+import {
+  ContractpartnerAccountActionsKey,
+  type CrudActions,
+} from "@/model/CrudActions";
+import useCreateContractpartnerAccountModalStore from "./CreateContractpartnerAccountModal.store";
+import CreateContractpartnerAccountModal from "./CreateContractpartnerAccountModal.vue";
+import useDeleteContractpartnerAccountModalStore from "./DeleteContractpartnerAccountModal.store";
+import DeleteContractpartnerAccountModal from "./DeleteContractpartnerAccountModal.vue";
 import ListContractpartnerAccountRowVue from "./ListContractpartnerAccountRow.vue";
+import { useListContractpartnerAccountsModalStore } from "./ListContractpartnerAccountsModal.store";
 
-import type { Contractpartner } from "@/model/contractpartner/Contractpartner";
 import type { ContractpartnerAccount } from "@/model/contractpartneraccount/ContractpartnerAccount";
 import ContractpartnerAccountService from "@/service/ContractpartnerAccountService";
 
 import SpanDate from "@/components/common/SpanDate.vue";
 import SpanIban from "@/components/common/SpanIban.vue";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
+import { storeToRefs } from "pinia";
 
 const serverErrors = ref(new Array<string>());
 
-const mcp = ref({} as Contractpartner);
+const { open, contractpartner: mcp } = storeToRefs(
+  useListContractpartnerAccountsModalStore(),
+);
+const { openCreateContractpartnerAccount, openEditContractpartnerAccount } =
+  useCreateContractpartnerAccountModalStore();
+const { openDeleteContractpartnerAccount } =
+  useDeleteContractpartnerAccountModalStore();
 const contractpartnerAccount = ref([] as Array<ContractpartnerAccount>);
 const dataLoaded = ref(false);
 
-const modalComponent = useTemplateRef<typeof ModalVue>("modalComponent");
-const createContractpartnerAccountModal = useTemplateRef<
-  typeof CreateContractpartnerAccountModalVue
->("createContractpartnerAccountModal");
-const deleteModal =
-  useTemplateRef<typeof DeleteContractpartnerAccountModalVue>("deleteModal");
+const actions: CrudActions<ContractpartnerAccount> = {
+  create: () => createContractpartnerAccount(),
+  edit: (contractpartnerAccount) =>
+    openEditContractpartnerAccount(contractpartnerAccount, loadData),
+  delete: (contractpartnerAccount) =>
+    openDeleteContractpartnerAccount(contractpartnerAccount, loadData),
+};
+
+provide(ContractpartnerAccountActionsKey, actions);
+
+const createContractpartnerAccount = () => {
+  openCreateContractpartnerAccount(mcp.value!.id, loadData);
+};
 
 const loadData = () => {
   dataLoaded.value = false;
-  ContractpartnerAccountService.fetchAllContractpartnerAccount(mcp.value.id)
+  ContractpartnerAccountService.fetchAllContractpartnerAccount(mcp.value!.id)
     .then((mcaArray: Array<ContractpartnerAccount>) => {
       contractpartnerAccount.value = mcaArray;
       dataLoaded.value = true;
@@ -174,23 +174,13 @@ const loadData = () => {
     });
 };
 
-const _show = (_mcp: Contractpartner) => {
-  mcp.value = _mcp;
-  loadData();
-  modalComponent.value?._show();
-};
-
-const showCreateContractpartnerAccountModal = () => {
-  createContractpartnerAccountModal.value?._show();
-};
-
-const editContractpartnerAccount = (_mca: ContractpartnerAccount) => {
-  createContractpartnerAccountModal.value?._show(_mca);
-};
-
-const deleteContractpartnerAccount = (_mca: ContractpartnerAccount) => {
-  deleteModal.value?._show(_mca);
-};
-
-defineExpose({ _show });
+watch(
+  [open, mcp],
+  ([isVisible]) => {
+    if (isVisible && mcp.value) {
+      loadData();
+    }
+  },
+  { immediate: true },
+);
 </script>

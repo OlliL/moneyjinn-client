@@ -1,3 +1,4 @@
+import GlobalModals from "@/components/common/GlobalModals.vue";
 import CapitalsourceServiceMocker from "@/service/mocker/CapitalsourceServiceMocker";
 import ContractpartnerAccountServiceMocker from "@/service/mocker/ContractpartnerAccountServiceMocker";
 import ContractpartnerServiceMocker from "@/service/mocker/ContractpartnerServiceMocker";
@@ -10,6 +11,7 @@ import {
 } from "@/stores/UserSessionStore";
 import {
   ButtonView,
+  DeclarativeModalStub,
   InputView,
   MobilePopupMenu,
   ModalView,
@@ -21,6 +23,7 @@ import "@testing-library/jest-dom/vitest";
 import { render } from "@testing-library/vue";
 import { createPinia, setActivePinia } from "pinia";
 import { beforeEach, test, vi } from "vitest";
+import { defineComponent } from "vue";
 
 vi.mock("@/service/ContractpartnerService");
 vi.mock("@/service/PostingAccountService");
@@ -62,12 +65,45 @@ class ListContractpartnersView {
   static readonly AccountsOneButton = new ButtonView(
     "contractpartner-accounts-1",
   );
-  static readonly Modal = new ModalView("app-modal");
+  static readonly CreateModal = new ModalView(
+    "app-modal-CreateContractpartner",
+  );
+  static readonly DeleteModal = new ModalView(
+    "app-modal-DeleteContractpartner",
+  );
+  static readonly ListAccountsModal = new ModalView(
+    "app-modal-ListContractpartnerAccounts",
+  );
+  static readonly CreateAccountsModal = new ModalView(
+    "app-modal-CreateContractpartnerAccounts",
+  );
+  static readonly DeleteAccountsModal = new ModalView(
+    "app-modal-DeleteContractpartnerAccounts",
+  );
+
   static readonly EmptyRowDesktop = new RowView(
     "contractpartner-empty-desktop",
   );
   static readonly EmptyRowMobile = new RowView("contractpartner-empty-mobile");
 }
+
+const renderListContractpartnersView = (
+  props: Record<string, unknown> = {},
+) => {
+  return render(
+    defineComponent({
+      setup() {
+        return { props };
+      },
+      template:
+        '<div><ListContractpartners v-bind="props" /><GlobalModals /></div>',
+      components: { ListContractpartners, GlobalModals },
+    }),
+    {
+      global: { stubs: { ModalVue: DeclarativeModalStub } },
+    },
+  );
+};
 
 beforeEach(() => {
   setActivePinia(createPinia());
@@ -97,7 +133,7 @@ beforeEach(() => {
 
 test("ListContractpartners renders contractpartner rows", async () => {
   await StoreService.getInstance().initAllStores();
-  render(ListContractpartners);
+  renderListContractpartnersView();
 
   await ListContractpartnersView.RowOne.assertToBeVisible();
   await ListContractpartnersView.RowTwo.assertNotToBeInDocument();
@@ -105,7 +141,7 @@ test("ListContractpartners renders contractpartner rows", async () => {
 
 test("ListContractpartners toggles valid-now filter", async () => {
   await StoreService.getInstance().initAllStores();
-  render(ListContractpartners);
+  renderListContractpartnersView();
 
   await ListContractpartnersView.ValidNowToggle.click();
 
@@ -114,7 +150,7 @@ test("ListContractpartners toggles valid-now filter", async () => {
 
 test("ListContractpartners filters by search input", async () => {
   await StoreService.getInstance().initAllStores();
-  render(ListContractpartners);
+  renderListContractpartnersView();
 
   await ListContractpartnersView.ValidNowToggle.click();
   await ListContractpartnersView.FilterInput.setValue("old");
@@ -124,34 +160,34 @@ test("ListContractpartners filters by search input", async () => {
 
 test("ListContractpartners opens edit modal from row action", async () => {
   await StoreService.getInstance().initAllStores();
-  render(ListContractpartners);
+  renderListContractpartnersView();
 
   await ListContractpartnersView.RowOne.assertToBeVisible();
   await ListContractpartnersView.EditOneButton.click();
-  await ListContractpartnersView.Modal.assertOpen();
+  await ListContractpartnersView.CreateModal.assertOpen();
 });
 
 test("ListContractpartners opens delete modal from row action", async () => {
   await StoreService.getInstance().initAllStores();
-  render(ListContractpartners);
+  renderListContractpartnersView();
 
   await ListContractpartnersView.RowOne.assertToBeVisible();
   await ListContractpartnersView.DeleteOneButton.click();
-  await ListContractpartnersView.Modal.assertOpen();
+  await ListContractpartnersView.DeleteModal.assertOpen();
 });
 
 test("ListContractpartners opens contractpartner accounts modal", async () => {
   await StoreService.getInstance().initAllStores();
-  render(ListContractpartners);
+  renderListContractpartnersView();
 
   await ListContractpartnersView.RowOne.assertToBeVisible();
   await ListContractpartnersView.AccountsOneButton.click();
-  await ListContractpartnersView.Modal.assertOpen();
+  await ListContractpartnersView.ListAccountsModal.assertOpen();
 });
 
 test("ListContractpartners filters via mobile sheet", async () => {
   await StoreService.getInstance().initAllStores();
-  render(ListContractpartners);
+  renderListContractpartnersView();
 
   await ListContractpartnersView.MobileAccordion.assertToBeVisible();
   await ListContractpartnersView.MobileFilterTrigger.click();
@@ -166,29 +202,29 @@ test("ListContractpartners filters via mobile sheet", async () => {
 
 test("ListContractpartners opens edit modal from mobile action", async () => {
   await StoreService.getInstance().initAllStores();
-  render(ListContractpartners);
+  renderListContractpartnersView();
 
   await ListContractpartnersView.MobileRowOne.assertToBeVisible();
   await ListContractpartnersView.MobileEditOneButton.click();
-  await ListContractpartnersView.Modal.assertOpen();
+  await ListContractpartnersView.CreateModal.assertOpen();
 });
 
 test("ListContractpartners opens delete modal from mobile action", async () => {
   await StoreService.getInstance().initAllStores();
-  render(ListContractpartners);
+  renderListContractpartnersView();
 
   await ListContractpartnersView.MobileRowOne.assertToBeVisible();
   await ListContractpartnersView.MobileDeleteOneButton.click();
-  await ListContractpartnersView.Modal.assertOpen();
+  await ListContractpartnersView.DeleteModal.assertOpen();
 });
 
 test("ListContractpartners opens accounts modal from mobile action", async () => {
   await StoreService.getInstance().initAllStores();
-  render(ListContractpartners);
+  renderListContractpartnersView();
 
   await ListContractpartnersView.MobileRowOne.assertToBeVisible();
   await ListContractpartnersView.MobileAccountsOneButton.click();
-  await ListContractpartnersView.Modal.assertOpen();
+  await ListContractpartnersView.ListAccountsModal.assertOpen();
 });
 
 test("ListContractpartners shows empty state for empty list (Desktop and Mobile)", async () => {
@@ -199,7 +235,7 @@ test("ListContractpartners shows empty state for empty list (Desktop and Mobile)
   CapitalsourceServiceMocker.mockFetchAllCapitalsource([]);
   ContractpartnerAccountServiceMocker.mockFetchAllContractpartnerAccount([]);
   await StoreService.getInstance().initAllStores();
-  render(ListContractpartners);
+  renderListContractpartnersView();
   await ListContractpartnersView.EmptyRowDesktop.assertToBeVisible();
   await ListContractpartnersView.EmptyRowMobile.assertToBeVisible();
 });

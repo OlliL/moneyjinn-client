@@ -1,3 +1,4 @@
+import { useCreateCapitalsourceModalStore } from "@/components/capitalsource/CreateCapitalsourceModal.store";
 import CreateCapitalsourceModal from "@/components/capitalsource/CreateCapitalsourceModal.vue";
 import { BackendError, BackendErrorType } from "@/model/BackendError";
 import { CapitalsourceImport } from "@/model/capitalsource/CapitalsourceImport";
@@ -25,7 +26,7 @@ import {
   ComboboxView,
   InputView,
   ModalView,
-  renderModalWithRef,
+  renderDeclarativeModal,
 } from "@/tests/TestViews";
 import "@testing-library/jest-dom/vitest";
 import { createPinia, setActivePinia } from "pinia";
@@ -38,33 +39,53 @@ vi.mock("@/service/PreDefMoneyflowService");
 vi.mock("@/service/CrudEtfService");
 
 class CreateCapitalsourceModalView {
-  static readonly Modal = new ModalView("app-modal");
-  static readonly CommentInput = new InputView("comment");
-  static readonly TypeSelect = new ComboboxView("type");
-  static readonly StateSelect = new ComboboxView("state");
-  static readonly ValidFromInput = new InputView("validFrom");
-  static readonly ValidTilInput = new InputView("validTil");
-  static readonly GroupUseSelect = new ComboboxView("groupUse");
-  static readonly ImportAllowedSelect = new ComboboxView("importAllowed");
-  static readonly AccountNumberInput = new InputView("accountNumber");
-  static readonly BankCodeInput = new InputView("bankCode");
+  static readonly Modal = new ModalView("app-modal-CreateCapitalsource"); // Use a specific test ID for this modal
+  static readonly CommentInput = new InputView("comment-CreateCapitalsource");
+  static readonly TypeSelect = new ComboboxView("type-CreateCapitalsource");
+  static readonly StateSelect = new ComboboxView("state-CreateCapitalsource");
+  static readonly ValidFromInput = new InputView(
+    "validFrom-CreateCapitalsource",
+  );
+  static readonly ValidTilInput = new InputView("validTil-CreateCapitalsource");
+  static readonly GroupUseSelect = new ComboboxView(
+    "groupUse-CreateCapitalsource",
+  );
+  static readonly ImportAllowedSelect = new ComboboxView(
+    "importAllowed-CreateCapitalsource",
+  );
+  static readonly AccountNumberInput = new InputView(
+    "accountNumber-CreateCapitalsource",
+  );
+  static readonly BankCodeInput = new InputView("bankCode-CreateCapitalsource");
 
   static readonly SaveButton = new ButtonView("createCapitalsourceSaveButton");
   static readonly ResetButton = new ButtonView(
     "createCapitalsourceResetButton",
   );
 
-  static readonly CommentError = new AlertView("comment-error-item");
-  static readonly TypeError = new AlertView("type-error");
-  static readonly StateError = new AlertView("state-error");
-  static readonly ValidFromError = new AlertView("validFrom-error");
-  static readonly ValidTilError = new AlertView("validTil-error");
-  static readonly GroupUseError = new AlertView("groupUse-error");
-  static readonly ImportAllowedError = new AlertView("importAllowed-error");
-  static readonly AccountNumberError = new AlertView(
-    "accountNumber-error-item",
+  static readonly CommentError = new AlertView(
+    "comment-CreateCapitalsource-error-item",
   );
-  static readonly BankCodeError = new AlertView("bankCode-error-item");
+  static readonly TypeError = new AlertView("type-CreateCapitalsource-error");
+  static readonly StateError = new AlertView("state-CreateCapitalsource-error");
+  static readonly ValidFromError = new AlertView(
+    "validFrom-CreateCapitalsource-error",
+  );
+  static readonly ValidTilError = new AlertView(
+    "validTil-CreateCapitalsource-error",
+  );
+  static readonly GroupUseError = new AlertView(
+    "groupUse-CreateCapitalsource-error",
+  );
+  static readonly ImportAllowedError = new AlertView(
+    "importAllowed-CreateCapitalsource-error",
+  );
+  static readonly AccountNumberError = new AlertView(
+    "accountNumber-CreateCapitalsource-error-item",
+  );
+  static readonly BankCodeError = new AlertView(
+    "bankCode-CreateCapitalsource-error-item",
+  );
   static readonly ServerErrorItem = new AlertView("serverError-item");
 }
 
@@ -84,8 +105,9 @@ beforeEach(async () => {
 });
 
 test("creates a new capitalsource", async () => {
-  const modalRef = renderModalWithRef<any>(CreateCapitalsourceModal);
-  await modalRef.value._show();
+  renderDeclarativeModal(CreateCapitalsourceModal);
+  const modalStore = useCreateCapitalsourceModalStore();
+  modalStore.openCreateCapitalsource();
 
   await CreateCapitalsourceModalView.Modal.assertOpen();
 
@@ -123,8 +145,11 @@ test("updates an existing capitalsource", async () => {
   } as any;
   CapitalsourceServiceMocker.mockUpdateCapitalsourceResolved();
 
-  const modalRef = renderModalWithRef<any>(CreateCapitalsourceModal);
-  await modalRef.value._show(existingMcs);
+  renderDeclarativeModal(CreateCapitalsourceModal);
+  const modalStore = useCreateCapitalsourceModalStore();
+  modalStore.openEditCapitalsource(existingMcs);
+
+  await CreateCapitalsourceModalView.Modal.assertOpen();
 
   await CreateCapitalsourceModalView.CommentInput.setValue("Updated Comment");
   await CreateCapitalsourceModalView.SaveButton.click();
@@ -137,8 +162,11 @@ test("updates an existing capitalsource", async () => {
 });
 
 test("reset button clears form in create mode", async () => {
-  const modalRef = renderModalWithRef<any>(CreateCapitalsourceModal);
-  await modalRef.value._show();
+  renderDeclarativeModal(CreateCapitalsourceModal);
+  const modalStore = useCreateCapitalsourceModalStore();
+  modalStore.openCreateCapitalsource();
+
+  await CreateCapitalsourceModalView.Modal.assertOpen();
 
   await CreateCapitalsourceModalView.CommentInput.setValue("To be cleared");
   await CreateCapitalsourceModalView.ResetButton.click();
@@ -157,8 +185,11 @@ test("reset button reverts changes in edit mode", async () => {
     groupUse: true,
     importAllowed: CapitalsourceImport.NOT_ALLOWED,
   } as any;
-  const modalRef = renderModalWithRef<any>(CreateCapitalsourceModal);
-  await modalRef.value._show(existingMcs);
+  renderDeclarativeModal(CreateCapitalsourceModal);
+  const modalStore = useCreateCapitalsourceModalStore();
+  modalStore.openEditCapitalsource(existingMcs);
+
+  await CreateCapitalsourceModalView.Modal.assertOpen();
 
   await CreateCapitalsourceModalView.CommentInput.setValue("Changed");
   await CreateCapitalsourceModalView.ResetButton.click();
@@ -167,8 +198,11 @@ test("reset button reverts changes in edit mode", async () => {
 });
 
 test("can save without optional account data", async () => {
-  const modalRef = renderModalWithRef<any>(CreateCapitalsourceModal);
-  await modalRef.value._show();
+  renderDeclarativeModal(CreateCapitalsourceModal);
+  const modalStore = useCreateCapitalsourceModalStore();
+  modalStore.openCreateCapitalsource();
+
+  await CreateCapitalsourceModalView.Modal.assertOpen();
 
   await CreateCapitalsourceModalView.CommentInput.setValue("Minimal Source");
   await CreateCapitalsourceModalView.TypeSelect.selectItem(
@@ -203,8 +237,11 @@ test("shows server errors on failure", async () => {
   );
   CapitalsourceServiceMocker.mockCreateCapitalsourceRejected(backendError);
 
-  const modalRef = renderModalWithRef<any>(CreateCapitalsourceModal);
-  await modalRef.value._show();
+  renderDeclarativeModal(CreateCapitalsourceModal);
+  const modalStore = useCreateCapitalsourceModalStore();
+  modalStore.openCreateCapitalsource();
+
+  await CreateCapitalsourceModalView.Modal.assertOpen();
 
   await CreateCapitalsourceModalView.CommentInput.setValue("Valid");
   await CreateCapitalsourceModalView.TypeSelect.selectItem(
@@ -230,8 +267,11 @@ test("shows server errors on failure", async () => {
 });
 
 test("validation: mandatory fields", async () => {
-  const modalRef = renderModalWithRef<any>(CreateCapitalsourceModal);
-  await modalRef.value._show();
+  renderDeclarativeModal(CreateCapitalsourceModal);
+  const modalStore = useCreateCapitalsourceModalStore();
+  modalStore.openCreateCapitalsource();
+
+  await CreateCapitalsourceModalView.Modal.assertOpen();
 
   // Trigger validation by clearing defaults or clicking save
   await CreateCapitalsourceModalView.SaveButton.click();
@@ -256,8 +296,11 @@ test("validation: mandatory fields", async () => {
 });
 
 test("validation: date fields", async () => {
-  const modalRef = renderModalWithRef<any>(CreateCapitalsourceModal);
-  await modalRef.value._show();
+  renderDeclarativeModal(CreateCapitalsourceModal);
+  const modalStore = useCreateCapitalsourceModalStore();
+  modalStore.openCreateCapitalsource();
+
+  await CreateCapitalsourceModalView.Modal.assertOpen();
 
   await CreateCapitalsourceModalView.ValidFromInput.setValue("");
   await CreateCapitalsourceModalView.ValidTilInput.setValue("");
@@ -272,8 +315,11 @@ test("validation: date fields", async () => {
 });
 
 test("validation: field lengths", async () => {
-  const modalRef = renderModalWithRef<any>(CreateCapitalsourceModal);
-  await modalRef.value._show();
+  renderDeclarativeModal(CreateCapitalsourceModal);
+  const modalStore = useCreateCapitalsourceModalStore();
+  modalStore.openCreateCapitalsource();
+
+  await CreateCapitalsourceModalView.Modal.assertOpen();
 
   await CreateCapitalsourceModalView.CommentInput.setValue("a".repeat(256));
   await CreateCapitalsourceModalView.AccountNumberInput.setValue(
@@ -294,8 +340,11 @@ test("validation: field lengths", async () => {
 });
 
 test("validation: numeric ranges for selects", async () => {
-  const modalRef = renderModalWithRef<any>(CreateCapitalsourceModal);
-  await modalRef.value._show();
+  renderDeclarativeModal(CreateCapitalsourceModal);
+  const modalStore = useCreateCapitalsourceModalStore();
+  modalStore.openCreateCapitalsource();
+
+  await CreateCapitalsourceModalView.Modal.assertOpen();
 
   await CreateCapitalsourceModalView.TypeSelect.selectItem(
     "Current Asset",
@@ -309,10 +358,14 @@ test("validation: numeric ranges for selects", async () => {
 });
 
 test("date inputs initialized with defaults", async () => {
-  const modalRef = renderModalWithRef<any>(CreateCapitalsourceModal);
-  await modalRef.value._show();
+  renderDeclarativeModal(CreateCapitalsourceModal);
+  const modalStore = useCreateCapitalsourceModalStore();
+  modalStore.openCreateCapitalsource();
+
+  await CreateCapitalsourceModalView.Modal.assertOpen();
 
   const today = new Date();
+  today.setHours(0, 0, 0, 0);
   const dd = String(today.getDate()).padStart(2, "0");
   const mm = String(today.getMonth() + 1).padStart(2, "0");
   const yyyy = today.getFullYear();
@@ -334,8 +387,11 @@ test("edit mode pre-fills data", async () => {
     importAllowed: CapitalsourceImport.ALL_ALLOWED,
   } as any;
 
-  const modalRef = renderModalWithRef<any>(CreateCapitalsourceModal);
-  await modalRef.value._show(mcs);
+  renderDeclarativeModal(CreateCapitalsourceModal);
+  const modalStore = useCreateCapitalsourceModalStore();
+  modalStore.openEditCapitalsource(mcs);
+
+  await CreateCapitalsourceModalView.Modal.assertOpen();
 
   await CreateCapitalsourceModalView.CommentInput.assertValue("Test Source");
   await CreateCapitalsourceModalView.ValidFromInput.assertValue("01.01.2024");

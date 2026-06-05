@@ -2,7 +2,7 @@
   <component :is="Modal.Root" v-model:open="isOpen">
     <component
       :is="Modal.Content"
-      data-testid="app-modal"
+      :data-testid="`app-modal-${props.idSuffix}`"
       :class="[
         props.maxWidth
           ? props.maxWidth
@@ -37,7 +37,6 @@
             type="button"
             variant="outline"
             class="button-with-icon w-full md:w-auto px-4"
-            ref="cancelButton"
           >
             <X class="icon-medium" />
             {{ $t("Modal.cancel") }}
@@ -73,13 +72,14 @@ import {
 } from "@/components/ui/drawer";
 import { isDesktop } from "@/tools/views/IsDesktop";
 import { X } from "lucide-vue-next";
-import { computed, nextTick, ref, useTemplateRef, watch } from "vue";
+import { computed } from "vue";
 
 const props = withDefaults(
   defineProps<{
     title?: string;
     maxWidth?: string;
     zIndex?: string;
+    idSuffix?: string;
   }>(),
   {
     title: "",
@@ -101,29 +101,5 @@ const Modal = computed(() => ({
   Close: isDesktopConst.value ? DialogClose : DrawerClose,
 }));
 
-const isOpen = ref(false);
-const cancelButton = useTemplateRef<typeof Button>("cancelButton");
-
-const _show = () => {
-  isOpen.value = true;
-};
-
-const _hide = () => {
-  isOpen.value = false;
-};
-
-watch(isOpen, (newValue) => {
-  if (newValue === true)
-    nextTick(() => {
-      const el = cancelButton.value?.$el || cancelButton.value;
-      if (el && typeof el.focus === "function") {
-        el.focus();
-      }
-    });
-});
-
-defineExpose({
-  _show,
-  _hide,
-});
+const isOpen = defineModel<boolean>("open", { default: false });
 </script>

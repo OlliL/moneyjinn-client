@@ -14,9 +14,6 @@
       :import-data="data.compareDataDataset"
       :capitalsource-id="capitalsourceId"
       :capitalsource-comment="capitalsourceComment"
-      @delete-moneyflow="$emit('deleteMoneyflow', $event)"
-      @edit-moneyflow="$emit('editMoneyflow', $event)"
-      @create-moneyflow="$emit('createMoneyflow', $event)"
     />
   </Accordion>
 </template>
@@ -24,18 +21,11 @@
 <script lang="ts" setup>
 import { Accordion } from "@/components/ui/accordion";
 import type { CompareData } from "@/model/comparedata/CompareData";
-import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 import CompareDataResultMobileRow from "./CompareDataResultMobileRow.vue";
 
 defineProps<{
   compareData?: CompareData[];
   capitalsourceId: number;
   capitalsourceComment: string;
-}>();
-
-defineEmits<{
-  deleteMoneyflow: [id: number];
-  editMoneyflow: [id: number];
-  createMoneyflow: [moneyflow: Moneyflow];
 }>();
 </script>

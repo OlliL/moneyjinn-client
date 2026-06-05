@@ -1,5 +1,10 @@
 <template>
-  <ModalVue :title="title" max-width="max-w-md" ref="modalComponent">
+  <ModalVue
+    :title="title"
+    max-width="max-w-md"
+    id-suffix="CreateGroup"
+    v-model:open="open"
+  >
     <template #body
       ><form
         @submit.prevent="createGroup"
@@ -10,7 +15,7 @@
 
         <div class="form-section space-y-4">
           <InputStandard
-            v-model="group.name"
+            v-model="groupModel.name"
             :validation-schema="schema.name"
             id="name"
             :field-label="$t('General.name')"
@@ -52,22 +57,20 @@ import GroupService from "@/service/GroupService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { globErr } from "@/tools/views/ZodUtil";
 import { Save, Undo2 } from "lucide-vue-next";
+import { storeToRefs } from "pinia";
 import { useForm } from "vee-validate";
-import { computed, ref, toRaw, useTemplateRef } from "vue";
+import { computed, ref, toRaw, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { string, ZodType } from "zod";
+import useCreateGroupModalStore from "./CreateGroupModal.store";
 
 const { t } = useI18n();
 
-const serverErrors = ref(new Array<string>());
-const group = ref({} as Group);
-const origGroup = ref({} as Group | undefined);
-const modalComponent = useTemplateRef<typeof ModalVue>("modalComponent");
+const { open, group, onDone } = storeToRefs(useCreateGroupModalStore());
 
-const emit = defineEmits<{
-  groupUpdated: [group: Group];
-  groupCreated: [group: Group];
-}>();
+const serverErrors = ref(new Array<string>());
+const groupModel = ref({} as Group);
+const origGroup = ref({} as Group | undefined);
 
 const { handleSubmit, values, setFieldTouched } = useForm();
 
@@ -83,42 +86,43 @@ const title = computed(() => {
 
 const resetForm = () => {
   if (origGroup.value) {
-    group.value = structuredClone(toRaw(origGroup.value))!;
+    groupModel.value = structuredClone(toRaw(origGroup.value))!;
   } else {
-    group.value = {} as Group;
+    groupModel.value = {} as Group;
   }
   serverErrors.value = new Array<string>();
   Object.keys(values).forEach((field) => setFieldTouched(field, false));
 };
 
-const _show = (_group?: Group) => {
-  origGroup.value = _group ?? undefined;
-  resetForm();
-  modalComponent.value?._show();
-};
+watch(
+  open,
+  (val) => {
+    if (val) {
+      origGroup.value = group.value;
+      resetForm();
+    }
+  },
+  { immediate: true },
+);
 
 const createGroup = handleSubmit(() => {
   serverErrors.value = new Array<string>();
 
   const serviceCall =
-    group.value.id > 0
-      ? GroupService.updateGroup(group.value)
-      : GroupService.createGroup(group.value);
+    groupModel.value.id > 0
+      ? GroupService.updateGroup(groupModel.value)
+      : GroupService.createGroup(groupModel.value);
 
   serviceCall
     .then((result) => {
-      const isUpdate = group.value.id > 0;
-      if (!isUpdate) group.value = result as Group;
+      const isUpdate = groupModel.value.id > 0;
+      if (!isUpdate) groupModel.value = result as Group;
 
-      modalComponent.value?._hide();
-      isUpdate
-        ? emit("groupUpdated", group.value)
-        : emit("groupCreated", group.value);
+      open.value = false;
+      onDone.value?.();
     })
     .catch((backendError) => {
       handleBackendError(backendError, serverErrors);
     });
 });
-
-defineExpose({ _show });
 </script>

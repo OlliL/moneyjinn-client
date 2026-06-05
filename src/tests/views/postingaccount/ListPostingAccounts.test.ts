@@ -1,3 +1,4 @@
+import GlobalModals from "@/components/common/GlobalModals.vue";
 import CapitalsourceServiceMocker from "@/service/mocker/CapitalsourceServiceMocker";
 import ContractpartnerServiceMocker from "@/service/mocker/ContractpartnerServiceMocker";
 import CrudEtfServiceMocker from "@/service/mocker/CrudEtfServiceMocker";
@@ -9,6 +10,7 @@ import {
 } from "@/stores/UserSessionStore";
 import {
   ButtonView,
+  DeclarativeModalStub,
   InputView,
   MobilePopupMenu,
   ModalView,
@@ -19,6 +21,7 @@ import "@testing-library/jest-dom/vitest";
 import { render } from "@testing-library/vue";
 import { createPinia, setActivePinia } from "pinia";
 import { beforeEach, test, vi } from "vitest";
+import { defineComponent } from "vue";
 
 vi.mock("@/service/PostingAccountService");
 vi.mock("@/service/CapitalsourceService");
@@ -50,12 +53,31 @@ class ListPostingAccountsView {
   static readonly RowTwo = new RowView("posting-account-row-2");
   static readonly EditOneButton = new ButtonView("posting-account-edit-1");
   static readonly DeleteOneButton = new ButtonView("posting-account-delete-1");
-  static readonly Modal = new ModalView("app-modal");
+  static readonly CreateModal = new ModalView("app-modal-CreatePostingAccount");
+  static readonly DeleteModal = new ModalView("app-modal-DeletePostingAccount");
   static readonly EmptyRowDesktop = new RowView(
     "posting-account-empty-desktop",
   );
   static readonly EmptyRowMobile = new RowView("posting-account-empty-mobile");
 }
+
+const renderListPostingAccountsView = (props: Record<string, unknown> = {}) => {
+  return render(
+    defineComponent({
+      setup() {
+        return { props };
+      },
+      template:
+        '<div><ListPostingAccounts v-bind="props" /><GlobalModals /></div>',
+      components: { ListPostingAccounts, GlobalModals },
+    }),
+    {
+      global: {
+        stubs: { ModalVue: DeclarativeModalStub },
+      },
+    },
+  );
+};
 
 beforeEach(() => {
   setActivePinia(createPinia());
@@ -72,14 +94,14 @@ beforeEach(() => {
 
 test("ListPostingAccounts renders posting account rows", async () => {
   await StoreService.getInstance().initAllStores();
-  render(ListPostingAccounts);
+  renderListPostingAccountsView();
 
   await ListPostingAccountsView.RowOne.assertToBeVisible();
 });
 
 test("ListPostingAccounts filters rows by search input", async () => {
   await StoreService.getInstance().initAllStores();
-  render(ListPostingAccounts);
+  renderListPostingAccountsView();
 
   await ListPostingAccountsView.RowOne.assertToBeVisible();
   await ListPostingAccountsView.FilterInput.setValue("savings");
@@ -89,34 +111,34 @@ test("ListPostingAccounts filters rows by search input", async () => {
 
 test("ListPostingAccounts opens create modal", async () => {
   await StoreService.getInstance().initAllStores();
-  render(ListPostingAccounts);
+  renderListPostingAccountsView();
 
   await ListPostingAccountsView.RowOne.assertToBeVisible();
   await ListPostingAccountsView.CreateButton.click();
-  await ListPostingAccountsView.Modal.assertOpen();
+  await ListPostingAccountsView.CreateModal.assertOpen();
 });
 
 test("ListPostingAccounts opens edit modal from row action", async () => {
   await StoreService.getInstance().initAllStores();
-  render(ListPostingAccounts);
+  renderListPostingAccountsView();
 
   await ListPostingAccountsView.RowOne.assertToBeVisible();
   await ListPostingAccountsView.EditOneButton.click();
-  await ListPostingAccountsView.Modal.assertOpen();
+  await ListPostingAccountsView.CreateModal.assertOpen();
 });
 
 test("ListPostingAccounts opens delete modal from row action", async () => {
   await StoreService.getInstance().initAllStores();
-  render(ListPostingAccounts);
+  renderListPostingAccountsView();
 
   await ListPostingAccountsView.RowOne.assertToBeVisible();
   await ListPostingAccountsView.DeleteOneButton.click();
-  await ListPostingAccountsView.Modal.assertOpen();
+  await ListPostingAccountsView.DeleteModal.assertOpen();
 });
 
 test("ListPostingAccounts filters via mobile sheet", async () => {
   await StoreService.getInstance().initAllStores();
-  render(ListPostingAccounts);
+  renderListPostingAccountsView();
 
   await ListPostingAccountsView.MobileAccordion.assertToBeVisible();
   await ListPostingAccountsView.MobileFilterTrigger.click();
@@ -129,20 +151,20 @@ test("ListPostingAccounts filters via mobile sheet", async () => {
 
 test("ListPostingAccounts opens edit modal from mobile action", async () => {
   await StoreService.getInstance().initAllStores();
-  render(ListPostingAccounts);
+  renderListPostingAccountsView();
 
   await ListPostingAccountsView.MobileRowOne.assertToBeVisible();
   await ListPostingAccountsView.MobileEditOneButton.click();
-  await ListPostingAccountsView.Modal.assertOpen();
+  await ListPostingAccountsView.CreateModal.assertOpen();
 });
 
 test("ListPostingAccounts opens delete modal from mobile action", async () => {
   await StoreService.getInstance().initAllStores();
-  render(ListPostingAccounts);
+  renderListPostingAccountsView();
 
   await ListPostingAccountsView.MobileRowOne.assertToBeVisible();
   await ListPostingAccountsView.MobileDeleteOneButton.click();
-  await ListPostingAccountsView.Modal.assertOpen();
+  await ListPostingAccountsView.DeleteModal.assertOpen();
 });
 
 test("ListPostingAccounts shows empty state for empty list (Desktop and Mobile)", async () => {
@@ -152,7 +174,7 @@ test("ListPostingAccounts shows empty state for empty list (Desktop and Mobile)"
   ContractpartnerServiceMocker.mockFetchAllContractpartner([]);
   CrudEtfServiceMocker.mockFetchAllEtf([]);
   await StoreService.getInstance().initAllStores();
-  render(ListPostingAccounts);
+  renderListPostingAccountsView();
   await ListPostingAccountsView.EmptyRowDesktop.assertToBeVisible();
   await ListPostingAccountsView.EmptyRowMobile.assertToBeVisible();
 });

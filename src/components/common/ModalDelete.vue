@@ -3,7 +3,8 @@
     :title="title"
     max-width="max-w-md"
     :z-index="zIndex"
-    ref="modalComponent"
+    v-model:open="isOpen"
+    :id-suffix="idSuffix"
   >
     <template #body>
       <DivError :server-errors="serverErrors" />
@@ -29,7 +30,7 @@
 </template>
 
 <script lang="ts" setup>
-import { useTemplateRef } from "vue";
+import { ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 
 import { Table, TableBody } from "@/components/ui/table";
@@ -37,14 +38,18 @@ import ButtonDeleteTwoTap from "./ButtonDeleteTwoTap.vue";
 import DivError from "./DivError.vue";
 import ModalVue from "./Modal.vue";
 
+import { handleBackendError } from "@/tools/views/HandleBackendError";
+
 const { t } = useI18n();
 
 const props = withDefaults(
   defineProps<{
     title: string;
-    serverErrors: Array<string>;
     maxWidth?: string;
     zIndex?: string;
+    idSuffix: string;
+    deleteAction: () => Promise<unknown>;
+    deleteSuccessAction?: () => void;
   }>(),
   {
     maxWidth: "",
@@ -52,26 +57,26 @@ const props = withDefaults(
   },
 );
 
-const emit = defineEmits<{
-  confirm: [];
-}>();
+const isOpen = defineModel<boolean>("open", { default: false });
+const serverErrors = ref<string[]>([]);
 
-const modalComponent = useTemplateRef<typeof ModalVue>("modalComponent");
+watch(isOpen, (newVal) => {
+  if (newVal) {
+    serverErrors.value = [];
+  }
+});
 
 const handleDelete = () => {
-  emit("confirm");
-};
+  serverErrors.value = [];
 
-const _show = () => {
-  modalComponent.value?._show();
+  props
+    .deleteAction()
+    .then(() => {
+      isOpen.value = false;
+      props.deleteSuccessAction?.();
+    })
+    .catch((backendError) => {
+      handleBackendError(backendError, serverErrors);
+    });
 };
-
-const _hide = () => {
-  modalComponent.value?._hide();
-};
-
-defineExpose({
-  _show,
-  _hide,
-});
 </script>

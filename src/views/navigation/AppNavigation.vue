@@ -1,21 +1,7 @@
 <template>
-  <CreateContractpartnerModalVue
-    ref="createContractpartnerModalNav"
-    id-suffix="Nav"
-  />
-  <CreateCapitalsourceModalVue
-    ref="createCapitalsourceModalNav"
-    id-suffix="Nav"
-  />
-  <CreatePreDefMoneyflowModalVue
-    ref="createPreDedMoneyflowModalNav"
-    id-suffix="Nav"
-  />
-
   <!-- Mobile Navigation-->
   <AppNavigationMobile
     @logout="logout"
-    @show-create-capitalsource-modal="showCreateCapitalsourceModal"
     @show-create-contractpartner-modal="showCreateContractpartnerModal"
     @show-pre-def-moneyflow-modal="showPreDefMoneyflowModal"
   />
@@ -23,7 +9,6 @@
   <!-- Desktop Navigation-->
   <AppNavigationDesktop
     @logout="logout"
-    @show-create-capitalsource-modal="showCreateCapitalsourceModal"
     @show-create-contractpartner-modal="showCreateContractpartnerModal"
     @show-pre-def-moneyflow-modal="showPreDefMoneyflowModal"
   />
@@ -39,41 +24,29 @@
 
 <script lang="ts" setup>
 import { LogoutApi } from "@/api";
-import CreateCapitalsourceModalVue from "@/components/capitalsource/CreateCapitalsourceModal.vue";
-import CreateContractpartnerModalVue from "@/components/contractpartner/CreateContractpartnerModal.vue";
-import CreatePreDefMoneyflowModalVue from "@/components/predefmoneyflow/CreatePreDefMoneyflowModal.vue";
+import { useCreateContractpartnerModalStore } from "@/components/contractpartner/CreateContractpartnerModal.store";
+import { useCreatePreDefMoneyflowModalStore } from "@/components/predefmoneyflow/CreatePreDefMoneyflowModal.store";
 import { AxiosSingleton } from "@/config/AxiosSingleton";
 import { WebSocketSingleton } from "@/config/WebSocketSingleton";
 import router, { Routes } from "@/router";
 import { StoreService } from "@/stores/StoreService";
 import { useUserSessionStore } from "@/stores/UserSessionStore";
 import { clearAuthTokens } from "axios-jwt";
-import { onMounted, useTemplateRef } from "vue";
+import { onMounted } from "vue";
 import { useI18n } from "vue-i18n";
 import AppNavigationDesktop from "./AppNavigationDesktop.vue";
 import AppNavigationMobile from "./AppNavigationMobile.vue";
 
 const { t } = useI18n();
 
-const createContractpartnerModalNav = useTemplateRef<
-  typeof CreateContractpartnerModalVue
->("createContractpartnerModalNav");
-const createCapitalsourceModalNav = useTemplateRef<
-  typeof CreateCapitalsourceModalVue
->("createCapitalsourceModalNav");
-const createPreDedMoneyflowModalNav = useTemplateRef<
-  typeof CreatePreDefMoneyflowModalVue
->("createPreDedMoneyflowModalNav");
+const { openCreatePreDefMoneyflow } = useCreatePreDefMoneyflowModalStore();
+const { openCreateContractpartner } = useCreateContractpartnerModalStore();
 
 const showCreateContractpartnerModal = () => {
-  createContractpartnerModalNav.value?._show();
-};
-
-const showCreateCapitalsourceModal = () => {
-  createCapitalsourceModalNav.value?._show();
+  openCreateContractpartner();
 };
 const showPreDefMoneyflowModal = () => {
-  createPreDedMoneyflowModalNav.value?._show();
+  openCreatePreDefMoneyflow();
 };
 const logout = async () => {
   WebSocketSingleton.getInstance().disconnectStompClient();

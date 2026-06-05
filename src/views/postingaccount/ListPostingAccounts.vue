@@ -1,14 +1,5 @@
 <template>
-  <CreatePostingAccountModalVue
-    ref="createPostingAccountModalList"
-    id-suffix="List"
-    @postingAccount-created="searchContent"
-    @posting-account-updated="searchContent"
-  />
-  <DeletePostingAccountModalVue
-    ref="deleteModal"
-    @postingAccount-deleted="searchContent"
-  />
+  <DeletePostingAccountModal />
 
   <div class="custom-container space-y-6">
     <div class="text-center">
@@ -19,68 +10,61 @@
       v-model="searchString"
       :showValidToggle="false"
       :placeholder="$t('PostingAccount.searchBy')"
-      @createClicked="showCreatePostingAccountModal"
+      @createClicked="actions.create"
     />
 
-    <ListPostingAccountsMobile
-      :posting-accounts="postingAccounts"
-      @delete-posting-account="deletePostingAccount"
-      @edit-posting-account="editPostingAccount"
-    />
+    <ListPostingAccountsMobile :posting-accounts="postingAccounts" />
 
-    <ListPostingAccountsDesktop
-      :posting-accounts="postingAccounts"
-      @delete-posting-account="deletePostingAccount"
-      @edit-posting-account="editPostingAccount"
-    />
+    <ListPostingAccountsDesktop :posting-accounts="postingAccounts" />
   </div>
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref, useTemplateRef, watch } from "vue";
+import { onMounted, provide, ref, watch } from "vue";
 
 import DivFilter from "@/components/common/DivFilter.vue";
-import CreatePostingAccountModalVue from "@/components/postingaccount/CreatePostingAccountModal.vue";
+import { useCreatePostingAccountModalStore } from "@/components/postingaccount/CreatePostingAccountModal.store";
+import {
+  PostingAccountActionsKey,
+  type CrudActions,
+} from "@/model/CrudActions";
 import type { PostingAccount } from "@/model/postingaccount/PostingAccount";
 import { usePostingAccountStore } from "@/stores/PostingAccountStore";
 import { storeToRefs } from "pinia";
-import DeletePostingAccountModalVue from "./elements/DeletePostingAccountModal.vue";
+import { useDeletePostingAccountModalStore } from "./elements/DeletePostingAccountModal.store";
+import DeletePostingAccountModal from "./elements/DeletePostingAccountModal.vue";
 import ListPostingAccountsDesktop from "./elements/ListPostingAccountsDesktop.vue";
 import ListPostingAccountsMobile from "./elements/ListPostingAccountsMobile.vue";
 
 const postingAccounts = ref(new Array<PostingAccount>());
 const searchString = ref("");
 
-const createPostingAccountModalList = useTemplateRef<
-  typeof CreatePostingAccountModalVue
->("createPostingAccountModalList");
-const deleteModal =
-  useTemplateRef<typeof DeletePostingAccountModalVue>("deleteModal");
-
 const postingAccountStore = usePostingAccountStore();
 const searchPostingAccounts = postingAccountStore.searchPostingAccounts;
 const { postingAccount } = storeToRefs(postingAccountStore);
+const { openDeletePostingAccount } = useDeletePostingAccountModalStore();
+const { openCreatePostingAccount, openEditPostingAccount } =
+  useCreatePostingAccountModalStore();
 
-const showCreatePostingAccountModal = () => {
-  createPostingAccountModalList.value?._show();
+const actions: CrudActions<PostingAccount> = {
+  create: () => {
+    openCreatePostingAccount(searchContent);
+  },
+  edit: (postingAccountEntry) => {
+    openEditPostingAccount(postingAccountEntry, searchContent);
+  },
+  delete: (postingAccountEntry) =>
+    openDeletePostingAccount(postingAccountEntry, searchContent),
 };
 
-const deletePostingAccount = (mcs: PostingAccount) => {
-  deleteModal.value?._show(mcs);
-};
-
-const editPostingAccount = (mcs: PostingAccount) => {
-  createPostingAccountModalList.value?._show(mcs);
-};
+provide(PostingAccountActionsKey, actions);
 
 watch(postingAccount, () => {
   searchContent();
   if (postingAccounts.value.length == 0) searchAllContent();
 });
 
-watch(searchString, () => {
-  searchContent();
-});
+watch(searchString, () => searchContent());
 
 const searchAllContent = () => {
   searchString.value = "";
@@ -88,12 +72,10 @@ const searchAllContent = () => {
 };
 
 const searchContent = () => {
-  searchPostingAccounts(searchString.value).then((_postingAccounts) => {
-    postingAccounts.value = _postingAccounts;
+  searchPostingAccounts(searchString.value).then((postingAccountEntries) => {
+    postingAccounts.value = postingAccountEntries;
   });
 };
 
-onMounted(() => {
-  searchAllContent();
-});
+onMounted(() => searchAllContent());
 </script>

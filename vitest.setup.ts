@@ -1,6 +1,6 @@
 import { config } from "@vue/test-utils";
-import I18nSingleton from "./src/config/I18nSingleton";
 import "vitest-canvas-mock";
+import I18nSingleton from "./src/config/I18nSingleton";
 
 config.global.plugins.push(I18nSingleton.getI18n());
 if (globalThis.HTMLElement !== undefined) {

@@ -1,3 +1,4 @@
+import { useCreatePostingAccountModalStore } from "@/components/postingaccount/CreatePostingAccountModal.store";
 import CreatePostingAccountModal from "@/components/postingaccount/CreatePostingAccountModal.vue";
 import { BackendError, BackendErrorType } from "@/model/BackendError";
 import type { PostingAccount } from "@/model/postingaccount/PostingAccount";
@@ -22,7 +23,7 @@ import {
   ButtonView,
   InputView,
   ModalView,
-  renderModalWithRef,
+  renderDeclarativeModal,
 } from "@/tests/TestViews";
 import "@testing-library/jest-dom/vitest";
 import { createPinia, setActivePinia } from "pinia";
@@ -35,14 +36,16 @@ vi.mock("@/service/PreDefMoneyflowService");
 vi.mock("@/service/CrudEtfService");
 
 class CreatePostingAccountModalView {
-  static readonly Modal = new ModalView("app-modal");
-  static readonly NameInput = new InputView("name");
+  static readonly Modal = new ModalView("app-modal-CreatePostingAccount");
+  static readonly NameInput = new InputView("name-CreatePostingAccount");
   static readonly SaveButton = new ButtonView("createPostingAccountSaveButton");
   static readonly ResetButton = new ButtonView(
     "createPostingAccountResetButton",
   );
 
-  static readonly NameError = new AlertView("name-error-item");
+  static readonly NameError = new AlertView(
+    "name-CreatePostingAccount-error-item",
+  );
   static readonly ServerErrorItem = new AlertView("serverError-item");
 }
 
@@ -64,8 +67,9 @@ beforeEach(async () => {
 });
 
 test("creates a new posting account", async () => {
-  const modalRef = renderModalWithRef<any>(CreatePostingAccountModal);
-  await modalRef.value._show();
+  renderDeclarativeModal(CreatePostingAccountModal);
+  const modalStore = useCreatePostingAccountModalStore();
+  modalStore.openCreatePostingAccount();
 
   await CreatePostingAccountModalView.Modal.assertOpen();
 
@@ -82,8 +86,10 @@ test("updates an existing posting account", async () => {
     name: "Existing Posting Account",
   } as PostingAccount;
 
-  const modalRef = renderModalWithRef<any>(CreatePostingAccountModal);
-  await modalRef.value._show(existingMpa);
+  renderDeclarativeModal(CreatePostingAccountModal);
+  const modalStore = useCreatePostingAccountModalStore();
+  modalStore.openEditPostingAccount(existingMpa);
+  await CreatePostingAccountModalView.Modal.assertOpen();
 
   await CreatePostingAccountModalView.NameInput.setValue(
     "Updated Posting Account",
@@ -98,8 +104,10 @@ test("updates an existing posting account", async () => {
 });
 
 test("reset button clears form in create mode", async () => {
-  const modalRef = renderModalWithRef<any>(CreatePostingAccountModal);
-  await modalRef.value._show();
+  renderDeclarativeModal(CreatePostingAccountModal);
+  const modalStore = useCreatePostingAccountModalStore();
+  modalStore.openCreatePostingAccount();
+  await CreatePostingAccountModalView.Modal.assertOpen();
 
   await CreatePostingAccountModalView.NameInput.setValue("To be cleared");
   await CreatePostingAccountModalView.ResetButton.click();
@@ -112,8 +120,10 @@ test("reset button reverts changes in edit mode", async () => {
     id: 1,
     name: "Original Name",
   } as PostingAccount;
-  const modalRef = renderModalWithRef<any>(CreatePostingAccountModal);
-  await modalRef.value._show(existingMpa);
+  renderDeclarativeModal(CreatePostingAccountModal);
+  const modalStore = useCreatePostingAccountModalStore();
+  modalStore.openEditPostingAccount(existingMpa);
+  await CreatePostingAccountModalView.Modal.assertOpen();
 
   await CreatePostingAccountModalView.NameInput.setValue("Changed Name");
   await CreatePostingAccountModalView.ResetButton.click();
@@ -129,8 +139,10 @@ test("shows server errors on failure", async () => {
   );
   PostingAccountServiceMocker.mockCreatePostingAccountRejected(backendError);
 
-  const modalRef = renderModalWithRef<any>(CreatePostingAccountModal);
-  await modalRef.value._show();
+  renderDeclarativeModal(CreatePostingAccountModal);
+  const modalStore = useCreatePostingAccountModalStore();
+  modalStore.openCreatePostingAccount();
+  await CreatePostingAccountModalView.Modal.assertOpen();
 
   await CreatePostingAccountModalView.NameInput.setValue("Valid Name");
   await CreatePostingAccountModalView.SaveButton.click();
@@ -142,8 +154,10 @@ test("shows server errors on failure", async () => {
 });
 
 test("validation: name is required", async () => {
-  const modalRef = renderModalWithRef<any>(CreatePostingAccountModal);
-  await modalRef.value._show();
+  renderDeclarativeModal(CreatePostingAccountModal);
+  const modalStore = useCreatePostingAccountModalStore();
+  modalStore.openCreatePostingAccount();
+  await CreatePostingAccountModalView.Modal.assertOpen();
 
   await CreatePostingAccountModalView.NameInput.setValue("trigger validation");
   await CreatePostingAccountModalView.NameInput.setValue("");
@@ -157,8 +171,10 @@ test("validation: name is required", async () => {
 });
 
 test("validation: name maximum length", async () => {
-  const modalRef = renderModalWithRef<any>(CreatePostingAccountModal);
-  await modalRef.value._show();
+  renderDeclarativeModal(CreatePostingAccountModal);
+  const modalStore = useCreatePostingAccountModalStore();
+  modalStore.openCreatePostingAccount();
+  await CreatePostingAccountModalView.Modal.assertOpen();
 
   await CreatePostingAccountModalView.NameInput.setValue("a".repeat(101));
   await CreatePostingAccountModalView.SaveButton.click();

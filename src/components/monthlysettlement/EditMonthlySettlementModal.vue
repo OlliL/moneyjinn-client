@@ -6,7 +6,8 @@
         : $t('MonthlySettlement.title.create')
     "
     max-width="max-w-md"
-    ref="modalComponent"
+    id-suffix="EditMonthlySettlement"
+    v-model:open="open"
   >
     <template #body>
       <form
@@ -121,10 +122,12 @@
 </template>
 
 <script lang="ts" setup>
+import { storeToRefs } from "pinia";
 import { useForm } from "vee-validate";
-import { ref, useTemplateRef, watch } from "vue";
+import { ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { date, ZodType } from "zod";
+import { useEditMonthlySettlementModalStore } from "./EditMonthlySettlementModal.store";
 
 import ButtonSubmit from "../common/ButtonSubmit.vue";
 import DivError from "../common/DivError.vue";
@@ -159,29 +162,19 @@ type MonthlySettlementFormData = MonthlySettlement & {
 
 const serverErrors = ref(new Array<string>());
 const editMode = ref(false);
-const year = ref(0);
-const month = ref(0);
 const selectedMonth = ref(undefined as Date | undefined);
 const loadedMonth = ref(undefined as Date | undefined);
 const monthlySettlementsNoCredit = ref(new Array<MonthlySettlementFormData>());
 const monthlySettlementsCredit = ref(new Array<MonthlySettlementFormData>());
-const modalComponent = useTemplateRef<typeof ModalVue>("modalComponent");
-const emit = defineEmits<{
-  monthlySettlementUpserted: [year: number, month: number];
-}>();
+const { open, year, month, onDone } = storeToRefs(
+  useEditMonthlySettlementModalStore(),
+);
 
 const { handleSubmit, values, setFieldTouched } = useForm();
 
 const schema: Partial<{ [key in keyof MonthlySettlement]: ZodType }> = {
   month: date(globErr(t("MonthlySettlement.validation.month"))),
   amount: amountSchema(t("MonthlySettlement.validation.amount")),
-};
-
-const _show = (_year?: number, _month?: number) => {
-  loadMonthlySettlements(_year, _month).then((_selectedMonth) => {
-    selectedMonth.value = _selectedMonth;
-  });
-  modalComponent.value?._show();
 };
 
 const loadMonthlySettlements = async (_year?: number, _month?: number) => {
@@ -248,13 +241,27 @@ const upsertMonthlySettlement = handleSubmit(() => {
 
   MonthlySettlementService.upsertMonthlySettlement(monthlySettlements)
     .then(() => {
-      modalComponent.value?._hide();
-      emit("monthlySettlementUpserted", year.value, month.value);
+      open.value = false;
+      if (year.value !== undefined && month.value !== undefined) {
+        onDone.value?.(year.value, month.value);
+      }
     })
     .catch((backendError) => {
       handleBackendError(backendError, serverErrors);
     });
 });
+
+watch(
+  [open, year, month],
+  ([isVisible, targetYear, targetMonth]) => {
+    if (!isVisible) return;
+
+    loadMonthlySettlements(targetYear, targetMonth).then((loaded) => {
+      selectedMonth.value = loaded;
+    });
+  },
+  { immediate: true },
+);
 
 watch(
   () => selectedMonth.value,
@@ -272,6 +279,4 @@ watch(
   },
   { immediate: true },
 );
-
-defineExpose({ _show });
 </script>

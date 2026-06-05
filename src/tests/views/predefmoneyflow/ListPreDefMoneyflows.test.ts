@@ -1,3 +1,4 @@
+import { useCreatePreDefMoneyflowModalStore } from "@/components/predefmoneyflow/CreatePreDefMoneyflowModal.store";
 import CapitalsourceServiceMocker from "@/service/mocker/CapitalsourceServiceMocker";
 import ContractpartnerServiceMocker from "@/service/mocker/ContractpartnerServiceMocker";
 import PostingAccountServiceMocker from "@/service/mocker/PostingAccountServiceMocker";
@@ -17,7 +18,7 @@ import ListPreDefMoneyflows from "@/views/predefmoneyflow/ListPreDefMoneyflows.v
 import "@testing-library/jest-dom/vitest";
 import { render } from "@testing-library/vue";
 import { createPinia, setActivePinia } from "pinia";
-import { beforeEach, test, vi } from "vitest";
+import { beforeEach, expect, test, vi } from "vitest";
 
 vi.mock("@/service/PreDefMoneyflowService");
 vi.mock("@/service/CapitalsourceService");
@@ -51,7 +52,12 @@ class ListPreDefMoneyflowsView {
   static readonly DeleteRowOneButton = new ButtonView(
     "predef-moneyflow-delete-1",
   );
-  static readonly Modal = new ModalView("app-modal");
+  static readonly CreateModal = new ModalView(
+    "app-modal-CreatePreDefMoneyflow",
+  );
+  static readonly DeleteModal = new ModalView(
+    "app-modal-DeletePreDefMoneyflow",
+  );
   static readonly EmptyRowDesktop = new RowView(
     "predef-moneyflow-empty-desktop",
   );
@@ -111,7 +117,8 @@ test("ListPreDefMoneyflows opens create modal", async () => {
 
   await ListPreDefMoneyflowsView.RowOne.assertToBeVisible();
   await ListPreDefMoneyflowsView.CreateButton.click();
-  await ListPreDefMoneyflowsView.Modal.assertOpen();
+  expect(useCreatePreDefMoneyflowModalStore().open).toBe(true);
+  expect(useCreatePreDefMoneyflowModalStore().preDefMoneyflow).toBeUndefined();
 });
 
 test("ListPreDefMoneyflows opens edit modal from row action", async () => {
@@ -119,7 +126,8 @@ test("ListPreDefMoneyflows opens edit modal from row action", async () => {
 
   await ListPreDefMoneyflowsView.RowOne.assertToBeVisible();
   await ListPreDefMoneyflowsView.EditRowOneButton.click();
-  await ListPreDefMoneyflowsView.Modal.assertOpen();
+  expect(useCreatePreDefMoneyflowModalStore().open).toBe(true);
+  expect(useCreatePreDefMoneyflowModalStore().preDefMoneyflow?.id).toBe(1);
 });
 
 test("ListPreDefMoneyflows opens delete modal from row action", async () => {
@@ -127,7 +135,7 @@ test("ListPreDefMoneyflows opens delete modal from row action", async () => {
 
   await ListPreDefMoneyflowsView.RowOne.assertToBeVisible();
   await ListPreDefMoneyflowsView.DeleteRowOneButton.click();
-  await ListPreDefMoneyflowsView.Modal.assertOpen();
+  await ListPreDefMoneyflowsView.DeleteModal.assertOpen();
 });
 
 test("ListPreDefMoneyflows filters via mobile sheet", async () => {
@@ -147,7 +155,8 @@ test("ListPreDefMoneyflows opens edit modal from mobile action", async () => {
 
   await ListPreDefMoneyflowsView.MobileRowOne.assertToBeVisible();
   await ListPreDefMoneyflowsView.MobileEditRowOneButton.click();
-  await ListPreDefMoneyflowsView.Modal.assertOpen();
+  expect(useCreatePreDefMoneyflowModalStore().open).toBe(true);
+  expect(useCreatePreDefMoneyflowModalStore().preDefMoneyflow?.id).toBe(1);
 });
 
 test("ListPreDefMoneyflows opens delete modal from mobile action", async () => {
@@ -155,7 +164,7 @@ test("ListPreDefMoneyflows opens delete modal from mobile action", async () => {
 
   await ListPreDefMoneyflowsView.MobileRowOne.assertToBeVisible();
   await ListPreDefMoneyflowsView.MobileDeleteRowOneButton.click();
-  await ListPreDefMoneyflowsView.Modal.assertOpen();
+  await ListPreDefMoneyflowsView.DeleteModal.assertOpen();
 });
 
 test("ListPreDefMoneyflows shows empty state for empty list (Desktop and Mobile)", async () => {

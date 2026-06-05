@@ -46,8 +46,6 @@
           :key="mcs.id"
           :mcs="mcs"
           :owner="mcs.userId === userId"
-          @delete-capitalsource="deleteCapitalsource"
-          @edit-capitalsource="editCapitalsource"
         />
       </TableBody>
     </DivContentTable>
@@ -70,17 +68,4 @@ defineProps<{
   capitalsources: Capitalsource[];
   userId: number;
 }>();
-
-const emit = defineEmits<{
-  deleteCapitalsource: [capitalsource: Capitalsource];
-  editCapitalsource: [capitalsource: Capitalsource];
-}>();
-
-const deleteCapitalsource = (mcs: Capitalsource) => {
-  emit("deleteCapitalsource", mcs);
-};
-
-const editCapitalsource = (mcs: Capitalsource) => {
-  emit("editCapitalsource", mcs);
-};
 </script>

@@ -1,12 +1,5 @@
 <template>
-  <DeleteMonthlySettlementModalVue
-    ref="deleteModal"
-    @monthly-settlement-deleted="monthlySettlementDeleted"
-  />
-  <EditMonthlySettlementModalVue
-    ref="editModal"
-    @monthly-settlement-upserted="monthlySettlementUpserted"
-  />
+  <DeleteMonthlySettlementModal />
   <div class="custom-container space-y-6">
     <div class="text-center">
       <h4 class="text-2xl font-bold">
@@ -29,11 +22,6 @@
       @select-year="selectYear"
       @select-month="selectMonth"
       @select-current-month="selectCurrentMonth"
-      @create="showEditMonthlySettlementModal()"
-      @edit="
-        showEditMonthlySettlementModal(Number(selectedYear), selectedMonth)
-      "
-      @delete="showDeleteMonthlySettlementModal"
     />
 
     <ListMonthlySettlementsDesktop
@@ -45,11 +33,6 @@
       :can-edit-or-delete="canEditOrDelete"
       @select-year="selectYear"
       @select-month="selectMonth"
-      @create="showEditMonthlySettlementModal()"
-      @edit="
-        showEditMonthlySettlementModal(Number(selectedYear), selectedMonth)
-      "
-      @delete="showDeleteMonthlySettlementModal"
     />
 
     <DivError :server-errors="serverErrors" />
@@ -65,14 +48,16 @@
 
 <script lang="ts" setup>
 import DivError from "@/components/common/DivError.vue";
-import EditMonthlySettlementModalVue from "@/components/monthlysettlement/EditMonthlySettlementModal.vue";
+import { useEditMonthlySettlementModalStore } from "@/components/monthlysettlement/EditMonthlySettlementModal.store";
+import { MonthlySettlementModalActionsKey } from "@/model/CrudActions";
 import router, { Routes } from "@/router";
 import MonthlySettlementService from "@/service/MonthlySettlementService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { getMonthName } from "@/tools/views/MonthName";
-import { computed, onMounted, ref, useTemplateRef } from "vue";
+import { computed, onMounted, provide, ref } from "vue";
 import { onBeforeRouteUpdate } from "vue-router";
-import DeleteMonthlySettlementModalVue from "./elements/DeleteMonthlySettlementModal.vue";
+import useDeleteMonthlySettlementModalStore from "./elements/DeleteMonthlySettlementModal.store";
+import DeleteMonthlySettlementModal from "./elements/DeleteMonthlySettlementModal.vue";
 import ListMonthlySettlementsDesktop from "./elements/ListMonthlySettlementsDesktop.vue";
 import ListMonthlySettlementsMobile from "./elements/ListMonthlySettlementsMobile.vue";
 import ShowMontlySettlementVue from "./elements/ShowMonthlySettlement.vue";
@@ -86,11 +71,20 @@ const selectedYear = ref("0");
 const selectedMonth = ref(0);
 const currentlyShownYear = ref("0");
 const canEditOrDelete = computed(() => selectedMonth.value > 0);
+const { openDeleteMonthlySettlement } = useDeleteMonthlySettlementModalStore();
 
-const deleteModal =
-  useTemplateRef<typeof DeleteMonthlySettlementModalVue>("deleteModal");
-const editModal =
-  useTemplateRef<typeof EditMonthlySettlementModalVue>("editModal");
+const { openCreateMonthlySettlement, openEditMonthlySettlement } =
+  useEditMonthlySettlementModalStore();
+
+provide(MonthlySettlementModalActionsKey, {
+  create: () => showEditMonthlySettlementModal(),
+  edit: () =>
+    showEditMonthlySettlementModal(
+      Number(selectedYear.value),
+      selectedMonth.value,
+    ),
+  delete: () => showDeleteMonthlySettlementModal(),
+});
 
 const props = withDefaults(
   defineProps<{
@@ -140,7 +134,7 @@ const loadMonth = (year?: string, month?: number) => {
     });
 };
 
-onBeforeRouteUpdate((to, from) => {
+onBeforeRouteUpdate((to) => {
   const year = to.params.year ? to.params.year.toString() : undefined;
   const month = to.params.month ? Number(to.params.month) : 0;
   if (
@@ -156,7 +150,12 @@ onBeforeRouteUpdate((to, from) => {
 });
 
 const showEditMonthlySettlementModal = (year?: number, month?: number) => {
-  (editModal.value as typeof EditMonthlySettlementModalVue)._show(year, month);
+  if (year === undefined && month === undefined) {
+    openCreateMonthlySettlement(monthlySettlementUpserted);
+    return;
+  }
+
+  openEditMonthlySettlement(year, month, monthlySettlementUpserted);
 };
 
 const selectYear = (year: string) => {
@@ -205,7 +204,11 @@ const monthlySettlementUpserted = (year: number, month: number) => {
 };
 
 const showDeleteMonthlySettlementModal = () => {
-  deleteModal.value?._show(Number(selectedYear.value), selectedMonth.value);
+  openDeleteMonthlySettlement(
+    Number(selectedYear.value),
+    selectedMonth.value,
+    monthlySettlementDeleted,
+  );
 };
 
 const monthlySettlementDeleted = (year: number) => {

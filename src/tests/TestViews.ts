@@ -116,21 +116,35 @@ export abstract class AbstractView {
   }
 }
 
-export const ModalStub = defineComponent({
-  data: () => ({ isOpen: false }),
-  methods: {
-    _show() {
-      this.isOpen = true;
-    },
-    _hide() {
-      this.isOpen = false;
-    },
+export const DeclarativeModalStub = defineComponent({
+  props: {
+    open: Boolean,
+    idSuffix: String, // Accept idSuffix prop
   },
+  emits: ["update:open"],
   template:
-    '<div v-if="isOpen" data-testid="app-modal"><slot name="body" /><slot name="footer" /></div>',
+    '<div v-if="open" :data-testid="\'app-modal-\' + idSuffix"><slot name="body" /><slot name="footer" /></div>',
 });
 
-export function renderModalWithRef<T = any>(component: any, props?: any) {
+export function renderDeclarativeModal(component: any, props?: any) {
+  render(
+    defineComponent({
+      setup() {
+        return () => h(component, { ...props });
+      },
+    }),
+    {
+      global: {
+        stubs: { ModalVue: DeclarativeModalStub },
+      },
+    },
+  );
+}
+
+export function renderDeclarativeModalWithRef<T = any>(
+  component: any,
+  props?: any,
+) {
   const modalRef = ref<T>();
   render(
     defineComponent({
@@ -140,7 +154,7 @@ export function renderModalWithRef<T = any>(component: any, props?: any) {
     }),
     {
       global: {
-        stubs: { ModalVue: ModalStub },
+        stubs: { ModalVue: DeclarativeModalStub },
       },
     },
   );

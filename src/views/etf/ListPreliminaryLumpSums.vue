@@ -1,31 +1,10 @@
 <template>
-  <CreateEtfPreliminaryLumpSumModalMonthlyVue
-    ref="createModalMonthly"
-    @etf-preliminary-lump-sum-created="reloadView"
-    @etf-preliminary-lump-sum-updated="reloadView"
-  />
-  <CreateEtfPreliminaryLumpSumModalPieceVue
-    ref="createModalPiece"
-    @etf-preliminary-lump-sum-created="reloadView"
-    @etf-preliminary-lump-sum-updated="reloadView"
-  />
-  <CreateEtfPreliminaryLumpSumModalYearly
-    ref="createModalYearly"
-    @etf-preliminary-lump-sum-created="reloadView"
-    @etf-preliminary-lump-sum-updated="reloadView"
-  />
-  <DeleteEtfPreliminaryLumpSumModalMonthlyVue
-    @etf-preliminary-lump-sum-deleted="reloadView"
-    ref="deleteModalMonthly"
-  />
-  <DeleteEtfPreliminaryLumpSumModalPieceVue
-    @etf-preliminary-lump-sum-deleted="reloadView"
-    ref="deleteModalPiece"
-  />
-  <DeleteEtfPreliminaryLumpSumModalYearly
-    @etf-preliminary-lump-sum-deleted="reloadView"
-    ref="deleteModalYearly"
-  />
+  <CreateEtfPreliminaryLumpSumModalMonthly />
+  <CreateEtfPreliminaryLumpSumModalPiece />
+  <CreateEtfPreliminaryLumpSumModalYearly />
+  <DeleteEtfPreliminaryLumpSumModalMonthly />
+  <DeleteEtfPreliminaryLumpSumModalPiece />
+  <DeleteEtfPreliminaryLumpSumModalYearly />
 
   <div class="custom-container space-y-6">
     <h4 class="text-center text-2xl font-bold">
@@ -51,10 +30,10 @@
         @select-year="selectYearMobile"
         @select-current-month="selectCurrentMonth"
         @open-edit="
-          showCreateEtfPreliminaryLumpSumModal(
+          showEditEtfPreliminaryLumpSumModal(
             selectedEtfId,
             etfPreliminaryLumpSum!.type,
-            etfPreliminaryLumpSum,
+            etfPreliminaryLumpSum!,
           )
         "
         @open-delete="showDeleteEtfPreliminaryLumpSumModal"
@@ -97,10 +76,10 @@
         @select-year="selectYearMobile"
         @select-current-month="selectCurrentMonth"
         @open-edit="
-          showCreateEtfPreliminaryLumpSumModal(
+          showEditEtfPreliminaryLumpSumModal(
             selectedEtfId,
             etfPreliminaryLumpSum!.type,
-            etfPreliminaryLumpSum,
+            etfPreliminaryLumpSum!,
           )
         "
         @open-delete="showDeleteEtfPreliminaryLumpSumModal"
@@ -169,19 +148,18 @@ import { EtfPreliminaryLumpSumType } from "@/model/etf/EtfPreliminaryLumpSumType
 import router, { Routes } from "@/router";
 import CrudEtfPreliminaryLumpSumService from "@/service/CrudEtfPreliminaryLumpSumService";
 import { useEtfStore } from "@/stores/EtfStore";
-import {
-  computed,
-  ref,
-  useTemplateRef,
-  watch,
-  type Component,
-  type ShallowRef,
-} from "vue";
-import CreateEtfPreliminaryLumpSumModalMonthlyVue from "./elements/CreateEtfPreliminaryLumpSumModalMonthly.vue";
-import CreateEtfPreliminaryLumpSumModalPieceVue from "./elements/CreateEtfPreliminaryLumpSumModalPiece.vue";
+import { computed, ref, watch, type Component } from "vue";
+import useCreateEtfPreliminaryLumpSumModalMonthlyStore from "./elements/CreateEtfPreliminaryLumpSumModalMonthly.store";
+import CreateEtfPreliminaryLumpSumModalMonthly from "./elements/CreateEtfPreliminaryLumpSumModalMonthly.vue";
+import useCreateEtfPreliminaryLumpSumModalPieceStore from "./elements/CreateEtfPreliminaryLumpSumModalPiece.store";
+import CreateEtfPreliminaryLumpSumModalPiece from "./elements/CreateEtfPreliminaryLumpSumModalPiece.vue";
+import useCreateEtfPreliminaryLumpSumModalYearlyStore from "./elements/CreateEtfPreliminaryLumpSumModalYearly.store";
 import CreateEtfPreliminaryLumpSumModalYearly from "./elements/CreateEtfPreliminaryLumpSumModalYearly.vue";
-import DeleteEtfPreliminaryLumpSumModalMonthlyVue from "./elements/DeleteEtfPreliminaryLumpSumModalMonthly.vue";
-import DeleteEtfPreliminaryLumpSumModalPieceVue from "./elements/DeleteEtfPreliminaryLumpSumModalPiece.vue";
+import useDeleteEtfPreliminaryLumpSumModalMonthlyStore from "./elements/DeleteEtfPreliminaryLumpSumModalMonthly.store";
+import DeleteEtfPreliminaryLumpSumModalMonthly from "./elements/DeleteEtfPreliminaryLumpSumModalMonthly.vue";
+import useDeleteEtfPreliminaryLumpSumModalPieceStore from "./elements/DeleteEtfPreliminaryLumpSumModalPiece.store";
+import DeleteEtfPreliminaryLumpSumModalPiece from "./elements/DeleteEtfPreliminaryLumpSumModalPiece.vue";
+import useDeleteEtfPreliminaryLumpSumModalYearlyStore from "./elements/DeleteEtfPreliminaryLumpSumModalYearly.store";
 import DeleteEtfPreliminaryLumpSumModalYearly from "./elements/DeleteEtfPreliminaryLumpSumModalYearly.vue";
 import ListPreliminaryLumpSumsDesktop from "./elements/ListPreliminaryLumpSumsDesktop.vue";
 import ListPreliminaryLumpSumsMobile from "./elements/ListPreliminaryLumpSumsMobile.vue";
@@ -212,18 +190,28 @@ const etfPreliminaryLumpSums = ref<Map<string, EtfPreliminaryLumpSum>>(
   new Map(),
 );
 const etfPreliminaryLumpSum = ref<EtfPreliminaryLumpSum | undefined>(undefined);
+const {
+  openCreateEtfPreliminaryLumpSumMonthly,
+  openEditEtfPreliminaryLumpSumMonthly,
+} = useCreateEtfPreliminaryLumpSumModalMonthlyStore();
+const {
+  openCreateEtfPreliminaryLumpSumPiece,
+  openEditEtfPreliminaryLumpSumPiece,
+} = useCreateEtfPreliminaryLumpSumModalPieceStore();
+const {
+  openCreateEtfPreliminaryLumpSumYearly,
+  openEditEtfPreliminaryLumpSumYearly,
+} = useCreateEtfPreliminaryLumpSumModalYearlyStore();
+const { openDeleteEtfPreliminaryLumpSumMonthly } =
+  useDeleteEtfPreliminaryLumpSumModalMonthlyStore();
+const { openDeleteEtfPreliminaryLumpSumPiece } =
+  useDeleteEtfPreliminaryLumpSumModalPieceStore();
+const { openDeleteEtfPreliminaryLumpSumYearly } =
+  useDeleteEtfPreliminaryLumpSumModalYearlyStore();
 
-interface CreateModalExpose {
-  _show: (etfId?: number, mep?: EtfPreliminaryLumpSum) => void;
-}
-interface DeleteModalExpose {
-  _show: (mep: EtfPreliminaryLumpSum) => void;
-}
 interface TypeConfigEntry {
   id: string;
   label: string;
-  create: Readonly<ShallowRef<CreateModalExpose | null>>;
-  delete: Readonly<ShallowRef<DeleteModalExpose | null>>;
   show: Component;
 }
 
@@ -231,25 +219,20 @@ const etfOptions = computed(() => getAsSelectBoxValues());
 
 const TYPE_CONFIG: Partial<Record<EtfPreliminaryLumpSumType, TypeConfigEntry>> =
   {
+    // Changed to use local refs for visibility
     [EtfPreliminaryLumpSumType.AMOUNT_PER_MONTH]: {
       id: "month",
       label: "ETFPreliminaryLumpSum.newMonthly",
-      create: useTemplateRef<CreateModalExpose>("createModalMonthly"),
-      delete: useTemplateRef<DeleteModalExpose>("deleteModalMonthly"),
       show: ShowEtfPreliminaryLumpSumMonthlyVue,
     },
     [EtfPreliminaryLumpSumType.AMOUNT_PER_PIECE]: {
       id: "piece",
       label: "ETFPreliminaryLumpSum.newPiece",
-      create: useTemplateRef<CreateModalExpose>("createModalPiece"),
-      delete: useTemplateRef<DeleteModalExpose>("deleteModalPiece"),
       show: ShowEtfPreliminaryLumpSumPieceVue,
     },
     [EtfPreliminaryLumpSumType.AMOUNT_PER_YEAR]: {
       id: "yearly",
       label: "ETFPreliminaryLumpSum.newYearly",
-      create: useTemplateRef<CreateModalExpose>("createModalYearly"),
-      delete: useTemplateRef<DeleteModalExpose>("deleteModalYearly"),
       show: ShowEtfPreliminaryLumpSumYearly,
     },
   };
@@ -336,26 +319,61 @@ watch(selectedYear, (newVal) => {
   }
 });
 
+const showEditEtfPreliminaryLumpSumModal = (
+  etfId: number | undefined,
+  type: EtfPreliminaryLumpSumType,
+  mep: EtfPreliminaryLumpSum,
+) => {
+  if (type === EtfPreliminaryLumpSumType.AMOUNT_PER_MONTH) {
+    openEditEtfPreliminaryLumpSumMonthly(etfId, mep, reloadView);
+  } else if (type === EtfPreliminaryLumpSumType.AMOUNT_PER_PIECE) {
+    openEditEtfPreliminaryLumpSumPiece(etfId, mep, reloadView);
+  } else {
+    openEditEtfPreliminaryLumpSumYearly(etfId, mep, reloadView);
+  }
+};
+
 const showCreateEtfPreliminaryLumpSumModal = (
   etfId: number | undefined,
   type: EtfPreliminaryLumpSumType,
-  mep?: EtfPreliminaryLumpSum,
 ) => {
-  TYPE_CONFIG[type]?.create.value?._show(etfId, mep);
+  if (type === EtfPreliminaryLumpSumType.AMOUNT_PER_MONTH) {
+    openCreateEtfPreliminaryLumpSumMonthly(etfId, reloadView);
+  } else if (type === EtfPreliminaryLumpSumType.AMOUNT_PER_PIECE) {
+    openCreateEtfPreliminaryLumpSumPiece(etfId, reloadView);
+  } else {
+    openCreateEtfPreliminaryLumpSumYearly(etfId, reloadView);
+  }
 };
 
 const showDeleteEtfPreliminaryLumpSumModal = () => {
   if (etfPreliminaryLumpSum.value) {
-    const type = etfPreliminaryLumpSum.value.type;
-    if (type) {
-      TYPE_CONFIG[type]?.delete.value?._show(etfPreliminaryLumpSum.value);
+    if (
+      etfPreliminaryLumpSum.value.type ===
+      EtfPreliminaryLumpSumType.AMOUNT_PER_MONTH
+    ) {
+      openDeleteEtfPreliminaryLumpSumMonthly(
+        etfPreliminaryLumpSum.value,
+        reloadView,
+      );
+    } else if (
+      etfPreliminaryLumpSum.value.type ===
+      EtfPreliminaryLumpSumType.AMOUNT_PER_PIECE
+    ) {
+      openDeleteEtfPreliminaryLumpSumPiece(
+        etfPreliminaryLumpSum.value,
+        reloadView,
+      );
+    } else {
+      openDeleteEtfPreliminaryLumpSumYearly(
+        etfPreliminaryLumpSum.value,
+        reloadView,
+      );
     }
   }
 };
 
-const selectYearMobile = (year: string) => {
-  selectedYear.value = year;
-};
+const selectYearMobile = (year: string) => (selectedYear.value = year);
 
 const selectCurrentMonth = () => {
   if (years.value.length > 0) {

@@ -2,12 +2,13 @@
   <ModalVue
     :title="title"
     maxWidth="max-w-[calc(100%-2rem)] md:max-w-2xl lg:max-w-2xl w-full mx-auto"
-    ref="modalComponent"
+    id-suffix="CreatePreDefMoneyflow"
+    v-model:open="open"
   >
     <template #body>
       <form
         @submit.prevent="createPreDefMoneyflow"
-        :id="'createPreDefMoneyflowForm' + idSuffix"
+        id="createPreDefMoneyflowForm"
       >
         <div class="space-y-4">
           <DivError :server-errors="serverErrors" />
@@ -116,11 +117,11 @@
                                 :style="{
                                   backgroundColor: mpm.favoriteColor,
                                 }"
-                                :data-testid="'favoriteColorPicker' + idSuffix"
+                                data-testid="favoriteColorPicker"
                               ></div>
                             </PopoverTrigger>
                             <PopoverContent
-                              class="w-40 p-2 bg-popover border rounded-md shadow-md z-[3000]"
+                              class="w-40 p-2 bg-popover border rounded-md shadow-md z-3000"
                               align="start"
                             >
                               <div class="flex justify-end mb-1">
@@ -184,7 +185,7 @@
                 <InputStandard
                   v-model="mpm.comment"
                   :validation-schema="schema.comment"
-                  :id="'comment' + idSuffix"
+                  id="comment"
                   :field-label="$t('General.comment')"
                 >
                   <template #icon
@@ -196,7 +197,7 @@
                 <SelectContractpartner
                   v-model="mpm.contractpartnerId"
                   :validation-schema="schema.contractpartnerId"
-                  :id-suffix="'CreatePreDefMoneyflow' + idSuffix"
+                  id-suffix="CreatePreDefMoneyflow"
                   :field-label="$t('General.contractpartner')"
                 />
               </div>
@@ -204,7 +205,7 @@
                 <SelectCapitalsource
                   v-model="mpm.capitalsourceId"
                   :validation-schema="schema.capitalsourceId"
-                  :id-suffix="'CreatePreDefMoneyflow' + idSuffix"
+                  id-suffix="CreatePreDefMoneyflow"
                   :field-label="$t('General.capitalsource')"
                   :validity-date="validityDate"
                 />
@@ -213,7 +214,7 @@
                 <SelectPostingAccount
                   v-model="mpm.postingAccountId"
                   :validation-schema="schema.postingAccountId"
-                  :id-suffix="'CreatePreDefMoneyflow' + idSuffix"
+                  id-suffix="CreatePreDefMoneyflow"
                   :field-label="$t('General.postingAccount')"
                 />
               </div>
@@ -237,8 +238,8 @@
 
       <ButtonSubmit
         :button-label="$t('General.save')"
-        :form-id="'createPreDefMoneyflowForm' + idSuffix"
-        :data-testid="'createPreDefMoneyflowSaveButton' + idSuffix"
+        form-id="createPreDefMoneyflowForm"
+        data-testid="createPreDefMoneyflowSaveButton"
       >
         <template #icon><Save class="icon-medium" /></template>
       </ButtonSubmit>
@@ -268,8 +269,9 @@ import {
   Undo2,
   X,
 } from "lucide-vue-next";
+import { storeToRefs } from "pinia";
 import { useForm } from "vee-validate";
-import { computed, ref, toRaw, useTemplateRef, watch } from "vue";
+import { computed, ref, toRaw, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { boolean, number, string, type ZodType } from "zod";
 import SelectCapitalsource from "../capitalsource/SelectCapitalsource.vue";
@@ -280,16 +282,12 @@ import InputStandard from "../common/InputStandard.vue";
 import ModalVue from "../common/Modal.vue";
 import SelectContractpartner from "../contractpartner/SelectContractpartner.vue";
 import SelectPostingAccount from "../postingaccount/SelectPostingAccount.vue";
+import useCreatePreDefMoneyflowModalStore from "./CreatePreDefMoneyflowModal.store";
 
 const { t } = useI18n();
-
-withDefaults(
-  defineProps<{
-    idSuffix?: string;
-  }>(),
-  {
-    idSuffix: "",
-  },
+const { close } = useCreatePreDefMoneyflowModalStore();
+const { open, preDefMoneyflow, onDone } = storeToRefs(
+  useCreatePreDefMoneyflowModalStore(),
 );
 
 const serverErrors = ref(new Array<string>());
@@ -317,14 +315,8 @@ const schema: Partial<{ [key in keyof PreDefMoneyflow]: ZodType }> = {
 
 const mpm = ref({} as PreDefMoneyflow);
 const origMpm = ref({} as PreDefMoneyflow | undefined);
-const modalComponent = useTemplateRef<typeof ModalVue>("modalComponent");
 const validityDate = new Date();
 validityDate.setHours(0, 0, 0, 0);
-const emit = defineEmits<{
-  preDefMoneyflowCreated: [preDefMoneyflow: PreDefMoneyflow];
-  preDefMoneyflowUpdated: [preDefMoneyflow: PreDefMoneyflow];
-}>();
-
 const isPopoverOpen = ref(false);
 const randomColors = ref<string[]>([]);
 const hoveredColor = ref<string | null>(null);
@@ -351,6 +343,16 @@ watch(isPopoverOpen, (val) => {
     hoveredColor.value = null;
   }
 });
+
+watch(
+  () => open.value,
+  (visible) => {
+    if (visible) {
+      origMpm.value = (preDefMoneyflow.value as any) ?? undefined;
+      resetForm();
+    }
+  },
+);
 
 const selectColor = (color: string) => {
   mpm.value.favoriteColor = color;
@@ -381,12 +383,6 @@ const resetForm = () => {
   Object.keys(values).forEach((field) => setFieldTouched(field, false));
 };
 
-const _show = async (_mpm?: PreDefMoneyflow) => {
-  origMpm.value = _mpm ?? undefined;
-  resetForm();
-  modalComponent.value?._show();
-};
-
 const createPreDefMoneyflow = handleSubmit(() => {
   serverErrors.value = new Array<string>();
 
@@ -394,8 +390,8 @@ const createPreDefMoneyflow = handleSubmit(() => {
     //update
     PreDefMoneyflowService.updatePreDefMoneyflow(mpm.value)
       .then(() => {
-        modalComponent.value?._hide();
-        emit("preDefMoneyflowUpdated", mpm.value);
+        close();
+        (onDone.value as any)?.(mpm.value);
       })
       .catch((backendError) => {
         handleBackendError(backendError, serverErrors);
@@ -405,13 +401,12 @@ const createPreDefMoneyflow = handleSubmit(() => {
     PreDefMoneyflowService.createPreDefMoneyflow(mpm.value)
       .then((_mpm) => {
         mpm.value = _mpm;
-        modalComponent.value?._hide();
-        emit("preDefMoneyflowCreated", mpm.value);
+        close();
+        (onDone.value as any)?.(mpm.value);
       })
       .catch((backendError) => {
         handleBackendError(backendError, serverErrors);
       });
   }
 });
-defineExpose({ _show });
 </script>

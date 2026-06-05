@@ -1,5 +1,10 @@
 <template>
-  <ModalVue :title="title" max-width="max-w-md" ref="modalComponent">
+  <ModalVue
+    :title="title"
+    max-width="max-w-md"
+    id-suffix="CreateEtfPreliminaryLumpSumPiece"
+    v-model:open="open"
+  >
     <template #body>
       <form
         @submit.prevent="createEtfPreliminaryLumpSum"
@@ -87,13 +92,16 @@ import { useEtfStore } from "@/stores/EtfStore";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { amountSchema, globErr } from "@/tools/views/ZodUtil";
 import { Euro, Save, Undo2 } from "lucide-vue-next";
+import { storeToRefs } from "pinia";
 import { useForm } from "vee-validate";
-import { computed, ref, toRaw, useTemplateRef } from "vue";
+import { computed, ref, toRaw, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { date, number, type ZodType } from "zod";
+import useCreateEtfPreliminaryLumpSumModalPieceStore from "./CreateEtfPreliminaryLumpSumModalPiece.store";
 
 const { t } = useI18n();
 
+const modalStore = useCreateEtfPreliminaryLumpSumModalPieceStore();
 const serverErrors = ref(new Array<string>());
 
 const schema: Partial<{ [key in keyof EtfPreliminaryLumpSum]: ZodType }> = {
@@ -105,12 +113,12 @@ const schema: Partial<{ [key in keyof EtfPreliminaryLumpSum]: ZodType }> = {
 const etfs = ref(new Array<SelectBoxValue>());
 const mep = ref({} as EtfPreliminaryLumpSum);
 const origMep = ref({} as EtfPreliminaryLumpSum | undefined);
-const defaultEtfId = ref(0 as number | undefined);
-const modalComponent = useTemplateRef<typeof ModalVue>("modalComponent");
-const emit = defineEmits<{
-  etfPreliminaryLumpSumCreated: [etfPreliminaryLumpSum: EtfPreliminaryLumpSum];
-  etfPreliminaryLumpSumUpdated: [etfPreliminaryLumpSum: EtfPreliminaryLumpSum];
-}>();
+const {
+  open,
+  lumpSum: etfPreliminaryLumpSumModel,
+  defaultEtfId,
+  onDone,
+} = storeToRefs(modalStore);
 const year = ref(new Date());
 const etfStore = useEtfStore();
 
@@ -143,42 +151,45 @@ const resetForm = () => {
   Object.keys(values).forEach((field) => setFieldTouched(field, false));
 };
 
-const _show = (_etfId?: number, _mep?: EtfPreliminaryLumpSum) => {
-  etfs.value = etfStore.getAsSelectBoxValues();
-  defaultEtfId.value = _etfId;
-  origMep.value = _mep ?? undefined;
-  resetForm();
-  modalComponent.value?._show();
-};
+watch(
+  [open, etfPreliminaryLumpSumModel, defaultEtfId],
+  ([newOpen, newEtfPreliminaryLumpSum]) => {
+    if (newOpen) {
+      etfs.value = etfStore.getAsSelectBoxValues();
+      origMep.value = newEtfPreliminaryLumpSum ?? undefined;
+      resetForm();
+    }
+  },
+  { immediate: true },
+);
 
 const createEtfPreliminaryLumpSum = handleSubmit(() => {
   serverErrors.value = new Array<string>();
 
   mep.value.year = year.value.getFullYear();
 
+  // Update
   if (mep.value.id > 0) {
     //update
     CrudEtfPreliminaryLumpSumService.updateEtfPreliminaryLumpSum(mep.value)
       .then(() => {
-        modalComponent.value?._hide();
-        emit("etfPreliminaryLumpSumUpdated", mep.value);
+        open.value = false;
+        onDone.value?.(mep.value);
       })
       .catch((backendError) => {
         handleBackendError(backendError, serverErrors);
       });
   } else {
-    //create
+    // Create
     CrudEtfPreliminaryLumpSumService.createEtfPreliminaryLumpSum(mep.value)
       .then((_etfPreliminaryLumpSum) => {
         mep.value = _etfPreliminaryLumpSum;
-        modalComponent.value?._hide();
-        emit("etfPreliminaryLumpSumCreated", mep.value);
+        open.value = false;
+        onDone.value?.(mep.value);
       })
       .catch((backendError) => {
         handleBackendError(backendError, serverErrors);
       });
   }
 });
-
-defineExpose({ _show });
 </script>

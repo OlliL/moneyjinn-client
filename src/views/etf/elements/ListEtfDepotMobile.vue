@@ -47,7 +47,7 @@
                   size="icon"
                   class="h-7 w-7"
                   :data-testid="`etf-depot-mobile-edit-${flow.etfflowid}`"
-                  @click.stop="editEtfFlow(flow)"
+                  @click.stop="actions.edit(flow)"
                 >
                   <Pencil class="icon-small" />
                 </Button>
@@ -56,7 +56,7 @@
                   size="icon"
                   class="h-7 w-7 text-destructive"
                   :data-testid="`etf-depot-mobile-delete-${flow.etfflowid}`"
-                  @click.stop="deleteEtfFlow(flow)"
+                  @click.stop="actions.delete(flow)"
                 >
                   <Trash2 class="icon-small" />
                 </Button>
@@ -101,20 +101,17 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
+import { EtfFlowActionsKey } from "@/model/CrudActions";
 import type { EtfFlow } from "@/model/etf/EtfFlow";
 import { formatDateWithTime } from "@/tools/views/FormatDate";
 import { formatNumber, redIfNegative } from "@/tools/views/FormatNumber";
 import { Pencil, Trash2 } from "lucide-vue-next";
+import { inject } from "vue";
 
 const props = defineProps<{
   flows: EtfFlow[];
   partial: number;
   isEffectiveOnly: boolean;
-}>();
-
-const emit = defineEmits<{
-  deleteEtfFlow: [etfFlow: EtfFlow];
-  editEtfFlow: [etfFlow: EtfFlow];
 }>();
 
 const amountClass = (flow: EtfFlow): string => {
@@ -133,11 +130,5 @@ const timestampString = (flow: EtfFlow): string => {
   );
 };
 
-const deleteEtfFlow = (flow: EtfFlow) => {
-  emit("deleteEtfFlow", flow);
-};
-
-const editEtfFlow = (flow: EtfFlow) => {
-  emit("editEtfFlow", flow);
-};
+const actions = inject(EtfFlowActionsKey)!;
 </script>

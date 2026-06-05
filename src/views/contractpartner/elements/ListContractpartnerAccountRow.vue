@@ -9,16 +9,10 @@
     <TableCell class="text-center border-r py-1 px-2">
       <SpanDate :date="mca.lastUsed" />
     </TableCell>
-    <ButtonTableIcon
-      :title="$t('General.edit')"
-      @click="editContractpartnerAccount"
-    >
+    <ButtonTableIcon :title="$t('General.edit')" @click="actions.edit(mca)">
       <Pencil class="icon-medium" />
     </ButtonTableIcon>
-    <ButtonTableIcon
-      :title="$t('General.delete')"
-      @click="deleteContractpartnerAccount"
-    >
+    <ButtonTableIcon :title="$t('General.delete')" @click="actions.delete(mca)">
       <Trash2 class="icon-medium" />
     </ButtonTableIcon>
   </TableRow>
@@ -26,6 +20,7 @@
 
 <script lang="ts" setup>
 import { Pencil, Trash2 } from "lucide-vue-next";
+import { inject } from "vue";
 
 import { TableCell, TableRow } from "@/components/ui/table";
 
@@ -33,23 +28,11 @@ import ButtonTableIcon from "@/components/common/ButtonTableIcon.vue";
 import SpanDate from "@/components/common/SpanDate.vue";
 import SpanIban from "@/components/common/SpanIban.vue";
 import type { ContractpartnerAccount } from "@/model/contractpartneraccount/ContractpartnerAccount";
+import { ContractpartnerAccountActionsKey } from "@/model/CrudActions";
 
-const props = defineProps<{
+defineProps<{
   mca: ContractpartnerAccount;
 }>();
 
-const emit = defineEmits<{
-  deleteContractpartnerAccount: [
-    contractpartnerAccount: ContractpartnerAccount,
-  ];
-  editContractpartnerAccount: [contractpartnerAccount: ContractpartnerAccount];
-}>();
-
-const deleteContractpartnerAccount = () => {
-  emit("deleteContractpartnerAccount", props.mca);
-};
-
-const editContractpartnerAccount = () => {
-  emit("editContractpartnerAccount", props.mca);
-};
+const actions = inject(ContractpartnerAccountActionsKey)!;
 </script>

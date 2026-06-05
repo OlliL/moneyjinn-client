@@ -1,9 +1,13 @@
 <template>
   <ModalDelete
     :title="$t('ETFPreliminaryLumpSum.title.delete')"
-    :server-errors="serverErrors"
-    ref="modalComponent"
-    @confirm="deleteEtfPreliminaryLumpSum"
+    id-suffix="DeleteEtfPreliminaryLumpSumMonthly"
+    v-model:open="open"
+    :delete-action="
+      () =>
+        CrudEtfPreliminaryLumpSumService.deleteEtfPreliminaryLumpSum(lumpSum.id)
+    "
+    :delete-success-action="() => onDone?.(lumpSum)"
   >
     <template #body>
       <div class="space-y-4">
@@ -17,7 +21,7 @@
               </ModalDeleteRow>
 
               <ModalDeleteRow :label="$t('General.year')" highlight-value>
-                {{ etfPreliminaryLumpSum.year }}
+                {{ lumpSum.year }}
               </ModalDeleteRow>
             </TableBody>
           </Table>
@@ -58,70 +62,45 @@ import ModalDelete from "@/components/common/ModalDelete.vue";
 import ModalDeleteRow from "@/components/common/ModalDeleteRow.vue";
 import SpanAmount from "@/components/common/SpanAmount.vue";
 import { Table, TableBody } from "@/components/ui/table";
-import type { EtfPreliminaryLumpSum } from "@/model/etf/EtfPreliminaryLumpSum";
 import CrudEtfPreliminaryLumpSumService from "@/service/CrudEtfPreliminaryLumpSumService";
 import { useEtfStore } from "@/stores/EtfStore";
-import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { getMonthName } from "@/tools/views/MonthName";
-import { computed, ref, useTemplateRef } from "vue";
+import { storeToRefs } from "pinia";
+import { computed, ref, watch } from "vue";
+import useDeleteEtfPreliminaryLumpSumModalMonthlyStore from "./DeleteEtfPreliminaryLumpSumModalMonthly.store";
 
 type RowData = {
   month: string;
   amount: number | undefined;
 };
 
-const serverErrors = ref(new Array<string>());
-
-const etfPreliminaryLumpSum = ref({} as EtfPreliminaryLumpSum);
-const etfName = computed(() => {
-  return etfStore.getEtf(etfPreliminaryLumpSum.value.etfId)?.name ?? "";
-});
-const modalComponent = useTemplateRef<typeof ModalDelete>("modalComponent");
-const emit = defineEmits<{
-  etfPreliminaryLumpSumDeleted: [etfPreliminaryLumpSum: EtfPreliminaryLumpSum];
-}>();
+const { getEtf } = useEtfStore();
 const dataArray = ref([] as Array<RowData>);
-const etfStore = useEtfStore();
+const etfName = computed(() => getEtf(lumpSum.value.etfId)?.name ?? "");
 
-const _show = (_mep: EtfPreliminaryLumpSum) => {
-  serverErrors.value = new Array<string>();
+const { open, lumpSum, onDone } = storeToRefs(
+  useDeleteEtfPreliminaryLumpSumModalMonthlyStore(),
+);
 
-  etfPreliminaryLumpSum.value = _mep;
-  const amounts = [
-    etfPreliminaryLumpSum.value.amountJanuary,
-    etfPreliminaryLumpSum.value.amountFebruary,
-    etfPreliminaryLumpSum.value.amountMarch,
-    etfPreliminaryLumpSum.value.amountApril,
-    etfPreliminaryLumpSum.value.amountMay,
-    etfPreliminaryLumpSum.value.amountJune,
-    etfPreliminaryLumpSum.value.amountJuly,
-    etfPreliminaryLumpSum.value.amountAugust,
-    etfPreliminaryLumpSum.value.amountSeptember,
-    etfPreliminaryLumpSum.value.amountOctober,
-    etfPreliminaryLumpSum.value.amountNovember,
-    etfPreliminaryLumpSum.value.amountDecember,
-  ];
-  dataArray.value = amounts.map((amount, i) => {
-    return { month: getMonthName(i + 1), amount: amount } as RowData;
-  });
-
-  modalComponent.value?._show();
-};
-
-const deleteEtfPreliminaryLumpSum = () => {
-  serverErrors.value = new Array<string>();
-
-  CrudEtfPreliminaryLumpSumService.deleteEtfPreliminaryLumpSum(
-    etfPreliminaryLumpSum.value.id,
-  )
-    .then(() => {
-      modalComponent.value?._hide();
-      emit("etfPreliminaryLumpSumDeleted", etfPreliminaryLumpSum.value);
-    })
-    .catch((backendError) => {
-      handleBackendError(backendError, serverErrors);
+watch(open, (newVal) => {
+  if (newVal) {
+    const amounts = [
+      lumpSum.value.amountJanuary,
+      lumpSum.value.amountFebruary,
+      lumpSum.value.amountMarch,
+      lumpSum.value.amountApril,
+      lumpSum.value.amountMay,
+      lumpSum.value.amountJune,
+      lumpSum.value.amountJuly,
+      lumpSum.value.amountAugust,
+      lumpSum.value.amountSeptember,
+      lumpSum.value.amountOctober,
+      lumpSum.value.amountNovember,
+      lumpSum.value.amountDecember,
+    ];
+    dataArray.value = amounts.map((amount, i) => {
+      return { month: getMonthName(i + 1), amount: amount } as RowData;
     });
-};
-
-defineExpose({ _show });
+  }
+});
 </script>

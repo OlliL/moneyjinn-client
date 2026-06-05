@@ -69,7 +69,7 @@
                 variant="ghost"
                 size="icon"
                 class="h-7 w-7"
-                @click.stop="editMoneyflow"
+                @click.stop="moneyflowActions.edit(mmf.id)"
               >
                 <Pencil class="icon-small" />
               </Button>
@@ -77,7 +77,7 @@
                 variant="ghost"
                 size="icon"
                 class="h-7 w-7 text-destructive"
-                @click.stop="deleteMoneyflow"
+                @click.stop="moneyflowActions.delete(mmf.id)"
               >
                 <Trash2 class="icon-small" />
               </Button>
@@ -240,6 +240,7 @@ import {
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import type { CompareDataDataset } from "@/model/comparedata/CompareDataDataset";
+import { CompareDataActionsKey } from "@/model/CrudActions";
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 import { useUserSessionStore } from "@/stores/UserSessionStore";
 import {
@@ -254,7 +255,7 @@ import {
   Plus,
   Trash2,
 } from "lucide-vue-next";
-import { computed } from "vue";
+import { computed, inject } from "vue";
 
 const props = defineProps<{
   mmf?: Moneyflow;
@@ -264,11 +265,6 @@ const props = defineProps<{
   rowIndex: number;
 }>();
 
-const emit = defineEmits<{
-  deleteMoneyflow: [id: number];
-  editMoneyflow: [id: number];
-  createMoneyflow: [moneyflow: Moneyflow];
-}>();
 const userSessionStore = useUserSessionStore();
 
 const displayDate = computed(
@@ -303,9 +299,8 @@ const isHeroComment = computed(() => {
   );
 });
 
-const deleteMoneyflow = () =>
-  props.mmf && emit("deleteMoneyflow", props.mmf.id);
-const editMoneyflow = () => props.mmf && emit("editMoneyflow", props.mmf.id);
+const moneyflowActions = inject(CompareDataActionsKey)!;
+
 const createMoneyflow = () => {
   if (!props.importData) return;
   const moneyflowToCreate = {
@@ -321,7 +316,7 @@ const createMoneyflow = () => {
     postingAccountName: props.importData.postingAccountName,
     contractpartnerMatchingId: props.importData?.contractpartnerMatchingId,
   } as Moneyflow;
-  emit("createMoneyflow", moneyflowToCreate);
+  moneyflowActions.create(moneyflowToCreate);
 };
 </script>
 

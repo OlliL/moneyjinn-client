@@ -218,10 +218,6 @@
         v-for="mmf in visibleMoneyflows"
         :key="'mobile-' + mmf.id"
         :mmf="mmf"
-        @show-receipt="showReceipt"
-        @edit-moneyflow="editMoneyflow"
-        @delete-moneyflow="deleteMoneyflow"
-        @list-moneyflow="listMoneyflow"
       />
     </Accordion>
 
@@ -320,10 +316,6 @@ const filterCapitalsource = defineModel<string>("filterCapitalsource", {
 });
 const emit = defineEmits<{
   sortByColumn: [field: keyof Moneyflow];
-  showReceipt: [id: number];
-  editMoneyflow: [moneyflow: Moneyflow];
-  deleteMoneyflow: [moneyflow: Moneyflow];
-  listMoneyflow: [moneyflow: Moneyflow];
 }>();
 
 const isSheetOpen = ref(false);
@@ -354,22 +346,6 @@ const visibleMoneyflows = computed(() => {
 const visibleAmountSum = computed(() => {
   return visibleMoneyflows.value.reduce((acc, mmf) => acc + mmf.amount, 0);
 });
-
-const showReceipt = (id: number) => {
-  emit("showReceipt", id);
-};
-
-const editMoneyflow = (moneyflow: Moneyflow) => {
-  emit("editMoneyflow", moneyflow);
-};
-
-const deleteMoneyflow = (moneyflow: Moneyflow) => {
-  emit("deleteMoneyflow", moneyflow);
-};
-
-const listMoneyflow = (moneyflow: Moneyflow) => {
-  emit("listMoneyflow", moneyflow);
-};
 
 const handleEnter = (event: Event): void => {
   event.preventDefault();

@@ -77,7 +77,6 @@
           :compare-data="compareDatasNotInDatabase"
           :capitalsource-id="capitalsourceId"
           :capitalsource-comment="capitalsourceComment"
-          @create-moneyflow="$emit('createMoneyflow', $event)"
         />
       </TabsContent>
 
@@ -86,8 +85,6 @@
           :compare-data="compareDatasNotInFile"
           :capitalsource-id="capitalsourceId"
           :capitalsource-comment="capitalsourceComment"
-          @delete-moneyflow="$emit('deleteMoneyflow', $event)"
-          @edit-moneyflow="$emit('editMoneyflow', $event)"
         />
       </TabsContent>
 
@@ -96,9 +93,6 @@
           :compare-data="compareDatasWrongCapitalsource"
           :capitalsource-id="capitalsourceId"
           :capitalsource-comment="capitalsourceComment"
-          @delete-moneyflow="$emit('deleteMoneyflow', $event)"
-          @edit-moneyflow="$emit('editMoneyflow', $event)"
-          @create-moneyflow="$emit('createMoneyflow', $event)"
         />
       </TabsContent>
 
@@ -107,9 +101,6 @@
           :compare-data="compareDatasMatching"
           :capitalsource-id="capitalsourceId"
           :capitalsource-comment="capitalsourceComment"
-          @delete-moneyflow="$emit('deleteMoneyflow', $event)"
-          @edit-moneyflow="$emit('editMoneyflow', $event)"
-          @create-moneyflow="$emit('createMoneyflow', $event)"
         />
       </TabsContent>
     </Tabs>
@@ -119,7 +110,6 @@
 <script lang="ts" setup>
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import type { CompareData } from "@/model/comparedata/CompareData";
-import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 import { ref } from "vue";
 import CompareDataResultMobileGroup from "./CompareDataResultMobileGroup.vue";
 
@@ -135,12 +125,5 @@ defineProps<{
   capitalsourceId: number;
   capitalsourceComment: string;
 }>();
-
-defineEmits<{
-  deleteMoneyflow: [id: number];
-  editMoneyflow: [id: number];
-  createMoneyflow: [moneyflow: Moneyflow];
-}>();
-
 const activeTab = ref("notInDb");
 </script>

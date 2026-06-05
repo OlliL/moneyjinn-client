@@ -5,6 +5,7 @@ import {
 } from "@/stores/UserSessionStore";
 import {
   ButtonView,
+  DeclarativeModalStub,
   InputView,
   MobilePopupMenu,
   ModalView,
@@ -39,7 +40,8 @@ class ListGroupsView {
   static readonly RowTwo = new RowView("group-row-2");
   static readonly EditOneButton = new ButtonView("group-edit-1");
   static readonly DeleteOneButton = new ButtonView("group-delete-1");
-  static readonly Modal = new ModalView("app-modal");
+  static readonly CreateModal = new ModalView("app-modal-CreateGroup");
+  static readonly DeleteModal = new ModalView("app-modal-DeleteGroup");
   static readonly EmptyRowDesktop = new RowView("group-empty-desktop");
   static readonly EmptyRowMobile = new RowView("group-empty-mobile");
 }
@@ -55,7 +57,9 @@ beforeEach(() => {
 });
 
 test("ListGroups loads and renders groups on mount", async () => {
-  render(ListGroups);
+  render(ListGroups, {
+    global: { stubs: { ModalVue: DeclarativeModalStub } },
+  });
 
   await ListGroupsView.RowOne.assertToBeVisible();
 });
@@ -74,7 +78,7 @@ test("ListGroups opens create modal", async () => {
 
   await ListGroupsView.RowOne.assertToBeVisible();
   await ListGroupsView.CreateButton.click();
-  await ListGroupsView.Modal.assertOpen();
+  await ListGroupsView.CreateModal.assertOpen();
 });
 
 test("ListGroups opens edit modal from row action", async () => {
@@ -82,7 +86,7 @@ test("ListGroups opens edit modal from row action", async () => {
 
   await ListGroupsView.RowOne.assertToBeVisible();
   await ListGroupsView.EditOneButton.click();
-  await ListGroupsView.Modal.assertOpen();
+  await ListGroupsView.CreateModal.assertOpen();
 });
 
 test("ListGroups opens delete modal from row action", async () => {
@@ -90,7 +94,7 @@ test("ListGroups opens delete modal from row action", async () => {
 
   await ListGroupsView.RowOne.assertToBeVisible();
   await ListGroupsView.DeleteOneButton.click();
-  await ListGroupsView.Modal.assertOpen();
+  await ListGroupsView.DeleteModal.assertOpen();
 });
 
 test("ListGroups filters via mobile sheet", async () => {
@@ -110,7 +114,7 @@ test("ListGroups opens edit modal from mobile action", async () => {
 
   await ListGroupsView.MobileRowOne.assertToBeVisible();
   await ListGroupsView.MobileEditOneButton.click();
-  await ListGroupsView.Modal.assertOpen();
+  await ListGroupsView.CreateModal.assertOpen();
 });
 
 test("ListGroups opens delete modal from mobile action", async () => {
@@ -118,7 +122,7 @@ test("ListGroups opens delete modal from mobile action", async () => {
 
   await ListGroupsView.MobileRowOne.assertToBeVisible();
   await ListGroupsView.MobileDeleteOneButton.click();
-  await ListGroupsView.Modal.assertOpen();
+  await ListGroupsView.DeleteModal.assertOpen();
 });
 
 test("ListGroups shows empty state for desktop and mobile if list is empty", async () => {

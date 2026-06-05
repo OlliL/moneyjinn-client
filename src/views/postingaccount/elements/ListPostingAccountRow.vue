@@ -4,14 +4,14 @@
     <ButtonTableIcon
       :title="$t('General.edit')"
       :test-id="`posting-account-edit-${mpa.id}`"
-      @click="editPostingAccount"
+      @click="actions.edit(mpa)"
     >
       <Pencil class="icon-medium" />
     </ButtonTableIcon>
     <ButtonTableIcon
       :title="$t('General.delete')"
       :test-id="`posting-account-delete-${mpa.id}`"
-      @click="deletePostingAccount"
+      @click="actions.delete(mpa)"
     >
       <Trash2 class="icon-medium" />
     </ButtonTableIcon>
@@ -21,22 +21,14 @@
 <script lang="ts" setup>
 import ButtonTableIcon from "@/components/common/ButtonTableIcon.vue";
 import { TableCell, TableRow } from "@/components/ui/table";
+import { PostingAccountActionsKey } from "@/model/CrudActions";
 import type { PostingAccount } from "@/model/postingaccount/PostingAccount";
 import { Pencil, Trash2 } from "lucide-vue-next";
+import { inject } from "vue";
 
 const props = defineProps<{
   mpa: PostingAccount;
 }>();
 
-const emit = defineEmits<{
-  deletePostingAccount: [postingAccount: PostingAccount];
-  editPostingAccount: [postingAccount: PostingAccount];
-}>();
-
-const deletePostingAccount = () => {
-  emit("deletePostingAccount", props.mpa);
-};
-const editPostingAccount = () => {
-  emit("editPostingAccount", props.mpa);
-};
+const actions = inject(PostingAccountActionsKey)!;
 </script>

@@ -120,23 +120,22 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
+import { PreDefMoneyflowActionsKey } from "@/model/CrudActions";
 import type { PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
 import { Pencil, Trash2 } from "lucide-vue-next";
+import { inject } from "vue";
 
 defineProps<{
   preDefMoneyflows: PreDefMoneyflow[];
 }>();
 
-const emit = defineEmits<{
-  deletePreDefMoneyflow: [preDefMoneyflow: PreDefMoneyflow];
-  editPreDefMoneyflow: [preDefMoneyflow: PreDefMoneyflow];
-}>();
+const actions = inject(PreDefMoneyflowActionsKey)!;
 
 const editPreDefMoneyflow = (mpm: PreDefMoneyflow) => {
-  emit("editPreDefMoneyflow", mpm);
+  actions.edit(mpm);
 };
 
 const deletePreDefMoneyflow = (mpm: PreDefMoneyflow) => {
-  emit("deletePreDefMoneyflow", mpm);
+  actions.delete(mpm);
 };
 </script>

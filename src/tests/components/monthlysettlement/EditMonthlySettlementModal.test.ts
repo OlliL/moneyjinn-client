@@ -1,3 +1,4 @@
+import { useEditMonthlySettlementModalStore } from "@/components/monthlysettlement/EditMonthlySettlementModal.store";
 import EditMonthlySettlementModal from "@/components/monthlysettlement/EditMonthlySettlementModal.vue";
 import { BackendError, BackendErrorType } from "@/model/BackendError";
 import { CapitalsourceType } from "@/model/capitalsource/CapitalsourceType";
@@ -23,7 +24,7 @@ import {
   ButtonView,
   InputView,
   ModalView,
-  renderModalWithRef,
+  renderDeclarativeModal,
 } from "@/tests/TestViews";
 import "@testing-library/jest-dom/vitest";
 import { createPinia, setActivePinia } from "pinia";
@@ -37,7 +38,7 @@ vi.mock("@/service/PreDefMoneyflowService");
 vi.mock("@/service/CrudEtfService");
 
 class EditMonthlySettlementModalView {
-  static readonly Modal = new ModalView("app-modal");
+  static readonly Modal = new ModalView("app-modal-EditMonthlySettlement");
   static readonly MonthInput = new InputView("selectedMonth");
   static readonly SaveButton = new ButtonView(
     "editMonthlySettlementSaveButton",
@@ -92,8 +93,8 @@ beforeEach(async () => {
 });
 
 test("initializes and loads data correctly", async () => {
-  const modalRef = renderModalWithRef<any>(EditMonthlySettlementModal);
-  await modalRef.value._show(2024, 5);
+  renderDeclarativeModal(EditMonthlySettlementModal);
+  useEditMonthlySettlementModalStore().openEditMonthlySettlement(2024, 5);
 
   await EditMonthlySettlementModalView.Modal.assertOpen();
   await EditMonthlySettlementModalView.MonthInput.assertValue("05.2024");
@@ -103,8 +104,8 @@ test("initializes and loads data correctly", async () => {
 });
 
 test("successful save calls service and closes modal", async () => {
-  const modalRef = renderModalWithRef<any>(EditMonthlySettlementModal);
-  await modalRef.value._show(2024, 5);
+  renderDeclarativeModal(EditMonthlySettlementModal);
+  useEditMonthlySettlementModalStore().openEditMonthlySettlement(2024, 5);
 
   await EditMonthlySettlementModalView.amountNoCreditInput(0).setValue("1100");
   await EditMonthlySettlementModalView.SaveButton.click();
@@ -122,8 +123,8 @@ test("successful save calls service and closes modal", async () => {
 });
 
 test("validation: month is required", async () => {
-  const modalRef = renderModalWithRef<any>(EditMonthlySettlementModal);
-  await modalRef.value._show(2024, 5);
+  renderDeclarativeModal(EditMonthlySettlementModal);
+  useEditMonthlySettlementModalStore().openEditMonthlySettlement(2024, 5);
 
   await EditMonthlySettlementModalView.MonthInput.setValue("");
   await EditMonthlySettlementModalView.SaveButton.click();
@@ -138,8 +139,8 @@ test("validation: month is required", async () => {
 });
 
 test("validation: amount is required", async () => {
-  const modalRef = renderModalWithRef<any>(EditMonthlySettlementModal);
-  await modalRef.value._show(2024, 5);
+  renderDeclarativeModal(EditMonthlySettlementModal);
+  useEditMonthlySettlementModalStore().openEditMonthlySettlement(2024, 5);
 
   await EditMonthlySettlementModalView.amountNoCreditInput(0).setValue("");
   await EditMonthlySettlementModalView.SaveButton.click();
@@ -163,8 +164,8 @@ test("shows server errors on failure", async () => {
     backendError,
   );
 
-  const modalRef = renderModalWithRef<any>(EditMonthlySettlementModal);
-  await modalRef.value._show(2024, 5);
+  renderDeclarativeModal(EditMonthlySettlementModal);
+  useEditMonthlySettlementModalStore().openEditMonthlySettlement(2024, 5);
 
   await EditMonthlySettlementModalView.SaveButton.click();
 
@@ -175,8 +176,8 @@ test("shows server errors on failure", async () => {
 });
 
 test("changing month reloads data", async () => {
-  const modalRef = renderModalWithRef<any>(EditMonthlySettlementModal);
-  await modalRef.value._show(2024, 5);
+  renderDeclarativeModal(EditMonthlySettlementModal);
+  useEditMonthlySettlementModalStore().openEditMonthlySettlement(2024, 5);
 
   // Verify initial load
   await EditMonthlySettlementModalView.MonthInput.assertValue("05.2024");

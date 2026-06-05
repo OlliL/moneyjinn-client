@@ -1,13 +1,16 @@
 <template>
   <ModalDelete
     :title="$t('Capitalsource.title.delete')"
-    :server-errors="serverErrors"
-    ref="modalComponent"
-    @confirm="deleteCapitalsource"
+    id-suffix="DeleteCapitalsource"
+    v-model:open="open"
+    :delete-action="
+      () => CapitalsourceService.deleteCapitalsource(capitalsource.id)
+    "
+    :delete-success-action="onDone"
   >
     <template #details>
       <ModalDeleteRow :label="$t('General.name')" highlight-value>
-        {{ mcs.comment }}
+        {{ capitalsource.comment }}
       </ModalDeleteRow>
 
       <ModalDeleteRow :label="$t('Capitalsource.type')">
@@ -19,19 +22,19 @@
       </ModalDeleteRow>
 
       <ModalDeleteRow :label="$t('General.iban')">
-        <SpanIban :iban="mcs.accountNumber" />
+        <SpanIban :iban="capitalsource.accountNumber" />
       </ModalDeleteRow>
 
       <ModalDeleteRow :label="$t('General.bic')">
-        {{ mcs.bankCode }}
+        {{ capitalsource.bankCode }}
       </ModalDeleteRow>
 
       <ModalDeleteRow :label="$t('General.validFrom')">
-        <SpanDate :date="mcs.validFrom" />
+        <SpanDate :date="capitalsource.validFrom" />
       </ModalDeleteRow>
 
       <ModalDeleteRow :label="$t('General.validTil')">
-        <SpanDate :date="mcs.validTil" />
+        <SpanDate :date="capitalsource.validTil" />
       </ModalDeleteRow>
     </template>
   </ModalDelete>
@@ -42,47 +45,26 @@ import ModalDelete from "@/components/common/ModalDelete.vue";
 import ModalDeleteRow from "@/components/common/ModalDeleteRow.vue";
 import SpanDate from "@/components/common/SpanDate.vue";
 import SpanIban from "@/components/common/SpanIban.vue";
-import type { Capitalsource } from "@/model/capitalsource/Capitalsource";
 import { capitalsourceStateNames } from "@/model/capitalsource/CapitalsourceState";
 import { capitalsourceTypeNames } from "@/model/capitalsource/CapitalsourceType";
 import CapitalsourceService from "@/service/CapitalsourceService";
-import { handleBackendError } from "@/tools/views/HandleBackendError";
-import { computed, ref, useTemplateRef } from "vue";
+import { storeToRefs } from "pinia";
+import { computed } from "vue";
+import { useDeleteCapitalsourceModalStore } from "./DeleteCapitalsourceModal.store";
 
-const serverErrors = ref(new Array<string>());
+const { open, capitalsource, onDone } = storeToRefs(
+  useDeleteCapitalsourceModalStore(),
+);
 
-const mcs = ref({} as Capitalsource);
-const modalComponent = useTemplateRef<typeof ModalDelete>("modalComponent");
-const emit = defineEmits<{
-  capitalsourceDeleted: [capitalsource: Capitalsource];
-}>();
+const typeString = computed(() =>
+  capitalsource.value?.type === undefined
+    ? ""
+    : capitalsourceTypeNames[capitalsource.value.type],
+);
 
-const typeString = computed(() => {
-  return capitalsourceTypeNames[mcs.value.type];
-});
-
-const stateString = computed(() => {
-  return capitalsourceStateNames[mcs.value.state];
-});
-
-const _show = (_mcs: Capitalsource) => {
-  mcs.value = _mcs;
-  serverErrors.value = new Array<string>();
-  modalComponent.value?._show();
-};
-
-const deleteCapitalsource = () => {
-  serverErrors.value = new Array<string>();
-
-  CapitalsourceService.deleteCapitalsource(mcs.value.id)
-    .then(() => {
-      modalComponent.value?._hide();
-      emit("capitalsourceDeleted", mcs.value);
-    })
-    .catch((backendError) => {
-      handleBackendError(backendError, serverErrors);
-    });
-};
-
-defineExpose({ _show });
+const stateString = computed(() =>
+  capitalsource.value?.state === undefined
+    ? ""
+    : capitalsourceStateNames[capitalsource.value.state],
+);
 </script>

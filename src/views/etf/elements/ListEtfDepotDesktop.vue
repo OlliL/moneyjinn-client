@@ -68,8 +68,6 @@
                 :flow="etfFlow"
                 :etfName="selectedEtfName"
                 :show-lump-sum="true"
-                @delete-etf-flow="deleteEtfFlow"
-                @edit-etf-flow="editEtfFlow"
               />
               <TableRow class="border-t">
                 <TableCell class="p-2 text-right">&sum;</TableCell>
@@ -134,8 +132,6 @@
                 :key="etfFlow.etfflowid"
                 :flow="etfFlow"
                 :show-lump-sum="false"
-                @delete-etf-flow="deleteEtfFlow"
-                @edit-etf-flow="editEtfFlow"
               />
               <TableRow class="border-t">
                 <TableCell class="p-2 text-right">&sum;</TableCell>
@@ -185,23 +181,10 @@ const props = defineProps<{
 
 const currentTab = defineModel<"effective" | "all">("currentTab");
 const { getEtf } = useEtfStore();
-const emit = defineEmits<{
-  deleteEtfFlow: [etfFlow: EtfFlow];
-  editEtfFlow: [etfFlow: EtfFlow];
-}>();
-
 const updateTab = (value: string | number) => {
   if (value === "effective" || value === "all") {
     currentTab.value = value;
   }
-};
-
-const deleteEtfFlow = (etfFlow: EtfFlow) => {
-  emit("deleteEtfFlow", etfFlow);
-};
-
-const editEtfFlow = (etfFlow: EtfFlow) => {
-  emit("editEtfFlow", etfFlow);
 };
 
 const selectedEtfName = computed(

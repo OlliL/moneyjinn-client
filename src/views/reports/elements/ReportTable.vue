@@ -2,25 +2,6 @@
   <div v-if="dataLoaded">
     <DivError :server-errors="serverErrors" />
 
-    <ListMoneyflowModalMobile
-      ref="listModal"
-      @show-receipt="showReceipt"
-      v-if="!desktop"
-    />
-    <ListMoneyflowModalDesktop ref="listModal" v-if="desktop" />
-    <DeleteMoneyflowModalVue
-      ref="deleteModal"
-      @moneyflow-deleted="moneyflowDeleted"
-    />
-    <EditMoneyflowModalVue
-      ref="editModal"
-      @moneyflow-updated="moneyflowUpdated"
-      @moneyflow-receipt-deleted="moneyflowReceiptDeleted"
-      @show-receipt="showReceipt"
-    />
-
-    <ReceiptModalVue ref="receiptModal" />
-
     <div>
       <ReportTableMobile
         v-model:filter-capitalsource="filterCapitalsource"
@@ -32,10 +13,6 @@
         :moneyflows="sortedMoneyflows"
         :amount-sum="amountSum"
         @sort-by-column="sortByColumn"
-        @delete-moneyflow="deleteMoneyflow"
-        @edit-moneyflow="editMoneyflow"
-        @list-moneyflow="listMoneyflow"
-        @show-receipt="showReceipt"
       />
 
       <ReportTableDesktop
@@ -47,10 +24,6 @@
         :moneyflows="sortedMoneyflows"
         :amount-sum="amountSum"
         @sort-by-column="sortByColumn"
-        @delete-moneyflow="deleteMoneyflow"
-        @edit-moneyflow="editMoneyflow"
-        @list-moneyflow="listMoneyflow"
-        @show-receipt="showReceipt"
       />
     </div>
   </div>
@@ -173,28 +146,23 @@
 
 <script lang="ts" setup>
 import DivError from "@/components/common/DivError.vue";
-import DeleteMoneyflowModalVue from "@/components/moneyflow/DeleteMoneyflowModal.vue";
-import EditMoneyflowModalVue from "@/components/moneyflow/EditMoneyflowModal.vue";
-import ListMoneyflowModalDesktop from "@/components/moneyflow/ListMoneyflowModalDesktop.vue"; // Keep for desktop
-import ListMoneyflowModalMobile from "@/components/moneyflow/ListMoneyflowModalMobile.vue"; // Keep for mobile
-import ReceiptModalVue from "@/components/reports/ReceiptModal.vue";
+import useDeleteMoneyflowModalStore from "@/components/moneyflow/DeleteMoneyflowModal.store";
+import useEditMoneyflowModalStore from "@/components/moneyflow/EditMoneyflowModal.store";
+import useListMoneyflowModalStore from "@/components/moneyflow/ListMoneyflowModal.store";
+import useReceiptModalStore from "@/components/reports/ReceiptModal.store";
 import { Accordion } from "@/components/ui/accordion"; // Import Accordion
 import { CapitalsourceType } from "@/model/capitalsource/CapitalsourceType";
+import {
+  MoneyflowRowActionsKey,
+  type MoneyflowRowActions,
+} from "@/model/CrudActions.ts";
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 import type { Report } from "@/model/report/Report";
 import type { ReportTurnoverCapitalsource } from "@/model/report/ReportTurnoverCapitalsource";
 import ReportService from "@/service/ReportService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { isDesktop } from "@/tools/views/IsDesktop";
-import {
-  computed,
-  onBeforeUnmount,
-  onMounted,
-  ref,
-  useTemplateRef,
-  watch,
-  type PropType,
-} from "vue";
+import { computed, onBeforeUnmount, onMounted, provide, ref, watch } from "vue";
 import CapitalsourceSummary from "./CapitalsourceSummary.vue";
 import CapitalsourceTableDesktop from "./CapitalsourceTableDesktop.vue";
 import CapitalsourceTableMobile from "./CapitalsourceTableMobile.vue";
@@ -211,14 +179,12 @@ const dataLoaded = defineModel("dataLoaded", {
 });
 
 const sortBy = defineModel<Map<keyof Moneyflow, boolean>>("sortBy", {
-  type: Object as PropType<Map<keyof Moneyflow, boolean>>,
   required: true,
 });
-const receiptModal = useTemplateRef<typeof ReceiptModalVue>("receiptModal");
-const deleteModal =
-  useTemplateRef<typeof DeleteMoneyflowModalVue>("deleteModal");
-const editModal = useTemplateRef<typeof EditMoneyflowModalVue>("editModal");
-const listModal = useTemplateRef<typeof ListMoneyflowModalDesktop>("listModal");
+const { openDeleteMoneyflow } = useDeleteMoneyflowModalStore();
+const { openEditMoneyflow } = useEditMoneyflowModalStore();
+const { openListMoneyflow } = useListMoneyflowModalStore();
+const { openListReceipt } = useReceiptModalStore();
 
 const filteredMoneyflows = ref([] as Moneyflow[]);
 watch(
@@ -276,11 +242,7 @@ const compareColumns = (
 
 const sortByColumn = (field: keyof Moneyflow) => {
   let sortByField = sortBy.value.get(field);
-  if (sortByField === undefined || !sortByField) {
-    sortByField = true;
-  } else {
-    sortByField = false;
-  }
+  sortByField = sortByField === undefined || !sortByField;
   sortBy.value.clear();
   sortBy.value.set(field, sortByField);
 };
@@ -394,18 +356,7 @@ const loadData = (year: number, month: number) => {
       handleBackendError(backendError, serverErrors);
     });
 };
-const showReceipt = (moneyflowId: number) => {
-  receiptModal.value?._show(moneyflowId);
-};
-const deleteMoneyflow = (mmf: Moneyflow) => {
-  deleteModal.value?._show(mmf);
-};
-const editMoneyflow = (mmf: Moneyflow) => {
-  editModal.value?._show(mmf);
-};
-const listMoneyflow = (mmf: Moneyflow) => {
-  listModal.value?._show(mmf);
-};
+
 /**
  * Recalculate end-of-month amounts (matching capitalsource and overall)
  * and end-of-year amount when a moneyflow is added/removed.
@@ -443,12 +394,6 @@ const moneyflowDeleted = (mmf: Moneyflow) => {
     return mmf.id !== originalMmf.id;
   });
 };
-const moneyflowReceiptDeleted = (mmfId: number) => {
-  const oldMmf = report.value.moneyflows.find(
-    (originalMmf) => mmfId === originalMmf.id,
-  );
-  if (oldMmf) oldMmf.hasReceipt = false;
-};
 const moneyflowUpdated = (mmf: Moneyflow) => {
   const oldMmf = report.value.moneyflows.find(
     (originalMmf) => mmf.id === originalMmf.id,
@@ -485,4 +430,19 @@ onMounted(() => {
     }
   }
 });
+
+const actions: MoneyflowRowActions = {
+  list: (mmf: Moneyflow) => openListMoneyflow(mmf, undefined, openListReceipt),
+  edit: (mmf: Moneyflow) =>
+    openEditMoneyflow(
+      mmf,
+      undefined,
+      () => loadData(+props.year, +props.month),
+      openListReceipt,
+    ),
+  delete: (mmf: Moneyflow) => openDeleteMoneyflow(mmf, moneyflowDeleted),
+  receipt: (id: number) => openListReceipt(id),
+};
+
+provide(MoneyflowRowActionsKey, actions);
 </script>

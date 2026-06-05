@@ -149,13 +149,13 @@
               <Separator />
               <div
                 class="cursor-pointer flex items-center gap-2 p-2 text-sm hover:bg-accent rounded-md"
-                @click="emit('showCreateCapitalsourceModal')"
+                @click="openCreateCapitalsource()"
               >
                 {{ $t("General.capitalsource") }}
               </div>
               <div
                 class="cursor-pointer flex items-center gap-2 p-2 text-sm hover:bg-accent rounded-md"
-                @click="emit('showCreateContractpartnerModal')"
+                @click="openCreateContractpartner()"
               >
                 {{ $t("General.contractpartner") }}
               </div>
@@ -357,6 +357,8 @@
 </template>
 
 <script lang="ts" setup>
+import { useCreateCapitalsourceModalStore } from "@/components/capitalsource/CreateCapitalsourceModal.store";
+import { useCreateContractpartnerModalStore } from "@/components/contractpartner/CreateContractpartnerModal.store";
 import { Button } from "@/components/ui/button";
 import {
   Collapsible,
@@ -403,14 +405,15 @@ const route = useRoute();
 
 const emit = defineEmits<{
   logout: [];
-  showCreateContractpartnerModal: [];
-  showCreateCapitalsourceModal: [];
   showPreDefMoneyflowModal: [];
 }>();
 
 const isMenuActve = (menu: DropdownMenus) => {
   return route.meta?.activeMenu === menu ? "router-link-active" : "";
 };
+
+const { openCreateCapitalsource } = useCreateCapitalsourceModalStore();
+const { openCreateContractpartner } = useCreateContractpartnerModalStore();
 </script>
 
 <style scoped>

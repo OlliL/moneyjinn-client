@@ -56,6 +56,8 @@
 <script lang="ts" setup>
 import MonthYearDesktopNavigator from "@/components/navigation/MonthYearDesktopNavigator.vue";
 import { Button } from "@/components/ui/button";
+import { MonthlySettlementModalActionsKey } from "@/model/CrudActions";
+import { inject } from "vue";
 
 defineProps<{
   dataLoaded: boolean;
@@ -69,14 +71,13 @@ defineProps<{
 const emit = defineEmits<{
   selectYear: [year: string];
   selectMonth: [month: number];
-  create: [];
-  edit: [];
-  delete: [];
 }>();
+
+const actions = inject(MonthlySettlementModalActionsKey)!;
 
 const selectYear = (year: string) => emit("selectYear", year);
 const selectMonth = (month: number) => emit("selectMonth", month);
-const emitCreate = () => emit("create");
-const emitEdit = () => emit("edit");
-const emitDelete = () => emit("delete");
+const emitCreate = () => actions.create();
+const emitEdit = () => actions.edit();
+const emitDelete = () => actions.delete();
 </script>

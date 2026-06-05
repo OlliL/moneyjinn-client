@@ -41,7 +41,8 @@ class ListUsersView {
   static readonly RowSusan = new RowView("user-row-2");
   static readonly EditAdminButton = new ButtonView("user-edit-1");
   static readonly DeleteAdminButton = new ButtonView("user-delete-1");
-  static readonly Modal = new ModalView("app-modal");
+  static readonly CreateModal = new ModalView("app-modal-CreateUser");
+  static readonly DeleteModal = new ModalView("app-modal-DeleteUser");
 }
 
 beforeEach(() => {
@@ -86,7 +87,7 @@ test("ListUsers opens create modal", async () => {
 
   await ListUsersView.RowAdmin.assertToBeVisible();
   await ListUsersView.CreateButton.click();
-  await ListUsersView.Modal.assertOpen();
+  await ListUsersView.CreateModal.assertOpen();
 });
 
 test("ListUsers opens edit modal from row action", async () => {
@@ -94,7 +95,7 @@ test("ListUsers opens edit modal from row action", async () => {
 
   await ListUsersView.RowAdmin.assertToBeVisible();
   await ListUsersView.EditAdminButton.click();
-  await ListUsersView.Modal.assertOpen();
+  await ListUsersView.CreateModal.assertOpen();
 });
 
 test("ListUsers opens delete modal from row action", async () => {
@@ -102,7 +103,7 @@ test("ListUsers opens delete modal from row action", async () => {
 
   await ListUsersView.RowAdmin.assertToBeVisible();
   await ListUsersView.DeleteAdminButton.click();
-  await ListUsersView.Modal.assertOpen();
+  await ListUsersView.DeleteModal.assertOpen();
 });
 
 test("ListUsers filters via mobile sheet", async () => {
@@ -122,7 +123,7 @@ test("ListUsers opens edit modal from mobile action", async () => {
 
   await ListUsersView.MobileRowAdmin.assertToBeVisible();
   await ListUsersView.MobileEditAdminButton.click();
-  await ListUsersView.Modal.assertOpen();
+  await ListUsersView.CreateModal.assertOpen();
 });
 
 test("ListUsers opens delete modal from mobile action", async () => {
@@ -130,5 +131,5 @@ test("ListUsers opens delete modal from mobile action", async () => {
 
   await ListUsersView.MobileRowAdmin.assertToBeVisible();
   await ListUsersView.MobileDeleteAdminButton.click();
-  await ListUsersView.Modal.assertOpen();
+  await ListUsersView.DeleteModal.assertOpen();
 });

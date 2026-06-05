@@ -1,10 +1,4 @@
 <template>
-  <CreateContractpartnerModalVue
-    ref="createContractpartnerModal"
-    :id-suffix="idSuffix"
-    @contractpartner-created="contractpartnerCreated"
-  />
-
   <SelectStandard
     v-model="contractpartnerId"
     :validation-schema="validationSchema"
@@ -20,15 +14,13 @@
 </template>
 <script lang="ts" setup>
 import { SquarePlus } from "lucide-vue-next";
-import { computed, useTemplateRef, type Ref } from "vue";
+import { computed, type Ref } from "vue";
 import { any, type ZodType } from "zod";
 
 import SelectStandard from "../common/SelectStandard.vue";
-import CreateContractpartnerModalVue from "./CreateContractpartnerModal.vue";
 
 import { useContractpartnerStore } from "@/stores/ContractpartnerStore";
-
-import type { Contractpartner } from "@/model/contractpartner/Contractpartner";
+import { useCreateContractpartnerModalStore } from "./CreateContractpartnerModal.store";
 
 const contractpartnerId = defineModel({ type: Number });
 
@@ -46,20 +38,16 @@ const props = withDefaults(
   },
 );
 
-const createContractpartnerModal = useTemplateRef<
-  typeof CreateContractpartnerModalVue
->("createContractpartnerModal");
-const contractpartnerStore = useContractpartnerStore();
+const { getAsSelectBoxValues } = useContractpartnerStore();
+const { openCreateContractpartner } = useCreateContractpartnerModalStore();
 
 const selectBoxValues = computed(() =>
-  contractpartnerStore.getAsSelectBoxValues(props.validityDate),
+  getAsSelectBoxValues(props.validityDate),
 );
 
-const showCreateContractpartnerModal = () => {
-  createContractpartnerModal.value?._show();
-};
-
-const contractpartnerCreated = (mcp: Contractpartner) => {
-  contractpartnerId.value = mcp.id;
-};
+const showCreateContractpartnerModal = () =>
+  openCreateContractpartner(
+    (contractpartnerEntry) =>
+      (contractpartnerId.value = contractpartnerEntry.id),
+  );
 </script>

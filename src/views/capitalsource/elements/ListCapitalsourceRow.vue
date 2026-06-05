@@ -23,7 +23,7 @@
       v-if="owner"
       :title="$t('General.edit')"
       :test-id="`capitalsource-edit-${mcs.id}`"
-      @click="editCapitalsource"
+      @click="actions.edit(mcs)"
     >
       <Pencil class="icon-medium" />
     </ButtonTableIcon>
@@ -31,58 +31,38 @@
       v-if="owner"
       :title="$t('General.delete')"
       :test-id="`capitalsource-delete-${mcs.id}`"
-      @click="deleteCapitalsource"
+      @click="actions.delete(mcs)"
     >
       <Trash2 class="icon-medium" />
     </ButtonTableIcon>
   </TableRow>
 </template>
 <script lang="ts" setup>
-import { Pencil, Trash2 } from "lucide-vue-next";
-import { computed } from "vue";
-
-import { TableCell, TableRow } from "@/components/ui/table";
-
-import SpanDate from "@/components/common/SpanDate.vue";
-
 import ButtonTableIcon from "@/components/common/ButtonTableIcon.vue";
 import SpanBoolean from "@/components/common/SpanBoolean.vue";
+import SpanDate from "@/components/common/SpanDate.vue";
 import SpanIban from "@/components/common/SpanIban.vue";
+import { TableCell, TableRow } from "@/components/ui/table";
+import { CapitalsourceActionsKey } from "@/model/CrudActions";
 import type { Capitalsource } from "@/model/capitalsource/Capitalsource";
 import { capitalsourceImportNames } from "@/model/capitalsource/CapitalsourceImport";
 import { capitalsourceStateNames } from "@/model/capitalsource/CapitalsourceState";
 import { capitalsourceTypeNames } from "@/model/capitalsource/CapitalsourceType";
+import { Pencil, Trash2 } from "lucide-vue-next";
+import { computed, inject } from "vue";
 
+const actions = inject(CapitalsourceActionsKey)!;
 const props = defineProps<{
   mcs: Capitalsource;
   owner: boolean;
 }>();
-const emit = defineEmits<{
-  deleteCapitalsource: [capitalsource: Capitalsource];
-  editCapitalsource: [capitalsource: Capitalsource];
-}>();
 
-const importAllowedColorClass = computed(() => {
-  return props.mcs.importAllowed > 0 ? "text-green-600" : "text-red-600";
-});
-
-const importAllowedString = computed(() => {
-  return capitalsourceImportNames[props.mcs.importAllowed];
-});
-
-const typeString = computed(() => {
-  return capitalsourceTypeNames[props.mcs.type];
-});
-
-const stateString = computed(() => {
-  return capitalsourceStateNames[props.mcs.state];
-});
-
-const deleteCapitalsource = () => {
-  emit("deleteCapitalsource", props.mcs);
-};
-
-const editCapitalsource = () => {
-  emit("editCapitalsource", props.mcs);
-};
+const importAllowedColorClass = computed(() =>
+  props.mcs.importAllowed > 0 ? "text-green-600" : "text-red-600",
+);
+const importAllowedString = computed(
+  () => capitalsourceImportNames[props.mcs.importAllowed],
+);
+const typeString = computed(() => capitalsourceTypeNames[props.mcs.type]);
+const stateString = computed(() => capitalsourceStateNames[props.mcs.state]);
 </script>

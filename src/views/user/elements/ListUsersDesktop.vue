@@ -15,13 +15,7 @@
         </TableRow>
       </TableHeader>
       <TableBody>
-        <ListUserRowVue
-          v-for="user in users"
-          :key="user.id"
-          :user="user"
-          @edit-user="editUser"
-          @delete-user="deleteUser"
-        />
+        <ListUserRowVue v-for="user in users" :key="user.id" :user="user" />
       </TableBody>
     </DivContentTable>
   </div>
@@ -41,17 +35,4 @@ import ListUserRowVue from "./ListUserRow.vue";
 defineProps<{
   users: User[];
 }>();
-
-const emit = defineEmits<{
-  deleteUser: [user: User];
-  editUser: [user: User];
-}>();
-
-const deleteUser = (user: User) => {
-  emit("deleteUser", user);
-};
-
-const editUser = (user: User) => {
-  emit("editUser", user);
-};
 </script>

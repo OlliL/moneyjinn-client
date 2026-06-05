@@ -1,9 +1,14 @@
 <template>
-  <ModalVue :title="title" max-width="max-w-md" ref="modalComponent">
+  <ModalVue
+    :title="title"
+    max-width="max-w-md"
+    id-suffix="CreatePostingAccount"
+    v-model:open="open"
+  >
     <template #body>
       <form
         @submit.prevent="createPostingAccount"
-        :id="'createPostingAccountForm' + idSuffix"
+        id="createPostingAccountForm-CreatePostingAccount"
         class="space-y-6"
       >
         <DivError :server-errors="serverErrors" />
@@ -12,7 +17,7 @@
           <InputStandard
             v-model="mpa.name"
             :validation-schema="schema.name"
-            :id="'name' + idSuffix"
+            id="name-CreatePostingAccount"
             :field-label="$t('General.name')"
           />
         </div>
@@ -32,7 +37,7 @@
 
       <ButtonSubmit
         :button-label="$t('General.save')"
-        :form-id="'createPostingAccountForm' + idSuffix"
+        form-id="createPostingAccountForm-CreatePostingAccount"
         test-id="createPostingAccountSaveButton"
       >
         <template #icon><Save class="icon-medium" /></template>
@@ -48,36 +53,25 @@ import PostingAccountService from "@/service/PostingAccountService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { globErr } from "@/tools/views/ZodUtil";
 import { Save, Undo2 } from "lucide-vue-next";
+import { storeToRefs } from "pinia";
 import { useForm } from "vee-validate";
-import { computed, ref, toRaw, useTemplateRef } from "vue";
+import { computed, ref, toRaw, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { string, ZodType } from "zod";
 import ButtonSubmit from "../common/ButtonSubmit.vue";
 import DivError from "../common/DivError.vue";
 import InputStandard from "../common/InputStandard.vue";
 import ModalVue from "../common/Modal.vue";
+import { useCreatePostingAccountModalStore } from "./CreatePostingAccountModal.store";
 
 const { t } = useI18n();
-
-withDefaults(
-  defineProps<{
-    idSuffix?: string;
-  }>(),
-  {
-    idSuffix: "",
-  },
-);
 
 const serverErrors = ref(new Array<string>());
 const mpa = ref({} as PostingAccount);
 const origMpa = ref({} as PostingAccount | undefined);
-const modalComponent = useTemplateRef<typeof ModalVue>("modalComponent");
-
-const emit = defineEmits<{
-  postingAccountCreated: [postingAccount: PostingAccount];
-  postingAccountUpdated: [postingAccount: PostingAccount];
-}>();
-
+const { open, postingAccount, onDone } = storeToRefs(
+  useCreatePostingAccountModalStore(),
+);
 const { handleSubmit, values, setFieldTouched } = useForm();
 
 const schema: Partial<{ [key in keyof PostingAccount]: ZodType }> = {
@@ -102,11 +96,16 @@ const resetForm = () => {
   Object.keys(values).forEach((field) => setFieldTouched(field, false));
 };
 
-const _show = (_mpa?: PostingAccount) => {
-  origMpa.value = _mpa ?? undefined;
-  resetForm();
-  modalComponent.value?._show();
-};
+watch(
+  [open, postingAccount],
+  ([isVisible, entry]) => {
+    if (isVisible) {
+      origMpa.value = entry;
+      resetForm();
+    }
+  },
+  { immediate: true },
+);
 
 const createPostingAccount = handleSubmit(() => {
   serverErrors.value = new Array<string>();
@@ -121,15 +120,11 @@ const createPostingAccount = handleSubmit(() => {
       const isUpdate = mpa.value.id > 0;
       if (!isUpdate) mpa.value = result as PostingAccount;
 
-      modalComponent.value?._hide();
-      isUpdate
-        ? emit("postingAccountUpdated", mpa.value)
-        : emit("postingAccountCreated", mpa.value);
+      open.value = false;
+      onDone.value?.(mpa.value);
     })
     .catch((backendError) => {
       handleBackendError(backendError, serverErrors);
     });
 });
-
-defineExpose({ _show });
 </script>

@@ -1,3 +1,4 @@
+import GlobalModals from "@/components/common/GlobalModals.vue";
 import { MoneyflowReceiptType } from "@/model/moneyflow/MoneyflowReceiptType";
 import router, { Routes } from "@/router";
 import EtfServiceMocker from "@/service/mocker/EtfServiceMocker";
@@ -11,6 +12,7 @@ import {
 import { assertHaveBeenCalledWith } from "@/tests/TestUtil";
 import {
   ButtonView,
+  DeclarativeModalStub,
   InputView,
   MobilePopupMenu,
   ModalView,
@@ -21,6 +23,7 @@ import "@testing-library/jest-dom/vitest";
 import { render } from "@testing-library/vue";
 import { createPinia, setActivePinia } from "pinia";
 import { beforeEach, expect, test, vi } from "vitest";
+import { defineComponent } from "vue";
 
 vi.mock("@/service/ReportService");
 vi.mock("@/service/MoneyflowReceiptService");
@@ -111,8 +114,28 @@ class ListReportsView {
     "month-year-nav-mobile-month-1",
   );
   static readonly MobileCreateButton = new ButtonView("reports-mobile-create");
-  static readonly Modal = new ModalView("app-modal");
+  static readonly ListModal = new ModalView("app-modal-ListMoneyflowDesktop");
+  static readonly EditModal = new ModalView("app-modal-EditMoneyflow");
+  static readonly DeleteModal = new ModalView("app-modal-DeleteMoneyflow");
+  static readonly ReceiptModal = new ModalView("app-modal-Receipt");
 }
+
+const renderListReportsView = (
+  props: { year?: string; month?: string } = {},
+) => {
+  return render(
+    defineComponent({
+      setup() {
+        return { props };
+      },
+      template: '<div><ListReports v-bind="props" /><GlobalModals /></div>',
+      components: { ListReports, GlobalModals },
+    }),
+    {
+      global: { stubs: { ModalVue: DeclarativeModalStub } },
+    },
+  );
+};
 
 beforeEach(() => {
   setActivePinia(createPinia());
@@ -173,7 +196,7 @@ beforeEach(() => {
 });
 
 test("ListReports calls getAvailableMonth on mount", async () => {
-  render(ListReports, { props: { year: "2026", month: "2" } });
+  renderListReportsView({ year: "2026", month: "2" });
 
   await assertHaveBeenCalledWith(ReportService.getAvailableMonth, 2026, 2);
 });
@@ -192,7 +215,7 @@ test("ListReports shows ETF data in desktop and mobile sections", async () => {
     },
   ]);
 
-  render(ListReports, { props: { year: "2026", month: "2" } });
+  renderListReportsView({ year: "2026", month: "2" });
 
   await ListReportsView.EtfDesktopTable.assertToBeVisible();
   await ListReportsView.EtfMobileAccordion.assertToBeVisible();
@@ -214,7 +237,7 @@ test("ListReports expands mobile ETF accordion and shows chart link", async () =
     },
   ]);
 
-  render(ListReports, { props: { year: "2026", month: "2" } });
+  renderListReportsView({ year: "2026", month: "2" });
 
   await ListReportsView.EtfMobileTriggerOne.click();
   await ListReportsView.EtfMobileContentOne.assertToBeVisible();
@@ -227,11 +250,11 @@ test("ListReports opens edit modal from own moneyflow row", async () => {
     receiptType: MoneyflowReceiptType.JPEG,
     receipt: "AA==",
   });
-  render(ListReports, { props: { year: "2026", month: "2" } });
+  renderListReportsView({ year: "2026", month: "2" });
 
   await ListReportsView.RowOwn.assertToBeVisible();
   await ListReportsView.EditOwnButton.click();
-  await ListReportsView.Modal.assertOpen();
+  await ListReportsView.EditModal.assertOpen();
 });
 
 test("ListReports opens delete modal from own moneyflow row", async () => {
@@ -240,19 +263,19 @@ test("ListReports opens delete modal from own moneyflow row", async () => {
     receiptType: MoneyflowReceiptType.JPEG,
     receipt: "AA==",
   });
-  render(ListReports, { props: { year: "2026", month: "2" } });
+  renderListReportsView({ year: "2026", month: "2" });
 
   await ListReportsView.RowOwn.assertToBeVisible();
   await ListReportsView.DeleteOwnButton.click();
-  await ListReportsView.Modal.assertOpen();
+  await ListReportsView.DeleteModal.assertOpen();
 });
 
 test("ListReports opens list modal from foreign moneyflow row", async () => {
-  render(ListReports, { props: { year: "2026", month: "2" } });
+  renderListReportsView({ year: "2026", month: "2" });
 
   await ListReportsView.RowForeign.assertToBeVisible();
   await ListReportsView.ListForeignButton.click();
-  await ListReportsView.Modal.assertOpen();
+  await ListReportsView.ListModal.assertOpen();
 });
 
 test("ListReports opens edit modal from own mobile moneyflow row", async () => {
@@ -261,11 +284,11 @@ test("ListReports opens edit modal from own mobile moneyflow row", async () => {
     receiptType: MoneyflowReceiptType.JPEG,
     receipt: "AA==",
   });
-  render(ListReports, { props: { year: "2026", month: "2" } });
+  renderListReportsView({ year: "2026", month: "2" });
 
   await ListReportsView.RowOwnMobile.assertToBeVisible();
   await ListReportsView.EditOwnMobileButton.click();
-  await ListReportsView.Modal.assertOpen();
+  await ListReportsView.EditModal.assertOpen();
 });
 
 test("ListReports opens delete modal from own mobile moneyflow row", async () => {
@@ -274,19 +297,19 @@ test("ListReports opens delete modal from own mobile moneyflow row", async () =>
     receiptType: MoneyflowReceiptType.JPEG,
     receipt: "AA==",
   });
-  render(ListReports, { props: { year: "2026", month: "2" } });
+  renderListReportsView({ year: "2026", month: "2" });
 
   await ListReportsView.RowOwnMobile.assertToBeVisible();
   await ListReportsView.DeleteOwnMobileButton.click();
-  await ListReportsView.Modal.assertOpen();
+  await ListReportsView.DeleteModal.assertOpen();
 });
 
 test("ListReports opens list modal from foreign mobile moneyflow row", async () => {
-  render(ListReports, { props: { year: "2026", month: "2" } });
+  renderListReportsView({ year: "2026", month: "2" });
 
   await ListReportsView.RowForeignMobile.assertToBeVisible();
   await ListReportsView.ListForeignMobileButton.click();
-  await ListReportsView.Modal.assertOpen();
+  await ListReportsView.ListModal.assertOpen();
 });
 
 test("ListReports opens receipt modal from own mobile moneyflow row", async () => {
@@ -295,15 +318,15 @@ test("ListReports opens receipt modal from own mobile moneyflow row", async () =
     receiptType: MoneyflowReceiptType.JPEG,
     receipt: "AA==",
   });
-  render(ListReports, { props: { year: "2026", month: "2" } });
+  renderListReportsView({ year: "2026", month: "2" });
 
   await ListReportsView.RowOwnMobile.assertToBeVisible();
   await ListReportsView.ReceiptOwnMobileButton.click();
-  await ListReportsView.Modal.assertOpen();
+  await ListReportsView.ReceiptModal.assertOpen();
 });
 
 test("ListReports filters mobile list by contractpartner", async () => {
-  render(ListReports, { props: { year: "2026", month: "2" } });
+  renderListReportsView({ year: "2026", month: "2" });
 
   await ListReportsView.RowOwnMobile.assertToBeVisible();
   await ListReportsView.RowForeignMobile.assertToBeVisible();
@@ -316,7 +339,7 @@ test("ListReports filters mobile list by contractpartner", async () => {
 });
 
 test("ListReports resets mobile contractpartner filter", async () => {
-  render(ListReports, { props: { year: "2026", month: "2" } });
+  renderListReportsView({ year: "2026", month: "2" });
 
   await ListReportsView.RowOwnMobile.assertToBeVisible();
   await ListReportsView.RowForeignMobile.assertToBeVisible();
@@ -330,7 +353,7 @@ test("ListReports resets mobile contractpartner filter", async () => {
 });
 
 test("ListReports closes mobile filter sheet on Enter", async () => {
-  render(ListReports, { props: { year: "2026", month: "2" } });
+  renderListReportsView({ year: "2026", month: "2" });
 
   await ListReportsView.MobileFilterTrigger.click();
   await ListReportsView.MobileFilterSheet.assertToBeVisible();
@@ -341,7 +364,7 @@ test("ListReports closes mobile filter sheet on Enter", async () => {
 });
 
 test("ListReports navigates to previous and next month", async () => {
-  render(ListReports, { props: { year: "2026", month: "2" } });
+  renderListReportsView({ year: "2026", month: "2" });
 
   await ListReportsView.RowOwn.assertToBeVisible();
   await ListReportsView.PreviousMonthButton.click();
@@ -364,7 +387,7 @@ test("ListReports navigates to previous and next month", async () => {
 });
 
 test("ListReports selects year via navigator", async () => {
-  render(ListReports, { props: { year: "2026", month: "2" } });
+  renderListReportsView({ year: "2026", month: "2" });
 
   await ListReportsView.YearTrigger.click();
   await ListReportsView.Year2025Item.click();
@@ -379,7 +402,7 @@ test("ListReports selects year via navigator", async () => {
 });
 
 test("ListReports selects month via navigator", async () => {
-  render(ListReports, { props: { year: "2026", month: "2" } });
+  renderListReportsView({ year: "2026", month: "2" });
 
   await ListReportsView.Month1Button.click();
 
@@ -393,7 +416,7 @@ test("ListReports selects month via navigator", async () => {
 });
 
 test("ListReports selects year via mobile period sheet", async () => {
-  render(ListReports, { props: { year: "2026", month: "2" } });
+  renderListReportsView({ year: "2026", month: "2" });
 
   await ListReportsView.MobileOpenPeriodSheetButton.click();
   await ListReportsView.MobilePeriodSheet.assertToBeVisible();
@@ -410,7 +433,7 @@ test("ListReports selects year via mobile period sheet", async () => {
 });
 
 test("ListReports selects month via mobile period sheet", async () => {
-  render(ListReports, { props: { year: "2026", month: "2" } });
+  renderListReportsView({ year: "2026", month: "2" });
 
   await ListReportsView.MobileOpenPeriodSheetButton.click();
   await ListReportsView.MobilePeriodSheet.assertToBeVisible();
@@ -426,7 +449,7 @@ test("ListReports selects month via mobile period sheet", async () => {
 });
 
 test("ListReports navigates to create moneyflow via mobile action", async () => {
-  render(ListReports, { props: { year: "2026", month: "2" } });
+  renderListReportsView({ year: "2026", month: "2" });
 
   await ListReportsView.MobileCreateButton.click();
 
@@ -447,7 +470,7 @@ test("ListReports shows empty state for empty list (Desktop)", async () => {
   } as never);
   EtfServiceMocker.mockListEtfOverview([]);
 
-  render(ListReports, { props: { year: "2026", month: "2" } });
+  renderListReportsView({ year: "2026", month: "2" });
   await new RowView("report-table-empty-desktop").assertToBeVisible();
 });
 
@@ -460,7 +483,7 @@ test("ListReports shows empty state for empty list (Mobile)", async () => {
   } as never);
   EtfServiceMocker.mockListEtfOverview([]);
 
-  render(ListReports, { props: { year: "2026", month: "2" } });
+  renderListReportsView({ year: "2026", month: "2" });
   await new RowView("report-table-empty-mobile").assertToBeVisible();
 });
 
@@ -506,7 +529,7 @@ test("ListReports shows sum/turnover", async () => {
   } as never);
   EtfServiceMocker.mockListEtfOverview([]);
 
-  render(ListReports, { props: { year: "2026", month: "2" } });
+  renderListReportsView({ year: "2026", month: "2" });
 
   await new RowView("report-table-empty").assertNotToBeInDocument();
 });

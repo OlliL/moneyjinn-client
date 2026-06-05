@@ -22,8 +22,6 @@
           v-for="mpa in postingAccounts"
           :key="mpa.id"
           :mpa="mpa"
-          @delete-postingAccount="deletePostingAccount"
-          @edit-postingAccount="editPostingAccount"
         />
       </TableBody>
     </DivContentTable>
@@ -45,17 +43,4 @@ import ListPostingAccountRowVue from "./ListPostingAccountRow.vue";
 defineProps<{
   postingAccounts: PostingAccount[];
 }>();
-
-const emit = defineEmits<{
-  deletePostingAccount: [postingAccount: PostingAccount];
-  editPostingAccount: [postingAccount: PostingAccount];
-}>();
-
-const deletePostingAccount = (mpa: PostingAccount) => {
-  emit("deletePostingAccount", mpa);
-};
-
-const editPostingAccount = (mpa: PostingAccount) => {
-  emit("editPostingAccount", mpa);
-};
 </script>

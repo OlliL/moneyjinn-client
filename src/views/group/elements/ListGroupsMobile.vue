@@ -29,7 +29,7 @@
               variant="ghost"
               size="icon"
               :data-testid="`group-mobile-edit-${group.id}`"
-              @click="editGroup(group)"
+              @click="actions.edit(group)"
             >
               <Pencil class="icon-medium" />
             </Button>
@@ -37,7 +37,7 @@
               variant="ghost"
               size="icon"
               :data-testid="`group-mobile-delete-${group.id}`"
-              @click="deleteGroup(group)"
+              @click="actions.delete(group)"
             >
               <Trash2 class="icon-medium" />
             </Button>
@@ -51,23 +51,13 @@
 <script lang="ts" setup>
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { GroupActionsKey } from "@/model/CrudActions";
 import type { Group } from "@/model/group/Group";
 import { Pencil, Trash2 } from "lucide-vue-next";
+import { inject } from "vue";
 
 defineProps<{
   groups: Group[];
 }>();
-
-const emit = defineEmits<{
-  deleteGroup: [group: Group];
-  editGroup: [group: Group];
-}>();
-
-const deleteGroup = (group: Group) => {
-  emit("deleteGroup", group);
-};
-
-const editGroup = (group: Group) => {
-  emit("editGroup", group);
-};
+const actions = inject(GroupActionsKey)!;
 </script>

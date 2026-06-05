@@ -1,16 +1,6 @@
 <template>
-  <CreateContractpartnerModalVue
-    ref="createContractpartnerModalList"
-    id-suffix="List"
-    @contractpartner-created="searchContent"
-    @contractpartner-updated="searchContent"
-  />
-  <DeleteContractpartnerModalVue
-    ref="deleteModal"
-    @contractpartner-deleted="searchContent"
-  />
-
-  <ListContractpartnerAccountsModal ref="accountsModal" />
+  <DeleteContractpartnerModal />
+  <ListContractpartnerAccountsModal />
 
   <div class="custom-container space-y-6">
     <div class="text-center">
@@ -21,41 +11,31 @@
       v-model="searchString"
       :placeholder="$t('Contractpartner.searchBy')"
       @validNowToggled="validNowToggled"
-      @createClicked="showCreateContractpartnerModal"
+      @createClicked="actions.create"
     />
 
-    <ListContractpartnersMobile
-      :contractpartners="contractpartners"
-      @delete-contractpartner="deleteContractpartner"
-      @edit-contractpartner="editContractpartner"
-      @list-contractpartner-accounts="listContractpartnerAccounts"
-    />
+    <ListContractpartnersMobile :contractpartners="contractpartners" />
 
-    <ListContractpartnersDesktop
-      :contractpartners="contractpartners"
-      @delete-contractpartner="deleteContractpartner"
-      @edit-contractpartner="editContractpartner"
-      @list-contractpartner-accounts="listContractpartnerAccounts"
-    />
+    <ListContractpartnersDesktop :contractpartners="contractpartners" />
   </div>
 </template>
 
 <script lang="ts" setup>
 import { storeToRefs } from "pinia";
-import {
-  onMounted,
-  onUnmounted,
-  ref,
-  shallowRef,
-  useTemplateRef,
-  watch,
-} from "vue";
+import { onMounted, onUnmounted, provide, ref, shallowRef, watch } from "vue";
 
+import { useCreateContractpartnerModalStore } from "@/components/contractpartner/CreateContractpartnerModal.store";
 import { useContractpartnerStore } from "@/stores/ContractpartnerStore";
+import useDeleteContractpartnerModalStore from "./elements/DeleteContractpartnerModal.store";
+import { useListContractpartnerAccountsModalStore } from "./elements/ListContractpartnerAccountsModal.store";
 
 import DivFilter from "@/components/common/DivFilter.vue";
-import CreateContractpartnerModalVue from "@/components/contractpartner/CreateContractpartnerModal.vue";
-import DeleteContractpartnerModalVue from "./elements/DeleteContractpartnerModal.vue";
+import {
+  ContractpartnerActionsKey,
+  OpenContractpartnerAccountsActionKey,
+  type CrudActions,
+} from "@/model/CrudActions";
+import DeleteContractpartnerModal from "./elements/DeleteContractpartnerModal.vue";
 import ListContractpartnerAccountsModal from "./elements/ListContractpartnerAccountsModal.vue";
 import ListContractpartnersDesktop from "./elements/ListContractpartnersDesktop.vue";
 import ListContractpartnersMobile from "./elements/ListContractpartnersMobile.vue";
@@ -65,44 +45,45 @@ import type { Contractpartner } from "@/model/contractpartner/Contractpartner";
 const validNow = ref(true);
 const contractpartners = shallowRef(new Array<Contractpartner>());
 const searchString = ref("");
-
 const INITIAL_CHUNK_SIZE = 50;
 const CHUNK_SIZE = 200;
 let renderAnimationFrameId: number | undefined;
 let currentSearchId = 0;
 
-const createContractpartnerModalList = useTemplateRef<
-  typeof CreateContractpartnerModalVue
->("createContractpartnerModalList");
-const deleteModal =
-  useTemplateRef<typeof DeleteContractpartnerModalVue>("deleteModal");
-const accountsModal =
-  useTemplateRef<typeof ListContractpartnerAccountsModal>("accountsModal");
-
 const contractpartnerStore = useContractpartnerStore();
-const searchContractpartners = contractpartnerStore.searchContractpartners;
+const { searchContractpartners } = contractpartnerStore;
 const { contractpartner } = storeToRefs(contractpartnerStore);
+const { openCreateContractpartner, openEditContractpartner } =
+  useCreateContractpartnerModalStore();
+const { openDeleteContractpartner } = useDeleteContractpartnerModalStore();
+const { openListContractpartnerAccounts } =
+  useListContractpartnerAccountsModalStore();
 
-const showCreateContractpartnerModal = () => {
-  createContractpartnerModalList.value?._show();
+const actions: CrudActions<Contractpartner> = {
+  create: () => {
+    openCreateContractpartner(searchContent);
+  },
+  edit: (contractpartnerEntry) => {
+    openEditContractpartner(contractpartnerEntry, searchContent);
+  },
+  delete: (contractpartnerEntry) =>
+    openDeleteContractpartner(contractpartnerEntry, searchContent),
 };
 
-const deleteContractpartner = (mcs: Contractpartner) => {
-  deleteModal.value?._show(mcs);
-};
-
-const editContractpartner = (mcs: Contractpartner) => {
-  createContractpartnerModalList.value?._show(mcs);
-};
+provide(ContractpartnerActionsKey, actions);
+provide(
+  OpenContractpartnerAccountsActionKey,
+  (contractpartnerEntry: Contractpartner) => {
+    openListContractpartnerAccounts(contractpartnerEntry);
+  },
+);
 
 watch(contractpartner, () => {
   searchContent();
   if (contractpartners.value.length == 0) searchAllContent();
 });
 
-watch(searchString, () => {
-  searchContent();
-});
+watch(searchString, () => searchContent());
 
 const validNowToggled = (myValidNow: boolean) => {
   validNow.value = myValidNow;
@@ -183,15 +164,9 @@ const renderChunk = (
   }
 };
 
-onMounted(() => {
-  searchAllContent();
-});
+onMounted(() => searchAllContent());
 
 onUnmounted(() => {
   if (renderAnimationFrameId) cancelAnimationFrame(renderAnimationFrameId);
 });
-
-const listContractpartnerAccounts = (mcp: Contractpartner) => {
-  accountsModal.value?._show(mcp);
-};
 </script>

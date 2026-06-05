@@ -83,7 +83,7 @@
       :aria-label="$t('General.edit')"
       :test-id="`etf-depot-edit-${flow.etfflowid}`"
       button-class="h-6 w-6 cursor-pointer"
-      @click="editEtfFlow"
+      @click="actions.edit(flow)"
     >
       <Pencil class="icon-medium" />
     </ButtonTableIcon>
@@ -92,7 +92,7 @@
       :aria-label="$t('General.delete')"
       :test-id="`etf-depot-delete-${flow.etfflowid}`"
       button-class="h-6 w-6 cursor-pointer"
-      @click="deleteEtfFlow"
+      @click="actions.delete(flow)"
     >
       <Trash2 class="icon-medium" />
     </ButtonTableIcon>
@@ -114,22 +114,19 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { EtfFlowActionsKey } from "@/model/CrudActions";
 import type { EtfFlow } from "@/model/etf/EtfFlow";
 import { useEtfStore } from "@/stores/EtfStore";
 import { formatDateWithTime } from "@/tools/views/FormatDate";
 import { formatNumber, redIfNegative } from "@/tools/views/FormatNumber";
 import { Pencil, Trash2 } from "lucide-vue-next";
-import { computed } from "vue";
+import { computed, inject } from "vue";
 
 const props = defineProps<{
   flow: EtfFlow;
   showLumpSum: boolean;
 }>();
 
-const emit = defineEmits<{
-  deleteEtfFlow: [etfFlow: EtfFlow];
-  editEtfFlow: [etfFlow: EtfFlow];
-}>();
 const etfStore = useEtfStore();
 const partial = computed(
   () => 100 - (etfStore.getEtf(props.flow.etfId)?.partialTaxExemption ?? 0),
@@ -150,10 +147,5 @@ const timestampString = computed(() => {
   );
 });
 
-const deleteEtfFlow = () => {
-  emit("deleteEtfFlow", props.flow);
-};
-const editEtfFlow = () => {
-  emit("editEtfFlow", props.flow);
-};
+const actions = inject(EtfFlowActionsKey)!;
 </script>

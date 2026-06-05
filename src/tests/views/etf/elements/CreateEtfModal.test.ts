@@ -16,8 +16,9 @@ import {
   ButtonView,
   InputView,
   ModalView,
-  renderModalWithRef,
+  renderDeclarativeModal,
 } from "@/tests/TestViews";
+import { useCreateEtfModalStore } from "@/views/etf/elements/CreateEtfModal.store";
 import CreateEtfModal from "@/views/etf/elements/CreateEtfModal.vue";
 import "@testing-library/jest-dom/vitest";
 import { createPinia, setActivePinia } from "pinia";
@@ -26,19 +27,19 @@ import { beforeEach, expect, test, vi } from "vitest";
 vi.mock("@/service/CrudEtfService");
 
 class CreateEtfModalView {
-  static readonly Modal = new ModalView("app-modal");
-  static readonly NameInput = new InputView("name");
-  static readonly IsinInput = new InputView("isin");
-  static readonly WknInput = new InputView("wkn");
-  static readonly TickerInput = new InputView("ticker");
+  static readonly Modal = new ModalView("app-modal-CreateEtf");
+  static readonly NameInput = new InputView("name-CreateEtf");
+  static readonly IsinInput = new InputView("isin-CreateEtf");
+  static readonly WknInput = new InputView("wkn-CreateEtf");
+  static readonly TickerInput = new InputView("ticker-CreateEtf");
   static readonly FavoriteButton = new ButtonView("createEtfFavoriteButton");
   static readonly SaveButton = new ButtonView("createEtfSaveButton");
   static readonly ResetButton = new ButtonView("createEtfResetButton");
   static readonly ServerErrorItem = new AlertView("serverError-item");
-  static readonly NameError = new AlertView("name-error-item");
-  static readonly IsinError = new AlertView("isin-error-item");
-  static readonly WknError = new AlertView("wkn-error-item");
-  static readonly TickerError = new AlertView("ticker-error-item");
+  static readonly NameError = new AlertView("name-CreateEtf-error-item");
+  static readonly IsinError = new AlertView("isin-CreateEtf-error-item");
+  static readonly WknError = new AlertView("wkn-CreateEtf-error-item");
+  static readonly TickerError = new AlertView("ticker-CreateEtf-error-item");
 }
 
 beforeEach(async () => {
@@ -54,8 +55,10 @@ beforeEach(async () => {
 
 test("creates a new etf", async () => {
   CrudEtfServiceMocker.mockCreateEtfResolved({ id: 1, name: "New ETF" } as Etf);
-  const modalRef = renderModalWithRef<any>(CreateEtfModal);
-  await modalRef.value._show();
+  renderDeclarativeModal(CreateEtfModal);
+  useCreateEtfModalStore().openCreateEtf();
+
+  await CreateEtfModalView.Modal.assertOpen();
 
   await CreateEtfModalView.NameInput.setValue("New ETF");
   await CreateEtfModalView.IsinInput.setValue("IE00B4L5Y983");
@@ -86,8 +89,10 @@ test("updates an existing etf", async () => {
   } as Etf;
   CrudEtfService.updateEtf = vi.fn().mockResolvedValue(undefined);
 
-  const modalRef = renderModalWithRef<any>(CreateEtfModal);
-  await modalRef.value._show(existing);
+  renderDeclarativeModal(CreateEtfModal);
+  useCreateEtfModalStore().openEditEtf(existing);
+
+  await CreateEtfModalView.Modal.assertOpen();
 
   await CreateEtfModalView.NameInput.setValue("Updated");
   await CreateEtfModalView.SaveButton.click();
@@ -103,8 +108,10 @@ test("updates an existing etf", async () => {
 });
 
 test("reset button works", async () => {
-  const modalRef = renderModalWithRef<any>(CreateEtfModal);
-  await modalRef.value._show();
+  renderDeclarativeModal(CreateEtfModal);
+  useCreateEtfModalStore().openCreateEtf();
+
+  await CreateEtfModalView.Modal.assertOpen();
 
   await CreateEtfModalView.NameInput.setValue("To be reset");
   await CreateEtfModalView.ResetButton.click();
@@ -119,8 +126,11 @@ test("shows server error on failure", async () => {
   );
   CrudEtfService.createEtf = vi.fn().mockRejectedValue(error);
 
-  const modalRef = renderModalWithRef<any>(CreateEtfModal);
-  await modalRef.value._show();
+  renderDeclarativeModal(CreateEtfModal);
+  useCreateEtfModalStore().openCreateEtf();
+
+  await CreateEtfModalView.Modal.assertOpen();
+
   await CreateEtfModalView.NameInput.setValue("Valid");
   await CreateEtfModalView.IsinInput.setValue("IE123");
   await CreateEtfModalView.WknInput.setValue("WKN1");
@@ -133,8 +143,10 @@ test("shows server error on failure", async () => {
 });
 
 test("validation: mandatory fields", async () => {
-  const modalRef = renderModalWithRef<any>(CreateEtfModal);
-  await modalRef.value._show();
+  renderDeclarativeModal(CreateEtfModal);
+  useCreateEtfModalStore().openCreateEtf();
+
+  await CreateEtfModalView.Modal.assertOpen();
 
   await CreateEtfModalView.SaveButton.click();
 
@@ -155,8 +167,10 @@ test("validation: mandatory fields", async () => {
 });
 
 test("validation: field lengths", async () => {
-  const modalRef = renderModalWithRef<any>(CreateEtfModal);
-  await modalRef.value._show();
+  renderDeclarativeModal(CreateEtfModal);
+  useCreateEtfModalStore().openCreateEtf();
+
+  await CreateEtfModalView.Modal.assertOpen();
 
   await CreateEtfModalView.NameInput.setValue("a".repeat(61));
   await CreateEtfModalView.IsinInput.setValue("a".repeat(31));

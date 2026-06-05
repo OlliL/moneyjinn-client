@@ -44,8 +44,6 @@
             v-for="mpm in preDefMoneyflows"
             :key="mpm.id"
             :mpm="mpm"
-            @edit-pre-def-moneyflow="editPreDefMoneyflow"
-            @delete-pre-def-moneyflow="deletePreDefMoneyflow"
           />
         </template>
       </TableBody>
@@ -67,17 +65,4 @@ import ListPreDefMoneyflowRowVue from "./ListPreDefMoneyflowRow.vue";
 defineProps<{
   preDefMoneyflows: PreDefMoneyflow[];
 }>();
-
-const emit = defineEmits<{
-  deletePreDefMoneyflow: [preDefMoneyflow: PreDefMoneyflow];
-  editPreDefMoneyflow: [preDefMoneyflow: PreDefMoneyflow];
-}>();
-
-const editPreDefMoneyflow = (mpm: PreDefMoneyflow) => {
-  emit("editPreDefMoneyflow", mpm);
-};
-
-const deletePreDefMoneyflow = (mpm: PreDefMoneyflow) => {
-  emit("deletePreDefMoneyflow", mpm);
-};
 </script>

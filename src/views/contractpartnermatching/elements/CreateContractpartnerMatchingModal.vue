@@ -1,9 +1,14 @@
 <template>
-  <ModalVue :title="title" max-width="max-w-md" ref="modalComponent">
+  <ModalVue
+    :title="title"
+    max-width="max-w-md"
+    id-suffix="CreateContractpartnerMatching"
+    v-model:open="open"
+  >
     <template #body>
       <form
         @submit.prevent="createContractpartnerMatching"
-        :id="'createContractpartnerMatchingForm' + idSuffix"
+        id="createContractpartnerMatchingForm"
       >
         <div class="space-y-4">
           <DivError :server-errors="serverErrors" />
@@ -13,13 +18,13 @@
               <InputStandard
                 v-model="mcm.matchingText"
                 :validation-schema="schema.matchingText"
-                :id="'name' + idSuffix"
+                id="name"
                 :field-label="$t('ContractpartnerMatching.matchingText')"
               />
               <SelectContractpartner
                 v-model="mcm.contractpartnerId"
                 :validation-schema="schema.contractpartnerId"
-                :id-suffix="'CreateContractpartnerMatching' + idSuffix"
+                id-suffix="CreateContractpartnerMatching"
                 :field-label="$t('General.contractpartner')"
               />
             </div>
@@ -36,13 +41,13 @@
             <InputStandard
               v-model="mcm.moneyflowComment"
               :validation-schema="schema.moneyflowComment"
-              :id="'moneyflowComment' + idSuffix"
+              id="moneyflowComment"
               :field-label="$t('General.comment')"
             />
             <SelectPostingAccount
               v-model="mcm.postingAccountId"
               :validation-schema="schema.postingAccountId"
-              :id-suffix="idSuffix + 'CreateContractpartner'"
+              id-suffix="CreateContractpartnerMatchingModal"
               :field-label="$t('General.postingAccount')"
             />
           </div>
@@ -64,7 +69,7 @@
 
       <ButtonSubmit
         :button-label="$t('General.save')"
-        :form-id="'createContractpartnerMatchingForm' + idSuffix"
+        form-id="createContractpartnerMatchingForm"
         test-id="createContractpartnerMatchingSaveButton"
       >
         <template #icon><Save class="icon-medium" /></template>
@@ -86,20 +91,17 @@ import ContractpartnerMatchingService from "@/service/ContractpartnerMatchingSer
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { globErr } from "@/tools/views/ZodUtil";
 import { Save, Undo2 } from "lucide-vue-next";
+import { storeToRefs } from "pinia";
 import { useForm } from "vee-validate";
-import { computed, ref, toRaw, useTemplateRef } from "vue";
+import { computed, ref, toRaw, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { number, string, ZodType } from "zod";
+import useCreateContractpartnerMatchingModalStore from "./CreateContractpartnerMatchingModal.store";
 
 const { t } = useI18n();
 
-withDefaults(
-  defineProps<{
-    idSuffix?: string;
-  }>(),
-  {
-    idSuffix: "",
-  },
+const { open, matching, onDone } = storeToRefs(
+  useCreateContractpartnerMatchingModalStore(),
 );
 
 const serverErrors = ref(new Array<string>());
@@ -121,15 +123,6 @@ const schema: Partial<{ [key in keyof ContractpartnerMatching]: ZodType }> = {
 
 const mcm = ref({} as ContractpartnerMatching);
 const origMcm = ref({} as ContractpartnerMatching | undefined);
-const modalComponent = useTemplateRef<typeof ModalVue>("modalComponent");
-const emit = defineEmits<{
-  contractpartnerMatchingCreated: [
-    contractpartnerMatching: ContractpartnerMatching,
-  ];
-  contractpartnerMatchingUpdated: [
-    contractpartnerMatching: ContractpartnerMatching,
-  ];
-}>();
 
 const { handleSubmit, values, setFieldTouched } = useForm();
 
@@ -149,11 +142,22 @@ const resetForm = () => {
   Object.keys(values).forEach((field) => setFieldTouched(field, false));
 };
 
-const _show = (_mcm?: ContractpartnerMatching) => {
-  origMcm.value = _mcm ?? undefined;
-  resetForm();
-  modalComponent.value?._show();
-};
+watch(
+  [open, matching],
+  ([isOpen, entry]) => {
+    if (!isOpen) {
+      origMcm.value = undefined;
+      return;
+    }
+    if (entry === undefined) {
+      origMcm.value = undefined;
+    } else {
+      origMcm.value = structuredClone(toRaw(entry));
+    }
+    resetForm();
+  },
+  { immediate: true },
+);
 
 const createContractpartnerMatching = handleSubmit(() => {
   serverErrors.value = new Array<string>();
@@ -162,8 +166,8 @@ const createContractpartnerMatching = handleSubmit(() => {
     //update
     ContractpartnerMatchingService.updateContractpartnerMatching(mcm.value)
       .then(() => {
-        modalComponent.value?._hide();
-        emit("contractpartnerMatchingUpdated", mcm.value);
+        open.value = false;
+        onDone.value?.();
       })
       .catch((backendError) => {
         handleBackendError(backendError, serverErrors);
@@ -173,13 +177,12 @@ const createContractpartnerMatching = handleSubmit(() => {
     ContractpartnerMatchingService.createContractpartnerMatching(mcm.value)
       .then((_mcm) => {
         mcm.value = _mcm;
-        modalComponent.value?._hide();
-        emit("contractpartnerMatchingCreated", mcm.value);
+        open.value = false;
+        onDone.value?.();
       })
       .catch((backendError) => {
         handleBackendError(backendError, serverErrors);
       });
   }
 });
-defineExpose({ _show });
 </script>

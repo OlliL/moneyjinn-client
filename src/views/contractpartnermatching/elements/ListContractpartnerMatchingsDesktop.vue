@@ -29,8 +29,6 @@
           v-for="mcm in contractpartnerMatchings"
           :key="mcm.id"
           :mcm="mcm"
-          @edit-contractpartner-matching="editContractpartnerMatching"
-          @delete-contractpartner-matching="deleteContractpartnerMatching"
         />
       </TableBody>
     </DivContentTable>
@@ -51,21 +49,4 @@ import ListContractpartnerMatchingRowVue from "./ListContractpartnerMatchingRow.
 defineProps<{
   contractpartnerMatchings: ContractpartnerMatching[];
 }>();
-
-const emit = defineEmits<{
-  editContractpartnerMatching: [
-    contractpartnerMatching: ContractpartnerMatching,
-  ];
-  deleteContractpartnerMatching: [
-    contractpartnerMatching: ContractpartnerMatching,
-  ];
-}>();
-
-const editContractpartnerMatching = (mcm: ContractpartnerMatching) => {
-  emit("editContractpartnerMatching", mcm);
-};
-
-const deleteContractpartnerMatching = (mcm: ContractpartnerMatching) => {
-  emit("deleteContractpartnerMatching", mcm);
-};
 </script>

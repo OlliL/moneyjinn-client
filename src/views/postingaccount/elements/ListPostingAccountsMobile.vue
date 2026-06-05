@@ -29,7 +29,7 @@
               variant="ghost"
               size="icon"
               :data-testid="`posting-account-mobile-edit-${mpa.id}`"
-              @click="editPostingAccount(mpa)"
+              @click="actions.edit(mpa)"
             >
               <Pencil class="icon-medium" />
             </Button>
@@ -37,7 +37,7 @@
               variant="ghost"
               size="icon"
               :data-testid="`posting-account-mobile-delete-${mpa.id}`"
-              @click="deletePostingAccount(mpa)"
+              @click="actions.delete(mpa)"
             >
               <Trash2 class="icon-medium" />
             </Button>
@@ -51,23 +51,14 @@
 <script lang="ts" setup>
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { PostingAccountActionsKey } from "@/model/CrudActions";
 import type { PostingAccount } from "@/model/postingaccount/PostingAccount";
 import { Pencil, Trash2 } from "lucide-vue-next";
+import { inject } from "vue";
 
 defineProps<{
   postingAccounts: PostingAccount[];
 }>();
 
-const emit = defineEmits<{
-  deletePostingAccount: [postingAccount: PostingAccount];
-  editPostingAccount: [postingAccount: PostingAccount];
-}>();
-
-const deletePostingAccount = (mpa: PostingAccount) => {
-  emit("deletePostingAccount", mpa);
-};
-
-const editPostingAccount = (mpa: PostingAccount) => {
-  emit("editPostingAccount", mpa);
-};
+const actions = inject(PostingAccountActionsKey)!;
 </script>

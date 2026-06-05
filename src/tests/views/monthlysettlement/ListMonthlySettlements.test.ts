@@ -1,3 +1,4 @@
+import GlobalModals from "@/components/common/GlobalModals.vue";
 import router, { Routes } from "@/router";
 import MonthlySettlementService from "@/service/MonthlySettlementService";
 import MonthlySettlementServiceMocker from "@/service/mocker/MonthlySettlementServiceMocker";
@@ -8,6 +9,7 @@ import {
 import { assertHaveBeenCalledWith } from "@/tests/TestUtil";
 import {
   ButtonView,
+  DeclarativeModalStub,
   MobilePopupMenu,
   ModalView,
   RowView,
@@ -17,6 +19,7 @@ import "@testing-library/jest-dom/vitest";
 import { render } from "@testing-library/vue";
 import { createPinia, setActivePinia } from "pinia";
 import { beforeEach, expect, test, vi } from "vitest";
+import { defineComponent } from "vue";
 
 vi.mock("@/service/MonthlySettlementService");
 vi.mock("@/router", async () => {
@@ -62,7 +65,10 @@ class ListMonthlySettlementsView {
     "month-year-nav-year-item-2027",
   );
   static readonly Month2Button = new ButtonView("month-year-nav-month-2");
-  static readonly Modal = new ModalView("app-modal");
+  static readonly EditModal = new ModalView("app-modal-EditMonthlySettlement");
+  static readonly DeleteModal = new ModalView(
+    "app-modal-DeleteMonthlySettlement",
+  );
   static readonly EmptyRow = new RowView("monthly-settlement-empty");
   static readonly EmptyRowDesktop = new RowView(
     "monthly-settlement-empty-desktop",
@@ -71,6 +77,27 @@ class ListMonthlySettlementsView {
     "monthly-settlement-empty-mobile",
   );
 }
+
+const renderListMonthlySettlementsView = (
+  props: {
+    year?: string;
+    month?: string;
+  } = {},
+) => {
+  return render(
+    defineComponent({
+      setup() {
+        return { props };
+      },
+      template:
+        '<div><ListMonthlySettlements v-bind="props" /><GlobalModals /></div>',
+      components: { ListMonthlySettlements, GlobalModals },
+    }),
+    {
+      global: { stubs: { ModalVue: DeclarativeModalStub } },
+    },
+  );
+};
 
 beforeEach(() => {
   setActivePinia(createPinia());
@@ -93,7 +120,7 @@ beforeEach(() => {
 });
 
 test("ListMonthlySettlements calls getAvailableMonth on mount", async () => {
-  render(ListMonthlySettlements, { props: { year: "2026", month: "1" } });
+  renderListMonthlySettlementsView({ year: "2026", month: "1" });
 
   await assertHaveBeenCalledWith(
     MonthlySettlementService.getAvailableMonth,
@@ -103,28 +130,28 @@ test("ListMonthlySettlements calls getAvailableMonth on mount", async () => {
 });
 
 test("ListMonthlySettlements opens new modal", async () => {
-  render(ListMonthlySettlements, { props: { year: "2026", month: "1" } });
+  renderListMonthlySettlementsView({ year: "2026", month: "1" });
 
   await ListMonthlySettlementsView.NewButton.click();
-  await ListMonthlySettlementsView.Modal.assertOpen();
+  await ListMonthlySettlementsView.EditModal.assertOpen();
 });
 
 test("ListMonthlySettlements opens edit modal", async () => {
-  render(ListMonthlySettlements, { props: { year: "2026", month: "1" } });
+  renderListMonthlySettlementsView({ year: "2026", month: "1" });
 
   await ListMonthlySettlementsView.EditButton.click();
-  await ListMonthlySettlementsView.Modal.assertOpen();
+  await ListMonthlySettlementsView.EditModal.assertOpen();
 });
 
 test("ListMonthlySettlements opens delete modal", async () => {
-  render(ListMonthlySettlements, { props: { year: "2026", month: "1" } });
+  renderListMonthlySettlementsView({ year: "2026", month: "1" });
 
   await ListMonthlySettlementsView.DeleteButton.click();
-  await ListMonthlySettlementsView.Modal.assertOpen();
+  await ListMonthlySettlementsView.DeleteModal.assertOpen();
 });
 
 test("ListMonthlySettlements selects another year via navigator", async () => {
-  render(ListMonthlySettlements, { props: { year: "2026", month: "1" } });
+  renderListMonthlySettlementsView({ year: "2026", month: "1" });
 
   await ListMonthlySettlementsView.YearTrigger.click();
   await ListMonthlySettlementsView.Year2027Item.click();
@@ -139,7 +166,7 @@ test("ListMonthlySettlements selects another year via navigator", async () => {
 });
 
 test("ListMonthlySettlements selects another month via navigator", async () => {
-  render(ListMonthlySettlements, { props: { year: "2026", month: "1" } });
+  renderListMonthlySettlementsView({ year: "2026", month: "1" });
 
   await ListMonthlySettlementsView.Month2Button.click();
 
@@ -153,28 +180,28 @@ test("ListMonthlySettlements selects another month via navigator", async () => {
 });
 
 test("ListMonthlySettlements opens new modal via mobile action", async () => {
-  render(ListMonthlySettlements, { props: { year: "2026", month: "1" } });
+  renderListMonthlySettlementsView({ year: "2026", month: "1" });
 
   await ListMonthlySettlementsView.MobileNewButton.click();
-  await ListMonthlySettlementsView.Modal.assertOpen();
+  await ListMonthlySettlementsView.EditModal.assertOpen();
 });
 
 test("ListMonthlySettlements opens edit modal via mobile action", async () => {
-  render(ListMonthlySettlements, { props: { year: "2026", month: "1" } });
+  renderListMonthlySettlementsView({ year: "2026", month: "1" });
 
   await ListMonthlySettlementsView.MobileEditButton.click();
-  await ListMonthlySettlementsView.Modal.assertOpen();
+  await ListMonthlySettlementsView.EditModal.assertOpen();
 });
 
 test("ListMonthlySettlements opens delete modal via mobile action", async () => {
-  render(ListMonthlySettlements, { props: { year: "2026", month: "1" } });
+  renderListMonthlySettlementsView({ year: "2026", month: "1" });
 
   await ListMonthlySettlementsView.MobileDeleteButton.click();
-  await ListMonthlySettlementsView.Modal.assertOpen();
+  await ListMonthlySettlementsView.DeleteModal.assertOpen();
 });
 
 test("ListMonthlySettlements selects another year via mobile period sheet", async () => {
-  render(ListMonthlySettlements, { props: { year: "2026", month: "1" } });
+  renderListMonthlySettlementsView({ year: "2026", month: "1" });
 
   await ListMonthlySettlementsView.MobileOpenPeriodSheetButton.click();
   await ListMonthlySettlementsView.MobilePeriodSheet.assertToBeVisible();
@@ -191,7 +218,7 @@ test("ListMonthlySettlements selects another year via mobile period sheet", asyn
 });
 
 test("ListMonthlySettlements selects another month via mobile period sheet", async () => {
-  render(ListMonthlySettlements, { props: { year: "2026", month: "1" } });
+  renderListMonthlySettlementsView({ year: "2026", month: "1" });
 
   await ListMonthlySettlementsView.MobileOpenPeriodSheetButton.click();
   await ListMonthlySettlementsView.MobilePeriodSheet.assertToBeVisible();
@@ -217,8 +244,9 @@ test("ListMonthlySettlements shows empty state for empty list (Desktop and Mobil
   MonthlySettlementServiceMocker.mockGetMonthlySettlementList([]);
 
   // Act
-  render(ListMonthlySettlements, {
-    props: { year: undefined, month: undefined },
+  renderListMonthlySettlementsView({
+    year: undefined,
+    month: undefined,
   });
 
   // Assert: Empty state visible

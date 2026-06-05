@@ -5,12 +5,8 @@
     v-if="dataLoaded"
   />
 
-  <DeleteEtfFlowModalVue @etf-flow-deleted="etfFlowDeleted" ref="deleteModal" />
-  <CreateEtfFlowModalVue
-    @etf-flow-created="etfFlowCreated"
-    @etf-flow-updated="etfFlowUpdated"
-    ref="createModal"
-  />
+  <CreateEtfFlowModal />
+  <DeleteEtfFlowModal />
   <div class="custom-container space-y-6">
     <div class="text-center">
       <h4 class="text-2xl font-bold">{{ $t("General.etfDepot") }}</h4>
@@ -100,8 +96,6 @@
         :etf-name="selectedEtf.name"
         :partial="partial"
         :is-effective-only="isMobileEffectiveOnly"
-        @delete-etf-flow="deleteEtfFlow"
-        @edit-etf-flow="editEtfFlow"
       />
 
       <ListEtfDepotDesktop
@@ -110,8 +104,6 @@
         :etf-effective-flows="etfEffectiveFlows"
         :selected-etf-id="selectedEtf.id"
         @update:current-tab="setCurrentTab"
-        @delete-etf-flow="deleteEtfFlow"
-        @edit-etf-flow="editEtfFlow"
       />
     </div>
 
@@ -144,6 +136,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { Switch } from "@/components/ui/switch";
+import { EtfFlowActionsKey, type CrudActions } from "@/model/CrudActions";
 import type { Etf } from "@/model/etf/Etf";
 import type { EtfDepot } from "@/model/etf/EtfDepot";
 import type { EtfFlow } from "@/model/etf/EtfFlow";
@@ -154,12 +147,14 @@ import { useEtfStore } from "@/stores/EtfStore";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { globErr } from "@/tools/views/ZodUtil";
 import { Filter, PlusSquare } from "lucide-vue-next";
-import { computed, onMounted, ref, useTemplateRef, watch } from "vue";
+import { computed, onMounted, provide, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { number } from "zod";
 import CalcEtfSaleForm from "./elements/CalcEtfSaleForm.vue";
-import CreateEtfFlowModalVue from "./elements/CreateEtfFlowModal.vue";
-import DeleteEtfFlowModalVue from "./elements/DeleteEtfFlowModal.vue";
+import useCreateEtfFlowModalStore from "./elements/CreateEtfFlowModal.store";
+import CreateEtfFlowModal from "./elements/CreateEtfFlowModal.vue";
+import useDeleteEtfFlowModalStore from "./elements/DeleteEtfFlowModal.store";
+import DeleteEtfFlowModal from "./elements/DeleteEtfFlowModal.vue";
 import ListEtfDepotDesktop from "./elements/ListEtfDepotDesktop.vue";
 import ListEtfDepotEtfTable from "./elements/ListEtfDepotEtfTable.vue";
 import ListEtfDepotMobile from "./elements/ListEtfDepotMobile.vue";
@@ -181,8 +176,8 @@ const selectedEtfId = ref(undefined as number | undefined);
 const calcEtfSalePieces = ref(0 as number | undefined);
 const currentTab = ref<"effective" | "all">("all");
 const isMobileFilterOpen = ref(false);
-const deleteModal = useTemplateRef<typeof DeleteEtfFlowModalVue>("deleteModal");
-const createModal = useTemplateRef<typeof CreateEtfFlowModalVue>("createModal");
+const { openCreateEtfFlow, openEditEtfFlow } = useCreateEtfFlowModalStore();
+const { openDeleteEtfFlow } = useDeleteEtfFlowModalStore();
 
 const { getAsSelectBoxValues, getFavoriteEtf, getEtf } = useEtfStore();
 
@@ -214,13 +209,11 @@ const partial = computed(() => {
   );
 });
 
-const isMobileEffectiveOnly = computed(() => {
-  return currentTab.value === "effective";
-});
+const isMobileEffectiveOnly = computed(() => currentTab.value === "effective");
 
-const mobileFlows = computed(() => {
-  return isMobileEffectiveOnly.value ? etfEffectiveFlows.value : etfFlows.value;
-});
+const mobileFlows = computed(() =>
+  isMobileEffectiveOnly.value ? etfEffectiveFlows.value : etfFlows.value,
+);
 
 const setMobileEffectiveOnly = (value: boolean) => {
   if (value && etfEffectiveFlows.value.length > 0) {
@@ -230,9 +223,8 @@ const setMobileEffectiveOnly = (value: boolean) => {
   currentTab.value = "all";
 };
 
-const setCurrentTab = (value: "effective" | "all" | undefined) => {
-  currentTab.value = value == "all" ? "all" : "effective";
-};
+const setCurrentTab = (value: "effective" | "all" | undefined) =>
+  (currentTab.value = value == "all" ? "all" : "effective");
 
 const loadData = (etfId: number) => {
   serverErrors.value = new Array<string>();
@@ -270,26 +262,20 @@ const handleServerResponse = (etfDepot: EtfDepot, etfId: number) => {
   dataLoaded.value = true;
 };
 
-const deleteEtfFlow = (etfFlow: EtfFlow) => {
-  deleteModal.value?._show(etfFlow, selectedEtf.value.name);
+const actions: CrudActions<EtfFlow> = {
+  create: () => createEtfFlow(),
+  edit: (etfFlow) => openEditEtfFlow(etfFlow, selectedEtfId.value, etfFlowDone),
+  delete: (etfFlow) =>
+    openDeleteEtfFlow(etfFlow, selectedEtf.value.name ?? "", etfFlowDone),
 };
-const etfFlowDeleted = (etfFlow: EtfFlow) => {
-  loadData(etfFlow.etfId);
-};
+
+provide(EtfFlowActionsKey, actions);
 
 const createEtfFlow = () => {
-  createModal.value?._show(null, selectedEtfId.value);
-};
-const etfFlowCreated = (etfFlow: EtfFlow) => {
-  loadData(etfFlow.etfId);
+  openCreateEtfFlow(selectedEtfId.value, etfFlowDone);
 };
 
-const editEtfFlow = (etfFlow: EtfFlow) => {
-  createModal.value?._show(etfFlow);
-};
-const etfFlowUpdated = (etfFlow: EtfFlow) => {
-  loadData(etfFlow.etfId);
-};
+const etfFlowDone = (etfFlow: EtfFlow) => loadData(etfFlow.etfId);
 
 watch(
   selectedEtfId,

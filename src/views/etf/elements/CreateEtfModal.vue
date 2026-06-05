@@ -1,7 +1,12 @@
 <template>
-  <ModalVue :title="title" max-width="max-w-md" ref="modalComponent">
+  <ModalVue
+    :title="title"
+    max-width="max-w-md"
+    id-suffix="CreateEtf"
+    v-model:open="open"
+  >
     <template #body
-      ><form @submit.prevent="createEtf" :id="'createEtfForm' + idSuffix">
+      ><form @submit.prevent="createEtf" id="createEtfForm-CreateEtf">
         <div class="space-y-4">
           <DivError :server-errors="serverErrors" />
 
@@ -11,7 +16,7 @@
                 <InputStandard
                   v-model="met.name"
                   :validation-schema="schema.name"
-                  :id="'name' + idSuffix"
+                  id="name-CreateEtf"
                   :field-label="$t('General.name')"
                 />
               </div>
@@ -41,7 +46,7 @@
                 <InputStandard
                   v-model="met.partialTaxExemption"
                   :validation-schema="schema.partialTaxExemption"
-                  :id="'partialTaxExemption' + idSuffix"
+                  id="partialTaxExemption-CreateEtf"
                   field-type="number"
                   step="0.01"
                   :field-label="$t('ETF.partialTaxExemption')"
@@ -53,7 +58,7 @@
                 <InputStandard
                   v-model="met.isin"
                   :validation-schema="schema.isin"
-                  :id="'isin' + idSuffix"
+                  id="isin-CreateEtf"
                   :field-label="$t('ETF.isin')"
                 />
               </div>
@@ -64,7 +69,7 @@
                 <InputStandard
                   v-model="met.wkn"
                   :validation-schema="schema.wkn"
-                  :id="'wkn' + idSuffix"
+                  id="wkn-CreateEtf"
                   :field-label="$t('ETF.wkn')"
                 />
               </div>
@@ -72,7 +77,7 @@
                 <InputStandard
                   v-model="met.ticker"
                   :validation-schema="schema.ticker"
-                  :id="'ticker' + idSuffix"
+                  id="ticker-CreateEtf"
                   :field-label="$t('ETF.ticker')"
                 />
               </div>
@@ -83,7 +88,7 @@
                 <InputStandard
                   v-model="met.chartUrl"
                   :validation-schema="schema.chartUrl"
-                  :id="'chartUrl' + idSuffix"
+                  id="chartUrl-CreateEtf"
                   :field-label="$t('ETF.chartUrl')"
                 />
               </div>
@@ -104,7 +109,7 @@
                 <InputStandard
                   v-model="met.transactionCostsAbsolute"
                   :validation-schema="schema.transactionCostsAbsolute"
-                  :id="'transactionCostsAbsolute' + idSuffix"
+                  id="transactionCostsAbsolute-CreateEtf"
                   field-type="number"
                   step="0.01"
                   :field-label="$t('ETFFlow.transactionCostsAbsolute')"
@@ -117,7 +122,7 @@
                 <InputStandard
                   v-model="met.transactionCostsRelative"
                   :validation-schema="schema.transactionCostsRelative"
-                  :id="'transactionCostsRelative' + idSuffix"
+                  id="transactionCostsRelative-CreateEtf"
                   field-type="number"
                   step="0.01"
                   :field-label="$t('ETFFlow.transactionCostsRelative')"
@@ -130,7 +135,7 @@
                 <InputStandard
                   v-model="met.transactionCostsMaximum"
                   :validation-schema="schema.transactionCostsMaximum"
-                  :id="'transactionCostsMaximum' + idSuffix"
+                  id="transactionCostsMaximum-CreateEtf"
                   field-type="number"
                   step="0.01"
                   :field-label="$t('ETFFlow.transactionCostsMaximum')"
@@ -157,7 +162,7 @@
 
       <ButtonSubmit
         :button-label="$t('General.save')"
-        :form-id="'createEtfForm' + idSuffix"
+        form-id="createEtfForm-CreateEtf"
         test-id="createEtfSaveButton"
       >
         <template #icon><Save class="icon-medium" /></template>
@@ -177,21 +182,16 @@ import CrudEtfService from "@/service/CrudEtfService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { amountSchema, globErr } from "@/tools/views/ZodUtil";
 import { Euro, Percent, Save, Star, Undo2 } from "lucide-vue-next";
+import { storeToRefs } from "pinia";
 import { useForm } from "vee-validate";
-import { computed, ref, toRaw, useTemplateRef } from "vue";
+import { computed, ref, toRaw, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { string, ZodType } from "zod";
+import useCreateEtfModalStore from "./CreateEtfModal.store";
 
 const { t } = useI18n();
 
-withDefaults(
-  defineProps<{
-    idSuffix?: string;
-  }>(),
-  {
-    idSuffix: "",
-  },
-);
+const { open, onDone } = storeToRefs(useCreateEtfModalStore());
 
 const serverErrors = ref(new Array<string>());
 
@@ -225,11 +225,6 @@ const schema: Partial<{ [key in keyof Etf]: ZodType }> = {
 
 const met = ref({} as Etf);
 const origMet = ref({} as Etf | undefined);
-const modalComponent = useTemplateRef<typeof ModalVue>("modalComponent");
-const emit = defineEmits<{
-  etfCreated: [etf: Etf];
-  etfUpdated: [etf: Etf];
-}>();
 const markAsFavorite = ref(false);
 
 const { handleSubmit, values, setFieldTouched } = useForm();
@@ -251,11 +246,16 @@ const resetForm = () => {
   Object.keys(values).forEach((field) => setFieldTouched(field, false));
 };
 
-const _show = (_met?: Etf) => {
-  origMet.value = _met ?? undefined;
-  resetForm();
-  modalComponent.value?._show();
-};
+watch(
+  open,
+  (val) => {
+    if (val) {
+      origMet.value = storeToRefs(useCreateEtfModalStore()).etf.value;
+      resetForm();
+    }
+  },
+  { immediate: true },
+);
 
 const createEtf = handleSubmit(() => {
   serverErrors.value = new Array<string>();
@@ -265,8 +265,8 @@ const createEtf = handleSubmit(() => {
     //update
     CrudEtfService.updateEtf(met.value)
       .then(() => {
-        modalComponent.value?._hide();
-        emit("etfUpdated", met.value);
+        open.value = false;
+        onDone.value?.();
       })
       .catch((backendError) => {
         handleBackendError(backendError, serverErrors);
@@ -276,13 +276,12 @@ const createEtf = handleSubmit(() => {
     CrudEtfService.createEtf(met.value)
       .then((etf) => {
         met.value = etf;
-        modalComponent.value?._hide();
-        emit("etfCreated", met.value);
+        open.value = false;
+        onDone.value?.();
       })
       .catch((backendError) => {
         handleBackendError(backendError, serverErrors);
       });
   }
 });
-defineExpose({ _show });
 </script>

@@ -9,6 +9,7 @@ import {
 import { assertHaveBeenCalledWith } from "@/tests/TestUtil";
 import {
   ButtonView,
+  DeclarativeModalStub,
   InputView,
   MobilePopupMenu,
   ModalView,
@@ -21,6 +22,7 @@ import "@testing-library/jest-dom/vitest";
 import { render } from "@testing-library/vue";
 import { createPinia, setActivePinia } from "pinia";
 import { beforeEach, test, vi } from "vitest";
+import { defineComponent } from "vue";
 
 vi.mock("@/service/EtfService");
 vi.mock("@/service/CrudEtfService");
@@ -53,7 +55,8 @@ class ListEtfDepotView {
   static readonly EditButton = new ButtonView("etf-depot-edit-101");
   static readonly DeleteButton = new ButtonView("etf-depot-delete-101");
   static readonly CalculateSaleHeadline = new TextView("Calculate Sale");
-  static readonly Modal = new ModalView("app-modal");
+  static readonly CreateModal = new ModalView("app-modal-CreateEtfFlow");
+  static readonly DeleteModal = new ModalView("app-modal-DeleteEtfFlow");
 }
 
 beforeEach(() => {
@@ -91,24 +94,39 @@ beforeEach(() => {
   } as never);
 });
 
+const renderListEtfDepotView = (props: { etfId?: string } = {}) => {
+  return render(
+    defineComponent({
+      setup() {
+        return { props };
+      },
+      template: '<div><ListEtfDepot v-bind="props" /></div>',
+      components: { ListEtfDepot },
+    }),
+    {
+      global: { stubs: { ModalVue: DeclarativeModalStub } },
+    },
+  );
+};
+
 test("ListEtfDepot calls listEtfFlowsById on mount", async () => {
   await useEtfStore().initEtfStore();
-  render(ListEtfDepot, { props: { etfId: "1" } });
+  renderListEtfDepotView({ etfId: "1" });
 
   await assertHaveBeenCalledWith(EtfService.listEtfFlowsById, 1);
 });
 
 test("ListEtfDepot opens create booking modal", async () => {
   await useEtfStore().initEtfStore();
-  render(ListEtfDepot, { props: { etfId: "1" } });
+  renderListEtfDepotView({ etfId: "1" });
 
   await ListEtfDepotView.CreateButton.click();
-  await ListEtfDepotView.Modal.assertOpen();
+  await ListEtfDepotView.CreateModal.assertOpen();
 });
 
 test("ListEtfDepot auto-selects favorite ETF when mounted without props", async () => {
   await useEtfStore().initEtfStore();
-  render(ListEtfDepot);
+  renderListEtfDepotView({ etfId: "1" });
 
   await ListEtfDepotView.EtfInput.assertValue("ETF 1");
   await ListEtfDepotView.EtfIdInput.assertValue("1");
@@ -150,25 +168,25 @@ test("ListEtfDepot shows effective flows when available", async () => {
   } as never);
 
   await useEtfStore().initEtfStore();
-  render(ListEtfDepot, { props: { etfId: "1" } });
+  renderListEtfDepotView({ etfId: "1" });
 
   await ListEtfDepotView.CalculateSaleHeadline.assertInDocument();
 });
 
 test("ListEtfDepot opens edit modal from row action", async () => {
   await useEtfStore().initEtfStore();
-  render(ListEtfDepot, { props: { etfId: "1" } });
+  renderListEtfDepotView({ etfId: "1" });
 
   await ListEtfDepotView.EditButton.click();
-  await ListEtfDepotView.Modal.assertOpen();
+  await ListEtfDepotView.CreateModal.assertOpen();
 });
 
 test("ListEtfDepot opens delete modal from row action", async () => {
   await useEtfStore().initEtfStore();
-  render(ListEtfDepot, { props: { etfId: "1" } });
+  renderListEtfDepotView({ etfId: "1" });
 
   await ListEtfDepotView.DeleteButton.click();
-  await ListEtfDepotView.Modal.assertOpen();
+  await ListEtfDepotView.DeleteModal.assertOpen();
 });
 
 test("ListEtfDepot toggles mobile view mode via filter switch", async () => {
@@ -216,7 +234,7 @@ test("ListEtfDepot toggles mobile view mode via filter switch", async () => {
   } as never);
 
   await useEtfStore().initEtfStore();
-  render(ListEtfDepot, { props: { etfId: "1" } });
+  renderListEtfDepotView({ etfId: "1" });
 
   await ListEtfDepotView.MobileRow102.assertToBeVisible();
   await ListEtfDepotView.MobileRow101.assertNotToBeInDocument();
@@ -234,18 +252,18 @@ test("ListEtfDepot toggles mobile view mode via filter switch", async () => {
 
 test("ListEtfDepot opens edit modal from mobile row action", async () => {
   await useEtfStore().initEtfStore();
-  render(ListEtfDepot, { props: { etfId: "1" } });
+  renderListEtfDepotView({ etfId: "1" });
 
   await ListEtfDepotView.MobileRow101.assertToBeVisible();
   await ListEtfDepotView.MobileEditButton.click();
-  await ListEtfDepotView.Modal.assertOpen();
+  await ListEtfDepotView.CreateModal.assertOpen();
 });
 
 test("ListEtfDepot opens delete modal from mobile row action", async () => {
   await useEtfStore().initEtfStore();
-  render(ListEtfDepot, { props: { etfId: "1" } });
+  renderListEtfDepotView({ etfId: "1" });
 
   await ListEtfDepotView.MobileRow101.assertToBeVisible();
   await ListEtfDepotView.MobileDeleteButton.click();
-  await ListEtfDepotView.Modal.assertOpen();
+  await ListEtfDepotView.DeleteModal.assertOpen();
 });

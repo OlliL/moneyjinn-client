@@ -224,10 +224,6 @@
             :key="mmf.id"
             :mmf="mmf"
             :index="index"
-            @show-receipt="$emit('showReceipt', $event)"
-            @delete-moneyflow="$emit('deleteMoneyflow', $event)"
-            @edit-moneyflow="$emit('editMoneyflow', $event)"
-            @list-moneyflow="$emit('listMoneyflow', $event)"
           />
           <TableRow
             v-if="moneyflows.length === 0"
@@ -292,10 +288,6 @@ const filterCapitalsource = defineModel<string>("filterCapitalsource", {
 
 const emit = defineEmits<{
   sortByColumn: [field: keyof Moneyflow];
-  showReceipt: [id: number];
-  deleteMoneyflow: [moneyflow: Moneyflow];
-  editMoneyflow: [moneyflow: Moneyflow];
-  listMoneyflow: [moneyflow: Moneyflow];
 }>();
 
 const sortIcon = (sortedField: keyof Moneyflow) => {

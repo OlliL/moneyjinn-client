@@ -14,7 +14,7 @@
           v-if="mmf.hasReceipt"
           variant="ghost"
           size="icon"
-          @click="$emit('showReceipt', mmf.id)"
+          @click="moneyflowActions.receipt(mmf.id)"
           :title="$t('Receipt.receipt')"
           :aria-label="$t('Receipt.receipt')"
           class="action-icon-button"
@@ -78,7 +78,7 @@
             variant="ghost"
             size="icon"
             :data-testid="`display-moneyflow-edit-${mmf.id}`"
-            @click="$emit('editMoneyflow', mmf)"
+            @click="moneyflowActions.edit(mmf)"
             :title="$t('General.edit')"
             class="action-icon-button"
           >
@@ -90,7 +90,7 @@
             variant="ghost"
             size="icon"
             :data-testid="`display-moneyflow-delete-${mmf.id}`"
-            @click="$emit('deleteMoneyflow', mmf)"
+            @click="moneyflowActions.delete(mmf)"
             :title="$t('General.delete')"
             class="action-icon-button"
           >
@@ -105,7 +105,7 @@
             variant="ghost"
             size="icon"
             :data-testid="`display-moneyflow-list-${mmf.id}`"
-            @click="$emit('listMoneyflow', mmf)"
+            @click="moneyflowActions.list(mmf)"
             :title="$t('General.moneyflow')"
             class="action-icon-button"
           >
@@ -123,21 +123,15 @@ import SpanAmount from "@/components/common/SpanAmount.vue";
 import SpanDate from "@/components/common/SpanDate.vue";
 import { Button } from "@/components/ui/button";
 import { TableCell, TableRow } from "@/components/ui/table";
+import { MoneyflowRowActionsKey } from "@/model/CrudActions";
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 import { useUserSessionStore } from "@/stores/UserSessionStore";
 import { Clock, Eye, Pencil, ReceiptText, Trash2 } from "lucide-vue-next";
-import { computed } from "vue";
+import { computed, inject } from "vue";
 
 const props = defineProps<{
   mmf: Moneyflow;
   index: number;
-}>();
-
-defineEmits<{
-  showReceipt: [id: number];
-  editMoneyflow: [moneyflow: Moneyflow];
-  deleteMoneyflow: [moneyflow: Moneyflow];
-  listMoneyflow: [moneyflow: Moneyflow];
 }>();
 
 const userSessionStore = useUserSessionStore();
@@ -186,4 +180,5 @@ const tableRows = computed(() => {
     },
   ];
 });
+const moneyflowActions = inject(MoneyflowRowActionsKey)!;
 </script>

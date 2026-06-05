@@ -39,7 +39,7 @@
                 variant="ghost"
                 size="icon"
                 :data-testid="`capitalsource-mobile-edit-${mcs.id}`"
-                @click.stop="editCapitalsource(mcs)"
+                @click.stop="actions.edit(mcs)"
               >
                 <Pencil class="icon-medium" />
               </Button>
@@ -47,7 +47,7 @@
                 variant="ghost"
                 size="icon"
                 :data-testid="`capitalsource-mobile-delete-${mcs.id}`"
-                @click.stop="deleteCapitalsource(mcs)"
+                @click.stop="actions.delete(mcs)"
               >
                 <Trash2 class="icon-medium" />
               </Button>
@@ -113,43 +113,26 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
+import { CapitalsourceActionsKey } from "@/model/CrudActions";
 import type { Capitalsource } from "@/model/capitalsource/Capitalsource";
 import { capitalsourceImportNames } from "@/model/capitalsource/CapitalsourceImport";
 import { capitalsourceStateNames } from "@/model/capitalsource/CapitalsourceState";
 import { capitalsourceTypeNames } from "@/model/capitalsource/CapitalsourceType";
 import { Pencil, Trash2 } from "lucide-vue-next";
+import { inject } from "vue";
 
 defineProps<{
   capitalsources: Capitalsource[];
   userId: number;
 }>();
+const actions = inject(CapitalsourceActionsKey)!;
 
-const emit = defineEmits<{
-  deleteCapitalsource: [capitalsource: Capitalsource];
-  editCapitalsource: [capitalsource: Capitalsource];
-}>();
-
-const deleteCapitalsource = (mcs: Capitalsource) => {
-  emit("deleteCapitalsource", mcs);
-};
-
-const editCapitalsource = (mcs: Capitalsource) => {
-  emit("editCapitalsource", mcs);
-};
-
-const importAllowedColorClass = (mcs: Capitalsource): string => {
-  return mcs.importAllowed > 0 ? "text-green-600" : "text-red-600";
-};
-
-const importAllowedString = (mcs: Capitalsource): string => {
-  return capitalsourceImportNames[mcs.importAllowed];
-};
-
-const typeString = (mcs: Capitalsource): string => {
-  return capitalsourceTypeNames[mcs.type];
-};
-
-const stateString = (mcs: Capitalsource): string => {
-  return capitalsourceStateNames[mcs.state];
-};
+const importAllowedColorClass = (mcs: Capitalsource): string =>
+  mcs.importAllowed > 0 ? "text-green-600" : "text-red-600";
+const importAllowedString = (mcs: Capitalsource): string =>
+  capitalsourceImportNames[mcs.importAllowed];
+const typeString = (mcs: Capitalsource): string =>
+  capitalsourceTypeNames[mcs.type];
+const stateString = (mcs: Capitalsource): string =>
+  capitalsourceStateNames[mcs.state];
 </script>

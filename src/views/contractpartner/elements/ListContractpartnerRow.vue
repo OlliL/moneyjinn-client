@@ -19,7 +19,7 @@
     <ButtonTableIcon
       :title="$t('General.edit')"
       :test-id="`contractpartner-edit-${mcp.id}`"
-      @click="editContractpartner"
+      @click="actions.edit(mcp)"
     >
       <Pencil class="icon-medium" />
     </ButtonTableIcon>
@@ -27,7 +27,7 @@
     <ButtonTableIcon
       :title="$t('General.delete')"
       :test-id="`contractpartner-delete-${mcp.id}`"
-      @click="deleteContractpartner"
+      @click="actions.delete(mcp)"
     >
       <Trash2 class="icon-medium" />
     </ButtonTableIcon>
@@ -35,7 +35,7 @@
     <ButtonTableIcon
       :title="$t('General.contractpartnerAccounts')"
       :test-id="`contractpartner-accounts-${mcp.id}`"
-      @click="listAccounts"
+      @click="listAccounts(mcp)"
     >
       <Banknote class="icon-medium" />
     </ButtonTableIcon>
@@ -44,32 +44,21 @@
 
 <script lang="ts" setup>
 import { Banknote, Pencil, Trash2 } from "lucide-vue-next";
-
-import { TableCell, TableRow } from "@/components/ui/table";
+import { inject } from "vue";
 
 import ButtonTableIcon from "@/components/common/ButtonTableIcon.vue";
 import SpanDate from "@/components/common/SpanDate.vue";
+import { TableCell, TableRow } from "@/components/ui/table";
 import type { Contractpartner } from "@/model/contractpartner/Contractpartner";
+import {
+  ContractpartnerActionsKey,
+  OpenContractpartnerAccountsActionKey,
+} from "@/model/CrudActions";
 
 const props = defineProps<{
   mcp: Contractpartner;
 }>();
 
-const emit = defineEmits<{
-  deleteContractpartner: [mcp: Contractpartner];
-  editContractpartner: [mcp: Contractpartner];
-  listContractpartnerAccounts: [mcp: Contractpartner];
-}>();
-
-const deleteContractpartner = () => {
-  emit("deleteContractpartner", props.mcp);
-};
-
-const editContractpartner = () => {
-  emit("editContractpartner", props.mcp);
-};
-
-const listAccounts = () => {
-  emit("listContractpartnerAccounts", props.mcp);
-};
+const actions = inject(ContractpartnerActionsKey)!;
+const listAccounts = inject(OpenContractpartnerAccountsActionKey)!;
 </script>

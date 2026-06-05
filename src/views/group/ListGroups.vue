@@ -1,15 +1,6 @@
 <template>
-  <CreateGroupModalVue
-    ref="createGroupModalList"
-    id-suffix="List"
-    @group-created="reloadView"
-    @group-updated="reloadView"
-  />
-  <DeleteGroupModalVue
-    ref="deleteModal"
-    id-suffix="List"
-    @group-deleted="reloadView"
-  />
+  <CreateGroupModal />
+  <DeleteGroupModal />
   <div class="custom-container space-y-6">
     <div class="text-center">
       <h4 class="text-2xl font-bold">{{ $t("General.groups") }}</h4>
@@ -19,37 +10,32 @@
       v-model="searchString"
       :showValidToggle="false"
       :placeholder="$t('Group.searchBy')"
-      @createClicked="showCreateGroupModal"
+      @createClicked="actions.create"
     />
 
     <DivError :server-errors="serverErrors" />
 
-    <ListGroupsMobile
-      :groups="groups"
-      @edit-group="editGroup"
-      @delete-group="deleteGroup"
-    />
+    <ListGroupsMobile :groups="groups" />
 
-    <ListGroupsDesktop
-      :groups="groups"
-      @edit-group="editGroup"
-      @delete-group="deleteGroup"
-    />
+    <ListGroupsDesktop :groups="groups" />
   </div>
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref, useTemplateRef, watch } from "vue";
+import { onMounted, provide, ref, watch } from "vue";
 
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 
 import DivError from "@/components/common/DivError.vue";
 import DivFilter from "@/components/common/DivFilter.vue";
-import CreateGroupModalVue from "./elements/CreateGroupModal.vue";
-import DeleteGroupModalVue from "./elements/DeleteGroupModal.vue";
+import useCreateGroupModalStore from "./elements/CreateGroupModal.store";
+import CreateGroupModal from "./elements/CreateGroupModal.vue";
+import useDeleteGroupModalStore from "./elements/DeleteGroupModal.store";
+import DeleteGroupModal from "./elements/DeleteGroupModal.vue";
 import ListGroupsDesktop from "./elements/ListGroupsDesktop.vue";
 import ListGroupsMobile from "./elements/ListGroupsMobile.vue";
 
+import { GroupActionsKey, type CrudActions } from "@/model/CrudActions";
 import type { Group } from "@/model/group/Group";
 
 import GroupService from "@/service/GroupService";
@@ -59,23 +45,16 @@ const serverErrors = ref(new Array<string>());
 const groups = ref(new Array<Group>());
 const allGroups = ref(new Array<Group>());
 const searchString = ref("");
+const { openCreateGroup, openEditGroup } = useCreateGroupModalStore();
+const { openDeleteGroup } = useDeleteGroupModalStore();
 
-const createGroupModalList = useTemplateRef<typeof CreateGroupModalVue>(
-  "createGroupModalList",
-);
-const deleteModal = useTemplateRef<typeof DeleteGroupModalVue>("deleteModal");
-
-const showCreateGroupModal = () => {
-  createGroupModalList.value?._show();
+const actions: CrudActions<Group> = {
+  create: () => openCreateGroup(reloadView),
+  edit: (groupEntry) => openEditGroup(groupEntry, reloadView),
+  delete: (groupEntry) => openDeleteGroup(groupEntry, reloadView),
 };
 
-const deleteGroup = (mcs: Group) => {
-  deleteModal.value?._show(mcs);
-};
-
-const editGroup = (mcs: Group) => {
-  createGroupModalList.value?._show(mcs);
-};
+provide(GroupActionsKey, actions);
 
 watch(searchString, () => {
   searchContent();

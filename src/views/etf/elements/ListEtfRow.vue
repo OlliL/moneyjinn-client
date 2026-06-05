@@ -21,14 +21,14 @@
     <ButtonTableIcon
       :title="$t('General.edit')"
       :test-id="`etf-edit-${etf.id}`"
-      @click="editEtf"
+      @click="actions.edit(etf)"
     >
       <Pencil class="icon-medium" />
     </ButtonTableIcon>
     <ButtonTableIcon
       :title="$t('General.delete')"
       :test-id="`etf-delete-${etf.id}`"
-      @click="deleteEtf"
+      @click="actions.delete(etf)"
     >
       <Trash2 class="icon-medium" />
     </ButtonTableIcon>
@@ -38,18 +38,17 @@
 import ButtonTableIcon from "@/components/common/ButtonTableIcon.vue";
 import SpanAmount from "@/components/common/SpanAmount.vue";
 import { TableCell, TableRow } from "@/components/ui/table";
+import { EtfActionsKey } from "@/model/CrudActions";
 import type { Etf } from "@/model/etf/Etf";
 import { formatNumber } from "@/tools/views/FormatNumber";
 import { Pencil, Star, Trash2 } from "lucide-vue-next";
-import { computed } from "vue";
+import { computed, inject } from "vue";
 
 const props = defineProps<{
   etf: Etf;
 }>();
-const emit = defineEmits<{
-  deleteEtf: [etf: Etf];
-  editEtf: [etf: Etf];
-}>();
+
+const actions = inject(EtfActionsKey)!;
 
 const relativeString = computed(() => {
   if (props.etf.transactionCostsRelative === undefined) {
@@ -64,11 +63,4 @@ const taxExemptionString = computed(() => {
   }
   return formatNumber(props.etf.partialTaxExemption, 2) + " %";
 });
-
-const deleteEtf = () => {
-  emit("deleteEtf", props.etf);
-};
-const editEtf = () => {
-  emit("editEtf", props.etf);
-};
 </script>

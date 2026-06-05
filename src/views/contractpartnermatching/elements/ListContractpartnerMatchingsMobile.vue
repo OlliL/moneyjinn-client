@@ -84,26 +84,21 @@ import {
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import type { ContractpartnerMatching } from "@/model/contractpartnermatching/ContractpartnerMatching";
+import { ContractpartnerMatchingActionsKey } from "@/model/CrudActions";
 import { Pencil, Trash2 } from "lucide-vue-next";
+import { inject } from "vue";
 
 defineProps<{
   contractpartnerMatchings: ContractpartnerMatching[];
 }>();
 
-const emit = defineEmits<{
-  editContractpartnerMatching: [
-    contractpartnerMatching: ContractpartnerMatching,
-  ];
-  deleteContractpartnerMatching: [
-    contractpartnerMatching: ContractpartnerMatching,
-  ];
-}>();
+const actions = inject(ContractpartnerMatchingActionsKey)!;
 
 const editContractpartnerMatching = (mcm: ContractpartnerMatching) => {
-  emit("editContractpartnerMatching", mcm);
+  actions.edit(mcm);
 };
 
 const deleteContractpartnerMatching = (mcm: ContractpartnerMatching) => {
-  emit("deleteContractpartnerMatching", mcm);
+  actions.delete(mcm);
 };
 </script>

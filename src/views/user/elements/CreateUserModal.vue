@@ -1,7 +1,12 @@
 <template>
-  <ModalVue :title="title" :max-width="maxWidth" ref="modalComponent">
+  <ModalVue
+    :title="title"
+    :max-width="maxWidth"
+    id-suffix="CreateUser"
+    v-model:open="open"
+  >
     <template #body>
-      <form @submit.prevent="createUser" :id="'createUserForm' + idSuffix">
+      <form @submit.prevent="createUser" id="createUserForm">
         <div
           class="grid grid-cols-1"
           :class="{ 'lg:grid-cols-12 gap-6': editMode }"
@@ -23,7 +28,7 @@
                   <InputStandard
                     v-model="user.userName"
                     :validation-schema="schema.userName"
-                    :id="'name' + idSuffix"
+                    id="name-CreateUser"
                     :field-label="$t('General.username')"
                   />
                 </div>
@@ -32,7 +37,7 @@
                     <InputStandard
                       v-model="password1"
                       :validation-schema-ref="schema.password"
-                      :id="'password1' + idSuffix"
+                      id="password1-CreateUser"
                       :field-label="$t('General.password')"
                       field-type="password"
                     />
@@ -42,7 +47,7 @@
                     <InputStandard
                       v-model="password2"
                       :validation-schema-ref="schema.password"
-                      :id="'password2' + idSuffix"
+                      id="password2-CreateUser"
                       :field-label="$t('User.passwordVerify')"
                       field-type="password"
                     />
@@ -64,7 +69,7 @@
                     <SelectStandard
                       v-model="user.role"
                       :validation-schema="schema.userRole"
-                      :id="'role' + idSuffix"
+                      id="role-CreateUser"
                       :field-label="$t('User.role')"
                       :select-box-values="userRoleValues"
                     />
@@ -73,7 +78,7 @@
                     <SelectStandard
                       v-model="user.groupId"
                       :validation-schema="schema.groupId"
-                      :id="'groupId' + idSuffix"
+                      id="groupId-CreateUser"
                       :field-label="$t('General.group')"
                       :select-box-values="groupValues"
                     />
@@ -82,7 +87,7 @@
                     <InputDate
                       v-model="validFrom"
                       :validation-schema="schema.validFrom"
-                      :id="'validFrom' + idSuffix"
+                      id="validFrom-CreateUser"
                       :field-label="$t('General.validFrom')"
                       picker-side="top"
                     />
@@ -91,7 +96,7 @@
                     <SelectStandard
                       v-model="user.userIsNew"
                       :validation-schema="schema.userIsNew"
-                      :id="'userIsNew' + idSuffix"
+                      id="userIsNew-CreateUser"
                       :field-label="$t('User.new')"
                       :select-box-values="yesNoValues"
                     />
@@ -161,7 +166,7 @@
 
       <ButtonSubmit
         :button-label="$t('General.save')"
-        :form-id="'createUserForm' + idSuffix"
+        form-id="createUserForm"
         test-id="createUserSaveButton"
       >
         <template #icon><Save class="icon-medium" /></template>
@@ -197,21 +202,16 @@ import UserService from "@/service/UserService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { globErr } from "@/tools/views/ZodUtil";
 import { Save, Undo2 } from "lucide-vue-next";
+import { storeToRefs } from "pinia";
 import { useForm } from "vee-validate";
-import { computed, ref, toRaw, useTemplateRef, watch } from "vue";
+import { computed, ref, toRaw, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { boolean, date, number, string, type ZodTypeAny } from "zod";
+import useCreateUserModalStore from "./CreateUserModal.store";
 
 const { t } = useI18n();
 
-withDefaults(
-  defineProps<{
-    idSuffix?: string;
-  }>(),
-  {
-    idSuffix: "",
-  },
-);
+const { open, onDone } = storeToRefs(useCreateUserModalStore());
 
 type UserGroup = AccessRelation & {
   group?: Group;
@@ -241,11 +241,6 @@ const yesNoValues = [
   { id: false, value: t("General.no") },
   { id: true, value: t("General.yes") },
 ] as Array<SelectBoxValue>;
-const modalComponent = useTemplateRef<typeof ModalVue>("modalComponent");
-const emit = defineEmits<{
-  userCreated: [user: User];
-  userUpdated: [user: User];
-}>();
 
 const { handleSubmit, values, setFieldTouched } = useForm();
 
@@ -319,11 +314,16 @@ const resetForm = () => {
   Object.keys(values).forEach((field) => setFieldTouched(field, false));
 };
 
-const _show = (_user?: User) => {
-  origUser.value = _user ?? undefined;
-  resetForm();
-  modalComponent.value?._show();
-};
+watch(
+  open,
+  (val) => {
+    if (val) {
+      origUser.value = storeToRefs(useCreateUserModalStore()).user.value;
+      resetForm();
+    }
+  },
+  { immediate: true },
+);
 
 const createUser = handleSubmit(() => {
   if (user.value.id > 0) {
@@ -340,8 +340,8 @@ const createUser = handleSubmit(() => {
       };
       UserService.updateUser(user.value, mar)
         .then(() => {
-          modalComponent.value?._hide();
-          emit("userUpdated", user.value);
+          open.value = false;
+          onDone.value?.();
         })
         .catch((backendError) => {
           handleBackendError(backendError, serverErrors);
@@ -354,14 +354,12 @@ const createUser = handleSubmit(() => {
     UserService.createUser(user.value)
       .then((_user) => {
         user.value = _user;
-        modalComponent.value?._hide();
-        emit("userCreated", user.value);
+        open.value = false;
+        onDone.value?.();
       })
       .catch((backendError) => {
         handleBackendError(backendError, serverErrors);
       });
   }
 });
-
-defineExpose({ _show });
 </script>

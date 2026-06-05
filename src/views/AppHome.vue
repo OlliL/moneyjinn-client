@@ -1,12 +1,4 @@
 <template>
-  <EditMonthlySettlementModalVue
-    ref="editModal"
-    @monthly-settlement-upserted="monthlySettlementUpserted"
-  />
-  <CreateMoneyflowQuickModal
-    ref="quickBookingModal"
-    @booking-finished="showSuccessToast"
-  />
   <div class="custom-container space-y-6">
     <div class="text-center">
       <h4 class="text-2xl font-bold">
@@ -85,8 +77,8 @@
 import DivError from "@/components/common/DivError.vue";
 import FavoriteIcon from "@/components/common/FavoriteIcon.vue";
 import SpanAmount from "@/components/common/SpanAmount.vue";
-import CreateMoneyflowQuickModal from "@/components/moneyflow/CreateMoneyflowQuickModal.vue";
-import EditMonthlySettlementModalVue from "@/components/monthlysettlement/EditMonthlySettlementModal.vue";
+import { useCreateMoneyflowQuickModalStore } from "@/components/moneyflow/CreateMoneyflowQuickModal.store";
+import { useEditMonthlySettlementModalStore } from "@/components/monthlysettlement/EditMonthlySettlementModal.store";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 import {
@@ -98,7 +90,7 @@ import EventService from "@/service/EventService";
 import PreDefMoneyflowService from "@/service/PreDefMoneyflowService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { AlertCircle, CheckCircle2 } from "lucide-vue-next";
-import { h, onMounted, ref, useTemplateRef } from "vue";
+import { h, onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { toast } from "vue-sonner";
 
@@ -110,12 +102,10 @@ const importedMoneyflows = ref(false);
 const monthlySettlementMissing = ref(false);
 const monthlySettlementMonth = ref(0);
 const monthlySettlementYear = ref(0);
-const editModal =
-  useTemplateRef<typeof EditMonthlySettlementModalVue>("editModal");
-const quickBookingModal =
-  useTemplateRef<typeof CreateMoneyflowQuickModal>("quickBookingModal");
 const dataLoaded = ref(false);
 const favoriteMoneyflows = ref<Array<PreDefMoneyflow>>([]);
+const { openEditMonthlySettlement } = useEditMonthlySettlementModalStore();
+const { openCreateMoneyflowQuick } = useCreateMoneyflowQuickModalStore();
 
 const showSuccessToast = (mmf: Moneyflow) => {
   toast.success(
@@ -178,9 +168,10 @@ const loadData = () => {
   });
 };
 const showEditMonthlySettlementModal = () => {
-  editModal.value?._show(
+  openEditMonthlySettlement(
     monthlySettlementYear.value,
     monthlySettlementMonth.value,
+    monthlySettlementUpserted,
   );
 };
 const monthlySettlementUpserted = () => {
@@ -193,7 +184,7 @@ const navigateImportMoneyflows = () => {
 };
 
 const openQuickBooking = (flow: PreDefMoneyflow) => {
-  quickBookingModal.value?._show(flow);
+  openCreateMoneyflowQuick(flow, showSuccessToast);
 };
 
 onMounted(() => {

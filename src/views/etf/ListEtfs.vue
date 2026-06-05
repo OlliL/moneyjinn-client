@@ -1,15 +1,6 @@
 <template>
-  <CreateEtfModalVue
-    ref="createEtfModalList"
-    id-suffix="List"
-    @etf-created="searchContent"
-    @etf-updated="searchContent"
-  />
-  <DeleteEtfModalVue
-    ref="deleteModal"
-    id-suffix="List"
-    @etf-deleted="searchContent"
-  />
+  <CreateEtfModal />
+  <DeleteEtfModal />
 
   <div class="custom-container space-y-6">
     <div class="text-center">
@@ -20,27 +11,30 @@
       v-model="searchString"
       :showValidToggle="false"
       :placeholder="$t('ETF.searchBy')"
-      @createClicked="showCreateEtfModal"
+      @createClicked="actions.create"
     />
 
     <DivError :server-errors="serverErrors" />
 
-    <ListEtfsMobile :etfs="etfs" @edit-etf="editEtf" @delete-etf="deleteEtf" />
+    <ListEtfsMobile :etfs="etfs" />
 
-    <ListEtfsDesktop :etfs="etfs" @edit-etf="editEtf" @delete-etf="deleteEtf" />
+    <ListEtfsDesktop :etfs="etfs" />
   </div>
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref, useTemplateRef, watch } from "vue";
+import { onMounted, provide, ref, watch } from "vue";
 
 import DivError from "@/components/common/DivError.vue";
 import DivFilter from "@/components/common/DivFilter.vue";
-import CreateEtfModalVue from "./elements/CreateEtfModal.vue";
-import DeleteEtfModalVue from "./elements/DeleteEtfModal.vue";
+import useCreateEtfModalStore from "./elements/CreateEtfModal.store";
+import CreateEtfModal from "./elements/CreateEtfModal.vue";
+import useDeleteEtfModalStore from "./elements/DeleteEtfModal.store";
+import DeleteEtfModal from "./elements/DeleteEtfModal.vue";
 import ListEtfsDesktop from "./elements/ListEtfsDesktop.vue";
 import ListEtfsMobile from "./elements/ListEtfsMobile.vue";
 
+import { EtfActionsKey, type CrudActions } from "@/model/CrudActions";
 import type { Etf } from "@/model/etf/Etf";
 
 import { useEtfStore } from "@/stores/EtfStore";
@@ -53,22 +47,16 @@ const searchString = ref("");
 const { searchEtfs } = useEtfStore();
 
 const { etf } = storeToRefs(useEtfStore());
+const { openCreateEtf, openEditEtf } = useCreateEtfModalStore();
+const { openDeleteEtf } = useDeleteEtfModalStore();
 
-const createEtfModalList =
-  useTemplateRef<typeof CreateEtfModalVue>("createEtfModalList");
-const deleteModal = useTemplateRef<typeof DeleteEtfModalVue>("deleteModal");
-
-const showCreateEtfModal = () => {
-  createEtfModalList.value?._show();
+const actions: CrudActions<Etf> = {
+  create: () => openCreateEtf(searchContent),
+  edit: (etfEntry) => openEditEtf(etfEntry, searchContent),
+  delete: (etfEntry) => openDeleteEtf(etfEntry, searchContent),
 };
 
-const deleteEtf = (mcs: Etf) => {
-  deleteModal.value?._show(mcs);
-};
-
-const editEtf = (mcs: Etf) => {
-  createEtfModalList.value?._show(mcs);
-};
+provide(EtfActionsKey, actions);
 
 watch(searchString, () => {
   searchContent();

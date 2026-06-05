@@ -22,8 +22,9 @@ import {
   ButtonView,
   InputView,
   ModalView,
-  renderModalWithRef,
+  renderDeclarativeModal,
 } from "@/tests/TestViews";
+import { useCreateGroupModalStore } from "@/views/group/elements/CreateGroupModal.store";
 import CreateGroupModal from "@/views/group/elements/CreateGroupModal.vue";
 import "@testing-library/jest-dom/vitest";
 import { createPinia, setActivePinia } from "pinia";
@@ -37,7 +38,7 @@ vi.mock("@/service/PreDefMoneyflowService");
 vi.mock("@/service/CrudEtfService");
 
 class CreateGroupModalView {
-  static readonly Modal = new ModalView("app-modal");
+  static readonly Modal = new ModalView("app-modal-CreateGroup");
   static readonly NameInput = new InputView("name");
   static readonly SaveButton = new ButtonView("createGroupSaveButton");
   static readonly ResetButton = new ButtonView("createGroupResetButton");
@@ -65,8 +66,8 @@ beforeEach(async () => {
 });
 
 test("creates a new group", async () => {
-  const modalRef = renderModalWithRef<any>(CreateGroupModal);
-  await modalRef.value._show();
+  useCreateGroupModalStore().openCreateGroup();
+  renderDeclarativeModal(CreateGroupModal);
 
   await CreateGroupModalView.Modal.assertOpen();
 
@@ -83,8 +84,8 @@ test("updates an existing group", async () => {
     name: "Existing Group",
   } as Group;
 
-  const modalRef = renderModalWithRef<any>(CreateGroupModal);
-  await modalRef.value._show(existingGroup);
+  useCreateGroupModalStore().openEditGroup(existingGroup);
+  renderDeclarativeModal(CreateGroupModal);
 
   await CreateGroupModalView.NameInput.setValue("Updated Group");
   await CreateGroupModalView.SaveButton.click();
@@ -97,8 +98,8 @@ test("updates an existing group", async () => {
 });
 
 test("reset button clears form in create mode", async () => {
-  const modalRef = renderModalWithRef<any>(CreateGroupModal);
-  await modalRef.value._show();
+  useCreateGroupModalStore().openCreateGroup();
+  renderDeclarativeModal(CreateGroupModal);
 
   await CreateGroupModalView.NameInput.setValue("To be cleared");
   await CreateGroupModalView.ResetButton.click();
@@ -111,8 +112,8 @@ test("reset button reverts changes in edit mode", async () => {
     id: 1,
     name: "Original Name",
   } as Group;
-  const modalRef = renderModalWithRef<any>(CreateGroupModal);
-  await modalRef.value._show(existingGroup);
+  useCreateGroupModalStore().openEditGroup(existingGroup);
+  renderDeclarativeModal(CreateGroupModal);
 
   await CreateGroupModalView.NameInput.setValue("Changed Name");
   await CreateGroupModalView.ResetButton.click();
@@ -128,8 +129,8 @@ test("shows server errors on failure", async () => {
   );
   GroupServiceMocker.mockCreateGroupRejected(backendError);
 
-  const modalRef = renderModalWithRef<any>(CreateGroupModal);
-  await modalRef.value._show();
+  useCreateGroupModalStore().openCreateGroup();
+  renderDeclarativeModal(CreateGroupModal);
 
   await CreateGroupModalView.NameInput.setValue("Valid Name");
   await CreateGroupModalView.SaveButton.click();
@@ -141,8 +142,8 @@ test("shows server errors on failure", async () => {
 });
 
 test("validation: name is required", async () => {
-  const modalRef = renderModalWithRef<any>(CreateGroupModal);
-  await modalRef.value._show();
+  useCreateGroupModalStore().openCreateGroup();
+  renderDeclarativeModal(CreateGroupModal);
 
   await CreateGroupModalView.NameInput.setValue("trigger validation");
   await CreateGroupModalView.NameInput.setValue("");

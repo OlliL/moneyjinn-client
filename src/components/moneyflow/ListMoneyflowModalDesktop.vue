@@ -1,9 +1,10 @@
 <template>
   <ModalVue
     :title="$t('General.moneyflow')"
-    ref="modalComponent"
+    id-suffix="ListMoneyflowDesktop"
     :max-width="modalWidth"
     v-if="mmf"
+    v-model:open="open"
   >
     <template #body>
       <DivError :server-errors="serverErrors" />
@@ -128,31 +129,26 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import type { ImportedMoneyflowReceipt } from "@/model/moneyflow/ImportedMoneyflowReceipt";
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 import type { MoneyflowReceipt } from "@/model/moneyflow/MoneyflowReceipt";
 import { mapImportedMoneyflowReceiptToMoneyflowReceipt } from "@/service/mapper/ImportedToMoneyflowReceiptMapper";
 import MoneyflowReceiptService from "@/service/MoneyflowReceiptService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
-import { useForm } from "vee-validate";
-import { computed, ref, useTemplateRef } from "vue";
+import { storeToRefs } from "pinia";
+import { computed, ref, toRaw, watch } from "vue";
 import DivError from "../common/DivError.vue";
 import ModalVue from "../common/Modal.vue";
 import SpanAmount from "../common/SpanAmount.vue";
 import SpanDate from "../common/SpanDate.vue";
 import SpanReceipt from "../common/SpanReceipt.vue";
+import useListMoneyflowModalStore from "./ListMoneyflowModal.store";
 
 const serverErrors = ref(new Array<string>());
 const mmf = ref({} as Moneyflow);
-const modalComponent = useTemplateRef<typeof ModalVue>("modalComponent");
 const receipt = ref({} as MoneyflowReceipt);
-
-const emit = defineEmits<{
-  moneyflowUpdated: [];
-  moneyflowReceiptDeleted: [];
-}>();
-
-const { values, setFieldTouched } = useForm();
+const { open, moneyflow, importedReceipt } = storeToRefs(
+  useListMoneyflowModalStore(),
+);
 
 const modalWidth = computed(() => {
   return receipt.value.receipt
@@ -170,21 +166,26 @@ const rowspan = computed(() => {
   return 1;
 });
 
-const _show = (_mmf: Moneyflow, importedReceipt?: ImportedMoneyflowReceipt) => {
-  mmf.value = _mmf;
-  if (mmf.value.hasReceipt) loadReceipt(mmf.value.id);
-  else if (importedReceipt)
-    receipt.value =
-      mapImportedMoneyflowReceiptToMoneyflowReceipt(importedReceipt);
-  modalComponent.value?._show();
-  Object.keys(values).forEach((field) => setFieldTouched(field, false));
-};
+watch(
+  [open, moneyflow, importedReceipt],
+  ([isVisible, entry, importedReceipt]) => {
+    if (!isVisible || !entry) return;
+
+    mmf.value = structuredClone(toRaw(entry));
+    receipt.value = {} as MoneyflowReceipt;
+    if (mmf.value.hasReceipt) loadReceipt(mmf.value.id);
+    else if (importedReceipt) {
+      receipt.value =
+        mapImportedMoneyflowReceiptToMoneyflowReceipt(importedReceipt);
+    }
+    serverErrors.value = new Array<string>();
+  },
+  { immediate: true },
+);
 
 const loadReceipt = (id: number) => {
   MoneyflowReceiptService.fetchReceipt(id)
     .then((response) => (receipt.value = response))
     .catch((backendError) => handleBackendError(backendError, serverErrors));
 };
-
-defineExpose({ _show });
 </script>

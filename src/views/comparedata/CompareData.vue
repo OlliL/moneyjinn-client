@@ -1,14 +1,4 @@
 <template>
-  <DeleteMoneyflowModal
-    ref="deleteModal"
-    @moneyflow-deleted="restartComparison"
-  />
-  <EditMoneyflowModal
-    ref="editModal"
-    @moneyflow-updated="restartComparison"
-    @moneyflow-created="restartComparison"
-  />
-
   <div class="custom-container space-y-6">
     <div class="text-center">
       <h4 class="text-2xl font-bold">{{ $t("CompareData.title") }}</h4>
@@ -106,9 +96,6 @@
         "
         :capitalsource-id="capitalsourceId"
         :capitalsource-comment="capitalsourceComment"
-        @delete-moneyflow="deleteMoneyflow"
-        @edit-moneyflow="editMoneyflow"
-        @create-moneyflow="createMoneyflow"
       />
       <CompareDataResultMobile
         class="md:hidden"
@@ -126,9 +113,6 @@
         "
         :capitalsource-id="capitalsourceId"
         :capitalsource-comment="capitalsourceComment"
-        @delete-moneyflow="deleteMoneyflow"
-        @edit-moneyflow="editMoneyflow"
-        @create-moneyflow="createMoneyflow"
       />
     </div>
   </div>
@@ -141,12 +125,16 @@ import DivError from "@/components/common/DivError.vue";
 import InputDate from "@/components/common/InputDate.vue";
 import InputFile from "@/components/common/InputFile.vue";
 import SelectStandard from "@/components/common/SelectStandard.vue";
-import DeleteMoneyflowModal from "@/components/moneyflow/DeleteMoneyflowModal.vue";
-import EditMoneyflowModal from "@/components/moneyflow/EditMoneyflowModal.vue";
+import useDeleteMoneyflowModalStore from "@/components/moneyflow/DeleteMoneyflowModal.store";
+import useEditMoneyflowModalStore from "@/components/moneyflow/EditMoneyflowModal.store";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import type { CompareData } from "@/model/comparedata/CompareData";
 import type { CompareDataParameter } from "@/model/comparedata/CompareDataParameter";
+import {
+  CompareDataActionsKey,
+  type CompareDataActions,
+} from "@/model/CrudActions.ts";
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 import type { SelectBoxValue } from "@/model/SelectBoxValue";
 import CompareDataService from "@/service/CompareDataService";
@@ -156,7 +144,7 @@ import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { globErr } from "@/tools/views/ZodUtil";
 import { Eye } from "lucide-vue-next";
 import { useForm } from "vee-validate";
-import { computed, onMounted, ref, useTemplateRef } from "vue";
+import { computed, onMounted, provide, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { any, array as arr, date, instanceof as instof, number } from "zod";
 import CompareDataResultDesktop from "./elements/CompareDataResultDesktop.vue";
@@ -197,9 +185,8 @@ const compareDatasWrongCapitalsource = ref(
 const compareDatasNotInFile = ref({} as Array<CompareData> | undefined);
 const compareDatasNotInDatabase = ref({} as Array<CompareData> | undefined);
 const files = ref({} as FileList);
-
-const deleteModal = useTemplateRef<typeof DeleteMoneyflowModal>("deleteModal");
-const editModal = useTemplateRef<typeof EditMoneyflowModal>("editModal");
+const { openDeleteMoneyflow } = useDeleteMoneyflowModalStore();
+const { openEditMoneyflow } = useEditMoneyflowModalStore();
 
 const { handleSubmit, values, setFieldTouched } = useForm();
 
@@ -362,17 +349,18 @@ const compareData = handleSubmit(async () => {
   }
 });
 
-const deleteMoneyflow = (id: number) => {
-  MoneyflowService.fetchMoneyflow(id).then((mmf) => {
-    deleteModal.value?._show(mmf);
-  });
+const actions: CompareDataActions = {
+  create: (mmf: Moneyflow) =>
+    openEditMoneyflow(mmf, undefined, restartComparison),
+  edit: (id: number) =>
+    MoneyflowService.fetchMoneyflow(id).then((mmf) => {
+      openEditMoneyflow(mmf, undefined, restartComparison);
+    }),
+  delete: (id: number) =>
+    MoneyflowService.fetchMoneyflow(id).then((mmf) => {
+      openDeleteMoneyflow(mmf, restartComparison);
+    }),
 };
-const editMoneyflow = (id: number) => {
-  MoneyflowService.fetchMoneyflow(id).then((mmf) => {
-    editModal.value?._show(mmf);
-  });
-};
-const createMoneyflow = (moneyflow: Moneyflow) => {
-  editModal.value?._show(moneyflow);
-};
+
+provide(CompareDataActionsKey, actions);
 </script>

@@ -57,22 +57,21 @@ import SpanAmount from "@/components/common/SpanAmount.vue";
 import SpanBoolean from "@/components/common/SpanBoolean.vue";
 import SpanDate from "@/components/common/SpanDate.vue";
 import { TableCell, TableRow } from "@/components/ui/table";
+import { PreDefMoneyflowActionsKey } from "@/model/CrudActions";
 import type { PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
 import { Pencil, Trash2 } from "lucide-vue-next";
+import { inject } from "vue";
 
 const props = defineProps<{
   mpm: PreDefMoneyflow;
 }>();
-const emit = defineEmits<{
-  deletePreDefMoneyflow: [preDefMoneyflow: PreDefMoneyflow];
-  editPreDefMoneyflow: [preDefMoneyflow: PreDefMoneyflow];
-}>();
+const actions = inject(PreDefMoneyflowActionsKey)!;
 
 const deletePreDefMoneyflow = () => {
-  emit("deletePreDefMoneyflow", props.mpm);
+  actions.delete(props.mpm);
 };
 
 const editPreDefMoneyflow = () => {
-  emit("editPreDefMoneyflow", props.mpm);
+  actions.edit(props.mpm);
 };
 </script>

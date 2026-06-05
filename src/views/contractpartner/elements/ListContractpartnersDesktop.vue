@@ -35,9 +35,6 @@
           :key="mcp.id"
           v-memo="[mcp.id]"
           :mcp="mcp"
-          @delete-contractpartner="deleteContractpartner"
-          @edit-contractpartner="editContractpartner"
-          @list-contractpartner-accounts="listContractpartnerAccounts"
         />
       </TableBody>
     </DivContentTable>
@@ -59,22 +56,4 @@ import ListContractpartnerRowVue from "./ListContractpartnerRow.vue";
 defineProps<{
   contractpartners: readonly Contractpartner[];
 }>();
-
-const emit = defineEmits<{
-  deleteContractpartner: [mcp: Contractpartner];
-  editContractpartner: [mcp: Contractpartner];
-  listContractpartnerAccounts: [mcp: Contractpartner];
-}>();
-
-const deleteContractpartner = (mcp: Contractpartner) => {
-  emit("deleteContractpartner", mcp);
-};
-
-const editContractpartner = (mcp: Contractpartner) => {
-  emit("editContractpartner", mcp);
-};
-
-const listContractpartnerAccounts = (mcp: Contractpartner) => {
-  emit("listContractpartnerAccounts", mcp);
-};
 </script>

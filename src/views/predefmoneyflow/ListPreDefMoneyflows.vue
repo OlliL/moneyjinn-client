@@ -1,15 +1,5 @@
 <template>
-  <CreatePreDefMoneyflowModalVue
-    ref="createPreDefMoneyflowModalList"
-    id-suffix="List"
-    @pre-def-moneyflow-created="reloadView"
-    @pre-def-moneyflow-updated="reloadView"
-  />
-  <DeletePreDefMoneyflowModalVue
-    ref="deleteModal"
-    id-suffix="List"
-    @pre-def-moneyflow-deleted="reloadView"
-  />
+  <DeletePreDefMoneyflowModal />
 
   <div class="custom-container space-y-6">
     <div class="text-center">
@@ -20,34 +10,31 @@
       v-model="searchString"
       :showValidToggle="false"
       :placeholder="$t('PreDefMoneyflow.searchBy')"
-      @createClicked="showCreatePreDefMoneyflowModal"
+      @createClicked="actions.create"
     />
 
     <DivError :server-errors="serverErrors" />
 
-    <ListPreDefMoneyflowsMobile
-      :pre-def-moneyflows="preDefMoneyflows"
-      @edit-pre-def-moneyflow="editPreDefMoneyflow"
-      @delete-pre-def-moneyflow="deletePreDefMoneyflow"
-    />
+    <ListPreDefMoneyflowsMobile :pre-def-moneyflows="preDefMoneyflows" />
 
-    <ListPreDefMoneyflowsDesktop
-      :pre-def-moneyflows="preDefMoneyflows"
-      @edit-pre-def-moneyflow="editPreDefMoneyflow"
-      @delete-pre-def-moneyflow="deletePreDefMoneyflow"
-    />
+    <ListPreDefMoneyflowsDesktop :pre-def-moneyflows="preDefMoneyflows" />
   </div>
 </template>
 
 <script lang="ts" setup>
 import DivError from "@/components/common/DivError.vue";
 import DivFilter from "@/components/common/DivFilter.vue";
-import CreatePreDefMoneyflowModalVue from "@/components/predefmoneyflow/CreatePreDefMoneyflowModal.vue";
+import { useCreatePreDefMoneyflowModalStore } from "@/components/predefmoneyflow/CreatePreDefMoneyflowModal.store";
+import {
+  PreDefMoneyflowActionsKey,
+  type CrudActions,
+} from "@/model/CrudActions";
 import type { PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
 import PreDefMoneyflowService from "@/service/PreDefMoneyflowService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
-import { onMounted, ref, useTemplateRef, watch } from "vue";
-import DeletePreDefMoneyflowModalVue from "./elements/DeletePreDefMoneyflowModal.vue";
+import { onMounted, provide, ref, watch } from "vue";
+import useDeletePreDefMoneyflowModalStore from "./elements/DeletePreDefMoneyflowModal.store";
+import DeletePreDefMoneyflowModal from "./elements/DeletePreDefMoneyflowModal.vue";
 import ListPreDefMoneyflowsDesktop from "./elements/ListPreDefMoneyflowsDesktop.vue";
 import ListPreDefMoneyflowsMobile from "./elements/ListPreDefMoneyflowsMobile.vue";
 
@@ -57,27 +44,19 @@ const preDefMoneyflows = ref(new Array<PreDefMoneyflow>());
 const allPreDefMoneyflows = ref(new Array<PreDefMoneyflow>());
 const searchString = ref("");
 
-const createPreDefMoneyflowModalList = useTemplateRef<
-  typeof CreatePreDefMoneyflowModalVue
->("createPreDefMoneyflowModalList");
-const deleteModal =
-  useTemplateRef<typeof DeletePreDefMoneyflowModalVue>("deleteModal");
+const { openCreatePreDefMoneyflow, openEditPreDefMoneyflow } =
+  useCreatePreDefMoneyflowModalStore();
+const { openDeletePreDefMoneyflow } = useDeletePreDefMoneyflowModalStore();
 
-const showCreatePreDefMoneyflowModal = () => {
-  createPreDefMoneyflowModalList.value?._show();
+const actions: CrudActions<PreDefMoneyflow> = {
+  create: () => openCreatePreDefMoneyflow(reloadView),
+  edit: (mpm) => openEditPreDefMoneyflow(mpm, reloadView),
+  delete: (mpm) => openDeletePreDefMoneyflow(mpm, reloadView),
 };
 
-const deletePreDefMoneyflow = (mcs: PreDefMoneyflow) => {
-  deleteModal.value?._show(mcs);
-};
+provide(PreDefMoneyflowActionsKey, actions);
 
-const editPreDefMoneyflow = (mcs: PreDefMoneyflow) => {
-  createPreDefMoneyflowModalList.value?._show(mcs);
-};
-
-watch(searchString, () => {
-  searchContent();
-});
+watch(searchString, () => searchContent());
 
 const searchContent = () => {
   if (searchString.value === "") {
