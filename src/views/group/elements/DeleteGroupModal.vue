@@ -2,9 +2,9 @@
   <ModalDelete
     :title="$t('Group.title.delete')"
     id-suffix="DeleteGroup"
-    v-model:server-errors="serverErrors"
     v-model:open="open"
-    @confirm="deleteGroup"
+    :delete-action="() => GroupService.deleteGroup(group.id)"
+    :delete-success-action="onDone"
   >
     <template #details>
       <ModalDeleteRow :label="$t('General.name')" highlight-value>
@@ -18,23 +18,8 @@
 import ModalDelete from "@/components/common/ModalDelete.vue";
 import ModalDeleteRow from "@/components/common/ModalDeleteRow.vue";
 import GroupService from "@/service/GroupService";
-import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { storeToRefs } from "pinia";
-import { ref } from "vue";
 import useDeleteGroupModalStore from "./DeleteGroupModal.store";
 
 const { open, group, onDone } = storeToRefs(useDeleteGroupModalStore());
-
-const serverErrors = ref(new Array<string>());
-
-const deleteGroup = () => {
-  GroupService.deleteGroup(group.value.id)
-    .then(() => {
-      open.value = false;
-      onDone.value?.();
-    })
-    .catch((backendError) => {
-      handleBackendError(backendError, serverErrors);
-    });
-};
 </script>

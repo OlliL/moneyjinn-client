@@ -2,9 +2,11 @@
   <ModalDelete
     :title="$t('PreDefMoneyflow.title.delete')"
     id-suffix="DeletePreDefMoneyflow"
-    v-model:server-errors="serverErrors"
     v-model:open="open"
-    @confirm="deletePreDefMoneyflow"
+    :delete-action="
+      () => PreDefMoneyflowService.deletePreDefMoneyflow(preDefMoneyflow.id)
+    "
+    :delete-success-action="onDone"
   >
     <template #details>
       <ModalDeleteRow :label="$t('General.amount')" highlight-value>
@@ -60,24 +62,10 @@ import SpanAmount from "@/components/common/SpanAmount.vue";
 import SpanBoolean from "@/components/common/SpanBoolean.vue";
 import SpanDate from "@/components/common/SpanDate.vue";
 import PreDefMoneyflowService from "@/service/PreDefMoneyflowService";
-import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { storeToRefs } from "pinia";
-import { ref } from "vue";
 import useDeletePreDefMoneyflowModalStore from "./DeletePreDefMoneyflowModal.store";
 
-const serverErrors = ref(new Array<string>());
 const { open, preDefMoneyflow, onDone } = storeToRefs(
   useDeletePreDefMoneyflowModalStore(),
 );
-
-const deletePreDefMoneyflow = () => {
-  PreDefMoneyflowService.deletePreDefMoneyflow(preDefMoneyflow.value.id)
-    .then(() => {
-      open.value = false;
-      onDone.value?.();
-    })
-    .catch((backendError) => {
-      handleBackendError(backendError, serverErrors);
-    });
-};
 </script>

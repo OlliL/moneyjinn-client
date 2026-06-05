@@ -166,7 +166,7 @@ test("CreatePreDefMoneyflowModal updates an existing predefined moneyflow", asyn
   PreDefMoneyflowServiceMocker.mockUpdatePreDefMoneyflowResolved();
 
   renderDeclarativeModal(CreatePreDefMoneyflowModal);
-  useCreatePreDefMoneyflowModalStore().openCreatePreDefMoneyflow(existingMpm);
+  useCreatePreDefMoneyflowModalStore().openEditPreDefMoneyflow(existingMpm);
 
   await CreatePreDefMoneyflowModalView.CommentInput.setValue("Updated Comment");
   await CreatePreDefMoneyflowModalView.SaveButton.click();

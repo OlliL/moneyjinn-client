@@ -2,9 +2,14 @@
   <ModalDelete
     :title="$t('ContractpartnerMatching.title.delete')"
     id-suffix="DeleteContractpartnerMatching"
-    v-model:server-errors="serverErrors"
     v-model:open="open"
-    @confirm="deleteContractpartnerMatching"
+    :delete-action="
+      () =>
+        ContractpartnerMatchingService.deleteContractpartnerMatching(
+          matching.id,
+        )
+    "
+    :delete-success-action="onDone"
   >
     <template #details>
       <ModalDeleteRow
@@ -38,26 +43,10 @@ import ModalDelete from "@/components/common/ModalDelete.vue";
 import ModalDeleteRow from "@/components/common/ModalDeleteRow.vue";
 import SpanDate from "@/components/common/SpanDate.vue";
 import ContractpartnerMatchingService from "@/service/ContractpartnerMatchingService";
-import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { storeToRefs } from "pinia";
-import { ref } from "vue";
 import useDeleteContractpartnerMatchingModalStore from "./DeleteContractpartnerMatchingModal.store";
 
-const serverErrors = ref(new Array<string>());
 const { open, matching, onDone } = storeToRefs(
   useDeleteContractpartnerMatchingModalStore(),
 );
-
-const deleteContractpartnerMatching = () => {
-  ContractpartnerMatchingService.deleteContractpartnerMatching(
-    matching.value.id,
-  )
-    .then(() => {
-      open.value = false;
-      onDone.value?.();
-    })
-    .catch((backendError) => {
-      handleBackendError(backendError, serverErrors);
-    });
-};
 </script>

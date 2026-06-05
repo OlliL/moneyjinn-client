@@ -2,9 +2,11 @@
   <ModalDelete
     :title="$t('Capitalsource.title.delete')"
     id-suffix="DeleteCapitalsource"
-    v-model:server-errors="serverErrors"
     v-model:open="open"
-    @confirm="deleteCapitalsource"
+    :delete-action="
+      () => CapitalsourceService.deleteCapitalsource(capitalsource.id)
+    "
+    :delete-success-action="onDone"
   >
     <template #details>
       <ModalDeleteRow :label="$t('General.name')" highlight-value>
@@ -46,37 +48,23 @@ import SpanIban from "@/components/common/SpanIban.vue";
 import { capitalsourceStateNames } from "@/model/capitalsource/CapitalsourceState";
 import { capitalsourceTypeNames } from "@/model/capitalsource/CapitalsourceType";
 import CapitalsourceService from "@/service/CapitalsourceService";
-import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { storeToRefs } from "pinia";
-import { computed, ref } from "vue";
+import { computed } from "vue";
 import { useDeleteCapitalsourceModalStore } from "./DeleteCapitalsourceModal.store";
 
 const { open, capitalsource, onDone } = storeToRefs(
   useDeleteCapitalsourceModalStore(),
 );
 
-const serverErrors = ref(new Array<string>());
-
-const typeString = computed(() => {
-  return capitalsource.value?.type === undefined
+const typeString = computed(() =>
+  capitalsource.value?.type === undefined
     ? ""
-    : capitalsourceTypeNames[capitalsource.value.type];
-});
+    : capitalsourceTypeNames[capitalsource.value.type],
+);
 
-const stateString = computed(() => {
-  return capitalsource.value?.state === undefined
+const stateString = computed(() =>
+  capitalsource.value?.state === undefined
     ? ""
-    : capitalsourceStateNames[capitalsource.value.state];
-});
-
-const deleteCapitalsource = () => {
-  CapitalsourceService.deleteCapitalsource(capitalsource.value.id)
-    .then(() => {
-      open.value = false;
-      onDone.value?.();
-    })
-    .catch((backendError) => {
-      handleBackendError(backendError, serverErrors);
-    });
-};
+    : capitalsourceStateNames[capitalsource.value.state],
+);
 </script>

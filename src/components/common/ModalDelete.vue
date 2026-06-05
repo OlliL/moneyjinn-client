@@ -30,13 +30,15 @@
 </template>
 
 <script lang="ts" setup>
-import { watch } from "vue";
+import { ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 
 import { Table, TableBody } from "@/components/ui/table";
 import ButtonDeleteTwoTap from "./ButtonDeleteTwoTap.vue";
 import DivError from "./DivError.vue";
 import ModalVue from "./Modal.vue";
+
+import { handleBackendError } from "@/tools/views/HandleBackendError";
 
 const { t } = useI18n();
 
@@ -46,6 +48,8 @@ const props = withDefaults(
     maxWidth?: string;
     zIndex?: string;
     idSuffix: string;
+    deleteAction: () => Promise<unknown>;
+    deleteSuccessAction?: () => void;
   }>(),
   {
     maxWidth: "",
@@ -53,12 +57,8 @@ const props = withDefaults(
   },
 );
 
-const emit = defineEmits<{
-  confirm: [];
-}>();
-
 const isOpen = defineModel<boolean>("open", { default: false });
-const serverErrors = defineModel<string[]>("serverErrors", { default: [] });
+const serverErrors = ref<string[]>([]);
 
 watch(isOpen, (newVal) => {
   if (newVal) {
@@ -68,6 +68,15 @@ watch(isOpen, (newVal) => {
 
 const handleDelete = () => {
   serverErrors.value = [];
-  emit("confirm");
+
+  props
+    .deleteAction()
+    .then(() => {
+      isOpen.value = false;
+      props.deleteSuccessAction?.();
+    })
+    .catch((backendError) => {
+      handleBackendError(backendError, serverErrors);
+    });
 };
 </script>

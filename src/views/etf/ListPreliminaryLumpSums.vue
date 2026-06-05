@@ -30,10 +30,10 @@
         @select-year="selectYearMobile"
         @select-current-month="selectCurrentMonth"
         @open-edit="
-          showCreateEtfPreliminaryLumpSumModal(
+          showEditEtfPreliminaryLumpSumModal(
             selectedEtfId,
             etfPreliminaryLumpSum!.type,
-            etfPreliminaryLumpSum,
+            etfPreliminaryLumpSum!,
           )
         "
         @open-delete="showDeleteEtfPreliminaryLumpSumModal"
@@ -76,10 +76,10 @@
         @select-year="selectYearMobile"
         @select-current-month="selectCurrentMonth"
         @open-edit="
-          showCreateEtfPreliminaryLumpSumModal(
+          showEditEtfPreliminaryLumpSumModal(
             selectedEtfId,
             etfPreliminaryLumpSum!.type,
-            etfPreliminaryLumpSum,
+            etfPreliminaryLumpSum!,
           )
         "
         @open-delete="showDeleteEtfPreliminaryLumpSumModal"
@@ -191,12 +191,18 @@ const etfPreliminaryLumpSums = ref<Map<string, EtfPreliminaryLumpSum>>(
   new Map(),
 );
 const etfPreliminaryLumpSum = ref<EtfPreliminaryLumpSum | undefined>(undefined);
-const { openCreateEtfPreliminaryLumpSumMonthly } =
-  useCreateEtfPreliminaryLumpSumModalMonthlyStore();
-const { openCreateEtfPreliminaryLumpSumPiece } =
-  useCreateEtfPreliminaryLumpSumModalPieceStore();
-const { openCreateEtfPreliminaryLumpSumYearly } =
-  useCreateEtfPreliminaryLumpSumModalYearlyStore();
+const {
+  openCreateEtfPreliminaryLumpSumMonthly,
+  openEditEtfPreliminaryLumpSumMonthly,
+} = useCreateEtfPreliminaryLumpSumModalMonthlyStore();
+const {
+  openCreateEtfPreliminaryLumpSumPiece,
+  openEditEtfPreliminaryLumpSumPiece,
+} = useCreateEtfPreliminaryLumpSumModalPieceStore();
+const {
+  openCreateEtfPreliminaryLumpSumYearly,
+  openEditEtfPreliminaryLumpSumYearly,
+} = useCreateEtfPreliminaryLumpSumModalYearlyStore();
 const { openDeleteEtfPreliminaryLumpSumMonthly } =
   useDeleteEtfPreliminaryLumpSumModalMonthlyStore();
 const { openDeleteEtfPreliminaryLumpSumPiece } =
@@ -340,17 +346,30 @@ watch(selectedYear, (newVal) => {
   }
 });
 
+const showEditEtfPreliminaryLumpSumModal = (
+  etfId: number | undefined,
+  type: EtfPreliminaryLumpSumType,
+  mep: EtfPreliminaryLumpSum,
+) => {
+  if (type === EtfPreliminaryLumpSumType.AMOUNT_PER_MONTH) {
+    openEditEtfPreliminaryLumpSumMonthly(etfId, mep, reloadView);
+  } else if (type === EtfPreliminaryLumpSumType.AMOUNT_PER_PIECE) {
+    openEditEtfPreliminaryLumpSumPiece(etfId, mep, reloadView);
+  } else {
+    openEditEtfPreliminaryLumpSumYearly(etfId, mep, reloadView);
+  }
+};
+
 const showCreateEtfPreliminaryLumpSumModal = (
   etfId: number | undefined,
   type: EtfPreliminaryLumpSumType,
-  mep?: EtfPreliminaryLumpSum,
 ) => {
   if (type === EtfPreliminaryLumpSumType.AMOUNT_PER_MONTH) {
-    openCreateEtfPreliminaryLumpSumMonthly(etfId, mep, reloadView);
+    openCreateEtfPreliminaryLumpSumMonthly(etfId, reloadView);
   } else if (type === EtfPreliminaryLumpSumType.AMOUNT_PER_PIECE) {
-    openCreateEtfPreliminaryLumpSumPiece(etfId, mep, reloadView);
+    openCreateEtfPreliminaryLumpSumPiece(etfId, reloadView);
   } else {
-    openCreateEtfPreliminaryLumpSumYearly(etfId, mep, reloadView);
+    openCreateEtfPreliminaryLumpSumYearly(etfId, reloadView);
   }
 };
 

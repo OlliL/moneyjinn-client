@@ -2,9 +2,12 @@
   <ModalDelete
     :title="$t('ETFPreliminaryLumpSum.title.delete')"
     id-suffix="DeleteEtfPreliminaryLumpSumMonthly"
-    v-model:server-errors="serverErrors"
     v-model:open="open"
-    @confirm="deleteEtfPreliminaryLumpSum"
+    :delete-action="
+      () =>
+        CrudEtfPreliminaryLumpSumService.deleteEtfPreliminaryLumpSum(lumpSum.id)
+    "
+    :delete-success-action="() => onDone?.(lumpSum)"
   >
     <template #body>
       <div class="space-y-4">
@@ -61,7 +64,6 @@ import SpanAmount from "@/components/common/SpanAmount.vue";
 import { Table, TableBody } from "@/components/ui/table";
 import CrudEtfPreliminaryLumpSumService from "@/service/CrudEtfPreliminaryLumpSumService";
 import { useEtfStore } from "@/stores/EtfStore";
-import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { getMonthName } from "@/tools/views/MonthName";
 import { storeToRefs } from "pinia";
 import { computed, ref, watch } from "vue";
@@ -73,9 +75,7 @@ type RowData = {
 };
 
 const { getEtf } = useEtfStore();
-
 const dataArray = ref([] as Array<RowData>);
-const serverErrors = ref(new Array<string>());
 const etfName = computed(() => getEtf(lumpSum.value.etfId)?.name ?? "");
 
 const { open, lumpSum, onDone } = storeToRefs(
@@ -103,15 +103,4 @@ watch(open, (newVal) => {
     });
   }
 });
-
-const deleteEtfPreliminaryLumpSum = () => {
-  CrudEtfPreliminaryLumpSumService.deleteEtfPreliminaryLumpSum(lumpSum.value.id)
-    .then(() => {
-      open.value = false;
-      onDone.value?.(lumpSum.value);
-    })
-    .catch((backendError) => {
-      handleBackendError(backendError, serverErrors);
-    });
-};
 </script>

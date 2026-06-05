@@ -14,7 +14,17 @@ export const useCreateEtfPreliminaryLumpSumModalMonthlyStore = defineStore(
 
     const openCreateEtfPreliminaryLumpSumMonthly = (
       etfId: number | undefined,
-      entry?: EtfPreliminaryLumpSum,
+      cb?: (lumpSum: EtfPreliminaryLumpSum) => void,
+    ) => {
+      defaultEtfId.value = etfId;
+      lumpSum.value = undefined;
+      onDone.value = cb;
+      open.value = true;
+    };
+
+    const openEditEtfPreliminaryLumpSumMonthly = (
+      etfId: number | undefined,
+      entry: EtfPreliminaryLumpSum,
       cb?: (lumpSum: EtfPreliminaryLumpSum) => void,
     ) => {
       defaultEtfId.value = etfId;
@@ -35,6 +45,7 @@ export const useCreateEtfPreliminaryLumpSumModalMonthlyStore = defineStore(
       defaultEtfId,
       onDone,
       openCreateEtfPreliminaryLumpSumMonthly,
+      openEditEtfPreliminaryLumpSumMonthly,
     };
   },
 );

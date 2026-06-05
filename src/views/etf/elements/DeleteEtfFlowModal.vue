@@ -2,9 +2,9 @@
   <ModalDelete
     :title="$t('ETFFlow.title.delete')"
     id-suffix="DeleteEtfFlow"
-    v-model:server-errors="serverErrors"
     v-model:open="open"
-    @confirm="deleteEtfFlow"
+    :delete-action="() => CrudEtfFlowService.deleteEtfFlow(flow.etfflowid)"
+    :delete-success-action="() => onDone?.(flow)"
   >
     <template #details>
       <ModalDeleteRow :label="$t('ETFFlow.bookingdate')" highlight-value>
@@ -33,40 +33,20 @@ import SpanAmount from "@/components/common/SpanAmount.vue";
 import CrudEtfFlowService from "@/service/CrudEtfFlowService";
 import { formatDateWithTime } from "@/tools/views/FormatDate";
 import { formatNumber, redIfNegative } from "@/tools/views/FormatNumber";
-import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { storeToRefs } from "pinia";
-import { computed, ref } from "vue";
+import { computed } from "vue";
 import useDeleteEtfFlowModalStore from "./DeleteEtfFlowModal.store";
 
 const { open, flow, etfName, onDone } = storeToRefs(
   useDeleteEtfFlowModalStore(),
 );
 
-const serverErrors = ref(new Array<string>());
-
-const amountClass = computed(() => {
-  return redIfNegative(flow.value.amount);
-});
-const amountString = computed(() => {
-  return formatNumber(flow.value.amount, 6);
-});
-
-const timestampString = computed(() => {
-  return (
+const amountClass = computed(() => redIfNegative(flow.value.amount));
+const amountString = computed(() => formatNumber(flow.value.amount, 6));
+const timestampString = computed(
+  () =>
     formatDateWithTime(flow.value.timestamp) +
     ":" +
-    String(flow.value.nanoseconds + 1000000000).substring(1, 4) //80000000 -> 1080000000 -> 080
-  );
-});
-
-const deleteEtfFlow = () => {
-  CrudEtfFlowService.deleteEtfFlow(flow.value.etfflowid)
-    .then(() => {
-      open.value = false;
-      onDone.value?.(flow.value);
-    })
-    .catch((backendError) => {
-      handleBackendError(backendError, serverErrors);
-    });
-};
+    String(flow.value.nanoseconds + 1000000000).substring(1, 4), //80000000 -> 1080000000 -> 080
+);
 </script>

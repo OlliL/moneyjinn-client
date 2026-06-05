@@ -2,9 +2,9 @@
   <ModalDelete
     :title="$t('User.title.delete')"
     id-suffix="DeleteUser"
-    v-model:server-errors="serverErrors"
     v-model:open="open"
-    @confirm="deleteUser"
+    :delete-action="() => UserService.deleteUser(user.id)"
+    :delete-success-action="onDone"
   >
     <template #details>
       <ModalDeleteRow :label="$t('General.name')" highlight-value>
@@ -32,27 +32,11 @@ import ModalDeleteRow from "@/components/common/ModalDeleteRow.vue";
 import SpanBoolean from "@/components/common/SpanBoolean.vue";
 import { userRoleNames } from "@/model/user/UserRole";
 import UserService from "@/service/UserService";
-import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { storeToRefs } from "pinia";
-import { computed, ref } from "vue";
+import { computed } from "vue";
 import useDeleteUserModalStore from "./DeleteUserModal.store";
 
 const { open, user, onDone } = storeToRefs(useDeleteUserModalStore());
 
-const serverErrors = ref(new Array<string>());
-
-const role = computed(() => {
-  return userRoleNames[user.value.role];
-});
-
-const deleteUser = () => {
-  UserService.deleteUser(user.value.id)
-    .then(() => {
-      open.value = false;
-      onDone.value?.();
-    })
-    .catch((backendError) => {
-      handleBackendError(backendError, serverErrors);
-    });
-};
+const role = computed(() => userRoleNames[user.value.role]);
 </script>

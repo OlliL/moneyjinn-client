@@ -3,9 +3,14 @@
     :title="$t('ContractpartnerAccount.title.delete')"
     z-index="2001"
     id-suffix="DeleteContractpartnerAccount"
-    v-model:server-errors="serverErrors"
     v-model:open="open"
-    @confirm="deleteContractpartnerAccount"
+    :delete-action="
+      () =>
+        ContractpartnerAccountService.deleteContractpartnerAccount(
+          account?.id ?? 0,
+        )
+    "
+    :delete-success-action="onDone"
   >
     <template #details>
       <ModalDeleteRow :label="$t('General.iban')" highlight-value>
@@ -27,25 +32,10 @@ import ModalDeleteRow from "@/components/common/ModalDeleteRow.vue";
 import SpanDate from "@/components/common/SpanDate.vue";
 import SpanIban from "@/components/common/SpanIban.vue";
 import ContractpartnerAccountService from "@/service/ContractpartnerAccountService";
-import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { storeToRefs } from "pinia";
-import { ref } from "vue";
 import useDeleteContractpartnerAccountModalStore from "./DeleteContractpartnerAccountModal.store";
 
 const { open, account, onDone } = storeToRefs(
   useDeleteContractpartnerAccountModalStore(),
 );
-
-const serverErrors = ref(new Array<string>());
-
-const deleteContractpartnerAccount = () => {
-  ContractpartnerAccountService.deleteContractpartnerAccount(account.value!.id)
-    .then(() => {
-      open.value = false;
-      onDone.value?.();
-    })
-    .catch((backendError) => {
-      handleBackendError(backendError, serverErrors);
-    });
-};
 </script>

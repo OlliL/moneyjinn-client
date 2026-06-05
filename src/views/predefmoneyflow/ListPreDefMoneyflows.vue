@@ -44,22 +44,19 @@ const preDefMoneyflows = ref(new Array<PreDefMoneyflow>());
 const allPreDefMoneyflows = ref(new Array<PreDefMoneyflow>());
 const searchString = ref("");
 
-const { openCreatePreDefMoneyflow } = useCreatePreDefMoneyflowModalStore();
+const { openCreatePreDefMoneyflow, openEditPreDefMoneyflow } =
+  useCreatePreDefMoneyflowModalStore();
 const { openDeletePreDefMoneyflow } = useDeletePreDefMoneyflowModalStore();
 
 const actions: CrudActions<PreDefMoneyflow> = {
-  create: () => openCreatePreDefMoneyflow(undefined, reloadView),
-  edit: (preDefMoneyflow) =>
-    openCreatePreDefMoneyflow(preDefMoneyflow, reloadView),
-  delete: (preDefMoneyflow) =>
-    openDeletePreDefMoneyflow(preDefMoneyflow, reloadView),
+  create: () => openCreatePreDefMoneyflow(reloadView),
+  edit: (mpm) => openEditPreDefMoneyflow(mpm, reloadView),
+  delete: (mpm) => openDeletePreDefMoneyflow(mpm, reloadView),
 };
 
 provide(PreDefMoneyflowActionsKey, actions);
 
-watch(searchString, () => {
-  searchContent();
-});
+watch(searchString, () => searchContent());
 
 const searchContent = () => {
   if (searchString.value === "") {

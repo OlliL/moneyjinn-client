@@ -12,7 +12,15 @@ export const useCreatePreDefMoneyflowModalStore = defineStore(
     );
 
     const openCreatePreDefMoneyflow = (
-      entry?: PreDefMoneyflow,
+      cb?: (entry: PreDefMoneyflow) => void,
+    ) => {
+      preDefMoneyflow.value = undefined;
+      onDone.value = cb;
+      open.value = true;
+    };
+
+    const openEditPreDefMoneyflow = (
+      entry: PreDefMoneyflow,
       cb?: (entry: PreDefMoneyflow) => void,
     ) => {
       preDefMoneyflow.value = entry;
@@ -35,6 +43,7 @@ export const useCreatePreDefMoneyflowModalStore = defineStore(
       preDefMoneyflow,
       onDone,
       openCreatePreDefMoneyflow,
+      openEditPreDefMoneyflow,
       close,
     };
   },
