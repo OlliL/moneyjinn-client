@@ -96,9 +96,6 @@
         "
         :capitalsource-id="capitalsourceId"
         :capitalsource-comment="capitalsourceComment"
-        @delete-moneyflow="deleteMoneyflow"
-        @edit-moneyflow="editMoneyflow"
-        @create-moneyflow="createMoneyflow"
       />
       <CompareDataResultMobile
         class="md:hidden"
@@ -116,9 +113,6 @@
         "
         :capitalsource-id="capitalsourceId"
         :capitalsource-comment="capitalsourceComment"
-        @delete-moneyflow="deleteMoneyflow"
-        @edit-moneyflow="editMoneyflow"
-        @create-moneyflow="createMoneyflow"
       />
     </div>
   </div>
@@ -137,6 +131,10 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import type { CompareData } from "@/model/comparedata/CompareData";
 import type { CompareDataParameter } from "@/model/comparedata/CompareDataParameter";
+import {
+  CompareDataActionsKey,
+  type CompareDataActions,
+} from "@/model/CrudActions.ts";
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 import type { SelectBoxValue } from "@/model/SelectBoxValue";
 import CompareDataService from "@/service/CompareDataService";
@@ -146,7 +144,7 @@ import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { globErr } from "@/tools/views/ZodUtil";
 import { Eye } from "lucide-vue-next";
 import { useForm } from "vee-validate";
-import { computed, onMounted, ref } from "vue";
+import { computed, onMounted, provide, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { any, array as arr, date, instanceof as instof, number } from "zod";
 import CompareDataResultDesktop from "./elements/CompareDataResultDesktop.vue";
@@ -351,17 +349,18 @@ const compareData = handleSubmit(async () => {
   }
 });
 
-const deleteMoneyflow = (id: number) => {
-  MoneyflowService.fetchMoneyflow(id).then((mmf) => {
-    openDeleteMoneyflow(mmf, restartComparison);
-  });
+const actions: CompareDataActions = {
+  create: (mmf: Moneyflow) =>
+    openEditMoneyflow(mmf, undefined, restartComparison),
+  edit: (id: number) =>
+    MoneyflowService.fetchMoneyflow(id).then((mmf) => {
+      openEditMoneyflow(mmf, undefined, restartComparison);
+    }),
+  delete: (id: number) =>
+    MoneyflowService.fetchMoneyflow(id).then((mmf) => {
+      openDeleteMoneyflow(mmf, restartComparison);
+    }),
 };
-const editMoneyflow = (id: number) => {
-  MoneyflowService.fetchMoneyflow(id).then((mmf) => {
-    openEditMoneyflow(mmf, undefined, restartComparison);
-  });
-};
-const createMoneyflow = (moneyflow: Moneyflow) => {
-  openEditMoneyflow(moneyflow, undefined, restartComparison);
-};
+
+provide(CompareDataActionsKey, actions);
 </script>

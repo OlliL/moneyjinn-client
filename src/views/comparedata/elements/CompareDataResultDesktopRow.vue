@@ -28,7 +28,7 @@
         variant="ghost"
         size="icon"
         :data-testid="`compare-data-edit-${mmf.id}`"
-        @click="editMoneyflow"
+        @click="moneyflowActions?.edit(mmf.id)"
         :title="$t('General.edit')"
         class="action-icon-button"
       >
@@ -43,7 +43,7 @@
         variant="ghost"
         size="icon"
         :data-testid="`compare-data-delete-${mmf.id}`"
-        @click="deleteMoneyflow"
+        @click="moneyflowActions?.delete(mmf.id)"
         :title="$t('General.delete')"
         class="action-icon-button"
       >
@@ -100,20 +100,17 @@
   <TableRow class="border-b-2 border-black"></TableRow>
 </template>
 <script lang="ts" setup>
-import { Pencil, Plus, Trash2 } from "lucide-vue-next";
-import { computed } from "vue";
-
-import { Button } from "@/components/ui/button";
-import { TableCell, TableRow } from "@/components/ui/table";
-
 import SpanAmount from "@/components/common/SpanAmount.vue";
 import SpanDate from "@/components/common/SpanDate.vue";
-
-import { useUserSessionStore } from "@/stores/UserSessionStore";
-
 import SpanImportComment from "@/components/common/SpanImportComment.vue";
+import { Button } from "@/components/ui/button";
+import { TableCell, TableRow } from "@/components/ui/table";
 import type { CompareDataDataset } from "@/model/comparedata/CompareDataDataset";
+import { CompareDataActionsKey } from "@/model/CrudActions";
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
+import { useUserSessionStore } from "@/stores/UserSessionStore";
+import { Pencil, Plus, Trash2 } from "lucide-vue-next";
+import { computed, inject } from "vue";
 
 const props = defineProps<{
   mmf?: Moneyflow;
@@ -124,22 +121,12 @@ const props = defineProps<{
 }>();
 
 const userSessionStore = useUserSessionStore();
-const emit = defineEmits<{
-  deleteMoneyflow: [id: number];
-  editMoneyflow: [id: number];
-  createMoneyflow: [moneyflow: Moneyflow];
-}>();
 
 const isOwnMoneyflow = computed(() => {
   return props.mmf ? props.mmf.userId === userSessionStore.getUserId : false;
 });
 
-const deleteMoneyflow = () => {
-  if (props.mmf) emit("deleteMoneyflow", props.mmf.id);
-};
-const editMoneyflow = () => {
-  if (props.mmf) emit("editMoneyflow", props.mmf.id);
-};
+const moneyflowActions = inject(CompareDataActionsKey);
 const createMoneyflow = () => {
   const moneyflowToCreate: Moneyflow = {
     id: 0,
@@ -156,6 +143,6 @@ const createMoneyflow = () => {
     postingAccountName: props.importData?.postingAccountName,
     contractpartnerMatchingId: props.importData?.contractpartnerMatchingId,
   } as Moneyflow;
-  emit("createMoneyflow", moneyflowToCreate);
+  moneyflowActions?.create(moneyflowToCreate);
 };
 </script>

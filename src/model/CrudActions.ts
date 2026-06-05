@@ -6,6 +6,7 @@ import type { ContractpartnerMatching } from "./contractpartnermatching/Contract
 import type { Etf } from "./etf/Etf";
 import type { EtfFlow } from "./etf/EtfFlow";
 import type { Group } from "./group/Group";
+import type { Moneyflow } from "./moneyflow/Moneyflow";
 import type { PreDefMoneyflow } from "./moneyflow/PreDefMoneyflow";
 import type { PostingAccount } from "./postingaccount/PostingAccount";
 import type { User } from "./user/User";
@@ -69,3 +70,11 @@ export const ContractpartnerMatchingActionsKey: InjectionKey<
 
 export const MonthlySettlementModalActionsKey: InjectionKey<MonthlySettlementModalActions> =
   Symbol("MonthlySettlementModalActions");
+
+export type CompareDataActions = {
+  create: (mmf: Moneyflow) => void; // bzw. was openEditMoneyflow zurückgibt
+  edit: (id: number) => Promise<void>;
+  delete: (id: number) => Promise<void>;
+};
+export const CompareDataActionsKey: InjectionKey<CompareDataActions> =
+  Symbol("CompareDataActions");

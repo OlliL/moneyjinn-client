@@ -57,19 +57,12 @@ const props = defineProps<{
   owner: boolean;
 }>();
 
-const importAllowedColorClass = computed(() => {
-  return props.mcs.importAllowed > 0 ? "text-green-600" : "text-red-600";
-});
-
-const importAllowedString = computed(() => {
-  return capitalsourceImportNames[props.mcs.importAllowed];
-});
-
-const typeString = computed(() => {
-  return capitalsourceTypeNames[props.mcs.type];
-});
-
-const stateString = computed(() => {
-  return capitalsourceStateNames[props.mcs.state];
-});
+const importAllowedColorClass = computed(() =>
+  props.mcs.importAllowed > 0 ? "text-green-600" : "text-red-600",
+);
+const importAllowedString = computed(
+  () => capitalsourceImportNames[props.mcs.importAllowed],
+);
+const typeString = computed(() => capitalsourceTypeNames[props.mcs.type]);
+const stateString = computed(() => capitalsourceStateNames[props.mcs.state]);
 </script>

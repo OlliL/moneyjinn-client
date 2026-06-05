@@ -72,9 +72,6 @@
                 :import-data="data.compareDataDataset"
                 :capitalsource-id="capitalsourceId"
                 :capitalsource-comment="capitalsourceComment"
-                @delete-moneyflow="$emit('deleteMoneyflow', $event)"
-                @edit-moneyflow="$emit('editMoneyflow', $event)"
-                @create-moneyflow="$emit('createMoneyflow', $event)"
               />
             </TableBody>
           </Table>
@@ -94,7 +91,6 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import type { CompareData } from "@/model/comparedata/CompareData";
-import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 import { ChevronDown, ChevronRight } from "lucide-vue-next";
 import { computed, ref } from "vue";
 import CompareDataResultDesktopRowVue from "./CompareDataResultDesktopRow.vue";
@@ -109,11 +105,6 @@ const props = defineProps<{
 }>();
 
 const isCollapsed = ref(false);
-defineEmits<{
-  deleteMoneyflow: [id: number];
-  editMoneyflow: [id: number];
-  createMoneyflow: [moneyflow: Moneyflow];
-}>();
 
 const toggleCollapse = () => {
   isCollapsed.value = !isCollapsed.value;

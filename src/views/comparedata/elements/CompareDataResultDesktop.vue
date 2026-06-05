@@ -20,7 +20,6 @@
         :amount-class="compareDatasNotInDatabaseCountClass"
         :capitalsource-id="capitalsourceId"
         :capitalsource-comment="capitalsourceComment"
-        @create-moneyflow="$emit('createMoneyflow', $event)"
       />
       <CompareDataResultDesktopGroupVue
         :comment="$t('CompareData.dataNotInSourceInDb')"
@@ -29,9 +28,6 @@
         :amount-class="compareDatasNotInFileCountClass"
         :capitalsource-id="capitalsourceId"
         :capitalsource-comment="capitalsourceComment"
-        @delete-moneyflow="$emit('deleteMoneyflow', $event)"
-        @edit-moneyflow="$emit('editMoneyflow', $event)"
-        @create-moneyflow="$emit('createMoneyflow', $event)"
       />
       <CompareDataResultDesktopGroupVue
         :comment="$t('CompareData.dataMatchingButWrongCapitalsource')"
@@ -40,9 +36,6 @@
         :amount-class="compareDatasWrongCapitalsourceCountClass"
         :capitalsource-id="capitalsourceId"
         :capitalsource-comment="capitalsourceComment"
-        @delete-moneyflow="$emit('deleteMoneyflow', $event)"
-        @edit-moneyflow="$emit('editMoneyflow', $event)"
-        @create-moneyflow="$emit('createMoneyflow', $event)"
       />
       <CompareDataResultDesktopGroupVue
         :comment="$t('CompareData.dataMatching')"
@@ -51,9 +44,6 @@
         :amount-class="compareDatasMatchingCountClass"
         :capitalsource-id="capitalsourceId"
         :capitalsource-comment="capitalsourceComment"
-        @delete-moneyflow="$emit('deleteMoneyflow', $event)"
-        @edit-moneyflow="$emit('editMoneyflow', $event)"
-        @create-moneyflow="$emit('createMoneyflow', $event)"
       />
     </TableBody>
   </DivContentTable>
@@ -68,7 +58,6 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import type { CompareData } from "@/model/comparedata/CompareData";
-import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 import CompareDataResultDesktopGroupVue from "./CompareDataResultDesktopGroup.vue";
 
 defineProps<{
@@ -82,11 +71,5 @@ defineProps<{
   compareDatasNotInDatabaseCountClass: string;
   capitalsourceId: number;
   capitalsourceComment: string;
-}>();
-
-defineEmits<{
-  deleteMoneyflow: [id: number];
-  editMoneyflow: [id: number];
-  createMoneyflow: [moneyflow: Moneyflow];
 }>();
 </script>
