@@ -166,14 +166,7 @@ import type { ReportTurnoverCapitalsource } from "@/model/report/ReportTurnoverC
 import ReportService from "@/service/ReportService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { isDesktop } from "@/tools/views/IsDesktop";
-import {
-  computed,
-  onBeforeUnmount,
-  onMounted,
-  ref,
-  watch,
-  type PropType,
-} from "vue";
+import { computed, onBeforeUnmount, onMounted, ref, watch } from "vue";
 import CapitalsourceSummary from "./CapitalsourceSummary.vue";
 import CapitalsourceTableDesktop from "./CapitalsourceTableDesktop.vue";
 import CapitalsourceTableMobile from "./CapitalsourceTableMobile.vue";
@@ -190,7 +183,6 @@ const dataLoaded = defineModel("dataLoaded", {
 });
 
 const sortBy = defineModel<Map<keyof Moneyflow, boolean>>("sortBy", {
-  type: Object as PropType<Map<keyof Moneyflow, boolean>>,
   required: true,
 });
 const { openDeleteMoneyflow } = useDeleteMoneyflowModalStore();
