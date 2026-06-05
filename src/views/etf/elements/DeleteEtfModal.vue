@@ -1,8 +1,8 @@
 <template>
   <ModalDelete
     :title="$t('ETF.title.delete')"
-    :server-errors="serverErrors"
     id-suffix="DeleteEtf"
+    v-model:server-errors="serverErrors"
     v-model:open="open"
     @confirm="deleteEtf"
   >
@@ -32,20 +32,14 @@ import ModalDeleteRow from "@/components/common/ModalDeleteRow.vue";
 import CrudEtfService from "@/service/CrudEtfService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { storeToRefs } from "pinia";
-import { ref, watch } from "vue";
+import { ref } from "vue";
 import useDeleteEtfModalStore from "./DeleteEtfModal.store";
 
 const { open, etf, onDone } = storeToRefs(useDeleteEtfModalStore());
 
 const serverErrors = ref(new Array<string>());
 
-watch(open, (newVal) => {
-  if (newVal) serverErrors.value = new Array<string>();
-});
-
 const deleteEtf = () => {
-  serverErrors.value = new Array<string>();
-
   CrudEtfService.deleteEtf(etf.value.id)
     .then(() => {
       open.value = false;

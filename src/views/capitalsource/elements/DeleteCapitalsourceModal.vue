@@ -1,8 +1,8 @@
 <template>
   <ModalDelete
     :title="$t('Capitalsource.title.delete')"
-    :server-errors="serverErrors"
     id-suffix="DeleteCapitalsource"
+    v-model:server-errors="serverErrors"
     v-model:open="open"
     @confirm="deleteCapitalsource"
   >
@@ -48,7 +48,7 @@ import { capitalsourceTypeNames } from "@/model/capitalsource/CapitalsourceType"
 import CapitalsourceService from "@/service/CapitalsourceService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { storeToRefs } from "pinia";
-import { computed, ref, watch } from "vue";
+import { computed, ref } from "vue";
 import { useDeleteCapitalsourceModalStore } from "./DeleteCapitalsourceModal.store";
 
 const { open, capitalsource, onDone } = storeToRefs(
@@ -69,13 +69,7 @@ const stateString = computed(() => {
     : capitalsourceStateNames[capitalsource.value.state];
 });
 
-watch(open, (newVal) => {
-  if (newVal) serverErrors.value = new Array<string>();
-});
-
 const deleteCapitalsource = () => {
-  serverErrors.value = new Array<string>();
-
   CapitalsourceService.deleteCapitalsource(capitalsource.value.id)
     .then(() => {
       open.value = false;

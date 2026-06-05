@@ -1,9 +1,9 @@
 <template>
   <ModalDelete
     :title="$t('ETFPreliminaryLumpSum.title.delete')"
-    :server-errors="serverErrors"
-    v-model:open="open"
     id-suffix="DeleteEtfPreliminaryLumpSumYearly"
+    v-model:server-errors="serverErrors"
+    v-model:open="open"
     @confirm="deleteEtfPreliminaryLumpSum"
   >
     <template #details>
@@ -30,7 +30,7 @@ import CrudEtfPreliminaryLumpSumService from "@/service/CrudEtfPreliminaryLumpSu
 import { useEtfStore } from "@/stores/EtfStore";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { storeToRefs } from "pinia";
-import { computed, ref, watch } from "vue";
+import { computed, ref } from "vue";
 import useDeleteEtfPreliminaryLumpSumModalYearlyStore from "./DeleteEtfPreliminaryLumpSumModalYearly.store";
 
 const { getEtf } = useEtfStore();
@@ -43,8 +43,6 @@ const { open, lumpSum, onDone } = storeToRefs(
 );
 
 const deleteEtfPreliminaryLumpSum = () => {
-  serverErrors.value = new Array<string>();
-
   CrudEtfPreliminaryLumpSumService.deleteEtfPreliminaryLumpSum(lumpSum.value.id)
     .then(() => {
       open.value = false;
@@ -54,8 +52,4 @@ const deleteEtfPreliminaryLumpSum = () => {
       handleBackendError(backendError, serverErrors);
     });
 };
-
-watch(open, (newVal) => {
-  if (newVal) serverErrors.value = new Array<string>();
-});
 </script>

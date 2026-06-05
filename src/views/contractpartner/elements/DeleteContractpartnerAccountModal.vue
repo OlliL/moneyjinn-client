@@ -1,9 +1,9 @@
 <template>
   <ModalDelete
     :title="$t('ContractpartnerAccount.title.delete')"
-    :server-errors="serverErrors"
     z-index="2001"
     id-suffix="DeleteContractpartnerAccount"
+    v-model:server-errors="serverErrors"
     v-model:open="open"
     @confirm="deleteContractpartnerAccount"
   >
@@ -29,7 +29,7 @@ import SpanIban from "@/components/common/SpanIban.vue";
 import ContractpartnerAccountService from "@/service/ContractpartnerAccountService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { storeToRefs } from "pinia";
-import { ref, watch } from "vue";
+import { ref } from "vue";
 import useDeleteContractpartnerAccountModalStore from "./DeleteContractpartnerAccountModal.store";
 
 const { open, account, onDone } = storeToRefs(
@@ -38,13 +38,7 @@ const { open, account, onDone } = storeToRefs(
 
 const serverErrors = ref(new Array<string>());
 
-watch(open, (newVal) => {
-  if (newVal) serverErrors.value = new Array<string>();
-});
-
 const deleteContractpartnerAccount = () => {
-  serverErrors.value = new Array<string>();
-
   ContractpartnerAccountService.deleteContractpartnerAccount(account.value!.id)
     .then(() => {
       open.value = false;

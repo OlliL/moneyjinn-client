@@ -30,6 +30,7 @@
 </template>
 
 <script lang="ts" setup>
+import { watch } from "vue";
 import { useI18n } from "vue-i18n";
 
 import { Table, TableBody } from "@/components/ui/table";
@@ -42,7 +43,6 @@ const { t } = useI18n();
 const props = withDefaults(
   defineProps<{
     title: string;
-    serverErrors: Array<string>;
     maxWidth?: string;
     zIndex?: string;
     idSuffix: string;
@@ -58,8 +58,16 @@ const emit = defineEmits<{
 }>();
 
 const isOpen = defineModel<boolean>("open", { default: false });
+const serverErrors = defineModel<string[]>("serverErrors", { default: [] });
+
+watch(isOpen, (newVal) => {
+  if (newVal) {
+    serverErrors.value = [];
+  }
+});
 
 const handleDelete = () => {
+  serverErrors.value = [];
   emit("confirm");
 };
 </script>

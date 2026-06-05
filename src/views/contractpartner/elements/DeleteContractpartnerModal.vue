@@ -1,8 +1,8 @@
 <template>
   <ModalDelete
     :title="$t('Contractpartner.title.delete')"
-    :server-errors="serverErrors"
     id-suffix="DeleteContractpartner"
+    v-model:server-errors="serverErrors"
     v-model:open="open"
     @confirm="deleteContractpartner"
   >
@@ -35,7 +35,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, watch } from "vue";
+import { ref } from "vue";
 
 import ModalDelete from "@/components/common/ModalDelete.vue";
 import ModalDeleteRow from "@/components/common/ModalDeleteRow.vue";
@@ -52,13 +52,7 @@ const { open, contractpartner, onDone } = storeToRefs(
 
 const serverErrors = ref(new Array<string>());
 
-watch(open, (newVal) => {
-  if (newVal) serverErrors.value = new Array<string>();
-});
-
 const deleteContractpartner = () => {
-  serverErrors.value = new Array<string>();
-
   ContractpartnerService.deleteContractpartner(contractpartner.value!.id)
     .then(() => {
       open.value = false;

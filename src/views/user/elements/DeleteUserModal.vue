@@ -1,8 +1,8 @@
 <template>
   <ModalDelete
     :title="$t('User.title.delete')"
-    :server-errors="serverErrors"
     id-suffix="DeleteUser"
+    v-model:server-errors="serverErrors"
     v-model:open="open"
     @confirm="deleteUser"
   >
@@ -34,26 +34,18 @@ import { userRoleNames } from "@/model/user/UserRole";
 import UserService from "@/service/UserService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { storeToRefs } from "pinia";
-import { computed, ref, watch } from "vue";
+import { computed, ref } from "vue";
 import useDeleteUserModalStore from "./DeleteUserModal.store";
 
 const { open, user, onDone } = storeToRefs(useDeleteUserModalStore());
 
 const serverErrors = ref(new Array<string>());
 
-watch(open, (newVal) => {
-  if (newVal) {
-    serverErrors.value = new Array<string>();
-  }
-});
-
 const role = computed(() => {
   return userRoleNames[user.value.role];
 });
 
 const deleteUser = () => {
-  serverErrors.value = new Array<string>();
-
   UserService.deleteUser(user.value.id)
     .then(() => {
       open.value = false;

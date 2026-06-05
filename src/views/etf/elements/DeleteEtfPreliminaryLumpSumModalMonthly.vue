@@ -1,9 +1,9 @@
 <template>
   <ModalDelete
     :title="$t('ETFPreliminaryLumpSum.title.delete')"
-    :server-errors="serverErrors"
-    v-model:open="open"
     id-suffix="DeleteEtfPreliminaryLumpSumMonthly"
+    v-model:server-errors="serverErrors"
+    v-model:open="open"
     @confirm="deleteEtfPreliminaryLumpSum"
   >
     <template #body>
@@ -84,8 +84,6 @@ const { open, lumpSum, onDone } = storeToRefs(
 
 watch(open, (newVal) => {
   if (newVal) {
-    serverErrors.value = new Array<string>();
-
     const amounts = [
       lumpSum.value.amountJanuary,
       lumpSum.value.amountFebruary,
@@ -107,8 +105,6 @@ watch(open, (newVal) => {
 });
 
 const deleteEtfPreliminaryLumpSum = () => {
-  serverErrors.value = new Array<string>();
-
   CrudEtfPreliminaryLumpSumService.deleteEtfPreliminaryLumpSum(lumpSum.value.id)
     .then(() => {
       open.value = false;

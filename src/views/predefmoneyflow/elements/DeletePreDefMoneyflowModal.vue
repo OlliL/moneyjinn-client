@@ -1,8 +1,8 @@
 <template>
   <ModalDelete
     :title="$t('PreDefMoneyflow.title.delete')"
-    :server-errors="serverErrors"
     id-suffix="DeletePreDefMoneyflow"
+    v-model:server-errors="serverErrors"
     v-model:open="open"
     @confirm="deletePreDefMoneyflow"
   >
@@ -62,7 +62,7 @@ import SpanDate from "@/components/common/SpanDate.vue";
 import PreDefMoneyflowService from "@/service/PreDefMoneyflowService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { storeToRefs } from "pinia";
-import { ref, watch } from "vue";
+import { ref } from "vue";
 import useDeletePreDefMoneyflowModalStore from "./DeletePreDefMoneyflowModal.store";
 
 const serverErrors = ref(new Array<string>());
@@ -70,15 +70,7 @@ const { open, preDefMoneyflow, onDone } = storeToRefs(
   useDeletePreDefMoneyflowModalStore(),
 );
 
-watch(open, (newVal) => {
-  if (newVal) {
-    serverErrors.value = new Array<string>();
-  }
-});
-
 const deletePreDefMoneyflow = () => {
-  serverErrors.value = new Array<string>();
-
   PreDefMoneyflowService.deletePreDefMoneyflow(preDefMoneyflow.value.id)
     .then(() => {
       open.value = false;

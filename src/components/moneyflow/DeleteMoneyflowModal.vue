@@ -1,8 +1,8 @@
 <template>
   <ModalDelete
     :title="$t('Moneyflow.title.delete')"
-    :server-errors="serverErrors"
     id-suffix="DeleteMoneyflow"
+    v-model:server-errors="serverErrors"
     v-model:open="open"
     @confirm="deleteMoneyflow"
   >
@@ -40,7 +40,7 @@
 
 <script lang="ts" setup>
 import { storeToRefs } from "pinia";
-import { ref, watch } from "vue";
+import { ref } from "vue";
 import useDeleteMoneyflowModalStore from "./DeleteMoneyflowModal.store";
 
 import ModalDelete from "../common/ModalDelete.vue";
@@ -55,18 +55,7 @@ const serverErrors = ref(new Array<string>());
 
 const { open, moneyflow, onDone } = storeToRefs(useDeleteMoneyflowModalStore());
 
-watch(
-  [open, moneyflow],
-  ([isVisible, entry]) => {
-    if (!isVisible || !entry) return;
-    serverErrors.value = new Array<string>();
-  },
-  { immediate: true },
-);
-
 const deleteMoneyflow = () => {
-  serverErrors.value = new Array<string>();
-
   MoneyflowService.deleteMoneyflow(moneyflow.value.id)
     .then(() => {
       open.value = false;

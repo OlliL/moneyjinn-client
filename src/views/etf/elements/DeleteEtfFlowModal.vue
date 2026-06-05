@@ -1,8 +1,8 @@
 <template>
   <ModalDelete
     :title="$t('ETFFlow.title.delete')"
-    :server-errors="serverErrors"
     id-suffix="DeleteEtfFlow"
+    v-model:server-errors="serverErrors"
     v-model:open="open"
     @confirm="deleteEtfFlow"
   >
@@ -35,7 +35,7 @@ import { formatDateWithTime } from "@/tools/views/FormatDate";
 import { formatNumber, redIfNegative } from "@/tools/views/FormatNumber";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { storeToRefs } from "pinia";
-import { computed, ref, watch } from "vue";
+import { computed, ref } from "vue";
 import useDeleteEtfFlowModalStore from "./DeleteEtfFlowModal.store";
 
 const { open, flow, etfName, onDone } = storeToRefs(
@@ -59,13 +59,7 @@ const timestampString = computed(() => {
   );
 });
 
-watch(open, (newVal) => {
-  if (newVal) serverErrors.value = new Array<string>();
-});
-
 const deleteEtfFlow = () => {
-  serverErrors.value = new Array<string>();
-
   CrudEtfFlowService.deleteEtfFlow(flow.value.etfflowid)
     .then(() => {
       open.value = false;
