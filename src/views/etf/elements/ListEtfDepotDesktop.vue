@@ -181,11 +181,6 @@ const props = defineProps<{
 
 const currentTab = defineModel<"effective" | "all">("currentTab");
 const { getEtf } = useEtfStore();
-const emit = defineEmits<{
-  deleteEtfFlow: [etfFlow: EtfFlow];
-  editEtfFlow: [etfFlow: EtfFlow];
-}>();
-
 const updateTab = (value: string | number) => {
   if (value === "effective" || value === "all") {
     currentTab.value = value;

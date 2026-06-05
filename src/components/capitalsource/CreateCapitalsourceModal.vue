@@ -170,11 +170,6 @@ const { open, capitalsource, onDone } = storeToRefs(
   useCreateCapitalsourceModalStore(),
 );
 
-const emit = defineEmits<{
-  capitalsourceUpdated: [capitalsource: Capitalsource];
-  capitalsourceCreated: [capitalsource: Capitalsource];
-}>();
-
 const groupUseValues = [
   { id: undefined, value: "" },
   { id: false, value: t("General.no") },

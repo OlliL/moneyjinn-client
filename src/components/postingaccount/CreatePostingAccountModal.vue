@@ -72,12 +72,6 @@ const origMpa = ref({} as PostingAccount | undefined);
 const { open, postingAccount, onDone } = storeToRefs(
   useCreatePostingAccountModalStore(),
 );
-
-const emit = defineEmits<{
-  postingAccountCreated: [postingAccount: PostingAccount];
-  postingAccountUpdated: [postingAccount: PostingAccount];
-}>();
-
 const { handleSubmit, values, setFieldTouched } = useForm();
 
 const schema: Partial<{ [key in keyof PostingAccount]: ZodType }> = {
@@ -128,9 +122,6 @@ const createPostingAccount = handleSubmit(() => {
 
       open.value = false;
       onDone.value?.(mpa.value);
-      isUpdate
-        ? emit("postingAccountUpdated", mpa.value)
-        : emit("postingAccountCreated", mpa.value);
     })
     .catch((backendError) => {
       handleBackendError(backendError, serverErrors);

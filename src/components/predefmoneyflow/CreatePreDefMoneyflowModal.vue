@@ -317,11 +317,6 @@ const mpm = ref({} as PreDefMoneyflow);
 const origMpm = ref({} as PreDefMoneyflow | undefined);
 const validityDate = new Date();
 validityDate.setHours(0, 0, 0, 0);
-const emit = defineEmits<{
-  preDefMoneyflowCreated: [preDefMoneyflow: PreDefMoneyflow];
-  preDefMoneyflowUpdated: [preDefMoneyflow: PreDefMoneyflow];
-}>();
-
 const isPopoverOpen = ref(false);
 const randomColors = ref<string[]>([]);
 const hoveredColor = ref<string | null>(null);
@@ -396,7 +391,6 @@ const createPreDefMoneyflow = handleSubmit(() => {
     PreDefMoneyflowService.updatePreDefMoneyflow(mpm.value)
       .then(() => {
         close();
-        emit("preDefMoneyflowUpdated", mpm.value);
         (onDone.value as any)?.(mpm.value);
       })
       .catch((backendError) => {
@@ -408,7 +402,6 @@ const createPreDefMoneyflow = handleSubmit(() => {
       .then((_mpm) => {
         mpm.value = _mpm;
         close();
-        emit("preDefMoneyflowCreated", mpm.value);
         (onDone.value as any)?.(mpm.value);
       })
       .catch((backendError) => {

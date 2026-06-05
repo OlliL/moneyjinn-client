@@ -208,12 +208,6 @@ const origMcp = ref({} as Contractpartner | undefined);
 const { open, contractpartner, onDone } = storeToRefs(
   useCreateContractpartnerModalStore(),
 );
-
-const emit = defineEmits<{
-  contractpartnerCreated: [contractpartner: Contractpartner];
-  contractpartnerUpdated: [contractpartner: Contractpartner];
-}>();
-
 const { handleSubmit, values, setFieldTouched } = useForm();
 
 const title = computed(() => {
@@ -265,9 +259,6 @@ const createContractpartner = handleSubmit(() => {
 
       open.value = false;
       onDone.value?.(mcp.value);
-      isUpdate
-        ? emit("contractpartnerUpdated", mcp.value)
-        : emit("contractpartnerCreated", mcp.value);
     })
     .catch((backendError) => {
       handleBackendError(backendError, serverErrors);

@@ -144,11 +144,6 @@ const { close } = useCreateMoneyflowQuickModalStore();
 const { open, preDefMoneyflow, onDone } = storeToRefs(
   useCreateMoneyflowQuickModalStore(),
 );
-
-const emit = defineEmits<{
-  bookingFinished: [moneyflow: Moneyflow];
-}>();
-
 const preDef = ref({} as PreDefMoneyflow);
 const serverErrors = ref(new Array<string>());
 
@@ -208,9 +203,8 @@ const book = handleSubmit(() => {
 
   MoneyflowService.createMoneyflow(mmf, preDef.value.id, false)
     .then(() => {
-      emit("bookingFinished", mmf);
       close();
-      (onDone.value as any)?.(mmf);
+      onDone.value?.(mmf);
     })
     .catch((error) => handleBackendError(error, serverErrors));
 });
