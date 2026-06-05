@@ -69,7 +69,7 @@
                 variant="ghost"
                 size="icon"
                 class="h-7 w-7"
-                @click.stop="moneyflowActions?.edit(mmf.id)"
+                @click.stop="moneyflowActions.edit(mmf.id)"
               >
                 <Pencil class="icon-small" />
               </Button>
@@ -77,7 +77,7 @@
                 variant="ghost"
                 size="icon"
                 class="h-7 w-7 text-destructive"
-                @click.stop="moneyflowActions?.delete(mmf.id)"
+                @click.stop="moneyflowActions.delete(mmf.id)"
               >
                 <Trash2 class="icon-small" />
               </Button>
@@ -299,7 +299,7 @@ const isHeroComment = computed(() => {
   );
 });
 
-const moneyflowActions = inject(CompareDataActionsKey);
+const moneyflowActions = inject(CompareDataActionsKey)!;
 
 const createMoneyflow = () => {
   if (!props.importData) return;
@@ -316,7 +316,7 @@ const createMoneyflow = () => {
     postingAccountName: props.importData.postingAccountName,
     contractpartnerMatchingId: props.importData?.contractpartnerMatchingId,
   } as Moneyflow;
-  moneyflowActions?.create(moneyflowToCreate);
+  moneyflowActions.create(moneyflowToCreate);
 };
 </script>
 

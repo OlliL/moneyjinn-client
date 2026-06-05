@@ -28,7 +28,7 @@
         variant="ghost"
         size="icon"
         :data-testid="`compare-data-edit-${mmf.id}`"
-        @click="moneyflowActions?.edit(mmf.id)"
+        @click="moneyflowActions.edit(mmf.id)"
         :title="$t('General.edit')"
         class="action-icon-button"
       >
@@ -43,7 +43,7 @@
         variant="ghost"
         size="icon"
         :data-testid="`compare-data-delete-${mmf.id}`"
-        @click="moneyflowActions?.delete(mmf.id)"
+        @click="moneyflowActions.delete(mmf.id)"
         :title="$t('General.delete')"
         class="action-icon-button"
       >
@@ -126,7 +126,7 @@ const isOwnMoneyflow = computed(() => {
   return props.mmf ? props.mmf.userId === userSessionStore.getUserId : false;
 });
 
-const moneyflowActions = inject(CompareDataActionsKey);
+const moneyflowActions = inject(CompareDataActionsKey)!;
 const createMoneyflow = () => {
   const moneyflowToCreate: Moneyflow = {
     id: 0,
@@ -143,6 +143,6 @@ const createMoneyflow = () => {
     postingAccountName: props.importData?.postingAccountName,
     contractpartnerMatchingId: props.importData?.contractpartnerMatchingId,
   } as Moneyflow;
-  moneyflowActions?.create(moneyflowToCreate);
+  moneyflowActions.create(moneyflowToCreate);
 };
 </script>

@@ -14,7 +14,7 @@
           v-if="mmf.hasReceipt"
           variant="ghost"
           size="icon"
-          @click="moneyflowActions?.receipt(mmf.id)"
+          @click="moneyflowActions.receipt(mmf.id)"
           :title="$t('Receipt.receipt')"
           :aria-label="$t('Receipt.receipt')"
           class="action-icon-button"
@@ -78,7 +78,7 @@
             variant="ghost"
             size="icon"
             :data-testid="`display-moneyflow-edit-${mmf.id}`"
-            @click="moneyflowActions?.edit(mmf)"
+            @click="moneyflowActions.edit(mmf)"
             :title="$t('General.edit')"
             class="action-icon-button"
           >
@@ -90,7 +90,7 @@
             variant="ghost"
             size="icon"
             :data-testid="`display-moneyflow-delete-${mmf.id}`"
-            @click="moneyflowActions?.delete(mmf)"
+            @click="moneyflowActions.delete(mmf)"
             :title="$t('General.delete')"
             class="action-icon-button"
           >
@@ -105,7 +105,7 @@
             variant="ghost"
             size="icon"
             :data-testid="`display-moneyflow-list-${mmf.id}`"
-            @click="moneyflowActions?.list(mmf)"
+            @click="moneyflowActions.list(mmf)"
             :title="$t('General.moneyflow')"
             class="action-icon-button"
           >
@@ -180,5 +180,5 @@ const tableRows = computed(() => {
     },
   ];
 });
-const moneyflowActions = inject(MoneyflowRowActionsKey);
+const moneyflowActions = inject(MoneyflowRowActionsKey)!;
 </script>

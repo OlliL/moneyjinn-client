@@ -124,9 +124,9 @@
                             :key="moneyflow.id"
                             :mmf="moneyflow"
                             :receipt-id="receipt.id"
-                            @delete-moneyflow="emitDeleteMoneyflow"
-                            @edit-moneyflow="emitEditMoneyflow"
-                            @list-moneyflow="emitListMoneyflow"
+                            @delete-moneyflow="deleteMoneyflow"
+                            @edit-moneyflow="editMoneyflow"
+                            @list-moneyflow="listMoneyflow"
                           />
                         </TableBody>
                       </Table>
@@ -138,9 +138,9 @@
                         :key="'mobile-' + moneyflow.id"
                         :mmf="moneyflow"
                         :v-model="selectedMoneyflowId"
-                        @delete-moneyflow="emitDeleteMoneyflow"
-                        @edit-moneyflow="emitEditMoneyflow"
-                        @list-moneyflow="emitListMoneyflow"
+                        @delete-moneyflow="deleteMoneyflow"
+                        @edit-moneyflow="editMoneyflow"
+                        @list-moneyflow="listMoneyflow"
                       />
                     </div>
                   </RadioGroup>
@@ -250,14 +250,14 @@ const moneyflowReceipt = computed(() =>
   mapImportedMoneyflowReceiptToMoneyflowReceipt(props.receipt),
 );
 
-const emitDeleteMoneyflow = (id: number) => {
-  importReceiptActions?.delete(id);
+const deleteMoneyflow = (id: number) => {
+  importReceiptActions.delete(id);
 };
-const emitEditMoneyflow = (id: number) => {
-  importReceiptActions?.edit(id, props.receipt);
+const editMoneyflow = (id: number) => {
+  importReceiptActions.edit(id, props.receipt);
 };
-const emitListMoneyflow = (id: number) => {
-  importReceiptActions?.list(id, props.receipt);
+const listMoneyflow = (id: number) => {
+  importReceiptActions.list(id, props.receipt);
 };
 
 const searchMoneyflows = handleSubmit(() => {
@@ -322,7 +322,7 @@ const importReceipt = () => {
     });
 };
 
-const importReceiptActions = inject(ImportReceiptRowActionsKey);
+const importReceiptActions = inject(ImportReceiptRowActionsKey)!;
 
 const deleteMoneyflowReceipt = () => {
   serverErrors.value = new Array<string>();
@@ -331,7 +331,7 @@ const deleteMoneyflowReceipt = () => {
     props.receipt.id,
   )
     .then(() => {
-      importReceiptActions?.removeReceipt(props.receipt.id);
+      importReceiptActions.removeReceipt(props.receipt.id);
     })
     .catch((backendError) => {
       handleBackendError(backendError, serverErrors);

@@ -93,7 +93,7 @@
               variant="ghost"
               size="icon"
               class="h-7 w-7"
-              @click.stop="moneyflowActions?.receipt(mmf.id)"
+              @click.stop="moneyflowActions.receipt(mmf.id)"
             >
               <ReceiptText class="icon-small" />
             </Button>
@@ -103,7 +103,7 @@
               variant="ghost"
               size="icon"
               class="h-7 w-7"
-              @click.stop="moneyflowActions?.edit(mmf)"
+              @click.stop="moneyflowActions.edit(mmf)"
             >
               <Pencil class="icon-small" />
             </Button>
@@ -113,7 +113,7 @@
               variant="ghost"
               size="icon"
               class="h-7 w-7 text-destructive"
-              @click.stop="moneyflowActions?.delete(mmf)"
+              @click.stop="moneyflowActions.delete(mmf)"
             >
               <Trash2 class="icon-small" />
             </Button>
@@ -123,7 +123,7 @@
               variant="ghost"
               size="icon"
               class="h-7 w-7"
-              @click.stop="moneyflowActions?.list(mmf)"
+              @click.stop="moneyflowActions.list(mmf)"
             >
               <Eye class="icon-small" />
             </Button>
@@ -274,5 +274,5 @@ const isFuture = computed(() => {
 const lesserOpacityIfFuture = computed(() =>
   isFuture.value ? "opacity-50" : "",
 );
-const moneyflowActions = inject(MoneyflowRowActionsKey);
+const moneyflowActions = inject(MoneyflowRowActionsKey)!;
 </script>
