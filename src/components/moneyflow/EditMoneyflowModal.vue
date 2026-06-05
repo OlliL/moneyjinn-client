@@ -54,7 +54,11 @@
               </div>
             </div>
             <div class="flex-1">
-              <EditMoneyflowBase :mmf-to-edit="mmf" ref="editMoneyflowVue" />
+              <EditMoneyflowBase
+                :mmf-to-edit="mmf"
+                ref="editMoneyflowVue"
+                :fillContractpartnerDefaults="true"
+              />
             </div>
           </div>
         </div>
@@ -135,7 +139,6 @@ watch(
   [open, moneyflow, importedReceipt],
   ([isVisible, entry, importedReceipt]) => {
     if (!isVisible || !entry) return;
-
     mmf.value = structuredClone(toRaw(entry));
     receipt.value = {} as MoneyflowReceipt;
     if (mmf.value.hasReceipt) loadReceipt(mmf.value.id);
