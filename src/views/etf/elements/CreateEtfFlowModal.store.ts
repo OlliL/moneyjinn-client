@@ -10,25 +10,23 @@ export const useCreateEtfFlowModalStore = defineStore(
     const defaultEtfId = ref<number | undefined>(undefined);
     const onDone = ref<((etfFlow: EtfFlow) => void) | undefined>(undefined);
 
-    const openCreateEtfFlow = (context?: {
-      defaultEtfId: number | undefined;
-      onDone?: (etfFlow: EtfFlow) => void;
-    }) => {
-      defaultEtfId.value = context?.defaultEtfId;
-      onDone.value = context?.onDone;
+    const openCreateEtfFlow = (
+      etfId: number | undefined,
+      cb?: (etfFlow: EtfFlow) => void,
+    ) => {
+      defaultEtfId.value = etfId;
+      onDone.value = cb;
       flow.value = undefined;
       open.value = true;
     };
 
     const openEditEtfFlow = (
       entry: EtfFlow,
-      context?: {
-        defaultEtfId: number | undefined;
-        onDone?: (etfFlow: EtfFlow) => void;
-      },
+      etfId: number | undefined,
+      cb?: (etfFlow: EtfFlow) => void,
     ) => {
-      defaultEtfId.value = context?.defaultEtfId;
-      onDone.value = context?.onDone;
+      defaultEtfId.value = etfId;
+      onDone.value = cb;
       flow.value = entry;
       open.value = true;
     };

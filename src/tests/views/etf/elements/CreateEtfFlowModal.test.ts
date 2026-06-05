@@ -66,7 +66,7 @@ test("creates a new etf flow with time formatting", async () => {
   CrudEtfFlowServiceMocker.mockCreateEtfFlowResolved({ etfflowid: 1 } as any);
   renderDeclarativeModal(CreateEtfFlowModal);
   const modalStore = useCreateEtfFlowModalStore();
-  modalStore.openCreateEtfFlow({ defaultEtfId: 1 });
+  modalStore.openCreateEtfFlow(1);
 
   await CreateEtfFlowModalView.Modal.assertOpen();
 
@@ -91,7 +91,7 @@ test("creates a new etf flow with time formatting", async () => {
 test("validation: mandatory fields are required", async () => {
   renderDeclarativeModal(CreateEtfFlowModal);
   const modalStore = useCreateEtfFlowModalStore();
-  modalStore.openCreateEtfFlow({ defaultEtfId: 1 });
+  modalStore.openCreateEtfFlow(1);
 
   await CreateEtfFlowModalView.Modal.assertOpen();
 

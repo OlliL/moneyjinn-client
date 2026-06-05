@@ -264,25 +264,15 @@ const handleServerResponse = (etfDepot: EtfDepot, etfId: number) => {
 
 const actions: CrudActions<EtfFlow> = {
   create: () => createEtfFlow(),
-  edit: (etfFlow) =>
-    openEditEtfFlow(etfFlow, {
-      defaultEtfId: selectedEtfId.value,
-      onDone: etfFlowDone,
-    }),
+  edit: (etfFlow) => openEditEtfFlow(etfFlow, selectedEtfId.value, etfFlowDone),
   delete: (etfFlow) =>
-    openDeleteEtfFlow(etfFlow, {
-      etfName: selectedEtf.value.name ?? "",
-      onDone: etfFlowDone,
-    }),
+    openDeleteEtfFlow(etfFlow, selectedEtf.value.name ?? "", etfFlowDone),
 };
 
 provide(EtfFlowActionsKey, actions);
 
 const createEtfFlow = () => {
-  openCreateEtfFlow({
-    defaultEtfId: selectedEtfId.value,
-    onDone: etfFlowDone,
-  });
+  openCreateEtfFlow(selectedEtfId.value, etfFlowDone);
 };
 
 const etfFlowDone = (etfFlow: EtfFlow) => loadData(etfFlow.etfId);

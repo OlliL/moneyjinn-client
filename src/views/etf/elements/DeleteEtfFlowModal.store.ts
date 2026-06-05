@@ -12,13 +12,11 @@ export const useDeleteEtfFlowModalStore = defineStore(
 
     const openDeleteEtfFlow = (
       entry: EtfFlow,
-      context?: {
-        etfName: string;
-        onDone?: (etfFlow: EtfFlow) => void;
-      },
+      name: string,
+      cb?: (etfFlow: EtfFlow) => void,
     ) => {
-      etfName.value = context?.etfName ?? "";
-      onDone.value = context?.onDone;
+      etfName.value = name ?? "";
+      onDone.value = cb;
       flow.value = entry;
       open.value = true;
     };
