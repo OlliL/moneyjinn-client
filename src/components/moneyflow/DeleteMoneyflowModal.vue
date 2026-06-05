@@ -8,31 +8,31 @@
   >
     <template #details>
       <ModalDeleteRow :label="$t('General.amount')" highlight-value>
-        <SpanAmount :amount="mmf.amount" />
+        <SpanAmount :amount="moneyflow.amount" />
       </ModalDeleteRow>
 
       <ModalDeleteRow :label="$t('Moneyflow.bookingdate')">
-        <SpanDate :date="mmf.bookingDate" />
+        <SpanDate :date="moneyflow.bookingDate" />
       </ModalDeleteRow>
 
       <ModalDeleteRow :label="$t('Moneyflow.invoicedate')">
-        <SpanDate :date="mmf.invoiceDate" />
+        <SpanDate :date="moneyflow.invoiceDate" />
       </ModalDeleteRow>
 
       <ModalDeleteRow :label="$t('General.contractpartner')">
-        {{ mmf.contractpartnerName }}
+        {{ moneyflow.contractpartnerName }}
       </ModalDeleteRow>
 
       <ModalDeleteRow :label="$t('General.capitalsource')">
-        {{ mmf.capitalsourceComment }}
+        {{ moneyflow.capitalsourceComment }}
       </ModalDeleteRow>
 
       <ModalDeleteRow :label="$t('General.comment')">
-        {{ mmf.comment }}
+        {{ moneyflow.comment }}
       </ModalDeleteRow>
 
       <ModalDeleteRow :label="$t('General.postingAccount')">
-        {{ mmf.postingAccountName }}
+        {{ moneyflow.postingAccountName }}
       </ModalDeleteRow>
     </template>
   </ModalDelete>
@@ -48,21 +48,17 @@ import ModalDeleteRow from "../common/ModalDeleteRow.vue";
 import SpanAmount from "../common/SpanAmount.vue";
 import SpanDate from "../common/SpanDate.vue";
 
-import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
-
 import MoneyflowService from "@/service/MoneyflowService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 
 const serverErrors = ref(new Array<string>());
 
-const mmf = ref({} as Moneyflow);
 const { open, moneyflow, onDone } = storeToRefs(useDeleteMoneyflowModalStore());
 
 watch(
   [open, moneyflow],
   ([isVisible, entry]) => {
     if (!isVisible || !entry) return;
-    mmf.value = entry;
     serverErrors.value = new Array<string>();
   },
   { immediate: true },
@@ -71,10 +67,10 @@ watch(
 const deleteMoneyflow = () => {
   serverErrors.value = new Array<string>();
 
-  MoneyflowService.deleteMoneyflow(mmf.value.id)
+  MoneyflowService.deleteMoneyflow(moneyflow.value.id)
     .then(() => {
       open.value = false;
-      onDone.value?.(mmf.value);
+      onDone.value?.(moneyflow.value);
     })
     .catch((backendError) => {
       handleBackendError(backendError, serverErrors);
