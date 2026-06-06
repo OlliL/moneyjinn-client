@@ -8,10 +8,8 @@
       :is="Modal.Content"
       :data-testid="`app-modal-${props.idSuffix}`"
       :class="[
-        'sm:max-w-lg',
-        props.maxWidth
-          ? props.maxWidth
-          : 'w-full max-w-full md:max-w-[calc(100%-2rem)]',
+        isDesktopConst ? 'sm:max-w-lg' : 'w-full max-w-full',
+        isDesktopConst ? props.maxWidth || 'md:max-w-[calc(100%-2rem)]' : '',
         'max-h-[95dvh] md:max-h-[90vh]',
         'flex flex-col gap-4 p-3 md:p-6 overflow-hidden',
       ]"
