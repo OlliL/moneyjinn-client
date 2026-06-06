@@ -108,7 +108,7 @@ onMounted(() => {
     userIsNew.value = false;
   }
   if (userIsNew.value) {
-    toast.warning(getErrorMessage(ErrorCode.PASSWORD_MUST_BE_CHANGED), {
+    toast.error(getErrorMessage(ErrorCode.PASSWORD_MUST_BE_CHANGED), {
       duration: Infinity,
     });
   }

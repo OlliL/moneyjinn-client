@@ -106,3 +106,5 @@ Object.defineProperty(globalThis, "matchMedia", {
     dispatchEvent: vi.fn(),
   })),
 });
+
+vi.mock("vue-sonner", () => ({ toast: { error: vi.fn(), dismiss: vi.fn() } }));

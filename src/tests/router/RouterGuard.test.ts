@@ -100,7 +100,7 @@ test("reloads and cancels navigation when target equals source fullPath", async 
   mockIsLoggedIn.mockResolvedValueOnce(true);
   useUserSessionStore().setUserSession({
     userId: 1,
-    userName: "oliver",
+    userName: "username",
     userIsAdmin: true,
     userCanLogin: true,
     userIsNew: false,

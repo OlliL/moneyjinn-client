@@ -12,7 +12,6 @@ const { mockRouterPush } = vi.hoisted(() => ({
   mockRouterPush: vi.fn(),
 }));
 
-vi.mock("vue-sonner", () => ({ toast: { error: vi.fn(), dismiss: vi.fn() } }));
 vi.mock("@/router", async () => {
   const actual = await vi.importActual<typeof import("@/router")>("@/router");
   return {
@@ -40,11 +39,11 @@ test("LoginView logs in and redirects to home", async () => {
 
   render(LoginView);
 
-  await LoginViewPage.UsernameInput.setValue("oliver");
+  await LoginViewPage.UsernameInput.setValue("username");
   await LoginViewPage.PasswordInput.setValue("secret");
   await LoginViewPage.SubmitButton.click();
 
-  await assertHaveBeenCalledWith(UserService.login, "oliver", "secret");
+  await assertHaveBeenCalledWith(UserService.login, "username", "secret");
   await assertHaveBeenCalledWith(router.push, { name: Routes.Home });
 });
 

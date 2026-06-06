@@ -99,7 +99,7 @@ beforeEach(() => {
   mockClearAuthTokens.mockResolvedValue(undefined);
   useUserSessionStore().setUserSession({
     userId: 7,
-    userName: "oliver",
+    userName: "username",
     userIsAdmin: true,
     userCanLogin: true,
     userIsNew: false,

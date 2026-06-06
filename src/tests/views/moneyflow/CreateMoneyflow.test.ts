@@ -35,7 +35,6 @@ import { render } from "@testing-library/vue";
 import { createPinia, setActivePinia } from "pinia";
 import { beforeEach, test, vi } from "vitest";
 
-vi.mock("vue-sonner", () => ({ toast: { error: vi.fn(), dismiss: vi.fn() } }));
 vi.mock("@/service/PreDefMoneyflowService");
 vi.mock("@/service/PostingAccountService");
 vi.mock("@/service/ContractpartnerService");

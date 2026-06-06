@@ -25,7 +25,6 @@ import "@testing-library/jest-dom/vitest";
 import { createPinia, setActivePinia } from "pinia";
 import { beforeEach, expect, test, vi } from "vitest";
 
-vi.mock("vue-sonner", () => ({ toast: { error: vi.fn(), dismiss: vi.fn() } }));
 vi.mock("@/service/CrudEtfService");
 
 class CreateEtfModalView {

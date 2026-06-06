@@ -33,7 +33,6 @@ class ImportReceiptsView {
   }
 }
 
-vi.mock("vue-sonner", () => ({ toast: { error: vi.fn(), dismiss: vi.fn() } }));
 vi.mock("@/service/MoneyflowService");
 
 const mockReceipts = [
