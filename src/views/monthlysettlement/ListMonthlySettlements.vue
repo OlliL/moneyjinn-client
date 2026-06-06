@@ -35,8 +35,6 @@
       @select-month="selectMonth"
     />
 
-    <DivError :server-errors="serverErrors" />
-
     <ShowMontlySettlementVue
       v-if="dataLoaded"
       :year="Number(selectedYear)"
@@ -47,7 +45,6 @@
 </template>
 
 <script lang="ts" setup>
-import DivError from "@/components/common/DivError.vue";
 import { useEditMonthlySettlementModalStore } from "@/components/monthlysettlement/EditMonthlySettlementModal.store";
 import { MonthlySettlementModalActionsKey } from "@/model/CrudActions";
 import router, { Routes } from "@/router";
@@ -61,8 +58,6 @@ import DeleteMonthlySettlementModal from "./elements/DeleteMonthlySettlementModa
 import ListMonthlySettlementsDesktop from "./elements/ListMonthlySettlementsDesktop.vue";
 import ListMonthlySettlementsMobile from "./elements/ListMonthlySettlementsMobile.vue";
 import ShowMontlySettlementVue from "./elements/ShowMonthlySettlement.vue";
-
-const serverErrors = ref(new Array<string>());
 
 const dataLoaded = ref(false);
 const months = ref([] as number[]);
@@ -109,7 +104,6 @@ const monthName = computed(() =>
 
 const loadMonth = (year?: string, month?: number) => {
   dataLoaded.value = false;
-  serverErrors.value = new Array<string>();
 
   MonthlySettlementService.getAvailableMonth(Number(year), month)
     .then((response) => {
@@ -130,7 +124,7 @@ const loadMonth = (year?: string, month?: number) => {
       dataLoaded.value = true;
     })
     .catch((backendError) => {
-      handleBackendError(backendError, serverErrors);
+      handleBackendError(backendError);
     });
 };
 

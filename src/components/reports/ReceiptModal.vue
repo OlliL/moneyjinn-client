@@ -7,7 +7,6 @@
     z-index="2500"
   >
     <template #body>
-      <DivError :server-errors="serverErrors" />
       <div class="w-full md:max-h-[calc(100vh-240px)] overflow-y-auto pr-1">
         <SpanReceipt :receipt="receipt" />
       </div>
@@ -31,12 +30,10 @@ import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { storeToRefs } from "pinia";
 import { ref, watch } from "vue";
 import ButtonDeleteTwoTap from "../common/ButtonDeleteTwoTap.vue";
-import DivError from "../common/DivError.vue";
 import ModalVue from "../common/Modal.vue";
 import SpanReceipt from "../common/SpanReceipt.vue";
 import useReceiptModalStore from "./ReceiptModal.store";
 
-const serverErrors = ref(new Array<string>());
 const { close } = useReceiptModalStore();
 const { open, moneyflowId, importedReceipt } = storeToRefs(
   useReceiptModalStore(),
@@ -52,7 +49,6 @@ watch(
       const targetImportedReceipt = importedReceipt.value as
         | ImportedMoneyflowReceipt
         | undefined;
-      serverErrors.value = new Array<string>();
 
       MoneyflowReceiptService.fetchReceipt(targetMoneyflowId)
         .then((response) => {
@@ -63,7 +59,7 @@ watch(
             );
         })
         .catch((backendError) => {
-          handleBackendError(backendError, serverErrors);
+          handleBackendError(backendError);
         });
     }
   },
@@ -75,7 +71,7 @@ const deleteMoneyflowReceipt = () => {
       close();
     })
     .catch((backendError) => {
-      handleBackendError(backendError, serverErrors);
+      handleBackendError(backendError);
     });
 };
 </script>

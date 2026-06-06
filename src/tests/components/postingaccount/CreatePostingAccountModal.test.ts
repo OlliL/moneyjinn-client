@@ -24,6 +24,7 @@ import {
   InputView,
   ModalView,
   renderDeclarativeModal,
+  ToastView,
 } from "@/tests/TestViews";
 import "@testing-library/jest-dom/vitest";
 import { createPinia, setActivePinia } from "pinia";
@@ -46,7 +47,7 @@ class CreatePostingAccountModalView {
   static readonly NameError = new AlertView(
     "name-CreatePostingAccount-error-item",
   );
-  static readonly ServerErrorItem = new AlertView("serverError-item");
+  static readonly Toast = new ToastView();
 }
 
 beforeEach(async () => {
@@ -147,7 +148,7 @@ test("shows server errors on failure", async () => {
   await CreatePostingAccountModalView.NameInput.setValue("Valid Name");
   await CreatePostingAccountModalView.SaveButton.click();
 
-  await CreatePostingAccountModalView.ServerErrorItem.assertMessageContains(
+  await CreatePostingAccountModalView.Toast.assertError(
     "Backend Error Message",
   );
   await CreatePostingAccountModalView.Modal.assertOpen();

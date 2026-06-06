@@ -11,8 +11,6 @@
         id="createPreDefMoneyflowForm"
       >
         <div class="space-y-4">
-          <DivError :server-errors="serverErrors" />
-
           <div class="form-section space-y-4">
             <div class="grid grid-cols-2 sm:grid-cols-24 gap-4">
               <div class="col-span-1 sm:col-span-7">
@@ -276,7 +274,6 @@ import { useI18n } from "vue-i18n";
 import { boolean, number, string, type ZodType } from "zod";
 import SelectCapitalsource from "../capitalsource/SelectCapitalsource.vue";
 import ButtonSubmit from "../common/ButtonSubmit.vue";
-import DivError from "../common/DivError.vue";
 import FavoriteIcon from "../common/FavoriteIcon.vue";
 import InputStandard from "../common/InputStandard.vue";
 import ModalVue from "../common/Modal.vue";
@@ -289,8 +286,6 @@ const { close } = useCreatePreDefMoneyflowModalStore();
 const { open, preDefMoneyflow, onDone } = storeToRefs(
   useCreatePreDefMoneyflowModalStore(),
 );
-
-const serverErrors = ref(new Array<string>());
 
 const schema: Partial<{ [key in keyof PreDefMoneyflow]: ZodType }> = {
   amount: amountSchema(t("Moneyflow.validation.amount")),
@@ -379,13 +374,10 @@ const resetForm = () => {
     mpm.value.favoriteColor = randomColors.value[0];
   }
   isPopoverOpen.value = false;
-  serverErrors.value = new Array<string>();
   Object.keys(values).forEach((field) => setFieldTouched(field, false));
 };
 
 const createPreDefMoneyflow = handleSubmit(() => {
-  serverErrors.value = new Array<string>();
-
   if (mpm.value.id > 0) {
     //update
     PreDefMoneyflowService.updatePreDefMoneyflow(mpm.value)
@@ -394,7 +386,7 @@ const createPreDefMoneyflow = handleSubmit(() => {
         (onDone.value as any)?.(mpm.value);
       })
       .catch((backendError) => {
-        handleBackendError(backendError, serverErrors);
+        handleBackendError(backendError);
       });
   } else {
     //create
@@ -405,7 +397,7 @@ const createPreDefMoneyflow = handleSubmit(() => {
         (onDone.value as any)?.(mpm.value);
       })
       .catch((backendError) => {
-        handleBackendError(backendError, serverErrors);
+        handleBackendError(backendError);
       });
   }
 });

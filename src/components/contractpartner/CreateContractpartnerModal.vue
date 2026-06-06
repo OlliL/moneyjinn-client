@@ -11,8 +11,6 @@
         id="createContractpartnerForm"
         class="space-y-6"
       >
-        <DivError :server-errors="serverErrors" />
-
         <div class="form-section space-y-4">
           <InputStandard
             v-model="mcp.name"
@@ -165,7 +163,6 @@ import { computed, ref, toRaw, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { coerce, date, number, string, ZodType } from "zod";
 import ButtonSubmit from "../common/ButtonSubmit.vue";
-import DivError from "../common/DivError.vue";
 import InputDate from "../common/InputDate.vue";
 import InputStandard from "../common/InputStandard.vue";
 import ModalVue from "../common/Modal.vue";
@@ -176,8 +173,6 @@ import CollapsibleTrigger from "../ui/collapsible/CollapsibleTrigger.vue";
 import { useCreateContractpartnerModalStore } from "./CreateContractpartnerModal.store";
 
 const { t } = useI18n();
-
-const serverErrors = ref(new Array<string>());
 
 const schema: Partial<{ [key in keyof Contractpartner]: ZodType }> = {
   name: string(globErr(t("Contractpartner.validation.name")))
@@ -229,7 +224,6 @@ const resetForm = () => {
       validTil: new Date("2999-12-31"),
     } as Contractpartner;
   }
-  serverErrors.value = new Array<string>();
   Object.keys(values).forEach((field) => setFieldTouched(field, false));
 };
 
@@ -245,8 +239,6 @@ watch(
 );
 
 const createContractpartner = handleSubmit(() => {
-  serverErrors.value = new Array<string>();
-
   const serviceCall =
     mcp.value.id > 0
       ? ContractpartnerService.updateContractpartner(mcp.value)
@@ -261,7 +253,7 @@ const createContractpartner = handleSubmit(() => {
       onDone.value?.(mcp.value);
     })
     .catch((backendError) => {
-      handleBackendError(backendError, serverErrors);
+      handleBackendError(backendError);
     });
 });
 </script>

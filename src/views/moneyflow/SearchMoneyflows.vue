@@ -7,8 +7,6 @@
       <div class="w-full max-w-7xl card-panel p-4">
         <form @submit.prevent="searchMoneyflows" id="searchMoneyflowsForm">
           <div class="space-y-4">
-            <DivError :server-errors="serverErrors" />
-
             <div
               class="grid grid-cols-2 gap-3 md:grid-cols-24 items-start text-left"
             >
@@ -282,7 +280,6 @@ import { any, date, type ZodTypeAny } from "zod";
 
 import ButtonSubmit from "@/components/common/ButtonSubmit.vue";
 import DivContentTable from "@/components/common/DivContentTable.vue";
-import DivError from "@/components/common/DivError.vue";
 import InputDate from "@/components/common/InputDate.vue";
 import InputStandard from "@/components/common/InputStandard.vue";
 import SelectStandard from "@/components/common/SelectStandard.vue";
@@ -323,8 +320,6 @@ import { isDesktop } from "@/tools/views/IsDesktop";
 import { ChevronDown, Search, SlidersHorizontal, Undo2 } from "lucide-vue-next";
 
 const { t } = useI18n();
-
-const serverErrors = ref(new Array<string>());
 
 const GROUP_NONE: number = 0;
 const GROUP_YEAR: number = 1;
@@ -433,7 +428,6 @@ const resetForm = () => {
   colBookingYear.value = false;
   colContractpartner.value = true;
   dataLoaded.value = false;
-  serverErrors.value = new Array<string>();
   Object.keys(values).forEach((field) => setFieldTouched(field, false));
 };
 
@@ -443,7 +437,6 @@ const restartSearch = () => {
 
 const searchMoneyflows = handleSubmit(() => {
   dataLoaded.value = false;
-  serverErrors.value = new Array<string>();
   if (startDate.value && endDate.value) {
     const searchParams: MoneyflowSearchParams = {
       startDate: startDate.value,
@@ -504,7 +497,7 @@ const searchMoneyflows = handleSubmit(() => {
         }
       })
       .catch((backendError) => {
-        handleBackendError(backendError, serverErrors);
+        handleBackendError(backendError);
       });
   }
 });

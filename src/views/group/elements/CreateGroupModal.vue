@@ -11,8 +11,6 @@
         id="createGroupForm"
         class="space-y-6"
       >
-        <DivError :server-errors="serverErrors" />
-
         <div class="form-section space-y-4">
           <InputStandard
             v-model="groupModel.name"
@@ -48,7 +46,6 @@
 
 <script lang="ts" setup>
 import ButtonSubmit from "@/components/common/ButtonSubmit.vue";
-import DivError from "@/components/common/DivError.vue";
 import InputStandard from "@/components/common/InputStandard.vue";
 import ModalVue from "@/components/common/Modal.vue";
 import { Button } from "@/components/ui/button";
@@ -68,7 +65,6 @@ const { t } = useI18n();
 
 const { open, group, onDone } = storeToRefs(useCreateGroupModalStore());
 
-const serverErrors = ref(new Array<string>());
 const groupModel = ref({} as Group);
 const origGroup = ref({} as Group | undefined);
 
@@ -90,7 +86,6 @@ const resetForm = () => {
   } else {
     groupModel.value = {} as Group;
   }
-  serverErrors.value = new Array<string>();
   Object.keys(values).forEach((field) => setFieldTouched(field, false));
 };
 
@@ -106,8 +101,6 @@ watch(
 );
 
 const createGroup = handleSubmit(() => {
-  serverErrors.value = new Array<string>();
-
   const serviceCall =
     groupModel.value.id > 0
       ? GroupService.updateGroup(groupModel.value)
@@ -122,7 +115,7 @@ const createGroup = handleSubmit(() => {
       onDone.value?.();
     })
     .catch((backendError) => {
-      handleBackendError(backendError, serverErrors);
+      handleBackendError(backendError);
     });
 });
 </script>

@@ -8,8 +8,6 @@
     <template #body>
       <form @submit.prevent="createEtfFlow" id="createEtfFlowForm">
         <div class="space-y-4">
-          <DivError :server-errors="serverErrors" />
-
           <div class="form-section space-y-4">
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div class="sm:col-span-2">
@@ -98,7 +96,6 @@
 
 <script lang="ts" setup>
 import ButtonSubmit from "@/components/common/ButtonSubmit.vue";
-import DivError from "@/components/common/DivError.vue";
 import InputDate from "@/components/common/InputDate.vue";
 import InputStandard from "@/components/common/InputStandard.vue";
 import ModalVue from "@/components/common/Modal.vue";
@@ -125,7 +122,6 @@ const { open, flow, defaultEtfId, onDone } = storeToRefs(
   useCreateEtfFlowModalStore(),
 );
 
-const serverErrors = ref(new Array<string>());
 const selectedEtfId = ref(0);
 
 const schema: Partial<{ [key in keyof EtfFlow]: ZodType }> = {
@@ -174,7 +170,6 @@ const resetForm = () => {
     bookingdate.value = today;
     bookingtime.value = "";
   }
-  serverErrors.value = new Array<string>();
   Object.keys(values).forEach((field) => setFieldTouched(field, false));
 };
 
@@ -192,8 +187,6 @@ watch(
 );
 
 const createEtfFlow = handleSubmit(() => {
-  serverErrors.value = new Array<string>();
-
   const times: Array<string> = bookingtime.value.split(":");
   const bookingDate = bookingdate.value;
   if (times[0] && times[1] && times[2] && times[3] && bookingDate) {
@@ -209,7 +202,7 @@ const createEtfFlow = handleSubmit(() => {
           onDone.value?.(etfFlow.value);
         })
         .catch((backendError) => {
-          handleBackendError(backendError, serverErrors);
+          handleBackendError(backendError);
         });
     } else {
       CrudEtfFlowService.createEtfFlow(etfFlow.value)
@@ -219,7 +212,7 @@ const createEtfFlow = handleSubmit(() => {
           onDone.value?.(etfFlow.value);
         })
         .catch((backendError) => {
-          handleBackendError(backendError, serverErrors);
+          handleBackendError(backendError);
         });
     }
   }

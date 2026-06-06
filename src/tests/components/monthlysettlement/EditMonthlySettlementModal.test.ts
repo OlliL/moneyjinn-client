@@ -25,6 +25,7 @@ import {
   InputView,
   ModalView,
   renderDeclarativeModal,
+  ToastView,
 } from "@/tests/TestViews";
 import "@testing-library/jest-dom/vitest";
 import { createPinia, setActivePinia } from "pinia";
@@ -51,7 +52,7 @@ class EditMonthlySettlementModalView {
   static amountNoCreditError(index: number): AlertView {
     return new AlertView(`amountNoCredit${index}-error-item`);
   }
-  static readonly ServerErrorItem = new AlertView("serverError-item");
+  static readonly Toast = new ToastView();
 }
 
 const defaultTransporter: MonthlySettlementEditTransporter = {
@@ -169,7 +170,7 @@ test("shows server errors on failure", async () => {
 
   await EditMonthlySettlementModalView.SaveButton.click();
 
-  await EditMonthlySettlementModalView.ServerErrorItem.assertMessageContains(
+  await EditMonthlySettlementModalView.Toast.assertError(
     "Backend Error Message",
   );
   await EditMonthlySettlementModalView.Modal.assertOpen();

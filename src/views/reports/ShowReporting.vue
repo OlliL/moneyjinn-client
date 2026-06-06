@@ -5,7 +5,6 @@
         {{ $t("Reports.title.costReporting") }}
       </h4>
     </div>
-    <DivError :server-errors="serverErrors" />
 
     <div class="flex justify-center">
       <div class="w-full max-w-xl card-panel p-4">
@@ -211,7 +210,6 @@
 
 <script lang="ts" setup>
 import ButtonSubmit from "@/components/common/ButtonSubmit.vue";
-import DivError from "@/components/common/DivError.vue";
 import InputDate from "@/components/common/InputDate.vue";
 import SelectPostingAccount from "@/components/postingaccount/SelectPostingAccount.vue";
 import { Button } from "@/components/ui/button";
@@ -252,8 +250,6 @@ import { Bar } from "vue-chartjs";
 import { useI18n } from "vue-i18n";
 import { any, date, number } from "zod";
 const { t } = useI18n();
-
-const serverErrors = ref(new Array<string>());
 
 const dataLoaded = ref(false);
 const reportingGraphLoaded = ref(false);
@@ -385,8 +381,6 @@ watch(singlePostingAccounts, () => {
 });
 
 const loadData = () => {
-  serverErrors.value = new Array<string>();
-
   dataLoaded.value = false;
   selectedPostingAccountIds.value = new Array<boolean>();
   postingAccountStore.postingAccount.forEach((mpa) => {
@@ -412,7 +406,7 @@ const loadData = () => {
       Object.keys(values).forEach((field) => setFieldTouched(field, false));
     })
     .catch((backendError) => {
-      handleBackendError(backendError, serverErrors);
+      handleBackendError(backendError);
     });
 };
 
@@ -478,8 +472,6 @@ const makeChartTitle = (reportingParameter: ReportingParameter): string => {
   return chartTitle;
 };
 const showReportingGraph = handleSubmit(() => {
-  serverErrors.value = new Array<string>();
-
   const reportingParameter = {} as ReportingParameter;
   if (groupByYear.value) {
     if (startDateYear.value && endDateYear.value) {
@@ -539,7 +531,7 @@ const showReportingGraph = handleSubmit(() => {
       reportingGraphLoaded.value = true;
     })
     .catch((backendError) => {
-      handleBackendError(backendError, serverErrors);
+      handleBackendError(backendError);
     });
 });
 

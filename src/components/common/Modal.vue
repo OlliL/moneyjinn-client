@@ -1,5 +1,9 @@
 <template>
-  <component :is="Modal.Root" v-model:open="isOpen">
+  <component
+    :is="Modal.Root"
+    v-model:open="isOpen"
+    v-bind="isDesktopConst ? {} : { dismissible: false }"
+  >
     <component
       :is="Modal.Content"
       :data-testid="`app-modal-${props.idSuffix}`"
@@ -11,6 +15,7 @@
         'flex flex-col gap-4 p-3 md:p-6 overflow-hidden',
       ]"
       :style="{ zIndex: props.zIndex }"
+      @interact-outside="(event) => event.preventDefault()"
     >
       <component :is="Modal.Header" class="space-y-1.5 text-left p-0!">
         <component
@@ -72,7 +77,8 @@ import {
 } from "@/components/ui/drawer";
 import { isDesktop } from "@/tools/views/IsDesktop";
 import { X } from "lucide-vue-next";
-import { computed } from "vue";
+import { computed, watch } from "vue";
+import { toast } from "vue-sonner";
 
 const props = withDefaults(
   defineProps<{
@@ -102,4 +108,10 @@ const Modal = computed(() => ({
 }));
 
 const isOpen = defineModel<boolean>("open", { default: false });
+
+watch(isOpen, (newValue) => {
+  if (!newValue) {
+    toast.dismiss();
+  }
+});
 </script>

@@ -7,7 +7,6 @@
     v-model:open="open"
   >
     <template #body>
-      <DivError :server-errors="serverErrors" />
       <div class="w-full">
         <div class="flex gap-4">
           <div
@@ -136,14 +135,12 @@ import MoneyflowReceiptService from "@/service/MoneyflowReceiptService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { storeToRefs } from "pinia";
 import { computed, ref, toRaw, watch } from "vue";
-import DivError from "../common/DivError.vue";
 import ModalVue from "../common/Modal.vue";
 import SpanAmount from "../common/SpanAmount.vue";
 import SpanDate from "../common/SpanDate.vue";
 import SpanReceipt from "../common/SpanReceipt.vue";
 import useListMoneyflowModalStore from "./ListMoneyflowModal.store";
 
-const serverErrors = ref(new Array<string>());
 const mmf = ref({} as Moneyflow);
 const receipt = ref({} as MoneyflowReceipt);
 const { open, moneyflow, importedReceipt } = storeToRefs(
@@ -178,7 +175,6 @@ watch(
       receipt.value =
         mapImportedMoneyflowReceiptToMoneyflowReceipt(importedReceipt);
     }
-    serverErrors.value = new Array<string>();
   },
   { immediate: true },
 );
@@ -186,6 +182,6 @@ watch(
 const loadReceipt = (id: number) => {
   MoneyflowReceiptService.fetchReceipt(id)
     .then((response) => (receipt.value = response))
-    .catch((backendError) => handleBackendError(backendError, serverErrors));
+    .catch((backendError) => handleBackendError(backendError));
 };
 </script>

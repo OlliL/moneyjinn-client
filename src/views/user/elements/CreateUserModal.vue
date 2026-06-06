@@ -13,8 +13,6 @@
         >
           <div :class="{ 'lg:col-span-6': editMode }">
             <div class="space-y-4">
-              <DivError :server-errors="serverErrors" />
-
               <div class="form-section space-y-4">
                 <div
                   class="flex items-center space-x-2 border-b border-border/40 pb-2"
@@ -177,7 +175,6 @@
 
 <script lang="ts" setup>
 import ButtonSubmit from "@/components/common/ButtonSubmit.vue";
-import DivError from "@/components/common/DivError.vue";
 import InputDate from "@/components/common/InputDate.vue";
 import InputStandard from "@/components/common/InputStandard.vue";
 import ModalVue from "@/components/common/Modal.vue";
@@ -216,8 +213,6 @@ const { open, onDone } = storeToRefs(useCreateUserModalStore());
 type UserGroup = AccessRelation & {
   group?: Group;
 };
-
-const serverErrors = ref(new Array<string>());
 
 const schema = {
   userName: string(globErr(t("User.validation.userName")))
@@ -308,7 +303,6 @@ const resetForm = () => {
       } as User;
     }
   });
-  serverErrors.value = new Array<string>();
   Object.keys(values).forEach((field) => setFieldTouched(field, false));
 };
 
@@ -342,7 +336,7 @@ const createUser = handleSubmit(() => {
           onDone.value?.();
         })
         .catch((backendError) => {
-          handleBackendError(backendError, serverErrors);
+          handleBackendError(backendError);
         });
     }
   } else {
@@ -356,7 +350,7 @@ const createUser = handleSubmit(() => {
         onDone.value?.();
       })
       .catch((backendError) => {
-        handleBackendError(backendError, serverErrors);
+        handleBackendError(backendError);
       });
   }
 });

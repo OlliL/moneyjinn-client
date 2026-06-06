@@ -9,7 +9,6 @@
       >
         <form @submit.prevent="changePassword" id="changePasswordForm">
           <div class="space-y-4">
-            <DivError :server-errors="serverErrors" />
             <div>
               <InputStandard
                 v-model="passwordOld"
@@ -60,7 +59,6 @@ import { string, type ZodTypeAny } from "zod";
 
 import router, { Routes } from "@/router";
 
-import DivError from "@/components/common/DivError.vue";
 import InputStandard from "@/components/common/InputStandard.vue";
 
 import { useUserSessionStore } from "@/stores/UserSessionStore";
@@ -74,6 +72,7 @@ import ButtonSubmit from "@/components/common/ButtonSubmit.vue";
 import UserService from "@/service/UserService";
 import { Save } from "lucide-vue-next";
 import { useForm } from "vee-validate";
+import { toast } from "vue-sonner";
 
 const { t } = useI18n();
 
@@ -82,7 +81,6 @@ const schema = {
   password: ref(string() as ZodTypeAny),
 };
 
-const serverErrors = ref(new Array<string>());
 const passwordOld = ref("");
 const password1 = ref("");
 const password2 = ref("");
@@ -103,8 +101,6 @@ watch(
 );
 
 onMounted(() => {
-  serverErrors.value = new Array<string>();
-
   const userSessionStore = useUserSessionStore();
   if (userSessionStore.userSession.userIsNew) {
     userIsNew.value = true;
@@ -112,16 +108,14 @@ onMounted(() => {
     userIsNew.value = false;
   }
   if (userIsNew.value) {
-    serverErrors.value.push(
-      getErrorMessage(ErrorCode.PASSWORD_MUST_BE_CHANGED),
-    );
+    toast.error(getErrorMessage(ErrorCode.PASSWORD_MUST_BE_CHANGED), {
+      duration: Infinity,
+    });
   }
   Object.keys(values).forEach((field) => setFieldTouched(field, false));
 });
 
 const changePassword = handleSubmit(() => {
-  serverErrors.value = new Array<string>();
-
   UserService.changePassword(passwordOld.value, password1.value)
     .then(() => {
       const userSessionStore = useUserSessionStore();
@@ -137,7 +131,7 @@ const changePassword = handleSubmit(() => {
       }
     })
     .catch((backendError) => {
-      handleBackendError(backendError, serverErrors);
+      handleBackendError(backendError);
     });
 });
 </script>

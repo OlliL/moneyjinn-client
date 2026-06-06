@@ -5,6 +5,7 @@ import {
   createWebHistory,
   type RouteLocationNormalized,
 } from "vue-router";
+import { toast } from "vue-sonner";
 
 export enum Routes {
   Login = "login",
@@ -195,6 +196,8 @@ const router = createRouter({
 
 router.beforeEach(
   async (to: RouteLocationNormalized, from: RouteLocationNormalized) => {
+    toast.dismiss();
+
     const loginNeeded = !to.matched.some((record) => record.meta.hideForAuth);
 
     const loggedIn = await isLoggedIn();

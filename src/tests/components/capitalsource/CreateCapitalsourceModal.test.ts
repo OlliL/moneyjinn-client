@@ -26,6 +26,7 @@ import {
   ComboboxView,
   InputView,
   ModalView,
+  ToastView,
   renderDeclarativeModal,
 } from "@/tests/TestViews";
 import "@testing-library/jest-dom/vitest";
@@ -63,6 +64,8 @@ class CreateCapitalsourceModalView {
     "createCapitalsourceResetButton",
   );
 
+  static readonly Toast = new ToastView();
+
   static readonly CommentError = new AlertView(
     "comment-CreateCapitalsource-error-item",
   );
@@ -86,7 +89,6 @@ class CreateCapitalsourceModalView {
   static readonly BankCodeError = new AlertView(
     "bankCode-CreateCapitalsource-error-item",
   );
-  static readonly ServerErrorItem = new AlertView("serverError-item");
 }
 
 beforeEach(async () => {
@@ -260,9 +262,7 @@ test("shows server errors on failure", async () => {
 
   await CreateCapitalsourceModalView.SaveButton.click();
 
-  await CreateCapitalsourceModalView.ServerErrorItem.assertMessageContains(
-    "Backend Error",
-  );
+  await CreateCapitalsourceModalView.Toast.assertError("Backend Error");
   await CreateCapitalsourceModalView.Modal.assertOpen();
 });
 

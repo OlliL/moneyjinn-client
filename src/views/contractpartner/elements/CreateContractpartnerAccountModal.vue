@@ -12,8 +12,6 @@
         id="createContractpartnerAccountFormCreateContractpartnerAccount"
       >
         <div class="space-y-4">
-          <DivError :server-errors="serverErrors" />
-
           <div class="form-section space-y-4">
             <div class="grid grid-cols-1 sm:grid-cols-12 gap-4">
               <div class="sm:col-span-8">
@@ -62,7 +60,6 @@
 
 <script lang="ts" setup>
 import ButtonSubmit from "@/components/common/ButtonSubmit.vue";
-import DivError from "@/components/common/DivError.vue";
 import InputStandard from "@/components/common/InputStandard.vue";
 import ModalVue from "@/components/common/Modal.vue";
 import { Button } from "@/components/ui/button";
@@ -93,7 +90,6 @@ withDefaults(
   },
 );
 
-const serverErrors = ref(new Array<string>());
 const mca = ref({} as ContractpartnerAccount);
 const origMca = ref<ContractpartnerAccount | undefined>(undefined);
 
@@ -125,7 +121,6 @@ const resetForm = () => {
     } as ContractpartnerAccount;
   }
 
-  serverErrors.value = new Array<string>();
   Object.keys(values).forEach((field) => setFieldTouched(field, false));
 };
 
@@ -141,8 +136,6 @@ watch(
 );
 
 const createContractpartnerAccount = handleSubmit(() => {
-  serverErrors.value = new Array<string>();
-
   const serviceCall =
     mca.value.id > 0
       ? ContractpartnerAccountService.updateContractpartnerAccount(mca.value)
@@ -157,7 +150,7 @@ const createContractpartnerAccount = handleSubmit(() => {
       onDone.value?.();
     })
     .catch((backendError) => {
-      handleBackendError(backendError, serverErrors);
+      handleBackendError(backendError);
     });
 });
 </script>

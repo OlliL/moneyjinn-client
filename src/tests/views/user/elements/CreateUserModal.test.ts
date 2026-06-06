@@ -28,6 +28,7 @@ import {
   InputView,
   ModalView,
   renderDeclarativeModal,
+  ToastView,
 } from "@/tests/TestViews";
 import { useCreateUserModalStore } from "@/views/user/elements/CreateUserModal.store";
 import CreateUserModal from "@/views/user/elements/CreateUserModal.vue";
@@ -71,7 +72,7 @@ class CreateUserModalView {
   static readonly UserIsNewError = new AlertView(
     "userIsNew-CreateUser-error-item",
   );
-  static readonly ServerErrorItem = new AlertView("serverError-item");
+  static readonly Toast = new ToastView();
 }
 
 const defaultGroups: Group[] = [
@@ -198,9 +199,7 @@ test("shows server errors on failure", async () => {
 
   await CreateUserModalView.SaveButton.click();
 
-  await CreateUserModalView.ServerErrorItem.assertMessageContains(
-    "Backend Error Message",
-  );
+  await CreateUserModalView.Toast.assertError("Backend Error Message");
   await CreateUserModalView.Modal.assertOpen();
 });
 

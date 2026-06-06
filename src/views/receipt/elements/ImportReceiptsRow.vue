@@ -25,8 +25,6 @@
             class="lg:col-span-3 p-6 space-y-6 flex flex-col justify-between"
           >
             <div>
-              <DivError :server-errors="serverErrors" />
-
               <form
                 @submit.prevent="searchMoneyflows"
                 :id="'searchReceipt' + receipt.id"
@@ -185,7 +183,6 @@
 <script lang="ts" setup>
 import ButtonDeleteTwoTap from "@/components/common/ButtonDeleteTwoTap.vue";
 import ButtonSubmit from "@/components/common/ButtonSubmit.vue";
-import DivError from "@/components/common/DivError.vue";
 import InputDate from "@/components/common/InputDate.vue";
 import InputStandard from "@/components/common/InputStandard.vue";
 import SpanReceipt from "@/components/common/SpanReceipt.vue";
@@ -217,8 +214,6 @@ import ImportReceiptSearchRowVue from "./ImportReceiptSearchRow.vue";
 import ImportReceiptsRowMobile from "./ImportReceiptsRowMobile.vue";
 
 const { t } = useI18n();
-
-const serverErrors = ref(new Array<string>());
 
 const schema = {
   amount: amountSchema(t("Moneyflow.validation.amount")),
@@ -259,7 +254,6 @@ const listMoneyflow = (id: number) =>
   importReceiptActions.list(id, props.receipt);
 
 const searchMoneyflows = handleSubmit(() => {
-  serverErrors.value = new Array<string>();
   searchExecuted.value = false;
   MoneyflowService.searchMoneyflowsByAmount(
     amount.value,
@@ -277,7 +271,7 @@ const searchMoneyflows = handleSubmit(() => {
       }
     })
     .catch((backendError) => {
-      handleBackendError(backendError, serverErrors);
+      handleBackendError(backendError);
     });
 });
 
@@ -304,8 +298,6 @@ onMounted(() => {
 const moneyflowSelected = computed(() => selectedMoneyflowId.value > 0);
 
 const importReceipt = () => {
-  serverErrors.value = new Array<string>();
-
   ImportedMoneyflowReceiptService.importImportedMoneyflowReceipt(
     props.receipt.id,
     selectedMoneyflowId.value,
@@ -314,15 +306,13 @@ const importReceipt = () => {
       emit("removeReceiptFromView", props.receipt.id);
     })
     .catch((backendError) => {
-      handleBackendError(backendError, serverErrors);
+      handleBackendError(backendError);
     });
 };
 
 const importReceiptActions = inject(ImportReceiptRowActionsKey)!;
 
 const deleteMoneyflowReceipt = () => {
-  serverErrors.value = new Array<string>();
-
   ImportedMoneyflowReceiptService.deleteImportedMoneyflowReceiptById(
     props.receipt.id,
   )
@@ -330,7 +320,7 @@ const deleteMoneyflowReceipt = () => {
       importReceiptActions.removeReceipt(props.receipt.id);
     })
     .catch((backendError) => {
-      handleBackendError(backendError, serverErrors);
+      handleBackendError(backendError);
     });
 };
 </script>

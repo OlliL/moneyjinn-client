@@ -15,7 +15,6 @@
         <div class="rounded-sm border bg-muted/20">
           <div class="p-4">
             <div class="space-y-4">
-              <DivError :server-errors="serverErrors" />
               <div class="grid grid-cols-1 md:grid-cols-3 gap-2 mb-4">
                 <div class="w-full">
                   <InputStandard
@@ -117,7 +116,6 @@
 
 <script lang="ts" setup>
 import ButtonSubmit from "@/components/common/ButtonSubmit.vue";
-import DivError from "@/components/common/DivError.vue";
 import InputStandard from "@/components/common/InputStandard.vue";
 import type { Etf } from "@/model/etf/Etf";
 import type { EtfSalesCalculation } from "@/model/etf/EtfSalesCalculation";
@@ -138,8 +136,6 @@ const props = defineProps<{
 }>();
 
 const { t } = useI18n();
-
-const serverErrors = ref(new Array<string>());
 
 const schema = {
   pieces: amountSchema(t("ETFFlow.validation.amount")),
@@ -167,8 +163,6 @@ const calcResults = ref({} as EtfSalesCalculation);
 const { handleSubmit } = useForm();
 
 const calculateEtfSale = handleSubmit(() => {
-  serverErrors.value = new Array<string>();
-
   EtfService.calcEtfSale(
     props.etf.id,
     calcEtfSalePieces.value,
@@ -182,7 +176,7 @@ const calculateEtfSale = handleSubmit(() => {
       calcResults.value = _calcResults;
     })
     .catch((backendError) => {
-      handleBackendError(backendError, serverErrors);
+      handleBackendError(backendError);
     });
 });
 

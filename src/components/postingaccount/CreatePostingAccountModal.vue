@@ -11,8 +11,6 @@
         id="createPostingAccountForm-CreatePostingAccount"
         class="space-y-6"
       >
-        <DivError :server-errors="serverErrors" />
-
         <div class="form-section space-y-4">
           <InputStandard
             v-model="mpa.name"
@@ -59,14 +57,12 @@ import { computed, ref, toRaw, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { string, ZodType } from "zod";
 import ButtonSubmit from "../common/ButtonSubmit.vue";
-import DivError from "../common/DivError.vue";
 import InputStandard from "../common/InputStandard.vue";
 import ModalVue from "../common/Modal.vue";
 import { useCreatePostingAccountModalStore } from "./CreatePostingAccountModal.store";
 
 const { t } = useI18n();
 
-const serverErrors = ref(new Array<string>());
 const mpa = ref({} as PostingAccount);
 const origMpa = ref({} as PostingAccount | undefined);
 const { open, postingAccount, onDone } = storeToRefs(
@@ -92,7 +88,6 @@ const resetForm = () => {
   } else {
     mpa.value = {} as PostingAccount;
   }
-  serverErrors.value = new Array<string>();
   Object.keys(values).forEach((field) => setFieldTouched(field, false));
 };
 
@@ -108,8 +103,6 @@ watch(
 );
 
 const createPostingAccount = handleSubmit(() => {
-  serverErrors.value = new Array<string>();
-
   const serviceCall =
     mpa.value.id > 0
       ? PostingAccountService.updatePostingAccount(mpa.value)
@@ -124,7 +117,7 @@ const createPostingAccount = handleSubmit(() => {
       onDone.value?.(mpa.value);
     })
     .catch((backendError) => {
-      handleBackendError(backendError, serverErrors);
+      handleBackendError(backendError);
     });
 });
 </script>

@@ -7,7 +7,6 @@
       <div class="w-full max-w-4xl card-panel p-4">
         <form @submit.prevent="compareData" id="compareDataForm">
           <div class="space-y-4">
-            <DivError :server-errors="serverErrors" />
             <div class="grid gap-3 grid-cols-6 md:grid-cols-12">
               <div class="col-span-3">
                 <InputDate
@@ -121,7 +120,6 @@
 <script lang="ts" setup>
 import SelectCapitalsource from "@/components/capitalsource/SelectCapitalsource.vue";
 import ButtonSubmit from "@/components/common/ButtonSubmit.vue";
-import DivError from "@/components/common/DivError.vue";
 import InputDate from "@/components/common/InputDate.vue";
 import InputFile from "@/components/common/InputFile.vue";
 import SelectStandard from "@/components/common/SelectStandard.vue";
@@ -151,8 +149,6 @@ import CompareDataResultDesktop from "./elements/CompareDataResultDesktop.vue";
 import CompareDataResultMobile from "./elements/CompareDataResultMobile.vue";
 
 const { t } = useI18n();
-
-const serverErrors = ref(new Array<string>());
 
 const schema = {
   startDate: date(globErr(t("General.validation.startDate"))),
@@ -257,7 +253,7 @@ const loadData = () => {
       }
     })
     .catch((backendError) => {
-      handleBackendError(backendError, serverErrors);
+      handleBackendError(backendError);
     });
 
   Object.keys(values).forEach((field) => setFieldTouched(field, false));
@@ -288,7 +284,6 @@ const restartComparison = () => {
 };
 const compareData = handleSubmit(async () => {
   dataCompared.value = false;
-  serverErrors.value = new Array<string>();
 
   if (startDate.value && endDate.value) {
     const compareDataParameter = {
@@ -336,7 +331,7 @@ const compareData = handleSubmit(async () => {
         dataCompared.value = true;
       })
       .catch((backendError) => {
-        handleBackendError(backendError, serverErrors);
+        handleBackendError(backendError);
       });
   }
 });

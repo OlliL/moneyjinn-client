@@ -1,7 +1,7 @@
 import router, { Routes } from "@/router";
 import UserService from "@/service/UserService";
 import { assertHaveBeenCalledWith } from "@/tests/TestUtil";
-import { AlertView, ButtonView, InputView } from "@/tests/TestViews";
+import { ButtonView, InputView, ToastView } from "@/tests/TestViews";
 import LoginView from "@/views/LoginView.vue";
 import "@testing-library/jest-dom/vitest";
 import { render } from "@testing-library/vue";
@@ -26,6 +26,7 @@ class LoginViewPage {
   static readonly UsernameInput = new InputView("username");
   static readonly PasswordInput = new InputView("password");
   static readonly SubmitButton = new ButtonView("login-submit");
+  static readonly Toast = new ToastView();
 }
 
 beforeEach(() => {
@@ -38,11 +39,11 @@ test("LoginView logs in and redirects to home", async () => {
 
   render(LoginView);
 
-  await LoginViewPage.UsernameInput.setValue("oliver");
+  await LoginViewPage.UsernameInput.setValue("username");
   await LoginViewPage.PasswordInput.setValue("secret");
   await LoginViewPage.SubmitButton.click();
 
-  await assertHaveBeenCalledWith(UserService.login, "oliver", "secret");
+  await assertHaveBeenCalledWith(UserService.login, "username", "secret");
   await assertHaveBeenCalledWith(router.push, { name: Routes.Home });
 });
 
@@ -53,7 +54,5 @@ test("LoginView shows provided login error", async () => {
     },
   });
 
-  await new AlertView("serverError-item").assertMessageContains(
-    "Session abgelaufen",
-  );
+  await LoginViewPage.Toast.assertError("Session abgelaufen");
 });

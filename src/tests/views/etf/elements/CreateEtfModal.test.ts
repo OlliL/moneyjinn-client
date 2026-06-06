@@ -17,6 +17,7 @@ import {
   InputView,
   ModalView,
   renderDeclarativeModal,
+  ToastView,
 } from "@/tests/TestViews";
 import { useCreateEtfModalStore } from "@/views/etf/elements/CreateEtfModal.store";
 import CreateEtfModal from "@/views/etf/elements/CreateEtfModal.vue";
@@ -35,11 +36,11 @@ class CreateEtfModalView {
   static readonly FavoriteButton = new ButtonView("createEtfFavoriteButton");
   static readonly SaveButton = new ButtonView("createEtfSaveButton");
   static readonly ResetButton = new ButtonView("createEtfResetButton");
-  static readonly ServerErrorItem = new AlertView("serverError-item");
   static readonly NameError = new AlertView("name-CreateEtf-error-item");
   static readonly IsinError = new AlertView("isin-CreateEtf-error-item");
   static readonly WknError = new AlertView("wkn-CreateEtf-error-item");
   static readonly TickerError = new AlertView("ticker-CreateEtf-error-item");
+  static readonly Toast = new ToastView();
 }
 
 beforeEach(async () => {
@@ -137,9 +138,7 @@ test("shows server error on failure", async () => {
   await CreateEtfModalView.TickerInput.setValue("TICK");
 
   await CreateEtfModalView.SaveButton.click();
-  await CreateEtfModalView.ServerErrorItem.assertMessageContains(
-    "Server Error",
-  );
+  await CreateEtfModalView.Toast.assertError("Server Error");
 });
 
 test("validation: mandatory fields", async () => {

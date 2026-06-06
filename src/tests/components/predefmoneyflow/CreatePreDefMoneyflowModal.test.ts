@@ -28,6 +28,7 @@ import {
   InputView,
   ModalView,
   renderDeclarativeModal,
+  ToastView,
 } from "@/tests/TestViews";
 import "@testing-library/jest-dom/vitest";
 import { createPinia, setActivePinia } from "pinia";
@@ -85,7 +86,7 @@ class CreatePreDefMoneyflowModalView {
   static readonly PostingAccountError = new AlertView(
     "postingAccountCreatePreDefMoneyflow-error",
   );
-  static readonly ServerErrorItem = new AlertView("serverError-item");
+  static readonly Toast = new ToastView();
 }
 
 beforeEach(async () => {
@@ -206,7 +207,7 @@ test("CreatePreDefMoneyflowModal shows server errors on failed save", async () =
 
   await CreatePreDefMoneyflowModalView.SaveButton.click();
 
-  await CreatePreDefMoneyflowModalView.ServerErrorItem.assertMessageContains(
+  await CreatePreDefMoneyflowModalView.Toast.assertError(
     "Server Error Message",
   );
   await CreatePreDefMoneyflowModalView.Modal.assertOpen();

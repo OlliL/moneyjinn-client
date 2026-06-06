@@ -33,6 +33,7 @@ import {
   CollectionView,
   ComboboxView,
   InputView,
+  ToastView,
   ToggleView,
 } from "@/tests/TestViews";
 import "@testing-library/jest-dom/vitest";
@@ -116,7 +117,7 @@ class EditMoneyflowBaseView {
     "postingAccountCreateMoneyflow-error",
   );
   static readonly CommentError = new AlertView("comment-error-item");
-  static readonly ServerErrorItem = new AlertView("serverError-item");
+  static readonly Toast = new ToastView();
 }
 
 const defaultPostingAccounts: PostingAccount[] = [
@@ -897,9 +898,7 @@ test("createMoneyflow shows server errors on rejection", async () => {
   const result = await editComponent.createMoneyflow();
 
   expect(result).toBe(false);
-  await EditMoneyflowBaseView.ServerErrorItem.assertMessageContains(
-    "Backend Error Message",
-  );
+  await EditMoneyflowBaseView.Toast.assertError("Backend Error Message");
 });
 
 test("prepareServerCall fills main comment and posting account from split entries if empty", async () => {

@@ -4,10 +4,10 @@ import ImportedMoneyflowReceiptServiceMocker from "@/service/mocker/ImportedMone
 import MoneyflowServiceMocker from "@/service/mocker/MoneyflowServiceMocker";
 import { useUserSessionStore } from "@/stores/UserSessionStore";
 import {
-  AlertView,
   ButtonView,
   FileUploadView,
   RadioView,
+  ToastView,
 } from "@/tests/TestViews";
 import ImportReceipts from "@/views/receipt/ImportReceipts.vue";
 import { render, waitFor } from "@testing-library/vue";
@@ -18,7 +18,7 @@ class ImportReceiptsView {
   static readonly UploadForm = new ButtonView("importReceipts-upload-form");
   static readonly FileInput = new FileUploadView("fileUpload");
   static readonly UploadButton = new ButtonView("importReceipts-upload-button");
-  static readonly ServerErrorItem = new AlertView("importReceipts-error-item");
+  static readonly Toast = new ToastView();
   // Returns all imported receipt rows (test IDs: importReceipts-row-<id>)
   static getReceiptRows() {
     // Only the main elements with exact ID (no filebox/filename)
@@ -99,9 +99,7 @@ test("shows error message on backend error", async () => {
     error,
   );
   render(ImportReceipts);
-  await ImportReceiptsView.ServerErrorItem.assertMessageContains(
-    "Backend error",
-  );
+  await ImportReceiptsView.Toast.assertError("Backend error");
 });
 
 test("shows search and auto-selects single matching moneyflow", async () => {

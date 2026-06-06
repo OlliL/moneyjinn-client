@@ -42,8 +42,6 @@
         @select-month="handleMonthSelect"
         @select-current-month="handleCurrentMonthSelect"
       />
-
-      <DivError :server-errors="serverErrors" />
     </div>
 
     <ButtonChevrons
@@ -86,7 +84,6 @@ import router, { Routes } from "@/router";
 
 import ButtonChevrons from "@/components/common/ButtonChevrons.vue";
 import ButtonMobileCreate from "@/components/common/ButtonMobileCreate.vue";
-import DivError from "@/components/common/DivError.vue";
 import MonthYearDesktopNavigator from "@/components/navigation/MonthYearDesktopNavigator.vue";
 import MonthYearMobileNavigator from "@/components/navigation/MonthYearMobileNavigator.vue";
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
@@ -95,8 +92,6 @@ import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { getMonthName } from "@/tools/views/MonthName";
 import ReportEtfTable from "./elements/ReportEtfTable.vue";
 import ReportTableVue from "./elements/ReportTable.vue";
-
-const serverErrors = ref(new Array<string>());
 
 const dataLoadedMonth = ref(false);
 const dataLoadedEtf = ref(false);
@@ -137,8 +132,6 @@ onMounted(() => {
 });
 
 const loadData = (year?: number, month?: number) => {
-  serverErrors.value = new Array<string>();
-
   dataLoadedMonth.value = false;
   ReportService.getAvailableMonth(year, month)
     .then((response) => {
@@ -161,7 +154,7 @@ const loadData = (year?: number, month?: number) => {
       dataLoadedMonth.value = true;
     })
     .catch((backendError) => {
-      handleBackendError(backendError, serverErrors);
+      handleBackendError(backendError);
     });
 };
 

@@ -3,6 +3,7 @@ import userEvent from "@testing-library/user-event";
 import { fireEvent, render, screen, waitFor } from "@testing-library/vue";
 import { expect } from "vitest";
 import { defineComponent, h, ref } from "vue";
+import { toast } from "vue-sonner";
 
 async function waitForInputHasValue(item: HTMLInputElement, value: string) {
   await waitFor(() => {
@@ -214,6 +215,14 @@ export class AlertView extends AbstractView {
     const element = await this.findByTestId<HTMLElement>(testId);
     await waitFor(() => {
       expect(element.textContent).toContain(text);
+    });
+  }
+}
+
+export class ToastView {
+  async assertError(message: string): Promise<void> {
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith(message, expect.anything());
     });
   }
 }

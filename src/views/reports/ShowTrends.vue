@@ -3,7 +3,6 @@
     <div class="text-center">
       <h4 class="text-2xl font-bold">{{ $t("Reports.title.trends") }}</h4>
     </div>
-    <DivError :server-errors="serverErrors" />
 
     <div class="flex justify-center">
       <div class="w-full max-w-3xl card-panel p-4">
@@ -338,7 +337,6 @@
 
 <script lang="ts" setup>
 import ButtonSubmit from "@/components/common/ButtonSubmit.vue";
-import DivError from "@/components/common/DivError.vue";
 import InputDate from "@/components/common/InputDate.vue";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -379,8 +377,6 @@ import { useI18n } from "vue-i18n";
 import { date } from "zod";
 
 const { t } = useI18n();
-
-const serverErrors = ref(new Array<string>());
 
 const schema = {
   startDate: date(globErr(t("General.validation.startDate"))),
@@ -539,7 +535,6 @@ onMounted(() => {
 });
 
 const loadData = () => {
-  serverErrors.value = new Array<string>();
   capitalsourceStore.capitalsource.forEach((capitalsource) => {
     capitalsourceIds.value[capitalsource.id] = false;
   });
@@ -571,7 +566,7 @@ const loadData = () => {
       Object.keys(values).forEach((field) => setFieldTouched(field, false));
     })
     .catch((backendError) => {
-      handleBackendError(backendError, serverErrors);
+      handleBackendError(backendError);
     });
 };
 
@@ -667,7 +662,6 @@ const addEtfData = (trends: Trends) => {
 };
 
 const showTrends = handleSubmit(() => {
-  serverErrors.value = new Array<string>();
   trendsGraphLoaded.value = false;
   const selectedCapitalsourceIds = new Array<number>();
   for (const key of capitalsourceIds.value.keys()) {
@@ -707,7 +701,7 @@ const showTrends = handleSubmit(() => {
       }
     })
     .catch((backendError) => {
-      handleBackendError(backendError, serverErrors);
+      handleBackendError(backendError);
     });
 });
 </script>

@@ -16,13 +16,13 @@ import {
   assertHaveBeenCalledWith,
 } from "@/tests/TestUtil";
 import {
-  AlertView,
   ButtonView,
   CheckboxView,
   CommandView,
   InputView,
   RowView,
   TextView,
+  ToastView,
 } from "@/tests/TestViews";
 import ShowTrends from "@/views/reports/ShowTrends.vue";
 import "@testing-library/jest-dom/vitest";
@@ -55,7 +55,8 @@ class ShowTrendsView {
   );
   static readonly EtfSearchInput = new InputView("etf-search-input");
   static readonly ShowTrendsButton = new ButtonView("show-trends-button");
-  static readonly ServerErrorItem = new AlertView("serverError-item");
+  static readonly Toast = new ToastView();
+
   static readonly GraphCanvas = new RowView("trends-canvas");
   static readonly EtfsCommand = new CommandView("etfs-command");
   static readonly CapitalsourcesCommand = new CommandView(
@@ -242,7 +243,6 @@ test("show trends - displays chart data correctly", async () => {
   render(ShowTrends);
 
   await ShowTrendsView.ShowTrendsButton.click();
-  await ShowTrendsView.ServerErrorItem.assertNotToBeVisible();
   await ShowTrendsView.GraphCanvas.assertToBeVisible();
 });
 
@@ -256,9 +256,7 @@ test("show trends - handles server error", async () => {
   render(ShowTrends);
 
   await ShowTrendsView.ShowTrendsButton.click();
-  await ShowTrendsView.ServerErrorItem.assertMessageContains(
-    "Failed to fetch trends",
-  );
+  await ShowTrendsView.Toast.assertError("Failed to fetch trends");
   await ShowTrendsView.GraphCanvas.assertNotToBeVisible();
 });
 
@@ -271,7 +269,5 @@ test("initial load - handles ReportService.showTrendsForm error", async () => {
   ReportServiceMocker.mockShowTrendsFormRejected(backendError);
   render(ShowTrends);
 
-  await ShowTrendsView.ServerErrorItem.assertMessageContains(
-    "Failed to load form data",
-  );
+  await ShowTrendsView.Toast.assertError("Failed to load form data");
 });

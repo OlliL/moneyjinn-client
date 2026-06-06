@@ -24,6 +24,7 @@ import {
   InputView,
   ModalView,
   renderDeclarativeModal,
+  ToastView,
 } from "@/tests/TestViews";
 import { useCreateContractpartnerMatchingModalStore } from "@/views/contractpartnermatching/elements/CreateContractpartnerMatchingModal.store";
 import CreateContractpartnerMatchingModal from "@/views/contractpartnermatching/elements/CreateContractpartnerMatchingModal.vue";
@@ -65,7 +66,7 @@ class CreateContractpartnerMatchingModalView {
   static readonly MoneyflowCommentError = new AlertView(
     "moneyflowComment-error-item",
   );
-  static readonly ServerErrorItem = new AlertView("serverError-item");
+  static readonly Toast = new ToastView();
 }
 
 beforeEach(async () => {
@@ -195,7 +196,7 @@ test("shows server errors on failure", async () => {
   );
   await CreateContractpartnerMatchingModalView.SaveButton.click();
 
-  await CreateContractpartnerMatchingModalView.ServerErrorItem.assertMessageContains(
+  await CreateContractpartnerMatchingModalView.Toast.assertError(
     "Backend Error Message",
   );
   await CreateContractpartnerMatchingModalView.Modal.assertOpen();

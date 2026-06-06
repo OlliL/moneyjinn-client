@@ -11,8 +11,6 @@
         id="createCapitalsourceForm-CreateCapitalsource"
         class="space-y-6"
       >
-        <DivError :server-errors="serverErrors" />
-
         <div class="form-section space-y-4">
           <div class="grid gap-1.5">
             <InputStandard
@@ -154,7 +152,6 @@ import { computed, ref, toRaw, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { boolean, date, number, string, ZodType } from "zod";
 import ButtonSubmit from "../common/ButtonSubmit.vue";
-import DivError from "../common/DivError.vue";
 import InputDate from "../common/InputDate.vue";
 import InputStandard from "../common/InputStandard.vue";
 import ModalVue from "../common/Modal.vue";
@@ -163,7 +160,6 @@ import { useCreateCapitalsourceModalStore } from "./CreateCapitalsourceModal.sto
 
 const { t } = useI18n();
 
-const serverErrors = ref(new Array<string>());
 const mcs = ref({} as Capitalsource);
 const origMcs = ref<Capitalsource | undefined>(undefined);
 const { open, capitalsource, onDone } = storeToRefs(
@@ -215,7 +211,6 @@ const resetForm = () => {
       validTil: new Date("2999-12-31"),
     } as Capitalsource;
   }
-  serverErrors.value = new Array<string>();
   Object.keys(values).forEach((field) => setFieldTouched(field, false));
 };
 
@@ -231,8 +226,6 @@ watch(
 );
 
 const createCapitalsource = handleSubmit(() => {
-  serverErrors.value = new Array<string>();
-
   const serviceCall =
     mcs.value.id > 0
       ? CapitalsourceService.updateCapitalsource(mcs.value)
@@ -246,7 +239,7 @@ const createCapitalsource = handleSubmit(() => {
       onDone.value?.(mcs.value);
     })
     .catch((backendError) => {
-      handleBackendError(backendError, serverErrors);
+      handleBackendError(backendError);
     });
 });
 </script>

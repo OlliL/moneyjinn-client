@@ -45,11 +45,11 @@ beforeEach(() => {
   vi.clearAllMocks();
   useUserSessionStore().setUserSession({
     userId: 1,
-    userName: "oliver",
+    userName: "username",
     userIsAdmin: true,
     userCanLogin: true,
     userIsNew: false,
-  } as UserSession);
+  });
   vi.mocked(UserService.changePassword).mockResolvedValue();
 });
 
@@ -69,7 +69,7 @@ test("ChangePassword changes password and redirects existing users to home", asy
 test("ChangePassword logs out new users and redirects to login", async () => {
   useUserSessionStore().setUserSession({
     userId: 1,
-    userName: "oliver",
+    userName: "username",
     userIsAdmin: true,
     userCanLogin: true,
     userIsNew: true,

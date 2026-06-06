@@ -11,6 +11,7 @@ import {
   type TokenRefreshRequest,
 } from "axios-jwt";
 import type { Token } from "axios-jwt/dist/src/Token";
+import { toast } from "vue-sonner";
 import I18nSingleton from "./I18nSingleton";
 import { webServerHost, webServerProtocol } from "./WebServerConfiguration";
 
@@ -38,6 +39,7 @@ export class AxiosSingleton {
         requestRefresh,
       });
 
+      applyRequestInterceptor(axiosSingleton.axiosInstance);
       applyErrorHandlerInterceptor(axiosSingleton.axiosInstance);
 
       AxiosSingleton.instance = axiosSingleton;
@@ -74,6 +76,16 @@ export class AxiosSingleton {
   public getAxiosInstance(): AxiosInstance {
     return this.axiosInstance;
   }
+}
+
+function applyRequestInterceptor(axios: AxiosInstance): void {
+  axios.interceptors.request.use(
+    (config) => {
+      toast.dismiss();
+      return config;
+    },
+    (error) => Promise.reject(error),
+  );
 }
 
 function applyErrorHandlerInterceptor(axios: AxiosInstance): void {
