@@ -15,7 +15,6 @@
         'flex flex-col gap-4 p-3 md:p-6 overflow-hidden',
       ]"
       :style="{ zIndex: props.zIndex }"
-      @pointer-down-outside="(event) => event.preventDefault()"
       @interact-outside="(event) => event.preventDefault()"
     >
       <component :is="Modal.Header" class="space-y-1.5 text-left p-0!">
@@ -78,7 +77,8 @@ import {
 } from "@/components/ui/drawer";
 import { isDesktop } from "@/tools/views/IsDesktop";
 import { X } from "lucide-vue-next";
-import { computed } from "vue";
+import { computed, watch } from "vue";
+import { toast } from "vue-sonner";
 
 const props = withDefaults(
   defineProps<{
@@ -108,4 +108,10 @@ const Modal = computed(() => ({
 }));
 
 const isOpen = defineModel<boolean>("open", { default: false });
+
+watch(isOpen, (newValue) => {
+  if (!newValue) {
+    toast.dismiss();
+  }
+});
 </script>

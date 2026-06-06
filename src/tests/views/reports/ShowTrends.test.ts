@@ -31,7 +31,7 @@ import { createPinia, setActivePinia } from "pinia";
 import { beforeEach, expect, test, vi } from "vitest";
 import { setupVitestCanvasMock } from "vitest-canvas-mock";
 
-vi.mock("vue-sonner", () => ({ toast: { error: vi.fn() } }));
+vi.mock("vue-sonner", () => ({ toast: { error: vi.fn(), dismiss: vi.fn() } }));
 vi.mock("@/service/ReportService");
 vi.mock("@/service/CrudEtfService"); // Needed for EtfStore to function
 vi.mock("@/service/CapitalsourceService"); // Needed for CapitalsourceStore to function

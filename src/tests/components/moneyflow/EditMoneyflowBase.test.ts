@@ -42,7 +42,7 @@ import { createPinia, setActivePinia } from "pinia";
 import { beforeEach, expect, test, vi } from "vitest";
 import { defineComponent, h, ref } from "vue";
 
-vi.mock("vue-sonner", () => ({ toast: { error: vi.fn() } }));
+vi.mock("vue-sonner", () => ({ toast: { error: vi.fn(), dismiss: vi.fn() } }));
 vi.mock("@/service/PreDefMoneyflowService");
 vi.mock("@/service/PostingAccountService");
 vi.mock("@/service/ContractpartnerService");

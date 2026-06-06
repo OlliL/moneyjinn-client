@@ -12,7 +12,7 @@ const { mockRouterPush } = vi.hoisted(() => ({
   mockRouterPush: vi.fn(),
 }));
 
-vi.mock("vue-sonner", () => ({ toast: { error: vi.fn() } }));
+vi.mock("vue-sonner", () => ({ toast: { error: vi.fn(), dismiss: vi.fn() } }));
 vi.mock("@/router", async () => {
   const actual = await vi.importActual<typeof import("@/router")>("@/router");
   return {

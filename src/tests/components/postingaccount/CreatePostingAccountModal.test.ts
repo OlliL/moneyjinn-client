@@ -30,7 +30,7 @@ import "@testing-library/jest-dom/vitest";
 import { createPinia, setActivePinia } from "pinia";
 import { beforeEach, test, vi } from "vitest";
 
-vi.mock("vue-sonner", () => ({ toast: { error: vi.fn() } }));
+vi.mock("vue-sonner", () => ({ toast: { error: vi.fn(), dismiss: vi.fn() } }));
 vi.mock("@/service/PostingAccountService");
 vi.mock("@/service/ContractpartnerService");
 vi.mock("@/service/CapitalsourceService");
