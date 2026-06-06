@@ -58,7 +58,7 @@ import router, { Routes } from "@/router";
 import MonthlySettlementService from "@/service/MonthlySettlementService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { getMonthName } from "@/tools/views/MonthName";
-import { computed, onMounted, provide, ref } from "vue";
+import { computed, onMounted, provide, ref, toRaw } from "vue";
 import { onBeforeRouteUpdate } from "vue-router";
 import { useDeleteMonthlySettlementModalStore } from "./elements/DeleteMonthlySettlementModal.store";
 import DeleteMonthlySettlementModal from "./elements/DeleteMonthlySettlementModal.vue";
@@ -78,7 +78,8 @@ const nextMonth = ref(0);
 const nextYear = ref(0);
 const currentlyShownYear = ref("0");
 const canEditOrDelete = computed(() => selectedMonth.value > 0);
-const { openDeleteMonthlySettlement } = useDeleteMonthlySettlementModalStore();
+const { openDelete: openDeleteMonthlySettlement } =
+  useDeleteMonthlySettlementModalStore();
 
 const { openCreateMonthlySettlement, openEditMonthlySettlement } =
   useEditMonthlySettlementModalStore();
@@ -251,16 +252,16 @@ const monthlySettlementUpserted = (year: number, month: number) => {
 
 const showDeleteMonthlySettlementModal = () => {
   openDeleteMonthlySettlement(
-    monthlySettlements.value,
+    structuredClone(toRaw(monthlySettlements.value)),
     monthlySettlementDeleted,
   );
 };
 
-const monthlySettlementDeleted = (year: number) => {
+const monthlySettlementDeleted = (settlements: MonthlySettlement[]) => {
   if (months.value.length > 1) {
     router.push({
       name: Routes.ListMonthlySettlements,
-      params: { year: year },
+      params: { year: settlements[0].year },
     });
   } else {
     router.push({

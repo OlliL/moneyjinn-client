@@ -10,7 +10,7 @@
     <template #body>
       <div class="flex justify-center mb-4">
         <div class="w-full">
-          <ShowMonthlySettlementVue :monthly-settlements="monthlySettlements" />
+          <ShowMonthlySettlementVue :monthly-settlements="localSettlements" />
         </div>
       </div>
     </template>
@@ -26,27 +26,37 @@
 <script lang="ts" setup>
 import ButtonDeleteTwoTap from "@/components/common/ButtonDeleteTwoTap.vue";
 import ModalVue from "@/components/common/Modal.vue";
+import type { MonthlySettlement } from "@/model/monthlysettlement/MonthlySettlement";
 import MonthlySettlementService from "@/service/MonthlySettlementService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { getMonthName } from "@/tools/views/MonthName";
 import { storeToRefs } from "pinia";
-import { computed } from "vue";
+import { computed, ref, watch } from "vue";
 import { useDeleteMonthlySettlementModalStore } from "./DeleteMonthlySettlementModal.store";
 import ShowMonthlySettlementVue from "./ShowMonthlySettlement.vue";
 
-const { open, monthlySettlements, onDone } = storeToRefs(
-  useDeleteMonthlySettlementModalStore(),
-);
+const store = useDeleteMonthlySettlementModalStore();
+const { open, onDone } = storeToRefs(store);
 
-const year = computed(() => monthlySettlements.value[0]?.year);
-const month = computed(() => monthlySettlements.value[0]?.month);
-const monthName = computed(() => getMonthName(month.value));
+const localSettlements = ref<MonthlySettlement[]>([]);
+
+watch(open, (isOpen) => {
+  if (isOpen) {
+    localSettlements.value = store.entity;
+  }
+});
+
+const year = computed(() => localSettlements.value[0]?.year);
+const month = computed(() => localSettlements.value[0]?.month);
+const monthName = computed(() =>
+  month.value ? getMonthName(month.value) : "",
+);
 
 const deleteMonthlySettlement = () => {
   MonthlySettlementService.deleteMonthlySettlement(year.value, month.value)
     .then(() => {
+      onDone.value?.(localSettlements.value);
       open.value = false;
-      onDone.value?.(year.value);
     })
     .catch((backendError) => {
       handleBackendError(backendError);
