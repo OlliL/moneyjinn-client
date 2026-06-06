@@ -113,6 +113,7 @@ import { computed, ref, toRaw, useTemplateRef, watch } from "vue";
 import DivError from "../common/DivError.vue";
 import ModalVue from "../common/Modal.vue";
 import SpanReceipt from "../common/SpanReceipt.vue";
+import useReceiptModalStore from "../reports/ReceiptModal.store.ts";
 import useEditMoneyflowModalStore from "./EditMoneyflowModal.store";
 
 const serverErrors = ref(new Array<string>());
@@ -121,9 +122,10 @@ const desktop = isDesktop();
 const mmf = ref({} as Moneyflow);
 const editMoneyflowVue =
   useTemplateRef<typeof EditMoneyflowBase>("editMoneyflowVue");
-const { open, moneyflow, importedReceipt, onDone, onShowReceipt } = storeToRefs(
+const { open, moneyflow, importedReceipt, onDone } = storeToRefs(
   useEditMoneyflowModalStore(),
 );
+const { openListReceipt } = useReceiptModalStore();
 
 const receipt = ref({} as MoneyflowReceipt);
 
@@ -157,7 +159,7 @@ const updateMoneyflow = handleSubmit(() => {
   editMoneyflowVue.value?.updateMoneyflow().then((mmf: Moneyflow) => {
     if (mmf !== undefined) {
       open.value = false;
-      onDone.value?.();
+      onDone.value?.(mmf);
     }
   });
 });
@@ -166,7 +168,7 @@ const createMoneyflow = handleSubmit(() => {
   editMoneyflowVue.value?.createMoneyflow().then((result: boolean) => {
     if (result) {
       open.value = false;
-      onDone.value?.();
+      onDone.value?.(mmf.value);
     }
   });
 });
@@ -185,7 +187,7 @@ const deleteMoneyflowReceipt = () => {
   MoneyflowReceiptService.deleteMoneyflowReceipt(mmf.value.id)
     .then(() => {
       open.value = false;
-      onDone.value?.();
+      onDone.value?.(mmf.value);
     })
     .catch((backendError) => {
       handleBackendError(backendError, serverErrors);
@@ -198,6 +200,6 @@ const resetForm = () => {
 };
 
 const showReceipt = () => {
-  onShowReceipt.value?.(mmf.value.id);
+  openListReceipt(mmf.value.id);
 };
 </script>

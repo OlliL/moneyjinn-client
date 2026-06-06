@@ -51,7 +51,6 @@ import InputFile from "@/components/common/InputFile.vue";
 import useDeleteMoneyflowModalStore from "@/components/moneyflow/DeleteMoneyflowModal.store";
 import useEditMoneyflowModalStore from "@/components/moneyflow/EditMoneyflowModal.store";
 import useListMoneyflowModalStore from "@/components/moneyflow/ListMoneyflowModal.store";
-import useReceiptModalStore from "@/components/reports/ReceiptModal.store";
 import {
   ImportReceiptRowActionsKey,
   type ImportReceiptRowActions,
@@ -75,7 +74,6 @@ const uploadReceiptsForm =
 const { openDeleteMoneyflow } = useDeleteMoneyflowModalStore();
 const { openEditMoneyflow } = useEditMoneyflowModalStore();
 const { openListMoneyflow } = useListMoneyflowModalStore();
-const { openListReceipt } = useReceiptModalStore();
 
 const { handleSubmit, values, setFieldTouched } = useForm();
 
@@ -96,11 +94,11 @@ const loadData = () => {
 const actions: ImportReceiptRowActions = {
   list: (id: number, receipt: ImportedMoneyflowReceipt) =>
     MoneyflowService.fetchMoneyflow(id).then((mmf) =>
-      openListMoneyflow(mmf, receipt, openListReceipt),
+      openListMoneyflow(mmf, receipt),
     ),
   edit: (id: number, receipt: ImportedMoneyflowReceipt) =>
     MoneyflowService.fetchMoneyflow(id).then((mmf) =>
-      openEditMoneyflow(mmf, receipt, undefined, openListReceipt),
+      openEditMoneyflow(mmf, receipt),
     ),
   delete: (id: number) =>
     MoneyflowService.fetchMoneyflow(id).then((mmf) => openDeleteMoneyflow(mmf)),

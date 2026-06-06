@@ -627,11 +627,11 @@ const getGroupByKey = (moneyflow: Moneyflow): string => {
 const actions: MoneyflowRowActions = {
   list: (mmf: Moneyflow) =>
     MoneyflowService.fetchMoneyflow(mmf.id).then((freshMmf) => {
-      openListMoneyflow(freshMmf, undefined, openListReceipt);
+      openListMoneyflow(freshMmf);
     }),
   edit: (mmf: Moneyflow) =>
     MoneyflowService.fetchMoneyflow(mmf.id).then((freshMmf) => {
-      openEditMoneyflow(freshMmf, undefined, restartSearch, openListReceipt);
+      openEditMoneyflow(freshMmf, undefined, restartSearch);
     }),
   delete: (mmf: Moneyflow) =>
     MoneyflowService.fetchMoneyflow(mmf.id).then((freshMmf) => {

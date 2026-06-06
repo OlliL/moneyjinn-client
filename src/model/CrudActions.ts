@@ -81,7 +81,7 @@ export const CompareDataActionsKey: InjectionKey<CompareDataActions> =
   Symbol("CompareDataActions");
 
 export interface MoneyflowRowActions {
-  list: (mmf: Moneyflow) => void; // bzw. was openEditMoneyflow zurückgibt
+  list: (mmf: Moneyflow) => void;
   edit: (mmf: Moneyflow) => void;
   delete: (mmf: Moneyflow) => void;
   receipt: (id: number) => void;

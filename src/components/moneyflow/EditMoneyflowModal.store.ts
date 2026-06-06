@@ -11,21 +11,17 @@ export const useEditMoneyflowModalStore = defineStore(
     const importedReceipt = ref<ImportedMoneyflowReceipt | undefined>(
       undefined,
     );
-    const onDone = ref<(() => void) | undefined>(undefined);
-    const onShowReceipt = ref<((moneyflowId: number) => void) | undefined>(
-      undefined,
-    );
+    const onDone = ref<((moneyflow: Moneyflow) => void) | undefined>(undefined);
 
     const openEditMoneyflow = (
       entry: Moneyflow,
       receipt?: ImportedMoneyflowReceipt,
-      doneCb?: () => void,
-      showReceiptCb?: (moneyflowId: number) => void,
+      doneCb?: (moneyflow: Moneyflow) => void,
     ) => {
       moneyflow.value = entry;
       importedReceipt.value = receipt;
       onDone.value = doneCb;
-      onShowReceipt.value = showReceiptCb;
+
       open.value = true;
     };
 
@@ -41,7 +37,6 @@ export const useEditMoneyflowModalStore = defineStore(
       moneyflow,
       importedReceipt,
       onDone,
-      onShowReceipt,
       openEditMoneyflow,
     };
   },

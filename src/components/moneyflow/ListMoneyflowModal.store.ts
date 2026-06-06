@@ -11,18 +11,14 @@ export const useListMoneyflowModalStore = defineStore(
     const importedReceipt = ref<ImportedMoneyflowReceipt | undefined>(
       undefined,
     );
-    const onShowReceipt = ref<((moneyflowId: number) => void) | undefined>(
-      undefined,
-    );
 
     const openListMoneyflow = (
       entry: Moneyflow,
       receipt?: ImportedMoneyflowReceipt,
-      showReceiptCb?: (moneyflowId: number) => void,
     ) => {
       moneyflow.value = entry;
       importedReceipt.value = receipt;
-      onShowReceipt.value = showReceiptCb;
+
       open.value = true;
     };
 
@@ -37,7 +33,6 @@ export const useListMoneyflowModalStore = defineStore(
       open,
       moneyflow,
       importedReceipt,
-      onShowReceipt,
       openListMoneyflow,
     };
   },

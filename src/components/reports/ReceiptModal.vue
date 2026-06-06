@@ -1,9 +1,10 @@
 <template>
   <ModalVue
     :title="$t('Receipt.receipt')"
-    max-width="max-w-md"
+    max-width="md:max-w-md w-full"
     id-suffix="Receipt"
     v-model:open="open"
+    z-index="2500"
   >
     <template #body>
       <DivError :server-errors="serverErrors" />

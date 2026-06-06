@@ -425,14 +425,8 @@ onMounted(() => {
 });
 
 const actions: MoneyflowRowActions = {
-  list: (mmf: Moneyflow) => openListMoneyflow(mmf, undefined, openListReceipt),
-  edit: (mmf: Moneyflow) =>
-    openEditMoneyflow(
-      mmf,
-      undefined,
-      () => moneyflowUpdated(mmf),
-      openListReceipt,
-    ),
+  list: (mmf: Moneyflow) => openListMoneyflow(mmf),
+  edit: (mmf: Moneyflow) => openEditMoneyflow(mmf, undefined, moneyflowUpdated),
   delete: (mmf: Moneyflow) => openDeleteMoneyflow(mmf, moneyflowDeleted),
   receipt: (id: number) => openListReceipt(id),
 };

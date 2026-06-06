@@ -211,12 +211,14 @@ import DivError from "../common/DivError.vue";
 import ModalVue from "../common/Modal.vue";
 import SpanAmount from "../common/SpanAmount.vue";
 import SpanDate from "../common/SpanDate.vue";
+import useReceiptModalStore from "../reports/ReceiptModal.store.ts";
 
 const serverErrors = ref(new Array<string>());
 const mmf = ref({} as Moneyflow);
-const { open, moneyflow, importedReceipt, onShowReceipt } = storeToRefs(
+const { open, moneyflow, importedReceipt } = storeToRefs(
   useListMoneyflowModalStore(),
 );
+const { openListReceipt } = useReceiptModalStore();
 
 // Schmaleres, fokussiertes Layout für Mobile & Desktop-Details
 const modalWidth = computed(() => "md:max-w-md w-full mx-auto");
@@ -243,6 +245,6 @@ watch(
 );
 
 const showReceipt = () => {
-  onShowReceipt.value?.(mmf.value.id);
+  openListReceipt(mmf.value.id);
 };
 </script>
