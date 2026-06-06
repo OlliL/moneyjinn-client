@@ -69,7 +69,7 @@ const searchString = ref("");
 const searchContractpartnerId = ref<number | undefined>(undefined);
 const { openCreateContractpartnerMatching, openEditContractpartnerMatching } =
   useCreateContractpartnerMatchingModalStore();
-const { openDeleteContractpartnerMatching } =
+const { openDelete: openDeleteContractpartnerMatching } =
   useDeleteContractpartnerMatchingModalStore();
 
 const actions: CrudActions<ContractpartnerMatching> = {

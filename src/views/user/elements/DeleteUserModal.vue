@@ -36,7 +36,7 @@ import { storeToRefs } from "pinia";
 import { computed } from "vue";
 import useDeleteUserModalStore from "./DeleteUserModal.store";
 
-const { open, user, onDone } = storeToRefs(useDeleteUserModalStore());
+const { open, entity: user, onDone } = storeToRefs(useDeleteUserModalStore());
 
 const role = computed(() => userRoleNames[user.value.role]);
 </script>

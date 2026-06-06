@@ -46,7 +46,9 @@ import ContractpartnerMatchingService from "@/service/ContractpartnerMatchingSer
 import { storeToRefs } from "pinia";
 import useDeleteContractpartnerMatchingModalStore from "./DeleteContractpartnerMatchingModal.store";
 
-const { open, matching, onDone } = storeToRefs(
-  useDeleteContractpartnerMatchingModalStore(),
-);
+const {
+  open,
+  entity: matching,
+  onDone,
+} = storeToRefs(useDeleteContractpartnerMatchingModalStore());
 </script>

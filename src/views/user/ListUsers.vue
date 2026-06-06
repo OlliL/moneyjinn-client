@@ -41,7 +41,7 @@ const users = ref(new Array<User>());
 const allUsers = ref(new Array<User>());
 const searchString = ref("");
 const { openCreateUser, openEditUser } = useCreateUserModalStore();
-const { openDeleteUser } = useDeleteUserModalStore();
+const { openDelete: openDeleteUser } = useDeleteUserModalStore();
 
 const actions: CrudActions<User> = {
   create: () => openCreateUser(reloadView),

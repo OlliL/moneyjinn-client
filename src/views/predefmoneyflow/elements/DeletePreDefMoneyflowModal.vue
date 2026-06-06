@@ -65,7 +65,9 @@ import PreDefMoneyflowService from "@/service/PreDefMoneyflowService";
 import { storeToRefs } from "pinia";
 import useDeletePreDefMoneyflowModalStore from "./DeletePreDefMoneyflowModal.store";
 
-const { open, preDefMoneyflow, onDone } = storeToRefs(
-  useDeletePreDefMoneyflowModalStore(),
-);
+const {
+  open,
+  entity: preDefMoneyflow,
+  onDone,
+} = storeToRefs(useDeletePreDefMoneyflowModalStore());
 </script>

@@ -52,7 +52,8 @@ const { searchContractpartners } = contractpartnerStore;
 const { contractpartner } = storeToRefs(contractpartnerStore);
 const { openCreateContractpartner, openEditContractpartner } =
   useCreateContractpartnerModalStore();
-const { openDeleteContractpartner } = useDeleteContractpartnerModalStore();
+const { openDelete: openDeleteContractpartner } =
+  useDeleteContractpartnerModalStore();
 const { openListContractpartnerAccounts } =
   useListContractpartnerAccountsModalStore();
 

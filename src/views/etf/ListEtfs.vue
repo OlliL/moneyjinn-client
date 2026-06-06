@@ -41,7 +41,7 @@ const { searchEtfs } = useEtfStore();
 
 const { etf } = storeToRefs(useEtfStore());
 const { openCreateEtf, openEditEtf } = useCreateEtfModalStore();
-const { openDeleteEtf } = useDeleteEtfModalStore();
+const { openDelete: openDeleteEtf } = useDeleteEtfModalStore();
 
 const actions: CrudActions<Etf> = {
   create: () => openCreateEtf(searchContent),

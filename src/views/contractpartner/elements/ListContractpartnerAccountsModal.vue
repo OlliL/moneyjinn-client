@@ -138,7 +138,7 @@ const { open, contractpartner: mcp } = storeToRefs(
 );
 const { openCreateContractpartnerAccount, openEditContractpartnerAccount } =
   useCreateContractpartnerAccountModalStore();
-const { openDeleteContractpartnerAccount } =
+const { openDelete: openDeleteContractpartnerAccount } =
   useDeleteContractpartnerAccountModalStore();
 const contractpartnerAccount = ref([] as Array<ContractpartnerAccount>);
 const dataLoaded = ref(false);

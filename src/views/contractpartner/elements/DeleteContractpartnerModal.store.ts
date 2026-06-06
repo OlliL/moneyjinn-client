@@ -1,36 +1,9 @@
 import type { Contractpartner } from "@/model/contractpartner/Contractpartner";
-import { defineStore } from "pinia";
-import { ref, watch } from "vue";
+import { createDeleteModalStore } from "@/stores/DeleteModalStoreFactory";
 
-export const useDeleteContractpartnerModalStore = defineStore(
-  "deleteContractpartnerModal",
-  () => {
-    const open = ref(false);
-    const contractpartner = ref({} as Contractpartner);
-    const onDone = ref<(() => void) | undefined>(undefined);
+export const useDeleteContractpartnerModalStore =
+  createDeleteModalStore<Contractpartner>("deleteContractpartnerModal");
 
-    const openDeleteContractpartner = (
-      entry: Contractpartner,
-      cb?: () => void,
-    ) => {
-      contractpartner.value = entry;
-      onDone.value = cb;
-      open.value = true;
-    };
-
-    watch(open, (newOpen) => {
-      if (!newOpen) {
-        contractpartner.value = {} as Contractpartner;
-      }
-    });
-
-    return {
-      open,
-      contractpartner,
-      onDone,
-      openDeleteContractpartner,
-    };
-  },
-);
+export default useDeleteContractpartnerModalStore;
 
 export default useDeleteContractpartnerModalStore;

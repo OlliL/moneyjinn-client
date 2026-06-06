@@ -41,7 +41,8 @@ const searchString = ref("");
 
 const { openCreatePreDefMoneyflow, openEditPreDefMoneyflow } =
   useCreatePreDefMoneyflowModalStore();
-const { openDeletePreDefMoneyflow } = useDeletePreDefMoneyflowModalStore();
+const { openDelete: openDeletePreDefMoneyflow } =
+  useDeletePreDefMoneyflowModalStore();
 
 const actions: CrudActions<PreDefMoneyflow> = {
   create: () => openCreatePreDefMoneyflow(reloadView),

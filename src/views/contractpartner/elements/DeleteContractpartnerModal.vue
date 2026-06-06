@@ -46,7 +46,9 @@ import ContractpartnerService from "@/service/ContractpartnerService";
 import { storeToRefs } from "pinia";
 import useDeleteContractpartnerModalStore from "./DeleteContractpartnerModal.store";
 
-const { open, contractpartner, onDone } = storeToRefs(
-  useDeleteContractpartnerModalStore(),
-);
+const {
+  open,
+  entity: contractpartner,
+  onDone,
+} = storeToRefs(useDeleteContractpartnerModalStore());
 </script>

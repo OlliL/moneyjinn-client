@@ -33,5 +33,5 @@ import CrudEtfService from "@/service/CrudEtfService";
 import { storeToRefs } from "pinia";
 import useDeleteEtfModalStore from "./DeleteEtfModal.store";
 
-const { open, etf, onDone } = storeToRefs(useDeleteEtfModalStore());
+const { open, entity: etf, onDone } = storeToRefs(useDeleteEtfModalStore());
 </script>

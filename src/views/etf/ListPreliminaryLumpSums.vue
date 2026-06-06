@@ -199,11 +199,11 @@ const {
   openCreateEtfPreliminaryLumpSumYearly,
   openEditEtfPreliminaryLumpSumYearly,
 } = useCreateEtfPreliminaryLumpSumModalYearlyStore();
-const { openDeleteEtfPreliminaryLumpSumMonthly } =
+const { openDelete: openDeleteEtfPreliminaryLumpSumMonthly } =
   useDeleteEtfPreliminaryLumpSumModalMonthlyStore();
-const { openDeleteEtfPreliminaryLumpSumPiece } =
+const { openDelete: openDeleteEtfPreliminaryLumpSumPiece } =
   useDeleteEtfPreliminaryLumpSumModalPieceStore();
-const { openDeleteEtfPreliminaryLumpSumYearly } =
+const { openDelete: openDeleteEtfPreliminaryLumpSumYearly } =
   useDeleteEtfPreliminaryLumpSumModalYearlyStore();
 
 interface TypeConfigEntry {

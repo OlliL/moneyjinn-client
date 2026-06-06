@@ -37,7 +37,7 @@ const groups = ref(new Array<Group>());
 const allGroups = ref(new Array<Group>());
 const searchString = ref("");
 const { openCreateGroup, openEditGroup } = useCreateGroupModalStore();
-const { openDeleteGroup } = useDeleteGroupModalStore();
+const { openDelete: openDeleteGroup } = useDeleteGroupModalStore();
 
 const actions: CrudActions<Group> = {
   create: () => openCreateGroup(reloadView),

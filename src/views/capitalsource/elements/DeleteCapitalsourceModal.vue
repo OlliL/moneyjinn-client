@@ -52,9 +52,11 @@ import { storeToRefs } from "pinia";
 import { computed } from "vue";
 import { useDeleteCapitalsourceModalStore } from "./DeleteCapitalsourceModal.store";
 
-const { open, capitalsource, onDone } = storeToRefs(
-  useDeleteCapitalsourceModalStore(),
-);
+const {
+  open,
+  entity: capitalsource,
+  onDone,
+} = storeToRefs(useDeleteCapitalsourceModalStore());
 
 const typeString = computed(() =>
   capitalsource.value?.type === undefined

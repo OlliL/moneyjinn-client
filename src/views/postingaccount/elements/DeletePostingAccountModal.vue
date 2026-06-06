@@ -23,7 +23,9 @@ import PostingAccountService from "@/service/PostingAccountService";
 import { storeToRefs } from "pinia";
 import { useDeletePostingAccountModalStore } from "./DeletePostingAccountModal.store";
 
-const { open, postingAccount, onDone } = storeToRefs(
-  useDeletePostingAccountModalStore(),
-);
+const {
+  open,
+  entity: postingAccount,
+  onDone,
+} = storeToRefs(useDeletePostingAccountModalStore());
 </script>

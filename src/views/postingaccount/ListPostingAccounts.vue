@@ -42,7 +42,8 @@ const searchString = ref("");
 const postingAccountStore = usePostingAccountStore();
 const searchPostingAccounts = postingAccountStore.searchPostingAccounts;
 const { postingAccount } = storeToRefs(postingAccountStore);
-const { openDeletePostingAccount } = useDeletePostingAccountModalStore();
+const { openDelete: openDeletePostingAccount } =
+  useDeletePostingAccountModalStore();
 const { openCreatePostingAccount, openEditPostingAccount } =
   useCreatePostingAccountModalStore();
 

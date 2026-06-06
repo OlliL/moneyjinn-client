@@ -21,5 +21,5 @@ import GroupService from "@/service/GroupService";
 import { storeToRefs } from "pinia";
 import useDeleteGroupModalStore from "./DeleteGroupModal.store";
 
-const { open, group, onDone } = storeToRefs(useDeleteGroupModalStore());
+const { open, entity: group, onDone } = storeToRefs(useDeleteGroupModalStore());
 </script>
