@@ -18,7 +18,7 @@
             <div class="grid grid-cols-1 sm:grid-cols-12 gap-4">
               <div class="sm:col-span-8">
                 <InputStandard
-                  v-model="account.accountNumber"
+                  v-model="mca.accountNumber"
                   :validation-schema="schema.accountNumber"
                   id="accountNumber-CreateContractpartnerAccount"
                   :field-label="$t('General.iban')"
@@ -27,7 +27,7 @@
 
               <div class="sm:col-span-4">
                 <InputStandard
-                  v-model="account.bankCode"
+                  v-model="mca.bankCode"
                   :validation-schema="schema.bankCode"
                   id="bankCode-CreateContractpartnerAccount"
                   :field-label="$t('General.bic')"
@@ -94,7 +94,8 @@ withDefaults(
 );
 
 const serverErrors = ref(new Array<string>());
-const origMca = ref({} as ContractpartnerAccount | undefined);
+const mca = ref({} as ContractpartnerAccount);
+const origMca = ref<ContractpartnerAccount | undefined>(undefined);
 
 const { handleSubmit, values, setFieldTouched } = useForm();
 
@@ -116,39 +117,41 @@ const title = computed(() =>
 );
 
 const resetForm = () => {
-  account.value = origMca.value
-    ? structuredClone(toRaw(origMca.value))!
-    : ({
-        contractpartnerid: account.value.contractpartnerid,
-      } as ContractpartnerAccount);
+  if (origMca.value) {
+    mca.value = structuredClone(toRaw(origMca.value))!;
+  } else {
+    mca.value = {
+      contractpartnerid: account.value?.contractpartnerid,
+    } as ContractpartnerAccount;
+  }
 
   serverErrors.value = new Array<string>();
   Object.keys(values).forEach((field) => setFieldTouched(field, false));
 };
 
-watch(open, (newVal) => {
-  if (newVal) {
-    origMca.value = account.value.id > 0 ? account.value : undefined;
-    resetForm();
-  }
-});
+watch(
+  [open, account],
+  ([isVisible, entry]) => {
+    if (isVisible) {
+      origMca.value = entry && entry.id > 0 ? entry : undefined;
+      resetForm();
+    }
+  },
+  { immediate: true },
+);
 
 const createContractpartnerAccount = handleSubmit(() => {
   serverErrors.value = new Array<string>();
 
   const serviceCall =
-    account.value.id > 0
-      ? ContractpartnerAccountService.updateContractpartnerAccount(
-          account.value,
-        )
-      : ContractpartnerAccountService.createContractpartnerAccount(
-          account.value,
-        );
+    mca.value.id > 0
+      ? ContractpartnerAccountService.updateContractpartnerAccount(mca.value)
+      : ContractpartnerAccountService.createContractpartnerAccount(mca.value);
 
   serviceCall
     .then((result) => {
-      const isUpdate = account.value.id > 0;
-      if (!isUpdate) account.value = result as ContractpartnerAccount;
+      const isUpdate = mca.value.id > 0;
+      if (!isUpdate) mca.value = result as ContractpartnerAccount;
 
       open.value = false;
       onDone.value?.();

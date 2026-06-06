@@ -6,21 +6,19 @@
     v-model:open="open"
     :delete-action="
       () =>
-        ContractpartnerAccountService.deleteContractpartnerAccount(
-          account?.id ?? 0,
-        )
+        ContractpartnerAccountService.deleteContractpartnerAccount(account.id)
     "
     :delete-success-action="onDone"
   >
     <template #details>
       <ModalDeleteRow :label="$t('General.iban')" highlight-value>
-        <SpanIban :iban="account?.accountNumber" />
+        <SpanIban :iban="account.accountNumber" />
       </ModalDeleteRow>
       <ModalDeleteRow :label="$t('General.bic')">
-        {{ account?.bankCode }}
+        {{ account.bankCode }}
       </ModalDeleteRow>
       <ModalDeleteRow :label="$t('General.lastUsed')">
-        <SpanDate :date="account?.lastUsed" />
+        <SpanDate :date="account.lastUsed" />
       </ModalDeleteRow>
     </template>
   </ModalDelete>

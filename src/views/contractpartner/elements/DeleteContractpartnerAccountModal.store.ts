@@ -6,7 +6,7 @@ export const useDeleteContractpartnerAccountModalStore = defineStore(
   "deleteContractpartnerAccountModal",
   () => {
     const open = ref(false);
-    const account = ref<ContractpartnerAccount | undefined>(undefined);
+    const account = ref({} as ContractpartnerAccount);
     const onDone = ref<(() => void) | undefined>(undefined);
 
     const openDeleteContractpartnerAccount = (
@@ -20,7 +20,7 @@ export const useDeleteContractpartnerAccountModalStore = defineStore(
 
     watch(open, (newOpen) => {
       if (!newOpen) {
-        account.value = undefined;
+        account.value = {} as ContractpartnerAccount;
       }
     });
 

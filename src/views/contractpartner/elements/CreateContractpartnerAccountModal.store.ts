@@ -6,7 +6,7 @@ export const useCreateContractpartnerAccountModalStore = defineStore(
   "createContractpartnerAccountModal",
   () => {
     const open = ref(false);
-    const account = ref({} as ContractpartnerAccount);
+    const account = ref<ContractpartnerAccount | undefined>(undefined);
     const onDone = ref<(() => void) | undefined>(undefined);
 
     const openCreateContractpartnerAccount = (id: number, cb?: () => void) => {
@@ -28,7 +28,7 @@ export const useCreateContractpartnerAccountModalStore = defineStore(
 
     watch(open, (newOpen) => {
       if (!newOpen) {
-        account.value = {} as ContractpartnerAccount;
+        account.value = undefined;
       }
     });
 
