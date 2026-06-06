@@ -1,7 +1,7 @@
 import router, { Routes } from "@/router";
 import UserService from "@/service/UserService";
 import { assertHaveBeenCalledWith } from "@/tests/TestUtil";
-import { AlertView, ButtonView, InputView } from "@/tests/TestViews";
+import { ButtonView, InputView, ToastView } from "@/tests/TestViews";
 import LoginView from "@/views/LoginView.vue";
 import "@testing-library/jest-dom/vitest";
 import { render } from "@testing-library/vue";
@@ -12,6 +12,7 @@ const { mockRouterPush } = vi.hoisted(() => ({
   mockRouterPush: vi.fn(),
 }));
 
+vi.mock("vue-sonner", () => ({ toast: { error: vi.fn() } }));
 vi.mock("@/router", async () => {
   const actual = await vi.importActual<typeof import("@/router")>("@/router");
   return {
@@ -26,6 +27,7 @@ class LoginViewPage {
   static readonly UsernameInput = new InputView("username");
   static readonly PasswordInput = new InputView("password");
   static readonly SubmitButton = new ButtonView("login-submit");
+  static readonly Toast = new ToastView();
 }
 
 beforeEach(() => {
@@ -53,7 +55,5 @@ test("LoginView shows provided login error", async () => {
     },
   });
 
-  await new AlertView("serverError-item").assertMessageContains(
-    "Session abgelaufen",
-  );
+  await LoginViewPage.Toast.assertError("Session abgelaufen");
 });

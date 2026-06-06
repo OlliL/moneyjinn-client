@@ -23,6 +23,7 @@ import {
   InputView,
   ModalView,
   renderDeclarativeModal,
+  ToastView,
 } from "@/tests/TestViews";
 import { useCreateGroupModalStore } from "@/views/group/elements/CreateGroupModal.store";
 import CreateGroupModal from "@/views/group/elements/CreateGroupModal.vue";
@@ -30,6 +31,7 @@ import "@testing-library/jest-dom/vitest";
 import { createPinia, setActivePinia } from "pinia";
 import { beforeEach, test, vi } from "vitest";
 
+vi.mock("vue-sonner", () => ({ toast: { error: vi.fn() } }));
 vi.mock("@/service/GroupService");
 vi.mock("@/service/PostingAccountService");
 vi.mock("@/service/ContractpartnerService");
@@ -44,7 +46,7 @@ class CreateGroupModalView {
   static readonly ResetButton = new ButtonView("createGroupResetButton");
 
   static readonly NameError = new AlertView("name-error-item");
-  static readonly ServerErrorItem = new AlertView("serverError-item");
+  static readonly Toast = new ToastView();
 }
 
 beforeEach(async () => {
@@ -135,9 +137,7 @@ test("shows server errors on failure", async () => {
   await CreateGroupModalView.NameInput.setValue("Valid Name");
   await CreateGroupModalView.SaveButton.click();
 
-  await CreateGroupModalView.ServerErrorItem.assertMessageContains(
-    "Backend Error Message",
-  );
+  await CreateGroupModalView.Toast.assertError("Backend Error Message");
   await CreateGroupModalView.Modal.assertOpen();
 });
 

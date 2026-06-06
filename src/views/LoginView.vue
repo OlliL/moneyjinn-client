@@ -69,6 +69,7 @@ import { Lock, LogIn, User } from "lucide-vue-next";
 import { useForm } from "vee-validate";
 import { onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
+import { toast } from "vue-sonner";
 import { string } from "zod";
 import { version } from "../../package.json";
 
@@ -90,6 +91,7 @@ const props = withDefaults(
 
 onMounted(() => {
   if (props.error) {
+    toast.error(props.error, { duration: Infinity });
   }
 });
 

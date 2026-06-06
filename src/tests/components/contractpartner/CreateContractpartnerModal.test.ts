@@ -25,11 +25,13 @@ import {
   InputView,
   ModalView,
   renderDeclarativeModal,
+  ToastView,
 } from "@/tests/TestViews";
 import "@testing-library/jest-dom/vitest";
 import { createPinia, setActivePinia } from "pinia";
 import { beforeEach, expect, test, vi } from "vitest";
 
+vi.mock("vue-sonner", () => ({ toast: { error: vi.fn() } }));
 vi.mock("@/service/ContractpartnerService");
 vi.mock("@/service/PostingAccountService");
 vi.mock("@/service/CapitalsourceService");
@@ -98,7 +100,7 @@ class CreateContractpartnerModalView {
   static readonly CountryError = new AlertView(
     "country-CreateContractpartner-error-item",
   );
-  static readonly ServerErrorItem = new AlertView("serverError-item");
+  static readonly Toast = new ToastView();
 }
 
 const defaultPostingAccounts = [
@@ -213,9 +215,7 @@ test("shows server errors on failure", async () => {
   await CreateContractpartnerModalView.ValidTilInput.setValue("31.12.2999");
   await CreateContractpartnerModalView.SaveButton.click();
 
-  await CreateContractpartnerModalView.ServerErrorItem.assertMessageContains(
-    "Backend Error",
-  );
+  await CreateContractpartnerModalView.Toast.assertError("Backend Error");
   await CreateContractpartnerModalView.Modal.assertOpen();
 });
 

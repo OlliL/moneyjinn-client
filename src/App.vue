@@ -7,14 +7,22 @@ import { RouterView } from "vue-router";
 <template>
   <router-view />
   <GlobalModals />
-  <Toaster position="top-center" rich-colors close-button />
+  <Toaster
+    position="top-center"
+    rich-colors
+    close-button
+    :toastOptions="{
+      classes: {
+        toast:
+          'group toast group-[.toaster]:bg-background group-[.toaster]:text-foreground group-[.toaster]:border-border group-[.toaster]:shadow-lg group-[.toaster]:pointer-events-auto',
+        closeButton: 'toast-close-button',
+      },
+    }"
+  />
 </template>
 
 <style>
-ul.month-selection {
-  margin: 0 !important;
-}
-span.link-primary:hover {
-  cursor: pointer;
+.toast-close-button:hover {
+  background-color: var(--secondary) !important;
 }
 </style>

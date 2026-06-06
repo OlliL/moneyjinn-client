@@ -20,13 +20,13 @@ import {
 } from "@/stores/UserSessionStore";
 import { assertHaveBeenCalledOnce } from "@/tests/TestUtil";
 import {
-  AlertView,
   ButtonView,
   CollapseView,
   CollectionView,
   ComboboxView,
   InputView,
   SelectView,
+  ToastView,
   ToggleView,
 } from "@/tests/TestViews";
 import CreateMoneyflow from "@/views/moneyflow/CreateMoneyflow.vue";
@@ -35,6 +35,7 @@ import { render } from "@testing-library/vue";
 import { createPinia, setActivePinia } from "pinia";
 import { beforeEach, test, vi } from "vitest";
 
+vi.mock("vue-sonner", () => ({ toast: { error: vi.fn() } }));
 vi.mock("@/service/PreDefMoneyflowService");
 vi.mock("@/service/PostingAccountService");
 vi.mock("@/service/ContractpartnerService");
@@ -75,7 +76,6 @@ class CreateMoneyflowView {
   static readonly SplitEntryRows = new CollectionView("splitEntryRow");
   static readonly ResetButton = new ButtonView("createMoneyflowResetButton");
   static readonly SaveButton = new ButtonView("createMoneyflowSaveButton");
-  static readonly ServerErrorItem = new AlertView("serverError-item");
   static readonly SelectMoneyflow = new SelectView("selectmoneyflow");
 
   static readonly PostingAccountCombobox = new ComboboxView(
@@ -91,6 +91,7 @@ class CreateMoneyflowView {
   static readonly FavoriteToggle = new ToggleView("Favorite");
   static readonly KeepToggle = new ToggleView("Keep");
   static readonly RenewToggle = new ToggleView("Renew");
+  static readonly Toast = new ToastView();
 
   static amountSplitEntryInput(rowId: number): InputView {
     return new InputView(`amountSplitEntry#${rowId}`);
@@ -381,9 +382,7 @@ test("failed submit shows server error message", async () => {
 
   await CreateMoneyflowView.SaveButton.click();
 
-  await CreateMoneyflowView.ServerErrorItem.assertMessageContains(
-    "Server not reachable",
-  );
+  await CreateMoneyflowView.Toast.assertError("Server not reachable");
 });
 
 test("successful submit of onceAMonth PreDefMoneyflow removes it from list", async () => {
