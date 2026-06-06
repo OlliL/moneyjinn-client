@@ -114,8 +114,6 @@ const createGroup = handleSubmit(() => {
       open.value = false;
       onDone.value?.();
     })
-    .catch((backendError) => {
-      handleBackendError(backendError);
-    });
+    .catch(handleBackendError);
 });
 </script>

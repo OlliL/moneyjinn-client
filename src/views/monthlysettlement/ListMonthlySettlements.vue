@@ -35,39 +35,61 @@
       @select-month="selectMonth"
     />
 
-    <ShowMontlySettlementVue
-      v-if="dataLoaded"
-      :year="Number(selectedYear)"
-      :month="selectedMonth"
-    />
+    <div v-if="dataLoaded" class="space-y-4">
+      <ButtonChevrons
+        test-id-prefix="show-monthlysettlement-month"
+        :show-previous-chevron="prevMonth > 0 && prevYear > 0"
+        :show-next-chevron="nextMonth > 0 && nextYear > 0"
+        @navigate-to-previous="navigateToPreviousMonth"
+        @navigate-to-next="navigateToNextMonth"
+      />
+      <ShowMontlySettlementVue :monthly-settlements="monthlySettlements" />
+    </div>
     <!---->
   </div>
 </template>
 
 <script lang="ts" setup>
+import ButtonChevrons from "@/components/common/ButtonChevrons.vue";
 import { useEditMonthlySettlementModalStore } from "@/components/monthlysettlement/EditMonthlySettlementModal.store";
 import { MonthlySettlementModalActionsKey } from "@/model/CrudActions";
+import type { MonthlySettlement } from "@/model/monthlysettlement/MonthlySettlement";
 import router, { Routes } from "@/router";
 import MonthlySettlementService from "@/service/MonthlySettlementService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { getMonthName } from "@/tools/views/MonthName";
-import { computed, onMounted, provide, ref } from "vue";
+import { computed, onMounted, provide, ref, toRaw } from "vue";
 import { onBeforeRouteUpdate } from "vue-router";
-import useDeleteMonthlySettlementModalStore from "./elements/DeleteMonthlySettlementModal.store";
+import { useDeleteMonthlySettlementModalStore } from "./elements/DeleteMonthlySettlementModal.store";
 import DeleteMonthlySettlementModal from "./elements/DeleteMonthlySettlementModal.vue";
 import ListMonthlySettlementsDesktop from "./elements/ListMonthlySettlementsDesktop.vue";
 import ListMonthlySettlementsMobile from "./elements/ListMonthlySettlementsMobile.vue";
 import ShowMontlySettlementVue from "./elements/ShowMonthlySettlement.vue";
+
+const props = withDefaults(
+  defineProps<{
+    year?: string;
+    month?: string;
+  }>(),
+  {
+    year: undefined,
+    month: undefined,
+  },
+);
 
 const dataLoaded = ref(false);
 const months = ref([] as number[]);
 const years = ref([] as number[]);
 const selectedYear = ref("0");
 const selectedMonth = ref(0);
-const currentlyShownYear = ref("0");
+const monthlySettlements = ref([] as Array<MonthlySettlement>);
+const prevMonth = ref(0);
+const prevYear = ref(0);
+const nextMonth = ref(0);
+const nextYear = ref(0);
 const canEditOrDelete = computed(() => selectedMonth.value > 0);
-const { openDeleteMonthlySettlement } = useDeleteMonthlySettlementModalStore();
-
+const { openDelete: openDeleteMonthlySettlement } =
+  useDeleteMonthlySettlementModalStore();
 const { openCreateMonthlySettlement, openEditMonthlySettlement } =
   useEditMonthlySettlementModalStore();
 
@@ -81,17 +103,6 @@ provide(MonthlySettlementModalActionsKey, {
   delete: () => showDeleteMonthlySettlementModal(),
 });
 
-const props = withDefaults(
-  defineProps<{
-    year?: string;
-    month?: string;
-  }>(),
-  {
-    year: undefined,
-    month: undefined,
-  },
-);
-
 onMounted(() => {
   const year = props.year ? props.year : undefined;
   const month: number | undefined = props.month ? +props.month : undefined;
@@ -99,49 +110,63 @@ onMounted(() => {
 });
 
 const monthName = computed(() =>
-  props.month ? getMonthName(+selectedMonth.value) : "",
+  selectedMonth.value ? getMonthName(selectedMonth.value) : "",
 );
 
 const loadMonth = (year?: string, month?: number) => {
   dataLoaded.value = false;
-
   MonthlySettlementService.getAvailableMonth(Number(year), month)
     .then((response) => {
       months.value = response.allMonth;
       years.value = response.allYears;
-
+      selectedYear.value = response.year.toString();
       selectedMonth.value = Number(response.month);
 
-      selectedYear.value = response.year.toString();
-
-      if (selectedYear.value != currentlyShownYear.value)
-        currentlyShownYear.value = selectedYear.value;
-
-      router.push({
-        name: Routes.ListMonthlySettlements,
-        params: { year: selectedYear.value, month: selectedMonth.value },
-      });
+      return loadSettlements(Number(selectedYear.value), selectedMonth.value);
+    })
+    .then(() => {
+      if (year !== selectedYear.value || month !== selectedMonth.value) {
+        updateRoute(selectedYear.value, selectedMonth.value);
+      }
       dataLoaded.value = true;
     })
-    .catch((backendError) => {
-      handleBackendError(backendError);
-    });
+    .catch(handleBackendError);
 };
 
+const loadSettlements = (year: number, month: number) =>
+  MonthlySettlementService.getMonthlySettlementList(year, month).then(
+    (response) => {
+      monthlySettlements.value = response.monthlySettlements;
+      prevMonth.value = response.prevMonth;
+      prevYear.value = response.prevYear;
+      nextMonth.value = response.nextMonth;
+      nextYear.value = response.nextYear;
+    },
+  );
+
 onBeforeRouteUpdate((to) => {
-  const year = to.params.year ? to.params.year.toString() : undefined;
+  const year = to.params.year?.toString();
   const month = to.params.month ? Number(to.params.month) : 0;
-  if (
-    // only reload month when switching years, deleting a settlement or creating a new settlement
-    currentlyShownYear.value != year ||
-    (selectedMonth.value > 0 && Number.isNaN(month)) ||
-    !months.value.includes(month)
-  ) {
+  if (selectedYear.value !== year || !months.value.includes(month)) {
     loadMonth(year, month);
   } else {
     selectedMonth.value = month;
+    loadSettlements(Number(selectedYear.value), month).catch(
+      handleBackendError,
+    );
   }
 });
+
+const updateRoute = (year?: string | number, month?: string | number) => {
+  router.push({
+    name: Routes.ListMonthlySettlements,
+    params: { year: year, month: month },
+  });
+};
+
+const navigateToPreviousMonth = () =>
+  updateRoute(prevYear.value, prevMonth.value);
+const navigateToNextMonth = () => updateRoute(nextYear.value, nextMonth.value);
 
 const showEditMonthlySettlementModal = (year?: number, month?: number) => {
   if (year === undefined && month === undefined) {
@@ -152,21 +177,13 @@ const showEditMonthlySettlementModal = (year?: number, month?: number) => {
   openEditMonthlySettlement(year, month, monthlySettlementUpserted);
 };
 
-const selectYear = (year: string) => {
-  router.push({
-    name: Routes.ListMonthlySettlements,
-    params: { year },
-  });
-};
+const selectYear = (year: string) => updateRoute(year);
 
 const selectMonth = (month: number) => {
   const targetMonth = months.value.includes(month)
     ? month
     : months.value.at(-1);
-  router.push({
-    name: Routes.ListMonthlySettlements,
-    params: { year: selectedYear.value, month: targetMonth },
-  });
+  updateRoute(selectedYear.value, targetMonth);
 };
 
 const selectCurrentMonth = () => {
@@ -181,41 +198,23 @@ const selectCurrentMonth = () => {
   ) {
     currentMonth = months.value.at(-1)!;
   }
-
-  router.push({
-    name: Routes.ListMonthlySettlements,
-    params: { year: currentYear, month: currentMonth },
-  });
+  updateRoute(currentYear, currentMonth);
 };
 
 const monthlySettlementUpserted = (year: number, month: number) => {
   selectedMonth.value = 0;
-  router.push({
-    name: Routes.ListMonthlySettlements,
-    params: { year: year, month: month },
-    force: true,
-  });
+  updateRoute(year, month);
 };
 
 const showDeleteMonthlySettlementModal = () => {
   openDeleteMonthlySettlement(
-    Number(selectedYear.value),
-    selectedMonth.value,
+    structuredClone(toRaw(monthlySettlements.value)),
     monthlySettlementDeleted,
   );
 };
 
-const monthlySettlementDeleted = (year: number) => {
-  if (months.value.length > 1) {
-    router.push({
-      name: Routes.ListMonthlySettlements,
-      params: { year: year },
-    });
-  } else {
-    router.push({
-      name: Routes.ListMonthlySettlements,
-      params: {},
-    });
-  }
+const monthlySettlementDeleted = (settlements: MonthlySettlement[]) => {
+  const targetYear = months.value.length > 1 ? settlements[0].year : undefined;
+  updateRoute(targetYear);
 };
 </script>

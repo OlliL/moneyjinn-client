@@ -174,9 +174,7 @@ const loadReceipt = (id: number) => {
     .then((response) => {
       receipt.value = response;
     })
-    .catch((backendError) => {
-      handleBackendError(backendError);
-    });
+    .catch(handleBackendError);
 };
 
 const deleteMoneyflowReceipt = () => {
@@ -185,9 +183,7 @@ const deleteMoneyflowReceipt = () => {
       open.value = false;
       onDone.value?.(mmf.value);
     })
-    .catch((backendError) => {
-      handleBackendError(backendError);
-    });
+    .catch(handleBackendError);
 };
 
 const resetForm = () => {

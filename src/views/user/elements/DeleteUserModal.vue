@@ -4,7 +4,7 @@
     id-suffix="DeleteUser"
     v-model:open="open"
     :delete-action="() => UserService.deleteUser(user.id)"
-    :delete-success-action="onDone"
+    :delete-success-action="() => onDone?.(user)"
   >
     <template #details>
       <ModalDeleteRow :label="$t('General.name')" highlight-value>
@@ -34,9 +34,9 @@ import { userRoleNames } from "@/model/user/UserRole";
 import UserService from "@/service/UserService";
 import { storeToRefs } from "pinia";
 import { computed } from "vue";
-import useDeleteUserModalStore from "./DeleteUserModal.store";
+import { useDeleteUserModalStore } from "./DeleteUserModal.store";
 
-const { open, user, onDone } = storeToRefs(useDeleteUserModalStore());
+const { open, entity: user, onDone } = storeToRefs(useDeleteUserModalStore());
 
 const role = computed(() => userRoleNames[user.value.role]);
 </script>

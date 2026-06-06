@@ -74,9 +74,7 @@ const loadData = (year: number, month: number) => {
       etfSummaryArray.value = _etfSummeryArray;
       dataLoaded.value = true;
     })
-    .catch((backendError) => {
-      handleBackendError(backendError);
-    });
+    .catch(handleBackendError);
 };
 
 onMounted(() => {

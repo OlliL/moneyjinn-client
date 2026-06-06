@@ -46,7 +46,8 @@ const userId = useUserSessionStore().getUserId;
 
 const capitalsourceStore = useCapitalsourceStore();
 const searchCapitalsources = capitalsourceStore.searchCapitalsources;
-const { openDeleteCapitalsource } = useDeleteCapitalsourceModalStore();
+const { openDelete: openDeleteCapitalsource } =
+  useDeleteCapitalsourceModalStore();
 const { openCreateCapitalsource, openEditCapitalsource } =
   useCreateCapitalsourceModalStore();
 

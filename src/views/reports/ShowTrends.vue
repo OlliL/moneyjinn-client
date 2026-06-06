@@ -565,9 +565,7 @@ const loadData = () => {
       dataLoaded.value = true;
       Object.keys(values).forEach((field) => setFieldTouched(field, false));
     })
-    .catch((backendError) => {
-      handleBackendError(backendError);
-    });
+    .catch(handleBackendError);
 };
 
 const getXLabel = (month: number, year: number) => {
@@ -700,8 +698,6 @@ const showTrends = handleSubmit(() => {
         trendsGraphLoaded.value = true;
       }
     })
-    .catch((backendError) => {
-      handleBackendError(backendError);
-    });
+    .catch(handleBackendError);
 });
 </script>

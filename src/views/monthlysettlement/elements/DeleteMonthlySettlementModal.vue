@@ -8,9 +8,9 @@
     v-model:open="open"
   >
     <template #body>
-      <div class="flex justify-center mb-4" v-if="month">
+      <div class="flex justify-center mb-4">
         <div class="w-full">
-          <ShowMonthlySettlementVue :year="year" :month="month" />
+          <ShowMonthlySettlementVue :monthly-settlements="localSettlements" />
         </div>
       </div>
     </template>
@@ -26,43 +26,38 @@
 <script lang="ts" setup>
 import ButtonDeleteTwoTap from "@/components/common/ButtonDeleteTwoTap.vue";
 import ModalVue from "@/components/common/Modal.vue";
+import type { MonthlySettlement } from "@/model/monthlysettlement/MonthlySettlement";
 import MonthlySettlementService from "@/service/MonthlySettlementService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { getMonthName } from "@/tools/views/MonthName";
 import { storeToRefs } from "pinia";
 import { computed, ref, watch } from "vue";
-import useDeleteMonthlySettlementModalStore from "./DeleteMonthlySettlementModal.store";
+import { useDeleteMonthlySettlementModalStore } from "./DeleteMonthlySettlementModal.store";
 import ShowMonthlySettlementVue from "./ShowMonthlySettlement.vue";
 
-const { open, year, month, onDone } = storeToRefs(
-  useDeleteMonthlySettlementModalStore(),
-);
+const store = useDeleteMonthlySettlementModalStore();
+const { open, onDone } = storeToRefs(store);
 
-const selectedMonth = ref(0);
-const selectedYear = ref(0);
-const monthName = computed(() => getMonthName(selectedMonth.value));
+const localSettlements = ref<MonthlySettlement[]>([]);
 
-watch(
-  () => [year.value, month.value],
-  ([nextYear, nextMonth]) => {
-    if (!nextYear || !nextMonth) return;
-    selectedYear.value = nextYear;
-    selectedMonth.value = nextMonth;
-  },
-  { immediate: true },
+watch(open, (isOpen) => {
+  if (isOpen) {
+    localSettlements.value = store.entity;
+  }
+});
+
+const year = computed(() => localSettlements.value[0]?.year);
+const month = computed(() => localSettlements.value[0]?.month);
+const monthName = computed(() =>
+  month.value ? getMonthName(month.value) : "",
 );
 
 const deleteMonthlySettlement = () => {
-  MonthlySettlementService.deleteMonthlySettlement(
-    selectedYear.value,
-    selectedMonth.value,
-  )
+  MonthlySettlementService.deleteMonthlySettlement(year.value, month.value)
     .then(() => {
+      onDone.value?.(localSettlements.value);
       open.value = false;
-      onDone.value?.(selectedYear.value);
     })
-    .catch((backendError) => {
-      handleBackendError(backendError);
-    });
+    .catch(handleBackendError);
 };
 </script>

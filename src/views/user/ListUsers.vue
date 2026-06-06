@@ -26,7 +26,7 @@ import { onMounted, provide, ref, watch } from "vue";
 import DivFilter from "@/components/common/DivFilter.vue";
 import useCreateUserModalStore from "./elements/CreateUserModal.store";
 import CreateUserModal from "./elements/CreateUserModal.vue";
-import useDeleteUserModalStore from "./elements/DeleteUserModal.store";
+import { useDeleteUserModalStore } from "./elements/DeleteUserModal.store";
 import DeleteUserModal from "./elements/DeleteUserModal.vue";
 import ListUsersDesktop from "./elements/ListUsersDesktop.vue";
 import ListUsersMobile from "./elements/ListUsersMobile.vue";
@@ -41,7 +41,7 @@ const users = ref(new Array<User>());
 const allUsers = ref(new Array<User>());
 const searchString = ref("");
 const { openCreateUser, openEditUser } = useCreateUserModalStore();
-const { openDeleteUser } = useDeleteUserModalStore();
+const { openDelete: openDeleteUser } = useDeleteUserModalStore();
 
 const actions: CrudActions<User> = {
   create: () => openCreateUser(reloadView),
@@ -74,9 +74,7 @@ const reloadView = () => {
       allUsers.value = _users;
       searchContent();
     })
-    .catch((backendError) => {
-      handleBackendError(backendError);
-    });
+    .catch(handleBackendError);
 };
 
 onMounted(() => {

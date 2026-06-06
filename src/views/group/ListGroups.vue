@@ -28,7 +28,7 @@ import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { onMounted, provide, ref, watch } from "vue";
 import useCreateGroupModalStore from "./elements/CreateGroupModal.store";
 import CreateGroupModal from "./elements/CreateGroupModal.vue";
-import useDeleteGroupModalStore from "./elements/DeleteGroupModal.store";
+import { useDeleteGroupModalStore } from "./elements/DeleteGroupModal.store";
 import DeleteGroupModal from "./elements/DeleteGroupModal.vue";
 import ListGroupsDesktop from "./elements/ListGroupsDesktop.vue";
 import ListGroupsMobile from "./elements/ListGroupsMobile.vue";
@@ -37,7 +37,7 @@ const groups = ref(new Array<Group>());
 const allGroups = ref(new Array<Group>());
 const searchString = ref("");
 const { openCreateGroup, openEditGroup } = useCreateGroupModalStore();
-const { openDeleteGroup } = useDeleteGroupModalStore();
+const { openDelete: openDeleteGroup } = useDeleteGroupModalStore();
 
 const actions: CrudActions<Group> = {
   create: () => openCreateGroup(reloadView),
@@ -70,9 +70,7 @@ const reloadView = () => {
       allGroups.value = _groups;
       searchContent();
     })
-    .catch((backendError) => {
-      handleBackendError(backendError);
-    });
+    .catch(handleBackendError);
 };
 
 onMounted(() => {

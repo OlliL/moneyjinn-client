@@ -115,9 +115,7 @@ onMounted(() =>
       );
       resetForm();
     })
-    .catch((backendError) => {
-      handleBackendError(backendError);
-    }),
+    .catch(handleBackendError),
 );
 
 const handleSelectChange = (val: AcceptableValue) => {

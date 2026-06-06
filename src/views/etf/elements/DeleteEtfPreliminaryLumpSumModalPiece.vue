@@ -38,7 +38,9 @@ import useDeleteEtfPreliminaryLumpSumModalPieceStore from "./DeleteEtfPreliminar
 const { getEtf } = useEtfStore();
 const etfName = computed(() => getEtf(lumpSum.value.etfId)?.name ?? "");
 
-const { open, lumpSum, onDone } = storeToRefs(
-  useDeleteEtfPreliminaryLumpSumModalPieceStore(),
-);
+const {
+  open,
+  entity: lumpSum,
+  onDone,
+} = storeToRefs(useDeleteEtfPreliminaryLumpSumModalPieceStore());
 </script>

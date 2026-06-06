@@ -120,7 +120,7 @@ import {
 } from "@/model/CrudActions";
 import useCreateContractpartnerAccountModalStore from "./CreateContractpartnerAccountModal.store";
 import CreateContractpartnerAccountModal from "./CreateContractpartnerAccountModal.vue";
-import useDeleteContractpartnerAccountModalStore from "./DeleteContractpartnerAccountModal.store";
+import { useDeleteContractpartnerAccountModalStore } from "./DeleteContractpartnerAccountModal.store";
 import DeleteContractpartnerAccountModal from "./DeleteContractpartnerAccountModal.vue";
 import ListContractpartnerAccountRowVue from "./ListContractpartnerAccountRow.vue";
 import { useListContractpartnerAccountsModalStore } from "./ListContractpartnerAccountsModal.store";
@@ -138,7 +138,7 @@ const { open, contractpartner: mcp } = storeToRefs(
 );
 const { openCreateContractpartnerAccount, openEditContractpartnerAccount } =
   useCreateContractpartnerAccountModalStore();
-const { openDeleteContractpartnerAccount } =
+const { openDelete: openDeleteContractpartnerAccount } =
   useDeleteContractpartnerAccountModalStore();
 const contractpartnerAccount = ref([] as Array<ContractpartnerAccount>);
 const dataLoaded = ref(false);
@@ -164,9 +164,7 @@ const loadData = () => {
       contractpartnerAccount.value = mcaArray;
       dataLoaded.value = true;
     })
-    .catch((backendError) => {
-      handleBackendError(backendError);
-    });
+    .catch(handleBackendError);
 };
 
 watch(

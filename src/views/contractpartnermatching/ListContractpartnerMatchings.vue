@@ -52,7 +52,7 @@ import {
 } from "@/model/CrudActions";
 import useCreateContractpartnerMatchingModalStore from "./elements/CreateContractpartnerMatchingModal.store";
 import CreateContractpartnerMatchingModal from "./elements/CreateContractpartnerMatchingModal.vue";
-import useDeleteContractpartnerMatchingModalStore from "./elements/DeleteContractpartnerMatchingModal.store";
+import { useDeleteContractpartnerMatchingModalStore } from "./elements/DeleteContractpartnerMatchingModal.store";
 import DeleteContractpartnerMatchingModal from "./elements/DeleteContractpartnerMatchingModal.vue";
 import ListContractpartnerMatchingsDesktop from "./elements/ListContractpartnerMatchingsDesktop.vue";
 import ListContractpartnerMatchingsMobile from "./elements/ListContractpartnerMatchingsMobile.vue";
@@ -69,7 +69,7 @@ const searchString = ref("");
 const searchContractpartnerId = ref<number | undefined>(undefined);
 const { openCreateContractpartnerMatching, openEditContractpartnerMatching } =
   useCreateContractpartnerMatchingModalStore();
-const { openDeleteContractpartnerMatching } =
+const { openDelete: openDeleteContractpartnerMatching } =
   useDeleteContractpartnerMatchingModalStore();
 
 const actions: CrudActions<ContractpartnerMatching> = {
@@ -115,9 +115,7 @@ const reloadView = () => {
       allContractpartnerMatchings.value = _contractpartnerMatchings;
       searchContent();
     })
-    .catch((backendError) => {
-      handleBackendError(backendError);
-    });
+    .catch(handleBackendError);
 };
 
 onMounted(() => {

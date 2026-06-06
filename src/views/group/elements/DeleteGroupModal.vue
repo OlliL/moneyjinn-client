@@ -4,7 +4,7 @@
     id-suffix="DeleteGroup"
     v-model:open="open"
     :delete-action="() => GroupService.deleteGroup(group.id)"
-    :delete-success-action="onDone"
+    :delete-success-action="() => onDone?.(group)"
   >
     <template #details>
       <ModalDeleteRow :label="$t('General.name')" highlight-value>
@@ -19,7 +19,7 @@ import ModalDelete from "@/components/common/ModalDelete.vue";
 import ModalDeleteRow from "@/components/common/ModalDeleteRow.vue";
 import GroupService from "@/service/GroupService";
 import { storeToRefs } from "pinia";
-import useDeleteGroupModalStore from "./DeleteGroupModal.store";
+import { useDeleteGroupModalStore } from "./DeleteGroupModal.store";
 
-const { open, group, onDone } = storeToRefs(useDeleteGroupModalStore());
+const { open, entity: group, onDone } = storeToRefs(useDeleteGroupModalStore());
 </script>

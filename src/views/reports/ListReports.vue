@@ -153,9 +153,7 @@ const loadData = (year?: number, month?: number) => {
 
       dataLoadedMonth.value = true;
     })
-    .catch((backendError) => {
-      handleBackendError(backendError);
-    });
+    .catch(handleBackendError);
 };
 
 const navigateToPreviousMonth = () => {

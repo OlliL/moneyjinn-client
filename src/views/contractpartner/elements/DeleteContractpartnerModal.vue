@@ -7,7 +7,7 @@
       () =>
         ContractpartnerService.deleteContractpartner(contractpartner?.id ?? 0)
     "
-    :delete-success-action="onDone"
+    :delete-success-action="() => onDone?.(contractpartner)"
   >
     <template #details>
       <ModalDeleteRow :label="$t('General.name')" highlight-value>
@@ -44,9 +44,11 @@ import SpanDate from "@/components/common/SpanDate.vue";
 
 import ContractpartnerService from "@/service/ContractpartnerService";
 import { storeToRefs } from "pinia";
-import useDeleteContractpartnerModalStore from "./DeleteContractpartnerModal.store";
+import { useDeleteContractpartnerModalStore } from "./DeleteContractpartnerModal.store";
 
-const { open, contractpartner, onDone } = storeToRefs(
-  useDeleteContractpartnerModalStore(),
-);
+const {
+  open,
+  entity: contractpartner,
+  onDone,
+} = storeToRefs(useDeleteContractpartnerModalStore());
 </script>

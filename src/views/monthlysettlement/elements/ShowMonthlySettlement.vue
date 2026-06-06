@@ -1,13 +1,5 @@
 <template>
-  <ButtonChevrons
-    test-id-prefix="show-monthlysettlement-month"
-    :show-previous-chevron="prevMonth > 0 && prevYear > 0"
-    :show-next-chevron="nextMonth > 0 && nextYear > 0"
-    @navigate-to-previous="navigateToPreviousMonth"
-    @navigate-to-next="navigateToNextMonth"
-  />
-
-  <div class="flex justify-center" v-if="props.month">
+  <div class="flex justify-center">
     <div class="w-full max-w-md">
       <div class="px-14 md:px-0">
         <div
@@ -96,7 +88,6 @@
 </template>
 
 <script lang="ts" setup>
-import ButtonChevrons from "@/components/common/ButtonChevrons.vue";
 import SpanAmount from "@/components/common/SpanAmount.vue";
 import {
   Table,
@@ -108,82 +99,27 @@ import {
 } from "@/components/ui/table";
 import { CapitalsourceType } from "@/model/capitalsource/CapitalsourceType";
 import type { MonthlySettlement } from "@/model/monthlysettlement/MonthlySettlement";
-import router, { Routes } from "@/router";
-import MonthlySettlementService from "@/service/MonthlySettlementService";
-import { handleBackendError } from "@/tools/views/HandleBackendError";
-import { onMounted, ref, watch } from "vue";
+import { computed } from "vue";
 
 const props = defineProps<{
-  year: number;
-  month: number;
+  monthlySettlements: Array<MonthlySettlement>;
 }>();
 
-const dataLoaded = ref(false);
-const monthlySettlementsNoCredit = ref([] as Array<MonthlySettlement>);
-const monthlySettlementsCredit = ref([] as Array<MonthlySettlement>);
-const monthlySettlementNoCreditSum = ref(0);
-const monthlySettlementCreditSum = ref(0);
-const prevMonth = ref(0);
-const prevYear = ref(0);
-const nextMonth = ref(0);
-const nextYear = ref(0);
+const monthlySettlementsNoCredit = computed(() =>
+  props.monthlySettlements.filter(
+    (mms) => mms.capitalsourceType !== CapitalsourceType.CREDIT,
+  ),
+);
+const monthlySettlementsCredit = computed(() =>
+  props.monthlySettlements.filter(
+    (mms) => mms.capitalsourceType === CapitalsourceType.CREDIT,
+  ),
+);
 
-const loadMonthlySettlements = (year: number, month: number) => {
-  dataLoaded.value = false;
-  MonthlySettlementService.getMonthlySettlementList(year, month)
-    .then((response) => {
-      monthlySettlementsCredit.value = new Array<MonthlySettlement>();
-      monthlySettlementsNoCredit.value = new Array<MonthlySettlement>();
-      monthlySettlementCreditSum.value = 0;
-      monthlySettlementNoCreditSum.value = 0;
-      prevMonth.value = response.prevMonth;
-      prevYear.value = response.prevYear;
-      nextMonth.value = response.nextMonth;
-      nextYear.value = response.nextYear;
-
-      const monthlySettlements = response.monthlySettlements;
-
-      for (const mms of monthlySettlements) {
-        if (mms.capitalsourceType === CapitalsourceType.CREDIT) {
-          monthlySettlementsCredit.value.push(mms);
-          monthlySettlementCreditSum.value += mms.amount;
-        } else {
-          monthlySettlementsNoCredit.value.push(mms);
-          monthlySettlementNoCreditSum.value += mms.amount;
-        }
-      }
-      dataLoaded.value = true;
-    })
-    .catch((backendError) => {
-      handleBackendError(backendError);
-    });
-};
-
-const navigateToPreviousMonth = () => {
-  if (prevMonth.value && prevYear.value)
-    router.push({
-      name: Routes.ListMonthlySettlements,
-      params: {
-        year: prevYear.value.toString(),
-        month: prevMonth.value.toString(),
-      },
-    });
-};
-
-const navigateToNextMonth = () => {
-  if (nextMonth.value && nextYear.value)
-    router.push({
-      name: Routes.ListMonthlySettlements,
-      params: {
-        year: nextYear.value.toString(),
-        month: nextMonth.value.toString(),
-      },
-    });
-};
-
-onMounted(() => loadMonthlySettlements(props.year, props.month));
-
-watch([() => props.year, () => props.month], () =>
-  loadMonthlySettlements(props.year, props.month),
+const monthlySettlementNoCreditSum = computed(() =>
+  monthlySettlementsNoCredit.value.reduce((sum, mms) => sum + mms.amount, 0),
+);
+const monthlySettlementCreditSum = computed(() =>
+  monthlySettlementsCredit.value.reduce((sum, mms) => sum + mms.amount, 0),
 );
 </script>

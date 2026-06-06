@@ -30,7 +30,7 @@ import type { PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
 import PreDefMoneyflowService from "@/service/PreDefMoneyflowService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { onMounted, provide, ref, watch } from "vue";
-import useDeletePreDefMoneyflowModalStore from "./elements/DeletePreDefMoneyflowModal.store";
+import { useDeletePreDefMoneyflowModalStore } from "./elements/DeletePreDefMoneyflowModal.store";
 import DeletePreDefMoneyflowModal from "./elements/DeletePreDefMoneyflowModal.vue";
 import ListPreDefMoneyflowsDesktop from "./elements/ListPreDefMoneyflowsDesktop.vue";
 import ListPreDefMoneyflowsMobile from "./elements/ListPreDefMoneyflowsMobile.vue";
@@ -41,7 +41,8 @@ const searchString = ref("");
 
 const { openCreatePreDefMoneyflow, openEditPreDefMoneyflow } =
   useCreatePreDefMoneyflowModalStore();
-const { openDeletePreDefMoneyflow } = useDeletePreDefMoneyflowModalStore();
+const { openDelete: openDeletePreDefMoneyflow } =
+  useDeletePreDefMoneyflowModalStore();
 
 const actions: CrudActions<PreDefMoneyflow> = {
   create: () => openCreatePreDefMoneyflow(reloadView),
@@ -82,9 +83,7 @@ const reloadView = () => {
       allPreDefMoneyflows.value = _preDefMoneyflows;
       searchContent();
     })
-    .catch((backendError) => {
-      handleBackendError(backendError);
-    });
+    .catch(handleBackendError);
 };
 
 onMounted(() => {

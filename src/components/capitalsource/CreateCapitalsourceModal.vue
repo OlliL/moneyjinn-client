@@ -238,8 +238,6 @@ const createCapitalsource = handleSubmit(() => {
       open.value = false;
       onDone.value?.(mcs.value);
     })
-    .catch((backendError) => {
-      handleBackendError(backendError);
-    });
+    .catch(handleBackendError);
 });
 </script>

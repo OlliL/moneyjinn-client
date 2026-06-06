@@ -6,7 +6,7 @@
     :delete-action="
       () => PostingAccountService.deletePostingAccount(postingAccount.id)
     "
-    :delete-success-action="onDone"
+    :delete-success-action="() => onDone?.(postingAccount)"
   >
     <template #details>
       <ModalDeleteRow :label="$t('General.name')" highlight-value>
@@ -23,7 +23,9 @@ import PostingAccountService from "@/service/PostingAccountService";
 import { storeToRefs } from "pinia";
 import { useDeletePostingAccountModalStore } from "./DeletePostingAccountModal.store";
 
-const { open, postingAccount, onDone } = storeToRefs(
-  useDeletePostingAccountModalStore(),
-);
+const {
+  open,
+  entity: postingAccount,
+  onDone,
+} = storeToRefs(useDeletePostingAccountModalStore());
 </script>

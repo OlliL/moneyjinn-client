@@ -78,9 +78,11 @@ const { getEtf } = useEtfStore();
 const dataArray = ref([] as Array<RowData>);
 const etfName = computed(() => getEtf(lumpSum.value.etfId)?.name ?? "");
 
-const { open, lumpSum, onDone } = storeToRefs(
-  useDeleteEtfPreliminaryLumpSumModalMonthlyStore(),
-);
+const {
+  open,
+  entity: lumpSum,
+  onDone,
+} = storeToRefs(useDeleteEtfPreliminaryLumpSumModalMonthlyStore());
 
 watch(open, (newVal) => {
   if (newVal) {

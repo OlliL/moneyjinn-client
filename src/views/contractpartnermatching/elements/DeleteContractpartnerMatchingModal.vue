@@ -9,7 +9,7 @@
           matching.id,
         )
     "
-    :delete-success-action="onDone"
+    :delete-success-action="() => onDone?.(matching)"
   >
     <template #details>
       <ModalDeleteRow
@@ -44,9 +44,11 @@ import ModalDeleteRow from "@/components/common/ModalDeleteRow.vue";
 import SpanDate from "@/components/common/SpanDate.vue";
 import ContractpartnerMatchingService from "@/service/ContractpartnerMatchingService";
 import { storeToRefs } from "pinia";
-import useDeleteContractpartnerMatchingModalStore from "./DeleteContractpartnerMatchingModal.store";
+import { useDeleteContractpartnerMatchingModalStore } from "./DeleteContractpartnerMatchingModal.store";
 
-const { open, matching, onDone } = storeToRefs(
-  useDeleteContractpartnerMatchingModalStore(),
-);
+const {
+  open,
+  entity: matching,
+  onDone,
+} = storeToRefs(useDeleteContractpartnerMatchingModalStore());
 </script>

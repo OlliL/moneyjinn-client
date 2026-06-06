@@ -1,5 +1,4 @@
 import { BackendError, BackendErrorType } from "@/model/BackendError";
-import type { Group } from "@/model/group/Group";
 import GroupService from "@/service/GroupService";
 import CapitalsourceServiceMocker from "@/service/mocker/CapitalsourceServiceMocker";
 import ContractpartnerServiceMocker from "@/service/mocker/ContractpartnerServiceMocker";
@@ -80,7 +79,7 @@ test("updates an existing group", async () => {
   const existingGroup = {
     id: 1,
     name: "Existing Group",
-  } as Group;
+  };
 
   useCreateGroupModalStore().openEditGroup(existingGroup);
   renderDeclarativeModal(CreateGroupModal);
@@ -109,7 +108,7 @@ test("reset button reverts changes in edit mode", async () => {
   const existingGroup = {
     id: 1,
     name: "Original Name",
-  } as Group;
+  };
   useCreateGroupModalStore().openEditGroup(existingGroup);
   renderDeclarativeModal(CreateGroupModal);
 

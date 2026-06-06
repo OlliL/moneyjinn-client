@@ -259,9 +259,7 @@ const createEtf = handleSubmit(() => {
         open.value = false;
         onDone.value?.();
       })
-      .catch((backendError) => {
-        handleBackendError(backendError);
-      });
+      .catch(handleBackendError);
   } else {
     //create
     CrudEtfService.createEtf(met.value)
@@ -270,9 +268,7 @@ const createEtf = handleSubmit(() => {
         open.value = false;
         onDone.value?.();
       })
-      .catch((backendError) => {
-        handleBackendError(backendError);
-      });
+      .catch(handleBackendError);
   }
 });
 </script>

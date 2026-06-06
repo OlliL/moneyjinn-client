@@ -116,8 +116,6 @@ const createPostingAccount = handleSubmit(() => {
       open.value = false;
       onDone.value?.(mpa.value);
     })
-    .catch((backendError) => {
-      handleBackendError(backendError);
-    });
+    .catch(handleBackendError);
 });
 </script>

@@ -169,9 +169,7 @@ const createEtfPreliminaryLumpSum = handleSubmit(() => {
         open.value = false;
         onDone.value?.(mep.value);
       })
-      .catch((backendError) => {
-        handleBackendError(backendError);
-      });
+      .catch(handleBackendError);
   } else {
     // Create
     CrudEtfPreliminaryLumpSumService.createEtfPreliminaryLumpSum(mep.value)
@@ -180,9 +178,7 @@ const createEtfPreliminaryLumpSum = handleSubmit(() => {
         open.value = false;
         onDone.value?.(mep.value);
       })
-      .catch((backendError) => {
-        handleBackendError(backendError);
-      });
+      .catch(handleBackendError);
   }
 });
 </script>

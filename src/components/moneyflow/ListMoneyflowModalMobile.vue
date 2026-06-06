@@ -183,14 +183,9 @@
 </template>
 
 <script lang="ts" setup>
-import { storeToRefs } from "pinia";
-import { computed, ref, toRaw, watch } from "vue";
-import useListMoneyflowModalStore from "./ListMoneyflowModal.store";
-
-// shadcn/ui Komponenten
 import { Badge } from "@/components/ui/badge";
-
-// Icons aus lucide-vue-next (Neu: Calendar und CalendarDays hinzugefügt)
+import type { ImportedMoneyflowReceipt } from "@/model/moneyflow/ImportedMoneyflowReceipt";
+import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 import {
   Calendar,
   CalendarDays,
@@ -201,14 +196,13 @@ import {
   ReceiptText,
   Tag,
 } from "lucide-vue-next";
-
-// Eigene bestehende Komponenten & Typen
-import type { ImportedMoneyflowReceipt } from "@/model/moneyflow/ImportedMoneyflowReceipt";
-import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
+import { storeToRefs } from "pinia";
+import { computed, ref, toRaw, watch } from "vue";
 import ModalVue from "../common/Modal.vue";
 import SpanAmount from "../common/SpanAmount.vue";
 import SpanDate from "../common/SpanDate.vue";
 import useReceiptModalStore from "../reports/ReceiptModal.store.ts";
+import useListMoneyflowModalStore from "./ListMoneyflowModal.store";
 
 const mmf = ref({} as Moneyflow);
 const { open, moneyflow, importedReceipt } = storeToRefs(
