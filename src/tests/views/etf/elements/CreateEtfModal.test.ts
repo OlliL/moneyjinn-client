@@ -6,10 +6,10 @@ import ContractpartnerServiceMocker from "@/service/mocker/ContractpartnerServic
 import CrudEtfServiceMocker from "@/service/mocker/CrudEtfServiceMocker";
 import PostingAccountServiceMocker from "@/service/mocker/PostingAccountServiceMocker";
 import { StoreService } from "@/stores/StoreService";
-import { useUserSessionStore } from "@/stores/UserSessionStore";
 import {
   assertHaveBeenCalledWith,
   assertNotHaveBeenCalled,
+  setupUserStandard,
 } from "@/tests/TestUtil";
 import {
   AlertView,
@@ -46,7 +46,7 @@ class CreateEtfModalView {
 beforeEach(async () => {
   setActivePinia(createPinia());
   vi.clearAllMocks();
-  useUserSessionStore().setUserSession({ userId: 1 } as any);
+  setupUserStandard();
   CrudEtfServiceMocker.mockFetchAllEtf([]);
   CapitalsourceServiceMocker.mockFetchAllCapitalsource([]);
   ContractpartnerServiceMocker.mockFetchAllContractpartner([]);

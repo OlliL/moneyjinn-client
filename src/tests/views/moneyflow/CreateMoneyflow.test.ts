@@ -14,11 +14,7 @@ import MoneyflowServiceMocker from "@/service/mocker/MoneyflowServiceMocker";
 import PostingAccountServiceMocker from "@/service/mocker/PostingAccountServiceMocker";
 import PreDefMoneyflowServiceMocker from "@/service/mocker/PreDefMoneyflowServiceMocker";
 import { StoreService } from "@/stores/StoreService";
-import {
-  type UserSession,
-  useUserSessionStore,
-} from "@/stores/UserSessionStore";
-import { assertHaveBeenCalledOnce } from "@/tests/TestUtil";
+import { assertHaveBeenCalledOnce, setupUserStandard } from "@/tests/TestUtil";
 import {
   ButtonView,
   CollapseView,
@@ -198,7 +194,7 @@ beforeEach(() => {
   setActivePinia(createPinia());
   vi.clearAllMocks();
   applyDefaultMocks();
-  useUserSessionStore().setUserSession({ userId: 1 } as UserSession);
+  setupUserStandard();
 });
 
 test("render - form initialized", async () => {

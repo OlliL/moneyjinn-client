@@ -10,12 +10,9 @@ import MoneyflowServiceMocker from "@/service/mocker/MoneyflowServiceMocker";
 import MoneyflowService from "@/service/MoneyflowService";
 import { useCapitalsourceStore } from "@/stores/CapitalsourceStore";
 import {
-  type UserSession,
-  useUserSessionStore,
-} from "@/stores/UserSessionStore";
-import {
   assertHaveBeenCalled,
   assertHaveBeenCalledWith,
+  setupUserStandard,
 } from "@/tests/TestUtil";
 import {
   ButtonView,
@@ -167,7 +164,7 @@ const runCompare = async () => {
 beforeEach(async () => {
   setActivePinia(createPinia());
   vi.clearAllMocks();
-  useUserSessionStore().setUserSession({ userId: 1 } as UserSession);
+  setupUserStandard();
 
   CapitalsourceServiceMocker.mockFetchAllCapitalsource([
     {

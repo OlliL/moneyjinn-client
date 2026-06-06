@@ -1,13 +1,11 @@
 import { WebSocketSingleton } from "@/config/WebSocketSingleton";
 import router, { Routes } from "@/router";
 import { StoreService } from "@/stores/StoreService";
-import {
-  type UserSession,
-  useUserSessionStore,
-} from "@/stores/UserSessionStore";
+import { useUserSessionStore } from "@/stores/UserSessionStore";
 import {
   assertHaveBeenCalled,
   assertHaveBeenCalledWith,
+  setupUserStandard,
 } from "@/tests/TestUtil";
 import AppNavigation from "@/views/navigation/AppNavigation.vue";
 import "@testing-library/jest-dom/vitest";
@@ -97,13 +95,7 @@ beforeEach(() => {
   mockInitAllStores.mockResolvedValue(undefined);
   mockLogoutApiCall.mockResolvedValue(undefined);
   mockClearAuthTokens.mockResolvedValue(undefined);
-  useUserSessionStore().setUserSession({
-    userId: 7,
-    userName: "username",
-    userIsAdmin: true,
-    userCanLogin: true,
-    userIsNew: false,
-  } as UserSession);
+  setupUserStandard();
 });
 
 const renderView = (props: Record<string, unknown> = {}) => {

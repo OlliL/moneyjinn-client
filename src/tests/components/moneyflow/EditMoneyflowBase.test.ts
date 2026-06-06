@@ -19,12 +19,9 @@ import PostingAccountServiceMocker from "@/service/mocker/PostingAccountServiceM
 import PreDefMoneyflowServiceMocker from "@/service/mocker/PreDefMoneyflowServiceMocker";
 import { StoreService } from "@/stores/StoreService";
 import {
-  type UserSession,
-  useUserSessionStore,
-} from "@/stores/UserSessionStore";
-import {
   assertHaveBeenCalledWith,
   assertNotHaveBeenCalled,
+  setupUserStandard,
 } from "@/tests/TestUtil";
 import {
   AlertView,
@@ -162,7 +159,7 @@ beforeEach(async () => {
   PreDefMoneyflowServiceMocker.mockFetchAllPreDefMoneyflow([]);
   CrudEtfServiceMocker.mockFetchAllEtf([]);
   await StoreService.getInstance().initAllStores();
-  useUserSessionStore().setUserSession({ userId: 1 } as UserSession);
+  setupUserStandard();
 });
 
 test("split entries handling", async () => {

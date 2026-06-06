@@ -6,10 +6,10 @@ import CrudEtfServiceMocker from "@/service/mocker/CrudEtfServiceMocker";
 import PostingAccountServiceMocker from "@/service/mocker/PostingAccountServiceMocker";
 import PreDefMoneyflowServiceMocker from "@/service/mocker/PreDefMoneyflowServiceMocker";
 import { StoreService } from "@/stores/StoreService";
-import { useUserSessionStore } from "@/stores/UserSessionStore";
 import {
   assertHaveBeenCalledWith,
   assertNotHaveBeenCalled,
+  setupUserStandard,
 } from "@/tests/TestUtil";
 import {
   AlertView,
@@ -46,7 +46,7 @@ class YearlyLumpSumView {
 beforeEach(async () => {
   setActivePinia(createPinia());
   vi.clearAllMocks();
-  useUserSessionStore().setUserSession({ userId: 1 } as any);
+  setupUserStandard();
   CrudEtfServiceMocker.mockFetchAllEtf([
     {
       id: 1,

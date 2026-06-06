@@ -1,3 +1,4 @@
+import { useUserSessionStore } from "@/stores/UserSessionStore";
 import { waitFor } from "@testing-library/vue";
 import { expect } from "vitest";
 
@@ -22,4 +23,24 @@ export async function assertHaveBeenCalledWith(
 
 export async function assertNotHaveBeenCalled(func: any) {
   await waitFor(() => expect(func).not.toHaveBeenCalled());
+}
+
+export function setupUserStandard() {
+  useUserSessionStore().setUserSession({
+    userId: 1,
+    userName: "standard-user",
+    userIsAdmin: false,
+    userCanLogin: true,
+    userIsNew: false,
+  });
+}
+
+export function setupUserNew() {
+  useUserSessionStore().setUserSession({
+    userId: 1,
+    userName: "new-user",
+    userIsAdmin: false,
+    userCanLogin: true,
+    userIsNew: true,
+  });
 }

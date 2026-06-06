@@ -1,9 +1,6 @@
 import GroupServiceMocker from "@/service/mocker/GroupServiceMocker";
 import UserServiceMocker from "@/service/mocker/UserServiceMocker";
-import {
-  type UserSession,
-  useUserSessionStore,
-} from "@/stores/UserSessionStore";
+import { setupUserStandard } from "@/tests/TestUtil";
 import {
   ButtonView,
   InputView,
@@ -48,7 +45,7 @@ class ListUsersView {
 beforeEach(() => {
   setActivePinia(createPinia());
   vi.clearAllMocks();
-  useUserSessionStore().setUserSession({ userId: 1 } as UserSession);
+  setupUserStandard();
   GroupServiceMocker.mockFetchAllGroup([{ id: 1, name: "Default group" }]);
   UserServiceMocker.mockFetchAllUser([
     {

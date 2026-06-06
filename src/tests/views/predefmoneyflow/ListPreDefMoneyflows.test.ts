@@ -3,10 +3,7 @@ import CapitalsourceServiceMocker from "@/service/mocker/CapitalsourceServiceMoc
 import ContractpartnerServiceMocker from "@/service/mocker/ContractpartnerServiceMocker";
 import PostingAccountServiceMocker from "@/service/mocker/PostingAccountServiceMocker";
 import PreDefMoneyflowServiceMocker from "@/service/mocker/PreDefMoneyflowServiceMocker";
-import {
-  type UserSession,
-  useUserSessionStore,
-} from "@/stores/UserSessionStore";
+import { setupUserStandard } from "@/tests/TestUtil";
 import {
   ButtonView,
   InputView,
@@ -67,7 +64,7 @@ class ListPreDefMoneyflowsView {
 beforeEach(() => {
   setActivePinia(createPinia());
   vi.clearAllMocks();
-  useUserSessionStore().setUserSession({ userId: 1 } as UserSession);
+  setupUserStandard();
   PreDefMoneyflowServiceMocker.mockFetchAllPreDefMoneyflow([
     {
       id: 2,

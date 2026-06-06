@@ -6,11 +6,7 @@ import CrudEtfPreliminaryLumpSumServiceMocker from "@/service/mocker/CrudEtfPrel
 import CrudEtfServiceMocker from "@/service/mocker/CrudEtfServiceMocker";
 import PostingAccountServiceMocker from "@/service/mocker/PostingAccountServiceMocker";
 import { StoreService } from "@/stores/StoreService";
-import {
-  type UserSession,
-  useUserSessionStore,
-} from "@/stores/UserSessionStore";
-import { assertHaveBeenCalledWith } from "@/tests/TestUtil";
+import { assertHaveBeenCalledWith, setupUserStandard } from "@/tests/TestUtil";
 import {
   ButtonView,
   DeclarativeModalStub,
@@ -121,7 +117,7 @@ const renderListPreliminaryLumpSumsView = (
 beforeEach(() => {
   setActivePinia(createPinia());
   vi.clearAllMocks();
-  useUserSessionStore().setUserSession({ userId: 1 } as UserSession);
+  setupUserStandard();
   CrudEtfServiceMocker.mockFetchAllEtf([
     {
       id: 1,

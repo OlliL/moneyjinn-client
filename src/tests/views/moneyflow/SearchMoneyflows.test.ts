@@ -5,11 +5,7 @@ import useReceiptModalStore from "@/components/reports/ReceiptModal.store";
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 import MoneyflowServiceMocker from "@/service/mocker/MoneyflowServiceMocker";
 import MoneyflowService from "@/service/MoneyflowService";
-import {
-  type UserSession,
-  useUserSessionStore,
-} from "@/stores/UserSessionStore";
-import { assertHaveBeenCalledWith } from "@/tests/TestUtil";
+import { assertHaveBeenCalledWith, setupUserStandard } from "@/tests/TestUtil";
 import { ButtonView, InputView, RowView } from "@/tests/TestViews";
 import SearchMoneyflows from "@/views/moneyflow/SearchMoneyflows.vue";
 import "@testing-library/jest-dom/vitest";
@@ -89,7 +85,7 @@ const expandFirstGroup = async () => {
 beforeEach(() => {
   setActivePinia(createPinia());
   vi.restoreAllMocks();
-  useUserSessionStore().setUserSession({ userId: 1 } as UserSession);
+  setupUserStandard();
 
   MoneyflowServiceMocker.mockSearchMoneyflowsResolved([
     createMoneyflow(12, 1, false),

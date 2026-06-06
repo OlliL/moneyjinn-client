@@ -9,13 +9,10 @@ import PostingAccountServiceMocker from "@/service/mocker/PostingAccountServiceM
 import PreDefMoneyflowServiceMocker from "@/service/mocker/PreDefMoneyflowServiceMocker";
 import { StoreService } from "@/stores/StoreService";
 import {
-  type UserSession,
-  useUserSessionStore,
-} from "@/stores/UserSessionStore";
-import {
   assertHaveBeenCalledOnce,
   assertHaveBeenCalledWith,
   assertNotHaveBeenCalled,
+  setupUserStandard,
 } from "@/tests/TestUtil";
 import {
   AlertView,
@@ -72,7 +69,7 @@ class CreateContractpartnerMatchingModalView {
 beforeEach(async () => {
   setActivePinia(createPinia());
   vi.clearAllMocks();
-  useUserSessionStore().setUserSession({ userId: 1 } as UserSession);
+  setupUserStandard();
 
   ContractpartnerServiceMocker.mockFetchAllContractpartner([
     { id: 1, name: "Partner 1" } as any,

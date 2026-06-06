@@ -3,11 +3,7 @@ import ContractpartnerMatchingServiceMocker from "@/service/mocker/Contractpartn
 import ContractpartnerServiceMocker from "@/service/mocker/ContractpartnerServiceMocker";
 import PostingAccountServiceMocker from "@/service/mocker/PostingAccountServiceMocker";
 import { useContractpartnerStore } from "@/stores/ContractpartnerStore";
-import {
-  type UserSession,
-  useUserSessionStore,
-} from "@/stores/UserSessionStore";
-import { assertHaveBeenCalledOnce } from "@/tests/TestUtil";
+import { assertHaveBeenCalledOnce, setupUserStandard } from "@/tests/TestUtil";
 import {
   ButtonView,
   ComboboxView,
@@ -76,7 +72,7 @@ class ListContractpartnerMatchingsView {
 beforeEach(async () => {
   setActivePinia(createPinia());
   vi.clearAllMocks();
-  useUserSessionStore().setUserSession({ userId: 1 } as UserSession);
+  setupUserStandard();
   ContractpartnerMatchingServiceMocker.mockFetchAllContractpartnerMatching([
     {
       id: 1,

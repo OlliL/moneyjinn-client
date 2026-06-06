@@ -1,8 +1,5 @@
 import GroupServiceMocker from "@/service/mocker/GroupServiceMocker";
-import {
-  type UserSession,
-  useUserSessionStore,
-} from "@/stores/UserSessionStore";
+import { setupUserStandard } from "@/tests/TestUtil";
 import {
   ButtonView,
   DeclarativeModalStub,
@@ -49,7 +46,7 @@ class ListGroupsView {
 beforeEach(() => {
   setActivePinia(createPinia());
   vi.clearAllMocks();
-  useUserSessionStore().setUserSession({ userId: 1 } as UserSession);
+  setupUserStandard();
   GroupServiceMocker.mockFetchAllGroup([
     { id: 1, name: "Group 1" },
     { id: 2, name: "Household" },

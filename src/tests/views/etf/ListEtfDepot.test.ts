@@ -2,11 +2,7 @@ import EtfService from "@/service/EtfService";
 import CrudEtfServiceMocker from "@/service/mocker/CrudEtfServiceMocker";
 import EtfServiceMocker from "@/service/mocker/EtfServiceMocker";
 import { useEtfStore } from "@/stores/EtfStore";
-import {
-  type UserSession,
-  useUserSessionStore,
-} from "@/stores/UserSessionStore";
-import { assertHaveBeenCalledWith } from "@/tests/TestUtil";
+import { assertHaveBeenCalledWith, setupUserStandard } from "@/tests/TestUtil";
 import {
   ButtonView,
   DeclarativeModalStub,
@@ -62,7 +58,7 @@ class ListEtfDepotView {
 beforeEach(() => {
   setActivePinia(createPinia());
   vi.clearAllMocks();
-  useUserSessionStore().setUserSession({ userId: 1 } as UserSession);
+  setupUserStandard();
   CrudEtfServiceMocker.mockFetchAllEtf([
     {
       id: 1,
@@ -91,7 +87,7 @@ beforeEach(() => {
       amount: 0,
       spentValue: 0,
     },
-  } as never);
+  });
 });
 
 const renderListEtfDepotView = (props: { etfId?: string } = {}) =>
@@ -164,7 +160,7 @@ test("ListEtfDepot shows effective flows when available", async () => {
       amount: 0.8,
       spentValue: 96,
     },
-  } as never);
+  });
 
   await useEtfStore().initEtfStore();
   renderListEtfDepotView({ etfId: "1" });
@@ -230,7 +226,7 @@ test("ListEtfDepot toggles mobile view mode via filter switch", async () => {
       amount: 0.5,
       spentValue: 52.5,
     },
-  } as never);
+  });
 
   await useEtfStore().initEtfStore();
   renderListEtfDepotView({ etfId: "1" });

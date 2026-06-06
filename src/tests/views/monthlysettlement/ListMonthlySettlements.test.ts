@@ -2,11 +2,7 @@ import GlobalModals from "@/components/common/GlobalModals.vue";
 import router, { Routes } from "@/router";
 import MonthlySettlementService from "@/service/MonthlySettlementService";
 import MonthlySettlementServiceMocker from "@/service/mocker/MonthlySettlementServiceMocker";
-import {
-  type UserSession,
-  useUserSessionStore,
-} from "@/stores/UserSessionStore";
-import { assertHaveBeenCalledWith } from "@/tests/TestUtil";
+import { assertHaveBeenCalledWith, setupUserStandard } from "@/tests/TestUtil";
 import {
   ButtonView,
   DeclarativeModalStub,
@@ -101,7 +97,7 @@ const renderListMonthlySettlementsView = (
 beforeEach(() => {
   setActivePinia(createPinia());
   vi.clearAllMocks();
-  useUserSessionStore().setUserSession({ userId: 1 } as UserSession);
+  setupUserStandard();
   MonthlySettlementServiceMocker.mockGetAvailableMonth({
     allMonth: [1, 2],
     allYears: [2026, 2027],

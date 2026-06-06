@@ -13,13 +13,10 @@ import UserServiceMocker from "@/service/mocker/UserServiceMocker";
 import UserService from "@/service/UserService";
 import { StoreService } from "@/stores/StoreService";
 import {
-  type UserSession,
-  useUserSessionStore,
-} from "@/stores/UserSessionStore";
-import {
   assertHaveBeenCalledOnce,
   assertHaveBeenCalledWith,
   assertNotHaveBeenCalled,
+  setupUserStandard,
 } from "@/tests/TestUtil";
 import {
   AlertView,
@@ -83,7 +80,7 @@ const defaultGroups: Group[] = [
 beforeEach(async () => {
   setActivePinia(createPinia());
   vi.clearAllMocks();
-  useUserSessionStore().setUserSession({ userId: 1 } as UserSession);
+  setupUserStandard();
 
   GroupServiceMocker.mockFetchAllGroup(defaultGroups);
   UserServiceMocker.mockGetAllAccessRelationsResolved([]);

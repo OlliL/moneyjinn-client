@@ -3,10 +3,7 @@ import ContractpartnerServiceMocker from "@/service/mocker/ContractpartnerServic
 import CrudEtfServiceMocker from "@/service/mocker/CrudEtfServiceMocker";
 import PostingAccountServiceMocker from "@/service/mocker/PostingAccountServiceMocker";
 import { StoreService } from "@/stores/StoreService";
-import {
-  type UserSession,
-  useUserSessionStore,
-} from "@/stores/UserSessionStore";
+import { setupUserStandard } from "@/tests/TestUtil";
 import {
   ButtonView,
   DeclarativeModalStub,
@@ -66,7 +63,7 @@ class ListEtfsView {
 beforeEach(() => {
   setActivePinia(createPinia());
   vi.clearAllMocks();
-  useUserSessionStore().setUserSession({ userId: 1 } as UserSession);
+  setupUserStandard();
   CrudEtfServiceMocker.mockFetchAllEtf([
     {
       id: 2,

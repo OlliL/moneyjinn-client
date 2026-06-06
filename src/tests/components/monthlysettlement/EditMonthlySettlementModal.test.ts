@@ -12,12 +12,9 @@ import PostingAccountServiceMocker from "@/service/mocker/PostingAccountServiceM
 import PreDefMoneyflowServiceMocker from "@/service/mocker/PreDefMoneyflowServiceMocker";
 import { StoreService } from "@/stores/StoreService";
 import {
-  type UserSession,
-  useUserSessionStore,
-} from "@/stores/UserSessionStore";
-import {
   assertHaveBeenCalledWith,
   assertNotHaveBeenCalled,
+  setupUserStandard,
 } from "@/tests/TestUtil";
 import {
   AlertView,
@@ -77,7 +74,7 @@ const defaultTransporter: MonthlySettlementEditTransporter = {
 beforeEach(async () => {
   setActivePinia(createPinia());
   vi.clearAllMocks();
-  useUserSessionStore().setUserSession({ userId: 1 } as UserSession);
+  setupUserStandard();
 
   CapitalsourceServiceMocker.mockFetchAllCapitalsource([]);
   ContractpartnerServiceMocker.mockFetchAllContractpartner([]);

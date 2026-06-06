@@ -1,10 +1,11 @@
 import router, { Routes } from "@/router";
 import UserService from "@/service/UserService";
+import { useUserSessionStore } from "@/stores/UserSessionStore";
 import {
-  type UserSession,
-  useUserSessionStore,
-} from "@/stores/UserSessionStore";
-import { assertHaveBeenCalledWith } from "@/tests/TestUtil";
+  assertHaveBeenCalledWith,
+  setupUserNew,
+  setupUserStandard,
+} from "@/tests/TestUtil";
 import { ButtonView, InputView } from "@/tests/TestViews";
 import ChangePassword from "@/views/user/ChangePassword.vue";
 import "@testing-library/jest-dom/vitest";
@@ -43,13 +44,7 @@ const fillAndSubmit = async () => {
 beforeEach(() => {
   setActivePinia(createPinia());
   vi.clearAllMocks();
-  useUserSessionStore().setUserSession({
-    userId: 1,
-    userName: "username",
-    userIsAdmin: true,
-    userCanLogin: true,
-    userIsNew: false,
-  });
+  setupUserStandard();
   vi.mocked(UserService.changePassword).mockResolvedValue();
 });
 
@@ -67,13 +62,7 @@ test("ChangePassword changes password and redirects existing users to home", asy
 });
 
 test("ChangePassword logs out new users and redirects to login", async () => {
-  useUserSessionStore().setUserSession({
-    userId: 1,
-    userName: "username",
-    userIsAdmin: true,
-    userCanLogin: true,
-    userIsNew: true,
-  } as UserSession);
+  setupUserNew();
 
   render(ChangePassword);
 

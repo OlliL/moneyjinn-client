@@ -1,8 +1,8 @@
 import {
-  type UserSession,
-  useUserSessionStore,
-} from "@/stores/UserSessionStore";
-import { assertHaveBeenCalledWith } from "@/tests/TestUtil";
+  assertHaveBeenCalledWith,
+  setupUserNew,
+  setupUserStandard,
+} from "@/tests/TestUtil";
 import { createPinia, setActivePinia } from "pinia";
 import { beforeEach, expect, test, vi } from "vitest";
 
@@ -73,13 +73,7 @@ test("allows change-password route directly", async () => {
 test("redirects new users to change-password", async () => {
   const { Routes } = await import("@/router");
   mockIsLoggedIn.mockResolvedValueOnce(true);
-  useUserSessionStore().setUserSession({
-    userId: 1,
-    userName: "new-user",
-    userIsAdmin: false,
-    userCanLogin: true,
-    userIsNew: true,
-  } as UserSession);
+  setupUserNew();
 
   const result = await registeredGuard?.(
     {
@@ -98,13 +92,7 @@ test("redirects new users to change-password", async () => {
 test("reloads and cancels navigation when target equals source fullPath", async () => {
   const { Routes } = await import("@/router");
   mockIsLoggedIn.mockResolvedValueOnce(true);
-  useUserSessionStore().setUserSession({
-    userId: 1,
-    userName: "username",
-    userIsAdmin: true,
-    userCanLogin: true,
-    userIsNew: false,
-  } as UserSession);
+  setupUserStandard();
 
   const result = await registeredGuard?.(
     {

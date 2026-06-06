@@ -5,11 +5,7 @@ import EtfServiceMocker from "@/service/mocker/EtfServiceMocker";
 import MoneyflowReceiptServiceMocker from "@/service/mocker/MoneyflowReceiptServiceMocker";
 import ReportServiceMocker from "@/service/mocker/ReportServiceMocker";
 import ReportService from "@/service/ReportService";
-import {
-  type UserSession,
-  useUserSessionStore,
-} from "@/stores/UserSessionStore";
-import { assertHaveBeenCalledWith } from "@/tests/TestUtil";
+import { assertHaveBeenCalledWith, setupUserStandard } from "@/tests/TestUtil";
 import {
   ButtonView,
   DeclarativeModalStub,
@@ -137,7 +133,7 @@ const renderListReportsView = (props: { year?: string; month?: string } = {}) =>
 beforeEach(() => {
   setActivePinia(createPinia());
   vi.clearAllMocks();
-  useUserSessionStore().setUserSession({ userId: 1 } as UserSession);
+  setupUserStandard();
   ReportServiceMocker.mockGetAvailableMonth({
     allMonth: [1, 2, 3],
     allYears: [2025, 2026],

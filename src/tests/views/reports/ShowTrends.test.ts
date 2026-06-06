@@ -8,12 +8,9 @@ import ReportServiceMocker from "@/service/mocker/ReportServiceMocker";
 import { useCapitalsourceStore } from "@/stores/CapitalsourceStore";
 import { useEtfStore } from "@/stores/EtfStore";
 import {
-  useUserSessionStore,
-  type UserSession,
-} from "@/stores/UserSessionStore";
-import {
   assertHaveBeenCalledOnce,
   assertHaveBeenCalledWith,
+  setupUserStandard,
 } from "@/tests/TestUtil";
 import {
   ButtonView,
@@ -95,7 +92,7 @@ beforeEach(async () => {
   setActivePinia(createPinia());
   vi.clearAllMocks();
   setupVitestCanvasMock();
-  useUserSessionStore().setUserSession({ userId: 1 } as UserSession);
+  setupUserStandard();
   ReportServiceMocker.mockShowTrendsFormResolved({
     startDate: new Date("2023-01-01"),
     endDate: new Date("2023-12-31"),

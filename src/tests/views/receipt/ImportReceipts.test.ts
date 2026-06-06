@@ -2,7 +2,7 @@
 import { BackendError, BackendErrorType } from "@/model/BackendError";
 import ImportedMoneyflowReceiptServiceMocker from "@/service/mocker/ImportedMoneyflowReceiptServiceMocker";
 import MoneyflowServiceMocker from "@/service/mocker/MoneyflowServiceMocker";
-import { useUserSessionStore } from "@/stores/UserSessionStore";
+import { setupUserStandard } from "@/tests/TestUtil";
 import {
   ButtonView,
   FileUploadView,
@@ -57,13 +57,7 @@ beforeEach(async () => {
     [...mockReceipts],
   );
   MoneyflowServiceMocker.mockFetchMoneyflowById((id) => ({ id }));
-  useUserSessionStore().setUserSession({
-    userId: 1,
-    userName: "test",
-    userIsAdmin: false,
-    userCanLogin: true,
-    userIsNew: false,
-  });
+  setupUserStandard();
 });
 
 test("renders imported receipts list", async () => {
