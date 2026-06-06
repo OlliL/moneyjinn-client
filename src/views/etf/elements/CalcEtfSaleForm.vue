@@ -208,9 +208,7 @@ watch(
 
 watch(
   () => props.pieces,
-  (newVal) => {
-    calcEtfSalePieces.value = newVal ?? 0;
-  },
+  (newVal) => (calcEtfSalePieces.value = newVal ?? 0),
   { immediate: true },
 );
 </script>

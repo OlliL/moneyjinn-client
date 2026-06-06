@@ -20,7 +20,7 @@
         <Button
           data-testid="monthly-settlement-new"
           type="button"
-          @click="emitCreate"
+          @click="actions.create()"
         >
           {{ $t("General.new") }}
         </Button>
@@ -28,7 +28,7 @@
           data-testid="monthly-settlement-edit"
           type="button"
           :disabled="!canEditOrDelete"
-          @click="emitEdit"
+          @click="actions.edit()"
         >
           {{ $t("General.edit") }}
         </Button>
@@ -37,7 +37,7 @@
           type="button"
           variant="destructive"
           :disabled="!canEditOrDelete"
-          @click="emitDelete"
+          @click="actions.delete()"
         >
           {{ $t("General.delete") }}
         </Button>
@@ -77,7 +77,4 @@ const actions = inject(MonthlySettlementModalActionsKey)!;
 
 const selectYear = (year: string) => emit("selectYear", year);
 const selectMonth = (month: number) => emit("selectMonth", month);
-const emitCreate = () => actions.create();
-const emitEdit = () => actions.edit();
-const emitDelete = () => actions.delete();
 </script>

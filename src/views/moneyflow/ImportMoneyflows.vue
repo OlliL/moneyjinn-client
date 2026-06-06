@@ -90,9 +90,8 @@ onMounted(() => {
     });
 });
 
-const onItemRemoved = (id: number) => {
-  importMoneyflows.value = importMoneyflows.value.filter(
+const onItemRemoved = (id: number) =>
+  (importMoneyflows.value = importMoneyflows.value.filter(
     (entry) => entry.id !== id,
-  );
-};
+  ));
 </script>

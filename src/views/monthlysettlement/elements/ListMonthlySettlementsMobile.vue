@@ -2,15 +2,15 @@
   <div>
     <ButtonMobileCreate
       data-testid="monthly-settlement-mobile-new"
-      @click="emitCreate"
+      @click="actions.create()"
     />
     <ButtonMobileDelete
       data-testid="monthly-settlement-mobile-delete"
-      @click="emitDelete"
+      @click="actions.delete()"
     />
     <ButtonMobileEdit
       data-testid="monthly-settlement-mobile-edit"
-      @click="emitEdit"
+      @click="actions.edit()"
     />
   </div>
 
@@ -66,7 +66,4 @@ const actions = inject(MonthlySettlementModalActionsKey)!;
 const selectCurrentMonth = () => emit("selectCurrentMonth");
 const selectYear = (year: string) => emit("selectYear", year);
 const selectMonth = (month: number) => emit("selectMonth", month);
-const emitCreate = () => actions.create();
-const emitEdit = () => actions.edit();
-const emitDelete = () => actions.delete();
 </script>

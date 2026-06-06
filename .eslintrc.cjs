@@ -12,4 +12,8 @@ module.exports = {
   parserOptions: {
     ecmaVersion: "latest",
   },
+  rules: {
+    // Erzwingt Expression Bodies, wo immer es möglich ist
+    "arrow-body-style": ["error", "as-needed"],
+  },
 };

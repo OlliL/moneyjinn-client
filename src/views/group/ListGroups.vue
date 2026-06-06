@@ -22,23 +22,19 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, provide, ref, watch } from "vue";
-
-import { handleBackendError } from "@/tools/views/HandleBackendError";
-
 import DivError from "@/components/common/DivError.vue";
 import DivFilter from "@/components/common/DivFilter.vue";
+import { GroupActionsKey, type CrudActions } from "@/model/CrudActions";
+import type { Group } from "@/model/group/Group";
+import GroupService from "@/service/GroupService";
+import { handleBackendError } from "@/tools/views/HandleBackendError";
+import { onMounted, provide, ref, watch } from "vue";
 import useCreateGroupModalStore from "./elements/CreateGroupModal.store";
 import CreateGroupModal from "./elements/CreateGroupModal.vue";
 import useDeleteGroupModalStore from "./elements/DeleteGroupModal.store";
 import DeleteGroupModal from "./elements/DeleteGroupModal.vue";
 import ListGroupsDesktop from "./elements/ListGroupsDesktop.vue";
 import ListGroupsMobile from "./elements/ListGroupsMobile.vue";
-
-import { GroupActionsKey, type CrudActions } from "@/model/CrudActions";
-import type { Group } from "@/model/group/Group";
-
-import GroupService from "@/service/GroupService";
 
 const serverErrors = ref(new Array<string>());
 
@@ -56,9 +52,7 @@ const actions: CrudActions<Group> = {
 
 provide(GroupActionsKey, actions);
 
-watch(searchString, () => {
-  searchContent();
-});
+watch(searchString, () => searchContent());
 
 const searchContent = () => {
   if (searchString.value === "") {

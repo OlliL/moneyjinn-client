@@ -191,71 +191,67 @@ const selectedEtfName = computed(
   () => getEtf(Number(props.selectedEtfId))?.name,
 );
 
-const etfEffectiveFlowAmountSum = computed(() => {
-  return props.etfEffectiveFlows.reduce((a, b) => a + (b["amount"] || 0), 0);
-});
+const etfEffectiveFlowAmountSum = computed(() =>
+  props.etfEffectiveFlows.reduce((a, b) => a + (b["amount"] || 0), 0),
+);
 
-const partial = computed(() => {
-  return (
+const partial = computed(
+  () =>
     100 -
     (props.selectedEtfId
       ? (getEtf(Number(props.selectedEtfId))?.partialTaxExemption ?? 0)
-      : 0)
-  );
-});
-const etfEffectiveFlowAccumulatedPreliminaryLumpSum = computed(() => {
-  return props.etfEffectiveFlows.reduce(
+      : 0),
+);
+const etfEffectiveFlowAccumulatedPreliminaryLumpSum = computed(() =>
+  props.etfEffectiveFlows.reduce(
     (a, b) =>
       a + ((b["accumulatedPreliminaryLumpSum"] * partial.value) / 100 || 0),
     0,
-  );
-});
+  ),
+);
 
-const etfEffectiveFlowAmountPriceSum = computed(() => {
-  return props.etfEffectiveFlows.reduce(
+const etfEffectiveFlowAmountPriceSum = computed(() =>
+  props.etfEffectiveFlows.reduce(
     (a, b) => a + (b["amount"] * b["price"] || 0),
     0,
-  );
-});
+  ),
+);
 
-const etfEffectiveFlowAmountSumString = computed(() => {
-  return formatNumber(etfEffectiveFlowAmountSum.value, 6);
-});
+const etfEffectiveFlowAmountSumString = computed(() =>
+  formatNumber(etfEffectiveFlowAmountSum.value, 6),
+);
 
-const etfEffectiveFlowPriceAvg = computed(() => {
-  return etfEffectiveFlowAmountPriceSum.value / etfEffectiveFlowAmountSum.value;
-});
+const etfEffectiveFlowPriceAvg = computed(
+  () => etfEffectiveFlowAmountPriceSum.value / etfEffectiveFlowAmountSum.value,
+);
 
-const etfFlowAmountSum = computed(() => {
-  return props.etfFlows.reduce((a, b) => a + (b["amount"] || 0), 0);
-});
+const etfFlowAmountSum = computed(() =>
+  props.etfFlows.reduce((a, b) => a + (b["amount"] || 0), 0),
+);
 
-const etfFlowBuyAmountSum = computed(() => {
-  return props.etfFlows.reduce(
+const etfFlowBuyAmountSum = computed(() =>
+  props.etfFlows.reduce(
     (a, b) => a + (b["amount"] > 0 ? b["amount"] || 0 : 0),
     0,
-  );
-});
+  ),
+);
 
-const etfFlowAmountPriceSum = computed(() => {
-  return props.etfFlows.reduce(
-    (a, b) => a + (b["amount"] * b["price"] || 0),
-    0,
-  );
-});
+const etfFlowAmountPriceSum = computed(() =>
+  props.etfFlows.reduce((a, b) => a + (b["amount"] * b["price"] || 0), 0),
+);
 
-const etfFlowBuyAmountPriceSum = computed(() => {
-  return props.etfFlows.reduce(
+const etfFlowBuyAmountPriceSum = computed(() =>
+  props.etfFlows.reduce(
     (a, b) => a + (b["amount"] > 0 ? b["amount"] * b["price"] || 0 : 0),
     0,
-  );
-});
+  ),
+);
 
-const etfFlowAmountSumString = computed(() => {
-  return formatNumber(etfFlowAmountSum.value, 6);
-});
+const etfFlowAmountSumString = computed(() =>
+  formatNumber(etfFlowAmountSum.value, 6),
+);
 
-const etfFlowPriceAvg = computed(() => {
-  return etfFlowBuyAmountPriceSum.value / etfFlowBuyAmountSum.value;
-});
+const etfFlowPriceAvg = computed(
+  () => etfFlowBuyAmountPriceSum.value / etfFlowBuyAmountSum.value,
+);
 </script>

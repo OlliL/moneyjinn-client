@@ -111,9 +111,8 @@
   </TableRow>
 </template>
 <script lang="ts" setup>
-import { ChevronDown, ChevronRight } from "lucide-vue-next";
-import { ref } from "vue";
-
+import SpanAmount from "@/components/common/SpanAmount.vue";
+import DisplayMoneyflowRowDesktop from "@/components/moneyflow/DisplayMoneyflowRowDesktop.vue";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -123,13 +122,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-
-import { Routes } from "@/router";
-
-import SpanAmount from "@/components/common/SpanAmount.vue";
-
-import DisplayMoneyflowRowDesktop from "@/components/moneyflow/DisplayMoneyflowRowDesktop.vue";
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
+import { Routes } from "@/router";
+import { ChevronDown, ChevronRight } from "lucide-vue-next";
+import { ref } from "vue";
 
 type MoneyflowGroup = {
   month: number;

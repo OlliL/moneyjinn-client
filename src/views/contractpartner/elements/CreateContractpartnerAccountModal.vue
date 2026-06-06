@@ -109,11 +109,11 @@ const schema: Partial<{ [key in keyof ContractpartnerAccount]: ZodType }> = {
     .optional(),
 };
 
-const title = computed(() => {
-  return origMca.value === undefined
+const title = computed(() =>
+  origMca.value === undefined
     ? t("ContractpartnerAccount.title.create")
-    : t("ContractpartnerAccount.title.update");
-});
+    : t("ContractpartnerAccount.title.update"),
+);
 
 const resetForm = () => {
   account.value = origMca.value

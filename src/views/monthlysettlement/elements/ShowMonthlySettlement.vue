@@ -187,11 +187,9 @@ const navigateToNextMonth = () => {
     });
 };
 
-onMounted(() => {
-  loadMonthlySettlements(props.year, props.month);
-});
+onMounted(() => loadMonthlySettlements(props.year, props.month));
 
-watch([() => props.year, () => props.month], () => {
-  loadMonthlySettlements(props.year, props.month);
-});
+watch([() => props.year, () => props.month], () =>
+  loadMonthlySettlements(props.year, props.month),
+);
 </script>

@@ -79,9 +79,7 @@ const { openListReceipt } = useReceiptModalStore();
 
 const { handleSubmit, values, setFieldTouched } = useForm();
 
-onMounted(() => {
-  loadData();
-});
+onMounted(() => loadData());
 
 const loadData = () => {
   ImportedMoneyflowReceiptService.showImportImportedMoneyflowReceipts()
@@ -97,22 +95,18 @@ const loadData = () => {
 
 const actions: ImportReceiptRowActions = {
   list: (id: number, receipt: ImportedMoneyflowReceipt) =>
-    MoneyflowService.fetchMoneyflow(id).then((mmf) => {
-      openListMoneyflow(mmf, receipt, openListReceipt);
-    }),
+    MoneyflowService.fetchMoneyflow(id).then((mmf) =>
+      openListMoneyflow(mmf, receipt, openListReceipt),
+    ),
   edit: (id: number, receipt: ImportedMoneyflowReceipt) =>
-    MoneyflowService.fetchMoneyflow(id).then((mmf) => {
-      openEditMoneyflow(mmf, receipt, undefined, openListReceipt);
-    }),
+    MoneyflowService.fetchMoneyflow(id).then((mmf) =>
+      openEditMoneyflow(mmf, receipt, undefined, openListReceipt),
+    ),
   delete: (id: number) =>
-    MoneyflowService.fetchMoneyflow(id).then((mmf) => {
-      openDeleteMoneyflow(mmf);
-    }),
+    MoneyflowService.fetchMoneyflow(id).then((mmf) => openDeleteMoneyflow(mmf)),
   removeReceipt: (id: number) => {
     importedMoneyflowReceipts.value = importedMoneyflowReceipts.value.filter(
-      (receipt) => {
-        return receipt.id !== id;
-      },
+      (receipt) => receipt.id !== id,
     );
   },
 };

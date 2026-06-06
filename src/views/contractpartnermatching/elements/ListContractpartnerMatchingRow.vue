@@ -18,14 +18,14 @@
     <ButtonTableIcon
       :title="$t('General.edit')"
       :test-id="`contractpartner-matching-edit-${mcm.id}`"
-      @click="editContractpartnerMatching"
+      @click="actions.edit(mcm)"
     >
       <Pencil class="icon-medium" />
     </ButtonTableIcon>
     <ButtonTableIcon
       :title="$t('General.delete')"
       :test-id="`contractpartner-matching-delete-${mcm.id}`"
-      @click="deleteContractpartnerMatching"
+      @click="actions.delete(mcm)"
     >
       <Trash2 class="icon-medium" />
     </ButtonTableIcon>
@@ -45,11 +45,4 @@ const props = defineProps<{
   mcm: ContractpartnerMatching;
 }>();
 const actions = inject(ContractpartnerMatchingActionsKey)!;
-
-const deleteContractpartnerMatching = () => {
-  actions.delete(props.mcm);
-};
-const editContractpartnerMatching = () => {
-  actions.edit(props.mcm);
-};
 </script>

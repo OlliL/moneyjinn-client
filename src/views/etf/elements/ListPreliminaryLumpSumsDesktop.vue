@@ -98,11 +98,8 @@ const emit = defineEmits<{
 const showTypeSelector = ref(false);
 const createButtonRefDesktop = ref<HTMLElement | null>(null);
 
-const toggleTypeSelector = () => {
-  showTypeSelector.value = !showTypeSelector.value;
-};
+const toggleTypeSelector = () =>
+  (showTypeSelector.value = !showTypeSelector.value);
 
-onClickOutside(createButtonRefDesktop, () => {
-  showTypeSelector.value = false;
-});
+onClickOutside(createButtonRefDesktop, () => (showTypeSelector.value = false));
 </script>

@@ -250,15 +250,13 @@ const moneyflowReceipt = computed(() =>
   mapImportedMoneyflowReceiptToMoneyflowReceipt(props.receipt),
 );
 
-const deleteMoneyflow = (id: number) => {
-  importReceiptActions.delete(id);
-};
-const editMoneyflow = (id: number) => {
+const deleteMoneyflow = (id: number) => importReceiptActions.delete(id);
+
+const editMoneyflow = (id: number) =>
   importReceiptActions.edit(id, props.receipt);
-};
-const listMoneyflow = (id: number) => {
+
+const listMoneyflow = (id: number) =>
   importReceiptActions.list(id, props.receipt);
-};
 
 const searchMoneyflows = handleSubmit(() => {
   serverErrors.value = new Array<string>();

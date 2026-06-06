@@ -353,9 +353,8 @@ const emit = defineEmits<{
   showPreDefMoneyflowModal: [];
 }>();
 
-const isMenuActve = (menu: DropdownMenus) => {
-  return route.meta?.activeMenu === menu ? "router-link-active" : "";
-};
+const isMenuActve = (menu: DropdownMenus) =>
+  route.meta?.activeMenu === menu ? "router-link-active" : "";
 
 const { openCreateCapitalsource } = useCreateCapitalsourceModalStore();
 const { openCreateContractpartner } = useCreateContractpartnerModalStore();

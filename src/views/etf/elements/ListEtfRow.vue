@@ -50,17 +50,15 @@ const props = defineProps<{
 
 const actions = inject(EtfActionsKey)!;
 
-const relativeString = computed(() => {
-  if (props.etf.transactionCostsRelative === undefined) {
-    return "";
-  }
-  return formatNumber(props.etf.transactionCostsRelative, 2) + " %";
-});
+const relativeString = computed(() =>
+  props.etf.transactionCostsRelative === undefined
+    ? ""
+    : formatNumber(props.etf.transactionCostsRelative, 2) + " %",
+);
 
-const taxExemptionString = computed(() => {
-  if (props.etf.partialTaxExemption === undefined) {
-    return "";
-  }
-  return formatNumber(props.etf.partialTaxExemption, 2) + " %";
-});
+const taxExemptionString = computed(() =>
+  props.etf.partialTaxExemption === undefined
+    ? ""
+    : formatNumber(props.etf.partialTaxExemption, 2) + " %",
+);
 </script>

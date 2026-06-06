@@ -73,7 +73,7 @@ const dataArray = computed<Array<RowData>>(() => {
   }));
 });
 
-const sum = computed(() => {
-  return dataArray.value.reduce((acc, row) => acc + (row.amount ?? 0), 0);
-});
+const sum = computed(() =>
+  dataArray.value.reduce((acc, row) => acc + (row.amount ?? 0), 0),
+);
 </script>

@@ -98,9 +98,10 @@ watch(open, (newVal) => {
       lumpSum.value.amountNovember,
       lumpSum.value.amountDecember,
     ];
-    dataArray.value = amounts.map((amount, i) => {
-      return { month: getMonthName(i + 1), amount: amount } as RowData;
-    });
+    dataArray.value = amounts.map(
+      (amount, i) =>
+        ({ month: getMonthName(i + 1), amount: amount }) as RowData,
+    );
   }
 });
 </script>

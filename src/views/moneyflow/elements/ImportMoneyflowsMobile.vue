@@ -240,18 +240,17 @@ const statusClass = (valid: boolean) =>
 const textStatusClass = (valid: boolean) =>
   valid ? "text-foreground font-medium" : "text-orange-400/70 italic";
 
-const importItem = () => {
+const importItem = () =>
   editRef.value
     ?.importImportedMoneyflow(props.importedMoneyflow)
     .then((res: boolean) => {
       if (res) emit("itemRemoved", props.importedMoneyflow.id);
     });
-};
-const deleteItem = () => {
+
+const deleteItem = () =>
   editRef.value
     ?.deleteImportedMoneyflow(props.importedMoneyflow.id)
     .then((res: boolean) => {
       if (res) emit("itemRemoved", props.importedMoneyflow.id);
     });
-};
 </script>

@@ -112,7 +112,7 @@ const editMoneyflowVue =
 
 const { handleSubmit, values, setFieldTouched } = useForm();
 
-onMounted(() => {
+onMounted(() =>
   PreDefMoneyflowService.fetchAllPreDefMoneyflow()
     .then((allPreDefMoneyflows) => {
       // remove those PreDefMoneyflows which where used this month already and have onceMonth set
@@ -126,8 +126,8 @@ onMounted(() => {
     })
     .catch((backendError) => {
       handleBackendError(backendError, serverErrors);
-    });
-});
+    }),
+);
 
 const handleSelectChange = (val: AcceptableValue) => {
   preDefMoneyflowId.value = Number(val ?? 0);

@@ -21,26 +21,23 @@
 </template>
 
 <script lang="ts" setup>
-import { storeToRefs } from "pinia";
-import { onMounted, onUnmounted, provide, ref, shallowRef, watch } from "vue";
-
-import { useCreateContractpartnerModalStore } from "@/components/contractpartner/CreateContractpartnerModal.store";
-import { useContractpartnerStore } from "@/stores/ContractpartnerStore";
-import useDeleteContractpartnerModalStore from "./elements/DeleteContractpartnerModal.store";
-import { useListContractpartnerAccountsModalStore } from "./elements/ListContractpartnerAccountsModal.store";
-
 import DivFilter from "@/components/common/DivFilter.vue";
+import { useCreateContractpartnerModalStore } from "@/components/contractpartner/CreateContractpartnerModal.store";
+import type { Contractpartner } from "@/model/contractpartner/Contractpartner";
 import {
   ContractpartnerActionsKey,
   OpenContractpartnerAccountsActionKey,
   type CrudActions,
 } from "@/model/CrudActions";
+import { useContractpartnerStore } from "@/stores/ContractpartnerStore";
+import { storeToRefs } from "pinia";
+import { onMounted, onUnmounted, provide, ref, shallowRef, watch } from "vue";
+import useDeleteContractpartnerModalStore from "./elements/DeleteContractpartnerModal.store";
 import DeleteContractpartnerModal from "./elements/DeleteContractpartnerModal.vue";
+import { useListContractpartnerAccountsModalStore } from "./elements/ListContractpartnerAccountsModal.store";
 import ListContractpartnerAccountsModal from "./elements/ListContractpartnerAccountsModal.vue";
 import ListContractpartnersDesktop from "./elements/ListContractpartnersDesktop.vue";
 import ListContractpartnersMobile from "./elements/ListContractpartnersMobile.vue";
-
-import type { Contractpartner } from "@/model/contractpartner/Contractpartner";
 
 const validNow = ref(true);
 const contractpartners = shallowRef(new Array<Contractpartner>());

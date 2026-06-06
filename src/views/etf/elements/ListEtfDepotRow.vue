@@ -132,20 +132,14 @@ const partial = computed(
   () => 100 - (etfStore.getEtf(props.flow.etfId)?.partialTaxExemption ?? 0),
 );
 
-const amountClass = computed(() => {
-  return redIfNegative(props.flow.amount);
-});
-const amountString = computed(() => {
-  return formatNumber(props.flow.amount, 6);
-});
-
-const timestampString = computed(() => {
-  return (
+const amountClass = computed(() => redIfNegative(props.flow.amount));
+const amountString = computed(() => formatNumber(props.flow.amount, 6));
+const timestampString = computed(
+  () =>
     formatDateWithTime(props.flow.timestamp) +
     ":" +
-    String(props.flow.nanoseconds + 1000000000).substring(1, 4) //80000000 -> 1080000000 -> 080
-  );
-});
+    String(props.flow.nanoseconds + 1000000000).substring(1, 4), //80000000 -> 1080000000 -> 080
+);
 
 const actions = inject(EtfFlowActionsKey)!;
 </script>

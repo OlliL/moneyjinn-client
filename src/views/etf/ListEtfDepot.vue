@@ -200,14 +200,13 @@ onMounted(() => {
   }
 });
 
-const partial = computed(() => {
-  return (
+const partial = computed(
+  () =>
     100 -
     (selectedEtfId.value
       ? (getEtf(Number(selectedEtfId.value))?.partialTaxExemption ?? 0)
-      : 0)
-  );
-});
+      : 0),
+);
 
 const isMobileEffectiveOnly = computed(() => currentTab.value === "effective");
 
@@ -271,10 +270,7 @@ const actions: CrudActions<EtfFlow> = {
 
 provide(EtfFlowActionsKey, actions);
 
-const createEtfFlow = () => {
-  openCreateEtfFlow(selectedEtfId.value, etfFlowDone);
-};
-
+const createEtfFlow = () => openCreateEtfFlow(selectedEtfId.value, etfFlowDone);
 const etfFlowDone = (etfFlow: EtfFlow) => loadData(etfFlow.etfId);
 
 watch(

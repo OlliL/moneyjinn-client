@@ -44,7 +44,7 @@
                   variant="ghost"
                   size="icon"
                   :data-testid="`predef-moneyflow-mobile-edit-${mpm.id}`"
-                  @click.stop="editPreDefMoneyflow(mpm)"
+                  @click.stop="actions.edit(mpm)"
                 >
                   <Pencil class="icon-medium" />
                 </Button>
@@ -52,7 +52,7 @@
                   variant="ghost"
                   size="icon"
                   :data-testid="`predef-moneyflow-mobile-delete-${mpm.id}`"
-                  @click.stop="deletePreDefMoneyflow(mpm)"
+                  @click.stop="actions.delete(mpm)"
                 >
                   <Trash2 class="icon-medium" />
                 </Button>
@@ -130,12 +130,4 @@ defineProps<{
 }>();
 
 const actions = inject(PreDefMoneyflowActionsKey)!;
-
-const editPreDefMoneyflow = (mpm: PreDefMoneyflow) => {
-  actions.edit(mpm);
-};
-
-const deletePreDefMoneyflow = (mpm: PreDefMoneyflow) => {
-  actions.delete(mpm);
-};
 </script>

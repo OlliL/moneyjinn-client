@@ -87,13 +87,8 @@ const actions: CrudActions<ContractpartnerMatching> = {
 
 provide(ContractpartnerMatchingActionsKey, actions);
 
-watch(searchString, () => {
-  searchContent();
-});
-
-watch(searchContractpartnerId, () => {
-  searchContent();
-});
+watch(searchString, () => searchContent());
+watch(searchContractpartnerId, () => searchContent());
 
 const searchContent = () => {
   const commentUpper = searchString.value.toUpperCase();

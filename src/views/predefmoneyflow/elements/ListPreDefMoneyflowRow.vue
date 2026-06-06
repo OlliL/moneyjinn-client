@@ -37,14 +37,14 @@
     <ButtonTableIcon
       :title="$t('General.edit')"
       :test-id="`predef-moneyflow-edit-${mpm.id}`"
-      @click="editPreDefMoneyflow"
+      @click="actions.edit(mpm)"
     >
       <Pencil class="icon-medium" />
     </ButtonTableIcon>
     <ButtonTableIcon
       :title="$t('General.delete')"
       :test-id="`predef-moneyflow-delete-${mpm.id}`"
-      @click="deletePreDefMoneyflow"
+      @click="actions.delete(mpm)"
     >
       <Trash2 class="icon-medium" />
     </ButtonTableIcon>
@@ -66,12 +66,4 @@ const props = defineProps<{
   mpm: PreDefMoneyflow;
 }>();
 const actions = inject(PreDefMoneyflowActionsKey)!;
-
-const deletePreDefMoneyflow = () => {
-  actions.delete(props.mpm);
-};
-
-const editPreDefMoneyflow = () => {
-  actions.edit(props.mpm);
-};
 </script>

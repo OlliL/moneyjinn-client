@@ -29,7 +29,7 @@
                 variant="ghost"
                 size="icon"
                 :data-testid="`contractpartner-matching-mobile-edit-${mcm.id}`"
-                @click.stop="editContractpartnerMatching(mcm)"
+                @click.stop="actions.edit(mcm)"
               >
                 <Pencil class="icon-medium" />
               </Button>
@@ -37,7 +37,7 @@
                 variant="ghost"
                 size="icon"
                 :data-testid="`contractpartner-matching-mobile-delete-${mcm.id}`"
-                @click.stop="deleteContractpartnerMatching(mcm)"
+                @click.stop="actions.delete(mcm)"
               >
                 <Trash2 class="icon-medium" />
               </Button>
@@ -93,12 +93,4 @@ defineProps<{
 }>();
 
 const actions = inject(ContractpartnerMatchingActionsKey)!;
-
-const editContractpartnerMatching = (mcm: ContractpartnerMatching) => {
-  actions.edit(mcm);
-};
-
-const deleteContractpartnerMatching = (mcm: ContractpartnerMatching) => {
-  actions.delete(mcm);
-};
 </script>

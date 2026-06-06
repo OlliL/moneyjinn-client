@@ -114,21 +114,12 @@ const props = defineProps<{
   isEffectiveOnly: boolean;
 }>();
 
-const amountClass = (flow: EtfFlow): string => {
-  return redIfNegative(flow.amount);
-};
-
-const amountString = (flow: EtfFlow): string => {
-  return formatNumber(flow.amount, 6);
-};
-
-const timestampString = (flow: EtfFlow): string => {
-  return (
-    formatDateWithTime(flow.timestamp) +
-    ":" +
-    String(flow.nanoseconds + 1000000000).substring(1, 4)
-  );
-};
+const amountClass = (flow: EtfFlow): string => redIfNegative(flow.amount);
+const amountString = (flow: EtfFlow): string => formatNumber(flow.amount, 6);
+const timestampString = (flow: EtfFlow): string =>
+  formatDateWithTime(flow.timestamp) +
+  ":" +
+  String(flow.nanoseconds + 1000000000).substring(1, 4);
 
 const actions = inject(EtfFlowActionsKey)!;
 </script>

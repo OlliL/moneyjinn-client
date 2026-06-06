@@ -23,22 +23,19 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, provide, ref, watch } from "vue";
-
 import DivError from "@/components/common/DivError.vue";
 import DivFilter from "@/components/common/DivFilter.vue";
+import { EtfActionsKey, type CrudActions } from "@/model/CrudActions";
+import type { Etf } from "@/model/etf/Etf";
+import { useEtfStore } from "@/stores/EtfStore";
+import { storeToRefs } from "pinia";
+import { onMounted, provide, ref, watch } from "vue";
 import useCreateEtfModalStore from "./elements/CreateEtfModal.store";
 import CreateEtfModal from "./elements/CreateEtfModal.vue";
 import useDeleteEtfModalStore from "./elements/DeleteEtfModal.store";
 import DeleteEtfModal from "./elements/DeleteEtfModal.vue";
 import ListEtfsDesktop from "./elements/ListEtfsDesktop.vue";
 import ListEtfsMobile from "./elements/ListEtfsMobile.vue";
-
-import { EtfActionsKey, type CrudActions } from "@/model/CrudActions";
-import type { Etf } from "@/model/etf/Etf";
-
-import { useEtfStore } from "@/stores/EtfStore";
-import { storeToRefs } from "pinia";
 
 const serverErrors = ref(new Array<string>());
 const etfs = ref(new Array<Etf>());
@@ -58,25 +55,18 @@ const actions: CrudActions<Etf> = {
 
 provide(EtfActionsKey, actions);
 
-watch(searchString, () => {
-  searchContent();
-});
-watch(etf, () => {
-  searchContent();
-});
+watch(searchString, () => searchContent());
+watch(etf, () => searchContent());
 
 const searchAllContent = () => {
   searchString.value = "";
   searchContent();
 };
 
-const searchContent = () => {
+const searchContent = () =>
   searchEtfs(searchString.value).then((_etfs) => {
     etfs.value = _etfs;
   });
-};
 
-onMounted(() => {
-  searchAllContent();
-});
+onMounted(() => searchAllContent());
 </script>

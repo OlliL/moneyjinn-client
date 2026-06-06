@@ -85,11 +85,7 @@ const emit = defineEmits<{
 const showTypeSelector = ref(false);
 const createButtonRef = ref<HTMLElement | null>(null);
 
-const toggleTypeSelector = () => {
-  showTypeSelector.value = !showTypeSelector.value;
-};
-
-onClickOutside(createButtonRef, () => {
-  showTypeSelector.value = false;
-});
+const toggleTypeSelector = () =>
+  (showTypeSelector.value = !showTypeSelector.value);
+onClickOutside(createButtonRef, () => (showTypeSelector.value = false));
 </script>

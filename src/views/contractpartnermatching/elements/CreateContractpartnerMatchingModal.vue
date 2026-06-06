@@ -126,11 +126,11 @@ const origMcm = ref({} as ContractpartnerMatching | undefined);
 
 const { handleSubmit, values, setFieldTouched } = useForm();
 
-const title = computed(() => {
-  return origMcm.value === undefined
+const title = computed(() =>
+  origMcm.value === undefined
     ? t("ContractpartnerMatching.title.create")
-    : t("ContractpartnerMatching.title.update");
-});
+    : t("ContractpartnerMatching.title.update"),
+);
 
 const resetForm = () => {
   if (origMcm.value) {

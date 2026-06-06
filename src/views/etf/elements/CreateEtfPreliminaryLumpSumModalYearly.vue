@@ -124,11 +124,11 @@ const etfStore = useEtfStore();
 
 const { handleSubmit, values, setFieldTouched } = useForm();
 
-const title = computed(() => {
-  return origMep.value === undefined
+const title = computed(() =>
+  origMep.value === undefined
     ? t("ETFPreliminaryLumpSum.title.create")
-    : t("ETFPreliminaryLumpSum.title.update");
-});
+    : t("ETFPreliminaryLumpSum.title.update"),
+);
 
 const resetForm = () => {
   mep.value = {} as EtfPreliminaryLumpSum;
@@ -168,7 +168,6 @@ const createEtfPreliminaryLumpSum = handleSubmit(() => {
 
   mep.value.year = year.value.getFullYear();
 
-  // Update
   if (mep.value.id > 0) {
     //update
     CrudEtfPreliminaryLumpSumService.updateEtfPreliminaryLumpSum(mep.value)

@@ -131,12 +131,8 @@ defineProps<{
   etfs: Etf[];
 }>();
 
-const relativeString = (value: number | undefined): string => {
-  if (value === undefined) {
-    return "";
-  }
-  return `${formatNumber(value, 2)} %`;
-};
+const relativeString = (value: number | undefined): string =>
+  value === undefined ? "" : formatNumber(value, 2) + " %";
 
 const actions = inject(EtfActionsKey)!;
 </script>

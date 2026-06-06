@@ -78,11 +78,11 @@ const schema: Partial<{ [key in keyof Group]: ZodType }> = {
   name: string(globErr(t("Group.validation.name"))).min(1),
 };
 
-const title = computed(() => {
-  return origGroup.value === undefined
+const title = computed(() =>
+  origGroup.value === undefined
     ? t("Group.title.create")
-    : t("Group.title.update");
-});
+    : t("Group.title.update"),
+);
 
 const resetForm = () => {
   if (origGroup.value) {
