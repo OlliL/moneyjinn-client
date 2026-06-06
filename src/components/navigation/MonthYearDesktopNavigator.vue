@@ -25,6 +25,7 @@
       type="single"
       variant="outline"
       :roving-focus="true"
+      orientation="horizontal"
       class="min-w-0 max-w-full flex-wrap justify-center"
     >
       <ToggleGroupItem
@@ -32,7 +33,7 @@
         :key="month"
         :value="String(month)"
         :data-testid="`${testIdPrefix}-month-${month}`"
-        class="h-9 min-w-16 px-3 text-sm"
+        class="h-9 min-w-16 !px-3 text-sm first:rounded-l-md last:rounded-r-md -ml-px first:ml-0"
       >
         {{ getMonthName(month) }}
       </ToggleGroupItem>
