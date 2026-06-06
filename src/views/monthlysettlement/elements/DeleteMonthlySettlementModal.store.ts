@@ -1,3 +1,4 @@
+import type { MonthlySettlement } from "@/model/monthlysettlement/MonthlySettlement";
 import { defineStore } from "pinia";
 import { ref, watch } from "vue";
 
@@ -5,36 +6,29 @@ export const useDeleteMonthlySettlementModalStore = defineStore(
   "deleteMonthlySettlementModal",
   () => {
     const open = ref(false);
-    const year = ref(0);
-    const month = ref(0);
+    const monthlySettlements = ref<MonthlySettlement[]>([]);
     const onDone = ref<((year: number) => void) | undefined>(undefined);
 
     const openDeleteMonthlySettlement = (
-      selectedYear: number,
-      selectedMonth: number,
+      settlements: MonthlySettlement[],
       cb?: (year: number) => void,
     ) => {
-      year.value = selectedYear;
-      month.value = selectedMonth;
+      monthlySettlements.value = settlements;
       onDone.value = cb;
       open.value = true;
     };
 
     watch(open, (isOpen) => {
       if (!isOpen) {
-        year.value = 0;
-        month.value = 0;
+        monthlySettlements.value = [];
       }
     });
 
     return {
       open,
-      year,
-      month,
+      monthlySettlements,
       onDone,
       openDeleteMonthlySettlement,
     };
   },
 );
-
-export default useDeleteMonthlySettlementModalStore;
