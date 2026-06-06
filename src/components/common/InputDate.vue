@@ -356,8 +356,9 @@ watch(isPopoverOpen, async (val) => {
 watch(
   () => model.value,
   (newVal) => {
-    const el = getInputElement();
-    if (el && document.activeElement === el) return;
+    // why was that here? Breaks monthlysettlement edit where its not set during onMounted but later
+    // const el = getInputElement();
+    // if (el && document.activeElement === el) return;
 
     const current =
       datepicker instanceof Datepicker

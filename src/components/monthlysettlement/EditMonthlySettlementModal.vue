@@ -247,7 +247,13 @@ const upsertMonthlySettlement = handleSubmit(() => {
 watch(
   [open, year, month],
   ([isVisible, targetYear, targetMonth]) => {
-    if (!isVisible) return;
+    if (!isVisible) {
+      selectedMonth.value = undefined;
+      loadedMonth.value = undefined;
+      monthlySettlementsNoCredit.value = [];
+      monthlySettlementsCredit.value = [];
+      return;
+    }
 
     loadMonthlySettlements(targetYear, targetMonth).then((loaded) => {
       selectedMonth.value = loaded;
