@@ -1,11 +1,11 @@
 import { useUserSessionStore } from "@/stores/UserSessionStore";
+import { dismissServerErrors } from "@/tools/views/HandleBackendError";
 import { isLoggedIn } from "axios-jwt";
 import {
   createRouter,
   createWebHistory,
   type RouteLocationNormalized,
 } from "vue-router";
-import { toast } from "vue-sonner";
 
 export enum Routes {
   Login = "login",
@@ -196,7 +196,7 @@ const router = createRouter({
 
 router.beforeEach(
   async (to: RouteLocationNormalized, from: RouteLocationNormalized) => {
-    toast.dismiss();
+    dismissServerErrors();
 
     const loginNeeded = !to.matched.some((record) => record.meta.hideForAuth);
 
