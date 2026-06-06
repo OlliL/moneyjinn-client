@@ -1,36 +1,19 @@
 <script lang="ts" setup>
-import { computed } from "vue";
-import type { ToasterProps } from "vue-sonner";
-
-import { cn } from "@/lib/utils";
 import {
   CircleCheckIcon,
   InfoIcon,
-  Loader2Icon,
-  OctagonXIcon,
   TriangleAlertIcon,
+  OctagonXIcon,
+  Loader2Icon,
   XIcon,
-} from "lucide-vue-next";
-import { Toaster as Sonner } from "vue-sonner";
+} from '@lucide/vue';
 
-const props = defineProps<ToasterProps>();
 
-const mergedToastOptions = computed(() => ({
-  ...props.toastOptions,
-  classes: {
-    ...props.toastOptions?.classes,
-    toast: cn(
-      "rounded-2xl !text-foreground !py-2",
-      props.toastOptions?.classes?.toast,
-    ),
-    title: cn("!font-bold", props.toastOptions?.classes?.title),
-    description: cn("!font-bold", props.toastOptions?.classes?.description),
-    success: cn("!text-foreground", props.toastOptions?.classes?.success),
-    error: cn("!text-foreground", props.toastOptions?.classes?.error),
-    info: cn("!text-foreground", props.toastOptions?.classes?.info),
-    warning: cn("!text-foreground", props.toastOptions?.classes?.warning),
-  },
-}));
+import type { ToasterProps } from "vue-sonner"
+import { Toaster as Sonner } from "vue-sonner"
+import { cn } from "@/lib/utils"
+
+const props = defineProps<ToasterProps>()
 </script>
 
 <template>
@@ -47,8 +30,12 @@ const mergedToastOptions = computed(() => ({
       '--gray5': 'var(--border)',
       '--gray12': 'var(--popover-foreground)',
     }"
+    :toast-options="{
+      classes: {
+        toast: 'rounded-2xl',
+      },
+    }"
     v-bind="props"
-    :toast-options="mergedToastOptions"
   >
     <template #success-icon>
       <CircleCheckIcon class="size-4" />
