@@ -7,8 +7,6 @@
     v-model:open="open"
   >
     <template #body>
-      <DivError :server-errors="serverErrors" />
-
       <div class="w-full space-y-4 p-1 text-left">
         <div v-if="mmf.hasReceipt || receipt?.receipt">
           <div
@@ -207,13 +205,11 @@ import {
 // Eigene bestehende Komponenten & Typen
 import type { ImportedMoneyflowReceipt } from "@/model/moneyflow/ImportedMoneyflowReceipt";
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
-import DivError from "../common/DivError.vue";
 import ModalVue from "../common/Modal.vue";
 import SpanAmount from "../common/SpanAmount.vue";
 import SpanDate from "../common/SpanDate.vue";
 import useReceiptModalStore from "../reports/ReceiptModal.store.ts";
 
-const serverErrors = ref(new Array<string>());
 const mmf = ref({} as Moneyflow);
 const { open, moneyflow, importedReceipt } = storeToRefs(
   useListMoneyflowModalStore(),
@@ -239,7 +235,6 @@ watch(
 
     mmf.value = structuredClone(toRaw(entry));
     receipt.value = importedReceipt;
-    serverErrors.value = new Array<string>();
   },
   { immediate: true },
 );

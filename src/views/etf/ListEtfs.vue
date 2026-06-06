@@ -14,8 +14,6 @@
       @createClicked="actions.create"
     />
 
-    <DivError :server-errors="serverErrors" />
-
     <ListEtfsMobile :etfs="etfs" />
 
     <ListEtfsDesktop :etfs="etfs" />
@@ -23,7 +21,6 @@
 </template>
 
 <script lang="ts" setup>
-import DivError from "@/components/common/DivError.vue";
 import DivFilter from "@/components/common/DivFilter.vue";
 import { EtfActionsKey, type CrudActions } from "@/model/CrudActions";
 import type { Etf } from "@/model/etf/Etf";
@@ -37,7 +34,6 @@ import DeleteEtfModal from "./elements/DeleteEtfModal.vue";
 import ListEtfsDesktop from "./elements/ListEtfsDesktop.vue";
 import ListEtfsMobile from "./elements/ListEtfsMobile.vue";
 
-const serverErrors = ref(new Array<string>());
 const etfs = ref(new Array<Etf>());
 const searchString = ref("");
 

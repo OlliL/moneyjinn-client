@@ -141,6 +141,7 @@
 import ButtonChevrons from "@/components/common/ButtonChevrons.vue";
 import DivError from "@/components/common/DivError.vue";
 import { Button } from "@/components/ui/button";
+import { handleBackendError } from "@/tools/views/HandleBackendError";
 import type { SelectBoxValue } from "@/model/SelectBoxValue";
 import type { Etf } from "@/model/etf/Etf";
 import type { EtfPreliminaryLumpSum } from "@/model/etf/EtfPreliminaryLumpSum";
@@ -269,7 +270,8 @@ const loadYears = (etfId: number, year?: string | undefined) => {
       selectedYear.value = targetYear;
       yearsLoaded.value = true;
     })
-    .catch(() => {
+    .catch((backendError) => {
+      handleBackendError(backendError, serverErrors);
       routerPush();
     });
 };
