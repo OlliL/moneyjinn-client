@@ -108,9 +108,13 @@ const Modal = computed(() => ({
 
 const isOpen = defineModel<boolean>("open", { default: false });
 
-watch(isOpen, (newValue) => {
-  if (!newValue) {
-    toast.dismiss();
-  }
-});
+watch(
+  isOpen,
+  (newValue) => {
+    if (!newValue) {
+      toast.dismiss("server-error");
+    }
+  },
+  { flush: "sync" },
+);
 </script>

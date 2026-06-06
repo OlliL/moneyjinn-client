@@ -196,7 +196,7 @@ const router = createRouter({
 
 router.beforeEach(
   async (to: RouteLocationNormalized, from: RouteLocationNormalized) => {
-    toast.dismiss();
+    toast.dismiss("server-error");
 
     const loginNeeded = !to.matched.some((record) => record.meta.hideForAuth);
 

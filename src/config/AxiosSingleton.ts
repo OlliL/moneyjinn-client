@@ -81,7 +81,7 @@ export class AxiosSingleton {
 function applyRequestInterceptor(axios: AxiosInstance): void {
   axios.interceptors.request.use(
     (config) => {
-      toast.dismiss();
+      toast.dismiss("server-error");
       return config;
     },
     (error) => Promise.reject(error),
