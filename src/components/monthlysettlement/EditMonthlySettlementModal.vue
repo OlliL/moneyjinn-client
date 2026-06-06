@@ -30,7 +30,7 @@
           <div class="w-full">
             <div
               class="flex flex-col rounded-md border mb-4"
-              v-if="monthlySettlementsNoCredit"
+              v-if="monthlySettlementsNoCredit.length"
             >
               <Table class="[&_td]:py-0.5! [&_th]:py-1!">
                 <TableHeader>
@@ -69,7 +69,7 @@
             </div>
             <div
               class="flex flex-col rounded-md border"
-              v-if="monthlySettlementsCredit"
+              v-if="monthlySettlementsCredit.length"
             >
               <Table>
                 <TableHeader v-if="monthlySettlementsNoCredit.length">
@@ -121,18 +121,6 @@
 </template>
 
 <script lang="ts" setup>
-import { storeToRefs } from "pinia";
-import { useForm } from "vee-validate";
-import { ref, watch } from "vue";
-import { useI18n } from "vue-i18n";
-import { date, ZodType } from "zod";
-import { useEditMonthlySettlementModalStore } from "./EditMonthlySettlementModal.store";
-
-import ButtonSubmit from "../common/ButtonSubmit.vue";
-import InputDate from "../common/InputDate.vue";
-import InputStandard from "../common/InputStandard.vue";
-import ModalVue from "../common/Modal.vue";
-
 import {
   Table,
   TableBody,
@@ -141,16 +129,23 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-
-import { handleBackendError } from "@/tools/views/HandleBackendError";
-import { amountSchema, globErr } from "@/tools/views/ZodUtil";
-
 import { CapitalsourceType } from "@/model/capitalsource/CapitalsourceType";
 import type { MonthlySettlement } from "@/model/monthlysettlement/MonthlySettlement";
 import type { MonthlySettlementEditTransporter } from "@/model/monthlysettlement/MonthlySettlementEditTransporter";
-
 import MonthlySettlementService from "@/service/MonthlySettlementService";
+import { handleBackendError } from "@/tools/views/HandleBackendError";
+import { amountSchema, globErr } from "@/tools/views/ZodUtil";
 import { Euro } from "lucide-vue-next";
+import { storeToRefs } from "pinia";
+import { useForm } from "vee-validate";
+import { ref, watch } from "vue";
+import { useI18n } from "vue-i18n";
+import { date, ZodType } from "zod";
+import ButtonSubmit from "../common/ButtonSubmit.vue";
+import InputDate from "../common/InputDate.vue";
+import InputStandard from "../common/InputStandard.vue";
+import ModalVue from "../common/Modal.vue";
+import { useEditMonthlySettlementModalStore } from "./EditMonthlySettlementModal.store";
 
 const { t } = useI18n();
 
@@ -159,10 +154,10 @@ type MonthlySettlementFormData = MonthlySettlement & {
 };
 
 const editMode = ref(false);
-const selectedMonth = ref(undefined as Date | undefined);
-const loadedMonth = ref(undefined as Date | undefined);
-const monthlySettlementsNoCredit = ref(new Array<MonthlySettlementFormData>());
-const monthlySettlementsCredit = ref(new Array<MonthlySettlementFormData>());
+const selectedMonth = ref<Date>();
+const loadedMonth = ref<Date>();
+const monthlySettlementsNoCredit = ref<MonthlySettlementFormData[]>([]);
+const monthlySettlementsCredit = ref<MonthlySettlementFormData[]>([]);
 const { open, year, month, onDone } = storeToRefs(
   useEditMonthlySettlementModalStore(),
 );
@@ -174,44 +169,39 @@ const schema: Partial<{ [key in keyof MonthlySettlement]: ZodType }> = {
   amount: amountSchema(t("MonthlySettlement.validation.amount")),
 };
 
-const loadMonthlySettlements = async (_year?: number, _month?: number) => {
-  monthlySettlementsCredit.value = new Array<MonthlySettlementFormData>();
-  monthlySettlementsNoCredit.value = new Array<MonthlySettlementFormData>();
-
-  return MonthlySettlementService.getMonthlySettlementForEdit(_year, _month)
+const loadMonthlySettlements = (targetYear?: number, targetMonth?: number) =>
+  MonthlySettlementService.getMonthlySettlementForEdit(targetYear, targetMonth)
     .then((transporter: MonthlySettlementEditTransporter) => {
-      const monthlySettlements = new Array<MonthlySettlementFormData>();
-
-      for (const mms of transporter.monthlySettlements) {
-        monthlySettlements.push({
+      const allSettlements: MonthlySettlementFormData[] = [
+        ...transporter.monthlySettlements.map((mms) => ({
           ...mms,
           imported: false,
-        });
-      }
-      if (transporter.importedMonthlySettlements) {
-        for (const mms of transporter.importedMonthlySettlements) {
-          monthlySettlements.push({
-            ...mms,
-            imported: true,
-          });
-        }
-      }
+        })),
+        ...(transporter.importedMonthlySettlements?.map((mms) => ({
+          ...mms,
+          imported: true,
+        })) || []),
+      ];
 
-      for (const mms of monthlySettlements) {
-        if (mms.capitalsourceType === CapitalsourceType.CREDIT) {
-          monthlySettlementsCredit.value.push(mms);
-        } else {
-          monthlySettlementsNoCredit.value.push(mms);
-        }
-      }
+      monthlySettlementsCredit.value = allSettlements.filter(
+        (mms) => mms.capitalsourceType === CapitalsourceType.CREDIT,
+      );
+      monthlySettlementsNoCredit.value = allSettlements.filter(
+        (mms) => mms.capitalsourceType !== CapitalsourceType.CREDIT,
+      );
 
       year.value = transporter.year;
       month.value = transporter.month;
-      const monthDate = new Date();
-      monthDate.setFullYear(transporter.year);
-      monthDate.setDate(1);
-      monthDate.setMonth(transporter.month - 1);
-      monthDate.setHours(0, 0, 0, 0);
+
+      const monthDate = new Date(
+        transporter.year,
+        transporter.month - 1,
+        1,
+        0,
+        0,
+        0,
+        0,
+      );
 
       editMode.value = transporter.editMode;
 
@@ -225,7 +215,6 @@ const loadMonthlySettlements = async (_year?: number, _month?: number) => {
       handleBackendError(backendError);
       return undefined;
     });
-};
 
 const upsertMonthlySettlement = handleSubmit(() => {
   const monthlySettlements = monthlySettlementsCredit.value.concat(
@@ -267,11 +256,9 @@ watch(
       newVal !== undefined &&
       !Number.isNaN(newVal.getTime()) &&
       (loadedMonth.value === undefined ||
-        newVal.toISOString() !== loadedMonth.value.toISOString())
+        newVal.getTime() !== loadedMonth.value.getTime())
     ) {
-      const _year = newVal.getFullYear();
-      const _month = newVal?.getMonth() + 1;
-      loadMonthlySettlements(_year, _month);
+      loadMonthlySettlements(newVal.getFullYear(), newVal.getMonth() + 1);
     }
   },
   { immediate: true },

@@ -39,15 +39,13 @@
 </template>
 
 <script lang="ts" setup>
+import MoneyflowService from "@/service/MoneyflowService";
 import { storeToRefs } from "pinia";
-import { useDeleteMoneyflowModalStore } from "./DeleteMoneyflowModal.store";
-
 import ModalDelete from "../common/ModalDelete.vue";
 import ModalDeleteRow from "../common/ModalDeleteRow.vue";
 import SpanAmount from "../common/SpanAmount.vue";
 import SpanDate from "../common/SpanDate.vue";
-
-import MoneyflowService from "@/service/MoneyflowService";
+import { useDeleteMoneyflowModalStore } from "./DeleteMoneyflowModal.store";
 
 const {
   open,

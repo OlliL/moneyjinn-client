@@ -214,7 +214,7 @@ const showDeleteMonthlySettlementModal = () => {
 };
 
 const monthlySettlementDeleted = (settlements: MonthlySettlement[]) => {
-  const params = months.value.length > 1 ? { year: settlements[0].year } : {};
-  updateRoute(params.year);
+  const targetYear = months.value.length > 1 ? settlements[0].year : undefined;
+  updateRoute(targetYear);
 };
 </script>
