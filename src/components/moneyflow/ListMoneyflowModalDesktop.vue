@@ -182,6 +182,6 @@ watch(
 const loadReceipt = (id: number) => {
   MoneyflowReceiptService.fetchReceipt(id)
     .then((response) => (receipt.value = response))
-    .catch((backendError) => handleBackendError(backendError));
+    .catch(handleBackendError);
 };
 </script>

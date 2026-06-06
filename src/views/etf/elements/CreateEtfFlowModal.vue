@@ -201,9 +201,7 @@ const createEtfFlow = handleSubmit(() => {
           open.value = false;
           onDone.value?.(etfFlow.value);
         })
-        .catch((backendError) => {
-          handleBackendError(backendError);
-        });
+        .catch(handleBackendError);
     } else {
       CrudEtfFlowService.createEtfFlow(etfFlow.value)
         .then((_etfFlow) => {
@@ -211,9 +209,7 @@ const createEtfFlow = handleSubmit(() => {
           open.value = false;
           onDone.value?.(etfFlow.value);
         })
-        .catch((backendError) => {
-          handleBackendError(backendError);
-        });
+        .catch(handleBackendError);
     }
   }
 });

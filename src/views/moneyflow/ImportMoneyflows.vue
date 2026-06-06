@@ -80,9 +80,7 @@ onMounted(() => {
       importMoneyflows.value = imf;
       dataLoaded.value = true;
     })
-    .catch((backendError) => {
-      handleBackendError(backendError);
-    });
+    .catch(handleBackendError);
 });
 
 const onItemRemoved = (id: number) =>

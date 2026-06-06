@@ -252,10 +252,7 @@ const loadData = () => {
         }
       }
     })
-    .catch((backendError) => {
-      handleBackendError(backendError);
-    });
-
+    .catch(handleBackendError);
   Object.keys(values).forEach((field) => setFieldTouched(field, false));
 };
 
@@ -330,9 +327,7 @@ const compareData = handleSubmit(async () => {
         }
         dataCompared.value = true;
       })
-      .catch((backendError) => {
-        handleBackendError(backendError);
-      });
+      .catch(handleBackendError);
   }
 });
 

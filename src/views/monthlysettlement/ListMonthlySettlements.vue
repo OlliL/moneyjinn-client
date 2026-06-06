@@ -130,23 +130,19 @@ const loadMonth = (year?: string, month?: number) => {
       }
       dataLoaded.value = true;
     })
-    .catch((e) => {
-      handleBackendError(e);
-    });
+    .catch(handleBackendError);
 };
 
 const loadSettlements = (year: number, month: number) =>
-  MonthlySettlementService.getMonthlySettlementList(year, month)
-    .then((response) => {
+  MonthlySettlementService.getMonthlySettlementList(year, month).then(
+    (response) => {
       monthlySettlements.value = response.monthlySettlements;
       prevMonth.value = response.prevMonth;
       prevYear.value = response.prevYear;
       nextMonth.value = response.nextMonth;
       nextYear.value = response.nextYear;
-    })
-    .catch((e) => {
-      handleBackendError(e);
-    });
+    },
+  );
 
 onBeforeRouteUpdate((to) => {
   const year = to.params.year?.toString();
@@ -155,7 +151,9 @@ onBeforeRouteUpdate((to) => {
     loadMonth(year, month);
   } else {
     selectedMonth.value = month;
-    loadSettlements(Number(selectedYear.value), month);
+    loadSettlements(Number(selectedYear.value), month).catch(
+      handleBackendError,
+    );
   }
 });
 

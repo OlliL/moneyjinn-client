@@ -496,9 +496,7 @@ const searchMoneyflows = handleSubmit(() => {
           dataLoaded.value = true;
         }
       })
-      .catch((backendError) => {
-        handleBackendError(backendError);
-      });
+      .catch(handleBackendError);
   }
 });
 

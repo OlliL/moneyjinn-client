@@ -175,9 +175,7 @@ const calculateEtfSale = handleSubmit(() => {
     .then((_calcResults) => {
       calcResults.value = _calcResults;
     })
-    .catch((backendError) => {
-      handleBackendError(backendError);
-    });
+    .catch(handleBackendError);
 });
 
 watch(

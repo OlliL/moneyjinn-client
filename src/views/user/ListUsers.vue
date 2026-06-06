@@ -74,9 +74,7 @@ const reloadView = () => {
       allUsers.value = _users;
       searchContent();
     })
-    .catch((backendError) => {
-      handleBackendError(backendError);
-    });
+    .catch(handleBackendError);
 };
 
 onMounted(() => {

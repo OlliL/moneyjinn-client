@@ -63,8 +63,6 @@ const handleDelete = () => {
       isOpen.value = false;
       props.deleteSuccessAction?.();
     })
-    .catch((backendError) => {
-      handleBackendError(backendError);
-    });
+    .catch(handleBackendError);
 };
 </script>

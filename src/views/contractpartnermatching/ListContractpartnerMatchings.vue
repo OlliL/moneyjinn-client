@@ -115,9 +115,7 @@ const reloadView = () => {
       allContractpartnerMatchings.value = _contractpartnerMatchings;
       searchContent();
     })
-    .catch((backendError) => {
-      handleBackendError(backendError);
-    });
+    .catch(handleBackendError);
 };
 
 onMounted(() => {

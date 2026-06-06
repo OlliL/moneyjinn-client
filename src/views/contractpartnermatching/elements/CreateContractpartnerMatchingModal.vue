@@ -161,9 +161,7 @@ const createContractpartnerMatching = handleSubmit(() => {
         open.value = false;
         onDone.value?.();
       })
-      .catch((backendError) => {
-        handleBackendError(backendError);
-      });
+      .catch(handleBackendError);
   } else {
     //create
     ContractpartnerMatchingService.createContractpartnerMatching(mcm.value)
@@ -172,9 +170,7 @@ const createContractpartnerMatching = handleSubmit(() => {
         open.value = false;
         onDone.value?.();
       })
-      .catch((backendError) => {
-        handleBackendError(backendError);
-      });
+      .catch(handleBackendError);
   }
 });
 </script>

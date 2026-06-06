@@ -164,9 +164,7 @@ const loadData = () => {
       contractpartnerAccount.value = mcaArray;
       dataLoaded.value = true;
     })
-    .catch((backendError) => {
-      handleBackendError(backendError);
-    });
+    .catch(handleBackendError);
 };
 
 watch(

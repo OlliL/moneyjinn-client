@@ -83,9 +83,7 @@ const reloadView = () => {
       allPreDefMoneyflows.value = _preDefMoneyflows;
       searchContent();
     })
-    .catch((backendError) => {
-      handleBackendError(backendError);
-    });
+    .catch(handleBackendError);
 };
 
 onMounted(() => {

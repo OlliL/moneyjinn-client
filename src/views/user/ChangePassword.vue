@@ -130,8 +130,6 @@ const changePassword = handleSubmit(() => {
         });
       }
     })
-    .catch((backendError) => {
-      handleBackendError(backendError);
-    });
+    .catch(handleBackendError);
 });
 </script>

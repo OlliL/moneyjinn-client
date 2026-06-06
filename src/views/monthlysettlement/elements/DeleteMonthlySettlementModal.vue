@@ -58,8 +58,6 @@ const deleteMonthlySettlement = () => {
       onDone.value?.(localSettlements.value);
       open.value = false;
     })
-    .catch((backendError) => {
-      handleBackendError(backendError);
-    });
+    .catch(handleBackendError);
 };
 </script>

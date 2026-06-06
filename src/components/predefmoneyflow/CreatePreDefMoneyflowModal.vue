@@ -385,9 +385,7 @@ const createPreDefMoneyflow = handleSubmit(() => {
         close();
         (onDone.value as any)?.(mpm.value);
       })
-      .catch((backendError) => {
-        handleBackendError(backendError);
-      });
+      .catch(handleBackendError);
   } else {
     //create
     PreDefMoneyflowService.createPreDefMoneyflow(mpm.value)
@@ -396,9 +394,7 @@ const createPreDefMoneyflow = handleSubmit(() => {
         close();
         (onDone.value as any)?.(mpm.value);
       })
-      .catch((backendError) => {
-        handleBackendError(backendError);
-      });
+      .catch(handleBackendError);
   }
 });
 </script>

@@ -77,10 +77,7 @@ const loadData = () => {
     .then((imr) => {
       importedMoneyflowReceipts.value = imr;
     })
-    .catch((backendError) => {
-      handleBackendError(backendError);
-    });
-
+    .catch(handleBackendError);
   Object.keys(values).forEach((field) => setFieldTouched(field, false));
 };
 
@@ -129,9 +126,7 @@ const uploadReceipts = handleSubmit(async () => {
       .then(() => {
         loadData();
       })
-      .catch((backendError) => {
-        handleBackendError(backendError);
-      });
+      .catch(handleBackendError);
     uploadReceiptsForm.value?.reset();
     files.value = null;
   }

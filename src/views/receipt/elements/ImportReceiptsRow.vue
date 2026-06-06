@@ -270,9 +270,7 @@ const searchMoneyflows = handleSubmit(() => {
         selectedMoneyflowId.value = 0;
       }
     })
-    .catch((backendError) => {
-      handleBackendError(backendError);
-    });
+    .catch(handleBackendError);
 });
 
 onMounted(() => {
@@ -305,9 +303,7 @@ const importReceipt = () => {
     .then(() => {
       emit("removeReceiptFromView", props.receipt.id);
     })
-    .catch((backendError) => {
-      handleBackendError(backendError);
-    });
+    .catch(handleBackendError);
 };
 
 const importReceiptActions = inject(ImportReceiptRowActionsKey)!;
@@ -319,8 +315,6 @@ const deleteMoneyflowReceipt = () => {
     .then(() => {
       importReceiptActions.removeReceipt(props.receipt.id);
     })
-    .catch((backendError) => {
-      handleBackendError(backendError);
-    });
+    .catch(handleBackendError);
 };
 </script>

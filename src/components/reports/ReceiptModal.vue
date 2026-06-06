@@ -58,9 +58,7 @@ watch(
               targetImportedReceipt,
             );
         })
-        .catch((backendError) => {
-          handleBackendError(backendError);
-        });
+        .catch(handleBackendError);
     }
   },
 );
@@ -70,8 +68,6 @@ const deleteMoneyflowReceipt = () => {
     .then(() => {
       close();
     })
-    .catch((backendError) => {
-      handleBackendError(backendError);
-    });
+    .catch(handleBackendError);
 };
 </script>

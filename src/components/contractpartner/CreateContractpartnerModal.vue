@@ -252,8 +252,6 @@ const createContractpartner = handleSubmit(() => {
       open.value = false;
       onDone.value?.(mcp.value);
     })
-    .catch((backendError) => {
-      handleBackendError(backendError);
-    });
+    .catch(handleBackendError);
 });
 </script>

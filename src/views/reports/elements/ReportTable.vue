@@ -340,9 +340,7 @@ const loadData = (year: number, month: number) => {
       report.value = _report;
       dataLoaded.value = true;
     })
-    .catch((backendError) => {
-      handleBackendError(backendError);
-    });
+    .catch(handleBackendError);
 };
 
 /**

@@ -70,9 +70,7 @@ const reloadView = () => {
       allGroups.value = _groups;
       searchContent();
     })
-    .catch((backendError) => {
-      handleBackendError(backendError);
-    });
+    .catch(handleBackendError);
 };
 
 onMounted(() => {

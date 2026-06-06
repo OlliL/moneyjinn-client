@@ -335,9 +335,7 @@ const createUser = handleSubmit(() => {
           open.value = false;
           onDone.value?.();
         })
-        .catch((backendError) => {
-          handleBackendError(backendError);
-        });
+        .catch(handleBackendError);
     }
   } else {
     //create
@@ -349,9 +347,7 @@ const createUser = handleSubmit(() => {
         open.value = false;
         onDone.value?.();
       })
-      .catch((backendError) => {
-        handleBackendError(backendError);
-      });
+      .catch(handleBackendError);
   }
 });
 </script>

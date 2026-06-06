@@ -405,9 +405,7 @@ const loadData = () => {
       dataLoaded.value = true;
       Object.keys(values).forEach((field) => setFieldTouched(field, false));
     })
-    .catch((backendError) => {
-      handleBackendError(backendError);
-    });
+    .catch(handleBackendError);
 };
 
 const randomColor = () => {
@@ -530,9 +528,7 @@ const showReportingGraph = handleSubmit(() => {
       }
       reportingGraphLoaded.value = true;
     })
-    .catch((backendError) => {
-      handleBackendError(backendError);
-    });
+    .catch(handleBackendError);
 });
 
 const makeResultMap = (

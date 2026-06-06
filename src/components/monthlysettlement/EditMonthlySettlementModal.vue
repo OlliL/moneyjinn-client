@@ -239,9 +239,7 @@ const upsertMonthlySettlement = handleSubmit(() => {
         onDone.value?.(year.value, month.value);
       }
     })
-    .catch((backendError) => {
-      handleBackendError(backendError);
-    });
+    .catch(handleBackendError);
 });
 
 watch(
