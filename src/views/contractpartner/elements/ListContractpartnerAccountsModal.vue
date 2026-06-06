@@ -120,7 +120,7 @@ import {
 } from "@/model/CrudActions";
 import useCreateContractpartnerAccountModalStore from "./CreateContractpartnerAccountModal.store";
 import CreateContractpartnerAccountModal from "./CreateContractpartnerAccountModal.vue";
-import useDeleteContractpartnerAccountModalStore from "./DeleteContractpartnerAccountModal.store";
+import { useDeleteContractpartnerAccountModalStore } from "./DeleteContractpartnerAccountModal.store";
 import DeleteContractpartnerAccountModal from "./DeleteContractpartnerAccountModal.vue";
 import ListContractpartnerAccountRowVue from "./ListContractpartnerAccountRow.vue";
 import { useListContractpartnerAccountsModalStore } from "./ListContractpartnerAccountsModal.store";

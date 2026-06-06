@@ -28,7 +28,7 @@ import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { onMounted, provide, ref, watch } from "vue";
 import useCreateGroupModalStore from "./elements/CreateGroupModal.store";
 import CreateGroupModal from "./elements/CreateGroupModal.vue";
-import useDeleteGroupModalStore from "./elements/DeleteGroupModal.store";
+import { useDeleteGroupModalStore } from "./elements/DeleteGroupModal.store";
 import DeleteGroupModal from "./elements/DeleteGroupModal.vue";
 import ListGroupsDesktop from "./elements/ListGroupsDesktop.vue";
 import ListGroupsMobile from "./elements/ListGroupsMobile.vue";

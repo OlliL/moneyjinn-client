@@ -153,11 +153,11 @@ import useCreateEtfPreliminaryLumpSumModalPieceStore from "./elements/CreateEtfP
 import CreateEtfPreliminaryLumpSumModalPiece from "./elements/CreateEtfPreliminaryLumpSumModalPiece.vue";
 import useCreateEtfPreliminaryLumpSumModalYearlyStore from "./elements/CreateEtfPreliminaryLumpSumModalYearly.store";
 import CreateEtfPreliminaryLumpSumModalYearly from "./elements/CreateEtfPreliminaryLumpSumModalYearly.vue";
-import useDeleteEtfPreliminaryLumpSumModalMonthlyStore from "./elements/DeleteEtfPreliminaryLumpSumModalMonthly.store";
+import { useDeleteEtfPreliminaryLumpSumModalMonthlyStore } from "./elements/DeleteEtfPreliminaryLumpSumModalMonthly.store";
 import DeleteEtfPreliminaryLumpSumModalMonthly from "./elements/DeleteEtfPreliminaryLumpSumModalMonthly.vue";
-import useDeleteEtfPreliminaryLumpSumModalPieceStore from "./elements/DeleteEtfPreliminaryLumpSumModalPiece.store";
+import { useDeleteEtfPreliminaryLumpSumModalPieceStore } from "./elements/DeleteEtfPreliminaryLumpSumModalPiece.store";
 import DeleteEtfPreliminaryLumpSumModalPiece from "./elements/DeleteEtfPreliminaryLumpSumModalPiece.vue";
-import useDeleteEtfPreliminaryLumpSumModalYearlyStore from "./elements/DeleteEtfPreliminaryLumpSumModalYearly.store";
+import { useDeleteEtfPreliminaryLumpSumModalYearlyStore } from "./elements/DeleteEtfPreliminaryLumpSumModalYearly.store";
 import DeleteEtfPreliminaryLumpSumModalYearly from "./elements/DeleteEtfPreliminaryLumpSumModalYearly.vue";
 import ListPreliminaryLumpSumsDesktop from "./elements/ListPreliminaryLumpSumsDesktop.vue";
 import ListPreliminaryLumpSumsMobile from "./elements/ListPreliminaryLumpSumsMobile.vue";

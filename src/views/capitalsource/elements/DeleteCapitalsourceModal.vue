@@ -6,7 +6,7 @@
     :delete-action="
       () => CapitalsourceService.deleteCapitalsource(capitalsource.id)
     "
-    :delete-success-action="onDone"
+    :delete-success-action="() => onDone?.(capitalsource)"
   >
     <template #details>
       <ModalDeleteRow :label="$t('General.name')" highlight-value>

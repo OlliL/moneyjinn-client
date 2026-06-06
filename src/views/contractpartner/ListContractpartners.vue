@@ -32,7 +32,7 @@ import {
 import { useContractpartnerStore } from "@/stores/ContractpartnerStore";
 import { storeToRefs } from "pinia";
 import { onMounted, onUnmounted, provide, ref, shallowRef, watch } from "vue";
-import useDeleteContractpartnerModalStore from "./elements/DeleteContractpartnerModal.store";
+import { useDeleteContractpartnerModalStore } from "./elements/DeleteContractpartnerModal.store";
 import DeleteContractpartnerModal from "./elements/DeleteContractpartnerModal.vue";
 import { useListContractpartnerAccountsModalStore } from "./elements/ListContractpartnerAccountsModal.store";
 import ListContractpartnerAccountsModal from "./elements/ListContractpartnerAccountsModal.vue";

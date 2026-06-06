@@ -29,7 +29,7 @@ import { storeToRefs } from "pinia";
 import { onMounted, provide, ref, watch } from "vue";
 import useCreateEtfModalStore from "./elements/CreateEtfModal.store";
 import CreateEtfModal from "./elements/CreateEtfModal.vue";
-import useDeleteEtfModalStore from "./elements/DeleteEtfModal.store";
+import { useDeleteEtfModalStore } from "./elements/DeleteEtfModal.store";
 import DeleteEtfModal from "./elements/DeleteEtfModal.vue";
 import ListEtfsDesktop from "./elements/ListEtfsDesktop.vue";
 import ListEtfsMobile from "./elements/ListEtfsMobile.vue";

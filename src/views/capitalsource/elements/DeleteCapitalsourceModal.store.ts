@@ -3,5 +3,3 @@ import { createDeleteModalStore } from "@/stores/DeleteModalStoreFactory";
 
 export const useDeleteCapitalsourceModalStore =
   createDeleteModalStore<Capitalsource>("deleteCapitalsourceModal");
-
-export default useDeleteCapitalsourceModalStore;

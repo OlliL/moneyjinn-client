@@ -30,7 +30,7 @@ import type { PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
 import PreDefMoneyflowService from "@/service/PreDefMoneyflowService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { onMounted, provide, ref, watch } from "vue";
-import useDeletePreDefMoneyflowModalStore from "./elements/DeletePreDefMoneyflowModal.store";
+import { useDeletePreDefMoneyflowModalStore } from "./elements/DeletePreDefMoneyflowModal.store";
 import DeletePreDefMoneyflowModal from "./elements/DeletePreDefMoneyflowModal.vue";
 import ListPreDefMoneyflowsDesktop from "./elements/ListPreDefMoneyflowsDesktop.vue";
 import ListPreDefMoneyflowsMobile from "./elements/ListPreDefMoneyflowsMobile.vue";

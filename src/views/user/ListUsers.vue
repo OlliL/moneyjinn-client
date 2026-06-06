@@ -26,7 +26,7 @@ import { onMounted, provide, ref, watch } from "vue";
 import DivFilter from "@/components/common/DivFilter.vue";
 import useCreateUserModalStore from "./elements/CreateUserModal.store";
 import CreateUserModal from "./elements/CreateUserModal.vue";
-import useDeleteUserModalStore from "./elements/DeleteUserModal.store";
+import { useDeleteUserModalStore } from "./elements/DeleteUserModal.store";
 import DeleteUserModal from "./elements/DeleteUserModal.vue";
 import ListUsersDesktop from "./elements/ListUsersDesktop.vue";
 import ListUsersMobile from "./elements/ListUsersMobile.vue";

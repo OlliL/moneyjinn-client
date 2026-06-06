@@ -3,5 +3,3 @@ import { createDeleteModalStore } from "@/stores/DeleteModalStoreFactory";
 
 export const useDeleteEtfModalStore =
   createDeleteModalStore<Etf>("deleteEtfModal");
-
-export default useDeleteEtfModalStore;

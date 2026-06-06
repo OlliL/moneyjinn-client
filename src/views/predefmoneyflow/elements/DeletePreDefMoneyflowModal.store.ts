@@ -3,7 +3,3 @@ import { createDeleteModalStore } from "@/stores/DeleteModalStoreFactory";
 
 export const useDeletePreDefMoneyflowModalStore =
   createDeleteModalStore<PreDefMoneyflow>("deletePreDefMoneyflowModal");
-
-export default useDeletePreDefMoneyflowModalStore;
-
-export default useDeletePreDefMoneyflowModalStore;

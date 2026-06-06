@@ -6,7 +6,7 @@
     :delete-action="
       () => PreDefMoneyflowService.deletePreDefMoneyflow(preDefMoneyflow.id)
     "
-    :delete-success-action="onDone"
+    :delete-success-action="() => onDone?.(preDefMoneyflow)"
   >
     <template #details>
       <ModalDeleteRow :label="$t('General.amount')" highlight-value>
@@ -63,7 +63,7 @@ import SpanBoolean from "@/components/common/SpanBoolean.vue";
 import SpanDate from "@/components/common/SpanDate.vue";
 import PreDefMoneyflowService from "@/service/PreDefMoneyflowService";
 import { storeToRefs } from "pinia";
-import useDeletePreDefMoneyflowModalStore from "./DeletePreDefMoneyflowModal.store";
+import { useDeletePreDefMoneyflowModalStore } from "./DeletePreDefMoneyflowModal.store";
 
 const {
   open,

@@ -6,7 +6,7 @@
     :delete-action="
       () => PostingAccountService.deletePostingAccount(postingAccount.id)
     "
-    :delete-success-action="onDone"
+    :delete-success-action="() => onDone?.(postingAccount)"
   >
     <template #details>
       <ModalDeleteRow :label="$t('General.name')" highlight-value>

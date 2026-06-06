@@ -8,7 +8,7 @@
       () =>
         ContractpartnerAccountService.deleteContractpartnerAccount(account.id)
     "
-    :delete-success-action="onDone"
+    :delete-success-action="() => onDone?.(account)"
   >
     <template #details>
       <ModalDeleteRow :label="$t('General.iban')" highlight-value>
@@ -31,7 +31,7 @@ import SpanDate from "@/components/common/SpanDate.vue";
 import SpanIban from "@/components/common/SpanIban.vue";
 import ContractpartnerAccountService from "@/service/ContractpartnerAccountService";
 import { storeToRefs } from "pinia";
-import useDeleteContractpartnerAccountModalStore from "./DeleteContractpartnerAccountModal.store";
+import { useDeleteContractpartnerAccountModalStore } from "./DeleteContractpartnerAccountModal.store";
 
 const {
   open,

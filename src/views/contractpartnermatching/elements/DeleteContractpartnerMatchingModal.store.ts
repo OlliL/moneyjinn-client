@@ -5,7 +5,3 @@ export const useDeleteContractpartnerMatchingModalStore =
   createDeleteModalStore<ContractpartnerMatching>(
     "deleteContractpartnerMatchingModal",
   );
-
-export default useDeleteContractpartnerMatchingModalStore;
-
-export default useDeleteContractpartnerMatchingModalStore;

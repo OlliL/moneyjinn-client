@@ -4,7 +4,7 @@
     id-suffix="DeleteEtf"
     v-model:open="open"
     :delete-action="() => CrudEtfService.deleteEtf(etf.id)"
-    :delete-success-action="onDone"
+    :delete-success-action="() => onDone?.(etf)"
   >
     <template #details>
       <ModalDeleteRow :label="$t('General.name')" highlight-value>
@@ -31,7 +31,7 @@ import ModalDelete from "@/components/common/ModalDelete.vue";
 import ModalDeleteRow from "@/components/common/ModalDeleteRow.vue";
 import CrudEtfService from "@/service/CrudEtfService";
 import { storeToRefs } from "pinia";
-import useDeleteEtfModalStore from "./DeleteEtfModal.store";
+import { useDeleteEtfModalStore } from "./DeleteEtfModal.store";
 
 const { open, entity: etf, onDone } = storeToRefs(useDeleteEtfModalStore());
 </script>
