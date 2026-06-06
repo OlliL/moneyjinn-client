@@ -3,6 +3,7 @@ import { BackendError, BackendErrorType } from "@/model/BackendError";
 import { ErrorCode } from "@/model/ErrorCode";
 import type { ValidationResult } from "@/model/validation/ValidationResult";
 import { mapValidationItemTransportToModel } from "@/service/mapper/ValidationItemTransportMapper";
+import { dismissServerErrors } from "@/tools/views/HandleBackendError";
 import type { AxiosInstance } from "axios";
 import axios from "axios";
 import {
@@ -11,7 +12,6 @@ import {
   type TokenRefreshRequest,
 } from "axios-jwt";
 import type { Token } from "axios-jwt/dist/src/Token";
-import { toast } from "vue-sonner";
 import I18nSingleton from "./I18nSingleton";
 import { webServerHost, webServerProtocol } from "./WebServerConfiguration";
 
@@ -81,7 +81,7 @@ export class AxiosSingleton {
 function applyRequestInterceptor(axios: AxiosInstance): void {
   axios.interceptors.request.use(
     (config) => {
-      toast.dismiss("server-error");
+      dismissServerErrors();
       return config;
     },
     (error) => Promise.reject(error),

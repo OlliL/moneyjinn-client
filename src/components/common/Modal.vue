@@ -74,10 +74,10 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
+import { dismissServerErrors } from "@/tools/views/HandleBackendError";
 import { isDesktop } from "@/tools/views/IsDesktop";
 import { X } from "lucide-vue-next";
 import { computed, watch } from "vue";
-import { toast } from "vue-sonner";
 
 const props = withDefaults(
   defineProps<{
@@ -108,13 +108,9 @@ const Modal = computed(() => ({
 
 const isOpen = defineModel<boolean>("open", { default: false });
 
-watch(
-  isOpen,
-  (newValue) => {
-    if (!newValue) {
-      toast.dismiss("server-error");
-    }
-  },
-  { flush: "sync" },
-);
+watch(isOpen, (newValue) => {
+  if (!newValue) {
+    dismissServerErrors();
+  }
+});
 </script>

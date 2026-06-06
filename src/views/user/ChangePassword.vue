@@ -63,7 +63,10 @@ import InputStandard from "@/components/common/InputStandard.vue";
 
 import { useUserSessionStore } from "@/stores/UserSessionStore";
 
-import { handleBackendError } from "@/tools/views/HandleBackendError";
+import {
+  handleBackendError,
+  showServerError,
+} from "@/tools/views/HandleBackendError";
 import { globErr } from "@/tools/views/ZodUtil";
 
 import { ErrorCode, getErrorMessage } from "@/model/ErrorCode";
@@ -72,7 +75,6 @@ import ButtonSubmit from "@/components/common/ButtonSubmit.vue";
 import UserService from "@/service/UserService";
 import { Save } from "lucide-vue-next";
 import { useForm } from "vee-validate";
-import { toast } from "vue-sonner";
 
 const { t } = useI18n();
 
@@ -108,10 +110,7 @@ onMounted(() => {
     userIsNew.value = false;
   }
   if (userIsNew.value) {
-    toast.error(getErrorMessage(ErrorCode.PASSWORD_MUST_BE_CHANGED), {
-      id: "server-error",
-      duration: Infinity,
-    });
+    showServerError(getErrorMessage(ErrorCode.PASSWORD_MUST_BE_CHANGED));
   }
   Object.keys(values).forEach((field) => setFieldTouched(field, false));
 });

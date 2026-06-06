@@ -13,7 +13,18 @@ const position = computed(() =>
 <template>
   <router-view />
   <GlobalModals />
-  <Toaster :position="position" rich-colors close-button />
+  <Toaster
+    :position="position"
+    rich-colors
+    close-button
+    :toastOptions="{
+      classes: {
+        toast:
+          'group toast group-[.toaster]:bg-background group-[.toaster]:text-foreground group-[.toaster]:border-border group-[.toaster]:shadow-lg group-[.toaster]:pointer-events-auto',
+        closeButton: 'toast-close-button',
+      },
+    }"
+  />
 </template>
 
 <style>
