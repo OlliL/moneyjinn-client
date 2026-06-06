@@ -8,6 +8,7 @@
       :is="Modal.Content"
       :data-testid="`app-modal-${props.idSuffix}`"
       :class="[
+        'sm:max-w-lg',
         props.maxWidth
           ? props.maxWidth
           : 'w-full max-w-full md:max-w-[calc(100%-2rem)]',
