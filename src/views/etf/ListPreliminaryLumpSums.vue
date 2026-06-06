@@ -111,8 +111,6 @@
         </template>
       </ListPreliminaryLumpSumsMobile>
 
-      <DivError :server-errors="serverErrors" />
-
       <div
         v-if="
           selectedYear && selectedEtfId !== undefined && etfPreliminaryLumpSum
@@ -139,9 +137,7 @@
 
 <script lang="ts" setup>
 import ButtonChevrons from "@/components/common/ButtonChevrons.vue";
-import DivError from "@/components/common/DivError.vue";
 import { Button } from "@/components/ui/button";
-import { handleBackendError } from "@/tools/views/HandleBackendError";
 import type { SelectBoxValue } from "@/model/SelectBoxValue";
 import type { Etf } from "@/model/etf/Etf";
 import type { EtfPreliminaryLumpSum } from "@/model/etf/EtfPreliminaryLumpSum";
@@ -149,6 +145,7 @@ import { EtfPreliminaryLumpSumType } from "@/model/etf/EtfPreliminaryLumpSumType
 import router, { Routes } from "@/router";
 import CrudEtfPreliminaryLumpSumService from "@/service/CrudEtfPreliminaryLumpSumService";
 import { useEtfStore } from "@/stores/EtfStore";
+import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { computed, ref, watch, type Component } from "vue";
 import useCreateEtfPreliminaryLumpSumModalMonthlyStore from "./elements/CreateEtfPreliminaryLumpSumModalMonthly.store";
 import CreateEtfPreliminaryLumpSumModalMonthly from "./elements/CreateEtfPreliminaryLumpSumModalMonthly.vue";
@@ -181,7 +178,6 @@ const props = withDefaults(
 
 const { getAsSelectBoxValues, getFavoriteEtf } = useEtfStore();
 
-const serverErrors = ref<string[]>([]);
 const yearsLoaded = ref(false);
 const selectedYear = ref<string | undefined>(props.year);
 const years = ref<string[]>([]);
@@ -246,7 +242,6 @@ const typeConfigs = computed(() =>
 );
 
 const loadYears = (etfId: number, year?: string | undefined) => {
-  serverErrors.value = [];
   yearsLoaded.value = false;
   years.value = [];
   etfPreliminaryLumpSums.value.clear();
@@ -271,7 +266,7 @@ const loadYears = (etfId: number, year?: string | undefined) => {
       yearsLoaded.value = true;
     })
     .catch((backendError) => {
-      handleBackendError(backendError, serverErrors);
+      handleBackendError(backendError);
       routerPush();
     });
 };

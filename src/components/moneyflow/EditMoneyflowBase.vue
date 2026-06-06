@@ -1,6 +1,4 @@
 <template>
-  <DivError :server-errors="serverErrors" />
-
   <div class="grid grid-cols-2 md:grid-cols-12 gap-4 mb-4">
     <div class="col-span-1 md:col-span-2">
       <InputDate
@@ -235,7 +233,6 @@ import { computed, onMounted, ref, toRaw, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { date, number, string } from "zod";
 import SelectCapitalsource from "../capitalsource/SelectCapitalsource.vue";
-import DivError from "../common/DivError.vue";
 import InputDate from "../common/InputDate.vue";
 import InputStandard from "../common/InputStandard.vue";
 import SelectContractpartner from "../contractpartner/SelectContractpartner.vue";
@@ -267,7 +264,6 @@ const schema = {
   capitalsourceId: number(globErr(t("General.validation.capitalsource"))).gt(0),
 };
 
-const serverErrors = ref(new Array<string>());
 const mmf = ref({} as Moneyflow);
 const amount = ref(undefined as number | undefined);
 const previousCommentSetByContractpartnerDefaults = ref("");
@@ -382,7 +378,6 @@ const resetForm = () => {
   } else {
     resetCreateForm();
   }
-  serverErrors.value = new Array<string>();
   mseRemainderIsValid.value = undefined;
 
   saveAsPreDefMoneyflow.value = false;
@@ -746,7 +741,7 @@ const importImportedMoneyflow = async (
         return true;
       })
       .catch((backendError) => {
-        handleBackendError(backendError, serverErrors);
+        handleBackendError(backendError);
         return false;
       });
   }
@@ -756,7 +751,7 @@ const deleteImportedMoneyflow = async (id: number): Promise<boolean> =>
   ImportedMoneyflowService.deleteImportedMoneyflow(id)
     .then(() => true)
     .catch((backendError) => {
-      handleBackendError(backendError, serverErrors);
+      handleBackendError(backendError);
       return false;
     });
 const createMoneyflow = async (): Promise<boolean> => {
@@ -771,7 +766,7 @@ const createMoneyflow = async (): Promise<boolean> => {
         return true;
       })
       .catch((backendError) => {
-        handleBackendError(backendError, serverErrors);
+        handleBackendError(backendError);
         return false;
       });
   }
@@ -807,7 +802,7 @@ const updateMoneyflow = async (): Promise<Moneyflow | undefined> => {
         return mmf;
       })
       .catch((backendError) => {
-        handleBackendError(backendError, serverErrors);
+        handleBackendError(backendError);
         return undefined;
       });
   }

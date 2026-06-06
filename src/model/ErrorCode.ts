@@ -70,7 +70,7 @@ export const enum ErrorCode {
   COLOR_INVALID = 394,
 }
 
-export const errorMessages = {
+export const errorMessages: Record<number, string> = {
   [ErrorCode.CONTRACTPARTNER_DOES_NOT_EXIST]: I18nSingleton.t()(
     "ErrorMessage.CONTRACTPARTNER_DOES_NOT_EXIST",
   ),
@@ -259,7 +259,7 @@ export const errorMessages = {
 };
 
 export function getErrorMessage(errorCode: number) {
-  const message = errorMessages[errorCode as keyof typeof errorMessages];
+  const message = errorMessages[errorCode];
 
   return (
     message ?? "Fehlertext zu Fehler-ID '" + errorCode + "' ist unbekannt!"

@@ -9,7 +9,6 @@
     v-model:open="open"
   >
     <template #body>
-      <DivError :server-errors="serverErrors" />
       <form
         @submit.prevent="mmf.id == 0 ? createMoneyflow() : updateMoneyflow()"
         id="updateMoneyflowForm"
@@ -110,13 +109,11 @@ import { Eye, ReceiptText, Save, Trash2, Undo2 } from "lucide-vue-next";
 import { storeToRefs } from "pinia";
 import { useForm } from "vee-validate";
 import { computed, ref, toRaw, useTemplateRef, watch } from "vue";
-import DivError from "../common/DivError.vue";
 import ModalVue from "../common/Modal.vue";
 import SpanReceipt from "../common/SpanReceipt.vue";
 import useReceiptModalStore from "../reports/ReceiptModal.store.ts";
 import useEditMoneyflowModalStore from "./EditMoneyflowModal.store";
 
-const serverErrors = ref(new Array<string>());
 const desktop = isDesktop();
 
 const mmf = ref({} as Moneyflow);
@@ -149,7 +146,6 @@ watch(
         mapImportedMoneyflowReceiptToMoneyflowReceipt(importedReceipt);
     }
 
-    serverErrors.value = new Array<string>();
     Object.keys(values).forEach((field) => setFieldTouched(field, false));
   },
   { immediate: true },
@@ -179,7 +175,7 @@ const loadReceipt = (id: number) => {
       receipt.value = response;
     })
     .catch((backendError) => {
-      handleBackendError(backendError, serverErrors);
+      handleBackendError(backendError);
     });
 };
 
@@ -190,7 +186,7 @@ const deleteMoneyflowReceipt = () => {
       onDone.value?.(mmf.value);
     })
     .catch((backendError) => {
-      handleBackendError(backendError, serverErrors);
+      handleBackendError(backendError);
     });
 };
 

@@ -14,8 +14,6 @@
       @createClicked="actions.create"
     />
 
-    <DivError :server-errors="serverErrors" />
-
     <ListUsersMobile :users="users" />
 
     <ListUsersDesktop :users="users" />
@@ -25,7 +23,6 @@
 <script lang="ts" setup>
 import { onMounted, provide, ref, watch } from "vue";
 
-import DivError from "@/components/common/DivError.vue";
 import DivFilter from "@/components/common/DivFilter.vue";
 import useCreateUserModalStore from "./elements/CreateUserModal.store";
 import CreateUserModal from "./elements/CreateUserModal.vue";
@@ -39,8 +36,6 @@ import type { User } from "@/model/user/User";
 
 import UserService from "@/service/UserService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
-
-const serverErrors = ref(new Array<string>());
 
 const users = ref(new Array<User>());
 const allUsers = ref(new Array<User>());
@@ -71,8 +66,6 @@ const searchContent = () => {
 };
 
 const reloadView = () => {
-  serverErrors.value = new Array<string>();
-
   UserService.fetchAllUser()
     .then((_users) => {
       _users.sort((a, b) =>
@@ -82,7 +75,7 @@ const reloadView = () => {
       searchContent();
     })
     .catch((backendError) => {
-      handleBackendError(backendError, serverErrors);
+      handleBackendError(backendError);
     });
 };
 

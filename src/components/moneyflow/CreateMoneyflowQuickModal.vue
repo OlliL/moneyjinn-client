@@ -12,8 +12,6 @@
         class="flex flex-col h-full"
       >
         <div class="space-y-3 pt-0">
-          <DivError :server-errors="serverErrors" />
-
           <div
             class="flex items-center justify-between text-[11px] text-muted-foreground font-bold uppercase tracking-wider px-1 mb-2 gap-2"
           >
@@ -111,7 +109,6 @@
 
 <script lang="ts" setup>
 import ButtonSubmit from "@/components/common/ButtonSubmit.vue";
-import DivError from "@/components/common/DivError.vue";
 import InputDate from "@/components/common/InputDate.vue";
 import InputStandard from "@/components/common/InputStandard.vue";
 import Modal from "@/components/common/Modal.vue";
@@ -121,7 +118,6 @@ import { Button } from "@/components/ui/button";
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 import { type PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
 import MoneyflowService from "@/service/MoneyflowService";
-import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { amountSchema, globErr } from "@/tools/views/ZodUtil";
 import {
   ChevronLeft,
@@ -145,7 +141,6 @@ const { open, preDefMoneyflow, onDone } = storeToRefs(
   useCreateMoneyflowQuickModalStore(),
 );
 const preDef = ref({} as PreDefMoneyflow);
-const serverErrors = ref(new Array<string>());
 
 const amount = ref<number>();
 const comment = ref("");
@@ -168,7 +163,6 @@ watch(
   (visible) => {
     if (visible && preDefMoneyflow.value) {
       const flow = preDefMoneyflow.value as PreDefMoneyflow;
-      serverErrors.value = new Array<string>();
       preDef.value = flow;
 
       amount.value = flow.amount;
@@ -189,8 +183,6 @@ const changeDate = (days: number) => {
 };
 
 const book = handleSubmit(() => {
-  serverErrors.value = new Array<string>();
-
   const mmf: Moneyflow = {
     amount: amount.value!,
     bookingDate: bookingDate.value,
@@ -201,11 +193,9 @@ const book = handleSubmit(() => {
     private: false,
   } as Moneyflow;
 
-  MoneyflowService.createMoneyflow(mmf, preDef.value.id, false)
-    .then(() => {
-      close();
-      onDone.value?.(mmf);
-    })
-    .catch((error) => handleBackendError(error, serverErrors));
+  MoneyflowService.createMoneyflow(mmf, preDef.value.id, false).then(() => {
+    close();
+    onDone.value?.(mmf);
+  });
 });
 </script>

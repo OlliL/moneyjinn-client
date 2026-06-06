@@ -8,8 +8,6 @@
     <template #body
       ><form @submit.prevent="createEtf" id="createEtfForm-CreateEtf">
         <div class="space-y-4">
-          <DivError :server-errors="serverErrors" />
-
           <div class="form-section space-y-4">
             <div class="flex items-end gap-3">
               <div class="flex-1">
@@ -173,7 +171,6 @@
 
 <script lang="ts" setup>
 import ButtonSubmit from "@/components/common/ButtonSubmit.vue";
-import DivError from "@/components/common/DivError.vue";
 import InputStandard from "@/components/common/InputStandard.vue";
 import ModalVue from "@/components/common/Modal.vue";
 import { Button } from "@/components/ui/button";
@@ -192,8 +189,6 @@ import useCreateEtfModalStore from "./CreateEtfModal.store";
 const { t } = useI18n();
 
 const { open, onDone } = storeToRefs(useCreateEtfModalStore());
-
-const serverErrors = ref(new Array<string>());
 
 const schema: Partial<{ [key in keyof Etf]: ZodType }> = {
   isin: string(globErr(t("ETF.validation.isin")))
@@ -240,7 +235,6 @@ const resetForm = () => {
     met.value = {} as Etf;
   }
   markAsFavorite.value = !!met.value.isFavorite;
-  serverErrors.value = new Array<string>();
   Object.keys(values).forEach((field) => setFieldTouched(field, false));
 };
 
@@ -256,7 +250,6 @@ watch(
 );
 
 const createEtf = handleSubmit(() => {
-  serverErrors.value = new Array<string>();
   met.value.isFavorite = markAsFavorite.value;
 
   if (met.value.id > 0) {
@@ -267,7 +260,7 @@ const createEtf = handleSubmit(() => {
         onDone.value?.();
       })
       .catch((backendError) => {
-        handleBackendError(backendError, serverErrors);
+        handleBackendError(backendError);
       });
   } else {
     //create
@@ -278,7 +271,7 @@ const createEtf = handleSubmit(() => {
         onDone.value?.();
       })
       .catch((backendError) => {
-        handleBackendError(backendError, serverErrors);
+        handleBackendError(backendError);
       });
   }
 });

@@ -1,5 +1,4 @@
 <template>
-  <DivError :server-errors="serverErrors" />
   <div class="flex justify-center py-3" v-if="dataLoaded && etfSummaryReceived">
     <!-- Desktop View -->
     <div class="w-full max-w-7xl" v-if="desktop">
@@ -42,7 +41,6 @@
 </template>
 
 <script lang="ts" setup>
-import DivError from "@/components/common/DivError.vue";
 import EtfTable from "@/components/etf/EtfTable.vue";
 import {
   Accordion,
@@ -56,7 +54,6 @@ import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { isDesktop } from "@/tools/views/IsDesktop";
 import { computed, onMounted, ref, watch } from "vue";
 
-const serverErrors = ref(new Array<string>());
 const desktop = isDesktop();
 
 const etfSummaryArray = ref(new Array<EtfSummary>());
@@ -71,8 +68,6 @@ const dataLoaded = defineModel({
 });
 
 const loadData = (year: number, month: number) => {
-  serverErrors.value = new Array<string>();
-
   dataLoaded.value = false;
   EtfService.listEtfOverview(year, month)
     .then((_etfSummeryArray) => {
@@ -80,7 +75,7 @@ const loadData = (year: number, month: number) => {
       dataLoaded.value = true;
     })
     .catch((backendError) => {
-      handleBackendError(backendError, serverErrors);
+      handleBackendError(backendError);
     });
 };
 

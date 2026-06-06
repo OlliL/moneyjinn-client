@@ -14,7 +14,6 @@
         @submit.prevent="upsertMonthlySettlement"
         id="upsertMonthlySettlementForm"
       >
-        <DivError :server-errors="serverErrors" />
         <div class="flex justify-center mb-4">
           <div class="w-1/3">
             <InputDate
@@ -130,7 +129,6 @@ import { date, ZodType } from "zod";
 import { useEditMonthlySettlementModalStore } from "./EditMonthlySettlementModal.store";
 
 import ButtonSubmit from "../common/ButtonSubmit.vue";
-import DivError from "../common/DivError.vue";
 import InputDate from "../common/InputDate.vue";
 import InputStandard from "../common/InputStandard.vue";
 import ModalVue from "../common/Modal.vue";
@@ -160,7 +158,6 @@ type MonthlySettlementFormData = MonthlySettlement & {
   imported: boolean;
 };
 
-const serverErrors = ref(new Array<string>());
 const editMode = ref(false);
 const selectedMonth = ref(undefined as Date | undefined);
 const loadedMonth = ref(undefined as Date | undefined);
@@ -178,8 +175,6 @@ const schema: Partial<{ [key in keyof MonthlySettlement]: ZodType }> = {
 };
 
 const loadMonthlySettlements = async (_year?: number, _month?: number) => {
-  serverErrors.value = new Array<string>();
-
   monthlySettlementsCredit.value = new Array<MonthlySettlementFormData>();
   monthlySettlementsNoCredit.value = new Array<MonthlySettlementFormData>();
 
@@ -227,14 +222,12 @@ const loadMonthlySettlements = async (_year?: number, _month?: number) => {
       return monthDate;
     })
     .catch((backendError) => {
-      handleBackendError(backendError, serverErrors);
+      handleBackendError(backendError);
       return undefined;
     });
 };
 
 const upsertMonthlySettlement = handleSubmit(() => {
-  serverErrors.value = new Array<string>();
-
   const monthlySettlements = monthlySettlementsCredit.value.concat(
     monthlySettlementsNoCredit.value,
   );
@@ -247,7 +240,7 @@ const upsertMonthlySettlement = handleSubmit(() => {
       }
     })
     .catch((backendError) => {
-      handleBackendError(backendError, serverErrors);
+      handleBackendError(backendError);
     });
 });
 

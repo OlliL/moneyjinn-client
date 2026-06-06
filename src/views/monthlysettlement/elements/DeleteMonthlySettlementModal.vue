@@ -8,7 +8,6 @@
     v-model:open="open"
   >
     <template #body>
-      <DivError :server-errors="serverErrors" />
       <div class="flex justify-center mb-4" v-if="month">
         <div class="w-full">
           <ShowMonthlySettlementVue :year="year" :month="month" />
@@ -26,7 +25,6 @@
 
 <script lang="ts" setup>
 import ButtonDeleteTwoTap from "@/components/common/ButtonDeleteTwoTap.vue";
-import DivError from "@/components/common/DivError.vue";
 import ModalVue from "@/components/common/Modal.vue";
 import MonthlySettlementService from "@/service/MonthlySettlementService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
@@ -36,7 +34,6 @@ import { computed, ref, watch } from "vue";
 import useDeleteMonthlySettlementModalStore from "./DeleteMonthlySettlementModal.store";
 import ShowMonthlySettlementVue from "./ShowMonthlySettlement.vue";
 
-const serverErrors = ref(new Array<string>());
 const { open, year, month, onDone } = storeToRefs(
   useDeleteMonthlySettlementModalStore(),
 );
@@ -51,14 +48,11 @@ watch(
     if (!nextYear || !nextMonth) return;
     selectedYear.value = nextYear;
     selectedMonth.value = nextMonth;
-    serverErrors.value = new Array<string>();
   },
   { immediate: true },
 );
 
 const deleteMonthlySettlement = () => {
-  serverErrors.value = new Array<string>();
-
   MonthlySettlementService.deleteMonthlySettlement(
     selectedYear.value,
     selectedMonth.value,
@@ -68,7 +62,7 @@ const deleteMonthlySettlement = () => {
       onDone.value?.(selectedYear.value);
     })
     .catch((backendError) => {
-      handleBackendError(backendError, serverErrors);
+      handleBackendError(backendError);
     });
 };
 </script>

@@ -5,10 +5,6 @@
     </div>
     <div class="flex justify-center">
       <div class="w-full max-w-md">
-        <DivError
-          :server-errors="serverErrors"
-          test-id-prefix="importReceipts-error"
-        />
         <form
           @submit.prevent="uploadReceipts"
           id="uploadReceiptsForm"
@@ -46,7 +42,6 @@
 
 <script lang="ts" setup>
 import ButtonSubmit from "@/components/common/ButtonSubmit.vue";
-import DivError from "@/components/common/DivError.vue";
 import InputFile from "@/components/common/InputFile.vue";
 import useDeleteMoneyflowModalStore from "@/components/moneyflow/DeleteMoneyflowModal.store";
 import useEditMoneyflowModalStore from "@/components/moneyflow/EditMoneyflowModal.store";
@@ -63,8 +58,6 @@ import { Upload } from "lucide-vue-next";
 import { useForm } from "vee-validate";
 import { onMounted, provide, ref, useTemplateRef } from "vue";
 import ImportReceiptsRowVue from "./elements/ImportReceiptsRow.vue";
-
-const serverErrors = ref(new Array<string>());
 
 const importedMoneyflowReceipts = ref(new Array<ImportedMoneyflowReceipt>());
 const files = ref<FileList | null>(null);
@@ -85,7 +78,7 @@ const loadData = () => {
       importedMoneyflowReceipts.value = imr;
     })
     .catch((backendError) => {
-      handleBackendError(backendError, serverErrors);
+      handleBackendError(backendError);
     });
 
   Object.keys(values).forEach((field) => setFieldTouched(field, false));
@@ -112,7 +105,6 @@ const actions: ImportReceiptRowActions = {
 provide(ImportReceiptRowActionsKey, actions);
 
 const uploadReceipts = handleSubmit(async () => {
-  serverErrors.value = new Array<string>();
   const receipts = new Array<ImportedMoneyflowReceipt>();
   if (files.value) {
     for (const file of files.value) {
@@ -138,7 +130,7 @@ const uploadReceipts = handleSubmit(async () => {
         loadData();
       })
       .catch((backendError) => {
-        handleBackendError(backendError, serverErrors);
+        handleBackendError(backendError);
       });
     uploadReceiptsForm.value?.reset();
     files.value = null;

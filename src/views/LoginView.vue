@@ -13,7 +13,6 @@
               {{ $t("LoginView.enterYourData") }}
             </h5>
           </div>
-          <DivError :server-errors="serverErrors" />
           <div class="mb-2">
             <InputStandard
               v-model="username"
@@ -62,7 +61,6 @@
 
 <script lang="ts" setup>
 import ButtonSubmit from "@/components/common/ButtonSubmit.vue";
-import DivError from "@/components/common/DivError.vue";
 import InputStandard from "@/components/common/InputStandard.vue";
 import router, { Routes } from "@/router";
 import UserService from "@/service/UserService";
@@ -74,7 +72,6 @@ import { useI18n } from "vue-i18n";
 import { string } from "zod";
 import { version } from "../../package.json";
 
-const serverErrors = ref(new Array<string>());
 const { t } = useI18n();
 
 const schema = {
@@ -93,7 +90,6 @@ const props = withDefaults(
 
 onMounted(() => {
   if (props.error) {
-    serverErrors.value.push(props.error);
   }
 });
 
@@ -103,14 +99,12 @@ const password = ref("");
 const { handleSubmit } = useForm();
 
 const handleLogin = handleSubmit((values) => {
-  serverErrors.value = new Array<string>();
-
   UserService.login(values.username, values.password)
     .then(() => {
       router.push({ name: Routes.Home });
     })
     .catch((backendError) => {
-      handleBackendError(backendError, serverErrors);
+      handleBackendError(backendError);
       password.value = "";
     });
 });

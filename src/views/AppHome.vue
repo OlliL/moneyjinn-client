@@ -6,8 +6,6 @@
       </h4>
     </div>
 
-    <DivError :server-errors="serverErrors" />
-
     <div class="max-w-3xl mx-auto space-y-2">
       <Alert
         v-if="importedMoneyflows"
@@ -74,7 +72,6 @@
 </template>
 
 <script lang="ts" setup>
-import DivError from "@/components/common/DivError.vue";
 import FavoriteIcon from "@/components/common/FavoriteIcon.vue";
 import SpanAmount from "@/components/common/SpanAmount.vue";
 import { useCreateMoneyflowQuickModalStore } from "@/components/moneyflow/CreateMoneyflowQuickModal.store";
@@ -92,8 +89,6 @@ import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { AlertCircle, CheckCircle2 } from "lucide-vue-next";
 import { h, onMounted, ref } from "vue";
 import { toast } from "vue-sonner";
-
-const serverErrors = ref(new Array<string>());
 
 const importedMoneyflows = ref(false);
 const monthlySettlementMissing = ref(false);
@@ -138,7 +133,7 @@ const loadData = () => {
       })
       .catch((backendError) => {
         error = true;
-        handleBackendError(backendError, serverErrors);
+        handleBackendError(backendError);
       }),
     PreDefMoneyflowService.fetchAllPreDefMoneyflow()
       .then((mpm) => {
@@ -155,7 +150,7 @@ const loadData = () => {
       })
       .catch((backendError) => {
         error = true;
-        handleBackendError(backendError, serverErrors);
+        handleBackendError(backendError);
       }),
   ]).then(() => {
     if (!error) {

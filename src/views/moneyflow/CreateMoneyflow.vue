@@ -42,11 +42,6 @@
       </div>
     </div>
 
-    <DivError
-      :server-errors="serverErrors"
-      test-id-prefix="createMoneyflowServerError"
-    />
-
     <div class="rounded-sm border shadow card-panel p-4">
       <form
         @submit.prevent="createMoneyflow"
@@ -83,7 +78,6 @@
 
 <script lang="ts" setup>
 import ButtonSubmit from "@/components/common/ButtonSubmit.vue";
-import DivError from "@/components/common/DivError.vue";
 import EditMoneyflowBase from "@/components/moneyflow/EditMoneyflowBase.vue";
 import { Button } from "@/components/ui/button";
 import {
@@ -101,8 +95,6 @@ import { Save, Undo2 } from "lucide-vue-next";
 import { type AcceptableValue } from "reka-ui";
 import { useForm } from "vee-validate";
 import { onMounted, ref, useTemplateRef } from "vue";
-
-const serverErrors = ref(new Array<string>());
 
 const preDefMoneyflows = ref(new Array<PreDefMoneyflow>());
 const preDefMoneyflowId = ref(0);
@@ -124,7 +116,7 @@ onMounted(() =>
       resetForm();
     })
     .catch((backendError) => {
-      handleBackendError(backendError, serverErrors);
+      handleBackendError(backendError);
     }),
 );
 

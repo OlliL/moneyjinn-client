@@ -32,8 +32,6 @@
         </div> </template
     ></DivFilter>
 
-    <DivError :server-errors="serverErrors" />
-
     <ListContractpartnerMatchingsMobile
       :contractpartner-matchings="contractpartnerMatchings"
     />
@@ -47,7 +45,6 @@
 <script lang="ts" setup>
 import { onMounted, provide, ref, watch } from "vue";
 
-import DivError from "@/components/common/DivError.vue";
 import DivFilter from "@/components/common/DivFilter.vue";
 import {
   ContractpartnerMatchingActionsKey,
@@ -65,8 +62,6 @@ import type { ContractpartnerMatching } from "@/model/contractpartnermatching/Co
 import SelectContractpartner from "@/components/contractpartner/SelectContractpartner.vue";
 import ContractpartnerMatchingService from "@/service/ContractpartnerMatchingService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
-
-const serverErrors = ref(new Array<string>());
 
 const contractpartnerMatchings = ref(new Array<ContractpartnerMatching>());
 const allContractpartnerMatchings = ref(new Array<ContractpartnerMatching>());
@@ -106,8 +101,6 @@ const searchContent = () => {
 };
 
 const reloadView = () => {
-  serverErrors.value = new Array<string>();
-
   ContractpartnerMatchingService.fetchAllContractpartnerMatching()
     .then((_contractpartnerMatchings) => {
       _contractpartnerMatchings.sort((a, b) => {
@@ -123,7 +116,7 @@ const reloadView = () => {
       searchContent();
     })
     .catch((backendError) => {
-      handleBackendError(backendError, serverErrors);
+      handleBackendError(backendError);
     });
 };
 

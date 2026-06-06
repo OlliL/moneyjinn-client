@@ -9,8 +9,6 @@
     v-model:open="open"
   >
     <template #body>
-      <DivError :server-errors="serverErrors" />
-
       <div class="hidden md:flex flex-col rounded-md border">
         <Table
           class="[&_tr:nth-child(even)]:bg-muted [&_td]:py-1! [&_th]:py-1!"
@@ -115,7 +113,6 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-import DivError from "@/components/common/DivError.vue";
 import ModalVue from "@/components/common/Modal.vue";
 import {
   ContractpartnerAccountActionsKey,
@@ -135,8 +132,6 @@ import SpanDate from "@/components/common/SpanDate.vue";
 import SpanIban from "@/components/common/SpanIban.vue";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { storeToRefs } from "pinia";
-
-const serverErrors = ref(new Array<string>());
 
 const { open, contractpartner: mcp } = storeToRefs(
   useListContractpartnerAccountsModalStore(),
@@ -170,7 +165,7 @@ const loadData = () => {
       dataLoaded.value = true;
     })
     .catch((backendError) => {
-      handleBackendError(backendError, serverErrors);
+      handleBackendError(backendError);
     });
 };
 

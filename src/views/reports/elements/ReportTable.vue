@@ -1,7 +1,5 @@
 <template>
   <div v-if="dataLoaded">
-    <DivError :server-errors="serverErrors" />
-
     <div>
       <ReportTableMobile
         v-model:filter-capitalsource="filterCapitalsource"
@@ -145,7 +143,6 @@
 </template>
 
 <script lang="ts" setup>
-import DivError from "@/components/common/DivError.vue";
 import useDeleteMoneyflowModalStore from "@/components/moneyflow/DeleteMoneyflowModal.store";
 import useEditMoneyflowModalStore from "@/components/moneyflow/EditMoneyflowModal.store";
 import useListMoneyflowModalStore from "@/components/moneyflow/ListMoneyflowModal.store";
@@ -169,7 +166,6 @@ import CapitalsourceTableMobile from "./CapitalsourceTableMobile.vue";
 import ReportTableDesktop from "./ReportTableDesktop.vue";
 import ReportTableMobile from "./ReportTableMobile.vue";
 
-const serverErrors = ref(new Array<string>());
 const desktop = isDesktop();
 
 const report = ref({} as Report);
@@ -338,7 +334,6 @@ const amountSum = computed(() => {
 });
 
 const loadData = (year: number, month: number) => {
-  serverErrors.value = new Array<string>();
   dataLoaded.value = false;
   ReportService.listReports(year, month)
     .then((_report) => {
@@ -346,7 +341,7 @@ const loadData = (year: number, month: number) => {
       dataLoaded.value = true;
     })
     .catch((backendError) => {
-      handleBackendError(backendError, serverErrors);
+      handleBackendError(backendError);
     });
 };
 

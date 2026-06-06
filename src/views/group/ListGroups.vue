@@ -13,8 +13,6 @@
       @createClicked="actions.create"
     />
 
-    <DivError :server-errors="serverErrors" />
-
     <ListGroupsMobile :groups="groups" />
 
     <ListGroupsDesktop :groups="groups" />
@@ -22,7 +20,6 @@
 </template>
 
 <script lang="ts" setup>
-import DivError from "@/components/common/DivError.vue";
 import DivFilter from "@/components/common/DivFilter.vue";
 import { GroupActionsKey, type CrudActions } from "@/model/CrudActions";
 import type { Group } from "@/model/group/Group";
@@ -35,8 +32,6 @@ import useDeleteGroupModalStore from "./elements/DeleteGroupModal.store";
 import DeleteGroupModal from "./elements/DeleteGroupModal.vue";
 import ListGroupsDesktop from "./elements/ListGroupsDesktop.vue";
 import ListGroupsMobile from "./elements/ListGroupsMobile.vue";
-
-const serverErrors = ref(new Array<string>());
 
 const groups = ref(new Array<Group>());
 const allGroups = ref(new Array<Group>());
@@ -67,8 +62,6 @@ const searchContent = () => {
 };
 
 const reloadView = () => {
-  serverErrors.value = new Array<string>();
-
   GroupService.fetchAllGroup()
     .then((_groups) => {
       _groups.sort((a, b) =>
@@ -78,7 +71,7 @@ const reloadView = () => {
       searchContent();
     })
     .catch((backendError) => {
-      handleBackendError(backendError, serverErrors);
+      handleBackendError(backendError);
     });
 };
 

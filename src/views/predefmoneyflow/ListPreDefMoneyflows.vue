@@ -13,8 +13,6 @@
       @createClicked="actions.create"
     />
 
-    <DivError :server-errors="serverErrors" />
-
     <ListPreDefMoneyflowsMobile :pre-def-moneyflows="preDefMoneyflows" />
 
     <ListPreDefMoneyflowsDesktop :pre-def-moneyflows="preDefMoneyflows" />
@@ -22,7 +20,6 @@
 </template>
 
 <script lang="ts" setup>
-import DivError from "@/components/common/DivError.vue";
 import DivFilter from "@/components/common/DivFilter.vue";
 import { useCreatePreDefMoneyflowModalStore } from "@/components/predefmoneyflow/CreatePreDefMoneyflowModal.store";
 import {
@@ -37,8 +34,6 @@ import useDeletePreDefMoneyflowModalStore from "./elements/DeletePreDefMoneyflow
 import DeletePreDefMoneyflowModal from "./elements/DeletePreDefMoneyflowModal.vue";
 import ListPreDefMoneyflowsDesktop from "./elements/ListPreDefMoneyflowsDesktop.vue";
 import ListPreDefMoneyflowsMobile from "./elements/ListPreDefMoneyflowsMobile.vue";
-
-const serverErrors = ref(new Array<string>());
 
 const preDefMoneyflows = ref(new Array<PreDefMoneyflow>());
 const allPreDefMoneyflows = ref(new Array<PreDefMoneyflow>());
@@ -73,8 +68,6 @@ const searchContent = () => {
 };
 
 const reloadView = () => {
-  serverErrors.value = new Array<string>();
-
   PreDefMoneyflowService.fetchAllPreDefMoneyflow()
     .then((_preDefMoneyflows) => {
       _preDefMoneyflows.sort((a, b) => {
@@ -90,7 +83,7 @@ const reloadView = () => {
       searchContent();
     })
     .catch((backendError) => {
-      handleBackendError(backendError, serverErrors);
+      handleBackendError(backendError);
     });
 };
 

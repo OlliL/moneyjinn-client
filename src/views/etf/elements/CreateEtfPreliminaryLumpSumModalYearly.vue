@@ -11,8 +11,6 @@
         id="createEtfPreliminaryLumpSumYearForm"
       >
         <div class="space-y-4">
-          <DivError :server-errors="serverErrors" />
-
           <div class="form-section space-y-4">
             <div class="grid grid-cols-2 sm:grid-cols-12 gap-4">
               <div class="col-span-2 sm:col-span-9">
@@ -78,7 +76,6 @@
 
 <script lang="ts" setup>
 import ButtonSubmit from "@/components/common/ButtonSubmit.vue";
-import DivError from "@/components/common/DivError.vue";
 import InputDate from "@/components/common/InputDate.vue";
 import InputStandard from "@/components/common/InputStandard.vue";
 import ModalVue from "@/components/common/Modal.vue";
@@ -102,7 +99,6 @@ import useCreateEtfPreliminaryLumpSumModalYearlyStore from "./CreateEtfPrelimina
 const { t } = useI18n();
 
 const modalStore = useCreateEtfPreliminaryLumpSumModalYearlyStore();
-const serverErrors = ref(new Array<string>());
 
 const schema: Partial<{ [key in keyof EtfPreliminaryLumpSum]: ZodType }> = {
   etfId: number(globErr(t("ETFPreliminaryLumpSum.validation.etfId"))).gt(0),
@@ -147,7 +143,6 @@ const resetForm = () => {
   localYearDate.setHours(0, 0, 0, 0);
   year.value = localYearDate;
 
-  serverErrors.value = new Array<string>();
   Object.keys(values).forEach((field) => setFieldTouched(field, false));
 };
 
@@ -164,8 +159,6 @@ watch(
 );
 
 const createEtfPreliminaryLumpSum = handleSubmit(() => {
-  serverErrors.value = new Array<string>();
-
   mep.value.year = year.value.getFullYear();
 
   if (mep.value.id > 0) {
@@ -176,7 +169,7 @@ const createEtfPreliminaryLumpSum = handleSubmit(() => {
         onDone.value?.(mep.value);
       })
       .catch((backendError) => {
-        handleBackendError(backendError, serverErrors);
+        handleBackendError(backendError);
       });
   } else {
     // Create
@@ -187,7 +180,7 @@ const createEtfPreliminaryLumpSum = handleSubmit(() => {
         onDone.value?.(mep.value);
       })
       .catch((backendError) => {
-        handleBackendError(backendError, serverErrors);
+        handleBackendError(backendError);
       });
   }
 });

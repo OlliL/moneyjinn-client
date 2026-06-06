@@ -11,7 +11,6 @@
     <div class="text-center">
       <h4 class="text-2xl font-bold">{{ $t("General.etfDepot") }}</h4>
     </div>
-    <DivError :server-errors="serverErrors" />
 
     <div class="flex justify-center">
       <div class="w-full max-w-md">
@@ -123,7 +122,6 @@
 
 <script lang="ts" setup>
 import ButtonMobileCreate from "@/components/common/ButtonMobileCreate.vue";
-import DivError from "@/components/common/DivError.vue";
 import SelectStandard from "@/components/common/SelectStandard.vue";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -160,8 +158,6 @@ import ListEtfDepotEtfTable from "./elements/ListEtfDepotEtfTable.vue";
 import ListEtfDepotMobile from "./elements/ListEtfDepotMobile.vue";
 
 const { t } = useI18n();
-
-const serverErrors = ref(new Array<string>());
 
 const schema = {
   etfId: number(globErr(t("ETFFlow.validation.etfId"))).gt(0),
@@ -226,7 +222,6 @@ const setCurrentTab = (value: "effective" | "all" | undefined) =>
   (currentTab.value = value == "all" ? "all" : "effective");
 
 const loadData = (etfId: number) => {
-  serverErrors.value = new Array<string>();
   dataLoaded.value = false;
   etfFlows.value = new Array<EtfFlow>();
   etfEffectiveFlows.value = new Array<EtfFlow>();
@@ -237,7 +232,7 @@ const loadData = (etfId: number) => {
       routerPush();
     })
     .catch((backendError) => {
-      handleBackendError(backendError, serverErrors);
+      handleBackendError(backendError);
       routerPush();
     });
 };

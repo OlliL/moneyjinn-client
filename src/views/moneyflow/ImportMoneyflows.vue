@@ -4,8 +4,6 @@
       <h4 class="text-2xl font-bold">{{ $t("Moneyflow.title.import") }}</h4>
     </div>
 
-    <DivError :server-errors="serverErrors" />
-
     <div
       class="flex justify-center"
       v-if="dataLoaded && importMoneyflows.length == 0"
@@ -67,11 +65,8 @@ import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { isDesktop } from "@/tools/views/IsDesktop";
 import { CheckCircle2 } from "lucide-vue-next";
 
-import DivError from "@/components/common/DivError.vue";
 import ImportMoneyflowsDesktop from "./elements/ImportMoneyflowsDesktop.vue";
 import ImportMoneyflowsMobile from "./elements/ImportMoneyflowsMobile.vue";
-
-const serverErrors = ref(new Array<string>());
 
 const importMoneyflows = ref<ImportedMoneyflow[]>([]);
 const dataLoaded = ref(false);
@@ -86,7 +81,7 @@ onMounted(() => {
       dataLoaded.value = true;
     })
     .catch((backendError) => {
-      handleBackendError(backendError, serverErrors);
+      handleBackendError(backendError);
     });
 });
 

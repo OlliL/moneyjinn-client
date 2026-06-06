@@ -1,5 +1,4 @@
 <template>
-  <DivError :server-errors="serverErrors" />
   <ButtonChevrons
     test-id-prefix="show-monthlysettlement-month"
     :show-previous-chevron="prevMonth > 0 && prevYear > 0"
@@ -98,7 +97,6 @@
 
 <script lang="ts" setup>
 import ButtonChevrons from "@/components/common/ButtonChevrons.vue";
-import DivError from "@/components/common/DivError.vue";
 import SpanAmount from "@/components/common/SpanAmount.vue";
 import {
   Table,
@@ -114,8 +112,6 @@ import router, { Routes } from "@/router";
 import MonthlySettlementService from "@/service/MonthlySettlementService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { onMounted, ref, watch } from "vue";
-
-const serverErrors = ref(new Array<string>());
 
 const props = defineProps<{
   year: number;
@@ -133,8 +129,6 @@ const nextMonth = ref(0);
 const nextYear = ref(0);
 
 const loadMonthlySettlements = (year: number, month: number) => {
-  serverErrors.value = new Array<string>();
-
   dataLoaded.value = false;
   MonthlySettlementService.getMonthlySettlementList(year, month)
     .then((response) => {
@@ -161,7 +155,7 @@ const loadMonthlySettlements = (year: number, month: number) => {
       dataLoaded.value = true;
     })
     .catch((backendError) => {
-      handleBackendError(backendError, serverErrors);
+      handleBackendError(backendError);
     });
 };
 
