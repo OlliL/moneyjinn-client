@@ -1,4 +1,3 @@
-import type { Events } from "@/model/event/Events";
 import router, { Routes } from "@/router";
 import EventService from "@/service/EventService";
 import {
@@ -57,7 +56,7 @@ test("AppHome loads event list and navigates to import moneyflows", async () => 
   vi.mocked(EventService.showEventList).mockResolvedValue({
     numberOfImportedMoneyflows: 2,
     monthlySettlementMissing: false,
-  } as Events);
+  });
 
   renderView();
 
@@ -76,7 +75,7 @@ test("AppHome shows monthly-settlement action when settlement is missing", async
     monthlySettlementMissing: true,
     monthlySettlementYear: 2026,
     monthlySettlementMonth: 4,
-  } as Events);
+  });
 
   renderView();
 

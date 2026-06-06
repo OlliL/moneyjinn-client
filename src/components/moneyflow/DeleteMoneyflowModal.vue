@@ -40,7 +40,7 @@
 
 <script lang="ts" setup>
 import { storeToRefs } from "pinia";
-import useDeleteMoneyflowModalStore from "./DeleteMoneyflowModal.store";
+import { useDeleteMoneyflowModalStore } from "./DeleteMoneyflowModal.store";
 
 import ModalDelete from "../common/ModalDelete.vue";
 import ModalDeleteRow from "../common/ModalDeleteRow.vue";
@@ -49,5 +49,9 @@ import SpanDate from "../common/SpanDate.vue";
 
 import MoneyflowService from "@/service/MoneyflowService";
 
-const { open, moneyflow, onDone } = storeToRefs(useDeleteMoneyflowModalStore());
+const {
+  open,
+  entity: moneyflow,
+  onDone,
+} = storeToRefs(useDeleteMoneyflowModalStore());
 </script>

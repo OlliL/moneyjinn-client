@@ -1,7 +1,6 @@
 import { useCreatePostingAccountModalStore } from "@/components/postingaccount/CreatePostingAccountModal.store";
 import CreatePostingAccountModal from "@/components/postingaccount/CreatePostingAccountModal.vue";
 import { BackendError, BackendErrorType } from "@/model/BackendError";
-import type { PostingAccount } from "@/model/postingaccount/PostingAccount";
 import PostingAccountService from "@/service/PostingAccountService";
 import CapitalsourceServiceMocker from "@/service/mocker/CapitalsourceServiceMocker";
 import ContractpartnerServiceMocker from "@/service/mocker/ContractpartnerServiceMocker";
@@ -82,7 +81,7 @@ test("updates an existing posting account", async () => {
   const existingMpa = {
     id: 1,
     name: "Existing Posting Account",
-  } as PostingAccount;
+  };
 
   renderDeclarativeModal(CreatePostingAccountModal);
   const modalStore = useCreatePostingAccountModalStore();
@@ -117,7 +116,7 @@ test("reset button reverts changes in edit mode", async () => {
   const existingMpa = {
     id: 1,
     name: "Original Name",
-  } as PostingAccount;
+  };
   renderDeclarativeModal(CreatePostingAccountModal);
   const modalStore = useCreatePostingAccountModalStore();
   modalStore.openEditPostingAccount(existingMpa);

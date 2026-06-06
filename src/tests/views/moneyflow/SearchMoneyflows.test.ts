@@ -1,4 +1,4 @@
-import useDeleteMoneyflowModalStore from "@/components/moneyflow/DeleteMoneyflowModal.store";
+import { useDeleteMoneyflowModalStore } from "@/components/moneyflow/DeleteMoneyflowModal.store";
 import useEditMoneyflowModalStore from "@/components/moneyflow/EditMoneyflowModal.store";
 import useListMoneyflowModalStore from "@/components/moneyflow/ListMoneyflowModal.store";
 import useReceiptModalStore from "@/components/reports/ReceiptModal.store";
@@ -35,23 +35,22 @@ const createMoneyflow = (
   id: number,
   userId = 1,
   hasReceipt = false,
-): Moneyflow =>
-  ({
-    id,
-    userId,
-    bookingDate: new Date("2026-02-05"),
-    invoiceDate: new Date("2026-02-05"),
-    amount: -42,
-    contractpartnerId: 3,
-    contractpartnerName: "Landlord",
-    capitalsourceId: 4,
-    capitalsourceComment: "Main account",
-    postingAccountId: 5,
-    postingAccountName: "Rent",
-    comment: "Rent payment",
-    private: false,
-    hasReceipt,
-  }) as Moneyflow;
+): Moneyflow => ({
+  id,
+  userId,
+  bookingDate: new Date("2026-02-05"),
+  invoiceDate: new Date("2026-02-05"),
+  amount: -42,
+  contractpartnerId: 3,
+  contractpartnerName: "Landlord",
+  capitalsourceId: 4,
+  capitalsourceComment: "Main account",
+  postingAccountId: 5,
+  postingAccountName: "Rent",
+  comment: "Rent payment",
+  private: false,
+  hasReceipt,
+});
 
 const runSearch = async () => {
   await SearchMoneyflowsView.CommentInput.setValue("rent");
@@ -125,7 +124,7 @@ test("SearchMoneyflows opens delete modal from own row action", async () => {
 
   await assertHaveBeenCalledWith(MoneyflowService.fetchMoneyflow, 12);
   expect(useDeleteMoneyflowModalStore().open).toBe(true);
-  expect(useDeleteMoneyflowModalStore().moneyflow?.id).toBe(12);
+  expect(useDeleteMoneyflowModalStore().entity?.id).toBe(12);
 });
 
 test("SearchMoneyflows opens edit modal from own row action", async () => {

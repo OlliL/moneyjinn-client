@@ -143,7 +143,7 @@
 </template>
 
 <script lang="ts" setup>
-import useDeleteMoneyflowModalStore from "@/components/moneyflow/DeleteMoneyflowModal.store";
+import { useDeleteMoneyflowModalStore } from "@/components/moneyflow/DeleteMoneyflowModal.store";
 import useEditMoneyflowModalStore from "@/components/moneyflow/EditMoneyflowModal.store";
 import useListMoneyflowModalStore from "@/components/moneyflow/ListMoneyflowModal.store";
 import useReceiptModalStore from "@/components/reports/ReceiptModal.store";
@@ -177,7 +177,7 @@ const dataLoaded = defineModel("dataLoaded", {
 const sortBy = defineModel<Map<keyof Moneyflow, boolean>>("sortBy", {
   required: true,
 });
-const { openDeleteMoneyflow } = useDeleteMoneyflowModalStore();
+const { openDelete: openDeleteMoneyflow } = useDeleteMoneyflowModalStore();
 const { openEditMoneyflow } = useEditMoneyflowModalStore();
 const { openListMoneyflow } = useListMoneyflowModalStore();
 const { openListReceipt } = useReceiptModalStore();

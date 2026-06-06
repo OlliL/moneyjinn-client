@@ -43,7 +43,7 @@
 <script lang="ts" setup>
 import ButtonSubmit from "@/components/common/ButtonSubmit.vue";
 import InputFile from "@/components/common/InputFile.vue";
-import useDeleteMoneyflowModalStore from "@/components/moneyflow/DeleteMoneyflowModal.store";
+import { useDeleteMoneyflowModalStore } from "@/components/moneyflow/DeleteMoneyflowModal.store";
 import useEditMoneyflowModalStore from "@/components/moneyflow/EditMoneyflowModal.store";
 import useListMoneyflowModalStore from "@/components/moneyflow/ListMoneyflowModal.store";
 import {
@@ -64,7 +64,7 @@ const files = ref<FileList | null>(null);
 
 const uploadReceiptsForm =
   useTemplateRef<HTMLFormElement>("uploadReceiptsForm");
-const { openDeleteMoneyflow } = useDeleteMoneyflowModalStore();
+const { openDelete: openDeleteMoneyflow } = useDeleteMoneyflowModalStore();
 const { openEditMoneyflow } = useEditMoneyflowModalStore();
 const { openListMoneyflow } = useListMoneyflowModalStore();
 

@@ -297,7 +297,7 @@ import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 import type { MoneyflowSearchParams } from "@/model/moneyflow/MoneyflowSearchParams";
 import type { SelectBoxValue } from "@/model/SelectBoxValue";
 
-import useDeleteMoneyflowModalStore from "@/components/moneyflow/DeleteMoneyflowModal.store";
+import { useDeleteMoneyflowModalStore } from "@/components/moneyflow/DeleteMoneyflowModal.store";
 import useEditMoneyflowModalStore from "@/components/moneyflow/EditMoneyflowModal.store";
 import useListMoneyflowModalStore from "@/components/moneyflow/ListMoneyflowModal.store";
 import useReceiptModalStore from "@/components/reports/ReceiptModal.store";
@@ -365,7 +365,7 @@ const searchContractpartnerId = ref(0);
 
 const mobileOptionsOpen = ref(false);
 const desktop = isDesktop();
-const { openDeleteMoneyflow } = useDeleteMoneyflowModalStore();
+const { openDelete: openDeleteMoneyflow } = useDeleteMoneyflowModalStore();
 const { openEditMoneyflow } = useEditMoneyflowModalStore();
 const { openListMoneyflow } = useListMoneyflowModalStore();
 const { openListReceipt } = useReceiptModalStore();

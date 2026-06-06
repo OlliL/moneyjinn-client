@@ -29,7 +29,6 @@
 </template>
 
 <script lang="ts" setup>
-import { watch } from "vue";
 import { useI18n } from "vue-i18n";
 
 import { Table, TableBody } from "@/components/ui/table";
@@ -56,11 +55,6 @@ const props = withDefaults(
 );
 
 const isOpen = defineModel<boolean>("open", { default: false });
-
-watch(isOpen, (newVal) => {
-  if (newVal) {
-  }
-});
 
 const handleDelete = () => {
   props

@@ -123,7 +123,7 @@ import ButtonSubmit from "@/components/common/ButtonSubmit.vue";
 import InputDate from "@/components/common/InputDate.vue";
 import InputFile from "@/components/common/InputFile.vue";
 import SelectStandard from "@/components/common/SelectStandard.vue";
-import useDeleteMoneyflowModalStore from "@/components/moneyflow/DeleteMoneyflowModal.store";
+import { useDeleteMoneyflowModalStore } from "@/components/moneyflow/DeleteMoneyflowModal.store";
 import useEditMoneyflowModalStore from "@/components/moneyflow/EditMoneyflowModal.store";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
@@ -181,7 +181,7 @@ const compareDatasWrongCapitalsource = ref(
 const compareDatasNotInFile = ref({} as Array<CompareData> | undefined);
 const compareDatasNotInDatabase = ref({} as Array<CompareData> | undefined);
 const files = ref({} as FileList);
-const { openDeleteMoneyflow } = useDeleteMoneyflowModalStore();
+const { openDelete: openDeleteMoneyflow } = useDeleteMoneyflowModalStore();
 const { openEditMoneyflow } = useEditMoneyflowModalStore();
 
 const { handleSubmit, values, setFieldTouched } = useForm();

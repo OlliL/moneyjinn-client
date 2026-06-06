@@ -103,7 +103,7 @@ beforeEach(() => {
     allYears: [2026, 2027],
     month: 1,
     year: 2026,
-  } as never);
+  });
   MonthlySettlementServiceMocker.mockGetMonthlySettlementList([]);
   MonthlySettlementServiceMocker.mockGetMonthlySettlementForEdit({
     year: 2026,
@@ -235,7 +235,7 @@ test("ListMonthlySettlements shows empty state for empty list (Desktop and Mobil
     allYears: [],
     month: 0,
     year: 0,
-  } as never);
+  });
   MonthlySettlementServiceMocker.mockGetMonthlySettlementList([]);
 
   // Act
