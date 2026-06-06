@@ -210,11 +210,11 @@ const { open, contractpartner, onDone } = storeToRefs(
 );
 const { handleSubmit, values, setFieldTouched } = useForm();
 
-const title = computed(() => {
-  return origMcp.value === undefined
+const title = computed(() =>
+  origMcp.value === undefined
     ? t("Contractpartner.title.create")
-    : t("Contractpartner.title.update");
-});
+    : t("Contractpartner.title.update"),
+);
 
 const resetForm = () => {
   if (origMcp.value) {

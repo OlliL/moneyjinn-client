@@ -59,20 +59,20 @@ const props = defineProps<{
   currentMonthIsSettled: boolean;
 }>();
 
-const capitalsourceTypeString = computed(() => {
-  return capitalsourceTypeNames[props.capitalsourceType];
-});
-const capitalsourceStateString = computed(() => {
-  return capitalsourceStateNames[props.capitalsourceState];
-});
-const differenceFixedCalculated = computed(() => {
-  return props.amountEndOfMonthFixed == null
+const capitalsourceTypeString = computed(
+  () => capitalsourceTypeNames[props.capitalsourceType],
+);
+const capitalsourceStateString = computed(
+  () => capitalsourceStateNames[props.capitalsourceState],
+);
+const differenceFixedCalculated = computed(() =>
+  props.amountEndOfMonthFixed == null
     ? 0
-    : props.amountEndOfMonthFixed - props.amountEndOfMonthCalculated;
-});
-const amountCurrentStateString = computed(() => {
-  return props.amountCurrentState == null
+    : props.amountEndOfMonthFixed - props.amountEndOfMonthCalculated,
+);
+const amountCurrentStateString = computed(() =>
+  props.amountCurrentState == null
     ? t("Reports.calculated")
-    : formatDateWithTime(props.amountCurrentState);
-});
+    : formatDateWithTime(props.amountCurrentState),
+);
 </script>

@@ -144,7 +144,7 @@ import { computed, onBeforeUnmount, ref } from "vue";
 import ButtonMobileCreate from "./ButtonMobileCreate.vue";
 import InputStandard from "./InputStandard.vue";
 
-const props = withDefaults(
+withDefaults(
   defineProps<{
     placeholder?: string;
     showValidToggle?: boolean;
@@ -164,9 +164,9 @@ const emit = defineEmits<{
 const isMobileSheetOpen = ref(false);
 let debounceTimeout: ReturnType<typeof setTimeout> | undefined;
 
-const allButtonVariant = computed(() => {
-  return model.value ? "default" : "secondary";
-});
+const allButtonVariant = computed(() =>
+  model.value ? "default" : "secondary",
+);
 
 const handleInput = (val: string | number) => {
   globalThis.clearTimeout(debounceTimeout);

@@ -75,20 +75,18 @@ class ReportService extends AbstractService {
       turnoverEndOfYearCalculated:
         listReportsResponse.turnoverEndOfYearCalculated,
       reportTurnoverCapitalsources:
-        listReportsResponse.reportTurnoverCapitalsourceTransports?.map(
-          (rtcp) => {
-            return mapReportTurnoverCapitalsourceTransportToModel(rtcp);
-          },
+        listReportsResponse.reportTurnoverCapitalsourceTransports?.map((rtcp) =>
+          mapReportTurnoverCapitalsourceTransportToModel(rtcp),
         ),
-      moneyflows: listReportsResponse.moneyflowTransports?.map((mmf) => {
-        return mapMoneyflowTransportToModel(
+      moneyflows: listReportsResponse.moneyflowTransports?.map((mmf) =>
+        mapMoneyflowTransportToModel(
           mmf,
           listReportsResponse.moneyflowsWithReceipt
             ? listReportsResponse.moneyflowsWithReceipt.includes(mmf.id)
             : false,
           mseMap.get(mmf.id),
-        );
-      }),
+        ),
+      ),
     };
 
     return report;
@@ -149,12 +147,10 @@ class ReportService extends AbstractService {
     let postingAccountsNo: Array<PostingAccount> | undefined;
     const mpas = showReportingFormResponse.postingAccountIds;
     if (mpas) {
-      postingAccountsYes = postingAccounts.filter((pa) => {
-        return !mpas.includes(pa.id);
-      });
-      postingAccountsNo = postingAccounts.filter((pa) => {
-        return mpas.includes(pa.id);
-      });
+      postingAccountsYes = postingAccounts.filter(
+        (pa) => !mpas.includes(pa.id),
+      );
+      postingAccountsNo = postingAccounts.filter((pa) => mpas.includes(pa.id));
     } else {
       postingAccountsYes = postingAccounts;
     }

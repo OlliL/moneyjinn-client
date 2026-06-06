@@ -83,8 +83,8 @@ const renderListMonthlySettlementsView = (
     year?: string;
     month?: string;
   } = {},
-) => {
-  return render(
+) =>
+  render(
     defineComponent({
       setup() {
         return { props };
@@ -97,7 +97,6 @@ const renderListMonthlySettlementsView = (
       global: { stubs: { ModalVue: DeclarativeModalStub } },
     },
   );
-};
 
 beforeEach(() => {
   setActivePinia(createPinia());

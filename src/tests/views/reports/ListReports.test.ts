@@ -120,10 +120,8 @@ class ListReportsView {
   static readonly ReceiptModal = new ModalView("app-modal-Receipt");
 }
 
-const renderListReportsView = (
-  props: { year?: string; month?: string } = {},
-) => {
-  return render(
+const renderListReportsView = (props: { year?: string; month?: string } = {}) =>
+  render(
     defineComponent({
       setup() {
         return { props };
@@ -135,7 +133,6 @@ const renderListReportsView = (
       global: { stubs: { ModalVue: DeclarativeModalStub } },
     },
   );
-};
 
 beforeEach(() => {
   setActivePinia(createPinia());

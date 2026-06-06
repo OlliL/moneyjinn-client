@@ -200,11 +200,11 @@ const schema: Partial<{ [key in keyof Capitalsource]: ZodType }> = {
     .max(2),
 };
 
-const title = computed(() => {
-  return origMcs.value === undefined
+const title = computed(() =>
+  origMcs.value === undefined
     ? t("Capitalsource.title.create")
-    : t("Capitalsource.title.update");
-});
+    : t("Capitalsource.title.update"),
+);
 
 const resetForm = () => {
   if (origMcs.value) {

@@ -39,8 +39,8 @@ const createMoneyflow = (
   id: number,
   userId = 1,
   hasReceipt = false,
-): Moneyflow => {
-  return {
+): Moneyflow =>
+  ({
     id,
     userId,
     bookingDate: new Date("2026-02-05"),
@@ -55,16 +55,15 @@ const createMoneyflow = (
     comment: "Rent payment",
     private: false,
     hasReceipt,
-  } as Moneyflow;
-};
+  }) as Moneyflow;
 
 const runSearch = async () => {
   await SearchMoneyflowsView.CommentInput.setValue("rent");
   await SearchMoneyflowsView.SubmitButton.click();
 };
 
-const renderView = (props: Record<string, unknown> = {}) => {
-  return render(
+const renderView = (props: Record<string, unknown> = {}) =>
+  render(
     defineComponent({
       setup() {
         return { props };
@@ -82,7 +81,6 @@ const renderView = (props: Record<string, unknown> = {}) => {
       },
     },
   );
-};
 
 const expandFirstGroup = async () => {
   await SearchMoneyflowsView.GroupExpandButton.click();

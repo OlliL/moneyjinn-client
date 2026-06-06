@@ -103,9 +103,9 @@ onMounted(() => {
   loadMonth(year, month);
 });
 
-const monthName = computed(() => {
-  return props.month ? getMonthName(+selectedMonth.value) : "";
-});
+const monthName = computed(() =>
+  props.month ? getMonthName(+selectedMonth.value) : "",
+);
 
 const loadMonth = (year?: string, month?: number) => {
   dataLoaded.value = false;

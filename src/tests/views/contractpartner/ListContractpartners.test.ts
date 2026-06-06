@@ -87,10 +87,8 @@ class ListContractpartnersView {
   static readonly EmptyRowMobile = new RowView("contractpartner-empty-mobile");
 }
 
-const renderListContractpartnersView = (
-  props: Record<string, unknown> = {},
-) => {
-  return render(
+const renderListContractpartnersView = (props: Record<string, unknown> = {}) =>
+  render(
     defineComponent({
       setup() {
         return { props };
@@ -103,7 +101,6 @@ const renderListContractpartnersView = (
       global: { stubs: { ModalVue: DeclarativeModalStub } },
     },
   );
-};
 
 beforeEach(() => {
   setActivePinia(createPinia());

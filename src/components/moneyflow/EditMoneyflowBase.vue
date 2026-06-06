@@ -432,7 +432,7 @@ const resetEditForm = () => {
     addNewMoneyflowSplitEntryRow();
     isExpanded.value = false;
   } else {
-    for (let mse of mmf.value.moneyflowSplitEntries) {
+    for (const mse of mmf.value.moneyflowSplitEntries) {
       originalMoneyflowSplitEntryIds.value.push(mse.id);
     }
     addNewMoneyflowSplitEntryRow();
@@ -564,7 +564,7 @@ const allMseRowsAreEmpty = (): boolean => {
   let allMseRowsAreEmpty = true;
   const mse = mmf.value.moneyflowSplitEntries;
   if (mse !== undefined) {
-    for (let entry of mse) {
+    for (const entry of mse) {
       if (
         entry.amount !== 0 ||
         entry.comment != "" ||
@@ -701,7 +701,7 @@ const prepareServerCallSplitEntries = () => {
   validateMseRemainder();
   if (!allMseRowsAreEmpty() && mmf.value.moneyflowSplitEntries) {
     let mse = {} as MoneyflowSplitEntry;
-    for (let filledMse of mmf.value.moneyflowSplitEntries) {
+    for (const filledMse of mmf.value.moneyflowSplitEntries) {
       if (filledMse.comment && filledMse.postingAccountId) {
         mse = filledMse;
         break;
@@ -752,16 +752,13 @@ const importImportedMoneyflow = async (
   }
   return false;
 };
-const deleteImportedMoneyflow = async (id: number): Promise<boolean> => {
-  return ImportedMoneyflowService.deleteImportedMoneyflow(id)
-    .then(() => {
-      return true;
-    })
+const deleteImportedMoneyflow = async (id: number): Promise<boolean> =>
+  ImportedMoneyflowService.deleteImportedMoneyflow(id)
+    .then(() => true)
     .catch((backendError) => {
       handleBackendError(backendError, serverErrors);
       return false;
     });
-};
 const createMoneyflow = async (): Promise<boolean> => {
   if (prepareServerCall()) {
     return MoneyflowService.createMoneyflow(
@@ -786,7 +783,7 @@ const updateMoneyflow = async (): Promise<Moneyflow | undefined> => {
     const updateMses = new Array<MoneyflowSplitEntry>();
     const updateMseIds = new Array<number>();
     if (mmf.value.moneyflowSplitEntries) {
-      for (let mse of mmf.value.moneyflowSplitEntries) {
+      for (const mse of mmf.value.moneyflowSplitEntries) {
         if (mse.id < 0) {
           createMses.push(mse);
         } else {

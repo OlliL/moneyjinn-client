@@ -229,11 +229,9 @@ const markAsFavorite = ref(false);
 
 const { handleSubmit, values, setFieldTouched } = useForm();
 
-const title = computed(() => {
-  return origMet.value === undefined
-    ? t("ETF.title.create")
-    : t("ETF.title.update");
-});
+const title = computed(() =>
+  origMet.value === undefined ? t("ETF.title.create") : t("ETF.title.update"),
+);
 
 const resetForm = () => {
   if (origMet.value) {

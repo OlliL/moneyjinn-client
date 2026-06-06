@@ -187,14 +187,14 @@ const loadMonthlySettlements = async (_year?: number, _month?: number) => {
     .then((transporter: MonthlySettlementEditTransporter) => {
       const monthlySettlements = new Array<MonthlySettlementFormData>();
 
-      for (let mms of transporter.monthlySettlements) {
+      for (const mms of transporter.monthlySettlements) {
         monthlySettlements.push({
           ...mms,
           imported: false,
         });
       }
       if (transporter.importedMonthlySettlements) {
-        for (let mms of transporter.importedMonthlySettlements) {
+        for (const mms of transporter.importedMonthlySettlements) {
           monthlySettlements.push({
             ...mms,
             imported: true,
@@ -202,7 +202,7 @@ const loadMonthlySettlements = async (_year?: number, _month?: number) => {
         }
       }
 
-      for (let mms of monthlySettlements) {
+      for (const mms of monthlySettlements) {
         if (mms.capitalsourceType === CapitalsourceType.CREDIT) {
           monthlySettlementsCredit.value.push(mms);
         } else {
@@ -235,7 +235,7 @@ const loadMonthlySettlements = async (_year?: number, _month?: number) => {
 const upsertMonthlySettlement = handleSubmit(() => {
   serverErrors.value = new Array<string>();
 
-  let monthlySettlements = monthlySettlementsCredit.value.concat(
+  const monthlySettlements = monthlySettlementsCredit.value.concat(
     monthlySettlementsNoCredit.value,
   );
 

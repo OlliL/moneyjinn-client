@@ -55,7 +55,7 @@ import {
   OpenContractpartnerAccountsActionKey,
 } from "@/model/CrudActions";
 
-const props = defineProps<{
+defineProps<{
   mcp: Contractpartner;
 }>();
 

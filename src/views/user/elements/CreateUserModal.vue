@@ -244,9 +244,7 @@ const yesNoValues = [
 
 const { handleSubmit, values, setFieldTouched } = useForm();
 
-const editMode = computed(() => {
-  return origUser.value !== undefined;
-});
+const editMode = computed(() => origUser.value !== undefined);
 
 watch(
   () => [password1.value, password2.value, editMode.value],
@@ -260,17 +258,17 @@ watch(
   },
 );
 
-const title = computed(() => {
-  return origUser.value === undefined
+const title = computed(() =>
+  origUser.value === undefined
     ? t("User.title.create")
-    : t("User.title.update");
-});
+    : t("User.title.update"),
+);
 
-const maxWidth = computed(() => {
-  return editMode.value
+const maxWidth = computed(() =>
+  editMode.value
     ? "max-w-[calc(100%-2rem)] md:max-w-2xl lg:max-w-4xl w-full mx-auto"
-    : "max-w-[calc(100%-2rem)] sm:max-w-md w-full mx-auto";
-});
+    : "max-w-[calc(100%-2rem)] sm:max-w-md w-full mx-auto",
+);
 
 const resetForm = () => {
   GroupService.fetchAllGroup().then((_groups) => {

@@ -26,7 +26,7 @@ import {
 } from "@/components/ui/table";
 import type { EtfPreliminaryLumpSum } from "@/model/etf/EtfPreliminaryLumpSum";
 
-const props = defineProps<{
+defineProps<{
   mep: EtfPreliminaryLumpSum;
 }>();
 </script>

@@ -301,9 +301,7 @@ onMounted(() => {
   }
 });
 
-const moneyflowSelected = computed(() => {
-  return selectedMoneyflowId.value > 0;
-});
+const moneyflowSelected = computed(() => selectedMoneyflowId.value > 0);
 
 const importReceipt = () => {
   serverErrors.value = new Array<string>();

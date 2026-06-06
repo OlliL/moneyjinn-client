@@ -245,11 +245,11 @@ watch(
   },
 );
 
-const monthName = computed(() => {
-  return props.month && !Number.isNaN(props.month)
+const monthName = computed(() =>
+  props.month && !Number.isNaN(props.month)
     ? getMonthName(Number(props.month))
-    : undefined;
-});
+    : undefined,
+);
 
 const selectMonth = (year: string, month?: string) => {
   router.push({

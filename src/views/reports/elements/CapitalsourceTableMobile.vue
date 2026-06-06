@@ -129,11 +129,11 @@ const {
   differenceFixedCalculatedSum,
 } = useCapitalsourceSums(computed(() => props.capitalsourceData));
 
-const displaySum = computed(() => {
-  return props.currentMonthIsSettled
+const displaySum = computed(() =>
+  props.currentMonthIsSettled
     ? amountEndOfMonthFixedSum.value
-    : amountCurrentSum.value;
-});
+    : amountCurrentSum.value,
+);
 
 const cashSum = computed(() => {
   const cashCapitalsource = capitalsource

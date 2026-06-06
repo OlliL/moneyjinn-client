@@ -194,45 +194,37 @@ onMounted(() => {
   loadData();
 });
 
-const sourceIsImportLabel = computed(() => {
-  return sourceIsImport.value ? t("CompareData.import") : t("CompareData.file");
-});
-const compareDatasMatchingCount = computed(() => {
-  return compareDatasMatching.value ? compareDatasMatching.value.length : 0;
-});
-const compareDatasMatchingCountClass = computed(() => {
-  return compareDatasMatchingCount.value > 0
-    ? "text-green-600"
-    : "text-red-600";
-});
-const compareDatasWrongCapitalsourceCount = computed(() => {
-  return compareDatasWrongCapitalsource.value
+const sourceIsImportLabel = computed(() =>
+  sourceIsImport.value ? t("CompareData.import") : t("CompareData.file"),
+);
+const compareDatasMatchingCount = computed(() =>
+  compareDatasMatching.value ? compareDatasMatching.value.length : 0,
+);
+const compareDatasMatchingCountClass = computed(() =>
+  compareDatasMatchingCount.value > 0 ? "text-green-600" : "text-red-600",
+);
+const compareDatasWrongCapitalsourceCount = computed(() =>
+  compareDatasWrongCapitalsource.value
     ? compareDatasWrongCapitalsource.value.length
-    : 0;
-});
-const compareDatasWrongCapitalsourceCountClass = computed(() => {
-  return compareDatasWrongCapitalsourceCount.value > 0
+    : 0,
+);
+const compareDatasWrongCapitalsourceCountClass = computed(() =>
+  compareDatasWrongCapitalsourceCount.value > 0
     ? "text-red-600"
-    : "text-green-600";
-});
-const compareDatasNotInFileCount = computed(() => {
-  return compareDatasNotInFile.value ? compareDatasNotInFile.value.length : 0;
-});
-const compareDatasNotInFileCountClass = computed(() => {
-  return compareDatasNotInFileCount.value > 0
-    ? "text-red-600"
-    : "text-green-600";
-});
-const compareDatasNotInDatabaseCount = computed(() => {
-  return compareDatasNotInDatabase.value
-    ? compareDatasNotInDatabase.value.length
-    : 0;
-});
-const compareDatasNotInDatabaseCountClass = computed(() => {
-  return compareDatasNotInDatabaseCount.value > 0
-    ? "text-red-600"
-    : "text-green-600";
-});
+    : "text-green-600",
+);
+const compareDatasNotInFileCount = computed(() =>
+  compareDatasNotInFile.value ? compareDatasNotInFile.value.length : 0,
+);
+const compareDatasNotInFileCountClass = computed(() =>
+  compareDatasNotInFileCount.value > 0 ? "text-red-600" : "text-green-600",
+);
+const compareDatasNotInDatabaseCount = computed(() =>
+  compareDatasNotInDatabase.value ? compareDatasNotInDatabase.value.length : 0,
+);
+const compareDatasNotInDatabaseCountClass = computed(() =>
+  compareDatasNotInDatabaseCount.value > 0 ? "text-red-600" : "text-green-600",
+);
 
 const loadData = () => {
   const _startDate = new Date();
@@ -250,7 +242,7 @@ const loadData = () => {
       compareDataFormat.value = compareDataParameter.selectedCompareDataFormat;
 
       compareDataFormats.value = new Array<SelectBoxValue>();
-      for (let fmt of compareDataParameter.compareDataFormats) {
+      for (const fmt of compareDataParameter.compareDataFormats) {
         compareDataFormats.value.push({ id: fmt.formatId, value: fmt.name });
       }
 

@@ -82,19 +82,15 @@ class UserService extends AbstractService {
     const response = await this.api.showUserList();
     const showUserListResponse = response.data;
     const groups: Array<Group> = showUserListResponse.groupTransports.map(
-      (value) => {
-        return mapGroupTransportToModel(value);
-      },
+      (value) => mapGroupTransportToModel(value),
     );
     const users: Array<User> = showUserListResponse.userTransports.map(
-      (value_1) => {
-        return mapUserTransportToModel(value_1);
-      },
+      (value_1) => mapUserTransportToModel(value_1),
     );
     const accessRelations: Array<AccessRelation> =
-      showUserListResponse.accessRelationTransports.map((value_2) => {
-        return mapAccessRelationTransportToModel(value_2);
-      });
+      showUserListResponse.accessRelationTransports.map((value_2) =>
+        mapAccessRelationTransportToModel(value_2),
+      );
     const groupsById = new Map<number, Group>();
     for (const group of groups) {
       groupsById.set(group.id, group);
@@ -121,9 +117,9 @@ class UserService extends AbstractService {
     const response = await this.api.showEditUser(userId);
     const showEditUserResponse = response.data;
     const accessRelations: Array<AccessRelation> =
-      showEditUserResponse.accessRelationTransports.map((value) => {
-        return mapAccessRelationTransportToModel(value);
-      });
+      showEditUserResponse.accessRelationTransports.map((value) =>
+        mapAccessRelationTransportToModel(value),
+      );
     return accessRelations;
   }
 

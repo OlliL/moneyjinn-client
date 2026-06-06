@@ -218,11 +218,12 @@ const emit = defineEmits<{
 
 const editRef = ref();
 
-const displayData = computed(() => {
-  // Return the reactive object from child or props directly.
-  // Vue handles reactivity for sub-properties in the template.
-  return editRef.value?.mmf || props.importedMoneyflow;
-});
+const displayData = computed(
+  () =>
+    // Return the reactive object from child or props directly.
+    // Vue handles reactivity for sub-properties in the template.
+    editRef.value?.mmf || props.importedMoneyflow,
+);
 
 const isReady = computed(() => {
   const mim = displayData.value;

@@ -84,7 +84,7 @@ const { open, account, onDone } = storeToRefs(
   useCreateContractpartnerAccountModalStore(),
 );
 
-const props = withDefaults(
+withDefaults(
   defineProps<{
     zIndex?: string;
   }>(),

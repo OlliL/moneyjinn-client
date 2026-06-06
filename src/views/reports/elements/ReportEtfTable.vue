@@ -98,7 +98,5 @@ watch(
   },
 );
 
-const etfSummaryReceived = computed(() => {
-  return etfSummaryArray.value.length > 0;
-});
+const etfSummaryReceived = computed(() => etfSummaryArray.value.length > 0);
 </script>

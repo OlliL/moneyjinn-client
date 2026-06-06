@@ -22,15 +22,15 @@ const props = withDefaults(
   },
 );
 
-const amountClass = computed(() => {
-  return redIfNegative(toFixed(props.amount ?? 0, props.decimalPlaces));
-});
+const amountClass = computed(() =>
+  redIfNegative(toFixed(props.amount ?? 0, props.decimalPlaces)),
+);
 
-const amountString = computed(() => {
-  return props.amount === undefined
+const amountString = computed(() =>
+  props.amount === undefined
     ? ""
     : formatNumber(props.amount, props.decimalPlaces) +
-        " " +
-        t("General.currency");
-});
+      " " +
+      t("General.currency"),
+);
 </script>

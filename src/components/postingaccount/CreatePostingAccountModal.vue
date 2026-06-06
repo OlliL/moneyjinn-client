@@ -80,11 +80,11 @@ const schema: Partial<{ [key in keyof PostingAccount]: ZodType }> = {
     .max(100, t("PostingAccount.validation.length.name")),
 };
 
-const title = computed(() => {
-  return origMpa.value === undefined
+const title = computed(() =>
+  origMpa.value === undefined
     ? t("PostingAccount.title.create")
-    : t("PostingAccount.title.update");
-});
+    : t("PostingAccount.title.update"),
+);
 
 const resetForm = () => {
   if (origMpa.value) {

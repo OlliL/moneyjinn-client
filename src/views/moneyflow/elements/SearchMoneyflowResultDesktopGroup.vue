@@ -138,7 +138,7 @@ type MoneyflowGroup = {
   moneyflows: Array<Moneyflow>;
 };
 
-const props = defineProps<{
+defineProps<{
   moneyflowGroup: MoneyflowGroup;
   colBookingMonth: boolean;
   colBookingYear: boolean;

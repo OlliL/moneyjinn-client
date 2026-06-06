@@ -85,7 +85,5 @@ defineProps<{
 
 const actions = inject(UserActionsKey)!;
 
-const roleString = (user: User): string => {
-  return userRoleNames[user.role];
-};
+const roleString = (user: User): string => userRoleNames[user.role];
 </script>

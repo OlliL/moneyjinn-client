@@ -23,9 +23,9 @@ export function formatDate(date: Date): string {
   if (dateStr === undefined) {
     dateStr = dateFormatter
       .formatToParts(date)
-      .map((obj) => {
-        return obj.type === "year" ? obj.value.padStart(4, "0") : obj.value;
-      })
+      .map((obj) =>
+        obj.type === "year" ? obj.value.padStart(4, "0") : obj.value,
+      )
       .join("");
     dateCache.set(date, dateStr);
   }

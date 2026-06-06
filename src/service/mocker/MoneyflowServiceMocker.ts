@@ -9,7 +9,7 @@ export default class MoneyflowServiceMocker {
   }
 
   static mockFetchMoneyflowById(
-    createMoneyflow: (id: number) => Moneyflow,
+    createMoneyflow: (id: number) => Partial<Moneyflow>,
   ): void {
     MoneyflowService.fetchMoneyflow = vi
       .fn()
@@ -29,7 +29,7 @@ export default class MoneyflowServiceMocker {
   }
 
   static mockSearchMoneyflowsByAmountResolved(
-    moneyflows: Array<Moneyflow>,
+    moneyflows: Array<Partial<Moneyflow>>,
   ): void {
     MoneyflowService.searchMoneyflowsByAmount = vi
       .fn()

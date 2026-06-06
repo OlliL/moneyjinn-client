@@ -57,9 +57,7 @@ class MonthlySettlementService extends AbstractService {
 
     const monthlySettlements: Array<MonthlySettlement> =
       showMonthlySettlementListResponse.monthlySettlementTransports?.map(
-        (mms) => {
-          return mapMonthlySettlementTransportToModel(mms);
-        },
+        (mms) => mapMonthlySettlementTransportToModel(mms),
       );
 
     return {
@@ -89,18 +87,14 @@ class MonthlySettlementService extends AbstractService {
 
     const monthlySettlements: Array<MonthlySettlement> =
       showMonthlySettlementCreateResponse.monthlySettlementTransports.map(
-        (mms) => {
-          return mapMonthlySettlementTransportToModel(mms);
-        },
+        (mms) => mapMonthlySettlementTransportToModel(mms),
       );
     if (
       showMonthlySettlementCreateResponse.importedMonthlySettlementTransports
     ) {
       const importedMonthlySettlements: Array<MonthlySettlement> =
         showMonthlySettlementCreateResponse.importedMonthlySettlementTransports?.map(
-          (mms) => {
-            return mapMonthlySettlementTransportToModel(mms);
-          },
+          (mms) => mapMonthlySettlementTransportToModel(mms),
         );
       result.importedMonthlySettlements = importedMonthlySettlements;
     }

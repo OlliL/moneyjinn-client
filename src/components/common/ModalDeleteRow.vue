@@ -26,9 +26,9 @@ const props = withDefaults(
   },
 );
 
-const valueClassName = computed(() => {
-  return props.highlightValue
+const valueClassName = computed(() =>
+  props.highlightValue
     ? "font-semibold text-foreground pr-4 py-3 text-base"
-    : "modal-detail-value";
-});
+    : "modal-detail-value",
+);
 </script>

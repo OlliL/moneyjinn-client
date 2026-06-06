@@ -109,7 +109,7 @@ const isCollapsed = ref(false);
 const toggleCollapse = () => {
   isCollapsed.value = !isCollapsed.value;
 };
-const compareDatasCount = computed(() => {
-  return props.compareData ? props.compareData.length : 0;
-});
+const compareDatasCount = computed(() =>
+  props.compareData ? props.compareData.length : 0,
+);
 </script>

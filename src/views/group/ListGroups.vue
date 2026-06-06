@@ -71,9 +71,9 @@ const reloadView = () => {
 
   GroupService.fetchAllGroup()
     .then((_groups) => {
-      _groups.sort((a, b) => {
-        return a.name.toUpperCase().localeCompare(b.name.toUpperCase());
-      });
+      _groups.sort((a, b) =>
+        a.name.toUpperCase().localeCompare(b.name.toUpperCase()),
+      );
       allGroups.value = _groups;
       searchContent();
     })

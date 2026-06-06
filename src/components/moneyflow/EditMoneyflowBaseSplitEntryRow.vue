@@ -211,7 +211,7 @@ const deleteMoneyflowSplitEntryRow = () =>
 const addMoneyflowSplitEntryRow = () => emit("addMoneyflowSplitEntryRow");
 
 const amountChanged = () => {
-  let amount = mseAmount.value ? +mseAmount.value : 0;
+  const amount = mseAmount.value ? +mseAmount.value : 0;
   emit("amountChanged", props.index, amount);
   if (props.isLastRow && mseAmount.value) addMoneyflowSplitEntryRow();
 };

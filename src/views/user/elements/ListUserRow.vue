@@ -42,7 +42,5 @@ const props = defineProps<{
 
 const actions = inject(UserActionsKey)!;
 
-const role = computed(() => {
-  return userRoleNames[props.user.role];
-});
+const role = computed(() => userRoleNames[props.user.role]);
 </script>

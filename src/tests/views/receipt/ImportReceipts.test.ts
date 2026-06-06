@@ -56,7 +56,7 @@ beforeEach(async () => {
   ImportedMoneyflowReceiptServiceMocker.mockShowImportImportedMoneyflowReceipts(
     [...mockReceipts],
   );
-  MoneyflowServiceMocker.mockFetchMoneyflowById((id) => ({ id }) as any);
+  MoneyflowServiceMocker.mockFetchMoneyflowById((id) => ({ id }));
   useUserSessionStore().setUserSession({
     userId: 1,
     userName: "test",
@@ -129,7 +129,7 @@ test("shows search and auto-selects single matching moneyflow", async () => {
       contractpartnerId: 1,
       postingAccountId: 1,
       hasReceipt: false,
-    } as any,
+    },
   ]);
 
   render(ImportReceipts);
@@ -151,8 +151,8 @@ test("shows search and does not auto-select if multiple moneyflows", async () =>
     [receipt],
   );
   MoneyflowServiceMocker.mockSearchMoneyflowsByAmountResolved([
-    { id: 1, amount: 56.78, contractpartnerName: "A" } as any,
-    { id: 2, amount: 56.78, contractpartnerName: "B" } as any,
+    { id: 1, amount: 56.78, contractpartnerName: "A" },
+    { id: 2, amount: 56.78, contractpartnerName: "B" },
   ]);
 
   render(ImportReceipts);

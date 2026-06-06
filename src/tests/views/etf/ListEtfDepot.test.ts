@@ -94,8 +94,8 @@ beforeEach(() => {
   } as never);
 });
 
-const renderListEtfDepotView = (props: { etfId?: string } = {}) => {
-  return render(
+const renderListEtfDepotView = (props: { etfId?: string } = {}) =>
+  render(
     defineComponent({
       setup() {
         return { props };
@@ -107,7 +107,6 @@ const renderListEtfDepotView = (props: { etfId?: string } = {}) => {
       global: { stubs: { ModalVue: DeclarativeModalStub } },
     },
   );
-};
 
 test("ListEtfDepot calls listEtfFlowsById on mount", async () => {
   await useEtfStore().initEtfStore();

@@ -29,15 +29,10 @@ export class AxiosSingleton {
         withCredentials: true,
       });
 
-      const requestRefresh: TokenRefreshRequest = async (
-        refreshToken: Token,
-      ) => {
-        return axiosSingleton
+      const requestRefresh: TokenRefreshRequest = async (refreshToken: Token) =>
+        axiosSingleton
           .refreshAuthToken(refreshToken)
-          .then((response) => {
-            return response;
-          });
-      };
+          .then((response) => response);
 
       applyAuthTokenInterceptor(axiosSingleton.axiosInstance, {
         requestRefresh,
@@ -83,9 +78,7 @@ export class AxiosSingleton {
 
 function applyErrorHandlerInterceptor(axios: AxiosInstance): void {
   axios.interceptors.response.use(
-    (response) => {
-      return response;
-    },
+    (response) => response,
     (error) => {
       if (error instanceof Error && !("response" in error)) {
         throw new BackendError(
@@ -111,9 +104,9 @@ function applyErrorHandlerInterceptor(axios: AxiosInstance): void {
         const validationResult: ValidationResult = {
           result: validationResponse.result,
           validationResultItems:
-            validationResponse.validationItemTransports?.map((vit) => {
-              return mapValidationItemTransportToModel(vit);
-            }),
+            validationResponse.validationItemTransports?.map((vit) =>
+              mapValidationItemTransportToModel(vit),
+            ),
         };
 
         throw new BackendError(

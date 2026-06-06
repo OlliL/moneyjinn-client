@@ -148,11 +148,11 @@ const etfStore = useEtfStore();
 
 const { handleSubmit, values, setFieldTouched } = useForm();
 
-const title = computed(() => {
-  return etfFlow.value?.etfflowid > 0
+const title = computed(() =>
+  etfFlow.value?.etfflowid > 0
     ? t("ETFFlow.title.update")
-    : t("ETFFlow.title.create");
-});
+    : t("ETFFlow.title.create"),
+);
 
 const resetForm = () => {
   if (origEtfFlow.value) {

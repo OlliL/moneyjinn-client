@@ -129,11 +129,11 @@ const receipt = ref({} as MoneyflowReceipt);
 
 const { handleSubmit, values, setFieldTouched } = useForm();
 
-const modalWidth = computed(() => {
-  return receipt.value.receipt
+const modalWidth = computed(() =>
+  receipt.value.receipt
     ? "md:max-w-full w-full mx-auto"
-    : "md:max-w-2xl lg:max-w-7xl w-full mx-auto";
-});
+    : "md:max-w-2xl lg:max-w-7xl w-full mx-auto",
+);
 
 watch(
   [open, moneyflow, importedReceipt],

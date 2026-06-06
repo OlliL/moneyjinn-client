@@ -2,9 +2,7 @@ import { number, ZodType } from "zod";
 
 export function globErr(message: string) {
   return {
-    errorMap: () => {
-      return { message: message };
-    },
+    errorMap: () => ({ message: message }),
   };
 }
 

@@ -58,13 +58,13 @@ export const useEtfStore = defineStore("etf", () => {
   }
 
   function getAsSelectBoxValues(): Array<SelectBoxValue> {
-    return etf.value.map((mcs) => {
-      return { id: mcs.id, value: mcs.name } as SelectBoxValue;
-    });
+    return etf.value.map(
+      (mcs) => ({ id: mcs.id, value: mcs.name }) as SelectBoxValue,
+    );
   }
 
   async function searchEtfs(comment: string): Promise<Array<Etf>> {
-    let met = etf.value;
+    const met = etf.value;
 
     if (comment === "") {
       return met;

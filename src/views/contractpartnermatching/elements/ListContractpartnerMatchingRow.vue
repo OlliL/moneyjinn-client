@@ -41,7 +41,7 @@ import { ContractpartnerMatchingActionsKey } from "@/model/CrudActions";
 import { Pencil, Trash2 } from "lucide-vue-next";
 import { inject } from "vue";
 
-const props = defineProps<{
+defineProps<{
   mcm: ContractpartnerMatching;
 }>();
 const actions = inject(ContractpartnerMatchingActionsKey)!;

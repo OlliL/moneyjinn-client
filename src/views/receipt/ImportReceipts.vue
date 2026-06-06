@@ -117,7 +117,7 @@ const uploadReceipts = handleSubmit(async () => {
   serverErrors.value = new Array<string>();
   const receipts = new Array<ImportedMoneyflowReceipt>();
   if (files.value) {
-    for (let file of files.value) {
+    for (const file of files.value) {
       const arrayBuffer = new Uint8Array(await file.arrayBuffer());
       let fileContents: string = "";
       for (let i = 0; i < arrayBuffer.byteLength; i++) {

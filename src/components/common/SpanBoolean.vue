@@ -14,11 +14,9 @@ const props = defineProps<{
   value?: boolean;
 }>();
 
-const colorClass = computed(() => {
-  return props.value ? "text-green-600" : "text-red-600";
-});
+const colorClass = computed(() =>
+  props.value ? "text-green-600" : "text-red-600",
+);
 
-const text = computed(() => {
-  return props.value ? t("General.yes") : t("General.no");
-});
+const text = computed(() => (props.value ? t("General.yes") : t("General.no")));
 </script>

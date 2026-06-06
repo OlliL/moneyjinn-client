@@ -124,9 +124,9 @@ const onInput = (event: Event) => {
 
 const isInvalid = computed(() => fieldMeta.touched && !!errorMessage.value);
 
-const alignmentClass = computed(() => {
-  return props.align ? "text-" + props.align : "";
-});
+const alignmentClass = computed(() =>
+  props.align ? "text-" + props.align : "",
+);
 
 const fieldRef = useTemplateRef<typeof Input>("fieldRef");
 

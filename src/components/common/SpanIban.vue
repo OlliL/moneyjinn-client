@@ -50,7 +50,7 @@ const copyToClipboard = () => {
   if (navigator.clipboard && navigator.clipboard.writeText) {
     navigator.clipboard
       .writeText(cleanToCopy)
-      .catch((err) => {
+      .catch(() => {
         // Fallback if Clipboard API fails (e.g., permissions)
         fallbackCopyToClipboard(cleanToCopy);
       })

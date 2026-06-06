@@ -543,7 +543,7 @@ const initializeMoneyflowGroup = (
     moneyflows: new Array<Moneyflow>(),
   } as MoneyflowGroup;
 
-  for (let groupBy of [groupByFirst.value, groupBySecond.value]) {
+  for (const groupBy of [groupByFirst.value, groupBySecond.value]) {
     switch (groupBy) {
       case GROUP_CONTRACTPARTNER: {
         moneyflowGroup.contractpartnerName = String(
@@ -570,14 +570,14 @@ const initializeMoneyflowGroup = (
 
 const getSortString = (moneyflow: Moneyflow): string => {
   let groupByKey = "";
-  for (let groupBy of [groupByFirst.value, groupBySecond.value]) {
+  for (const groupBy of [groupByFirst.value, groupBySecond.value]) {
     switch (groupBy) {
       case GROUP_CONTRACTPARTNER: {
         groupByKey += String(moneyflow["contractpartnerName"]).toUpperCase();
         break;
       }
       case GROUP_MONTH: {
-        let month = String(moneyflow["bookingDate"].getMonth() + 1);
+        const month = String(moneyflow["bookingDate"].getMonth() + 1);
         if (month.length === 1) groupByKey += "0";
         groupByKey += month;
         break;
@@ -598,14 +598,14 @@ const getSortString = (moneyflow: Moneyflow): string => {
 
 const getGroupByKey = (moneyflow: Moneyflow): string => {
   let groupByKey = "";
-  for (let groupBy of [groupByFirst.value, groupBySecond.value]) {
+  for (const groupBy of [groupByFirst.value, groupBySecond.value]) {
     switch (groupBy) {
       case GROUP_CONTRACTPARTNER: {
         groupByKey += String(moneyflow["contractpartnerId"]);
         break;
       }
       case GROUP_MONTH: {
-        let month = String(moneyflow["bookingDate"].getMonth() + 1);
+        const month = String(moneyflow["bookingDate"].getMonth() + 1);
         if (month.length === 1) groupByKey += "0";
         groupByKey += month;
         break;

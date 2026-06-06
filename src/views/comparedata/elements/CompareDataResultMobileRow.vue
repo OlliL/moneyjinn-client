@@ -291,13 +291,14 @@ const heroTitle = computed(() => {
   return props.importData?.comment || props.importData?.moneyflowComment || "";
 });
 
-const isHeroComment = computed(() => {
-  return !(
-    props.mmf?.contractpartnerName ||
-    props.importData?.partner ||
-    props.importData?.contractpartnerName
-  );
-});
+const isHeroComment = computed(
+  () =>
+    !(
+      props.mmf?.contractpartnerName ||
+      props.importData?.partner ||
+      props.importData?.contractpartnerName
+    ),
+);
 
 const moneyflowActions = inject(CompareDataActionsKey)!;
 

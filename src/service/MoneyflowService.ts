@@ -41,9 +41,9 @@ class MoneyflowService extends AbstractService {
 
     if (moneyflow.moneyflowSplitEntries) {
       request.insertMoneyflowSplitEntryTransports =
-        moneyflow.moneyflowSplitEntries.map((mse) => {
-          return mapMoneyflowSplitEntryToTransport(mse);
-        });
+        moneyflow.moneyflowSplitEntries.map((mse) =>
+          mapMoneyflowSplitEntryToTransport(mse),
+        );
     }
 
     await this.api.createMoneyflows(request);
@@ -58,13 +58,13 @@ class MoneyflowService extends AbstractService {
     const request = {} as UpdateMoneyflowRequest;
     request.moneyflowTransport = mapMoneyflowToTransport(moneyflow);
     request.insertMoneyflowSplitEntryTransports =
-      createMoneyflowSplitEntries.map((mse) => {
-        return mapMoneyflowSplitEntryToTransport(mse);
-      });
+      createMoneyflowSplitEntries.map((mse) =>
+        mapMoneyflowSplitEntryToTransport(mse),
+      );
     request.updateMoneyflowSplitEntryTransports =
-      updateMoneyflowSplitEntries.map((mse) => {
-        return mapMoneyflowSplitEntryToTransport(mse);
-      });
+      updateMoneyflowSplitEntries.map((mse) =>
+        mapMoneyflowSplitEntryToTransport(mse),
+      );
     request.deleteMoneyflowSplitEntryIds = deleteMoneyflowSplitEntryIds;
 
     const response = await this.api.updateMoneyflowV2(request);
@@ -96,14 +96,14 @@ class MoneyflowService extends AbstractService {
 
     if (searchMoneyflowsResponse.moneyflowTransports) {
       const moneyflows: Array<Moneyflow> =
-        searchMoneyflowsResponse.moneyflowTransports?.map((mmf) => {
-          return mapMoneyflowTransportToModel(
+        searchMoneyflowsResponse.moneyflowTransports?.map((mmf) =>
+          mapMoneyflowTransportToModel(
             mmf,
             searchMoneyflowsResponse.moneyflowsWithReceipt
               ? searchMoneyflowsResponse.moneyflowsWithReceipt.includes(mmf.id)
               : false,
-          );
-        });
+          ),
+        );
       return moneyflows;
     }
 
@@ -155,9 +155,9 @@ class MoneyflowService extends AbstractService {
 
     if (searchMoneyflowsByAmountResponse.moneyflowTransports) {
       const moneyflows: Array<Moneyflow> =
-        searchMoneyflowsByAmountResponse.moneyflowTransports?.map((mmf) => {
-          return mapMoneyflowTransportToModel(mmf, false, mseMap.get(mmf.id));
-        });
+        searchMoneyflowsByAmountResponse.moneyflowTransports?.map((mmf) =>
+          mapMoneyflowTransportToModel(mmf, false, mseMap.get(mmf.id)),
+        );
 
       return moneyflows;
     }

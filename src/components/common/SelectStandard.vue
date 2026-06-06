@@ -206,13 +206,10 @@ const focusNextInputElement = () => {
   });
 };
 
-const getDropdownAnchors = () => {
-  return dropdownRef.value?.querySelectorAll("a") || [];
-};
+const getDropdownAnchors = () => dropdownRef.value?.querySelectorAll("a") || [];
 
-const getFirstDropdownAnchor = () => {
-  return getDropdownAnchors()[0] as HTMLAnchorElement | undefined;
-};
+const getFirstDropdownAnchor = () =>
+  getDropdownAnchors()[0] as HTMLAnchorElement | undefined;
 
 const clearInput = () => {
   if (fieldValue.value) setState({ touched: true });

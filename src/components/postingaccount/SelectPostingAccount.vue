@@ -23,7 +23,7 @@ import { useCreatePostingAccountModalStore } from "./CreatePostingAccountModal.s
 
 const postingAccountId = defineModel({ type: Number });
 
-const props = withDefaults(
+withDefaults(
   defineProps<{
     validationSchema?: ZodType;
     validationSchemaRef?: Ref<ZodType>;

@@ -75,7 +75,7 @@ defineProps<{
   selectBoxValues: SelectBoxValue[];
 }>();
 
-const emit = defineEmits<{
+defineEmits<{
   selectYear: [year: string];
   selectCurrentMonth: [];
   openEdit: [];

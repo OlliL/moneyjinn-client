@@ -68,49 +68,38 @@ export const useCapitalsourceStore = defineStore("capitalsource", () => {
     }
   };
 
-  const getAsSelectBoxValues = (validityDate: Date): Array<SelectBoxValue> => {
-    return capitalsource.value
-      .filter((mcs) => {
-        return (
+  const getAsSelectBoxValues = (validityDate: Date): Array<SelectBoxValue> =>
+    capitalsource.value
+      .filter(
+        (mcs) =>
           validityDate >= mcs.validFrom &&
           validityDate <= mcs.validTil &&
           mcs.type != CapitalsourceType.CREDIT &&
-          (mcs.userId === getUserId.value || mcs.groupUse)
-        );
-      })
-      .map((mcs) => {
-        return { id: mcs.id, value: mcs.comment } as SelectBoxValue;
-      });
-  };
+          (mcs.userId === getUserId.value || mcs.groupUse),
+      )
+      .map((mcs) => ({ id: mcs.id, value: mcs.comment }) as SelectBoxValue);
 
-  const getAllAsSelectBoxValues = (): Array<SelectBoxValue> => {
-    return capitalsource.value.map((mcs) => {
-      return { id: mcs.id, value: mcs.comment } as SelectBoxValue;
-    });
-  };
+  const getAllAsSelectBoxValues = (): Array<SelectBoxValue> =>
+    capitalsource.value.map(
+      (mcs) => ({ id: mcs.id, value: mcs.comment }) as SelectBoxValue,
+    );
 
-  const getCapitalsource = (id: number): Capitalsource | undefined => {
-    return capitalsource.value.find((mcp) => {
-      return mcp.id === id;
-    });
-  };
+  const getCapitalsource = (id: number): Capitalsource | undefined =>
+    capitalsource.value.find((mcp) => mcp.id === id);
 
-  const getValidCapitalsource = (validityDate: Date) => {
-    return capitalsource.value.filter((mcp) => {
-      return validityDate >= mcp.validFrom && validityDate <= mcp.validTil;
-    });
-  };
+  const getValidCapitalsource = (validityDate: Date) =>
+    capitalsource.value.filter(
+      (mcp) => validityDate >= mcp.validFrom && validityDate <= mcp.validTil,
+    );
 
-  const getBookableValidCapitalsources = (validityDate: Date) => {
-    return capitalsource.value.filter((mcp) => {
-      return (
+  const getBookableValidCapitalsources = (validityDate: Date) =>
+    capitalsource.value.filter(
+      (mcp) =>
         validityDate >= mcp.validFrom &&
         validityDate <= mcp.validTil &&
         mcp.type != CapitalsourceType.CREDIT &&
-        (mcp.userId === getUserId.value || mcp.groupUse)
-      );
-    });
-  };
+        (mcp.userId === getUserId.value || mcp.groupUse),
+    );
 
   const searchCapitalsources = async (
     comment: string,

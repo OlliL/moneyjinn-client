@@ -369,16 +369,16 @@ onMounted(() => {
   loadData();
 });
 
-const groupByYearLabel = computed(() => {
-  return groupByYear.value
+const groupByYearLabel = computed(() =>
+  groupByYear.value
     ? t("Reports.aggregationOnYears")
-    : t("Reports.aggregationOnMonths");
-});
-const singlePostingAccountsLabel = computed(() => {
-  return singlePostingAccounts.value
+    : t("Reports.aggregationOnMonths"),
+);
+const singlePostingAccountsLabel = computed(() =>
+  singlePostingAccounts.value
     ? t("Reports.singlePostingAccount")
-    : t("Reports.multiplePostingAccounts");
-});
+    : t("Reports.multiplePostingAccounts"),
+);
 
 watch(singlePostingAccounts, () => {
   setFieldTouched("postingAccountShowReporting", false);
@@ -530,7 +530,7 @@ const showReportingGraph = handleSubmit(() => {
         chartData.value.datasets[0]!.backgroundColor = [];
         chartOptions.value.plugins.title.text = chartTitle;
 
-        for (let [key, value] of resultMap) {
+        for (const [key, value] of resultMap) {
           chartData.value.labels.push(key);
           chartData.value.datasets[0]!.data.push(value);
           chartData.value.datasets[0]!.backgroundColor.push(randomColor());
@@ -549,8 +549,8 @@ const makeResultMap = (
   const resultMap = new Map<string, number>();
 
   if (singlePostingAccounts.value) {
-    for (let reportingMonthAmount of reportingMonthAmounts) {
-      let key: string = "";
+    for (const reportingMonthAmount of reportingMonthAmounts) {
+      let key: string;
       if (groupByYear.value) {
         key = reportingMonthAmount.year + "";
       } else {
@@ -562,7 +562,7 @@ const makeResultMap = (
       resultMap.set(key, reportingMonthAmount.amount * -1);
     }
   } else {
-    for (let reportingMonthAmount of reportingMonthAmounts) {
+    for (const reportingMonthAmount of reportingMonthAmounts) {
       const key = reportingMonthAmount.postingAccountName;
       let amount = resultMap.get(key);
       if (amount === undefined) {

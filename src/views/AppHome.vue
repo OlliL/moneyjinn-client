@@ -91,10 +91,7 @@ import PreDefMoneyflowService from "@/service/PreDefMoneyflowService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { AlertCircle, CheckCircle2 } from "lucide-vue-next";
 import { h, onMounted, ref } from "vue";
-import { useI18n } from "vue-i18n";
 import { toast } from "vue-sonner";
-
-const { t } = useI18n();
 
 const serverErrors = ref(new Array<string>());
 
@@ -149,12 +146,11 @@ const loadData = () => {
         if (mpm && mpm.length > 0) {
           favoriteMoneyflows.value = mpm
             .filter((flow) => flow.isFavorite)
-            .filter((mpm) => {
-              return (
+            .filter(
+              (mpm) =>
                 !mpm.onceAMonth ||
-                !preDefMoneyflowAlreadyUsedThisMonth(today, mpm)
-              );
-            });
+                !preDefMoneyflowAlreadyUsedThisMonth(today, mpm),
+            );
         }
       })
       .catch((backendError) => {

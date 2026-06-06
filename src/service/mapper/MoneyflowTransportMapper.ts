@@ -23,9 +23,9 @@ export function mapMoneyflowTransportToModel(
     postingAccountId: transport.postingaccountid,
     postingAccountName: transport.postingaccountname,
     hasReceipt: hasReceipt,
-    moneyflowSplitEntries: splitEntries?.map((mse) => {
-      return mapMoneyflowSplitEntryTransportToModel(mse);
-    }),
+    moneyflowSplitEntries: splitEntries?.map((mse) =>
+      mapMoneyflowSplitEntryTransportToModel(mse),
+    ),
     contractpartnerMatchingId: transport.contractpartnerMatchingId,
   };
   model.bookingDate.setHours(0, 0, 0, 0);

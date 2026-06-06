@@ -108,7 +108,7 @@ import { formatNumber, redIfNegative } from "@/tools/views/FormatNumber";
 import { Pencil, Trash2 } from "lucide-vue-next";
 import { inject } from "vue";
 
-const props = defineProps<{
+defineProps<{
   flows: EtfFlow[];
   partial: number;
   isEffectiveOnly: boolean;

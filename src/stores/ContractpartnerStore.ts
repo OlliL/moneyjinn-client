@@ -67,20 +67,18 @@ export const useContractpartnerStore = defineStore("contractpartner", () => {
 
   function getAsSelectBoxValues(validityDate?: Date): Array<SelectBoxValue> {
     return contractpartner.value
-      .filter((mcs) => {
-        return validityDate
+      .filter((mcs) =>
+        validityDate
           ? validityDate >= mcs.validFrom && validityDate <= mcs.validTil
-          : true;
-      })
-      .map((mcs) => {
-        return { id: mcs.id, value: mcs.name };
-      });
+          : true,
+      )
+      .map((mcs) => ({ id: mcs.id, value: mcs.name }));
   }
 
   function getValidContractpartner(validityDate: Date) {
-    return contractpartner.value.filter((mcp) => {
-      return validityDate >= mcp.validFrom && validityDate <= mcp.validTil;
-    });
+    return contractpartner.value.filter(
+      (mcp) => validityDate >= mcp.validFrom && validityDate <= mcp.validTil,
+    );
   }
 
   async function searchContractpartners(

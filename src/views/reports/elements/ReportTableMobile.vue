@@ -335,17 +335,17 @@ const filteredMoneyflows = computed(() => {
   });
 });
 
-const hiddenPlannedCount = computed(() => {
-  return props.moneyflows.length - filteredMoneyflows.value.length;
-});
+const hiddenPlannedCount = computed(
+  () => props.moneyflows.length - filteredMoneyflows.value.length,
+);
 
-const visibleMoneyflows = computed(() => {
-  return filteredMoneyflows.value.slice(0, limit.value);
-});
+const visibleMoneyflows = computed(() =>
+  filteredMoneyflows.value.slice(0, limit.value),
+);
 
-const visibleAmountSum = computed(() => {
-  return visibleMoneyflows.value.reduce((acc, mmf) => acc + mmf.amount, 0);
-});
+const visibleAmountSum = computed(() =>
+  visibleMoneyflows.value.reduce((acc, mmf) => acc + mmf.amount, 0),
+);
 
 const handleEnter = (event: Event): void => {
   event.preventDefault();
@@ -385,7 +385,6 @@ const sortByColumn = (field: keyof Moneyflow) => {
   emit("sortByColumn", field);
 };
 
-const getSortIcon = (field: keyof Moneyflow) => {
-  return getDirectionIcon(props.sortBy.get(field));
-};
+const getSortIcon = (field: keyof Moneyflow) =>
+  getDirectionIcon(props.sortBy.get(field));
 </script>

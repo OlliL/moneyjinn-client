@@ -117,11 +117,10 @@ onMounted(() =>
     .then((allPreDefMoneyflows) => {
       // remove those PreDefMoneyflows which where used this month already and have onceMonth set
       const today = new Date();
-      preDefMoneyflows.value = allPreDefMoneyflows.filter((mpm) => {
-        return (
-          !mpm.onceAMonth || !preDefMoneyflowAlreadyUsedThisMonth(today, mpm)
-        );
-      });
+      preDefMoneyflows.value = allPreDefMoneyflows.filter(
+        (mpm) =>
+          !mpm.onceAMonth || !preDefMoneyflowAlreadyUsedThisMonth(today, mpm),
+      );
       resetForm();
     })
     .catch((backendError) => {
@@ -138,9 +137,9 @@ const selectPreDefMoneyflow = () => {
   if (preDefMoneyflowId.value <= 0) {
     selectedPreDefMoneyflow.value = undefined;
   } else {
-    const preDefMoneyflow = preDefMoneyflows.value.find((mpm) => {
-      return mpm.id === +preDefMoneyflowId.value;
-    });
+    const preDefMoneyflow = preDefMoneyflows.value.find(
+      (mpm) => mpm.id === +preDefMoneyflowId.value,
+    );
     if (preDefMoneyflow) {
       selectedPreDefMoneyflow.value = preDefMoneyflow;
     }

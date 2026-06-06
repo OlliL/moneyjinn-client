@@ -85,9 +85,9 @@ const emit = defineEmits<{
   listMoneyflow: [id: number];
 }>();
 
-const isOwnMoneyflow = computed(() => {
-  return props.mmf.userId === userSessionStore.getUserId;
-});
+const isOwnMoneyflow = computed(
+  () => props.mmf.userId === userSessionStore.getUserId,
+);
 
 const deleteMoneyflow = () => emit("deleteMoneyflow", props.mmf.id);
 const editMoneyflow = () => emit("editMoneyflow", props.mmf.id);

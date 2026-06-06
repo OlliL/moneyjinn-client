@@ -78,8 +78,8 @@ class ListCapitalsourcesView {
  * Helper function to render ListCapitalsources together with GlobalModals.
  * This ensures that the Create/Edit modals are present in the DOM.
  */
-const renderListCapitalsourcesView = (props: Record<string, unknown> = {}) => {
-  return render(
+const renderListCapitalsourcesView = (props: Record<string, unknown> = {}) =>
+  render(
     defineComponent({
       setup() {
         return { props };
@@ -92,7 +92,6 @@ const renderListCapitalsourcesView = (props: Record<string, unknown> = {}) => {
       global: { stubs: { ModalVue: DeclarativeModalStub } },
     },
   );
-};
 
 beforeEach(() => {
   setActivePinia(createPinia());

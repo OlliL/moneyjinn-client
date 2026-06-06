@@ -58,8 +58,8 @@ class CompareDataView {
   static readonly DeleteModal = new ModalView("app-modal-DeleteMoneyflow");
 }
 
-const renderCompareDataView = (props: Record<string, unknown> = {}) => {
-  return render(
+const renderCompareDataView = (props: Record<string, unknown> = {}) =>
+  render(
     defineComponent({
       setup() {
         return { props };
@@ -71,7 +71,6 @@ const renderCompareDataView = (props: Record<string, unknown> = {}) => {
       global: { stubs: { ModalVue: DeclarativeModalStub } },
     },
   );
-};
 
 const compareDataDataset: CompareDataDataset = {
   bookingDate: new Date("2026-02-05"),
@@ -86,8 +85,8 @@ const compareDataDataset: CompareDataDataset = {
   postingAccountId: 5,
 };
 
-const ownMoneyflow = (id: number): Moneyflow => {
-  return {
+const ownMoneyflow = (id: number): Moneyflow =>
+  ({
     id,
     userId: 1,
     bookingDate: new Date("2026-02-05"),
@@ -102,8 +101,7 @@ const ownMoneyflow = (id: number): Moneyflow => {
     comment: "Rent payment",
     private: false,
     hasReceipt: false,
-  } as Moneyflow;
-};
+  }) as Moneyflow;
 
 const compareDataResult: CompareDataResult = {
   compareDatasMatching: [],

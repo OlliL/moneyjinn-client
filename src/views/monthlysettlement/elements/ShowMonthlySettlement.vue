@@ -149,7 +149,7 @@ const loadMonthlySettlements = (year: number, month: number) => {
 
       const monthlySettlements = response.monthlySettlements;
 
-      for (let mms of monthlySettlements) {
+      for (const mms of monthlySettlements) {
         if (mms.capitalsourceType === CapitalsourceType.CREDIT) {
           monthlySettlementsCredit.value.push(mms);
           monthlySettlementCreditSum.value += mms.amount;

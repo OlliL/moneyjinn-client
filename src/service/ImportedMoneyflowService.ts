@@ -40,9 +40,9 @@ class ImportedMoneyflowService extends AbstractService {
     request.importedMoneyflowTransport = transport;
     if (importedMoneyflow.moneyflowSplitEntries) {
       request.insertMoneyflowSplitEntryTransports =
-        importedMoneyflow.moneyflowSplitEntries.map((mse) => {
-          return mapMoneyflowSplitEntryToTransport(mse);
-        });
+        importedMoneyflow.moneyflowSplitEntries.map((mse) =>
+          mapMoneyflowSplitEntryToTransport(mse),
+        );
     }
 
     await this.api.importImportedMoneyflows(request);

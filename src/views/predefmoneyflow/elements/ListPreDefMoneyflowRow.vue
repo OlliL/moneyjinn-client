@@ -62,7 +62,7 @@ import type { PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
 import { Pencil, Trash2 } from "lucide-vue-next";
 import { inject } from "vue";
 
-const props = defineProps<{
+defineProps<{
   mpm: PreDefMoneyflow;
 }>();
 const actions = inject(PreDefMoneyflowActionsKey)!;

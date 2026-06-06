@@ -20,13 +20,9 @@ export const useUserSessionStore = defineStore(
       userIsNew: true,
     });
 
-    const getUserId = computed((): number => {
-      return userSession.value.userId;
-    });
+    const getUserId = computed((): number => userSession.value.userId);
 
-    const isAdmin = computed((): boolean => {
-      return userSession.value.userIsAdmin;
-    });
+    const isAdmin = computed((): boolean => userSession.value.userIsAdmin);
 
     function setUserSession(userSess: UserSession) {
       userSession.value = structuredClone(toRaw(userSess))!;

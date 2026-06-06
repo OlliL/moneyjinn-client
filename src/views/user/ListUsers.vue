@@ -75,9 +75,9 @@ const reloadView = () => {
 
   UserService.fetchAllUser()
     .then((_users) => {
-      _users.sort((a, b) => {
-        return a.userName.toUpperCase().localeCompare(b.userName.toUpperCase());
-      });
+      _users.sort((a, b) =>
+        a.userName.toUpperCase().localeCompare(b.userName.toUpperCase()),
+      );
       allUsers.value = _users;
       searchContent();
     })

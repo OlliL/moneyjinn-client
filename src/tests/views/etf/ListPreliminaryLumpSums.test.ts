@@ -104,8 +104,8 @@ const renderListPreliminaryLumpSumsView = (
     etfId?: string;
     year?: string;
   } = {},
-) => {
-  return render(
+) =>
+  render(
     defineComponent({
       setup() {
         return { props };
@@ -117,7 +117,6 @@ const renderListPreliminaryLumpSumsView = (
       global: { stubs: { ModalVue: DeclarativeModalStub } },
     },
   );
-};
 
 beforeEach(() => {
   setActivePinia(createPinia());

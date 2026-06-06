@@ -86,8 +86,8 @@ beforeEach(() => {
   PostingAccountServiceMocker.mockFetchAllPostingAccount([]);
 });
 
-const renderListEtfsView = (props: Record<string, unknown> = {}) => {
-  return render(
+const renderListEtfsView = (props: Record<string, unknown> = {}) =>
+  render(
     defineComponent({
       setup() {
         return { props };
@@ -99,7 +99,6 @@ const renderListEtfsView = (props: Record<string, unknown> = {}) => {
       global: { stubs: { ModalVue: DeclarativeModalStub } },
     },
   );
-};
 
 test("ListEtfs loads and renders ETF rows on mount", async () => {
   await StoreService.getInstance().initAllStores();

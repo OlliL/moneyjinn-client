@@ -187,15 +187,15 @@ const emit = defineEmits<{
 
 const isSheetOpen = ref(false);
 
-const periodLabel = computed(() => {
-  return props.selectedMonth > 0
+const periodLabel = computed(() =>
+  props.selectedMonth > 0
     ? `${getMonthName(props.selectedMonth)} ${props.selectedYear}`
-    : String(props.selectedYear);
-});
+    : String(props.selectedYear),
+);
 
-const currentYearIdx = computed(() => {
-  return props.years.findIndex((y) => String(y) === String(props.selectedYear));
-});
+const currentYearIdx = computed(() =>
+  props.years.findIndex((y) => String(y) === String(props.selectedYear)),
+);
 
 const selectedYearModel = computed({
   get: () => String(props.selectedYear),

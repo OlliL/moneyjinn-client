@@ -10,15 +10,14 @@ import { computed, ref } from "vue";
 export const usePostingAccountStore = defineStore("postingAccount", () => {
   const postingAccount = ref([] as Array<PostingAccount>);
 
-  const getPostingAccount = computed((): Array<PostingAccount> => {
-    return postingAccount.value;
-  });
+  const getPostingAccount = computed(
+    (): Array<PostingAccount> => postingAccount.value,
+  );
 
-  const getAsSelectBoxValues = computed((): Array<SelectBoxValue> => {
-    return postingAccount.value.map((mpa) => {
-      return { id: mpa.id, value: mpa.name };
-    });
-  });
+  const getAsSelectBoxValues = computed(
+    (): Array<SelectBoxValue> =>
+      postingAccount.value.map((mpa) => ({ id: mpa.id, value: mpa.name })),
+  );
 
   function initPostingAccountStore() {
     return PostingAccountService.fetchAllPostingAccount().then(

@@ -70,16 +70,16 @@ const props = defineProps<{
   report: Report;
 }>();
 
-const assetSourcesWithMovement = computed(() => {
-  return (props.report.reportTurnoverCapitalsources ?? []).filter(
+const assetSourcesWithMovement = computed(() =>
+  (props.report.reportTurnoverCapitalsources ?? []).filter(
     (data) =>
       data.capitalsourceType === CapitalsourceType.CURRENT_ASSET ||
       data.capitalsourceType === CapitalsourceType.LONG_TERM_ASSET,
-  );
-});
+  ),
+);
 
-const assetSummary = computed(() => {
-  return assetSourcesWithMovement.value.reduce(
+const assetSummary = computed(() =>
+  assetSourcesWithMovement.value.reduce(
     (summary, data) => {
       summary.fixedEnding += data.amountEndOfMonthFixed ?? 0;
       summary.fixedBeginning += data.amountBeginOfMonthFixed;
@@ -101,8 +101,8 @@ const assetSummary = computed(() => {
       calculatedDelta: number;
       hasFixedEnd: boolean;
     },
-  );
-});
+  ),
+);
 
 const assetsMonthlyCalculatedTurnover = computed(
   () => assetSummary.value.calculatedDelta,

@@ -50,13 +50,13 @@ class EtfService extends AbstractService {
 
     const etfDepot = {} as EtfDepot;
     etfDepot.calcEtfSalePieces = listEtfFlowsResponse.calcEtfSalePieces;
-    etfDepot.etfFlows = listEtfFlowsResponse.etfFlowTransports?.map((flow) => {
-      return mapEtfFlowTransportToModel(flow);
-    });
+    etfDepot.etfFlows = listEtfFlowsResponse.etfFlowTransports?.map((flow) =>
+      mapEtfFlowTransportToModel(flow),
+    );
     etfDepot.etfEffectiveFlows =
-      listEtfFlowsResponse.etfEffectiveFlowTransports?.map((flow) => {
-        return mapEtfEffectiveFlowTransportToModel(flow);
-      });
+      listEtfFlowsResponse.etfEffectiveFlowTransports?.map((flow) =>
+        mapEtfEffectiveFlowTransportToModel(flow),
+      );
 
     if (listEtfFlowsResponse.etfSummaryTransport)
       etfDepot.etfSummary = mapEtfSummaryTransportToEtfSummary(

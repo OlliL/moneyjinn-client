@@ -122,9 +122,9 @@ const props = defineProps<{
 
 const userSessionStore = useUserSessionStore();
 
-const isOwnMoneyflow = computed(() => {
-  return props.mmf ? props.mmf.userId === userSessionStore.getUserId : false;
-});
+const isOwnMoneyflow = computed(() =>
+  props.mmf ? props.mmf.userId === userSessionStore.getUserId : false,
+);
 
 const moneyflowActions = inject(CompareDataActionsKey)!;
 const createMoneyflow = () => {

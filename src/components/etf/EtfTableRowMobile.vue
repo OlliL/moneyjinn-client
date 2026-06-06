@@ -113,19 +113,17 @@ const props = defineProps<{
   pricesTimestamp?: Date;
 }>();
 
-const sumSellPrice = computed(() => {
-  return props.sellPrice ? props.amount * props.sellPrice : undefined;
-});
-const avgSpentPrice = computed(() => {
-  return props.amount ? props.spentValue / props.amount : undefined;
-});
-const profit = computed(() => {
-  return sumSellPrice.value ? sumSellPrice.value - props.spentValue : undefined;
-});
-const pricesTimestampString = computed(() => {
-  return props.pricesTimestamp ? formatDateWithTime(props.pricesTimestamp) : "";
-});
-const etfFlowAmountSumString = computed(() => {
-  return formatNumber(props.amount, 6);
-});
+const sumSellPrice = computed(() =>
+  props.sellPrice ? props.amount * props.sellPrice : undefined,
+);
+const avgSpentPrice = computed(() =>
+  props.amount ? props.spentValue / props.amount : undefined,
+);
+const profit = computed(() =>
+  sumSellPrice.value ? sumSellPrice.value - props.spentValue : undefined,
+);
+const pricesTimestampString = computed(() =>
+  props.pricesTimestamp ? formatDateWithTime(props.pricesTimestamp) : "",
+);
+const etfFlowAmountSumString = computed(() => formatNumber(props.amount, 6));
 </script>

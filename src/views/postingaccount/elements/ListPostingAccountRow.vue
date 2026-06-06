@@ -26,7 +26,7 @@ import type { PostingAccount } from "@/model/postingaccount/PostingAccount";
 import { Pencil, Trash2 } from "lucide-vue-next";
 import { inject } from "vue";
 
-const props = defineProps<{
+defineProps<{
   mpa: PostingAccount;
 }>();
 

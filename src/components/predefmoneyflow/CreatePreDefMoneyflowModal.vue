@@ -321,9 +321,9 @@ const isPopoverOpen = ref(false);
 const randomColors = ref<string[]>([]);
 const hoveredColor = ref<string | null>(null);
 
-const previewColor = computed(() => {
-  return hoveredColor.value ?? mpm.value.favoriteColor;
-});
+const previewColor = computed(
+  () => hoveredColor.value ?? mpm.value.favoriteColor,
+);
 
 const updateRandomColors = () => {
   randomColors.value = Array.from(
@@ -361,11 +361,11 @@ const selectColor = (color: string) => {
 
 const { handleSubmit, values, setFieldTouched } = useForm();
 
-const title = computed(() => {
-  return origMpm.value === undefined
+const title = computed(() =>
+  origMpm.value === undefined
     ? t("PreDefMoneyflow.title.create")
-    : t("PreDefMoneyflow.title.update");
-});
+    : t("PreDefMoneyflow.title.update"),
+);
 
 const resetForm = () => {
   updateRandomColors();

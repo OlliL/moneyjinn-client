@@ -202,9 +202,7 @@ const sortedMoneyflows = computed(() => {
     if (entry) {
       const field = entry[0] as keyof Moneyflow;
       const ascending = entry[1] === true;
-      result.sort((a, b) => {
-        return (ascending ? 1 : -1) * compareColumns(a, b, field);
-      });
+      result.sort((a, b) => (ascending ? 1 : -1) * compareColumns(a, b, field));
     }
   }
   return result;
@@ -252,8 +250,8 @@ const filterComment = ref("");
 const filterPostingAccount = ref("");
 const filterCapitalsource = ref("");
 const filter = () => {
-  filteredMoneyflows.value = report.value.moneyflows.filter((mmf) => {
-    return (
+  filteredMoneyflows.value = report.value.moneyflows.filter(
+    (mmf) =>
       mmf.contractpartnerName
         ?.toLowerCase()
         .includes(filterContractpartner.value.toLowerCase()) &&
@@ -263,9 +261,8 @@ const filter = () => {
         .includes(filterPostingAccount.value.toLowerCase()) &&
       mmf.capitalsourceComment
         ?.toLowerCase()
-        .includes(filterCapitalsource.value.toLowerCase())
-    );
-  });
+        .includes(filterCapitalsource.value.toLowerCase()),
+  );
 };
 
 let debounceTimeout: ReturnType<typeof setTimeout> | undefined;
@@ -292,16 +289,11 @@ const props = defineProps<{
   month: string;
 }>();
 
-const capitalsourceHasMovement = (
-  data: ReportTurnoverCapitalsource,
-): boolean => {
-  return (
-    data.amountBeginOfMonthFixed != 0 ||
-    data.amountEndOfMonthCalculated != 0 ||
-    !!data.amountCurrent ||
-    !!data.amountEndOfMonthFixed
-  );
-};
+const capitalsourceHasMovement = (data: ReportTurnoverCapitalsource): boolean =>
+  data.amountBeginOfMonthFixed != 0 ||
+  data.amountEndOfMonthCalculated != 0 ||
+  !!data.amountCurrent ||
+  !!data.amountEndOfMonthFixed;
 
 const filterCapitalsourcesByTypes = (types: CapitalsourceType[]) => {
   if (!dataLoaded.value) return [];
@@ -330,14 +322,15 @@ const creditTurnoverCapitalsources = computed(() =>
   filterCapitalsourcesByTypes([CapitalsourceType.CREDIT]),
 );
 
-const currentMonthIsSettled = computed(() => {
-  return !!(
-    dataLoaded.value &&
-    report.value.reportTurnoverCapitalsources?.some(
-      (data) => !!data.amountEndOfMonthFixed,
-    )
-  );
-});
+const currentMonthIsSettled = computed(
+  () =>
+    !!(
+      dataLoaded.value &&
+      report.value.reportTurnoverCapitalsources?.some(
+        (data) => !!data.amountEndOfMonthFixed,
+      )
+    ),
+);
 
 const amountSum = computed(() => {
   if (!dataLoaded.value || !filteredMoneyflows.value) return 0;
@@ -369,7 +362,7 @@ const bookCapitalsourceAmounts = (mmf: Moneyflow, bookOut: boolean) => {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
   const capitalsourceComment = mmf.capitalsourceComment;
-  let direction = bookOut ? -1 : 1;
+  const direction = bookOut ? -1 : 1;
   const amount = mmf.amount * direction;
 
   report.value.reportTurnoverCapitalsources
@@ -390,9 +383,9 @@ const bookCapitalsourceAmounts = (mmf: Moneyflow, bookOut: boolean) => {
 };
 const moneyflowDeleted = (mmf: Moneyflow) => {
   bookCapitalsourceAmounts(mmf, true);
-  report.value.moneyflows = report.value.moneyflows.filter((originalMmf) => {
-    return mmf.id !== originalMmf.id;
-  });
+  report.value.moneyflows = report.value.moneyflows.filter(
+    (originalMmf) => mmf.id !== originalMmf.id,
+  );
 };
 const moneyflowUpdated = (mmf: Moneyflow) => {
   const oldMmf = report.value.moneyflows.find(
@@ -437,7 +430,7 @@ const actions: MoneyflowRowActions = {
     openEditMoneyflow(
       mmf,
       undefined,
-      () => loadData(+props.year, +props.month),
+      () => moneyflowUpdated(mmf),
       openListReceipt,
     ),
   delete: (mmf: Moneyflow) => openDeleteMoneyflow(mmf, moneyflowDeleted),

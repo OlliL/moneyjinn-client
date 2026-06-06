@@ -12,9 +12,7 @@ const props = defineProps<{
   receiptBase64: string;
 }>();
 
-const pdfSource = computed(() => {
-  return {
-    data: atob(props.receiptBase64),
-  };
-});
+const pdfSource = computed(() => ({
+  data: atob(props.receiptBase64),
+}));
 </script>

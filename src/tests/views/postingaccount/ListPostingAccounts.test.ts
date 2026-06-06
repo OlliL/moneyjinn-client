@@ -61,8 +61,8 @@ class ListPostingAccountsView {
   static readonly EmptyRowMobile = new RowView("posting-account-empty-mobile");
 }
 
-const renderListPostingAccountsView = (props: Record<string, unknown> = {}) => {
-  return render(
+const renderListPostingAccountsView = (props: Record<string, unknown> = {}) =>
+  render(
     defineComponent({
       setup() {
         return { props };
@@ -77,7 +77,6 @@ const renderListPostingAccountsView = (props: Record<string, unknown> = {}) => {
       },
     },
   );
-};
 
 beforeEach(() => {
   setActivePinia(createPinia());

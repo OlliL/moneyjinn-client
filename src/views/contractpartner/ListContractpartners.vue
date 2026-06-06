@@ -140,27 +140,6 @@ const processAndRenderChunked = (
   }
 };
 
-const renderChunk = (
-  allData: Contractpartner[],
-  startIndex: number,
-  searchId: number,
-) => {
-  if (searchId !== currentSearchId) return;
-
-  const nextIndex = startIndex + CHUNK_SIZE;
-  const chunk = allData.slice(startIndex, nextIndex);
-
-  contractpartners.value = [...contractpartners.value, ...chunk];
-
-  if (nextIndex < allData.length) {
-    renderAnimationFrameId = globalThis.requestAnimationFrame(() =>
-      renderChunk(allData, nextIndex, searchId),
-    );
-  } else {
-    renderAnimationFrameId = undefined;
-  }
-};
-
 onMounted(() => searchAllContent());
 
 onUnmounted(() => {

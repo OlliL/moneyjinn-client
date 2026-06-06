@@ -23,7 +23,7 @@ defineOptions({
   inheritAttrs: false,
 });
 
-const clazz = computed(() => {
-  return props.alternateRowBackground ? "[&_tr:nth-child(even)]:bg-muted" : "";
-});
+const clazz = computed(() =>
+  props.alternateRowBackground ? "[&_tr:nth-child(even)]:bg-muted" : "",
+);
 </script>
