@@ -286,7 +286,7 @@ const filterCapitalsource = defineModel<string>("filterCapitalsource", {
   default: "",
 });
 
-const emit = defineEmits<{
+defineEmits<{
   sortByColumn: [field: keyof Moneyflow];
 }>();
 

@@ -49,23 +49,25 @@
                   </TableHeader>
                   <TableBody>
                     <TableRow v-if="rowspan == 1">
-                      <TableCell
+                      <TableCell class="border-r"
                         ><SpanDate :date="mmf.bookingDate"
                       /></TableCell>
-                      <TableCell
+                      <TableCell class="border-r"
                         ><SpanDate :date="mmf.invoiceDate"
                       /></TableCell>
-                      <TableCell class="text-right">
+                      <TableCell class="text-right border-r">
                         <SpanAmount :amount="mmf.amount" />
                       </TableCell>
-                      <TableCell class="text-left">{{
+                      <TableCell class="text-left border-r">{{
                         mmf.contractpartnerName
                       }}</TableCell>
-                      <TableCell class="text-left">{{ mmf.comment }}</TableCell>
-                      <TableCell class="text-left">{{
+                      <TableCell class="text-left border-r">{{
+                        mmf.comment
+                      }}</TableCell>
+                      <TableCell class="text-left border-r">{{
                         mmf.postingAccountName
                       }}</TableCell>
-                      <TableCell class="text-left">{{
+                      <TableCell class="text-left border-r">{{
                         mmf.capitalsourceComment
                       }}</TableCell>
                     </TableRow>
@@ -73,37 +75,47 @@
                       v-for="(mse, index) in mmf.moneyflowSplitEntries"
                       :key="mse.id"
                     >
-                      <TableCell :rowspan="rowspan" v-if="index == 0">
+                      <TableCell
+                        :rowspan="rowspan"
+                        v-if="index == 0"
+                        class="border-r"
+                      >
                         <SpanDate :date="mmf.bookingDate" />
                       </TableCell>
-                      <TableCell :rowspan="rowspan" v-if="index == 0">
+                      <TableCell
+                        :rowspan="rowspan"
+                        v-if="index == 0"
+                        class="border-r"
+                      >
                         <SpanDate :date="mmf.invoiceDate" />
                       </TableCell>
                       <TableCell
                         :rowspan="rowspan"
                         v-if="index == 0"
-                        class="text-right"
+                        class="text-right border-r"
                       >
                         <SpanAmount :amount="mmf.amount" />
                       </TableCell>
-                      <TableCell class="text-right">
+                      <TableCell class="text-right border-r">
                         <SpanAmount :amount="mse.amount" />
                       </TableCell>
                       <TableCell
                         :rowspan="rowspan"
                         v-if="index == 0"
-                        class="text-left"
+                        class="text-left border-r"
                       >
                         {{ mmf.contractpartnerName }}
                       </TableCell>
-                      <TableCell class="text-left">{{ mse.comment }}</TableCell>
-                      <TableCell class="text-left">{{
+                      <TableCell class="text-left border-r">{{
+                        mse.comment
+                      }}</TableCell>
+                      <TableCell class="text-left border-r">{{
                         mse.postingAccountName
                       }}</TableCell>
                       <TableCell
                         :rowspan="rowspan"
                         v-if="index == 0"
-                        class="text-left"
+                        class="text-left border-r"
                       >
                         {{ mmf.capitalsourceComment }}
                       </TableCell>
