@@ -44,8 +44,10 @@ const searchPostingAccounts = postingAccountStore.searchPostingAccounts;
 const { postingAccount } = storeToRefs(postingAccountStore);
 const { openDelete: openDeletePostingAccount } =
   useDeletePostingAccountModalStore();
-const { openCreatePostingAccount, openEditPostingAccount } =
-  useCreatePostingAccountModalStore();
+const {
+  openCreate: openCreatePostingAccount,
+  openEdit: openEditPostingAccount,
+} = useCreatePostingAccountModalStore();
 
 const actions: CrudActions<PostingAccount> = {
   create: () => {
