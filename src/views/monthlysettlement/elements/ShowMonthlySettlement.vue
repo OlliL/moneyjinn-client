@@ -35,8 +35,8 @@
                 <TableCell class="text-right border-r font-bold"
                   >&sum;</TableCell
                 >
-                <TableCell class="text-right whitespace-nowrap">
-                  <u><SpanAmount :amount="monthlySettlementNoCreditSum" /></u>
+                <TableCell class="text-right whitespace-nowrap underline">
+                  <SpanAmount :amount="monthlySettlementNoCreditSum" />
                 </TableCell>
               </TableRow>
             </TableBody>
@@ -73,10 +73,8 @@
                 <TableCell class="text-right border-r font-bold"
                   >&sum;</TableCell
                 >
-                <TableCell class="text-right whitespace-nowrap">
-                  <u>
-                    <SpanAmount :amount="monthlySettlementCreditSum" />
-                  </u>
+                <TableCell class="text-right whitespace-nowrap underline">
+                  <SpanAmount :amount="monthlySettlementCreditSum" />
                 </TableCell>
               </TableRow>
             </TableBody>

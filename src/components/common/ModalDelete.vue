@@ -60,8 +60,8 @@ const handleDelete = () => {
   props
     .deleteAction()
     .then(() => {
-      isOpen.value = false;
       props.deleteSuccessAction?.();
+      isOpen.value = false;
     })
     .catch(handleBackendError);
 };

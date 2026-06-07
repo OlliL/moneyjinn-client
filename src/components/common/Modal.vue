@@ -28,7 +28,7 @@
         }}</component>
       </component>
 
-      <div class="overflow-y-auto flex-1 pr-1">
+      <div class="overflow-y-auto flex-1 pl-1 pr-1">
         <slot name="body" />
       </div>
 
