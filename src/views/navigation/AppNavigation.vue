@@ -1,17 +1,9 @@
 <template>
   <!-- Mobile Navigation-->
-  <AppNavigationMobile
-    @logout="logout"
-    @show-create-contractpartner-modal="showCreateContractpartnerModal"
-    @show-pre-def-moneyflow-modal="showPreDefMoneyflowModal"
-  />
+  <AppNavigationMobile @logout="logout" />
 
   <!-- Desktop Navigation-->
-  <AppNavigationDesktop
-    @logout="logout"
-    @show-create-contractpartner-modal="showCreateContractpartnerModal"
-    @show-pre-def-moneyflow-modal="showPreDefMoneyflowModal"
-  />
+  <AppNavigationDesktop @logout="logout" />
 
   <div class="mt-10">
     <router-view v-slot="{ Component }">
@@ -24,8 +16,6 @@
 
 <script lang="ts" setup>
 import { LogoutApi } from "@/api";
-import { useCreateContractpartnerModalStore } from "@/components/contractpartner/CreateContractpartnerModal.store";
-import { useCreatePreDefMoneyflowModalStore } from "@/components/predefmoneyflow/CreatePreDefMoneyflowModal.store";
 import { AxiosSingleton } from "@/config/AxiosSingleton";
 import { WebSocketSingleton } from "@/config/WebSocketSingleton";
 import router, { Routes } from "@/router";
@@ -39,15 +29,6 @@ import AppNavigationMobile from "./AppNavigationMobile.vue";
 
 const { t } = useI18n();
 
-const { openCreatePreDefMoneyflow } = useCreatePreDefMoneyflowModalStore();
-const { openCreateContractpartner } = useCreateContractpartnerModalStore();
-
-const showCreateContractpartnerModal = () => {
-  openCreateContractpartner();
-};
-const showPreDefMoneyflowModal = () => {
-  openCreatePreDefMoneyflow();
-};
 const logout = async () => {
   WebSocketSingleton.getInstance().disconnectStompClient();
   const userSessionStore = useUserSessionStore();

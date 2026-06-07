@@ -91,7 +91,7 @@ beforeEach(async () => {
 
 test("creates a new matching", async () => {
   renderDeclarativeModal(CreateContractpartnerMatchingModal);
-  useCreateContractpartnerMatchingModalStore().openCreateContractpartnerMatching();
+  useCreateContractpartnerMatchingModalStore().openCreate();
 
   await CreateContractpartnerMatchingModalView.MatchingTextInput.setValue(
     "Match text",
@@ -116,9 +116,7 @@ test("updates an existing matching", async () => {
   } as ContractpartnerMatching;
 
   renderDeclarativeModal(CreateContractpartnerMatchingModal);
-  useCreateContractpartnerMatchingModalStore().openEditContractpartnerMatching(
-    existing,
-  );
+  useCreateContractpartnerMatchingModalStore().openEdit(existing);
 
   await CreateContractpartnerMatchingModalView.MatchingTextInput.setValue(
     "New text",
@@ -134,7 +132,7 @@ test("updates an existing matching", async () => {
 
 test("reset button clears form in create mode", async () => {
   renderDeclarativeModal(CreateContractpartnerMatchingModal);
-  useCreateContractpartnerMatchingModalStore().openCreateContractpartnerMatching();
+  useCreateContractpartnerMatchingModalStore().openCreate();
 
   await CreateContractpartnerMatchingModalView.MatchingTextInput.setValue(
     "Something",
@@ -153,9 +151,7 @@ test("reset button reverts changes in edit mode", async () => {
     contractpartnerId: 1,
   } as ContractpartnerMatching;
   renderDeclarativeModal(CreateContractpartnerMatchingModal);
-  useCreateContractpartnerMatchingModalStore().openEditContractpartnerMatching(
-    existing,
-  );
+  useCreateContractpartnerMatchingModalStore().openEdit(existing);
 
   await CreateContractpartnerMatchingModalView.MatchingTextInput.setValue(
     "Changed",
@@ -184,9 +180,7 @@ test("shows server errors on failure", async () => {
   } as ContractpartnerMatching;
 
   renderDeclarativeModal(CreateContractpartnerMatchingModal);
-  useCreateContractpartnerMatchingModalStore().openEditContractpartnerMatching(
-    existing,
-  );
+  useCreateContractpartnerMatchingModalStore().openEdit(existing);
 
   await CreateContractpartnerMatchingModalView.MatchingTextInput.setValue(
     "valid",
@@ -201,7 +195,7 @@ test("shows server errors on failure", async () => {
 
 test("validation: mandatory fields are required", async () => {
   renderDeclarativeModal(CreateContractpartnerMatchingModal);
-  useCreateContractpartnerMatchingModalStore().openCreateContractpartnerMatching();
+  useCreateContractpartnerMatchingModalStore().openCreate();
 
   await CreateContractpartnerMatchingModalView.SaveButton.click();
 
@@ -219,7 +213,7 @@ test("validation: mandatory fields are required", async () => {
 
 test("validation: matchingText maximum length", async () => {
   renderDeclarativeModal(CreateContractpartnerMatchingModal);
-  useCreateContractpartnerMatchingModalStore().openCreateContractpartnerMatching();
+  useCreateContractpartnerMatchingModalStore().openCreate();
 
   await CreateContractpartnerMatchingModalView.MatchingTextInput.setValue(
     "a".repeat(51),
@@ -233,7 +227,7 @@ test("validation: matchingText maximum length", async () => {
 
 test("validation: moneyflowComment maximum length", async () => {
   renderDeclarativeModal(CreateContractpartnerMatchingModal);
-  useCreateContractpartnerMatchingModalStore().openCreateContractpartnerMatching();
+  useCreateContractpartnerMatchingModalStore().openCreate();
 
   await CreateContractpartnerMatchingModalView.MoneyflowCommentInput.setValue(
     "a".repeat(101),

@@ -50,7 +50,7 @@ import {
   ContractpartnerMatchingActionsKey,
   type CrudActions,
 } from "@/model/CrudActions";
-import useCreateContractpartnerMatchingModalStore from "./elements/CreateContractpartnerMatchingModal.store";
+import { useCreateContractpartnerMatchingModalStore } from "./elements/CreateContractpartnerMatchingModal.store";
 import CreateContractpartnerMatchingModal from "./elements/CreateContractpartnerMatchingModal.vue";
 import { useDeleteContractpartnerMatchingModalStore } from "./elements/DeleteContractpartnerMatchingModal.store";
 import DeleteContractpartnerMatchingModal from "./elements/DeleteContractpartnerMatchingModal.vue";
@@ -67,8 +67,10 @@ const contractpartnerMatchings = ref(new Array<ContractpartnerMatching>());
 const allContractpartnerMatchings = ref(new Array<ContractpartnerMatching>());
 const searchString = ref("");
 const searchContractpartnerId = ref<number | undefined>(undefined);
-const { openCreateContractpartnerMatching, openEditContractpartnerMatching } =
-  useCreateContractpartnerMatchingModalStore();
+const {
+  openCreate: openCreateContractpartnerMatching,
+  openEdit: openEditContractpartnerMatching,
+} = useCreateContractpartnerMatchingModalStore();
 const { openDelete: openDeleteContractpartnerMatching } =
   useDeleteContractpartnerMatchingModalStore();
 

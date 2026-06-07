@@ -39,7 +39,8 @@ withDefaults(
 const userSessionStore = useUserSessionStore();
 const userIsAdmin = computed(() => userSessionStore.isAdmin);
 const postingAccountStore = usePostingAccountStore();
-const { openCreatePostingAccount } = useCreatePostingAccountModalStore();
+const { openCreate: openCreatePostingAccount } =
+  useCreatePostingAccountModalStore();
 
 const selectBoxValues = computed(
   () => postingAccountStore.getAsSelectBoxValues,
