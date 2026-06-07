@@ -17,7 +17,6 @@ export function createCreateModalStore<T extends { id: number }>(
     const { t } = useI18n();
 
     const open = ref(false);
-    const entity = ref<T | undefined>(undefined);
     const onDone = ref<((entry: T) => void) | undefined>(undefined);
 
     const mData = ref<T>({} as T);
@@ -34,7 +33,7 @@ export function createCreateModalStore<T extends { id: number }>(
       setFieldTouched?: (field: string, touched: boolean) => void,
     ) => {
       mData.value = isEditMode.value
-        ? structuredClone(toRaw(origData.value))!
+        ? structuredClone(toRaw(origData.value))
         : options.getEmptyEntity();
 
       if (values && setFieldTouched) {
@@ -43,7 +42,6 @@ export function createCreateModalStore<T extends { id: number }>(
     };
 
     const openCreate = (cb?: (entry: T) => void) => {
-      entity.value = undefined;
       origData.value = undefined;
       onDone.value = cb;
       open.value = true;
@@ -51,7 +49,6 @@ export function createCreateModalStore<T extends { id: number }>(
     };
 
     const openEdit = (entry: T, cb?: (entry: T) => void) => {
-      entity.value = entry;
       origData.value = entry;
       onDone.value = cb;
       open.value = true;
@@ -61,7 +58,6 @@ export function createCreateModalStore<T extends { id: number }>(
     watch(open, (isVisible) => {
       if (!isVisible) {
         origData.value = undefined;
-        entity.value = undefined;
       }
     });
 

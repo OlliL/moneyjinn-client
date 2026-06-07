@@ -125,7 +125,7 @@ beforeEach(async () => {
 test("creates a new contractpartner", async () => {
   renderDeclarativeModal(CreateContractpartnerModal);
   const modalStore = useCreateContractpartnerModalStore();
-  modalStore.openCreateContractpartner();
+  modalStore.openCreate();
   await CreateContractpartnerModalView.Modal.assertOpen();
 
   await CreateContractpartnerModalView.NameInput.setValue("New Partner");
@@ -148,7 +148,7 @@ test("updates an existing contractpartner", async () => {
 
   renderDeclarativeModal(CreateContractpartnerModal);
   const modalStore = useCreateContractpartnerModalStore();
-  modalStore.openEditContractpartner(existingMcp);
+  modalStore.openEdit(existingMcp);
   await CreateContractpartnerModalView.Modal.assertOpen();
 
   await CreateContractpartnerModalView.NameInput.setValue("Updated Partner");
@@ -164,7 +164,7 @@ test("updates an existing contractpartner", async () => {
 test("reset button clears form in create mode", async () => {
   renderDeclarativeModal(CreateContractpartnerModal);
   const modalStore = useCreateContractpartnerModalStore();
-  modalStore.openCreateContractpartner();
+  modalStore.openCreate();
   await CreateContractpartnerModalView.Modal.assertOpen();
 
   await CreateContractpartnerModalView.NameInput.setValue("To be cleared");
@@ -182,7 +182,7 @@ test("reset button reverts changes in edit mode", async () => {
   } as Contractpartner;
   renderDeclarativeModal(CreateContractpartnerModal);
   const modalStore = useCreateContractpartnerModalStore();
-  modalStore.openEditContractpartner(existingMcp);
+  modalStore.openEdit(existingMcp);
   await CreateContractpartnerModalView.Modal.assertOpen();
 
   await CreateContractpartnerModalView.NameInput.setValue("Changed Partner");
@@ -203,7 +203,7 @@ test("shows server errors on failure", async () => {
 
   renderDeclarativeModal(CreateContractpartnerModal);
   const modalStore = useCreateContractpartnerModalStore();
-  modalStore.openCreateContractpartner();
+  modalStore.openCreate();
   await CreateContractpartnerModalView.Modal.assertOpen();
 
   await CreateContractpartnerModalView.NameInput.setValue("Valid Name");
@@ -218,7 +218,7 @@ test("shows server errors on failure", async () => {
 test("validation: name is required", async () => {
   renderDeclarativeModal(CreateContractpartnerModal);
   const modalStore = useCreateContractpartnerModalStore();
-  modalStore.openCreateContractpartner();
+  modalStore.openCreate();
   await CreateContractpartnerModalView.Modal.assertOpen();
 
   await CreateContractpartnerModalView.NameInput.setValue("");
@@ -234,7 +234,7 @@ test("validation: name is required", async () => {
 test("validation: name maximum length", async () => {
   renderDeclarativeModal(CreateContractpartnerModal);
   const modalStore = useCreateContractpartnerModalStore();
-  modalStore.openCreateContractpartner();
+  modalStore.openCreate();
   await CreateContractpartnerModalView.Modal.assertOpen();
 
   await CreateContractpartnerModalView.NameInput.setValue("a".repeat(101));
@@ -250,7 +250,7 @@ test("validation: name maximum length", async () => {
 test("validation: moneyflowComment maximum length", async () => {
   renderDeclarativeModal(CreateContractpartnerModal);
   const modalStore = useCreateContractpartnerModalStore();
-  modalStore.openCreateContractpartner();
+  modalStore.openCreate();
   await CreateContractpartnerModalView.Modal.assertOpen();
 
   await CreateContractpartnerModalView.MoneyflowCommentInput.setValue(
@@ -268,7 +268,7 @@ test("validation: moneyflowComment maximum length", async () => {
 test("validation: validFrom and validTil are required", async () => {
   renderDeclarativeModal(CreateContractpartnerModal);
   const modalStore = useCreateContractpartnerModalStore();
-  modalStore.openCreateContractpartner();
+  modalStore.openCreate();
   await CreateContractpartnerModalView.Modal.assertOpen();
 
   await CreateContractpartnerModalView.ValidFromInput.setValue("");
@@ -289,7 +289,7 @@ test("validation: validFrom and validTil are required", async () => {
 test("address data fields are optional", async () => {
   renderDeclarativeModal(CreateContractpartnerModal);
   const modalStore = useCreateContractpartnerModalStore();
-  modalStore.openCreateContractpartner();
+  modalStore.openCreate();
   await CreateContractpartnerModalView.Modal.assertOpen();
 
   await CreateContractpartnerModalView.NameInput.setValue(
@@ -335,7 +335,7 @@ test("address data fields are optional", async () => {
 test("date inputs initialized with defaults", async () => {
   renderDeclarativeModal(CreateContractpartnerModal);
   const modalStore = useCreateContractpartnerModalStore();
-  modalStore.openCreateContractpartner();
+  modalStore.openCreate();
   await CreateContractpartnerModalView.Modal.assertOpen();
 
   const today = new Date();
@@ -372,7 +372,7 @@ test("edit mode pre-fills data", async () => {
 
   renderDeclarativeModal(CreateContractpartnerModal);
   const modalStore = useCreateContractpartnerModalStore();
-  modalStore.openEditContractpartner(mcp);
+  modalStore.openEdit(mcp);
   await CreateContractpartnerModalView.Modal.assertOpen();
 
   await CreateContractpartnerModalView.NameInput.assertValue("Test Partner");
