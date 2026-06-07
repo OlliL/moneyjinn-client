@@ -154,23 +154,17 @@ watch(
 );
 
 const createContractpartnerMatching = handleSubmit(() => {
-  if (mcm.value.id > 0) {
-    //update
-    ContractpartnerMatchingService.updateContractpartnerMatching(mcm.value)
-      .then(() => {
-        open.value = false;
-        onDone.value?.();
-      })
-      .catch(handleBackendError);
-  } else {
-    //create
-    ContractpartnerMatchingService.createContractpartnerMatching(mcm.value)
-      .then((_mcm) => {
-        mcm.value = _mcm;
-        open.value = false;
-        onDone.value?.();
-      })
-      .catch(handleBackendError);
-  }
+  const isUpdate = mcm.value.id > 0;
+  const serviceCall = isUpdate
+    ? ContractpartnerMatchingService.updateContractpartnerMatching(mcm.value)
+    : ContractpartnerMatchingService.createContractpartnerMatching(mcm.value);
+
+  serviceCall
+    .then((result) => {
+      if (!isUpdate) mcm.value = result as ContractpartnerMatching;
+      open.value = false;
+      onDone.value?.(mcm.value);
+    })
+    .catch(handleBackendError);
 });
 </script>

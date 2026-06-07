@@ -103,16 +103,14 @@ watch(
 );
 
 const createPostingAccount = handleSubmit(() => {
-  const serviceCall =
-    mpa.value.id > 0
-      ? PostingAccountService.updatePostingAccount(mpa.value)
-      : PostingAccountService.createPostingAccount(mpa.value);
+  const isUpdate = mpa.value.id > 0;
+  const serviceCall = isUpdate
+    ? PostingAccountService.updatePostingAccount(mpa.value)
+    : PostingAccountService.createPostingAccount(mpa.value);
 
   serviceCall
     .then((result) => {
-      const isUpdate = mpa.value.id > 0;
       if (!isUpdate) mpa.value = result as PostingAccount;
-
       open.value = false;
       onDone.value?.(mpa.value);
     })

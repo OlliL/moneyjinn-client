@@ -7,9 +7,14 @@ export const useCreateContractpartnerMatchingModalStore = defineStore(
   () => {
     const open = ref(false);
     const matching = ref<ContractpartnerMatching | undefined>(undefined);
-    const onDone = ref<(() => void) | undefined>(undefined);
 
-    const openCreateContractpartnerMatching = (cb?: () => void) => {
+    const onDone = ref<((entry: ContractpartnerMatching) => void) | undefined>(
+      undefined,
+    );
+
+    const openCreateContractpartnerMatching = (
+      cb?: (entry: ContractpartnerMatching) => void,
+    ) => {
       matching.value = undefined;
       onDone.value = cb;
       open.value = true;

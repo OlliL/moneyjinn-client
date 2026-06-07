@@ -226,14 +226,13 @@ watch(
 );
 
 const createCapitalsource = handleSubmit(() => {
-  const serviceCall =
-    mcs.value.id > 0
-      ? CapitalsourceService.updateCapitalsource(mcs.value)
-      : CapitalsourceService.createCapitalsource(mcs.value);
+  const isUpdate = mcs.value.id > 0;
+  const serviceCall = isUpdate
+    ? CapitalsourceService.updateCapitalsource(mcs.value)
+    : CapitalsourceService.createCapitalsource(mcs.value);
 
   serviceCall
     .then((result) => {
-      const isUpdate = mcs.value.id > 0;
       if (!isUpdate) mcs.value = result as Capitalsource;
       open.value = false;
       onDone.value?.(mcs.value);

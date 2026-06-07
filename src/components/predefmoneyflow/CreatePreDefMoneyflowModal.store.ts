@@ -28,10 +28,6 @@ export const useCreatePreDefMoneyflowModalStore = defineStore(
       open.value = true;
     };
 
-    const close = () => {
-      open.value = false;
-    };
-
     watch(open, (isOpen) => {
       if (!isOpen) {
         preDefMoneyflow.value = undefined;
@@ -44,7 +40,6 @@ export const useCreatePreDefMoneyflowModalStore = defineStore(
       onDone,
       openCreatePreDefMoneyflow,
       openEditPreDefMoneyflow,
-      close,
     };
   },
 );

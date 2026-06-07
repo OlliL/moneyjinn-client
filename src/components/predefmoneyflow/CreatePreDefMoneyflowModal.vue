@@ -282,7 +282,6 @@ import SelectPostingAccount from "../postingaccount/SelectPostingAccount.vue";
 import useCreatePreDefMoneyflowModalStore from "./CreatePreDefMoneyflowModal.store";
 
 const { t } = useI18n();
-const { close } = useCreatePreDefMoneyflowModalStore();
 const { open, preDefMoneyflow, onDone } = storeToRefs(
   useCreatePreDefMoneyflowModalStore(),
 );
@@ -343,7 +342,7 @@ watch(
   () => open.value,
   (visible) => {
     if (visible) {
-      origMpm.value = (preDefMoneyflow.value as any) ?? undefined;
+      origMpm.value = preDefMoneyflow.value ?? undefined;
       resetForm();
     }
   },
@@ -378,23 +377,17 @@ const resetForm = () => {
 };
 
 const createPreDefMoneyflow = handleSubmit(() => {
-  if (mpm.value.id > 0) {
-    //update
-    PreDefMoneyflowService.updatePreDefMoneyflow(mpm.value)
-      .then(() => {
-        close();
-        (onDone.value as any)?.(mpm.value);
-      })
-      .catch(handleBackendError);
-  } else {
-    //create
-    PreDefMoneyflowService.createPreDefMoneyflow(mpm.value)
-      .then((_mpm) => {
-        mpm.value = _mpm;
-        close();
-        (onDone.value as any)?.(mpm.value);
-      })
-      .catch(handleBackendError);
-  }
+  const isUpdate = mpm.value.id > 0;
+  const serviceCall = isUpdate
+    ? PreDefMoneyflowService.updatePreDefMoneyflow(mpm.value)
+    : PreDefMoneyflowService.createPreDefMoneyflow(mpm.value);
+
+  serviceCall
+    .then((result) => {
+      if (isUpdate) mpm.value = result as PreDefMoneyflow;
+      open.value = false;
+      onDone.value?.(mpm.value);
+    })
+    .catch(handleBackendError);
 });
 </script>
