@@ -48,7 +48,7 @@ const capitalsourceStore = useCapitalsourceStore();
 const searchCapitalsources = capitalsourceStore.searchCapitalsources;
 const { openDelete: openDeleteCapitalsource } =
   useDeleteCapitalsourceModalStore();
-const { openCreateCapitalsource, openEditCapitalsource } =
+const { openCreate: openCreateCapitalsource, openEdit: openEditCapitalsource } =
   useCreateCapitalsourceModalStore();
 
 watch(searchString, () => {

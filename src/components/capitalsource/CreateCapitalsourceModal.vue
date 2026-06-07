@@ -14,7 +14,7 @@
         <div class="form-section space-y-4">
           <div class="grid gap-1.5">
             <InputStandard
-              v-model="mcs.comment"
+              v-model="mData.comment"
               :validation-schema="schema.comment"
               id="comment-CreateCapitalsource"
               :field-label="$t('General.name')"
@@ -22,14 +22,14 @@
           </div>
           <div class="grid grid-cols-2 gap-4">
             <SelectStandard
-              v-model="mcs.type"
+              v-model="mData.type"
               :validation-schema="schema.type"
               id="type-CreateCapitalsource"
               :field-label="$t('Capitalsource.type')"
               :select-box-values="capitalsourceTypeValues"
             />
             <SelectStandard
-              v-model="mcs.state"
+              v-model="mData.state"
               :validation-schema="schema.state"
               id="state-CreateCapitalsource"
               :field-label="$t('Capitalsource.state')"
@@ -47,14 +47,14 @@
             </span>
             <div class="space-y-4">
               <InputDate
-                v-model="mcs.validFrom"
+                v-model="mData.validFrom"
                 :validation-schema="schema.validFrom"
                 id="validFrom-CreateCapitalsource"
                 :field-label="$t('General.validFrom')"
                 picker-side="top"
               />
               <InputDate
-                v-model="mcs.validTil"
+                v-model="mData.validTil"
                 :validation-schema="schema.validTil"
                 id="validTil-CreateCapitalsource"
                 :field-label="$t('General.validTil')"
@@ -71,14 +71,14 @@
             </span>
             <div class="space-y-4">
               <SelectStandard
-                v-model="mcs.groupUse"
+                v-model="mData.groupUse"
                 :validation-schema="schema.groupUse"
                 id="groupUse-CreateCapitalsource"
                 :field-label="$t('Capitalsource.groupUse')"
                 :select-box-values="groupUseValues"
               />
               <SelectStandard
-                v-model="mcs.importAllowed"
+                v-model="mData.importAllowed"
                 :validation-schema="schema.importAllowed"
                 id="importAllowed-CreateCapitalsource"
                 :field-label="$t('Capitalsource.importAllowed')"
@@ -96,13 +96,13 @@
           </div>
           <div class="grid grid-cols-2 gap-4">
             <InputStandard
-              v-model="mcs.accountNumber"
+              v-model="mData.accountNumber"
               :validation-schema="schema.accountNumber"
               id="accountNumber-CreateCapitalsource"
               :field-label="$t('General.iban')"
             />
             <InputStandard
-              v-model="mcs.bankCode"
+              v-model="mData.bankCode"
               :validation-schema="schema.bankCode"
               id="bankCode-CreateCapitalsource"
               :field-label="$t('General.bic')"
@@ -118,7 +118,7 @@
         variant="secondary"
         class="button-with-icon hidden md:flex"
         data-testid="createCapitalsourceResetButton"
-        @click="resetForm"
+        @click="resetForm(values, setFieldTouched)"
       >
         <Undo2 class="icon-medium" />
         {{ $t("General.reset") }}
@@ -142,13 +142,10 @@ import { capitalsourceImportValues } from "@/model/capitalsource/CapitalsourceIm
 import { capitalsourceStateValues } from "@/model/capitalsource/CapitalsourceState";
 import { capitalsourceTypeValues } from "@/model/capitalsource/CapitalsourceType";
 import type { SelectBoxValue } from "@/model/SelectBoxValue";
-import CapitalsourceService from "@/service/CapitalsourceService";
-import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { globErr } from "@/tools/views/ZodUtil";
 import { Save, Undo2 } from "lucide-vue-next";
 import { storeToRefs } from "pinia";
 import { useForm } from "vee-validate";
-import { computed, ref, toRaw, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { boolean, date, number, string, ZodType } from "zod";
 import ButtonSubmit from "../common/ButtonSubmit.vue";
@@ -159,12 +156,9 @@ import SelectStandard from "../common/SelectStandard.vue";
 import { useCreateCapitalsourceModalStore } from "./CreateCapitalsourceModal.store";
 
 const { t } = useI18n();
-
-const mcs = ref({} as Capitalsource);
-const origMcs = ref<Capitalsource | undefined>(undefined);
-const { open, capitalsource, onDone } = storeToRefs(
-  useCreateCapitalsourceModalStore(),
-);
+const store = useCreateCapitalsourceModalStore();
+const { open, mData, title } = storeToRefs(store);
+const { resetForm, save } = store;
 
 const groupUseValues = [
   { id: undefined, value: "" },
@@ -195,48 +189,5 @@ const schema: Partial<{ [key in keyof Capitalsource]: ZodType }> = {
     .min(0)
     .max(2),
 };
-
-const title = computed(() =>
-  origMcs.value === undefined
-    ? t("Capitalsource.title.create")
-    : t("Capitalsource.title.update"),
-);
-
-const resetForm = () => {
-  if (origMcs.value) {
-    mcs.value = structuredClone(toRaw(origMcs.value))!;
-  } else {
-    mcs.value = {
-      validFrom: new Date(),
-      validTil: new Date("2999-12-31"),
-    } as Capitalsource;
-  }
-  Object.keys(values).forEach((field) => setFieldTouched(field, false));
-};
-
-watch(
-  [open, capitalsource],
-  ([isVisible, entry]) => {
-    if (isVisible) {
-      origMcs.value = entry;
-      resetForm();
-    }
-  },
-  { immediate: true },
-);
-
-const createCapitalsource = handleSubmit(() => {
-  const isUpdate = mcs.value.id > 0;
-  const serviceCall = isUpdate
-    ? CapitalsourceService.updateCapitalsource(mcs.value)
-    : CapitalsourceService.createCapitalsource(mcs.value);
-
-  serviceCall
-    .then((result) => {
-      if (!isUpdate) mcs.value = result as Capitalsource;
-      open.value = false;
-      onDone.value?.(mcs.value);
-    })
-    .catch(handleBackendError);
-});
+const createCapitalsource = save(handleSubmit);
 </script>

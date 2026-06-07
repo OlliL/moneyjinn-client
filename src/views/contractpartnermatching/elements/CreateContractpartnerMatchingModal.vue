@@ -14,13 +14,13 @@
           <div class="form-section space-y-4">
             <div class="grid grid-cols-1 gap-4">
               <InputStandard
-                v-model="mcm.matchingText"
+                v-model="mData.matchingText"
                 :validation-schema="schema.matchingText"
                 id="name"
                 :field-label="$t('ContractpartnerMatching.matchingText')"
               />
               <SelectContractpartner
-                v-model="mcm.contractpartnerId"
+                v-model="mData.contractpartnerId"
                 :validation-schema="schema.contractpartnerId"
                 id-suffix="CreateContractpartnerMatching"
                 :field-label="$t('General.contractpartner')"
@@ -37,13 +37,13 @@
               </span>
             </div>
             <InputStandard
-              v-model="mcm.moneyflowComment"
+              v-model="mData.moneyflowComment"
               :validation-schema="schema.moneyflowComment"
               id="moneyflowComment"
               :field-label="$t('General.comment')"
             />
             <SelectPostingAccount
-              v-model="mcm.postingAccountId"
+              v-model="mData.postingAccountId"
               :validation-schema="schema.postingAccountId"
               id-suffix="CreateContractpartnerMatchingModal"
               :field-label="$t('General.postingAccount')"
@@ -59,7 +59,7 @@
         variant="secondary"
         class="button-with-icon hidden md:flex"
         data-testid="createContractpartnerMatchingResetButton"
-        @click="resetForm"
+        @click="resetForm(values, setFieldTouched)"
       >
         <Undo2 class="icon-medium" />
         {{ $t("General.reset") }}
@@ -84,22 +84,19 @@ import SelectContractpartner from "@/components/contractpartner/SelectContractpa
 import SelectPostingAccount from "@/components/postingaccount/SelectPostingAccount.vue";
 import { Button } from "@/components/ui/button";
 import type { ContractpartnerMatching } from "@/model/contractpartnermatching/ContractpartnerMatching";
-import ContractpartnerMatchingService from "@/service/ContractpartnerMatchingService";
-import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { globErr } from "@/tools/views/ZodUtil";
 import { Save, Undo2 } from "lucide-vue-next";
 import { storeToRefs } from "pinia";
 import { useForm } from "vee-validate";
-import { computed, ref, toRaw, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { number, string, ZodType } from "zod";
-import useCreateContractpartnerMatchingModalStore from "./CreateContractpartnerMatchingModal.store";
+import { useCreateContractpartnerMatchingModalStore } from "./CreateContractpartnerMatchingModal.store";
 
 const { t } = useI18n();
 
-const { open, matching, onDone } = storeToRefs(
-  useCreateContractpartnerMatchingModalStore(),
-);
+const store = useCreateContractpartnerMatchingModalStore();
+const { open, mData, title } = storeToRefs(store);
+const { resetForm, save } = store;
 
 const schema: Partial<{ [key in keyof ContractpartnerMatching]: ZodType }> = {
   matchingText: string(
@@ -116,55 +113,6 @@ const schema: Partial<{ [key in keyof ContractpartnerMatching]: ZodType }> = {
   postingAccountId: number().optional(),
 };
 
-const mcm = ref({} as ContractpartnerMatching);
-const origMcm = ref({} as ContractpartnerMatching | undefined);
-
 const { handleSubmit, values, setFieldTouched } = useForm();
-
-const title = computed(() =>
-  origMcm.value === undefined
-    ? t("ContractpartnerMatching.title.create")
-    : t("ContractpartnerMatching.title.update"),
-);
-
-const resetForm = () => {
-  if (origMcm.value) {
-    mcm.value = structuredClone(toRaw(origMcm.value))!;
-  } else {
-    mcm.value = {} as ContractpartnerMatching;
-  }
-  Object.keys(values).forEach((field) => setFieldTouched(field, false));
-};
-
-watch(
-  [open, matching],
-  ([isOpen, entry]) => {
-    if (!isOpen) {
-      origMcm.value = undefined;
-      return;
-    }
-    if (entry === undefined) {
-      origMcm.value = undefined;
-    } else {
-      origMcm.value = structuredClone(toRaw(entry));
-    }
-    resetForm();
-  },
-  { immediate: true },
-);
-
-const createContractpartnerMatching = handleSubmit(() => {
-  const isUpdate = mcm.value.id > 0;
-  const serviceCall = isUpdate
-    ? ContractpartnerMatchingService.updateContractpartnerMatching(mcm.value)
-    : ContractpartnerMatchingService.createContractpartnerMatching(mcm.value);
-
-  serviceCall
-    .then((result) => {
-      if (!isUpdate) mcm.value = result as ContractpartnerMatching;
-      open.value = false;
-      onDone.value?.(mcm.value);
-    })
-    .catch(handleBackendError);
-});
+const createContractpartnerMatching = save(handleSubmit);
 </script>

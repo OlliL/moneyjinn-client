@@ -13,7 +13,7 @@
       >
         <div class="form-section space-y-4">
           <InputStandard
-            v-model="mpa.name"
+            v-model="mData.name"
             :validation-schema="schema.name"
             id="name-CreatePostingAccount"
             :field-label="$t('General.name')"
@@ -27,7 +27,7 @@
         variant="secondary"
         class="button-with-icon hidden md:flex"
         data-testid="createPostingAccountResetButton"
-        @click="resetForm"
+        @click="resetForm(values, setFieldTouched)"
       >
         <Undo2 class="icon-medium" />
         {{ $t("General.reset") }}
@@ -47,13 +47,10 @@
 <script lang="ts" setup>
 import { Button } from "@/components/ui/button";
 import type { PostingAccount } from "@/model/postingaccount/PostingAccount";
-import PostingAccountService from "@/service/PostingAccountService";
-import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { globErr } from "@/tools/views/ZodUtil";
 import { Save, Undo2 } from "lucide-vue-next";
 import { storeToRefs } from "pinia";
 import { useForm } from "vee-validate";
-import { computed, ref, toRaw, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { string, ZodType } from "zod";
 import ButtonSubmit from "../common/ButtonSubmit.vue";
@@ -62,12 +59,9 @@ import ModalVue from "../common/Modal.vue";
 import { useCreatePostingAccountModalStore } from "./CreatePostingAccountModal.store";
 
 const { t } = useI18n();
-
-const mpa = ref({} as PostingAccount);
-const origMpa = ref({} as PostingAccount | undefined);
-const { open, postingAccount, onDone } = storeToRefs(
-  useCreatePostingAccountModalStore(),
-);
+const store = useCreatePostingAccountModalStore();
+const { open, mData, title } = storeToRefs(store);
+const { resetForm, save } = store;
 const { handleSubmit, values, setFieldTouched } = useForm();
 
 const schema: Partial<{ [key in keyof PostingAccount]: ZodType }> = {
@@ -75,45 +69,5 @@ const schema: Partial<{ [key in keyof PostingAccount]: ZodType }> = {
     .min(1)
     .max(100, t("PostingAccount.validation.length.name")),
 };
-
-const title = computed(() =>
-  origMpa.value === undefined
-    ? t("PostingAccount.title.create")
-    : t("PostingAccount.title.update"),
-);
-
-const resetForm = () => {
-  if (origMpa.value) {
-    mpa.value = structuredClone(toRaw(origMpa.value))!;
-  } else {
-    mpa.value = {} as PostingAccount;
-  }
-  Object.keys(values).forEach((field) => setFieldTouched(field, false));
-};
-
-watch(
-  [open, postingAccount],
-  ([isVisible, entry]) => {
-    if (isVisible) {
-      origMpa.value = entry;
-      resetForm();
-    }
-  },
-  { immediate: true },
-);
-
-const createPostingAccount = handleSubmit(() => {
-  const isUpdate = mpa.value.id > 0;
-  const serviceCall = isUpdate
-    ? PostingAccountService.updatePostingAccount(mpa.value)
-    : PostingAccountService.createPostingAccount(mpa.value);
-
-  serviceCall
-    .then((result) => {
-      if (!isUpdate) mpa.value = result as PostingAccount;
-      open.value = false;
-      onDone.value?.(mpa.value);
-    })
-    .catch(handleBackendError);
-});
+const createPostingAccount = save(handleSubmit);
 </script>

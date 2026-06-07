@@ -50,8 +50,10 @@ let currentSearchId = 0;
 const contractpartnerStore = useContractpartnerStore();
 const { searchContractpartners } = contractpartnerStore;
 const { contractpartner } = storeToRefs(contractpartnerStore);
-const { openCreateContractpartner, openEditContractpartner } =
-  useCreateContractpartnerModalStore();
+const {
+  openCreate: openCreateContractpartner,
+  openEdit: openEditContractpartner,
+} = useCreateContractpartnerModalStore();
 const { openDelete: openDeleteContractpartner } =
   useDeleteContractpartnerModalStore();
 const { openListContractpartnerAccounts } =

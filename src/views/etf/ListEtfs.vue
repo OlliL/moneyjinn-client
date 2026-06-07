@@ -27,7 +27,7 @@ import type { Etf } from "@/model/etf/Etf";
 import { useEtfStore } from "@/stores/EtfStore";
 import { storeToRefs } from "pinia";
 import { onMounted, provide, ref, watch } from "vue";
-import useCreateEtfModalStore from "./elements/CreateEtfModal.store";
+import { useCreateEtfModalStore } from "./elements/CreateEtfModal.store";
 import CreateEtfModal from "./elements/CreateEtfModal.vue";
 import { useDeleteEtfModalStore } from "./elements/DeleteEtfModal.store";
 import DeleteEtfModal from "./elements/DeleteEtfModal.vue";
@@ -40,7 +40,8 @@ const searchString = ref("");
 const { searchEtfs } = useEtfStore();
 
 const { etf } = storeToRefs(useEtfStore());
-const { openCreateEtf, openEditEtf } = useCreateEtfModalStore();
+const { openCreate: openCreateEtf, openEdit: openEditEtf } =
+  useCreateEtfModalStore();
 const { openDelete: openDeleteEtf } = useDeleteEtfModalStore();
 
 const actions: CrudActions<Etf> = {

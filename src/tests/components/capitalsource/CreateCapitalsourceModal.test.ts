@@ -107,7 +107,7 @@ beforeEach(async () => {
 test("creates a new capitalsource", async () => {
   renderDeclarativeModal(CreateCapitalsourceModal);
   const modalStore = useCreateCapitalsourceModalStore();
-  modalStore.openCreateCapitalsource();
+  modalStore.openCreate();
 
   await CreateCapitalsourceModalView.Modal.assertOpen();
 
@@ -147,7 +147,7 @@ test("updates an existing capitalsource", async () => {
 
   renderDeclarativeModal(CreateCapitalsourceModal);
   const modalStore = useCreateCapitalsourceModalStore();
-  modalStore.openEditCapitalsource(existingMcs);
+  modalStore.openEdit(existingMcs);
 
   await CreateCapitalsourceModalView.Modal.assertOpen();
 
@@ -164,7 +164,7 @@ test("updates an existing capitalsource", async () => {
 test("reset button clears form in create mode", async () => {
   renderDeclarativeModal(CreateCapitalsourceModal);
   const modalStore = useCreateCapitalsourceModalStore();
-  modalStore.openCreateCapitalsource();
+  modalStore.openCreate();
 
   await CreateCapitalsourceModalView.Modal.assertOpen();
 
@@ -187,7 +187,7 @@ test("reset button reverts changes in edit mode", async () => {
   } as any;
   renderDeclarativeModal(CreateCapitalsourceModal);
   const modalStore = useCreateCapitalsourceModalStore();
-  modalStore.openEditCapitalsource(existingMcs);
+  modalStore.openEdit(existingMcs);
 
   await CreateCapitalsourceModalView.Modal.assertOpen();
 
@@ -200,7 +200,7 @@ test("reset button reverts changes in edit mode", async () => {
 test("can save without optional account data", async () => {
   renderDeclarativeModal(CreateCapitalsourceModal);
   const modalStore = useCreateCapitalsourceModalStore();
-  modalStore.openCreateCapitalsource();
+  modalStore.openCreate();
 
   await CreateCapitalsourceModalView.Modal.assertOpen();
 
@@ -239,7 +239,7 @@ test("shows server errors on failure", async () => {
 
   renderDeclarativeModal(CreateCapitalsourceModal);
   const modalStore = useCreateCapitalsourceModalStore();
-  modalStore.openCreateCapitalsource();
+  modalStore.openCreate();
 
   await CreateCapitalsourceModalView.Modal.assertOpen();
 
@@ -267,7 +267,7 @@ test("shows server errors on failure", async () => {
 test("validation: mandatory fields", async () => {
   renderDeclarativeModal(CreateCapitalsourceModal);
   const modalStore = useCreateCapitalsourceModalStore();
-  modalStore.openCreateCapitalsource();
+  modalStore.openCreate();
 
   await CreateCapitalsourceModalView.Modal.assertOpen();
 
@@ -296,7 +296,7 @@ test("validation: mandatory fields", async () => {
 test("validation: date fields", async () => {
   renderDeclarativeModal(CreateCapitalsourceModal);
   const modalStore = useCreateCapitalsourceModalStore();
-  modalStore.openCreateCapitalsource();
+  modalStore.openCreate();
 
   await CreateCapitalsourceModalView.Modal.assertOpen();
 
@@ -315,7 +315,7 @@ test("validation: date fields", async () => {
 test("validation: field lengths", async () => {
   renderDeclarativeModal(CreateCapitalsourceModal);
   const modalStore = useCreateCapitalsourceModalStore();
-  modalStore.openCreateCapitalsource();
+  modalStore.openCreate();
 
   await CreateCapitalsourceModalView.Modal.assertOpen();
 
@@ -340,7 +340,7 @@ test("validation: field lengths", async () => {
 test("validation: numeric ranges for selects", async () => {
   renderDeclarativeModal(CreateCapitalsourceModal);
   const modalStore = useCreateCapitalsourceModalStore();
-  modalStore.openCreateCapitalsource();
+  modalStore.openCreate();
 
   await CreateCapitalsourceModalView.Modal.assertOpen();
 
@@ -358,7 +358,7 @@ test("validation: numeric ranges for selects", async () => {
 test("date inputs initialized with defaults", async () => {
   renderDeclarativeModal(CreateCapitalsourceModal);
   const modalStore = useCreateCapitalsourceModalStore();
-  modalStore.openCreateCapitalsource();
+  modalStore.openCreate();
 
   await CreateCapitalsourceModalView.Modal.assertOpen();
 
@@ -387,7 +387,7 @@ test("edit mode pre-fills data", async () => {
 
   renderDeclarativeModal(CreateCapitalsourceModal);
   const modalStore = useCreateCapitalsourceModalStore();
-  modalStore.openEditCapitalsource(mcs);
+  modalStore.openEdit(mcs);
 
   await CreateCapitalsourceModalView.Modal.assertOpen();
 

@@ -66,7 +66,7 @@ beforeEach(async () => {
 test("creates a new posting account", async () => {
   renderDeclarativeModal(CreatePostingAccountModal);
   const modalStore = useCreatePostingAccountModalStore();
-  modalStore.openCreatePostingAccount();
+  modalStore.openCreate();
 
   await CreatePostingAccountModalView.Modal.assertOpen();
 
@@ -85,7 +85,7 @@ test("updates an existing posting account", async () => {
 
   renderDeclarativeModal(CreatePostingAccountModal);
   const modalStore = useCreatePostingAccountModalStore();
-  modalStore.openEditPostingAccount(existingMpa);
+  modalStore.openEdit(existingMpa);
   await CreatePostingAccountModalView.Modal.assertOpen();
 
   await CreatePostingAccountModalView.NameInput.setValue(
@@ -103,7 +103,7 @@ test("updates an existing posting account", async () => {
 test("reset button clears form in create mode", async () => {
   renderDeclarativeModal(CreatePostingAccountModal);
   const modalStore = useCreatePostingAccountModalStore();
-  modalStore.openCreatePostingAccount();
+  modalStore.openCreate();
   await CreatePostingAccountModalView.Modal.assertOpen();
 
   await CreatePostingAccountModalView.NameInput.setValue("To be cleared");
@@ -119,7 +119,7 @@ test("reset button reverts changes in edit mode", async () => {
   };
   renderDeclarativeModal(CreatePostingAccountModal);
   const modalStore = useCreatePostingAccountModalStore();
-  modalStore.openEditPostingAccount(existingMpa);
+  modalStore.openEdit(existingMpa);
   await CreatePostingAccountModalView.Modal.assertOpen();
 
   await CreatePostingAccountModalView.NameInput.setValue("Changed Name");
@@ -138,7 +138,7 @@ test("shows server errors on failure", async () => {
 
   renderDeclarativeModal(CreatePostingAccountModal);
   const modalStore = useCreatePostingAccountModalStore();
-  modalStore.openCreatePostingAccount();
+  modalStore.openCreate();
   await CreatePostingAccountModalView.Modal.assertOpen();
 
   await CreatePostingAccountModalView.NameInput.setValue("Valid Name");
@@ -153,7 +153,7 @@ test("shows server errors on failure", async () => {
 test("validation: name is required", async () => {
   renderDeclarativeModal(CreatePostingAccountModal);
   const modalStore = useCreatePostingAccountModalStore();
-  modalStore.openCreatePostingAccount();
+  modalStore.openCreate();
   await CreatePostingAccountModalView.Modal.assertOpen();
 
   await CreatePostingAccountModalView.NameInput.setValue("trigger validation");
@@ -170,7 +170,7 @@ test("validation: name is required", async () => {
 test("validation: name maximum length", async () => {
   renderDeclarativeModal(CreatePostingAccountModal);
   const modalStore = useCreatePostingAccountModalStore();
-  modalStore.openCreatePostingAccount();
+  modalStore.openCreate();
   await CreatePostingAccountModalView.Modal.assertOpen();
 
   await CreatePostingAccountModalView.NameInput.setValue("a".repeat(101));

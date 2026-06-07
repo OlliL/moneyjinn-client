@@ -125,7 +125,7 @@ beforeEach(async () => {
 
 test("CreatePreDefMoneyflowModal creates a new predefined moneyflow", async () => {
   renderDeclarativeModal(CreatePreDefMoneyflowModal);
-  useCreatePreDefMoneyflowModalStore().openCreatePreDefMoneyflow();
+  useCreatePreDefMoneyflowModalStore().openCreate();
 
   await CreatePreDefMoneyflowModalView.Modal.assertOpen();
 
@@ -164,7 +164,7 @@ test("CreatePreDefMoneyflowModal updates an existing predefined moneyflow", asyn
   PreDefMoneyflowServiceMocker.mockUpdatePreDefMoneyflowResolved();
 
   renderDeclarativeModal(CreatePreDefMoneyflowModal);
-  useCreatePreDefMoneyflowModalStore().openEditPreDefMoneyflow(existingMpm);
+  useCreatePreDefMoneyflowModalStore().openEdit(existingMpm);
 
   await CreatePreDefMoneyflowModalView.CommentInput.setValue("Updated Comment");
   await CreatePreDefMoneyflowModalView.SaveButton.click();
@@ -185,7 +185,7 @@ test("CreatePreDefMoneyflowModal shows server errors on failed save", async () =
   PreDefMoneyflowServiceMocker.mockCreatePreDefMoneyflowRejected(backendError);
 
   renderDeclarativeModal(CreatePreDefMoneyflowModal);
-  useCreatePreDefMoneyflowModalStore().openCreatePreDefMoneyflow();
+  useCreatePreDefMoneyflowModalStore().openCreate();
 
   await CreatePreDefMoneyflowModalView.AmountInput.setValue("10");
   await CreatePreDefMoneyflowModalView.CommentInput.setValue("Test");
@@ -212,7 +212,7 @@ test("CreatePreDefMoneyflowModal shows server errors on failed save", async () =
 
 test("CreatePreDefMoneyflowModal reset button clears the form", async () => {
   renderDeclarativeModal(CreatePreDefMoneyflowModal);
-  useCreatePreDefMoneyflowModalStore().openCreatePreDefMoneyflow();
+  useCreatePreDefMoneyflowModalStore().openCreate();
 
   await CreatePreDefMoneyflowModalView.AmountInput.setValue("123.45");
   await CreatePreDefMoneyflowModalView.CommentInput.setValue(
@@ -227,7 +227,7 @@ test("CreatePreDefMoneyflowModal reset button clears the form", async () => {
 
 test("CreatePreDefMoneyflowModal handles favorite abbreviation visibility", async () => {
   renderDeclarativeModal(CreatePreDefMoneyflowModal);
-  useCreatePreDefMoneyflowModalStore().openCreatePreDefMoneyflow();
+  useCreatePreDefMoneyflowModalStore().openCreate();
 
   await CreatePreDefMoneyflowModalView.FavoriteAbbreviationInput.assertNotToBeInDocument();
 
@@ -245,7 +245,7 @@ test("CreatePreDefMoneyflowModal handles favorite abbreviation visibility", asyn
 
 test("CreatePreDefMoneyflowModal handles favorite color selection", async () => {
   renderDeclarativeModal(CreatePreDefMoneyflowModal);
-  useCreatePreDefMoneyflowModalStore().openCreatePreDefMoneyflow();
+  useCreatePreDefMoneyflowModalStore().openCreate();
 
   await CreatePreDefMoneyflowModalView.FavoriteButton.click();
   await CreatePreDefMoneyflowModalView.FavoriteColorTrigger.click();
@@ -262,7 +262,7 @@ test("CreatePreDefMoneyflowModal handles favorite color selection", async () => 
 
 test("CreatePreDefMoneyflowModal validation: amount is required", async () => {
   renderDeclarativeModal(CreatePreDefMoneyflowModal);
-  useCreatePreDefMoneyflowModalStore().openCreatePreDefMoneyflow();
+  useCreatePreDefMoneyflowModalStore().openCreate();
 
   await CreatePreDefMoneyflowModalView.SaveButton.click();
 
@@ -275,7 +275,7 @@ test("CreatePreDefMoneyflowModal validation: amount is required", async () => {
 
 test("CreatePreDefMoneyflowModal validation: comment is required", async () => {
   renderDeclarativeModal(CreatePreDefMoneyflowModal);
-  useCreatePreDefMoneyflowModalStore().openCreatePreDefMoneyflow();
+  useCreatePreDefMoneyflowModalStore().openCreate();
 
   await CreatePreDefMoneyflowModalView.AmountInput.setValue("10");
   await CreatePreDefMoneyflowModalView.SaveButton.click();
@@ -289,7 +289,7 @@ test("CreatePreDefMoneyflowModal validation: comment is required", async () => {
 
 test("CreatePreDefMoneyflowModal validation: comment maximum length", async () => {
   renderDeclarativeModal(CreatePreDefMoneyflowModal);
-  useCreatePreDefMoneyflowModalStore().openCreatePreDefMoneyflow();
+  useCreatePreDefMoneyflowModalStore().openCreate();
 
   await CreatePreDefMoneyflowModalView.AmountInput.setValue("10");
   await CreatePreDefMoneyflowModalView.CommentInput.setValue("a".repeat(101));
@@ -304,7 +304,7 @@ test("CreatePreDefMoneyflowModal validation: comment maximum length", async () =
 
 test("CreatePreDefMoneyflowModal validation: contractpartner is required", async () => {
   renderDeclarativeModal(CreatePreDefMoneyflowModal);
-  useCreatePreDefMoneyflowModalStore().openCreatePreDefMoneyflow();
+  useCreatePreDefMoneyflowModalStore().openCreate();
 
   await CreatePreDefMoneyflowModalView.AmountInput.setValue("10");
   await CreatePreDefMoneyflowModalView.CommentInput.setValue("Test");
@@ -319,7 +319,7 @@ test("CreatePreDefMoneyflowModal validation: contractpartner is required", async
 
 test("CreatePreDefMoneyflowModal validation: capitalsource is required", async () => {
   renderDeclarativeModal(CreatePreDefMoneyflowModal);
-  useCreatePreDefMoneyflowModalStore().openCreatePreDefMoneyflow();
+  useCreatePreDefMoneyflowModalStore().openCreate();
 
   await CreatePreDefMoneyflowModalView.AmountInput.setValue("10");
   await CreatePreDefMoneyflowModalView.CommentInput.setValue("Test");
@@ -338,7 +338,7 @@ test("CreatePreDefMoneyflowModal validation: capitalsource is required", async (
 
 test("CreatePreDefMoneyflowModal validation: posting account is required", async () => {
   renderDeclarativeModal(CreatePreDefMoneyflowModal);
-  useCreatePreDefMoneyflowModalStore().openCreatePreDefMoneyflow();
+  useCreatePreDefMoneyflowModalStore().openCreate();
 
   await CreatePreDefMoneyflowModalView.AmountInput.setValue("10");
   await CreatePreDefMoneyflowModalView.CommentInput.setValue("Test");
@@ -361,7 +361,7 @@ test("CreatePreDefMoneyflowModal validation: posting account is required", async
 
 test("CreatePreDefMoneyflowModal validation: favorite abbreviation is required when favorite active", async () => {
   renderDeclarativeModal(CreatePreDefMoneyflowModal);
-  useCreatePreDefMoneyflowModalStore().openCreatePreDefMoneyflow();
+  useCreatePreDefMoneyflowModalStore().openCreate();
 
   await CreatePreDefMoneyflowModalView.FavoriteButton.click();
 

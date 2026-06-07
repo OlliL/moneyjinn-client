@@ -63,8 +63,8 @@ beforeEach(async () => {
 });
 
 test("creates a new group", async () => {
-  useCreateGroupModalStore().openCreateGroup();
   renderDeclarativeModal(CreateGroupModal);
+  useCreateGroupModalStore().openCreate();
 
   await CreateGroupModalView.Modal.assertOpen();
 
@@ -81,8 +81,8 @@ test("updates an existing group", async () => {
     name: "Existing Group",
   };
 
-  useCreateGroupModalStore().openEditGroup(existingGroup);
   renderDeclarativeModal(CreateGroupModal);
+  useCreateGroupModalStore().openEdit(existingGroup);
 
   await CreateGroupModalView.NameInput.setValue("Updated Group");
   await CreateGroupModalView.SaveButton.click();
@@ -95,8 +95,8 @@ test("updates an existing group", async () => {
 });
 
 test("reset button clears form in create mode", async () => {
-  useCreateGroupModalStore().openCreateGroup();
   renderDeclarativeModal(CreateGroupModal);
+  useCreateGroupModalStore().openCreate();
 
   await CreateGroupModalView.NameInput.setValue("To be cleared");
   await CreateGroupModalView.ResetButton.click();
@@ -109,8 +109,8 @@ test("reset button reverts changes in edit mode", async () => {
     id: 1,
     name: "Original Name",
   };
-  useCreateGroupModalStore().openEditGroup(existingGroup);
   renderDeclarativeModal(CreateGroupModal);
+  useCreateGroupModalStore().openEdit(existingGroup);
 
   await CreateGroupModalView.NameInput.setValue("Changed Name");
   await CreateGroupModalView.ResetButton.click();
@@ -126,8 +126,8 @@ test("shows server errors on failure", async () => {
   );
   GroupServiceMocker.mockCreateGroupRejected(backendError);
 
-  useCreateGroupModalStore().openCreateGroup();
   renderDeclarativeModal(CreateGroupModal);
+  useCreateGroupModalStore().openCreate();
 
   await CreateGroupModalView.NameInput.setValue("Valid Name");
   await CreateGroupModalView.SaveButton.click();
@@ -137,8 +137,8 @@ test("shows server errors on failure", async () => {
 });
 
 test("validation: name is required", async () => {
-  useCreateGroupModalStore().openCreateGroup();
   renderDeclarativeModal(CreateGroupModal);
+  useCreateGroupModalStore().openCreate();
 
   await CreateGroupModalView.NameInput.setValue("trigger validation");
   await CreateGroupModalView.NameInput.setValue("");

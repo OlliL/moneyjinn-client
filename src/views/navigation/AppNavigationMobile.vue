@@ -161,7 +161,7 @@
               </div>
               <div
                 class="cursor-pointer flex items-center gap-2 p-2 text-sm hover:bg-accent rounded-md"
-                @click="emit('showPreDefMoneyflowModal')"
+                @click="openCreatePreDefMoneyflow()"
               >
                 {{ $t("General.preDefMoneyflow") }}
               </div>
@@ -359,6 +359,7 @@
 <script lang="ts" setup>
 import { useCreateCapitalsourceModalStore } from "@/components/capitalsource/CreateCapitalsourceModal.store";
 import { useCreateContractpartnerModalStore } from "@/components/contractpartner/CreateContractpartnerModal.store";
+import { useCreatePreDefMoneyflowModalStore } from "@/components/predefmoneyflow/CreatePreDefMoneyflowModal.store";
 import { Button } from "@/components/ui/button";
 import {
   Collapsible,
@@ -405,14 +406,17 @@ const route = useRoute();
 
 const emit = defineEmits<{
   logout: [];
-  showPreDefMoneyflowModal: [];
 }>();
 
 const isMenuActve = (menu: DropdownMenus) =>
   route.meta?.activeMenu === menu ? "router-link-active" : "";
 
-const { openCreateCapitalsource } = useCreateCapitalsourceModalStore();
-const { openCreateContractpartner } = useCreateContractpartnerModalStore();
+const { openCreate: openCreateCapitalsource } =
+  useCreateCapitalsourceModalStore();
+const { openCreate: openCreateContractpartner } =
+  useCreateContractpartnerModalStore();
+const { openCreate: openCreatePreDefMoneyflow } =
+  useCreatePreDefMoneyflowModalStore();
 </script>
 
 <style scoped>

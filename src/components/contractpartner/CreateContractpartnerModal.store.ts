@@ -1,45 +1,23 @@
 import type { Contractpartner } from "@/model/contractpartner/Contractpartner";
-import { defineStore } from "pinia";
-import { ref, watch } from "vue";
+import ContractpartnerService from "@/service/ContractpartnerService";
+import { createCreateModalStore } from "@/stores/CreateModalStoreFactory";
 
-export const useCreateContractpartnerModalStore = defineStore(
-  "createContractpartnerModal",
-  () => {
-    const open = ref(false);
-    const contractpartner = ref<Contractpartner | undefined>(undefined);
-    const onDone = ref<((entry: Contractpartner) => void) | undefined>(
-      undefined,
-    );
-
-    const openCreateContractpartner = (
-      cb?: (entry: Contractpartner) => void,
-    ) => {
-      contractpartner.value = undefined;
-      onDone.value = cb;
-      open.value = true;
-    };
-
-    const openEditContractpartner = (
-      entry: Contractpartner,
-      cb?: (entry: Contractpartner) => void,
-    ) => {
-      contractpartner.value = entry;
-      onDone.value = cb;
-      open.value = true;
-    };
-
-    watch(open, (newOpen) => {
-      if (!newOpen) {
-        contractpartner.value = undefined;
-      }
-    });
-
-    return {
-      open,
-      contractpartner,
-      onDone,
-      openCreateContractpartner,
-      openEditContractpartner,
-    };
-  },
-);
+export const useCreateContractpartnerModalStore =
+  createCreateModalStore<Contractpartner>("createContractpartnerModal", {
+    titleCreate: "Contractpartner.title.create",
+    titleUpdate: "Contractpartner.title.update",
+    createFn: (e) => ContractpartnerService.createContractpartner(e),
+    updateFn: (e) => ContractpartnerService.updateContractpartner(e),
+    getEmptyEntity: () => {
+      const beginningOfPreviousMonth = new Date();
+      beginningOfPreviousMonth.setDate(1);
+      beginningOfPreviousMonth.setHours(0, 0, 0, 0);
+      beginningOfPreviousMonth.setMonth(
+        beginningOfPreviousMonth.getMonth() - 1,
+      );
+      return {
+        validFrom: beginningOfPreviousMonth,
+        validTil: new Date("2999-12-31"),
+      } as Contractpartner;
+    },
+  });

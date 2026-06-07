@@ -145,11 +145,9 @@
           }}</span>
         </MenubarItem>
         <MenubarItem as-child>
-          <span
-            class="cursor-pointer"
-            @click="emit('showPreDefMoneyflowModal')"
-            >{{ $t("General.preDefMoneyflow") }}</span
-          >
+          <span class="cursor-pointer" @click="openCreatePreDefMoneyflow()">{{
+            $t("General.preDefMoneyflow")
+          }}</span>
         </MenubarItem>
       </MenubarContent>
     </MenubarMenu>
@@ -314,6 +312,7 @@
 <script lang="ts" setup>
 import { useCreateCapitalsourceModalStore } from "@/components/capitalsource/CreateCapitalsourceModal.store";
 import { useCreateContractpartnerModalStore } from "@/components/contractpartner/CreateContractpartnerModal.store";
+import { useCreatePreDefMoneyflowModalStore } from "@/components/predefmoneyflow/CreatePreDefMoneyflowModal.store";
 import {
   Menubar,
   MenubarContent,
@@ -350,14 +349,17 @@ const route = useRoute();
 
 const emit = defineEmits<{
   logout: [];
-  showPreDefMoneyflowModal: [];
 }>();
 
 const isMenuActve = (menu: DropdownMenus) =>
   route.meta?.activeMenu === menu ? "router-link-active" : "";
 
-const { openCreateCapitalsource } = useCreateCapitalsourceModalStore();
-const { openCreateContractpartner } = useCreateContractpartnerModalStore();
+const { openCreate: openCreateCapitalsource } =
+  useCreateCapitalsourceModalStore();
+const { openCreate: openCreateContractpartner } =
+  useCreateContractpartnerModalStore();
+const { openCreate: openCreatePreDefMoneyflow } =
+  useCreatePreDefMoneyflowModalStore();
 </script>
 
 <style scoped>

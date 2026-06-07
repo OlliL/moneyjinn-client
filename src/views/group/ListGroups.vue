@@ -26,7 +26,7 @@ import type { Group } from "@/model/group/Group";
 import GroupService from "@/service/GroupService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { onMounted, provide, ref, watch } from "vue";
-import useCreateGroupModalStore from "./elements/CreateGroupModal.store";
+import { useCreateGroupModalStore } from "./elements/CreateGroupModal.store";
 import CreateGroupModal from "./elements/CreateGroupModal.vue";
 import { useDeleteGroupModalStore } from "./elements/DeleteGroupModal.store";
 import DeleteGroupModal from "./elements/DeleteGroupModal.vue";
@@ -36,7 +36,8 @@ import ListGroupsMobile from "./elements/ListGroupsMobile.vue";
 const groups = ref(new Array<Group>());
 const allGroups = ref(new Array<Group>());
 const searchString = ref("");
-const { openCreateGroup, openEditGroup } = useCreateGroupModalStore();
+const { openCreate: openCreateGroup, openEdit: openEditGroup } =
+  useCreateGroupModalStore();
 const { openDelete: openDeleteGroup } = useDeleteGroupModalStore();
 
 const actions: CrudActions<Group> = {

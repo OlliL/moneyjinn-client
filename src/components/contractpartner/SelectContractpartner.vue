@@ -39,7 +39,8 @@ const props = withDefaults(
 );
 
 const { getAsSelectBoxValues } = useContractpartnerStore();
-const { openCreateContractpartner } = useCreateContractpartnerModalStore();
+const { openCreate: openCreateContractpartner } =
+  useCreateContractpartnerModalStore();
 
 const selectBoxValues = computed(() =>
   getAsSelectBoxValues(props.validityDate),

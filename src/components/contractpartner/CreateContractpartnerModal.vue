@@ -13,7 +13,7 @@
       >
         <div class="form-section space-y-4">
           <InputStandard
-            v-model="mcp.name"
+            v-model="mData.name"
             :validation-schema="schema.name"
             id="name-CreateContractpartner"
             :field-label="$t('General.name')"
@@ -28,13 +28,13 @@
             </span>
           </div>
           <InputStandard
-            v-model="mcp.moneyflowComment"
+            v-model="mData.moneyflowComment"
             :validation-schema="schema.moneyflowComment"
             id="moneyflowComment-CreateContractpartner"
             :field-label="$t('General.comment')"
           />
           <SelectPostingAccount
-            v-model="mcp.postingAccountId"
+            v-model="mData.postingAccountId"
             :validation-schema="schema.postingAccountId"
             id-suffix="-CreateContractpartner"
             :field-label="$t('General.postingAccount')"
@@ -49,14 +49,14 @@
             </span>
             <div class="grid grid-cols-2 gap-4 mt-2">
               <InputDate
-                v-model="mcp.validFrom"
+                v-model="mData.validFrom"
                 :validation-schema="schema.validFrom"
                 id="validFrom-CreateContractpartner"
                 :field-label="$t('General.validFrom')"
                 picker-side="top"
               />
               <InputDate
-                v-model="mcp.validTil"
+                v-model="mData.validTil"
                 :validation-schema="schema.validTil"
                 id="validTil-CreateContractpartner"
                 :field-label="$t('General.validTil')"
@@ -88,7 +88,7 @@
             <div class="grid grid-cols-3 gap-4 pt-3">
               <div class="col-span-2">
                 <InputStandard
-                  v-model="mcp.street"
+                  v-model="mData.street"
                   :validation-schema="schema.street"
                   id="street-CreateContractpartner"
                   :field-label="$t('Contractpartner.street')"
@@ -96,7 +96,7 @@
               </div>
               <div class="col-span-1">
                 <InputStandard
-                  v-model="mcp.country"
+                  v-model="mData.country"
                   :validation-schema="schema.country"
                   id="country-CreateContractpartner"
                   :field-label="$t('Contractpartner.country')"
@@ -107,7 +107,7 @@
             <div class="grid grid-cols-3 gap-4">
               <div class="col-span-1">
                 <InputStandard
-                  v-model="mcp.postcode"
+                  v-model="mData.postcode"
                   :validation-schema="schema.postcode"
                   id="postcode-CreateContractpartner"
                   :field-label="$t('Contractpartner.postcode')"
@@ -115,7 +115,7 @@
               </div>
               <div class="col-span-2">
                 <InputStandard
-                  v-model="mcp.town"
+                  v-model="mData.town"
                   :validation-schema="schema.town"
                   id="town-CreateContractpartner"
                   :field-label="$t('Contractpartner.town')"
@@ -133,7 +133,7 @@
         variant="secondary"
         class="button-with-icon hidden md:flex"
         data-testid="createContractpartnerResetButton"
-        @click="resetForm"
+        @click="resetForm(values, setFieldTouched)"
       >
         <Undo2 class="icon-medium" />
         {{ $t("General.reset") }}
@@ -153,13 +153,10 @@
 <script lang="ts" setup>
 import { Button } from "@/components/ui/button";
 import type { Contractpartner } from "@/model/contractpartner/Contractpartner";
-import ContractpartnerService from "@/service/ContractpartnerService";
-import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { globErr } from "@/tools/views/ZodUtil";
 import { ChevronDown, Save, Undo2 } from "lucide-vue-next";
 import { storeToRefs } from "pinia";
 import { useForm } from "vee-validate";
-import { computed, ref, toRaw, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { coerce, date, number, string, ZodType } from "zod";
 import ButtonSubmit from "../common/ButtonSubmit.vue";
@@ -173,6 +170,11 @@ import CollapsibleTrigger from "../ui/collapsible/CollapsibleTrigger.vue";
 import { useCreateContractpartnerModalStore } from "./CreateContractpartnerModal.store";
 
 const { t } = useI18n();
+const store = useCreateContractpartnerModalStore();
+const { open, mData, title } = storeToRefs(store);
+const { resetForm, save } = store;
+
+const { handleSubmit, values, setFieldTouched } = useForm();
 
 const schema: Partial<{ [key in keyof Contractpartner]: ZodType }> = {
   name: string(globErr(t("Contractpartner.validation.name")))
@@ -197,61 +199,5 @@ const schema: Partial<{ [key in keyof Contractpartner]: ZodType }> = {
   validFrom: date(globErr(t("General.validation.validFrom"))),
   validTil: date(globErr(t("General.validation.validTil"))),
 };
-
-const mcp = ref({} as Contractpartner);
-const origMcp = ref({} as Contractpartner | undefined);
-const { open, contractpartner, onDone } = storeToRefs(
-  useCreateContractpartnerModalStore(),
-);
-const { handleSubmit, values, setFieldTouched } = useForm();
-
-const title = computed(() =>
-  origMcp.value === undefined
-    ? t("Contractpartner.title.create")
-    : t("Contractpartner.title.update"),
-);
-
-const resetForm = () => {
-  if (origMcp.value) {
-    mcp.value = structuredClone(toRaw(origMcp.value))!;
-  } else {
-    const beginningOfPreviousMonth = new Date();
-    beginningOfPreviousMonth.setDate(1);
-    beginningOfPreviousMonth.setHours(0, 0, 0, 0);
-    beginningOfPreviousMonth.setMonth(beginningOfPreviousMonth.getMonth() - 1);
-    mcp.value = {
-      validFrom: beginningOfPreviousMonth,
-      validTil: new Date("2999-12-31"),
-    } as Contractpartner;
-  }
-  Object.keys(values).forEach((field) => setFieldTouched(field, false));
-};
-
-watch(
-  [open, contractpartner],
-  ([isVisible, entry]) => {
-    if (isVisible) {
-      origMcp.value = entry;
-      resetForm();
-    }
-  },
-  { immediate: true },
-);
-
-const createContractpartner = handleSubmit(() => {
-  const serviceCall =
-    mcp.value.id > 0
-      ? ContractpartnerService.updateContractpartner(mcp.value)
-      : ContractpartnerService.createContractpartner(mcp.value);
-
-  serviceCall
-    .then((result) => {
-      const isUpdate = mcp.value.id > 0;
-      if (!isUpdate) mcp.value = result as Contractpartner;
-
-      open.value = false;
-      onDone.value?.(mcp.value);
-    })
-    .catch(handleBackendError);
-});
+const createContractpartner = save(handleSubmit);
 </script>

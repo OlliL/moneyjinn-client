@@ -57,7 +57,7 @@ beforeEach(async () => {
 test("creates a new etf", async () => {
   CrudEtfServiceMocker.mockCreateEtfResolved({ id: 1, name: "New ETF" } as Etf);
   renderDeclarativeModal(CreateEtfModal);
-  useCreateEtfModalStore().openCreateEtf();
+  useCreateEtfModalStore().openCreate();
 
   await CreateEtfModalView.Modal.assertOpen();
 
@@ -91,7 +91,7 @@ test("updates an existing etf", async () => {
   CrudEtfService.updateEtf = vi.fn().mockResolvedValue(undefined);
 
   renderDeclarativeModal(CreateEtfModal);
-  useCreateEtfModalStore().openEditEtf(existing);
+  useCreateEtfModalStore().openEdit(existing);
 
   await CreateEtfModalView.Modal.assertOpen();
 
@@ -110,7 +110,7 @@ test("updates an existing etf", async () => {
 
 test("reset button works", async () => {
   renderDeclarativeModal(CreateEtfModal);
-  useCreateEtfModalStore().openCreateEtf();
+  useCreateEtfModalStore().openCreate();
 
   await CreateEtfModalView.Modal.assertOpen();
 
@@ -128,7 +128,7 @@ test("shows server error on failure", async () => {
   CrudEtfService.createEtf = vi.fn().mockRejectedValue(error);
 
   renderDeclarativeModal(CreateEtfModal);
-  useCreateEtfModalStore().openCreateEtf();
+  useCreateEtfModalStore().openCreate();
 
   await CreateEtfModalView.Modal.assertOpen();
 
@@ -143,7 +143,7 @@ test("shows server error on failure", async () => {
 
 test("validation: mandatory fields", async () => {
   renderDeclarativeModal(CreateEtfModal);
-  useCreateEtfModalStore().openCreateEtf();
+  useCreateEtfModalStore().openCreate();
 
   await CreateEtfModalView.Modal.assertOpen();
 
@@ -167,7 +167,7 @@ test("validation: mandatory fields", async () => {
 
 test("validation: field lengths", async () => {
   renderDeclarativeModal(CreateEtfModal);
-  useCreateEtfModalStore().openCreateEtf();
+  useCreateEtfModalStore().openCreate();
 
   await CreateEtfModalView.Modal.assertOpen();
 
