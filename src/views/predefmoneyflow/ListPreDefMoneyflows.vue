@@ -39,8 +39,10 @@ const preDefMoneyflows = ref(new Array<PreDefMoneyflow>());
 const allPreDefMoneyflows = ref(new Array<PreDefMoneyflow>());
 const searchString = ref("");
 
-const { openCreatePreDefMoneyflow, openEditPreDefMoneyflow } =
-  useCreatePreDefMoneyflowModalStore();
+const {
+  openCreate: openCreatePreDefMoneyflow,
+  openEdit: openEditPreDefMoneyflow,
+} = useCreatePreDefMoneyflowModalStore();
 const { openDelete: openDeletePreDefMoneyflow } =
   useDeletePreDefMoneyflowModalStore();
 

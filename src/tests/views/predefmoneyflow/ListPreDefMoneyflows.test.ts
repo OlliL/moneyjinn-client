@@ -115,7 +115,7 @@ test("ListPreDefMoneyflows opens create modal", async () => {
   await ListPreDefMoneyflowsView.RowOne.assertToBeVisible();
   await ListPreDefMoneyflowsView.CreateButton.click();
   expect(useCreatePreDefMoneyflowModalStore().open).toBe(true);
-  expect(useCreatePreDefMoneyflowModalStore().preDefMoneyflow).toBeUndefined();
+  expect(useCreatePreDefMoneyflowModalStore().mData.id).toBeUndefined();
 });
 
 test("ListPreDefMoneyflows opens edit modal from row action", async () => {
@@ -124,7 +124,7 @@ test("ListPreDefMoneyflows opens edit modal from row action", async () => {
   await ListPreDefMoneyflowsView.RowOne.assertToBeVisible();
   await ListPreDefMoneyflowsView.EditRowOneButton.click();
   expect(useCreatePreDefMoneyflowModalStore().open).toBe(true);
-  expect(useCreatePreDefMoneyflowModalStore().preDefMoneyflow?.id).toBe(1);
+  expect(useCreatePreDefMoneyflowModalStore().mData?.id).toBe(1);
 });
 
 test("ListPreDefMoneyflows opens delete modal from row action", async () => {
@@ -153,7 +153,7 @@ test("ListPreDefMoneyflows opens edit modal from mobile action", async () => {
   await ListPreDefMoneyflowsView.MobileRowOne.assertToBeVisible();
   await ListPreDefMoneyflowsView.MobileEditRowOneButton.click();
   expect(useCreatePreDefMoneyflowModalStore().open).toBe(true);
-  expect(useCreatePreDefMoneyflowModalStore().preDefMoneyflow?.id).toBe(1);
+  expect(useCreatePreDefMoneyflowModalStore().mData?.id).toBe(1);
 });
 
 test("ListPreDefMoneyflows opens delete modal from mobile action", async () => {

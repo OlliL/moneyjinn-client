@@ -15,7 +15,7 @@
             <div class="grid grid-cols-2 sm:grid-cols-24 gap-4">
               <div class="col-span-1 sm:col-span-7">
                 <InputStandard
-                  v-model="mpm.amount"
+                  v-model="mData.amount"
                   :validation-schema="schema.amount"
                   id="amount"
                   field-type="number"
@@ -36,9 +36,9 @@
                   <ToggleGroup
                     type="single"
                     class="border border-input bg-muted inline-flex h-8 rounded-md overflow-hidden p-0 items-stretch w-full"
-                    :model-value="mpm.onceAMonth ? 'yes' : 'no'"
+                    :model-value="mData.onceAMonth ? 'yes' : 'no'"
                     @update:model-value="
-                      (val: any) => val && (mpm.onceAMonth = val === 'yes')
+                      (val: any) => val && (mData.onceAMonth = val === 'yes')
                     "
                     id="onceAMonth"
                   >
@@ -70,10 +70,10 @@
                       <button
                         data-testid="createPreDefMoneyflowFavoriteButton"
                         type="button"
-                        @click="mpm.isFavorite = !mpm.isFavorite"
+                        @click="mData.isFavorite = !mData.isFavorite"
                         :class="[
                           'flex items-center justify-center p-1 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-8 w-8 shrink-0 transition-all z-20',
-                          mpm.isFavorite
+                          mData.isFavorite
                             ? 'rounded-l-md border-r-0'
                             : 'rounded-md',
                         ]"
@@ -82,7 +82,7 @@
                         <Star
                           class="h-5 w-5 transition-all"
                           :class="
-                            mpm.isFavorite
+                            mData.isFavorite
                               ? 'fill-primary text-primary'
                               : 'text-muted-foreground'
                           "
@@ -90,12 +90,12 @@
                       </button>
 
                       <div
-                        v-if="mpm.isFavorite"
+                        v-if="mData.isFavorite"
                         class="flex items-center h-8 border border-input rounded-r-md pl-2 md:pl-1 pr-2 gap-1 bg-muted/5 animate-in slide-in-from-left-2 duration-200"
                       >
                         <div class="w-12">
                           <InputStandard
-                            v-model="mpm.favoriteAbbreviation"
+                            v-model="mData.favoriteAbbreviation"
                             :validation-schema="schema.favoriteAbbreviation"
                             id="favoriteAbbreviation"
                             field-label=""
@@ -113,7 +113,7 @@
                               <div
                                 class="h-7.5 w-7.5 rounded-sm border cursor-pointer transition-all flex items-center justify-center shadow-sm hover:opacity-90 border-transparent"
                                 :style="{
-                                  backgroundColor: mpm.favoriteColor,
+                                  backgroundColor: mData.favoriteColor,
                                 }"
                                 data-testid="favoriteColorPicker"
                               ></div>
@@ -160,7 +160,7 @@
                       </div>
                     </div>
                     <div
-                      v-if="mpm.isFavorite"
+                      v-if="mData.isFavorite"
                       class="flex items-center gap-2 ml-auto shrink-0 h-8"
                     >
                       <span
@@ -170,7 +170,7 @@
                       </span>
                       <div class="w-12 h-8 relative shrink-0">
                         <FavoriteIcon
-                          :text="mpm.favoriteAbbreviation"
+                          :text="mData.favoriteAbbreviation"
                           :color="previewColor"
                           class="absolute top-1/2 -translate-y-1/2 left-0"
                         />
@@ -181,7 +181,7 @@
               </div>
               <div class="col-span-2 sm:col-span-12">
                 <InputStandard
-                  v-model="mpm.comment"
+                  v-model="mData.comment"
                   :validation-schema="schema.comment"
                   id="comment"
                   :field-label="$t('General.comment')"
@@ -193,7 +193,7 @@
               </div>
               <div class="col-span-2 sm:col-span-12">
                 <SelectContractpartner
-                  v-model="mpm.contractpartnerId"
+                  v-model="mData.contractpartnerId"
                   :validation-schema="schema.contractpartnerId"
                   id-suffix="CreatePreDefMoneyflow"
                   :field-label="$t('General.contractpartner')"
@@ -201,7 +201,7 @@
               </div>
               <div class="col-span-2 sm:col-span-12">
                 <SelectCapitalsource
-                  v-model="mpm.capitalsourceId"
+                  v-model="mData.capitalsourceId"
                   :validation-schema="schema.capitalsourceId"
                   id-suffix="CreatePreDefMoneyflow"
                   :field-label="$t('General.capitalsource')"
@@ -210,7 +210,7 @@
               </div>
               <div class="col-span-2 sm:col-span-12">
                 <SelectPostingAccount
-                  v-model="mpm.postingAccountId"
+                  v-model="mData.postingAccountId"
                   :validation-schema="schema.postingAccountId"
                   id-suffix="CreatePreDefMoneyflow"
                   :field-label="$t('General.postingAccount')"
@@ -228,7 +228,7 @@
         variant="secondary"
         data-testid="createPreDefMoneyflowResetButton"
         class="button-with-icon hidden md:flex"
-        @click="resetForm"
+        @click="resetForm(values, setFieldTouched)"
       >
         <Undo2 class="icon-medium" />
         {{ $t("General.reset") }}
@@ -255,8 +255,6 @@ import {
 } from "@/components/ui/popover";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import type { PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
-import PreDefMoneyflowService from "@/service/PreDefMoneyflowService";
-import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { amountSchema, globErr } from "@/tools/views/ZodUtil";
 import {
   Euro,
@@ -269,7 +267,7 @@ import {
 } from "lucide-vue-next";
 import { storeToRefs } from "pinia";
 import { useForm } from "vee-validate";
-import { computed, ref, toRaw, watch } from "vue";
+import { computed, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { boolean, number, string, type ZodType } from "zod";
 import SelectCapitalsource from "../capitalsource/SelectCapitalsource.vue";
@@ -279,12 +277,13 @@ import InputStandard from "../common/InputStandard.vue";
 import ModalVue from "../common/Modal.vue";
 import SelectContractpartner from "../contractpartner/SelectContractpartner.vue";
 import SelectPostingAccount from "../postingaccount/SelectPostingAccount.vue";
-import useCreatePreDefMoneyflowModalStore from "./CreatePreDefMoneyflowModal.store";
+import { useCreatePreDefMoneyflowModalStore } from "./CreatePreDefMoneyflowModal.store";
 
 const { t } = useI18n();
-const { open, preDefMoneyflow, onDone } = storeToRefs(
-  useCreatePreDefMoneyflowModalStore(),
-);
+const store = useCreatePreDefMoneyflowModalStore();
+const { open, mData, title } = storeToRefs(store);
+const { resetForm, save } = store;
+const { handleSubmit, values, setFieldTouched } = useForm();
 
 const schema: Partial<{ [key in keyof PreDefMoneyflow]: ZodType }> = {
   amount: amountSchema(t("Moneyflow.validation.amount")),
@@ -307,8 +306,6 @@ const schema: Partial<{ [key in keyof PreDefMoneyflow]: ZodType }> = {
   isFavorite: boolean().optional(),
 };
 
-const mpm = ref({} as PreDefMoneyflow);
-const origMpm = ref({} as PreDefMoneyflow | undefined);
 const validityDate = new Date();
 validityDate.setHours(0, 0, 0, 0);
 const isPopoverOpen = ref(false);
@@ -316,7 +313,7 @@ const randomColors = ref<string[]>([]);
 const hoveredColor = ref<string | null>(null);
 
 const previewColor = computed(
-  () => hoveredColor.value ?? mpm.value.favoriteColor,
+  () => hoveredColor.value ?? mData.value.favoriteColor,
 );
 
 const updateRandomColors = () => {
@@ -339,55 +336,21 @@ watch(isPopoverOpen, (val) => {
 });
 
 watch(
-  () => open.value,
-  (visible) => {
-    if (visible) {
-      origMpm.value = preDefMoneyflow.value ?? undefined;
-      resetForm();
+  () => mData.value.isFavorite,
+  (favorite) => {
+    if (favorite) {
+      if (!mData.value.favoriteColor) {
+        updateRandomColors();
+        mData.value.favoriteColor = randomColors.value[0];
+      }
     }
   },
 );
 
 const selectColor = (color: string) => {
-  mpm.value.favoriteColor = color;
+  mData.value.favoriteColor = color;
   isPopoverOpen.value = false;
 };
 
-const { handleSubmit, values, setFieldTouched } = useForm();
-
-const title = computed(() =>
-  origMpm.value === undefined
-    ? t("PreDefMoneyflow.title.create")
-    : t("PreDefMoneyflow.title.update"),
-);
-
-const resetForm = () => {
-  updateRandomColors();
-  if (origMpm.value) {
-    mpm.value = structuredClone(toRaw(origMpm.value))!;
-  } else {
-    mpm.value = {} as PreDefMoneyflow;
-    mpm.value.isFavorite = false;
-    mpm.value.onceAMonth = false;
-    mpm.value.favoriteAbbreviation = "";
-    mpm.value.favoriteColor = randomColors.value[0];
-  }
-  isPopoverOpen.value = false;
-  Object.keys(values).forEach((field) => setFieldTouched(field, false));
-};
-
-const createPreDefMoneyflow = handleSubmit(() => {
-  const isUpdate = mpm.value.id > 0;
-  const serviceCall = isUpdate
-    ? PreDefMoneyflowService.updatePreDefMoneyflow(mpm.value)
-    : PreDefMoneyflowService.createPreDefMoneyflow(mpm.value);
-
-  serviceCall
-    .then((result) => {
-      if (isUpdate) mpm.value = result as PreDefMoneyflow;
-      open.value = false;
-      onDone.value?.(mpm.value);
-    })
-    .catch(handleBackendError);
-});
+const createPreDefMoneyflow = save(handleSubmit);
 </script>
