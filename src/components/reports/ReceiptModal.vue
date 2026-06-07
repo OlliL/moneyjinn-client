@@ -22,7 +22,6 @@
 </template>
 
 <script lang="ts" setup>
-import type { ImportedMoneyflowReceipt } from "@/model/moneyflow/ImportedMoneyflowReceipt";
 import type { MoneyflowReceipt } from "@/model/moneyflow/MoneyflowReceipt";
 import { mapImportedMoneyflowReceiptToMoneyflowReceipt } from "@/service/mapper/ImportedToMoneyflowReceiptMapper";
 import MoneyflowReceiptService from "@/service/MoneyflowReceiptService";
@@ -45,20 +44,17 @@ watch(
   () => open.value,
   (visible) => {
     if (visible && moneyflowId.value !== undefined) {
-      const targetMoneyflowId = moneyflowId.value as number;
-      const targetImportedReceipt = importedReceipt.value as
-        | ImportedMoneyflowReceipt
-        | undefined;
-
-      MoneyflowReceiptService.fetchReceipt(targetMoneyflowId)
+      MoneyflowReceiptService.fetchReceipt(moneyflowId.value)
         .then((response) => {
           if (response.receiptType !== undefined) receipt.value = response;
-          else if (targetImportedReceipt)
+          else if (importedReceipt.value !== undefined)
             receipt.value = mapImportedMoneyflowReceiptToMoneyflowReceipt(
-              targetImportedReceipt,
+              importedReceipt.value,
             );
         })
         .catch(handleBackendError);
+    } else {
+      receipt.value = {} as MoneyflowReceipt;
     }
   },
 );

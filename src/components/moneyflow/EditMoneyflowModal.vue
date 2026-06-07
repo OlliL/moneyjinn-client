@@ -23,7 +23,7 @@
             </div>
             <div v-if="receipt.receipt && !desktop">
               <div
-                @click="showReceipt"
+                @click="openListReceipt(mmf.id, importedReceipt)"
                 class="flex items-center justify-between p-3 rounded-xl border border-dashed border-input bg-muted/40 hover:bg-muted/80 active:bg-muted transition-all cursor-pointer w-full group select-none mb-4"
               >
                 <div class="flex items-center gap-3">
@@ -189,9 +189,5 @@ const deleteMoneyflowReceipt = () => {
 const resetForm = () => {
   editMoneyflowVue.value?.resetForm();
   Object.keys(values).forEach((field) => setFieldTouched(field, false));
-};
-
-const showReceipt = () => {
-  openListReceipt(mmf.value.id);
 };
 </script>
