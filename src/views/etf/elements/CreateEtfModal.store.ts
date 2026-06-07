@@ -1,37 +1,14 @@
 import type { Etf } from "@/model/etf/Etf";
-import { defineStore } from "pinia";
-import { ref, watch } from "vue";
+import CrudEtfService from "@/service/CrudEtfService";
+import { createCreateModalStore } from "@/stores/CreateModalStoreFactory";
 
-export const useCreateEtfModalStore = defineStore("createEtfModal", () => {
-  const open = ref(false);
-  const etf = ref<Etf | undefined>(undefined);
-  const onDone = ref<(() => void) | undefined>(undefined);
-
-  const openCreateEtf = (cb?: () => void) => {
-    etf.value = undefined;
-    onDone.value = cb;
-    open.value = true;
-  };
-
-  const openEditEtf = (entry: Etf, cb?: () => void) => {
-    etf.value = entry;
-    onDone.value = cb;
-    open.value = true;
-  };
-
-  watch(open, (isOpen) => {
-    if (!isOpen) {
-      etf.value = undefined;
-    }
-  });
-
-  return {
-    open,
-    etf,
-    onDone,
-    openCreateEtf,
-    openEditEtf,
-  };
-});
-
-export default useCreateEtfModalStore;
+export const useCreateEtfModalStore = createCreateModalStore<Etf>(
+  "createEtfModal",
+  {
+    titleCreate: "ETF.title.create",
+    titleUpdate: "ETF.title.update",
+    createFn: (e) => CrudEtfService.createEtf(e),
+    updateFn: (e) => CrudEtfService.updateEtf(e),
+    getEmptyEntity: () => ({ isFavorite: false }) as Etf,
+  },
+);

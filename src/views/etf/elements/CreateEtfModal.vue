@@ -12,7 +12,7 @@
             <div class="flex items-end gap-3">
               <div class="flex-1">
                 <InputStandard
-                  v-model="met.name"
+                  v-model="mData.name"
                   :validation-schema="schema.name"
                   id="name-CreateEtf"
                   :field-label="$t('General.name')"
@@ -21,7 +21,7 @@
 
               <button
                 type="button"
-                @click="markAsFavorite = !markAsFavorite"
+                @click="mData.isFavorite = !mData.isFavorite"
                 data-testid="createEtfFavoriteButton"
                 class="flex items-center justify-center p-2 rounded-md border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 w-10 transition-colors"
                 :title="$t('General.markAsFav')"
@@ -29,7 +29,7 @@
                 <Star
                   class="h-5 w-5 transition-all"
                   :class="
-                    markAsFavorite
+                    mData.isFavorite
                       ? 'fill-primary text-primary'
                       : 'text-muted-foreground'
                   "
@@ -42,7 +42,7 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <InputStandard
-                  v-model="met.partialTaxExemption"
+                  v-model="mData.partialTaxExemption"
                   :validation-schema="schema.partialTaxExemption"
                   id="partialTaxExemption-CreateEtf"
                   field-type="number"
@@ -54,7 +54,7 @@
               </div>
               <div>
                 <InputStandard
-                  v-model="met.isin"
+                  v-model="mData.isin"
                   :validation-schema="schema.isin"
                   id="isin-CreateEtf"
                   :field-label="$t('ETF.isin')"
@@ -65,7 +65,7 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <InputStandard
-                  v-model="met.wkn"
+                  v-model="mData.wkn"
                   :validation-schema="schema.wkn"
                   id="wkn-CreateEtf"
                   :field-label="$t('ETF.wkn')"
@@ -73,7 +73,7 @@
               </div>
               <div>
                 <InputStandard
-                  v-model="met.ticker"
+                  v-model="mData.ticker"
                   :validation-schema="schema.ticker"
                   id="ticker-CreateEtf"
                   :field-label="$t('ETF.ticker')"
@@ -84,7 +84,7 @@
             <div class="grid grid-cols-1 gap-2">
               <div>
                 <InputStandard
-                  v-model="met.chartUrl"
+                  v-model="mData.chartUrl"
                   :validation-schema="schema.chartUrl"
                   id="chartUrl-CreateEtf"
                   :field-label="$t('ETF.chartUrl')"
@@ -105,7 +105,7 @@
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div>
                 <InputStandard
-                  v-model="met.transactionCostsAbsolute"
+                  v-model="mData.transactionCostsAbsolute"
                   :validation-schema="schema.transactionCostsAbsolute"
                   id="transactionCostsAbsolute-CreateEtf"
                   field-type="number"
@@ -118,7 +118,7 @@
 
               <div>
                 <InputStandard
-                  v-model="met.transactionCostsRelative"
+                  v-model="mData.transactionCostsRelative"
                   :validation-schema="schema.transactionCostsRelative"
                   id="transactionCostsRelative-CreateEtf"
                   field-type="number"
@@ -131,7 +131,7 @@
 
               <div>
                 <InputStandard
-                  v-model="met.transactionCostsMaximum"
+                  v-model="mData.transactionCostsMaximum"
                   :validation-schema="schema.transactionCostsMaximum"
                   id="transactionCostsMaximum-CreateEtf"
                   field-type="number"
@@ -152,7 +152,7 @@
         variant="secondary"
         class="button-with-icon hidden md:flex"
         data-testid="createEtfResetButton"
-        @click="resetForm"
+        @click="resetForm(values, setFieldTouched)"
       >
         <Undo2 class="icon-medium" />
         {{ $t("General.reset") }}
@@ -175,20 +175,18 @@ import InputStandard from "@/components/common/InputStandard.vue";
 import ModalVue from "@/components/common/Modal.vue";
 import { Button } from "@/components/ui/button";
 import type { Etf } from "@/model/etf/Etf";
-import CrudEtfService from "@/service/CrudEtfService";
-import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { amountSchema, globErr } from "@/tools/views/ZodUtil";
 import { Euro, Percent, Save, Star, Undo2 } from "lucide-vue-next";
 import { storeToRefs } from "pinia";
 import { useForm } from "vee-validate";
-import { computed, ref, toRaw, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { string, ZodType } from "zod";
-import useCreateEtfModalStore from "./CreateEtfModal.store";
+import { useCreateEtfModalStore } from "./CreateEtfModal.store";
 
 const { t } = useI18n();
-
-const { open, onDone } = storeToRefs(useCreateEtfModalStore());
+const store = useCreateEtfModalStore();
+const { open, mData, title } = storeToRefs(store);
+const { resetForm, save } = store;
 
 const schema: Partial<{ [key in keyof Etf]: ZodType }> = {
   isin: string(globErr(t("ETF.validation.isin")))
@@ -217,58 +215,6 @@ const schema: Partial<{ [key in keyof Etf]: ZodType }> = {
     t("ETF.validation.partialTaxExemption"),
   ).optional(),
 };
-
-const met = ref({} as Etf);
-const origMet = ref({} as Etf | undefined);
-const markAsFavorite = ref(false);
-
 const { handleSubmit, values, setFieldTouched } = useForm();
-
-const title = computed(() =>
-  origMet.value === undefined ? t("ETF.title.create") : t("ETF.title.update"),
-);
-
-const resetForm = () => {
-  if (origMet.value) {
-    met.value = structuredClone(toRaw(origMet.value))!;
-  } else {
-    met.value = {} as Etf;
-  }
-  markAsFavorite.value = !!met.value.isFavorite;
-  Object.keys(values).forEach((field) => setFieldTouched(field, false));
-};
-
-watch(
-  open,
-  (val) => {
-    if (val) {
-      origMet.value = storeToRefs(useCreateEtfModalStore()).etf.value;
-      resetForm();
-    }
-  },
-  { immediate: true },
-);
-
-const createEtf = handleSubmit(() => {
-  met.value.isFavorite = markAsFavorite.value;
-
-  if (met.value.id > 0) {
-    //update
-    CrudEtfService.updateEtf(met.value)
-      .then(() => {
-        open.value = false;
-        onDone.value?.();
-      })
-      .catch(handleBackendError);
-  } else {
-    //create
-    CrudEtfService.createEtf(met.value)
-      .then((etf) => {
-        met.value = etf;
-        open.value = false;
-        onDone.value?.();
-      })
-      .catch(handleBackendError);
-  }
-});
+const createEtf = save(handleSubmit);
 </script>
