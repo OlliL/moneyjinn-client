@@ -37,7 +37,8 @@ const props = withDefaults(
   },
 );
 
-const { openCreateCapitalsource } = useCreateCapitalsourceModalStore();
+const { openCreate: openCreateCapitalsource } =
+  useCreateCapitalsourceModalStore();
 const { getAsSelectBoxValues } = useCapitalsourceStore();
 
 const selectBoxValues = computed(() =>

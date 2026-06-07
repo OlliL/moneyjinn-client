@@ -26,7 +26,7 @@ export function createCreateModalStore<T extends { id: number }>(
     const isEditMode = computed(() => origData.value !== undefined);
 
     const title = computed(() =>
-      isEditMode.value ? t(options.titleCreate) : t(options.titleUpdate),
+      isEditMode.value ? t(options.titleUpdate) : t(options.titleCreate),
     );
 
     const resetForm = (

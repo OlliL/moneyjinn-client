@@ -1,41 +1,16 @@
 import type { Capitalsource } from "@/model/capitalsource/Capitalsource";
-import { defineStore } from "pinia";
-import { ref, watch } from "vue";
+import CapitalsourceService from "@/service/CapitalsourceService";
+import { createCreateModalStore } from "@/stores/CreateModalStoreFactory";
 
-export const useCreateCapitalsourceModalStore = defineStore(
-  "createCapitalsourceModal",
-  () => {
-    const open = ref(false);
-    const capitalsource = ref<Capitalsource | undefined>(undefined);
-    const onDone = ref<((entry: Capitalsource) => void) | undefined>(undefined);
-
-    const openCreateCapitalsource = (cb?: (entry: Capitalsource) => void) => {
-      capitalsource.value = undefined;
-      onDone.value = cb;
-      open.value = true;
-    };
-
-    const openEditCapitalsource = (
-      entry: Capitalsource,
-      cb?: (entry: Capitalsource) => void,
-    ) => {
-      capitalsource.value = entry;
-      onDone.value = cb;
-      open.value = true;
-    };
-
-    watch(open, (isOpen) => {
-      if (!isOpen) {
-        capitalsource.value = undefined;
-      }
-    });
-
-    return {
-      open,
-      capitalsource,
-      onDone,
-      openCreateCapitalsource,
-      openEditCapitalsource,
-    };
-  },
-);
+export const useCreateCapitalsourceModalStore =
+  createCreateModalStore<Capitalsource>("createCapitalsourceModal", {
+    titleCreate: "Capitalsource.title.create",
+    titleUpdate: "Capitalsource.title.update",
+    createFn: (e) => CapitalsourceService.createCapitalsource(e),
+    updateFn: (e) => CapitalsourceService.updateCapitalsource(e),
+    getEmptyEntity: () =>
+      ({
+        validFrom: new Date(),
+        validTil: new Date("2999-12-31"),
+      }) as Capitalsource,
+  });
