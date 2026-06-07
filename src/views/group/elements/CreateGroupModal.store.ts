@@ -1,37 +1,14 @@
 import type { Group } from "@/model/group/Group";
-import { defineStore } from "pinia";
-import { ref, watch } from "vue";
+import GroupService from "@/service/GroupService";
+import { createCreateModalStore } from "@/stores/CreateModalStoreFactory";
 
-export const useCreateGroupModalStore = defineStore("createGroupModal", () => {
-  const open = ref(false);
-  const group = ref<Group | undefined>(undefined);
-  const onDone = ref<(() => void) | undefined>(undefined);
-
-  const openCreateGroup = (cb?: () => void) => {
-    group.value = undefined;
-    onDone.value = cb;
-    open.value = true;
-  };
-
-  const openEditGroup = (entry: Group, cb?: () => void) => {
-    group.value = entry;
-    onDone.value = cb;
-    open.value = true;
-  };
-
-  watch(open, (isOpen) => {
-    if (!isOpen) {
-      group.value = undefined;
-    }
-  });
-
-  return {
-    open,
-    group,
-    onDone,
-    openCreateGroup,
-    openEditGroup,
-  };
-});
-
-export default useCreateGroupModalStore;
+export const useCreateGroupModalStore = createCreateModalStore<Group>(
+  "createGroupModal",
+  {
+    titleCreate: "Group.title.create",
+    titleUpdate: "Group.title.update",
+    createFn: (e) => GroupService.createGroup(e),
+    updateFn: (e) => GroupService.updateGroup(e),
+    getEmptyEntity: () => ({}) as Group,
+  },
+);

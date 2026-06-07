@@ -13,7 +13,7 @@
       >
         <div class="form-section space-y-4">
           <InputStandard
-            v-model="groupModel.name"
+            v-model="mData.name"
             :validation-schema="schema.name"
             id="name"
             :field-label="$t('General.name')"
@@ -27,7 +27,7 @@
         variant="secondary"
         class="button-with-icon hidden md:flex"
         data-testid="createGroupResetButton"
-        @click="resetForm"
+        @click="resetForm(values, setFieldTouched)"
       >
         <Undo2 class="icon-medium" />
         {{ $t("General.reset") }}
@@ -50,70 +50,23 @@ import InputStandard from "@/components/common/InputStandard.vue";
 import ModalVue from "@/components/common/Modal.vue";
 import { Button } from "@/components/ui/button";
 import type { Group } from "@/model/group/Group";
-import GroupService from "@/service/GroupService";
-import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { globErr } from "@/tools/views/ZodUtil";
 import { Save, Undo2 } from "lucide-vue-next";
 import { storeToRefs } from "pinia";
 import { useForm } from "vee-validate";
-import { computed, ref, toRaw, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { string, ZodType } from "zod";
-import useCreateGroupModalStore from "./CreateGroupModal.store";
+import { useCreateGroupModalStore } from "./CreateGroupModal.store";
 
 const { t } = useI18n();
-
-const { open, group, onDone } = storeToRefs(useCreateGroupModalStore());
-
-const groupModel = ref({} as Group);
-const origGroup = ref({} as Group | undefined);
+const store = useCreateGroupModalStore();
+const { open, mData, title } = storeToRefs(store);
+const { resetForm, save } = store;
 
 const { handleSubmit, values, setFieldTouched } = useForm();
 
 const schema: Partial<{ [key in keyof Group]: ZodType }> = {
   name: string(globErr(t("Group.validation.name"))).min(1),
 };
-
-const title = computed(() =>
-  origGroup.value === undefined
-    ? t("Group.title.create")
-    : t("Group.title.update"),
-);
-
-const resetForm = () => {
-  if (origGroup.value) {
-    groupModel.value = structuredClone(toRaw(origGroup.value))!;
-  } else {
-    groupModel.value = {} as Group;
-  }
-  Object.keys(values).forEach((field) => setFieldTouched(field, false));
-};
-
-watch(
-  open,
-  (val) => {
-    if (val) {
-      origGroup.value = group.value;
-      resetForm();
-    }
-  },
-  { immediate: true },
-);
-
-const createGroup = handleSubmit(() => {
-  const serviceCall =
-    groupModel.value.id > 0
-      ? GroupService.updateGroup(groupModel.value)
-      : GroupService.createGroup(groupModel.value);
-
-  serviceCall
-    .then((result) => {
-      const isUpdate = groupModel.value.id > 0;
-      if (!isUpdate) groupModel.value = result as Group;
-
-      open.value = false;
-      onDone.value?.();
-    })
-    .catch(handleBackendError);
-});
+const createGroup = save(handleSubmit);
 </script>

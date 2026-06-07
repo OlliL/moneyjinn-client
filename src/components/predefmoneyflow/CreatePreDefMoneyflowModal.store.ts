@@ -16,5 +16,3 @@ export const useCreatePreDefMoneyflowModalStore =
         favoriteColor: undefined,
       }) as PreDefMoneyflow,
   });
-
-export default useCreatePreDefMoneyflowModalStore;
