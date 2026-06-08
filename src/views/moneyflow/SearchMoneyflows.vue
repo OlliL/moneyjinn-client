@@ -521,6 +521,13 @@ const groupBy = (moneyflows: Array<Moneyflow>) => {
     moneyflowGroup.comment.add(moneyflow.comment);
     moneyflowGroup.moneyflows.push(moneyflow);
   }
+
+  // Sort moneyflows within each group by bookingDate
+  moneyflowGroups.value.forEach((group) => {
+    group.moneyflows.sort(
+      (a, b) => a.bookingDate.getTime() - b.bookingDate.getTime(),
+    );
+  });
 };
 
 const initializeMoneyflowGroup = (
