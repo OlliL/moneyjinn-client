@@ -261,7 +261,5 @@ export const errorMessages: Record<number, string> = {
 export function getErrorMessage(errorCode: number) {
   const message = errorMessages[errorCode];
 
-  return (
-    message ?? "Fehlertext zu Fehler-ID '" + errorCode + "' ist unbekannt!"
-  );
+  return message ?? "Unknow errorcode '" + errorCode + "'";
 }

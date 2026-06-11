@@ -1,11 +1,9 @@
-// stores/createDeleteModalStore.ts
 import { defineStore } from "pinia";
 import { ref, watch } from "vue";
 
 export function createDeleteModalStore<T>(storeId: string) {
   return defineStore(storeId, () => {
     const open = ref(false);
-    // Wir nutzen hier 'as T', damit die Entity dem Generic entspricht (wie dein {} as Moneyflow)
     const entity = ref<T>({} as T);
     const onDone = ref<((entry: T) => void) | undefined>(undefined);
 
@@ -15,7 +13,6 @@ export function createDeleteModalStore<T>(storeId: string) {
       open.value = true;
     };
 
-    // Reset beim Schließen des Modals
     watch(open, (isOpen) => {
       if (!isOpen) {
         entity.value = {} as T;
@@ -24,9 +21,9 @@ export function createDeleteModalStore<T>(storeId: string) {
 
     return {
       open,
-      entity, // generischer Name statt 'moneyflow'
+      entity,
       onDone,
-      openDelete, // einheitlicher Name statt 'openDeleteMoneyflow'
+      openDelete,
     };
   });
 }
