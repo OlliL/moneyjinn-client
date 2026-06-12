@@ -53,7 +53,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { GroupActionsKey } from "@/model/CrudActions";
 import type { Group } from "@/model/group/Group";
-import { Pencil, Trash2 } from "lucide-vue-next";
+import { Pencil, Trash2 } from "@lucide/vue";
 import { inject } from "vue";
 
 defineProps<{

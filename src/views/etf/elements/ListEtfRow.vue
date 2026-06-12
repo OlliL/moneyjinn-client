@@ -41,7 +41,7 @@ import { TableCell, TableRow } from "@/components/ui/table";
 import { EtfActionsKey } from "@/model/CrudActions";
 import type { Etf } from "@/model/etf/Etf";
 import { formatNumber } from "@/tools/views/FormatNumber";
-import { Pencil, Star, Trash2 } from "lucide-vue-next";
+import { Pencil, Star, Trash2 } from "@lucide/vue";
 import { computed, inject } from "vue";
 
 const props = defineProps<{

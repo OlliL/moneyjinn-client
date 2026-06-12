@@ -124,7 +124,7 @@ import {
 } from "@/components/ui/table";
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 import { Routes } from "@/router";
-import { ChevronDown, ChevronRight } from "lucide-vue-next";
+import { ChevronDown, ChevronRight } from "@lucide/vue";
 import { ref } from "vue";
 
 type MoneyflowGroup = {

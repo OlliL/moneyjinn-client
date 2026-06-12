@@ -140,7 +140,7 @@ import MoneyflowService from "@/service/MoneyflowService";
 import { useCapitalsourceStore } from "@/stores/CapitalsourceStore";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { globErr } from "@/tools/views/ZodUtil";
-import { Eye } from "lucide-vue-next";
+import { Eye } from "@lucide/vue";
 import { useForm } from "vee-validate";
 import { computed, onMounted, provide, ref } from "vue";
 import { useI18n } from "vue-i18n";

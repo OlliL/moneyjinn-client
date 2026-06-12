@@ -38,7 +38,7 @@ import SpanDate from "@/components/common/SpanDate.vue";
 import { TableCell, TableRow } from "@/components/ui/table";
 import type { ContractpartnerMatching } from "@/model/contractpartnermatching/ContractpartnerMatching";
 import { ContractpartnerMatchingActionsKey } from "@/model/CrudActions";
-import { Pencil, Trash2 } from "lucide-vue-next";
+import { Pencil, Trash2 } from "@lucide/vue";
 import { inject } from "vue";
 
 defineProps<{

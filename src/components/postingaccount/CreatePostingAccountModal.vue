@@ -48,7 +48,7 @@
 import { Button } from "@/components/ui/button";
 import type { PostingAccount } from "@/model/postingaccount/PostingAccount";
 import { globErr } from "@/tools/views/ZodUtil";
-import { Save, Undo2 } from "lucide-vue-next";
+import { Save, Undo2 } from "@lucide/vue";
 import { storeToRefs } from "pinia";
 import { useForm } from "vee-validate";
 import { useI18n } from "vue-i18n";

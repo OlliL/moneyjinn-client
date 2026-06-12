@@ -91,7 +91,7 @@ import type { PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
 import { preDefMoneyflowAlreadyUsedThisMonth } from "@/model/moneyflow/PreDefMoneyflow";
 import PreDefMoneyflowService from "@/service/PreDefMoneyflowService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
-import { Save, Undo2 } from "lucide-vue-next";
+import { Save, Undo2 } from "@lucide/vue";
 import { type AcceptableValue } from "reka-ui";
 import { useForm } from "vee-validate";
 import { onMounted, ref, useTemplateRef } from "vue";

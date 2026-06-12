@@ -105,7 +105,7 @@ import { mapImportedMoneyflowReceiptToMoneyflowReceipt } from "@/service/mapper/
 import MoneyflowReceiptService from "@/service/MoneyflowReceiptService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { isDesktop } from "@/tools/views/IsDesktop";
-import { Eye, ReceiptText, Save, Trash2, Undo2 } from "lucide-vue-next";
+import { Eye, ReceiptText, Save, Trash2, Undo2 } from "@lucide/vue";
 import { storeToRefs } from "pinia";
 import { useForm } from "vee-validate";
 import { computed, ref, toRaw, useTemplateRef, watch } from "vue";

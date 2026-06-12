@@ -19,7 +19,7 @@
 </template>
 
 <script lang="ts" setup>
-import { Pencil, Trash2 } from "lucide-vue-next";
+import { Pencil, Trash2 } from "@lucide/vue";
 import { inject } from "vue";
 
 import { TableCell, TableRow } from "@/components/ui/table";

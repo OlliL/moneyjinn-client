@@ -59,7 +59,7 @@ import SpanDate from "@/components/common/SpanDate.vue";
 import { TableCell, TableRow } from "@/components/ui/table";
 import { PreDefMoneyflowActionsKey } from "@/model/CrudActions";
 import type { PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
-import { Pencil, Trash2 } from "lucide-vue-next";
+import { Pencil, Trash2 } from "@lucide/vue";
 import { inject } from "vue";
 
 defineProps<{

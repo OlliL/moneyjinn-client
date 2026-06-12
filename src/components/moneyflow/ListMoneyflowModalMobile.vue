@@ -195,7 +195,7 @@ import {
   MessageSquareMore,
   ReceiptText,
   Tag,
-} from "lucide-vue-next";
+} from "@lucide/vue";
 import { storeToRefs } from "pinia";
 import { computed, ref, toRaw, watch } from "vue";
 import ModalVue from "../common/Modal.vue";

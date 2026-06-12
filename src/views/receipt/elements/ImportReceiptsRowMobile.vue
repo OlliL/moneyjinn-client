@@ -110,7 +110,7 @@ import {
   MessageSquareMore,
   Pencil,
   Trash2,
-} from "lucide-vue-next";
+} from "@lucide/vue";
 import { computed } from "vue";
 
 const props = defineProps<{

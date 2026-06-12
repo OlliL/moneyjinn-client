@@ -228,7 +228,7 @@ import { toFixed } from "@/tools/math";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { isDesktop } from "@/tools/views/IsDesktop";
 import { amountSchema, globErr } from "@/tools/views/ZodUtil";
-import { Euro, MessageSquareMore, Plus } from "lucide-vue-next";
+import { Euro, MessageSquareMore, Plus } from "@lucide/vue";
 import { computed, onMounted, ref, toRaw, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { date, number, string } from "zod";

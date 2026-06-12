@@ -268,7 +268,7 @@ import {
   ArrowUpDown,
   ArrowUpNarrowWide,
   X,
-} from "lucide-vue-next";
+} from "@lucide/vue";
 
 const props = defineProps<{
   moneyflows: Moneyflow[];

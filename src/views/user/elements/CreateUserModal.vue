@@ -198,7 +198,7 @@ import GroupService from "@/service/GroupService";
 import UserService from "@/service/UserService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { globErr } from "@/tools/views/ZodUtil";
-import { Save, Undo2 } from "lucide-vue-next";
+import { Save, Undo2 } from "@lucide/vue";
 import { storeToRefs } from "pinia";
 import { useForm } from "vee-validate";
 import { computed, ref, toRaw, watch } from "vue";

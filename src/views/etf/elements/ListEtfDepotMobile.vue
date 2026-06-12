@@ -105,7 +105,7 @@ import { EtfFlowActionsKey } from "@/model/CrudActions";
 import type { EtfFlow } from "@/model/etf/EtfFlow";
 import { formatDateWithTime } from "@/tools/views/FormatDate";
 import { formatNumber, redIfNegative } from "@/tools/views/FormatNumber";
-import { Pencil, Trash2 } from "lucide-vue-next";
+import { Pencil, Trash2 } from "@lucide/vue";
 import { inject } from "vue";
 
 defineProps<{

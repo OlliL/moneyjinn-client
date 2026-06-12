@@ -240,7 +240,7 @@ import {
   ReceiptText,
   Tag,
   Trash2,
-} from "lucide-vue-next";
+} from "@lucide/vue";
 import { computed, inject } from "vue";
 
 const props = withDefaults(

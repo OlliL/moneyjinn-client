@@ -358,6 +358,7 @@ import { useEtfStore } from "@/stores/EtfStore";
 import { formatNumber } from "@/tools/views/FormatNumber";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { globErr } from "@/tools/views/ZodUtil";
+import { ChevronDown, Eye, SlidersHorizontal } from "@lucide/vue";
 import {
   CategoryScale,
   Chart as ChartJS,
@@ -369,7 +370,6 @@ import {
   Title,
   Tooltip,
 } from "chart.js";
-import { ChevronDown, Eye, SlidersHorizontal } from "lucide-vue-next";
 import { useForm } from "vee-validate";
 import { computed, onMounted, ref } from "vue";
 import { Line } from "vue-chartjs";

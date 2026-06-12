@@ -15,7 +15,7 @@
 </template>
 
 <script lang="ts" setup>
-import { Copy } from "lucide-vue-next";
+import { Copy } from "@lucide/vue";
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 import { toast } from "vue-sonner";

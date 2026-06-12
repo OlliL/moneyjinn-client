@@ -143,7 +143,7 @@ import { capitalsourceStateValues } from "@/model/capitalsource/CapitalsourceSta
 import { capitalsourceTypeValues } from "@/model/capitalsource/CapitalsourceType";
 import type { SelectBoxValue } from "@/model/SelectBoxValue";
 import { globErr } from "@/tools/views/ZodUtil";
-import { Save, Undo2 } from "lucide-vue-next";
+import { Save, Undo2 } from "@lucide/vue";
 import { storeToRefs } from "pinia";
 import { useForm } from "vee-validate";
 import { useI18n } from "vue-i18n";

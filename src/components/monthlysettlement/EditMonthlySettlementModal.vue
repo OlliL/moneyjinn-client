@@ -135,7 +135,7 @@ import type { MonthlySettlementEditTransporter } from "@/model/monthlysettlement
 import MonthlySettlementService from "@/service/MonthlySettlementService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { amountSchema, globErr } from "@/tools/views/ZodUtil";
-import { Euro } from "lucide-vue-next";
+import { Euro } from "@lucide/vue";
 import { storeToRefs } from "pinia";
 import { useForm } from "vee-validate";
 import { ref, watch } from "vue";

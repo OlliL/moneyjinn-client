@@ -139,7 +139,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { Switch } from "@/components/ui/switch";
-import { Filter, PlusSquare, X } from "lucide-vue-next";
+import { Filter, PlusSquare, X } from "@lucide/vue";
 import { computed, onBeforeUnmount, ref } from "vue";
 import ButtonMobileCreate from "./ButtonMobileCreate.vue";
 import InputStandard from "./InputStandard.vue";

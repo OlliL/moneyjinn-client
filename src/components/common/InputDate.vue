@@ -76,8 +76,8 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { CalendarDays } from "@lucide/vue";
 import { toTypedSchema } from "@vee-validate/zod";
-import { CalendarDays } from "lucide-vue-next";
 import { Datepicker } from "vanillajs-datepicker";
 // @ts-ignore
 import de from "vanillajs-datepicker/locales/de";

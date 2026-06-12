@@ -67,7 +67,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import type { Etf } from "@/model/etf/Etf";
-import { Star } from "lucide-vue-next";
+import { Star } from "@lucide/vue";
 import ListEtfRowVue from "./ListEtfRow.vue";
 
 defineProps<{

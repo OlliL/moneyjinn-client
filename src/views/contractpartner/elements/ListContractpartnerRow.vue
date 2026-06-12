@@ -43,7 +43,7 @@
 </template>
 
 <script lang="ts" setup>
-import { Banknote, Pencil, Trash2 } from "lucide-vue-next";
+import { Banknote, Pencil, Trash2 } from "@lucide/vue";
 import { inject } from "vue";
 
 import ButtonTableIcon from "@/components/common/ButtonTableIcon.vue";

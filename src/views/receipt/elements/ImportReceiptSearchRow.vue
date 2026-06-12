@@ -72,7 +72,7 @@ import { RadioGroupItem } from "@/components/ui/radio-group";
 import { TableCell, TableRow } from "@/components/ui/table";
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 import { useUserSessionStore } from "@/stores/UserSessionStore";
-import { Eye, Pencil, Trash2 } from "lucide-vue-next";
+import { Eye, Pencil, Trash2 } from "@lucide/vue";
 import { computed } from "vue";
 const props = defineProps<{
   mmf: Moneyflow;

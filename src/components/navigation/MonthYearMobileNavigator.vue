@@ -155,7 +155,7 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 import { getMonthName } from "@/tools/views/MonthName";
-import { CalendarDays, ChevronLeft, ChevronRight } from "lucide-vue-next";
+import { CalendarDays, ChevronLeft, ChevronRight } from "@lucide/vue";
 import { computed, ref } from "vue";
 
 const props = withDefaults(

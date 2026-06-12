@@ -234,6 +234,7 @@ import { formatNumber } from "@/tools/views/FormatNumber";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { getMonthName } from "@/tools/views/MonthName";
 import { globErr } from "@/tools/views/ZodUtil";
+import { Eye } from "@lucide/vue";
 import {
   BarElement,
   CategoryScale,
@@ -243,7 +244,6 @@ import {
   Title,
   Tooltip,
 } from "chart.js";
-import { Eye } from "lucide-vue-next";
 import { useForm } from "vee-validate";
 import { computed, onMounted, ref, watch } from "vue";
 import { Bar } from "vue-chartjs";

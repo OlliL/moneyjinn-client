@@ -108,7 +108,7 @@ import { useEtfStore } from "@/stores/EtfStore";
 import { formatTime } from "@/tools/views/FormatDate";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { amountSchema, globErr } from "@/tools/views/ZodUtil";
-import { Euro, Save, Undo2 } from "lucide-vue-next";
+import { Euro, Save, Undo2 } from "@lucide/vue";
 import { storeToRefs } from "pinia";
 import { useForm } from "vee-validate";
 import { computed, ref, toRaw, watch } from "vue";

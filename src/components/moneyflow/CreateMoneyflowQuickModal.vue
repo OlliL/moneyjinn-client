@@ -126,7 +126,7 @@ import {
   Euro,
   MessageSquareMore,
   Save,
-} from "lucide-vue-next";
+} from "@lucide/vue";
 import { storeToRefs } from "pinia";
 import { useForm } from "vee-validate";
 import { ref, watch } from "vue";

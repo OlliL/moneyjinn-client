@@ -108,7 +108,7 @@ import { CapitalsourceState } from "@/model/capitalsource/CapitalsourceState";
 import type { ReportTurnoverCapitalsource } from "@/model/report/ReportTurnoverCapitalsource";
 import { useCapitalsourceStore } from "@/stores/CapitalsourceStore";
 import { useUserSessionStore } from "@/stores/UserSessionStore";
-import { Coins } from "lucide-vue-next";
+import { Coins } from "@lucide/vue";
 import { computed } from "vue";
 import CapitalsourceTableMobileRow from "./CapitalsourceTableMobileRow.vue";
 import { useCapitalsourceSums } from "./useCapitalsourceSums";

@@ -100,7 +100,7 @@
 </template>
 
 <script lang="ts" setup>
-import { Pencil, PlusSquare, Trash2 } from "lucide-vue-next";
+import { Pencil, PlusSquare, Trash2 } from "@lucide/vue";
 import { provide, ref, watch } from "vue";
 
 import { Button } from "@/components/ui/button";

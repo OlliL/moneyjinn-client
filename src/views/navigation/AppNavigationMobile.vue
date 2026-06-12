@@ -392,7 +392,7 @@ import {
   SquareUserRound,
   Table2,
   Wrench,
-} from "lucide-vue-next";
+} from "@lucide/vue";
 import { ref } from "vue";
 import { useRoute } from "vue-router";
 import { version } from "../../../package.json";

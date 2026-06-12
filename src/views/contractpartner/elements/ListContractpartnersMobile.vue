@@ -110,7 +110,7 @@ import {
   OpenContractpartnerAccountsActionKey,
 } from "@/model/CrudActions";
 import type { Contractpartner } from "@/model/contractpartner/Contractpartner";
-import { Banknote, Pencil, Trash2 } from "lucide-vue-next";
+import { Banknote, Pencil, Trash2 } from "@lucide/vue";
 import { inject } from "vue";
 
 defineProps<{

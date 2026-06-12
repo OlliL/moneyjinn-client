@@ -114,8 +114,8 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import type { SelectBoxValue } from "@/model/SelectBoxValue";
+import { X } from "@lucide/vue";
 import { toTypedSchema } from "@vee-validate/zod";
-import { X } from "lucide-vue-next";
 import { useField } from "vee-validate";
 import {
   computed,

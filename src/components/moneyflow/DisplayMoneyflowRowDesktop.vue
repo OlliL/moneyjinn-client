@@ -126,7 +126,7 @@ import { TableCell, TableRow } from "@/components/ui/table";
 import { MoneyflowRowActionsKey } from "@/model/CrudActions";
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 import { useUserSessionStore } from "@/stores/UserSessionStore";
-import { Clock, Eye, Pencil, ReceiptText, Trash2 } from "lucide-vue-next";
+import { Clock, Eye, Pencil, ReceiptText, Trash2 } from "@lucide/vue";
 import { computed, inject } from "vue";
 
 const props = defineProps<{

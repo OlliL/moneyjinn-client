@@ -96,7 +96,7 @@ import EditMoneyflowBase from "@/components/moneyflow/EditMoneyflowBase.vue";
 import type { ImportedMoneyflow } from "@/model/moneyflow/ImportedMoneyflow";
 
 import ButtonDeleteTwoTap from "@/components/common/ButtonDeleteTwoTap.vue";
-import { Save } from "lucide-vue-next";
+import { Save } from "@lucide/vue";
 
 const props = defineProps<{
   importedMoneyflow: ImportedMoneyflow;

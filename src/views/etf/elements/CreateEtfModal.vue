@@ -176,7 +176,7 @@ import ModalVue from "@/components/common/Modal.vue";
 import { Button } from "@/components/ui/button";
 import type { Etf } from "@/model/etf/Etf";
 import { amountSchema, globErr } from "@/tools/views/ZodUtil";
-import { Euro, Percent, Save, Star, Undo2 } from "lucide-vue-next";
+import { Euro, Percent, Save, Star, Undo2 } from "@lucide/vue";
 import { storeToRefs } from "pinia";
 import { useForm } from "vee-validate";
 import { useI18n } from "vue-i18n";

@@ -53,7 +53,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { PostingAccountActionsKey } from "@/model/CrudActions";
 import type { PostingAccount } from "@/model/postingaccount/PostingAccount";
-import { Pencil, Trash2 } from "lucide-vue-next";
+import { Pencil, Trash2 } from "@lucide/vue";
 import { inject } from "vue";
 
 defineProps<{

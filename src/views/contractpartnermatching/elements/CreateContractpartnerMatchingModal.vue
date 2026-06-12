@@ -85,7 +85,7 @@ import SelectPostingAccount from "@/components/postingaccount/SelectPostingAccou
 import { Button } from "@/components/ui/button";
 import type { ContractpartnerMatching } from "@/model/contractpartnermatching/ContractpartnerMatching";
 import { globErr } from "@/tools/views/ZodUtil";
-import { Save, Undo2 } from "lucide-vue-next";
+import { Save, Undo2 } from "@lucide/vue";
 import { storeToRefs } from "pinia";
 import { useForm } from "vee-validate";
 import { useI18n } from "vue-i18n";

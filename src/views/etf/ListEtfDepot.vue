@@ -144,7 +144,7 @@ import EtfService from "@/service/EtfService";
 import { useEtfStore } from "@/stores/EtfStore";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { globErr } from "@/tools/views/ZodUtil";
-import { Filter, PlusSquare } from "lucide-vue-next";
+import { Filter, PlusSquare } from "@lucide/vue";
 import { computed, onMounted, provide, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { number } from "zod";

@@ -13,7 +13,7 @@
     "test:ci": "vitest run"
   },
   "dependencies": {
-    "@lucide/vue": "^1.17.0",
+    "@lucide/vue": "^1.18.0",
     "@stomp/stompjs": "^7.0.0",
     "@tailwindcss/vite": "^4.3.0",
     "@tanstack/vue-table": "^8.21.3",
@@ -25,7 +25,6 @@
     "chart.js": "^4.1.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
-    "lucide-vue-next": "^1.0.0",
     "pinia": "^3.0.2",
     "pinia-plugin-persistedstate": "^4.3.0",
     "pinia-shared-state": "^2.0.1",

@@ -75,8 +75,8 @@ import MonthYearDesktopNavigator from "@/components/navigation/MonthYearDesktopN
 import { Button } from "@/components/ui/button";
 import type { EtfPreliminaryLumpSum } from "@/model/etf/EtfPreliminaryLumpSum";
 import type { SelectBoxValue } from "@/model/SelectBoxValue";
+import { PlusSquare, SquarePen, Trash2 } from "@lucide/vue";
 import { onClickOutside } from "@vueuse/core";
-import { PlusSquare, SquarePen, Trash2 } from "lucide-vue-next";
 import { ref } from "vue";
 
 const selectedEtfId = defineModel<number | undefined>("selectedEtfId");

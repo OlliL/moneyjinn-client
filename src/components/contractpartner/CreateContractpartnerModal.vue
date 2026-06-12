@@ -154,7 +154,7 @@
 import { Button } from "@/components/ui/button";
 import type { Contractpartner } from "@/model/contractpartner/Contractpartner";
 import { globErr } from "@/tools/views/ZodUtil";
-import { ChevronDown, Save, Undo2 } from "lucide-vue-next";
+import { ChevronDown, Save, Undo2 } from "@lucide/vue";
 import { storeToRefs } from "pinia";
 import { useForm } from "vee-validate";
 import { useI18n } from "vue-i18n";

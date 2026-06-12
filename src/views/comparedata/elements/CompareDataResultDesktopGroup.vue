@@ -91,7 +91,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import type { CompareData } from "@/model/comparedata/CompareData";
-import { ChevronDown, ChevronRight } from "lucide-vue-next";
+import { ChevronDown, ChevronRight } from "@lucide/vue";
 import { computed, ref } from "vue";
 import CompareDataResultDesktopRowVue from "./CompareDataResultDesktopRow.vue";
 

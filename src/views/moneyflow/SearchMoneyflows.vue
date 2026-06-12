@@ -317,7 +317,7 @@ import {
 } from "@/model/CrudActions.ts";
 import MoneyflowService from "@/service/MoneyflowService";
 import { isDesktop } from "@/tools/views/IsDesktop";
-import { ChevronDown, Search, SlidersHorizontal, Undo2 } from "lucide-vue-next";
+import { ChevronDown, Search, SlidersHorizontal, Undo2 } from "@lucide/vue";
 
 const { t } = useI18n();
 

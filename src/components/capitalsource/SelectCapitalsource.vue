@@ -13,7 +13,7 @@
 </template>
 
 <script lang="ts" setup>
-import { SquarePlus } from "lucide-vue-next";
+import { SquarePlus } from "@lucide/vue";
 import { computed } from "vue";
 import { any, type ZodType } from "zod";
 

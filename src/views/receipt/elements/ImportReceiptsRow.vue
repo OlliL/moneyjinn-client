@@ -205,7 +205,7 @@ import MoneyflowService from "@/service/MoneyflowService";
 import { toFixed } from "@/tools/math";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { amountSchema, globErr } from "@/tools/views/ZodUtil";
-import { Euro, Save, Search } from "lucide-vue-next";
+import { Euro, Save, Search } from "@lucide/vue";
 import { useForm } from "vee-validate";
 import { computed, inject, nextTick, onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";

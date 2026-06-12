@@ -63,7 +63,7 @@ import AlertTitle from "@/components/ui/alert/AlertTitle.vue";
 import ImportedMoneyflowService from "@/service/ImportedMoneyflowService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { isDesktop } from "@/tools/views/IsDesktop";
-import { CheckCircle2 } from "lucide-vue-next";
+import { CheckCircle2 } from "@lucide/vue";
 
 import ImportMoneyflowsDesktop from "./elements/ImportMoneyflowsDesktop.vue";
 import ImportMoneyflowsMobile from "./elements/ImportMoneyflowsMobile.vue";

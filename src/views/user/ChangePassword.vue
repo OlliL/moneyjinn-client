@@ -73,7 +73,7 @@ import { ErrorCode, getErrorMessage } from "@/model/ErrorCode";
 
 import ButtonSubmit from "@/components/common/ButtonSubmit.vue";
 import UserService from "@/service/UserService";
-import { Save } from "lucide-vue-next";
+import { Save } from "@lucide/vue";
 import { useForm } from "vee-validate";
 
 const { t } = useI18n();

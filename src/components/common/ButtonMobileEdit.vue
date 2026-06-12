@@ -13,7 +13,7 @@
 
 <script lang="ts" setup>
 import { Button } from "@/components/ui/button";
-import { SquarePen } from "lucide-vue-next";
+import { SquarePen } from "@lucide/vue";
 
 defineProps<{
   dataTestid: string;

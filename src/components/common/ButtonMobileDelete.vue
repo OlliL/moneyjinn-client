@@ -14,7 +14,7 @@
 
 <script lang="ts" setup>
 import { Button } from "@/components/ui/button";
-import { Trash2 } from "lucide-vue-next";
+import { Trash2 } from "@lucide/vue";
 
 defineProps<{
   dataTestid: string;

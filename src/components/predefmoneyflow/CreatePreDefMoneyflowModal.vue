@@ -264,7 +264,7 @@ import {
   Star,
   Undo2,
   X,
-} from "lucide-vue-next";
+} from "@lucide/vue";
 import { storeToRefs } from "pinia";
 import { useForm } from "vee-validate";
 import { computed, ref, watch } from "vue";

@@ -109,7 +109,7 @@ import type { CompareDataDataset } from "@/model/comparedata/CompareDataDataset"
 import { CompareDataActionsKey } from "@/model/CrudActions";
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 import { useUserSessionStore } from "@/stores/UserSessionStore";
-import { Pencil, Plus, Trash2 } from "lucide-vue-next";
+import { Pencil, Plus, Trash2 } from "@lucide/vue";
 import { computed, inject } from "vue";
 
 const props = defineProps<{

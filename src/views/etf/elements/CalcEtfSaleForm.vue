@@ -123,7 +123,7 @@ import type { EtfSummary } from "@/model/etf/EtfSummary";
 import EtfService from "@/service/EtfService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { amountSchema } from "@/tools/views/ZodUtil";
-import { Euro, Percent } from "lucide-vue-next";
+import { Euro, Percent } from "@lucide/vue";
 import { useForm } from "vee-validate";
 import { ref, watch } from "vue";
 import { useI18n } from "vue-i18n";

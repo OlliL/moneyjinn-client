@@ -31,7 +31,7 @@
   </Button>
 </template>
 <script setup lang="ts">
-import { AlertTriangle, Trash2, X } from "lucide-vue-next";
+import { AlertTriangle, Trash2, X } from "@lucide/vue";
 import { ref } from "vue";
 import Button from "../ui/button/Button.vue";
 

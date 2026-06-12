@@ -15,7 +15,7 @@
 <script lang="ts" setup>
 import { usePostingAccountStore } from "@/stores/PostingAccountStore";
 import { useUserSessionStore } from "@/stores/UserSessionStore";
-import { SquarePlus } from "lucide-vue-next";
+import { SquarePlus } from "@lucide/vue";
 import { computed, type Ref } from "vue";
 import { any, type ZodType } from "zod";
 import SelectStandard from "../common/SelectStandard.vue";

@@ -99,7 +99,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { amountSchema, globErr } from "@/tools/views/ZodUtil";
-import { ArrowLeft, Euro, MessageSquareMore, Trash2 } from "lucide-vue-next";
+import { ArrowLeft, Euro, MessageSquareMore, Trash2 } from "@lucide/vue";
 import { computed, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { any, number, string } from "zod";

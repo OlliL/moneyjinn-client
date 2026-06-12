@@ -76,7 +76,7 @@ import {
 } from "@/components/ui/drawer";
 import { dismissServerErrors } from "@/tools/views/HandleBackendError";
 import { isDesktop } from "@/tools/views/IsDesktop";
-import { X } from "lucide-vue-next";
+import { X } from "@lucide/vue";
 import { computed, watch } from "vue";
 
 const props = withDefaults(

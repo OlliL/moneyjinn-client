@@ -86,7 +86,7 @@ import router, { Routes } from "@/router";
 import EventService from "@/service/EventService";
 import PreDefMoneyflowService from "@/service/PreDefMoneyflowService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
-import { AlertCircle, CheckCircle2 } from "lucide-vue-next";
+import { AlertCircle, CheckCircle2 } from "@lucide/vue";
 import { h, onMounted, ref } from "vue";
 import { toast } from "vue-sonner";
 

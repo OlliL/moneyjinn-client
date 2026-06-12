@@ -24,7 +24,7 @@
   </Button>
 </template>
 <script lang="ts" setup>
-import { ChevronLeft, ChevronRight } from "lucide-vue-next";
+import { ChevronLeft, ChevronRight } from "@lucide/vue";
 import Button from "../ui/button/Button.vue";
 
 defineProps<{

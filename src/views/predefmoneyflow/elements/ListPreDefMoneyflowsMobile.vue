@@ -122,7 +122,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { PreDefMoneyflowActionsKey } from "@/model/CrudActions";
 import type { PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
-import { Pencil, Trash2 } from "lucide-vue-next";
+import { Pencil, Trash2 } from "@lucide/vue";
 import { inject } from "vue";
 
 defineProps<{

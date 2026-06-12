@@ -68,7 +68,7 @@ import {
   handleBackendError,
   showServerError,
 } from "@/tools/views/HandleBackendError";
-import { Lock, LogIn, User } from "lucide-vue-next";
+import { Lock, LogIn, User } from "@lucide/vue";
 import { useForm } from "vee-validate";
 import { onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";

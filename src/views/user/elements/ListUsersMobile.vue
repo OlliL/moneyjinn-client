@@ -76,7 +76,7 @@ import { Button } from "@/components/ui/button";
 import { UserActionsKey } from "@/model/CrudActions";
 import type { User } from "@/model/user/User";
 import { userRoleNames } from "@/model/user/UserRole";
-import { Pencil, Trash2 } from "lucide-vue-next";
+import { Pencil, Trash2 } from "@lucide/vue";
 import { inject } from "vue";
 
 defineProps<{
