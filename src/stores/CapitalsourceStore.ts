@@ -69,28 +69,16 @@ export const useCapitalsourceStore = defineStore("capitalsource", () => {
   };
 
   const getAsSelectBoxValues = (validityDate: Date): Array<SelectBoxValue> =>
-    capitalsource.value
-      .filter(
-        (mcs) =>
-          validityDate >= mcs.validFrom &&
-          validityDate <= mcs.validTil &&
-          mcs.type != CapitalsourceType.CREDIT &&
-          (mcs.userId === getUserId.value || mcs.groupUse),
-      )
-      .map((mcs) => ({ id: mcs.id, value: mcs.comment }) as SelectBoxValue);
+    getBookableValidCapitalsources(validityDate).map((mcs) => ({
+      id: mcs.id,
+      value: mcs.comment,
+    }));
 
   const getAllAsSelectBoxValues = (): Array<SelectBoxValue> =>
-    capitalsource.value.map(
-      (mcs) => ({ id: mcs.id, value: mcs.comment }) as SelectBoxValue,
-    );
+    capitalsource.value.map((mcs) => ({ id: mcs.id, value: mcs.comment }));
 
   const getCapitalsource = (id: number): Capitalsource | undefined =>
     capitalsource.value.find((mcp) => mcp.id === id);
-
-  const getValidCapitalsource = (validityDate: Date) =>
-    capitalsource.value.filter(
-      (mcp) => validityDate >= mcp.validFrom && validityDate <= mcp.validTil,
-    );
 
   const getBookableValidCapitalsources = (validityDate: Date) =>
     capitalsource.value.filter(
@@ -109,7 +97,9 @@ export const useCapitalsourceStore = defineStore("capitalsource", () => {
     if (validNow) {
       const date = new Date();
       date.setHours(0, 0, 0, 0);
-      mcs = getValidCapitalsource(date);
+      mcs = capitalsource.value.filter(
+        (mcp) => date >= mcp.validFrom && date <= mcp.validTil,
+      );
     }
 
     if (comment === "") {
@@ -149,7 +139,6 @@ export const useCapitalsourceStore = defineStore("capitalsource", () => {
     getAsSelectBoxValues,
     getAllAsSelectBoxValues,
     getCapitalsource,
-    getValidCapitalsource,
     getBookableValidCapitalsources,
     searchCapitalsources,
     compareCapitalsource,

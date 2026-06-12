@@ -311,10 +311,7 @@ watch(
 );
 
 watch(
-  [
-    () => mmf.value.postingAccountId,
-    () => postingAccountStore.getPostingAccount,
-  ],
+  [() => mmf.value.postingAccountId, () => postingAccountStore.postingAccount],
   ([newId, accounts]) => {
     if (newId !== undefined && newId > 0 && accounts && accounts.length > 0) {
       mmf.value.postingAccountName =
@@ -410,7 +407,7 @@ const resetEditForm = () => {
   // Ensure names are synced after cloning, as the watcher might not trigger if IDs remain unchanged
   if (mmf.value.postingAccountId > 0) {
     mmf.value.postingAccountName =
-      postingAccountStore.getPostingAccount.find(
+      postingAccountStore.postingAccount.find(
         (pa) => pa.id === mmf.value.postingAccountId,
       )?.name ?? "";
   }

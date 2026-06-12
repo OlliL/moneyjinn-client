@@ -141,7 +141,7 @@ class ReportService extends AbstractService {
     const showReportingFormResponse = response.data;
 
     const postingAccountStore = usePostingAccountStore();
-    const postingAccounts = postingAccountStore.getPostingAccount;
+    const postingAccounts = postingAccountStore.postingAccount;
 
     let postingAccountsYes: Array<PostingAccount> | undefined;
     let postingAccountsNo: Array<PostingAccount> | undefined;

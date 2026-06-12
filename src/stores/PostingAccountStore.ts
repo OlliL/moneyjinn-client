@@ -10,10 +10,6 @@ import { computed, ref } from "vue";
 export const usePostingAccountStore = defineStore("postingAccount", () => {
   const postingAccount = ref([] as Array<PostingAccount>);
 
-  const getPostingAccount = computed(
-    (): Array<PostingAccount> => postingAccount.value,
-  );
-
   const getAsSelectBoxValues = computed(
     (): Array<SelectBoxValue> =>
       postingAccount.value.map((mpa) => ({ id: mpa.id, value: mpa.name })),
@@ -47,7 +43,7 @@ export const usePostingAccountStore = defineStore("postingAccount", () => {
           const pos = postingAccount.value.findIndex(
             (entry) => entry.id === mpa.id,
           );
-          if (pos === undefined) {
+          if (pos === -1) {
             postingAccount.value.push(mpa);
           } else {
             postingAccount.value.splice(pos, 1, mpa);
@@ -58,7 +54,7 @@ export const usePostingAccountStore = defineStore("postingAccount", () => {
           const pos = postingAccount.value.findIndex(
             (entry) => entry.id === mpa.id,
           );
-          if (pos !== undefined) postingAccount.value.splice(pos, 1, mpa);
+          if (pos !== -1) postingAccount.value.splice(pos, 1, mpa);
           break;
         }
         case "DELETE": {
@@ -90,7 +86,6 @@ export const usePostingAccountStore = defineStore("postingAccount", () => {
 
   return {
     postingAccount,
-    getPostingAccount,
     getAsSelectBoxValues,
     initPostingAccountStore,
     subscribeToWebsocket,

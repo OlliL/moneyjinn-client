@@ -39,7 +39,7 @@ export const useContractpartnerStore = defineStore("contractpartner", () => {
           const pos = contractpartner.value.findIndex(
             (entry) => entry.id === mcp.id,
           );
-          if (pos === undefined) {
+          if (pos === -1) {
             contractpartner.value.push(mcp);
           } else {
             contractpartner.value.splice(pos, 1, mcp);
@@ -50,7 +50,7 @@ export const useContractpartnerStore = defineStore("contractpartner", () => {
           const pos = contractpartner.value.findIndex(
             (entry) => entry.id === mcp.id,
           );
-          if (pos !== undefined) contractpartner.value.splice(pos, 1, mcp);
+          if (pos !== -1) contractpartner.value.splice(pos, 1, mcp);
           break;
         }
         case "DELETE": {

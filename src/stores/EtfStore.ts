@@ -33,7 +33,7 @@ export const useEtfStore = defineStore("etf", () => {
         case "CREATE": {
           // idempotency
           const pos = etf.value.findIndex((entry) => entry.id === met.id);
-          if (pos === undefined) {
+          if (pos === -1) {
             etf.value.push(met);
           } else {
             etf.value.splice(pos, 1, met);
@@ -42,7 +42,7 @@ export const useEtfStore = defineStore("etf", () => {
         }
         case "UPDATE": {
           const pos = etf.value.findIndex((entry) => entry.id === met.id);
-          if (pos !== undefined) etf.value.splice(pos, 1, met);
+          if (pos !== -1) etf.value.splice(pos, 1, met);
           break;
         }
         case "DELETE": {
@@ -58,9 +58,7 @@ export const useEtfStore = defineStore("etf", () => {
   }
 
   function getAsSelectBoxValues(): Array<SelectBoxValue> {
-    return etf.value.map(
-      (mcs) => ({ id: mcs.id, value: mcs.name }) as SelectBoxValue,
-    );
+    return etf.value.map((mcs) => ({ id: mcs.id, value: mcs.name }));
   }
 
   async function searchEtfs(comment: string): Promise<Array<Etf>> {

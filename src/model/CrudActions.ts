@@ -18,7 +18,6 @@ export interface CrudActions<T> {
   delete: (item: T) => void;
 }
 
-// Einheitlicher Typ für lokale Domain-Modal-Aktionen.
 export interface LocalCrudModalActions<T> extends CrudActions<T> {}
 
 export type OpenContractpartnerAccountsAction = (item: Contractpartner) => void;
@@ -29,7 +28,6 @@ export interface MonthlySettlementModalActions {
   delete: () => void;
 }
 
-// Domänen-spezifische Keys
 export const CapitalsourceActionsKey: InjectionKey<
   LocalCrudModalActions<Capitalsource>
 > = Symbol("CapitalsourceActions");
@@ -91,7 +89,7 @@ export const MoneyflowRowActionsKey: InjectionKey<MoneyflowRowActions> = Symbol(
 );
 
 export interface ImportReceiptRowActions {
-  list: (id: number, receipt: ImportedMoneyflowReceipt) => void; // bzw. was openEditMoneyflow zurückgibt
+  list: (id: number, receipt: ImportedMoneyflowReceipt) => void;
   edit: (id: number, receipt: ImportedMoneyflowReceipt) => void;
   delete: (id: number) => void;
   removeReceipt: (id: number) => void;
