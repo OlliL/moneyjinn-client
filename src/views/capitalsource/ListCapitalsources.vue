@@ -32,6 +32,7 @@ import type { Capitalsource } from "@/model/capitalsource/Capitalsource";
 import { CapitalsourceActionsKey, type CrudActions } from "@/model/CrudActions";
 import { useCapitalsourceStore } from "@/stores/CapitalsourceStore";
 import { useUserSessionStore } from "@/stores/UserSessionStore";
+import { storeToRefs } from "pinia";
 import { onMounted, provide, ref, watch } from "vue";
 import { useDeleteCapitalsourceModalStore } from "./elements/DeleteCapitalsourceModal.store";
 import DeleteCapitalsourceModal from "./elements/DeleteCapitalsourceModal.vue";
@@ -45,11 +46,17 @@ const searchString = ref("");
 const userId = useUserSessionStore().getUserId;
 
 const capitalsourceStore = useCapitalsourceStore();
+const { capitalsource } = storeToRefs(capitalsourceStore);
 const searchCapitalsources = capitalsourceStore.searchCapitalsources;
 const { openDelete: openDeleteCapitalsource } =
   useDeleteCapitalsourceModalStore();
 const { openCreate: openCreateCapitalsource, openEdit: openEditCapitalsource } =
   useCreateCapitalsourceModalStore();
+
+watch(capitalsource, () => {
+  searchContent();
+  if (capitalsource.value.length == 0) searchAllContent();
+});
 
 watch(searchString, () => {
   searchContent();
