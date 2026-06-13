@@ -229,13 +229,6 @@ const searchExecuted = ref(false);
 const searchSuccessful = ref(false);
 const selectedMoneyflowId = ref(0);
 
-const emit = defineEmits<{
-  deleteMoneyflow: [id: number];
-  editMoneyflow: [id: number, receipt: ImportedMoneyflowReceipt];
-  listMoneyflow: [id: number, receipt: ImportedMoneyflowReceipt];
-  removeReceiptFromView: [id: number];
-}>();
-
 const props = defineProps<{
   receipt: ImportedMoneyflowReceipt;
 }>();
@@ -301,7 +294,7 @@ const importReceipt = () => {
     selectedMoneyflowId.value,
   )
     .then(() => {
-      emit("removeReceiptFromView", props.receipt.id);
+      importReceiptActions.removeReceipt(props.receipt.id);
     })
     .catch(handleBackendError);
 };
