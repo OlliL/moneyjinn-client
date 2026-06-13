@@ -1,39 +1,43 @@
-// Page object according to team convention
 import { BackendError, BackendErrorType } from "@/model/BackendError";
+import ImportedMoneyflowReceiptService from "@/service/ImportedMoneyflowReceiptService";
 import ImportedMoneyflowReceiptServiceMocker from "@/service/mocker/ImportedMoneyflowReceiptServiceMocker";
 import MoneyflowServiceMocker from "@/service/mocker/MoneyflowServiceMocker";
-import { setupUserStandard } from "@/tests/TestUtil";
+import MoneyflowService from "@/service/MoneyflowService";
+import {
+  assertHaveBeenCalled,
+  assertHaveBeenCalledWith,
+  setupUserStandard,
+} from "@/tests/TestUtil";
 import {
   ButtonView,
   FileUploadView,
   RadioView,
+  RowView,
   ToastView,
 } from "@/tests/TestViews";
 import ImportReceipts from "@/views/receipt/ImportReceipts.vue";
-import { render, waitFor } from "@testing-library/vue";
+import { render } from "@testing-library/vue";
 import { createPinia, setActivePinia } from "pinia";
 import { beforeEach, expect, test, vi } from "vitest";
 
 class ImportReceiptsView {
-  static readonly UploadForm = new ButtonView("importReceipts-upload-form");
-  static readonly FileInput = new FileUploadView("fileUpload");
+  static readonly UploadForm = new RowView("importReceipts-upload-form");
+  static readonly FileInput = new FileUploadView("importReceipts-file-input");
   static readonly UploadButton = new ButtonView("importReceipts-upload-button");
   static readonly Toast = new ToastView();
-  // Returns all imported receipt rows (test IDs: importReceipts-row-<id>)
-  static getReceiptRows() {
-    // Only the main elements with exact ID (no filebox/filename)
-    return Array.from(document.querySelectorAll("[data-testid]")).filter((el) =>
-      /^importReceipts-row-\d+$/.test(el.getAttribute("data-testid") || ""),
-    );
-  }
-  static async assertReceiptCount(count: number) {
-    await waitFor(() => {
-      expect(ImportReceiptsView.getReceiptRows().length).toBe(count);
-    });
-  }
+
+  static readonly Row1 = new RowView("importReceipts-row-1");
+  static readonly Row2 = new RowView("importReceipts-row-2");
+  static readonly Row3 = new RowView("importReceipts-row-3");
+  static readonly Row4 = new RowView("importReceipts-row-4");
+
+  static readonly MoneyflowRadio1 = new RadioView("moneyflow-radio-1");
+  static readonly MoneyflowRadio2 = new RadioView("moneyflow-radio-2");
+  static readonly MoneyflowRadio42 = new RadioView("moneyflow-radio-42");
 }
 
 vi.mock("@/service/MoneyflowService");
+vi.mock("@/service/ImportedMoneyflowReceiptService");
 
 const mockReceipts = [
   {
@@ -53,16 +57,31 @@ const mockReceipts = [
 beforeEach(async () => {
   setActivePinia(createPinia());
   vi.clearAllMocks();
+
+  // Polyfill for JSDOM missing File.prototype.arrayBuffer
+  if (!File.prototype.arrayBuffer) {
+    File.prototype.arrayBuffer = function (this: File) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result as ArrayBuffer);
+        reader.onerror = reject;
+        reader.readAsArrayBuffer(this);
+      });
+    };
+  }
+
   ImportedMoneyflowReceiptServiceMocker.mockShowImportImportedMoneyflowReceipts(
     [...mockReceipts],
   );
+  ImportedMoneyflowReceiptServiceMocker.mockCreateImportedMoneyflowReceiptsResolved();
   MoneyflowServiceMocker.mockFetchMoneyflowById((id) => ({ id }));
   setupUserStandard();
 });
 
 test("renders imported receipts list", async () => {
   render(ImportReceipts);
-  await ImportReceiptsView.assertReceiptCount(2);
+  await ImportReceiptsView.Row1.assertToBeVisible();
+  await ImportReceiptsView.Row2.assertToBeVisible();
 });
 
 test("renders empty state if no receipts", async () => {
@@ -70,20 +89,33 @@ test("renders empty state if no receipts", async () => {
     [],
   );
   render(ImportReceipts);
-  await ImportReceiptsView.assertReceiptCount(0);
+  await ImportReceiptsView.Row1.assertNotToBeInDocument();
+  await ImportReceiptsView.Row2.assertNotToBeInDocument();
 });
 
 test("calls uploadReceipts on form submit and uploads file", async () => {
   render(ImportReceipts);
   const file = new File(["test"], "test.pdf", { type: "application/pdf" });
   await ImportReceiptsView.FileInput.selectFile(file);
+
   await ImportReceiptsView.UploadButton.click();
-  // Robust: Form still exists
-  await ImportReceiptsView.UploadForm.assertToBeVisible();
+
+  await assertHaveBeenCalled(
+    ImportedMoneyflowReceiptService.createImportedMoneyflowReceipts,
+  );
+  await assertHaveBeenCalledWith(
+    ImportedMoneyflowReceiptService.createImportedMoneyflowReceipts,
+    [
+      expect.objectContaining({
+        filename: "test.pdf",
+        id: 0,
+        mediaType: "application/pdf",
+      }),
+    ],
+  );
 });
 
 test("shows error message on backend error", async () => {
-  // Simulate a real BackendError as expected in the code
   const error = new BackendError(
     BackendErrorType.ERROR,
     undefined,
@@ -112,23 +144,24 @@ test("shows search and auto-selects single matching moneyflow", async () => {
       id: 42,
       amount: 12.34,
       contractpartnerName: "Test Partner",
+      comment: "Test Comment",
       userId: 1,
-      invoiceDate: undefined,
-      comment: "",
-      private: false,
-      bookingDate: new Date(),
-      capitalsourceId: 1,
-      contractpartnerId: 1,
-      postingAccountId: 1,
-      hasReceipt: false,
     },
   ]);
 
   render(ImportReceipts);
 
-  // Simulate search (auto-executed if filename contains amount)
-  await ImportReceiptsView.assertReceiptCount(1);
-  await new RadioView("moneyflow-radio-42").assertChecked();
+  await ImportReceiptsView.Row3.assertToBeVisible();
+
+  // Verify that the search was auto-triggered by filename "1234.pdf" (12.34)
+  await assertHaveBeenCalledWith(
+    MoneyflowService.searchMoneyflowsByAmount,
+    12.34,
+    expect.any(Date),
+    expect.any(Date),
+  );
+
+  await ImportReceiptsView.MoneyflowRadio42.assertChecked();
 });
 
 test("shows search and does not auto-select if multiple moneyflows", async () => {
@@ -149,10 +182,10 @@ test("shows search and does not auto-select if multiple moneyflows", async () =>
 
   render(ImportReceipts);
 
-  await ImportReceiptsView.assertReceiptCount(1);
-  // Verify that both radio buttons are not checked
-  await new RadioView("moneyflow-radio-1").assertUnchecked();
-  await new RadioView("moneyflow-radio-2").assertUnchecked();
-});
+  await ImportReceiptsView.Row4.assertToBeVisible();
 
-// The following tests access the VM object and are no longer reasonably testable with Testing-Library.
+  await assertHaveBeenCalled(MoneyflowService.searchMoneyflowsByAmount);
+
+  await ImportReceiptsView.MoneyflowRadio1.assertUnchecked();
+  await ImportReceiptsView.MoneyflowRadio2.assertUnchecked();
+});

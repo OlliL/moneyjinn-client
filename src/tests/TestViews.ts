@@ -538,12 +538,11 @@ export class SelectView extends AbstractView {
 }
 
 export class FileUploadView extends AbstractView {
-  async selectFile(file: File): Promise<void> {
+  async selectFile(file: File | File[]): Promise<void> {
     const testId = this.getRequiredTestId("selectFile");
     const element = await this.findByTestId<HTMLElement>(testId);
-    Object.defineProperty(element, "files", { value: [file] });
-    // Trigger change event
-    await fireEvent.change(element);
+    const user = this.createUser();
+    await user.upload(element, file);
   }
 }
 

@@ -9,7 +9,6 @@
       :id="id"
       :data-testid="id"
       multiple
-      ref="fileUpload"
       :class="[
         'file:mr-2 file:cursor-pointer file:rounded-md file:border file:border-input file:bg-background file:px-2 file:py-1 file:text-sm file:font-medium hover:file:bg-accent',
         isInvalid
@@ -33,7 +32,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toTypedSchema } from "@vee-validate/zod";
 import { useField } from "vee-validate";
-import { computed, useTemplateRef, type Ref } from "vue";
+import { computed, type Ref } from "vue";
 import { any, type ZodType } from "zod";
 
 const props = withDefaults(
@@ -48,7 +47,6 @@ const props = withDefaults(
   },
 );
 const model = defineModel<FileList | null | undefined>();
-const fileUpload = useTemplateRef<HTMLInputElement>("fileUpload");
 
 const schema = computed(() => {
   if (props.validationSchemaRef) {
@@ -67,7 +65,7 @@ const {
 });
 
 const onInput = (event: Event) => {
-  const files = fileUpload.value?.files;
+  const files = (event.target as HTMLInputElement).files;
 
   setState({ touched: true });
   handleChange(event, true);
