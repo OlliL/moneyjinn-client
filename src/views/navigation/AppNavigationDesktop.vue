@@ -302,7 +302,7 @@
         as-child
         class="cursor-pointer"
         :title="$t('General.logout')"
-        @click="emit('logout')"
+        @click="$emit('logout')"
         ><span><LogOut class="m-2 text-muted-foreground" /></span
       ></MenubarTrigger>
     </MenubarMenu>
@@ -347,7 +347,7 @@ const month = new Date().getMonth() + 1;
 const { isAdmin } = useUserSessionStore();
 const route = useRoute();
 
-const emit = defineEmits<{
+defineEmits<{
   logout: [];
 }>();
 

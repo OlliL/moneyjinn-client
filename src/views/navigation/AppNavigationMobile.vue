@@ -345,7 +345,7 @@
 
           <div
             class="flex items-center gap-2 p-1 cursor-pointer"
-            @click="emit('logout')"
+            @click="$emit('logout')"
           >
             <LogOut :size="20" />
             {{ $t("General.logout") }}
@@ -404,7 +404,7 @@ const month = new Date().getMonth() + 1;
 const { isAdmin } = useUserSessionStore();
 const route = useRoute();
 
-const emit = defineEmits<{
+defineEmits<{
   logout: [];
 }>();
 
