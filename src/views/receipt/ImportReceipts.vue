@@ -16,8 +16,7 @@
             <InputFile
               class="md:col-span-8"
               v-model="files"
-              id="fileUpload"
-              data-testid="importReceipts-file-input"
+              id="importReceipts-file-input"
             />
             <ButtonSubmit
               class="md:col-span-4"

@@ -1,39 +1,76 @@
-// Page object according to team convention
 import { BackendError, BackendErrorType } from "@/model/BackendError";
+import ImportedMoneyflowReceiptService from "@/service/ImportedMoneyflowReceiptService";
 import ImportedMoneyflowReceiptServiceMocker from "@/service/mocker/ImportedMoneyflowReceiptServiceMocker";
 import MoneyflowServiceMocker from "@/service/mocker/MoneyflowServiceMocker";
-import { setupUserStandard } from "@/tests/TestUtil";
+import MoneyflowService from "@/service/MoneyflowService";
+import {
+  assertHaveBeenCalled,
+  assertHaveBeenCalledWith,
+  setupUserStandard,
+} from "@/tests/TestUtil";
 import {
   ButtonView,
   FileUploadView,
+  InputView,
   RadioView,
+  RowView,
+  TextView,
   ToastView,
 } from "@/tests/TestViews";
 import ImportReceipts from "@/views/receipt/ImportReceipts.vue";
-import { render, waitFor } from "@testing-library/vue";
+import { render } from "@testing-library/vue";
 import { createPinia, setActivePinia } from "pinia";
 import { beforeEach, expect, test, vi } from "vitest";
 
 class ImportReceiptsView {
-  static readonly UploadForm = new ButtonView("importReceipts-upload-form");
-  static readonly FileInput = new FileUploadView("fileUpload");
+  static readonly UploadForm = new RowView("importReceipts-upload-form");
+  static readonly FileInput = new FileUploadView("importReceipts-file-input");
   static readonly UploadButton = new ButtonView("importReceipts-upload-button");
   static readonly Toast = new ToastView();
-  // Returns all imported receipt rows (test IDs: importReceipts-row-<id>)
-  static getReceiptRows() {
-    // Only the main elements with exact ID (no filebox/filename)
-    return Array.from(document.querySelectorAll("[data-testid]")).filter((el) =>
-      /^importReceipts-row-\d+$/.test(el.getAttribute("data-testid") || ""),
-    );
-  }
-  static async assertReceiptCount(count: number) {
-    await waitFor(() => {
-      expect(ImportReceiptsView.getReceiptRows().length).toBe(count);
-    });
-  }
+
+  static readonly Row1 = new RowView("importReceipts-row-1");
+  static readonly Row2 = new RowView("importReceipts-row-2");
+  static readonly Row3 = new RowView("importReceipts-row-3");
+  static readonly Row4 = new RowView("importReceipts-row-4");
+
+  static readonly Row1SearchButton = new ButtonView("searchReceipt1-submit");
+  static readonly Row1AmountInput = new InputView(
+    "importReceipts-row-amount-1",
+  );
+  static readonly Row1ApplyButton = new ButtonView(
+    "importReceipts-row-apply-1",
+  );
+  static readonly Row1DeleteButton = new ButtonView(
+    "importReceipts-row-delete-1",
+  );
+
+  static readonly MoneyflowRadio1 = new RadioView("moneyflow-radio-1");
+  static readonly MoneyflowRadio2 = new RadioView("moneyflow-radio-2");
+  static readonly MoneyflowRadio42 = new RadioView("moneyflow-radio-42");
+
+  static readonly SearchResultEdit42 = new ButtonView(
+    "import-receipt-search-result-edit-42",
+  );
+  static readonly SearchResultDelete42 = new ButtonView(
+    "import-receipt-search-result-delete-42",
+  );
+  static readonly SearchResultList99 = new ButtonView(
+    "import-receipt-search-result-list-99",
+  );
+  static readonly SearchResultEdit99 = new ButtonView(
+    "import-receipt-search-result-edit-99",
+  );
+  static readonly SearchResultDelete99 = new ButtonView(
+    "import-receipt-search-result-delete-99",
+  );
+
+  static readonly NoResultsMessage = new TextView(
+    /No Matching Transactions Found!/,
+  );
 }
 
 vi.mock("@/service/MoneyflowService");
+vi.mock("@/service/ImportedMoneyflowReceiptService");
 
 const mockReceipts = [
   {
@@ -53,16 +90,17 @@ const mockReceipts = [
 beforeEach(async () => {
   setActivePinia(createPinia());
   vi.clearAllMocks();
+
   ImportedMoneyflowReceiptServiceMocker.mockShowImportImportedMoneyflowReceipts(
     [...mockReceipts],
   );
-  MoneyflowServiceMocker.mockFetchMoneyflowById((id) => ({ id }));
   setupUserStandard();
 });
 
 test("renders imported receipts list", async () => {
   render(ImportReceipts);
-  await ImportReceiptsView.assertReceiptCount(2);
+  await ImportReceiptsView.Row1.assertToBeVisible();
+  await ImportReceiptsView.Row2.assertToBeVisible();
 });
 
 test("renders empty state if no receipts", async () => {
@@ -70,20 +108,34 @@ test("renders empty state if no receipts", async () => {
     [],
   );
   render(ImportReceipts);
-  await ImportReceiptsView.assertReceiptCount(0);
+  await ImportReceiptsView.Row1.assertNotToBeInDocument();
+  await ImportReceiptsView.Row2.assertNotToBeInDocument();
 });
 
 test("calls uploadReceipts on form submit and uploads file", async () => {
+  ImportedMoneyflowReceiptServiceMocker.mockCreateImportedMoneyflowReceiptsResolved();
   render(ImportReceipts);
   const file = new File(["test"], "test.pdf", { type: "application/pdf" });
   await ImportReceiptsView.FileInput.selectFile(file);
+
   await ImportReceiptsView.UploadButton.click();
-  // Robust: Form still exists
-  await ImportReceiptsView.UploadForm.assertToBeVisible();
+
+  await assertHaveBeenCalled(
+    ImportedMoneyflowReceiptService.createImportedMoneyflowReceipts,
+  );
+  await assertHaveBeenCalledWith(
+    ImportedMoneyflowReceiptService.createImportedMoneyflowReceipts,
+    [
+      expect.objectContaining({
+        filename: "test.pdf",
+        id: 0,
+        mediaType: "application/pdf",
+      }),
+    ],
+  );
 });
 
 test("shows error message on backend error", async () => {
-  // Simulate a real BackendError as expected in the code
   const error = new BackendError(
     BackendErrorType.ERROR,
     undefined,
@@ -112,23 +164,24 @@ test("shows search and auto-selects single matching moneyflow", async () => {
       id: 42,
       amount: 12.34,
       contractpartnerName: "Test Partner",
+      comment: "Test Comment",
       userId: 1,
-      invoiceDate: undefined,
-      comment: "",
-      private: false,
-      bookingDate: new Date(),
-      capitalsourceId: 1,
-      contractpartnerId: 1,
-      postingAccountId: 1,
-      hasReceipt: false,
     },
   ]);
 
   render(ImportReceipts);
 
-  // Simulate search (auto-executed if filename contains amount)
-  await ImportReceiptsView.assertReceiptCount(1);
-  await new RadioView("moneyflow-radio-42").assertChecked();
+  await ImportReceiptsView.Row3.assertToBeVisible();
+
+  // Verify that the search was auto-triggered by filename "1234.pdf" (12.34)
+  await assertHaveBeenCalledWith(
+    MoneyflowService.searchMoneyflowsByAmount,
+    12.34,
+    expect.any(Date),
+    expect.any(Date),
+  );
+
+  await ImportReceiptsView.MoneyflowRadio42.assertChecked();
 });
 
 test("shows search and does not auto-select if multiple moneyflows", async () => {
@@ -149,10 +202,158 @@ test("shows search and does not auto-select if multiple moneyflows", async () =>
 
   render(ImportReceipts);
 
-  await ImportReceiptsView.assertReceiptCount(1);
-  // Verify that both radio buttons are not checked
-  await new RadioView("moneyflow-radio-1").assertUnchecked();
-  await new RadioView("moneyflow-radio-2").assertUnchecked();
+  await ImportReceiptsView.Row4.assertToBeVisible();
+
+  await assertHaveBeenCalled(MoneyflowService.searchMoneyflowsByAmount);
+
+  await ImportReceiptsView.MoneyflowRadio1.assertUnchecked();
+  await ImportReceiptsView.MoneyflowRadio2.assertUnchecked();
 });
 
-// The following tests access the VM object and are no longer reasonably testable with Testing-Library.
+test("manual search triggers moneyflow search", async () => {
+  // Mock search result for a specific manual search
+  MoneyflowServiceMocker.mockSearchMoneyflowsByAmountResolved([
+    { id: 42, amount: 99.99, contractpartnerName: "Manual Search" },
+  ]);
+
+  render(ImportReceipts);
+
+  await ImportReceiptsView.Row1.assertToBeVisible();
+  await ImportReceiptsView.Row1AmountInput.setValue("99.99");
+  await ImportReceiptsView.Row1SearchButton.click();
+
+  await assertHaveBeenCalledWith(
+    MoneyflowService.searchMoneyflowsByAmount,
+    99.99,
+    expect.any(Date),
+    expect.any(Date),
+  );
+  await ImportReceiptsView.MoneyflowRadio42.assertToBeVisible();
+});
+
+test("shows message when search returns no results", async () => {
+  MoneyflowServiceMocker.mockSearchMoneyflowsByAmountResolved([]);
+
+  render(ImportReceipts);
+
+  await ImportReceiptsView.Row1.assertToBeVisible();
+  await ImportReceiptsView.Row1AmountInput.setValue("0.00");
+  await ImportReceiptsView.Row1SearchButton.click();
+
+  await ImportReceiptsView.NoResultsMessage.assertInDocument();
+});
+
+test("assigns receipt to selected moneyflow (apply)", async () => {
+  ImportedMoneyflowReceiptServiceMocker.mockImportImportedMoneyflowReceiptResolved();
+  // receipt.id=1 matches Row1
+  MoneyflowServiceMocker.mockSearchMoneyflowsByAmountResolved([
+    { id: 42, amount: 10.0, contractpartnerName: "Partner" },
+  ]);
+
+  render(ImportReceipts);
+
+  // Row 1 automatically searches if filename was numeric, but here we trigger manually to be sure
+  await ImportReceiptsView.Row1AmountInput.setValue("10.00");
+  await ImportReceiptsView.Row1SearchButton.click();
+
+  await ImportReceiptsView.MoneyflowRadio42.assertToBeVisible();
+  // Radio 42 is likely auto-selected since it's the only one
+  await ImportReceiptsView.Row1ApplyButton.click();
+
+  await assertHaveBeenCalledWith(
+    ImportedMoneyflowReceiptService.importImportedMoneyflowReceipt,
+    1, // receipt.id
+    42, // moneyflow.id
+  );
+  // After success, the row should be removed from view
+  await ImportReceiptsView.Row1.assertNotToBeInDocument();
+});
+
+test("deletes an imported receipt", async () => {
+  ImportedMoneyflowReceiptServiceMocker.mockDeleteImportedMoneyflowReceiptByIdResolved();
+  render(ImportReceipts);
+
+  await ImportReceiptsView.Row1.assertToBeVisible();
+
+  // ButtonDeleteTwoTap needs two clicks
+  await ImportReceiptsView.Row1DeleteButton.click();
+  await ImportReceiptsView.Row1DeleteButton.click();
+
+  await assertHaveBeenCalledWith(
+    ImportedMoneyflowReceiptService.deleteImportedMoneyflowReceiptById,
+    1,
+  );
+  await ImportReceiptsView.Row1.assertNotToBeInDocument();
+});
+
+test("shows action buttons based on moneyflow ownership", async () => {
+  // 1. Mock search results: one owned by current user (id=1), one foreign
+  MoneyflowServiceMocker.mockSearchMoneyflowsByAmountResolved([
+    { id: 42, amount: 10, userId: 1, contractpartnerName: "My MMF" }, // Own
+    { id: 99, amount: 10, userId: 2, contractpartnerName: "Foreign MMF" }, // Foreign
+  ]);
+
+  render(ImportReceipts);
+
+  await ImportReceiptsView.Row1AmountInput.setValue("10.00");
+  await ImportReceiptsView.Row1SearchButton.click();
+
+  // Own MMF: Edit and Delete should be visible
+  await ImportReceiptsView.SearchResultEdit42.assertToBeVisible();
+  await ImportReceiptsView.SearchResultDelete42.assertToBeVisible();
+
+  // Foreign MMF: Only List/Eye should be visible (ID 99)
+  await ImportReceiptsView.SearchResultList99.assertToBeVisible();
+
+  // Verify that Edit/Delete are NOT there for foreign MMF
+  await ImportReceiptsView.SearchResultEdit99.assertNotToBeInDocument();
+  await ImportReceiptsView.SearchResultDelete99.assertNotToBeInDocument();
+});
+
+test("triggers edit moneyflow action", async () => {
+  MoneyflowServiceMocker.mockSearchMoneyflowsByAmountResolved([
+    { id: 42, amount: 10, userId: 1, contractpartnerName: "My MMF" },
+  ]);
+  MoneyflowServiceMocker.mockFetchMoneyflowById((id) => ({ id }));
+
+  render(ImportReceipts);
+
+  await ImportReceiptsView.Row1AmountInput.setValue("10.00");
+  await ImportReceiptsView.Row1SearchButton.click();
+
+  await ImportReceiptsView.SearchResultEdit42.click();
+
+  await assertHaveBeenCalledWith(MoneyflowService.fetchMoneyflow, 42);
+});
+
+test("triggers delete moneyflow action", async () => {
+  MoneyflowServiceMocker.mockSearchMoneyflowsByAmountResolved([
+    { id: 42, amount: 10, userId: 1, contractpartnerName: "My MMF" },
+  ]);
+  MoneyflowServiceMocker.mockFetchMoneyflowById((id) => ({ id }));
+
+  render(ImportReceipts);
+
+  await ImportReceiptsView.Row1AmountInput.setValue("10.00");
+  await ImportReceiptsView.Row1SearchButton.click();
+
+  await ImportReceiptsView.SearchResultDelete42.click();
+
+  await assertHaveBeenCalledWith(MoneyflowService.fetchMoneyflow, 42);
+});
+
+test("triggers list moneyflow action", async () => {
+  MoneyflowServiceMocker.mockSearchMoneyflowsByAmountResolved([
+    { id: 99, amount: 10, userId: 2, contractpartnerName: "Foreign MMF" },
+  ]);
+  MoneyflowServiceMocker.mockFetchMoneyflowById((id) => ({ id }));
+
+  render(ImportReceipts);
+
+  await ImportReceiptsView.Row1AmountInput.setValue("10.00");
+  await ImportReceiptsView.Row1SearchButton.click();
+
+  await ImportReceiptsView.SearchResultList99.click();
+
+  await assertHaveBeenCalledWith(MoneyflowService.fetchMoneyflow, 99);
+});
