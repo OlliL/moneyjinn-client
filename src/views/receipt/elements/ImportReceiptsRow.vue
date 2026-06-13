@@ -36,7 +36,7 @@
                     <InputDate
                       v-model="startDate"
                       :validation-schema="schema.startDate"
-                      id="startDate"
+                      :id="`importReceipts-row-startDate-${receipt.id}`"
                       :field-label="$t('General.startDate')"
                       picker-side="top"
                     />
@@ -45,7 +45,7 @@
                     <InputDate
                       v-model="endDate"
                       :validation-schema="schema.endDate"
-                      id="endDate"
+                      :id="`importReceipts-row-endDate-${receipt.id}`"
                       :field-label="$t('General.endDate')"
                       picker-side="top"
                       picker-align="end"
@@ -55,7 +55,7 @@
                     <InputStandard
                       v-model="amount"
                       :validation-schema="schema.amount"
-                      id="amount"
+                      :id="`importReceipts-row-amount-${receipt.id}`"
                       field-type="number"
                       step="0.01"
                       :field-label="$t('General.amount')"
@@ -66,6 +66,7 @@
                   <div class="md:col-span-1 mt-5">
                     <ButtonSubmit
                       :form-id="'searchReceipt' + receipt.id"
+                      :data-testid="'searchReceipt' + receipt.id + '-submit'"
                       class="!w-full"
                     >
                       <template #icon><Search class="icon-medium" /></template>
@@ -159,6 +160,7 @@
               <ButtonDeleteTwoTap
                 :button-label="$t('Moneyflow.deleteReceipt')"
                 @execute-delete="deleteMoneyflowReceipt"
+                :data-testid="`importReceipts-row-delete-${receipt.id}`"
               />
               <Button
                 type="button"
@@ -167,7 +169,7 @@
                 @click="importReceipt"
                 v-if="searchExecuted && searchSuccessful"
                 :disabled="!moneyflowSelected"
-                data-testid="importReceipts-row-apply"
+                :data-testid="`importReceipts-row-apply-${receipt.id}`"
               >
                 <Save class="icon-medium" />
                 {{ $t("Moneyflow.apply") }}
