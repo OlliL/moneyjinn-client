@@ -87,9 +87,11 @@ export function useFormContext<T>(config: FieldConfig<T>) {
     } else {
       const firstIssue = result.error.issues[0] as ZodIssueWithDefault;
       const isDefaultError = firstIssue.__isZodDefault === true;
-      const customGlobMessageFn = (toRaw(schema.value) as any)._def?.error;
+      const customGlobMessageFn = (toRaw(schema.value) as ZodType).def?.error;
       if (isDefaultError && customGlobMessageFn) {
-        validationError.value = customGlobMessageFn().message;
+        const result = customGlobMessageFn(firstIssue as never);
+        validationError.value =
+          typeof result === "string" ? result : result?.message;
       } else {
         validationError.value = firstIssue.message;
       }
