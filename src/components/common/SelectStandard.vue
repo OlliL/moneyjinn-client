@@ -10,7 +10,7 @@
         :id="id"
         :name="id"
         :data-testid="id + '-id'"
-        v-model="hiddenValue"
+        v-model="modelValue"
       />
 
       <Popover v-model:open="isOpen" :modal="false">
@@ -128,13 +128,10 @@ import {
 } from "vue";
 import { any, type ZodType } from "zod";
 
-const emit = defineEmits<{
-  "update:modelValue": [value: unknown];
-}>();
+const [modelValue] = defineModel<unknown>({ default: undefined });
 
 const props = withDefaults(
   defineProps<{
-    modelValue?: unknown;
     selectBoxValues: Array<SelectBoxValue>;
     validationSchema?: ZodType;
     validationSchemaRef?: Ref<ZodType>;
@@ -155,11 +152,10 @@ const schema = computed(
 const items: Ref<Array<SelectBoxValue>> = ref([]);
 const fieldValue = ref<string | undefined>(undefined);
 const preventOnFocus = ref(false);
-const hiddenValue = ref<unknown>(props.modelValue);
 
 const { errorMessage, handleBlur, handleInput } = useFormContext({
   schema: schema,
-  model: hiddenValue,
+  model: modelValue,
 });
 
 const filterItemList = () => {
@@ -209,15 +205,14 @@ const getFirstDropdownAnchor = () =>
   getDropdownAnchors()[0] as HTMLAnchorElement | undefined;
 
 const clearInput = () => {
-  hiddenValue.value = undefined;
+  modelValue.value = undefined;
   fieldValue.value = undefined;
-  emit("update:modelValue", undefined);
   handleInput();
   handleBlur();
 };
 const setFieldValue = () => {
   fieldValue.value = props.selectBoxValues.find(
-    (sbv) => sbv.id == hiddenValue.value,
+    (sbv) => sbv.id == modelValue.value,
   )?.value;
   // filterItemList() is called by watch(props.modelValue) or onInput, which also resets highlight
   filterItemList();
@@ -268,8 +263,7 @@ const onFocus = () => {
 };
 
 const onClickAnchor = (selectBoxValue: SelectBoxValue) => {
-  hiddenValue.value = selectBoxValue.id;
-  emit("update:modelValue", selectBoxValue.id);
+  modelValue.value = selectBoxValue.id;
   handleInput();
   handleBlur();
   hideDropdown();
@@ -338,14 +332,9 @@ const onInput = () => {
 const fieldRef = useTemplateRef<typeof Input>("fieldRef");
 const dropdownRef = useTemplateRef<HTMLDivElement>("dropdownRef");
 
-watch(
-  () => props.modelValue,
-  (newVal) => {
-    hiddenValue.value = newVal;
-    setFieldValue();
-  },
-  { immediate: true },
-);
+watch(modelValue, () => {
+  setFieldValue();
+});
 
 onMounted(() => {
   if (props.focus) {
@@ -358,16 +347,16 @@ onMounted(() => {
 watch(
   () => props.selectBoxValues,
   (newVal) => {
-    // reset the fieldValue in case its not part of the select-box. But only do that if the hiddenValue is set at all.
+    // reset the fieldValue in case its not part of the select-box. But only do that if the modelValue is set at all.
     if (
       newVal.length > 0 &&
-      hiddenValue.value != undefined &&
-      hiddenValue.value !== 0
+      modelValue.value != undefined &&
+      modelValue.value !== 0
     ) {
-      if (newVal.some((sbv) => sbv.id == hiddenValue.value)) {
+      if (newVal.some((sbv) => sbv.id == modelValue.value)) {
         setFieldValue();
       } else {
-        hiddenValue.value = undefined;
+        modelValue.value = undefined;
         fieldValue.value = undefined;
       }
     }
