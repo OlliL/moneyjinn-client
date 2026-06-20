@@ -102,7 +102,7 @@ const schema = computed(
 );
 
 const { errorMessage, handleBlur } = useFormContext({
-  schema: schema.value,
+  schema: schema,
   model: model,
 });
 

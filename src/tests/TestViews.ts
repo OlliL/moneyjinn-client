@@ -339,6 +339,8 @@ export class InputView extends AbstractView {
       await fireEvent.update(input, value);
       await this.waitUntilInputValueEquals(input, value);
     }
+
+    await fireEvent.blur(input);
   }
 
   async assertFocused(): Promise<void> {

@@ -6,6 +6,7 @@ import {
   onUnmounted,
   provide,
   ref,
+  toRaw,
   watch,
   type Ref,
 } from "vue";
@@ -14,12 +15,12 @@ import { type ZodType } from "zod";
 const FormSymbol = Symbol("FormContext");
 
 interface FieldRegistration {
-  validate: () => Promise<boolean>;
+  validate: (setTouched?: boolean) => Promise<boolean>;
   reset: () => void;
 }
 
 interface FieldConfig<T> {
-  schema: ZodType<T>;
+  schema: Ref<ZodType<T>>;
   model: Ref<T>;
 }
 
@@ -38,7 +39,7 @@ export function createFormContext() {
   const handleSubmit = (callback: () => unknown) => {
     return async () => {
       const results = await Promise.all(
-        childFields.value.map((field) => field.validate()),
+        childFields.value.map((field) => field.validate(true)),
       );
       const isFormValid = results.every(Boolean);
       if (isFormValid) {
@@ -57,7 +58,9 @@ export function createFormContext() {
 
 export function useFormContext<T>(config: FieldConfig<T>) {
   const { schema, model } = config;
-  const register = inject<(field: FieldRegistration) => () => void>(FormSymbol);
+  const register = inject<
+    ((field: FieldRegistration) => () => void) | undefined
+  >(FormSymbol, undefined);
 
   const touched = ref(false);
   const validationError = ref<string | undefined>(undefined);
@@ -66,8 +69,9 @@ export function useFormContext<T>(config: FieldConfig<T>) {
   );
   let initialValue: unknown;
 
-  const validate = async (): Promise<boolean> => {
-    const result = schema.safeParse(model.value);
+  const validate = async (setTouched?: boolean): Promise<boolean> => {
+    if (setTouched) touched.value = setTouched;
+    const result = schema.value.safeParse(model.value);
     validationError.value = result.success
       ? undefined
       : result.error.errors[0]?.message;
@@ -75,7 +79,7 @@ export function useFormContext<T>(config: FieldConfig<T>) {
   };
 
   const setInitialValue = () => {
-    initialValue = structuredClone(model.value);
+    initialValue = structuredClone(toRaw(model.value));
   };
 
   const handleBlur = () => {
@@ -100,7 +104,7 @@ export function useFormContext<T>(config: FieldConfig<T>) {
       unregister = register({ validate, reset });
     }
     watch(
-      model,
+      [model, schema],
       () => {
         validate();
       },

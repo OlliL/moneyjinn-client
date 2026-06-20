@@ -29,7 +29,7 @@
             @click.stop="isPopoverOpen = true"
             @pointerdown.stop="isPopoverOpen = true"
             @input="onTextInput"
-            @blur="onBlur"
+            @blur="handleBlur"
           />
 
           <div
@@ -76,6 +76,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { useFormContext } from "@/service/util/ValidationUtil";
 import { CalendarDays } from "@lucide/vue";
 import { Datepicker } from "vanillajs-datepicker";
 // @ts-expect-error Plain JS import
@@ -92,7 +93,6 @@ import {
 } from "vue";
 import { useI18n } from "vue-i18n";
 import { date, preprocess, type ZodType } from "zod";
-import { useFormContext } from "@/service/util/ValidationUtil";
 
 const props = withDefaults(
   defineProps<{
@@ -148,7 +148,7 @@ const effectiveSchema = computed(() => {
 });
 
 const { errorMessage, handleBlur } = useFormContext({
-  schema: effectiveSchema.value,
+  schema: effectiveSchema,
   model: model as Ref<Date | undefined>,
 });
 let datepicker = {} as Datepicker;
@@ -160,10 +160,6 @@ const getInputElement = () => {
   if (!refValue) return undefined;
   if ("$el" in refValue && refValue.$el) return refValue.$el;
   return refValue as HTMLInputElement;
-};
-
-const onBlur = (_event: FocusEvent) => {
-  handleBlur();
 };
 
 const initDatepicker = () => {
@@ -223,8 +219,6 @@ const initDatepicker = () => {
     }
   });
 };
-
-
 
 onMounted(() => {
   if (model.value) {

@@ -273,33 +273,16 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { useForm } from "vee-validate";
-import { onMounted, provide, ref, watch } from "vue";
-import { useI18n } from "vue-i18n";
-import { any, date, type ZodTypeAny } from "zod";
-
 import ButtonSubmit from "@/components/common/ButtonSubmit.vue";
 import DivContentTable from "@/components/common/DivContentTable.vue";
 import InputDate from "@/components/common/InputDate.vue";
 import InputStandard from "@/components/common/InputStandard.vue";
 import SelectStandard from "@/components/common/SelectStandard.vue";
 import SelectContractpartner from "@/components/contractpartner/SelectContractpartner.vue";
-import SelectPostingAccount from "@/components/postingaccount/SelectPostingAccount.vue";
-import SearchMoneyflowResultDesktopGroup from "./elements/SearchMoneyflowResultDesktopGroup.vue";
-import SearchMoneyflowResultMobileGroup from "./elements/SearchMoneyflowResultMobileGroup.vue";
-
-import { toFixed } from "@/tools/math";
-import { handleBackendError } from "@/tools/views/HandleBackendError";
-import { getMonthName } from "@/tools/views/MonthName";
-import { globErr } from "@/tools/views/ZodUtil";
-
-import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
-import type { MoneyflowSearchParams } from "@/model/moneyflow/MoneyflowSearchParams";
-import type { SelectBoxValue } from "@/model/SelectBoxValue";
-
 import { useDeleteMoneyflowModalStore } from "@/components/moneyflow/DeleteMoneyflowModal.store";
 import useEditMoneyflowModalStore from "@/components/moneyflow/EditMoneyflowModal.store";
 import useListMoneyflowModalStore from "@/components/moneyflow/ListMoneyflowModal.store";
+import SelectPostingAccount from "@/components/postingaccount/SelectPostingAccount.vue";
 import useReceiptModalStore from "@/components/reports/ReceiptModal.store";
 import { Accordion } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
@@ -315,9 +298,22 @@ import {
   MoneyflowRowActionsKey,
   type MoneyflowRowActions,
 } from "@/model/CrudActions.ts";
+import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
+import type { MoneyflowSearchParams } from "@/model/moneyflow/MoneyflowSearchParams";
+import type { SelectBoxValue } from "@/model/SelectBoxValue";
 import MoneyflowService from "@/service/MoneyflowService";
+import { createFormContext } from "@/service/util/ValidationUtil.ts";
+import { toFixed } from "@/tools/math";
+import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { isDesktop } from "@/tools/views/IsDesktop";
+import { getMonthName } from "@/tools/views/MonthName";
+import { globErr } from "@/tools/views/ZodUtil";
 import { ChevronDown, Search, SlidersHorizontal, Undo2 } from "@lucide/vue";
+import { onMounted, provide, ref, watch } from "vue";
+import { useI18n } from "vue-i18n";
+import { any, date, type ZodTypeAny } from "zod";
+import SearchMoneyflowResultDesktopGroup from "./elements/SearchMoneyflowResultDesktopGroup.vue";
+import SearchMoneyflowResultMobileGroup from "./elements/SearchMoneyflowResultMobileGroup.vue";
 
 const { t } = useI18n();
 
@@ -399,7 +395,7 @@ export type MoneyflowGroup = {
   moneyflows: Array<Moneyflow>;
 };
 
-const { handleSubmit, values, setFieldTouched } = useForm();
+const { handleSubmit, resetAll } = createFormContext();
 
 onMounted(() => {
   resetForm();
@@ -428,7 +424,7 @@ const resetForm = () => {
   colBookingYear.value = false;
   colContractpartner.value = true;
   dataLoaded.value = false;
-  Object.keys(values).forEach((field) => setFieldTouched(field, false));
+  resetAll();
 };
 
 const restartSearch = () => {

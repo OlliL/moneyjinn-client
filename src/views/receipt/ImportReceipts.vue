@@ -52,9 +52,9 @@ import {
 import type { ImportedMoneyflowReceipt } from "@/model/moneyflow/ImportedMoneyflowReceipt";
 import ImportedMoneyflowReceiptService from "@/service/ImportedMoneyflowReceiptService";
 import MoneyflowService from "@/service/MoneyflowService";
+import { createFormContext } from "@/service/util/ValidationUtil.ts";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { Upload } from "@lucide/vue";
-import { useForm } from "vee-validate";
 import { onMounted, provide, ref, useTemplateRef } from "vue";
 import ImportReceiptsRowVue from "./elements/ImportReceiptsRow.vue";
 
@@ -67,7 +67,7 @@ const { openDelete: openDeleteMoneyflow } = useDeleteMoneyflowModalStore();
 const { openEditMoneyflow } = useEditMoneyflowModalStore();
 const { openListMoneyflow } = useListMoneyflowModalStore();
 
-const { handleSubmit, values, setFieldTouched } = useForm();
+const { handleSubmit, resetAll } = createFormContext();
 
 onMounted(() => loadData());
 
@@ -77,7 +77,7 @@ const loadData = () => {
       importedMoneyflowReceipts.value = imr;
     })
     .catch(handleBackendError);
-  Object.keys(values).forEach((field) => setFieldTouched(field, false));
+  resetAll();
 };
 
 const actions: ImportReceiptRowActions = {

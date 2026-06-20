@@ -204,11 +204,11 @@ import { MoneyflowReceiptType } from "@/model/moneyflow/MoneyflowReceiptType";
 import ImportedMoneyflowReceiptService from "@/service/ImportedMoneyflowReceiptService";
 import { mapImportedMoneyflowReceiptToMoneyflowReceipt } from "@/service/mapper/ImportedToMoneyflowReceiptMapper";
 import MoneyflowService from "@/service/MoneyflowService";
+import { createFormContext } from "@/service/util/ValidationUtil.ts";
 import { toFixed } from "@/tools/math";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { amountSchema, globErr } from "@/tools/views/ZodUtil";
 import { Euro, Save, Search } from "@lucide/vue";
-import { useForm } from "vee-validate";
 import { computed, inject, nextTick, onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { date } from "zod";
@@ -235,7 +235,7 @@ const props = defineProps<{
   receipt: ImportedMoneyflowReceipt;
 }>();
 
-const { handleSubmit } = useForm();
+const { handleSubmit } = createFormContext();
 const moneyflowReceipt = computed(() =>
   mapImportedMoneyflowReceiptToMoneyflowReceipt(props.receipt),
 );

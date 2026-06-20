@@ -59,7 +59,7 @@
         variant="secondary"
         class="button-with-icon hidden md:flex"
         data-testid="createContractpartnerMatchingResetButton"
-        @click="resetForm(values, setFieldTouched)"
+        @click="resetForm(resetAll)"
       >
         <Undo2 class="icon-medium" />
         {{ $t("General.reset") }}
@@ -84,10 +84,10 @@ import SelectContractpartner from "@/components/contractpartner/SelectContractpa
 import SelectPostingAccount from "@/components/postingaccount/SelectPostingAccount.vue";
 import { Button } from "@/components/ui/button";
 import type { ContractpartnerMatching } from "@/model/contractpartnermatching/ContractpartnerMatching";
+import { createFormContext } from "@/service/util/ValidationUtil.ts";
 import { globErr } from "@/tools/views/ZodUtil";
 import { Save, Undo2 } from "@lucide/vue";
 import { storeToRefs } from "pinia";
-import { useForm } from "vee-validate";
 import { useI18n } from "vue-i18n";
 import { number, string, ZodType } from "zod";
 import { useCreateContractpartnerMatchingModalStore } from "./CreateContractpartnerMatchingModal.store";
@@ -113,6 +113,6 @@ const schema: Partial<{ [key in keyof ContractpartnerMatching]: ZodType }> = {
   postingAccountId: number().optional(),
 };
 
-const { handleSubmit, values, setFieldTouched } = useForm();
+const { handleSubmit, resetAll } = createFormContext();
 const createContractpartnerMatching = save(handleSubmit);
 </script>

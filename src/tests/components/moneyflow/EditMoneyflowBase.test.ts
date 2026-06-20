@@ -6,6 +6,7 @@ import { CapitalsourceState } from "@/model/capitalsource/CapitalsourceState";
 import { CapitalsourceType } from "@/model/capitalsource/CapitalsourceType";
 import type { Contractpartner } from "@/model/contractpartner/Contractpartner";
 import type { ImportedMoneyflow } from "@/model/moneyflow/ImportedMoneyflow";
+import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 import type { PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
 import type { PostingAccount } from "@/model/postingaccount/PostingAccount";
 import ImportedMoneyflowService from "@/service/ImportedMoneyflowService";
@@ -17,6 +18,7 @@ import ImportedMoneyflowServiceMocker from "@/service/mocker/ImportedMoneyflowSe
 import MoneyflowServiceMocker from "@/service/mocker/MoneyflowServiceMocker";
 import PostingAccountServiceMocker from "@/service/mocker/PostingAccountServiceMocker";
 import PreDefMoneyflowServiceMocker from "@/service/mocker/PreDefMoneyflowServiceMocker";
+import { createFormContext } from "@/service/util/ValidationUtil";
 import { StoreService } from "@/stores/StoreService";
 import {
   assertHaveBeenCalledWith,
@@ -37,7 +39,7 @@ import "@testing-library/jest-dom/vitest";
 import { render } from "@testing-library/vue";
 import { createPinia, setActivePinia } from "pinia";
 import { beforeEach, expect, test, vi } from "vitest";
-import { defineComponent, h, ref } from "vue";
+import { defineComponent, h, ref, type PropType } from "vue";
 
 vi.mock("@/service/PreDefMoneyflowService");
 vi.mock("@/service/PostingAccountService");
@@ -162,8 +164,39 @@ beforeEach(async () => {
   setupUserStandard();
 });
 
+// Wir erstellen einen Wrapper, der den Kontext injiziert
+const TestWrapper = defineComponent({
+  components: { EditMoneyflowBase },
+  props: {
+    fillContractpartnerDefaults: {
+      type: Boolean,
+      default: false,
+    },
+    idSuffix: {
+      type: String,
+      default: "",
+    },
+    mmfToEdit: {
+      type: Object as PropType<Moneyflow>,
+      optional: true,
+    },
+  },
+  setup() {
+    createFormContext(); // Ruft intern provide(FormSymbol) auf
+    return {};
+  },
+  template: `
+    <EditMoneyflowBase 
+      v-bind="$attrs" 
+      :fillContractpartnerDefaults="fillContractpartnerDefaults"
+      :idSuffix="idSuffix"
+      :mmfToEdit="mmfToEdit"
+    />
+  `,
+});
+
 test("split entries handling", async () => {
-  render(EditMoneyflowBase, {
+  render(TestWrapper, {
     props: { fillContractpartnerDefaults: true },
   });
 
@@ -204,7 +237,7 @@ test("split entries handling", async () => {
 });
 
 test("select a Contractpartner - set and reset input fields", async () => {
-  render(EditMoneyflowBase, {
+  render(TestWrapper, {
     props: { fillContractpartnerDefaults: true },
   });
 
@@ -223,7 +256,7 @@ test("select a Contractpartner - set and reset input fields", async () => {
 });
 
 test("select a Contractpartner - previously set input fields not overwritten", async () => {
-  render(EditMoneyflowBase, {
+  render(TestWrapper, {
     props: { fillContractpartnerDefaults: true },
   });
 
@@ -256,14 +289,14 @@ test("no cash capitalsource available - no default capitalsource selected", asyn
   CapitalsourceServiceMocker.mockFetchAllCapitalsource([noCash]);
   await StoreService.getInstance().initAllStores();
 
-  render(EditMoneyflowBase, {
+  render(TestWrapper, {
     props: { fillContractpartnerDefaults: true },
   });
   await EditMoneyflowBaseView.CapitalsourceIdInput.assertValue("0");
 });
 
 test("invoiceDate set - contractpartner combobox uses invoiceDate for validity", async () => {
-  render(EditMoneyflowBase, {
+  render(TestWrapper, {
     props: { fillContractpartnerDefaults: true },
   });
   await EditMoneyflowBaseView.InvoiceDateInput.setValue("01.01.2025");
@@ -275,10 +308,10 @@ test("invoiceDate set - contractpartner combobox uses invoiceDate for validity",
 });
 
 test("toggle private/public - switching works", async () => {
-  render(EditMoneyflowBase);
+  render(TestWrapper);
   await EditMoneyflowBaseView.PublicToggle.assertChecked(); // This assertion should now pass due to resetForm being called by default.
   // Adding fillContractpartnerDefaults: true here for consistency, though it might not be strictly necessary if resetForm is called by default.
-  // render(EditMoneyflowBase, { props: { fillContractpartnerDefaults: true } });
+  // render(TestWrapper, { props: { fillContractpartnerDefaults: true } });
   await EditMoneyflowBaseView.PrivateToggle.click();
   await EditMoneyflowBaseView.PrivateToggle.assertChecked();
   await EditMoneyflowBaseView.PublicToggle.assertUnchecked();
@@ -294,7 +327,7 @@ test("selecting PreDefMoneyflow changes toggle labels to keep/renew", async () =
     postingAccountId: 1,
   } as PreDefMoneyflow;
 
-  const { rerender } = render(EditMoneyflowBase, {
+  const { rerender } = render(TestWrapper, {
     props: { fillContractpartnerDefaults: true },
   });
   await EditMoneyflowBaseView.OnceToggle.assertChecked();
@@ -305,7 +338,7 @@ test("selecting PreDefMoneyflow changes toggle labels to keep/renew", async () =
 });
 
 test("split entries - incomplete remainder makes remainder invalid", async () => {
-  render(EditMoneyflowBase, {
+  render(TestWrapper, {
     props: { fillContractpartnerDefaults: true },
   });
   await EditMoneyflowBaseView.AmountInput.setValue("-100.00");
@@ -317,7 +350,7 @@ test("split entries - incomplete remainder makes remainder invalid", async () =>
 });
 
 test("remainder button with no amount set - remainder stays zero", async () => {
-  render(EditMoneyflowBase, {
+  render(TestWrapper, {
     props: { fillContractpartnerDefaults: true },
   });
   await EditMoneyflowBaseView.SubbookingToggleButton.click();
@@ -334,7 +367,7 @@ test("choose a PreDefMoneyflow - comment field is filled from PreDefMoneyflow", 
     postingAccountId: 1,
   } as PreDefMoneyflow;
 
-  const { rerender } = render(EditMoneyflowBase, {
+  const { rerender } = render(TestWrapper, {
     props: { fillContractpartnerDefaults: true },
   });
   await rerender({ selectedPreDefMoneyflow: preDef });
@@ -344,7 +377,7 @@ test("choose a PreDefMoneyflow - comment field is filled from PreDefMoneyflow", 
 });
 
 test("resetForm resets the component state", async () => {
-  const { rerender } = render(EditMoneyflowBase, {
+  const { rerender } = render(TestWrapper, {
     props: { fillContractpartnerDefaults: true },
   });
 
@@ -388,7 +421,7 @@ test("capitalsource defaults to CASH on mount", async () => {
   ]);
   await StoreService.getInstance().initAllStores();
 
-  render(EditMoneyflowBase, {
+  render(TestWrapper, {
     props: { fillContractpartnerDefaults: true },
   });
   await EditMoneyflowBaseView.CapitalsourceIdInput.assertValue("1");
@@ -396,7 +429,7 @@ test("capitalsource defaults to CASH on mount", async () => {
 
 test("Toggle Labels change based on PreDefMoneyflow selection", async () => {
   const preDef = { id: 1 } as PreDefMoneyflow;
-  const { rerender } = render(EditMoneyflowBase, {
+  const { rerender } = render(TestWrapper, {
     props: { fillContractpartnerDefaults: true },
   });
 
@@ -406,7 +439,7 @@ test("Toggle Labels change based on PreDefMoneyflow selection", async () => {
 });
 
 test("validation: amount is required", async () => {
-  render(EditMoneyflowBase, {
+  render(TestWrapper, {
     props: { fillContractpartnerDefaults: true },
   });
 
@@ -420,7 +453,7 @@ test("validation: amount is required", async () => {
 });
 
 test("validation: bookingDate is required", async () => {
-  render(EditMoneyflowBase, {
+  render(TestWrapper, {
     props: { fillContractpartnerDefaults: true },
   });
 
@@ -434,7 +467,7 @@ test("validation: bookingDate is required", async () => {
 });
 
 test("validation: contractpartner is required", async () => {
-  render(EditMoneyflowBase, {
+  render(TestWrapper, {
     props: { fillContractpartnerDefaults: true },
   });
 
@@ -450,7 +483,7 @@ test("validation: contractpartner is required", async () => {
 });
 
 test("validation: capitalsource is required", async () => {
-  render(EditMoneyflowBase, {
+  render(TestWrapper, {
     props: { fillContractpartnerDefaults: true },
   });
 
@@ -465,7 +498,7 @@ test("validation: capitalsource is required", async () => {
 });
 
 test("validation: comment is required", async () => {
-  render(EditMoneyflowBase, {
+  render(TestWrapper, {
     props: { fillContractpartnerDefaults: true },
   });
 
@@ -479,7 +512,7 @@ test("validation: comment is required", async () => {
 });
 
 test("validation: comment maximum length", async () => {
-  render(EditMoneyflowBase, {
+  render(TestWrapper, {
     props: { fillContractpartnerDefaults: true },
   });
 
@@ -492,7 +525,7 @@ test("validation: comment maximum length", async () => {
 });
 
 test("validation: posting account is required", async () => {
-  render(EditMoneyflowBase, {
+  render(TestWrapper, {
     props: { fillContractpartnerDefaults: true },
   });
 
@@ -508,7 +541,7 @@ test("validation: posting account is required", async () => {
 });
 
 test("validation: comment and posting account optional when split entries present", async () => {
-  render(EditMoneyflowBase, {
+  render(TestWrapper, {
     props: { fillContractpartnerDefaults: true },
   });
 
@@ -538,7 +571,7 @@ test("initializes correctly in edit mode", async () => {
     ],
   } as any;
 
-  render(EditMoneyflowBase, { props: { mmfToEdit } });
+  render(TestWrapper, { props: { mmfToEdit } });
 
   await EditMoneyflowBaseView.AmountInput.assertValue("-50");
   // Main comment/posting account should be hidden when split entries exist
@@ -948,7 +981,7 @@ test("prepareServerCall fills main comment and posting account from split entrie
 });
 
 test("deleting a split entry row maintains at least 2 rows", async () => {
-  render(EditMoneyflowBase, { props: { fillContractpartnerDefaults: true } });
+  render(TestWrapper, { props: { fillContractpartnerDefaults: true } });
 
   await EditMoneyflowBaseView.SubbookingToggleButton.click();
   await EditMoneyflowBaseView.SplitEntryRows.assertCount(2);

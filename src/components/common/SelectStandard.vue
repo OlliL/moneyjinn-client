@@ -158,7 +158,7 @@ const preventOnFocus = ref(false);
 const hiddenValue = ref<unknown>(props.modelValue);
 
 const { errorMessage, handleBlur } = useFormContext({
-  schema: schema.value,
+  schema: schema,
   model: hiddenValue,
 });
 

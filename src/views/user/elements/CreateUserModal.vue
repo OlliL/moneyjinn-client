@@ -196,11 +196,11 @@ import type { User } from "@/model/user/User";
 import { UserRole, userRoleValues } from "@/model/user/UserRole";
 import GroupService from "@/service/GroupService";
 import UserService from "@/service/UserService";
+import { createFormContext } from "@/service/util/ValidationUtil.ts";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { globErr } from "@/tools/views/ZodUtil";
 import { Save, Undo2 } from "@lucide/vue";
 import { storeToRefs } from "pinia";
-import { useForm } from "vee-validate";
 import { computed, ref, toRaw, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { boolean, date, number, string, type ZodTypeAny } from "zod";
@@ -237,7 +237,7 @@ const yesNoValues = [
   { id: true, value: t("General.yes") },
 ] as Array<SelectBoxValue>;
 
-const { handleSubmit, values, setFieldTouched } = useForm();
+const { handleSubmit, resetAll } = createFormContext();
 
 const editMode = computed(() => origUser.value !== undefined);
 
@@ -303,7 +303,7 @@ const resetForm = () => {
       } as User;
     }
   });
-  Object.keys(values).forEach((field) => setFieldTouched(field, false));
+  resetAll();
 };
 
 watch(

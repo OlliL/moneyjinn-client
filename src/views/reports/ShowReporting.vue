@@ -228,6 +228,7 @@ import type { PostingAccount } from "@/model/postingaccount/PostingAccount";
 import type { ReportingMonthAmount } from "@/model/report/ReportingMonthAmount";
 import type { ReportingParameter } from "@/model/report/ReportingParameter";
 import ReportService from "@/service/ReportService";
+import { createFormContext } from "@/service/util/ValidationUtil.ts";
 import { usePostingAccountStore } from "@/stores/PostingAccountStore";
 import { toFixed } from "@/tools/math";
 import { formatNumber } from "@/tools/views/FormatNumber";
@@ -244,8 +245,7 @@ import {
   Title,
   Tooltip,
 } from "chart.js";
-import { useForm } from "vee-validate";
-import { computed, onMounted, ref, watch } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { Bar } from "vue-chartjs";
 import { useI18n } from "vue-i18n";
 import { any, date, number } from "zod";
@@ -359,7 +359,7 @@ type ChartData = {
   datasets: Array<ChartDataDataset>;
 };
 
-const { handleSubmit, values, setFieldTouched } = useForm();
+const { handleSubmit, resetAll } = createFormContext();
 
 onMounted(() => {
   loadData();
@@ -376,9 +376,10 @@ const singlePostingAccountsLabel = computed(() =>
     : t("Reports.multiplePostingAccounts"),
 );
 
-watch(singlePostingAccounts, () => {
-  setFieldTouched("postingAccountShowReporting", false);
-});
+// FIXME das hier umstellen auf 'ohne vee-validate'
+//watch(singlePostingAccounts, () => {
+//  setFieldTouched("postingAccountShowReporting", false);
+//});
 
 const loadData = () => {
   dataLoaded.value = false;
@@ -403,7 +404,7 @@ const loadData = () => {
         selectedPostingAccountIds.value[mpa.id] = true;
       });
       dataLoaded.value = true;
-      Object.keys(values).forEach((field) => setFieldTouched(field, false));
+      resetAll();
     })
     .catch(handleBackendError);
 };

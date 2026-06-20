@@ -133,11 +133,11 @@ import { CapitalsourceType } from "@/model/capitalsource/CapitalsourceType";
 import type { MonthlySettlement } from "@/model/monthlysettlement/MonthlySettlement";
 import type { MonthlySettlementEditTransporter } from "@/model/monthlysettlement/MonthlySettlementEditTransporter";
 import MonthlySettlementService from "@/service/MonthlySettlementService";
+import { createFormContext } from "@/service/util/ValidationUtil.ts";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { amountSchema, globErr } from "@/tools/views/ZodUtil";
 import { Euro } from "@lucide/vue";
 import { storeToRefs } from "pinia";
-import { useForm } from "vee-validate";
 import { ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { date, ZodType } from "zod";
@@ -162,7 +162,7 @@ const { open, year, month, onDone } = storeToRefs(
   useEditMonthlySettlementModalStore(),
 );
 
-const { handleSubmit, values, setFieldTouched } = useForm();
+const { handleSubmit, resetAll } = createFormContext();
 
 const schema: Partial<{ [key in keyof MonthlySettlement]: ZodType }> = {
   month: date(globErr(t("MonthlySettlement.validation.month"))),
@@ -205,7 +205,7 @@ const loadMonthlySettlements = (targetYear?: number, targetMonth?: number) =>
 
       editMode.value = transporter.editMode;
 
-      Object.keys(values).forEach((field) => setFieldTouched(field, false));
+      resetAll();
 
       loadedMonth.value = monthDate;
 

@@ -29,15 +29,15 @@ export function createCreateModalStore<T extends { id: number }>(
     );
 
     const resetForm = (
-      values?: Record<string, any>,
+      resetAll?: () => void,
       setFieldTouched?: (field: string, touched: boolean) => void,
     ) => {
       mData.value = isEditMode.value
         ? structuredClone(toRaw(origData.value))
         : options.getEmptyEntity();
 
-      if (values && setFieldTouched) {
-        Object.keys(values).forEach((field) => setFieldTouched(field, false));
+      if (resetAll) {
+        resetAll();
       }
     };
 
@@ -62,7 +62,7 @@ export function createCreateModalStore<T extends { id: number }>(
     });
 
     const save = (
-      handleSubmit: (fn: () => void) => (e?: Event) => Promise<void>,
+      handleSubmit: (fn: () => unknown) => (e?: Event) => Promise<unknown>,
     ) => {
       return handleSubmit(() => {
         const serviceCall = isEditMode.value

@@ -27,7 +27,7 @@
         variant="secondary"
         class="button-with-icon hidden md:flex"
         data-testid="createGroupResetButton"
-        @click="resetForm(values, setFieldTouched)"
+        @click="resetForm(resetAll)"
       >
         <Undo2 class="icon-medium" />
         {{ $t("General.reset") }}
@@ -50,10 +50,10 @@ import InputStandard from "@/components/common/InputStandard.vue";
 import ModalVue from "@/components/common/Modal.vue";
 import { Button } from "@/components/ui/button";
 import type { Group } from "@/model/group/Group";
+import { createFormContext } from "@/service/util/ValidationUtil.ts";
 import { globErr } from "@/tools/views/ZodUtil";
 import { Save, Undo2 } from "@lucide/vue";
 import { storeToRefs } from "pinia";
-import { useForm } from "vee-validate";
 import { useI18n } from "vue-i18n";
 import { string, ZodType } from "zod";
 import { useCreateGroupModalStore } from "./CreateGroupModal.store";
@@ -63,7 +63,7 @@ const store = useCreateGroupModalStore();
 const { open, mData, title } = storeToRefs(store);
 const { resetForm, save } = store;
 
-const { handleSubmit, values, setFieldTouched } = useForm();
+const { handleSubmit, resetAll } = createFormContext();
 
 const schema: Partial<{ [key in keyof Group]: ZodType }> = {
   name: string(globErr(t("Group.validation.name"))).min(1),

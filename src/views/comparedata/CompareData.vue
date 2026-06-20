@@ -137,11 +137,11 @@ import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 import type { SelectBoxValue } from "@/model/SelectBoxValue";
 import CompareDataService from "@/service/CompareDataService";
 import MoneyflowService from "@/service/MoneyflowService";
+import { createFormContext } from "@/service/util/ValidationUtil.ts";
 import { useCapitalsourceStore } from "@/stores/CapitalsourceStore";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { globErr } from "@/tools/views/ZodUtil";
 import { Eye } from "@lucide/vue";
-import { useForm } from "vee-validate";
 import { computed, onMounted, provide, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { any, array as arr, date, instanceof as instof, number } from "zod";
@@ -184,7 +184,7 @@ const files = ref({} as FileList);
 const { openDelete: openDeleteMoneyflow } = useDeleteMoneyflowModalStore();
 const { openEditMoneyflow } = useEditMoneyflowModalStore();
 
-const { handleSubmit, values, setFieldTouched } = useForm();
+const { handleSubmit, resetAll } = createFormContext();
 
 onMounted(() => {
   loadData();
@@ -253,7 +253,7 @@ const loadData = () => {
       }
     })
     .catch(handleBackendError);
-  Object.keys(values).forEach((field) => setFieldTouched(field, false));
+  resetAll();
 };
 
 const compareMoneyflowsByDate = (dataA: CompareData, dataB: CompareData) => {

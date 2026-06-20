@@ -121,10 +121,10 @@ import type { Etf } from "@/model/etf/Etf";
 import type { EtfSalesCalculation } from "@/model/etf/EtfSalesCalculation";
 import type { EtfSummary } from "@/model/etf/EtfSummary";
 import EtfService from "@/service/EtfService";
+import { createFormContext } from "@/service/util/ValidationUtil.ts";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { amountSchema } from "@/tools/views/ZodUtil";
 import { Euro, Percent } from "@lucide/vue";
-import { useForm } from "vee-validate";
 import { ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import CalcEtfSaleResult from "./CalcEtfSaleResult.vue";
@@ -160,7 +160,7 @@ const calcEtfTransactionCostsRelative = ref(0 as number | undefined);
 const calcEtfTransactionCostsMaximum = ref(0 as number | undefined);
 const calcResults = ref({} as EtfSalesCalculation);
 
-const { handleSubmit } = useForm();
+const { handleSubmit } = createFormContext();
 
 const calculateEtfSale = handleSubmit(() => {
   EtfService.calcEtfSale(
