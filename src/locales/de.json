@@ -69,8 +69,8 @@
     "validation": {
       "validFrom": "Bitte Gültig ab angeben!",
       "validTil": "Bitte Gültig bis angeben!",
-      "startDate": "Bitte Startdatum angeben!",
-      "endDate": "Bitte Enddatum angeben!",
+      "startDate": "Startdatum angeben!",
+      "endDate": "Enddatum angeben!",
       "capitalsource": "Bitte Kapitalquelle angeben!"
     },
     "importComment": {

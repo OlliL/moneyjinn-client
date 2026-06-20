@@ -233,7 +233,6 @@ const onBlur = () => {
         hideDropdown();
       }
       setFieldValue();
-      handleInput();
       handleBlur();
     }
   }, 100);

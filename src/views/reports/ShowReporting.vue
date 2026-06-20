@@ -244,8 +244,9 @@ import {
   LinearScale,
   Title,
   Tooltip,
+  type ChartOptions,
 } from "chart.js";
-import { computed, onMounted, ref } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 import { Bar } from "vue-chartjs";
 import { useI18n } from "vue-i18n";
 import { any, date, number } from "zod";
@@ -277,7 +278,7 @@ const chartData = ref({
     },
   ],
 } as ChartData);
-const chartOptions = ref({
+const chartOptions = ref<ChartOptions<"bar">>({
   responsive: true,
   maintainAspectRatio: false,
   plugins: {
@@ -290,7 +291,7 @@ const chartOptions = ref({
     },
     tooltip: {
       callbacks: {
-        label: function (context: any) {
+        label: function (context) {
           let label = context.dataset.label || "";
 
           if (context.parsed.y !== null) {
@@ -309,7 +310,7 @@ const chartOptions = ref({
   scales: {
     y: {
       ticks: {
-        callback: function (value: any) {
+        callback: function (value) {
           return formatNumber(+value, 0) + currency;
         },
       },
@@ -376,10 +377,9 @@ const singlePostingAccountsLabel = computed(() =>
     : t("Reports.multiplePostingAccounts"),
 );
 
-// FIXME das hier umstellen auf 'ohne vee-validate'
-//watch(singlePostingAccounts, () => {
-//  setFieldTouched("postingAccountShowReporting", false);
-//});
+watch(singlePostingAccounts, () => {
+  resetAll();
+});
 
 const loadData = () => {
   dataLoaded.value = false;
@@ -519,7 +519,7 @@ const showReportingGraph = handleSubmit(() => {
         chartData.value.labels = [];
         chartData.value.datasets[0]!.data = [];
         chartData.value.datasets[0]!.backgroundColor = [];
-        chartOptions.value.plugins.title.text = chartTitle;
+        chartOptions.value.plugins!.title!.text = chartTitle;
 
         for (const [key, value] of resultMap) {
           chartData.value.labels.push(key);
