@@ -255,7 +255,7 @@ import {
 } from "@/components/ui/popover";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import type { PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
-import { createFormContext } from "@/service/util/ValidationUtil.ts";
+import { createFormContext } from "@/tools/views/ValidationUtil.ts";
 import { amountSchema, globErr } from "@/tools/views/ZodUtil";
 import {
   Euro,

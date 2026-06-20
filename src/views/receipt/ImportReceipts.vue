@@ -52,8 +52,8 @@ import {
 import type { ImportedMoneyflowReceipt } from "@/model/moneyflow/ImportedMoneyflowReceipt";
 import ImportedMoneyflowReceiptService from "@/service/ImportedMoneyflowReceiptService";
 import MoneyflowService from "@/service/MoneyflowService";
-import { createFormContext } from "@/service/util/ValidationUtil.ts";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
+import { createFormContext } from "@/tools/views/ValidationUtil.ts";
 import { Upload } from "@lucide/vue";
 import { onMounted, provide, ref, useTemplateRef } from "vue";
 import ImportReceiptsRowVue from "./elements/ImportReceiptsRow.vue";

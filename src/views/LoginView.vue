@@ -64,11 +64,11 @@ import ButtonSubmit from "@/components/common/ButtonSubmit.vue";
 import InputStandard from "@/components/common/InputStandard.vue";
 import router, { Routes } from "@/router";
 import UserService from "@/service/UserService";
-import { createFormContext } from "@/service/util/ValidationUtil";
 import {
   handleBackendError,
   showServerError,
 } from "@/tools/views/HandleBackendError";
+import { createFormContext } from "@/tools/views/ValidationUtil";
 import { Lock, LogIn, User } from "@lucide/vue";
 import { onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";

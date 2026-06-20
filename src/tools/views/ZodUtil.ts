@@ -1,11 +1,4 @@
-import { number, z, ZodType } from "zod";
-
-z.config({
-  customError: (issue) => {
-    (issue as any).__isZodDefault = true;
-    return undefined;
-  },
-});
+import { number, ZodType } from "zod";
 
 export function globErr(message: string) {
   return {

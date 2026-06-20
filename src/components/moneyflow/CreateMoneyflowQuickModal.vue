@@ -118,7 +118,7 @@ import { Button } from "@/components/ui/button";
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 import { type PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
 import MoneyflowService from "@/service/MoneyflowService";
-import { createFormContext } from "@/service/util/ValidationUtil";
+import { createFormContext } from "@/tools/views/ValidationUtil";
 import { amountSchema, globErr } from "@/tools/views/ZodUtil";
 import {
   ChevronLeft,

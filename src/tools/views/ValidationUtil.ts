@@ -70,7 +70,12 @@ export function useFormContext<T>(config: FieldConfig<T>) {
 
   const validate = async (setTouched?: boolean): Promise<boolean> => {
     if (setTouched) touched.value = setTouched;
-    const result = schema.value.safeParse(model.value);
+    const result = schema.value.safeParse(model.value, {
+      error: (issue) => {
+        (issue as any).__isZodDefault = true;
+        return undefined;
+      },
+    });
 
     if (result.success) {
       validationError.value = undefined;

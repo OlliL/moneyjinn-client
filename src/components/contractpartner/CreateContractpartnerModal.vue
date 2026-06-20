@@ -153,7 +153,7 @@
 <script lang="ts" setup>
 import { Button } from "@/components/ui/button";
 import type { Contractpartner } from "@/model/contractpartner/Contractpartner";
-import { createFormContext } from "@/service/util/ValidationUtil.ts";
+import { createFormContext } from "@/tools/views/ValidationUtil.ts";
 import { globErr } from "@/tools/views/ZodUtil";
 import { ChevronDown, Save, Undo2 } from "@lucide/vue";
 import { storeToRefs } from "pinia";

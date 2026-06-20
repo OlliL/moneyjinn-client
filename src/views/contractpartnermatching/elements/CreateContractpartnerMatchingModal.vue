@@ -84,7 +84,7 @@ import SelectContractpartner from "@/components/contractpartner/SelectContractpa
 import SelectPostingAccount from "@/components/postingaccount/SelectPostingAccount.vue";
 import { Button } from "@/components/ui/button";
 import type { ContractpartnerMatching } from "@/model/contractpartnermatching/ContractpartnerMatching";
-import { createFormContext } from "@/service/util/ValidationUtil.ts";
+import { createFormContext } from "@/tools/views/ValidationUtil";
 import { globErr } from "@/tools/views/ZodUtil";
 import { Save, Undo2 } from "@lucide/vue";
 import { storeToRefs } from "pinia";

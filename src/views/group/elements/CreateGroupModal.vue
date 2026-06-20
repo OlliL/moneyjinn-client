@@ -50,7 +50,7 @@ import InputStandard from "@/components/common/InputStandard.vue";
 import ModalVue from "@/components/common/Modal.vue";
 import { Button } from "@/components/ui/button";
 import type { Group } from "@/model/group/Group";
-import { createFormContext } from "@/service/util/ValidationUtil.ts";
+import { createFormContext } from "@/tools/views/ValidationUtil";
 import { globErr } from "@/tools/views/ZodUtil";
 import { Save, Undo2 } from "@lucide/vue";
 import { storeToRefs } from "pinia";

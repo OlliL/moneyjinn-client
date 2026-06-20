@@ -353,11 +353,11 @@ import type { SelectBoxValue } from "@/model/SelectBoxValue";
 import type { Trends } from "@/model/report/Trends";
 import type { TrendsParameter } from "@/model/report/TrendsParameter";
 import ReportService from "@/service/ReportService";
-import { createFormContext } from "@/service/util/ValidationUtil.ts";
 import { useCapitalsourceStore } from "@/stores/CapitalsourceStore";
 import { useEtfStore } from "@/stores/EtfStore";
 import { formatNumber } from "@/tools/views/FormatNumber";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
+import { createFormContext } from "@/tools/views/ValidationUtil";
 import { globErr } from "@/tools/views/ZodUtil";
 import { ChevronDown, Eye, SlidersHorizontal } from "@lucide/vue";
 import {

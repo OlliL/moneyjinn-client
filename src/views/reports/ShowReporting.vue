@@ -228,12 +228,12 @@ import type { PostingAccount } from "@/model/postingaccount/PostingAccount";
 import type { ReportingMonthAmount } from "@/model/report/ReportingMonthAmount";
 import type { ReportingParameter } from "@/model/report/ReportingParameter";
 import ReportService from "@/service/ReportService";
-import { createFormContext } from "@/service/util/ValidationUtil.ts";
 import { usePostingAccountStore } from "@/stores/PostingAccountStore";
 import { toFixed } from "@/tools/math";
 import { formatNumber } from "@/tools/views/FormatNumber";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { getMonthName } from "@/tools/views/MonthName";
+import { createFormContext } from "@/tools/views/ValidationUtil";
 import { globErr } from "@/tools/views/ZodUtil";
 import { Eye } from "@lucide/vue";
 import {

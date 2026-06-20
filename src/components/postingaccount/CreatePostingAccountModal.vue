@@ -47,7 +47,7 @@
 <script lang="ts" setup>
 import { Button } from "@/components/ui/button";
 import type { PostingAccount } from "@/model/postingaccount/PostingAccount";
-import { createFormContext } from "@/service/util/ValidationUtil.ts";
+import { createFormContext } from "@/tools/views/ValidationUtil.ts";
 import { globErr } from "@/tools/views/ZodUtil";
 import { Save, Undo2 } from "@lucide/vue";
 import { storeToRefs } from "pinia";
