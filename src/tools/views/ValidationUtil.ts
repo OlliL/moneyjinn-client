@@ -11,8 +11,13 @@ import {
   type Ref,
 } from "vue";
 import { type ZodType } from "zod";
+import type { $ZodIssueBase } from "zod/v4/core";
 
 const FormSymbol = Symbol("FormContext");
+
+interface ZodIssueWithDefault extends $ZodIssueBase {
+  __isZodDefault?: true;
+}
 
 interface FieldRegistration {
   validate: (setTouched?: boolean) => Promise<boolean>;
@@ -72,7 +77,7 @@ export function useFormContext<T>(config: FieldConfig<T>) {
     if (setTouched) touched.value = setTouched;
     const result = schema.value.safeParse(model.value, {
       error: (issue) => {
-        (issue as any).__isZodDefault = true;
+        (issue as ZodIssueWithDefault).__isZodDefault = true;
         return undefined;
       },
     });
@@ -80,8 +85,8 @@ export function useFormContext<T>(config: FieldConfig<T>) {
     if (result.success) {
       validationError.value = undefined;
     } else {
-      const firstIssue = result.error.issues[0];
-      const isDefaultError = (firstIssue as any).__isZodDefault === true;
+      const firstIssue = result.error.issues[0] as ZodIssueWithDefault;
+      const isDefaultError = firstIssue.__isZodDefault === true;
       const customGlobMessageFn = (toRaw(schema.value) as any)._def?.error;
       if (isDefaultError && customGlobMessageFn) {
         validationError.value = customGlobMessageFn().message;
