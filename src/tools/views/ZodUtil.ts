@@ -1,8 +1,15 @@
-import { number, ZodType } from "zod";
+import { number, z, ZodType } from "zod";
+
+z.config({
+  customError: (issue) => {
+    (issue as any).__isZodDefault = true;
+    return undefined;
+  },
+});
 
 export function globErr(message: string) {
   return {
-    errorMap: () => ({ message: message }),
+    error: () => ({ message: message }),
   };
 }
 

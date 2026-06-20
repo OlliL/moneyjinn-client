@@ -147,7 +147,7 @@ const effectiveSchema = computed(() => {
   return preprocess(parseInput, base);
 });
 
-const { errorMessage, handleBlur } = useFormContext({
+const { errorMessage, handleBlur, handleInput } = useFormContext({
   schema: effectiveSchema,
   model: model as Ref<Date | undefined>,
 });
@@ -249,6 +249,7 @@ const onTextInput = (event: Event) => {
     if (datepicker instanceof Datepicker) datepicker.setDate({ clear: true });
     model.value = undefined;
   }
+  handleInput();
 };
 
 const setDate = (newVal?: Date) => {

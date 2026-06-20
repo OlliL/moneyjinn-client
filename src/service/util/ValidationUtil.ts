@@ -67,39 +67,43 @@ export function useFormContext<T>(config: FieldConfig<T>) {
   const errorMessage = computed(() =>
     touched.value ? validationError.value : undefined,
   );
-  let initialValue: unknown;
 
   const validate = async (setTouched?: boolean): Promise<boolean> => {
     if (setTouched) touched.value = setTouched;
     const result = schema.value.safeParse(model.value);
-    validationError.value = result.success
-      ? undefined
-      : result.error.errors[0]?.message;
-    return !validationError.value;
+
+    if (result.success) {
+      validationError.value = undefined;
+    } else {
+      const firstIssue = result.error.issues[0];
+      const isDefaultError = (firstIssue as any).__isZodDefault === true;
+      const customGlobMessageFn = (toRaw(schema.value) as any)._def?.error;
+      if (isDefaultError && customGlobMessageFn) {
+        validationError.value = customGlobMessageFn().message;
+      } else {
+        validationError.value = firstIssue.message;
+      }
+    }
+
+    return result.success;
   };
 
-  const setInitialValue = () => {
-    initialValue = structuredClone(toRaw(model.value));
+  const handleInput = () => {
+    touched.value = true;
   };
 
   const handleBlur = () => {
-    touched.value = true;
-    if (JSON.stringify(model.value) !== JSON.stringify(initialValue)) {
-      validate();
-      setInitialValue();
-    }
+    validate();
   };
 
   const reset = () => {
     touched.value = false;
     validationError.value = undefined;
-    setInitialValue();
   };
 
   let unregister: (() => void) | null = null;
 
   onMounted(() => {
-    setInitialValue();
     if (register) {
       unregister = register({ validate, reset });
     }
@@ -116,5 +120,5 @@ export function useFormContext<T>(config: FieldConfig<T>) {
     if (unregister) unregister();
   });
 
-  return { errorMessage, validate, handleBlur, reset };
+  return { errorMessage, validate, handleBlur, reset, handleInput };
 }

@@ -51,7 +51,7 @@ const schema = computed(
   () => props.validationSchemaRef?.value ?? props.validationSchema,
 );
 
-const { errorMessage, handleBlur } = useFormContext({
+const { errorMessage, handleBlur, handleInput } = useFormContext({
   schema: schema,
   model: model,
 });
@@ -59,6 +59,7 @@ const { errorMessage, handleBlur } = useFormContext({
 const onInput = (event: Event) => {
   const files = (event.target as HTMLInputElement).files;
   model.value = files;
+  handleInput();
   handleBlur();
 };
 </script>

@@ -2,6 +2,9 @@
   "extends": "@vue/tsconfig/tsconfig.dom.json",
   "include": ["env.d.ts", "src/**/*", "src/**/*.vue"],
   "compilerOptions": {
+    "moduleResolution": "bundler", // WICHTIG! Alternativ "node16" oder "nodenext"
+    "module": "ESNext",
+    "strict": true,
     "paths": {
       "@/*": ["./src/*"]
     }

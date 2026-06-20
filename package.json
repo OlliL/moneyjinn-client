@@ -39,7 +39,7 @@
     "vue-pdf-embed": "^2.1.4",
     "vue-router": "^5.0.2",
     "vue-sonner": "^2.0.9",
-    "zod": "^3.20.2"
+    "zod": "^4.4.3"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

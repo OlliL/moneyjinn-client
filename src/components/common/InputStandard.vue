@@ -25,6 +25,7 @@
             : 'border-input focus-visible:ring-ring',
         ]"
         @blur="handleBlur"
+        @input="handleInput"
       />
 
       <div
@@ -101,7 +102,7 @@ const schema = computed(
   () => props.validationSchemaRef?.value ?? props.validationSchema,
 );
 
-const { errorMessage, handleBlur } = useFormContext({
+const { errorMessage, handleBlur, handleInput } = useFormContext({
   schema: schema,
   model: model,
 });

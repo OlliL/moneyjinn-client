@@ -203,7 +203,7 @@ import { Save, Undo2 } from "@lucide/vue";
 import { storeToRefs } from "pinia";
 import { computed, ref, toRaw, watch } from "vue";
 import { useI18n } from "vue-i18n";
-import { boolean, date, number, string, type ZodTypeAny } from "zod";
+import { boolean, date, number, string, ZodType } from "zod";
 import useCreateUserModalStore from "./CreateUserModal.store";
 
 const { t } = useI18n();
@@ -222,7 +222,7 @@ const schema = {
   validFrom: date(globErr(t("General.validation.validFrom"))),
   userIsNew: boolean(globErr(t("User.validation.userIsNew"))),
   userRole: number(globErr(t("User.validation.userRole"))),
-  password: ref(string() as ZodTypeAny),
+  password: ref(string() as ZodType),
 };
 
 const origUser = ref({} as User | undefined);

@@ -157,7 +157,7 @@ const fieldValue = ref<string | undefined>(undefined);
 const preventOnFocus = ref(false);
 const hiddenValue = ref<unknown>(props.modelValue);
 
-const { errorMessage, handleBlur } = useFormContext({
+const { errorMessage, handleBlur, handleInput } = useFormContext({
   schema: schema,
   model: hiddenValue,
 });
@@ -212,6 +212,7 @@ const clearInput = () => {
   hiddenValue.value = undefined;
   fieldValue.value = undefined;
   emit("update:modelValue", undefined);
+  handleInput();
   handleBlur();
 };
 const setFieldValue = () => {
@@ -237,6 +238,7 @@ const onBlur = () => {
         hideDropdown();
       }
       setFieldValue();
+      handleInput();
       handleBlur();
     }
   }, 100);
@@ -268,6 +270,7 @@ const onFocus = () => {
 const onClickAnchor = (selectBoxValue: SelectBoxValue) => {
   hiddenValue.value = selectBoxValue.id;
   emit("update:modelValue", selectBoxValue.id);
+  handleInput();
   handleBlur();
   hideDropdown();
 };

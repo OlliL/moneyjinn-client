@@ -311,7 +311,7 @@ import { globErr } from "@/tools/views/ZodUtil";
 import { ChevronDown, Search, SlidersHorizontal, Undo2 } from "@lucide/vue";
 import { onMounted, provide, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
-import { any, date, type ZodTypeAny } from "zod";
+import { any, date, ZodType } from "zod";
 import SearchMoneyflowResultDesktopGroup from "./elements/SearchMoneyflowResultDesktopGroup.vue";
 import SearchMoneyflowResultMobileGroup from "./elements/SearchMoneyflowResultMobileGroup.vue";
 
@@ -369,7 +369,7 @@ const { openListReceipt } = useReceiptModalStore();
 const schema = {
   startDate: date(globErr(t("General.validation.startDate"))),
   endDate: date(globErr(t("General.validation.endDate"))),
-  searchCriteria: ref(any() as ZodTypeAny),
+  searchCriteria: ref(any() as ZodType),
 };
 
 watch(

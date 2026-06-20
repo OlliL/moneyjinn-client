@@ -56,7 +56,7 @@
 import { createFormContext } from "@/service/util/ValidationUtil.ts";
 import { onMounted, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
-import { string, type ZodTypeAny } from "zod";
+import { string, ZodType } from "zod";
 
 import router, { Routes } from "@/router";
 
@@ -80,7 +80,7 @@ const { t } = useI18n();
 
 const schema = {
   passwordOld: string(globErr(t("User.validation.passwordOld"))).min(1),
-  password: ref(string() as ZodTypeAny),
+  password: ref(string() as ZodType),
 };
 
 const passwordOld = ref("");
