@@ -164,7 +164,6 @@ beforeEach(async () => {
   setupUserStandard();
 });
 
-// Wir erstellen einen Wrapper, der den Kontext injiziert
 const TestWrapper = defineComponent({
   components: { EditMoneyflowBase },
   props: {
@@ -182,7 +181,7 @@ const TestWrapper = defineComponent({
     },
   },
   setup() {
-    createFormContext(); // Ruft intern provide(FormSymbol) auf
+    createFormContext();
     return {};
   },
   template: `

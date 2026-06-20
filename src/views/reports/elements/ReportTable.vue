@@ -147,7 +147,7 @@ import { useDeleteMoneyflowModalStore } from "@/components/moneyflow/DeleteMoney
 import useEditMoneyflowModalStore from "@/components/moneyflow/EditMoneyflowModal.store";
 import useListMoneyflowModalStore from "@/components/moneyflow/ListMoneyflowModal.store";
 import useReceiptModalStore from "@/components/reports/ReceiptModal.store";
-import { Accordion } from "@/components/ui/accordion"; // Import Accordion
+import { Accordion } from "@/components/ui/accordion";
 import { CapitalsourceType } from "@/model/capitalsource/CapitalsourceType";
 import {
   MoneyflowRowActionsKey,

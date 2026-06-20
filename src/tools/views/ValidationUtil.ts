@@ -1,5 +1,4 @@
 import {
-  computed,
   inject,
   nextTick,
   onMounted,
@@ -68,13 +67,9 @@ export function useFormContext<T>(config: FieldConfig<T>) {
   >(FormSymbol, undefined);
 
   const touched = ref(false);
-  const validationError = ref<string | undefined>(undefined);
-  const errorMessage = computed(() =>
-    touched.value ? validationError.value : undefined,
-  );
+  const errorMessage = ref<string | undefined>(undefined);
 
   const validate = async (setTouched?: boolean): Promise<boolean> => {
-    if (setTouched) touched.value = setTouched;
     const result = schema.value.safeParse(model.value, {
       error: (issue) => {
         (issue as ZodIssueWithDefault).__isZodDefault = true;
@@ -83,17 +78,17 @@ export function useFormContext<T>(config: FieldConfig<T>) {
     });
 
     if (result.success) {
-      validationError.value = undefined;
-    } else {
+      errorMessage.value = undefined;
+    } else if (touched.value || setTouched) {
       const firstIssue = result.error.issues[0] as ZodIssueWithDefault;
       const isDefaultError = firstIssue.__isZodDefault === true;
       const customGlobMessageFn = (toRaw(schema.value) as ZodType).def?.error;
       if (isDefaultError && customGlobMessageFn) {
         const result = customGlobMessageFn(firstIssue as never);
-        validationError.value =
+        errorMessage.value =
           typeof result === "string" ? result : result?.message;
       } else {
-        validationError.value = firstIssue.message;
+        errorMessage.value = firstIssue.message;
       }
     }
 
@@ -110,7 +105,7 @@ export function useFormContext<T>(config: FieldConfig<T>) {
 
   const reset = () => {
     touched.value = false;
-    validationError.value = undefined;
+    errorMessage.value = undefined;
   };
 
   let unregister: (() => void) | null = null;

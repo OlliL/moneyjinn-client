@@ -116,7 +116,7 @@ const { t } = useI18n();
 const model = defineModel<Date | undefined>();
 const closeLabel = t("General.close");
 const isPopoverOpen = ref(false);
-const popoverZIndex = ref(3500); // Deine Z-Index Logik bleibt hier erhalten
+const popoverZIndex = ref(3500);
 const datepickerContainer = useTemplateRef<HTMLDivElement>(
   "datepickerContainer",
 );
@@ -204,12 +204,7 @@ const initDatepicker = () => {
   datepickerContainer.value.addEventListener("changeDate", onInput);
   datepickerContainer.value.addEventListener("click", (e) => {
     const target = e.target as HTMLElement;
-    const vCls =
-      props.pickMode === "month"
-        ? "month"
-        : props.pickMode === "year"
-          ? "year"
-          : "day";
+    const vCls = { month: "month", year: "year" }[props.pickMode] || "day";
     if (
       (target.classList.contains("datepicker-cell") &&
         target.classList.contains(vCls)) ||
@@ -296,7 +291,7 @@ const onKeyboardInput = (event: KeyboardEvent) => {
   }
 };
 
-const onInput = () => {
+const onInput = async () => {
   const sel = datepicker.getDate() as Date | undefined;
   const el = getInputElement();
   const changed = sel?.getTime() !== model.value?.getTime();
@@ -304,12 +299,16 @@ const onInput = () => {
     model.value = undefined;
     if (el) el.value = "";
     handleBlur();
+    isPopoverOpen.value = false;
   } else if (sel && changed) {
     model.value = sel;
-    if (el) el.value = Datepicker.formatDate(sel, format, "de");
     handleBlur();
+    isPopoverOpen.value = false;
+    await nextTick();
+    if (el) el.value = Datepicker.formatDate(sel, format, "de");
+  } else {
+    isPopoverOpen.value = false;
   }
-  isPopoverOpen.value = false;
 };
 
 watch(isPopoverOpen, async (val) => {

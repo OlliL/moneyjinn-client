@@ -249,7 +249,6 @@
 </template>
 
 <script lang="ts" setup>
-// Script-Teil bleibt unverändert...
 import SpanAmount from "@/components/common/SpanAmount.vue";
 import DisplayMoneyflowRowDesktop from "@/components/moneyflow/DisplayMoneyflowRowDesktop.vue";
 import { Button } from "@/components/ui/button";
