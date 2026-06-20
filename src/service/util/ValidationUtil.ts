@@ -1,5 +1,7 @@
 import {
+  computed,
   inject,
+  nextTick,
   onMounted,
   onUnmounted,
   provide,
@@ -11,7 +13,10 @@ import { type ZodType } from "zod";
 
 const FormSymbol = Symbol("FormContext");
 
-type ValidateFn = () => Promise<boolean>;
+interface FieldRegistration {
+  validate: () => Promise<boolean>;
+  reset: () => void;
+}
 
 interface FieldConfig<T> {
   schema: ZodType<T>;
@@ -19,14 +24,12 @@ interface FieldConfig<T> {
 }
 
 export function createFormContext() {
-  const childValidations = ref<ValidateFn[]>([]);
+  const childFields = ref<FieldRegistration[]>([]);
 
-  const registerField = (validateFn: ValidateFn) => {
-    childValidations.value.push(validateFn);
+  const registerField = (field: FieldRegistration) => {
+    childFields.value.push(field);
     return () => {
-      childValidations.value = childValidations.value.filter(
-        (fn) => fn !== validateFn,
-      );
+      childFields.value = childFields.value.filter((f) => f !== field);
     };
   };
 
@@ -35,7 +38,7 @@ export function createFormContext() {
   const handleSubmit = (callback: () => unknown) => {
     return async () => {
       const results = await Promise.all(
-        childValidations.value.map((validate) => validate()),
+        childFields.value.map((field) => field.validate()),
       );
       const isFormValid = results.every(Boolean);
       if (isFormValid) {
@@ -45,22 +48,30 @@ export function createFormContext() {
     };
   };
 
-  return { handleSubmit };
+  const resetAll = () => {
+    nextTick(() => childFields.value.forEach((field) => field.reset()));
+  };
+
+  return { handleSubmit, resetAll };
 }
 
 export function useFormContext<T>(config: FieldConfig<T>) {
   const { schema, model } = config;
-  const register = inject<(validateFn: ValidateFn) => () => void>(FormSymbol);
+  const register = inject<(field: FieldRegistration) => () => void>(FormSymbol);
 
-  const errorMessage = ref<string | undefined>(undefined);
+  const touched = ref(false);
+  const validationError = ref<string | undefined>(undefined);
+  const errorMessage = computed(() =>
+    touched.value ? validationError.value : undefined,
+  );
   let initialValue: unknown;
 
   const validate = async (): Promise<boolean> => {
     const result = schema.safeParse(model.value);
-    errorMessage.value = result.success
+    validationError.value = result.success
       ? undefined
       : result.error.errors[0]?.message;
-    return !errorMessage.value;
+    return !validationError.value;
   };
 
   const setInitialValue = () => {
@@ -68,6 +79,7 @@ export function useFormContext<T>(config: FieldConfig<T>) {
   };
 
   const handleBlur = () => {
+    touched.value = true;
     if (JSON.stringify(model.value) !== JSON.stringify(initialValue)) {
       validate();
       setInitialValue();
@@ -75,7 +87,8 @@ export function useFormContext<T>(config: FieldConfig<T>) {
   };
 
   const reset = () => {
-    errorMessage.value = undefined;
+    touched.value = false;
+    validationError.value = undefined;
     setInitialValue();
   };
 
@@ -84,7 +97,7 @@ export function useFormContext<T>(config: FieldConfig<T>) {
   onMounted(() => {
     setInitialValue();
     if (register) {
-      unregister = register(validate);
+      unregister = register({ validate, reset });
     }
     watch(
       model,

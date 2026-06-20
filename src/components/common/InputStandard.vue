@@ -95,7 +95,7 @@ const props = withDefaults(
     disabled: false,
   },
 );
-const model = defineModel<unknown>();
+const model = defineModel<string | number>();
 
 const schema = computed(
   () => props.validationSchemaRef?.value ?? props.validationSchema,

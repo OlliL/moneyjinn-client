@@ -25,7 +25,7 @@
                 :data-testid="id"
                 :class="[
                   $slots.icon ? 'rounded-r-none' : '',
-                  isInvalid
+                  errorMessage
                     ? '!border-destructive bg-destructive/[0.03] focus-visible:ring-destructive/15 !border-r-destructive'
                     : 'bg-background border-input focus-visible:ring-ring',
                 ]"
@@ -52,7 +52,7 @@
               v-if="$slots.icon"
               :class="[
                 'flex items-center justify-center px-2 border border-input rounded-r-md text-foreground transition-colors relative',
-                isInvalid ? 'border-l-transparent' : '',
+                errorMessage ? 'border-l-transparent' : '',
               ]"
               @click.stop
               @pointerdown.stop
@@ -96,7 +96,7 @@
     </div>
 
     <p
-      v-if="isInvalid"
+      v-if="errorMessage"
       :data-testid="id + '-error'"
       class="text-[0.8rem] font-medium text-destructive mt-0.5 text-left ml-1"
     >
@@ -114,9 +114,8 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import type { SelectBoxValue } from "@/model/SelectBoxValue";
+import { useFormContext } from "@/service/util/ValidationUtil";
 import { X } from "@lucide/vue";
-import { toTypedSchema } from "@vee-validate/zod";
-import { useField } from "vee-validate";
 import {
   computed,
   nextTick,
@@ -128,6 +127,10 @@ import {
   type Ref,
 } from "vue";
 import { any, type ZodType } from "zod";
+
+const emit = defineEmits<{
+  "update:modelValue": [value: unknown];
+}>();
 
 const props = withDefaults(
   defineProps<{
@@ -144,25 +147,19 @@ const props = withDefaults(
     focus: false,
   },
 );
-const schema = computed(() => {
-  if (props.validationSchemaRef) {
-    return toTypedSchema(props.validationSchemaRef.value);
-  }
-  return toTypedSchema(props.validationSchema);
-});
+
+const schema = computed(
+  () => props.validationSchemaRef?.value ?? props.validationSchema,
+);
 
 const items: Ref<Array<SelectBoxValue>> = ref([]);
 const fieldValue = ref<string | undefined>(undefined);
 const preventOnFocus = ref(false);
-const {
-  value: hiddenValue,
-  meta: fieldMeta,
-  errorMessage,
-  setState,
-  setValue,
-} = useField(props.id, schema, {
-  initialValue: props.modelValue,
-  syncVModel: true,
+const hiddenValue = ref<unknown>(props.modelValue);
+
+const { errorMessage, handleBlur } = useFormContext({
+  schema: schema.value,
+  model: hiddenValue,
 });
 
 const filterItemList = () => {
@@ -212,9 +209,10 @@ const getFirstDropdownAnchor = () =>
   getDropdownAnchors()[0] as HTMLAnchorElement | undefined;
 
 const clearInput = () => {
-  if (fieldValue.value) setState({ touched: true });
   hiddenValue.value = undefined;
   fieldValue.value = undefined;
+  emit("update:modelValue", undefined);
+  handleBlur();
 };
 const setFieldValue = () => {
   fieldValue.value = props.selectBoxValues.find(
@@ -239,6 +237,7 @@ const onBlur = () => {
         hideDropdown();
       }
       setFieldValue();
+      handleBlur();
     }
   }, 100);
 };
@@ -267,8 +266,9 @@ const onFocus = () => {
 };
 
 const onClickAnchor = (selectBoxValue: SelectBoxValue) => {
-  setState({ touched: true });
-  setValue(selectBoxValue.id);
+  hiddenValue.value = selectBoxValue.id;
+  emit("update:modelValue", selectBoxValue.id);
+  handleBlur();
   hideDropdown();
 };
 
@@ -332,14 +332,13 @@ const onInput = () => {
   filterItemList();
 };
 
-const isInvalid = computed(() => fieldMeta.touched && !!errorMessage.value);
-
 const fieldRef = useTemplateRef<typeof Input>("fieldRef");
 const dropdownRef = useTemplateRef<HTMLDivElement>("dropdownRef");
 
 watch(
   () => props.modelValue,
-  () => {
+  (newVal) => {
+    hiddenValue.value = newVal;
     setFieldValue();
   },
   { immediate: true },

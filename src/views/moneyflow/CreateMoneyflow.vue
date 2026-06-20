@@ -90,10 +90,10 @@ import {
 import type { PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
 import { preDefMoneyflowAlreadyUsedThisMonth } from "@/model/moneyflow/PreDefMoneyflow";
 import PreDefMoneyflowService from "@/service/PreDefMoneyflowService";
+import { createFormContext } from "@/service/util/ValidationUtil";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { Save, Undo2 } from "@lucide/vue";
 import { type AcceptableValue } from "reka-ui";
-import { useForm } from "vee-validate";
 import { onMounted, ref, useTemplateRef } from "vue";
 
 const preDefMoneyflows = ref(new Array<PreDefMoneyflow>());
@@ -102,7 +102,7 @@ const selectedPreDefMoneyflow = ref(undefined as PreDefMoneyflow | undefined);
 const editMoneyflowVue =
   useTemplateRef<typeof EditMoneyflowBase>("editMoneyflowVue");
 
-const { handleSubmit, values, setFieldTouched } = useForm();
+const { handleSubmit, resetAll } = createFormContext();
 
 onMounted(() =>
   PreDefMoneyflowService.fetchAllPreDefMoneyflow()
@@ -154,6 +154,6 @@ const resetForm = () => {
   preDefMoneyflowId.value = 0;
   selectPreDefMoneyflow();
   editMoneyflowVue.value?.resetForm();
-  Object.keys(values).forEach((field) => setFieldTouched(field, false));
+  resetAll();
 };
 </script>

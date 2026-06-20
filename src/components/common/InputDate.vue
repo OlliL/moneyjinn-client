@@ -14,7 +14,7 @@
             type="text"
             :class="[
               'rounded-r-none bg-white z-10',
-              isInvalid
+              errorMessage
                 ? 'border-destructive! bg-destructive/3 focus-visible:ring-destructive/15 border-r-destructive!'
                 : 'border-input focus-visible:ring-ring',
             ]"
@@ -35,7 +35,7 @@
           <div
             :class="[
               'cursor-pointer flex items-center justify-center px-2 border border-input rounded-r-md text-foreground transition-colors relative',
-              isInvalid ? 'border-l-transparent' : '',
+              errorMessage ? 'border-l-transparent' : '',
             ]"
           >
             <CalendarDays class="w-4 h-4" />
@@ -59,7 +59,7 @@
     </Popover>
 
     <p
-      v-if="isInvalid"
+      v-if="errorMessage"
       :data-testid="id + '-error'"
       class="text-[0.8rem] font-medium text-destructive mt-0.5 text-left ml-1"
     >
@@ -77,11 +77,9 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { CalendarDays } from "@lucide/vue";
-import { toTypedSchema } from "@vee-validate/zod";
 import { Datepicker } from "vanillajs-datepicker";
 // @ts-expect-error Plain JS import
 import de from "vanillajs-datepicker/locales/de";
-import { useField } from "vee-validate";
 import {
   computed,
   nextTick,
@@ -94,6 +92,7 @@ import {
 } from "vue";
 import { useI18n } from "vue-i18n";
 import { date, preprocess, type ZodType } from "zod";
+import { useFormContext } from "@/service/util/ValidationUtil";
 
 const props = withDefaults(
   defineProps<{
@@ -115,7 +114,6 @@ const props = withDefaults(
 
 const { t } = useI18n();
 const model = defineModel<Date | undefined>();
-const viewMounted = ref(false);
 const closeLabel = t("General.close");
 const isPopoverOpen = ref(false);
 const popoverZIndex = ref(3500); // Deine Z-Index Logik bleibt hier erhalten
@@ -144,27 +142,14 @@ const parseInput = (v: unknown) => {
   return d && Datepicker.formatDate(d, format, "de") === v ? d : v;
 };
 
-const schema = computed(() => {
-  if (!viewMounted.value) return undefined;
-  return toTypedSchema(
-    preprocess(
-      parseInput,
-      props.validationSchemaRef?.value ?? props.validationSchema,
-    ),
-  );
+const effectiveSchema = computed(() => {
+  const base = props.validationSchemaRef?.value ?? props.validationSchema;
+  return preprocess(parseInput, base);
 });
 
-const {
-  meta: fieldMeta,
-  errorMessage,
-  setState,
-  handleChange,
-  handleBlur,
-  validate,
-  setValue,
-} = useField(props.id, schema, {
-  initialValue: model.value,
-  syncVModel: false,
+const { errorMessage, handleBlur } = useFormContext({
+  schema: effectiveSchema.value,
+  model: model as Ref<Date | undefined>,
 });
 let datepicker = {} as Datepicker;
 const getInputElement = () => {
@@ -177,9 +162,8 @@ const getInputElement = () => {
   return refValue as HTMLInputElement;
 };
 
-const onBlur = (event: FocusEvent) => {
-  handleBlur(event);
-  validate();
+const onBlur = (_event: FocusEvent) => {
+  handleBlur();
 };
 
 const initDatepicker = () => {
@@ -240,8 +224,9 @@ const initDatepicker = () => {
   });
 };
 
+
+
 onMounted(() => {
-  viewMounted.value = true;
   if (model.value) {
     setDate(model.value);
   }
@@ -255,7 +240,6 @@ onUnmounted(() => {
 
 const onTextInput = (event: Event) => {
   const v = (event.target as HTMLInputElement).value;
-  handleChange(event, false);
 
   if (v.length === format.length) {
     const d = parseInput(v);
@@ -263,7 +247,6 @@ const onTextInput = (event: Event) => {
       if (datepicker instanceof Datepicker) datepicker.setDate(d);
       if (d.getTime() !== model.value?.getTime()) {
         model.value = d;
-        setValue(d, false);
       }
     } else {
       model.value = new Date(Number.NaN);
@@ -271,7 +254,6 @@ const onTextInput = (event: Event) => {
   } else if (v === "" && model.value !== undefined) {
     if (datepicker instanceof Datepicker) datepicker.setDate({ clear: true });
     model.value = undefined;
-    setValue(undefined, false);
   }
 };
 
@@ -324,20 +306,16 @@ const onInput = () => {
   const el = getInputElement();
   const changed = sel?.getTime() !== model.value?.getTime();
   if (!sel && model.value !== undefined) {
-    setState({ touched: true });
     model.value = undefined;
-    setValue(undefined);
     if (el) el.value = "";
+    handleBlur();
   } else if (sel && changed) {
-    setState({ touched: true });
     model.value = sel;
-    setValue(sel);
     if (el) el.value = Datepicker.formatDate(sel, format, "de");
+    handleBlur();
   }
   isPopoverOpen.value = false;
 };
-
-const isInvalid = computed(() => fieldMeta.touched && !!errorMessage.value);
 
 watch(isPopoverOpen, async (val) => {
   if (val) {
@@ -367,7 +345,6 @@ watch(
 
     if (newVal?.getTime() !== current?.getTime()) {
       setDate(newVal);
-      setValue(newVal, false);
     }
   },
 );
