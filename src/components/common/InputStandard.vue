@@ -6,7 +6,7 @@
 
     <div class="flex -space-x-px relative">
       <Input
-        v-model="fieldValue"
+        v-model="model as string"
         v-bind="$attrs"
         ref="fieldRef"
         :id="id"
@@ -20,11 +20,11 @@
           'bg-background z-10',
           alignmentClass,
           $slots.icon || $slots.button ? 'rounded-r-none' : '',
-          isInvalid
+          errorMessage
             ? 'border-destructive! bg-destructive/3 focus-visible:ring-destructive/15 border-r-destructive!'
             : 'border-input focus-visible:ring-ring',
         ]"
-        @input="onInput($event)"
+        @blur="handleBlur"
       />
 
       <div
@@ -32,7 +32,7 @@
         :class="[
           'flex items-center justify-center px-2 border border-input text-foreground transition-colors relative',
           $slots.button ? '' : 'rounded-r-md',
-          isInvalid ? 'border-l-transparent' : '',
+          errorMessage ? 'border-l-transparent' : '',
         ]"
       >
         <slot name="icon"></slot>
@@ -41,7 +41,7 @@
         v-if="$slots.button"
         :class="[
           'flex items-center justify-center px-2 border border-input rounded-r-md text-foreground transition-colors relative action-icon-button',
-          isInvalid ? 'border-l-transparent' : '',
+          errorMessage ? 'border-l-transparent' : '',
         ]"
       >
         <slot name="button"></slot>
@@ -49,7 +49,7 @@
     </div>
 
     <p
-      v-if="isInvalid"
+      v-if="errorMessage"
       class="text-[0.8rem] font-medium text-destructive mt-0.5 text-left ml-1"
       :data-testid="id + '-error-item'"
     >
@@ -61,8 +61,7 @@
 <script lang="ts" setup>
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { toTypedSchema } from "@vee-validate/zod";
-import { useField } from "vee-validate";
+import { useFormContext } from "@/service/util/ValidationUtil";
 import {
   computed,
   nextTick,
@@ -96,33 +95,16 @@ const props = withDefaults(
     disabled: false,
   },
 );
-const model = defineModel<any>();
+const model = defineModel<unknown>();
 
-const schema = computed(() => {
-  if (props.validationSchemaRef) {
-    return toTypedSchema(props.validationSchemaRef.value);
-  }
-  return toTypedSchema(props.validationSchema);
+const schema = computed(
+  () => props.validationSchemaRef?.value ?? props.validationSchema,
+);
+
+const { errorMessage, handleBlur } = useFormContext({
+  schema: schema.value,
+  model: model,
 });
-
-const {
-  value: fieldValue,
-  meta: fieldMeta,
-  errorMessage,
-  setState,
-  handleChange,
-  setValue,
-} = useField(props.id, schema, {
-  syncVModel: true,
-});
-
-const onInput = (event: Event) => {
-  setState({ touched: true });
-  handleChange(event, true);
-  model.value = fieldValue.value;
-};
-
-const isInvalid = computed(() => fieldMeta.touched && !!errorMessage.value);
 
 const alignmentClass = computed(() =>
   props.align ? "text-" + props.align : "",
@@ -139,6 +121,7 @@ const getInputElement = () => {
   if ("$el" in refValue && refValue.$el) return refValue.$el;
   return refValue as HTMLInputElement;
 };
+
 onMounted(() => {
   if (props.focus) {
     nextTick(() => {
@@ -150,10 +133,6 @@ onMounted(() => {
 watch(
   () => model.value,
   (newValue) => {
-    setValue(newValue, false);
-    // The shadcn Input uses useVModel with passive:true, which means it does not
-    // react to external modelValue changes. We therefore update the native input
-    // element's value directly so the DOM stays in sync.
     nextTick(() => {
       const el = getInputElement();
       if (el && el.value !== String(newValue ?? "")) {

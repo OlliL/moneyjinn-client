@@ -79,7 +79,7 @@ import {
 import { CalendarDays } from "@lucide/vue";
 import { toTypedSchema } from "@vee-validate/zod";
 import { Datepicker } from "vanillajs-datepicker";
-// @ts-ignore
+// @ts-expect-error Plain JS import
 import de from "vanillajs-datepicker/locales/de";
 import { useField } from "vee-validate";
 import {
@@ -136,7 +136,7 @@ const {
   dots: autoDots,
 } = CONFIG[props.pickMode as keyof typeof CONFIG] || CONFIG.day;
 
-const parseInput = (v: any) => {
+const parseInput = (v: unknown) => {
   if (v instanceof Date) return v;
   if (typeof v !== "string" || v.length !== format.length) return v;
   const ts = Datepicker.parseDate(v, format, "de");

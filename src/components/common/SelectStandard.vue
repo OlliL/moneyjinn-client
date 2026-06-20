@@ -131,7 +131,7 @@ import { any, type ZodType } from "zod";
 
 const props = withDefaults(
   defineProps<{
-    modelValue?: any;
+    modelValue?: unknown;
     selectBoxValues: Array<SelectBoxValue>;
     validationSchema?: ZodType;
     validationSchemaRef?: Ref<ZodType>;

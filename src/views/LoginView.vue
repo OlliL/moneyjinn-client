@@ -64,12 +64,12 @@ import ButtonSubmit from "@/components/common/ButtonSubmit.vue";
 import InputStandard from "@/components/common/InputStandard.vue";
 import router, { Routes } from "@/router";
 import UserService from "@/service/UserService";
+import { createFormContext } from "@/service/util/ValidationUtil";
 import {
   handleBackendError,
   showServerError,
 } from "@/tools/views/HandleBackendError";
 import { Lock, LogIn, User } from "@lucide/vue";
-import { useForm } from "vee-validate";
 import { onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { string } from "zod";
@@ -95,10 +95,10 @@ onMounted(() => {
 const username = ref("");
 const password = ref("");
 
-const { handleSubmit } = useForm();
+const { handleSubmit } = createFormContext();
 
-const handleLogin = handleSubmit((values) => {
-  UserService.login(values.username, values.password)
+const handleLogin = handleSubmit(() => {
+  UserService.login(username.value, password.value)
     .then(() => {
       router.push({ name: Routes.Home });
     })
