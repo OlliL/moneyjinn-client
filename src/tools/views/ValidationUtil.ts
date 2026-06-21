@@ -31,32 +31,26 @@ interface FieldConfig<T> {
 export function createFormContext() {
   const childFields = ref<FieldRegistration[]>([]);
 
+  const validateAll = async (setTouched = true) =>
+    (
+      await Promise.all(childFields.value.map((f) => f.validate(setTouched)))
+    ).every(Boolean);
+
+  const handleSubmit = (callback: () => unknown) => async () =>
+    (await validateAll()) ? callback() : false;
+
+  const resetAll = () =>
+    nextTick(() => childFields.value.forEach((field) => field.reset()));
+
+  const unregisterField = (field: FieldRegistration) =>
+    (childFields.value = childFields.value.filter((f) => f !== field));
+
   const registerField = (field: FieldRegistration) => {
     childFields.value.push(field);
-    return () => {
-      childFields.value = childFields.value.filter((f) => f !== field);
-    };
+    return unregisterField;
   };
 
   provide(FormSymbol, registerField);
-
-  const handleSubmit = (callback: () => unknown) => {
-    return async () => {
-      const results = await Promise.all(
-        childFields.value.map((field) => field.validate(true)),
-      );
-      const isFormValid = results.every(Boolean);
-      if (isFormValid) {
-        return callback();
-      }
-      return false;
-    };
-  };
-
-  const resetAll = () => {
-    nextTick(() => childFields.value.forEach((field) => field.reset()));
-  };
-
   return { handleSubmit, resetAll };
 }
 
@@ -69,27 +63,26 @@ export function useFormContext<T>(config: FieldConfig<T>) {
   const touched = ref(false);
   const errorMessage = ref<string | undefined>(undefined);
 
-  const validate = async (setTouched?: boolean): Promise<boolean> => {
+  const getErrorMessage = (issue: ZodIssueWithDefault) => {
+    const customFn = (toRaw(schema.value) as ZodType).def?.error;
+    if (issue.__isZodDefault && customFn) {
+      const result = customFn(issue as never);
+      return typeof result === "string" ? result : result?.message;
+    }
+    return issue.message;
+  };
+
+  const validate = async (forceValidation?: boolean): Promise<boolean> => {
     const result = schema.value.safeParse(model.value, {
       error: (issue) => {
         (issue as ZodIssueWithDefault).__isZodDefault = true;
-        return undefined;
       },
     });
 
     if (result.success) {
       errorMessage.value = undefined;
-    } else if (touched.value || setTouched) {
-      const firstIssue = result.error.issues[0] as ZodIssueWithDefault;
-      const isDefaultError = firstIssue.__isZodDefault === true;
-      const customGlobMessageFn = (toRaw(schema.value) as ZodType).def?.error;
-      if (isDefaultError && customGlobMessageFn) {
-        const result = customGlobMessageFn(firstIssue as never);
-        errorMessage.value =
-          typeof result === "string" ? result : result?.message;
-      } else {
-        errorMessage.value = firstIssue.message;
-      }
+    } else if (touched.value || forceValidation) {
+      errorMessage.value = getErrorMessage(result.error.issues[0]);
     }
 
     return result.success;
