@@ -19,6 +19,7 @@ interface ZodIssueWithDefault extends $ZodIssueBase {
 }
 
 interface FieldRegistration {
+  uuid: string;
   validate: (setTouched?: boolean) => Promise<boolean>;
   reset: () => void;
 }
@@ -39,9 +40,11 @@ interface FieldConfig<T> {
 export function createFormContext() {
   const childFields = ref<FieldRegistration[]>([]);
 
-  const validateAll = async (setTouched = true) =>
+  const validateAll = async (forceValidation = true) =>
     (
-      await Promise.all(childFields.value.map((f) => f.validate(setTouched)))
+      await Promise.all(
+        childFields.value.map((f) => f.validate(forceValidation)),
+      )
     ).every(Boolean);
 
   const handleSubmit = (callback: () => unknown) => async () =>
@@ -51,11 +54,13 @@ export function createFormContext() {
     nextTick(() => childFields.value.forEach((field) => field.reset()));
 
   const unregisterField = (field: FieldRegistration) =>
-    (childFields.value = childFields.value.filter((f) => f !== field));
+    (childFields.value = childFields.value.filter(
+      (f) => f.uuid !== field.uuid,
+    ));
 
   const registerField = (field: FieldRegistration) => {
     childFields.value.push(field);
-    return unregisterField;
+    return () => unregisterField(field);
   };
 
   provide(FormSymbol, registerField);
@@ -178,7 +183,11 @@ export function useFormContext<T>(config: FieldConfig<T>) {
 
   onMounted(() => {
     if (register) {
-      unregister = register({ validate, reset });
+      unregister = register({
+        uuid: globalThis.crypto.randomUUID(),
+        validate,
+        reset,
+      });
     }
     watch(
       [model, schema],
