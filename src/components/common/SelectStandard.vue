@@ -128,7 +128,7 @@ import {
 } from "vue";
 import { any, type ZodType } from "zod";
 
-const [modelValue] = defineModel<unknown>({ default: undefined });
+const [modelValue] = defineModel<unknown | undefined>();
 
 const props = withDefaults(
   defineProps<{
