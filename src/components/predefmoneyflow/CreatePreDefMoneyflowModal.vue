@@ -228,7 +228,7 @@
         variant="secondary"
         data-testid="createPreDefMoneyflowResetButton"
         class="button-with-icon hidden md:flex"
-        @click="resetForm(values, setFieldTouched)"
+        @click="resetForm(resetAll)"
       >
         <Undo2 class="icon-medium" />
         {{ $t("General.reset") }}
@@ -255,6 +255,7 @@ import {
 } from "@/components/ui/popover";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import type { PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
+import { createFormContext } from "@/tools/views/ValidationUtil.ts";
 import { amountSchema, globErr } from "@/tools/views/ZodUtil";
 import {
   Euro,
@@ -266,7 +267,6 @@ import {
   X,
 } from "@lucide/vue";
 import { storeToRefs } from "pinia";
-import { useForm } from "vee-validate";
 import { computed, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { boolean, number, string, type ZodType } from "zod";
@@ -283,7 +283,7 @@ const { t } = useI18n();
 const store = useCreatePreDefMoneyflowModalStore();
 const { open, mData, title } = storeToRefs(store);
 const { resetForm, save } = store;
-const { handleSubmit, values, setFieldTouched } = useForm();
+const { handleSubmit, resetAll } = createFormContext();
 
 const schema: Partial<{ [key in keyof PreDefMoneyflow]: ZodType }> = {
   amount: amountSchema(t("Moneyflow.validation.amount")),

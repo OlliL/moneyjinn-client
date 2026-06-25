@@ -87,10 +87,10 @@ import type { SelectBoxValue } from "@/model/SelectBoxValue";
 import CrudEtfPreliminaryLumpSumService from "@/service/CrudEtfPreliminaryLumpSumService";
 import { useEtfStore } from "@/stores/EtfStore";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
+import { createFormContext } from "@/tools/views/ValidationUtil";
 import { amountSchema, globErr } from "@/tools/views/ZodUtil";
 import { Euro, Save, Undo2 } from "@lucide/vue";
 import { storeToRefs } from "pinia";
-import { useForm } from "vee-validate";
 import { computed, ref, toRaw, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { date, number, type ZodType } from "zod";
@@ -118,7 +118,7 @@ const {
 const year = ref(new Date());
 const etfStore = useEtfStore();
 
-const { handleSubmit, values, setFieldTouched } = useForm();
+const { handleSubmit, resetAll } = createFormContext();
 
 const title = computed(() =>
   origMep.value === undefined
@@ -143,7 +143,7 @@ const resetForm = () => {
   localYearDate.setHours(0, 0, 0, 0);
   year.value = localYearDate;
 
-  Object.keys(values).forEach((field) => setFieldTouched(field, false));
+  resetAll();
 };
 
 watch(

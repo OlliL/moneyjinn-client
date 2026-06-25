@@ -168,10 +168,10 @@ const allButtonVariant = computed(() =>
   model.value ? "default" : "secondary",
 );
 
-const handleInput = (val: string | number) => {
+const handleInput = (val?: string | number) => {
   globalThis.clearTimeout(debounceTimeout);
   debounceTimeout = globalThis.setTimeout(() => {
-    model.value = String(val);
+    model.value = String(val ?? "");
   }, 300);
 };
 

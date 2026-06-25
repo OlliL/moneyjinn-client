@@ -68,8 +68,8 @@ import {
   handleBackendError,
   showServerError,
 } from "@/tools/views/HandleBackendError";
+import { createFormContext } from "@/tools/views/ValidationUtil";
 import { Lock, LogIn, User } from "@lucide/vue";
-import { useForm } from "vee-validate";
 import { onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { string } from "zod";
@@ -95,10 +95,10 @@ onMounted(() => {
 const username = ref("");
 const password = ref("");
 
-const { handleSubmit } = useForm();
+const { handleSubmit } = createFormContext();
 
-const handleLogin = handleSubmit((values) => {
-  UserService.login(values.username, values.password)
+const handleLogin = handleSubmit(() => {
+  UserService.login(username.value, password.value)
     .then(() => {
       router.push({ name: Routes.Home });
     })

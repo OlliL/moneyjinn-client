@@ -27,7 +27,7 @@
         variant="secondary"
         class="button-with-icon hidden md:flex"
         data-testid="createPostingAccountResetButton"
-        @click="resetForm(values, setFieldTouched)"
+        @click="resetForm(resetAll)"
       >
         <Undo2 class="icon-medium" />
         {{ $t("General.reset") }}
@@ -47,10 +47,10 @@
 <script lang="ts" setup>
 import { Button } from "@/components/ui/button";
 import type { PostingAccount } from "@/model/postingaccount/PostingAccount";
+import { createFormContext } from "@/tools/views/ValidationUtil.ts";
 import { globErr } from "@/tools/views/ZodUtil";
 import { Save, Undo2 } from "@lucide/vue";
 import { storeToRefs } from "pinia";
-import { useForm } from "vee-validate";
 import { useI18n } from "vue-i18n";
 import { string, ZodType } from "zod";
 import ButtonSubmit from "../common/ButtonSubmit.vue";
@@ -62,7 +62,7 @@ const { t } = useI18n();
 const store = useCreatePostingAccountModalStore();
 const { open, mData, title } = storeToRefs(store);
 const { resetForm, save } = store;
-const { handleSubmit, values, setFieldTouched } = useForm();
+const { handleSubmit, resetAll } = createFormContext();
 
 const schema: Partial<{ [key in keyof PostingAccount]: ZodType }> = {
   name: string(globErr(t("PostingAccount.validation.name")))

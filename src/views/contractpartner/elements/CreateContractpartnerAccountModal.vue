@@ -66,10 +66,10 @@ import { Button } from "@/components/ui/button";
 import type { ContractpartnerAccount } from "@/model/contractpartneraccount/ContractpartnerAccount";
 import ContractpartnerAccountService from "@/service/ContractpartnerAccountService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
+import { createFormContext } from "@/tools/views/ValidationUtil";
 import { globErr } from "@/tools/views/ZodUtil";
 import { Save, Undo2 } from "@lucide/vue";
 import { storeToRefs } from "pinia";
-import { useForm } from "vee-validate";
 import { computed, ref, toRaw, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { string, ZodType } from "zod";
@@ -93,7 +93,7 @@ withDefaults(
 const mca = ref({} as ContractpartnerAccount);
 const origMca = ref<ContractpartnerAccount | undefined>(undefined);
 
-const { handleSubmit, values, setFieldTouched } = useForm();
+const { handleSubmit, resetAll } = createFormContext();
 
 const schema: Partial<{ [key in keyof ContractpartnerAccount]: ZodType }> = {
   accountNumber: string(
@@ -121,7 +121,7 @@ const resetForm = () => {
     } as ContractpartnerAccount;
   }
 
-  Object.keys(values).forEach((field) => setFieldTouched(field, false));
+  resetAll();
 };
 
 watch(

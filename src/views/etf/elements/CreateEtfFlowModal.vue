@@ -107,10 +107,10 @@ import CrudEtfFlowService from "@/service/CrudEtfFlowService";
 import { useEtfStore } from "@/stores/EtfStore";
 import { formatTime } from "@/tools/views/FormatDate";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
+import { createFormContext } from "@/tools/views/ValidationUtil";
 import { amountSchema, globErr } from "@/tools/views/ZodUtil";
 import { Euro, Save, Undo2 } from "@lucide/vue";
 import { storeToRefs } from "pinia";
-import { useForm } from "vee-validate";
 import { computed, ref, toRaw, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { date, number, string, type ZodType } from "zod";
@@ -142,7 +142,7 @@ const bookingtime = ref("");
 
 const etfStore = useEtfStore();
 
-const { handleSubmit, values, setFieldTouched } = useForm();
+const { handleSubmit, resetAll } = createFormContext();
 
 const title = computed(() =>
   etfFlow.value?.etfflowid > 0
@@ -170,7 +170,7 @@ const resetForm = () => {
     bookingdate.value = today;
     bookingtime.value = "";
   }
-  Object.keys(values).forEach((field) => setFieldTouched(field, false));
+  resetAll();
 };
 
 watch(

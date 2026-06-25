@@ -152,7 +152,7 @@
         variant="secondary"
         class="button-with-icon hidden md:flex"
         data-testid="createEtfResetButton"
-        @click="resetForm(values, setFieldTouched)"
+        @click="resetForm(resetAll)"
       >
         <Undo2 class="icon-medium" />
         {{ $t("General.reset") }}
@@ -175,10 +175,10 @@ import InputStandard from "@/components/common/InputStandard.vue";
 import ModalVue from "@/components/common/Modal.vue";
 import { Button } from "@/components/ui/button";
 import type { Etf } from "@/model/etf/Etf";
+import { createFormContext } from "@/tools/views/ValidationUtil";
 import { amountSchema, globErr } from "@/tools/views/ZodUtil";
 import { Euro, Percent, Save, Star, Undo2 } from "@lucide/vue";
 import { storeToRefs } from "pinia";
-import { useForm } from "vee-validate";
 import { useI18n } from "vue-i18n";
 import { string, ZodType } from "zod";
 import { useCreateEtfModalStore } from "./CreateEtfModal.store";
@@ -215,6 +215,6 @@ const schema: Partial<{ [key in keyof Etf]: ZodType }> = {
     t("ETF.validation.partialTaxExemption"),
   ).optional(),
 };
-const { handleSubmit, values, setFieldTouched } = useForm();
+const { handleSubmit, resetAll } = createFormContext();
 const createEtf = save(handleSubmit);
 </script>

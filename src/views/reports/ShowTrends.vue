@@ -357,6 +357,7 @@ import { useCapitalsourceStore } from "@/stores/CapitalsourceStore";
 import { useEtfStore } from "@/stores/EtfStore";
 import { formatNumber } from "@/tools/views/FormatNumber";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
+import { createFormContext } from "@/tools/views/ValidationUtil";
 import { globErr } from "@/tools/views/ZodUtil";
 import { ChevronDown, Eye, SlidersHorizontal } from "@lucide/vue";
 import {
@@ -370,7 +371,6 @@ import {
   Title,
   Tooltip,
 } from "chart.js";
-import { useForm } from "vee-validate";
 import { computed, onMounted, ref } from "vue";
 import { Line } from "vue-chartjs";
 import { useI18n } from "vue-i18n";
@@ -528,7 +528,7 @@ const etfSelectBoxValues = computed(
 
 const capitalsourceIds = ref(new Array<boolean>());
 const etfIds = ref(new Array<boolean>());
-const { handleSubmit, values, setFieldTouched } = useForm();
+const { handleSubmit, resetAll } = createFormContext();
 
 onMounted(() => {
   loadData();
@@ -563,7 +563,7 @@ const loadData = () => {
         });
 
       dataLoaded.value = true;
-      Object.keys(values).forEach((field) => setFieldTouched(field, false));
+      resetAll();
     })
     .catch(handleBackendError);
 };

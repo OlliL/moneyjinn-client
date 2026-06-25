@@ -11,7 +11,7 @@
       multiple
       :class="[
         'file:mr-2 file:cursor-pointer file:rounded-md file:border file:border-input file:bg-background file:px-2 file:py-1 file:text-sm file:font-medium hover:file:bg-accent',
-        isInvalid
+        errorMessage
           ? 'border-destructive! bg-destructive/3 focus-visible:ring-destructive/15'
           : 'border-input focus-visible:ring-ring',
       ]"
@@ -19,7 +19,7 @@
     />
 
     <p
-      v-if="isInvalid"
+      v-if="errorMessage"
       class="text-[0.8rem] font-medium text-destructive mt-0.5 text-left ml-1"
     >
       {{ errorMessage }}
@@ -30,8 +30,7 @@
 <script lang="ts" setup>
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { toTypedSchema } from "@vee-validate/zod";
-import { useField } from "vee-validate";
+import { useFormContext } from "@/tools/views/ValidationUtil";
 import { computed, type Ref } from "vue";
 import { any, type ZodType } from "zod";
 
@@ -48,29 +47,19 @@ const props = withDefaults(
 );
 const model = defineModel<FileList | null | undefined>();
 
-const schema = computed(() => {
-  if (props.validationSchemaRef) {
-    return toTypedSchema(props.validationSchemaRef.value);
-  }
-  return toTypedSchema(props.validationSchema);
-});
+const schema = computed(
+  () => props.validationSchemaRef?.value ?? props.validationSchema,
+);
 
-const {
-  meta: fieldMeta,
-  errorMessage,
-  setState,
-  handleChange,
-} = useField(props.id, schema, {
-  syncVModel: true,
+const { errorMessage, handleBlur, handleInput } = useFormContext({
+  schema: schema,
+  model: model,
 });
 
 const onInput = (event: Event) => {
   const files = (event.target as HTMLInputElement).files;
-
-  setState({ touched: true });
-  handleChange(event, true);
   model.value = files;
+  handleInput();
+  handleBlur();
 };
-
-const isInvalid = computed(() => fieldMeta.touched && !!errorMessage.value);
 </script>

@@ -118,7 +118,7 @@
         variant="secondary"
         class="button-with-icon hidden md:flex"
         data-testid="createCapitalsourceResetButton"
-        @click="resetForm(values, setFieldTouched)"
+        @click="resetForm(resetAll)"
       >
         <Undo2 class="icon-medium" />
         {{ $t("General.reset") }}
@@ -142,10 +142,10 @@ import { capitalsourceImportValues } from "@/model/capitalsource/CapitalsourceIm
 import { capitalsourceStateValues } from "@/model/capitalsource/CapitalsourceState";
 import { capitalsourceTypeValues } from "@/model/capitalsource/CapitalsourceType";
 import type { SelectBoxValue } from "@/model/SelectBoxValue";
+import { createFormContext } from "@/tools/views/ValidationUtil.ts";
 import { globErr } from "@/tools/views/ZodUtil";
 import { Save, Undo2 } from "@lucide/vue";
 import { storeToRefs } from "pinia";
-import { useForm } from "vee-validate";
 import { useI18n } from "vue-i18n";
 import { boolean, date, number, string, ZodType } from "zod";
 import ButtonSubmit from "../common/ButtonSubmit.vue";
@@ -166,7 +166,7 @@ const groupUseValues = [
   { id: true, value: t("General.yes") },
 ] as Array<SelectBoxValue>;
 
-const { handleSubmit, values, setFieldTouched } = useForm();
+const { handleSubmit, resetAll } = createFormContext();
 
 const schema: Partial<{ [key in keyof Capitalsource]: ZodType }> = {
   comment: string(globErr(t("Capitalsource.validation.comment")))

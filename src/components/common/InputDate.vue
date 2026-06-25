@@ -14,7 +14,7 @@
             type="text"
             :class="[
               'rounded-r-none bg-white z-10',
-              isInvalid
+              errorMessage
                 ? 'border-destructive! bg-destructive/3 focus-visible:ring-destructive/15 border-r-destructive!'
                 : 'border-input focus-visible:ring-ring',
             ]"
@@ -29,13 +29,13 @@
             @click.stop="isPopoverOpen = true"
             @pointerdown.stop="isPopoverOpen = true"
             @input="onTextInput"
-            @blur="onBlur"
+            @blur="handleBlur"
           />
 
           <div
             :class="[
               'cursor-pointer flex items-center justify-center px-2 border border-input rounded-r-md text-foreground transition-colors relative',
-              isInvalid ? 'border-l-transparent' : '',
+              errorMessage ? 'border-l-transparent' : '',
             ]"
           >
             <CalendarDays class="w-4 h-4" />
@@ -59,7 +59,7 @@
     </Popover>
 
     <p
-      v-if="isInvalid"
+      v-if="errorMessage"
       :data-testid="id + '-error'"
       class="text-[0.8rem] font-medium text-destructive mt-0.5 text-left ml-1"
     >
@@ -76,12 +76,11 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { useFormContext } from "@/tools/views/ValidationUtil";
 import { CalendarDays } from "@lucide/vue";
-import { toTypedSchema } from "@vee-validate/zod";
 import { Datepicker } from "vanillajs-datepicker";
-// @ts-ignore
+// @ts-expect-error Plain JS import
 import de from "vanillajs-datepicker/locales/de";
-import { useField } from "vee-validate";
 import {
   computed,
   nextTick,
@@ -115,10 +114,9 @@ const props = withDefaults(
 
 const { t } = useI18n();
 const model = defineModel<Date | undefined>();
-const viewMounted = ref(false);
 const closeLabel = t("General.close");
 const isPopoverOpen = ref(false);
-const popoverZIndex = ref(3500); // Deine Z-Index Logik bleibt hier erhalten
+const popoverZIndex = ref(3500);
 const datepickerContainer = useTemplateRef<HTMLDivElement>(
   "datepickerContainer",
 );
@@ -136,7 +134,7 @@ const {
   dots: autoDots,
 } = CONFIG[props.pickMode as keyof typeof CONFIG] || CONFIG.day;
 
-const parseInput = (v: any) => {
+const parseInput = (v: unknown) => {
   if (v instanceof Date) return v;
   if (typeof v !== "string" || v.length !== format.length) return v;
   const ts = Datepicker.parseDate(v, format, "de");
@@ -144,27 +142,14 @@ const parseInput = (v: any) => {
   return d && Datepicker.formatDate(d, format, "de") === v ? d : v;
 };
 
-const schema = computed(() => {
-  if (!viewMounted.value) return undefined;
-  return toTypedSchema(
-    preprocess(
-      parseInput,
-      props.validationSchemaRef?.value ?? props.validationSchema,
-    ),
-  );
+const effectiveSchema = computed(() => {
+  const base = props.validationSchemaRef?.value ?? props.validationSchema;
+  return preprocess(parseInput, base);
 });
 
-const {
-  meta: fieldMeta,
-  errorMessage,
-  setState,
-  handleChange,
-  handleBlur,
-  validate,
-  setValue,
-} = useField(props.id, schema, {
-  initialValue: model.value,
-  syncVModel: false,
+const { errorMessage, handleBlur, handleInput } = useFormContext({
+  schema: effectiveSchema,
+  model: model as Ref<Date | undefined>,
 });
 let datepicker = {} as Datepicker;
 const getInputElement = () => {
@@ -175,11 +160,6 @@ const getInputElement = () => {
   if (!refValue) return undefined;
   if ("$el" in refValue && refValue.$el) return refValue.$el;
   return refValue as HTMLInputElement;
-};
-
-const onBlur = (event: FocusEvent) => {
-  handleBlur(event);
-  validate();
 };
 
 const initDatepicker = () => {
@@ -224,12 +204,7 @@ const initDatepicker = () => {
   datepickerContainer.value.addEventListener("changeDate", onInput);
   datepickerContainer.value.addEventListener("click", (e) => {
     const target = e.target as HTMLElement;
-    const vCls =
-      props.pickMode === "month"
-        ? "month"
-        : props.pickMode === "year"
-          ? "year"
-          : "day";
+    const vCls = { month: "month", year: "year" }[props.pickMode] || "day";
     if (
       (target.classList.contains("datepicker-cell") &&
         target.classList.contains(vCls)) ||
@@ -241,7 +216,6 @@ const initDatepicker = () => {
 };
 
 onMounted(() => {
-  viewMounted.value = true;
   if (model.value) {
     setDate(model.value);
   }
@@ -255,7 +229,6 @@ onUnmounted(() => {
 
 const onTextInput = (event: Event) => {
   const v = (event.target as HTMLInputElement).value;
-  handleChange(event, false);
 
   if (v.length === format.length) {
     const d = parseInput(v);
@@ -263,7 +236,6 @@ const onTextInput = (event: Event) => {
       if (datepicker instanceof Datepicker) datepicker.setDate(d);
       if (d.getTime() !== model.value?.getTime()) {
         model.value = d;
-        setValue(d, false);
       }
     } else {
       model.value = new Date(Number.NaN);
@@ -271,8 +243,8 @@ const onTextInput = (event: Event) => {
   } else if (v === "" && model.value !== undefined) {
     if (datepicker instanceof Datepicker) datepicker.setDate({ clear: true });
     model.value = undefined;
-    setValue(undefined, false);
   }
+  handleInput();
 };
 
 const setDate = (newVal?: Date) => {
@@ -319,25 +291,25 @@ const onKeyboardInput = (event: KeyboardEvent) => {
   }
 };
 
-const onInput = () => {
+const onInput = async () => {
   const sel = datepicker.getDate() as Date | undefined;
   const el = getInputElement();
   const changed = sel?.getTime() !== model.value?.getTime();
   if (!sel && model.value !== undefined) {
-    setState({ touched: true });
     model.value = undefined;
-    setValue(undefined);
     if (el) el.value = "";
+    handleBlur();
+    isPopoverOpen.value = false;
   } else if (sel && changed) {
-    setState({ touched: true });
     model.value = sel;
-    setValue(sel);
+    handleBlur();
+    isPopoverOpen.value = false;
+    await nextTick();
     if (el) el.value = Datepicker.formatDate(sel, format, "de");
+  } else {
+    isPopoverOpen.value = false;
   }
-  isPopoverOpen.value = false;
 };
-
-const isInvalid = computed(() => fieldMeta.touched && !!errorMessage.value);
 
 watch(isPopoverOpen, async (val) => {
   if (val) {
@@ -367,7 +339,6 @@ watch(
 
     if (newVal?.getTime() !== current?.getTime()) {
       setDate(newVal);
-      setValue(newVal, false);
     }
   },
 );

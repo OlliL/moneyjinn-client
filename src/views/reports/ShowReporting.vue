@@ -233,6 +233,7 @@ import { toFixed } from "@/tools/math";
 import { formatNumber } from "@/tools/views/FormatNumber";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { getMonthName } from "@/tools/views/MonthName";
+import { createFormContext } from "@/tools/views/ValidationUtil";
 import { globErr } from "@/tools/views/ZodUtil";
 import { Eye } from "@lucide/vue";
 import {
@@ -243,8 +244,8 @@ import {
   LinearScale,
   Title,
   Tooltip,
+  type ChartOptions,
 } from "chart.js";
-import { useForm } from "vee-validate";
 import { computed, onMounted, ref, watch } from "vue";
 import { Bar } from "vue-chartjs";
 import { useI18n } from "vue-i18n";
@@ -277,7 +278,7 @@ const chartData = ref({
     },
   ],
 } as ChartData);
-const chartOptions = ref({
+const chartOptions = ref<ChartOptions<"bar">>({
   responsive: true,
   maintainAspectRatio: false,
   plugins: {
@@ -290,7 +291,7 @@ const chartOptions = ref({
     },
     tooltip: {
       callbacks: {
-        label: function (context: any) {
+        label: function (context) {
           let label = context.dataset.label || "";
 
           if (context.parsed.y !== null) {
@@ -309,7 +310,7 @@ const chartOptions = ref({
   scales: {
     y: {
       ticks: {
-        callback: function (value: any) {
+        callback: function (value) {
           return formatNumber(+value, 0) + currency;
         },
       },
@@ -359,7 +360,7 @@ type ChartData = {
   datasets: Array<ChartDataDataset>;
 };
 
-const { handleSubmit, values, setFieldTouched } = useForm();
+const { handleSubmit, resetAll } = createFormContext();
 
 onMounted(() => {
   loadData();
@@ -377,7 +378,7 @@ const singlePostingAccountsLabel = computed(() =>
 );
 
 watch(singlePostingAccounts, () => {
-  setFieldTouched("postingAccountShowReporting", false);
+  resetAll();
 });
 
 const loadData = () => {
@@ -403,7 +404,7 @@ const loadData = () => {
         selectedPostingAccountIds.value[mpa.id] = true;
       });
       dataLoaded.value = true;
-      Object.keys(values).forEach((field) => setFieldTouched(field, false));
+      resetAll();
     })
     .catch(handleBackendError);
 };
@@ -518,7 +519,7 @@ const showReportingGraph = handleSubmit(() => {
         chartData.value.labels = [];
         chartData.value.datasets[0]!.data = [];
         chartData.value.datasets[0]!.backgroundColor = [];
-        chartOptions.value.plugins.title.text = chartTitle;
+        chartOptions.value.plugins!.title!.text = chartTitle;
 
         for (const [key, value] of resultMap) {
           chartData.value.labels.push(key);

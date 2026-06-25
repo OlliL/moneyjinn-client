@@ -118,6 +118,7 @@ import { Button } from "@/components/ui/button";
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
 import { type PreDefMoneyflow } from "@/model/moneyflow/PreDefMoneyflow";
 import MoneyflowService from "@/service/MoneyflowService";
+import { createFormContext } from "@/tools/views/ValidationUtil";
 import { amountSchema, globErr } from "@/tools/views/ZodUtil";
 import {
   ChevronLeft,
@@ -128,14 +129,13 @@ import {
   Save,
 } from "@lucide/vue";
 import { storeToRefs } from "pinia";
-import { useForm } from "vee-validate";
 import { ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { date, number, string } from "zod";
 import useCreateMoneyflowQuickModalStore from "./CreateMoneyflowQuickModal.store";
 
 const { t } = useI18n();
-const { handleSubmit } = useForm();
+const { handleSubmit } = createFormContext();
 const { close } = useCreateMoneyflowQuickModalStore();
 const { open, preDefMoneyflow, onDone } = storeToRefs(
   useCreateMoneyflowQuickModalStore(),

@@ -133,7 +133,7 @@
         variant="secondary"
         class="button-with-icon hidden md:flex"
         data-testid="createContractpartnerResetButton"
-        @click="resetForm(values, setFieldTouched)"
+        @click="resetForm(resetAll)"
       >
         <Undo2 class="icon-medium" />
         {{ $t("General.reset") }}
@@ -153,10 +153,10 @@
 <script lang="ts" setup>
 import { Button } from "@/components/ui/button";
 import type { Contractpartner } from "@/model/contractpartner/Contractpartner";
+import { createFormContext } from "@/tools/views/ValidationUtil.ts";
 import { globErr } from "@/tools/views/ZodUtil";
 import { ChevronDown, Save, Undo2 } from "@lucide/vue";
 import { storeToRefs } from "pinia";
-import { useForm } from "vee-validate";
 import { useI18n } from "vue-i18n";
 import { coerce, date, number, string, ZodType } from "zod";
 import ButtonSubmit from "../common/ButtonSubmit.vue";
@@ -174,7 +174,7 @@ const store = useCreateContractpartnerModalStore();
 const { open, mData, title } = storeToRefs(store);
 const { resetForm, save } = store;
 
-const { handleSubmit, values, setFieldTouched } = useForm();
+const { handleSubmit, resetAll } = createFormContext();
 
 const schema: Partial<{ [key in keyof Contractpartner]: ZodType }> = {
   name: string(globErr(t("Contractpartner.validation.name")))

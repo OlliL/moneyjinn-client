@@ -105,9 +105,9 @@ import { mapImportedMoneyflowReceiptToMoneyflowReceipt } from "@/service/mapper/
 import MoneyflowReceiptService from "@/service/MoneyflowReceiptService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { isDesktop } from "@/tools/views/IsDesktop";
+import { createFormContext } from "@/tools/views/ValidationUtil.ts";
 import { Eye, ReceiptText, Save, Trash2, Undo2 } from "@lucide/vue";
 import { storeToRefs } from "pinia";
-import { useForm } from "vee-validate";
 import { computed, ref, toRaw, useTemplateRef, watch } from "vue";
 import ModalVue from "../common/Modal.vue";
 import SpanReceipt from "../common/SpanReceipt.vue";
@@ -126,7 +126,7 @@ const { openListReceipt } = useReceiptModalStore();
 
 const receipt = ref({} as MoneyflowReceipt);
 
-const { handleSubmit, values, setFieldTouched } = useForm();
+const { handleSubmit, resetAll } = createFormContext();
 
 const modalWidth = computed(() =>
   receipt.value.receipt
@@ -146,7 +146,7 @@ watch(
         mapImportedMoneyflowReceiptToMoneyflowReceipt(importedReceipt);
     }
 
-    Object.keys(values).forEach((field) => setFieldTouched(field, false));
+    resetAll();
   },
   { immediate: true },
 );
@@ -188,6 +188,6 @@ const deleteMoneyflowReceipt = () => {
 
 const resetForm = () => {
   editMoneyflowVue.value?.resetForm();
-  Object.keys(values).forEach((field) => setFieldTouched(field, false));
+  resetAll();
 };
 </script>

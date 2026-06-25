@@ -53,9 +53,10 @@
 </template>
 
 <script lang="ts" setup>
+import { createFormContext } from "@/tools/views/ValidationUtil";
 import { onMounted, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
-import { string, type ZodTypeAny } from "zod";
+import { string, ZodType } from "zod";
 
 import router, { Routes } from "@/router";
 
@@ -74,13 +75,12 @@ import { ErrorCode, getErrorMessage } from "@/model/ErrorCode";
 import ButtonSubmit from "@/components/common/ButtonSubmit.vue";
 import UserService from "@/service/UserService";
 import { Save } from "@lucide/vue";
-import { useForm } from "vee-validate";
 
 const { t } = useI18n();
 
 const schema = {
   passwordOld: string(globErr(t("User.validation.passwordOld"))).min(1),
-  password: ref(string() as ZodTypeAny),
+  password: ref(string() as ZodType),
 };
 
 const passwordOld = ref("");
@@ -88,7 +88,7 @@ const password1 = ref("");
 const password2 = ref("");
 const userIsNew = ref(false);
 
-const { handleSubmit, values, setFieldTouched } = useForm();
+const { handleSubmit, resetAll } = createFormContext();
 
 watch(
   () => [password1.value, password2.value],
@@ -112,7 +112,7 @@ onMounted(() => {
   if (userIsNew.value) {
     showServerError(getErrorMessage(ErrorCode.PASSWORD_MUST_BE_CHANGED));
   }
-  Object.keys(values).forEach((field) => setFieldTouched(field, false));
+  resetAll();
 });
 
 const changePassword = handleSubmit(() => {
