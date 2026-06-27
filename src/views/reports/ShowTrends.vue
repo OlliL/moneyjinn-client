@@ -360,6 +360,12 @@ import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { createFormContext } from "@/tools/views/ValidationUtil";
 import { globErr } from "@/tools/views/ZodUtil";
 import { ChevronDown, Eye, SlidersHorizontal } from "@lucide/vue";
+import type {
+  ChartData,
+  ChartOptions,
+  ScriptableContext,
+  TooltipItem,
+} from "chart.js";
 import {
   CategoryScale,
   Chart as ChartJS,
@@ -390,15 +396,16 @@ const startDate = ref(new Date());
 const endDate = ref(new Date());
 const capitalsourcesActive = ref(true);
 const etfsActive = ref(true);
-const chartData = ref({
+const chartData = ref<ChartData<"line">>({
   labels: new Array<string>(),
   datasets: [
     {
+      type: "line",
       label: t("Reports.settled"),
       data: new Array<number | null>(),
       fill: true,
       borderColor: "#B0C4DE",
-      backgroundColor: (ctx: any) => {
+      backgroundColor: (ctx: ScriptableContext<"line">) => {
         const canvas = ctx.chart.ctx;
         const gradient = canvas.createLinearGradient(0, 500, 0, 0);
 
@@ -409,11 +416,12 @@ const chartData = ref({
       },
     },
     {
+      type: "line",
       label: t("Reports.calculated"),
       data: new Array<number | null>(),
       fill: true,
       borderColor: "#689bde",
-      backgroundColor: (ctx: any) => {
+      backgroundColor: (ctx: ScriptableContext<"line">) => {
         const canvas = ctx.chart.ctx;
         const gradient = canvas.createLinearGradient(0, 500, 0, 0);
 
@@ -424,11 +432,12 @@ const chartData = ref({
       },
     },
     {
+      type: "line",
       label: t("General.etfs"),
       data: new Array<number | null>(),
       fill: true,
       borderColor: "#be2200",
-      backgroundColor: (ctx: any) => {
+      backgroundColor: (ctx: ScriptableContext<"line">) => {
         const canvas = ctx.chart.ctx;
         const gradient = canvas.createLinearGradient(0, 500, 0, 0);
 
@@ -439,9 +448,9 @@ const chartData = ref({
       },
     },
   ],
-} as ChartData);
+});
 
-const chartOptions = ref({
+const chartOptions = ref<ChartOptions<"line">>({
   responsive: true,
   maintainAspectRatio: false,
   plugins: {
@@ -451,7 +460,7 @@ const chartOptions = ref({
     },
     tooltip: {
       callbacks: {
-        label: function (context: any) {
+        label: function (context: TooltipItem<"line">) {
           let label = context.dataset.label || "";
 
           if (label) label += ": ";
@@ -483,7 +492,7 @@ const chartOptions = ref({
         display: true,
       },
       ticks: {
-        callback: function (value: any) {
+        callback: function (value: number | string) {
           return formatNumber(+value, 0) + currency;
         },
       },
@@ -501,19 +510,6 @@ ChartJS.register(
   Legend,
   Filler,
 );
-
-type ChartDataDataset = {
-  label: string;
-  data: Array<number | null>;
-  fill: boolean;
-  borderColor: string;
-  backgroundColor: any;
-  hidden?: boolean;
-};
-type ChartData = {
-  labels: Array<string>;
-  datasets: Array<ChartDataDataset>;
-};
 
 const currency = t("General.currency");
 const capitalsourceStore = useCapitalsourceStore();
@@ -592,7 +588,7 @@ const addXAxisLabels = (trends: Trends) => {
         },
       );
       labelsCalculated.forEach((label) => {
-        chartData.value.labels.push(label);
+        chartData.value.labels!.push(label);
       });
     }
   } else if (trends.trendsEtfs && trends.trendsEtfs.length > 0) {
@@ -650,9 +646,9 @@ const addEtfData = (trends: Trends) => {
       chartData.value.datasets[2]!.hidden = false;
     }
 
-    const startLabel = chartData.value.labels[0];
-    const endLabel = chartData.value.labels[chartData.value.labels.length - 1];
-    chartOptions.value.plugins.title.text = t("Reports.title.trendGraph", {
+    const startLabel = chartData.value.labels![0];
+    const endLabel = chartData.value.labels!.at(-1);
+    chartOptions.value.plugins!.title!.text = t("Reports.title.trendGraph", {
       startLabel: startLabel,
       endLabel: endLabel,
     });
