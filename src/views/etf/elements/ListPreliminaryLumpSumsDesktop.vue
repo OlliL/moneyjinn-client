@@ -51,7 +51,7 @@
         class="button-with-icon"
         @click="$emit('openEdit')"
       >
-        <SquarePen class="icon-medium" />
+        <SquarePen class="icon-medium mr-2" />
         {{ $t("General.edit") }}
       </Button>
       <Button
@@ -62,7 +62,7 @@
         class="button-with-icon"
         @click="$emit('openDelete')"
       >
-        <Trash2 class="icon-medium" />
+        <Trash2 class="icon-medium mr-2" />
         {{ $t("General.delete") }}
       </Button>
     </div>

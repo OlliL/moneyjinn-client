@@ -12,40 +12,41 @@
       </h4>
     </div>
 
-    <ListMonthlySettlementsMobile
-      :data-loaded="dataLoaded"
-      :years="years"
-      :months="months"
-      :selected-year="selectedYear"
-      :selected-month="selectedMonth"
-      :can-edit-or-delete="canEditOrDelete"
-      @select-year="selectYear"
-      @select-month="selectMonth"
-      @select-current-month="selectCurrentMonth"
-    />
-
-    <ListMonthlySettlementsDesktop
-      :data-loaded="dataLoaded"
-      :years="years"
-      :months="months"
-      :selected-year="selectedYear"
-      :selected-month="selectedMonth"
-      :can-edit-or-delete="canEditOrDelete"
-      @select-year="selectYear"
-      @select-month="selectMonth"
-    />
-
-    <div v-if="dataLoaded" class="space-y-4">
-      <ButtonChevrons
-        test-id-prefix="show-monthlysettlement-month"
-        :show-previous-chevron="prevMonth > 0 && prevYear > 0"
-        :show-next-chevron="nextMonth > 0 && nextYear > 0"
-        @navigate-to-previous="navigateToPreviousMonth"
-        @navigate-to-next="navigateToNextMonth"
+    <div>
+      <ListMonthlySettlementsMobile
+        :data-loaded="dataLoaded"
+        :years="years"
+        :months="months"
+        :selected-year="selectedYear"
+        :selected-month="selectedMonth"
+        :can-edit-or-delete="canEditOrDelete"
+        @select-year="selectYear"
+        @select-month="selectMonth"
+        @select-current-month="selectCurrentMonth"
       />
-      <ShowMontlySettlementVue :monthly-settlements="monthlySettlements" />
+
+      <ListMonthlySettlementsDesktop
+        :data-loaded="dataLoaded"
+        :years="years"
+        :months="months"
+        :selected-year="selectedYear"
+        :selected-month="selectedMonth"
+        :can-edit-or-delete="canEditOrDelete"
+        @select-year="selectYear"
+        @select-month="selectMonth"
+      />
+
+      <div v-if="dataLoaded" class="space-y-4">
+        <ButtonChevrons
+          test-id-prefix="show-monthlysettlement-month"
+          :show-previous-chevron="prevMonth > 0 && prevYear > 0"
+          :show-next-chevron="nextMonth > 0 && nextYear > 0"
+          @navigate-to-previous="navigateToPreviousMonth"
+          @navigate-to-next="navigateToNextMonth"
+        />
+        <ShowMontlySettlementVue :monthly-settlements="monthlySettlements" />
+      </div>
     </div>
-    <!---->
   </div>
 </template>
 
