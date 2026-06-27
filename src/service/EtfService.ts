@@ -1,13 +1,8 @@
-import {
-  EtfControllerApi,
-  type CalcEtfSaleRequest,
-  type ListEtfFlowsResponse,
-} from "@/api";
+import { EtfControllerApi, type CalcEtfSaleRequest } from "@/api";
 import type { EtfDepot } from "@/model/etf/EtfDepot";
 import type { EtfSalesCalculation } from "@/model/etf/EtfSalesCalculation";
 import type { EtfSummary } from "@/model/etf/EtfSummary";
 import AbstractService from "@/service/AbstractService";
-import type { AxiosResponse } from "axios";
 import { mapEtfEffectiveFlowTransportToModel } from "./mapper/EtfEffectiveFlowTransportMapper";
 import { mapEtfFlowTransportToModel } from "./mapper/EtfFlowTransportMapper";
 import { mapEtfSummaryTransportToEtfSummary } from "./mapper/EtfTSummaryTransportMapper";
@@ -40,12 +35,6 @@ class EtfService extends AbstractService {
 
   async listEtfFlowsById(etfId: number): Promise<EtfDepot> {
     const response = await this.api.listEtfFlowsById(etfId);
-    return this.handleListEtfFlowsResponse(response);
-  }
-
-  async handleListEtfFlowsResponse(
-    response: AxiosResponse<ListEtfFlowsResponse, any>,
-  ): Promise<EtfDepot> {
     const listEtfFlowsResponse = response.data;
 
     const etfDepot = {} as EtfDepot;

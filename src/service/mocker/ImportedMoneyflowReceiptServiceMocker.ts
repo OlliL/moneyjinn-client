@@ -1,9 +1,12 @@
 import type { BackendError } from "@/model/BackendError.ts";
+import type { ImportedMoneyflowReceipt } from "@/model/moneyflow/ImportedMoneyflowReceipt";
 import ImportedMoneyflowReceiptService from "@/service/ImportedMoneyflowReceiptService";
 import { vi } from "vitest";
 
 export default class ImportedMoneyflowReceiptServiceMocker {
-  static mockShowImportImportedMoneyflowReceipts(receipts: any[]) {
+  static mockShowImportImportedMoneyflowReceipts(
+    receipts: Array<ImportedMoneyflowReceipt>,
+  ) {
     ImportedMoneyflowReceiptService.showImportImportedMoneyflowReceipts = vi
       .fn()
       .mockResolvedValue(receipts);
@@ -21,7 +24,7 @@ export default class ImportedMoneyflowReceiptServiceMocker {
       .mockResolvedValue(undefined);
   }
 
-  static mockCreateImportedMoneyflowReceiptsRejected(error: any) {
+  static mockCreateImportedMoneyflowReceiptsRejected(error: BackendError) {
     ImportedMoneyflowReceiptService.createImportedMoneyflowReceipts = vi
       .fn()
       .mockRejectedValue(error);

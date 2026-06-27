@@ -18,7 +18,7 @@ export interface CrudActions<T> {
   delete: (item: T) => void;
 }
 
-export interface LocalCrudModalActions<T> extends CrudActions<T> {}
+export type LocalCrudModalActions<T> = CrudActions<T>;
 
 export type OpenContractpartnerAccountsAction = (item: Contractpartner) => void;
 

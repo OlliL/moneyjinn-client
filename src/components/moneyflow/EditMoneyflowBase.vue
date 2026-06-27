@@ -484,7 +484,7 @@ const resetCreateForm = () => {
 const addNewMoneyflowSplitEntryRow = () => {
   if (mmf.value.moneyflowSplitEntries !== undefined) {
     const mse = mmf.value.moneyflowSplitEntries;
-    const lastMse = mse[mse.length - 1];
+    const lastMse = mse.at(-1);
     let newMseId = -1;
     if (lastMse) {
       // existing MoneyflowSplitEntries have positive IDs, new created rows must always have negative IDs

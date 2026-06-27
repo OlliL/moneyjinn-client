@@ -77,19 +77,17 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, onMounted, ref, watch } from "vue";
-import { onBeforeRouteUpdate, type RouteParamsGeneric } from "vue-router";
-
-import router, { Routes } from "@/router";
-
 import ButtonChevrons from "@/components/common/ButtonChevrons.vue";
 import ButtonMobileCreate from "@/components/common/ButtonMobileCreate.vue";
 import MonthYearDesktopNavigator from "@/components/navigation/MonthYearDesktopNavigator.vue";
 import MonthYearMobileNavigator from "@/components/navigation/MonthYearMobileNavigator.vue";
 import type { Moneyflow } from "@/model/moneyflow/Moneyflow";
+import router, { Routes } from "@/router";
 import ReportService from "@/service/ReportService";
 import { handleBackendError } from "@/tools/views/HandleBackendError";
 import { getMonthName } from "@/tools/views/MonthName";
+import { computed, onMounted, ref, watch } from "vue";
+import { onBeforeRouteUpdate, type RouteParamsGeneric } from "vue-router";
 import ReportEtfTable from "./elements/ReportEtfTable.vue";
 import ReportTableVue from "./elements/ReportTable.vue";
 
@@ -200,9 +198,7 @@ onBeforeRouteUpdate((to) => {
   const year = to.params.year ? +to.params.year : undefined;
   const month = to.params.month ? +to.params.month : 0;
   const isFirstMonth = months.value ? months.value.indexOf(month) == 0 : true;
-  const isLastMonth = months.value
-    ? months.value.indexOf(month) == months.value.length - 1
-    : true;
+  const isLastMonth = months.value ? month == months.value.at(-1) : true;
 
   updateSortByParams(to.params);
 
