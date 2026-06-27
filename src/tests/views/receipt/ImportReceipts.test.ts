@@ -247,7 +247,7 @@ test("assigns receipt to selected moneyflow (apply)", async () => {
   ImportedMoneyflowReceiptServiceMocker.mockImportImportedMoneyflowReceiptResolved();
   // receipt.id=1 matches Row1
   MoneyflowServiceMocker.mockSearchMoneyflowsByAmountResolved([
-    { id: 42, amount: 10.0, contractpartnerName: "Partner" },
+    { id: 42, amount: 10, contractpartnerName: "Partner" },
   ]);
 
   render(ImportReceipts);
