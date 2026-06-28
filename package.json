@@ -31,6 +31,7 @@
     "shadcn-vue": "^2.7.3",
     "tailwind-merge": "^3.6.0",
     "tailwindcss": "^4.3.0",
+    "uuid": "^14.0.1",
     "vanillajs-datepicker": "^1.2.0",
     "vaul-vue": "^0.4.1",
     "vue": "^3.2.41",

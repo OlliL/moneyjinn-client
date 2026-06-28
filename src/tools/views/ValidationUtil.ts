@@ -1,3 +1,4 @@
+import { v4 as uuidv4 } from "uuid";
 import {
   inject,
   nextTick,
@@ -184,7 +185,7 @@ export function useFormContext<T>(config: FieldConfig<T>) {
   onMounted(() => {
     if (register) {
       unregister = register({
-        uuid: globalThis.crypto.randomUUID(),
+        uuid: uuidv4(),
         validate,
         reset,
       });
