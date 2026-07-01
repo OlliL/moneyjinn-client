@@ -38,7 +38,11 @@
               <div
                 class="md:col-span-2 flex items-start gap-3 md:px-3 md:py-2 md:mt-5"
               >
-                <Switch id="sourceIsImport" v-model="sourceIsImport" />
+                <Switch
+                  id="sourceIsImport"
+                  v-model="sourceIsImport"
+                  data-testid="sourceIsImport"
+                />
                 <Label
                   for="sourceIsImport"
                   class="cursor-pointer text-sm font-medium select-none"
@@ -144,7 +148,7 @@ import { globErr } from "@/tools/views/ZodUtil";
 import { Eye } from "@lucide/vue";
 import { computed, onMounted, provide, ref } from "vue";
 import { useI18n } from "vue-i18n";
-import { any, array as arr, date, instanceof as instof, number } from "zod";
+import { any, date, instanceof as instof, number } from "zod";
 import CompareDataResultDesktop from "./elements/CompareDataResultDesktop.vue";
 import CompareDataResultMobile from "./elements/CompareDataResultMobile.vue";
 
@@ -162,7 +166,10 @@ const schema = {
   importfile: computed(() =>
     sourceIsImport.value
       ? any().optional()
-      : arr(instof(File), globErr(t("CompareData.validation.importfile"))),
+      : instof(
+          FileList,
+          globErr(t("CompareData.validation.importfile")),
+        ).refine((fl) => fl.length > 0, { message: "File is required" }),
   ),
 };
 const capitalsourceStore = useCapitalsourceStore();

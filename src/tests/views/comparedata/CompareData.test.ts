@@ -15,10 +15,12 @@ import {
   setupUserStandard,
 } from "@/tests/TestUtil";
 import {
+  AlertView,
   ButtonView,
   DeclarativeModalStub,
   InputView,
   ModalView,
+  SwitchView,
 } from "@/tests/TestViews";
 import CompareData from "@/views/comparedata/CompareData.vue";
 import "@testing-library/jest-dom/vitest";
@@ -35,6 +37,9 @@ class CompareDataView {
   static readonly CapitalsourceIdInput = new InputView(
     "capitalsourceCompareData-id",
   );
+  static readonly FileInput = new InputView("fileUpload");
+  static readonly FileInputError = new AlertView("fileUpload-error");
+  static readonly SourceIsImportSwitch = new SwitchView("sourceIsImport");
   static readonly SubmitButton = new ButtonView("compare-data-submit");
   static readonly GroupMatchingToggle = new ButtonView(
     "compare-data-group-matching-toggle",
@@ -342,4 +347,25 @@ test("CompareData shows no group toggles when no data was found", async () => {
   await CompareDataView.GroupWrongCapitalsourceToggle.assertNotToBeInDocument();
   await CompareDataView.GroupNotInFileToggle.assertNotToBeInDocument();
   await CompareDataView.GroupNotInDatabaseToggle.assertNotToBeInDocument();
+});
+
+test("CompareData validation: file is required when source is file", async () => {
+  CompareDataServiceMocker.mockShowCompareDataFormResolved({
+    selectedSourceIsImport: false,
+    selectedCompareDataFormat: 1,
+    selectedCapitalSourceId: 1,
+    compareDataFormats: [{ formatId: 1, name: "CSV" }],
+  } as CompareDataParameter);
+  renderCompareDataView();
+
+  await assertHaveBeenCalled(CompareDataService.showCompareDataForm);
+  await CompareDataView.CapitalsourceIdInput.assertValue("1");
+
+  // Try to submit without a file
+  await CompareDataView.SubmitButton.click();
+
+  // Should show validation error
+  await CompareDataView.FileInputError.assertMessageContains(
+    "Please specify the import file!",
+  );
 });
