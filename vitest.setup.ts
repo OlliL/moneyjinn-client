@@ -1,6 +1,34 @@
 import { config } from "@vue/test-utils";
+import { beforeEach, vi } from "vitest";
 import "vitest-canvas-mock";
 import I18nSingleton from "./src/config/I18nSingleton";
+
+// Mock localStorage BEFORE any imports (beforeEach is too late)
+const store: Record<string, string> = {};
+Object.defineProperty(globalThis, "localStorage", {
+  value: {
+    getItem: (key: string): string | null => store[key] ?? null,
+    setItem: (key: string, value: string): void => {
+      store[key] = value;
+    },
+    clear: (): void => {
+      Object.keys(store).forEach((key) => delete store[key]);
+    },
+    removeItem: (key: string): void => {
+      delete store[key];
+    },
+    get length(): number {
+      return Object.keys(store).length;
+    },
+    key: (index: number): string | null => Object.keys(store)[index] ?? null,
+  },
+  writable: true,
+});
+
+beforeEach(() => {
+  // Reset store for each test
+  Object.keys(store).forEach((key) => delete store[key]);
+});
 
 config.global.plugins.push(I18nSingleton.getI18n());
 if (globalThis.HTMLElement !== undefined) {
@@ -95,7 +123,7 @@ globalThis.ResizeObserver = class ResizeObserver implements ResizeObserver {
 // for Modal.vue: force Dialog instead of Drawer because of timer issues in vitest
 Object.defineProperty(globalThis, "matchMedia", {
   writable: true,
-  value: vi.fn().mockImplementation((query) => ({
+  value: vi.fn().mockImplementation((query: string) => ({
     matches: query.includes("min-width") || query.includes("640px"),
     media: query,
     onchange: null,
