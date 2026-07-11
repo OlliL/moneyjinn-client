@@ -1,5 +1,6 @@
 <template>
   <ModalVue
+    z-index="1900"
     :title="
       mmf.id == 0 ? $t('Moneyflow.title.create') : $t('Moneyflow.title.update')
     "
