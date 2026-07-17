@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import type { ToasterProps } from 'vue-sonner'
+
 import {
   CircleCheckIcon,
   InfoIcon,
@@ -6,13 +8,13 @@ import {
   OctagonXIcon,
   TriangleAlertIcon,
   XIcon,
-} from "@lucide/vue";
+} from '@lucide/vue'
+import { reactiveOmit } from '@vueuse/core'
+import { Toaster as Sonner } from 'vue-sonner'
+import { cn } from '@/lib/utils'
 
-import { cn } from "@/lib/utils";
-import type { ToasterProps } from "vue-sonner";
-import { Toaster as Sonner } from "vue-sonner";
-
-const props = defineProps<ToasterProps>();
+const props = defineProps<ToasterProps>()
+const delegatedProps = reactiveOmit(props, 'class', 'toastOptions')
 </script>
 
 <template>
@@ -29,7 +31,12 @@ const props = defineProps<ToasterProps>();
       '--gray5': 'var(--border)',
       '--gray12': 'var(--popover-foreground)',
     }"
-    v-bind="props"
+    :toast-options="props.toastOptions ?? {
+      classes: {
+        toast: 'rounded-2xl',
+      },
+    }"
+    v-bind="delegatedProps"
   >
     <template #success-icon>
       <CircleCheckIcon class="size-4" />

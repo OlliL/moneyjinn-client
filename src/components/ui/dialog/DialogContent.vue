@@ -1,29 +1,29 @@
 <script setup lang="ts">
-import { XIcon } from '@lucide/vue';
+import type { DialogContentEmits, DialogContentProps } from 'reka-ui'
 
-import type { DialogContentEmits, DialogContentProps } from "reka-ui"
-import type { HTMLAttributes } from "vue"
-import { reactiveOmit } from "@vueuse/core"
+import type { HTMLAttributes } from 'vue'
+import { XIcon } from '@lucide/vue'
+import { reactiveOmit } from '@vueuse/core'
 import {
   DialogClose,
   DialogContent,
   DialogPortal,
   useForwardPropsEmits,
-} from "reka-ui"
-import { cn } from "@/lib/utils"
+} from 'reka-ui'
+import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
-import DialogOverlay from "./DialogOverlay.vue"
+import DialogOverlay from './DialogOverlay.vue'
 
 defineOptions({
   inheritAttrs: false,
 })
 
-const props = withDefaults(defineProps<DialogContentProps & { class?: HTMLAttributes["class"], showCloseButton?: boolean }>(), {
+const props = withDefaults(defineProps<DialogContentProps & { class?: HTMLAttributes['class'], showCloseButton?: boolean }>(), {
   showCloseButton: true,
 })
 const emits = defineEmits<DialogContentEmits>()
 
-const delegatedProps = reactiveOmit(props, "class")
+const delegatedProps = reactiveOmit(props, 'class')
 
 const forwarded = useForwardPropsEmits(delegatedProps, emits)
 </script>

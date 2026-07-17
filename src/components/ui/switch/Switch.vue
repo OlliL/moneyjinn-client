@@ -1,24 +1,24 @@
 <script setup lang="ts">
-import type { SwitchRootEmits, SwitchRootProps } from "reka-ui"
-import type { HTMLAttributes } from "vue"
-import { reactiveOmit } from "@vueuse/core"
+import type { SwitchRootEmits, SwitchRootProps } from 'reka-ui'
+import type { HTMLAttributes } from 'vue'
+import { reactiveOmit } from '@vueuse/core'
 import {
   SwitchRoot,
   SwitchThumb,
   useForwardPropsEmits,
-} from "reka-ui"
-import { cn } from "@/lib/utils"
+} from 'reka-ui'
+import { cn } from '@/lib/utils'
 
 const props = withDefaults(defineProps<SwitchRootProps & {
-  class?: HTMLAttributes["class"]
-  size?: "sm" | "default"
+  class?: HTMLAttributes['class']
+  size?: 'sm' | 'default'
 }>(), {
-  size: "default",
+  size: 'default',
 })
 
 const emits = defineEmits<SwitchRootEmits>()
 
-const delegatedProps = reactiveOmit(props, "class", "size")
+const delegatedProps = reactiveOmit(props, 'class', 'size')
 
 const forwarded = useForwardPropsEmits(delegatedProps, emits)
 </script>
