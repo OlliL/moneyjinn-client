@@ -45,7 +45,7 @@
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "@intlify/unplugin-vue-i18n": "^11.2.3",
-    "@testing-library/jest-dom": "^6.4.6",
+    "@testing-library/jest-dom": "^7.0.0",
     "@testing-library/user-event": "^14.6.1",
     "@testing-library/vue": "^8.1.0",
     "@types/node": "^26.0.0",
