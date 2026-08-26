@@ -248,16 +248,27 @@ const filterCapitalsource = ref("");
 const filter = () => {
   filteredMoneyflows.value = report.value.moneyflows.filter(
     (mmf) =>
-      mmf.contractpartnerName
+      (mmf.contractpartnerName
         ?.toLowerCase()
         .includes(filterContractpartner.value.toLowerCase()) &&
-      mmf.comment?.toLowerCase().includes(filterComment.value.toLowerCase()) &&
-      mmf.postingAccountName
-        ?.toLowerCase()
-        .includes(filterPostingAccount.value.toLowerCase()) &&
-      mmf.capitalsourceComment
-        ?.toLowerCase()
-        .includes(filterCapitalsource.value.toLowerCase()),
+        mmf.comment
+          ?.toLowerCase()
+          .includes(filterComment.value.toLowerCase()) &&
+        mmf.postingAccountName
+          ?.toLowerCase()
+          .includes(filterPostingAccount.value.toLowerCase()) &&
+        mmf.capitalsourceComment
+          ?.toLowerCase()
+          .includes(filterCapitalsource.value.toLowerCase())) ||
+      mmf.moneyflowSplitEntries?.some(
+        (splitEntry) =>
+          splitEntry.postingAccountName
+            ?.toLowerCase()
+            .includes(filterPostingAccount.value.toLowerCase()) &&
+          splitEntry.comment
+            ?.toLowerCase()
+            .includes(filterComment.value.toLowerCase()),
+      ),
   );
 };
 
