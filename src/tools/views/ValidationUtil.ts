@@ -11,13 +11,8 @@ import {
   type Ref,
 } from "vue";
 import { type ZodType } from "zod";
-import type { $ZodIssueBase } from "zod/v4/core";
 
 const FormSymbol = Symbol("FormContext");
-
-interface ZodIssueWithDefault extends $ZodIssueBase {
-  __isZodDefault?: true;
-}
 
 interface FieldRegistration {
   uuid: string;
@@ -41,15 +36,15 @@ interface FieldConfig<T> {
 export function createFormContext() {
   const childFields = ref<FieldRegistration[]>([]);
 
-  const validateAll = async (forceValidation = true) =>
+  const validateAll = async (setTouched = true) =>
     (
-      await Promise.all(
-        childFields.value.map((f) => f.validate(forceValidation)),
-      )
+      await Promise.all(childFields.value.map((f) => f.validate(setTouched)))
     ).every(Boolean);
 
-  const handleSubmit = (callback: () => unknown) => async () =>
-    (await validateAll()) ? callback() : false;
+  const handleSubmit =
+    <T>(callback: () => T | Promise<T> = () => true as T) =>
+    async (): Promise<T | false> =>
+      (await validateAll()) ? await callback() : false;
 
   const resetAll = () =>
     nextTick(() => childFields.value.forEach((field) => field.reset()));
@@ -70,8 +65,9 @@ export function createFormContext() {
      * Creates a submit handler that validates all registered fields before executing the callback.
      * Uses forceValidation=true to ensure all fields show their errors on submit attempt.
      *
-     * @param {() => unknown} callback - The function to call if all validations pass
-     * @returns {() => Promise<boolean>} Async function that returns true if validation passes and callback was executed, false otherwise
+     * @param {() => unknown} [callback] - Optional function to call if all validations pass (defaults to `() => true`)
+     * @returns {() => Promise<boolean>} Async function that returns false if validation fails,
+     * otherwise the callback result (default: true)
      */
     handleSubmit,
     /**
@@ -106,62 +102,31 @@ export function useFormContext<T>(config: FieldConfig<T>) {
 
   const touched = ref(false);
   const errorMessage = ref<string | undefined>(undefined);
+  let initialValue: unknown;
 
-  /**
-   * Resolves the error message for a validation issue.
-   *
-   * Resolution order:
-   * 1. If __isZodDefault is NOT set → custom error from schema definition (use issue.message)
-   * 2. If __isZodDefault IS set → default error, check for global custom error (globErr)
-   * 3. If no global custom error → use Zod's default message (issue.message)
-   */
-  const getErrorMessage = (issue: ZodIssueWithDefault) => {
-    // Local custom error from schema definition (e.g., z.string().min(1, "custom message"))
-    if (!issue.__isZodDefault) {
-      return issue.message;
-    }
-    // Global custom error on schema (globErr) if set
-    const customFn = (toRaw(schema.value) as ZodType).def?.error;
-    if (customFn) {
-      const result = customFn(issue as never);
-      return typeof result === "string" ? result : result?.message;
-    }
-    // Neither a local nor a global custom error → use Zod's default message
-    return issue.message;
-  };
+  const getRawSchema = () => toRaw(schema.value) as ZodType<T, T>;
 
   /**
    * Validates the field against the Zod schema.
    *
-   * @param {boolean} [forceValidation] - If true, sets error message even if field hasn't been touched yet used during handleSubmit
+   * @param {boolean} [forceValidation] - If true, sets the error message even if the field has not been touched yet;
+   *   used during submit handling to show all validation errors immediately.
    * @returns {Promise<boolean>} True if validation passes, false otherwise
    *
-   * Error message resolution hierarchy:
-   * 1. If validation passes → errorMessage is cleared, returns true
-   * 2. If validation fails and (field is touched OR forceValidation is true):
-   *    a. Custom error from schema definition → use custom error message
-   *    b. No custom error, but global custom error on schema (globErr) → use global error message
-   *    c. Neither custom nor global error → use Zod's default error message
+   * Error message resolution hierarchy is handled by Zod itself.
+   * `issue.message` already contains the final message according to Zod's
+   * precedence rules (lokale Check-Fehler > schemaweite Fehler > Default-Fehler).
    *
-   * Implementation details:
-   * - During safeParse, every default Zod issue receives the __isZodDefault flag.
-   *   Custom errors from schema definitions bypass this because the errorMap is only
-   *   invoked when no custom error message exists.
-   * - getErrorMessage checks __isZodDefault to distinguish between custom and default errors:
-   *   - If __isZodDefault is NOT set → it's a custom error from the schema
-   *   - If __isZodDefault IS set → it's a default error, check for global custom error (globErr)
+   * The error message is only written when the field was already touched by the
+   * user or when validation is forced explicitly (for example on submit).
    */
   const validate = async (forceValidation?: boolean): Promise<boolean> => {
-    const result = schema.value.safeParse(model.value, {
-      error: (issue) => {
-        (issue as ZodIssueWithDefault).__isZodDefault = true;
-      },
-    });
+    const result = getRawSchema().safeParse(model.value);
 
     if (result.success) {
       errorMessage.value = undefined;
     } else if (touched.value || forceValidation) {
-      errorMessage.value = getErrorMessage(result.error.issues[0]);
+      errorMessage.value = result.error.issues[0]?.message;
     }
 
     return result.success;
