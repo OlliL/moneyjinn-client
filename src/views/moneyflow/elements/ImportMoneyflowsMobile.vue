@@ -195,6 +195,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import type { ImportedMoneyflow } from "@/model/moneyflow/ImportedMoneyflow";
+import type { MoneyflowSplitEntry } from "@/model/moneyflow/MoneyflowSplitEntry";
 import {
   Calendar,
   CalendarDays,
@@ -227,12 +228,22 @@ const displayData = computed(
 
 const isReady = computed(() => {
   const mim = displayData.value;
+  console.log(mim.moneyflowSplitEntries);
   return (
     mim.contractpartnerId > 0 &&
-    mim.postingAccountId > 0 &&
     mim.capitalsourceId > 0 &&
-    mim.comment?.length > 0 &&
-    mim.bookingDate
+    mim.bookingDate &&
+    ((mim.postingAccountId > 0 && mim.comment?.length > 0) ||
+      (mim.moneyflowSplitEntries !== undefined &&
+        mim.moneyflowSplitEntries.reduce(
+          (sum: number, entry: MoneyflowSplitEntry) => sum + entry.amount,
+          0,
+        ) == mim.amount &&
+        mim.moneyflowSplitEntries.filter(
+          (entry: MoneyflowSplitEntry) =>
+            (entry.amount || entry.comment || entry.postingAccountId) &&
+            (!entry.amount || !entry.comment || !entry.postingAccountId),
+        ).length == 0))
   );
 });
 
