@@ -200,6 +200,7 @@
       <span
         v-if="!showPlanned && hiddenPlannedCount > 0"
         class="text-orange-500/80"
+        @click="showPlanned = !showPlanned"
       >
         {{ $t("Reports.plannedHiddenCount", { num: hiddenPlannedCount }) }}
       </span>
