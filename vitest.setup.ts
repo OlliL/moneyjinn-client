@@ -109,3 +109,34 @@ Object.defineProperty(globalThis, "matchMedia", {
 });
 
 vi.mock("vue-sonner", () => ({ toast: { error: vi.fn(), dismiss: vi.fn() } }));
+
+const localStorageMock = (() => {
+  let store: Record<string, string> = {};
+  return {
+    getItem: (key: string) => store[key] || null,
+    setItem: (key: string, value: string) => {
+      store[key] = String(value);
+    },
+    removeItem: (key: string) => {
+      delete store[key];
+    },
+    clear: () => {
+      store = {};
+    },
+    key: (index: number) => Object.keys(store)[index] || null,
+    get length() {
+      return Object.keys(store).length;
+    },
+  };
+})();
+
+// add globally for vitest / jsdom
+Object.defineProperty(globalThis, "localStorage", {
+  value: localStorageMock,
+  writable: true,
+});
+
+// clear storage before each test to avoid state leakage between tests
+beforeEach(() => {
+  localStorage.clear();
+});
