@@ -1,5 +1,5 @@
 import { config } from "@vue/test-utils";
-import { vi } from "vitest";
+import { beforeEach, vi } from "vitest";
 import "vitest-canvas-mock";
 import I18nSingleton from "./src/config/I18nSingleton";
 
