@@ -260,15 +260,16 @@ const filter = () => {
         mmf.capitalsourceComment
           ?.toLowerCase()
           .includes(filterCapitalsource.value.toLowerCase())) ||
-      mmf.moneyflowSplitEntries?.some(
-        (splitEntry) =>
-          splitEntry.postingAccountName
-            ?.toLowerCase()
-            .includes(filterPostingAccount.value.toLowerCase()) &&
-          splitEntry.comment
-            ?.toLowerCase()
-            .includes(filterComment.value.toLowerCase()),
-      ),
+      ((filterPostingAccount.value || filterComment.value) &&
+        mmf.moneyflowSplitEntries?.some(
+          (splitEntry) =>
+            splitEntry.postingAccountName
+              ?.toLowerCase()
+              .includes(filterPostingAccount.value.toLowerCase()) &&
+            splitEntry.comment
+              ?.toLowerCase()
+              .includes(filterComment.value.toLowerCase()),
+        )),
   );
 };
 
